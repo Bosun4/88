@@ -9,7 +9,7 @@ def fetch_matches(date=None):
     date=date or get_today();h={"x-apisports-key":API_FOOTBALL_KEY};ms=[]
     for lid in JINGCAI_LEAGUES:
         try:
-            r=requests.get(API_FOOTBALL_BASE+"/fixtures",headers=h,params={"date":date,"league":lid,"season":2025},timeout=15);d=r.json()
+            r=requests.get(API_FOOTBALL_BASE+"/fixtures",headers=h,params={"date":date,"league":lid,"season":2024},timeout=15);d=r.json()
             if d.get("response"):
                 for m in d["response"]:
                     ms.append({"id":m["fixture"]["id"],"date":m["fixture"]["date"],"league":m["league"]["name"],"league_id":m["league"]["id"],"league_logo":m["league"].get("logo",""),"home_team":m["teams"]["home"]["name"],"away_team":m["teams"]["away"]["name"],"home_logo":m["teams"]["home"].get("logo",""),"away_logo":m["teams"]["away"].get("logo",""),"home_id":m["teams"]["home"]["id"],"away_id":m["teams"]["away"]["id"],"status":m["fixture"]["status"]["short"],"home_goals":m["goals"]["home"],"away_goals":m["goals"]["away"]})
