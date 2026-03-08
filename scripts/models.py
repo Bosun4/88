@@ -282,7 +282,7 @@ class LogisticModel:
         if not HAS_SK:return
         X,y=_generate_training_data(800)
         self.scaler=StandardScaler();X=self.scaler.fit_transform(X)
-        self.model=LogisticRegression(max_iter=1000,random_state=42)
+        self.model=LogisticRegression(max_iter=1000,multi_class="multinomial",random_state=42)
         self.model.fit(X,y);self.trained=True
     def predict(self,hs,ast):
         if not self.trained:self.train()
