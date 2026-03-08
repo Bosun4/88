@@ -1,7 +1,7 @@
 {
   "date": "2026-03-08",
-  "session": "morning",
-  "update_time": "2026-03-08 11:42:32",
+  "session": "evening",
+  "update_time": "2026-03-08 21:54:55",
   "total_matches": 34,
   "results": [
     {
@@ -25,9 +25,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 3.11,
-        "sp_draw": 3.25,
-        "sp_away": 2.0
+        "sp_home": 3.35,
+        "sp_draw": 3.1,
+        "sp_away": 1.97
       },
       "away_stats": {
         "played": 21,
@@ -279,9 +279,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 2.02,
-        "sp_draw": 3.45,
-        "sp_away": 2.9
+        "sp_home": 2.0,
+        "sp_draw": 3.38,
+        "sp_away": 3.0
       },
       "away_stats": {
         "played": 21,
@@ -533,9 +533,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 2.15,
-        "sp_draw": 3.05,
-        "sp_away": 2.98
+        "sp_home": 2.03,
+        "sp_draw": 3.1,
+        "sp_away": 3.2
       },
       "away_stats": {
         "played": 21,
@@ -787,9 +787,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.48,
-        "sp_draw": 3.65,
-        "sp_away": 5.6
+        "sp_home": 1.58,
+        "sp_draw": 3.4,
+        "sp_away": 4.95
       },
       "away_stats": {
         "played": 21,
@@ -1041,9 +1041,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.51,
-        "sp_draw": 3.9,
-        "sp_away": 4.75
+        "sp_home": 1.58,
+        "sp_draw": 3.8,
+        "sp_away": 4.3
       },
       "away_stats": {
         "played": 21,
@@ -1295,9 +1295,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.94,
-        "sp_draw": 2.85,
-        "sp_away": 3.8
+        "sp_home": 2.12,
+        "sp_draw": 2.8,
+        "sp_away": 3.33
       },
       "away_stats": {
         "played": 21,
@@ -1549,9 +1549,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.4,
-        "sp_draw": 4.25,
-        "sp_away": 5.55
+        "sp_home": 1.47,
+        "sp_draw": 4.0,
+        "sp_away": 5.02
       },
       "away_stats": {
         "played": 21,
@@ -1803,9 +1803,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.28,
-        "sp_draw": 4.9,
-        "sp_away": 6.95
+        "sp_home": 1.22,
+        "sp_draw": 5.45,
+        "sp_away": 7.9
       },
       "away_stats": {
         "played": 21,
@@ -2057,8 +2057,8 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 2.75,
-        "sp_draw": 3.3,
+        "sp_home": 2.83,
+        "sp_draw": 3.2,
         "sp_away": 2.16
       },
       "away_stats": {
@@ -2311,9 +2311,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.37,
-        "sp_draw": 4.35,
-        "sp_away": 5.9
+        "sp_home": 1.36,
+        "sp_draw": 4.4,
+        "sp_away": 6.0
       },
       "away_stats": {
         "played": 21,
@@ -2565,9 +2565,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 4.08,
-        "sp_draw": 3.8,
-        "sp_away": 1.61
+        "sp_home": 4.68,
+        "sp_draw": 3.95,
+        "sp_away": 1.51
       },
       "away_stats": {
         "played": 21,
@@ -2819,9 +2819,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.45,
-        "sp_draw": 3.7,
-        "sp_away": 5.9
+        "sp_home": 1.43,
+        "sp_draw": 3.86,
+        "sp_away": 5.85
       },
       "away_stats": {
         "played": 21,
@@ -3073,9 +3073,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.57,
-        "sp_draw": 3.65,
-        "sp_away": 4.6
+        "sp_home": 1.63,
+        "sp_draw": 3.5,
+        "sp_away": 4.35
       },
       "away_stats": {
         "played": 21,
@@ -3327,9 +3327,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 2.46,
+        "sp_home": 2.62,
         "sp_draw": 3.1,
-        "sp_away": 2.5
+        "sp_away": 2.35
       },
       "away_stats": {
         "played": 21,
@@ -3581,9 +3581,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 2.8,
-        "sp_draw": 2.7,
-        "sp_away": 2.5
+        "sp_home": 2.92,
+        "sp_draw": 2.78,
+        "sp_away": 2.34
       },
       "away_stats": {
         "played": 21,
@@ -3835,9 +3835,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 4.02,
-        "sp_draw": 3.65,
-        "sp_away": 1.65
+        "sp_home": 4.05,
+        "sp_draw": 3.72,
+        "sp_away": 1.63
       },
       "away_stats": {
         "played": 21,
@@ -4089,9 +4089,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.44,
-        "sp_draw": 3.9,
-        "sp_away": 5.6
+        "sp_home": 1.35,
+        "sp_draw": 4.25,
+        "sp_away": 6.5
       },
       "away_stats": {
         "played": 21,
@@ -4343,9 +4343,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 3.6,
-        "sp_draw": 3.35,
-        "sp_away": 1.81
+        "sp_home": 4.2,
+        "sp_draw": 3.65,
+        "sp_away": 1.62
       },
       "away_stats": {
         "played": 21,
@@ -4597,9 +4597,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.3,
-        "sp_draw": 4.65,
-        "sp_away": 6.9
+        "sp_home": 1.35,
+        "sp_draw": 4.35,
+        "sp_away": 6.3
       },
       "away_stats": {
         "played": 21,
@@ -5105,9 +5105,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 4.02,
-        "sp_draw": 3.05,
-        "sp_away": 1.81
+        "sp_home": 4.25,
+        "sp_draw": 3.16,
+        "sp_away": 1.73
       },
       "away_stats": {
         "played": 21,
@@ -5359,9 +5359,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 2.22,
-        "sp_draw": 3.0,
-        "sp_away": 2.9
+        "sp_home": 2.4,
+        "sp_draw": 2.8,
+        "sp_away": 2.81
       },
       "away_stats": {
         "played": 21,
@@ -5613,9 +5613,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 2.05,
-        "sp_draw": 3.1,
-        "sp_away": 3.13
+        "sp_home": 1.9,
+        "sp_draw": 2.95,
+        "sp_away": 3.78
       },
       "away_stats": {
         "played": 21,
@@ -5867,9 +5867,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 3.16,
-        "sp_draw": 3.2,
-        "sp_away": 2.0
+        "sp_home": 3.1,
+        "sp_draw": 3.03,
+        "sp_away": 2.1
       },
       "away_stats": {
         "played": 21,
@@ -6121,9 +6121,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.58,
-        "sp_draw": 3.65,
-        "sp_away": 4.5
+        "sp_home": 1.48,
+        "sp_draw": 3.8,
+        "sp_away": 5.25
       },
       "away_stats": {
         "played": 21,
@@ -6375,9 +6375,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.89,
-        "sp_draw": 3.0,
-        "sp_away": 3.75
+        "sp_home": 1.91,
+        "sp_draw": 2.92,
+        "sp_away": 3.8
       },
       "away_stats": {
         "played": 21,
@@ -6629,9 +6629,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.43,
-        "sp_draw": 4.08,
-        "sp_away": 5.4
+        "sp_home": 1.39,
+        "sp_draw": 4.15,
+        "sp_away": 5.9
       },
       "away_stats": {
         "played": 21,
@@ -7137,9 +7137,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.51,
-        "sp_draw": 3.65,
-        "sp_away": 5.18
+        "sp_home": 1.57,
+        "sp_draw": 3.45,
+        "sp_away": 4.93
       },
       "away_stats": {
         "played": 21,
@@ -8664,9 +8664,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 3.11,
-        "sp_draw": 3.25,
-        "sp_away": 2.0
+        "sp_home": 3.35,
+        "sp_draw": 3.1,
+        "sp_away": 1.97
       },
       "away_stats": {
         "played": 21,
@@ -8919,9 +8919,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 2.02,
-        "sp_draw": 3.45,
-        "sp_away": 2.9
+        "sp_home": 2.0,
+        "sp_draw": 3.38,
+        "sp_away": 3.0
       },
       "away_stats": {
         "played": 21,
@@ -9174,9 +9174,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 2.15,
-        "sp_draw": 3.05,
-        "sp_away": 2.98
+        "sp_home": 2.03,
+        "sp_draw": 3.1,
+        "sp_away": 3.2
       },
       "away_stats": {
         "played": 21,
@@ -9429,9 +9429,9 @@
         "clean_sheets": 3,
         "form": "LLLDL",
         "rank": 10,
-        "sp_home": 1.48,
-        "sp_draw": 3.65,
-        "sp_away": 5.6
+        "sp_home": 1.58,
+        "sp_draw": 3.4,
+        "sp_away": 4.95
       },
       "away_stats": {
         "played": 21,
