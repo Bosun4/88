@@ -11,7 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from config import *
-from fetch_data import collect_all_data
+from fetch_data import collect_all
 from predict import run_predictions
 
 # ==================== 工具函数 ====================
@@ -199,7 +199,7 @@ def main():
     print("=" * 60)
 
     # 1. 数据抓取（优先用 fetch_data.py，失败时用备用 scrape）
-    raw_data = collect_all_data(date)
+    raw_data = collect_all(date)
 
     os.makedirs("data", exist_ok=True)
     with open("data/raw_data.json", "w", encoding="utf-8") as f:
