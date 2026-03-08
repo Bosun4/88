@@ -29,5 +29,5 @@ jobs:
           git config user.name "Bot"
           git config user.email "bot@predict.ai"
           git add data/
-          git diff --cached --quiet || git commit -m "🔮 $(TZ='Asia/Shanghai' date '+%m-%d %H:%M')"
+          git diff --cached --quiet || git commit -m "update"
           git push
