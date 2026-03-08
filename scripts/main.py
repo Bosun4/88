@@ -11,7 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from config import *
-from fetch_data import collect_all_data
+from fetch_data import collect_all
 from predict import run_predictions
 
 # ==================== 工具函数 ====================
