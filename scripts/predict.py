@@ -56,7 +56,7 @@ def call_model(prompt, url, key, model_pool, is_gpt=True):
     return None
 
 def call_gpt(p): return call_model(p, GPT_API_URL, GPT_API_KEY, ["gpt-5.4", "gpt-5.3", "gpt-5.2"], True)
-def call_gemini(p): return call_model(p, GEMINI_API_URL, GEMINI_API_KEY, ["[次-流抗截]gemini-3.1-pro-preview-thinking", "gemini-1.5-pro"], False)
+def call_gemini(p): return call_model(p, GEMINI_API_URL, GEMINI_API_KEY, ["gemini-3.1-pro-preview-thinking", "gemini-3.1-pro-preview"], False)
 
 def merge_all(gpt, gemini, stats, match_obj):
     ai_preds = [x for x in [gpt, gemini] if isinstance(x, dict)]
