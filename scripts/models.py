@@ -122,7 +122,7 @@ class MLPredictorBase:
         X = self.scaler.transform([feat])
         proba = list(self.model.predict_proba(X)[0])
         
-        # 兜底平滑器：防止任何机器学习模型输出超过 75% 的单边极端概率
+        # 防爆冷平滑器：防止机器学习给出极端高胜率
         if max(proba) > 0.75:
             p_max = max(proba)
             excess = p_max - 0.75
@@ -290,7 +290,6 @@ class OddsAnalyzer:
 # ==========================================
 class EnsemblePredictor:
     def __init__(self):
-        # 传统统计
         self.poisson = PoissonModel()
         self.dixon = DixonColesModel()
         self.bt = BradleyTerryModel()
@@ -298,12 +297,10 @@ class EnsemblePredictor:
         self.form = FormModel()
         self.odds = OddsAnalyzer()
         
-        # 高阶量化
-        self.bivariate = BivariatePoissonModel() # 防爆冷
-        self.smart_money = SmartMoneyDetector()  # 逆向追踪
-        self.pace_totals = PaceTotalGoalsModel() # 大球节奏
+        self.bivariate = BivariatePoissonModel()
+        self.smart_money = SmartMoneyDetector()
+        self.pace_totals = PaceTotalGoalsModel()
         
-        # 机器学习 (移除了易崩溃的 GB 模型)
         self.rf = RandomForestModel()
         self.nn = NeuralNetModel()
         self.lr = LogisticModel()
@@ -315,17 +312,14 @@ class EnsemblePredictor:
     def predict(self, match, odds_data=None):
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {}); h2h = match.get("h2h", [])
         
-        # 执行所有统计与量化模型
         poi = self.poisson.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
         biv = self.bivariate.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
         dc = self.dixon.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
-        
         bt = self.bt.predict(hs.get("wins"), hs.get("played"), ast.get("wins"), ast.get("played"))
         bay = self.bayes.predict(hs.get("wins"), hs.get("draws"), hs.get("losses"), ast.get("wins"), ast.get("draws"), ast.get("losses"))
         hf = self.form.analyze(hs.get("form", "")); af = self.form.analyze(ast.get("form", ""))
         pace = self.pace_totals.predict(hs, ast) 
         
-        # 执行机器学习模型
         rf = self.rf.predict(match, odds_data)
         nn = self.nn.predict(match, odds_data)
         lr = self.lr.predict(match, odds_data)
@@ -334,8 +328,6 @@ class EnsemblePredictor:
         if odds_data and odds_data.get("bookmakers"):
             oa = self.odds.analyze_market(odds_data["bookmakers"])
             
-        # 【核心修正】：11模型完美权重重组 (总和 = 1.0)
-        # 将被剔除的 34% 权重，补给了表现最稳的 RF, NN 和 Poisson 家族
         w = {
             "poisson": 0.12, "bivariate": 0.10, "dixon": 0.10, 
             "bt": 0.08, "bayes": 0.06, 
@@ -355,16 +347,12 @@ class EnsemblePredictor:
             dp += pred.get("draw", 33) * wt
             ap += pred.get("away_win", 33) * wt
             
-        # 状态偏置
         fd = hf["score"] - af["score"]
         hp += (fd * 0.08); ap -= (fd * 0.08)
         
-        # 🚨 逆向追踪：聪明钱预警权重修正
         sm_data = self.smart_money.analyze(hp, ap, odds_data)
-        hp += sm_data["home_rlm_adj"]
-        ap += sm_data["away_rlm_adj"]
+        hp += sm_data["home_rlm_adj"]; ap += sm_data["away_rlm_adj"]
         
-        # 归一化
         t = hp + dp + ap
         if t > 0: hp = round(hp/t*100, 1); dp = round(dp/t*100, 1); ap = round(100-hp-dp, 1)
         
@@ -378,21 +366,18 @@ class EnsemblePredictor:
             "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap, 
             "predicted_score": poi["predicted_score"], "confidence": cf, 
             
-            # 返回活跃模型
             "poisson": poi, "dixon_coles": dc, "bradley_terry": bt,
             "bayesian": bay, "random_forest": rf, "neural_net": nn, "logistic": lr,
             "odds": oa, "home_form": hf, "away_form": af,
             
-            # 优雅地给前端返回已停用模型的空壳，保证页面 UI 绝对不会报错
+            # 兼容空壳，防前端报错
             "elo": {"home_win": "-", "draw": "-", "away_win": "-", "elo_diff": "已停用"},
             "monte_carlo": {"top_scores": [{"score": "已停用", "prob": "-"}]},
             "gradient_boost": {"home_win": "-", "draw": "-", "away_win": "-"},
             
-            # 高阶量化导出
             "smart_money_signal": sm_data["signal"], 
             "over_2_5": pace["over_2_5"], "btts": poi.get("btts", 50),
             "pace_rating": pace["pace_rating"],
             "expected_total_goals": pace["expected_total"],
-            
             "model_consensus": consensus, "total_models": len(models_list)
         }
