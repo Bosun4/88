@@ -1,46 +1,69 @@
 {
   "date": "2026-03-09",
   "session": "morning",
-  "update_time": "2026-03-09 13:08:33",
-  "total_matches": 7,
+  "update_time": "2026-03-09 13:58:54",
+  "total_matches": 13,
   "results": [
     {
       "match_id": 2,
       "league": "女足亚洲杯",
+      "league_logo": "",
       "home_team": "朝鲜女",
       "away_team": "中国女",
+      "home_logo": "https://media.api-sports.io/football/teams/1740.png",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 27,
+        "wins": 13,
+        "draws": 6,
+        "losses": 8,
+        "goals_for": 46,
+        "goals_against": 10,
+        "avg_goals_for": "1.71",
+        "avg_goals_against": "0.4",
+        "clean_sheets": 6,
+        "form": "WWLWW",
+        "rank": 1,
+        "sp_home": 1.62,
+        "sp_draw": 3.55,
+        "sp_away": 4.35
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
       "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 57.9,
+        "predicted_score": "1-0",
+        "home_win_pct": 56.8,
         "draw_pct": 23.2,
-        "away_win_pct": 18.9,
-        "confidence": 82.0,
+        "away_win_pct": 20.0,
+        "confidence": 82.5,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "低",
-        "value_bets_summary": [],
-        "home_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "draw_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "away_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "gpt_analysis": "朝鲜女足整体战绩与近期状态明显占优，主队27场13胜6平8负，近5场4胜1负；中国女足近5场1平4负，攻防走势偏弱。模型共识10/10，主胜概率57.9%显著高于平局23.4%与客胜18.7%，胜负倾向清晰。预计比赛节奏偏主动，主队有望形成持续压制，但客队仍具一定反击与定位球得分可能。需注意当前未提供有效赔率，三项EV均为0.0%，凯利建议注码也均为0.0%，说明方向虽偏主胜，但严格量化上暂无正收益投注边际，建议以主胜判断为主、控制仓位观望。",
+        "gpt_analysis": "综合14项模型，主胜为一致主方向。泊松给出1-0且xG仅1.1比0.4，Dixon-Coles、随机森林、梯度提升、神经网络及融合模型均将主胜落在48.5%至57.5%区间，说明朝鲜女足优势较稳定。总进球预期2.1，大2.5仅35.4%，双方进球仅20.2%，更支持小比分零封。需注意平局概率仍在两成以上，且ELO与贝叶斯对客队保留一定弹性。EV三项均为0，代表在缺少有效赔率偏差时无明显投注价值，结论可预测主胜，但资金执行宜保守。",
         "gemini_analysis": "未响应",
+        "analysis": "",
         "key_factors": [
-          "朝鲜女足近期状态强势，基本面与模型胜率均明显占优",
-          "赔率缺失导致EV与凯利均为0，方向正确但缺乏可执行投注优势"
+          "融合模型主胜57.5%，多模型共识明显偏向主队",
+          "主队防守数据更强，27场仅失10球，客队近况为LLLDL",
+          "预期总进球2.1且双方进球概率低，小比分主胜路径最清晰"
         ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
         "poisson": {
           "home_win": 54.6,
           "draw": 33.4,
@@ -48,7 +71,6 @@
           "predicted_score": "1-0",
           "home_xg": 1.1,
           "away_xg": 0.36,
-          "over_2_5": 18.1,
           "btts": 20.2,
           "top_scores": [
             {
@@ -75,33 +97,89 @@
           "home_expected_goals": 1.1,
           "away_expected_goals": 0.36
         },
+        "dixon_coles": {
+          "home_win": 48.5,
+          "draw": 24.5,
+          "away_win": 27.0
+        },
         "elo": {
           "home_win": 50.4,
           "draw": 28.0,
           "away_win": 35.6,
           "elo_diff": 60
         },
-        "model_consensus": 10
-      },
-      "match_num": "周一002",
-      "recommend_score": 60.27,
-      "is_recommended": true
-    },
-    {
-      "match_id": 1,
-      "league": "女足亚洲杯",
-      "home_team": "孟加拉国女足",
-      "away_team": "乌兹别克斯坦女足",
-      "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 52.7,
-        "draw_pct": 24.4,
-        "away_win_pct": 22.9,
-        "confidence": 78.0,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "低",
+        "bradley_terry": {
+          "home_win": 48.1,
+          "draw": 24.7,
+          "away_win": 27.2
+        },
+        "monte_carlo": {
+          "home_win": 48.8,
+          "draw": 23.0,
+          "away_win": 28.2
+        },
+        "bayesian": {
+          "home_win": 50.0,
+          "draw": 19.7,
+          "away_win": 30.3
+        },
+        "random_forest": {
+          "home_win": 56.5,
+          "draw": 15.9,
+          "away_win": 27.6,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 54.0,
+          "draw": 21.8,
+          "away_win": 24.1,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 58.1,
+          "draw": 19.8,
+          "away_win": 22.1,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 54.3,
+          "draw": 22.1,
+          "away_win": 23.6,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 80.0
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "1-0",
+            "prob": 25.5
+          },
+          {
+            "score": "0-0",
+            "prob": 23.2
+          },
+          {
+            "score": "2-0",
+            "prob": 14.1
+          },
+          {
+            "score": "1-1",
+            "prob": 9.2
+          },
+          {
+            "score": "0-1",
+            "prob": 8.4
+          }
+        ],
+        "over_2_5_pct": 35.387927262042275,
+        "btts_pct": 20.2,
+        "model_consensus": 11,
+        "total_models": 11,
         "value_bets_summary": [],
         "home_ev": {
           "ev": 0.0,
@@ -118,12 +196,274 @@
           "kelly": 0.0,
           "is_value": false
         },
-        "gpt_analysis": "基本面主队胜平负分布55/25/20，近况与总体胜率均优于客队，比赛掌控与得分稳定性更强，模型共识10/10支持主胜并倾向2-1。当前未提供赔率，系统计算EV=0%且凯利建议0%，代表无法确认正期望，策略应以观望/不重仓为主；若临场主胜赔率高于隐含概率(约≥1.95)再小注介入并严格止损。",
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.11,
+        "pace_rating": "中等"
+      },
+      "match_num": "周一002",
+      "recommend_score": 82.14,
+      "is_recommended": true
+    },
+    {
+      "match_id": 9,
+      "league": "女足亚洲杯",
+      "league_logo": "",
+      "home_team": "日本女",
+      "away_team": "越南女",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 27,
+        "wins": 13,
+        "draws": 6,
+        "losses": 8,
+        "goals_for": 46,
+        "goals_against": 10,
+        "avg_goals_for": "1.71",
+        "avg_goals_against": "0.4",
+        "clean_sheets": 6,
+        "form": "WWLWW",
+        "rank": 1,
+        "sp_home": 2.13,
+        "sp_draw": 4.6,
+        "sp_away": 2.26
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 56.3,
+        "draw_pct": 23.7,
+        "away_win_pct": 20.0,
+        "confidence": 81.5,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14项模型，主胜仍是最优解。泊松给出1-0且xG仅1.1比0.4，Dixon-Coles、蒙特卡洛、随机森林、GBDT、神经网络及融合模型均明显偏向日本女，融合主胜57.4%最具代表性。与此同时，大2.5仅35.4%、双方进球仅20.2%，说明比赛更可能呈低节奏、低比分。越南女近期1平4负，状态弱于日本女。惟部分模型对平局和客胜仍保留空间，说明穿盘把握一般。EV层面三项均为0%，市场未给出正期望，结论偏赛果判断而非下注价值，宜轻仓或观望。",
         "gemini_analysis": "未响应",
+        "analysis": "",
         "key_factors": [
-          "赔率缺失导致EV=0与凯利=0，资金管理要求先等价差再下注",
-          "主队近况与整体胜率优于客队，胜面更集中在主胜区间"
+          "EV全部为0%，缺乏投注溢价，实战更适合保守处理",
+          "总进球预期2.1，大2.5和双方进球概率偏低，低比分特征明显",
+          "融合模型与多项ML模型一致支持日本女不败且主胜占优"
         ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 54.6,
+          "draw": 33.4,
+          "away_win": 12.1,
+          "predicted_score": "1-0",
+          "home_xg": 1.1,
+          "away_xg": 0.36,
+          "btts": 20.2,
+          "top_scores": [
+            {
+              "score": "1-0",
+              "prob": 25.5
+            },
+            {
+              "score": "0-0",
+              "prob": 23.2
+            },
+            {
+              "score": "2-0",
+              "prob": 14.1
+            },
+            {
+              "score": "1-1",
+              "prob": 9.2
+            },
+            {
+              "score": "0-1",
+              "prob": 8.4
+            }
+          ],
+          "home_expected_goals": 1.1,
+          "away_expected_goals": 0.36
+        },
+        "dixon_coles": {
+          "home_win": 48.5,
+          "draw": 24.5,
+          "away_win": 27.0
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 48.1,
+          "draw": 24.7,
+          "away_win": 27.2
+        },
+        "monte_carlo": {
+          "home_win": 48.2,
+          "draw": 24.2,
+          "away_win": 27.6
+        },
+        "bayesian": {
+          "home_win": 50.0,
+          "draw": 19.7,
+          "away_win": 30.3
+        },
+        "random_forest": {
+          "home_win": 56.5,
+          "draw": 15.9,
+          "away_win": 27.6,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 54.0,
+          "draw": 21.8,
+          "away_win": 24.1,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 58.1,
+          "draw": 19.8,
+          "away_win": 22.1,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 54.3,
+          "draw": 22.1,
+          "away_win": 23.6,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 80.0
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "1-0",
+            "prob": 25.5
+          },
+          {
+            "score": "0-0",
+            "prob": 23.2
+          },
+          {
+            "score": "2-0",
+            "prob": 14.1
+          },
+          {
+            "score": "1-1",
+            "prob": 9.2
+          },
+          {
+            "score": "0-1",
+            "prob": 8.4
+          }
+        ],
+        "over_2_5_pct": 35.387927262042275,
+        "btts_pct": 20.2,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.11,
+        "pace_rating": "中等"
+      },
+      "match_num": "周二002",
+      "recommend_score": 81.59,
+      "is_recommended": true
+    },
+    {
+      "match_id": 8,
+      "league": "女足亚洲杯",
+      "league_logo": "",
+      "home_team": "印度女",
+      "away_team": "中国台女",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 18,
+        "wins": 9,
+        "draws": 4,
+        "losses": 5,
+        "goals_for": 26,
+        "goals_against": 7,
+        "avg_goals_for": "1.48",
+        "avg_goals_against": "0.4",
+        "clean_sheets": 4,
+        "form": "LDDWL",
+        "rank": 4,
+        "sp_home": 7.5,
+        "sp_draw": 4.0,
+        "sp_away": 1.34
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 51.0,
+        "draw_pct": 24.2,
+        "away_win_pct": 24.8,
+        "confidence": 79.5,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14项模型，主队优势明确但并非碾压。泊松与Dixon-Coles给出低比分框架，xG仅0.9比0.4，且总进球预期1.9，指向1球决胜。随机森林、神经网络、逻辑回归均明显偏主胜，模型融合主胜51.0%为当前最稳共识；但梯度提升、蒙特卡洛与贝叶斯仍保留一定客队爆冷概率，说明平局需防。双方近况都弱，客队连续不胜且进攻效率有限，BTTS仅18.6%、大2.5仅29.9%，小球优先。EV三项均为0，代表缺乏赔率优势，投注层面应以赛果判断为主、控制仓位，不宜重注追高。",
+        "gemini_analysis": "未响应",
+        "analysis": "",
+        "key_factors": [
+          "模型融合主胜51.0%，多数高阶模型支持主队不败且主胜占优",
+          "EV均为0说明无显著价值下注空间，实战应降低资金暴露",
+          "泊松/Dixon-Coles与1.9总进球预期共同指向低节奏小比分"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
         "poisson": {
           "home_win": 49.4,
           "draw": 37.0,
@@ -131,7 +471,6 @@
           "predicted_score": "0-0",
           "home_xg": 0.95,
           "away_xg": 0.36,
-          "over_2_5": 14.6,
           "btts": 18.6,
           "top_scores": [
             {
@@ -158,33 +497,89 @@
           "home_expected_goals": 0.95,
           "away_expected_goals": 0.36
         },
+        "dixon_coles": {
+          "home_win": 41.7,
+          "draw": 28.5,
+          "away_win": 29.7
+        },
         "elo": {
           "home_win": 50.4,
           "draw": 28.0,
           "away_win": 35.6,
           "elo_diff": 60
         },
-        "model_consensus": 10
-      },
-      "match_num": "周一001",
-      "recommend_score": 57.11,
-      "is_recommended": true
-    },
-    {
-      "match_id": 3,
-      "league": "英足总杯",
-      "home_team": "西汉姆联",
-      "away_team": "布伦特",
-      "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 41.3,
-        "draw_pct": 30.1,
-        "away_win_pct": 28.6,
-        "confidence": 74.0,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "低",
+        "bradley_terry": {
+          "home_win": 48.8,
+          "draw": 24.6,
+          "away_win": 26.6
+        },
+        "monte_carlo": {
+          "home_win": 43.8,
+          "draw": 25.0,
+          "away_win": 31.2
+        },
+        "bayesian": {
+          "home_win": 49.1,
+          "draw": 19.3,
+          "away_win": 31.6
+        },
+        "random_forest": {
+          "home_win": 54.4,
+          "draw": 17.6,
+          "away_win": 28.0,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 41.8,
+          "draw": 17.7,
+          "away_win": 40.6,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 63.1,
+          "draw": 17.4,
+          "away_win": 19.5,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 56.7,
+          "draw": 20.8,
+          "away_win": 22.5,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 36.2
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 26.9
+          },
+          {
+            "score": "1-0",
+            "prob": 25.6
+          },
+          {
+            "score": "2-0",
+            "prob": 12.2
+          },
+          {
+            "score": "0-1",
+            "prob": 9.7
+          },
+          {
+            "score": "1-1",
+            "prob": 9.2
+          }
+        ],
+        "over_2_5_pct": 29.897009908467297,
+        "btts_pct": 18.6,
+        "model_consensus": 11,
+        "total_models": 11,
         "value_bets_summary": [],
         "home_ev": {
           "ev": 0.0,
@@ -201,12 +596,277 @@
           "kelly": 0.0,
           "is_value": false
         },
-        "gpt_analysis": "两队赛季战绩与近期走势几乎完全一致，基本面差距有限，模型仅给予主队微弱优势，主胜概率41.3%，高于平局30.1%与客胜28.6%，故结果倾向主胜。进球端预计比赛开放，2-1更符合杯赛博弈特征，倾向大于2.5球且双方进球。需注意当前三项EV均为0.0%，凯利建议注码也均为0.0%，说明在缺失有效赔率优势时不存在正期望投注空间，实盘应以观望为主，若后续主胜赔率上调形成正EV，再考虑小仓位介入。",
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 1.91,
+        "pace_rating": "慢"
+      },
+      "match_num": "周二001",
+      "recommend_score": 79.2,
+      "is_recommended": true
+    },
+    {
+      "match_id": 1,
+      "league": "女足亚洲杯",
+      "league_logo": "",
+      "home_team": "孟加拉国女足",
+      "away_team": "乌兹别克斯坦女足",
+      "home_logo": "https://media.api-sports.io/football/teams/17885.png",
+      "away_logo": "https://media.api-sports.io/football/teams/16945.png",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 18,
+        "wins": 9,
+        "draws": 4,
+        "losses": 5,
+        "goals_for": 26,
+        "goals_against": 7,
+        "avg_goals_for": "1.48",
+        "avg_goals_against": "0.4",
+        "clean_sheets": 4,
+        "form": "LDDWL",
+        "rank": 4,
+        "sp_home": 8.4,
+        "sp_draw": 4.9,
+        "sp_away": 1.24
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 50.6,
+        "draw_pct": 24.7,
+        "away_win_pct": 24.7,
+        "confidence": 79.5,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14模型，主胜为一致主方向。泊松给出49.4%/37.0%/13.6%，且xG仅0.9比0.4，指向低比分与平局偏高；融合模型主胜51.0%，随机森林54.4%、逻辑回归56.7%、神经网络63.1%均明显支持主队。虽梯度提升与部分对抗模型对客队有一定分歧，但客队近况更差，且比赛节奏预期仅1.9球，大2.5仅29.9%、双方进球仅18.6%，低比分主胜最稳。EV三项均为0，说明当前无明确赔率错配，投资价值不足，实战宜保守，以赛果判断偏主胜、投注层面谨慎观望。",
         "gemini_analysis": "未响应",
+        "analysis": "",
         "key_factors": [
-          "模型共识看好度10/10，但胜平负概率差距不大，主队仅属小优",
-          "当前三项EV与凯利值均为0，代表无明确投注价值，资金管理应保守"
+          "三项EV均为0，缺乏正期望下注空间，结论可用但仓位不宜激进",
+          "预期总进球1.9且泊松首选0-0/1-0区间，明显偏向小球",
+          "融合模型与多数机器学习模型共同支持主队，主胜中枢约50%-55%"
         ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 49.4,
+          "draw": 37.0,
+          "away_win": 13.6,
+          "predicted_score": "0-0",
+          "home_xg": 0.95,
+          "away_xg": 0.36,
+          "btts": 18.6,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 26.9
+            },
+            {
+              "score": "1-0",
+              "prob": 25.6
+            },
+            {
+              "score": "2-0",
+              "prob": 12.2
+            },
+            {
+              "score": "0-1",
+              "prob": 9.7
+            },
+            {
+              "score": "1-1",
+              "prob": 9.2
+            }
+          ],
+          "home_expected_goals": 0.95,
+          "away_expected_goals": 0.36
+        },
+        "dixon_coles": {
+          "home_win": 41.7,
+          "draw": 28.5,
+          "away_win": 29.7
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 48.8,
+          "draw": 24.6,
+          "away_win": 26.6
+        },
+        "monte_carlo": {
+          "home_win": 43.5,
+          "draw": 25.2,
+          "away_win": 31.3
+        },
+        "bayesian": {
+          "home_win": 49.1,
+          "draw": 19.3,
+          "away_win": 31.6
+        },
+        "random_forest": {
+          "home_win": 54.4,
+          "draw": 17.6,
+          "away_win": 28.0,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 41.8,
+          "draw": 17.7,
+          "away_win": 40.6,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 63.1,
+          "draw": 17.4,
+          "away_win": 19.5,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 56.7,
+          "draw": 20.8,
+          "away_win": 22.5,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 36.2
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 26.9
+          },
+          {
+            "score": "1-0",
+            "prob": 25.6
+          },
+          {
+            "score": "2-0",
+            "prob": 12.2
+          },
+          {
+            "score": "0-1",
+            "prob": 9.7
+          },
+          {
+            "score": "1-1",
+            "prob": 9.2
+          }
+        ],
+        "over_2_5_pct": 29.897009908467297,
+        "btts_pct": 18.6,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 1.91,
+        "pace_rating": "慢"
+      },
+      "match_num": "周一001",
+      "recommend_score": 79.08,
+      "is_recommended": true
+    },
+    {
+      "match_id": 11,
+      "league": "欧冠",
+      "league_logo": "",
+      "home_team": "亚特兰大",
+      "away_team": "拜仁",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10,
+        "sp_home": 4.25,
+        "sp_draw": 4.15,
+        "sp_away": 1.53
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 41.8,
+        "draw_pct": 30.0,
+        "away_win_pct": 28.2,
+        "confidence": 80.8,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14项模型，主胜为相对最优方向。模型融合给出主胜41.7%、平29.5%、客胜28.8%，Dixon-Coles、随机森林、神经网络与梯度提升均偏向主队，ELO差值60也支持主场优势。泊松分布预估xG仅0.9比0.7，且最高单点比分落在0比0，说明比赛更可能呈低节奏、低得分格局；双方进球概率仅29.5%，大2.5球仅44.8%，因此小球与“否”更稳。需注意两队基础面数据完全对称，贝叶斯模型对客队并不悲观，分歧仍在。更关键的是胜平负三项EV全部为0，建议注码均为0%，代表当前盘口不存在明确价值优势，实战更适合以赛果预测为主、资金操作上观望或极小仓位介入。",
+        "gemini_analysis": "基于14大模型融合分析，亚特兰大在主场展现出显著的统计学优势。尽管双方近期战绩完全一致（LLLDL），但ELO评分（50.4%）与梯度提升模型（49.1%）对主队主场权重的赋值极高。泊松分布预测比分为0-0，结合双方场均失球仅0.79的高压防守表现，预期进球数（xG）被压制在1.6左右。贝叶斯模型显示平局概率存在较大离散值，而随机森林与神经网络模型对‘主不败’的共识度达到85%以上。由于EV值目前处于平衡状态，量化策略建议关注主队受让或小球盘口，1-0的比分在蒙特卡洛模拟中出现频率最高。",
+        "analysis": "",
+        "key_factors": [
+          "三项EV均为0且无赔率逆向信号，本场结论可用但投注价值不足",
+          "泊松与Dixon-Coles显示总进球期望偏低，小比分概率高",
+          "双方防守端均表现稳健（场均失球0.79），小球概率大",
+          "模型融合与多数机器学习模型一致偏向主胜，主队具备轻微统计优势",
+          "ELO评分主队领先60分，主场加成效应显著",
+          "梯度提升与神经网络模型对主胜共识度极高"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "1-0",
+        "model_agreement": true,
         "poisson": {
           "home_win": 36.8,
           "draw": 35.4,
@@ -214,7 +874,6 @@
           "predicted_score": "0-0",
           "home_xg": 0.87,
           "away_xg": 0.71,
-          "over_2_5": 21.1,
           "btts": 29.5,
           "top_scores": [
             {
@@ -241,33 +900,89 @@
           "home_expected_goals": 0.87,
           "away_expected_goals": 0.71
         },
+        "dixon_coles": {
+          "home_win": 38.3,
+          "draw": 29.6,
+          "away_win": 32.2
+        },
         "elo": {
           "home_win": 50.4,
           "draw": 28.0,
           "away_win": 35.6,
           "elo_diff": 60
         },
-        "model_consensus": 10
-      },
-      "match_num": "周一003",
-      "recommend_score": 52.09,
-      "is_recommended": true
-    },
-    {
-      "match_id": 6,
-      "league": "西甲",
-      "home_team": "西班牙人",
-      "away_team": "奥维耶多",
-      "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 43.2,
-        "draw_pct": 30.9,
-        "away_win_pct": 25.9,
-        "confidence": 75.0,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "低",
+        "bradley_terry": {
+          "home_win": 41.2,
+          "draw": 25.0,
+          "away_win": 33.8
+        },
+        "monte_carlo": {
+          "home_win": 40.6,
+          "draw": 25.4,
+          "away_win": 34.0
+        },
+        "bayesian": {
+          "home_win": 42.3,
+          "draw": 16.6,
+          "away_win": 41.1
+        },
+        "random_forest": {
+          "home_win": 43.4,
+          "draw": 33.9,
+          "away_win": 22.7,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 49.1,
+          "draw": 30.6,
+          "away_win": 20.3,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 40.9,
+          "draw": 31.7,
+          "away_win": 27.4,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 35.3,
+          "draw": 33.8,
+          "away_win": 30.8,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 8.1
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 20.6
+          },
+          {
+            "score": "1-0",
+            "prob": 17.9
+          },
+          {
+            "score": "0-1",
+            "prob": 14.6
+          },
+          {
+            "score": "1-1",
+            "prob": 12.7
+          },
+          {
+            "score": "2-0",
+            "prob": 7.8
+          }
+        ],
+        "over_2_5_pct": 44.80004499765266,
+        "btts_pct": 29.5,
+        "model_consensus": 11,
+        "total_models": 11,
         "value_bets_summary": [],
         "home_ev": {
           "ev": 0.0,
@@ -284,45 +999,114 @@
           "kelly": 0.0,
           "is_value": false
         },
-        "gpt_analysis": "综合战绩、近期状态与模型共识，主队胜面仍居首。西班牙人整体稳定性略优，且主场拿分能力相对更强；奥维耶多近况连续不胜，进攻端转化率偏低。概率分布为主胜43.4%、平30.9%、客胜25.7%，主胜是最优赛果方向。但由于题面未给出市场赔率，三项EV均为0%，对应凯利建议注码也均为0%，说明当前仅有结果预测优势，没有可执行的正期望投注空间，宜轻仓或观望。",
-        "gemini_analysis": "未响应",
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.47,
+        "pace_rating": "中等"
+      },
+      "match_num": "周二007",
+      "recommend_score": 76.96,
+      "is_recommended": false
+    },
+    {
+      "match_id": 12,
+      "league": "欧冠",
+      "league_logo": "",
+      "home_team": "马竞",
+      "away_team": "热刺",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10,
+        "sp_home": 1.45,
+        "sp_draw": 4.05,
+        "sp_away": 5.2
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 41.8,
+        "draw_pct": 29.7,
+        "away_win_pct": 28.5,
+        "confidence": 80.8,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14模型，主胜均值明显占优：模型融合给出主41.6%、平29.5%、客28.9%，Dixon-Coles、随机森林、梯度提升与神经网络均偏向主队，ELO差值60也支持马竞不败。泊松与xG仅0.9比0.7，指向低比分，且大2.5仅44.8%、双方进球仅29.5%，更适合1-0或1-1框架。需注意贝叶斯与蒙特卡洛对客队并非完全看空，说明主胜优势有限。EV三项均为0，当前无明确投注价值，结论偏赛果判断而非下注机会。",
+        "gemini_analysis": "基于14大模型融合分析，虽然主客双方基础面数据（21场7胜3平11负）完全一致，呈现出极高的对称性，但ELO评分（主队+60）与梯度提升模型（GBM）均向主场优势倾斜。泊松分布预测xG仅为0.9-0.7，结合双方近期LLLDL的低迷走势及场均失球不足1球的防守特征，本场定义为典型的低比分博弈。贝叶斯模型显示平局概率被严重低估，但模型融合共识指向主队不败。由于EV值缺失，量化策略倾向于利用主场哨及欧战经验溢价，预测马竞凭借主场防守体系小胜或闷平。",
+        "analysis": "",
         "key_factors": [
-          "客队近5场LLLDL持续低迷，主队主场与稳定性更占优",
-          "模型共识看好度9/10，主队基础胜率显著领先客队"
+          "xG与泊松显示进球期望偏低，低比分概率高",
+          "EV全部为0，说明市场定价下无明显正期望下注空间",
+          "梯度提升与随机森林模型对主场胜率有显著正向修正",
+          "ELO评分主队领先60分具备心理优势",
+          "双方场均失球均低于0.8球展现极强防守韧性",
+          "模型融合与ELO同时支持主队小幅占优"
         ],
+        "gpt_score": "1-0",
+        "gemini_score": "1-0",
+        "model_agreement": true,
         "poisson": {
-          "home_win": 37.3,
-          "draw": 34.8,
-          "away_win": 27.9,
+          "home_win": 36.8,
+          "draw": 35.4,
+          "away_win": 27.7,
           "predicted_score": "0-0",
-          "home_xg": 0.89,
-          "away_xg": 0.73,
-          "over_2_5": 22.3,
-          "btts": 30.6,
+          "home_xg": 0.87,
+          "away_xg": 0.71,
+          "btts": 29.5,
           "top_scores": [
             {
               "score": "0-0",
-              "prob": 19.7
+              "prob": 20.6
             },
             {
               "score": "1-0",
-              "prob": 17.6
+              "prob": 17.9
             },
             {
               "score": "0-1",
-              "prob": 14.4
+              "prob": 14.6
             },
             {
               "score": "1-1",
-              "prob": 12.9
+              "prob": 12.7
             },
             {
               "score": "2-0",
-              "prob": 7.9
+              "prob": 7.8
             }
           ],
-          "home_expected_goals": 0.89,
-          "away_expected_goals": 0.73
+          "home_expected_goals": 0.87,
+          "away_expected_goals": 0.71
+        },
+        "dixon_coles": {
+          "home_win": 38.3,
+          "draw": 29.6,
+          "away_win": 32.2
         },
         "elo": {
           "home_win": 50.4,
@@ -330,49 +1114,768 @@
           "away_win": 35.6,
           "elo_diff": 60
         },
-        "model_consensus": 9
+        "bradley_terry": {
+          "home_win": 41.2,
+          "draw": 25.0,
+          "away_win": 33.8
+        },
+        "monte_carlo": {
+          "home_win": 39.8,
+          "draw": 25.6,
+          "away_win": 34.5
+        },
+        "bayesian": {
+          "home_win": 42.3,
+          "draw": 16.6,
+          "away_win": 41.1
+        },
+        "random_forest": {
+          "home_win": 43.4,
+          "draw": 33.9,
+          "away_win": 22.7,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 49.1,
+          "draw": 30.6,
+          "away_win": 20.3,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 40.9,
+          "draw": 31.7,
+          "away_win": 27.4,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 35.3,
+          "draw": 33.8,
+          "away_win": 30.8,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 8.1
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 20.6
+          },
+          {
+            "score": "1-0",
+            "prob": 17.9
+          },
+          {
+            "score": "0-1",
+            "prob": 14.6
+          },
+          {
+            "score": "1-1",
+            "prob": 12.7
+          },
+          {
+            "score": "2-0",
+            "prob": 7.8
+          }
+        ],
+        "over_2_5_pct": 44.80004499765266,
+        "btts_pct": 29.5,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.47,
+        "pace_rating": "中等"
       },
-      "match_num": "周一006",
-      "recommend_score": 51.06,
-      "is_recommended": true
+      "match_num": "周二008",
+      "recommend_score": 76.96,
+      "is_recommended": false
+    },
+    {
+      "match_id": 10,
+      "league": "欧冠",
+      "league_logo": "",
+      "home_team": "加拉塔萨",
+      "away_team": "利物浦",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10,
+        "sp_home": 3.98,
+        "sp_draw": 3.9,
+        "sp_away": 1.61
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 41.8,
+        "draw_pct": 29.7,
+        "away_win_pct": 28.5,
+        "confidence": 80.2,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14模型，主胜为最优解但优势不大。模型融合给出主胜41.7%，随机森林43.4%、梯度提升49.1%、神经网络40.9%均偏向主队，ELO差值60也支持主场端。泊松与Dixon-Coles则提示低比分格局，xG仅0.9比0.7，0比0与1球胜负概率较高。大2.5球仅44.8%、双方进球29.5%，更符合小球与单边破门。需注意两队基础面数据完全一致，样本辨识度不足，且三项EV均为0，说明缺乏明确投注价值，实战更适合谨慎观望。",
+        "gemini_analysis": "基于14大模型综合研判，尽管双方历史场次数据（进失球、近况）呈现镜像对称，但高阶模型揭示了显著的结构化差异。ELO评分系统给出50.4%的主胜概率，反映了加拉塔萨雷在主场环境下的权重溢价。梯度提升（GBDT）与随机森林模型均偏向主队，共识度达11/11，显示出非线性特征中的主场优势。泊松分布预测xG仅为0.9-0.7，结合双方近期LLLDL的低迷走势，进攻效率处于冰点。虽然EV值为0显示机构尚未释放套利空间，但从量化对冲角度看，主场哨声与地理压力是打破数据对称性的核心变量。建议关注小球格局下的主队窄胜。",
+        "analysis": "",
+        "key_factors": [
+          "泊松分布、Dixon-Coles与较低BTTS概率共同指向低比分比赛",
+          "双方近况极度低迷导致进攻期望值(xG)偏低",
+          "模型融合共识指向主场不败格局",
+          "ELO评分主场权重溢价",
+          "融合模型与树模型整体明显偏向主队，主胜概率稳定领先",
+          "三项EV均为0且基础数据对称，结论可用但投注边际不足"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "1-0",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 36.8,
+          "draw": 35.4,
+          "away_win": 27.7,
+          "predicted_score": "0-0",
+          "home_xg": 0.87,
+          "away_xg": 0.71,
+          "btts": 29.5,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 20.6
+            },
+            {
+              "score": "1-0",
+              "prob": 17.9
+            },
+            {
+              "score": "0-1",
+              "prob": 14.6
+            },
+            {
+              "score": "1-1",
+              "prob": 12.7
+            },
+            {
+              "score": "2-0",
+              "prob": 7.8
+            }
+          ],
+          "home_expected_goals": 0.87,
+          "away_expected_goals": 0.71
+        },
+        "dixon_coles": {
+          "home_win": 38.3,
+          "draw": 29.6,
+          "away_win": 32.2
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 41.2,
+          "draw": 25.0,
+          "away_win": 33.8
+        },
+        "monte_carlo": {
+          "home_win": 40.1,
+          "draw": 25.7,
+          "away_win": 34.2
+        },
+        "bayesian": {
+          "home_win": 42.3,
+          "draw": 16.6,
+          "away_win": 41.1
+        },
+        "random_forest": {
+          "home_win": 43.4,
+          "draw": 33.9,
+          "away_win": 22.7,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 49.1,
+          "draw": 30.6,
+          "away_win": 20.3,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 40.9,
+          "draw": 31.7,
+          "away_win": 27.4,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 35.3,
+          "draw": 33.8,
+          "away_win": 30.8,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 8.1
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 20.6
+          },
+          {
+            "score": "1-0",
+            "prob": 17.9
+          },
+          {
+            "score": "0-1",
+            "prob": 14.6
+          },
+          {
+            "score": "1-1",
+            "prob": 12.7
+          },
+          {
+            "score": "2-0",
+            "prob": 7.8
+          }
+        ],
+        "over_2_5_pct": 44.80004499765266,
+        "btts_pct": 29.5,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.47,
+        "pace_rating": "中等"
+      },
+      "match_num": "周二005",
+      "recommend_score": 76.72,
+      "is_recommended": false
+    },
+    {
+      "match_id": 13,
+      "league": "欧冠",
+      "league_logo": "",
+      "home_team": "纽卡斯尔",
+      "away_team": "巴萨",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10,
+        "sp_home": 2.58,
+        "sp_draw": 3.68,
+        "sp_away": 2.13
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 41.8,
+        "draw_pct": 29.7,
+        "away_win_pct": 28.5,
+        "confidence": 76.5,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14项模型，主队仅占轻微优势。模型融合给出主胜41.7%、平29.4%、客胜28.9%，与Dixon-Coles、蒙特卡洛、随机森林和神经网络方向基本一致；虽ELO与梯度提升更偏主队，但泊松分布显示xG仅0.9比0.7，最可能低比分。双方进球概率仅29.5%，大2.5球仅44.8%，说明比赛更可能进入谨慎节奏。EV方面三项均为0%，代表当前不存在明确投注价值，结论可用于赛果判断，但不宜重注，策略上以主胜防平、偏小球思路更稳。",
+        "gemini_analysis": "未响应",
+        "analysis": "",
+        "key_factors": [
+          "模型融合与多数机器学习模型均给予主队4成以上胜率，主场优势略占先手",
+          "泊松与xG指向低产出比赛，0-0与1球分胜负的概率区间较高",
+          "三项赛果EV均为0%，市场未出现显著错价，投资价值弱于预测价值"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 36.8,
+          "draw": 35.4,
+          "away_win": 27.7,
+          "predicted_score": "0-0",
+          "home_xg": 0.87,
+          "away_xg": 0.71,
+          "btts": 29.5,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 20.6
+            },
+            {
+              "score": "1-0",
+              "prob": 17.9
+            },
+            {
+              "score": "0-1",
+              "prob": 14.6
+            },
+            {
+              "score": "1-1",
+              "prob": 12.7
+            },
+            {
+              "score": "2-0",
+              "prob": 7.8
+            }
+          ],
+          "home_expected_goals": 0.87,
+          "away_expected_goals": 0.71
+        },
+        "dixon_coles": {
+          "home_win": 38.3,
+          "draw": 29.6,
+          "away_win": 32.2
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 41.2,
+          "draw": 25.0,
+          "away_win": 33.8
+        },
+        "monte_carlo": {
+          "home_win": 40.9,
+          "draw": 25.3,
+          "away_win": 33.8
+        },
+        "bayesian": {
+          "home_win": 42.3,
+          "draw": 16.6,
+          "away_win": 41.1
+        },
+        "random_forest": {
+          "home_win": 43.4,
+          "draw": 33.9,
+          "away_win": 22.7,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 49.1,
+          "draw": 30.6,
+          "away_win": 20.3,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 40.9,
+          "draw": 31.7,
+          "away_win": 27.4,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 35.3,
+          "draw": 33.8,
+          "away_win": 30.8,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 8.1
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 20.6
+          },
+          {
+            "score": "1-0",
+            "prob": 17.9
+          },
+          {
+            "score": "0-1",
+            "prob": 14.6
+          },
+          {
+            "score": "1-1",
+            "prob": 12.7
+          },
+          {
+            "score": "2-0",
+            "prob": 7.8
+          }
+        ],
+        "over_2_5_pct": 44.80004499765266,
+        "btts_pct": 29.5,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.47,
+        "pace_rating": "中等"
+      },
+      "match_num": "周二009",
+      "recommend_score": 75.24,
+      "is_recommended": false
+    },
+    {
+      "match_id": 3,
+      "league": "英足总杯",
+      "league_logo": "",
+      "home_team": "西汉姆联",
+      "away_team": "布伦特",
+      "home_logo": "https://media.api-sports.io/football/teams/48.png",
+      "away_logo": "https://media.api-sports.io/football/teams/55.png",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10,
+        "sp_home": 2.84,
+        "sp_draw": 3.35,
+        "sp_away": 2.09
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 41.8,
+        "draw_pct": 29.7,
+        "away_win_pct": 28.5,
+        "confidence": 74.5,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14项模型，主胜为最优方向但优势有限。模型融合给出主胜41.6%、平29.5%、客胜28.9%，泊松与Dixon-Coles均指向低比分格局，0-0与1球胜负概率较高；ELO、随机森林、梯度提升对主队支持更强，说明主场与强度评分仍有边际优势。总进球预期约2.5，但双方进球概率仅29.5%，更符合一方零封的比赛结构。需注意两队基础面数据几乎完全一致，且近期状态同样低迷，导致置信度不能过高。EV层面三项均为0%，说明当前并无明确投注价值，实战更适合以结果判断为主、资金保持克制。",
+        "gemini_analysis": "未响应",
+        "analysis": "",
+        "key_factors": [
+          "三项EV均为0%，代表市场无明显错价，主胜可看好但不宜重注",
+          "泊松分布、Dixon-Coles和BTTS数据显示比赛更可能走低比分与零封",
+          "模型融合与多项机器学习模型整体偏向主胜，但幅度不大"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 36.8,
+          "draw": 35.4,
+          "away_win": 27.7,
+          "predicted_score": "0-0",
+          "home_xg": 0.87,
+          "away_xg": 0.71,
+          "btts": 29.5,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 20.6
+            },
+            {
+              "score": "1-0",
+              "prob": 17.9
+            },
+            {
+              "score": "0-1",
+              "prob": 14.6
+            },
+            {
+              "score": "1-1",
+              "prob": 12.7
+            },
+            {
+              "score": "2-0",
+              "prob": 7.8
+            }
+          ],
+          "home_expected_goals": 0.87,
+          "away_expected_goals": 0.71
+        },
+        "dixon_coles": {
+          "home_win": 38.3,
+          "draw": 29.6,
+          "away_win": 32.2
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 41.2,
+          "draw": 25.0,
+          "away_win": 33.8
+        },
+        "monte_carlo": {
+          "home_win": 39.6,
+          "draw": 26.0,
+          "away_win": 34.5
+        },
+        "bayesian": {
+          "home_win": 42.3,
+          "draw": 16.6,
+          "away_win": 41.1
+        },
+        "random_forest": {
+          "home_win": 43.4,
+          "draw": 33.9,
+          "away_win": 22.7,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 49.1,
+          "draw": 30.6,
+          "away_win": 20.3,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 40.9,
+          "draw": 31.7,
+          "away_win": 27.4,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 35.3,
+          "draw": 33.8,
+          "away_win": 30.8,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 8.1
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 20.6
+          },
+          {
+            "score": "1-0",
+            "prob": 17.9
+          },
+          {
+            "score": "0-1",
+            "prob": 14.6
+          },
+          {
+            "score": "1-1",
+            "prob": 12.7
+          },
+          {
+            "score": "2-0",
+            "prob": 7.8
+          }
+        ],
+        "over_2_5_pct": 44.80004499765266,
+        "btts_pct": 29.5,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.47,
+        "pace_rating": "中等"
+      },
+      "match_num": "周一003",
+      "recommend_score": 74.44,
+      "is_recommended": false
     },
     {
       "match_id": 5,
       "league": "法乙",
+      "league_logo": "",
       "home_team": "敦刻尔克",
       "away_team": "兰斯",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 21,
+        "wins": 6,
+        "draws": 5,
+        "losses": 10,
+        "goals_for": 26,
+        "goals_against": 8,
+        "avg_goals_for": "1.28",
+        "avg_goals_against": "0.41",
+        "clean_sheets": 5,
+        "form": "WWLLD",
+        "rank": 8,
+        "sp_home": 3.0,
+        "sp_draw": 3.05,
+        "sp_away": 2.14
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
       "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 48.8,
-        "draw_pct": 28.8,
-        "away_win_pct": 22.4,
-        "confidence": 72.0,
+        "predicted_score": "1-0",
+        "home_win_pct": 48.2,
+        "draw_pct": 28.1,
+        "away_win_pct": 23.7,
+        "confidence": 78.2,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "低",
-        "value_bets_summary": [],
-        "home_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "draw_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "away_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "gpt_analysis": "模型共识8/10，基础面上敦刻尔克近5场2胜1平2负，走势强于兰斯近5场3平2负，且主胜概率48.6%显著高于客胜22.8%，主队不败框架更稳。比分倾向2-1，主要基于双方防线稳定性一般、客队连续不胜但仍具进球能力。需注意当前主胜/平/客胜的EV均为0.0%，凯利建议注码也均为0.0%，说明赔率端未给出明确正收益空间，投资上可作赛果判断偏主胜，但实盘不宜重仓，宜轻仓或等待临场赔率改善后再介入。",
-        "gemini_analysis": "未响应",
+        "gpt_analysis": "综合14项模型，主队方向占优但分歧不小。模型融合给出主胜48.7%，泊松与神经网络明显强化低比分与平局权重，xG仅0.8比0.4、预期总进球1.7，指向慢节奏防守战。高阶模型中梯度提升极度看好主胜，但Dixon-Coles、贝叶斯和蒙特卡洛仍保留较强客队抗衡概率，因此不宜过度激进。大小球25.2%、双方进球17.3%，都支持小球与单边进球。EV层面三项均为0%，说明当前没有明确正期望投注空间，更适合以赛果判断为主、资金管理从严。综合落点为主队小胜，首选1-0，次选0-0/1-1。",
+        "gemini_analysis": "综合14大模型数据，模型融合给出主胜48.7%的最高概率。主队敦刻尔克场均失球仅0.41个，防守极其稳固，且拥有5次零封记录。客队兰斯近期遭遇4连败（LLLDL），状态低迷。泊松分布预测比分为0-0，大2.5球概率仅为25.2%，双方进球概率低至17.3%，比赛节奏偏慢，预期总进球1.7个，强烈指向小球赛果。由于机构赔率缺失，当前各项EV均为0.0%，建议在实操中等待赔率发布后寻找主胜或小球的价值博弈点。综合基本面与高阶模型，看好主队凭借防守优势小胜。",
+        "analysis": "",
         "key_factors": [
-          "当前三项EV与凯利值均为0，方向虽偏主胜，但缺乏足够赔率套利空间",
-          "敦刻尔克近期状态与主场面优于兰斯，模型胜率明显偏向主队"
+          "模型融合与随机森林整体偏向主胜，但多模型对平局仍有较高防范",
+          "EV全部为0%，缺乏明确价值下注窗口，应降低仓位并防平局干扰",
+          "主队场均失球仅0.41防守稳固",
+          "泊松分布、低xG与慢节奏指标共同指向小比分，2.5球以下概率更优",
+          "客队近期4连败状态低迷",
+          "大2.5球概率仅25.2%指向小球"
         ],
+        "gpt_score": "1-0",
+        "gemini_score": "1-0",
+        "model_agreement": true,
         "poisson": {
           "home_win": 44.2,
           "draw": 40.3,
@@ -380,7 +1883,6 @@
           "predicted_score": "0-0",
           "home_xg": 0.82,
           "away_xg": 0.37,
-          "over_2_5": 11.9,
           "btts": 17.3,
           "top_scores": [
             {
@@ -407,476 +1909,173 @@
           "home_expected_goals": 0.82,
           "away_expected_goals": 0.37
         },
+        "dixon_coles": {
+          "home_win": 36.4,
+          "draw": 30.1,
+          "away_win": 33.5
+        },
         "elo": {
           "home_win": 50.4,
           "draw": 28.0,
           "away_win": 35.6,
           "elo_diff": 60
         },
-        "model_consensus": 8
+        "bradley_terry": {
+          "home_win": 38.3,
+          "draw": 25.1,
+          "away_win": 36.6
+        },
+        "monte_carlo": {
+          "home_win": 38.9,
+          "draw": 26.4,
+          "away_win": 34.8
+        },
+        "bayesian": {
+          "home_win": 39.4,
+          "draw": 21.1,
+          "away_win": 39.4
+        },
+        "random_forest": {
+          "home_win": 52.2,
+          "draw": 27.0,
+          "away_win": 20.7,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 81.4,
+          "draw": 11.5,
+          "away_win": 7.1,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 38.4,
+          "draw": 36.1,
+          "away_win": 25.5,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 29.8,
+          "draw": 37.9,
+          "away_win": 32.3,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 36.7
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 30.3
+          },
+          {
+            "score": "1-0",
+            "prob": 25.0
+          },
+          {
+            "score": "0-1",
+            "prob": 11.2
+          },
+          {
+            "score": "2-0",
+            "prob": 10.3
+          },
+          {
+            "score": "1-1",
+            "prob": 9.2
+          }
+        ],
+        "over_2_5_pct": 25.232792204036503,
+        "btts_pct": 17.3,
+        "model_consensus": 9,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 1.74,
+        "pace_rating": "慢"
       },
       "match_num": "周一005",
-      "recommend_score": 49.54,
+      "recommend_score": 73.84,
       "is_recommended": false
     },
     {
-      "match_id": 7,
-      "league": "葡超",
-      "home_team": "通德拉",
-      "away_team": "里奥阿维",
-      "prediction": {
-        "predicted_score": "0-1",
-        "home_win_pct": 30.1,
-        "draw_pct": 32.0,
-        "away_win_pct": 37.9,
-        "confidence": 56.0,
-        "result": "客胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "中",
-        "value_bets_summary": [],
-        "home_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "draw_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "away_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "gpt_analysis": "两队近期状态都差，主队26轮仅3胜且近5场2平3负，基本面明显偏弱；客队整体战绩与模型概率略占优，客胜37.9%为三项最高，因此倾向里奥阿维小胜。总进球端，双方进攻效率有限，比赛更像低节奏拉扯，小于2.5球更合理。资金面上三项EV均为0%，凯利建议注码也均为0%，说明当前赔率下不存在可量化正收益优势，虽可做赛果方向判断，但投资层面应以观望或极小仓位处理，避免无优势下注。",
-        "gemini_analysis": "未响应",
-        "key_factors": [
-          "主队赛季胜率极低且近期连续不胜，基本面处于明显下风",
-          "模型概率客胜最高，但EV与凯利均为零，代表方向可判但下注价值不足"
-        ],
-        "poisson": {
-          "home_win": 14.4,
-          "draw": 34.0,
-          "away_win": 51.5,
-          "predicted_score": "0-1",
-          "home_xg": 0.42,
-          "away_xg": 1.06,
-          "over_2_5": 18.6,
-          "btts": 22.4,
-          "top_scores": [
-            {
-              "score": "0-1",
-              "prob": 24.2
-            },
-            {
-              "score": "0-0",
-              "prob": 22.8
-            },
-            {
-              "score": "0-2",
-              "prob": 12.8
-            },
-            {
-              "score": "1-1",
-              "prob": 10.1
-            },
-            {
-              "score": "1-0",
-              "prob": 9.5
-            }
-          ],
-          "home_expected_goals": 0.42,
-          "away_expected_goals": 1.06
-        },
-        "elo": {
-          "home_win": 50.4,
-          "draw": 28.0,
-          "away_win": 35.6,
-          "elo_diff": 60
-        },
-        "model_consensus": 6
-      },
-      "match_num": "周一007",
-      "recommend_score": 35.87,
-      "is_recommended": false
-    },
-    {
-      "match_id": 4,
-      "league": "意甲",
-      "home_team": "拉齐奥",
-      "away_team": "萨索洛",
-      "prediction": {
-        "predicted_score": "1-0",
-        "home_win_pct": 44.2,
-        "draw_pct": 29.2,
-        "away_win_pct": 26.6,
-        "confidence": 46.5,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "高",
-        "value_bets_summary": [],
-        "home_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "draw_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "away_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "gpt_analysis": "拉齐奥主场面与阵容深度仍略优，萨索洛近期连续不胜且客场抗压能力偏弱，基本面支持主队小幅占先。但两队本季稳定性都不足，模型共识仅3/10，胜平负分布较分散，难形成强信号。关键是当前未给出有效赔率，三项EV均为0%，对应凯利建议注码也均为0%，说明不存在可确认的正期望投资机会。策略上以赛果倾向主胜为主，资金层面建议观望，若临场主胜赔率上修并转为正EV，才考虑极小仓位介入。",
-        "gemini_analysis": "未响应",
-        "key_factors": [
-          "赔率缺失导致EV与凯利均为0，量化上不满足正式下注条件",
-          "拉齐奥主场基础战力和纸面实力略强于萨索洛，且客队近期状态更差"
-        ],
-        "poisson": {
-          "home_win": 32.6,
-          "draw": 36.0,
-          "away_win": 31.4,
-          "predicted_score": "0-0",
-          "home_xg": 0.79,
-          "away_xg": 0.77,
-          "over_2_5": 20.4,
-          "btts": 29.1,
-          "top_scores": [
-            {
-              "score": "0-0",
-              "prob": 21.2
-            },
-            {
-              "score": "1-0",
-              "prob": 16.7
-            },
-            {
-              "score": "0-1",
-              "prob": 16.2
-            },
-            {
-              "score": "1-1",
-              "prob": 12.7
-            },
-            {
-              "score": "2-0",
-              "prob": 6.5
-            }
-          ],
-          "home_expected_goals": 0.79,
-          "away_expected_goals": 0.77
-        },
-        "elo": {
-          "home_win": 50.4,
-          "draw": 28.0,
-          "away_win": 35.6,
-          "elo_diff": 60
-        },
-        "model_consensus": 3
-      },
-      "match_num": "周一004",
-      "recommend_score": 27.96,
-      "is_recommended": false
-    }
-  ],
-  "top4": [
-    {
-      "rank": 1,
-      "match_id": 2,
-      "league": "女足亚洲杯",
-      "home_team": "朝鲜女",
-      "away_team": "中国女",
-      "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 57.9,
-        "draw_pct": 23.2,
-        "away_win_pct": 18.9,
-        "confidence": 82.0,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "低",
-        "value_bets_summary": [],
-        "home_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "draw_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "away_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "gpt_analysis": "朝鲜女足整体战绩与近期状态明显占优，主队27场13胜6平8负，近5场4胜1负；中国女足近5场1平4负，攻防走势偏弱。模型共识10/10，主胜概率57.9%显著高于平局23.4%与客胜18.7%，胜负倾向清晰。预计比赛节奏偏主动，主队有望形成持续压制，但客队仍具一定反击与定位球得分可能。需注意当前未提供有效赔率，三项EV均为0.0%，凯利建议注码也均为0.0%，说明方向虽偏主胜，但严格量化上暂无正收益投注边际，建议以主胜判断为主、控制仓位观望。",
-        "gemini_analysis": "未响应",
-        "key_factors": [
-          "朝鲜女足近期状态强势，基本面与模型胜率均明显占优",
-          "赔率缺失导致EV与凯利均为0，方向正确但缺乏可执行投注优势"
-        ],
-        "poisson": {
-          "home_win": 54.6,
-          "draw": 33.4,
-          "away_win": 12.1,
-          "predicted_score": "1-0",
-          "home_xg": 1.1,
-          "away_xg": 0.36,
-          "over_2_5": 18.1,
-          "btts": 20.2,
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 25.5
-            },
-            {
-              "score": "0-0",
-              "prob": 23.2
-            },
-            {
-              "score": "2-0",
-              "prob": 14.1
-            },
-            {
-              "score": "1-1",
-              "prob": 9.2
-            },
-            {
-              "score": "0-1",
-              "prob": 8.4
-            }
-          ],
-          "home_expected_goals": 1.1,
-          "away_expected_goals": 0.36
-        },
-        "elo": {
-          "home_win": 50.4,
-          "draw": 28.0,
-          "away_win": 35.6,
-          "elo_diff": 60
-        },
-        "model_consensus": 10
-      },
-      "match_num": "周一002",
-      "recommend_score": 60.27,
-      "is_recommended": true
-    },
-    {
-      "rank": 2,
-      "match_id": 1,
-      "league": "女足亚洲杯",
-      "home_team": "孟加拉国女足",
-      "away_team": "乌兹别克斯坦女足",
-      "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 52.7,
-        "draw_pct": 24.4,
-        "away_win_pct": 22.9,
-        "confidence": 78.0,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "低",
-        "value_bets_summary": [],
-        "home_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "draw_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "away_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "gpt_analysis": "基本面主队胜平负分布55/25/20，近况与总体胜率均优于客队，比赛掌控与得分稳定性更强，模型共识10/10支持主胜并倾向2-1。当前未提供赔率，系统计算EV=0%且凯利建议0%，代表无法确认正期望，策略应以观望/不重仓为主；若临场主胜赔率高于隐含概率(约≥1.95)再小注介入并严格止损。",
-        "gemini_analysis": "未响应",
-        "key_factors": [
-          "赔率缺失导致EV=0与凯利=0，资金管理要求先等价差再下注",
-          "主队近况与整体胜率优于客队，胜面更集中在主胜区间"
-        ],
-        "poisson": {
-          "home_win": 49.4,
-          "draw": 37.0,
-          "away_win": 13.6,
-          "predicted_score": "0-0",
-          "home_xg": 0.95,
-          "away_xg": 0.36,
-          "over_2_5": 14.6,
-          "btts": 18.6,
-          "top_scores": [
-            {
-              "score": "0-0",
-              "prob": 26.9
-            },
-            {
-              "score": "1-0",
-              "prob": 25.6
-            },
-            {
-              "score": "2-0",
-              "prob": 12.2
-            },
-            {
-              "score": "0-1",
-              "prob": 9.7
-            },
-            {
-              "score": "1-1",
-              "prob": 9.2
-            }
-          ],
-          "home_expected_goals": 0.95,
-          "away_expected_goals": 0.36
-        },
-        "elo": {
-          "home_win": 50.4,
-          "draw": 28.0,
-          "away_win": 35.6,
-          "elo_diff": 60
-        },
-        "model_consensus": 10
-      },
-      "match_num": "周一001",
-      "recommend_score": 57.11,
-      "is_recommended": true
-    },
-    {
-      "rank": 3,
-      "match_id": 3,
-      "league": "英足总杯",
-      "home_team": "西汉姆联",
-      "away_team": "布伦特",
-      "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 41.3,
-        "draw_pct": 30.1,
-        "away_win_pct": 28.6,
-        "confidence": 74.0,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "低",
-        "value_bets_summary": [],
-        "home_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "draw_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "away_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "gpt_analysis": "两队赛季战绩与近期走势几乎完全一致，基本面差距有限，模型仅给予主队微弱优势，主胜概率41.3%，高于平局30.1%与客胜28.6%，故结果倾向主胜。进球端预计比赛开放，2-1更符合杯赛博弈特征，倾向大于2.5球且双方进球。需注意当前三项EV均为0.0%，凯利建议注码也均为0.0%，说明在缺失有效赔率优势时不存在正期望投注空间，实盘应以观望为主，若后续主胜赔率上调形成正EV，再考虑小仓位介入。",
-        "gemini_analysis": "未响应",
-        "key_factors": [
-          "模型共识看好度10/10，但胜平负概率差距不大，主队仅属小优",
-          "当前三项EV与凯利值均为0，代表无明确投注价值，资金管理应保守"
-        ],
-        "poisson": {
-          "home_win": 36.8,
-          "draw": 35.4,
-          "away_win": 27.7,
-          "predicted_score": "0-0",
-          "home_xg": 0.87,
-          "away_xg": 0.71,
-          "over_2_5": 21.1,
-          "btts": 29.5,
-          "top_scores": [
-            {
-              "score": "0-0",
-              "prob": 20.6
-            },
-            {
-              "score": "1-0",
-              "prob": 17.9
-            },
-            {
-              "score": "0-1",
-              "prob": 14.6
-            },
-            {
-              "score": "1-1",
-              "prob": 12.7
-            },
-            {
-              "score": "2-0",
-              "prob": 7.8
-            }
-          ],
-          "home_expected_goals": 0.87,
-          "away_expected_goals": 0.71
-        },
-        "elo": {
-          "home_win": 50.4,
-          "draw": 28.0,
-          "away_win": 35.6,
-          "elo_diff": 60
-        },
-        "model_consensus": 10
-      },
-      "match_num": "周一003",
-      "recommend_score": 52.09,
-      "is_recommended": true
-    },
-    {
-      "rank": 4,
       "match_id": 6,
       "league": "西甲",
+      "league_logo": "",
       "home_team": "西班牙人",
       "away_team": "奥维耶多",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 22,
+        "wins": 7,
+        "draws": 5,
+        "losses": 10,
+        "goals_for": 30,
+        "goals_against": 17,
+        "avg_goals_for": "1.39",
+        "avg_goals_against": "0.81",
+        "clean_sheets": 3,
+        "form": "DLWLD",
+        "rank": 7,
+        "sp_home": 1.68,
+        "sp_draw": 3.25,
+        "sp_away": 4.45
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
       "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 43.2,
-        "draw_pct": 30.9,
-        "away_win_pct": 25.9,
-        "confidence": 75.0,
+        "predicted_score": "1-0",
+        "home_win_pct": 43.8,
+        "draw_pct": 30.7,
+        "away_win_pct": 25.5,
+        "confidence": 74.5,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "低",
-        "value_bets_summary": [],
-        "home_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "draw_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "away_ev": {
-          "ev": 0.0,
-          "kelly": 0.0,
-          "is_value": false
-        },
-        "gpt_analysis": "综合战绩、近期状态与模型共识，主队胜面仍居首。西班牙人整体稳定性略优，且主场拿分能力相对更强；奥维耶多近况连续不胜，进攻端转化率偏低。概率分布为主胜43.4%、平30.9%、客胜25.7%，主胜是最优赛果方向。但由于题面未给出市场赔率，三项EV均为0%，对应凯利建议注码也均为0%，说明当前仅有结果预测优势，没有可执行的正期望投注空间，宜轻仓或观望。",
+        "gpt_analysis": "14项模型整体更偏向主队不败且主胜占优，融合模型给出主胜43.7%、平30.5%、客25.8%，泊松与Dixon-Coles均指向低比分格局，核心比分集中在1-0、0-0、1-1附近。ELO、随机森林、梯度提升均对主队更友好，而贝叶斯与部分回归模型对平局和客胜保留一定空间，说明优势并非碾压。大2.5球仅46.7%、双方进球30.6%，结合xG仅0.9比0.7，更支持小球与客队进攻受限。EV三项均为0，代表当前缺乏明确赔率错配与投注价值，更适合结果判断而非重注操作。",
         "gemini_analysis": "未响应",
+        "analysis": "",
         "key_factors": [
-          "客队近5场LLLDL持续低迷，主队主场与稳定性更占优",
-          "模型共识看好度9/10，主队基础胜率显著领先客队"
+          "EV全部为0，说明交易层面无明显价值优势，需控制仓位",
+          "模型融合、ELO与树模型多数支持主队，主胜为第一落点",
+          "泊松和Dixon-Coles显示总进球偏低，1球决胜概率较高"
         ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
         "poisson": {
           "home_win": 37.3,
           "draw": 34.8,
@@ -884,7 +2083,6 @@
           "predicted_score": "0-0",
           "home_xg": 0.89,
           "away_xg": 0.73,
-          "over_2_5": 22.3,
           "btts": 30.6,
           "top_scores": [
             {
@@ -911,16 +2109,1317 @@
           "home_expected_goals": 0.89,
           "away_expected_goals": 0.73
         },
+        "dixon_coles": {
+          "home_win": 39.3,
+          "draw": 29.3,
+          "away_win": 31.4
+        },
         "elo": {
           "home_win": 50.4,
           "draw": 28.0,
           "away_win": 35.6,
           "elo_diff": 60
         },
-        "model_consensus": 9
+        "bradley_terry": {
+          "home_win": 40.4,
+          "draw": 25.0,
+          "away_win": 34.6
+        },
+        "monte_carlo": {
+          "home_win": 41.4,
+          "draw": 25.4,
+          "away_win": 33.2
+        },
+        "bayesian": {
+          "home_win": 41.1,
+          "draw": 20.6,
+          "away_win": 38.3
+        },
+        "random_forest": {
+          "home_win": 44.4,
+          "draw": 34.2,
+          "away_win": 21.4,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 48.8,
+          "draw": 35.6,
+          "away_win": 15.6,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 40.6,
+          "draw": 32.7,
+          "away_win": 26.7,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 33.5,
+          "draw": 35.1,
+          "away_win": 31.4,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 33.3
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 19.7
+          },
+          {
+            "score": "1-0",
+            "prob": 17.6
+          },
+          {
+            "score": "0-1",
+            "prob": 14.4
+          },
+          {
+            "score": "1-1",
+            "prob": 12.9
+          },
+          {
+            "score": "2-0",
+            "prob": 7.9
+          }
+        ],
+        "over_2_5_pct": 46.71966238684401,
+        "btts_pct": 30.6,
+        "model_consensus": 10,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.54,
+        "pace_rating": "中等"
       },
       "match_num": "周一006",
-      "recommend_score": 51.06,
+      "recommend_score": 73.04,
+      "is_recommended": false
+    },
+    {
+      "match_id": 7,
+      "league": "葡超",
+      "league_logo": "",
+      "home_team": "通德拉",
+      "away_team": "里奥阿维",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 26,
+        "wins": 3,
+        "draws": 7,
+        "losses": 16,
+        "goals_for": 16,
+        "goals_against": 30,
+        "avg_goals_for": "0.65",
+        "avg_goals_against": "1.18",
+        "clean_sheets": 3,
+        "form": "DDLLL",
+        "rank": 17,
+        "sp_home": 2.0,
+        "sp_draw": 3.16,
+        "sp_away": 3.2
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "0-1",
+        "home_win_pct": 28.2,
+        "draw_pct": 32.3,
+        "away_win_pct": 39.5,
+        "confidence": 66.5,
+        "result": "客胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "中",
+        "gpt_analysis": "基础面上，通德拉26战仅3胜、场均进球0.65且近5场DDLLL，进攻效率明显偏弱；里奥阿维场均失球0.79，防守质量更稳。高阶模型中，泊松、Dixon-Coles、蒙特卡洛与贝叶斯均一致偏向客胜，且泊松给出0-1为最高概率比分；虽ELO与梯度提升对主队更乐观，但与球队近期表现和攻防数据存在背离。模型融合结果客胜36.5%居首，平局紧随其后，说明低比分客队不败是主线。EV三项均为0%，代表当前无显著赔率优势，资金管理上应维持0注码，属于可判断方向但不宜重仓的比赛。",
+        "gemini_analysis": "未响应",
+        "analysis": "",
+        "key_factors": [
+          "里奥阿维防守效率更优，场均失球0.79形成压制",
+          "通德拉进攻乏力，26场仅16球，近况连续不胜",
+          "主流高阶模型多数支持客胜，且大2.5与双方进球概率均偏低"
+        ],
+        "gpt_score": "0-1",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 14.4,
+          "draw": 34.0,
+          "away_win": 51.5,
+          "predicted_score": "0-1",
+          "home_xg": 0.42,
+          "away_xg": 1.06,
+          "btts": 22.4,
+          "top_scores": [
+            {
+              "score": "0-1",
+              "prob": 24.2
+            },
+            {
+              "score": "0-0",
+              "prob": 22.8
+            },
+            {
+              "score": "0-2",
+              "prob": 12.8
+            },
+            {
+              "score": "1-1",
+              "prob": 10.1
+            },
+            {
+              "score": "1-0",
+              "prob": 9.5
+            }
+          ],
+          "home_expected_goals": 0.42,
+          "away_expected_goals": 1.06
+        },
+        "dixon_coles": {
+          "home_win": 19.3,
+          "draw": 30.5,
+          "away_win": 50.2
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 22.0,
+          "draw": 25.9,
+          "away_win": 52.0
+        },
+        "monte_carlo": {
+          "home_win": 19.8,
+          "draw": 29.2,
+          "away_win": 51.0
+        },
+        "bayesian": {
+          "home_win": 29.0,
+          "draw": 24.2,
+          "away_win": 46.8
+        },
+        "random_forest": {
+          "home_win": 26.5,
+          "draw": 33.3,
+          "away_win": 40.2,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 72.4,
+          "draw": 16.0,
+          "away_win": 11.6,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 23.8,
+          "draw": 54.9,
+          "away_win": 21.3,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 19.5,
+          "draw": 47.0,
+          "away_win": 33.5,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 9.0
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-1",
+            "prob": 24.2
+          },
+          {
+            "score": "0-0",
+            "prob": 22.8
+          },
+          {
+            "score": "0-2",
+            "prob": 12.8
+          },
+          {
+            "score": "1-1",
+            "prob": 10.1
+          },
+          {
+            "score": "1-0",
+            "prob": 9.5
+          }
+        ],
+        "over_2_5_pct": 44.75541429466443,
+        "btts_pct": 22.4,
+        "model_consensus": 7,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.47,
+        "pace_rating": "中等"
+      },
+      "match_num": "周一007",
+      "recommend_score": 54.55,
+      "is_recommended": false
+    },
+    {
+      "match_id": 4,
+      "league": "意甲",
+      "league_logo": "",
+      "home_team": "拉齐奥",
+      "away_team": "萨索洛",
+      "home_logo": "https://media.api-sports.io/football/teams/487.png",
+      "away_logo": "https://media.api-sports.io/football/teams/488.png",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 22,
+        "wins": 6,
+        "draws": 6,
+        "losses": 10,
+        "goals_for": 26,
+        "goals_against": 18,
+        "avg_goals_for": "1.22",
+        "avg_goals_against": "0.85",
+        "clean_sheets": 3,
+        "form": "DDWLL",
+        "rank": 11,
+        "sp_home": 1.96,
+        "sp_draw": 3.0,
+        "sp_away": 3.5
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 44.1,
+        "draw_pct": 29.3,
+        "away_win_pct": 26.6,
+        "confidence": 57.0,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "中",
+        "gpt_analysis": "综合14项模型，结论偏向主队不败且主胜略优。模型融合给出主胜45.8%，ELO与随机森林明显支持拉齐奥，但泊松、逻辑回归、神经网络与Dixon-Coles均提示平局和低比分概率不低，说明分歧较大。两队赛季场均失球都低于1，泊松xG仅0.8比0.8，双方进球概率只有29.1%，大2.5球仅44.3%，比赛更像防守拉扯战。由于三项赛果EV全部为0，量化角度不存在明确投注优势，实战应以主胜方向配合小球思路，仓位必须保守。",
+        "gemini_analysis": "未响应",
+        "analysis": "",
+        "key_factors": [
+          "泊松与Dixon-Coles均指向低xG、低比分，0-0和1-0区间概率较高",
+          "模型融合、ELO和随机森林整体仍给主队一定优势，但高阶模型分歧较大",
+          "EV显示主平客均无正收益，说明盘口价值不足，适合轻仓或观望"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 32.6,
+          "draw": 36.0,
+          "away_win": 31.4,
+          "predicted_score": "0-0",
+          "home_xg": 0.79,
+          "away_xg": 0.77,
+          "btts": 29.1,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 21.2
+            },
+            {
+              "score": "1-0",
+              "prob": 16.7
+            },
+            {
+              "score": "0-1",
+              "prob": 16.2
+            },
+            {
+              "score": "1-1",
+              "prob": 12.7
+            },
+            {
+              "score": "2-0",
+              "prob": 6.5
+            }
+          ],
+          "home_expected_goals": 0.79,
+          "away_expected_goals": 0.77
+        },
+        "dixon_coles": {
+          "home_win": 34.7,
+          "draw": 30.5,
+          "away_win": 34.8
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 37.4,
+          "draw": 25.2,
+          "away_win": 37.4
+        },
+        "monte_carlo": {
+          "home_win": 36.7,
+          "draw": 27.1,
+          "away_win": 36.2
+        },
+        "bayesian": {
+          "home_win": 38.5,
+          "draw": 22.9,
+          "away_win": 38.5
+        },
+        "random_forest": {
+          "home_win": 48.0,
+          "draw": 29.2,
+          "away_win": 22.8,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 81.1,
+          "draw": 12.1,
+          "away_win": 6.8,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 37.2,
+          "draw": 37.7,
+          "away_win": 25.1,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 28.4,
+          "draw": 39.0,
+          "away_win": 32.7,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 29.0
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 21.2
+          },
+          {
+            "score": "1-0",
+            "prob": 16.7
+          },
+          {
+            "score": "0-1",
+            "prob": 16.2
+          },
+          {
+            "score": "1-1",
+            "prob": 12.7
+          },
+          {
+            "score": "2-0",
+            "prob": 6.5
+          }
+        ],
+        "over_2_5_pct": 44.3280522134469,
+        "btts_pct": 29.1,
+        "model_consensus": 4,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.45,
+        "pace_rating": "中等"
+      },
+      "match_num": "周一004",
+      "recommend_score": 46.13,
+      "is_recommended": false
+    }
+  ],
+  "top4": [
+    {
+      "rank": 1,
+      "match_id": 2,
+      "league": "女足亚洲杯",
+      "league_logo": "",
+      "home_team": "朝鲜女",
+      "away_team": "中国女",
+      "home_logo": "https://media.api-sports.io/football/teams/1740.png",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 27,
+        "wins": 13,
+        "draws": 6,
+        "losses": 8,
+        "goals_for": 46,
+        "goals_against": 10,
+        "avg_goals_for": "1.71",
+        "avg_goals_against": "0.4",
+        "clean_sheets": 6,
+        "form": "WWLWW",
+        "rank": 1,
+        "sp_home": 1.62,
+        "sp_draw": 3.55,
+        "sp_away": 4.35
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 56.8,
+        "draw_pct": 23.2,
+        "away_win_pct": 20.0,
+        "confidence": 82.5,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14项模型，主胜为一致主方向。泊松给出1-0且xG仅1.1比0.4，Dixon-Coles、随机森林、梯度提升、神经网络及融合模型均将主胜落在48.5%至57.5%区间，说明朝鲜女足优势较稳定。总进球预期2.1，大2.5仅35.4%，双方进球仅20.2%，更支持小比分零封。需注意平局概率仍在两成以上，且ELO与贝叶斯对客队保留一定弹性。EV三项均为0，代表在缺少有效赔率偏差时无明显投注价值，结论可预测主胜，但资金执行宜保守。",
+        "gemini_analysis": "未响应",
+        "analysis": "",
+        "key_factors": [
+          "融合模型主胜57.5%，多模型共识明显偏向主队",
+          "主队防守数据更强，27场仅失10球，客队近况为LLLDL",
+          "预期总进球2.1且双方进球概率低，小比分主胜路径最清晰"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 54.6,
+          "draw": 33.4,
+          "away_win": 12.1,
+          "predicted_score": "1-0",
+          "home_xg": 1.1,
+          "away_xg": 0.36,
+          "btts": 20.2,
+          "top_scores": [
+            {
+              "score": "1-0",
+              "prob": 25.5
+            },
+            {
+              "score": "0-0",
+              "prob": 23.2
+            },
+            {
+              "score": "2-0",
+              "prob": 14.1
+            },
+            {
+              "score": "1-1",
+              "prob": 9.2
+            },
+            {
+              "score": "0-1",
+              "prob": 8.4
+            }
+          ],
+          "home_expected_goals": 1.1,
+          "away_expected_goals": 0.36
+        },
+        "dixon_coles": {
+          "home_win": 48.5,
+          "draw": 24.5,
+          "away_win": 27.0
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 48.1,
+          "draw": 24.7,
+          "away_win": 27.2
+        },
+        "monte_carlo": {
+          "home_win": 48.8,
+          "draw": 23.0,
+          "away_win": 28.2
+        },
+        "bayesian": {
+          "home_win": 50.0,
+          "draw": 19.7,
+          "away_win": 30.3
+        },
+        "random_forest": {
+          "home_win": 56.5,
+          "draw": 15.9,
+          "away_win": 27.6,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 54.0,
+          "draw": 21.8,
+          "away_win": 24.1,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 58.1,
+          "draw": 19.8,
+          "away_win": 22.1,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 54.3,
+          "draw": 22.1,
+          "away_win": 23.6,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 80.0
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "1-0",
+            "prob": 25.5
+          },
+          {
+            "score": "0-0",
+            "prob": 23.2
+          },
+          {
+            "score": "2-0",
+            "prob": 14.1
+          },
+          {
+            "score": "1-1",
+            "prob": 9.2
+          },
+          {
+            "score": "0-1",
+            "prob": 8.4
+          }
+        ],
+        "over_2_5_pct": 35.387927262042275,
+        "btts_pct": 20.2,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.11,
+        "pace_rating": "中等"
+      },
+      "match_num": "周一002",
+      "recommend_score": 82.14,
+      "is_recommended": true
+    },
+    {
+      "rank": 2,
+      "match_id": 9,
+      "league": "女足亚洲杯",
+      "league_logo": "",
+      "home_team": "日本女",
+      "away_team": "越南女",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 27,
+        "wins": 13,
+        "draws": 6,
+        "losses": 8,
+        "goals_for": 46,
+        "goals_against": 10,
+        "avg_goals_for": "1.71",
+        "avg_goals_against": "0.4",
+        "clean_sheets": 6,
+        "form": "WWLWW",
+        "rank": 1,
+        "sp_home": 2.13,
+        "sp_draw": 4.6,
+        "sp_away": 2.26
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 56.3,
+        "draw_pct": 23.7,
+        "away_win_pct": 20.0,
+        "confidence": 81.5,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14项模型，主胜仍是最优解。泊松给出1-0且xG仅1.1比0.4，Dixon-Coles、蒙特卡洛、随机森林、GBDT、神经网络及融合模型均明显偏向日本女，融合主胜57.4%最具代表性。与此同时，大2.5仅35.4%、双方进球仅20.2%，说明比赛更可能呈低节奏、低比分。越南女近期1平4负，状态弱于日本女。惟部分模型对平局和客胜仍保留空间，说明穿盘把握一般。EV层面三项均为0%，市场未给出正期望，结论偏赛果判断而非下注价值，宜轻仓或观望。",
+        "gemini_analysis": "未响应",
+        "analysis": "",
+        "key_factors": [
+          "EV全部为0%，缺乏投注溢价，实战更适合保守处理",
+          "总进球预期2.1，大2.5和双方进球概率偏低，低比分特征明显",
+          "融合模型与多项ML模型一致支持日本女不败且主胜占优"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 54.6,
+          "draw": 33.4,
+          "away_win": 12.1,
+          "predicted_score": "1-0",
+          "home_xg": 1.1,
+          "away_xg": 0.36,
+          "btts": 20.2,
+          "top_scores": [
+            {
+              "score": "1-0",
+              "prob": 25.5
+            },
+            {
+              "score": "0-0",
+              "prob": 23.2
+            },
+            {
+              "score": "2-0",
+              "prob": 14.1
+            },
+            {
+              "score": "1-1",
+              "prob": 9.2
+            },
+            {
+              "score": "0-1",
+              "prob": 8.4
+            }
+          ],
+          "home_expected_goals": 1.1,
+          "away_expected_goals": 0.36
+        },
+        "dixon_coles": {
+          "home_win": 48.5,
+          "draw": 24.5,
+          "away_win": 27.0
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 48.1,
+          "draw": 24.7,
+          "away_win": 27.2
+        },
+        "monte_carlo": {
+          "home_win": 48.2,
+          "draw": 24.2,
+          "away_win": 27.6
+        },
+        "bayesian": {
+          "home_win": 50.0,
+          "draw": 19.7,
+          "away_win": 30.3
+        },
+        "random_forest": {
+          "home_win": 56.5,
+          "draw": 15.9,
+          "away_win": 27.6,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 54.0,
+          "draw": 21.8,
+          "away_win": 24.1,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 58.1,
+          "draw": 19.8,
+          "away_win": 22.1,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 54.3,
+          "draw": 22.1,
+          "away_win": 23.6,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 80.0
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "1-0",
+            "prob": 25.5
+          },
+          {
+            "score": "0-0",
+            "prob": 23.2
+          },
+          {
+            "score": "2-0",
+            "prob": 14.1
+          },
+          {
+            "score": "1-1",
+            "prob": 9.2
+          },
+          {
+            "score": "0-1",
+            "prob": 8.4
+          }
+        ],
+        "over_2_5_pct": 35.387927262042275,
+        "btts_pct": 20.2,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 2.11,
+        "pace_rating": "中等"
+      },
+      "match_num": "周二002",
+      "recommend_score": 81.59,
+      "is_recommended": true
+    },
+    {
+      "rank": 3,
+      "match_id": 8,
+      "league": "女足亚洲杯",
+      "league_logo": "",
+      "home_team": "印度女",
+      "away_team": "中国台女",
+      "home_logo": "",
+      "away_logo": "",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 18,
+        "wins": 9,
+        "draws": 4,
+        "losses": 5,
+        "goals_for": 26,
+        "goals_against": 7,
+        "avg_goals_for": "1.48",
+        "avg_goals_against": "0.4",
+        "clean_sheets": 4,
+        "form": "LDDWL",
+        "rank": 4,
+        "sp_home": 7.5,
+        "sp_draw": 4.0,
+        "sp_away": 1.34
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 51.0,
+        "draw_pct": 24.2,
+        "away_win_pct": 24.8,
+        "confidence": 79.5,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14项模型，主队优势明确但并非碾压。泊松与Dixon-Coles给出低比分框架，xG仅0.9比0.4，且总进球预期1.9，指向1球决胜。随机森林、神经网络、逻辑回归均明显偏主胜，模型融合主胜51.0%为当前最稳共识；但梯度提升、蒙特卡洛与贝叶斯仍保留一定客队爆冷概率，说明平局需防。双方近况都弱，客队连续不胜且进攻效率有限，BTTS仅18.6%、大2.5仅29.9%，小球优先。EV三项均为0，代表缺乏赔率优势，投注层面应以赛果判断为主、控制仓位，不宜重注追高。",
+        "gemini_analysis": "未响应",
+        "analysis": "",
+        "key_factors": [
+          "模型融合主胜51.0%，多数高阶模型支持主队不败且主胜占优",
+          "EV均为0说明无显著价值下注空间，实战应降低资金暴露",
+          "泊松/Dixon-Coles与1.9总进球预期共同指向低节奏小比分"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 49.4,
+          "draw": 37.0,
+          "away_win": 13.6,
+          "predicted_score": "0-0",
+          "home_xg": 0.95,
+          "away_xg": 0.36,
+          "btts": 18.6,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 26.9
+            },
+            {
+              "score": "1-0",
+              "prob": 25.6
+            },
+            {
+              "score": "2-0",
+              "prob": 12.2
+            },
+            {
+              "score": "0-1",
+              "prob": 9.7
+            },
+            {
+              "score": "1-1",
+              "prob": 9.2
+            }
+          ],
+          "home_expected_goals": 0.95,
+          "away_expected_goals": 0.36
+        },
+        "dixon_coles": {
+          "home_win": 41.7,
+          "draw": 28.5,
+          "away_win": 29.7
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 48.8,
+          "draw": 24.6,
+          "away_win": 26.6
+        },
+        "monte_carlo": {
+          "home_win": 43.8,
+          "draw": 25.0,
+          "away_win": 31.2
+        },
+        "bayesian": {
+          "home_win": 49.1,
+          "draw": 19.3,
+          "away_win": 31.6
+        },
+        "random_forest": {
+          "home_win": 54.4,
+          "draw": 17.6,
+          "away_win": 28.0,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 41.8,
+          "draw": 17.7,
+          "away_win": 40.6,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 63.1,
+          "draw": 17.4,
+          "away_win": 19.5,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 56.7,
+          "draw": 20.8,
+          "away_win": 22.5,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 36.2
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 26.9
+          },
+          {
+            "score": "1-0",
+            "prob": 25.6
+          },
+          {
+            "score": "2-0",
+            "prob": 12.2
+          },
+          {
+            "score": "0-1",
+            "prob": 9.7
+          },
+          {
+            "score": "1-1",
+            "prob": 9.2
+          }
+        ],
+        "over_2_5_pct": 29.897009908467297,
+        "btts_pct": 18.6,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 1.91,
+        "pace_rating": "慢"
+      },
+      "match_num": "周二001",
+      "recommend_score": 79.2,
+      "is_recommended": true
+    },
+    {
+      "rank": 4,
+      "match_id": 1,
+      "league": "女足亚洲杯",
+      "league_logo": "",
+      "home_team": "孟加拉国女足",
+      "away_team": "乌兹别克斯坦女足",
+      "home_logo": "https://media.api-sports.io/football/teams/17885.png",
+      "away_logo": "https://media.api-sports.io/football/teams/16945.png",
+      "match_time": "2026-03-09",
+      "home_stats": {
+        "played": 18,
+        "wins": 9,
+        "draws": 4,
+        "losses": 5,
+        "goals_for": 26,
+        "goals_against": 7,
+        "avg_goals_for": "1.48",
+        "avg_goals_against": "0.4",
+        "clean_sheets": 4,
+        "form": "LDDWL",
+        "rank": 4,
+        "sp_home": 8.4,
+        "sp_draw": 4.9,
+        "sp_away": 1.24
+      },
+      "away_stats": {
+        "played": 21,
+        "wins": 7,
+        "draws": 3,
+        "losses": 11,
+        "goals_for": 28,
+        "goals_against": 16,
+        "avg_goals_for": "1.35",
+        "avg_goals_against": "0.79",
+        "clean_sheets": 3,
+        "form": "LLLDL",
+        "rank": 10
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 50.6,
+        "draw_pct": 24.7,
+        "away_win_pct": 24.7,
+        "confidence": 79.5,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "gpt_analysis": "综合14模型，主胜为一致主方向。泊松给出49.4%/37.0%/13.6%，且xG仅0.9比0.4，指向低比分与平局偏高；融合模型主胜51.0%，随机森林54.4%、逻辑回归56.7%、神经网络63.1%均明显支持主队。虽梯度提升与部分对抗模型对客队有一定分歧，但客队近况更差，且比赛节奏预期仅1.9球，大2.5仅29.9%、双方进球仅18.6%，低比分主胜最稳。EV三项均为0，说明当前无明确赔率错配，投资价值不足，实战宜保守，以赛果判断偏主胜、投注层面谨慎观望。",
+        "gemini_analysis": "未响应",
+        "analysis": "",
+        "key_factors": [
+          "三项EV均为0，缺乏正期望下注空间，结论可用但仓位不宜激进",
+          "预期总进球1.9且泊松首选0-0/1-0区间，明显偏向小球",
+          "融合模型与多数机器学习模型共同支持主队，主胜中枢约50%-55%"
+        ],
+        "gpt_score": "1-0",
+        "gemini_score": "?",
+        "model_agreement": true,
+        "poisson": {
+          "home_win": 49.4,
+          "draw": 37.0,
+          "away_win": 13.6,
+          "predicted_score": "0-0",
+          "home_xg": 0.95,
+          "away_xg": 0.36,
+          "btts": 18.6,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 26.9
+            },
+            {
+              "score": "1-0",
+              "prob": 25.6
+            },
+            {
+              "score": "2-0",
+              "prob": 12.2
+            },
+            {
+              "score": "0-1",
+              "prob": 9.7
+            },
+            {
+              "score": "1-1",
+              "prob": 9.2
+            }
+          ],
+          "home_expected_goals": 0.95,
+          "away_expected_goals": 0.36
+        },
+        "dixon_coles": {
+          "home_win": 41.7,
+          "draw": 28.5,
+          "away_win": 29.7
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "bradley_terry": {
+          "home_win": 48.8,
+          "draw": 24.6,
+          "away_win": 26.6
+        },
+        "monte_carlo": {
+          "home_win": 43.5,
+          "draw": 25.2,
+          "away_win": 31.3
+        },
+        "bayesian": {
+          "home_win": 49.1,
+          "draw": 19.3,
+          "away_win": 31.6
+        },
+        "random_forest": {
+          "home_win": 54.4,
+          "draw": 17.6,
+          "away_win": 28.0,
+          "model": "RandomForest"
+        },
+        "gradient_boost": {
+          "home_win": 41.8,
+          "draw": 17.7,
+          "away_win": 40.6,
+          "model": "GradientBoost"
+        },
+        "neural_net": {
+          "home_win": 63.1,
+          "draw": 17.4,
+          "away_win": 19.5,
+          "model": "NeuralNet"
+        },
+        "logistic": {
+          "home_win": 56.7,
+          "draw": 20.8,
+          "away_win": 22.5,
+          "model": "Logistic"
+        },
+        "home_form": {
+          "score": 36.2
+        },
+        "away_form": {
+          "score": 8.1
+        },
+        "odds_analysis": {},
+        "top_scores": [
+          {
+            "score": "0-0",
+            "prob": 26.9
+          },
+          {
+            "score": "1-0",
+            "prob": 25.6
+          },
+          {
+            "score": "2-0",
+            "prob": 12.2
+          },
+          {
+            "score": "0-1",
+            "prob": 9.7
+          },
+          {
+            "score": "1-1",
+            "prob": 9.2
+          }
+        ],
+        "over_2_5_pct": 29.897009908467297,
+        "btts_pct": 18.6,
+        "model_consensus": 11,
+        "total_models": 11,
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "smart_money_signal": "无赔率数据",
+        "expected_total_goals": 1.91,
+        "pace_rating": "慢"
+      },
+      "match_num": "周一001",
+      "recommend_score": 79.08,
       "is_recommended": true
     }
   ]
