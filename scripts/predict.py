@@ -1,9 +1,9 @@
 """
-AI 预测与决策中枢 (终极修复版):
-1. [API 修复] 恢复 system 指令角色，解决因缺少指令导致的 400 Bad Request。
-2. [模型降级] 严格遵照要求：gpt-5.4 逐级降级，最低兜底至 gpt-5.2。
-3. [防崩护盾] 严密的 isinstance 字典校验，彻底屏蔽 NoneType 崩溃。
-4. [前端兼容] 保留全部大小球、双边进球、风险等级等前端 UI 强依赖字段。
+AI 预测与决策中枢 (精准代理模型版):
+1. [模型对齐] 精准匹配代理商后台带前缀的模型名：[次-流抗截]gemini-3.1-pro-preview-thinking。
+2. [指令修复] 保留 system 系统角色，防止 400 报错。
+3. [强效防崩] 严密的 isinstance 校验，彻底屏蔽 NoneType 崩溃。
+4. [全量字段] 保留前端必需的所有大小球、风险评估字段，拒绝 undefined。
 """
 import json
 import requests
@@ -39,22 +39,18 @@ def build_prompt(m, sp):
 
 # ==================== 3. 稳健型 AI 轮询调度 ====================
 def call_model(prompt, url, key, model_pool):
-    """
-    带 system 指令的 API 调用，防止代理接口报 400 错误。
-    """
+    """带 system 指令的 API 调用，防止代理接口报 400 错误"""
     headers = {
         "Authorization": f"Bearer {key}", 
         "Content-Type": "application/json"
     }
     
-    # 你的接口需要的关键指令 (System Prompt)
     sys_msg = "你是顶级量化精算师。必须严格输出纯JSON格式，不能包含任何多余字符或Markdown标记！"
     
     for model_name in model_pool:
         try:
             print(f"    🤖 尝试匹配 AI: {model_name}...")
             
-            # 严格保留 system 角色，满足后台接口的要求
             payload = {
                 "model": model_name,
                 "messages": [
@@ -63,7 +59,8 @@ def call_model(prompt, url, key, model_pool):
                 ],
                 "temperature": 0.3
             }
-            r = requests.post(url, headers=headers, json=payload, timeout=25)
+            # 放宽超时时间到 30 秒，给这种“次-流抗截”的高延迟代理多一点反应时间
+            r = requests.post(url, headers=headers, json=payload, timeout=30)
             
             if r.status_code == 200:
                 t = r.json()["choices"][0]["message"]["content"]
@@ -72,7 +69,6 @@ def call_model(prompt, url, key, model_pool):
                 if s >= 0 and e > s:
                     return json.loads(t[s:e])
             else:
-                # 打印出报错细节，如果再报 400，我们能一眼看出后台到底缺什么参数
                 print(f"    ❌ {model_name} 接口返回报错: {r.status_code} ({r.text[:50]})")
         except Exception as err: 
             print(f"    ⚠️ {model_name} 请求超时或异常")
@@ -82,11 +78,9 @@ def call_model(prompt, url, key, model_pool):
 
 # ==================== 4. 2串1 优化引擎 ====================
 def optimize_parlay(results):
-    """物理级防崩 2串1 组合器"""
     valid_recs = []
     
     for m in results:
-        # 确保数据层级绝对安全，防止任何 list object 异常
         if isinstance(m, dict):
             is_rec = m.get("is_recommended")
             pred_obj = m.get("prediction")
@@ -123,11 +117,11 @@ def run_predictions(raw):
     res_list = []
     print(f"\n=== 启动 11 核心模型 + 双 AI 深度研判 (共 {len(ms)} 场) ===")
     
-    # 🔥 严格遵守你的降级指令：gpt-5.4 降一级最低到 5.2
+    # 🔥 完全匹配你的 GPT 代理配置
     gpt_pool = ["gpt-5.4", "gpt-5.3", "gpt-5.2"]
     
-    # Gemini 阵营保留你的高级思考模型
-    gemini_pool = ["gemini-3.1-pro-preview-thinking", "gemini-1.5-pro"]
+    # 🔥 核心修复：精准匹配你截图里代理后台的真实名字
+    gemini_pool = ["[次-流抗截]gemini-3.1-pro-preview-thinking", "gemini-1.5-pro"]
     
     for i, m in enumerate(ms):
         print(f"  [{i+1}/{len(ms)}] 执行深度量化: {m.get('home_team', '未知主队')}")
@@ -143,7 +137,6 @@ def run_predictions(raw):
         print("  [Gemini 阵营]")
         gm = call_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, gemini_pool)
         
-        # 安全读取 AI 返回结果
         is_gp_valid = isinstance(gp, dict)
         is_gm_valid = isinstance(gm, dict)
         
@@ -156,7 +149,6 @@ def run_predictions(raw):
             ai_avg = sum(x.get("home_win_pct", 33) for x in ai_pool) / len(ai_pool)
             final_hp = round(sp["home_win_pct"] * 0.6 + ai_avg * 0.4, 1)
 
-        # 🔥 全量保留前端需要的所有数据，不再报 undefined
         mg = {
             "predicted_score": gm.get("predicted_score", sp.get("predicted_score", "")) if is_gm_valid else sp.get("predicted_score", ""),
             "home_win_pct": final_hp, 
