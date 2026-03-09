@@ -8,9 +8,9 @@ ODDS_API_BASE="https://api.the-odds-api.com/v4"
 GEMINI_API_URL="https://once.novai.su/v1/chat/completions"
 GEMINI_API_KEY=os.environ.get("GEMINI_API_KEY","")
 GEMINI_MODEL="gemini-3.1-pro-preview-thinking"
-GPT_API_URL="https://once.novai.su/v1/chat/completions"
+GPT_API_URL="https://nan.meta-api.vip/v1/chat/completions"
 GPT_API_KEY=os.environ.get("GPT_API_KEY","")
-GPT_MODEL="[次]gpt-5.2"
+GPT_MODEL="gpt-5.4"
 C500_URL="https://trade.500.com/jczq/?date={date}"
 OKOOO_DETAIL="https://m.okooo.com/jczq/"
 TIMEZONE="Asia/Shanghai"
