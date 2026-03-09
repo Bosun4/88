@@ -35,7 +35,7 @@ def build_prompt(m, stats_pred, val_h, val_d, val_a):
     bay = sp.get("bayesian", {})
     lr = sp.get("logistic", {})
     
-    p = "你是顶级足球竞彩分析师与量化基金经理。以下是纯净版量化统计模型的预测结果及资金期望值，请综合分析给出最终判断。\n\n"
+    p = "你是顶级足球竞彩分析师与量化基金经理。以下是纯净版量化统计模型的预测结果、机构绝密情报及资金期望值，请综合分析给出最终判断。\n\n"
     p += f"【比赛】{lg} {h} vs {a}\n"
     
     if hs: p += f"【主队】{hs.get('played','?')}场 {hs.get('wins','?')}胜{hs.get('draws','?')}平{hs.get('losses','?')}负 进{hs.get('goals_for','?')}失{hs.get('goals_against','?')} 均进{hs.get('avg_goals_for','?')}均失{hs.get('avg_goals_against','?')} 近况:{hs.get('form','?')}\n"
@@ -45,6 +45,16 @@ def build_prompt(m, stats_pred, val_h, val_d, val_a):
         p += "【交锋】\n"
         for x in h2h[:5]: p += f"{x.get('date','')} {x.get('home','')} {x.get('score','')} {x.get('away','')}\n"
             
+    # 🔥 核心升级：将刚才抓取到的绝密情报与伤停名单喂给 AI
+    intel = m.get("intelligence", {})
+    if intel:
+        p += "\n【机构绝密情报与伤停名单】\n"
+        if intel.get("home_injury"): p += f"主队伤停: {intel['home_injury']}\n"
+        if intel.get("guest_injury"): p += f"客队伤停: {intel['guest_injury']}\n"
+        if intel.get("home_bad_news"): p += f"主队利空: {intel['home_bad_news'][:120]}...\n"
+        if intel.get("guest_bad_news"): p += f"客队利空: {intel['guest_bad_news'][:120]}...\n"
+        if intel.get("match_points"): p += f"机构提要: {intel['match_points']}\n"
+
     p += "\n【核心模型预测汇总】\n"
     p += f"泊松分布: 主{poi.get('home_win',33):.1f}% 平{poi.get('draw',33):.1f}% 客{poi.get('away_win',33):.1f}% 比分{poi.get('predicted_score','?')} xG:{poi.get('home_xg',1.3):.1f}-{poi.get('away_xg',1.0):.1f}\n"
     p += f"Dixon-Coles: 主{dc.get('home_win',33):.1f}% 平{dc.get('draw',33):.1f}% 客{dc.get('away_win',33):.1f}%\n"
@@ -62,9 +72,8 @@ def build_prompt(m, stats_pred, val_h, val_d, val_a):
     p += f"平局: EV={val_d['ev']}%, 建议注码={val_d['kelly']}%\n"
     p += f"客胜: EV={val_a['ev']}%, 建议注码={val_a['kelly']}%\n"
     
-    p += "\n综合所有数据，给出最终预测。请严格按以下JSON格式返回结果，不包含多余文字：\n"
-    # 加入你要求的 AI 独立比分返回：ai_independent_score
-    p += '{"predicted_score":"2-1","ai_independent_score":"2-1","home_win_pct":55,"draw_pct":25,"away_win_pct":20,"confidence":70,"result":"主胜","over_under_2_5":"大","both_score":"是","risk_level":"中","analysis":"200字逻辑分析(请做最终裁判)","key_factors":["因素1","因素2"]}'
+    p += "\n综合所有数据与伤停情报，给出最终预测。请严格按以下JSON格式返回结果，不包含多余文字：\n"
+    p += '{"predicted_score":"2-1","ai_independent_score":"2-1","home_win_pct":55,"draw_pct":25,"away_win_pct":20,"confidence":70,"result":"主胜","over_under_2_5":"大","both_score":"是","risk_level":"中","analysis":"200字深度逻辑分析(须结合伤停情报、盘口及底层模型)","key_factors":["伤停影响","数据支撑"]}'
     return p
 
 def call_model(prompt, url, key, model_pool):
@@ -189,7 +198,7 @@ def select_top4(preds):
 def run_predictions(raw):
     ms = raw.get("matches", [])
     od = raw.get("odds", {})
-    print(f"\n=== 11 核心精华模型 + 2 AI 验证: 共 {len(ms)} 场 ===")
+    print(f"\n=== 11 核心精华模型 + 绝密情报 + 2 AI 验证: 共 {len(ms)} 场 ===")
     res = []
     
     for i, m in enumerate(ms):
