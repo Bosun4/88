@@ -1,3 +1,4 @@
+""" 主运行脚本： 1. 抓取数据 2. AI预测 3. 生成前端JSON 4. 更新 index.html """
 import math
 import random
 import time
@@ -8,7 +9,7 @@ import requests
 from collections import defaultdict
 
 try:
-    from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+    from sklearn.ensemble import RandomForestClassifier
     from sklearn.neural_network import MLPClassifier
     from sklearn.linear_model import LogisticRegression
     from sklearn.preprocessing import StandardScaler
@@ -103,7 +104,7 @@ def _build_ml_features(match, match_odds):
         return [0.45, 0.25, 0.30, 0.6, 0.4]
 
 # ==========================================
-# 1. 机器学习引擎 (真实特征提取)
+# 1. 机器学习引擎 (已剔除易过拟合的 GB 模型)
 # ==========================================
 class MLPredictorBase:
     def __init__(self, name):
@@ -119,16 +120,19 @@ class MLPredictorBase:
         if not self.model: return {"home_win": 40, "draw": 30, "away_win": 30, "model": f"{self.name}-fallback"}
         feat = _build_ml_features(match, match_odds)
         X = self.scaler.transform([feat])
-        proba = self.model.predict_proba(X)[0]
+        proba = list(self.model.predict_proba(X)[0])
+        
+        # 兜底平滑器：防止任何机器学习模型输出超过 75% 的单边极端概率
+        if max(proba) > 0.75:
+            p_max = max(proba)
+            excess = p_max - 0.75
+            proba = [0.75 if p == p_max else p + (excess / 2.0) for p in proba]
+
         return {"home_win": round(proba[0] * 100, 1), "draw": round(proba[1] * 100, 1), "away_win": round(proba[2] * 100, 1), "model": self.name}
 
 class RandomForestModel(MLPredictorBase):
     def __init__(self): super().__init__("RandomForest")
     def _init_model(self): self.model = RandomForestClassifier(n_estimators=150, max_depth=6, random_state=42)
-
-class GradientBoostModel(MLPredictorBase):
-    def __init__(self): super().__init__("GradientBoost")
-    def _init_model(self): self.model = GradientBoostingClassifier(n_estimators=100, max_depth=3, learning_rate=0.05, random_state=42)
 
 class NeuralNetModel(MLPredictorBase):
     def __init__(self): super().__init__("NeuralNet")
@@ -139,7 +143,7 @@ class LogisticModel(MLPredictorBase):
     def _init_model(self): self.model = LogisticRegression(C=0.5, max_iter=500, random_state=42)
 
 # ==========================================
-# 2. 高阶量化模块 (逆向、防爆冷、大球)
+# 2. 高阶量化模块 (逆向、大球)
 # ==========================================
 class SmartMoneyDetector:
     def analyze(self, model_home_prob, model_away_prob, match_odds):
@@ -199,7 +203,7 @@ class PaceTotalGoalsModel:
         return {"over_2_5": max(15.0, min(85.0, over_prob * 100)), "expected_total": round(final_exp, 2), "pace_rating": "极快" if final_exp > 3.0 else ("慢" if final_exp < 2.0 else "中等")}
 
 # ==========================================
-# 3. 经典统计与概率引擎 (完美还原)
+# 3. 经典统计与概率引擎 (已剔除 ELO 和 MC)
 # ==========================================
 class PoissonModel:
     def predict(self, home_gf, home_ga, away_gf, away_ga, league_avg=1.35):
@@ -245,22 +249,6 @@ class DixonColesModel:
         if t > 0: hw /= t; dr /= t; aw /= t
         return {"home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1)}
 
-class EloModel:
-    def __init__(self): self.ratings = defaultdict(lambda: 1500); self.k = 30
-    def update(self, h, a, hg, ag):
-        rh = self.ratings[h]; ra = self.ratings[a]; eh = 1 / (1 + 10 ** ((ra - rh) / 400)); ea = 1 - eh
-        sh = 1 if hg > ag else (0.5 if hg == ag else 0); sa = 1 - sh
-        mov = math.log(abs(hg - ag) + 2) if hg != ag else 1.0
-        self.ratings[h] = rh + self.k * mov * (sh - eh); self.ratings[a] = ra + self.k * mov * (sa - ea)
-    def predict(self, h, a):
-        rh = self.ratings[h] + 60; ra = self.ratings[a]; eh = 1 / (1 + 10 ** ((ra - rh) / 400))
-        df = 0.28 if abs(rh - ra) < 100 else 0.22; hw = eh * (1 - df / 2); aw = (1 - eh) * (1 - df / 2)
-        return {"home_win": round(hw*100, 1), "draw": round(df*100, 1), "away_win": round(aw*100, 1), "elo_diff": round(rh - ra, 1)}
-    def load_h2h(self, records):
-        for r in reversed(records):
-            try: p = r["score"].split("-"); self.update(r["home"], r["away"], int(p[0]), int(p[1]))
-            except: pass
-
 class BradleyTerryModel:
     def predict(self, home_wins, home_total, away_wins, away_total):
         try: hw = int(home_wins or 0); ht = max(1, int(home_total or 1)); aw = int(away_wins or 0); at = max(1, int(away_total or 1))
@@ -269,16 +257,6 @@ class BradleyTerryModel:
         h_str = hp / (hp + ap) * 1.10; a_str = ap / (hp + ap) * 0.90
         dr = 0.25; h = h_str * (1 - dr); a = a_str * (1 - dr); t = h + dr + a
         return {"home_win": round(h/t*100, 1), "draw": round(dr/t*100, 1), "away_win": round(a/t*100, 1)}
-
-class MonteCarloModel:
-    def simulate(self, home_gf, home_ga, away_gf, away_ga, n=10000):
-        try: home_gf = float(home_gf or 1.3); away_gf = float(away_gf or 1.1)
-        except: home_gf = 1.3; away_gf = 1.1
-        he = max(0.3, min(home_gf * 1.05, 4.0)); ae = max(0.2, min(away_gf * 0.95, 3.5))
-        np.random.seed(int(time.time() % 1000))
-        hg = np.random.poisson(he, n); ag = np.random.poisson(ae, n)
-        hw = np.sum(hg > ag) / n; dr = np.sum(hg == ag) / n; aw = np.sum(hg < ag) / n
-        return {"home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1)}
 
 class BayesianModel:
     def predict(self, hw, hd, hl, aw, ad, al):
@@ -308,16 +286,14 @@ class OddsAnalyzer:
         return {"avg_home_odds": round(ah, 2), "avg_draw_odds": round(ad, 2), "avg_away_odds": round(aa, 2)}
 
 # ==========================================
-# 4. 终极融合中枢 (集齐 14 颗龙珠)
+# 4. 终极融合中枢 (纯净 11 模型矩阵)
 # ==========================================
 class EnsemblePredictor:
     def __init__(self):
         # 传统统计
         self.poisson = PoissonModel()
         self.dixon = DixonColesModel()
-        self.elo = EloModel()
         self.bt = BradleyTerryModel()
-        self.mc = MonteCarloModel()
         self.bayes = BayesianModel()
         self.form = FormModel()
         self.odds = OddsAnalyzer()
@@ -327,36 +303,30 @@ class EnsemblePredictor:
         self.smart_money = SmartMoneyDetector()  # 逆向追踪
         self.pace_totals = PaceTotalGoalsModel() # 大球节奏
         
-        # 机器学习
+        # 机器学习 (移除了易崩溃的 GB 模型)
         self.rf = RandomForestModel()
-        self.gb = GradientBoostModel()
         self.nn = NeuralNetModel()
         self.lr = LogisticModel()
         
-        print("[Models] 正在初始化量化分析引擎(14模型完全体)...")
-        self.rf.train(); self.gb.train(); self.nn.train(); self.lr.train()
+        print("[Models] 正在初始化量化分析引擎(11核心模型纯净版)...")
+        self.rf.train(); self.nn.train(); self.lr.train()
         print("[Models] 所有模型就绪！")
 
     def predict(self, match, odds_data=None):
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {}); h2h = match.get("h2h", [])
-        home = match["home_team"]; away = match["away_team"]
         
         # 执行所有统计与量化模型
         poi = self.poisson.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
         biv = self.bivariate.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
         dc = self.dixon.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
         
-        if h2h: self.elo.load_h2h(h2h)
-        elo = self.elo.predict(home, away)
         bt = self.bt.predict(hs.get("wins"), hs.get("played"), ast.get("wins"), ast.get("played"))
-        mc = self.mc.simulate(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
         bay = self.bayes.predict(hs.get("wins"), hs.get("draws"), hs.get("losses"), ast.get("wins"), ast.get("draws"), ast.get("losses"))
         hf = self.form.analyze(hs.get("form", "")); af = self.form.analyze(ast.get("form", ""))
         pace = self.pace_totals.predict(hs, ast) 
         
         # 执行机器学习模型
         rf = self.rf.predict(match, odds_data)
-        gb = self.gb.predict(match, odds_data)
         nn = self.nn.predict(match, odds_data)
         lr = self.lr.predict(match, odds_data)
         
@@ -364,17 +334,18 @@ class EnsemblePredictor:
         if odds_data and odds_data.get("bookmakers"):
             oa = self.odds.analyze_market(odds_data["bookmakers"])
             
-        # 11重胜率加权矩阵
+        # 【核心修正】：11模型完美权重重组 (总和 = 1.0)
+        # 将被剔除的 34% 权重，补给了表现最稳的 RF, NN 和 Poisson 家族
         w = {
-            "poisson": 0.08, "bivariate": 0.08, "dixon": 0.08, 
-            "elo": 0.12, "bt": 0.04, "mc": 0.08, "bayes": 0.04, 
-            "rf": 0.14, "gb": 0.14, "nn": 0.10, "lr": 0.10
+            "poisson": 0.12, "bivariate": 0.10, "dixon": 0.10, 
+            "bt": 0.08, "bayes": 0.06, 
+            "rf": 0.24, "nn": 0.16, "lr": 0.14
         }
         
         models_list = [
             ("poisson", poi), ("bivariate", biv), ("dixon", dc), 
-            ("elo", elo), ("bt", bt), ("mc", mc), ("bayes", bay), 
-            ("rf", rf), ("gb", gb), ("nn", nn), ("lr", lr)
+            ("bt", bt), ("bayes", bay), 
+            ("rf", rf), ("nn", nn), ("lr", lr)
         ]
         
         hp = 0; dp = 0; ap = 0
@@ -407,11 +378,15 @@ class EnsemblePredictor:
             "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap, 
             "predicted_score": poi["predicted_score"], "confidence": cf, 
             
-            # 返回所有模型的细节给 predict.py
-            "poisson": poi, "dixon_coles": dc, "elo": elo, "bradley_terry": bt,
-            "monte_carlo": mc, "bayesian": bay, "random_forest": rf,
-            "gradient_boost": gb, "neural_net": nn, "logistic": lr,
+            # 返回活跃模型
+            "poisson": poi, "dixon_coles": dc, "bradley_terry": bt,
+            "bayesian": bay, "random_forest": rf, "neural_net": nn, "logistic": lr,
             "odds": oa, "home_form": hf, "away_form": af,
+            
+            # 优雅地给前端返回已停用模型的空壳，保证页面 UI 绝对不会报错
+            "elo": {"home_win": "-", "draw": "-", "away_win": "-", "elo_diff": "已停用"},
+            "monte_carlo": {"top_scores": [{"score": "已停用", "prob": "-"}]},
+            "gradient_boost": {"home_win": "-", "draw": "-", "away_win": "-"},
             
             # 高阶量化导出
             "smart_money_signal": sm_data["signal"], 
