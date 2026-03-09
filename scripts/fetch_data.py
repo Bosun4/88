@@ -3,6 +3,47 @@ from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from config import *
 
+# ==================== 队名中英映射字典 ====================
+# 左边是500彩票网的中文名，右边是 API-Football 认识的英文名
+# 以后遇到查不到真实战绩的球队，直接在这个字典里补充即可！
+TEAM_NAME_MAPPING = {
+    # 英超
+    "西汉姆联": "West Ham",
+    "布伦特": "Brentford",
+    "阿森纳": "Arsenal",
+    "曼城": "Manchester City",
+    "利物浦": "Liverpool",
+    "曼联": "Manchester United",
+    "切尔西": "Chelsea",
+    "热刺": "Tottenham",
+    
+    # 意甲
+    "拉齐奥": "Lazio",
+    "萨索洛": "Sassuolo",
+    "尤文图斯": "Juventus",
+    "罗马": "Roma",
+    "AC米兰": "AC Milan",
+    "国际米兰": "Inter",
+    "那不勒斯": "Napoli",
+    
+    # 西甲
+    "西班牙人": "Espanyol",
+    "奥维耶多": "Real Oviedo",
+    "皇马": "Real Madrid",
+    "巴萨": "Barcelona",
+    "马竞": "Atletico Madrid",
+    
+    # 其他举例 (根据你最近的比赛日志)
+    "朝鲜女": "North Korea W",
+    "中国女": "China PR W",
+    "敦刻尔克": "Dunkerque",
+    "兰斯": "Reims",
+    "通德拉": "Tondela",
+    "里奥阿维": "Rio Ave",
+    "孟加拉国女足": "Bangladesh W",
+    "乌兹别克斯坦女足": "Uzbekistan W"
+}
+
 def get_today(offset=0):
     from zoneinfo import ZoneInfo
     return (datetime.now(ZoneInfo(TIMEZONE)) + timedelta(days=offset)).strftime("%Y-%m-%d")
@@ -216,11 +257,19 @@ def collect_all(date=None):
     print("2. Enrich with API data...")
     for i, m in enumerate(matches):
         print("  [%d/%d] %s vs %s" % (i + 1, len(matches), m["home_team"], m["away_team"]))
-        # Try API search
-        ht = search_team_api(m["home_team"])
+        
+        # 翻译队名（如果在字典里找不到，就保留原中文名去碰运气）
+        h_search = TEAM_NAME_MAPPING.get(m["home_team"], m["home_team"])
+        a_search = TEAM_NAME_MAPPING.get(m["away_team"], m["away_team"])
+        
+        print("    🔎 Search API: %s vs %s" % (h_search, a_search))
+
+        # Try API search (拿着翻译后的名字去查)
+        ht = search_team_api(h_search)
         time.sleep(0.5)
-        at = search_team_api(m["away_team"])
+        at = search_team_api(a_search)
         time.sleep(0.5)
+        
         m["home_id"] = ht["id"] if ht else 0
         m["away_id"] = at["id"] if at else 0
         m["home_logo"] = ht["logo"] if ht else ""
