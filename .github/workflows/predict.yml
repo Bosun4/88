@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 🚀 【新增】拉取完整的提交历史，确保 rebase 合并时不报错
       
       - uses: actions/setup-python@v5
         with:
@@ -38,11 +40,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          # 2. 【核心修复】把生成的 data 文件夹提取到根目录！
+          # 2. 把生成的 data 文件夹提取到根目录！
           mkdir -p data/
           cp -r scripts/data/* data/ || echo "No data generated"
           
-          # 3. 提交并推送到仓库
+          # 3. 提交修改
           git add data/
           git diff --cached --quiet || git commit -m "🤖 自动更新比赛预测数据"
+          
+          # 4. 🚀 【核心修复】防冲突机制：先同步你在网页上手动修改的代码，合并后再推送
+          git pull --rebase origin main
           git push
