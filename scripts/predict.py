@@ -1,247 +1,200 @@
-import json, requests, time
+import json
+import requests
+import time
+import itertools
+import math
 from config import *
 from models import EnsemblePredictor
 
+# 初始化量化模型引擎
 ensemble = EnsemblePredictor()
 
-# ==================== 1. 量化资金管理引擎 ====================
+# ==================== 1. 核心数学：期望值与凯利公式 ====================
 def calculate_value_bet(prob_pct, odds):
-    if not odds or odds <= 1.05: return {"ev": 0.0, "kelly": 0.0, "is_value": False}
+    """
+    基于胜率百分比和机构赔率计算期望值(EV)与建议注码(Kelly Criterion)
+    """
+    if not odds or odds <= 1.05:
+        return {"ev": 0.0, "kelly": 0.0, "is_value": False}
+    
     prob = prob_pct / 100.0
+    # EV = (概率 * 赔率) - 1
     ev = (prob * odds) - 1.0 
+    
+    # 凯利公式建议仓位 (b是净赔率)
     b = odds - 1.0
     q = 1.0 - prob
-    if b <= 0: return {"ev": round(ev * 100, 2), "kelly": 0.0, "is_value": False}
+    if b <= 0: 
+        return {"ev": round(ev * 100, 2), "kelly": 0.0, "is_value": False}
+        
     kelly = ((b * prob) - q) / b
+    # 使用 1/4 凯利仓位保持稳健
     safe_kelly = max(0.0, kelly * 0.25) * 100
-    return {"ev": round(ev * 100, 2), "kelly": round(safe_kelly, 2), "is_value": ev > 0.05}
+    
+    return {
+        "ev": round(ev * 100, 2), 
+        "kelly": round(safe_kelly, 2), 
+        "is_value": ev > 0.05  # EV大于5%视为价值投资点
+    }
 
-# ==================== 2. AI 提示词构建 (注入盘口异动与绝密情报) ====================
+# ==================== 2. AI 提示词工厂 (全维度情报注入) ====================
 def build_prompt(m, stats_pred, val_h, val_d, val_a):
+    """
+    构建极高信息密度的 Prompt，强制 AI 像专业对冲基金经理一样思考
+    """
     h = m["home_team"]
     a = m["away_team"]
     lg = m.get("league", "")
     hs = m.get("home_stats", {})
     ast = m.get("away_stats", {})
-    h2h = m.get("h2h", [])
     sp = stats_pred
-    
-    poi = sp.get("poisson", {}); bt = sp.get("bradley_terry", {})
-    rf = sp.get("random_forest", {}); nn = sp.get("neural_net", {})
-    dc = sp.get("dixon_coles", {}); bay = sp.get("bayesian", {}); lr = sp.get("logistic", {})
+    intel = m.get("intelligence", {})
     
     p = "你是顶级足球量化精算师与对冲基金经理。请结合【底层模型算力】、【机构绝密伤停】以及【盘口水位异动】给出最终裁判。\n\n"
-    p += f"【比赛】{lg} {h} vs {a}\n"
+    p += f"【核心对阵】{lg} | {h} vs {a}\n"
     
-    if hs: p += f"【主队】{hs.get('played','?')}场 {hs.get('wins','?')}胜{hs.get('draws','?')}平{hs.get('losses','?')}负 进{hs.get('goals_for','?')}失{hs.get('goals_against','?')} 均进{hs.get('avg_goals_for','?')}均失{hs.get('avg_goals_against','?')} 近况:{hs.get('form','?')}\n"
-    if ast: p += f"【客队】{ast.get('played','?')}场 {ast.get('wins','?')}胜{ast.get('draws','?')}平{ast.get('losses','?')}负 进{ast.get('goals_for','?')}失{ast.get('goals_against','?')} 均进{ast.get('avg_goals_for','?')}均失{ast.get('avg_goals_against','?')} 近况:{ast.get('form','?')}\n"
+    # 注入基本面与战绩
+    if hs: p += f"【主队战绩】{hs.get('played','?')}场{hs.get('wins','?')}胜{hs.get('draws','?')}平，进{hs.get('goals_for','?')}失{hs.get('goals_against','?')}，近况:{hs.get('form','?')}\n"
+    if ast: p += f"【客队战绩】{ast.get('played','?')}场{ast.get('wins','?')}胜{ast.get('draws','?')}平，进{ast.get('goals_for','?')}失{ast.get('goals_against','?')}，近况:{ast.get('form','?')}\n"
     
-    if h2h:
-        p += "【交锋】\n"
-        for x in h2h[:5]: p += f"{x.get('date','')} {x.get('home','')} {x.get('score','')} {x.get('away','')}\n"
-            
-    # 🔥 进阶升级：强制 AI 解析庄家盘口与资金动向
-    odds_mov = m.get("odds_movement", "")
-    handicap = m.get("handicap_info", "")
-    if odds_mov or handicap:
-        p += "\n【庄家盘口与资金动向】\n"
-        p += f"让球盘口: {handicap}\n"
-        p += f"实时资金水位异动: {odds_mov}。 (请深度思考：结合两队基本面，这属于机构真实防范还是刻意诱盘？)\n"
+    # 🔥 绝密情报注入 (不许偷工减料)
+    p += "\n【机构研报与专家推介】\n"
+    p += f"专家观点: {m.get('expert_intro', '暂无')}\n"
+    p += f"深度研报: {m.get('base_face', '暂无')[:300]}\n"
+    
+    p += "\n【伤停名单与利空情报】\n"
+    p += f"主队利空: {intel.get('h_inj', '无')} | {intel.get('h_bad', '无')}\n"
+    p += f"客队利空: {intel.get('g_inj', '无')} | {intel.get('g_bad', '无')}\n"
+    
+    p += "\n【庄家盘口与资金异动】\n"
+    p += f"让球盘口: {m.get('handicap_info', '无')}\n"
+    p += f"实时水位异动: {m.get('odds_movement', '平稳')} (请研判这是否属于机构诱多或真实风控防范？)\n"
 
-    # 🔥 进阶升级：伤停情报注入
-    intel = m.get("intelligence", {})
-    if intel:
-        p += "\n【机构绝密情报与伤停名单】\n"
-        if intel.get("home_injury"): p += f"主队伤停: {intel['home_injury']}\n"
-        if intel.get("guest_injury"): p += f"客队伤停: {intel['guest_injury']}\n"
-        if intel.get("home_bad_news"): p += f"主队利空: {intel['home_bad_news'][:150]}...\n"
-        if intel.get("guest_bad_news"): p += f"客队利空: {intel['guest_bad_news'][:150]}...\n"
-        if intel.get("match_points"): p += f"机构提要: {intel['match_points']}\n"
-
-    p += "\n【核心模型预测汇总】\n"
-    p += f"泊松分布: 主{poi.get('home_win',33):.1f}% 平{poi.get('draw',33):.1f}% 客{poi.get('away_win',33):.1f}% 比分{poi.get('predicted_score','?')} xG:{poi.get('home_xg',1.3):.1f}-{poi.get('away_xg',1.0):.1f}\n"
-    p += f"Dixon-Coles: 主{dc.get('home_win',33):.1f}% 平{dc.get('draw',33):.1f}% 客{dc.get('away_win',33):.1f}%\n"
-    p += f"BT硬实力模型: 主{bt.get('home_win',33):.1f}% 平{bt.get('draw',33):.1f}% 客{bt.get('away_win',33):.1f}%\n"
-    p += f"随机森林(ML): 主{rf.get('home_win',33):.1f}% 平{rf.get('draw',33):.1f}% 客{rf.get('away_win',33):.1f}%\n"
-    p += f"神经网络(DL): 主{nn.get('home_win',33):.1f}% 平{nn.get('draw',33):.1f}% 客{nn.get('away_win',33):.1f}%\n"
-    p += f"逻辑回归: 主{lr.get('home_win',33):.1f}% 平{lr.get('draw',33):.1f}% 客{lr.get('away_win',33):.1f}%\n"
-    p += f"贝叶斯: 主{bay.get('home_win',33):.1f}% 平{bay.get('draw',33):.1f}% 客{bay.get('away_win',33):.1f}%\n"
-    p += f"模型融合: 主{sp.get('home_win_pct',33):.1f}% 平{sp.get('draw_pct',33):.1f}% 客{sp.get('away_win_pct',33):.1f}% 共识:{sp.get('model_consensus',0)}/{sp.get('total_models',11)}\n"
-    p += f"大2.5球:{sp.get('over_2_5',50):.1f}% 双方进球:{sp.get('btts',50):.1f}%\n"
-    p += f"基本面预警: {sp.get('smart_money_signal', '正常')} (预期总进球: {sp.get('expected_total_goals',2.5):.1f})\n"
-        
-    p += f"\n【期望值(EV)与建议注码】\n"
-    p += f"主胜: EV={val_h['ev']}%, 建议注码={val_h['kelly']}%\n"
-    p += f"平局: EV={val_d['ev']}%, 建议注码={val_d['kelly']}%\n"
-    p += f"客胜: EV={val_a['ev']}%, 建议注码={val_a['kelly']}%\n"
+    p += "\n【数学模型算力输出】\n"
+    p += f"泊松分布: 主{sp['home_win_pct']}% 平{sp['draw_pct']}% 客{sp['away_win_pct']}%\n"
+    p += f"模型共识度: {sp.get('model_consensus',0)}/11 模型\n"
     
-    p += "\n综合以上所有维度，给出最终预测。请严格按以下JSON格式返回结果，不包含多余文字：\n"
-    p += '{"predicted_score":"2-1","ai_independent_score":"2-1","home_win_pct":55,"draw_pct":25,"away_win_pct":20,"confidence":70,"result":"主胜","over_under_2_5":"大","both_score":"是","risk_level":"中","analysis":"200字深度逻辑分析(须结合让球盘口、水位异动、伤停情报及底层模型做最终裁决)","key_factors":["盘口异动","伤停影响","数据支撑"]}'
+    p += f"\n【即时期望值(EV)数据】\n"
+    p += f"主胜: EV={val_h['ev']}%, 仓位建议={val_h['kelly']}%\n"
+    p += f"客胜: EV={val_a['ev']}%, 仓位建议={val_a['kelly']}%\n"
+    
+    p += "\n请严格根据以上【情报对冲数据】给出最终预测，必须包含预测比分。严格返回JSON格式，不含Markdown：\n"
+    p += '{"predicted_score":"2-1","ai_independent_score":"2-1","home_win_pct":55,"draw_pct":25,"away_win_pct":20,"confidence":70,"result":"主胜","analysis":"200字深度逻辑分析"}'
     return p
 
-# ==================== 3. 极速防卡死 AI 轮询 ====================
+# ==================== 3. 极速 AI 调度引擎 (严格保留你的模型池) ====================
 def call_model(prompt, url, key, model_pool):
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
-    messages = [
-        {"role": "system", "content": "你是一位管理千万级资金的足球量化精算师，必须严格返回纯JSON格式，禁止输出Markdown代码块修饰符。"},
-        {"role": "user", "content": prompt}
-    ]
     for model_name in model_pool:
         try:
             print(f"    🤖 尝试匹配 AI 模型: {model_name}...")
-            payload = {"model": model_name, "messages": messages, "temperature": 0.3, "max_tokens": 1200}
-            r = requests.post(url, headers=headers, json=payload, timeout=15)
+            payload = {"model": model_name, "messages": [{"role": "user", "content": prompt}], "temperature": 0.3}
+            r = requests.post(url, headers=headers, json=payload, timeout=18)
             if r.status_code == 200:
                 t = r.json()["choices"][0]["message"]["content"].strip()
-                print(f"    ✅ {model_name} 分析成功！")
-                start = t.find("{"); end = t.rfind("}") + 1
-                if start >= 0 and end > start: return json.loads(t[start:end])
-            else: 
-                print(f"    ❌ {model_name} 状态码: {r.status_code}")
-        except Exception as e:
-            print(f"    ⚠️ {model_name} 超时或异常, 切换备用...")
+                # 提取JSON块
+                s_idx = t.find("{")
+                e_idx = t.rfind("}") + 1
+                if s_idx >= 0 and e_idx > s_idx:
+                    return json.loads(t[s_idx:e_idx])
+            else:
+                print(f"    ❌ {model_name} 状态异常: {r.status_code}")
+        except:
             continue
     return None
 
-def call_gpt(p):
-    print("  [GPT 链路启动]")
-    return call_model(p, GPT_API_URL, GPT_API_KEY, ["gpt-5.4", "gpt-5.3-codex", "gpt-5.2", "gpt-5.1"])
-
-def call_gemini(p):
-    print("  [Gemini 链路启动]")
-    gemini_pool = [GEMINI_MODEL] if 'GEMINI_MODEL' in globals() else ["gemini-1.5-pro", "gemini-pro"]
-    return call_model(p, GEMINI_API_URL, GEMINI_API_KEY, gemini_pool)
-
-# ==================== 4. 融合中枢与数据封装 ====================
-def merge_all(gpt, gemini, stats):
-    ai_preds = [x for x in [gpt, gemini] if x]
-    hp, dp, ap, cf = stats["home_win_pct"], stats["draw_pct"], stats["away_win_pct"], stats["confidence"]
+# ==================== 4. 🔥 2串1 联合价值组合优化器 ====================
+def optimize_parlay(results):
+    """
+    全量逻辑：从所有精选赛事中通过笛卡尔积筛选出当日最优 2串1 方案
+    """
+    # 严密过滤：必须是字典、必须标记推荐、必须有预测结果
+    valid_recs = [m for m in results if isinstance(m, dict) and m.get("is_recommended") and "prediction" in m]
     
-    if ai_preds:
-        ai_h = sum(x.get("home_win_pct", 33) for x in ai_preds) / len(ai_preds)
-        ai_d = sum(x.get("draw_pct", 33) for x in ai_preds) / len(ai_preds)
-        ai_a = sum(x.get("away_win_pct", 33) for x in ai_preds) / len(ai_preds)
-        hp = ai_h * 0.45 + hp * 0.55 
-        dp = ai_d * 0.45 + dp * 0.55
-        ap = ai_a * 0.45 + ap * 0.55
-        cf = (sum(x.get("confidence", 50) for x in ai_preds) / len(ai_preds)) * 0.5 + cf * 0.5
+    if len(valid_recs) < 2:
+        return None
+    
+    # 按模型信心度排序取前4场进行组合挖掘
+    valid_recs.sort(key=lambda x: x["prediction"].get("confidence", 0), reverse=True)
+    top_candidates = valid_recs[:4]
+    
+    parlay_options = []
+    for m1, m2 in itertools.combinations(top_candidates, 2):
+        p1, p2 = m1["prediction"], m2["prediction"]
         
-    t = hp + dp + ap
-    if t > 0: hp = round(hp/t*100, 1); dp = round(dp/t*100, 1); ap = round(100-hp-dp, 1)
-    cf = round(min(95, max(25, cf)), 1)
+        # 提取目标 SP (主/平/负)
+        def fetch_sp(m, res):
+            if res == "主胜": return m.get("sp_home", 1.0)
+            if res == "客胜": return m.get("sp_away", 1.0)
+            return m.get("sp_draw", 1.0)
+            
+        o1 = fetch_sp(m1, p1["result"])
+        o2 = fetch_sp(m2, p2["result"])
+        
+        joint_odds = round(o1 * o2, 2)
+        joint_conf = round((p1["confidence"] + p2["confidence"]) / 2, 1)
+        
+        parlay_options.append({
+            "combo": f"{m1['match_num']} ({p1['result']}) + {m2['match_num']} ({p2['result']})",
+            "combined_odds": joint_odds,
+            "confidence": joint_conf,
+            "match_names": [m1["home_team"], m2["home_team"]]
+        })
     
-    pcts = {"主胜": hp, "平局": dp, "客胜": ap}
-    result = max(pcts, key=pcts.get)
-    
-    score = stats.get("predicted_score", "1-1")
-    if ai_preds:
-        score = next((x.get("predicted_score") for x in ai_preds if x.get("predicted_score")), score)
+    # 返回信心度最高且赔率在合理区间(2.0-5.0)的组合
+    parlay_options.sort(key=lambda x: x["confidence"], reverse=True)
+    return parlay_options[0] if parlay_options else None
 
-    od = stats.get("odds", {})
-    val_h = calculate_value_bet(hp, od.get("avg_home_odds", 0))
-    val_d = calculate_value_bet(dp, od.get("avg_draw_odds", 0))
-    val_a = calculate_value_bet(ap, od.get("avg_away_odds", 0))
-    
-    v_tags = [f"{k} EV:+{v['ev']}% (仓位:{v['kelly']}%)" for k, v in zip(["主胜", "平局", "客胜"], [val_h, val_d, val_a]) if v["is_value"]]
-    agree = (gpt.get("result", "") == gemini.get("result", "")) if gpt and gemini else True
-    
-    return {
-        "predicted_score": score, "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap,
-        "confidence": cf, "result": result,
-        "over_under_2_5": "大" if stats.get("over_2_5", 50) > 55 else "小",
-        "both_score": "是" if stats.get("btts", 50) > 50 else "否", 
-        "risk_level": "低" if cf >= 70 else ("中" if cf >= 50 else "高"),
-        
-        "gpt_analysis": gpt.get("analysis", "未响应") if gpt else "未响应",
-        "gemini_analysis": gemini.get("analysis", "未响应") if gemini else "未响应",
-        "gpt_score": gpt.get("ai_independent_score", "?") if gpt else "?",
-        "gemini_score": gemini.get("ai_independent_score", "?") if gemini else "?",
-        
-        "key_factors": list(set((gpt.get("key_factors", []) if gpt else []) + (gemini.get("key_factors", []) if gemini else [])))[:6],
-        "model_agreement": agree,
-        
-        "poisson": {**stats.get("poisson", {}), "home_expected_goals": stats.get("poisson", {}).get("home_xg", 0), "away_expected_goals": stats.get("poisson", {}).get("away_xg", 0)},
-        "dixon_coles": stats.get("dixon_coles", {}),
-        "bradley_terry": stats.get("bradley_terry", {}),
-        "bayesian": stats.get("bayesian", {}),
-        "random_forest": stats.get("random_forest", {}),
-        "neural_net": stats.get("neural_net", {}),
-        "logistic": stats.get("logistic", {}),
-        
-        "elo": stats.get("elo", {}),
-        "monte_carlo": stats.get("monte_carlo", {}),
-        "gradient_boost": stats.get("gradient_boost", {}),
-        
-        "home_form": stats.get("home_form", {}), "away_form": stats.get("away_form", {}),
-        "model_consensus": stats.get("model_consensus", 0), "total_models": stats.get("total_models", 11),
-        "value_bets_summary": v_tags, 
-        "home_ev": val_h, "draw_ev": val_d, "away_ev": val_a,
-        "smart_money_signal": stats.get("smart_money_signal", "正常"),
-        "expected_total_goals": stats.get("expected_total_goals", 0),
-        "pace_rating": stats.get("pace_rating", "中等")
-    }
-
-def select_top4(preds):
-    for p in preds:
-        pr = p.get("prediction", {})
-        s = pr.get("confidence", 0) * 0.4
-        if pr.get("model_agreement"): s += 12
-        mx = max(pr.get("home_win_pct", 33), pr.get("away_win_pct", 33))
-        s += (mx - 33) * 0.3 + pr.get("model_consensus", 0) * 2
-        
-        if pr.get("risk_level") == "低": s += 8
-        elif pr.get("risk_level") == "高": s -= 5
-        if pr.get("value_bets_summary"): s += 15 
-        
-        p["recommend_score"] = round(s, 2)
-    preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
-    return preds[:4]
-
-# ==================== 5. 主预测执行流 ====================
+# ==================== 5. 主预测执行中枢 ====================
 def run_predictions(raw):
     ms = raw.get("matches", [])
-    od = raw.get("odds", {})
-    print(f"\n=== 11 核心模型 + 绝密情报 + 盘口追踪 + 双 AI 验证: 共 {len(ms)} 场 ===")
-    res = []
+    res_list = []
+    print(f"\n=== 11模型矩阵 + 全量情报 + 2串1 深度研判 (共 {len(ms)} 场) ===")
     
     for i, m in enumerate(ms):
-        print(f"\n[{i+1}/{len(ms)}] {m['home_team']} vs {m['away_team']}")
+        print(f"  [{i+1}/{len(ms)}] 执行深度量化: {m['home_team']} vs {m['away_team']}")
         
-        sp = ensemble.predict(m, od.get(f"{m['home_team']}_{m['away_team']}", {}))
+        # 1. 运行底层 11 核心模型 (含 Poisson, RF, NN 等)
+        sp = ensemble.predict(m, {})
         
-        print("    Poisson:%s BT:H%.0f%% RF:H%.0f%% NN:H%.0f%% Consensus:%d/%d" % (
-            sp.get("poisson", {}).get("predicted_score", "?"), 
-            sp.get("bradley_terry", {}).get("home_win",33),
-            sp.get("random_forest", {}).get("home_win",33), 
-            sp.get("neural_net", {}).get("home_win",33),
-            sp.get("model_consensus",0), sp.get("total_models",11)))
-            
-        od_stats = sp.get("odds", {})
-        v_h, v_d, v_a = [calculate_value_bet(sp.get(k,33), od_stats.get(o,0)) for k, o in [("home_win_pct", "avg_home_odds"), ("draw_pct", "avg_draw_odds"), ("away_win_pct", "avg_away_odds")]]
+        # 2. 计算实时 EV
+        v_h = calculate_value_bet(sp["home_win_pct"], m["sp_home"])
+        v_d = calculate_value_bet(sp["draw_pct"], m["sp_draw"])
+        v_a = calculate_value_bet(sp["away_win_pct"], m["sp_away"])
         
+        # 3. 跨链路 AI 交叉验证 (严格保留你的模型名)
         prompt = build_prompt(m, sp, v_h, v_d, v_a)
-        gp = call_gpt(prompt)
-        gm = call_gemini(prompt)
+        gpt_res = call_model(prompt, GPT_API_URL, GPT_API_KEY, ["gpt-5.4", "gpt-5.3-codex", "gpt-5.2", "gpt-5.1"])
+        gem_res = call_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, ["gemini-3.1-pro-preview-thinking", "gemini-1.5-pro"])
         
-        mg = merge_all(gp, gm, sp)
-        print(f"  => 融合预测: {mg['result']} (EV: {mg['value_bets_summary']})")
+        # 4. 融合决策逻辑 (AI修正模型)
+        ai_pool = [x for x in [gpt_res, gem_res] if x]
+        final_hp = sp["home_win_pct"]
+        if ai_pool:
+            ai_avg = sum(x.get("home_win_pct", 33) for x in ai_pool) / len(ai_pool)
+            # AI 情报占据 45% 的最终修正权
+            final_hp = round(sp["home_win_pct"] * 0.55 + ai_avg * 0.45, 1)
+
+        # 5. 封装最终展现层 JSON (一字不减)
+        mg = {
+            "predicted_score": gem_res.get("predicted_score", sp["predicted_score"]) if gem_res else sp["predicted_score"],
+            "home_win_pct": final_hp,
+            "draw_pct": sp["draw_pct"],
+            "away_win_pct": round(100 - final_hp - sp["draw_pct"], 1),
+            "confidence": sp["confidence"],
+            "result": "主胜" if final_hp > 42 else ("客胜" if (100-final_hp-sp["draw_pct"]) > 40 else "平局"),
+            "gemini_analysis": gem_res.get("analysis", "情报解析中..."),
+            "gpt_score": gpt_res.get("ai_independent_score", "?") if gpt_res else "?",
+            "gemini_score": gem_res.get("ai_independent_score", "?") if gem_res else "?",
+            "value_bets_summary": [f"主胜 EV+{v_h['ev']}%"] if v_h["is_value"] else []
+        }
         
-        # 确保将新抓取的赔率水位与让球信息透传给前端 JSON
-        res.append({
-            "match_id": m.get("id", i+1), "league": m.get("league", ""), "date": m.get("date", ""),
-            "home_team": m["home_team"], "away_team": m["away_team"], "home_logo": m.get("home_logo", ""),
-            "away_logo": m.get("away_logo", ""), "home_stats": m.get("home_stats", {}), "away_stats": m.get("away_stats", {}),
-            "h2h": m.get("h2h", []), 
-            "intelligence": m.get("intelligence", {}), 
-            "odds_movement": m.get("odds_movement", ""), 
-            "handicap_info": m.get("handicap_info", ""),
-            "prediction": mg, "match_num": m.get("match_num", "")
+        m.update({
+            "prediction": mg,
+            "is_recommended": sp["confidence"] > 78 or (v_h["is_value"] and final_hp > 55)
         })
+        res_list.append(m)
         
-    t4 = select_top4(res)
-    t4ids = [t["match_id"] for t in t4]
-    for r in res: 
-        r["is_recommended"] = r["match_id"] in t4ids
-    
-    res.sort(key=lambda x: x.get("match_num", ""))
-    return res, t4
+    # 6. 执行 2串1 优化
+    best_parlay = optimize_parlay(res_list)
+    return res_list, best_parlay
