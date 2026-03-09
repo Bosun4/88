@@ -16,19 +16,17 @@ TEAM_NAME_MAPPING = {
 }
 
 def translate_team_name(name):
-    if name in TEAM_NAME_MAPPING: 
-        return TEAM_NAME_MAPPING[name]
+    if name in TEAM_NAME_MAPPING: return TEAM_NAME_MAPPING[name]
     try:
         clean = name.replace("女足", " Women").replace("联", " United").replace("台女", " Taipei Women")
         return GoogleTranslator(source='zh-CN', target='en').translate(clean).replace("FC", "").strip()
-    except: 
-        return name
+    except Exception: return name
 
 def get_today(offset=0):
     try:
         from zoneinfo import ZoneInfo
         return (datetime.now(ZoneInfo(TIMEZONE)) + timedelta(days=offset)).strftime("%Y-%m-%d")
-    except:
+    except Exception:
         return (datetime.now() + timedelta(days=offset)).strftime("%Y-%m-%d")
 
 def _safe_dict(val):
@@ -48,10 +46,8 @@ def scrape_wencai_jczq(date=None):
         
         for item in match_list:
             try:
-                # 严密防御所有的异常结构
                 chg = _safe_dict(item.get("change"))
-                w_c = chg.get("win", 0)
-                l_c = chg.get("lose", 0)
+                w_c, l_c = chg.get("win", 0), chg.get("lose", 0)
                 odds_mov = f"主胜{'升水' if w_c>0 else '降水' if w_c<0 else '平稳'}，客胜{'升水' if l_c>0 else '降水' if l_c<0 else '平稳'}"
 
                 expert_intro = item.get("intro", "")
@@ -86,7 +82,9 @@ def scrape_wencai_jczq(date=None):
             except Exception as e:
                 print(f"    - 解析单场异常: {item.get('home', '未知')} ({e})")
                 continue
-    except Exception as e: print(f"  ❌ API 抓取失败: {e}")
+    except Exception as e: 
+        print(f"  ❌ API 抓取失败: {e}")
+        
     return ms
 
 def search_team_api(name):
@@ -95,7 +93,7 @@ def search_team_api(name):
         r = requests.get(f"{API_FOOTBALL_BASE}/teams", headers=h, params={"search": translate_team_name(name)}, timeout=10)
         res = r.json().get("response", [])
         if res: return {"id": res[0]["team"]["id"], "name": res[0]["team"]["name"], "logo": res[0]["team"].get("logo", "")}
-    except: pass
+    except Exception: pass
     return None
 
 def fetch_stats(tid, season=2024): 
@@ -110,14 +108,14 @@ def fetch_stats(tid, season=2024):
                 "form": s.get("form", ""), "clean_sheets": s["clean_sheet"].get("total", 0),
                 "avg_goals_for": str(s["goals"]["for"]["average"].get("total", "0.0")), "avg_goals_against": str(s["goals"]["against"]["average"].get("total", "0.0"))
             }
-    except: pass
+    except Exception: pass
     return {}
 
 def fetch_h2h(hid, aid):
     h = {"x-apisports-key": API_FOOTBALL_KEY}
     try:
         return [{"date": m["fixture"]["date"][:10], "home": m["teams"]["home"]["name"], "away": m["teams"]["away"]["name"], "score": f"{m['goals']['home']}-{m['goals']['away']}", "league": m["league"]["name"]} for m in requests.get(f"{API_FOOTBALL_BASE}/fixtures/headtohead", headers=h, params={"h2h": f"{hid}-{aid}", "last": 5}, timeout=10).json().get("response", [])]
-    except: return []
+    except Exception: return []
 
 def generate_stats_from_rank(rank, team_name="", total_teams=20):
     random.seed((rank * 7) + sum(ord(c) for c in team_name)) 
@@ -138,7 +136,7 @@ def fetch_odds_baseline():
     try:
         r = requests.get(f"{ODDS_API_BASE}/sports/soccer/odds", params={"apiKey": ODDS_API_KEY, "regions": "eu", "markets": "h2h"}, timeout=10)
         return {f"{ev['home_team']}_{ev['away_team']}": {"bookmakers": [{"name": b['title'], "markets": {m['key']: {o['name']: o.get('price', 0) for o in m.get('outcomes', [])} for m in b.get('markets', [])}} for b in ev.get('bookmakers', [])[:3]]} for ev in r.json()}
-    except: return {}
+    except Exception: return {}
 
 def collect_all(date=None):
     target_date = date or get_today()
@@ -149,8 +147,10 @@ def collect_all(date=None):
         ht = search_team_api(m["home_team"]); at = search_team_api(m["away_team"])
         m.update({"home_id": ht["id"] if ht else 0, "away_id": at["id"] if at else 0, "id": i + 1, "date": target_date})
         api_h = fetch_stats(m["home_id"]); api_a = fetch_stats(m["away_id"])
+        
         m["home_stats"] = api_h if api_h.get("played", 0) > 0 else generate_stats_from_rank(m["home_rank"], m["home_team"])
         m["away_stats"] = api_a if api_a.get("played", 0) > 0 else generate_stats_from_rank(m["away_rank"], m["away_team"])
         m["h2h"] = fetch_h2h(m["home_id"], m["away_id"])
         time.sleep(0.2)
+        
     return {"date": target_date, "matches": matches, "odds": fetch_odds_baseline(), "fetch_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
