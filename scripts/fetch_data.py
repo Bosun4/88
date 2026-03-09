@@ -3,7 +3,6 @@ import json
 import time
 import re
 from datetime import datetime, timedelta
-from bs4 import BeautifulSoup
 from deep_translator import GoogleTranslator
 from config import *
 
@@ -18,7 +17,8 @@ TEAM_NAME_MAPPING = {
     "巴萨": "Barcelona", "马竞": "Atletico Madrid", "朝鲜女": "North Korea W",
     "中国女": "China PR W", "敦刻尔克": "Dunkerque", "兰斯": "Reims",
     "通德拉": "Tondela", "里奥阿维": "Rio Ave", "孟加拉国女足": "Bangladesh W",
-    "乌兹别克斯坦女足": "Uzbekistan W", "拜仁": "Bayern Munich", "亚特兰大": "Atalanta"
+    "乌兹别克斯坦女足": "Uzbekistan W", "拜仁": "Bayern Munich", "亚特兰大": "Atalanta",
+    "中国台女": "Chinese Taipei W", "日本女": "Japan W", "越南女": "Vietnam W"
 }
 
 def translate_team_name(name):
@@ -31,83 +31,114 @@ def translate_team_name(name):
     except: 
         return name
 
-# ==================== 2. 500.com 解析引擎 ====================
+# ==================== 2. 问彩高级 JSON 解析引擎 (带情报提取) ====================
 def get_today(offset=0):
-    from zoneinfo import ZoneInfo
-    return (datetime.now(ZoneInfo(TIMEZONE)) + timedelta(days=offset)).strftime("%Y-%m-%d")
-
-def scrape_500_jczq(date=None):
-    date = date or get_today()
-    url = C500_URL.format(date=date)
-    print(f"  🌐 正在连接 500.com: {url}")
-    ms = []
     try:
-        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}, timeout=20)
-        r.encoding = "gb2312"
-        soup = BeautifulSoup(r.text, "html.parser")
-        rows = soup.find_all("tr")
-        print(f"  ✅ 发现 {len(rows)} 行网页数据")
+        from zoneinfo import ZoneInfo
+        return (datetime.now(ZoneInfo(TIMEZONE)) + timedelta(days=offset)).strftime("%Y-%m-%d")
+    except:
+        return (datetime.now() + timedelta(days=offset)).strftime("%Y-%m-%d")
+
+def scrape_wencai_jczq(date=None):
+    """
+    全新升级版：直连 JSON 接口，不仅提取赔率，更提取伤停与利空情报喂给AI！
+    """
+    url = "https://edu.wencaivip.cn/api/v1.reference/matches"
+    print(f"  🌐 正在直连 Wencai 高级情报接口...")
+    ms = []
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Accept": "application/json, text/plain, */*"
+    }
+    
+    try:
+        r = requests.get(url, headers=headers, timeout=15)
+        data = r.json() 
+        football_matches = data.get("data", {}).get("matches", {}).get("1", [])
         
-        for row in rows:
-            tds = row.find_all("td")
-            if len(tds) < 4: continue
+        if not football_matches:
+            print("  ⚠️ 接口未返回足球比赛数据。")
+            return ms
             
-            full_text = "|".join([td.get_text(strip=True) for td in tds])
-            league, match_num = "", ""
-            
-            for td in tds[:4]:
-                t = td.get_text(strip=True)
-                if re.match(r"^[\u4e00-\u9fff]+$", t) and 1 < len(t) < 6: 
-                    league = t
-                elif re.match(r"^\u5468[一二三四五六日]\d{3}$", t): 
-                    match_num = t
-
-            home, away = "", ""
-            home_rank, away_rank = 0, 0
-
-            # 方案A: VS 分割
-            for td in tds:
-                txt = td.get_text(strip=True)
-                if "VS" in txt.upper() and len(txt) > 2:
-                    parts = re.split(r'VS|vs', txt)
-                    if len(parts) >= 2:
-                        m_h = re.search(r'\[(\d+)\](.+)', parts[0].strip())
-                        home_rank, home = (int(m_h.group(1)), m_h.group(2).strip()) if m_h else (0, re.sub(r'\[.*?\]', '', parts[0]).strip())
-                        
-                        m_a = re.search(r'\[(\d+)\](.+)', parts[1].strip())
-                        away_rank, away = (int(m_a.group(1)), m_a.group(2).strip()) if m_a else (0, re.sub(r'\[.*?\]', '', parts[1]).strip())
-                    break
-
-            # 方案B: a标签降级提取
-            if not home or not away:
-                tls = []
-                for a in row.find_all("a"):
-                    t = a.get_text(strip=True)
-                    if len(t) > 1 and t not in [match_num, league, "析", "亚", "欧"]:
-                        tls.append(t)
+        print(f"  ✅ 极速解析到 {len(football_matches)} 场带有绝密情报的比赛数据！")
+        
+        for item in football_matches:
+            try:
+                # 1. 基础信息
+                league = item.get("cup", "")
+                match_num = f"{item.get('week', '')}{item.get('week_no', '')}"
+                home = item.get("home", "")
+                away = item.get("guest", "")
                 
-                if len(tls) >= 2:
-                    def cn(n):
-                        m = re.search(r'\[(\d+)\](.+)', n)
-                        return (int(m.group(1)), m.group(2).strip()) if m else (0, n.strip())
-                    home_rank, home = cn(tls[0])
-                    away_rank, away = cn(tls[1])
+                # 2. 提取SP初赔
+                sp_home = float(item.get("win") or 0)
+                sp_draw = float(item.get("same") or 0)
+                sp_away = float(item.get("lose") or 0)
+                
+                # 3. 提取排名与机构深度分析
+                home_rank = 0
+                away_rank = 0
+                match_points = "" # 机构基本面提要
+                
+                points_data = item.get("points", {})
+                if isinstance(points_data, dict):
+                    h_pos = points_data.get("home_position", "")
+                    a_pos = points_data.get("guest_position", "")
+                    h_match = re.search(r'\d+', str(h_pos))
+                    a_match = re.search(r'\d+', str(a_pos))
+                    home_rank = int(h_match.group()) if h_match else 0
+                    away_rank = int(a_match.group()) if a_match else 0
+                    match_points = points_data.get("match_points", "")
 
-            if home and away:
-                sps = re.findall(r"(\d+\.\d{2})", full_text)
-                ms.append({
-                    "home_team": home, "away_team": away, "league": league, "match_num": match_num,
-                    "home_rank": home_rank, "away_rank": away_rank,
-                    "sp_home": float(sps[0]) if len(sps)>0 else 0, 
-                    "sp_draw": float(sps[1]) if len(sps)>1 else 0, 
-                    "sp_away": float(sps[2]) if len(sps)>2 else 0,
-                    "source": "500", "raw_text": full_text[:150]
-                })
+                # 4. 🔥 新增：提取极其珍贵的伤停与利空情报
+                info_data = item.get("information", {})
+                home_injury = ""
+                guest_injury = ""
+                home_news = ""
+                guest_news = ""
+                
+                if isinstance(info_data, dict):
+                    home_injury = info_data.get("home_injury", "").replace("\n", " | ")
+                    guest_injury = info_data.get("guest_injury", "").replace("\n", " | ")
+                    home_news = info_data.get("home_bad_news", "").replace("\n", " ") # 重点提取利空
+                    guest_news = info_data.get("guest_bad_news", "").replace("\n", " ")
+                
+                if home and away:
+                    ms.append({
+                        "home_team": home, 
+                        "away_team": away, 
+                        "league": league, 
+                        "match_num": match_num,
+                        "home_rank": home_rank, 
+                        "away_rank": away_rank,
+                        "sp_home": sp_home, 
+                        "sp_draw": sp_draw, 
+                        "sp_away": sp_away,
+                        
+                        # 注入高级情报池
+                        "intelligence": {
+                            "home_injury": home_injury,
+                            "guest_injury": guest_injury,
+                            "home_bad_news": home_news,
+                            "guest_bad_news": guest_news,
+                            "match_points": match_points[:200] # 取前200字核心防Token超载
+                        },
+                        
+                        "source": "wencai_api", 
+                        "raw_text": json.dumps(item)[:150]
+                    })
+                    print(f"    {match_num} {league}: {home}[{home_rank}] vs {away}[{away_rank}] (已加载伤停情报)")
+            
+            except Exception as e:
+                continue
+                
     except Exception as e: 
-        print(f"  ❌ 500.com 解析错误: {str(e)}")
+        print(f"  ❌ Wencai 接口请求或解析错误: {str(e)}")
+        
     return ms
 
-# ==================== 3. API 数据交互 ====================
+# ==================== 3. API-Football 数据交互 ====================
 def search_team_api(name):
     search_n = translate_team_name(name)
     h = {"x-apisports-key": API_FOOTBALL_KEY}
@@ -149,10 +180,9 @@ def fetch_h2h(hid, aid):
         return [{"date": m["fixture"]["date"][:10], "home": m["teams"]["home"]["name"], "away": m["teams"]["away"]["name"], "score": f"{m['goals']['home']}-{m['goals']['away']}", "league": m["league"]["name"]} for m in r.json().get("response", [])]
     except: return []
 
-# ==================== 4. 核心兜底逻辑 (加入名字哈希防重) ====================
+# ==================== 4. 核心兜底逻辑 ====================
 def generate_stats_from_rank(rank, team_name="", total_teams=20):
     import random
-    # 使用名字哈希作为种子，确保只要名字不同，生成的兜底数据就绝对不一样！
     name_hash = sum(ord(c) for c in team_name) if team_name else 0
     random.seed((rank * 7) + name_hash) 
     
@@ -188,8 +218,8 @@ def collect_all(date=None):
     date = date or get_today()
     print(f"\n🚀 启动全量数据抓取中心 | 日期: {date}")
     
-    matches = scrape_500_jczq(date)
-    print(f"  - 500网初始场次: {len(matches)}")
+    matches = scrape_wencai_jczq(date)
+    print(f"  - 发现有效赛事: {len(matches)} 场")
     
     for i, m in enumerate(matches):
         print(f"  [{i+1}/{len(matches)}] 深度装载: {m['home_team']} vs {m['away_team']}")
@@ -221,4 +251,4 @@ def collect_all(date=None):
         time.sleep(0.3)
 
     print("3. 同步 Odds-API 赔率...")
-    return {"date": date, "matches": matches, "odds": fetch_odds(), "fetch_time": datetime.utcnow().isoformat()}
+    return {"date": date, "matches": matches, "odds": fetch_odds(), "fetch_time": get_today()}
