@@ -1,7 +1,7 @@
 {
   "date": "2026-03-09",
   "session": "morning",
-  "update_time": "2026-03-09 11:55:24",
+  "update_time": "2026-03-09 13:08:33",
   "total_matches": 7,
   "results": [
     {
@@ -11,36 +11,45 @@
       "away_team": "中国女",
       "prediction": {
         "predicted_score": "2-1",
-        "home_win_pct": 53.4,
-        "draw_pct": 27.4,
-        "away_win_pct": 19.2,
-        "confidence": 86.5,
+        "home_win_pct": 57.9,
+        "draw_pct": 23.2,
+        "away_win_pct": 18.9,
+        "confidence": 82.0,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "低",
-        "gpt_analysis": "多模型整体明显偏向朝鲜女足，泊松、Dixon-Coles、ELO与蒙特卡洛均给出主胜为第一概率，且综合共识显示9/10模型支持主队方向。朝鲜女足样本战绩更稳，场均失球仅0.4，防守质量显著优于中国女足；同时近期状态WWLWW，也强于客队LLLDL。中国女足虽有一定进攻能力，但近期连续不胜，稳定性与对抗强度不足。结合蒙特卡洛总进球3.1与泊松1-0基线，判断主队更可能在控制比赛基础上赢一球，2-1较为匹配。",
-        "gemini_analysis": "朝鲜女足近期状态火热，近5场取得4胜，且场均失球仅为0.4个，展现出极强的防守统治力。相比之下，中国女足近期陷入低迷，近5场未尝胜绩且输掉4场，士气与竞技状态均处于低谷。多维度模型（泊松、Dixon-Coles、ELO等）均将主胜概率指向50%左右，综合共识度极高。考虑到朝鲜坚固的防线，中国队破门难度极大，预期比赛节奏将被主队掌控，打出零封主胜的概率最高。",
-        "analysis": "",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "朝鲜女足整体战绩与近期状态明显占优，主队27场13胜6平8负，近5场4胜1负；中国女足近5场1平4负，攻防走势偏弱。模型共识10/10，主胜概率57.9%显著高于平局23.4%与客胜18.7%，胜负倾向清晰。预计比赛节奏偏主动，主队有望形成持续压制，但客队仍具一定反击与定位球得分可能。需注意当前未提供有效赔率，三项EV均为0.0%，凯利建议注码也均为0.0%，说明方向虽偏主胜，但严格量化上暂无正收益投注边际，建议以主胜判断为主、控制仓位观望。",
+        "gemini_analysis": "未响应",
         "key_factors": [
-          "朝鲜女足近期状态与整体胜率占优，且防守数据明显更强",
-          "90%的量化模型共识指向主队不败",
-          "朝鲜女足场均0.4球的顶级防守数据",
-          "主流模型多数集中支持主胜，概率分布呈现主队优势但平局仍需防范",
-          "中国女足近期1平4负的低迷状态"
+          "朝鲜女足近期状态强势，基本面与模型胜率均明显占优",
+          "赔率缺失导致EV与凯利均为0，方向正确但缺乏可执行投注优势"
         ],
-        "model_agreement": true,
         "poisson": {
-          "home_win": 55.2,
-          "draw": 32.9,
-          "away_win": 11.9,
+          "home_win": 54.6,
+          "draw": 33.4,
+          "away_win": 12.1,
           "predicted_score": "1-0",
-          "home_xg": 1.12,
+          "home_xg": 1.1,
           "away_xg": 0.36,
-          "home_expected_goals": 1.12,
-          "away_expected_goals": 0.36,
-          "over_2_5": 18.6,
-          "btts": 20.4,
+          "over_2_5": 18.1,
+          "btts": 20.2,
           "top_scores": [
             {
               "score": "1-0",
@@ -48,11 +57,11 @@
             },
             {
               "score": "0-0",
-              "prob": 22.7
+              "prob": 23.2
             },
             {
               "score": "2-0",
-              "prob": 14.3
+              "prob": 14.1
             },
             {
               "score": "1-1",
@@ -60,14 +69,22 @@
             },
             {
               "score": "0-1",
-              "prob": 8.2
+              "prob": 8.4
             }
-          ]
+          ],
+          "home_expected_goals": 1.1,
+          "away_expected_goals": 0.36
         },
-        "model_consensus": 9
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "model_consensus": 10
       },
       "match_num": "周一002",
-      "recommend_score": 78.72,
+      "recommend_score": 60.27,
       "is_recommended": true
     },
     {
@@ -76,194 +93,81 @@
       "home_team": "孟加拉国女足",
       "away_team": "乌兹别克斯坦女足",
       "prediction": {
-        "predicted_score": "1-0",
-        "home_win_pct": 46.1,
-        "draw_pct": 28.0,
-        "away_win_pct": 25.9,
-        "confidence": 86.2,
+        "predicted_score": "2-1",
+        "home_win_pct": 52.7,
+        "draw_pct": 24.4,
+        "away_win_pct": 22.9,
+        "confidence": 78.0,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "低",
-        "gpt_analysis": "主队基本面更稳，18战仅失0.4球的防守质量明显优于客队，且整体胜率、近期走势与主场预期均占优。模型层面虽存在分歧，但泊松、Dixon-Coles、蒙特卡洛及综合共识整体仍偏向主队不败且主胜略优。需注意泊松给出较高平局概率，说明比赛节奏可能偏谨慎，主队更像凭防线优势与效率小胜，首选主胜，次防平局。",
-        "gemini_analysis": "综合多维度模型数据，孟加拉国女足在防守端表现出极强的统治力（场均失球仅0.4个），而乌兹别克斯坦女足近期状态低迷（近5场LLLDL）。虽然蒙特卡洛模拟给出了较高的预期进球数，但泊松分布和主队防守数据强烈指向低比分格局。ELO评分和Dixon-Coles模型均倾向于主队不败。机器学习模型对主胜略显保守（33.8%），提示需防范平局。综合共识高度一致，主队凭借坚固的防守体系有望以微弱优势拿下比赛，零封对手概率较高。",
-        "analysis": "",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "基本面主队胜平负分布55/25/20，近况与总体胜率均优于客队，比赛掌控与得分稳定性更强，模型共识10/10支持主胜并倾向2-1。当前未提供赔率，系统计算EV=0%且凯利建议0%，代表无法确认正期望，策略应以观望/不重仓为主；若临场主胜赔率高于隐含概率(约≥1.95)再小注介入并严格止损。",
+        "gemini_analysis": "未响应",
         "key_factors": [
-          "孟加拉国女足场均失球仅0.4，防守体系极其稳固",
-          "乌兹别克斯坦女足近期遭遇连败，士气与竞技状态处于低谷",
-          "乌兹别克斯坦女足近况LLLDL，状态低迷且胜率偏低",
-          "泊松分布与防守数据共振，强烈指向小球与零封格局",
-          "孟加拉国女足场均失球仅0.4，防守稳定性是最大优势"
+          "赔率缺失导致EV=0与凯利=0，资金管理要求先等价差再下注",
+          "主队近况与整体胜率优于客队，胜面更集中在主胜区间"
         ],
-        "model_agreement": true,
         "poisson": {
-          "home_win": 50.0,
-          "draw": 36.5,
-          "away_win": 13.5,
+          "home_win": 49.4,
+          "draw": 37.0,
+          "away_win": 13.6,
           "predicted_score": "0-0",
-          "home_xg": 0.97,
+          "home_xg": 0.95,
           "away_xg": 0.36,
-          "home_expected_goals": 0.97,
-          "away_expected_goals": 0.36,
-          "over_2_5": 15.0,
-          "btts": 18.8,
+          "over_2_5": 14.6,
+          "btts": 18.6,
           "top_scores": [
             {
               "score": "0-0",
-              "prob": 26.4
+              "prob": 26.9
             },
             {
               "score": "1-0",
-              "prob": 25.7
+              "prob": 25.6
             },
             {
               "score": "2-0",
-              "prob": 12.4
+              "prob": 12.2
             },
             {
               "score": "0-1",
-              "prob": 9.5
+              "prob": 9.7
             },
             {
               "score": "1-1",
               "prob": 9.2
             }
-          ]
+          ],
+          "home_expected_goals": 0.95,
+          "away_expected_goals": 0.36
         },
-        "model_consensus": 9
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "model_consensus": 10
       },
       "match_num": "周一001",
-      "recommend_score": 76.41,
-      "is_recommended": true
-    },
-    {
-      "match_id": 6,
-      "league": "西甲",
-      "home_team": "西班牙人",
-      "away_team": "奥维耶多",
-      "prediction": {
-        "predicted_score": "1-0",
-        "home_win_pct": 46.1,
-        "draw_pct": 29.6,
-        "away_win_pct": 24.3,
-        "confidence": 76.5,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "低",
-        "gpt_analysis": "多数模型一致偏向主胜，泊松与Dixon-Coles均给出主队不败且主胜概率领先，ELO差值60也支撑主场优势。两队赛季场均失球都偏低，近期状态同样低迷，比赛节奏大概率谨慎，平局具备一定干扰，但客队近5场更差且胜率不足。综合攻守效率、主场加成与模型共识，主队小胜最优，防平需留意。",
-        "gemini_analysis": "未响应",
-        "analysis": "",
-        "key_factors": [
-          "两队防守数据优于进攻数据，低比分格局明显，1球差最符合分布",
-          "9/10模型共识偏向主队，主胜概率在多模型中持续领先"
-        ],
-        "model_agreement": true,
-        "poisson": {
-          "home_win": 37.9,
-          "draw": 34.6,
-          "away_win": 27.6,
-          "predicted_score": "0-0",
-          "home_xg": 0.91,
-          "away_xg": 0.73,
-          "home_expected_goals": 0.91,
-          "away_expected_goals": 0.73,
-          "over_2_5": 22.7,
-          "btts": 30.9,
-          "top_scores": [
-            {
-              "score": "0-0",
-              "prob": 19.4
-            },
-            {
-              "score": "1-0",
-              "prob": 17.7
-            },
-            {
-              "score": "0-1",
-              "prob": 14.1
-            },
-            {
-              "score": "1-1",
-              "prob": 12.9
-            },
-            {
-              "score": "2-0",
-              "prob": 8.0
-            }
-          ]
-        },
-        "model_consensus": 9
-      },
-      "match_num": "周一006",
-      "recommend_score": 72.53,
-      "is_recommended": true
-    },
-    {
-      "match_id": 5,
-      "league": "法乙",
-      "home_team": "敦刻尔克",
-      "away_team": "兰斯",
-      "prediction": {
-        "predicted_score": "1-0",
-        "home_win_pct": 44.8,
-        "draw_pct": 29.6,
-        "away_win_pct": 25.6,
-        "confidence": 82.2,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "低",
-        "gpt_analysis": "多模型整体明显偏向主队，综合共识显示8/10模型支持主胜，ELO与机器学习均给予主队更高胜率，说明主场与整体稳定性占优。泊松分布虽给出0比0倾向，但其主胜概率仍高于客胜，反映比赛节奏可能偏谨慎。客队近况连续不胜，状态走低，而主队近期胜场更多，基本面略优。考虑法乙进球波动偏小，最终更看好敦刻尔克以小比分取胜。",
-        "gemini_analysis": "主队敦刻尔克防守端表现极其稳固，场均失球仅0.41个，具备极强的零封能力。客队兰斯近期遭遇连败且状态低迷（近5场1平4负），士气处于低谷。多维度模型共识高度倾向主队不败，其中泊松分布与ELO评分均给出主队较高胜率。尽管蒙特卡洛模拟提示一定进球数，但结合主队极低的失球率及泊松0-0的预期，本场比赛大概率是一场沉闷的低比分较量，主队有望凭借坚固防守和主场优势小胜对手。",
-        "analysis": "",
-        "key_factors": [
-          "客队近5场1平4负状态低迷，主队近期表现相对更稳",
-          "主队场均失球仅0.41，防守极其稳固",
-          "8/10模型共识倾向主胜，主队综合胜面更高",
-          "客队近期1平4负状态极差",
-          "80%的模型共识看好主队方向",
-          "泊松分布强烈指向低比分格局"
-        ],
-        "model_agreement": true,
-        "poisson": {
-          "home_win": 44.8,
-          "draw": 39.9,
-          "away_win": 15.4,
-          "predicted_score": "0-0",
-          "home_xg": 0.84,
-          "away_xg": 0.37,
-          "home_expected_goals": 0.84,
-          "away_expected_goals": 0.37,
-          "over_2_5": 12.2,
-          "btts": 17.5,
-          "top_scores": [
-            {
-              "score": "0-0",
-              "prob": 29.9
-            },
-            {
-              "score": "1-0",
-              "prob": 25.1
-            },
-            {
-              "score": "0-1",
-              "prob": 11.0
-            },
-            {
-              "score": "2-0",
-              "prob": 10.5
-            },
-            {
-              "score": "1-1",
-              "prob": 9.3
-            }
-          ]
-        },
-        "model_consensus": 8
-      },
-      "match_num": "周一005",
-      "recommend_score": 72.42,
+      "recommend_score": 57.11,
       "is_recommended": true
     },
     {
@@ -272,41 +176,50 @@
       "home_team": "西汉姆联",
       "away_team": "布伦特",
       "prediction": {
-        "predicted_score": "1-0",
-        "home_win_pct": 38.7,
-        "draw_pct": 31.8,
-        "away_win_pct": 29.5,
-        "confidence": 74.5,
+        "predicted_score": "2-1",
+        "home_win_pct": 41.3,
+        "draw_pct": 30.1,
+        "away_win_pct": 28.6,
+        "confidence": 74.0,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "低",
-        "gpt_analysis": "多模型整体对西汉姆联略有倾斜，泊松、Dixon-Coles与蒙特卡洛均给出主队小幅领先，ELO差值也支持主场优势。两队基础战绩、进失球与近况几乎一致，说明比赛不会形成明显碾压，胜负更可能由主场环境、杯赛轮换质量和关键时段把握机会能力决定。泊松预期偏低比分，且双方失球数据不高，比赛节奏大概率偏谨慎，西汉姆联更像是以一球优势过关。",
-        "gemini_analysis": "本场比赛主客两队赛季数据与近期状态（LLLDL）呈现罕见的完全同质化，均处于进攻乏力且士气低迷的阶段。场均失球仅0.79反映出双方防守端具备一定韧性。泊松分布给出的0-0预期及高达35.2%的平局概率，高度契合两队当前的僵持基本面。尽管ELO与Dixon-Coles模型给予主场一定加成，但机器学习端主胜概率仅28.7%，显示出深度算法对主队反弹持悲观态度。结合杯赛特性与蒙特卡洛的波动预期，本场极大概率陷入闷战，常规时间内握手言和是最高概率事件，需防范低比分平局。",
-        "analysis": "",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "两队赛季战绩与近期走势几乎完全一致，基本面差距有限，模型仅给予主队微弱优势，主胜概率41.3%，高于平局30.1%与客胜28.6%，故结果倾向主胜。进球端预计比赛开放，2-1更符合杯赛博弈特征，倾向大于2.5球且双方进球。需注意当前三项EV均为0.0%，凯利建议注码也均为0.0%，说明在缺失有效赔率优势时不存在正期望投注空间，实盘应以观望为主，若后续主胜赔率上调形成正EV，再考虑小仓位介入。",
+        "gemini_analysis": "未响应",
         "key_factors": [
-          "泊松与Dixon-Coles均指向低比分下主队更占优",
-          "机器学习模型对主胜信心严重不足（仅28.7%）",
-          "主场优势与ELO差值对西汉姆联形成基础支撑",
-          "泊松分布平局概率（35.2%）显著高于常规均值",
-          "双方近况极度低迷且防守数据优异（均失0.79球）"
+          "模型共识看好度10/10，但胜平负概率差距不大，主队仅属小优",
+          "当前三项EV与凯利值均为0，代表无明确投注价值，资金管理应保守"
         ],
-        "model_agreement": false,
         "poisson": {
-          "home_win": 37.4,
-          "draw": 35.2,
-          "away_win": 27.4,
+          "home_win": 36.8,
+          "draw": 35.4,
+          "away_win": 27.7,
           "predicted_score": "0-0",
-          "home_xg": 0.88,
+          "home_xg": 0.87,
           "away_xg": 0.71,
-          "home_expected_goals": 0.88,
-          "away_expected_goals": 0.71,
-          "over_2_5": 21.6,
-          "btts": 29.9,
+          "over_2_5": 21.1,
+          "btts": 29.5,
           "top_scores": [
             {
               "score": "0-0",
-              "prob": 20.3
+              "prob": 20.6
             },
             {
               "score": "1-0",
@@ -314,22 +227,196 @@
             },
             {
               "score": "0-1",
+              "prob": 14.6
+            },
+            {
+              "score": "1-1",
+              "prob": 12.7
+            },
+            {
+              "score": "2-0",
+              "prob": 7.8
+            }
+          ],
+          "home_expected_goals": 0.87,
+          "away_expected_goals": 0.71
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "model_consensus": 10
+      },
+      "match_num": "周一003",
+      "recommend_score": 52.09,
+      "is_recommended": true
+    },
+    {
+      "match_id": 6,
+      "league": "西甲",
+      "home_team": "西班牙人",
+      "away_team": "奥维耶多",
+      "prediction": {
+        "predicted_score": "2-1",
+        "home_win_pct": 43.2,
+        "draw_pct": 30.9,
+        "away_win_pct": 25.9,
+        "confidence": 75.0,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "综合战绩、近期状态与模型共识，主队胜面仍居首。西班牙人整体稳定性略优，且主场拿分能力相对更强；奥维耶多近况连续不胜，进攻端转化率偏低。概率分布为主胜43.4%、平30.9%、客胜25.7%，主胜是最优赛果方向。但由于题面未给出市场赔率，三项EV均为0%，对应凯利建议注码也均为0%，说明当前仅有结果预测优势，没有可执行的正期望投注空间，宜轻仓或观望。",
+        "gemini_analysis": "未响应",
+        "key_factors": [
+          "客队近5场LLLDL持续低迷，主队主场与稳定性更占优",
+          "模型共识看好度9/10，主队基础胜率显著领先客队"
+        ],
+        "poisson": {
+          "home_win": 37.3,
+          "draw": 34.8,
+          "away_win": 27.9,
+          "predicted_score": "0-0",
+          "home_xg": 0.89,
+          "away_xg": 0.73,
+          "over_2_5": 22.3,
+          "btts": 30.6,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 19.7
+            },
+            {
+              "score": "1-0",
+              "prob": 17.6
+            },
+            {
+              "score": "0-1",
               "prob": 14.4
             },
             {
               "score": "1-1",
-              "prob": 12.8
+              "prob": 12.9
             },
             {
               "score": "2-0",
               "prob": 7.9
             }
-          ]
+          ],
+          "home_expected_goals": 0.89,
+          "away_expected_goals": 0.73
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
         },
         "model_consensus": 9
       },
-      "match_num": "周一003",
-      "recommend_score": 57.51,
+      "match_num": "周一006",
+      "recommend_score": 51.06,
+      "is_recommended": true
+    },
+    {
+      "match_id": 5,
+      "league": "法乙",
+      "home_team": "敦刻尔克",
+      "away_team": "兰斯",
+      "prediction": {
+        "predicted_score": "2-1",
+        "home_win_pct": 48.8,
+        "draw_pct": 28.8,
+        "away_win_pct": 22.4,
+        "confidence": 72.0,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "模型共识8/10，基础面上敦刻尔克近5场2胜1平2负，走势强于兰斯近5场3平2负，且主胜概率48.6%显著高于客胜22.8%，主队不败框架更稳。比分倾向2-1，主要基于双方防线稳定性一般、客队连续不胜但仍具进球能力。需注意当前主胜/平/客胜的EV均为0.0%，凯利建议注码也均为0.0%，说明赔率端未给出明确正收益空间，投资上可作赛果判断偏主胜，但实盘不宜重仓，宜轻仓或等待临场赔率改善后再介入。",
+        "gemini_analysis": "未响应",
+        "key_factors": [
+          "当前三项EV与凯利值均为0，方向虽偏主胜，但缺乏足够赔率套利空间",
+          "敦刻尔克近期状态与主场面优于兰斯，模型胜率明显偏向主队"
+        ],
+        "poisson": {
+          "home_win": 44.2,
+          "draw": 40.3,
+          "away_win": 15.6,
+          "predicted_score": "0-0",
+          "home_xg": 0.82,
+          "away_xg": 0.37,
+          "over_2_5": 11.9,
+          "btts": 17.3,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 30.3
+            },
+            {
+              "score": "1-0",
+              "prob": 25.0
+            },
+            {
+              "score": "0-1",
+              "prob": 11.2
+            },
+            {
+              "score": "2-0",
+              "prob": 10.3
+            },
+            {
+              "score": "1-1",
+              "prob": 9.2
+            }
+          ],
+          "home_expected_goals": 0.82,
+          "away_expected_goals": 0.37
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "model_consensus": 8
+      },
+      "match_num": "周一005",
+      "recommend_score": 49.54,
       "is_recommended": false
     },
     {
@@ -339,61 +426,80 @@
       "away_team": "里奥阿维",
       "prediction": {
         "predicted_score": "0-1",
-        "home_win_pct": 24.4,
-        "draw_pct": 31.8,
-        "away_win_pct": 43.8,
-        "confidence": 64.0,
+        "home_win_pct": 30.1,
+        "draw_pct": 32.0,
+        "away_win_pct": 37.9,
+        "confidence": 56.0,
         "result": "客胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "中",
-        "gpt_analysis": "主队26轮仅3胜，场均仅进0.65球，近5场2平3负，进攻持续低迷；客队虽然近期走势也弱，但赛季场均1.35球、失0.79球，攻防质量明显优于主队。泊松、Dixon-Coles、蒙特卡洛三类核心模型均一致支持客胜且预期总进球仅1.98，指向低比分格局。ELO单独偏向主队属明显离群信号，在基本面与其余模型不共振情况下参考价值应下调，综合判断客队小胜最优。",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "两队近期状态都差，主队26轮仅3胜且近5场2平3负，基本面明显偏弱；客队整体战绩与模型概率略占优，客胜37.9%为三项最高，因此倾向里奥阿维小胜。总进球端，双方进攻效率有限，比赛更像低节奏拉扯，小于2.5球更合理。资金面上三项EV均为0%，凯利建议注码也均为0%，说明当前赔率下不存在可量化正收益优势，虽可做赛果方向判断，但投资层面应以观望或极小仓位处理，避免无优势下注。",
         "gemini_analysis": "未响应",
-        "analysis": "",
         "key_factors": [
-          "客队赛季攻防效率显著占优，主流概率模型集中支持客胜",
-          "总进球预期不足2球，0-1或0-0是最匹配的比分区间",
-          "主队攻击力极弱，26场仅0.65球且近期连续不胜"
+          "主队赛季胜率极低且近期连续不胜，基本面处于明显下风",
+          "模型概率客胜最高，但EV与凯利均为零，代表方向可判但下注价值不足"
         ],
-        "model_agreement": true,
         "poisson": {
-          "home_win": 14.7,
+          "home_win": 14.4,
           "draw": 34.0,
-          "away_win": 51.3,
+          "away_win": 51.5,
           "predicted_score": "0-1",
-          "home_xg": 0.43,
+          "home_xg": 0.42,
           "away_xg": 1.06,
-          "home_expected_goals": 0.43,
-          "away_expected_goals": 1.06,
-          "over_2_5": 18.8,
-          "btts": 22.7,
+          "over_2_5": 18.6,
+          "btts": 22.4,
           "top_scores": [
             {
               "score": "0-1",
-              "prob": 24.0
+              "prob": 24.2
             },
             {
               "score": "0-0",
-              "prob": 22.6
+              "prob": 22.8
             },
             {
               "score": "0-2",
-              "prob": 12.7
+              "prob": 12.8
             },
             {
               "score": "1-1",
-              "prob": 10.2
+              "prob": 10.1
             },
             {
               "score": "1-0",
-              "prob": 9.6
+              "prob": 9.5
             }
-          ]
+          ],
+          "home_expected_goals": 0.42,
+          "away_expected_goals": 1.06
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
         },
         "model_consensus": 6
       },
       "match_num": "周一007",
-      "recommend_score": 52.84,
+      "recommend_score": 35.87,
       "is_recommended": false
     },
     {
@@ -403,39 +509,49 @@
       "away_team": "萨索洛",
       "prediction": {
         "predicted_score": "1-0",
-        "home_win_pct": 42.6,
-        "draw_pct": 31.1,
-        "away_win_pct": 26.3,
-        "confidence": 62.0,
+        "home_win_pct": 44.2,
+        "draw_pct": 29.2,
+        "away_win_pct": 26.6,
+        "confidence": 46.5,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
-        "risk_level": "中",
-        "gpt_analysis": "各模型分歧不小，泊松与Dixon-Coles明显偏低比分，平局权重较高；ELO与机器学习更支持主队，且综合共识有6成模型偏向主胜。两队赛季失球数据都不高，主队近5场虽起伏，但客队近况更差、连续不胜，拉齐奥坐镇主场仍有微弱优势。综合攻防效率、模型投票与低比分特征，主胜略优于平局，倾向1-0或1-1，首选主胜，防平。",
+        "risk_level": "高",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "拉齐奥主场面与阵容深度仍略优，萨索洛近期连续不胜且客场抗压能力偏弱，基本面支持主队小幅占先。但两队本季稳定性都不足，模型共识仅3/10，胜平负分布较分散，难形成强信号。关键是当前未给出有效赔率，三项EV均为0%，对应凯利建议注码也均为0%，说明不存在可确认的正期望投资机会。策略上以赛果倾向主胜为主，资金层面建议观望，若临场主胜赔率上修并转为正EV，才考虑极小仓位介入。",
         "gemini_analysis": "未响应",
-        "analysis": "",
         "key_factors": [
-          "客队近5场3负2平状态更弱，主场因素提升拉齐奥胜面",
-          "ELO和机器学习模型对主队支持更强，提供主胜基础",
-          "两队失球控制都不错，比赛节奏可能偏谨慎",
-          "泊松与Dixon-Coles指向低比分，平局概率不可忽视"
+          "赔率缺失导致EV与凯利均为0，量化上不满足正式下注条件",
+          "拉齐奥主场基础战力和纸面实力略强于萨索洛，且客队近期状态更差"
         ],
-        "model_agreement": true,
         "poisson": {
-          "home_win": 33.1,
-          "draw": 35.8,
-          "away_win": 31.1,
+          "home_win": 32.6,
+          "draw": 36.0,
+          "away_win": 31.4,
           "predicted_score": "0-0",
-          "home_xg": 0.8,
+          "home_xg": 0.79,
           "away_xg": 0.77,
-          "home_expected_goals": 0.8,
-          "away_expected_goals": 0.77,
-          "over_2_5": 20.7,
-          "btts": 29.4,
+          "over_2_5": 20.4,
+          "btts": 29.1,
           "top_scores": [
             {
               "score": "0-0",
-              "prob": 20.9
+              "prob": 21.2
             },
             {
               "score": "1-0",
@@ -443,22 +559,30 @@
             },
             {
               "score": "0-1",
-              "prob": 16.0
+              "prob": 16.2
             },
             {
               "score": "1-1",
-              "prob": 12.8
+              "prob": 12.7
             },
             {
               "score": "2-0",
-              "prob": 6.7
+              "prob": 6.5
             }
-          ]
+          ],
+          "home_expected_goals": 0.79,
+          "away_expected_goals": 0.77
         },
-        "model_consensus": 6
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "model_consensus": 3
       },
       "match_num": "周一004",
-      "recommend_score": 51.68,
+      "recommend_score": 27.96,
       "is_recommended": false
     }
   ],
@@ -471,36 +595,45 @@
       "away_team": "中国女",
       "prediction": {
         "predicted_score": "2-1",
-        "home_win_pct": 53.4,
-        "draw_pct": 27.4,
-        "away_win_pct": 19.2,
-        "confidence": 86.5,
+        "home_win_pct": 57.9,
+        "draw_pct": 23.2,
+        "away_win_pct": 18.9,
+        "confidence": 82.0,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "低",
-        "gpt_analysis": "多模型整体明显偏向朝鲜女足，泊松、Dixon-Coles、ELO与蒙特卡洛均给出主胜为第一概率，且综合共识显示9/10模型支持主队方向。朝鲜女足样本战绩更稳，场均失球仅0.4，防守质量显著优于中国女足；同时近期状态WWLWW，也强于客队LLLDL。中国女足虽有一定进攻能力，但近期连续不胜，稳定性与对抗强度不足。结合蒙特卡洛总进球3.1与泊松1-0基线，判断主队更可能在控制比赛基础上赢一球，2-1较为匹配。",
-        "gemini_analysis": "朝鲜女足近期状态火热，近5场取得4胜，且场均失球仅为0.4个，展现出极强的防守统治力。相比之下，中国女足近期陷入低迷，近5场未尝胜绩且输掉4场，士气与竞技状态均处于低谷。多维度模型（泊松、Dixon-Coles、ELO等）均将主胜概率指向50%左右，综合共识度极高。考虑到朝鲜坚固的防线，中国队破门难度极大，预期比赛节奏将被主队掌控，打出零封主胜的概率最高。",
-        "analysis": "",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "朝鲜女足整体战绩与近期状态明显占优，主队27场13胜6平8负，近5场4胜1负；中国女足近5场1平4负，攻防走势偏弱。模型共识10/10，主胜概率57.9%显著高于平局23.4%与客胜18.7%，胜负倾向清晰。预计比赛节奏偏主动，主队有望形成持续压制，但客队仍具一定反击与定位球得分可能。需注意当前未提供有效赔率，三项EV均为0.0%，凯利建议注码也均为0.0%，说明方向虽偏主胜，但严格量化上暂无正收益投注边际，建议以主胜判断为主、控制仓位观望。",
+        "gemini_analysis": "未响应",
         "key_factors": [
-          "朝鲜女足近期状态与整体胜率占优，且防守数据明显更强",
-          "90%的量化模型共识指向主队不败",
-          "朝鲜女足场均0.4球的顶级防守数据",
-          "主流模型多数集中支持主胜，概率分布呈现主队优势但平局仍需防范",
-          "中国女足近期1平4负的低迷状态"
+          "朝鲜女足近期状态强势，基本面与模型胜率均明显占优",
+          "赔率缺失导致EV与凯利均为0，方向正确但缺乏可执行投注优势"
         ],
-        "model_agreement": true,
         "poisson": {
-          "home_win": 55.2,
-          "draw": 32.9,
-          "away_win": 11.9,
+          "home_win": 54.6,
+          "draw": 33.4,
+          "away_win": 12.1,
           "predicted_score": "1-0",
-          "home_xg": 1.12,
+          "home_xg": 1.1,
           "away_xg": 0.36,
-          "home_expected_goals": 1.12,
-          "away_expected_goals": 0.36,
-          "over_2_5": 18.6,
-          "btts": 20.4,
+          "over_2_5": 18.1,
+          "btts": 20.2,
           "top_scores": [
             {
               "score": "1-0",
@@ -508,11 +641,11 @@
             },
             {
               "score": "0-0",
-              "prob": 22.7
+              "prob": 23.2
             },
             {
               "score": "2-0",
-              "prob": 14.3
+              "prob": 14.1
             },
             {
               "score": "1-1",
@@ -520,14 +653,22 @@
             },
             {
               "score": "0-1",
-              "prob": 8.2
+              "prob": 8.4
             }
-          ]
+          ],
+          "home_expected_goals": 1.1,
+          "away_expected_goals": 0.36
         },
-        "model_consensus": 9
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "model_consensus": 10
       },
       "match_num": "周一002",
-      "recommend_score": 78.72,
+      "recommend_score": 60.27,
       "is_recommended": true
     },
     {
@@ -537,113 +678,226 @@
       "home_team": "孟加拉国女足",
       "away_team": "乌兹别克斯坦女足",
       "prediction": {
-        "predicted_score": "1-0",
-        "home_win_pct": 46.1,
-        "draw_pct": 28.0,
-        "away_win_pct": 25.9,
-        "confidence": 86.2,
+        "predicted_score": "2-1",
+        "home_win_pct": 52.7,
+        "draw_pct": 24.4,
+        "away_win_pct": 22.9,
+        "confidence": 78.0,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "低",
-        "gpt_analysis": "主队基本面更稳，18战仅失0.4球的防守质量明显优于客队，且整体胜率、近期走势与主场预期均占优。模型层面虽存在分歧，但泊松、Dixon-Coles、蒙特卡洛及综合共识整体仍偏向主队不败且主胜略优。需注意泊松给出较高平局概率，说明比赛节奏可能偏谨慎，主队更像凭防线优势与效率小胜，首选主胜，次防平局。",
-        "gemini_analysis": "综合多维度模型数据，孟加拉国女足在防守端表现出极强的统治力（场均失球仅0.4个），而乌兹别克斯坦女足近期状态低迷（近5场LLLDL）。虽然蒙特卡洛模拟给出了较高的预期进球数，但泊松分布和主队防守数据强烈指向低比分格局。ELO评分和Dixon-Coles模型均倾向于主队不败。机器学习模型对主胜略显保守（33.8%），提示需防范平局。综合共识高度一致，主队凭借坚固的防守体系有望以微弱优势拿下比赛，零封对手概率较高。",
-        "analysis": "",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "基本面主队胜平负分布55/25/20，近况与总体胜率均优于客队，比赛掌控与得分稳定性更强，模型共识10/10支持主胜并倾向2-1。当前未提供赔率，系统计算EV=0%且凯利建议0%，代表无法确认正期望，策略应以观望/不重仓为主；若临场主胜赔率高于隐含概率(约≥1.95)再小注介入并严格止损。",
+        "gemini_analysis": "未响应",
         "key_factors": [
-          "孟加拉国女足场均失球仅0.4，防守体系极其稳固",
-          "乌兹别克斯坦女足近期遭遇连败，士气与竞技状态处于低谷",
-          "乌兹别克斯坦女足近况LLLDL，状态低迷且胜率偏低",
-          "泊松分布与防守数据共振，强烈指向小球与零封格局",
-          "孟加拉国女足场均失球仅0.4，防守稳定性是最大优势"
+          "赔率缺失导致EV=0与凯利=0，资金管理要求先等价差再下注",
+          "主队近况与整体胜率优于客队，胜面更集中在主胜区间"
         ],
-        "model_agreement": true,
         "poisson": {
-          "home_win": 50.0,
-          "draw": 36.5,
-          "away_win": 13.5,
+          "home_win": 49.4,
+          "draw": 37.0,
+          "away_win": 13.6,
           "predicted_score": "0-0",
-          "home_xg": 0.97,
+          "home_xg": 0.95,
           "away_xg": 0.36,
-          "home_expected_goals": 0.97,
-          "away_expected_goals": 0.36,
-          "over_2_5": 15.0,
-          "btts": 18.8,
+          "over_2_5": 14.6,
+          "btts": 18.6,
           "top_scores": [
             {
               "score": "0-0",
-              "prob": 26.4
+              "prob": 26.9
             },
             {
               "score": "1-0",
-              "prob": 25.7
+              "prob": 25.6
             },
             {
               "score": "2-0",
-              "prob": 12.4
+              "prob": 12.2
             },
             {
               "score": "0-1",
-              "prob": 9.5
+              "prob": 9.7
             },
             {
               "score": "1-1",
               "prob": 9.2
             }
-          ]
+          ],
+          "home_expected_goals": 0.95,
+          "away_expected_goals": 0.36
         },
-        "model_consensus": 9
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "model_consensus": 10
       },
       "match_num": "周一001",
-      "recommend_score": 76.41,
+      "recommend_score": 57.11,
       "is_recommended": true
     },
     {
       "rank": 3,
+      "match_id": 3,
+      "league": "英足总杯",
+      "home_team": "西汉姆联",
+      "away_team": "布伦特",
+      "prediction": {
+        "predicted_score": "2-1",
+        "home_win_pct": 41.3,
+        "draw_pct": 30.1,
+        "away_win_pct": 28.6,
+        "confidence": 74.0,
+        "result": "主胜",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "risk_level": "低",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "两队赛季战绩与近期走势几乎完全一致，基本面差距有限，模型仅给予主队微弱优势，主胜概率41.3%，高于平局30.1%与客胜28.6%，故结果倾向主胜。进球端预计比赛开放，2-1更符合杯赛博弈特征，倾向大于2.5球且双方进球。需注意当前三项EV均为0.0%，凯利建议注码也均为0.0%，说明在缺失有效赔率优势时不存在正期望投注空间，实盘应以观望为主，若后续主胜赔率上调形成正EV，再考虑小仓位介入。",
+        "gemini_analysis": "未响应",
+        "key_factors": [
+          "模型共识看好度10/10，但胜平负概率差距不大，主队仅属小优",
+          "当前三项EV与凯利值均为0，代表无明确投注价值，资金管理应保守"
+        ],
+        "poisson": {
+          "home_win": 36.8,
+          "draw": 35.4,
+          "away_win": 27.7,
+          "predicted_score": "0-0",
+          "home_xg": 0.87,
+          "away_xg": 0.71,
+          "over_2_5": 21.1,
+          "btts": 29.5,
+          "top_scores": [
+            {
+              "score": "0-0",
+              "prob": 20.6
+            },
+            {
+              "score": "1-0",
+              "prob": 17.9
+            },
+            {
+              "score": "0-1",
+              "prob": 14.6
+            },
+            {
+              "score": "1-1",
+              "prob": 12.7
+            },
+            {
+              "score": "2-0",
+              "prob": 7.8
+            }
+          ],
+          "home_expected_goals": 0.87,
+          "away_expected_goals": 0.71
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
+        },
+        "model_consensus": 10
+      },
+      "match_num": "周一003",
+      "recommend_score": 52.09,
+      "is_recommended": true
+    },
+    {
+      "rank": 4,
       "match_id": 6,
       "league": "西甲",
       "home_team": "西班牙人",
       "away_team": "奥维耶多",
       "prediction": {
-        "predicted_score": "1-0",
-        "home_win_pct": 46.1,
-        "draw_pct": 29.6,
-        "away_win_pct": 24.3,
-        "confidence": 76.5,
+        "predicted_score": "2-1",
+        "home_win_pct": 43.2,
+        "draw_pct": 30.9,
+        "away_win_pct": 25.9,
+        "confidence": 75.0,
         "result": "主胜",
         "over_under_2_5": "小",
         "both_score": "否",
         "risk_level": "低",
-        "gpt_analysis": "多数模型一致偏向主胜，泊松与Dixon-Coles均给出主队不败且主胜概率领先，ELO差值60也支撑主场优势。两队赛季场均失球都偏低，近期状态同样低迷，比赛节奏大概率谨慎，平局具备一定干扰，但客队近5场更差且胜率不足。综合攻守效率、主场加成与模型共识，主队小胜最优，防平需留意。",
+        "value_bets_summary": [],
+        "home_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "draw_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "away_ev": {
+          "ev": 0.0,
+          "kelly": 0.0,
+          "is_value": false
+        },
+        "gpt_analysis": "综合战绩、近期状态与模型共识，主队胜面仍居首。西班牙人整体稳定性略优，且主场拿分能力相对更强；奥维耶多近况连续不胜，进攻端转化率偏低。概率分布为主胜43.4%、平30.9%、客胜25.7%，主胜是最优赛果方向。但由于题面未给出市场赔率，三项EV均为0%，对应凯利建议注码也均为0%，说明当前仅有结果预测优势，没有可执行的正期望投注空间，宜轻仓或观望。",
         "gemini_analysis": "未响应",
-        "analysis": "",
         "key_factors": [
-          "两队防守数据优于进攻数据，低比分格局明显，1球差最符合分布",
-          "9/10模型共识偏向主队，主胜概率在多模型中持续领先"
+          "客队近5场LLLDL持续低迷，主队主场与稳定性更占优",
+          "模型共识看好度9/10，主队基础胜率显著领先客队"
         ],
-        "model_agreement": true,
         "poisson": {
-          "home_win": 37.9,
-          "draw": 34.6,
-          "away_win": 27.6,
+          "home_win": 37.3,
+          "draw": 34.8,
+          "away_win": 27.9,
           "predicted_score": "0-0",
-          "home_xg": 0.91,
+          "home_xg": 0.89,
           "away_xg": 0.73,
-          "home_expected_goals": 0.91,
-          "away_expected_goals": 0.73,
-          "over_2_5": 22.7,
-          "btts": 30.9,
+          "over_2_5": 22.3,
+          "btts": 30.6,
           "top_scores": [
             {
               "score": "0-0",
-              "prob": 19.4
+              "prob": 19.7
             },
             {
               "score": "1-0",
-              "prob": 17.7
+              "prob": 17.6
             },
             {
               "score": "0-1",
-              "prob": 14.1
+              "prob": 14.4
             },
             {
               "score": "1-1",
@@ -651,82 +905,22 @@
             },
             {
               "score": "2-0",
-              "prob": 8.0
+              "prob": 7.9
             }
-          ]
+          ],
+          "home_expected_goals": 0.89,
+          "away_expected_goals": 0.73
+        },
+        "elo": {
+          "home_win": 50.4,
+          "draw": 28.0,
+          "away_win": 35.6,
+          "elo_diff": 60
         },
         "model_consensus": 9
       },
       "match_num": "周一006",
-      "recommend_score": 72.53,
-      "is_recommended": true
-    },
-    {
-      "rank": 4,
-      "match_id": 5,
-      "league": "法乙",
-      "home_team": "敦刻尔克",
-      "away_team": "兰斯",
-      "prediction": {
-        "predicted_score": "1-0",
-        "home_win_pct": 44.8,
-        "draw_pct": 29.6,
-        "away_win_pct": 25.6,
-        "confidence": 82.2,
-        "result": "主胜",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "risk_level": "低",
-        "gpt_analysis": "多模型整体明显偏向主队，综合共识显示8/10模型支持主胜，ELO与机器学习均给予主队更高胜率，说明主场与整体稳定性占优。泊松分布虽给出0比0倾向，但其主胜概率仍高于客胜，反映比赛节奏可能偏谨慎。客队近况连续不胜，状态走低，而主队近期胜场更多，基本面略优。考虑法乙进球波动偏小，最终更看好敦刻尔克以小比分取胜。",
-        "gemini_analysis": "主队敦刻尔克防守端表现极其稳固，场均失球仅0.41个，具备极强的零封能力。客队兰斯近期遭遇连败且状态低迷（近5场1平4负），士气处于低谷。多维度模型共识高度倾向主队不败，其中泊松分布与ELO评分均给出主队较高胜率。尽管蒙特卡洛模拟提示一定进球数，但结合主队极低的失球率及泊松0-0的预期，本场比赛大概率是一场沉闷的低比分较量，主队有望凭借坚固防守和主场优势小胜对手。",
-        "analysis": "",
-        "key_factors": [
-          "客队近5场1平4负状态低迷，主队近期表现相对更稳",
-          "主队场均失球仅0.41，防守极其稳固",
-          "8/10模型共识倾向主胜，主队综合胜面更高",
-          "客队近期1平4负状态极差",
-          "80%的模型共识看好主队方向",
-          "泊松分布强烈指向低比分格局"
-        ],
-        "model_agreement": true,
-        "poisson": {
-          "home_win": 44.8,
-          "draw": 39.9,
-          "away_win": 15.4,
-          "predicted_score": "0-0",
-          "home_xg": 0.84,
-          "away_xg": 0.37,
-          "home_expected_goals": 0.84,
-          "away_expected_goals": 0.37,
-          "over_2_5": 12.2,
-          "btts": 17.5,
-          "top_scores": [
-            {
-              "score": "0-0",
-              "prob": 29.9
-            },
-            {
-              "score": "1-0",
-              "prob": 25.1
-            },
-            {
-              "score": "0-1",
-              "prob": 11.0
-            },
-            {
-              "score": "2-0",
-              "prob": 10.5
-            },
-            {
-              "score": "1-1",
-              "prob": 9.3
-            }
-          ]
-        },
-        "model_consensus": 8
-      },
-      "match_num": "周一005",
-      "recommend_score": 72.42,
+      "recommend_score": 51.06,
       "is_recommended": true
     }
   ]
