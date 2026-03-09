@@ -32,7 +32,7 @@ def get_today(offset=0):
         return (datetime.now() + timedelta(days=offset)).strftime("%Y-%m-%d")
 
 def _safe_dict(val):
-    """🔥 终极护盾：防止问彩 API 诡异地返回空列表 [] 导致 .get() 崩溃"""
+    """🔥 防崩护盾：如果 API 返回列表 [] 或 None，强制转为空字典 {}"""
     return val if isinstance(val, dict) else {}
 
 def scrape_wencai_jczq(date=None):
