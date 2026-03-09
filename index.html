@@ -3,225 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小鱼儿 足球量化精算系统</title>
+    <title>AI量化足球投研终端</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e5e7eb; }
-        .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .recommend-glow { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); }
-        .gradient-text { background: linear-gradient(45deg, #10b981, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .tab-active { border-bottom: 2px solid #3b82f6; color: #3b82f6; }
-        .match-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .match-card:hover { transform: translateY(-2px); background: rgba(31, 41, 55, 0.5); }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
+        .tab-active { border-bottom: 2px solid #3b82f6; color: #60a5fa; }
+        .tab-inactive { color: #94a3b8; }
+        .tab-inactive:hover { color: #cbd5e1; }
     </style>
 </head>
-<body class="min-h-screen pb-20">
+<body class="min-h-screen flex flex-col">
 
-        <header class="sticky top-0 z-50 glass border-b border-white/5 px-4 py-4">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 bg-gradient-to-tr from-emerald-600 to-blue-500 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-chart-pie text-white text-sm"></i>
-                </div>
-                <h1 class="text-xl font-bold tracking-tight text-white">小鱼儿足球分析 <span class="text-emerald-500 font-light text-lg">小鱼儿算法</span></h1>
-            </div>
-            <div id="last-update" class="text-[10px] text-gray-500 text-right leading-tight">
-                初始化中...
-            </div>
+    <header class="bg-slate-900 border-b border-slate-800 shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
+                ⚽ 小鱼儿足球 AI 分析系统
+            </h1>
+            <div class="text-sm text-slate-400" id="update-time">最后更新: 加载中...</div>
         </div>
     </header>
 
-
-    <main class="max-w-6xl mx-auto px-4 mt-6">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="glass p-4 rounded-2xl">
-                <p class="text-gray-500 text-xs mb-1">今日监控赛事</p>
-                <h3 id="stat-total" class="text-2xl font-bold">-</h3>
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-6 space-y-8">
+        
+        <section>
+            <div class="flex items-center gap-2 mb-4">
+                <span class="text-2xl">🔥</span>
+                <h2 class="text-xl font-bold text-slate-100">今日核心推荐 (TOP 4)</h2>
             </div>
-            <div class="glass p-4 rounded-2xl border-l-4 border-emerald-500">
-                <p class="text-gray-500 text-xs mb-1">AI 强信心推荐</p>
-                <h3 id="stat-rec" class="text-2xl font-bold text-emerald-400">-</h3>
-            </div>
-            <div id="market-sentiment" class="col-span-2 glass p-4 rounded-2xl flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs mb-1">机构资金情绪</p>
-                    <div class="flex items-center space-x-2">
-                        <span id="sentiment-label" class="text-sm font-semibold text-purple-400">正在扫描盘口...</span>
-                    </div>
+            <div id="top4-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 </div>
-                <i class="fas fa-chart-line text-purple-500/50 text-2xl"></i>
-            </div>
-        </div>
+        </section>
 
-        <div class="flex space-x-4 mb-6 overflow-x-auto pb-2 no-scrollbar">
-            <button onclick="filterMatches('all')" class="px-4 py-1.5 rounded-full text-xs font-medium glass hover:bg-white/10 transition">全部</button>
-            <button onclick="filterMatches('recommended')" class="px-4 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">精选</button>
-            <button onclick="filterMatches('high_ev')" class="px-4 py-1.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">高期望值</button>
-        </div>
-
-        <div id="match-container" class="space-y-4">
-            <div class="flex flex-col items-center justify-center py-20 opacity-20">
-                <i class="fas fa-circle-notch animate-spin text-4xl mb-4"></i>
-                <p>正在同步全球盘口数据...</p>
+        <section>
+            <div class="flex border-b border-slate-700 mb-6">
+                <button onclick="switchTab('yesterday')" id="tab-yesterday" class="tab-inactive px-6 py-3 font-medium transition-colors">昨日赛事</button>
+                <button onclick="switchTab('today')" id="tab-today" class="tab-active px-6 py-3 font-medium transition-colors">今日赛事</button>
+                <button onclick="switchTab('tomorrow')" id="tab-tomorrow" class="tab-inactive px-6 py-3 font-medium transition-colors">明日赛事</button>
             </div>
-        </div>
+
+            <div id="matches-container" class="space-y-4">
+                <div class="text-center py-10 text-slate-500">正在加载 AI 分析数据...</div>
+            </div>
+        </section>
     </main>
 
     <script>
-        let allMatches = [];
+        let allData = null;
+        let currentTab = 'today';
 
-        async function init() {
-            try {
-                const r = await fetch('data/latest.json?t=' + Date.now());
-                const data = await r.json();
-                allMatches = data.matches;
-                document.getElementById('last-update').innerHTML = `数据源: Wencai API<br>更新于: ${data.fetch_time}`;
-                render(allMatches);
-            } catch (e) {
-                document.getElementById('match-container').innerHTML = `<p class="text-center text-red-500">数据加载失败，请检查脚本运行状态。</p>`;
-            }
-        }
-
-        function render(matches) {
-            const container = document.getElementById('match-container');
-            container.innerHTML = '';
-            
-            document.getElementById('stat-total').innerText = matches.length;
-            document.getElementById('stat-rec').innerText = matches.filter(m => m.is_recommended).length;
-
-            matches.forEach(m => {
-                container.appendChild(createMatchCard(m));
+        // 获取数据
+        fetch('data/predictions.json')
+            .then(response => response.json())
+            .then(data => {
+                allData = data;
+                document.getElementById('update-time').textContent = `最后更新: ${data.update_time}`;
+                renderTop4(data.top4);
+                renderMatches(currentTab);
+            })
+            .catch(error => {
+                document.getElementById('matches-container').innerHTML = `<div class="text-red-400 text-center py-10">获取数据失败，请检查后端运行状态。</div>`;
+                console.error(error);
             });
+
+        // 切换 Tab
+        function switchTab(tab) {
+            currentTab = tab;
+            ['yesterday', 'today', 'tomorrow'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                if(t === tab) {
+                    el.classList.remove('tab-inactive');
+                    el.classList.add('tab-active');
+                } else {
+                    el.classList.add('tab-inactive');
+                    el.classList.remove('tab-active');
+                }
+            });
+            renderMatches(tab);
         }
 
-        function createMatchCard(m) {
-            const div = document.createElement('div');
-            const pred = m.prediction;
-            const mId = m.match_id;
-            const isRec = m.is_recommended;
+        // 渲染顶部推荐卡片
+        function renderTop4(top4List) {
+            const container = document.getElementById('top4-container');
+            if (!top4List || top4List.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-slate-500 text-sm">今日暂无高期望值赛事推荐。</div>`;
+                return;
+            }
             
-            div.className = `match-card glass rounded-2xl overflow-hidden ${isRec ? 'recommend-glow' : ''}`;
-            
-            // 核心概率计算
-            const homeW = pred.home_win_pct;
-            const drawW = pred.draw_pct;
-            const awayW = pred.away_win_pct;
-
-            div.innerHTML = `
-                <div class="p-4">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-[10px] px-2 py-0.5 rounded bg-white/5 text-gray-400 font-mono">${m.match_num || ''} ${m.league}</span>
-                        <div class="flex space-x-2">
-                            ${isRec ? '<span class="text-[10px] bg-emerald-500 text-white px-2 py-0.5 rounded-full font-bold italic">AI STRONG PICK</span>' : ''}
-                            <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/20">信心 ${pred.confidence}%</span>
-                        </div>
+            container.innerHTML = top4List.map(match => {
+                const pred = match.prediction;
+                // EV 标签提取
+                const evTags = pred.value_bets_summary.map(tag => `<span class="bg-emerald-900/50 text-emerald-400 text-xs px-2 py-1 rounded border border-emerald-700/50">${tag}</span>`).join('');
+                
+                return `
+                <div class="bg-slate-800 rounded-xl p-4 border border-yellow-600/30 card-hover transition-all">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold text-yellow-500 bg-yellow-900/30 px-2 py-1 rounded">推荐 #${match.rank}</span>
+                        <span class="text-xs text-slate-400">${match.league} | ${match.match_num}</span>
                     </div>
-
-                    <div class="grid grid-cols-3 items-center gap-2 mb-6">
-                        <div class="text-center">
-                            <div class="text-lg font-bold truncate">${m.home_team}</div>
-                            <div class="text-[10px] text-gray-500">排名 ${m.home_stats.rank || 'N/A'}</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-2xl font-black text-blue-500">${pred.predicted_score}</div>
-                            <div class="text-[10px] text-gray-500 uppercase tracking-widest">${pred.result}</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-lg font-bold truncate">${m.away_team}</div>
-                            <div class="text-[10px] text-gray-500">排名 ${m.away_stats.rank || 'N/A'}</div>
-                        </div>
+                    <div class="text-center my-3">
+                        <div class="font-bold text-base truncate">${match.home_team}</div>
+                        <div class="text-slate-500 text-xs my-1">VS</div>
+                        <div class="font-bold text-base truncate">${match.away_team}</div>
                     </div>
-
-                    <div class="w-full h-1.5 flex rounded-full overflow-hidden bg-gray-800 mb-2">
-                        <div style="width: ${homeW}%" class="bg-blue-500"></div>
-                        <div style="width: ${drawW}%" class="bg-gray-600"></div>
-                        <div style="width: ${awayW}%" class="bg-red-500"></div>
+                    <div class="bg-slate-900 rounded p-2 text-center border border-slate-700">
+                        <div class="text-sm font-semibold text-blue-400">AI 预测: ${pred.result} (${pred.predicted_score})</div>
+                        <div class="text-xs text-slate-400 mt-1">信心度: ${pred.confidence}% | 风险: ${pred.risk_level}</div>
                     </div>
-                    <div class="flex justify-between text-[10px] font-mono text-gray-400 mb-4">
-                        <span>主胜 ${homeW}%</span>
-                        <span>平局 ${drawW}%</span>
-                        <span>客胜 ${awayW}%</span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2 mb-4">
-                        <div class="bg-white/5 rounded-lg p-2 text-center">
-                            <div class="text-gray-500 text-[10px]">大小球 (2.5)</div>
-                            <div class="text-sm font-bold">${pred.over_under_2_5}</div>
-                        </div>
-                        <div class="bg-white/5 rounded-lg p-2 text-center">
-                            <div class="text-gray-500 text-[10px]">双边进球</div>
-                            <div class="text-sm font-bold">${pred.both_score}</div>
-                        </div>
-                    </div>
-
-                    <button onclick="toggleDetails('${mId}')" class="w-full py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs text-gray-400 transition flex items-center justify-center">
-                        <i class="fas fa-chevron-down mr-2" id="icon-${mId}"></i> 展开深度量化研报
-                    </button>
-
-                    <div id="details-${mId}" class="hidden mt-4 space-y-3 pt-4 border-t border-white/5">
-                        
-                        ${m.intelligence ? `
-                        <div class="border border-red-900/30 bg-red-900/10 p-2 rounded-lg">
-                            <div class="text-red-400 text-[11px] font-bold mb-1 flex items-center">
-                                <i class="fas fa-user-injured mr-1 text-[10px]"></i> 伤停利空情报
-                            </div>
-                            <div class="text-[10px] text-gray-300 leading-relaxed">
-                                ${m.intelligence.home_injury ? `<p><span class="text-red-500/70">主:</span> ${m.intelligence.home_injury}</p>` : ''}
-                                ${m.intelligence.guest_injury ? `<p><span class="text-red-500/70">客:</span> ${m.intelligence.guest_injury}</p>` : ''}
-                                ${m.intelligence.home_bad_news ? `<p class="mt-1 text-gray-400 italic">${m.intelligence.home_bad_news}</p>` : ''}
-                            </div>
-                        </div>` : ''}
-
-                        ${m.handicap_info || m.odds_movement ? `
-                        <div class="border border-purple-900/50 bg-purple-900/10 p-2 rounded-lg">
-                            <div class="text-purple-400 text-[11px] font-bold mb-1 flex items-center">
-                                <i class="fas fa-hand-holding-usd mr-1 text-[10px]"></i> 资金盘口追踪
-                            </div>
-                            <div class="text-[10px] space-y-1">
-                                <div class="flex justify-between"><span class="text-gray-500">让球盘口:</span> <span class="text-white font-mono">${m.handicap_info}</span></div>
-                                <div class="flex justify-between"><span class="text-gray-500">资金水位异动:</span> <span class="${m.odds_movement.includes('降水') ? 'text-emerald-400 font-bold' : 'text-gray-300'}">${m.odds_movement}</span></div>
-                            </div>
-                        </div>` : ''}
-
-                        <div class="bg-blue-500/5 p-2 rounded-lg">
-                            <div class="text-blue-400 text-[11px] font-bold mb-1 flex items-center">
-                                <i class="fas fa-calculator mr-1"></i> 期望值(EV)与对冲建议
-                            </div>
-                            <div class="text-[10px] font-mono text-gray-400">
-                                ${pred.value_bets_summary && pred.value_bets_summary.length > 0 ? 
-                                    pred.value_bets_summary.map(v => `<div class="text-emerald-400">★ ${v}</div>`).join('') : 
-                                    '<div>无明显套利空间，建议观望。</div>'}
-                            </div>
-                        </div>
-
-                        <div class="text-[11px] leading-relaxed text-gray-400 bg-black/30 p-3 rounded-xl border border-white/5 italic">
-                            <span class="text-gray-500 font-bold not-italic block mb-1">精算师复盘:</span>
-                            "${pred.gemini_analysis || pred.gpt_analysis}"
-                        </div>
+                    <div class="mt-3 flex flex-wrap gap-1 justify-center">
+                        ${evTags}
                     </div>
                 </div>
-            `;
-            return div;
+                `;
+            }).join('');
         }
 
-        function toggleDetails(id) {
-            const el = document.getElementById(`details-${id}`);
-            const icon = document.getElementById(`icon-${id}`);
-            el.classList.toggle('hidden');
-            icon.classList.toggle('fa-chevron-up');
-            icon.classList.toggle('fa-chevron-down');
-        }
+        // 渲染赛事列表
+        function renderMatches(tab) {
+            const container = document.getElementById('matches-container');
+            const matches = allData.matches[tab];
 
-        function filterMatches(type) {
-            if (type === 'all') render(allMatches);
-            else if (type === 'recommended') render(allMatches.filter(m => m.is_recommended));
-            else if (type === 'high_ev') render(allMatches.filter(m => m.prediction.value_bets_summary.length > 0));
-        }
+            if (!matches || matches.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-slate-500 bg-slate-800 rounded-xl border border-slate-700">该日期暂无赛事数据</div>`;
+                return;
+            }
 
-        init();
-        setInterval(init, 300000); // 5分钟自动刷新
+            container.innerHTML = matches.map(match => {
+                const p = match.prediction;
+                // 胜平负进度条
+                const hp = p.home_win_pct;
+                const dp = p.draw_pct;
+                const ap = p.away_win_pct;
+                
+                // 高阶风控信号处理
+                let signalHtml = '';
+                if(p.smart_money_signal && p.smart_money_signal !== "正常" && p.smart_money_signal !== "盘口与情绪正常") {
+                    signalHtml = `<div class="bg-red-900/30 border border-red-700/50 text-red-400 text-xs px-3 py-2 rounded mb-3">🚨 <b>风控预警：</b>${p.smart_money_signal}</div>`;
+                }
+
+                const evTags = p.value_bets_summary.map(tag => `<span class="bg-emerald-900/50 text-emerald-400 text-xs px-2 py-1 rounded border border-emerald-700/50">${tag}</span>`).join('');
+
+                return `
+                <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-sm">
+                    <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded">${match.league}</span>
+                            <span class="text-sm text-slate-400">${match.match_num} | ${match.match_time || '00:00'}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="text-xs px-2 py-1 rounded bg-slate-700 text-slate-300">双边进球: ${p.both_score}</span>
+                            <span class="text-xs px-2 py-1 rounded bg-slate-700 text-slate-300">大小球: ${p.over_under_2_5}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-4">
+                        <div class="flex-1 text-right text-lg font-bold">${match.home_team}</div>
+                        <div class="flex flex-col items-center px-4">
+                            <div class="text-2xl font-black text-blue-400 mb-1">${p.predicted_score}</div>
+                            <div class="text-xs text-slate-400 bg-slate-900 px-2 py-1 rounded border border-slate-700">预测: ${p.result}</div>
+                        </div>
+                        <div class="flex-1 text-left text-lg font-bold">${match.away_team}</div>
+                    </div>
+
+                    ${signalHtml}
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-xs text-slate-400 mb-1">
+                            <span>主胜 ${hp}%</span>
+                            <span>平局 ${dp}%</span>
+                            <span>客胜 ${ap}%</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5 flex overflow-hidden">
+                            <div class="bg-blue-500 h-2.5" style="width: ${hp}%"></div>
+                            <div class="bg-slate-400 h-2.5" style="width: ${dp}%"></div>
+                            <div class="bg-rose-500 h-2.5" style="width: ${ap}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        ${evTags}
+                    </div>
+
+                    <details class="group bg-slate-900 border border-slate-700 rounded-lg">
+                        <summary class="flex items-center justify-between cursor-pointer p-3 text-sm font-medium text-slate-300 hover:text-white">
+                            查看 AI 深度解读 (含伤停与资金动向)
+                            <span class="transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-slate-700 text-sm text-slate-400 leading-relaxed bg-slate-800/50">
+                            <p class="mb-2"><strong class="text-blue-400">GPT 分析：</strong>${p.gpt_analysis}</p>
+                            <p><strong class="text-purple-400">Gemini 分析：</strong>${p.gemini_analysis}</p>
+                        </div>
+                    </details>
+                </div>
+                `;
+            }).join('');
+        }
     </script>
 </body>
 </html>
