@@ -24,7 +24,7 @@ def build_prompt(m, sp):
     return p
 
 def call_model(prompt, url, key, model_pool):
-    """🔥 修复：恢复标准 API Payload，防止报 400 错误"""
+    """🔥 绝对不改你的请求格式，还原最纯净的 Payload，防止 400 错误"""
     headers = {
         "Authorization": f"Bearer {key}", 
         "Content-Type": "application/json"
@@ -33,14 +33,11 @@ def call_model(prompt, url, key, model_pool):
     for model_name in model_pool:
         try:
             print(f"    🤖 尝试匹配 AI: {model_name}...")
+            # 还原为你最初的极简请求格式
             payload = {
                 "model": model_name,
-                "messages": [
-                    {"role": "system", "content": "You are a professional football data analyst. Output ONLY valid JSON without any markdown formatting."},
-                    {"role": "user", "content": prompt}
-                ],
-                "temperature": 0.3,
-                "max_tokens": 1200
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.3
             }
             r = requests.post(url, headers=headers, json=payload, timeout=20)
             
@@ -89,7 +86,7 @@ def run_predictions(raw):
     ms = raw.get("matches", []); res_list = []
     print(f"\n=== 启动 11 核心模型 + 双 AI 深度研判 (共 {len(ms)} 场) ===")
     
-    # 你的模型池，一字未改！
+    # 🔥 你的模型池，一个字都不动！
     gpt_pool = ["gpt-5.4", "gpt-5.3-codex", "gpt-5.2", "gpt-5.1"]
     gemini_pool = ["gemini-3.1-pro-preview-thinking", "gemini-1.5-pro"]
     
@@ -106,30 +103,37 @@ def run_predictions(raw):
         print("  [Gemini 阵营]")
         gm = call_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, gemini_pool)
         
-        ai_pool = [x for x in [gp, gm] if x]
+        # 🔥 终极防崩溃：确保 AI 返回的是真正的字典
+        is_gp_valid = isinstance(gp, dict)
+        is_gm_valid = isinstance(gm, dict)
+        
+        ai_pool = []
+        if is_gp_valid: ai_pool.append(gp)
+        if is_gm_valid: ai_pool.append(gm)
+        
         final_hp = sp["home_win_pct"]
         if ai_pool:
             final_hp = round(sp["home_win_pct"] * 0.6 + (sum(x.get("home_win_pct", 33) for x in ai_pool)/len(ai_pool)) * 0.4, 1)
 
-        # 🔥 修复：救回你 UI 面板报错 undefined 的那些核心字段！
+        # 🔥 救回前端报错 undefined 的大小球/双边进球字段！
         mg = {
-            "predicted_score": gm.get("predicted_score", sp["predicted_score"]) if gm else sp["predicted_score"],
+            "predicted_score": gm.get("predicted_score", sp.get("predicted_score", "")) if is_gm_valid else sp.get("predicted_score", ""),
             "home_win_pct": final_hp, 
-            "draw_pct": sp["draw_pct"], 
-            "away_win_pct": round(100 - final_hp - sp["draw_pct"], 1),
-            "confidence": sp["confidence"], 
+            "draw_pct": sp.get("draw_pct", 33), 
+            "away_win_pct": round(100 - final_hp - sp.get("draw_pct", 33), 1),
+            "confidence": sp.get("confidence", 50), 
             "result": "主胜" if final_hp > 42 else "平局",
-            "over_under_2_5": "大" if sp.get("over_2_5", 50) > 55 else "小",
-            "both_score": "是" if sp.get("btts", 50) > 50 else "否",
-            "risk_level": "低" if sp["confidence"] >= 70 else ("中" if sp["confidence"] >= 50 else "高"),
-            "gpt_analysis": gp.get("analysis", "未响应") if gp else "未响应",
-            "gemini_analysis": gm.get("analysis", "未响应") if gm else "未响应",
-            "gpt_score": gp.get("ai_independent_score", "?") if gp else "?",
-            "gemini_score": gm.get("ai_independent_score", "?") if gm else "?",
-            "value_bets_summary": [f"主胜 EV+{v_h['ev']}%"] if v_h["is_value"] else []
+            "over_under_2_5": "大" if sp.get("over_2_5", 50) > 55 else "小",  # 恢复前端展示
+            "both_score": "是" if sp.get("btts", 50) > 50 else "否",      # 恢复前端展示
+            "risk_level": "低" if sp.get("confidence", 50) >= 70 else ("中" if sp.get("confidence", 50) >= 50 else "高"),
+            "gpt_analysis": gp.get("analysis", "未响应") if is_gp_valid else "未响应",
+            "gemini_analysis": gm.get("analysis", "未响应") if is_gm_valid else "未响应",
+            "gpt_score": gp.get("ai_independent_score", "?") if is_gp_valid else "?",
+            "gemini_score": gm.get("ai_independent_score", "?") if is_gm_valid else "?",
+            "value_bets_summary": [f"主胜 EV+{v_h['ev']}%"] if v_h.get("is_value") else []
         }
         
-        m.update({"prediction": mg, "is_recommended": sp["confidence"] > 75})
+        m.update({"prediction": mg, "is_recommended": sp.get("confidence", 0) > 75})
         res_list.append(m)
         
     return res_list, optimize_parlay(res_list)
