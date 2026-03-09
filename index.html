@@ -3,221 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NAN Quant | 体育量化分析中枢</title>
+    <title>AI 竞彩量化预测</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <style>
-        body { background-color: #0f172a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .value-bet-glow { box-shadow: 0 0 15px rgba(234, 179, 8, 0.4); border: 1px solid rgba(234, 179, 8, 0.8); }
-        .ai-text { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* 完美复刻老版暗黑风格 */
+        body { background-color: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .card-bg { background-color: #161b22; border: 1px solid #30363d; }
+        .card-header-bg { background-color: #0d1117; border-bottom: 1px solid #30363d; }
+        .prob-bar-h { background-color: #238636; } /* 主胜绿 */
+        .prob-bar-d { background-color: #b08800; } /* 平局黄 */
+        .prob-bar-a { background-color: #1f6feb; } /* 客胜蓝 */
+        .badge-ev { background: linear-gradient(90deg, #d29922, #e3b341); color: #000; }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="min-h-screen pb-10">
 
-    <header class="max-w-6xl mx-auto mb-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+    <div class="max-w-3xl mx-auto px-3 sm:px-4 pt-6">
+        
+        <div class="flex justify-between items-end mb-6 border-b border-gray-700 pb-3">
+            <div>
+                <h1 class="text-2xl font-bold text-white">⚽ 量化预测中心</h1>
+                <p class="text-xs text-gray-400 mt-1" id="update-time">数据更新中...</p>
+            </div>
+            <div class="text-right">
+                <span class="text-xs text-gray-400">今日赛事</span>
+                <div class="text-lg font-bold text-blue-400" id="total-matches">0</div>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-lg font-bold text-white mb-3 flex items-center">
+                🎯 精选推荐 <span class="ml-2 bg-orange-500 text-white text-[10px] px-2 py-0.5 rounded-full">TOP4</span>
+            </h2>
+            <div id="top4-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                </div>
+        </div>
+
         <div>
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2"><span class="text-blue-500">NAN</span> Quant Dashboard</h1>
-            <p class="text-slate-400 text-sm md:text-base">11重融合模型 | XGBoost & 泊松引擎 | AI 基金经理级分析</p>
+            <h2 class="text-lg font-bold text-white mb-3 flex items-center">
+                📋 全部分析 <span id="list-count" class="text-gray-400 text-sm ml-1">(0)</span>
+            </h2>
+            <div id="matches-container" class="space-y-4">
+                <div class="text-center py-10 text-gray-500">正在接入赛事数据...</div>
+            </div>
         </div>
-        <div class="mt-4 md:mt-0 text-right glass-panel px-6 py-3 rounded-xl">
-            <div class="text-xs text-slate-400">最后更新时间</div>
-            <div id="update-time" class="text-lg font-bold text-green-400">加载中...</div>
-            <div class="text-xs text-slate-400 mt-1">今日共监控 <span id="total-matches" class="text-white font-bold">0</span> 场赛事</div>
-        </div>
-    </header>
 
-    <main id="matches-container" class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="text-center w-full col-span-1 lg:col-span-2 py-20">
-            <div class="animate-spin inline-block w-8 h-8 border-[3px] border-current border-t-transparent text-blue-500 rounded-full" role="status" aria-label="loading"></div>
-            <p class="mt-2 text-slate-400">正在接入量化模型数据...</p>
-        </div>
-    </main>
+    </div>
 
     <script>
-        // 核心渲染逻辑
         document.addEventListener('DOMContentLoaded', () => {
-            // 这里替换为你的数据文件路径，通常是 data/predictions.json 
             fetch('data/predictions.json?t=' + new Date().getTime())
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
-                    document.getElementById('update-time').innerText = data.update_time || '未知';
+                    document.getElementById('update-time').innerText = '最后更新: ' + (data.update_time || '未知');
                     document.getElementById('total-matches').innerText = data.total_matches || 0;
-                    renderMatches(data.results || data.matches || []);
+                    document.getElementById('list-count').innerText = `(${data.total_matches || 0})`;
+                    
+                    const matches = data.results || data.matches || [];
+                    const top4 = data.top4 || matches.filter(m => m.is_recommended).slice(0, 4);
+                    
+                    renderTop4(top4);
+                    renderAllMatches(matches);
                 })
-                .catch(error => {
-                    console.error('获取数据失败:', error);
-                    document.getElementById('matches-container').innerHTML = `<div class="col-span-2 text-center text-red-400 py-10">数据加载失败，请检查 GitHub Actions 是否成功运行生成了 predictions.json。</div>`;
+                .catch(err => {
+                    console.error(err);
+                    document.getElementById('matches-container').innerHTML = '<div class="text-center text-red-500 py-5">数据加载失败，请检查文件路径。</div>';
                 });
         });
 
-        function renderMatches(matches) {
-            const container = document.getElementById('matches-container');
-            container.innerHTML = ''; // 清空加载状态
+        // 展开/收起 控制逻辑
+        function toggleDetails(id) {
+            const detailDiv = document.getElementById(`details-${id}`);
+            const btnText = document.getElementById(`btn-text-${id}`);
+            if (detailDiv.classList.contains('hidden')) {
+                detailDiv.classList.remove('hidden');
+                btnText.innerHTML = '📊 收起 ▲';
+            } else {
+                detailDiv.classList.add('hidden');
+                btnText.innerHTML = '📊 展开深度数据 ▼';
+            }
+        }
 
-            // 提取高价值比赛排在前面
-            matches.sort((a, b) => {
-                let valA = (a.prediction.value_bets_summary && a.prediction.value_bets_summary.length > 0) ? 1 : 0;
-                let valB = (b.prediction.value_bets_summary && b.prediction.value_bets_summary.length > 0) ? 1 : 0;
-                return valB - valA; 
-            });
+        // 渲染 TOP 4
+        function renderTop4(top4Matches) {
+            const container = document.getElementById('top4-container');
+            container.innerHTML = '';
+            if (top4Matches.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-sm">今日暂无强烈推荐赛事</div>';
+                return;
+            }
 
-            matches.forEach((match, index) => {
-                const p = match.prediction;
-                
-                // 检查是否有价值下注 (EV > 0)
-                const hasValue = p.value_bets_summary && p.value_bets_summary.length > 0;
-                const cardClass = hasValue ? 'glass-panel rounded-2xl p-5 value-bet-glow relative' : 'glass-panel rounded-2xl p-5 relative';
-                const badgeHtml = hasValue ? `<div class="absolute -top-3 -right-3 bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-yellow-500/50">🔥 超高期望值 (Value Bet)</div>` : '';
-                const recBadge = match.is_recommended ? `<span class="bg-blue-600 text-white text-xs px-2 py-1 rounded ml-2">主推</span>` : '';
-
-                // 构造凯利与EV标签
-                const getEvTag = (evData) => {
-                    if (!evData || !evData.is_value) return '';
-                    return `<span class="block text-[10px] text-yellow-400 mt-1">EV: +${evData.ev}% | 建议仓位: ${evData.kelly}%</span>`;
-                };
-
-                const cardHTML = `
-                    <div class="${cardClass}">
-                        ${badgeHtml}
-                        <div class="flex justify-between items-center mb-4 text-xs text-slate-400 border-b border-slate-700 pb-2">
-                            <span class="font-bold text-slate-300">${match.league || '竞彩赛事'} ${match.match_num || ''} ${recBadge}</span>
-                            <span>模型共识度: <span class="text-white">${p.model_consensus}/10</span></span>
+            top4Matches.forEach((match, index) => {
+                const p = match.prediction || match;
+                // 复刻图8的简洁卡片
+                const html = `
+                    <div class="card-bg rounded-lg p-3 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-orange-600 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-bl-lg">${index + 1}</div>
+                        <div class="text-xs text-gray-400 mb-2">${match.league || '赛事'} | ${match.match_num || ''}</div>
+                        <div class="flex justify-between items-center mb-3">
+                            <div class="text-sm font-bold text-white w-2/5 truncate">${match.home_team || '主队'}</div>
+                            <div class="text-xs text-gray-500">VS</div>
+                            <div class="text-sm font-bold text-white w-2/5 text-right truncate">${match.away_team || '客队'}</div>
                         </div>
-
-                        <div class="flex justify-between items-center mb-6">
-                            <div class="text-center w-1/3">
-                                <div class="font-bold text-lg text-white mb-1 truncate">${match.home_team}</div>
-                                <div class="text-xs text-slate-500">xG: ${p.poisson.home_expected_goals || '-'}</div>
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="bg-gray-800 rounded p-1">
+                                <div class="text-[10px] text-gray-400">比分</div>
+                                <div class="text-sm font-bold text-green-400">${p.predicted_score}</div>
                             </div>
-                            <div class="text-center w-1/3">
-                                <div class="text-3xl font-black text-blue-400 drop-shadow-md mb-1">${p.predicted_score}</div>
-                                <div class="text-xs font-bold ${p.confidence >= 70 ? 'text-green-400' : 'text-orange-400'}">置信度: ${p.confidence}%</div>
+                            <div class="bg-gray-800 rounded p-1">
+                                <div class="text-[10px] text-gray-400">结果</div>
+                                <div class="text-sm font-bold text-white">${p.result}</div>
                             </div>
-                            <div class="text-center w-1/3">
-                                <div class="font-bold text-lg text-white mb-1 truncate">${match.away_team}</div>
-                                <div class="text-xs text-slate-500">xG: ${p.poisson.away_expected_goals || '-'}</div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2 mb-4 text-center">
-                            <div class="flex-1 bg-slate-800 rounded-lg p-2 border ${p.home_ev?.is_value ? 'border-yellow-500/50' : 'border-slate-700'}">
-                                <div class="text-xs text-slate-400">主胜</div>
-                                <div class="font-bold text-white text-lg">${p.home_win_pct}%</div>
-                                ${getEvTag(p.home_ev)}
-                            </div>
-                            <div class="flex-1 bg-slate-800 rounded-lg p-2 border ${p.draw_ev?.is_value ? 'border-yellow-500/50' : 'border-slate-700'}">
-                                <div class="text-xs text-slate-400">平局</div>
-                                <div class="font-bold text-white text-lg">${p.draw_pct}%</div>
-                                ${getEvTag(p.draw_ev)}
-                            </div>
-                            <div class="flex-1 bg-slate-800 rounded-lg p-2 border ${p.away_ev?.is_value ? 'border-yellow-500/50' : 'border-slate-700'}">
-                                <div class="text-xs text-slate-400">客胜</div>
-                                <div class="font-bold text-white text-lg">${p.away_win_pct}%</div>
-                                ${getEvTag(p.away_ev)}
+                            <div class="bg-gray-800 rounded p-1">
+                                <div class="text-[10px] text-gray-400">置信</div>
+                                <div class="text-sm font-bold text-orange-400">${p.confidence}%</div>
                             </div>
                         </div>
-
-                        <div class="flex justify-around text-xs text-slate-300 bg-slate-900/50 rounded-lg p-3 mb-4">
-                            <div><span class="text-slate-500">大2.5球:</span> <span class="${p.over_under_2_5 === '大' ? 'text-red-400' : 'text-green-400'} font-bold">${p.over_under_2_5}</span></div>
-                            <div><span class="text-slate-500">双方进球:</span> <span class="font-bold">${p.both_score}</span></div>
-                            <div><span class="text-slate-500">风控评级:</span> <span class="font-bold">${p.risk_level}</span></div>
-                        </div>
-
-                        <div id="chart-${index}" style="width: 100%; height: 220px;" class="mb-4"></div>
-
-                        <div class="border-t border-slate-700 pt-3 mt-2">
-                            <h4 class="text-sm font-bold ai-text mb-2 flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 9V5a1 1 0 112 0v4a1 1 0 11-2 0zm0 4a1 1 0 112 0v1a1 1 0 11-2 0v-1z"></path></svg>
-                                基金经理 AI 投研摘要
-                            </h4>
-                            <p class="text-xs text-slate-400 leading-relaxed">${p.gpt_analysis !== "未响应" ? p.gpt_analysis : (p.gemini_analysis !== "未响应" ? p.gemini_analysis : 'AI 正在分析核心赔率异动...')}</p>
-                            <div class="mt-2 flex flex-wrap gap-1">
-                                ${p.key_factors ? p.key_factors.map(f => `<span class="bg-slate-800 text-[10px] text-slate-300 px-2 py-0.5 rounded">${f}</span>`).join('') : ''}
-                            </div>
-                        </div>
+                        ${p.home_ev && p.home_ev.is_value ? `<div class="mt-2 text-[10px] text-center text-yellow-500">🔥 存在套利价值: 主胜 EV +${p.home_ev.ev}%</div>` : ''}
                     </div>
                 `;
-                container.insertAdjacentHTML('beforeend', cardHTML);
-
-                // 准备 ECharts 雷达图数据
-                setTimeout(() => {
-                    initRadarChart(`chart-${index}`, match);
-                }, 100);
+                container.insertAdjacentHTML('beforeend', html);
             });
         }
 
-        // 初始化 ECharts 雷达图
-        function initRadarChart(elementId, match) {
-            const chartDom = document.getElementById(elementId);
-            if (!chartDom) return;
-            const myChart = echarts.init(chartDom, 'dark');
-            const p = match.prediction;
+        // 渲染全部列表 (完美复刻图7带有展开功能的卡片)
+        function renderAllMatches(matches) {
+            const container = document.getElementById('matches-container');
+            container.innerHTML = '';
 
-            // 动态映射数据到 0-100 的雷达图范围
-            const homeScore = [
-                p.home_win_pct, // 胜率倾向
-                Math.min(100, (p.poisson.home_expected_goals / 2.5) * 100), // xG转化
-                p.home_ev?.is_value ? 90 : 40, // 资金/EV倾向
-                (p.model_consensus / 10) * 100, // 模型共识度
-                p.elo.home_win // ELO底蕴
-            ];
+            matches.forEach((match, index) => {
+                const p = match.prediction || match;
+                const mId = match.match_id || index;
+                const recBadge = match.is_recommended ? `<span class="bg-orange-500 text-white text-[10px] px-1.5 py-0.5 rounded ml-2">★ 推荐</span>` : '';
+                
+                // 检查高价值盘口并生成标签
+                let evTags = '';
+                if (p.home_ev?.is_value) evTags += `<span class="badge-ev text-[10px] px-1.5 py-0.5 rounded mr-1">主 EV+${p.home_ev.ev}% | 仓位 ${p.home_ev.kelly}%</span>`;
+                if (p.draw_ev?.is_value) evTags += `<span class="badge-ev text-[10px] px-1.5 py-0.5 rounded mr-1">平 EV+${p.draw_ev.ev}% | 仓位 ${p.draw_ev.kelly}%</span>`;
+                if (p.away_ev?.is_value) evTags += `<span class="badge-ev text-[10px] px-1.5 py-0.5 rounded mr-1">客 EV+${p.away_ev.ev}% | 仓位 ${p.away_ev.kelly}%</span>`;
 
-            const awayScore = [
-                p.away_win_pct,
-                Math.min(100, (p.poisson.away_expected_goals / 2.5) * 100),
-                p.away_ev?.is_value ? 90 : 40,
-                ((10 - p.model_consensus) / 10) * 100,
-                p.elo.away_win
-            ];
+                const html = `
+                    <div class="card-bg rounded-lg mb-4">
+                        <div class="card-header-bg px-3 py-2 flex justify-between items-center rounded-t-lg">
+                            <div class="text-xs font-bold text-blue-400">${match.league || '赛事'} ${match.match_num || ''} ${recBadge}</div>
+                            <div class="text-[10px] text-gray-500">${match.match_time || '未定时间'}</div>
+                        </div>
 
-            const option = {
-                backgroundColor: 'transparent',
-                tooltip: { trigger: 'item' },
-                legend: {
-                    data: ['主队能力', '客队能力'],
-                    bottom: 0,
-                    textStyle: { color: '#94a3b8', fontSize: 10 },
-                    itemWidth: 10, itemHeight: 10
-                },
-                radar: {
-                    indicator: [
-                        { name: '胜率倾向', max: 100 },
-                        { name: '期望进球(xG)', max: 100 },
-                        { name: '资金价值(EV)', max: 100 },
-                        { name: '模型共识', max: 100 },
-                        { name: 'ELO底蕴', max: 100 }
-                    ],
-                    radius: '60%',
-                    center: ['50%', '45%'],
-                    shape: 'polygon',
-                    splitNumber: 4,
-                    axisName: { color: '#64748b', fontSize: 10 },
-                    splitLine: { lineStyle: { color: ['rgba(255, 255, 255, 0.05)', 'rgba(255, 255, 255, 0.1)'] } },
-                    splitArea: { show: false },
-                    axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.1)' } }
-                },
-                series: [{
-                    name: '主客队战力雷达',
-                    type: 'radar',
-                    data: [
-                        {
-                            value: homeScore,
-                            name: '主队能力',
-                            itemStyle: { color: '#3b82f6' },
-                            areaStyle: { color: 'rgba(59, 130, 246, 0.3)' }
-                        },
-                        {
-                            value: awayScore,
-                            name: '客队能力',
-                            itemStyle: { color: '#f43f5e' },
-                            areaStyle: { color: 'rgba(244, 63, 94, 0.3)' }
-                        }
-                    ]
-                }]
-            };
-            myChart.setOption(option);
-            window.addEventListener('resize', () => myChart.resize());
+                        <div class="p-3">
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="text-center w-2/5">
+                                    <div class="text-sm font-bold text-white mb-1">${match.home_team || '主队'}</div>
+                                    <div class="text-[10px] text-gray-500">主队</div>
+                                </div>
+                                <div class="text-center w-1/5">
+                                    <div class="text-xl font-bold text-blue-400">${p.predicted_score}</div>
+                                    <div class="text-xs text-white bg-gray-700 rounded mt-1 inline-block px-2 py-0.5">${p.result}</div>
+                                </div>
+                                <div class="text-center w-2/5">
+                                    <div class="text-sm font-bold text-white mb-1">${match.away_team || '客队'}</div>
+                                    <div class="text-[10px] text-gray-500">客队</div>
+                                </div>
+                            </div>
+
+                            <div class="flex w-full h-6 rounded overflow-hidden text-[10px] font-bold text-white text-center leading-6 mb-1">
+                                <div class="prob-bar-h" style="width: ${p.home_win_pct}%">主 ${p.home_win_pct}%</div>
+                                <div class="prob-bar-d" style="width: ${p.draw_pct}%">平 ${p.draw_pct}%</div>
+                                <div class="prob-bar-a" style="width: ${p.away_win_pct}%">客 ${p.away_win_pct}%</div>
+                            </div>
+                            
+                            ${evTags ? `<div class="mt-1.5 mb-2 flex flex-wrap">${evTags}</div>` : '<div class="h-2"></div>'}
+
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-gray-800 rounded-lg p-2 mb-2">
+                                <div><div class="text-gray-500 mb-1">大小2.5</div><div class="${p.over_under_2_5 === '大' ? 'text-red-400' : 'text-green-400'} font-bold">${p.over_under_2_5}</div></div>
+                                <div><div class="text-gray-500 mb-1">双方进球</div><div class="${p.both_score === '是' ? 'text-red-400' : 'text-green-400'} font-bold">${p.both_score}</div></div>
+                                <div><div class="text-gray-500 mb-1">风险</div><div class="${p.risk_level === '低' ? 'text-green-400' : 'text-orange-400'} font-bold">${p.risk_level}</div></div>
+                            </div>
+
+                            <div class="text-center text-xs text-gray-400 py-1 cursor-pointer hover:text-white" onclick="toggleDetails('${mId}')">
+                                <span id="btn-text-${mId}">📊 展开深度数据 ▼</span>
+                            </div>
+                        </div>
+
+                        <div id="details-${mId}" class="hidden border-t border-gray-700 bg-[#0d1117] p-3 text-xs text-gray-300 rounded-b-lg space-y-3">
+                            
+                            <div class="border border-blue-900 bg-blue-900/20 p-2 rounded">
+                                <div class="text-blue-400 font-bold mb-1">🤖 基金经理 AI 投研</div>
+                                <div class="text-gray-400 leading-relaxed">${p.gpt_analysis !== "未响应" ? p.gpt_analysis : (p.gemini_analysis !== "未响应" ? p.gemini_analysis : "暂无分析")}</div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="border border-gray-700 p-2 rounded relative">
+                                    <div class="text-green-400 font-bold mb-2">📐 泊松分布模型</div>
+                                    <div class="flex justify-between mb-1"><span class="text-gray-500">主胜/平/客</span><span>${p.poisson.home_win}/${p.poisson.draw}/${p.poisson.away_win}%</span></div>
+                                    <div class="flex justify-between mb-1"><span class="text-gray-500">期望进球 (xG)</span><span class="text-white">主 ${p.poisson.home_expected_goals || '?'} 客 ${p.poisson.away_expected_goals || '?'}</span></div>
+                                    <div class="flex justify-between mb-2"><span class="text-gray-500">大2.5球</span><span>${p.poisson.over_2_5 || '-'}%</span></div>
+                                    <div class="text-[10px] text-gray-500 mb-1">比分概率TOP5</div>
+                                    <div class="flex flex-wrap gap-1">
+                                        ${(p.poisson.top_scores || []).slice(0, 5).map(s => `<span class="bg-gray-800 px-1 py-0.5 rounded border border-gray-600">${s.score} ${s.prob}%</span>`).join('')}
+                                    </div>
+                                </div>
+
+                                <div class="border border-gray-700 p-2 rounded relative">
+                                    <div class="text-blue-400 font-bold mb-2">📊 ELO评分模型</div>
+                                    <div class="flex justify-between mb-1"><span class="text-gray-500">主胜/平/客</span><span>${p.elo.home_win}/${p.elo.draw}/${p.elo.away_win}%</span></div>
+                                    <div class="flex justify-between"><span class="text-gray-500">ELO实力差值</span><span class="${p.elo.elo_diff > 0 ? 'text-green-400' : 'text-red-400'} font-bold">${p.elo.elo_diff > 0 ? '+'+p.elo.elo_diff : p.elo.elo_diff}</span></div>
+                                </div>
+                            </div>
+
+                            <div class="border border-gray-700 p-2 rounded">
+                                <div class="text-orange-400 font-bold mb-2">🔥 状态与近况</div>
+                                <div class="flex justify-between mb-1"><span class="text-gray-500">主队状态</span><span>${match.home_stats?.form || '-'}</span></div>
+                                <div class="flex justify-between"><span class="text-gray-500">客队状态</span><span>${match.away_stats?.form || '-'}</span></div>
+                            </div>
+                            
+                            <div class="border border-gray-700 p-2 rounded">
+                                <div class="text-gray-300 font-bold mb-2">📉 基础战绩比拼</div>
+                                <table class="w-full text-center text-[10px]">
+                                    <thead><tr class="text-gray-500 border-b border-gray-700"><th>球队</th><th>战绩</th><th>进/失</th><th>零封</th></tr></thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="py-1">${match.home_team?.substring(0,4)}</td>
+                                            <td>${match.home_stats?.wins || 0}W${match.home_stats?.draws || 0}D${match.home_stats?.losses || 0}L</td>
+                                            <td>${match.home_stats?.goals_for || 0}/${match.home_stats?.goals_against || 0}</td>
+                                            <td>${match.home_stats?.clean_sheets || 0}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-1">${match.away_team?.substring(0,4)}</td>
+                                            <td>${match.away_stats?.wins || 0}W${match.away_stats?.draws || 0}D${match.away_stats?.losses || 0}L</td>
+                                            <td>${match.away_stats?.goals_for || 0}/${match.away_stats?.goals_against || 0}</td>
+                                            <td>${match.away_stats?.clean_sheets || 0}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
         }
     </script>
 </body>
