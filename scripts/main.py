@@ -1,253 +1,136 @@
-""" 主运行脚本： 1. 抓取数据 2. AI预测 3. 生成前端JSON 4. 更新 index.html """
+"""
+主运行脚本 (完全体 v5.0):
+1. [Fetch] 调用高级 JSON 接口提取：伤停名单、专家点评、基本面深度研报及实时水位异动
+2. [Predict] 11核心量化模型运算 + 双 AI (GPT/Gemini) 深度情报研判与交叉比分验证
+3. [Strategy] 2串1 自动组合优化，利用联合EV计算当日最高期望回报方案
+4. [Storage] 生成对齐最新前端的 latest.json 与 早/晚盘历史档案
+"""
 import json
 import os
 import sys
 import time
 import re
-import random
 from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
-import requests
-from bs4 import BeautifulSoup
+
+# 尝试导入时区库，若失败则降级处理
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    # 适配低版本 Python 环境或某些 Actions 环境
+    ZoneInfo = None
 
 from config import *
 from fetch_data import collect_all
 from predict import run_predictions
 
-# ==================== 工具函数 ====================
-def get_today(offset=0):
-    return (datetime.now(ZoneInfo(TIMEZONE)) + timedelta(days=offset)).strftime("%Y-%m-%d")
-
-def generate_stats_from_rank(rank, total_teams=20):
-    """用联赛排名生成合理的统计数据"""
-    random.seed(rank * 7 + 3)
-    if rank == 0:
-        rank = 10
-    strength = 1 - (rank - 1) / total_teams
-    played = random.randint(18, 30)
-    win_rate = max(0.15, min(0.75, strength * 0.6 + random.uniform(-0.1, 0.1)))
-    draw_rate = random.uniform(0.15, 0.30)
-    loss_rate = 1 - win_rate - draw_rate
-    wins = max(1, int(played * win_rate))
-    draws = max(1, int(played * draw_rate))
-    losses = max(1, played - wins - draws)
-    gf_per = max(0.5, strength * 2.0 + random.uniform(-0.3, 0.3))
-    ga_per = max(0.4, (1 - strength) * 1.8 + random.uniform(-0.3, 0.3))
-    gf = int(played * gf_per)
-    ga = int(played * ga_per)
-    cs = max(0, int(played * (1 - ga_per / 2) * 0.3))
-    form_chars = []
-    for _ in range(min(5, played)):
-        r2 = random.random()
-        if r2 < win_rate:
-            form_chars.append("W")
-        elif r2 < win_rate + draw_rate:
-            form_chars.append("D")
-        else:
-            form_chars.append("L")
-    return {
-        "played": played, "wins": wins, "draws": draws, "losses": losses,
-        "goals_for": gf, "goals_against": ga,
-        "avg_goals_for": str(round(gf_per, 2)),
-        "avg_goals_against": str(round(ga_per, 2)),
-        "clean_sheets": cs, "form": "".join(form_chars), "rank": rank
-    }
-
-# ==================== 数据抓取函数 ====================
-def scrape_500_jczq(date=None):
-    date = date or get_today()
-    url = C500_URL.format(date=date)
-    print(f"  500.com: {url}")
-    ms = []
-    try:
-        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}, timeout=20)
-        r.encoding = "gb2312"
-        soup = BeautifulSoup(r.text, "html.parser")
-        rows = soup.find_all("tr")
-        print(f"  found {len(rows)} rows")
-        for row in rows:
-            tds = row.find_all("td")
-            if len(tds) < 4: continue
-            text = "|".join([td.get_text(strip=True) for td in tds])
-            # Extract league and match_num
-            league = ""
-            match_num = ""
-            for td in tds[:3]:
-                t = td.get_text(strip=True)
-                if re.match(r"^[\u4e00-\u9fff]+$", t) and 1 < len(t) < 6:
-                    league = t
-                elif re.match(r"^\u5468[一二三四五六日]\d{3}$", t):
-                    match_num = t
-            # Extract teams with rankings
-            home = away = ""
-            home_rank = away_rank = 0
-            for td in tds:
-                t = td.get_text(strip=True)
-                m2 = re.match(r"^\[(\d+)\](.+)$", t)
-                if m2:
-                    rank = int(m2.group(1))
-                    name = m2.group(2)
-                    if not home:
-                        home = name
-                        home_rank = rank
-                    elif not away:
-                        away = name
-                        away_rank = rank
-            if not home or not away:
-                links = row.find_all("a")
-                teams = []
-                for a in links:
-                    t = a.get_text(strip=True)
-                    m3 = re.match(r"^\[(\d+)\](.+)$", t)
-                    if m3:
-                        teams.append((m3.group(2), int(m3.group(1))))
-                    elif 1 < len(t) < 20 and not t.isdigit() and "vs" not in t.lower():
-                        teams.append((t, 0))
-                if len(teams) >= 2:
-                    home, home_rank = teams[0]
-                    away, away_rank = teams[1]
-            if not home or not away:
-                vs_match = re.search(r"(.+?)\s*(?:vs|VS|V)\s*(.+)", text)
-                if vs_match:
-                    home = vs_match.group(1).strip()[-10:]
-                    away = vs_match.group(2).strip()[:10]
-            if home and away:
-                sp_nums = re.findall(r"(\d+\.\d{2})", text)
-                sp_home = float(sp_nums[0]) if len(sp_nums) >= 1 else 0
-                sp_draw = float(sp_nums[1]) if len(sp_nums) >= 2 else 0
-                sp_away = float(sp_nums[2]) if len(sp_nums) >= 3 else 0
-                m_obj = {
-                    "home_team": home, "away_team": away, "league": league, "match_num": match_num,
-                    "home_rank": home_rank, "away_rank": away_rank,
-                    "sp_home": sp_home, "sp_draw": sp_draw, "sp_away": sp_away,
-                    "source": "500", "raw": text[:200]
-                }
-                ms.append(m_obj)
-                print(f"    {league or '?'}: {home}[{home_rank}] vs {away}[{away_rank}] SP:{sp_home:.2f}/{sp_draw:.2f}/{sp_away:.2f}")
-    except Exception as e:
-        print(f"  500.com error:{e}")
-    return ms
-
-def search_team_api(name):
-    h = {"x-apisports-key": API_FOOTBALL_KEY}
-    try:
-        r = requests.get(API_FOOTBALL_BASE + "/teams", headers=h, params={"search": name}, timeout=10)
-        d = r.json()
-        if d.get("response") and len(d["response"]) > 0:
-            team = d["response"][0]["team"]
-            return {"id": team["id"], "name": team["name"], "logo": team.get("logo", "")}
-    except:
-        pass
-    return None
-
-def fetch_stats(tid, lid=0, season=2024):
-    if not tid: return {}
-    h = {"x-apisports-key": API_FOOTBALL_KEY}
-    try:
-        params = {"team": tid, "season": season}
-        if lid: params["league"] = lid
-        r = requests.get(API_FOOTBALL_BASE + "/teams/statistics", headers=h, params=params, timeout=15)
-        d = r.json()
-        if d.get("response"):
-            s = d["response"]
-            return {
-                "played": s["fixtures"]["played"].get("total", 0),
-                "wins": s["fixtures"]["wins"].get("total", 0),
-                "draws": s["fixtures"]["draws"].get("total", 0),
-                "losses": s["fixtures"]["loses"].get("total", 0),
-                "goals_for": s["goals"]["for"]["total"].get("total", 0),
-                "goals_against": s["goals"]["against"]["total"].get("total", 0),
-                "form": s.get("form", ""),
-                "clean_sheets": s["clean_sheet"].get("total", 0),
-                "avg_goals_for": s["goals"]["for"]["average"].get("total", "0"),
-                "avg_goals_against": s["goals"]["against"]["average"].get("total", "0")
-            }
-    except:
-        pass
-    return {}
-
-def fetch_h2h(hid, aid):
-    if not hid or not aid: return []
-    h = {"x-apisports-key": API_FOOTBALL_KEY}
-    try:
-        r = requests.get(API_FOOTBALL_BASE + "/fixtures/headtohead", headers=h, params={"h2h": f"{hid}-{aid}", "last": 10}, timeout=15)
-        d = r.json()
-        rc = []
-        if d.get("response"):
-            for m in d["response"]:
-                rc.append({
-                    "date": m["fixture"]["date"][:10],
-                    "home": m["teams"]["home"]["name"],
-                    "away": m["teams"]["away"]["name"],
-                    "score": f"{m['goals']['home']}-{m['goals']['away']}",
-                    "league": m["league"]["name"]
-                })
-        return rc
-    except:
-        pass
-    return []
-
-# ==================== 主函数 ====================
-def main():
-    date = get_today()
-    now = datetime.now(ZoneInfo("Asia/Shanghai"))
-    session = "morning" if now.hour < 15 else "evening"
-
-    print("=" * 60)
-    print("⚽ 竞彩足球AI预测系统")
-    print(f"📅 日期: {date} 时段: {'上午' if session == 'morning' else '晚上'}")
-    print("=" * 60)
-
-    # 1. 数据抓取（优先用 fetch_data.py，失败时用备用 scrape）
-    raw_data = collect_all(date)
-
-    os.makedirs("data", exist_ok=True)
-    with open("data/raw_data.json", "w", encoding="utf-8") as f:
-        json.dump(raw_data, f, ensure_ascii=False, indent=2)
-
-    if not raw_data["matches"]:
-        print("⚠️ 今日无竞彩比赛数据，生成空预测页面")
-        output = {
-            "date": date,
-            "session": session,
-            "update_time": now.strftime("%Y-%m-%d %H:%M:%S"),
-            "total_matches": 0,
-            "results": [],
-            "top4": [],
-        }
+# ==================== 1. 系统时间与调度逻辑 ====================
+def get_system_time():
+    """获取精准时区时间、日期字符串及场次时段(早盘/晚盘)"""
+    if ZoneInfo and TIMEZONE:
+        try:
+            tz = ZoneInfo(TIMEZONE)
+            now = datetime.now(tz)
+        except:
+            now = datetime.now()
     else:
-        # 2. AI预测
-        results, top4 = run_predictions(raw_data)
-        output = {
-            "date": date,
-            "session": session,
-            "update_time": now.strftime("%Y-%m-%d %H:%M:%S"),
-            "total_matches": len(results),
-            "results": results,
-            "top4": [
-                {
-                    "rank": i + 1,
-                    **t,
-                }
-                for i, t in enumerate(top4)
-            ],
-        }
+        now = datetime.now()
+        
+    date_str = now.strftime("%Y-%m-%d")
+    time_str = now.strftime("%H:%M:%S")
+    
+    # 划分场次：下午15:00前运行视为“早盘”，15:00后视为“晚盘”
+    # 对应竞彩大部分比赛的截售与开赛节奏
+    session = "morning" if now.hour < 15 else "evening"
+    session_zn = "早盘阶段" if session == "morning" else "晚盘阶段"
+    
+    return date_str, time_str, session, session_zn
 
-    # 3. 保存预测结果
-    with open("data/predictions.json", "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+# ==================== 2. 主逻辑执行枢纽 ====================
+def main():
+    date_str, time_str, session, session_zn = get_system_time()
 
-    # 同时保存历史
-    history_file = f"data/history_{date}_{session}.json"
-    with open(history_file, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+    print("=" * 65)
+    print(f"🚀 AI 量化足球投研终端 (全维度情报融合版) | {date_str}")
+    print(f"🕒 系统启动时间: {time_str} | 运行场次: {session_zn}")
+    print("=" * 65)
 
-    print(f"\n{'='*60}")
-    print(f"✅ 全部完成！")
-    print(f" 📊 共 {output['total_matches']} 场比赛")
-    print(f" 🎯 推荐 {len(output['top4'])} 场")
-    print(f" 📁 文件: data/predictions.json")
-    print(f"{'='*60}")
+    # 目录初始化
+    os.makedirs("data", exist_ok=True)
+    print("  [Init] 数据持久化目录就绪")
+
+    try:
+        # --- 阶段 1: 深度情报采集 ---
+        # 调用已升级的 fetch_data.py，捕获 wencai API 的专家推介、伤停利空、投票及实时水位
+        print(f"\n[STEP 1/3] 正在接入深度情报网络...")
+        raw_data = collect_all(date_str)
+        
+        # 兜底：如果 API 没给数据，生成空预测防止前端白屏
+        if not raw_data or not raw_data.get("matches") or len(raw_data["matches"]) == 0:
+            print("  ⚠️ 警告: 今日暂无有效竞彩足球赛事数据，生成空存档。")
+            final_output = {
+                "fetch_time": f"{date_str} {time_str}",
+                "total_matches": 0,
+                "best_parlay": None,
+                "matches": [],
+                "date": date_str,
+                "session": session
+            }
+        else:
+            # --- 阶段 2: 核心预测与 2串1 优化策略 ---
+            # run_predictions 此时返回：
+            # results: 包含预测、伤停、专家文本、AI比分、盘口动向的所有场次列表
+            # best_parlay: 经过联合EV优化后的当日最佳 2串1 方案
+            print(f"\n[STEP 2/3] 正在对 {len(raw_data['matches'])} 场赛事执行量化研判...")
+            results, best_parlay = run_predictions(raw_data)
+            
+            # --- 阶段 3: 封装高密度展现层 JSON ---
+            print("\n[STEP 3/3] 正在构建全维度输出数据...")
+            final_output = {
+                "fetch_time": f"{date_str} {time_str}",
+                "date": date_str,
+                "session": session,
+                "total_matches": len(results),
+                "best_parlay": best_parlay, # 置顶的黄金组合建议
+                "matches": results,         # 携带 intelligence, handicap 等所有核心字段
+                "top4_ids": [m["match_id"] for m in results if m.get("is_recommended")]
+            }
+
+        # --- 阶段 4: 写入持久化文件 ---
+        # 1. latest.json: 前端 index.html 实时渲染的唯一金标文件
+        target_file = "data/latest.json"
+        with open(target_file, "w", encoding="utf-8") as f:
+            json.dump(final_output, f, ensure_ascii=False, indent=4)
+        
+        # 2. 存档文件: 用于未来 AI 进行“错题本”自学习和胜率追溯
+        history_file = f"data/history_{date_str}_{session}.json"
+        with open(history_file, "w", encoding="utf-8") as f:
+            json.dump(final_output, f, ensure_ascii=False, indent=4)
+
+        # 华丽的终端报告
+        print(f"\n{'='*65}")
+        print("✅ 全量预测任务成功闭环！")
+        print(f"📊 总分析场次: {final_output['total_matches']} 场")
+        
+        if final_output.get("best_parlay"):
+            bp = final_output["best_parlay"]
+            print(f"🎯 今日最佳对冲方案 (2串1): {bp['combo']}")
+            print(f"📈 组合赔率积: {bp['combined_odds']} | 平均模型信心: {bp['confidence']}%")
+        
+        print(f"📁 核心文件已更新: {target_file}")
+        print(f"📚 历史数据已归档: {history_file}")
+        print(f"{'='*65}")
+
+    except Exception as e:
+        print("\n" + "!" * 65)
+        print(f"🚨 系统运行崩溃！")
+        print(f"错误类型: {type(e).__name__}")
+        print(f"详细描述: {str(e)}")
+        # 详细堆栈回溯，方便在 GitHub Actions 日志里直接抓虫
+        import traceback
+        traceback.print_exc()
+        print("!" * 65)
+        # 强行抛出错误，让 GitHub Actions 标红，而不是假装运行成功
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
