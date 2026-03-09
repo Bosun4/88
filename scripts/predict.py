@@ -108,12 +108,12 @@ def call_model(prompt, url, key, model_pool):
 
 def call_gpt(p):
     print("  [GPT 链路启动]")
-    gpt_pool = ["gpt-5.4", "gpt-5.3-codex", "gpt-5.2", "gpt-5.1"]
+    gpt_pool = ["gpt-5.4", "gpt-5.3-codex"]
     return call_model(p, GPT_API_URL, GPT_API_KEY, gpt_pool)
 
 def call_gemini(p):
     print("  [Gemini 链路启动]")
-    gemini_pool = [GEMINI_MODEL] if 'GEMINI_MODEL' in globals() else ["gemini-1.5-pro", "gemini-pro"]
+    gemini_pool = [GEMINI_MODEL] if 'GEMINI_MODEL' in globals() else ["gemini-3.1-pro-preview-thinking", "gemini-3.1-pro-preview"]
     return call_model(p, GEMINI_API_URL, GEMINI_API_KEY, gemini_pool)
 
 # ==================== 4. 融合中枢 (全量导出前端所需的所有字典) ====================
