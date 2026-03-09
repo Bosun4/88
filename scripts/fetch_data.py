@@ -31,7 +31,7 @@ def translate_team_name(name):
     except: 
         return name
 
-# ==================== 2. 问彩高级 JSON 解析引擎 (带情报提取) ====================
+# ==================== 2. 问彩高级 JSON 解析引擎 ====================
 def get_today(offset=0):
     try:
         from zoneinfo import ZoneInfo
@@ -41,10 +41,11 @@ def get_today(offset=0):
 
 def scrape_wencai_jczq(date=None):
     """
-    全新升级版：直连 JSON 接口，不仅提取赔率，更提取伤停与利空情报喂给AI！
+    全新极速版：直连 edu.wencaivip.cn 底层 JSON API 接口
+    融合了：伤停情报、让球盘口、以及实时的资金水位异动追踪！
     """
     url = "https://edu.wencaivip.cn/api/v1.reference/matches"
-    print(f"  🌐 正在直连 Wencai 高级情报接口...")
+    print(f"  🌐 正在直连 Wencai 高级情报与盘口接口...")
     ms = []
     
     headers = {
@@ -61,25 +62,42 @@ def scrape_wencai_jczq(date=None):
             print("  ⚠️ 接口未返回足球比赛数据。")
             return ms
             
-        print(f"  ✅ 极速解析到 {len(football_matches)} 场带有绝密情报的比赛数据！")
+        print(f"  ✅ 极速解析到 {len(football_matches)} 场带有【情报与资金异动】的数据！")
         
         for item in football_matches:
             try:
-                # 1. 基础信息
+                # 1. 基础赛事信息
                 league = item.get("cup", "")
                 match_num = f"{item.get('week', '')}{item.get('week_no', '')}"
                 home = item.get("home", "")
                 away = item.get("guest", "")
                 
-                # 2. 提取SP初赔
+                # 2. 提取标准盘(胜平负) SP赔率
                 sp_home = float(item.get("win") or 0)
                 sp_draw = float(item.get("same") or 0)
                 sp_away = float(item.get("lose") or 0)
                 
-                # 3. 提取排名与机构深度分析
+                # 🔥 3. 进阶升级：提取赔率资金异动 (1=升水/看衰, -1=降水/防范, 0=不变)
+                change_data = item.get("change", {})
+                odds_movement = "平稳"
+                if isinstance(change_data, dict) and change_data:
+                    w_c = change_data.get("win", 0)
+                    l_c = change_data.get("lose", 0)
+                    w_txt = "升水(机构看衰)" if w_c > 0 else ("降水(机构防范)" if w_c < 0 else "平稳")
+                    l_txt = "升水(机构看衰)" if l_c > 0 else ("降水(机构防范)" if l_c < 0 else "平稳")
+                    odds_movement = f"主胜{w_txt}，客胜{l_txt}"
+
+                # 🔥 4. 进阶升级：提取让球盘数据 (亚盘逻辑基础)
+                give_ball = item.get("give_ball", 0)
+                hhad_win = item.get("hhad_win", "-")
+                hhad_same = item.get("hhad_same", "-")
+                hhad_lose = item.get("hhad_lose", "-")
+                handicap_str = f"主队让({give_ball})球 | 让胜{hhad_win} 让平{hhad_same} 让负{hhad_lose}"
+                
+                # 5. 提取排名与机构提要
                 home_rank = 0
                 away_rank = 0
-                match_points = "" # 机构基本面提要
+                match_points = "" 
                 
                 points_data = item.get("points", {})
                 if isinstance(points_data, dict):
@@ -91,7 +109,7 @@ def scrape_wencai_jczq(date=None):
                     away_rank = int(a_match.group()) if a_match else 0
                     match_points = points_data.get("match_points", "")
 
-                # 4. 🔥 新增：提取极其珍贵的伤停与利空情报
+                # 6. 提取极其珍贵的伤停与利空情报
                 info_data = item.get("information", {})
                 home_injury = ""
                 guest_injury = ""
@@ -101,7 +119,7 @@ def scrape_wencai_jczq(date=None):
                 if isinstance(info_data, dict):
                     home_injury = info_data.get("home_injury", "").replace("\n", " | ")
                     guest_injury = info_data.get("guest_injury", "").replace("\n", " | ")
-                    home_news = info_data.get("home_bad_news", "").replace("\n", " ") # 重点提取利空
+                    home_news = info_data.get("home_bad_news", "").replace("\n", " ")
                     guest_news = info_data.get("guest_bad_news", "").replace("\n", " ")
                 
                 if home and away:
@@ -116,19 +134,22 @@ def scrape_wencai_jczq(date=None):
                         "sp_draw": sp_draw, 
                         "sp_away": sp_away,
                         
-                        # 注入高级情报池
+                        # 新增盘口与资金异动维度
+                        "odds_movement": odds_movement,
+                        "handicap_info": handicap_str,
+                        
+                        # 高级情报池
                         "intelligence": {
                             "home_injury": home_injury,
                             "guest_injury": guest_injury,
                             "home_bad_news": home_news,
                             "guest_bad_news": guest_news,
-                            "match_points": match_points[:200] # 取前200字核心防Token超载
+                            "match_points": match_points[:200]
                         },
-                        
                         "source": "wencai_api", 
                         "raw_text": json.dumps(item)[:150]
                     })
-                    print(f"    {match_num} {league}: {home}[{home_rank}] vs {away}[{away_rank}] (已加载伤停情报)")
+                    print(f"    {match_num} {home} vs {away} [盘口: {handicap_str} | 异动: {odds_movement}]")
             
             except Exception as e:
                 continue
