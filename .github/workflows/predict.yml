@@ -14,22 +14,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          
       - run: pip install -r requirements.txt
-      - name: Run
+      
+      - name: Run Predictions
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
-        run: cd scripts && python main.py
+        run: |
+          cd scripts
+          python main.py
+          
       - name: Push data updates
         run: |
+          # 1. 配置 Git 机器人
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # 2. 【核心修复】把生成的 data 文件夹提取到根目录！
+          mkdir -p data/
+          cp -r scripts/data/* data/ || echo "No data generated"
+          
+          # 3. 提交并推送到仓库
           git add data/
-          git diff --cached --quiet || git commit -m "update predictions data"
+          git diff --cached --quiet || git commit -m "🤖 自动更新比赛预测数据"
           git push
