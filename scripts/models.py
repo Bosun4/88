@@ -19,12 +19,15 @@ class RefinedPoissonModel:
     def predict(self, home_xg, away_xg, odds_dict):
         try: lh = float(home_xg or 1.3); la = float(away_xg or 1.1)
         except Exception: lh, la = 1.3, 1.1
+        
         max_g = 8
         probs = np.zeros((max_g+1, max_g+1))
         def pmf(k, lam): return (lam**k) * math.exp(-lam) / math.factorial(k)
+        
         for h in range(max_g + 1):
             for a in range(max_g + 1):
                 probs[h, a] = pmf(h, lh) * pmf(a, la)
+                
         if odds_dict and isinstance(odds_dict, dict):
             if 3.05 <= odds_dict.get("a2", 999) <= 3.10:
                 for h in range(max_g+1):
@@ -45,6 +48,7 @@ class RefinedPoissonModel:
                     for a in range(max_g+1):
                         if h+a == 3: probs[h, a] *= 1.40
             if 7.50 <= odds_dict.get("w21", 999) <= 8.50: probs[2, 1] *= 1.42
+
         probs /= probs.sum()
         hw, dr, aw, scores = 0.0, 0.0, 0.0, []
         for h in range(max_g+1):
@@ -54,6 +58,7 @@ class RefinedPoissonModel:
                 elif h == a: dr += p
                 else: aw += p
                 scores.append({"score": f"{h}-{a}", "prob": round(p*100, 1)})
+        
         scores.sort(key=lambda x: x["prob"], reverse=True)
         return {
             "home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1),
@@ -158,13 +163,12 @@ class InjuryPenaltyModel:
         return {"h_adj": h_penalty, "a_adj": a_penalty}
 
 class PaceTotalGoalsModel:
-    def predict(self, hs, ast):
+    def predict(self, h_gf, h_ga, a_gf, a_ga, hs, ast):
         try:
-            h_gf, h_ga = float(hs.get("avg_goals_for", 1.3)), float(hs.get("avg_goals_against", 1.1))
-            a_gf, a_ga = float(ast.get("avg_goals_for", 1.1)), float(ast.get("avg_goals_against", 1.3))
             h_cs = float(hs.get("clean_sheets", 2)) / max(1, float(hs.get("played", 10)))
             a_cs = float(ast.get("clean_sheets", 2)) / max(1, float(ast.get("played", 10)))
-        except Exception: return {"over_2_5": 50.0, "expected_total": 2.5, "pace_rating": "中等"}
+        except Exception: 
+            h_cs, a_cs = 0.2, 0.2
         final_exp = (h_gf * a_ga + a_gf * h_ga) * (1.0 + (0.3 - ((h_cs + a_cs) / 2)))
         over_prob = 1.0 - (math.exp(-final_exp) * (1 + final_exp + (final_exp**2)/2))
         return {"over_2_5": max(15.0, min(85.0, over_prob * 100)), "expected_total": round(final_exp, 2), "pace_rating": "极快" if final_exp > 3.0 else ("慢" if final_exp < 2.0 else "中等")}
@@ -242,30 +246,37 @@ class EnsemblePredictor:
 
     def predict(self, match, odds_data=None):
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
-        h_gf = float(hs.get("avg_goals_for", 1.3)); h_ga = float(hs.get("avg_goals_against", 1.1))
-        a_gf = float(ast.get("avg_goals_for", 1.1)); a_ga = float(ast.get("avg_goals_against", 1.3))
         
-        # 🔥 核心修正：跨联赛赔率纠偏引擎 (彻底打碎 加拉塔萨雷 > 利物浦 的假象)
+        # 🔥 核心修正：引入“赔率反推 xG”引擎，彻底粉碎随机生成的垃圾数据！
         sp_h = float(match.get("sp_home", 0))
+        sp_d = float(match.get("sp_draw", 0))
         sp_a = float(match.get("sp_away", 0))
         
-        if sp_h > 1.0 and sp_a > 1.0:
-            implied_h = 1 / sp_h
-            implied_a = 1 / sp_a
-            if implied_a > implied_h and h_gf >= a_gf:
-                ratio = math.sqrt(sp_h / sp_a) 
-                a_gf = h_gf * ratio * 1.15 
-                h_gf = h_gf / ratio 
-            elif implied_h > implied_a and a_gf >= h_gf:
-                ratio = math.sqrt(sp_a / sp_h)
-                h_gf = a_gf * ratio * 1.15
-                a_gf = a_gf / ratio
+        # 如果问彩提供了真实的欧赔，直接通过庄家赔率反推真实攻防实力 (无视假战绩)
+        if sp_h > 1.0 and sp_a > 1.0 and sp_d > 1.0:
+            prob_h, prob_d, prob_a = 1/sp_h, 1/sp_d, 1/sp_a
+            margin = prob_h + prob_d + prob_a
+            prob_h /= margin; prob_d /= margin; prob_a /= margin
+            
+            # 根据平局概率反推总进球数，平局概率越低，总进球越高
+            expected_total = 2.5 + (0.25 - prob_d) * 6.0
+            expected_total = max(1.5, min(expected_total, 4.0))
+            
+            # 按胜率分配进球
+            h_gf = expected_total * (prob_h / (prob_h + prob_a))
+            a_gf = expected_total * (prob_a / (prob_h + prob_a))
+            h_ga = a_gf  # 预期失球即为对手的预期进球
+            a_ga = h_gf
+        else:
+            # 只有在万不得已没有赔率时，才用纸面数据
+            h_gf, h_ga = float(hs.get("avg_goals_for", 1.3)), float(hs.get("avg_goals_against", 1.1))
+            a_gf, a_ga = float(ast.get("avg_goals_for", 1.1)), float(ast.get("avg_goals_against", 1.3))
                 
         poi = self.poisson.predict(h_gf, h_ga, a_gf, a_ga)
         dc = self.dixon.predict(h_gf, h_ga, a_gf, a_ga)
         rf = self.rf.predict(match, odds_data)
         lr = self.lr.predict(match, odds_data)
-        pace = self.pace_totals.predict(hs, ast) 
+        pace = self.pace_totals.predict(h_gf, h_ga, a_gf, a_ga, hs, ast) 
         
         v2_odds = match.get("v2_odds_dict", {})
         ref_poi = self.refined_poisson.predict(h_gf, a_gf, v2_odds)
