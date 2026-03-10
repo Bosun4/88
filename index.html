@@ -106,7 +106,7 @@
 
         function renderTop4(top4List) {
             const container = document.getElementById('top4-container');
-            if (!top4List || top4List.length === 0) return container.innerHTML = `<div class="col-span-full text-slate-500 text-sm text-center py-4 glass-panel rounded-xl">今日暂无精选推荐</div>`;
+            if (!top4List || top4List.length === 0) return container.innerHTML = `<div class="col-span-full text-slate-500 text-sm text-center py-4 glass-panel rounded-xl">今日暂无高价值赛事</div>`;
             container.innerHTML = top4List.map(match => {
                 const p = match.prediction;
                 const poiScore = p.refined_poisson?.predicted_score || "?-?";
@@ -120,8 +120,7 @@
                         <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-[10px] text-slate-500 mb-1">本地置信度</div><div class="font-bold text-blue-400 text-base">${p.confidence}%</div></div>
                     </div>
                     <div class="flex items-center gap-2 relative z-10">
-                        <span class="text-[10px] bg-blue-900/40 text-blue-300 px-2 py-1 rounded border border-blue-800/50">GPT抗压: ${p.gpt_score}</span>
-                        ${p.model_consensus >= 3 ? `<span class="text-[10px] bg-emerald-900/40 text-emerald-400 px-2 py-1 rounded border border-emerald-800/50 flex items-center gap-1">✅ 底层共识</span>` : ''}
+                        <span class="text-[10px] bg-indigo-900/40 text-indigo-300 px-2 py-1 rounded border border-indigo-800/50">Gemini终极推演: ${p.gemini_score}</span>
                     </div>
                 </div>`;
             }).join('');
@@ -136,7 +135,6 @@
                 const p = match.prediction;
                 const hs = match.home_stats || {}; const as = match.away_stats || {};
                 
-                // 本地概率
                 const hp = p.home_win_pct; const dp = p.draw_pct; const ap = p.away_win_pct;
                 
                 let signalHtml = '';
@@ -167,7 +165,7 @@
                 }
 
                 return `
-                <div class="glass-panel rounded-2xl overflow-hidden flex flex-col shadow-lg">
+                <div class="glass-panel rounded-2xl overflow-hidden flex flex-col shadow-lg border-t border-slate-700">
                     <div class="bg-slate-800/80 px-5 py-3 border-b border-slate-700/50 flex justify-between items-center">
                         <div class="flex items-center gap-2"><span class="text-xs font-bold text-yellow-500">${match.league} ${match.match_num}</span>${match.is_recommended ? `<span class="bg-orange-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold shadow-md shadow-orange-500/30">推荐</span>` : ''}</div>
                         <div class="text-xs text-slate-400 font-mono">${match.match_time || '00:00'}</div>
@@ -183,7 +181,7 @@
                         </div>
 
                         <div class="mb-5 bg-slate-900 p-3 rounded-xl border border-slate-800 relative">
-                            <div class="absolute -top-2 left-3 bg-slate-800 text-[9px] text-slate-400 px-1.5 rounded">底层引擎判定概率</div>
+                            <div class="absolute -top-2 left-3 bg-slate-800 text-[9px] text-slate-400 px-1.5 rounded">底层数学期望概率</div>
                             <div class="flex justify-between text-xs font-medium mb-2 px-1 mt-1">
                                 <span class="text-blue-400">主 ${hp}%</span>
                                 <span class="text-slate-400">平 ${dp}%</span>
@@ -200,38 +198,41 @@
                         ${evTags ? `<div class="flex flex-wrap gap-2 mb-4">${evTags}</div>` : ''}
                         ${v2Html}
 
-                        <div class="bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-xl border border-blue-800/30 p-4 mt-5 shadow-inner">
-                            <div class="flex items-center gap-2 mb-4 pb-3 border-b border-blue-800/30">
-                                <span class="text-lg">🧠</span>
-                                <span class="text-sm font-bold text-white">AI 大脑独立推演区 (脱离本地数据限制)</span>
-                            </div>
+                        <div class="mt-6 border border-slate-700 rounded-xl overflow-hidden bg-slate-900/50 shadow-lg">
                             
-                            <div class="mb-5">
-                                <div class="flex justify-between items-center mb-2">
-                                    <div class="text-xs font-bold text-blue-400 bg-blue-950/50 px-2 py-1 rounded">🤖 GPT-5 结论</div>
-                                    <div class="text-sm font-black text-white bg-slate-800 px-2 py-1 rounded border border-slate-700">${p.gpt_score}</div>
+                            <div class="bg-gradient-to-r from-indigo-900/60 to-purple-900/60 p-4 border-b border-slate-700">
+                                <div class="flex justify-between items-center mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-xl">👑</span>
+                                        <span class="text-sm font-black text-indigo-300">首席决策官 (Gemini) 终极裁决</span>
+                                    </div>
+                                    <div class="text-lg font-black text-white bg-slate-900/80 px-3 py-1 rounded-lg border border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.3)]">${p.gemini_score}</div>
                                 </div>
-                                <div class="flex gap-3 text-[10px] text-slate-400 mb-2">
-                                    <span>主胜 ${p.gpt_hp}%</span><span>平局 ${p.gpt_dp}%</span><span>客胜 ${p.gpt_ap}%</span>
-                                </div>
-                                <div class="text-xs text-slate-300 leading-relaxed bg-slate-900/50 p-3 rounded-lg border border-slate-800">
-                                    ${p.gpt_analysis}
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="flex justify-between items-center mb-2">
-                                    <div class="text-xs font-bold text-purple-400 bg-purple-950/50 px-2 py-1 rounded">🤖 Gemini 结论</div>
-                                    <div class="text-sm font-black text-white bg-slate-800 px-2 py-1 rounded border border-slate-700">${p.gemini_score}</div>
-                                </div>
-                                <div class="flex gap-3 text-[10px] text-slate-400 mb-2">
-                                    <span>主胜 ${p.gemini_hp}%</span><span>平局 ${p.gemini_dp}%</span><span>客胜 ${p.gemini_ap}%</span>
-                                </div>
-                                <div class="text-xs text-slate-300 leading-relaxed bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+                                <div class="text-xs text-slate-300 leading-relaxed italic bg-slate-950/40 p-3 rounded-lg">
                                     ${p.gemini_analysis}
                                 </div>
                             </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-700">
+                                
+                                <div class="p-4 bg-blue-950/20">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-xs font-bold text-blue-400">🤖 逻辑顾问 (GPT-5)</span>
+                                        <span class="text-xs font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${p.gpt_score}</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed">${p.gpt_analysis}</p>
+                                </div>
+
+                                <div class="p-4 bg-teal-950/20">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-xs font-bold text-teal-400">👽 风控顾问 (Grok)</span>
+                                        <span class="text-xs font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${p.grok_score}</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed">${p.grok_analysis}</p>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>`;
             }).join('');
