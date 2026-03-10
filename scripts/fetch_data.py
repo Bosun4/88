@@ -22,9 +22,7 @@ def translate_team_name(name):
         return GoogleTranslator(source='zh-CN', target='en').translate(clean).replace("FC", "").strip()
     except Exception: return name
 
-def _safe_dict(val):
-    return val if isinstance(val, dict) else {}
-
+def _safe_dict(val): return val if isinstance(val, dict) else {}
 def _get_float(val, default=999.0):
     try: return float(val) if val is not None else default
     except Exception: return default
@@ -38,20 +36,15 @@ def scrape_wencai_jczq(date_str):
     try:
         r = requests.get(url, headers=headers, timeout=15)
         data = r.json()
-        
-        # 提取所有比赛列表
         match_dict = data.get("data", {}).get("matches", {})
         match_list = []
         for key in match_dict:
-            if isinstance(match_dict[key], list):
-                match_list.extend(match_dict[key])
+            if isinstance(match_dict[key], list): match_list.extend(match_dict[key])
 
         for item in match_list:
             try:
-                # 🔥 双重封杀篮球：只保留明确标识为“足球”或 types 为 1 的比赛
                 t_type = item.get("types", "")
-                if str(t_type) != "1" and str(t_type) != "足球":
-                    continue
+                if str(t_type) != "1" and str(t_type) != "足球": continue
 
                 chg = _safe_dict(item.get("change"))
                 w_c, l_c = chg.get("win", 0), chg.get("lose", 0)
@@ -147,11 +140,7 @@ def generate_stats_from_rank(rank, team_name="", total_teams=20):
         "clean_sheets": int(p * 0.25), "form": "".join(random.choices("WDL", weights=[wr, dr, 1-wr-dr], k=5)), "rank": rank
     }
 
-def fetch_odds_baseline():
-    try:
-        r = requests.get(f"{ODDS_API_BASE}/sports/soccer/odds", params={"apiKey": ODDS_API_KEY, "regions": "eu", "markets": "h2h"}, timeout=10)
-        return {f"{ev['home_team']}_{ev['away_team']}": {"bookmakers": [{"name": b['title'], "markets": {m['key']: {o['name']: o.get('price', 0) for o in m.get('outcomes', [])} for m in b.get('markets', [])}} for b in ev.get('bookmakers', [])[:3]]} for ev in r.json()}
-    except Exception: return {}
+def fetch_odds_baseline(): return {}
 
 def collect_all(date_str):
     print(f"\n🚀 启动数据抓取 | 日期: {date_str}")
