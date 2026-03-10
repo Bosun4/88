@@ -13,13 +13,9 @@
         .prob-bar-h { background: linear-gradient(90deg, #3b82f6, #2563eb); }
         .prob-bar-d { background: #64748b; }
         .prob-bar-a { background: linear-gradient(90deg, #f43f5e, #e11d48); }
-        ::-webkit-scrollbar { width: 0px; background: transparent; } /* 隐藏滚动条让页面更干净 */
-        
-        /* 胶囊式 Tab 样式 */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
         .tab-btn { flex: 1; text-align: center; padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 600; transition: all 0.3s ease; color: #94a3b8; }
         .tab-btn.active { background-color: #3b82f6; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5); }
-        
-        /* 细节动画 */
         details summary::-webkit-details-marker { display: none; }
         details[open] summary ~ * { animation: slideDown 0.3s ease-in-out; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -41,9 +37,8 @@
     </header>
 
     <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-6 space-y-8">
-        
         <section class="grid grid-cols-2 md:grid-cols-4 gap-4" id="dashboard"></section>
-
+        
         <section>
             <div class="flex items-center gap-2 mb-4">
                 <span class="text-xl font-bold text-white flex items-center gap-2">🎯 精选推荐 <span class="bg-orange-500 text-white text-xs px-2 py-0.5 rounded font-black shadow-lg shadow-orange-500/30">TOP 4</span></span>
@@ -120,11 +115,14 @@
                     <div class="flex justify-between items-center mb-4 relative z-10"><div class="flex items-center gap-2"><span class="text-xs font-bold text-slate-300">${match.league}</span><span class="text-xs text-slate-500">${match.match_num}</span></div><div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white font-black text-xs shadow-md shadow-orange-500/50">${match.rank}</div></div>
                     <div class="flex justify-between items-center mb-5 relative z-10"><div class="w-2/5 text-left font-bold text-lg truncate">${match.home_team}</div><div class="text-xs text-slate-600 font-black italic">VS</div><div class="w-2/5 text-right font-bold text-lg truncate">${match.away_team}</div></div>
                     <div class="grid grid-cols-3 gap-2 mb-4 relative z-10">
-                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-xs text-slate-500 mb-1">比分</div><div class="font-black text-emerald-400 text-lg">${p.predicted_score}</div></div>
-                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-xs text-slate-500 mb-1">结果</div><div class="font-bold text-white text-base">${p.result}</div></div>
-                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-xs text-slate-500 mb-1">置信</div><div class="font-bold text-blue-400 text-base">${p.confidence}%</div></div>
+                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-xs text-slate-500 mb-1">系统比分</div><div class="font-black text-emerald-400 text-lg">${p.predicted_score}</div></div>
+                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-xs text-slate-500 mb-1">系统预测</div><div class="font-bold text-white text-base">${p.result}</div></div>
+                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-xs text-slate-500 mb-1">置信度</div><div class="font-bold text-blue-400 text-base">${p.confidence}%</div></div>
                     </div>
-                    <div class="flex items-center gap-2 relative z-10"><span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded border border-slate-700">V2比分: ${poiScore}</span>${p.model_consensus >= 3 ? `<span class="text-[10px] bg-emerald-900/40 text-emerald-400 px-2 py-1 rounded border border-emerald-800/50 flex items-center gap-1">✅ 共识</span>` : ''}</div>
+                    <div class="flex items-center gap-2 relative z-10">
+                        <span class="text-[10px] bg-blue-900/40 text-blue-300 px-2 py-1 rounded border border-blue-800/50">GPT推演: ${p.gpt_score}</span>
+                        ${p.model_consensus >= 3 ? `<span class="text-[10px] bg-emerald-900/40 text-emerald-400 px-2 py-1 rounded border border-emerald-800/50 flex items-center gap-1">✅ 共识</span>` : ''}
+                    </div>
                 </div>`;
             }).join('');
         }
@@ -145,7 +143,6 @@
                 }
                 const evTags = p.value_bets_summary.map(tag => `<span class="bg-emerald-900/40 text-emerald-400 text-[11px] px-2.5 py-1 rounded border border-emerald-700/50 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>${tag}</span>`).join('');
 
-                // V2 专属数据舱
                 let v2Html = '';
                 if (p.refined_poisson && p.refined_poisson.v2_details) {
                     const dts = p.refined_poisson.v2_details;
@@ -178,7 +175,7 @@
                             <div class="w-2/5 text-right"><div class="font-bold text-lg md:text-xl text-white truncate">${match.home_team}</div></div>
                             <div class="w-1/5 flex flex-col items-center">
                                 <div class="text-3xl font-black text-white bg-slate-800 px-3 py-1 rounded-lg border border-slate-600 shadow-inner">${p.predicted_score}</div>
-                                <div class="text-[10px] font-bold mt-2 px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 tracking-widest">${p.result}</div>
+                                <div class="text-[10px] font-bold mt-2 px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 tracking-widest">系统预测</div>
                             </div>
                             <div class="w-2/5 text-left"><div class="font-bold text-lg md:text-xl text-white truncate">${match.away_team}</div></div>
                         </div>
@@ -196,10 +193,9 @@
                             </div>
                         </div>
                         
-                        <div class="grid grid-cols-4 gap-2 mb-4">
-                            <div class="bg-slate-800/40 rounded-lg p-2 text-center border border-slate-700/30"><div class="text-[10px] text-slate-500 mb-1">置信度</div><div class="text-sm font-bold text-white">${p.confidence}%</div></div>
-                            <div class="bg-slate-800/40 rounded-lg p-2 text-center border border-slate-700/30"><div class="text-[10px] text-slate-500 mb-1">大2.5球</div><div class="text-sm font-bold ${p.over_under_2_5 === '大' ? 'text-rose-400' : 'text-emerald-400'}">${p.over_under_2_5}</div></div>
-                            <div class="bg-slate-800/40 rounded-lg p-2 text-center border border-slate-700/30"><div class="text-[10px] text-slate-500 mb-1">双方进球</div><div class="text-sm font-bold text-white">${p.both_score}</div></div>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="bg-slate-800/40 rounded-lg p-2 text-center border border-slate-700/30"><div class="text-[10px] text-slate-500 mb-1">系统置信度</div><div class="text-sm font-bold text-white">${p.confidence}%</div></div>
+                            <div class="bg-slate-800/40 rounded-lg p-2 text-center border border-slate-700/30"><div class="text-[10px] text-slate-500 mb-1">系统倾向</div><div class="text-sm font-bold text-blue-400">${p.result}</div></div>
                             <div class="bg-slate-800/40 rounded-lg p-2 text-center border border-slate-700/30"><div class="text-[10px] text-slate-500 mb-1">风控等级</div><div class="text-sm font-bold ${p.risk_level === '低' ? 'text-emerald-400' : 'text-orange-400'}">${p.risk_level}</div></div>
                         </div>
 
@@ -224,12 +220,24 @@
                         </details>
 
                         <div class="bg-gradient-to-br from-blue-900/30 to-purple-900/30 rounded-xl border border-blue-800/40 p-4 mt-4 shadow-inner">
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="w-1.5 h-4 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
-                                <span class="text-xs font-bold text-blue-300">🤖 AI 顶尖投研复盘</span>
+                            <div class="flex items-center justify-between mb-4 border-b border-blue-800/30 pb-3">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-1.5 h-4 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                                    <span class="text-xs font-bold text-blue-300">🤖 AI 独立推演</span>
+                                </div>
+                                <div class="flex gap-2">
+                                    <span class="text-[10px] bg-blue-900/50 text-blue-300 px-2 py-1 rounded border border-blue-700/50">GPT: ${p.gpt_score}</span>
+                                    <span class="text-[10px] bg-purple-900/50 text-purple-300 px-2 py-1 rounded border border-purple-700/50">Gemini: ${p.gemini_score}</span>
+                                </div>
                             </div>
-                            <p class="text-xs text-slate-300 leading-relaxed mb-3 pb-3 border-b border-blue-800/30"><strong class="text-blue-400">GPT 分析：</strong>${p.gpt_analysis}</p>
-                            <p class="text-xs text-slate-300 leading-relaxed"><strong class="text-purple-400">Gemini 分析：</strong>${p.gemini_analysis}</p>
+                            <div class="text-xs text-slate-300 leading-relaxed mb-4 pb-3 border-b border-slate-700/50">
+                                <strong class="text-blue-400 block mb-1">GPT 深度解析：</strong>
+                                <span class="block whitespace-pre-wrap">${p.gpt_analysis}</span>
+                            </div>
+                            <div class="text-xs text-slate-300 leading-relaxed">
+                                <strong class="text-purple-400 block mb-1">Gemini 深度解析：</strong>
+                                <span class="block whitespace-pre-wrap">${p.gemini_analysis}</span>
+                            </div>
                         </div>
                     </div>
                 </div>`;
