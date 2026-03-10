@@ -19,7 +19,6 @@ def build_prompt(m, sp, val_h, val_d, val_a):
     intel = m.get("intelligence", {})
     ref_poi = sp.get("refined_poisson", {})
     
-    # 🔥 提示词全面升级：赋予 AI 独立推演权，强迫其输出独立比分
     p = "作为掌管亿万资金的顶级量化足球投研专家，请基于以下【量化矩阵数据】与【独家基本面情报】进行独立推演。\n\n"
     p += f"【赛事】{lg} | {h} vs {a}\n"
     p += f"【伤停与利空】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
@@ -87,7 +86,6 @@ def merge_all(gpt, gemini, stats, match_obj):
     if t > 0: hp, dp, ap = round(hp/t*100, 1), round(dp/t*100, 1), round(100-hp-dp, 1)
     result = max({"主胜": hp, "平局": dp, "客胜": ap}, key={"主胜": hp, "平局": dp, "客胜": ap}.get)
     
-    # 🔥 核心拆分：系统比分与 AI 独立比分分离
     system_score = stats.get("predicted_score", "1-1")
     gpt_score = gpt.get("ai_score", "未预测") if isinstance(gpt, dict) else "未预测"
     gemini_score = gemini.get("ai_score", "未预测") if isinstance(gemini, dict) else "未预测"
@@ -98,9 +96,9 @@ def merge_all(gpt, gemini, stats, match_obj):
     v_tags = [f"{k} EV:+{v['ev']}% (仓位:{v['kelly']}%)" for k, v in zip(["主胜", "平局", "客胜"], [val_h, val_d, val_a]) if v and v.get("is_value")]
     
     return {
-        "predicted_score": system_score,  # 系统量化比分
-        "gpt_score": gpt_score,           # GPT 独立推演比分
-        "gemini_score": gemini_score,     # Gemini 独立推演比分
+        "predicted_score": system_score,
+        "gpt_score": gpt_score,
+        "gemini_score": gemini_score,
         "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap,
         "confidence": cf, "result": result,
         "risk_level": "低" if cf >= 70 else ("中" if cf >= 50 else "高"),
@@ -147,6 +145,7 @@ def run_predictions(raw):
     t4ids = [t["id"] for t in t4]
     for r in res: r["is_recommended"] = r["id"] in t4ids
     
+    # 🔥 核心修正：绝对按顺序排列 (从 周一001 开始排)
     def extract_num(match_str):
         nums = re.findall(r'\d+', match_str)
         return int(nums[0]) if nums else 9999
