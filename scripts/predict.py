@@ -1,4 +1,4 @@
-import json, requests, time
+import json, requests, time, re
 from config import *
 from models import EnsemblePredictor
 
@@ -19,25 +19,29 @@ def build_prompt(m, sp, val_h, val_d, val_a):
     intel = m.get("intelligence", {})
     ref_poi = sp.get("refined_poisson", {})
     
-    p = "你是顶级量化基金经理。请基于以下数据给出终极预测。\n\n"
-    p += f"【比赛】{lg} | {h} vs {a}\n"
+    # 🔥 提示词全面升级：赋予 AI 独立推演权，强迫其输出独立比分
+    p = "作为掌管亿万资金的顶级量化足球投研专家，请基于以下【量化矩阵数据】与【独家基本面情报】进行独立推演。\n\n"
+    p += f"【赛事】{lg} | {h} vs {a}\n"
     p += f"【伤停与利空】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
-    p += f"【盘口与风控】{m.get('handicap_info')} | 异动：{m.get('odds_movement')} | 预警：{sp.get('smart_money_signal')}\n"
+    p += f"【盘口与风控】{m.get('handicap_info')} | 异动：{m.get('odds_movement')} | 系统预警：{sp.get('smart_money_signal')}\n"
             
-    p += "\n【核心量化算力】\n"
-    p += f"V2高危比分预警: 2-2({ref_poi.get('v2_details',{}).get('p22','0%')}) 1-1({ref_poi.get('v2_details',{}).get('p11','0%')})\n"
-    p += f"融合胜率: 主{sp.get('home_win_pct',33):.1f}% 平{sp.get('draw_pct',33):.1f}% 客{sp.get('away_win_pct',33):.1f}%\n"
+    p += "\n【底层核心量化算力】\n"
+    p += f"系统V2高危比分预警: 2-2({ref_poi.get('v2_details',{}).get('p22','0%')}) 1-1({ref_poi.get('v2_details',{}).get('p11','0%')})\n"
+    p += f"底层融合胜率: 主{sp.get('home_win_pct',33):.1f}% 平{sp.get('draw_pct',33):.1f}% 客{sp.get('away_win_pct',33):.1f}%\n"
         
-    p += f"\n【期望值(EV)与仓位】\n"
+    p += f"\n【期望值(EV)与建议仓位】\n"
     p += f"主胜: EV={val_h['ev']}%, 仓位={val_h['kelly']}%\n平局: EV={val_d['ev']}%, 仓位={val_d['kelly']}%\n客胜: EV={val_a['ev']}%, 仓位={val_a['kelly']}%\n"
     
-    p += "\n综合以上数据，给出预测。只返回纯JSON格式，严禁Markdown修饰：\n"
-    p += '{"predicted_score":"2-1","home_win_pct":55,"draw_pct":25,"away_win_pct":20,"confidence":70,"result":"主胜","over_under_2_5":"大","both_score":"是","risk_level":"中","analysis":"结合伤停、V2比分预警及EV数据进行200字精辟解读","key_factors":["核心因素1"]}'
+    p += "\n【你的核心任务】\n"
+    p += "1. 深度纠偏：不要盲从底层量化胜率，请务必结合「伤停利空」和「水位异动（庄家真实意图）」来寻找冷门或诱盘。\n"
+    p += "2. 独立比分推演：结合基本面与V2比分预警，给出你独立判断的最终比分（ai_score）。\n"
+    p += "\n严格返回纯JSON格式，严禁任何Markdown修饰或额外解释字符：\n"
+    p += '{"ai_score":"1-1","home_win_pct":45,"draw_pct":30,"away_win_pct":25,"confidence":75,"result":"平局","analysis":"200字深度解析，必须说明你给出该ai_score的底层逻辑，以及伤停/水位如何影响了你的判断。","key_factors":["核心因素1","核心因素2"]}'
     return p
 
 def call_gpt(prompt):
     headers = {"Authorization": f"Bearer {GPT_API_KEY}", "Content-Type": "application/json"}
-    messages = [{"role": "system", "content": "你是一位管理千万级资金的足球量化精算师，必须严格返回纯JSON格式，禁止输出Markdown代码块。"}, {"role": "user", "content": prompt}]
+    messages = [{"role": "system", "content": "你是一位顶级足球量化精算师，必须严格返回纯JSON格式，禁止输出Markdown代码块。"}, {"role": "user", "content": prompt}]
     pool = ["gpt-5.4", "gpt-5.3-codex", "gpt-5.2", "gpt-5.1"]
     for model in pool:
         try:
@@ -58,7 +62,7 @@ def call_gemini(prompt):
             if "generateContent" in GEMINI_API_URL:
                 payload = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.3, "maxOutputTokens": 1500}}
             else:
-                messages = [{"role": "user", "content": "系统指令：你是一位管理千万级资金的足球量化精算师，必须严格返回纯JSON格式，禁止输出Markdown。\n\n" + prompt}]
+                messages = [{"role": "user", "content": "系统指令：你是一位顶级足球量化精算师，必须严格返回纯JSON格式，禁止输出Markdown。\n\n" + prompt}]
                 payload = {"model": model, "messages": messages, "temperature": 0.3, "max_tokens": 1500}
 
             r = requests.post(GEMINI_API_URL, headers=headers, json=payload, timeout=40)
@@ -82,7 +86,11 @@ def merge_all(gpt, gemini, stats, match_obj):
     t = hp + dp + ap
     if t > 0: hp, dp, ap = round(hp/t*100, 1), round(dp/t*100, 1), round(100-hp-dp, 1)
     result = max({"主胜": hp, "平局": dp, "客胜": ap}, key={"主胜": hp, "平局": dp, "客胜": ap}.get)
-    score = next((x.get("predicted_score") for x in ai_preds if x.get("predicted_score")), stats.get("predicted_score", "1-1"))
+    
+    # 🔥 核心拆分：系统比分与 AI 独立比分分离
+    system_score = stats.get("predicted_score", "1-1")
+    gpt_score = gpt.get("ai_score", "未预测") if isinstance(gpt, dict) else "未预测"
+    gemini_score = gemini.get("ai_score", "未预测") if isinstance(gemini, dict) else "未预测"
 
     val_h = calculate_value_bet(hp, match_obj.get("sp_home", 0))
     val_d = calculate_value_bet(dp, match_obj.get("sp_draw", 0))
@@ -90,10 +98,11 @@ def merge_all(gpt, gemini, stats, match_obj):
     v_tags = [f"{k} EV:+{v['ev']}% (仓位:{v['kelly']}%)" for k, v in zip(["主胜", "平局", "客胜"], [val_h, val_d, val_a]) if v and v.get("is_value")]
     
     return {
-        "predicted_score": score, "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap,
+        "predicted_score": system_score,  # 系统量化比分
+        "gpt_score": gpt_score,           # GPT 独立推演比分
+        "gemini_score": gemini_score,     # Gemini 独立推演比分
+        "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap,
         "confidence": cf, "result": result,
-        "over_under_2_5": "大" if stats.get("over_2_5", 50) > 55 else "小",
-        "both_score": "是" if stats.get("btts", 50) > 50 else "否", 
         "risk_level": "低" if cf >= 70 else ("中" if cf >= 50 else "高"),
         "gpt_analysis": gpt.get("analysis", "未响应") if isinstance(gpt, dict) else "未响应",
         "gemini_analysis": gemini.get("analysis", "未响应") if isinstance(gemini, dict) else "未响应",
@@ -137,5 +146,10 @@ def run_predictions(raw):
     t4 = select_top4(res)
     t4ids = [t["id"] for t in t4]
     for r in res: r["is_recommended"] = r["id"] in t4ids
-    res.sort(key=lambda x: x.get("match_num", ""))
+    
+    def extract_num(match_str):
+        nums = re.findall(r'\d+', match_str)
+        return int(nums[0]) if nums else 9999
+    res.sort(key=lambda x: extract_num(x.get("match_num", "")))
+    
     return res, t4
