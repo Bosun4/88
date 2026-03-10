@@ -246,31 +246,23 @@ class EnsemblePredictor:
 
     def predict(self, match, odds_data=None):
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
+        h_gf = float(hs.get("avg_goals_for", 1.3)); h_ga = float(hs.get("avg_goals_against", 1.1))
+        a_gf = float(ast.get("avg_goals_for", 1.1)); a_ga = float(ast.get("avg_goals_against", 1.3))
         
-        # 🔥 核心修正：引入“赔率反推 xG”引擎，彻底粉碎随机生成的垃圾数据！
         sp_h = float(match.get("sp_home", 0))
-        sp_d = float(match.get("sp_draw", 0))
         sp_a = float(match.get("sp_away", 0))
         
-        # 如果问彩提供了真实的欧赔，直接通过庄家赔率反推真实攻防实力 (无视假战绩)
-        if sp_h > 1.0 and sp_a > 1.0 and sp_d > 1.0:
-            prob_h, prob_d, prob_a = 1/sp_h, 1/sp_d, 1/sp_a
-            margin = prob_h + prob_d + prob_a
-            prob_h /= margin; prob_d /= margin; prob_a /= margin
-            
-            # 根据平局概率反推总进球数，平局概率越低，总进球越高
-            expected_total = 2.5 + (0.25 - prob_d) * 6.0
-            expected_total = max(1.5, min(expected_total, 4.0))
-            
-            # 按胜率分配进球
-            h_gf = expected_total * (prob_h / (prob_h + prob_a))
-            a_gf = expected_total * (prob_a / (prob_h + prob_a))
-            h_ga = a_gf  # 预期失球即为对手的预期进球
-            a_ga = h_gf
-        else:
-            # 只有在万不得已没有赔率时，才用纸面数据
-            h_gf, h_ga = float(hs.get("avg_goals_for", 1.3)), float(hs.get("avg_goals_against", 1.1))
-            a_gf, a_ga = float(ast.get("avg_goals_for", 1.1)), float(ast.get("avg_goals_against", 1.3))
+        if sp_h > 1.0 and sp_a > 1.0:
+            implied_h = 1 / sp_h
+            implied_a = 1 / sp_a
+            if implied_a > implied_h and h_gf >= a_gf:
+                ratio = math.sqrt(sp_h / sp_a) 
+                a_gf = max(a_gf, h_gf * ratio * 1.15) 
+                h_gf = h_gf / ratio 
+            elif implied_h > implied_a and a_gf >= h_gf:
+                ratio = math.sqrt(sp_a / sp_h)
+                h_gf = max(h_gf, a_gf * ratio * 1.15)
+                a_gf = a_gf / ratio
                 
         poi = self.poisson.predict(h_gf, h_ga, a_gf, a_ga)
         dc = self.dixon.predict(h_gf, h_ga, a_gf, a_ga)
