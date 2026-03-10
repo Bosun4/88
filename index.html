@@ -9,19 +9,15 @@
     <style>
         body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #0B1120; color: #f8fafc; }
         .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
-        .gradient-text { background: linear-gradient(to right, #60a5fa, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .top4-card { background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%); border-top: 3px solid #f59e0b; }
         .tab-active { border-bottom: 2px solid #3b82f6; color: #60a5fa; font-weight: 600; }
         .tab-inactive { color: #64748b; }
-        .prob-bar-h { background: linear-gradient(90deg, #3b82f6, #2563eb); }
-        .prob-bar-d { background: #64748b; }
-        .prob-bar-a { background: linear-gradient(90deg, #f43f5e, #e11d48); }
-        
-        /* 滚动条美化 */
+        .prob-bar-h { background: linear-gradient(90deg, #10b981, #059669); }
+        .prob-bar-d { background: #eab308; }
+        .prob-bar-a { background: linear-gradient(90deg, #3b82f6, #2563eb); }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0B1120; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -41,17 +37,13 @@
 
     <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-6 space-y-8">
         
-        <section class="grid grid-cols-2 md:grid-cols-4 gap-4" id="dashboard">
-            </section>
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4" id="dashboard"></section>
 
         <section>
             <div class="flex items-center gap-2 mb-4">
-                <span class="text-xl font-bold text-white flex items-center gap-2">
-                    🎯 精选推荐 <span class="bg-orange-500 text-white text-xs px-2 py-0.5 rounded font-black">TOP 4</span>
-                </span>
+                <span class="text-xl font-bold text-white flex items-center gap-2">🎯 精选推荐 <span class="bg-orange-500 text-white text-xs px-2 py-0.5 rounded font-black">TOP 4</span></span>
             </div>
-            <div id="top4-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                </div>
+            <div id="top4-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </section>
 
         <section class="pt-4">
@@ -60,10 +52,7 @@
                 <button onclick="switchTab('today')" id="tab-today" class="tab-active px-6 py-3 whitespace-nowrap transition-colors">今日赛事</button>
                 <button onclick="switchTab('tomorrow')" id="tab-tomorrow" class="tab-inactive px-6 py-3 whitespace-nowrap transition-colors">明日赛事</button>
             </div>
-
-            <div id="matches-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="col-span-full text-center py-10 text-slate-500">正在进行高维矩阵演算...</div>
-            </div>
+            <div id="matches-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
         </section>
     </main>
 
@@ -71,7 +60,6 @@
         let allData = null;
         let currentTab = 'today';
 
-        // 初始化数据
         fetch('data/predictions.json')
             .then(res => res.json())
             .then(data => {
@@ -82,27 +70,19 @@
                 renderMatches(currentTab);
             })
             .catch(err => {
-                document.getElementById('matches-container').innerHTML = `<div class="col-span-full text-red-400 text-center py-10">获取数据失败，请检查后端引擎是否正常运行。</div>`;
-                console.error(err);
+                document.getElementById('matches-container').innerHTML = `<div class="col-span-full text-red-400 text-center py-10">获取数据失败，请检查后端运行。</div>`;
             });
 
-        // 切换日期标签
         function switchTab(tab) {
             currentTab = tab;
             ['yesterday', 'today', 'tomorrow'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
-                if(t === tab) {
-                    el.classList.add('tab-active');
-                    el.classList.remove('tab-inactive');
-                } else {
-                    el.classList.add('tab-inactive');
-                    el.classList.remove('tab-active');
-                }
+                if(t === tab) { el.classList.add('tab-active'); el.classList.remove('tab-inactive'); } 
+                else { el.classList.add('tab-inactive'); el.classList.remove('tab-active'); }
             });
             renderMatches(tab);
         }
 
-        // 渲染顶部数据大屏
         function renderDashboard() {
             let total = 0; let highConf = 0; let consensusCount = 0; let confSum = 0;
             ['yesterday', 'today', 'tomorrow'].forEach(day => {
@@ -110,7 +90,6 @@
                 total += ms.length;
                 ms.forEach(m => {
                     confSum += m.prediction.confidence;
-                    if(m.prediction.confidence > 75) highConf++;
                     if(m.prediction.model_consensus >= 3) consensusCount++;
                 });
             });
@@ -118,248 +97,100 @@
             const top4Count = allData.top4 ? allData.top4.length : 0;
 
             document.getElementById('dashboard').innerHTML = `
-                <div class="glass-panel p-4 rounded-2xl flex flex-col justify-center items-center relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-blue-500/10 rounded-full blur-xl"></div>
-                    <span class="text-3xl font-black text-orange-400">${total}</span>
-                    <span class="text-xs text-slate-400 mt-1">竞彩总场次</span>
-                </div>
-                <div class="glass-panel p-4 rounded-2xl flex flex-col justify-center items-center relative overflow-hidden">
-                    <div class="absolute -left-4 -bottom-4 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl"></div>
-                    <span class="text-3xl font-black text-emerald-400">${top4Count}</span>
-                    <span class="text-xs text-slate-400 mt-1">精选推荐</span>
-                </div>
-                <div class="glass-panel p-4 rounded-2xl flex flex-col justify-center items-center relative overflow-hidden">
-                    <div class="absolute right-0 bottom-0 w-16 h-16 bg-purple-500/10 rounded-full blur-xl"></div>
-                    <span class="text-3xl font-black text-purple-400">${consensusCount}</span>
-                    <span class="text-xs text-slate-400 mt-1">高共识场次</span>
-                </div>
-                <div class="glass-panel p-4 rounded-2xl flex flex-col justify-center items-center relative overflow-hidden">
-                    <div class="absolute left-0 top-0 w-16 h-16 bg-pink-500/10 rounded-full blur-xl"></div>
-                    <span class="text-3xl font-black text-pink-400">${avgConf}%</span>
-                    <span class="text-xs text-slate-400 mt-1">全局平均置信</span>
-                </div>
+                <div class="glass-panel p-4 rounded-2xl flex flex-col justify-center items-center"><span class="text-3xl font-black text-orange-400">${total}</span><span class="text-xs text-slate-400 mt-1">竞彩总场次</span></div>
+                <div class="glass-panel p-4 rounded-2xl flex flex-col justify-center items-center"><span class="text-3xl font-black text-emerald-400">${top4Count}</span><span class="text-xs text-slate-400 mt-1">精选推荐</span></div>
+                <div class="glass-panel p-4 rounded-2xl flex flex-col justify-center items-center"><span class="text-3xl font-black text-purple-400">${consensusCount}</span><span class="text-xs text-slate-400 mt-1">高共识场次</span></div>
+                <div class="glass-panel p-4 rounded-2xl flex flex-col justify-center items-center"><span class="text-3xl font-black text-pink-400">${avgConf}%</span><span class="text-xs text-slate-400 mt-1">平均置信度</span></div>
             `;
         }
 
-        // 渲染精美 TOP 4 卡片 (还原图7风格)
         function renderTop4(top4List) {
             const container = document.getElementById('top4-container');
-            if (!top4List || top4List.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-slate-500 text-sm text-center py-4 glass-panel rounded-xl">今日暂无高期望值赛事推荐</div>`;
-                return;
-            }
-            
+            if (!top4List || top4List.length === 0) return container.innerHTML = `<div class="col-span-full text-slate-500 text-sm text-center py-4 glass-panel rounded-xl">今日暂无赛事</div>`;
             container.innerHTML = top4List.map(match => {
                 const p = match.prediction;
-                const poiScore = p.poisson?.predicted_score || "?-?";
-                const isConsensus = p.model_consensus >= 3;
-                
+                const poiScore = p.refined_poisson?.predicted_score || "?-?";
                 return `
                 <div class="top4-card rounded-2xl p-5 shadow-lg relative overflow-hidden">
-                    <div class="absolute right-0 top-0 w-32 h-32 bg-orange-500/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
-                    
-                    <div class="flex justify-between items-center mb-4 relative z-10">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-bold text-slate-300">${match.league}</span>
-                            <span class="text-xs text-slate-500">${match.match_num}</span>
-                        </div>
-                        <div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white font-black text-xs shadow-md shadow-orange-500/40">
-                            ${match.rank}
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between items-center mb-5 relative z-10">
-                        <div class="w-2/5 text-left font-bold text-lg truncate">${match.home_team}</div>
-                        <div class="text-xs text-slate-600 font-black italic">VS</div>
-                        <div class="w-2/5 text-right font-bold text-lg truncate">${match.away_team}</div>
-                    </div>
-                    
+                    <div class="flex justify-between items-center mb-4 relative z-10"><div class="flex items-center gap-2"><span class="text-xs font-bold text-slate-300">${match.league}</span><span class="text-xs text-slate-500">${match.match_num}</span></div><div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white font-black text-xs">${match.rank}</div></div>
+                    <div class="flex justify-between items-center mb-5 relative z-10"><div class="w-2/5 text-left font-bold text-lg truncate">${match.home_team}</div><div class="text-xs text-slate-600 font-black italic">VS</div><div class="w-2/5 text-right font-bold text-lg truncate">${match.away_team}</div></div>
                     <div class="grid grid-cols-3 gap-2 mb-4 relative z-10">
-                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50">
-                            <div class="text-xs text-slate-500 mb-1">比分</div>
-                            <div class="font-black text-emerald-400 text-lg">${p.predicted_score}</div>
-                        </div>
-                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50">
-                            <div class="text-xs text-slate-500 mb-1">结果</div>
-                            <div class="font-bold text-white text-base">${p.result}</div>
-                        </div>
-                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50">
-                            <div class="text-xs text-slate-500 mb-1">置信度</div>
-                            <div class="font-bold text-blue-400 text-base">${p.confidence}%</div>
-                        </div>
+                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-xs text-slate-500 mb-1">比分</div><div class="font-black text-emerald-400 text-lg">${p.predicted_score}</div></div>
+                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-xs text-slate-500 mb-1">结果</div><div class="font-bold text-white text-base">${p.result}</div></div>
+                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-xs text-slate-500 mb-1">置信</div><div class="font-bold text-blue-400 text-base">${p.confidence}%</div></div>
                     </div>
-                    
-                    <div class="flex items-center gap-2 relative z-10">
-                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded border border-slate-700">泊松: ${poiScore}</span>
-                        <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded border border-slate-700">O2.5: ${p.over_under_2_5 === '大' ? '>55%' : '<50%'}</span>
-                        ${isConsensus ? `<span class="text-[10px] bg-emerald-900/40 text-emerald-400 px-2 py-1 rounded border border-emerald-800/50 flex items-center gap-1">✅ 共识</span>` : ''}
-                    </div>
-                </div>
-                `;
+                    <div class="flex items-center gap-2 relative z-10"><span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded border border-slate-700">V2比分: ${poiScore}</span>${p.model_consensus >= 3 ? `<span class="text-[10px] bg-emerald-900/40 text-emerald-400 px-2 py-1 rounded border border-emerald-800/50 flex items-center gap-1">✅ 共识</span>` : ''}</div>
+                </div>`;
             }).join('');
         }
 
-        // 渲染高密度赛事列表 (融合图4和图5)
         function renderMatches(tab) {
             const container = document.getElementById('matches-container');
             const matches = allData.matches[tab] || [];
-
-            if (matches.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 glass-panel rounded-2xl text-slate-500">该日期暂无赛事数据</div>`;
-                return;
-            }
+            if (matches.length === 0) return container.innerHTML = `<div class="col-span-full text-center py-12 glass-panel rounded-2xl text-slate-500">该日期无赛事</div>`;
 
             container.innerHTML = matches.map(match => {
                 const p = match.prediction;
-                const hs = match.home_stats || {};
-                const as = match.away_stats || {};
+                const hp = p.home_win_pct; const dp = p.draw_pct; const ap = p.away_win_pct;
                 
-                // 概率条
-                const hp = p.home_win_pct;
-                const dp = p.draw_pct;
-                const ap = p.away_win_pct;
-                
-                // 预警信号
                 let signalHtml = '';
                 if(p.smart_money_signal && p.smart_money_signal !== "正常" && p.smart_money_signal !== "盘口与情绪正常") {
-                    signalHtml = `<div class="bg-red-950/40 border border-red-800/50 text-red-400 text-xs px-3 py-2 rounded mb-3 flex items-start gap-2">
-                        <span>🚨</span><span>${p.smart_money_signal}</span>
-                    </div>`;
+                    signalHtml = `<div class="bg-red-950/40 border border-red-800/50 text-red-400 text-xs px-3 py-2 rounded mb-3 flex items-start gap-2"><span>🚨</span><span>${p.smart_money_signal}</span></div>`;
                 }
-
-                // 凯利 EV 标签
                 const evTags = p.value_bets_summary.map(tag => `<span class="bg-emerald-900/40 text-emerald-400 text-xs px-2 py-1 rounded border border-emerald-700/50 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>${tag}</span>`).join('');
 
-                // 泊松前五比分 (如果有)
-                let topScoresHtml = '';
-                if (p.poisson && p.poisson.top_scores && p.poisson.top_scores.length > 0) {
-                    topScoresHtml = p.poisson.top_scores.slice(0,4).map(s => 
-                        `<span class="text-[10px] bg-slate-800 border border-slate-700 text-slate-300 px-1.5 py-0.5 rounded">${s.score} ${s.prob}%</span>`
-                    ).join('');
+                // 🔥 新增：V2 专属渲染板块
+                let v2Html = '';
+                if (p.refined_poisson) {
+                    const v2 = p.refined_poisson;
+                    const dts = v2.v2_details || {};
+                    v2Html = `
+                    <details class="group bg-slate-800/40 rounded-lg border border-slate-700/50 mt-2">
+                        <summary class="text-xs font-medium text-slate-300 p-3 cursor-pointer flex justify-between items-center hover:bg-slate-800/60 transition-colors">
+                            <span class="flex items-center gap-2"><span class="text-orange-400">🎯</span>V2 赔率共振精细化模型</span>
+                            <span class="transition group-open:rotate-180 text-slate-500">▼</span>
+                        </summary>
+                        <div class="p-3 pt-0 border-t border-slate-700/50 mt-1">
+                            <div class="grid grid-cols-4 gap-2 mt-2">
+                                <div class="bg-slate-900 rounded p-2 text-center border border-slate-700"><div class="text-[10px] text-slate-500">平 2-2</div><div class="text-xs font-bold text-white">${dts.p22||'-'}</div></div>
+                                <div class="bg-slate-900 rounded p-2 text-center border border-slate-700"><div class="text-[10px] text-slate-500">平 1-1</div><div class="text-xs font-bold text-white">${dts.p11||'-'}</div></div>
+                                <div class="bg-slate-900 rounded p-2 text-center border border-slate-700"><div class="text-[10px] text-slate-500">胜 2-1</div><div class="text-xs font-bold text-white">${dts.p21||'-'}</div></div>
+                                <div class="bg-slate-900 rounded p-2 text-center border border-slate-700"><div class="text-[10px] text-slate-500">负 1-2</div><div class="text-xs font-bold text-white">${dts.p12||'-'}</div></div>
+                            </div>
+                        </div>
+                    </details>
+                    `;
                 }
 
                 return `
                 <div class="glass-panel rounded-2xl overflow-hidden flex flex-col">
-                    
                     <div class="bg-slate-800/50 px-4 py-3 border-b border-slate-700/50 flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-bold text-yellow-500">${match.league} ${match.match_num}</span>
-                            ${match.is_recommended ? `<span class="bg-orange-500 text-white text-[10px] px-1.5 rounded font-bold">推荐</span>` : ''}
-                        </div>
+                        <div class="flex items-center gap-2"><span class="text-xs font-bold text-yellow-500">${match.league} ${match.match_num}</span>${match.is_recommended ? `<span class="bg-orange-500 text-white text-[10px] px-1.5 rounded font-bold">推荐</span>` : ''}</div>
                         <div class="text-xs text-slate-500">${match.match_time || '00:00'}</div>
                     </div>
-
                     <div class="p-4 flex-grow">
                         <div class="flex items-center justify-between mb-4">
-                            <div class="w-1/3 text-right">
-                                <div class="font-bold text-base md:text-lg">${match.home_team}</div>
-                                <div class="text-[10px] text-slate-500">主队</div>
-                            </div>
-                            <div class="w-1/3 flex flex-col items-center">
-                                <div class="text-2xl md:text-3xl font-black text-white bg-slate-800 px-3 py-1 rounded-lg border border-slate-700 shadow-inner">${p.predicted_score}</div>
-                                <div class="text-[10px] font-bold mt-1 px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">${p.result}</div>
-                            </div>
-                            <div class="w-1/3 text-left">
-                                <div class="font-bold text-base md:text-lg">${match.away_team}</div>
-                                <div class="text-[10px] text-slate-500">客队</div>
-                            </div>
+                            <div class="w-1/3 text-right"><div class="font-bold text-base md:text-lg">${match.home_team}</div></div>
+                            <div class="w-1/3 flex flex-col items-center"><div class="text-2xl md:text-3xl font-black text-white bg-slate-800 px-3 py-1 rounded-lg border border-slate-700 shadow-inner">${p.predicted_score}</div><div class="text-[10px] font-bold mt-1 px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">${p.result}</div></div>
+                            <div class="w-1/3 text-left"><div class="font-bold text-base md:text-lg">${match.away_team}</div></div>
                         </div>
-
                         <div class="mb-4 bg-slate-900/50 p-3 rounded-xl border border-slate-800/50">
-                            <div class="flex justify-between text-[11px] font-medium text-slate-400 mb-1.5 px-1">
-                                <span>主胜 ${hp}%</span>
-                                <span>平局 ${dp}%</span>
-                                <span>客胜 ${ap}%</span>
-                            </div>
-                            <div class="w-full bg-slate-800 rounded-full h-1.5 flex overflow-hidden">
-                                <div class="prob-bar-h h-full" style="width: ${hp}%"></div>
-                                <div class="prob-bar-d h-full" style="width: ${dp}%"></div>
-                                <div class="prob-bar-a h-full" style="width: ${ap}%"></div>
-                            </div>
+                            <div class="flex justify-between text-[11px] font-medium mb-1.5 px-1"><span class="text-emerald-400">主 ${hp}%</span><span class="text-yellow-500">平 ${dp}%</span><span class="text-blue-400">客 ${ap}%</span></div>
+                            <div class="w-full bg-slate-800 rounded-full h-2 flex overflow-hidden"><div class="prob-bar-h h-full" style="width: ${hp}%"></div><div class="prob-bar-d h-full" style="width: ${dp}%"></div><div class="prob-bar-a h-full" style="width: ${ap}%"></div></div>
                         </div>
-
-                        <div class="grid grid-cols-4 gap-2 mb-4">
-                            <div class="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/30">
-                                <div class="text-[10px] text-slate-500 mb-0.5">置信度</div>
-                                <div class="text-sm font-bold text-white">${p.confidence}%</div>
-                            </div>
-                            <div class="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/30">
-                                <div class="text-[10px] text-slate-500 mb-0.5">大2.5球</div>
-                                <div class="text-sm font-bold ${p.over_under_2_5 === '大' ? 'text-rose-400' : 'text-emerald-400'}">${p.over_under_2_5}</div>
-                            </div>
-                            <div class="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/30">
-                                <div class="text-[10px] text-slate-500 mb-0.5">双方进球</div>
-                                <div class="text-sm font-bold text-white">${p.both_score}</div>
-                            </div>
-                            <div class="bg-slate-800/50 rounded-lg p-2 text-center border border-slate-700/30">
-                                <div class="text-[10px] text-slate-500 mb-0.5">风控等级</div>
-                                <div class="text-sm font-bold ${p.risk_level === '低' ? 'text-emerald-400' : 'text-orange-400'}">${p.risk_level}</div>
-                            </div>
-                        </div>
-
+                        
                         ${signalHtml}
                         ${evTags ? `<div class="flex flex-wrap gap-2 mb-4">${evTags}</div>` : ''}
+                        
+                        ${v2Html}
 
-                        <div class="space-y-2 mb-4">
-                            <details class="group bg-slate-800/40 rounded-lg border border-slate-700/50">
-                                <summary class="text-xs font-medium text-slate-300 p-3 cursor-pointer flex justify-between items-center hover:bg-slate-800/60 transition-colors">
-                                    <span class="flex items-center gap-2"><span class="text-blue-400">📐</span>泊松分布 & ELO模型</span>
-                                    <span class="transition group-open:rotate-180 text-slate-500">▼</span>
-                                </summary>
-                                <div class="p-3 pt-0 border-t border-slate-700/50 mt-1">
-                                    <div class="flex justify-between text-xs text-slate-400 mb-1 mt-2">
-                                        <span>xG 期望进球</span>
-                                        <span class="font-mono">${p.poisson?.home_expected_goals || '?'} - ${p.poisson?.away_expected_goals || '?'}</span>
-                                    </div>
-                                    <div class="flex justify-between text-xs text-slate-400 mb-2">
-                                        <span>ELO 战力差值</span>
-                                        <span class="font-mono text-emerald-400">${p.elo?.elo_diff > 0 ? '+'+p.elo?.elo_diff : p.elo?.elo_diff || '未知'}</span>
-                                    </div>
-                                    <div class="text-[10px] text-slate-500 mb-1 mt-2">比分概率 TOP 4</div>
-                                    <div class="flex flex-wrap gap-1">
-                                        ${topScoresHtml || '<span class="text-xs text-slate-600">暂无数据</span>'}
-                                    </div>
-                                </div>
-                            </details>
-
-                            <details class="group bg-slate-800/40 rounded-lg border border-slate-700/50">
-                                <summary class="text-xs font-medium text-slate-300 p-3 cursor-pointer flex justify-between items-center hover:bg-slate-800/60 transition-colors">
-                                    <span class="flex items-center gap-2"><span class="text-orange-400">🔥</span>状态与基本面战绩</span>
-                                    <span class="transition group-open:rotate-180 text-slate-500">▼</span>
-                                </summary>
-                                <div class="p-3 pt-0 border-t border-slate-700/50 mt-1">
-                                    <div class="grid grid-cols-2 gap-4 mt-2">
-                                        <div>
-                                            <div class="text-[10px] text-slate-500 mb-1">主队战绩</div>
-                                            <div class="text-xs font-mono text-slate-300">${hs.wins || 0}W ${hs.draws || 0}D ${hs.losses || 0}L</div>
-                                            <div class="text-[10px] text-slate-500 mt-1">均进/失: ${hs.avg_goals_for || 0} / ${hs.avg_goals_against || 0}</div>
-                                            <div class="text-[10px] text-slate-500">动量: <span class="${p.home_form?.score > 60 ? 'text-rose-400' : 'text-slate-400'}">${p.home_form?.score || 50}分</span></div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-[10px] text-slate-500 mb-1">客队战绩</div>
-                                            <div class="text-xs font-mono text-slate-300">${as.wins || 0}W ${as.draws || 0}D ${as.losses || 0}L</div>
-                                            <div class="text-[10px] text-slate-500 mt-1">均进/失: ${as.avg_goals_for || 0} / ${as.avg_goals_against || 0}</div>
-                                            <div class="text-[10px] text-slate-500">动量: <span class="${p.away_form?.score > 60 ? 'text-rose-400' : 'text-slate-400'}">${p.away_form?.score || 50}分</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </details>
+                        <div class="bg-blue-950/20 rounded-lg border border-blue-900/50 p-3 mt-4">
+                            <div class="flex items-center gap-2 mb-2"><span class="w-1.5 h-4 bg-blue-500 rounded-full"></span><span class="text-xs font-bold text-blue-400">🤖 GPT x Gemini 双核复盘</span></div>
+                            <p class="text-xs text-slate-400 leading-relaxed mb-2 pb-2 border-b border-slate-700/50"><strong class="text-blue-300">GPT：</strong>${p.gpt_analysis}</p>
+                            <p class="text-xs text-slate-400 leading-relaxed"><strong class="text-purple-300">Gemini：</strong>${p.gemini_analysis}</p>
                         </div>
-
-                        <div class="bg-blue-900/10 rounded-lg border border-blue-800/30 p-3 mt-4">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="w-1.5 h-4 bg-blue-500 rounded-full"></span>
-                                <span class="text-xs font-bold text-blue-400">AI 精算师复盘</span>
-                                ${p.model_consensus >= 3 ? `<span class="ml-auto text-[10px] bg-emerald-900/50 text-emerald-400 px-1.5 py-0.5 rounded">全模型共识</span>` : ''}
-                            </div>
-                            <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 hover:line-clamp-none transition-all duration-300 cursor-pointer" title="点击查看全部">
-                                ${p.gpt_analysis !== "未响应" ? p.gpt_analysis : p.gemini_analysis}
-                            </p>
-                        </div>
-
                     </div>
-                </div>
-                `;
+                </div>`;
             }).join('');
         }
     </script>
