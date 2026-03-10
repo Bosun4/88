@@ -14,28 +14,25 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
-def build_prompt(m, sp, val_h, val_d, val_a):
+# 🔥 核心修改 1：AI 提示词彻底“断奶”，不给它看任何本地算出的概率，让它独立思考！
+def build_prompt(m):
     h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
     intel = m.get("intelligence", {})
-    ref_poi = sp.get("refined_poisson", {})
+    hs, ast = m.get("home_stats", {}), m.get("away_stats", {})
     
-    p = "作为掌管亿万资金的顶级量化足球投研专家，请基于以下【量化矩阵数据】与【独家基本面情报】进行独立推演。\n\n"
-    p += f"【赛事】{lg} | {h} vs {a}\n"
+    p = "你是一位独立思考的顶级足球投研专家。请仅基于以下【基本面数据】与【独家情报】，利用你自身的知识库进行推演。\n\n"
+    p += f"【赛事对阵】{lg} | {h} vs {a}\n"
     p += f"【伤停与利空】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
-    p += f"【盘口与风控】{m.get('handicap_info')} | 异动：{m.get('odds_movement')} | 系统预警：{sp.get('smart_money_signal')}\n"
-            
-    p += "\n【底层核心量化算力】\n"
-    p += f"系统V2高危比分预警: 2-2({ref_poi.get('v2_details',{}).get('p22','0%')}) 1-1({ref_poi.get('v2_details',{}).get('p11','0%')})\n"
-    p += f"底层融合胜率: 主{sp.get('home_win_pct',33):.1f}% 平{sp.get('draw_pct',33):.1f}% 客{sp.get('away_win_pct',33):.1f}%\n"
-        
-    p += f"\n【期望值(EV)与建议仓位】\n"
-    p += f"主胜: EV={val_h['ev']}%, 仓位={val_h['kelly']}%\n平局: EV={val_d['ev']}%, 仓位={val_d['kelly']}%\n客胜: EV={val_a['ev']}%, 仓位={val_a['kelly']}%\n"
+    p += f"【盘口与异动】{m.get('handicap_info')} | 水位：{m.get('odds_movement')}\n"
+    p += f"【专家与研报】{m.get('expert_intro', '暂无')} | {m.get('base_face', '暂无')[:250]}\n"
     
-    p += "\n【你的核心任务】\n"
-    p += "1. 深度纠偏：不要盲从底层量化胜率，请务必结合「伤停利空」和「水位异动（庄家真实意图）」来寻找冷门或诱盘。\n"
-    p += "2. 独立比分推演：结合基本面与V2比分预警，给出你独立判断的最终比分（ai_score）。\n"
-    p += "\n严格返回纯JSON格式，严禁任何Markdown修饰或额外解释字符：\n"
-    p += '{"ai_score":"1-1","home_win_pct":45,"draw_pct":30,"away_win_pct":25,"confidence":75,"result":"平局","analysis":"200字深度解析，必须说明你给出该ai_score的底层逻辑，以及伤停/水位如何影响了你的判断。","key_factors":["核心因素1","核心因素2"]}'
+    if hs: p += f"【主队近况】{hs.get('played','?')}场{hs.get('wins','?')}胜{hs.get('draws','?')}平，进{hs.get('goals_for','?')}失{hs.get('goals_against','?')}\n"
+    if ast: p += f"【客队近况】{ast.get('played','?')}场{ast.get('wins','?')}胜{ast.get('draws','?')}平，进{ast.get('goals_for','?')}失{ast.get('goals_against','?')}\n"
+    
+    p += "\n【你的任务】\n"
+    p += "不要受外界干扰，利用你对球队实力的认知、伤停的致命程度以及庄家水位的暗示，给出你认为最合理的独立胜率和比分。\n"
+    p += "严格返回纯JSON格式，严禁任何Markdown修饰或额外字符：\n"
+    p += '{"ai_score":"1-1","ai_home_pct":40,"ai_draw_pct":30,"ai_away_pct":30,"analysis":"200字独立深度解析，必须说明伤停或庄家异动是如何影响你的判断的。"}'
     return p
 
 def call_gpt(prompt):
@@ -73,39 +70,46 @@ def call_gemini(prompt):
     return None
 
 def merge_all(gpt, gemini, stats, match_obj):
-    ai_preds = [x for x in [gpt, gemini] if isinstance(x, dict)]
-    hp, dp, ap, cf = stats["home_win_pct"], stats["draw_pct"], stats["away_win_pct"], stats["confidence"]
+    # 🔥 核心修改 2：彻底阻断概率混合！主进度条和EV计算【完全由本地纯数学模型接管】
+    sys_hp = stats.get("home_win_pct", 33)
+    sys_dp = stats.get("draw_pct", 33)
+    sys_ap = stats.get("away_win_pct", 33)
+    sys_cf = stats.get("confidence", 50)
+    sys_score = stats.get("predicted_score", "1-1")
     
-    if ai_preds:
-        hp = (sum(x.get("home_win_pct", 33) for x in ai_preds) / len(ai_preds)) * 0.45 + hp * 0.55 
-        dp = (sum(x.get("draw_pct", 33) for x in ai_preds) / len(ai_preds)) * 0.45 + dp * 0.55
-        ap = (sum(x.get("away_win_pct", 33) for x in ai_preds) / len(ai_preds)) * 0.45 + ap * 0.55
-        cf = (sum(x.get("confidence", 50) for x in ai_preds) / len(ai_preds)) * 0.5 + cf * 0.5
-        
-    t = hp + dp + ap
-    if t > 0: hp, dp, ap = round(hp/t*100, 1), round(dp/t*100, 1), round(100-hp-dp, 1)
-    result = max({"主胜": hp, "平局": dp, "客胜": ap}, key={"主胜": hp, "平局": dp, "客胜": ap}.get)
-    
-    system_score = stats.get("predicted_score", "1-1")
-    gpt_score = gpt.get("ai_score", "未预测") if isinstance(gpt, dict) else "未预测"
-    gemini_score = gemini.get("ai_score", "未预测") if isinstance(gemini, dict) else "未预测"
+    result = max({"主胜": sys_hp, "平局": sys_dp, "客胜": sys_ap}, key={"主胜": sys_hp, "平局": sys_dp, "客胜": sys_ap}.get)
 
-    val_h = calculate_value_bet(hp, match_obj.get("sp_home", 0))
-    val_d = calculate_value_bet(dp, match_obj.get("sp_draw", 0))
-    val_a = calculate_value_bet(ap, match_obj.get("sp_away", 0))
+    val_h = calculate_value_bet(sys_hp, match_obj.get("sp_home", 0))
+    val_d = calculate_value_bet(sys_dp, match_obj.get("sp_draw", 0))
+    val_a = calculate_value_bet(sys_ap, match_obj.get("sp_away", 0))
     v_tags = [f"{k} EV:+{v['ev']}% (仓位:{v['kelly']}%)" for k, v in zip(["主胜", "平局", "客胜"], [val_h, val_d, val_a]) if v and v.get("is_value")]
     
+    # 提取 AI 的独立推演结果打包传给前端
+    gpt_pred = gpt if isinstance(gpt, dict) else {}
+    gemini_pred = gemini if isinstance(gemini, dict) else {}
+    
     return {
-        "predicted_score": system_score,
-        "gpt_score": gpt_score,
-        "gemini_score": gemini_score,
-        "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap,
-        "confidence": cf, "result": result,
-        "risk_level": "低" if cf >= 70 else ("中" if cf >= 50 else "高"),
-        "gpt_analysis": gpt.get("analysis", "未响应") if isinstance(gpt, dict) else "未响应",
-        "gemini_analysis": gemini.get("analysis", "未响应") if isinstance(gemini, dict) else "未响应",
+        "predicted_score": sys_score,
+        "home_win_pct": sys_hp, "draw_pct": sys_dp, "away_win_pct": sys_ap,
+        "confidence": sys_cf, "result": result,
+        "risk_level": "低" if sys_cf >= 70 else ("中" if sys_cf >= 50 else "高"),
+        
+        # AI 独立预测舱
+        "gpt_score": gpt_pred.get("ai_score", "未预测"),
+        "gpt_hp": gpt_pred.get("ai_home_pct", "-"),
+        "gpt_dp": gpt_pred.get("ai_draw_pct", "-"),
+        "gpt_ap": gpt_pred.get("ai_away_pct", "-"),
+        "gpt_analysis": gpt_pred.get("analysis", "未响应"),
+        
+        "gemini_score": gemini_pred.get("ai_score", "未预测"),
+        "gemini_hp": gemini_pred.get("ai_home_pct", "-"),
+        "gemini_dp": gemini_pred.get("ai_draw_pct", "-"),
+        "gemini_ap": gemini_pred.get("ai_away_pct", "-"),
+        "gemini_analysis": gemini_pred.get("analysis", "未响应"),
+        
         "smart_money_signal": stats.get("smart_money_signal", "正常"),
         "value_bets_summary": v_tags,
+        "over_under_2_5": stats.get("over_2_5", "小"), "both_score": stats.get("btts", "否"),
         
         "poisson": {**stats.get("poisson", {}), "home_expected_goals": stats.get("poisson", {}).get("home_xg", "?"), "away_expected_goals": stats.get("poisson", {}).get("away_xg", "?")},
         "refined_poisson": stats.get("refined_poisson", {}), 
@@ -129,11 +133,9 @@ def run_predictions(raw):
     ms = raw.get("matches", []); res = []
     for i, m in enumerate(ms):
         sp = ensemble.predict(m, {})
-        v_h = calculate_value_bet(sp.get("home_win_pct",33), m.get("sp_home",0))
-        v_d = calculate_value_bet(sp.get("draw_pct",33), m.get("sp_draw",0))
-        v_a = calculate_value_bet(sp.get("away_win_pct",33), m.get("sp_away",0))
         
-        prompt = build_prompt(m, sp, v_h, v_d, v_a)
+        # 将赛事仅包含客观情报，直接发给 AI 独立预测
+        prompt = build_prompt(m)
         gp = call_gpt(prompt)
         time.sleep(1)
         gm = call_gemini(prompt)
@@ -145,7 +147,6 @@ def run_predictions(raw):
     t4ids = [t["id"] for t in t4]
     for r in res: r["is_recommended"] = r["id"] in t4ids
     
-    # 🔥 核心修正：绝对按顺序排列 (从 周一001 开始排)
     def extract_num(match_str):
         nums = re.findall(r'\d+', match_str)
         return int(nums[0]) if nums else 9999
