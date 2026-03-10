@@ -38,11 +38,21 @@ def scrape_wencai_jczq(date_str):
     try:
         r = requests.get(url, headers=headers, timeout=15)
         data = r.json()
-        match_list = data.get("data", {}).get("matches", {}).get("1", [])
-        print(f"  ✅ 发现 {len(match_list)} 场竞彩足球赛事")
+        
+        # 提取所有比赛列表
+        match_dict = data.get("data", {}).get("matches", {})
+        match_list = []
+        for key in match_dict:
+            if isinstance(match_dict[key], list):
+                match_list.extend(match_dict[key])
 
         for item in match_list:
             try:
+                # 🔥 双重封杀篮球：只保留明确标识为“足球”或 types 为 1 的比赛
+                t_type = item.get("types", "")
+                if str(t_type) != "1" and str(t_type) != "足球":
+                    continue
+
                 chg = _safe_dict(item.get("change"))
                 w_c, l_c = chg.get("win", 0), chg.get("lose", 0)
                 odds_mov = f"主胜{'升水' if w_c>0 else '降水' if w_c<0 else '平稳'}，客胜{'升水' if l_c>0 else '降水' if l_c<0 else '平稳'}"
@@ -61,15 +71,11 @@ def scrape_wencai_jczq(date_str):
                     "match_points": pts.get("match_points", "")
                 }
                 
-                # 🔥 核心：提取 V2 模型需要的精细化赔率字典
                 v2_odds = {
-                    "a1": _get_float(item.get("a1")),
-                    "a2": _get_float(item.get("a2")),
-                    "a3": _get_float(item.get("a3")),
-                    "a4": _get_float(item.get("a4")),
-                    "s11": _get_float(item.get("s11")),
-                    "s22": _get_float(item.get("s22")),
-                    "w21": _get_float(item.get("w21")) # 问彩的 2:1 赔率键名为 w21
+                    "a1": _get_float(item.get("a1")), "a2": _get_float(item.get("a2")),
+                    "a3": _get_float(item.get("a3")), "a4": _get_float(item.get("a4")),
+                    "s11": _get_float(item.get("s11")), "s22": _get_float(item.get("s22")),
+                    "w21": _get_float(item.get("w21"))
                 }
                 
                 m_time = "00:00"
@@ -90,7 +96,7 @@ def scrape_wencai_jczq(date_str):
                     "home_rank": parse_rank(pts.get("home_position", "")),
                     "away_rank": parse_rank(pts.get("guest_position", "")),
                     "votes": _safe_dict(item.get("vote")),
-                    "v2_odds_dict": v2_odds # 传入 V2 专属字典
+                    "v2_odds_dict": v2_odds 
                 })
             except Exception: continue
     except Exception as e: print(f"  ❌ API 抓取失败: {e}")
@@ -141,6 +147,12 @@ def generate_stats_from_rank(rank, team_name="", total_teams=20):
         "clean_sheets": int(p * 0.25), "form": "".join(random.choices("WDL", weights=[wr, dr, 1-wr-dr], k=5)), "rank": rank
     }
 
+def fetch_odds_baseline():
+    try:
+        r = requests.get(f"{ODDS_API_BASE}/sports/soccer/odds", params={"apiKey": ODDS_API_KEY, "regions": "eu", "markets": "h2h"}, timeout=10)
+        return {f"{ev['home_team']}_{ev['away_team']}": {"bookmakers": [{"name": b['title'], "markets": {m['key']: {o['name']: o.get('price', 0) for o in m.get('outcomes', [])} for m in b.get('markets', [])}} for b in ev.get('bookmakers', [])[:3]]} for ev in r.json()}
+    except Exception: return {}
+
 def collect_all(date_str):
     print(f"\n🚀 启动数据抓取 | 日期: {date_str}")
     matches = scrape_wencai_jczq(date_str)
@@ -153,4 +165,4 @@ def collect_all(date_str):
         m["away_stats"] = api_a if api_a.get("played", 0) > 0 else generate_stats_from_rank(m["away_rank"], m["away_team"])
         m["h2h"] = fetch_h2h(m["home_id"], m["away_id"])
         time.sleep(0.2)
-    return {"date": date_str, "matches": matches, "odds": {}}
+    return {"date": date_str, "matches": matches, "odds": fetch_odds_baseline()}
