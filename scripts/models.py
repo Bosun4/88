@@ -15,26 +15,16 @@ try:
 except Exception:
     HAS_SK = False
 
-# ==========================================
-# 1. 你的专属：精细化模型 V2.0 
-# ==========================================
 class RefinedPoissonModel:
-    """完美移植你提供的精细化模型 V2 (历史赔率阀值共振)"""
     def predict(self, home_xg, away_xg, odds_dict):
         try: lh = float(home_xg or 1.3); la = float(away_xg or 1.1)
         except Exception: lh, la = 1.3, 1.1
-        
         max_g = 8
         probs = np.zeros((max_g+1, max_g+1))
-        
         def pmf(k, lam): return (lam**k) * math.exp(-lam) / math.factorial(k)
-        
-        # 基础双变量泊松
         for h in range(max_g + 1):
             for a in range(max_g + 1):
                 probs[h, a] = pmf(h, lh) * pmf(a, la)
-                
-        # === 自动检测阀值并激进加强权重 ===
         if odds_dict and isinstance(odds_dict, dict):
             if 3.05 <= odds_dict.get("a2", 999) <= 3.10:
                 for h in range(max_g+1):
@@ -44,10 +34,8 @@ class RefinedPoissonModel:
                 for h in range(max_g+1):
                     for a in range(max_g+1):
                         if h+a == 4: probs[h, a] *= 1.42
-            if 5.80 <= odds_dict.get("s11", 999) <= 6.10:
-                probs[1, 1] *= 1.38
-            if 10.00 <= odds_dict.get("s22", 999) <= 11.50:
-                probs[2, 2] *= 1.45
+            if 5.80 <= odds_dict.get("s11", 999) <= 6.10: probs[1, 1] *= 1.38
+            if 10.00 <= odds_dict.get("s22", 999) <= 11.50: probs[2, 2] *= 1.45
             if 4.50 <= odds_dict.get("a1", 999) <= 5.00:
                 for h in range(max_g+1):
                     for a in range(max_g+1):
@@ -56,13 +44,8 @@ class RefinedPoissonModel:
                 for h in range(max_g+1):
                     for a in range(max_g+1):
                         if h+a == 3: probs[h, a] *= 1.40
-            if 7.50 <= odds_dict.get("w21", 999) <= 8.50:
-                probs[2, 1] *= 1.42
-
-        # 归一化
+            if 7.50 <= odds_dict.get("w21", 999) <= 8.50: probs[2, 1] *= 1.42
         probs /= probs.sum()
-        
-        # 转换为标准输出
         hw, dr, aw, scores = 0.0, 0.0, 0.0, []
         for h in range(max_g+1):
             for a in range(max_g+1):
@@ -71,21 +54,13 @@ class RefinedPoissonModel:
                 elif h == a: dr += p
                 else: aw += p
                 scores.append({"score": f"{h}-{a}", "prob": round(p*100, 1)})
-        
         scores.sort(key=lambda x: x["prob"], reverse=True)
-        
         return {
             "home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1),
             "predicted_score": scores[0]["score"], "top_scores": scores[:5],
-            "v2_details": {
-                "p22": f"{probs[2,2]*100:.1f}%", "p11": f"{probs[1,1]*100:.1f}%",
-                "p21": f"{probs[2,1]*100:.1f}%", "p12": f"{probs[1,2]*100:.1f}%",
-            }
+            "v2_details": {"p22": f"{probs[2,2]*100:.1f}%", "p11": f"{probs[1,1]*100:.1f}%", "p21": f"{probs[2,1]*100:.1f}%", "p12": f"{probs[1,2]*100:.1f}%"}
         }
 
-# ==========================================
-# 核心数据引擎与基础模型
-# ==========================================
 def fetch_real_historical_data():
     leagues, seasons = ['E0', 'SP1', 'I1', 'D1', 'F1'], ['2324', '2223', '2122'] 
     dfs, headers = [], {"User-Agent": "Mozilla/5.0"}
@@ -103,21 +78,24 @@ def fetch_real_historical_data():
             prob_h, prob_d, prob_a = 1/float(row['B365H']), 1/float(row['B365D']), 1/float(row['B365A'])
             target = {'H': 0, 'D': 1, 'A': 2}.get(str(row['FTR']).upper())
             if target is not None:
-                X.append([prob_h, prob_d, prob_a, prob_h/(prob_h+prob_a), prob_a/(prob_h+prob_a)])
-                y.append(target)
+                X.append([prob_h, prob_d, prob_a, prob_h/(prob_h+prob_a), prob_a/(prob_h+prob_a)]); y.append(target)
         except Exception: continue
     return np.array(X), np.array(y)
 
 def _fallback_training_data(n=1000):
     np.random.seed(42); X, y = [], []
     for _ in range(n):
-        ph, pd = np.random.uniform(0.2, 0.8), np.random.uniform(0.15, 0.35)
-        pa = max(0.01, 1 - ph - pd)
+        ph, pd = np.random.uniform(0.2, 0.8), np.random.uniform(0.15, 0.35); pa = max(0.01, 1 - ph - pd)
         X.append([ph, pd, pa, ph/(ph+pa), pa/(ph+pa)]); y.append(np.random.choice([0, 1, 2], p=[ph, pd, pa]))
     return np.array(X), np.array(y)
 
 def _build_ml_features(match, match_odds):
     try:
+        sp_h, sp_d, sp_a = float(match.get("sp_home", 0)), float(match.get("sp_draw", 0)), float(match.get("sp_away", 0))
+        if sp_h > 1.0 and sp_a > 1.0:
+            prob_h, prob_d, prob_a = 1/sp_h, 1/sp_d, 1/sp_a
+            t = prob_h + prob_d + prob_a
+            return [prob_h/t, prob_d/t, prob_a/t, (prob_h/t)/(prob_h/t+prob_a/t), (prob_a/t)/(prob_h/t+prob_a/t)]
         hw, hp = float(match.get("home_stats", {}).get("wins", 4)), float(match.get("home_stats", {}).get("played", 10))
         aw, ap = float(match.get("away_stats", {}).get("wins", 4)), float(match.get("away_stats", {}).get("played", 10))
         prob_h, prob_a = max(0.2, min(0.75, (hw/max(1, hp)) * 1.1)), max(0.2, min(0.75, (aw/max(1, ap)) * 0.9))
@@ -200,10 +178,6 @@ class FormModel:
 
 class PoissonModel:
     def predict(self, home_gf, home_ga, away_gf, away_ga, league_avg=1.35):
-        try: home_gf, home_ga = float(home_gf or 1.3), float(home_ga or 1.1)
-        except Exception: home_gf, home_ga = 1.3, 1.1
-        try: away_gf, away_ga = float(away_gf or 1.1), float(away_ga or 1.3)
-        except Exception: away_gf, away_ga = 1.1, 1.3
         he = max(0.3, min((home_gf / league_avg) * 1.10 * (away_ga / league_avg) * league_avg, 4.5))
         ae = max(0.2, min((away_gf / league_avg) * (home_ga / league_avg) * 0.90 * league_avg, 4.0))
         def pmf(k, l): return (l**k) * math.exp(-l) / math.factorial(k)
@@ -211,10 +185,9 @@ class PoissonModel:
         for i in range(7):
             for j in range(7):
                 p = pmf(i, he) * pmf(j, ae)
-                if i > j: hw += p
-                elif i == j: dr += p
-                else: aw += p
-                if i > 0 and j > 0: bt += p
+                if i > j: hw += p; bt += p if i>0 and j>0 else 0
+                elif i == j: dr += p; bt += p if i>0 and j>0 else 0
+                else: aw += p; bt += p if i>0 and j>0 else 0
                 scores.append((i, j, p))
         scores.sort(key=lambda x: x[2], reverse=True); t = hw + dr + aw
         if t > 0: hw /= t; dr /= t; aw /= t
@@ -222,8 +195,6 @@ class PoissonModel:
 
 class DixonColesModel:
     def predict(self, home_gf, home_ga, away_gf, away_ga):
-        try: home_gf, away_gf = float(home_gf or 1.3), float(away_gf or 1.1)
-        except Exception: home_gf, away_gf = 1.3, 1.1
         he = max(0.3, min(home_gf * 1.05, 4.0)); ae = max(0.2, min(away_gf * 0.95, 3.5))
         rho = -0.15 if abs(he - ae) < 0.5 else -0.05
         def pmf(k, l): return (l**k) * math.exp(-l) / math.factorial(k)
@@ -244,37 +215,61 @@ class DixonColesModel:
         if t > 0: hw /= t; dr /= t; aw /= t
         return {"home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1)}
 
+class EloModel:
+    def predict(self, home_rank, away_rank):
+        rh = 1500 + (20 - max(1, home_rank)) * 15 + 50
+        ra = 1500 + (20 - max(1, away_rank)) * 15
+        eh = 1 / (1 + 10 ** ((ra - rh) / 400))
+        df = 0.28 if abs(rh - ra) < 100 else 0.22
+        hw = eh * (1 - df / 2); aw = (1 - eh) * (1 - df / 2)
+        return {"home_win": round(hw*100, 1), "draw": round(df*100, 1), "away_win": round(aw*100, 1), "elo_diff": round(rh - ra, 1)}
+
 class EnsemblePredictor:
     def __init__(self):
         self.poisson = PoissonModel()
-        self.refined_poisson = RefinedPoissonModel() # 🔥 加入你的 V2 模型
+        self.refined_poisson = RefinedPoissonModel()
         self.dixon = DixonColesModel()
         self.rf = RandomForestModel()
         self.lr = LogisticModel()
-        
         self.public_sentiment = PublicSentimentModel()
         self.handicap_momentum = HandicapMomentumModel()
         self.injury_penalty = InjuryPenaltyModel()
         self.pace_totals = PaceTotalGoalsModel()
         self.form = FormModel()
-        
-        print("[Models] 正在初始化量化引擎(含 V2 精细化模型)...")
+        self.elo = EloModel()
+        print("[Models] 核心引擎与防陷阱组件启动...")
         self.rf.train(); self.lr.train()
 
     def predict(self, match, odds_data=None):
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
+        h_gf = float(hs.get("avg_goals_for", 1.3)); h_ga = float(hs.get("avg_goals_against", 1.1))
+        a_gf = float(ast.get("avg_goals_for", 1.1)); a_ga = float(ast.get("avg_goals_against", 1.3))
         
-        poi = self.poisson.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
-        dc = self.dixon.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
+        # 🔥 核心修正：跨联赛赔率纠偏引擎 (彻底打碎 加拉塔萨雷 > 利物浦 的假象)
+        sp_h = float(match.get("sp_home", 0))
+        sp_a = float(match.get("sp_away", 0))
+        
+        if sp_h > 1.0 and sp_a > 1.0:
+            implied_h = 1 / sp_h
+            implied_a = 1 / sp_a
+            if implied_a > implied_h and h_gf >= a_gf:
+                ratio = math.sqrt(sp_h / sp_a) 
+                a_gf = h_gf * ratio * 1.15 
+                h_gf = h_gf / ratio 
+            elif implied_h > implied_a and a_gf >= h_gf:
+                ratio = math.sqrt(sp_a / sp_h)
+                h_gf = a_gf * ratio * 1.15
+                a_gf = a_gf / ratio
+                
+        poi = self.poisson.predict(h_gf, h_ga, a_gf, a_ga)
+        dc = self.dixon.predict(h_gf, h_ga, a_gf, a_ga)
         rf = self.rf.predict(match, odds_data)
         lr = self.lr.predict(match, odds_data)
         pace = self.pace_totals.predict(hs, ast) 
         
-        # 运行你的专属 V2 模型
         v2_odds = match.get("v2_odds_dict", {})
-        ref_poi = self.refined_poisson.predict(hs.get("avg_goals_for"), ast.get("avg_goals_for"), v2_odds)
+        ref_poi = self.refined_poisson.predict(h_gf, a_gf, v2_odds)
             
-        # 🔥 将你的 V2 模型赋予 25% 的高权重
         w = {"poisson": 0.15, "refined_poisson": 0.25, "dixon": 0.20, "rf": 0.25, "lr": 0.15}
         models_list = [("poisson", poi), ("refined_poisson", ref_poi), ("dixon", dc), ("rf", rf), ("lr", lr)]
         
@@ -310,7 +305,7 @@ class EnsemblePredictor:
             "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap, 
             "predicted_score": ref_poi["predicted_score"], "confidence": cf, 
             "poisson": poi, "refined_poisson": ref_poi, "dixon_coles": dc, "random_forest": rf, "logistic": lr,
-            "home_form": hf, "away_form": af,
+            "elo": self.elo.predict(match.get("home_rank", 10), match.get("away_rank", 10)), "home_form": hf, "away_form": af,
             "smart_money_signal": " | ".join(signals) if signals else "盘口与情绪正常",
             "over_2_5": pace["over_2_5"], "btts": poi.get("btts", 50),
             "pace_rating": pace["pace_rating"],
