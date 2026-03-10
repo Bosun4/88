@@ -16,36 +16,28 @@ def calculate_value_bet(prob_pct, odds):
 
 def build_prompt(m, sp, val_h, val_d, val_a):
     h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
-    hs, ast = m.get("home_stats", {}), m.get("away_stats", {})
-    
-    # 获取你的 V2 模型数据给 AI 参考
-    ref_poi = sp.get("refined_poisson", {})
-    poi, rf, lr, dc = sp.get("poisson", {}), sp.get("random_forest", {}), sp.get("logistic", {}), sp.get("dixon_coles", {})
     intel = m.get("intelligence", {})
+    ref_poi = sp.get("refined_poisson", {})
     
-    p = "你是顶级量化基金经理。请基于以下【V2赔率共振数据】与【独家情报】给出终极预测。\n\n"
-    p += f"【比赛对阵】{lg} | {h} vs {a}\n"
-    p += f"【专家分析】{m.get('expert_intro', '暂无')}\n"
+    p = "你是顶级量化基金经理。请基于以下数据给出终极预测。\n\n"
+    p += f"【比赛】{lg} | {h} vs {a}\n"
     p += f"【伤停与利空】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
     p += f"【盘口与风控】{m.get('handicap_info')} | 异动：{m.get('odds_movement')} | 预警：{sp.get('smart_money_signal')}\n"
             
-    p += "\n【核心量化算力 (含V2精细化模型)】\n"
-    p += f"精细化泊松V2: 主{ref_poi.get('home_win',33):.1f}% 平{ref_poi.get('draw',33):.1f}% 客{ref_poi.get('away_win',33):.1f}%\n"
+    p += "\n【核心量化算力】\n"
     p += f"V2高危比分预警: 2-2({ref_poi.get('v2_details',{}).get('p22','0%')}) 1-1({ref_poi.get('v2_details',{}).get('p11','0%')})\n"
     p += f"融合胜率: 主{sp.get('home_win_pct',33):.1f}% 平{sp.get('draw_pct',33):.1f}% 客{sp.get('away_win_pct',33):.1f}%\n"
         
-    p += f"\n【期望值(EV)与凯利仓位】\n"
-    p += f"主胜: EV={val_h['ev']}%, 建议注码={val_h['kelly']}%\n"
-    p += f"平局: EV={val_d['ev']}%, 建议注码={val_d['kelly']}%\n"
-    p += f"客胜: EV={val_a['ev']}%, 建议注码={val_a['kelly']}%\n"
+    p += f"\n【期望值(EV)与仓位】\n"
+    p += f"主胜: EV={val_h['ev']}%, 仓位={val_h['kelly']}%\n平局: EV={val_d['ev']}%, 仓位={val_d['kelly']}%\n客胜: EV={val_a['ev']}%, 仓位={val_a['kelly']}%\n"
     
-    p += "\n综合以上数据，给出最终预测。只返回纯JSON格式，严禁Markdown修饰：\n"
+    p += "\n综合以上数据，给出预测。只返回纯JSON格式，严禁Markdown修饰：\n"
     p += '{"predicted_score":"2-1","home_win_pct":55,"draw_pct":25,"away_win_pct":20,"confidence":70,"result":"主胜","over_under_2_5":"大","both_score":"是","risk_level":"中","analysis":"结合伤停、V2比分预警及EV数据进行200字精辟解读","key_factors":["核心因素1"]}'
     return p
 
 def call_gpt(prompt):
     headers = {"Authorization": f"Bearer {GPT_API_KEY}", "Content-Type": "application/json"}
-    messages = [{"role": "system", "content": "你是一位管理千万级资金的足球量化精算师，必须严格返回纯JSON格式，禁止输出Markdown代码块修饰符。"}, {"role": "user", "content": prompt}]
+    messages = [{"role": "system", "content": "你是一位管理千万级资金的足球量化精算师，必须严格返回纯JSON格式，禁止输出Markdown代码块。"}, {"role": "user", "content": prompt}]
     pool = ["gpt-5.4", "gpt-5.3-codex", "gpt-5.2", "gpt-5.1"]
     for model in pool:
         try:
@@ -108,10 +100,10 @@ def merge_all(gpt, gemini, stats, match_obj):
         "smart_money_signal": stats.get("smart_money_signal", "正常"),
         "value_bets_summary": v_tags,
         
-        "poisson": {**stats.get("poisson", {}), "home_expected_goals": stats.get("poisson", {}).get("home_xg", 0), "away_expected_goals": stats.get("poisson", {}).get("away_xg", 0)},
-        "refined_poisson": stats.get("refined_poisson", {}), # 🔥 输出你的 V2 模型给前端
-        "home_form": stats.get("home_form", {}), "away_form": stats.get("away_form", {}),
-        "model_consensus": stats.get("model_consensus", 0), "total_models": stats.get("total_models", 5)
+        "poisson": {**stats.get("poisson", {}), "home_expected_goals": stats.get("poisson", {}).get("home_xg", "?"), "away_expected_goals": stats.get("poisson", {}).get("away_xg", "?")},
+        "refined_poisson": stats.get("refined_poisson", {}), 
+        "elo": stats.get("elo", {}), "home_form": stats.get("home_form", {}), "away_form": stats.get("away_form", {}),
+        "model_consensus": stats.get("model_consensus", 0), "total_models": stats.get("total_models", 4)
     }
 
 def select_top4(preds):
