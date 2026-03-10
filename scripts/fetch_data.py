@@ -43,7 +43,6 @@ def scrape_wencai_jczq(date_str):
 
         for item in match_list:
             try:
-                # 🔥 终极拦截：只要不是 "1" 或 "足球"，全部丢弃，绝不让篮球混进来！
                 t_type = item.get("types", "")
                 if str(t_type) != "1" and str(t_type) != "足球": continue
 
@@ -137,7 +136,6 @@ def collect_all(date_str):
         m.update({"home_id": ht["id"] if ht else 0, "away_id": at["id"] if at else 0, "id": i + 1, "date": date_str})
         api_h = fetch_stats(m["home_id"]); api_a = fetch_stats(m["away_id"])
         
-        # 🔥 核心修正：取消虚假的随机数据生成。如果查不到，给空字典，让 models.py 里的赔率推演引擎接管！
         m["home_stats"] = api_h if api_h.get("played", 0) > 0 else {}
         m["away_stats"] = api_a if api_a.get("played", 0) > 0 else {}
         m["h2h"] = fetch_h2h(m["home_id"], m["away_id"])
