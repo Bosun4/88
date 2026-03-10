@@ -43,6 +43,7 @@ def scrape_wencai_jczq(date_str):
 
         for item in match_list:
             try:
+                # 🔥 终极拦截：只要不是 "1" 或 "足球"，全部丢弃，绝不让篮球混进来！
                 t_type = item.get("types", "")
                 if str(t_type) != "1" and str(t_type) != "足球": continue
 
@@ -125,21 +126,6 @@ def fetch_h2h(hid, aid):
         return [{"date": m["fixture"]["date"][:10], "home": m["teams"]["home"]["name"], "away": m["teams"]["away"]["name"], "score": f"{m['goals']['home']}-{m['goals']['away']}", "league": m["league"]["name"]} for m in requests.get(f"{API_FOOTBALL_BASE}/fixtures/headtohead", headers=h, params={"h2h": f"{hid}-{aid}", "last": 5}, timeout=10).json().get("response", [])]
     except Exception: return []
 
-def generate_stats_from_rank(rank, team_name="", total_teams=20):
-    random.seed((rank * 7) + sum(ord(c) for c in team_name)) 
-    rank = rank if rank > 0 else random.randint(8, 14)
-    s = 1 - (rank - 1) / total_teams
-    p = random.randint(22, 28)
-    wr = max(0.15, min(0.75, s * 0.65)); dr = random.uniform(0.18, 0.28)
-    w = int(p * wr); d = int(p * dr)
-    gf = max(0.7, s * 2.1); ga = max(0.6, (1 - s) * 1.8)
-    return {
-        "played": p, "wins": w, "draws": d, "losses": max(0, p - w - d),
-        "goals_for": int(p * gf), "goals_against": int(p * ga),
-        "avg_goals_for": str(round(gf, 2)), "avg_goals_against": str(round(ga, 2)),
-        "clean_sheets": int(p * 0.25), "form": "".join(random.choices("WDL", weights=[wr, dr, 1-wr-dr], k=5)), "rank": rank
-    }
-
 def fetch_odds_baseline(): return {}
 
 def collect_all(date_str):
@@ -150,8 +136,10 @@ def collect_all(date_str):
         ht = search_team_api(m["home_team"]); at = search_team_api(m["away_team"])
         m.update({"home_id": ht["id"] if ht else 0, "away_id": at["id"] if at else 0, "id": i + 1, "date": date_str})
         api_h = fetch_stats(m["home_id"]); api_a = fetch_stats(m["away_id"])
-        m["home_stats"] = api_h if api_h.get("played", 0) > 0 else generate_stats_from_rank(m["home_rank"], m["home_team"])
-        m["away_stats"] = api_a if api_a.get("played", 0) > 0 else generate_stats_from_rank(m["away_rank"], m["away_team"])
+        
+        # 🔥 核心修正：取消虚假的随机数据生成。如果查不到，给空字典，让 models.py 里的赔率推演引擎接管！
+        m["home_stats"] = api_h if api_h.get("played", 0) > 0 else {}
+        m["away_stats"] = api_a if api_a.get("played", 0) > 0 else {}
         m["h2h"] = fetch_h2h(m["home_id"], m["away_id"])
         time.sleep(0.2)
     return {"date": date_str, "matches": matches, "odds": fetch_odds_baseline()}
