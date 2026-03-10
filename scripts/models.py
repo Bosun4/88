@@ -14,18 +14,85 @@ try:
     HAS_SK = True
 except Exception:
     HAS_SK = False
-    print("[WARN] sklearn 未安装，将使用降级模型")
 
+# ==========================================
+# 1. 你的专属：精细化模型 V2.0 
+# ==========================================
+class RefinedPoissonModel:
+    """完美移植你提供的精细化模型 V2 (历史赔率阀值共振)"""
+    def predict(self, home_xg, away_xg, odds_dict):
+        try: lh = float(home_xg or 1.3); la = float(away_xg or 1.1)
+        except Exception: lh, la = 1.3, 1.1
+        
+        max_g = 8
+        probs = np.zeros((max_g+1, max_g+1))
+        
+        def pmf(k, lam): return (lam**k) * math.exp(-lam) / math.factorial(k)
+        
+        # 基础双变量泊松
+        for h in range(max_g + 1):
+            for a in range(max_g + 1):
+                probs[h, a] = pmf(h, lh) * pmf(a, la)
+                
+        # === 自动检测阀值并激进加强权重 ===
+        if odds_dict and isinstance(odds_dict, dict):
+            if 3.05 <= odds_dict.get("a2", 999) <= 3.10:
+                for h in range(max_g+1):
+                    for a in range(max_g+1):
+                        if h+a == 2: probs[h, a] *= 1.40
+            if 4.50 <= odds_dict.get("a4", 999) <= 5.00:
+                for h in range(max_g+1):
+                    for a in range(max_g+1):
+                        if h+a == 4: probs[h, a] *= 1.42
+            if 5.80 <= odds_dict.get("s11", 999) <= 6.10:
+                probs[1, 1] *= 1.38
+            if 10.00 <= odds_dict.get("s22", 999) <= 11.50:
+                probs[2, 2] *= 1.45
+            if 4.50 <= odds_dict.get("a1", 999) <= 5.00:
+                for h in range(max_g+1):
+                    for a in range(max_g+1):
+                        if h+a == 1: probs[h, a] *= 1.35
+            if 3.60 <= odds_dict.get("a3", 999) <= 3.90:
+                for h in range(max_g+1):
+                    for a in range(max_g+1):
+                        if h+a == 3: probs[h, a] *= 1.40
+            if 7.50 <= odds_dict.get("w21", 999) <= 8.50:
+                probs[2, 1] *= 1.42
+
+        # 归一化
+        probs /= probs.sum()
+        
+        # 转换为标准输出
+        hw, dr, aw, scores = 0.0, 0.0, 0.0, []
+        for h in range(max_g+1):
+            for a in range(max_g+1):
+                p = probs[h, a]
+                if h > a: hw += p
+                elif h == a: dr += p
+                else: aw += p
+                scores.append({"score": f"{h}-{a}", "prob": round(p*100, 1)})
+        
+        scores.sort(key=lambda x: x["prob"], reverse=True)
+        
+        return {
+            "home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1),
+            "predicted_score": scores[0]["score"], "top_scores": scores[:5],
+            "v2_details": {
+                "p22": f"{probs[2,2]*100:.1f}%", "p11": f"{probs[1,1]*100:.1f}%",
+                "p21": f"{probs[2,1]*100:.1f}%", "p12": f"{probs[1,2]*100:.1f}%",
+            }
+        }
+
+# ==========================================
+# 核心数据引擎与基础模型
+# ==========================================
 def fetch_real_historical_data():
-    leagues = ['E0', 'SP1', 'I1', 'D1', 'F1']
-    seasons = ['2324', '2223', '2122'] 
-    dfs = []
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    leagues, seasons = ['E0', 'SP1', 'I1', 'D1', 'F1'], ['2324', '2223', '2122'] 
+    dfs, headers = [], {"User-Agent": "Mozilla/5.0"}
     for season in seasons:
         for league in leagues:
-            url = f"https://www.football-data.co.uk/mmz4281/{season}/{league}.csv"
             try:
-                r = requests.get(url, headers=headers, timeout=10)
+                r = requests.get(f"https://www.football-data.co.uk/mmz4281/{season}/{league}.csv", headers=headers, timeout=10)
                 if r.status_code == 200: dfs.append(pd.read_csv(io.StringIO(r.text), on_bad_lines='skip'))
             except Exception: continue
     if not dfs: return _fallback_training_data()
@@ -46,28 +113,15 @@ def _fallback_training_data(n=1000):
     for _ in range(n):
         ph, pd = np.random.uniform(0.2, 0.8), np.random.uniform(0.15, 0.35)
         pa = max(0.01, 1 - ph - pd)
-        X.append([ph, pd, pa, ph/(ph+pa), pa/(ph+pa)])
-        y.append(np.random.choice([0, 1, 2], p=[ph, pd, pa]))
+        X.append([ph, pd, pa, ph/(ph+pa), pa/(ph+pa)]); y.append(np.random.choice([0, 1, 2], p=[ph, pd, pa]))
     return np.array(X), np.array(y)
 
 def _build_ml_features(match, match_odds):
     try:
-        if match_odds and "bookmakers" in match_odds:
-            ho, do2, ao = [], [], []
-            for bk in match_odds["bookmakers"]:
-                h2h = bk.get("markets", {}).get("h2h", {})
-                if "Home" in h2h: ho.append(h2h["Home"])
-                if "Draw" in h2h: do2.append(h2h["Draw"])
-                if "Away" in h2h: ao.append(h2h["Away"])
-            if ho and do2 and ao:
-                prob_h, prob_d, prob_a = 1/(sum(ho)/len(ho)), 1/(sum(do2)/len(do2)), 1/(sum(ao)/len(ao))
-            else: raise Exception()
-        else:
-            hw, hp = float(match.get("home_stats", {}).get("wins", 4)), float(match.get("home_stats", {}).get("played", 10))
-            aw, ap = float(match.get("away_stats", {}).get("wins", 4)), float(match.get("away_stats", {}).get("played", 10))
-            prob_h = max(0.2, min(0.75, (hw/max(1, hp)) * 1.1))
-            prob_a = max(0.2, min(0.75, (aw/max(1, ap)) * 0.9))
-            prob_d = max(0.15, 1 - prob_h - prob_a)
+        hw, hp = float(match.get("home_stats", {}).get("wins", 4)), float(match.get("home_stats", {}).get("played", 10))
+        aw, ap = float(match.get("away_stats", {}).get("wins", 4)), float(match.get("away_stats", {}).get("played", 10))
+        prob_h, prob_a = max(0.2, min(0.75, (hw/max(1, hp)) * 1.1)), max(0.2, min(0.75, (aw/max(1, ap)) * 0.9))
+        prob_d = max(0.15, 1 - prob_h - prob_a)
         return [prob_h, prob_d, prob_a, prob_h/(prob_h+prob_a), prob_a/(prob_h+prob_a)]
     except Exception: return [0.45, 0.25, 0.30, 0.6, 0.4]
 
@@ -97,8 +151,8 @@ class PublicSentimentModel:
         try:
             v_win, v_lose = float(votes.get("win", 33)), float(votes.get("lose", 33))
             h_adj, a_adj, signal = 0, 0, "情绪平稳"
-            if v_win > 60 and (v_win - model_h) > 20: h_adj, signal = -5.0, "🔥主队散户过热(防冷)"
-            elif v_lose > 60 and (v_lose - model_a) > 20: a_adj, signal = -5.0, "🔥客队散户过热(防冷)"
+            if v_win > 60 and (v_win - model_h) > 20: h_adj, signal = -5.0, "🔥主队大热必死预警"
+            elif v_lose > 60 and (v_lose - model_a) > 20: a_adj, signal = -5.0, "🔥客队大热必死预警"
             return {"h_adj": h_adj, "d_adj": 0, "a_adj": a_adj, "signal": signal}
         except Exception: return {"h_adj": 0, "d_adj": 0, "a_adj": 0, "signal": "情绪正常"}
 
@@ -110,8 +164,8 @@ class HandicapMomentumModel:
             m = re.search(r'让(-?\d+)', str(handicap_str))
             if m: give_ball = int(m.group(1))
         except Exception: pass
-        if give_ball < 0 and "主胜降水" in odds_movement_str: h_adj, signal = 3.0, "📈主队让球强挡(真实看好)"
-        elif give_ball > 0 and "客胜降水" in odds_movement_str: a_adj, signal = 3.0, "📈客队让球强挡(真实看好)"
+        if give_ball < 0 and "主胜降水" in odds_movement_str: h_adj, signal = 3.0, "📈主队让球强挡"
+        elif give_ball > 0 and "客胜降水" in odds_movement_str: a_adj, signal = 3.0, "📈客队让球强挡"
         elif give_ball < 0 and "主胜升水" in odds_movement_str: h_adj, signal = -2.0, "⚠️强让弱升水(诱导盘)"
         return {"h_adj": h_adj, "a_adj": a_adj, "signal": signal}
 
@@ -124,20 +178,6 @@ class InjuryPenaltyModel:
         h_penalty -= min(str(h_inj_text).count("受伤") * 0.5, 3.0)
         a_penalty -= min(str(g_inj_text).count("受伤") * 0.5, 3.0)
         return {"h_adj": h_penalty, "a_adj": a_penalty}
-
-class SmartMoneyDetector:
-    def analyze(self, model_h, model_a, match_odds):
-        if not match_odds or not match_odds.get("bookmakers"): return {"home_rlm_adj": 0, "away_rlm_adj": 0, "signal": ""}
-        ho, ao = [], []
-        for bk in match_odds["bookmakers"]:
-            h2h = bk.get("markets", {}).get("h2h", {})
-            if "Home" in h2h: ho.append(h2h["Home"])
-            if "Away" in h2h: ao.append(h2h["Away"])
-        if not ho or not ao: return {"home_rlm_adj": 0, "away_rlm_adj": 0, "signal": ""}
-        diff_h = (1/(sum(ho)/len(ho))*100) - model_h
-        diff_a = (1/(sum(ao)/len(ao))*100) - model_a
-        signal = "⚠️跨盘防主" if diff_h > 12 else ("⚠️跨盘防客" if diff_a > 12 else "")
-        return {"home_rlm_adj": diff_h * 0.4, "away_rlm_adj": diff_a * 0.4, "signal": signal}
 
 class PaceTotalGoalsModel:
     def predict(self, hs, ast):
@@ -157,18 +197,6 @@ class FormModel:
         momentum = sum((3 if c=="W" else 1 if c=="D" else 0) * max(0.2, 1.0 - i*0.15) for i, c in enumerate(reversed(form)))
         tw = sum(3 * max(0.2, 1.0 - i*0.15) for i in range(len(form)))
         return {"score": round((momentum / tw) * 100 if tw > 0 else 50, 1)}
-
-class OddsAnalyzer:
-    def analyze_market(self, bookmakers):
-        if not bookmakers: return {}
-        ho, do2, ao = [], [], []
-        for bk in bookmakers:
-            h2h = bk.get("markets", {}).get("h2h", {})
-            if "Home" in h2h: ho.append(h2h["Home"])
-            if "Draw" in h2h: do2.append(h2h["Draw"])
-            if "Away" in h2h: ao.append(h2h["Away"])
-        if not ho: return {}
-        return {"avg_home_odds": round(sum(ho)/len(ho), 2), "avg_draw_odds": round(sum(do2)/len(do2), 2), "avg_away_odds": round(sum(ao)/len(ao), 2)}
 
 class PoissonModel:
     def predict(self, home_gf, home_ga, away_gf, away_ga, league_avg=1.35):
@@ -219,30 +247,37 @@ class DixonColesModel:
 class EnsemblePredictor:
     def __init__(self):
         self.poisson = PoissonModel()
+        self.refined_poisson = RefinedPoissonModel() # 🔥 加入你的 V2 模型
         self.dixon = DixonColesModel()
         self.rf = RandomForestModel()
         self.lr = LogisticModel()
+        
         self.public_sentiment = PublicSentimentModel()
         self.handicap_momentum = HandicapMomentumModel()
         self.injury_penalty = InjuryPenaltyModel()
-        self.smart_money = SmartMoneyDetector()
         self.pace_totals = PaceTotalGoalsModel()
         self.form = FormModel()
-        self.odds = OddsAnalyzer()
-        print("[Models] 初始化量化引擎(4基础+5风控)就绪...")
+        
+        print("[Models] 正在初始化量化引擎(含 V2 精细化模型)...")
         self.rf.train(); self.lr.train()
 
     def predict(self, match, odds_data=None):
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
+        
         poi = self.poisson.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
         dc = self.dixon.predict(hs.get("avg_goals_for"), hs.get("avg_goals_against"), ast.get("avg_goals_for"), ast.get("avg_goals_against"))
         rf = self.rf.predict(match, odds_data)
         lr = self.lr.predict(match, odds_data)
         pace = self.pace_totals.predict(hs, ast) 
-        oa = self.odds.analyze_market(odds_data.get("bookmakers", [])) if odds_data else {}
+        
+        # 运行你的专属 V2 模型
+        v2_odds = match.get("v2_odds_dict", {})
+        ref_poi = self.refined_poisson.predict(hs.get("avg_goals_for"), ast.get("avg_goals_for"), v2_odds)
             
-        w = {"poisson": 0.35, "dixon": 0.25, "rf": 0.25, "lr": 0.15}
-        models_list = [("poisson", poi), ("dixon", dc), ("rf", rf), ("lr", lr)]
+        # 🔥 将你的 V2 模型赋予 25% 的高权重
+        w = {"poisson": 0.15, "refined_poisson": 0.25, "dixon": 0.20, "rf": 0.25, "lr": 0.15}
+        models_list = [("poisson", poi), ("refined_poisson", ref_poi), ("dixon", dc), ("rf", rf), ("lr", lr)]
+        
         hp, dp, ap = 0.0, 0.0, 0.0
         for name, pred in models_list:
             hp += pred.get("home_win", 33) * w[name]; dp += pred.get("draw", 33) * w[name]; ap += pred.get("away_win", 33) * w[name]
@@ -263,10 +298,6 @@ class EnsemblePredictor:
         inj_data = self.injury_penalty.analyze(intel.get("h_inj", ""), intel.get("g_inj", ""))
         hp += inj_data["h_adj"]; ap += inj_data["a_adj"]
         
-        sm_data = self.smart_money.analyze(hp, ap, odds_data)
-        hp += sm_data["home_rlm_adj"]; ap += sm_data["away_rlm_adj"]
-        if sm_data["signal"]: signals.append(sm_data["signal"])
-        
         t = hp + dp + ap
         if t > 0: hp = round(hp/t*100, 1); dp = round(dp/t*100, 1); ap = round(100-hp-dp, 1)
         
@@ -277,8 +308,12 @@ class EnsemblePredictor:
         
         return {
             "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap, 
-            "predicted_score": poi["predicted_score"], "confidence": cf, 
-            "odds": oa, "smart_money_signal": " | ".join(signals) if signals else "盘口与情绪正常",
+            "predicted_score": ref_poi["predicted_score"], "confidence": cf, 
+            "poisson": poi, "refined_poisson": ref_poi, "dixon_coles": dc, "random_forest": rf, "logistic": lr,
+            "home_form": hf, "away_form": af,
+            "smart_money_signal": " | ".join(signals) if signals else "盘口与情绪正常",
             "over_2_5": pace["over_2_5"], "btts": poi.get("btts", 50),
-            "model_consensus": consensus, "total_models": 4
+            "pace_rating": pace["pace_rating"],
+            "expected_total_goals": pace["expected_total"],
+            "model_consensus": consensus, "total_models": len(models_list)
         }
