@@ -3,7 +3,7 @@ import json
 import time
 import re
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from deep_translator import GoogleTranslator
 from config import *
 
@@ -46,6 +46,19 @@ def scrape_wencai_jczq(date_str):
                 t_type = item.get("types", "")
                 if str(t_type) != "1" and str(t_type) != "足球": continue
 
+                # 🔥 核心防御：强行拦截串台数据！
+                # 问彩接口会返回所有比赛，必须根据比赛时间(stime)计算出它的竞彩归属日
+                stime = item.get("stime")
+                if not stime: continue
+                
+                dt = datetime.fromtimestamp(stime, timezone(timedelta(hours=8)))
+                # 减去11小时归档（凌晨3点的比赛属于前一天）
+                jc_date = (dt - timedelta(hours=11)).strftime("%Y-%m-%d")
+                
+                # 如果算出来的竞彩日不是我们正在请求的这天，直接斩杀丢弃！
+                if jc_date != date_str:
+                    continue
+
                 chg = _safe_dict(item.get("change"))
                 w_c, l_c = _get_float(chg.get("win"), 0), _get_float(chg.get("lose"), 0)
                 odds_mov = f"主胜{'升水' if w_c>0 else '降水' if w_c<0 else '平稳'}，客胜{'升水' if l_c>0 else '降水' if l_c<0 else '平稳'}"
@@ -71,8 +84,7 @@ def scrape_wencai_jczq(date_str):
                     "w21": _get_float(item.get("w21")), "a5": _get_float(item.get("a5")), "a6": _get_float(item.get("a6"))
                 }
                 
-                m_time = "00:00"
-                if item.get("stime"): m_time = datetime.fromtimestamp(item["stime"]).strftime('%H:%M')
+                m_time = dt.strftime('%H:%M')
                 
                 def parse_rank(pos):
                     if not pos: return 0
@@ -128,7 +140,7 @@ def fetch_h2h(hid, aid):
 def fetch_odds_baseline(): return {}
 
 def collect_all(date_str):
-    print(f"\n🚀 启动数据抓取 | 日期: {date_str}")
+    print(f"\n🚀 启动数据抓取 | 目标日期: {date_str}")
     matches = scrape_wencai_jczq(date_str)
     for i, m in enumerate(matches):
         print(f"  [{i+1}/{len(matches)}] 装载: {m['home_team']} vs {m['away_team']}")
