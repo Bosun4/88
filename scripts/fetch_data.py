@@ -29,7 +29,7 @@ def _get_float(val, default=999.0):
 
 def scrape_wencai_jczq(date_str):
     url = f"https://edu.wencaivip.cn/api/v1.reference/matches?date={date_str}"
-    print(f"  🌐 正在建立问彩链路 [{date_str}]: {url}")
+    print(f"  🌐 正在建立问彩抓包链路 [{date_str}]: {url}")
     ms = []
     headers = {"User-Agent": "Mozilla/5.0", "Accept": "application/json"}
     
