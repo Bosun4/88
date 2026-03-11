@@ -2,33 +2,23 @@ import json
 import os
 import sys
 import traceback
-from datetime import datetime, timedelta
-
-try:
-    from zoneinfo import ZoneInfo
-except ImportError:
-    ZoneInfo = None
-
-from fetch_data import collect_all
-from predict import run_predictions
+from datetime import datetime, timedelta, timezone
 
 def get_target_date(offset=0):
-    if ZoneInfo:
-        now = datetime.now(ZoneInfo("Asia/Shanghai"))
-    else:
-        now = datetime.now()
+    # 🔥 核心防御：强行锁定北京时区，并且减去11小时！
+    # 因为如果早上8点运行，按竞彩逻辑它依然属于“昨天”的期号！
+    beijing_tz = timezone(timedelta(hours=8))
+    now = datetime.now(beijing_tz) - timedelta(hours=11)
     return (now + timedelta(days=offset)).strftime("%Y-%m-%d")
 
 def main():
-    if ZoneInfo:
-        now_time = datetime.now(ZoneInfo("Asia/Shanghai"))
-    else:
-        now_time = datetime.now()
+    beijing_tz = timezone(timedelta(hours=8))
+    now_time = datetime.now(beijing_tz)
         
     session = "morning" if now_time.hour < 15 else "evening"
 
     print("=" * 70)
-    print("⚽ 量化足球投研终端 (极客解耦版)")
+    print("⚽ 量化足球投研终端 (严密时序风控版)")
     print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
     print("=" * 70)
 
@@ -47,9 +37,12 @@ def main():
     days_map = {"yesterday": -1, "today": 0, "tomorrow": 1}
 
     try:
+        from fetch_data import collect_all
+        from predict import run_predictions
+        
         for day_key, offset in days_map.items():
             target_date = get_target_date(offset)
-            print(f"\n{'='*20} 处理 {day_key} ({target_date}) 赛事 {'='*20}")
+            print(f"\n{'='*20} 正在抓取并清洗 {day_key} ({target_date}) 的赛事 {'='*20}")
             
             raw_data = collect_all(target_date)
             if not raw_data or not raw_data.get("matches"):
