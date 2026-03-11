@@ -68,7 +68,7 @@ def scrape_wencai_jczq(date_str):
                     "a1": _get_float(item.get("a1")), "a2": _get_float(item.get("a2")),
                     "a3": _get_float(item.get("a3")), "a4": _get_float(item.get("a4")),
                     "s11": _get_float(item.get("s11")), "s22": _get_float(item.get("s22")),
-                    "w21": _get_float(item.get("w21"))
+                    "w21": _get_float(item.get("w21")), "a5": _get_float(item.get("a5")), "a6": _get_float(item.get("a6"))
                 }
                 
                 m_time = "00:00"
