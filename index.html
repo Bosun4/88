@@ -143,7 +143,6 @@
                 }
                 const evTags = p.value_bets_summary.map(tag => `<span class="bg-emerald-900/40 text-emerald-400 text-[11px] px-2.5 py-1 rounded border border-emerald-700/50 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>${tag}</span>`).join('');
 
-                // 🔥 暴力美学预警标签
                 let extremeHtml = '';
                 if (p.extreme_warning && p.extreme_warning !== "无" && p.extreme_warning !== "") {
                     extremeHtml = `<div class="absolute -top-3 -right-2 bg-gradient-to-r from-red-600 to-purple-600 text-white text-[10px] font-black px-3 py-1.5 rounded-bl-xl rounded-tr-xl shadow-[0_0_15px_rgba(220,38,38,0.8)] border border-red-400 animate-pulse z-20">${p.extreme_warning}</div>`;
