@@ -14,75 +14,63 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
-def build_independent_prompt(m, sp):
+def build_independent_prompt(m):
     h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
     intel = m.get("intelligence", {})
-    hs, ast = m.get("home_stats", {}), m.get("away_stats", {})
     
-    p = "作为我冷酷无情的量化导师，对一切比赛内容进行压力测试，挑战所有给定的数据。我需要的是滴水不漏的缜密思维，而不是廉价的自我认同。请基于以下情报进行极其苛刻的推演。\n\n"
-    p += f"【赛事】{lg} | {h} vs {a}\n"
-    p += f"【伤停与破绽】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
-    p += f"【盘口与机构阴谋】{m.get('handicap_info')} | 水位：{m.get('odds_movement')}\n"
-    p += f"【外部杂音(需审视)】{m.get('expert_intro', '暂无')}\n"
-    
-    warning = sp.get('extreme_warning', '无')
-    p += f"【系统压测信号】{warning}\n"
+    p = "作为极其严谨的量化精算导师，请对以下情报数据进行极度深度的压力测试。我需要滴水不漏的缜密逻辑。\n\n"
+    p += f"【比赛对阵】{lg} | {h} vs {a}\n"
+    p += f"【阵容与隐患】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
+    p += f"【盘口与动向】{m.get('handicap_info')} | 资金异动：{m.get('odds_movement')}\n"
+    p += f"【外部观点】{m.get('expert_intro', '暂无')}\n"
     
     p += "\n【压测准则】\n"
-    p += "1. 不要盲从常规概率，用你的高维视角压力测试庄家赔率与伤停信息，找出基本面与盘口之间隐藏的致命破绽。\n"
-    p += "2. 拒绝平庸。如果数据支撑碾压，给出冷血的穿盘比分；如果势均力敌，给出缜密的平局推演。\n"
-    p += "必须严格返回JSON格式，不可有Markdown修饰：\n"
-    p += '{"ai_score":"1-2","analysis":"200字极其冷酷、专业的压测复盘，说明你为何推演出该比分。"}'
+    p += "1. 挑战表象：运用你对球队实力的深层认知，识破庄家通过盘口设置的诱导陷阱。\n"
+    p += "2. 拒绝平庸：如果双方实力悬殊或防线残缺，请果断给出大比分穿盘预测（如0-3, 1-4）；如果是真正的防守战，给出合理的僵局比分。\n"
+    p += "3. 必须严格返回纯JSON格式，严禁出现Markdown修饰或任何多余的解释文字。\n"
+    p += '{"ai_score":"1-2","analysis":"200字极其严谨的逻辑复盘，揭露比赛的胜负核心点。"}'
     return p
 
 def build_synthesis_prompt(m, gpt_res, claude_res):
     h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
-    p = "作为首席决策官兼冷酷无情的导师，对GPT和Claude的意见进行最高级别的压力测试。挑战它们的所有逻辑漏洞，我需要的是滴水不漏的缜密思维。\n\n"
+    p = "作为首席决策官兼严谨的量化导师，请对GPT和Claude的意见进行最高级别的逻辑压测。挑出它们的漏洞，给出绝对权威的最终裁决。\n\n"
     p += f"【赛事】{lg} | {h} vs {a}\n"
-    p += f"【GPT 意见】预测比分: {gpt_res.get('ai_score', '未知')} | 逻辑: {gpt_res.get('analysis', '无')}\n"
-    p += f"【Claude 意见】预测比分: {claude_res.get('ai_score', '未知')} | 逻辑: {claude_res.get('analysis', '无')}\n"
-    p += "\n【压测任务】冷酷地审视这两份报告，剔除它们感性与不合理的部分，结合你自己的知识库，给出最终的绝对裁决。\n"
-    p += "必须严格返回纯JSON格式：\n"
-    p += '{"ai_score":"1-2","analysis":"200字冷酷的终极压测裁决，指出你采纳或摒弃前两份报告的根本原因。"}'
+    p += f"【GPT 报告】比分: {gpt_res.get('ai_score', '未知')} | 逻辑: {gpt_res.get('analysis', '无')}\n"
+    p += f"【Claude 报告】比分: {claude_res.get('ai_score', '未知')} | 逻辑: {claude_res.get('analysis', '无')}\n"
+    p += "\n【终极裁决】冷酷地审视这两份报告，剔除感性部分，结合你的知识库，给出一锤定音的『预测比分』。\n"
+    p += '必须严格返回纯JSON格式：\n{"ai_score":"1-2","analysis":"200字终极严谨裁决，指出你采纳或摒弃它们意见的根本逻辑。"}'
     return p
 
 def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
-    sys_msg = "你是冷酷严谨的量化精算师，严格返回纯JSON格式，严禁Markdown标记。"
-    print(f"    🤖 请求 AI: {model_name} (无尽等待中，只要有数据才进行下一步)...")
+    sys_msg = "你是严谨无情的量化精算师，只允许输出JSON，不准带```json代码块。"
+    print(f"    🤖 等待 AI {model_name} 的独立思考 (600秒上限)...")
     try:
         if is_gpt_format:
-            payload = {"model": model_name, "messages": [{"role": "system", "content": sys_msg}, {"role": "user", "content": prompt}], "temperature": 0.3, "max_tokens": 1500}
+            payload = {"model": model_name, "messages": [{"role": "system", "content": sys_msg}, {"role": "user", "content": prompt}], "temperature": 0.3}
         else:
             if "generateContent" in url: 
-                payload = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.3, "maxOutputTokens": 1500}}
+                payload = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.3}}
             else: 
-                payload = {"model": model_name, "messages": [{"role": "user", "content": "系统指令：" + sys_msg + "\n\n" + prompt}], "temperature": 0.3, "max_tokens": 1500}
+                payload = {"model": model_name, "messages": [{"role": "user", "content": "系统指令：" + sys_msg + "\n\n" + prompt}], "temperature": 0.3}
         
         r = requests.post(url, headers=headers, json=payload, timeout=600)
         if r.status_code == 200:
             t = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip() if "generateContent" in url else r.json()["choices"][0]["message"]["content"].strip()
-            s = t.find("{"); e = t.rfind("}") + 1
-            if s >= 0 and e > s: return json.loads(t[s:e])
-        else:
-            print(f"    ❌ 接口报错: {r.status_code} ({r.text[:50]})")
+            match = re.search(r'\{.*\}', t, re.DOTALL)
+            if match:
+                return json.loads(match.group(0))
     except Exception as e: print(f"    ⚠️ {model_name} 异常: {str(e)[:40]}")
     return {}
 
-def call_gpt(prompt): 
-    return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
+def call_gpt(prompt): return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
 
 def call_claude(prompt): 
-    # 🔥 获取独立的 Claude 密钥，如果 config 里没写，就直接从环境变量里抓
-    try:
-        claude_key = CLAUDE_API_KEY
-    except NameError:
-        claude_key = os.getenv("CLAUDE_API_KEY", "")
-    # 🔥 核心替换：指定 Claude 模型，复用 GPT 的底层网关
+    try: claude_key = CLAUDE_API_KEY
+    except NameError: claude_key = os.environ.get("CLAUDE_API_KEY", "")
     return call_ai_model(prompt, GPT_API_URL, claude_key, "claude-sonnet-4-6", True) 
 
-def call_gemini(prompt): 
-    return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
+def call_gemini(prompt): return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
 
 def merge_all(gpt, claude, gemini, stats, match_obj):
     sys_hp, sys_dp, sys_ap = stats.get("home_win_pct", 33), stats.get("draw_pct", 33), stats.get("away_win_pct", 33)
@@ -100,12 +88,13 @@ def merge_all(gpt, claude, gemini, stats, match_obj):
         "predicted_score": sys_score, "home_win_pct": sys_hp, "draw_pct": sys_dp, "away_win_pct": sys_ap,
         "confidence": sys_cf, "result": result, "risk_level": "低" if sys_cf >= 70 else ("中" if sys_cf >= 50 else "高"),
         
-        "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "未响应"),
-        "claude_score": claude.get("ai_score", "-"), "claude_analysis": claude.get("analysis", "系统阻断或未响应"),
-        "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "未响应"),
+        "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "安全审查拦截/未响应"),
+        "claude_score": claude.get("ai_score", "-"), "claude_analysis": claude.get("analysis", "安全审查拦截/未响应"),
+        "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "安全审查拦截/未响应"),
         
-        "smart_money_signal": stats.get("smart_money_signal", "正常"), "value_bets_summary": v_tags,
-        "extreme_warning": stats.get("extreme_warning", "无"), 
+        "value_bets_summary": v_tags,
+        "extreme_warning": stats.get("extreme_warning", "无"),
+        "smart_money_signal": stats.get("smart_money_signal", "正常"),
         "poisson": {**stats.get("poisson", {}), "home_expected_goals": stats.get("poisson", {}).get("home_xg", "?"), "away_expected_goals": stats.get("poisson", {}).get("away_xg", "?")},
         "refined_poisson": stats.get("refined_poisson", {}), "elo": stats.get("elo", {}), 
         "home_form": stats.get("home_form", {}), "away_form": stats.get("away_form", {}),
@@ -120,20 +109,29 @@ def select_top4(preds):
         if pr.get("risk_level") == "低": s += 8
         elif pr.get("risk_level") == "高": s -= 5
         if pr.get("value_bets_summary"): s += 15 
-        if pr.get("extreme_warning") != "无": s += 10 
         p["recommend_score"] = round(s, 2)
     preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
     return preds[:4]
+
+# 🔥 核心修复：极其严谨的汉字星期权重映射！
+def extract_num(match_str):
+    week_map = {"一": 1000, "二": 2000, "三": 3000, "四": 4000, "五": 5000, "六": 6000, "日": 7000, "天": 7000}
+    base_weight = 0
+    for k, v in week_map.items():
+        if k in match_str:
+            base_weight = v
+            break
+    nums = re.findall(r'\d+', match_str)
+    return base_weight + int(nums[0]) if nums else 9999
 
 def run_predictions(raw):
     ms = raw.get("matches", []); res = []
     for i, m in enumerate(ms):
         sp = ensemble.predict(m, {})
-        ind_prompt = build_independent_prompt(m, sp)
         
+        ind_prompt = build_independent_prompt(m)
         gpt_res = call_gpt(ind_prompt)
         time.sleep(1)
-        # 🔥 核心替换：调度 Claude 分析
         claude_res = call_claude(ind_prompt)
         time.sleep(1)
         
@@ -147,8 +145,6 @@ def run_predictions(raw):
     t4ids = [t["id"] for t in t4]
     for r in res: r["is_recommended"] = r["id"] in t4ids
     
-    def extract_num(match_str):
-        nums = re.findall(r'\d+', match_str)
-        return int(nums[0]) if nums else 9999
+    # 使用增强权重函数严谨排序
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
     return res, t4
