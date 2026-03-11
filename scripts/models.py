@@ -134,8 +134,8 @@ class PublicSentimentModel:
         try:
             v_win, v_lose = float(votes.get("win", 33)), float(votes.get("lose", 33))
             h_adj, a_adj, signal = 0, 0, "情绪平稳"
-            if v_win > 60 and (v_win - model_h) > 20: h_adj, signal = -5.0, "🔥主队大热必死预警"
-            elif v_lose > 60 and (v_lose - model_a) > 20: a_adj, signal = -5.0, "🔥客队大热必死预警"
+            if v_win > 60 and (v_win - model_h) > 20: h_adj, signal = -5.0, "⚠️ 主队市场过热 (动能压制)"
+            elif v_lose > 60 and (v_lose - model_a) > 20: a_adj, signal = -5.0, "⚠️ 客队市场过热 (动能压制)"
             return {"h_adj": h_adj, "d_adj": 0, "a_adj": a_adj, "signal": signal}
         except Exception: return {"h_adj": 0, "d_adj": 0, "a_adj": 0, "signal": "情绪正常"}
 
@@ -147,9 +147,9 @@ class HandicapMomentumModel:
             m = re.search(r'让(-?\d+)', str(handicap_str))
             if m: give_ball = int(m.group(1))
         except Exception: pass
-        if give_ball < 0 and "主胜降水" in odds_movement_str: h_adj, signal = 3.0, "📈主队让球强挡"
-        elif give_ball > 0 and "客胜降水" in odds_movement_str: a_adj, signal = 3.0, "📈客队让球强挡"
-        elif give_ball < 0 and "主胜升水" in odds_movement_str: h_adj, signal = -2.0, "⚠️强让弱升水(诱导盘)"
+        if give_ball < 0 and "主胜降水" in odds_movement_str: h_adj, signal = 3.0, "📈 主让动能增强"
+        elif give_ball > 0 and "客胜降水" in odds_movement_str: a_adj, signal = 3.0, "📈 客让动能增强"
+        elif give_ball < 0 and "主胜升水" in odds_movement_str: h_adj, signal = -2.0, "📉 强让弱退水 (存在诱导)"
         return {"h_adj": h_adj, "a_adj": a_adj, "signal": signal}
 
 class InjuryPenaltyModel:
@@ -241,7 +241,7 @@ class EnsemblePredictor:
         self.pace_totals = PaceTotalGoalsModel()
         self.form = FormModel()
         self.elo = EloModel()
-        print("[Models] 暴力美学极限矩阵加载完毕...")
+        print("[Models] 核心引擎与防陷阱组件启动...")
         self.rf.train(); self.lr.train()
 
     def predict(self, match, odds_data=None):
@@ -253,7 +253,7 @@ class EnsemblePredictor:
         v2_odds = match.get("v2_odds_dict", {})
         extreme_warning = "无"
         
-        # 🔥🔥🔥 核心升级：强队降维打击机制与惨案预警 🔥🔥🔥
+        # 冷酷的强制赔率压测：用真金白银的赔率碾压虚假纸面数据
         if sp_h > 1.0 and sp_a > 1.0 and sp_d > 1.0:
             prob_h, prob_d, prob_a = 1/sp_h, 1/sp_d, 1/sp_a
             margin = prob_h + prob_d + prob_a
@@ -262,27 +262,25 @@ class EnsemblePredictor:
             expected_total = 2.5 + (0.25 - prob_d) * 8.0
             expected_total = max(1.5, expected_total)
             
-            # 检测庄家是否极度防范大球（a5, a6 赔率异常低）
             is_massacre = False
             if float(v2_odds.get("a5", 999)) < 7.5 or float(v2_odds.get("a6", 999)) < 13.0:
-                expected_total *= 1.35  # 强行拉高总进球期望，解除 0-2 封印
+                expected_total *= 1.35
                 is_massacre = True
 
-            # 强行实力纠偏，赋予碾压局 3.5 球以上的恐怖火力
-            if prob_a > 0.60 and prob_h < 0.22: # 客队绝对碾压 (如拜仁打亚特兰大)
+            if prob_a > 0.60 and prob_h < 0.22: 
                 a_gf = expected_total * 0.85
                 h_gf = expected_total * 0.15
                 if is_massacre: 
-                    extreme_warning = "🩸 极限惨案预警 (客队穿盘)"
-                    a_gf = max(a_gf, 3.8) # 给强队保底恐怖的 xG
-            elif prob_h > 0.60 and prob_a < 0.22: # 主队绝对碾压
+                    extreme_warning = "🛑 深度压测: 客队穿盘动能极高"
+                    a_gf = max(a_gf, 3.8) 
+            elif prob_h > 0.60 and prob_a < 0.22: 
                 h_gf = expected_total * 0.85
                 a_gf = expected_total * 0.15
                 if is_massacre: 
-                    extreme_warning = "🩸 极限惨案预警 (主队穿盘)"
+                    extreme_warning = "🛑 深度压测: 主队穿盘动能极高"
                     h_gf = max(h_gf, 3.8)
-            elif is_massacre: # 势均力敌但庄家怕大球 (如马竞打热刺)
-                extreme_warning = "🔥 极致对攻大战 (防穿盘)"
+            elif is_massacre: 
+                extreme_warning = "⚡ 深度压测: 开放性对攻格局"
                 h_gf = max(expected_total * (prob_h / (prob_h + prob_a)), 2.2)
                 a_gf = max(expected_total * (prob_a / (prob_h + prob_a)), 2.2)
             else:
@@ -334,7 +332,7 @@ class EnsemblePredictor:
             "poisson": poi, "refined_poisson": ref_poi, "dixon_coles": dc, "random_forest": rf, "logistic": lr,
             "elo": self.elo.predict(match.get("home_rank", 10), match.get("away_rank", 10)), "home_form": hf, "away_form": af,
             "smart_money_signal": " | ".join(signals) if signals else "盘口与情绪正常",
-            "extreme_warning": extreme_warning, # 🔥 传给前端的惨案预警灯
+            "extreme_warning": extreme_warning, 
             "over_2_5": pace["over_2_5"], "btts": poi.get("btts", 50),
             "pace_rating": pace["pace_rating"],
             "expected_total_goals": pace["expected_total"],
