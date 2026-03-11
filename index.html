@@ -106,9 +106,10 @@
 
         function renderTop4(top4List) {
             const container = document.getElementById('top4-container');
-            if (!top4List || top4List.length === 0) return container.innerHTML = `<div class="col-span-full text-slate-500 text-sm text-center py-4 glass-panel rounded-xl">今日暂无精选推荐</div>`;
+            if (!top4List || top4List.length === 0) return container.innerHTML = `<div class="col-span-full text-slate-500 text-sm text-center py-4 glass-panel rounded-xl">今日暂无高价值赛事</div>`;
             container.innerHTML = top4List.map(match => {
                 const p = match.prediction;
+                const poiScore = p.refined_poisson?.predicted_score || "?-?";
                 return `
                 <div class="top4-card rounded-2xl p-5 shadow-lg relative overflow-hidden">
                     <div class="flex justify-between items-center mb-4 relative z-10"><div class="flex items-center gap-2"><span class="text-xs font-bold text-slate-300">${match.league}</span><span class="text-xs text-slate-500">${match.match_num}</span></div><div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white font-black text-xs shadow-md shadow-orange-500/50">${match.rank}</div></div>
@@ -133,10 +134,18 @@
             container.innerHTML = matches.map(match => {
                 const p = match.prediction;
                 const hs = match.home_stats || {}; const as = match.away_stats || {};
-                
                 const hp = p.home_win_pct; const dp = p.draw_pct; const ap = p.away_win_pct;
                 
+                let signalHtml = '';
+                if(p.smart_money_signal && p.smart_money_signal !== "正常" && p.smart_money_signal !== "盘口与情绪正常") {
+                    signalHtml = `<div class="bg-red-950/60 border border-red-800/50 text-red-400 text-xs px-3 py-2.5 rounded-lg mb-4 flex items-center gap-2 font-medium shadow-inner"><span>🚨</span><span>${p.smart_money_signal}</span></div>`;
+                }
                 const evTags = p.value_bets_summary.map(tag => `<span class="bg-emerald-900/40 text-emerald-400 text-[11px] px-2.5 py-1 rounded border border-emerald-700/50 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>${tag}</span>`).join('');
+
+                let extremeHtml = '';
+                if (p.extreme_warning && p.extreme_warning !== "无" && p.extreme_warning !== "") {
+                    extremeHtml = `<div class="absolute -top-3 -right-2 bg-gradient-to-r from-red-600 to-purple-600 text-white text-[10px] font-black px-3 py-1.5 rounded-bl-xl rounded-tr-xl shadow-[0_0_15px_rgba(220,38,38,0.8)] border border-red-400 animate-pulse z-20">${p.extreme_warning}</div>`;
+                }
 
                 let v2Html = '';
                 if (p.refined_poisson && p.refined_poisson.v2_details) {
@@ -161,9 +170,10 @@
 
                 return `
                 <div class="glass-panel rounded-2xl overflow-hidden flex flex-col shadow-lg border-t border-slate-700 relative">
+                    ${extremeHtml}
                     <div class="bg-slate-800/80 px-5 py-3 border-b border-slate-700/50 flex justify-between items-center">
                         <div class="flex items-center gap-2"><span class="text-xs font-bold text-yellow-500">${match.league} ${match.match_num}</span>${match.is_recommended ? `<span class="bg-orange-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold shadow-md shadow-orange-500/30">推荐</span>` : ''}</div>
-                        <div class="text-xs text-slate-400 font-mono">${match.match_time || '00:00'}</div>
+                        <div class="text-xs text-slate-400 font-mono mr-4">${match.match_time || '00:00'}</div>
                     </div>
                     <div class="p-5 flex-grow">
                         <div class="flex items-center justify-between mb-5">
@@ -189,15 +199,17 @@
                             </div>
                         </div>
 
+                        ${signalHtml}
                         ${evTags ? `<div class="flex flex-wrap gap-2 mb-4">${evTags}</div>` : ''}
                         ${v2Html}
 
                         <div class="mt-6 border border-slate-700 rounded-xl overflow-hidden bg-slate-900/50 shadow-lg">
+                            
                             <div class="bg-gradient-to-r from-indigo-900/60 to-purple-900/60 p-4 border-b border-slate-700">
                                 <div class="flex justify-between items-center mb-3">
                                     <div class="flex items-center gap-2">
                                         <span class="text-xl">👑</span>
-                                        <span class="text-sm font-black text-indigo-300">首席决策官 </span>
+                                        <span class="text-sm font-black text-indigo-300">首席决策官 (Gemini) 终极裁决</span>
                                     </div>
                                     <div class="text-lg font-black text-white bg-slate-900/80 px-3 py-1 rounded-lg border border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.3)]">${p.gemini_score}</div>
                                 </div>
@@ -207,19 +219,21 @@
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-700">
+                                
                                 <div class="p-4 bg-blue-950/20">
                                     <div class="flex justify-between items-center mb-2">
-                                        <span class="text-xs font-bold text-blue-400">🤖 逻辑顾问 (G T)</span>
+                                        <span class="text-xs font-bold text-blue-400">🤖 逻辑顾问 (GPT-5)</span>
                                         <span class="text-xs font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${p.gpt_score}</span>
                                     </div>
                                     <p class="text-[11px] text-slate-400 leading-relaxed">${p.gpt_analysis}</p>
                                 </div>
+
                                 <div class="p-4 bg-teal-950/20">
                                     <div class="flex justify-between items-center mb-2">
-                                        <span class="text-xs font-bold text-teal-400">👽 压测顾问 (G K)</span>
-                                        <span class="text-xs font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${p.grok_score}</span>
+                                        <span class="text-xs font-bold text-teal-400">⚡ 交叉风控 (Claude)</span>
+                                        <span class="text-xs font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${p.claude_score}</span>
                                     </div>
-                                    <p class="text-[11px] text-slate-400 leading-relaxed">${p.grok_analysis}</p>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed">${p.claude_analysis}</p>
                                 </div>
                             </div>
                         </div>
