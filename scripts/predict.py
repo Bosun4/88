@@ -14,43 +14,44 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
+# 🔥 注入“冷酷导师”人格的独立顾问提示词
 def build_independent_prompt(m, sp):
     h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
     intel = m.get("intelligence", {})
     hs, ast = m.get("home_stats", {}), m.get("away_stats", {})
     
-    p = "你是一位拒绝平庸、嗅觉极其敏锐的足球量化顾问。请基于以下情报进行推演。\n\n"
+    p = "作为我冷酷无情的量化导师，对一切比赛内容进行压力测试，挑战所有给定的数据。我需要的是滴水不漏的缜密思维，而不是廉价的自我认同。请基于以下情报进行极其苛刻的推演。\n\n"
     p += f"【赛事】{lg} | {h} vs {a}\n"
-    p += f"【伤停利空】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
-    p += f"【盘口异动】{m.get('handicap_info')} | 水位：{m.get('odds_movement')}\n"
-    p += f"【专家研报】{m.get('expert_intro', '暂无')} | {m.get('base_face', '暂无')[:250]}\n"
+    p += f"【伤停与破绽】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
+    p += f"【盘口与机构阴谋】{m.get('handicap_info')} | 水位：{m.get('odds_movement')}\n"
+    p += f"【外部杂音(需审视)】{m.get('expert_intro', '暂无')}\n"
     
-    # 🔥 核心：将系统的屠杀预警传给 AI
     warning = sp.get('extreme_warning', '无')
-    p += f"【系统极端预警】{warning}\n"
+    p += f"【系统压测信号】{warning}\n"
     
-    p += "\n【你的核心任务 (暴力美学版)】\n"
-    p += "1. 抛弃保守心态！如果【系统极端预警】提示「惨案预警」或「对攻大战」，或者你看到某队后防线伤停严重，你**必须**敢于推演 1-4, 0-5, 5-2 这种打穿盘口的反常理比分！不要给我永远写 1-1 或 1-2！\n"
-    p += "2. 结合伤停，敏锐捕捉冷门和屠杀局。\n"
-    p += "严格返回JSON格式，不可有Markdown修饰：\n"
-    p += '{"ai_score":"0-4","analysis":"200字独立见解，说明你预判大比分的逻辑。"}'
+    p += "\n【压测准则】\n"
+    p += "1. 不要盲从常规概率，用你的高维视角压力测试庄家赔率与伤停信息，找出基本面与盘口之间隐藏的致命破绽。\n"
+    p += "2. 拒绝平庸。如果数据支撑碾压，给出冷血的穿盘比分；如果势均力敌，给出缜密的平局推演。\n"
+    p += "必须严格返回JSON格式，不可有Markdown修饰：\n"
+    p += '{"ai_score":"1-2","analysis":"200字极其冷酷、专业的压测复盘，说明你为何推演出该比分。"}'
     return p
 
+# 🔥 注入“冷酷首席”人格的综合决策提示词
 def build_synthesis_prompt(m, gpt_res, grok_res):
     h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
-    p = "你是本机构的『首席AI决策官』。综合两名极端顾问(GPT与Grok)的意见，给出最终官方裁决。\n\n"
+    p = "作为首席决策官兼冷酷无情的导师，对GPT和Grok的意见进行最高级别的压力测试。挑战它们的所有逻辑漏洞，我需要的是滴水不漏的缜密思维。\n\n"
     p += f"【赛事】{lg} | {h} vs {a}\n"
     p += f"【GPT 意见】预测比分: {gpt_res.get('ai_score', '未知')} | 逻辑: {gpt_res.get('analysis', '无')}\n"
     p += f"【Grok 意见】预测比分: {grok_res.get('ai_score', '未知')} | 逻辑: {grok_res.get('analysis', '无')}\n"
-    p += "\n【任务】如果两位顾问都预判了大比分/惨案，你必须顺势而为，敲定这个极端的『最终比分』。如果分歧巨大，请用你的知识库进行裁决。\n"
-    p += "严格返回纯JSON格式：\n"
-    p += '{"ai_score":"1-5","analysis":"200字综合最终研判意见(必须提及对GPT和Grok极端比分的取舍)"}'
+    p += "\n【压测任务】冷酷地审视这两份报告，剔除它们感性与不合理的部分，结合你自己的知识库，给出最终的绝对裁决。\n"
+    p += "必须严格返回纯JSON格式：\n"
+    p += '{"ai_score":"1-2","analysis":"200字冷酷的终极压测裁决，指出你采纳或摒弃前两份报告的根本原因。"}'
     return p
 
-def call_ai_model(prompt, url, key, model_name, is_gpt_format=True, max_time=30):
+def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
-    sys_msg = "你是顶级足球量化精算师，严格返回纯JSON格式，禁绝Markdown代码块。"
-    print(f"    🤖 尝试请求 AI: {model_name}...")
+    sys_msg = "你是冷酷严谨的量化精算师，严格返回纯JSON格式，严禁Markdown标记。"
+    print(f"    🤖 请求 AI: {model_name} (无尽等待中，只要有数据才进行下一步)...")
     try:
         if is_gpt_format:
             payload = {"model": model_name, "messages": [{"role": "system", "content": sys_msg}, {"role": "user", "content": prompt}], "temperature": 0.3, "max_tokens": 1500}
@@ -60,17 +61,26 @@ def call_ai_model(prompt, url, key, model_name, is_gpt_format=True, max_time=30)
             else: 
                 payload = {"model": model_name, "messages": [{"role": "user", "content": "系统指令：" + sys_msg + "\n\n" + prompt}], "temperature": 0.3, "max_tokens": 1500}
         
-        r = requests.post(url, headers=headers, json=payload, timeout=max_time)
+        # 🔥 取消人为束缚，设定为 600 秒超长等待，确保大模型想多久就想多久
+        r = requests.post(url, headers=headers, json=payload, timeout=600)
         if r.status_code == 200:
             t = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip() if "generateContent" in url else r.json()["choices"][0]["message"]["content"].strip()
             s = t.find("{"); e = t.rfind("}") + 1
             if s >= 0 and e > s: return json.loads(t[s:e])
+        else:
+            print(f"    ❌ 接口报错: {r.status_code} ({r.text[:50]})")
     except Exception as e: print(f"    ⚠️ {model_name} 异常: {str(e)[:40]}")
     return {}
 
-def call_gpt(prompt): return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
-def call_grok(prompt): return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次]grok-420-thinking", True) 
-def call_gemini(prompt): return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False, 45)
+def call_gpt(prompt): 
+    return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
+
+def call_grok(prompt): 
+    # Grok 走 OpenAI 标准格式
+    return call_ai_model(prompt, GPT_API_URL, GEMINI_API_KEY, "[次]grok-420-thinking", True) 
+
+def call_gemini(prompt): 
+    return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
 
 def merge_all(gpt, grok, gemini, stats, match_obj):
     sys_hp, sys_dp, sys_ap = stats.get("home_win_pct", 33), stats.get("draw_pct", 33), stats.get("away_win_pct", 33)
@@ -88,10 +98,10 @@ def merge_all(gpt, grok, gemini, stats, match_obj):
         "predicted_score": sys_score, "home_win_pct": sys_hp, "draw_pct": sys_dp, "away_win_pct": sys_ap,
         "confidence": sys_cf, "result": result, "risk_level": "低" if sys_cf >= 70 else ("中" if sys_cf >= 50 else "高"),
         "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "未响应"),
-        "grok_score": grok.get("ai_score", "-"), "grok_analysis": grok.get("analysis", "未响应"),
+        "grok_score": grok.get("ai_score", "-"), "grok_analysis": grok.get("analysis", "系统阻断或未响应"),
         "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "未响应"),
         "smart_money_signal": stats.get("smart_money_signal", "正常"), "value_bets_summary": v_tags,
-        "extreme_warning": stats.get("extreme_warning", "无"), # 传递预警到前端
+        "extreme_warning": stats.get("extreme_warning", "无"), 
         "poisson": {**stats.get("poisson", {}), "home_expected_goals": stats.get("poisson", {}).get("home_xg", "?"), "away_expected_goals": stats.get("poisson", {}).get("away_xg", "?")},
         "refined_poisson": stats.get("refined_poisson", {}), "elo": stats.get("elo", {}), 
         "home_form": stats.get("home_form", {}), "away_form": stats.get("away_form", {}),
@@ -106,7 +116,7 @@ def select_top4(preds):
         if pr.get("risk_level") == "低": s += 8
         elif pr.get("risk_level") == "高": s -= 5
         if pr.get("value_bets_summary"): s += 15 
-        if pr.get("extreme_warning") != "无": s += 10 # 极端赛事优先推荐
+        if pr.get("extreme_warning") != "无": s += 10 
         p["recommend_score"] = round(s, 2)
     preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
     return preds[:4]
@@ -116,6 +126,7 @@ def run_predictions(raw):
     for i, m in enumerate(ms):
         sp = ensemble.predict(m, {})
         ind_prompt = build_independent_prompt(m, sp)
+        
         gpt_res = call_gpt(ind_prompt)
         time.sleep(1)
         grok_res = call_grok(ind_prompt)
