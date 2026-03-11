@@ -182,12 +182,12 @@ class FormModel:
 
 class PoissonModel:
     def predict(self, home_gf, home_ga, away_gf, away_ga, league_avg=1.35):
-        he = max(0.3, min((home_gf / league_avg) * 1.10 * (away_ga / league_avg) * league_avg, 4.5))
-        ae = max(0.2, min((away_gf / league_avg) * (home_ga / league_avg) * 0.90 * league_avg, 4.0))
+        he = max(0.2, min((home_gf / league_avg) * 1.10 * (away_ga / league_avg) * league_avg, 5.5))
+        ae = max(0.2, min((away_gf / league_avg) * (home_ga / league_avg) * 0.90 * league_avg, 5.5))
         def pmf(k, l): return (l**k) * math.exp(-l) / math.factorial(k)
         hw, dr, aw, bt, scores = 0, 0, 0, 0, []
-        for i in range(7):
-            for j in range(7):
+        for i in range(8):
+            for j in range(8):
                 p = pmf(i, he) * pmf(j, ae)
                 if i > j: hw += p; bt += p if i>0 and j>0 else 0
                 elif i == j: dr += p; bt += p if i>0 and j>0 else 0
@@ -199,7 +199,7 @@ class PoissonModel:
 
 class DixonColesModel:
     def predict(self, home_gf, home_ga, away_gf, away_ga):
-        he = max(0.3, min(home_gf * 1.05, 4.0)); ae = max(0.2, min(away_gf * 0.95, 3.5))
+        he = max(0.2, min(home_gf * 1.05, 5.0)); ae = max(0.2, min(away_gf * 0.95, 5.0))
         rho = -0.15 if abs(he - ae) < 0.5 else -0.05
         def pmf(k, l): return (l**k) * math.exp(-l) / math.factorial(k)
         def tau(i, j, lam, mu, r):
@@ -209,8 +209,8 @@ class DixonColesModel:
             elif i == 1 and j == 1: return 1 - r
             return 1
         hw, dr, aw = 0, 0, 0
-        for i in range(6):
-            for j in range(6):
+        for i in range(7):
+            for j in range(7):
                 p = max(0, tau(i, j, he, ae, rho) * pmf(i, he) * pmf(j, ae))
                 if i > j: hw += p
                 elif i == j: dr += p
@@ -241,7 +241,7 @@ class EnsemblePredictor:
         self.pace_totals = PaceTotalGoalsModel()
         self.form = FormModel()
         self.elo = EloModel()
-        print("[Models] 核心引擎与防陷阱组件启动...")
+        print("[Models] 暴力美学极限矩阵加载完毕...")
         self.rf.train(); self.lr.train()
 
     def predict(self, match, odds_data=None):
@@ -249,20 +249,45 @@ class EnsemblePredictor:
         h_gf = float(hs.get("avg_goals_for", 1.3)); h_ga = float(hs.get("avg_goals_against", 1.1))
         a_gf = float(ast.get("avg_goals_for", 1.1)); a_ga = float(ast.get("avg_goals_against", 1.3))
         
-        sp_h = float(match.get("sp_home", 0))
-        sp_a = float(match.get("sp_away", 0))
+        sp_h, sp_d, sp_a = float(match.get("sp_home", 0)), float(match.get("sp_draw", 0)), float(match.get("sp_away", 0))
+        v2_odds = match.get("v2_odds_dict", {})
+        extreme_warning = "无"
         
-        if sp_h > 1.0 and sp_a > 1.0:
-            implied_h = 1 / sp_h
-            implied_a = 1 / sp_a
-            if implied_a > implied_h and h_gf >= a_gf:
-                ratio = math.sqrt(sp_h / sp_a) 
-                a_gf = max(a_gf, h_gf * ratio * 1.15) 
-                h_gf = h_gf / ratio 
-            elif implied_h > implied_a and a_gf >= h_gf:
-                ratio = math.sqrt(sp_a / sp_h)
-                h_gf = max(h_gf, a_gf * ratio * 1.15)
-                a_gf = a_gf / ratio
+        # 🔥🔥🔥 核心升级：强队降维打击机制与惨案预警 🔥🔥🔥
+        if sp_h > 1.0 and sp_a > 1.0 and sp_d > 1.0:
+            prob_h, prob_d, prob_a = 1/sp_h, 1/sp_d, 1/sp_a
+            margin = prob_h + prob_d + prob_a
+            prob_h /= margin; prob_d /= margin; prob_a /= margin
+            
+            expected_total = 2.5 + (0.25 - prob_d) * 8.0
+            expected_total = max(1.5, expected_total)
+            
+            # 检测庄家是否极度防范大球（a5, a6 赔率异常低）
+            is_massacre = False
+            if float(v2_odds.get("a5", 999)) < 7.5 or float(v2_odds.get("a6", 999)) < 13.0:
+                expected_total *= 1.35  # 强行拉高总进球期望，解除 0-2 封印
+                is_massacre = True
+
+            # 强行实力纠偏，赋予碾压局 3.5 球以上的恐怖火力
+            if prob_a > 0.60 and prob_h < 0.22: # 客队绝对碾压 (如拜仁打亚特兰大)
+                a_gf = expected_total * 0.85
+                h_gf = expected_total * 0.15
+                if is_massacre: 
+                    extreme_warning = "🩸 极限惨案预警 (客队穿盘)"
+                    a_gf = max(a_gf, 3.8) # 给强队保底恐怖的 xG
+            elif prob_h > 0.60 and prob_a < 0.22: # 主队绝对碾压
+                h_gf = expected_total * 0.85
+                a_gf = expected_total * 0.15
+                if is_massacre: 
+                    extreme_warning = "🩸 极限惨案预警 (主队穿盘)"
+                    h_gf = max(h_gf, 3.8)
+            elif is_massacre: # 势均力敌但庄家怕大球 (如马竞打热刺)
+                extreme_warning = "🔥 极致对攻大战 (防穿盘)"
+                h_gf = max(expected_total * (prob_h / (prob_h + prob_a)), 2.2)
+                a_gf = max(expected_total * (prob_a / (prob_h + prob_a)), 2.2)
+            else:
+                h_gf = expected_total * (prob_h / (prob_h + prob_a))
+                a_gf = expected_total * (prob_a / (prob_h + prob_a))
                 
         poi = self.poisson.predict(h_gf, h_ga, a_gf, a_ga)
         dc = self.dixon.predict(h_gf, h_ga, a_gf, a_ga)
@@ -270,7 +295,6 @@ class EnsemblePredictor:
         lr = self.lr.predict(match, odds_data)
         pace = self.pace_totals.predict(h_gf, h_ga, a_gf, a_ga, hs, ast) 
         
-        v2_odds = match.get("v2_odds_dict", {})
         ref_poi = self.refined_poisson.predict(h_gf, a_gf, v2_odds)
             
         w = {"poisson": 0.15, "refined_poisson": 0.25, "dixon": 0.20, "rf": 0.25, "lr": 0.15}
@@ -310,6 +334,7 @@ class EnsemblePredictor:
             "poisson": poi, "refined_poisson": ref_poi, "dixon_coles": dc, "random_forest": rf, "logistic": lr,
             "elo": self.elo.predict(match.get("home_rank", 10), match.get("away_rank", 10)), "home_form": hf, "away_form": af,
             "smart_money_signal": " | ".join(signals) if signals else "盘口与情绪正常",
+            "extreme_warning": extreme_warning, # 🔥 传给前端的惨案预警灯
             "over_2_5": pace["over_2_5"], "btts": poi.get("btts", 50),
             "pace_rating": pace["pace_rating"],
             "expected_total_goals": pace["expected_total"],
