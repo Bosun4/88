@@ -47,7 +47,7 @@ def scrape_wencai_jczq(date_str):
                 if str(t_type) != "1" and str(t_type) != "足球": continue
 
                 chg = _safe_dict(item.get("change"))
-                w_c, l_c = chg.get("win", 0), chg.get("lose", 0)
+                w_c, l_c = _get_float(chg.get("win"), 0), _get_float(chg.get("lose"), 0)
                 odds_mov = f"主胜{'升水' if w_c>0 else '降水' if w_c<0 else '平稳'}，客胜{'升水' if l_c>0 else '降水' if l_c<0 else '平稳'}"
 
                 expert_intro = item.get("intro", "")
@@ -135,7 +135,6 @@ def collect_all(date_str):
         ht = search_team_api(m["home_team"]); at = search_team_api(m["away_team"])
         m.update({"home_id": ht["id"] if ht else 0, "away_id": at["id"] if at else 0, "id": i + 1, "date": date_str})
         api_h = fetch_stats(m["home_id"]); api_a = fetch_stats(m["away_id"])
-        
         m["home_stats"] = api_h if api_h.get("played", 0) > 0 else {}
         m["away_stats"] = api_a if api_a.get("played", 0) > 0 else {}
         m["h2h"] = fetch_h2h(m["home_id"], m["away_id"])
