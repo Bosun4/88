@@ -128,40 +128,6 @@ class LogisticModel(MLPredictorBase):
     def __init__(self): super().__init__("Logistic")
     def _init_model(self): self.model = LogisticRegression(C=0.5, max_iter=500, random_state=42)
 
-class PublicSentimentModel:
-    def analyze(self, votes, model_h, model_d, model_a):
-        if not votes or not isinstance(votes, dict): return {"h_adj": 0, "d_adj": 0, "a_adj": 0, "signal": "情绪正常"}
-        try:
-            v_win, v_lose = float(votes.get("win", 33)), float(votes.get("lose", 33))
-            h_adj, a_adj, signal = 0, 0, "情绪平稳"
-            if v_win > 60 and (v_win - model_h) > 20: h_adj, signal = -5.0, "⚠️ 主队市场过热 (动能压制)"
-            elif v_lose > 60 and (v_lose - model_a) > 20: a_adj, signal = -5.0, "⚠️ 客队市场过热 (动能压制)"
-            return {"h_adj": h_adj, "d_adj": 0, "a_adj": a_adj, "signal": signal}
-        except Exception: return {"h_adj": 0, "d_adj": 0, "a_adj": 0, "signal": "情绪正常"}
-
-class HandicapMomentumModel:
-    def analyze(self, handicap_str, odds_movement_str):
-        h_adj, a_adj, signal = 0, 0, "水位平稳"
-        give_ball = 0
-        try:
-            m = re.search(r'让(-?\d+)', str(handicap_str))
-            if m: give_ball = int(m.group(1))
-        except Exception: pass
-        if give_ball < 0 and "主胜降水" in odds_movement_str: h_adj, signal = 3.0, "📈 主让动能增强"
-        elif give_ball > 0 and "客胜降水" in odds_movement_str: a_adj, signal = 3.0, "📈 客让动能增强"
-        elif give_ball < 0 and "主胜升水" in odds_movement_str: h_adj, signal = -2.0, "📉 强让弱退水 (存在诱导)"
-        return {"h_adj": h_adj, "a_adj": a_adj, "signal": signal}
-
-class InjuryPenaltyModel:
-    def analyze(self, h_inj_text, g_inj_text):
-        h_penalty, a_penalty = 0.0, 0.0
-        for word in ["停赛", "红牌停赛", "赛季报销", "骨折", "韧带撕裂"]:
-            if word in str(h_inj_text): h_penalty -= 2.5
-            if word in str(g_inj_text): a_penalty -= 2.5
-        h_penalty -= min(str(h_inj_text).count("受伤") * 0.5, 3.0)
-        a_penalty -= min(str(g_inj_text).count("受伤") * 0.5, 3.0)
-        return {"h_adj": h_penalty, "a_adj": a_penalty}
-
 class PaceTotalGoalsModel:
     def predict(self, h_gf, h_ga, a_gf, a_ga, hs, ast):
         try:
@@ -235,25 +201,22 @@ class EnsemblePredictor:
         self.dixon = DixonColesModel()
         self.rf = RandomForestModel()
         self.lr = LogisticModel()
-        self.public_sentiment = PublicSentimentModel()
-        self.handicap_momentum = HandicapMomentumModel()
-        self.injury_penalty = InjuryPenaltyModel()
         self.pace_totals = PaceTotalGoalsModel()
         self.form = FormModel()
         self.elo = EloModel()
-        print("[Models] 核心引擎与防陷阱组件启动...")
+        print("[Models] 本地冷酷数学模型矩阵加载完毕...")
         self.rf.train(); self.lr.train()
 
     def predict(self, match, odds_data=None):
+        """完全基于数学、排名、赔率的本地运算，绝不掺杂AI文本"""
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
         h_gf = float(hs.get("avg_goals_for", 1.3)); h_ga = float(hs.get("avg_goals_against", 1.1))
         a_gf = float(ast.get("avg_goals_for", 1.1)); a_ga = float(ast.get("avg_goals_against", 1.3))
         
         sp_h, sp_d, sp_a = float(match.get("sp_home", 0)), float(match.get("sp_draw", 0)), float(match.get("sp_away", 0))
         v2_odds = match.get("v2_odds_dict", {})
-        extreme_warning = "无"
         
-        # 冷酷的强制赔率压测：用真金白银的赔率碾压虚假纸面数据
+        # 赔率强制纠偏引擎
         if sp_h > 1.0 and sp_a > 1.0 and sp_d > 1.0:
             prob_h, prob_d, prob_a = 1/sp_h, 1/sp_d, 1/sp_a
             margin = prob_h + prob_d + prob_a
@@ -262,27 +225,13 @@ class EnsemblePredictor:
             expected_total = 2.5 + (0.25 - prob_d) * 8.0
             expected_total = max(1.5, expected_total)
             
-            is_massacre = False
             if float(v2_odds.get("a5", 999)) < 7.5 or float(v2_odds.get("a6", 999)) < 13.0:
                 expected_total *= 1.35
-                is_massacre = True
 
             if prob_a > 0.60 and prob_h < 0.22: 
-                a_gf = expected_total * 0.85
-                h_gf = expected_total * 0.15
-                if is_massacre: 
-                    extreme_warning = "🛑 深度压测: 客队穿盘动能极高"
-                    a_gf = max(a_gf, 3.8) 
+                a_gf, h_gf = expected_total * 0.85, expected_total * 0.15
             elif prob_h > 0.60 and prob_a < 0.22: 
-                h_gf = expected_total * 0.85
-                a_gf = expected_total * 0.15
-                if is_massacre: 
-                    extreme_warning = "🛑 深度压测: 主队穿盘动能极高"
-                    h_gf = max(h_gf, 3.8)
-            elif is_massacre: 
-                extreme_warning = "⚡ 深度压测: 开放性对攻格局"
-                h_gf = max(expected_total * (prob_h / (prob_h + prob_a)), 2.2)
-                a_gf = max(expected_total * (prob_a / (prob_h + prob_a)), 2.2)
+                h_gf, a_gf = expected_total * 0.85, expected_total * 0.15
             else:
                 h_gf = expected_total * (prob_h / (prob_h + prob_a))
                 a_gf = expected_total * (prob_a / (prob_h + prob_a))
@@ -292,7 +241,6 @@ class EnsemblePredictor:
         rf = self.rf.predict(match, odds_data)
         lr = self.lr.predict(match, odds_data)
         pace = self.pace_totals.predict(h_gf, h_ga, a_gf, a_ga, hs, ast) 
-        
         ref_poi = self.refined_poisson.predict(h_gf, a_gf, v2_odds)
             
         w = {"poisson": 0.15, "refined_poisson": 0.25, "dixon": 0.20, "rf": 0.25, "lr": 0.15}
@@ -302,21 +250,8 @@ class EnsemblePredictor:
         for name, pred in models_list:
             hp += pred.get("home_win", 33) * w[name]; dp += pred.get("draw", 33) * w[name]; ap += pred.get("away_win", 33) * w[name]
             
-        signals = []
         hf, af = self.form.analyze(hs.get("form", "")), self.form.analyze(ast.get("form", ""))
         hp += (hf["score"] - af["score"]) * 0.08; ap -= (hf["score"] - af["score"]) * 0.08
-        
-        sent_data = self.public_sentiment.analyze(match.get("votes", {}), hp, dp, ap)
-        hp += sent_data["h_adj"]; ap += sent_data["a_adj"]
-        if sent_data["signal"] != "情绪平稳": signals.append(sent_data["signal"])
-            
-        hcp_data = self.handicap_momentum.analyze(match.get("handicap_info", ""), match.get("odds_movement", ""))
-        hp += hcp_data["h_adj"]; ap += hcp_data["a_adj"]
-        if hcp_data["signal"] != "水位平稳": signals.append(hcp_data["signal"])
-            
-        intel = match.get("intelligence", {})
-        inj_data = self.injury_penalty.analyze(intel.get("h_inj", ""), intel.get("g_inj", ""))
-        hp += inj_data["h_adj"]; ap += inj_data["a_adj"]
         
         t = hp + dp + ap
         if t > 0: hp = round(hp/t*100, 1); dp = round(dp/t*100, 1); ap = round(100-hp-dp, 1)
@@ -331,8 +266,6 @@ class EnsemblePredictor:
             "predicted_score": ref_poi["predicted_score"], "confidence": cf, 
             "poisson": poi, "refined_poisson": ref_poi, "dixon_coles": dc, "random_forest": rf, "logistic": lr,
             "elo": self.elo.predict(match.get("home_rank", 10), match.get("away_rank", 10)), "home_form": hf, "away_form": af,
-            "smart_money_signal": " | ".join(signals) if signals else "盘口与情绪正常",
-            "extreme_warning": extreme_warning, 
             "over_2_5": pace["over_2_5"], "btts": poi.get("btts", 50),
             "pace_rating": pace["pace_rating"],
             "expected_total_goals": pace["expected_total"],
