@@ -28,7 +28,7 @@ def main():
     session = "morning" if now_time.hour < 15 else "evening"
 
     print("=" * 70)
-    print("⚽ 量化足球投研终端 (极限风控解禁版)")
+    print("⚽ 量化足球投研终端 (冷酷导师压测版)")
     print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
     print("=" * 70)
 
