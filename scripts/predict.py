@@ -14,35 +14,39 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
-# 🔥 核心防御：强制断绝无关队伍的关联
+# 🔥 核心防御：死锁球队注意力，严令禁止提及无关球星
 def build_independent_prompt(m):
     h, a = m["home_team"], m["away_team"]
     intel = m.get("intelligence", {})
     
-    p = f"【系统硬指令】你是一个无情的量化处理程序。你的任务极其单一：只分析【{h}】和【{a}】这场比赛。\n"
-    p += f"【警报】若下方情报中出现了与这两队无关的人名（如姆巴佩、哈兰德等）或球队名，那是数据杂音，立即屏蔽，严禁在分析中提及！\n\n"
-    p += f"【主队阵容隐患】{intel.get('h_inj')}\n"
-    p += f"【客队阵容隐患】{intel.get('g_inj')}\n"
-    p += f"【盘口资金动向】{m.get('handicap_info')} | {m.get('odds_movement')}\n\n"
+    p = f"【系统最高指令】你是一个冷血的量化裁判程序。你的任务极其单一：只分析【{h}】和【{a}】这场比赛。\n"
+    p += f"【红色警报】若下方情报中出现了与这两队无关的人名（如姆巴佩、哈兰德等）或球队名，那是数据杂音，立即彻底屏蔽，严禁在分析中提及！\n\n"
+    p += f"【阵容隐患】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
+    p += f"【资金动向】{m.get('handicap_info')} | {m.get('odds_movement')}\n"
     
-    p += "结合防线隐患与庄家意图，给出最冷血的比分推演（如实力悬殊请给0-3, 1-4；势均力敌请给1-1）。\n"
-    p += "【格式要求】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号(如```json)！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字的冷酷复盘，紧扣双方队伍"}'
+    intro = m.get('expert_intro', '')
+    if len(intro) > 150: intro = intro[:150] + "..."
+    p += f"【精简短评】{intro if intro else '无'}\n\n"
+    
+    p += "结合隐患与庄家意图，给出最冷血的比分推演（如实力悬殊请给0-3, 1-4；势均力敌请给1-1）。\n"
+    p += "【格式铁律】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号(如```json)！\n"
+    p += '{"ai_score":"1-2","analysis":"不超过100字的冷酷复盘，必须紧扣这两支队伍，不许废话"}'
     return p
 
 def build_synthesis_prompt(m, gpt_res, claude_res):
     h, a = m["home_team"], m["away_team"]
-    p = f"【系统硬指令】你是首席裁判程序。仅围绕【{h}】和【{a}】进行判定。\n"
+    p = f"【系统最高指令】你是首席裁判。仅围绕【{h}】和【{a}】进行判定。\n"
     p += f"GPT 判定: {gpt_res.get('ai_score', '无')} | 逻辑: {gpt_res.get('analysis', '无')}\n"
     p += f"Claude 判定: {claude_res.get('ai_score', '无')} | 逻辑: {claude_res.get('analysis', '无')}\n\n"
-    p += "剔除他们可能的幻觉(如提到无关球队)，给出你的终局裁决。\n"
-    p += "【格式要求】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号！\n"
+    p += "【任务】剔除他们可能出现的幻觉(如提到无关球队或人名)，给出你的终局裁决。\n"
+    p += "【格式铁律】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号！\n"
     p += '{"ai_score":"1-2","analysis":"不超过100字的终极裁定"}'
     return p
 
-# 🔥 核心脱水器：不管 AI 输出多恶心，硬生生把 JSON 扣出来！
+# 🔥 核心脱水器：不跟大模型废话，无论输出什么恶心格式，直接用正则暴力切割出 JSON！
 def extract_clean_json(text):
     text = text.strip()
+    # 强制定位到第一个 { 和 最后一个 }
     start = text.find('{')
     end = text.rfind('}')
     if start != -1 and end != -1:
@@ -55,7 +59,7 @@ def extract_clean_json(text):
 
 def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
-    sys_msg = "你是冷血的JSON数据输出机。不能输出任何Markdown代码块(不能有```json)。"
+    sys_msg = "你是冷血的JSON数据输出机。不能输出任何Markdown代码块。"
     
     print(f"    🤖 启动 {model_name} (无尽等待)...")
     try:
@@ -68,20 +72,19 @@ def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
         if r.status_code == 200:
             t = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip() if "generateContent" in url else r.json()["choices"][0]["message"]["content"].strip()
             
-            # 暴力脱水提取
+            # 执行暴力脱水
             parsed_data = extract_clean_json(t)
             if parsed_data:
-                # 二次脱水：防止 analysis 里嵌套 markdown
+                # 二次脱水：防止 analysis 字段里又嵌套了 markdown 符号
                 parsed_data["analysis"] = parsed_data.get("analysis", "").replace("```json", "").replace("```", "").strip()
                 return parsed_data
             else:
-                print("    ❌ 无法解析返回的格式。")
+                print("    ❌ 无法解析返回的格式，已抛弃。")
         else:
             print(f"    ❌ API 报错: {r.status_code}")
     except Exception as e: print(f"    ⚠️ 异常: {str(e)[:40]}")
     return {}
 
-# 🔥 API 省钱逻辑：只调核心模型，不搞冗余重试
 def call_gpt(prompt): return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
 
 def call_claude(prompt): 
