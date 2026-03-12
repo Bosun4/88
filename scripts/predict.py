@@ -22,7 +22,11 @@ def build_independent_prompt(m):
     p += f"【警报】若下方情报中出现了与这两队无关的人名（如姆巴佩、哈兰德等）或球队名，那是数据杂音，立即屏蔽，严禁在分析中提及！\n\n"
     p += f"【主队阵容隐患】{intel.get('h_inj')}\n"
     p += f"【客队阵容隐患】{intel.get('g_inj')}\n"
-    p += f"【盘口资金动向】{m.get('handicap_info')} | {m.get('odds_movement')}\n\n"
+    p += f"【盘口资金动向】{m.get('handicap_info')} | {m.get('odds_movement')}\n"
+    
+    intro = m.get('expert_intro', '')
+    if len(intro) > 150: intro = intro[:150] + "..."
+    p += f"【精简短评】{intro if intro else '无'}\n\n"
     
     p += "结合防线隐患与庄家意图，给出最冷血的比分推演（如实力悬殊请给0-3, 1-4；势均力敌请给1-1）。\n"
     p += "【格式要求】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号(如```json)！\n"
@@ -39,19 +43,17 @@ def build_synthesis_prompt(m, gpt_res, claude_res):
     p += '{"ai_score":"1-2","analysis":"不超过100字的终极裁定"}'
     return p
 
-# 🔥 终极脱水器：只要 AI 有响应，我就算生拉硬拽也要把数据抠出来，绝不浪费钱！
 def extract_clean_json(text):
     text = str(text or "").strip()
-    
-    # 保底手段：用正则暴力抽取（无视任何外层废话）
     fallback_score = "未预测"
     fallback_analysis = "格式混乱，已启用暴力抽取。"
+    
     s_match = re.search(r'"ai_score"\s*:\s*"([^"]+)"', text)
     if s_match: fallback_score = s_match.group(1)
+    
     a_match = re.search(r'"analysis"\s*:\s*"(.*?)"', text, re.DOTALL)
     if a_match: fallback_analysis = a_match.group(1).replace('"', "'").replace('\n', ' ').strip()
     
-    # 优先尝试标准 JSON 解析
     start = text.find('{')
     end = text.rfind('}')
     if start != -1 and end != -1:
@@ -61,7 +63,6 @@ def extract_clean_json(text):
         except Exception:
             pass
             
-    # 标准失败则抛出保底正则成果
     if fallback_score != "未预测":
         return {"ai_score": fallback_score, "analysis": fallback_analysis}
     return None
@@ -153,7 +154,6 @@ def extract_num(match_str):
     nums = re.findall(r'\d+', match_str)
     return base_weight + int(nums[0]) if nums else 9999
 
-# 🔥 加入 AI 资金阀门：接收 main 传来的 use_ai 指令
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", []); res = []
     for i, m in enumerate(ms):
@@ -166,10 +166,9 @@ def run_predictions(raw, use_ai=True):
             syn_prompt = build_synthesis_prompt(m, gpt_res or {}, claude_res or {})
             gemini_res = call_gemini(syn_prompt)
         else:
-            # 🔥 对于昨天完场的比赛，直接赋予免算标志，一分钱都不花！
-            gpt_res = {"ai_score": "-", "analysis": "历史已完场，系统阻断 AI 分析以节省接口算力。"}
-            claude_res = {"ai_score": "-", "analysis": "历史已完场，系统阻断 AI 分析以节省接口算力。"}
-            gemini_res = {"ai_score": "-", "analysis": "历史已完场，系统阻断 AI 分析以节省接口算力。"}
+            gpt_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
+            claude_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
+            gemini_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
             
         mg = merge_all(gpt_res or {}, claude_res or {}, gemini_res or {}, sp, m)
         res.append({**m, "prediction": mg})
