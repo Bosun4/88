@@ -14,73 +14,79 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
-# 🔥 核心防御：彻底切断冗杂新闻，植入强制排他指令
+# 🔥 核心防御：强制断绝无关队伍的关联
 def build_independent_prompt(m):
-    h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
+    h, a = m["home_team"], m["away_team"]
     intel = m.get("intelligence", {})
     
-    p = "作为极其严谨的量化精算导师，请对以下情报数据进行极度深度的压力测试。我需要滴水不漏的缜密逻辑。\n\n"
-    p += f"【绝对锁定目标赛事】{lg} | {h} vs {a}\n"
-    p += f"【阵容与隐患】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
-    p += f"【盘口与动向】{m.get('handicap_info')} | 资金异动：{m.get('odds_movement')}\n"
+    p = f"【系统硬指令】你是一个无情的量化处理程序。你的任务极其单一：只分析【{h}】和【{a}】这场比赛。\n"
+    p += f"【警报】若下方情报中出现了与这两队无关的人名（如姆巴佩、哈兰德等）或球队名，那是数据杂音，立即屏蔽，严禁在分析中提及！\n\n"
+    p += f"【主队阵容隐患】{intel.get('h_inj')}\n"
+    p += f"【客队阵容隐患】{intel.get('g_inj')}\n"
+    p += f"【盘口资金动向】{m.get('handicap_info')} | {m.get('odds_movement')}\n\n"
     
-    # 丢除带有大量污染信息的 base_face，只取简短的 intro
-    intro = m.get('expert_intro', '')
-    if len(intro) > 150: intro = intro[:150] + "..."
-    p += f"【专家短评】{intro if intro else '暂无'}\n"
-    
-    p += "\n【压测与防幻觉准则】\n"
-    p += f"1. 绝对专注：你只能围绕【{h}】和【{a}】这两支球队进行分析！如果提供的情报中荒谬地出现了姆巴佩、哈兰德等与本场完全无关的球星或豪门名称，这是数据抓取时的全球资讯串台，请立刻启动防御机制，将其彻底无视！绝对不允许把无关球星写进分析里！\n"
-    p += "2. 挑战表象：运用你对这两支球队实力的深层认知，识破庄家通过盘口设置的诱导陷阱。\n"
-    p += "3. 拒绝平庸：如果双方实力悬殊或防线残缺，请果断给出大比分穿盘预测（如0-3, 1-4）；如果是真正的防守战，给出合理的僵局比分。\n"
-    p += "4. 必须严格返回纯JSON格式，严禁出现Markdown修饰或任何多余的解释文字。\n"
-    p += '{"ai_score":"1-2","analysis":"200字极其严谨的逻辑复盘，紧扣当前两支球队，揭露比赛的胜负核心点。"}'
+    p += "结合防线隐患与庄家意图，给出最冷血的比分推演（如实力悬殊请给0-3, 1-4；势均力敌请给1-1）。\n"
+    p += "【格式要求】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号(如```json)！\n"
+    p += '{"ai_score":"1-2","analysis":"不超过100字的冷酷复盘，紧扣双方队伍"}'
     return p
 
 def build_synthesis_prompt(m, gpt_res, claude_res):
-    h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
-    p = "作为首席决策官兼严谨的量化导师，请对GPT和Claude的意见进行最高级别的逻辑压测。挑出它们的漏洞，给出绝对权威的最终裁决。\n\n"
-    p += f"【绝对锁定目标赛事】{lg} | {h} vs {a}\n"
-    p += f"【GPT 报告】比分: {gpt_res.get('ai_score', '未知')} | 逻辑: {gpt_res.get('analysis', '无')}\n"
-    p += f"【Claude 报告】比分: {claude_res.get('ai_score', '未知')} | 逻辑: {claude_res.get('analysis', '无')}\n"
-    
-    p += "\n【终极裁决与纠错指令】\n"
-    p += f"1. 严查幻觉失误：冷酷地审视这两份报告！如果它们在逻辑中愚蠢地提及了未参与本场比赛的无关球星（如非要聊姆巴佩、梅西等），请毫不留情地在裁决中批判这种幻觉，并强行剔除该无效逻辑！\n"
-    p += "2. 结合你的知识库，给出一锤定音的『预测比分』。\n"
-    p += '必须严格返回纯JSON格式：\n{"ai_score":"1-2","analysis":"200字终极严谨裁决，紧紧围绕对阵双方，指出你采纳或摒弃它们意见的根本逻辑。"}'
+    h, a = m["home_team"], m["away_team"]
+    p = f"【系统硬指令】你是首席裁判程序。仅围绕【{h}】和【{a}】进行判定。\n"
+    p += f"GPT 判定: {gpt_res.get('ai_score', '无')} | 逻辑: {gpt_res.get('analysis', '无')}\n"
+    p += f"Claude 判定: {claude_res.get('ai_score', '无')} | 逻辑: {claude_res.get('analysis', '无')}\n\n"
+    p += "剔除他们可能的幻觉(如提到无关球队)，给出你的终局裁决。\n"
+    p += "【格式要求】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号！\n"
+    p += '{"ai_score":"1-2","analysis":"不超过100字的终极裁定"}'
     return p
+
+# 🔥 核心脱水器：不管 AI 输出多恶心，硬生生把 JSON 扣出来！
+def extract_clean_json(text):
+    text = text.strip()
+    start = text.find('{')
+    end = text.rfind('}')
+    if start != -1 and end != -1:
+        json_str = text[start:end+1]
+        try:
+            return json.loads(json_str)
+        except:
+            pass
+    return None
 
 def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
-    sys_msg = "你是严谨无情的量化精算师，只允许输出JSON，不准带```json代码块。"
-    print(f"    🤖 等待 AI {model_name} 的独立思考 (无时间限制)...")
+    sys_msg = "你是冷血的JSON数据输出机。不能输出任何Markdown代码块(不能有```json)。"
+    
+    print(f"    🤖 启动 {model_name} (无尽等待)...")
     try:
         if is_gpt_format:
-            payload = {"model": model_name, "messages": [{"role": "system", "content": sys_msg}, {"role": "user", "content": prompt}], "temperature": 0.3}
+            payload = {"model": model_name, "messages": [{"role": "system", "content": sys_msg}, {"role": "user", "content": prompt}], "temperature": 0.2}
         else:
-            if "generateContent" in url: 
-                payload = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.3}}
-            else: 
-                payload = {"model": model_name, "messages": [{"role": "user", "content": "系统指令：" + sys_msg + "\n\n" + prompt}], "temperature": 0.3}
+            payload = {"contents": [{"parts": [{"text": sys_msg + "\n" + prompt}]}], "generationConfig": {"temperature": 0.2}} if "generateContent" in url else {"model": model_name, "messages": [{"role": "user", "content": sys_msg + "\n" + prompt}], "temperature": 0.2}
         
         r = requests.post(url, headers=headers, json=payload, timeout=600)
         if r.status_code == 200:
             t = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip() if "generateContent" in url else r.json()["choices"][0]["message"]["content"].strip()
-            match = re.search(r'\{.*\}', t, re.DOTALL)
-            if match:
-                return json.loads(match.group(0))
+            
+            # 暴力脱水提取
+            parsed_data = extract_clean_json(t)
+            if parsed_data:
+                # 二次脱水：防止 analysis 里嵌套 markdown
+                parsed_data["analysis"] = parsed_data.get("analysis", "").replace("```json", "").replace("```", "").strip()
+                return parsed_data
+            else:
+                print("    ❌ 无法解析返回的格式。")
         else:
-            print(f"    ❌ 接口报错: {r.status_code} ({r.text[:50]})")
-    except Exception as e: print(f"    ⚠️ {model_name} 异常: {str(e)[:40]}")
+            print(f"    ❌ API 报错: {r.status_code}")
+    except Exception as e: print(f"    ⚠️ 异常: {str(e)[:40]}")
     return {}
 
+# 🔥 API 省钱逻辑：只调核心模型，不搞冗余重试
 def call_gpt(prompt): return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
 
 def call_claude(prompt): 
-    try:
-        claude_key = CLAUDE_API_KEY
-    except NameError:
-        claude_key = os.environ.get("CLAUDE_API_KEY", "")
+    try: claude_key = CLAUDE_API_KEY
+    except NameError: claude_key = os.environ.get("CLAUDE_API_KEY", "")
     return call_ai_model(prompt, GPT_API_URL, claude_key, "claude-sonnet-4-6", True) 
 
 def call_gemini(prompt): return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
@@ -101,9 +107,9 @@ def merge_all(gpt, claude, gemini, stats, match_obj):
         "predicted_score": sys_score, "home_win_pct": sys_hp, "draw_pct": sys_dp, "away_win_pct": sys_ap,
         "confidence": sys_cf, "result": result, "risk_level": "低" if sys_cf >= 70 else ("中" if sys_cf >= 50 else "高"),
         
-        "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "安全审查拦截/未响应"),
-        "claude_score": claude.get("ai_score", "-"), "claude_analysis": claude.get("analysis", "安全审查拦截/未响应"),
-        "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "安全审查拦截/未响应"),
+        "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "安全阻断或解析失败"),
+        "claude_score": claude.get("ai_score", "-"), "claude_analysis": claude.get("analysis", "安全阻断或解析失败"),
+        "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "安全阻断或解析失败"),
         
         "value_bets_summary": v_tags,
         "extreme_warning": stats.get("extreme_warning", "无"),
@@ -143,9 +149,7 @@ def run_predictions(raw):
         
         ind_prompt = build_independent_prompt(m)
         gpt_res = call_gpt(ind_prompt)
-        time.sleep(1)
         claude_res = call_claude(ind_prompt)
-        time.sleep(1)
         
         syn_prompt = build_synthesis_prompt(m, gpt_res or {}, claude_res or {})
         gemini_res = call_gemini(syn_prompt)
