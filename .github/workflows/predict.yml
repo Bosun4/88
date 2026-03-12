@@ -39,17 +39,23 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
+          # 创建并同步数据目录，加入强力容错 2>/dev/null
           mkdir -p data/
           if [ -d "scripts/data" ]; then
-            cp -r scripts/data/* data/
+            cp -r scripts/data/* data/ 2>/dev/null || true
           fi
           
-          git add data/
-          
-          if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (终极全量解耦版)"
-            git pull --rebase origin main || true
-            git push
+          # 🔥 极客级防御：只在 data 文件夹内有实质性文件时，才允许执行 git add
+          if [ "$(ls -A data/ 2>/dev/null)" ]; then
+            git add data/
+            if ! git diff-index --quiet HEAD; then
+              git commit -m "🤖 Auto-update prediction data (免疫空目录拦截版)"
+              git pull --rebase origin main || true
+              git push
+              echo "✅ 新数据已成功推送到云端！"
+            else
+              echo "✅ 数据与云端完全一致，无新增改动，安全跳过。"
+            fi
           else
-            echo "✅ 本次测算数据无变动，安全退出。"
+            echo "⚠️ 警告：本次运行未产生任何有效数据文件（可能当前无赛事或全部被拦截）。安全退出，不执行提交。"
           fi
