@@ -40,16 +40,16 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
           mkdir -p data/
-          cp -r scripts/data/* data/ || echo "No data generated"
+          if [ -d "scripts/data" ]; then
+            cp -r scripts/data/* data/
+          fi
           
           git add data/
           
-          # 🔥 极客级防御：检测是否有文件变动。无变动则直接成功退出，不强行commit引发报错！
-          if [[ -n "$(git status --porcelain data/)" ]]; then
-            git commit -m "🤖 自动更新比赛预测数据 (智能拦截空提交版)"
-            git pull --rebase origin main || git pull origin main
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "🤖 Auto-update prediction data (终极全量解耦版)"
+            git pull --rebase origin main || true
             git push
-            echo "✅ 新数据已成功推送到云端！"
           else
-            echo "✅ 本次测算数据与云端完全一致，无新增改动，安全跳过提交。"
+            echo "✅ 本次测算数据无变动，安全退出。"
           fi
