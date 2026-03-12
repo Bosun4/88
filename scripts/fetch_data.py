@@ -45,7 +45,6 @@ def scrape_wencai_jczq(date_str):
 
         for item in match_list:
             try:
-                # 🔥 全部强制转化为字符串，绝杀 Null 陷阱！
                 t_type = str(item.get("types") or "")
                 if t_type != "1" and t_type != "足球": continue
 
@@ -63,11 +62,10 @@ def scrape_wencai_jczq(date_str):
                 info = _safe_dict(item.get("information"))
                 pts = _safe_dict(item.get("points"))
                 
-                # 🔥 强制 str() 包裹防崩溃！
                 h_inj = str(info.get("home_injury") or "无重大伤停").replace("\n", " ").strip()[:150]
                 g_inj = str(info.get("guest_injury") or "无重大伤停").replace("\n", " ").strip()[:150]
-                
                 intel_pool = {"h_inj": h_inj, "g_inj": g_inj}
+                
                 expert_intro = str(item.get("intro") or "").strip()
                 
                 v2_odds = {
