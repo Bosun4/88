@@ -14,39 +14,60 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
+# 🔥 核心重构：注入全部足球硬核参数（赔率、联赛、盘口），以金融风控口吻压榨 AI
 def build_independent_prompt(m):
-    h, a = m["home_team"], m["away_team"]
+    h = m.get("home_team", "主队")
+    a = m.get("away_team", "客队")
+    lg = m.get("league", "未知赛事")
+    sp_h = m.get("sp_home", 0.0)
+    sp_d = m.get("sp_draw", 0.0)
+    sp_a = m.get("sp_away", 0.0)
     intel = m.get("intelligence", {})
     
-    p = f"【系统硬指令】你是一个无情的量化处理程序。你的任务极其单一：只分析【{h}】和【{a}】这场比赛。\n"
-    p += f"【警报】若下方情报中出现了与这两队无关的人名（如姆巴佩、哈兰德等）或球队名，那是数据杂音，立即屏蔽，严禁在分析中提及！\n\n"
-    p += f"【主队阵容隐患】{intel.get('h_inj')}\n"
-    p += f"【客队阵容隐患】{intel.get('g_inj')}\n"
-    p += f"【盘口资金动向】{m.get('handicap_info')} | {m.get('odds_movement')}\n"
+    p = f"【系统绝对指令】你是一名冷酷无情的顶级足球量化风控专家。你的任务是且仅是对【{h}】(主队) VS 【{a}】(客队) 的比赛进行胜负与比分推演。\n"
+    p += f"【红色高压警报】绝对禁止在分析中提及任何与本场对阵无关的球队名或球星名（如姆巴佩、哈兰德等）。如果下方情报中出现此类杂音，那是数据串台，请立刻在脑内将其粉碎无视！\n\n"
     
-    intro = m.get('expert_intro', '')
+    p += f"【足球基本面与赔率】\n"
+    p += f"- 赛事级别：{lg}\n"
+    p += f"- 初始胜平负赔率：主胜 {sp_h} | 平局 {sp_d} | 客胜 {sp_a}\n"
+    p += f"- 盘口与资金流向：{m.get('handicap_info')} | {m.get('odds_movement')}\n\n"
+    
+    p += f"【核心阵容隐患】\n"
+    p += f"- 主队伤停：{intel.get('h_inj')}\n"
+    p += f"- 客队伤停：{intel.get('g_inj')}\n\n"
+    
+    intro = str(m.get('expert_intro', '')).strip()
     if len(intro) > 150: intro = intro[:150] + "..."
-    p += f"【精简短评】{intro if intro else '无'}\n\n"
+    p += f"【精简情报】{intro if intro else '无'}\n\n"
     
-    p += "结合防线隐患与庄家意图，给出最冷血的比分推演（如实力悬殊请给0-3, 1-4；势均力敌请给1-1）。\n"
-    p += "【格式要求】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号(如```json)！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字的冷酷复盘，紧扣双方队伍"}'
+    p += "【风控推演要求】\n"
+    p += "1. 结合初始赔率(SP值)和资金水位变化，洞察庄家真实的诱导意图（是阻盘还是诱盘？）。\n"
+    p += "2. 评估伤停对球队核心战力的致命影响，给出极其冷血的比分推演（碾压局果断大比分穿盘，胶着局防守平局）。\n"
+    p += "【格式铁律】必须且只能返回1个纯JSON对象，绝对不允许包含Markdown修饰符(如```json)或任何多余文本！\n"
+    p += '{"ai_score":"1-2","analysis":"不超过100字的致命复盘，一针见血剖析胜负手，必须严格紧扣这两支队伍！"}'
     return p
 
+# 🔥 核心重构：赋予首席数据裁决官最高纠错权
 def build_synthesis_prompt(m, gpt_res, claude_res):
-    h, a = m["home_team"], m["away_team"]
-    p = f"【系统硬指令】你是首席裁判程序。仅围绕【{h}】和【{a}】进行判定。\n"
-    p += f"GPT 判定: {gpt_res.get('ai_score', '无')} | 逻辑: {gpt_res.get('analysis', '无')}\n"
-    p += f"Claude 判定: {claude_res.get('ai_score', '无')} | 逻辑: {claude_res.get('analysis', '无')}\n\n"
-    p += "剔除他们可能的幻觉(如提到无关球队)，给出你的终局裁决。\n"
-    p += "【格式要求】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字的终极裁定"}'
+    h = m.get("home_team", "主队")
+    a = m.get("away_team", "客队")
+    
+    p = f"【系统绝对指令】你是首席足球数据裁决官。你的唯一任务是对【{h}】vs【{a}】进行终局判定。\n"
+    p += f"GPT 提交的前瞻: 比分 [{gpt_res.get('ai_score', '无')}] | 逻辑 [{gpt_res.get('analysis', '无')}]\n"
+    p += f"Claude 提交的前瞻: 比分 [{claude_res.get('ai_score', '无')}] | 逻辑 [{claude_res.get('analysis', '无')}]\n\n"
+    
+    p += "【终极裁决要求】\n"
+    p += "1. 交叉比对两份前瞻。如果发现任何一份报告出现了幻觉（例如提及了非本场比赛的无关球员或球队），必须在你的裁决中直接摒弃该无效逻辑！\n"
+    p += "2. 结合你自身的足球知识库，做出最无情的比分终裁。\n"
+    p += "【格式铁律】必须且只能返回1个纯JSON对象，绝对不允许包含Markdown修饰符！\n"
+    p += '{"ai_score":"1-2","analysis":"不超过100字的终局冷酷裁定，一锤定音，不许废话。"}'
     return p
 
+# 暴力脱水器：无视大模型格式抽风，确保 API 经费100%转化为有效数据
 def extract_clean_json(text):
     text = str(text or "").strip()
     fallback_score = "未预测"
-    fallback_analysis = "格式混乱，已启用暴力抽取。"
+    fallback_analysis = "格式混乱，已启用底线暴力抽取。"
     
     s_match = re.search(r'"ai_score"\s*:\s*"([^"]+)"', text)
     if s_match: fallback_score = s_match.group(1)
@@ -69,7 +90,7 @@ def extract_clean_json(text):
 
 def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
-    sys_msg = "你是冷血的JSON数据输出机。不能输出任何Markdown代码块。"
+    sys_msg = "你是冷血的JSON数据输出机。严禁输出任何Markdown代码块。"
     
     print(f"    🤖 启动 {model_name} (无尽等待)...")
     try:
