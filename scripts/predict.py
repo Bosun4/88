@@ -39,24 +39,38 @@ def build_synthesis_prompt(m, gpt_res, claude_res):
     p += '{"ai_score":"1-2","analysis":"不超过100字的终极裁定"}'
     return p
 
-# 🔥 终极 JSON 暴力脱水提取器
+# 🔥 终极脱水器：只要 AI 有响应，我就算生拉硬拽也要把数据抠出来，绝不浪费钱！
 def extract_clean_json(text):
     text = str(text or "").strip()
+    
+    # 保底手段：用正则暴力抽取（无视任何外层废话）
+    fallback_score = "未预测"
+    fallback_analysis = "格式混乱，已启用暴力抽取。"
+    s_match = re.search(r'"ai_score"\s*:\s*"([^"]+)"', text)
+    if s_match: fallback_score = s_match.group(1)
+    a_match = re.search(r'"analysis"\s*:\s*"(.*?)"', text, re.DOTALL)
+    if a_match: fallback_analysis = a_match.group(1).replace('"', "'").replace('\n', ' ').strip()
+    
+    # 优先尝试标准 JSON 解析
     start = text.find('{')
     end = text.rfind('}')
     if start != -1 and end != -1:
         json_str = text[start:end+1]
         try:
             return json.loads(json_str)
-        except:
+        except Exception:
             pass
+            
+    # 标准失败则抛出保底正则成果
+    if fallback_score != "未预测":
+        return {"ai_score": fallback_score, "analysis": fallback_analysis}
     return None
 
 def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
-    sys_msg = "你是冷血的JSON数据输出机。严禁输出Markdown格式。"
+    sys_msg = "你是冷血的JSON数据输出机。不能输出任何Markdown代码块。"
     
-    print(f"    🤖 启动 {model_name} (等待反馈)...")
+    print(f"    🤖 启动 {model_name} (无尽等待)...")
     try:
         if is_gpt_format:
             payload = {"model": model_name, "messages": [{"role": "system", "content": sys_msg}, {"role": "user", "content": prompt}], "temperature": 0.2}
@@ -69,12 +83,11 @@ def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
             
             parsed_data = extract_clean_json(t)
             if parsed_data:
-                # 🔥 强制双保险脱水，确保前端不会出现代码块！
                 raw_analysis = str(parsed_data.get("analysis") or "")
                 parsed_data["analysis"] = raw_analysis.replace("```json", "").replace("```", "").strip()
                 return parsed_data
             else:
-                print("    ❌ 无法解析 JSON 格式。")
+                print("    ❌ 无法解析返回的格式，API耗损。")
         else:
             print(f"    ❌ API 报错: {r.status_code}")
     except Exception as e: print(f"    ⚠️ 异常: {str(e)[:40]}")
@@ -140,18 +153,24 @@ def extract_num(match_str):
     nums = re.findall(r'\d+', match_str)
     return base_weight + int(nums[0]) if nums else 9999
 
-def run_predictions(raw):
+# 🔥 加入 AI 资金阀门：接收 main 传来的 use_ai 指令
+def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", []); res = []
     for i, m in enumerate(ms):
         sp = ensemble.predict(m, {})
         
-        ind_prompt = build_independent_prompt(m)
-        gpt_res = call_gpt(ind_prompt)
-        claude_res = call_claude(ind_prompt)
-        
-        syn_prompt = build_synthesis_prompt(m, gpt_res or {}, claude_res or {})
-        gemini_res = call_gemini(syn_prompt)
-        
+        if use_ai:
+            ind_prompt = build_independent_prompt(m)
+            gpt_res = call_gpt(ind_prompt)
+            claude_res = call_claude(ind_prompt)
+            syn_prompt = build_synthesis_prompt(m, gpt_res or {}, claude_res or {})
+            gemini_res = call_gemini(syn_prompt)
+        else:
+            # 🔥 对于昨天完场的比赛，直接赋予免算标志，一分钱都不花！
+            gpt_res = {"ai_score": "-", "analysis": "历史已完场，系统阻断 AI 分析以节省接口算力。"}
+            claude_res = {"ai_score": "-", "analysis": "历史已完场，系统阻断 AI 分析以节省接口算力。"}
+            gemini_res = {"ai_score": "-", "analysis": "历史已完场，系统阻断 AI 分析以节省接口算力。"}
+            
         mg = merge_all(gpt_res or {}, claude_res or {}, gemini_res or {}, sp, m)
         res.append({**m, "prediction": mg})
         
