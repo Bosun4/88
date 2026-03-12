@@ -14,37 +14,46 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
+# 🔥 核心防御：彻底切断冗杂新闻，植入强制排他指令
 def build_independent_prompt(m):
     h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
     intel = m.get("intelligence", {})
     
     p = "作为极其严谨的量化精算导师，请对以下情报数据进行极度深度的压力测试。我需要滴水不漏的缜密逻辑。\n\n"
-    p += f"【比赛对阵】{lg} | {h} vs {a}\n"
+    p += f"【绝对锁定目标赛事】{lg} | {h} vs {a}\n"
     p += f"【阵容与隐患】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
     p += f"【盘口与动向】{m.get('handicap_info')} | 资金异动：{m.get('odds_movement')}\n"
-    p += f"【外部观点】{m.get('expert_intro', '暂无')}\n"
     
-    p += "\n【压测准则】\n"
-    p += "1. 挑战表象：运用你对球队实力的深层认知，识破庄家通过盘口设置的诱导陷阱。\n"
-    p += "2. 拒绝平庸：如果双方实力悬殊或防线残缺，请果断给出大比分穿盘预测（如0-3, 1-4）；如果是真正的防守战，给出合理的僵局比分。\n"
-    p += "3. 必须严格返回纯JSON格式，严禁出现Markdown修饰或任何多余的解释文字。\n"
-    p += '{"ai_score":"1-2","analysis":"200字极其严谨的逻辑复盘，揭露比赛的胜负核心点。"}'
+    # 丢除带有大量污染信息的 base_face，只取简短的 intro
+    intro = m.get('expert_intro', '')
+    if len(intro) > 150: intro = intro[:150] + "..."
+    p += f"【专家短评】{intro if intro else '暂无'}\n"
+    
+    p += "\n【压测与防幻觉准则】\n"
+    p += f"1. 绝对专注：你只能围绕【{h}】和【{a}】这两支球队进行分析！如果提供的情报中荒谬地出现了姆巴佩、哈兰德等与本场完全无关的球星或豪门名称，这是数据抓取时的全球资讯串台，请立刻启动防御机制，将其彻底无视！绝对不允许把无关球星写进分析里！\n"
+    p += "2. 挑战表象：运用你对这两支球队实力的深层认知，识破庄家通过盘口设置的诱导陷阱。\n"
+    p += "3. 拒绝平庸：如果双方实力悬殊或防线残缺，请果断给出大比分穿盘预测（如0-3, 1-4）；如果是真正的防守战，给出合理的僵局比分。\n"
+    p += "4. 必须严格返回纯JSON格式，严禁出现Markdown修饰或任何多余的解释文字。\n"
+    p += '{"ai_score":"1-2","analysis":"200字极其严谨的逻辑复盘，紧扣当前两支球队，揭露比赛的胜负核心点。"}'
     return p
 
 def build_synthesis_prompt(m, gpt_res, claude_res):
     h, a, lg = m["home_team"], m["away_team"], m.get("league", "")
     p = "作为首席决策官兼严谨的量化导师，请对GPT和Claude的意见进行最高级别的逻辑压测。挑出它们的漏洞，给出绝对权威的最终裁决。\n\n"
-    p += f"【赛事】{lg} | {h} vs {a}\n"
+    p += f"【绝对锁定目标赛事】{lg} | {h} vs {a}\n"
     p += f"【GPT 报告】比分: {gpt_res.get('ai_score', '未知')} | 逻辑: {gpt_res.get('analysis', '无')}\n"
     p += f"【Claude 报告】比分: {claude_res.get('ai_score', '未知')} | 逻辑: {claude_res.get('analysis', '无')}\n"
-    p += "\n【终极裁决】冷酷地审视这两份报告，剔除感性部分，结合你的知识库，给出一锤定音的『预测比分』。\n"
-    p += '必须严格返回纯JSON格式：\n{"ai_score":"1-2","analysis":"200字终极严谨裁决，指出你采纳或摒弃它们意见的根本逻辑。"}'
+    
+    p += "\n【终极裁决与纠错指令】\n"
+    p += f"1. 严查幻觉失误：冷酷地审视这两份报告！如果它们在逻辑中愚蠢地提及了未参与本场比赛的无关球星（如非要聊姆巴佩、梅西等），请毫不留情地在裁决中批判这种幻觉，并强行剔除该无效逻辑！\n"
+    p += "2. 结合你的知识库，给出一锤定音的『预测比分』。\n"
+    p += '必须严格返回纯JSON格式：\n{"ai_score":"1-2","analysis":"200字终极严谨裁决，紧紧围绕对阵双方，指出你采纳或摒弃它们意见的根本逻辑。"}'
     return p
 
 def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
     sys_msg = "你是严谨无情的量化精算师，只允许输出JSON，不准带```json代码块。"
-    print(f"    🤖 等待 AI {model_name} 的独立思考 (600秒上限)...")
+    print(f"    🤖 等待 AI {model_name} 的独立思考 (无时间限制)...")
     try:
         if is_gpt_format:
             payload = {"model": model_name, "messages": [{"role": "system", "content": sys_msg}, {"role": "user", "content": prompt}], "temperature": 0.3}
@@ -60,14 +69,18 @@ def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
             match = re.search(r'\{.*\}', t, re.DOTALL)
             if match:
                 return json.loads(match.group(0))
+        else:
+            print(f"    ❌ 接口报错: {r.status_code} ({r.text[:50]})")
     except Exception as e: print(f"    ⚠️ {model_name} 异常: {str(e)[:40]}")
     return {}
 
 def call_gpt(prompt): return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
 
 def call_claude(prompt): 
-    try: claude_key = CLAUDE_API_KEY
-    except NameError: claude_key = os.environ.get("CLAUDE_API_KEY", "")
+    try:
+        claude_key = CLAUDE_API_KEY
+    except NameError:
+        claude_key = os.environ.get("CLAUDE_API_KEY", "")
     return call_ai_model(prompt, GPT_API_URL, claude_key, "claude-sonnet-4-6", True) 
 
 def call_gemini(prompt): return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
@@ -113,7 +126,6 @@ def select_top4(preds):
     preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
     return preds[:4]
 
-# 🔥 核心修复：极其严谨的汉字星期权重映射！
 def extract_num(match_str):
     week_map = {"一": 1000, "二": 2000, "三": 3000, "四": 4000, "五": 5000, "六": 6000, "日": 7000, "天": 7000}
     base_weight = 0
@@ -145,6 +157,5 @@ def run_predictions(raw):
     t4ids = [t["id"] for t in t4]
     for r in res: r["is_recommended"] = r["id"] in t4ids
     
-    # 使用增强权重函数严谨排序
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
     return res, t4
