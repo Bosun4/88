@@ -5,8 +5,6 @@ import traceback
 from datetime import datetime, timedelta, timezone
 
 def get_target_date(offset=0):
-    # 🔥 核心防御：强行锁定北京时区，并且减去11小时！
-    # 因为如果早上8点运行，按竞彩逻辑它依然属于“昨天”的期号！
     beijing_tz = timezone(timedelta(hours=8))
     now = datetime.now(beijing_tz) - timedelta(hours=11)
     return (now + timedelta(days=offset)).strftime("%Y-%m-%d")
@@ -18,7 +16,7 @@ def main():
     session = "morning" if now_time.hour < 15 else "evening"
 
     print("=" * 70)
-    print("⚽ 量化足球投研终端 (严密时序风控版)")
+    print("⚽ 量化足球投研终端 (严密时序与防污染版)")
     print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
     print("=" * 70)
 
