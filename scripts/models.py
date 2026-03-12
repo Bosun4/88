@@ -72,7 +72,7 @@ def fetch_real_historical_data():
     for season in seasons:
         for league in leagues:
             try:
-                r = requests.get(f"https://www.football-data.co.uk/mmz4281/{season}/{league}.csv", headers=headers, timeout=10)
+                r = requests.get(f"[https://www.football-data.co.uk/mmz4281/](https://www.football-data.co.uk/mmz4281/){season}/{league}.csv", headers=headers, timeout=10)
                 if r.status_code == 200: dfs.append(pd.read_csv(io.StringIO(r.text), on_bad_lines='skip'))
             except Exception: continue
     if not dfs: return _fallback_training_data()
@@ -208,7 +208,6 @@ class EnsemblePredictor:
         self.rf.train(); self.lr.train()
 
     def predict(self, match, odds_data=None):
-        """完全基于数学、排名、赔率的本地运算，绝不掺杂AI文本"""
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
         h_gf = float(hs.get("avg_goals_for", 1.3)); h_ga = float(hs.get("avg_goals_against", 1.1))
         a_gf = float(ast.get("avg_goals_for", 1.1)); a_ga = float(ast.get("avg_goals_against", 1.3))
@@ -216,7 +215,6 @@ class EnsemblePredictor:
         sp_h, sp_d, sp_a = float(match.get("sp_home", 0)), float(match.get("sp_draw", 0)), float(match.get("sp_away", 0))
         v2_odds = match.get("v2_odds_dict", {})
         
-        # 赔率强制纠偏引擎
         if sp_h > 1.0 and sp_a > 1.0 and sp_d > 1.0:
             prob_h, prob_d, prob_a = 1/sp_h, 1/sp_d, 1/sp_a
             margin = prob_h + prob_d + prob_a
