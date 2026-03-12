@@ -72,7 +72,7 @@ def fetch_real_historical_data():
     for season in seasons:
         for league in leagues:
             try:
-                r = requests.get(f"[https://www.football-data.co.uk/mmz4281/](https://www.football-data.co.uk/mmz4281/){season}/{league}.csv", headers=headers, timeout=10)
+                r = requests.get(f"https://www.football-data.co.uk/mmz4281/{season}/{league}.csv", headers=headers, timeout=10)
                 if r.status_code == 200: dfs.append(pd.read_csv(io.StringIO(r.text), on_bad_lines='skip'))
             except Exception: continue
     if not dfs: return _fallback_training_data()
@@ -214,6 +214,7 @@ class EnsemblePredictor:
         
         sp_h, sp_d, sp_a = float(match.get("sp_home", 0)), float(match.get("sp_draw", 0)), float(match.get("sp_away", 0))
         v2_odds = match.get("v2_odds_dict", {})
+        extreme_warning = "无"
         
         if sp_h > 1.0 and sp_a > 1.0 and sp_d > 1.0:
             prob_h, prob_d, prob_a = 1/sp_h, 1/sp_d, 1/sp_a
@@ -223,13 +224,25 @@ class EnsemblePredictor:
             expected_total = 2.5 + (0.25 - prob_d) * 8.0
             expected_total = max(1.5, expected_total)
             
+            is_massacre = False
             if float(v2_odds.get("a5", 999)) < 7.5 or float(v2_odds.get("a6", 999)) < 13.0:
                 expected_total *= 1.35
+                is_massacre = True
 
             if prob_a > 0.60 and prob_h < 0.22: 
                 a_gf, h_gf = expected_total * 0.85, expected_total * 0.15
+                if is_massacre: 
+                    extreme_warning = "🔴 实力碾压预警 (客防大比分穿盘)"
+                    a_gf = max(a_gf, 3.8) 
             elif prob_h > 0.60 and prob_a < 0.22: 
                 h_gf, a_gf = expected_total * 0.85, expected_total * 0.15
+                if is_massacre: 
+                    extreme_warning = "🔴 实力碾压预警 (主防大比分穿盘)"
+                    h_gf = max(h_gf, 3.8)
+            elif is_massacre: 
+                extreme_warning = "⚠️ 开放场面预警 (高危对攻大战)"
+                h_gf = max(expected_total * (prob_h / (prob_h + prob_a)), 2.2)
+                a_gf = max(expected_total * (prob_a / (prob_h + prob_a)), 2.2)
             else:
                 h_gf = expected_total * (prob_h / (prob_h + prob_a))
                 a_gf = expected_total * (prob_a / (prob_h + prob_a))
@@ -264,6 +277,7 @@ class EnsemblePredictor:
             "predicted_score": ref_poi["predicted_score"], "confidence": cf, 
             "poisson": poi, "refined_poisson": ref_poi, "dixon_coles": dc, "random_forest": rf, "logistic": lr,
             "elo": self.elo.predict(match.get("home_rank", 10), match.get("away_rank", 10)), "home_form": hf, "away_form": af,
+            "extreme_warning": extreme_warning, "smart_money_signal": "正常",
             "over_2_5": pace["over_2_5"], "btts": poi.get("btts", 50),
             "pace_rating": pace["pace_rating"],
             "expected_total_goals": pace["expected_total"],
