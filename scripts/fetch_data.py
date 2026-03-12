@@ -16,6 +16,8 @@ TEAM_NAME_MAPPING = {
 }
 
 def translate_team_name(name):
+    if not name: return ""
+    name = str(name)
     if name in TEAM_NAME_MAPPING: return TEAM_NAME_MAPPING[name]
     try:
         clean = name.replace("女足", " Women").replace("联", " United")
@@ -28,7 +30,7 @@ def _get_float(val, default=999.0):
     except Exception: return default
 
 def scrape_wencai_jczq(date_str):
-    url = f"[https://edu.wencaivip.cn/api/v1.reference/matches?date=](https://edu.wencaivip.cn/api/v1.reference/matches?date=){date_str}"
+    url = f"https://edu.wencaivip.cn/api/v1.reference/matches?date={date_str}"
     print(f"  🌐 正在建立问彩净水链路 [{date_str}]...")
     ms = []
     headers = {"User-Agent": "Mozilla/5.0", "Accept": "application/json"}
@@ -43,8 +45,9 @@ def scrape_wencai_jczq(date_str):
 
         for item in match_list:
             try:
-                t_type = item.get("types", "")
-                if str(t_type) != "1" and str(t_type) != "足球": continue
+                # 🔥 全部强制转化为字符串，绝杀 Null 陷阱！
+                t_type = str(item.get("types") or "")
+                if t_type != "1" and t_type != "足球": continue
 
                 stime = item.get("stime")
                 if not stime: continue
@@ -60,15 +63,11 @@ def scrape_wencai_jczq(date_str):
                 info = _safe_dict(item.get("information"))
                 pts = _safe_dict(item.get("points"))
                 
-                # 🔥 终极防崩溃修复：强制转为 str，无视 API 传来的 null，并限制长度
-                h_inj_raw = info.get("home_injury")
-                g_inj_raw = info.get("guest_injury")
-                h_inj = str(h_inj_raw).replace("\n", " ").strip()[:150] if h_inj_raw else "无重大伤停"
-                g_inj = str(g_inj_raw).replace("\n", " ").strip()[:150] if g_inj_raw else "无重大伤停"
+                # 🔥 强制 str() 包裹防崩溃！
+                h_inj = str(info.get("home_injury") or "无重大伤停").replace("\n", " ").strip()[:150]
+                g_inj = str(info.get("guest_injury") or "无重大伤停").replace("\n", " ").strip()[:150]
                 
                 intel_pool = {"h_inj": h_inj, "g_inj": g_inj}
-                
-                # 🔥 修复死代码：精准提取短评专家意见，坚决抛弃含有“姆巴佩”的长篇废话
                 expert_intro = str(item.get("intro") or "").strip()
                 
                 v2_odds = {
@@ -82,15 +81,20 @@ def scrape_wencai_jczq(date_str):
                     if not pos: return 0
                     m = re.findall(r'\d+', str(pos))
                     return int(m[0]) if m else 0
+                    
+                home_t = str(item.get("home") or "未知主队")
+                away_t = str(item.get("guest") or "未知客队")
+                lg_t = str(item.get("cup") or "未知联赛")
+                m_num = str(item.get("week") or "") + str(item.get("week_no") or "")
 
                 ms.append({
-                    "home_team": item.get("home", ""), "away_team": item.get("guest", ""), 
-                    "league": item.get("cup", ""), "match_num": f"{item.get('week', '')}{item.get('week_no', '')}",
+                    "home_team": home_t, "away_team": away_t, 
+                    "league": lg_t, "match_num": m_num,
                     "match_time": dt.strftime('%H:%M'),
                     "sp_home": _get_float(item.get("win"), 0), "sp_draw": _get_float(item.get("same"), 0), "sp_away": _get_float(item.get("lose"), 0),
                     "odds_movement": odds_mov, "handicap_info": f"让{item.get('give_ball', 0)}",
                     "intelligence": intel_pool, 
-                    "expert_intro": expert_intro, # 🔥 修复：真正传给下游！
+                    "expert_intro": expert_intro,
                     "home_rank": parse_rank(pts.get("home_position", "")),
                     "away_rank": parse_rank(pts.get("guest_position", "")),
                     "votes": _safe_dict(item.get("vote")),
