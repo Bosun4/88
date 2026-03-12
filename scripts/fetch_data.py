@@ -28,8 +28,8 @@ def _get_float(val, default=999.0):
     except Exception: return default
 
 def scrape_wencai_jczq(date_str):
-    url = f"https://edu.wencaivip.cn/api/v1.reference/matches?date={date_str}"
-    print(f"  🌐 正在建立问彩抓包链路 [{date_str}]: {url}")
+    url = f"[https://edu.wencaivip.cn/api/v1.reference/matches?date=](https://edu.wencaivip.cn/api/v1.reference/matches?date=){date_str}"
+    print(f"  🌐 正在建立问彩净水链路 [{date_str}]...")
     ms = []
     headers = {"User-Agent": "Mozilla/5.0", "Accept": "application/json"}
     
@@ -46,35 +46,27 @@ def scrape_wencai_jczq(date_str):
                 t_type = item.get("types", "")
                 if str(t_type) != "1" and str(t_type) != "足球": continue
 
-                # 🔥 核心防御：强行拦截串台数据！
-                # 问彩接口会返回所有比赛，必须根据比赛时间(stime)计算出它的竞彩归属日
                 stime = item.get("stime")
                 if not stime: continue
                 
                 dt = datetime.fromtimestamp(stime, timezone(timedelta(hours=8)))
-                # 减去11小时归档（凌晨3点的比赛属于前一天）
                 jc_date = (dt - timedelta(hours=11)).strftime("%Y-%m-%d")
-                
-                # 如果算出来的竞彩日不是我们正在请求的这天，直接斩杀丢弃！
-                if jc_date != date_str:
-                    continue
+                if jc_date != date_str: continue
 
                 chg = _safe_dict(item.get("change"))
                 w_c, l_c = _get_float(chg.get("win"), 0), _get_float(chg.get("lose"), 0)
                 odds_mov = f"主胜{'升水' if w_c>0 else '降水' if w_c<0 else '平稳'}，客胜{'升水' if l_c>0 else '降水' if l_c<0 else '平稳'}"
 
-                expert_intro = item.get("intro", "")
-                ana = _safe_dict(item.get("analyse"))
-                base_face = ana.get("baseface", "")
                 info = _safe_dict(item.get("information"))
                 pts = _safe_dict(item.get("points"))
                 
+                # 🔥 核心防御：剔除冗长的专家观点，限制伤停字符串长度，防止新闻污染
+                h_inj = info.get("home_injury", "").replace("\n", " ")[:150]
+                g_inj = info.get("guest_injury", "").replace("\n", " ")[:150]
+                
                 intel_pool = {
-                    "h_inj": info.get("home_injury", "").replace("\n", " ") if info.get("home_injury") else "无",
-                    "g_inj": info.get("guest_injury", "").replace("\n", " ") if info.get("guest_injury") else "无",
-                    "h_bad": info.get("home_bad_news", "").replace("\n", " ") if info.get("home_bad_news") else "无",
-                    "g_bad": info.get("guest_bad_news", "").replace("\n", " ") if info.get("guest_bad_news") else "无",
-                    "match_points": pts.get("match_points", "")
+                    "h_inj": h_inj if h_inj else "无重大伤停",
+                    "g_inj": g_inj if g_inj else "无重大伤停"
                 }
                 
                 v2_odds = {
@@ -84,8 +76,6 @@ def scrape_wencai_jczq(date_str):
                     "w21": _get_float(item.get("w21")), "a5": _get_float(item.get("a5")), "a6": _get_float(item.get("a6"))
                 }
                 
-                m_time = dt.strftime('%H:%M')
-                
                 def parse_rank(pos):
                     if not pos: return 0
                     m = re.findall(r'\d+', str(pos))
@@ -94,10 +84,10 @@ def scrape_wencai_jczq(date_str):
                 ms.append({
                     "home_team": item.get("home", ""), "away_team": item.get("guest", ""), 
                     "league": item.get("cup", ""), "match_num": f"{item.get('week', '')}{item.get('week_no', '')}",
-                    "match_time": m_time,
+                    "match_time": dt.strftime('%H:%M'),
                     "sp_home": _get_float(item.get("win"), 0), "sp_draw": _get_float(item.get("same"), 0), "sp_away": _get_float(item.get("lose"), 0),
                     "odds_movement": odds_mov, "handicap_info": f"让{item.get('give_ball', 0)}",
-                    "intelligence": intel_pool, "expert_intro": expert_intro, "base_face": base_face,
+                    "intelligence": intel_pool, 
                     "home_rank": parse_rank(pts.get("home_position", "")),
                     "away_rank": parse_rank(pts.get("guest_position", "")),
                     "votes": _safe_dict(item.get("vote")),
@@ -140,10 +130,10 @@ def fetch_h2h(hid, aid):
 def fetch_odds_baseline(): return {}
 
 def collect_all(date_str):
-    print(f"\n🚀 启动数据抓取 | 目标日期: {date_str}")
+    print(f"\n🚀 启动数据脱水过滤 | 目标日期: {date_str}")
     matches = scrape_wencai_jczq(date_str)
     for i, m in enumerate(matches):
-        print(f"  [{i+1}/{len(matches)}] 装载: {m['home_team']} vs {m['away_team']}")
+        print(f"  [{i+1}/{len(matches)}] 锁定并净化: {m['home_team']} vs {m['away_team']}")
         ht = search_team_api(m["home_team"]); at = search_team_api(m["away_team"])
         m.update({"home_id": ht["id"] if ht else 0, "away_id": at["id"] if at else 0, "id": i + 1, "date": date_str})
         api_h = fetch_stats(m["home_id"]); api_a = fetch_stats(m["away_id"])
