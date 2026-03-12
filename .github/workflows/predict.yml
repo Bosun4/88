@@ -12,7 +12,6 @@ jobs:
   predict:
     runs-on: ubuntu-latest
     steps:
-      # 🔥 绝对不能漏掉这步！没有这步就无法拉取你的代码仓！
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  
@@ -44,7 +43,13 @@ jobs:
           cp -r scripts/data/* data/ || echo "No data generated"
           
           git add data/
-          git diff --cached --quiet || git commit -m "🤖 自动更新比赛预测数据 (终极防崩溃版)"
           
-          git pull --rebase origin main || git pull origin main
-          git push
+          # 🔥 极客级防御：检测是否有文件变动。无变动则直接成功退出，不强行commit引发报错！
+          if [[ -n "$(git status --porcelain data/)" ]]; then
+            git commit -m "🤖 自动更新比赛预测数据 (智能拦截空提交版)"
+            git pull --rebase origin main || git pull origin main
+            git push
+            echo "✅ 新数据已成功推送到云端！"
+          else
+            echo "✅ 本次测算数据与云端完全一致，无新增改动，安全跳过提交。"
+          fi
