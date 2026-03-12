@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小鱼儿足球分析 Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap)" rel="stylesheet">
     <style>
         body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #0B1120; color: #f8fafc; }
         .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
@@ -115,15 +115,20 @@
                     <div class="flex justify-between items-center mb-4 relative z-10"><div class="flex items-center gap-2"><span class="text-xs font-bold text-slate-300">${match.league}</span><span class="text-xs text-slate-500">${match.match_num}</span></div><div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white font-black text-xs shadow-md shadow-orange-500/50">${match.rank}</div></div>
                     <div class="flex justify-between items-center mb-5 relative z-10"><div class="w-2/5 text-left font-bold text-lg truncate">${match.home_team}</div><div class="text-xs text-slate-600 font-black italic">VS</div><div class="w-2/5 text-right font-bold text-lg truncate">${match.away_team}</div></div>
                     <div class="grid grid-cols-3 gap-2 mb-4 relative z-10">
-                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-[10px] text-slate-500 mb-1">本地纯量化比分</div><div class="font-black text-emerald-400 text-lg">${p.predicted_score}</div></div>
-                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-[10px] text-slate-500 mb-1">量化主倾向</div><div class="font-bold text-white text-base">${p.result}</div></div>
-                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-[10px] text-slate-500 mb-1">置信度</div><div class="font-bold text-blue-400 text-base">${p.confidence}%</div></div>
+                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-[10px] text-slate-500 mb-1">本地系统比分</div><div class="font-black text-emerald-400 text-lg">${p.predicted_score}</div></div>
+                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-[10px] text-slate-500 mb-1">系统主观倾向</div><div class="font-bold text-white text-base">${p.result}</div></div>
+                        <div class="bg-slate-800/80 rounded-lg p-2 text-center border border-slate-700/50"><div class="text-[10px] text-slate-500 mb-1">本地置信度</div><div class="font-bold text-blue-400 text-base">${p.confidence}%</div></div>
                     </div>
                     <div class="flex items-center gap-2 relative z-10">
                         <span class="text-[10px] bg-indigo-900/40 text-indigo-300 px-2 py-1 rounded border border-indigo-800/50">Gemini终裁: ${p.gemini_score}</span>
                     </div>
                 </div>`;
             }).join('');
+        }
+
+        function cleanMarkdown(text) {
+            if (!text) return "无";
+            return text.replace(/```json/g, '').replace(/```/g, '').trim();
         }
 
         function renderMatches(tab) {
@@ -134,6 +139,7 @@
             container.innerHTML = matches.map(match => {
                 const p = match.prediction;
                 const hs = match.home_stats || {}; const as = match.away_stats || {};
+                
                 const hp = p.home_win_pct; const dp = p.draw_pct; const ap = p.away_win_pct;
                 
                 let signalHtml = '';
@@ -186,7 +192,7 @@
                         </div>
 
                         <div class="mb-5 bg-slate-900 p-3 rounded-xl border border-slate-800 relative">
-                            <div class="absolute -top-2 left-3 bg-slate-800 text-[9px] text-slate-400 px-1.5 rounded">本地引擎数学概率 (排除了AI文本干扰)</div>
+                            <div class="absolute -top-2 left-3 bg-slate-800 text-[9px] text-slate-400 px-1.5 rounded">本地引擎数学概率 (纯物理脱离AI)</div>
                             <div class="flex justify-between text-xs font-medium mb-2 px-1 mt-1">
                                 <span class="text-blue-400">主 ${hp}%</span>
                                 <span class="text-slate-400">平 ${dp}%</span>
@@ -204,7 +210,6 @@
                         ${v2Html}
 
                         <div class="mt-6 border border-slate-700 rounded-xl overflow-hidden bg-slate-900/50 shadow-lg">
-                            
                             <div class="bg-gradient-to-r from-indigo-900/60 to-purple-900/60 p-4 border-b border-slate-700">
                                 <div class="flex justify-between items-center mb-3">
                                     <div class="flex items-center gap-2">
@@ -214,26 +219,24 @@
                                     <div class="text-lg font-black text-white bg-slate-900/80 px-3 py-1 rounded-lg border border-indigo-500/50 shadow-[0_0_10px_rgba(99,102,241,0.3)]">${p.gemini_score}</div>
                                 </div>
                                 <div class="text-xs text-slate-300 leading-relaxed italic bg-slate-950/40 p-3 rounded-lg border border-slate-800">
-                                    ${p.gemini_analysis}
+                                    ${cleanMarkdown(p.gemini_analysis)}
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-700">
-                                
                                 <div class="p-4 bg-blue-950/20">
                                     <div class="flex justify-between items-center mb-2">
                                         <span class="text-xs font-bold text-blue-400">🤖 逻辑顾问 (GPT-5)</span>
                                         <span class="text-xs font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${p.gpt_score}</span>
                                     </div>
-                                    <p class="text-[11px] text-slate-400 leading-relaxed">${p.gpt_analysis}</p>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed">${cleanMarkdown(p.gpt_analysis)}</p>
                                 </div>
-
                                 <div class="p-4 bg-teal-950/20">
                                     <div class="flex justify-between items-center mb-2">
                                         <span class="text-xs font-bold text-teal-400">⚡ 交叉风控 (Claude)</span>
                                         <span class="text-xs font-bold text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${p.claude_score}</span>
                                     </div>
-                                    <p class="text-[11px] text-slate-400 leading-relaxed">${p.claude_analysis}</p>
+                                    <p class="text-[11px] text-slate-400 leading-relaxed">${cleanMarkdown(p.claude_analysis)}</p>
                                 </div>
                             </div>
                         </div>
