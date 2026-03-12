@@ -12,7 +12,7 @@ jobs:
   predict:
     runs-on: ubuntu-latest
     steps:
-      # 🔥 就是这里！你之前漏掉了这步，导致没有 .git 文件夹！
+      # 🔥 绝对不能漏掉这步！没有这步就无法拉取你的代码仓！
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  
@@ -44,7 +44,7 @@ jobs:
           cp -r scripts/data/* data/ || echo "No data generated"
           
           git add data/
-          git diff --cached --quiet || git commit -m "🤖 自动更新比赛预测数据 (修复架构漏洞)"
+          git diff --cached --quiet || git commit -m "🤖 自动更新比赛预测数据 (终极防崩溃版)"
           
-          git pull --rebase origin main
+          git pull --rebase origin main || git pull origin main
           git push
