@@ -60,14 +60,16 @@ def scrape_wencai_jczq(date_str):
                 info = _safe_dict(item.get("information"))
                 pts = _safe_dict(item.get("points"))
                 
-                # 🔥 核心防御：剔除冗长的专家观点，限制伤停字符串长度，防止新闻污染
-                h_inj = info.get("home_injury", "").replace("\n", " ")[:150]
-                g_inj = info.get("guest_injury", "").replace("\n", " ")[:150]
+                # 🔥 终极防崩溃修复：强制转为 str，无视 API 传来的 null，并限制长度
+                h_inj_raw = info.get("home_injury")
+                g_inj_raw = info.get("guest_injury")
+                h_inj = str(h_inj_raw).replace("\n", " ").strip()[:150] if h_inj_raw else "无重大伤停"
+                g_inj = str(g_inj_raw).replace("\n", " ").strip()[:150] if g_inj_raw else "无重大伤停"
                 
-                intel_pool = {
-                    "h_inj": h_inj if h_inj else "无重大伤停",
-                    "g_inj": g_inj if g_inj else "无重大伤停"
-                }
+                intel_pool = {"h_inj": h_inj, "g_inj": g_inj}
+                
+                # 🔥 修复死代码：精准提取短评专家意见，坚决抛弃含有“姆巴佩”的长篇废话
+                expert_intro = str(item.get("intro") or "").strip()
                 
                 v2_odds = {
                     "a1": _get_float(item.get("a1")), "a2": _get_float(item.get("a2")),
@@ -88,6 +90,7 @@ def scrape_wencai_jczq(date_str):
                     "sp_home": _get_float(item.get("win"), 0), "sp_draw": _get_float(item.get("same"), 0), "sp_away": _get_float(item.get("lose"), 0),
                     "odds_movement": odds_mov, "handicap_info": f"让{item.get('give_ball', 0)}",
                     "intelligence": intel_pool, 
+                    "expert_intro": expert_intro, # 🔥 修复：真正传给下游！
                     "home_rank": parse_rank(pts.get("home_position", "")),
                     "away_rank": parse_rank(pts.get("guest_position", "")),
                     "votes": _safe_dict(item.get("vote")),
