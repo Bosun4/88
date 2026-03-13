@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-03-13 18:17:17",
+  "update_time": "2026-03-13 18:45:03",
   "top4": [
     {
       "rank": 1,
@@ -59,7 +59,7 @@
         "grok_score": "-",
         "grok_analysis": "阻断或解析失败",
         "gemini_score": "2-1",
-        "gemini_analysis": "双AI前瞻数据缺失，直接调用底层数据库。坎布尔主场进攻火力强劲，虽防线偶有漏洞，但罗达JC客战抗压与硬坚能力不足。裁定坎布尔凭借主场优势与锋线效率强行拿下比赛，一锤定音。",
+        "gemini_analysis": "双端前瞻数据缺失，直接启用底层逻辑。坎布尔主场锋线压制力足，但防线存疑；罗达JC客战抗压极值较低，仅能依靠反击偷袭。裁定：坎布尔主场强攻破局，2-1绞杀对手。",
         "value_bets_summary": [
           "主胜 EV:+17.45% (仓位:9.28%)"
         ],
@@ -186,7 +186,7 @@
         "grok_score": "-",
         "grok_analysis": "阻断或解析失败",
         "gemini_score": "2-1",
-        "gemini_analysis": "GPT与Grok均未提供有效数据，视为弃权。基于自身数据库：都灵主场防守强悍且具备意甲老牌底蕴，帕尔马客战防守薄弱，防线易被打穿。终局裁定都灵主场全取三分。",
+        "gemini_analysis": "输入前瞻为空，基于独立数据库裁决。都灵主场防守强悍且战术纪律严明，帕尔马客战能力薄弱且防线不稳。主队整体实力与经验均占优，必将利用主场优势击溃对手全取三分。",
         "value_bets_summary": [
           "主胜 EV:+17.41% (仓位:4.4%)"
         ],
@@ -257,6 +257,133 @@
     },
     {
       "rank": 3,
+      "home_team": "雷克斯",
+      "away_team": "斯旺西",
+      "league": "英冠",
+      "match_num": "周五011",
+      "match_time": "04:00",
+      "sp_home": 2.13,
+      "sp_draw": 3.04,
+      "sp_away": 3.02,
+      "odds_movement": "主胜降水，客胜升水",
+      "handicap_info": "让-1",
+      "intelligence": {
+        "h_inj": "利贝拉托·卡卡塞 受伤 亚伦·詹姆斯 受伤 受伤 本·希夫 受伤 受伤 马修-詹姆斯 停赛 轮休 托马斯·奥康纳 受伤 受伤",
+        "g_inj": "里卡多·阿尔梅达·桑托斯 停赛 轮休 曼努埃尔·本森 停赛 轮休 亚当·伊达 停赛 轮休 齐达内·伊努萨 受伤 受伤 赞·维波特尼克 受伤"
+      },
+      "expert_intro": "斯旺西斩获联赛两连胜，此番走访上轮联赛失利的雷克斯，斯旺西剑指3分。",
+      "home_rank": 0,
+      "away_rank": 0,
+      "votes": {
+        "win": "41",
+        "same": "29",
+        "lose": "30",
+        "hhad_win": "18",
+        "hhad_same": "24",
+        "hhad_lose": "58"
+      },
+      "v2_odds_dict": {
+        "a1": 4.3,
+        "a2": 3.1,
+        "a3": 3.5,
+        "a4": 6.0,
+        "s11": 5.75,
+        "s22": 13.0,
+        "w21": 7.5,
+        "a5": 12.5,
+        "a6": 25.0
+      },
+      "home_id": 0,
+      "away_id": 0,
+      "id": 9,
+      "date": "2026-03-13",
+      "home_stats": {},
+      "away_stats": {},
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-1",
+        "home_win_pct": 53.9,
+        "draw_pct": 29.9,
+        "away_win_pct": 16.2,
+        "confidence": 80,
+        "result": "主胜",
+        "risk_level": "低",
+        "gpt_score": "-",
+        "gpt_analysis": "阻断或解析失败",
+        "grok_score": "-",
+        "grok_analysis": "阻断或解析失败",
+        "gemini_score": "1-2",
+        "gemini_analysis": "双AI前瞻缺失，启用独立裁决。斯旺西身处英冠，具备绝对的联赛级别与阵容深度压制。尽管雷克斯汉姆拥有资金支持与主场气势，但战术素养与控球能力存在代差。斯旺西将通过传控撕裂防线，雷克斯无力回天，客队取胜。",
+        "value_bets_summary": [
+          "主胜 EV:+14.81% (仓位:3.28%)"
+        ],
+        "extreme_warning": "无",
+        "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
+        "poisson": {
+          "home_win": 53.5,
+          "draw": 28.3,
+          "away_win": 18.2,
+          "predicted_score": "1-0",
+          "home_xg": 1.35,
+          "away_xg": 0.66,
+          "btts": 35.7,
+          "home_expected_goals": 1.35,
+          "away_expected_goals": 0.66
+        },
+        "refined_poisson": {
+          "home_win": 45.8,
+          "draw": 29.7,
+          "away_win": 24.6,
+          "predicted_score": "1-1",
+          "top_scores": [
+            {
+              "score": "1-1",
+              "prob": 16.0
+            },
+            {
+              "score": "1-0",
+              "prob": 12.7
+            },
+            {
+              "score": "2-0",
+              "prob": 11.3
+            },
+            {
+              "score": "2-1",
+              "prob": 10.3
+            },
+            {
+              "score": "0-0",
+              "prob": 10.0
+            }
+          ],
+          "v2_details": {
+            "p22": "3.3%",
+            "p11": "16.0%",
+            "p21": "10.3%",
+            "p12": "5.1%"
+          }
+        },
+        "elo": {
+          "home_win": 49.1,
+          "draw": 28.0,
+          "away_win": 36.9,
+          "elo_diff": 50
+        },
+        "home_form": {
+          "score": 50
+        },
+        "away_form": {
+          "score": 50
+        },
+        "model_consensus": 5,
+        "total_models": 5
+      },
+      "recommend_score": 61.27,
+      "is_recommended": true
+    },
+    {
+      "rank": 4,
       "home_team": "马格德堡",
       "away_team": "达姆施塔",
       "league": "德乙",
@@ -312,8 +439,8 @@
         "gpt_analysis": "阻断或解析失败",
         "grok_score": "-",
         "grok_analysis": "阻断或解析失败",
-        "gemini_score": "1-2",
-        "gemini_analysis": "GPT与Grok均未提供数据。基于独立数据库裁决：马格德堡战术激进，控球率高但防线压上极易暴露身后空当。达姆施塔特作为降班马底蕴犹存，换帅后反击犀利。客队将利用高效转换无情惩罚主队防守漏洞，客场取胜。",
+        "gemini_score": "2-1",
+        "gemini_analysis": "GPT与Grok均未提供有效前瞻，已全部摒弃。基于底层数据：马格德堡主场控球体系成熟，进攻端压制力强；达姆施塔特降级后防线重组不稳，客战乏力。主队将利用传控撕裂客队防线，马格德堡主场全取三分。",
         "value_bets_summary": [
           "主胜 EV:+20.75% (仓位:3.99%)"
         ],
@@ -381,133 +508,6 @@
       },
       "recommend_score": 60.85,
       "is_recommended": true
-    },
-    {
-      "rank": 4,
-      "home_team": "雷克斯",
-      "away_team": "斯旺西",
-      "league": "英冠",
-      "match_num": "周五011",
-      "match_time": "04:00",
-      "sp_home": 2.18,
-      "sp_draw": 3.04,
-      "sp_away": 2.93,
-      "odds_movement": "主胜平稳，客胜平稳",
-      "handicap_info": "让-1",
-      "intelligence": {
-        "h_inj": "利贝拉托·卡卡塞 受伤 亚伦·詹姆斯 受伤 受伤 本·希夫 受伤 受伤 马修-詹姆斯 停赛 轮休 托马斯·奥康纳 受伤 受伤",
-        "g_inj": "里卡多·阿尔梅达·桑托斯 停赛 轮休 曼努埃尔·本森 停赛 轮休 亚当·伊达 停赛 轮休 齐达内·伊努萨 受伤 受伤 赞·维波特尼克 受伤"
-      },
-      "expert_intro": "斯旺西斩获联赛两连胜，此番走访上轮联赛失利的雷克斯，斯旺西剑指3分。",
-      "home_rank": 0,
-      "away_rank": 0,
-      "votes": {
-        "win": "41",
-        "same": "29",
-        "lose": "30",
-        "hhad_win": "18",
-        "hhad_same": "24",
-        "hhad_lose": "58"
-      },
-      "v2_odds_dict": {
-        "a1": 4.3,
-        "a2": 3.1,
-        "a3": 3.5,
-        "a4": 6.0,
-        "s11": 5.75,
-        "s22": 13.0,
-        "w21": 7.5,
-        "a5": 12.5,
-        "a6": 25.0
-      },
-      "home_id": 0,
-      "away_id": 0,
-      "id": 9,
-      "date": "2026-03-13",
-      "home_stats": {},
-      "away_stats": {},
-      "h2h": [],
-      "prediction": {
-        "predicted_score": "1-1",
-        "home_win_pct": 51.0,
-        "draw_pct": 31.1,
-        "away_win_pct": 17.9,
-        "confidence": 80,
-        "result": "主胜",
-        "risk_level": "低",
-        "gpt_score": "-",
-        "gpt_analysis": "阻断或解析失败",
-        "grok_score": "-",
-        "grok_analysis": "阻断或解析失败",
-        "gemini_score": "1-2",
-        "gemini_analysis": "鉴于双AI输入为空，本裁决直调底层数据。斯旺西具英冠级别降维打击能力，控球与战术素养全面压制。雷克斯汉姆虽有资本加持与主场狂热，但硬实力鸿沟无法逾越。斯旺西将无情绞杀悬念，雷克斯仅能凭乱战破蛋。终局已定。",
-        "value_bets_summary": [
-          "主胜 EV:+11.18% (仓位:2.37%)"
-        ],
-        "extreme_warning": "无",
-        "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
-        "poisson": {
-          "home_win": 52.0,
-          "draw": 28.7,
-          "away_win": 19.2,
-          "predicted_score": "1-0",
-          "home_xg": 1.32,
-          "away_xg": 0.68,
-          "btts": 36.1,
-          "home_expected_goals": 1.32,
-          "away_expected_goals": 0.68
-        },
-        "refined_poisson": {
-          "home_win": 44.3,
-          "draw": 29.9,
-          "away_win": 25.8,
-          "predicted_score": "1-1",
-          "top_scores": [
-            {
-              "score": "1-1",
-              "prob": 16.1
-            },
-            {
-              "score": "1-0",
-              "prob": 12.4
-            },
-            {
-              "score": "2-0",
-              "prob": 10.8
-            },
-            {
-              "score": "2-1",
-              "prob": 10.2
-            },
-            {
-              "score": "0-0",
-              "prob": 10.0
-            }
-          ],
-          "v2_details": {
-            "p22": "3.3%",
-            "p11": "16.1%",
-            "p21": "10.2%",
-            "p12": "5.3%"
-          }
-        },
-        "elo": {
-          "home_win": 49.1,
-          "draw": 28.0,
-          "away_win": 36.9,
-          "elo_diff": 50
-        },
-        "home_form": {
-          "score": 50
-        },
-        "away_form": {
-          "score": 50
-        },
-        "model_consensus": 5,
-        "total_models": 5
-      },
-      "recommend_score": 60.4,
-      "is_recommended": true
     }
   ],
   "matches": {
@@ -569,8 +569,8 @@
           "gpt_analysis": "阻断或解析失败",
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
-          "gemini_score": "1-2",
-          "gemini_analysis": "GPT与Grok均未提供数据。基于独立数据库裁决：马格德堡战术激进，控球率高但防线压上极易暴露身后空当。达姆施塔特作为降班马底蕴犹存，换帅后反击犀利。客队将利用高效转换无情惩罚主队防守漏洞，客场取胜。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "GPT与Grok均未提供有效前瞻，已全部摒弃。基于底层数据：马格德堡主场控球体系成熟，进攻端压制力强；达姆施塔特降级后防线重组不稳，客战乏力。主队将利用传控撕裂客队防线，马格德堡主场全取三分。",
           "value_bets_summary": [
             "主胜 EV:+20.75% (仓位:3.99%)"
           ],
@@ -696,7 +696,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "0-3",
-          "gemini_analysis": "双AI前瞻数据缺失。吉达国民坐拥马赫雷斯、凯西等顶级外援，硬实力呈绝对碾压态势。胡巴卡德身价与技战术底蕴均处绝对劣势，防线注定被轻易撕裂。实力悬殊，客队必将实施降维打击，无情碾压取胜。",
+          "gemini_analysis": "GPT与Grok前瞻缺失，直接调用底层数据。吉达国民坐拥马赫雷斯与凯西等顶级外援，硬实力呈绝对碾压态势。胡巴卡德阵容深度与战术素养存在严重代差，防线无法抵挡沙特豪门的降维打击。裁定：客队兵不血刃，零封完胜。",
           "value_bets_summary": [
             "主胜 EV:+13.04% (仓位:2.33%)"
           ],
@@ -822,7 +822,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "1-1",
-          "gemini_analysis": "双方AI数据缺失。克莱蒙降级后水土不服，主场统治力尽失；波城FC客场防反极具韧性。数据模型显示主队进攻转化率低下，波城足以全身而退，平局为最合理终裁。",
+          "gemini_analysis": "外部前瞻缺失，启动独立裁决。克莱蒙降级后统治力尽失，主场进攻疲软；波城客场战术保守但防守坚韧。双方均无力击穿对方防线，1-1是最符合数据的冷血结局。",
           "value_bets_summary": [
             "主胜 EV:+18.8% (仓位:3.36%)"
           ],
@@ -947,8 +947,8 @@
           "gpt_analysis": "阻断或解析失败",
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
-          "gemini_score": "1-1",
-          "gemini_analysis": "前瞻数据缺失，直接调用底层数据库。兹沃勒主场防守漏洞频出，但格罗宁根客场进攻转化率同样低下。双方缺乏一击致命的绝对核心，中场绞杀将消耗大部分时间。数据模型推演指向沉闷的拉锯战，裁定平局。",
+          "gemini_score": "1-2",
+          "gemini_analysis": "双AI前瞻数据缺失，直接启用底层数据库。兹沃勒近期主场防守体系松懈，而格罗宁根重返荷甲后展现出极强的战术韧性与反击效率。数据模型无情判定客队实力占优，将以反击一击致命。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -1072,7 +1072,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "2-1",
-          "gemini_analysis": "双AI前瞻数据缺失，直接调用底层数据库。坎布尔主场进攻火力强劲，虽防线偶有漏洞，但罗达JC客战抗压与硬坚能力不足。裁定坎布尔凭借主场优势与锋线效率强行拿下比赛，一锤定音。",
+          "gemini_analysis": "双端前瞻数据缺失，直接启用底层逻辑。坎布尔主场锋线压制力足，但防线存疑；罗达JC客战抗压极值较低，仅能依靠反击偷袭。裁定：坎布尔主场强攻破局，2-1绞杀对手。",
           "value_bets_summary": [
             "主胜 EV:+17.45% (仓位:9.28%)"
           ],
@@ -1198,7 +1198,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "2-0",
-          "gemini_analysis": "双AI前瞻数据缺失，直接启用底层数据库。门兴主场战力稳定，进攻端具备绝对压制力；圣保利作为升班马客战孱弱，锋线极度缺乏终结手段。硬实力悬殊，门兴将以碾压姿态全取三分，主场冷酷零封。",
+          "gemini_analysis": "双AI输入缺失，启动独立裁决。门兴主场底蕴深厚，进攻端火力足以撕裂升班马防线；圣保利客战孱弱，锋线终结能力极差。实力绝对碾压，门兴主场必取完胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -1322,7 +1322,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "2-1",
-          "gemini_analysis": "GPT与Grok均未提供有效数据，视为弃权。基于自身数据库：都灵主场防守强悍且具备意甲老牌底蕴，帕尔马客战防守薄弱，防线易被打穿。终局裁定都灵主场全取三分。",
+          "gemini_analysis": "输入前瞻为空，基于独立数据库裁决。都灵主场防守强悍且战术纪律严明，帕尔马客战能力薄弱且防线不稳。主队整体实力与经验均占优，必将利用主场优势击溃对手全取三分。",
           "value_bets_summary": [
             "主胜 EV:+17.41% (仓位:4.4%)"
           ],
@@ -1448,7 +1448,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "2-0",
-          "gemini_analysis": "GPT与Grok输入为空，已直接摒弃。基于底层数据：马赛主场韦洛德罗姆具备绝对统治力，阵容深度与进攻火力呈碾压态势。欧塞尔客战能力孱弱，防线无法抵挡高压渗透。裁定马赛主场无悬念完胜。",
+          "gemini_analysis": "前瞻数据为空，启用独立裁决。马赛纸面实力与韦洛德罗姆主场优势显著，德泽尔比的进攻体系对阵中下游球队具备绝对压制力。欧塞尔客战防守孱弱，缺乏爆冷资本。实力碾压，判定马赛主场完胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -1521,10 +1521,10 @@
         "league": "英冠",
         "match_num": "周五011",
         "match_time": "04:00",
-        "sp_home": 2.18,
+        "sp_home": 2.13,
         "sp_draw": 3.04,
-        "sp_away": 2.93,
-        "odds_movement": "主胜平稳，客胜平稳",
+        "sp_away": 3.02,
+        "odds_movement": "主胜降水，客胜升水",
         "handicap_info": "让-1",
         "intelligence": {
           "h_inj": "利贝拉托·卡卡塞 受伤 亚伦·詹姆斯 受伤 受伤 本·希夫 受伤 受伤 马修-詹姆斯 停赛 轮休 托马斯·奥康纳 受伤 受伤",
@@ -1561,9 +1561,9 @@
         "h2h": [],
         "prediction": {
           "predicted_score": "1-1",
-          "home_win_pct": 51.0,
-          "draw_pct": 31.1,
-          "away_win_pct": 17.9,
+          "home_win_pct": 53.9,
+          "draw_pct": 29.9,
+          "away_win_pct": 16.2,
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
@@ -1572,44 +1572,44 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "1-2",
-          "gemini_analysis": "鉴于双AI输入为空，本裁决直调底层数据。斯旺西具英冠级别降维打击能力，控球与战术素养全面压制。雷克斯汉姆虽有资本加持与主场狂热，但硬实力鸿沟无法逾越。斯旺西将无情绞杀悬念，雷克斯仅能凭乱战破蛋。终局已定。",
+          "gemini_analysis": "双AI前瞻缺失，启用独立裁决。斯旺西身处英冠，具备绝对的联赛级别与阵容深度压制。尽管雷克斯汉姆拥有资金支持与主场气势，但战术素养与控球能力存在代差。斯旺西将通过传控撕裂防线，雷克斯无力回天，客队取胜。",
           "value_bets_summary": [
-            "主胜 EV:+11.18% (仓位:2.37%)"
+            "主胜 EV:+14.81% (仓位:3.28%)"
           ],
           "extreme_warning": "无",
           "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
           "poisson": {
-            "home_win": 52.0,
-            "draw": 28.7,
-            "away_win": 19.2,
+            "home_win": 53.5,
+            "draw": 28.3,
+            "away_win": 18.2,
             "predicted_score": "1-0",
-            "home_xg": 1.32,
-            "away_xg": 0.68,
-            "btts": 36.1,
-            "home_expected_goals": 1.32,
-            "away_expected_goals": 0.68
+            "home_xg": 1.35,
+            "away_xg": 0.66,
+            "btts": 35.7,
+            "home_expected_goals": 1.35,
+            "away_expected_goals": 0.66
           },
           "refined_poisson": {
-            "home_win": 44.3,
-            "draw": 29.9,
-            "away_win": 25.8,
+            "home_win": 45.8,
+            "draw": 29.7,
+            "away_win": 24.6,
             "predicted_score": "1-1",
             "top_scores": [
               {
                 "score": "1-1",
-                "prob": 16.1
+                "prob": 16.0
               },
               {
                 "score": "1-0",
-                "prob": 12.4
+                "prob": 12.7
               },
               {
                 "score": "2-0",
-                "prob": 10.8
+                "prob": 11.3
               },
               {
                 "score": "2-1",
-                "prob": 10.2
+                "prob": 10.3
               },
               {
                 "score": "0-0",
@@ -1618,9 +1618,9 @@
             ],
             "v2_details": {
               "p22": "3.3%",
-              "p11": "16.1%",
-              "p21": "10.2%",
-              "p12": "5.3%"
+              "p11": "16.0%",
+              "p21": "10.3%",
+              "p12": "5.1%"
             }
           },
           "elo": {
@@ -1638,7 +1638,7 @@
           "model_consensus": 5,
           "total_models": 5
         },
-        "recommend_score": 60.4,
+        "recommend_score": 61.27,
         "is_recommended": true
       },
       {
@@ -1698,7 +1698,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "1-2",
-          "gemini_analysis": "双AI输入缺失，直接启用底层数据库。阿拉维斯主场球风彪悍，但阵容深度与技术上限不足。比利亚雷亚尔在马塞利诺治下进攻体系成熟，中前场技术优势明显。黄潜将利用传控与高效终结撕裂主队防线，客场无情带走三分。",
+          "gemini_analysis": "双AI前瞻数据为空，已全部摒弃。基于底层数据库：阿拉维斯主场球风彪悍且防守极具韧性，但比利亚雷亚尔中前场技术优势显著，具备降维打击能力。主队防线无法全场抵御黄潜的传切渗透，客队将以微弱优势带走三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -1821,7 +1821,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "3-0",
-          "gemini_analysis": "GPT与Grok均未提供有效数据，视为弃权。基于历史交锋与绝对实力差距，中国女足在体能、战术及对抗上呈碾压态势。中国台北女足防线无法抵挡高强度压迫，中国女足将以绝对优势零封取胜，毫无悬念。",
+          "gemini_analysis": "双AI输入为空，直接启用底层数据库。中国女足对阵中国台北女足存在断层式实力碾压。无论是身体对抗、战术纵深还是历史交锋记录，中国女足均呈单边压制态势。防线不会受到实质威胁，常规时间将兵不血刃完成零封大胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
@@ -1945,7 +1945,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "0-1",
-          "gemini_analysis": "两份前瞻均无有效数据，直接启用底层数据库。神户胜利船作为卫冕冠军，整体实力与锋线终结能力远超名古屋鲸八。名古屋防守尚可但进攻疲软，难以抵挡大迫勇也等人的冲击。神户客场全取三分，一剑封喉。",
+          "gemini_analysis": "双AI输入为空，直接启用底层数据库。神户胜利船阵容深度与锋线终结能力呈绝对优势。名古屋鲸八虽具主场防守韧性，但进攻端极度匮乏，难以反制神户的高位压迫。数据模型锁定客队掌控局势，裁定神户客场一击致命。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2068,8 +2068,8 @@
           "gpt_analysis": "阻断或解析失败",
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
-          "gemini_score": "2-0",
-          "gemini_analysis": "双方前瞻缺失，启动独立裁决。光州FC主场高位压迫极具侵略性；全北现代霸主光环褪色，客场防线松散且中场脱节。数据推演表明光州将完全掌控比赛节奏，全北无力招架。终裁：光州主场无情绞杀全北。",
+          "gemini_score": "1-2",
+          "gemini_analysis": "输入前瞻均为空，直接调用底层数据库。光州FC战术激进但防线容错率低，全北现代虽陷低谷但阵容底蕴与硬仗经验仍在。全北将利用光州大举压上暴露的身后空间完成致命反击，客场无情绞杀带走三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2193,7 +2193,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "0-2",
-          "gemini_analysis": "双AI前瞻缺失，直接启用底层数据。奥克兰FC作为A联赛新军展现出统治级防守与高效反击，资本注入带来的阵容深度远超常年垫底挣扎的纽喷气机。主队防线脆弱且缺乏终结能力，客队将无情碾压，全取三分。",
+          "gemini_analysis": "双AI前瞻缺失。纽喷气机常年受困财务与阵容深度，防线极度脆弱；新军奥克兰FC获强力资本注入，班底成熟且战力成型迅速。主队毫无招架之力，奥克兰FC将无情碾压全取三分。",
           "value_bets_summary": [
             "主胜 EV:+21.51% (仓位:4.1%)"
           ],
@@ -2319,7 +2319,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "1-1",
-          "gemini_analysis": "输入前瞻均为空，启动独立裁决。鹿岛鹿角主场防守强硬但终结能力不稳；川崎前锋进攻体系成熟但防线存隐患。双方中场绞杀激烈，实力伯仲之间，注定平局收场。",
+          "gemini_analysis": "GPT与Grok前瞻数据为空，直接废弃。基于底层数据库，鹿岛鹿角主场球风硬朗，但川崎前锋传控体系具备极强渗透力。双方中场绞杀将极大消耗体能，防线均存致命隐患。实力伯仲之间，各取一分是唯一冷酷结局。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2443,7 +2443,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "0-1",
-          "gemini_analysis": "双AI前瞻数据缺失，直接启用底层数据库。东京绿茵主场防守顽强但终结能力匮乏；浦和红钻阵容深度与经验占绝对优势。模型推演浦和将通过中场绞杀掌控节奏，一击致命。裁定客队小胜。",
+          "gemini_analysis": "外部前瞻缺失，启动独立裁决。东京绿茵升班马底蕴单薄，攻坚乏力；浦和红钻阵容深度与战术素养全面压制。比赛将陷入中场绞杀，浦和必将凭借球星个人能力与定位球优势撕裂防线。实力鸿沟不可逾越，客队带走胜利。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2566,8 +2566,8 @@
           "gpt_analysis": "阻断或解析失败",
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
-          "gemini_score": "0-2",
-          "gemini_analysis": "GPT与Grok均未提供有效前瞻。基于客观数据库，金泉尚武战术纪律严明，本赛季攻防两端实力远超对手。大田市民防线漏洞百出，主场亦无力回天。实力差距悬殊，客队必胜。",
+          "gemini_score": "1-2",
+          "gemini_analysis": "双端前瞻缺失，直接调用底层数据。大田市民防线脆弱，整体状态低迷；金泉尚武战术纪律严明，本赛季展现出极强的客场反击与终结能力。硬实力呈单边压制，金泉尚武将无情击溃大田防线，客场全取三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2688,7 +2688,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "4-0",
-          "gemini_analysis": "双AI数据缺失，直接执行底层实力裁决。韩国女足属亚洲强队，技战术与身体素质呈降维打击态势。乌兹别克斯坦女足防线孱弱，面对高位压迫必将全线崩溃。实力鸿沟不可逾越，韩国女足将兵不血刃拿下大胜，悬念彻底抹杀。",
+          "gemini_analysis": "GPT与Grok均无有效输入。基于实力库，韩国女足属亚洲第一梯队，技战术与身体对抗全面碾压乌兹别克斯坦女足。乌兹别克防线绝对无法抵挡韩国的高位压迫与边路冲击，本场判定为单方面屠杀。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
@@ -2811,8 +2811,8 @@
           "gpt_analysis": "阻断或解析失败",
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
-          "gemini_score": "0-2",
-          "gemini_analysis": "GPT与Grok均未提供有效数据。基于底层数据库，杜塞多夫整体实力与战术执行力呈碾压态势，不伦瑞克防线脆弱且缺乏反制手段。客队将兵不血刃拿下比赛，终局已定。",
+          "gemini_score": "1-2",
+          "gemini_analysis": "GPT与Grok均无输入。基于底层数据：杜塞尔多夫整体实力与进攻火力远超不伦瑞克，具备冲甲硬实力。不伦瑞克主场虽有抵抗力但防线脆弱，难以抵挡客队的高效反击与渗透。裁定客队全取三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2936,7 +2936,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "1-2",
-          "gemini_analysis": "前瞻数据均为空，直接启用底层知识库。赫罗纳本赛季核心流失且受双线作战拖累，防线退化严重；毕尔巴鄂竞技战术底盘稳固，威廉姆斯兄弟的边路反击极具致命性。主队无效控球将被客队的高效转换无情击溃，裁定客胜。",
+          "gemini_analysis": "无前瞻输入，直接启用底层数据。赫罗纳本赛季核心流失且受欧冠双线拖累，防线退化严重；毕尔巴鄂竞技保留威廉姆斯兄弟等绝对主力，高位逼抢与快速转换极具杀伤力。客军边路冲击将无情撕裂主队防线，毕尔巴鄂带走三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -3060,7 +3060,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "2-1",
-          "gemini_analysis": "双AI前瞻缺失，直接启用内建数据库裁决。国米主场统治力及中场绞杀能力全面压制亚特兰大。加斯佩里尼的高位逼抢虽具破坏力，但国米防线容错率极低且反击致命，锋线核心将无情撕裂客队防线。数据碾压，主队取胜，毫无悬念。",
+          "gemini_analysis": "GPT与Grok输入为空，直接废弃。基于底层数据库：国米梅阿查主场统治力绝对压制，中场控制与锋线终结能力占优。亚特兰大高位逼抢必留致命空当，国米将无情绞杀取胜。",
           "value_bets_summary": [
             "主胜 EV:+7.16% (仓位:3.98%)"
           ],
@@ -3185,8 +3185,8 @@
           "gpt_analysis": "阻断或解析失败",
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
-          "gemini_score": "1-1",
-          "gemini_analysis": "GPT与Grok均未提供有效数据，直接启用底层数据库。霍芬海姆主场火力尚可但防线脆弱，沃尔夫斯堡客战风格保守且缺乏绝对终结能力。双方中场绞杀将主导比赛，平局为最合理预期。终局裁定：握手言和。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "GPT与Grok提交数据为空，视为无效直接摒弃。基于底层数据：霍芬海姆主场进攻火力稳定，而沃尔夫斯堡客战防线脆弱且状态起伏不定。主队将利用高位压迫撕裂对手防线，冷酷收割三分。",
           "value_bets_summary": [
             "主胜 EV:+10.83% (仓位:7.74%)"
           ],
@@ -3312,7 +3312,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "3-1",
-          "gemini_analysis": "双AI输入为空，直接调用底层数据。多特蒙德主场战力呈碾压态势，进攻端火力足以撕裂奥格斯堡防线。奥格斯堡客战能力孱弱，虽有零星反击但无法改变战局。终局判定：多特蒙德主场绝对压制取胜。",
+          "gemini_analysis": "双AI输入为空，直接调用底层数据。多特蒙德主场具备绝对压制力，锋线火力足以摧毁奥格斯堡孱弱的客场防线。尽管大黄蜂防线偶有漏洞可能导致失球，但整体实力呈碾压态势。胜负已分，主队必胜。",
           "value_bets_summary": [
             "主胜 EV:+7.42% (仓位:5.98%)"
           ],
@@ -3438,7 +3438,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "2-0",
-          "gemini_analysis": "GPT与Grok均未提供有效数据，已全部摒弃。基于底层数据库：法兰克福主场战力强悍，马尔穆什等锋线状态火热；海登海姆客战能力有限，防线难以抵挡高压冲击。实力碾压，主队完胜。",
+          "gemini_analysis": "GPT与Grok均未提供有效前瞻，视为弃权。基于底层数据库：法兰克福主场战力强悍，马尔穆什等锋线状态火热；海登海姆客战能力有限，防线难以抵挡高压冲击。实力碾压，主队完胜。",
           "value_bets_summary": [
             "主胜 EV:+11.95% (仓位:7.29%)"
           ],
@@ -3564,7 +3564,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "0-2",
-          "gemini_analysis": "GPT与Grok均未提供有效数据，直接启用内部数据库。伯恩利防线脆弱且主场缺乏统治力，面对伯恩茅斯的高位逼抢与快速转换极易崩盘。客队锋线终结能力更胜一筹，判定伯恩茅斯客场无情碾压。",
+          "gemini_analysis": "双AI输入为空，直接执行底层裁决。伯恩利防线脆弱且战术天真，缺乏顶级联赛生存硬度；伯恩茅斯高位压迫极具侵略性，反击高效致命。战术与执行力全面碾压，客队带走三分，毫无悬念。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -3688,7 +3688,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "2-0",
-          "gemini_analysis": "双AI前瞻缺失，直接启用底层数据。马竞主场战力呈绝对碾压，西蒙尼的战术体系将彻底绞杀赫塔费贫弱的锋线。赫塔费的粗野防守无法阻挡马竞的立体攻势，奥布拉克必保零封。裁决：马竞无情碾压，两球完胜。",
+          "gemini_analysis": "GPT与Grok均未提供有效数据。基于历史数据库，马竞在西蒙尼治下对阵赫塔费具备压倒性优势，主场防守稳固且反击高效。赫塔费客场进攻极度匮乏，难以击穿马竞防线。裁定马竞零封完胜。",
           "value_bets_summary": [
             "主胜 EV:+6.13% (仓位:3.48%)"
           ],
@@ -3814,7 +3814,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "0-2",
-          "gemini_analysis": "输入前瞻为空，直接调用底层数据。朗斯战术体系与阵容深度全面碾压洛里昂。主队防线漏洞百出，绝对无法抵御客队的高位压迫与快速转换。数据裁定：朗斯客场无情完胜。",
+          "gemini_analysis": "双AI前瞻数据缺失，直接启用底层数据库。朗斯在战术执行力与防守硬度上呈绝对碾压态势，其高位逼抢将彻底摧毁洛里昂脆弱的防线。客队全取三分并零封对手，毫无悬念。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -3938,7 +3938,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "2-0",
-          "gemini_analysis": "前瞻数据缺失，直接启用底层数据库。那不勒斯实力呈绝对碾压，孔蒂体系下防守稳固且主场战力极强。莱切锋线疲软，客战能力低下，毫无爆冷可能。裁定那不勒斯兵不血刃拿下比赛，轻松零封对手。",
+          "gemini_analysis": "鉴于双AI输入为空，启动独立裁决。那不勒斯整体实力呈碾压态势，主场作战且防守体系严密。莱切锋线疲软，客战毫无招架之力。主队将兵不血刃拿下比赛。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4062,7 +4062,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "2-1",
-          "gemini_analysis": "双AI输入缺失，启动独立裁决。汉堡主场人民公园球场压迫感极强，进攻端火力稳定；科隆降级后客战防守体系存在致命漏洞。数据模型无情锁定汉堡主场击穿对手防线，全取三分。",
+          "gemini_analysis": "双AI前瞻缺失，直接调用底层数据库。汉堡主场进攻压制力强，科隆降级后防线重组且客战疲软。数据模型推演显示，汉堡将利用边路撕裂科隆防线，主场全取三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4186,7 +4186,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "0-1",
-          "gemini_analysis": "GPT与Grok数据为空，本裁决基于底层数据库。奥维耶多身处西乙，与西甲巴伦西亚存在客观实力代差。蝙蝠军团虽近年客战不稳，但战术底蕴与球员能力足以形成压制。主队防线无法全场抵御，客队小胜是唯一符合逻辑的终局。",
+          "gemini_analysis": "前瞻数据缺失，启动独立裁决。奥维耶多主场防守硬朗，但受限于西乙实力上限。巴伦西亚虽近年客场疲软，但西甲级别的战术素养与单兵能力仍具降维打击优势。蝙蝠军团将以最小代价控盘，一剑封喉。",
           "value_bets_summary": [
             "主胜 EV:+13.47% (仓位:2.17%)"
           ],
@@ -4312,7 +4312,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "3-0",
-          "gemini_analysis": "双AI输入为空，直接启用底层数据库。埃因霍温整体实力呈绝对碾压，主场进攻火力无可匹敌。奈梅亨防线孱弱，客战毫无爆冷可能。裁决：主队兵不血刃，大比分零封完胜。",
+          "gemini_analysis": "双AI前瞻缺失，直接启用底层数据库。埃因霍温荷甲霸主地位不可撼动，主场火力呈碾压级；奈梅亨客战豪门防线脆弱，毫无爆冷资本。实力降维打击，主队必将兵不血刃拿下大胜。",
           "value_bets_summary": [
             "主胜 EV:+7.71% (仓位:6.02%)"
           ],
@@ -4438,7 +4438,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "0-1",
-          "gemini_analysis": "GPT与Grok均未提供有效数据，直接启用内部数据库。尤文图斯整体实力与战术纪律性呈碾压态势，乌迪内斯主场防线无法抵御持续的高效反击。斑马军团将以极简的实用主义带走胜利，一击致命。",
+          "gemini_analysis": "双AI输入为空，直接启用核心数据库。尤文图斯防守体系严密，战术纪律性呈压倒性优势。乌迪内斯主场硬度不足以弥补绝对的阵容实力差距。斑马军团将以令人窒息的防守控制带走胜利，一击致命。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4562,7 +4562,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "3-0",
-          "gemini_analysis": "鉴于双AI均未提供有效前瞻，本裁决基于客观实力库直判。皇马与埃尔切存在不可逾越的鸿沟，皇马锋线火力呈碾压态势，中场控制力绝对占优；埃尔切防线脆弱，毫无爆冷资本。终局判定：皇马单方面屠杀，零封取胜。",
+          "gemini_analysis": "鉴于双AI均未提供有效前瞻，本裁决直击客观实力。皇马在阵容深度与攻防两端呈绝对碾压态势，埃尔切孱弱的防线根本无法抵挡银河战舰的降维打击。胜负毫无悬念，皇马将以压倒性优势无情终结比赛。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
           "smart_money_signal": "正常",
@@ -4686,7 +4686,7 @@
           "grok_score": "-",
           "grok_analysis": "阻断或解析失败",
           "gemini_score": "0-2",
-          "gemini_analysis": "前瞻数据缺失，启动独立裁决。本菲卡硬实力呈碾压态势，阿罗卡防线无法抵挡其边路冲击与中路渗透。历史交锋本菲卡占据绝对统治，主队毫无爆冷资本。终局判定：客队兵不血刃，零封取胜。",
+          "gemini_analysis": "GPT与Grok均未提供有效数据。基于底层数据库，本菲卡在阵容深度与历史交锋中具备绝对碾压优势。阿罗卡主场防守难以抵挡本菲卡边路与中路的立体渗透。实力悬殊，客队将兵不血刃拿下比赛，终局裁定0-2。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (客防大比分穿盘)",
           "smart_money_signal": "正常",
