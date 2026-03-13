@@ -108,15 +108,20 @@ def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
             else:
                 print("    ❌ 无法解析返回的格式，API耗损。")
         else:
-            print(f"    ❌ API 报错: {r.status_code}")
+            print(f"    ❌ API 报错: {r.status_code} - {r.text[:100]}")
     except Exception as e: print(f"    ⚠️ 异常: {str(e)[:40]}")
     return {}
 
 def call_gpt(prompt): return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
 
-# 🔥 换回 Grok 引擎，使用原定的 GEMINI_API_KEY 映射
+# 🔥 核心替换：指定全新的专属 API 网关、密钥名称和模型型号！
 def call_grok(prompt): 
-    return call_ai_model(prompt, GPT_API_URL, GEMINI_API_KEY, "[次]grok-420-thinking", True) 
+    try: grok_key = GROK_API_KEY
+    except NameError: grok_key = os.environ.get("GROK_API_KEY", "")
+    
+    # 直接硬编码新的网关，不依赖 config.py
+    grok_url = "[https://api.gemai.cc/v1/chat/completions](https://api.gemai.cc/v1/chat/completions)"
+    return call_ai_model(prompt, grok_url, grok_key, "grok-420-thinking", True) 
 
 def call_gemini(prompt): return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
 
