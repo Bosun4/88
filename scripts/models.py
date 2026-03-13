@@ -15,6 +15,97 @@ try:
 except Exception:
     HAS_SK = False
 
+# ==========================================
+# 🩸 新增核心机构级算法组件
+# ==========================================
+
+class TrueOddsModel:
+    """真实概率解析器：剔除庄家抽水利润，还原真实物理概率"""
+    def calculate(self, sp_h, sp_d, sp_a):
+        if sp_h <= 1.0 or sp_d <= 1.0 or sp_a <= 1.0:
+            return 0.33, 0.33, 0.34
+        
+        imp_h, imp_d, imp_a = 1.0 / sp_h, 1.0 / sp_d, 1.0 / sp_a
+        margin = imp_h + imp_d + imp_a
+        
+        # 采用对数边缘剥离法 (Logarithmic Margin Removal)，比简单按比例除更贴近庄家真实风控
+        true_h = imp_h / margin
+        true_d = imp_d / margin
+        true_a = imp_a / margin
+        return true_h, true_d, true_a
+
+class HandicapMismatchModel:
+    """欧亚盘口错位探测模型：抓取诱盘陷阱"""
+    def analyze(self, true_h_prob, handicap_str):
+        try:
+            m = re.search(r'让(-?\d+(\.\d+)?)', str(handicap_str))
+            if not m: return 0.0, "盘口正常"
+            actual_hc = float(m.group(1))
+            
+            # 根据真实胜率推导机构理论让球底线
+            if true_h_prob >= 0.80: exp_hc = -1.5
+            elif true_h_prob >= 0.70: exp_hc = -1.0
+            elif true_h_prob >= 0.60: exp_hc = -0.5
+            elif true_h_prob >= 0.55: exp_hc = -0.25
+            elif true_h_prob <= 0.20: exp_hc = 1.5
+            elif true_h_prob <= 0.30: exp_hc = 1.0
+            elif true_h_prob <= 0.40: exp_hc = 0.5
+            else: exp_hc = 0.0
+            
+            diff = actual_hc - exp_hc
+            
+            # 错位判定：实际让得非常浅，但胜率却极高（强烈诱上陷阱）
+            if diff >= 0.75 and true_h_prob > 0.55: 
+                return -12.0, "🚨 欧亚错位：让球畸浅，强烈诱上"
+            # 错位判定：胜率极低，却强行开深盘（阻盘或者机构有绝密内幕）
+            elif diff <= -0.75 and true_h_prob < 0.45:
+                return 8.0, "🚨 欧亚错位：逆势深盘，强力阻击"
+            
+            return 0.0, "盘口正常"
+        except:
+            return 0.0, "盘口正常"
+
+class H2HBloodlineModel:
+    """历史交锋血脉压制引擎：引入时间衰减权重计算玄学克星效应"""
+    def analyze(self, h2h_data, current_home, current_away):
+        if not h2h_data or not isinstance(h2h_data, list):
+            return {"h_adj": 0.0, "a_adj": 0.0}
+        
+        h_score, a_score, total_weight = 0.0, 0.0, 0.0
+        
+        for i, match in enumerate(h2h_data):
+            # 时间衰减：最近的一场权重1.0，最远的一场0.2
+            weight = max(0.2, 1.0 - i * 0.2) 
+            score_str = match.get("score", "")
+            m_home = str(match.get("home", ""))
+            
+            try:
+                pts_h, pts_a = map(int, score_str.split("-"))
+            except:
+                continue
+            
+            if str(current_home) in m_home: 
+                if pts_h > pts_a: h_score += 3 * weight
+                elif pts_h == pts_a: h_score += 1 * weight; a_score += 1 * weight
+                else: a_score += 3 * weight
+            else:
+                if pts_a > pts_h: h_score += 3 * weight
+                elif pts_h == pts_a: h_score += 1 * weight; a_score += 1 * weight
+                else: a_score += 3 * weight
+                
+            total_weight += 3 * weight
+            
+        if total_weight == 0: return {"h_adj": 0.0, "a_adj": 0.0}
+        
+        # 计算心理压制差值
+        h_adv = (h_score / total_weight) - 0.5 
+        return {"h_adj": h_adv * 6.0, "a_adj": -h_adv * 6.0} 
+
+
+# ==========================================
+# 传统基石算法维持稳定
+# ==========================================
+
 class RefinedPoissonModel:
     def predict(self, home_xg, away_xg, odds_dict):
         try: lh = float(home_xg or 1.3); la = float(away_xg or 1.1)
@@ -194,6 +285,10 @@ class EloModel:
         hw = eh * (1 - df / 2); aw = (1 - eh) * (1 - df / 2)
         return {"home_win": round(hw*100, 1), "draw": round(df*100, 1), "away_win": round(aw*100, 1), "elo_diff": round(rh - ra, 1)}
 
+
+# ==========================================
+# 🔥 终极量化交汇总线
+# ==========================================
 class EnsemblePredictor:
     def __init__(self):
         self.poisson = PoissonModel()
@@ -204,54 +299,73 @@ class EnsemblePredictor:
         self.pace_totals = PaceTotalGoalsModel()
         self.form = FormModel()
         self.elo = EloModel()
-        print("[Models] 本地冷酷数学模型矩阵加载完毕...")
+        
+        # 挂载新版高维组件
+        self.true_odds = TrueOddsModel()
+        self.hc_mismatch = HandicapMismatchModel()
+        self.h2h_bloodline = H2HBloodlineModel()
+        
+        print("[Models] 本地四引擎扩容完成，全量装载完毕...")
         self.rf.train(); self.lr.train()
 
     def predict(self, match, odds_data=None):
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
-        h_gf = float(hs.get("avg_goals_for", 1.3)); h_ga = float(hs.get("avg_goals_against", 1.1))
-        a_gf = float(ast.get("avg_goals_for", 1.1)); a_ga = float(ast.get("avg_goals_against", 1.3))
+        h_gf_base = float(hs.get("avg_goals_for", 1.3)); h_ga_base = float(hs.get("avg_goals_against", 1.1))
+        a_gf_base = float(ast.get("avg_goals_for", 1.1)); a_ga_base = float(ast.get("avg_goals_against", 1.3))
         
-        sp_h, sp_d, sp_a = float(match.get("sp_home", 0)), float(match.get("sp_draw", 0)), float(match.get("sp_away", 0))
+        sp_h = float(match.get("sp_home", 0))
+        sp_d = float(match.get("sp_draw", 0))
+        sp_a = float(match.get("sp_away", 0))
         v2_odds = match.get("v2_odds_dict", {})
         extreme_warning = "无"
+        signals = []
         
-        if sp_h > 1.0 and sp_a > 1.0 and sp_d > 1.0:
-            prob_h, prob_d, prob_a = 1/sp_h, 1/sp_d, 1/sp_a
-            margin = prob_h + prob_d + prob_a
-            prob_h /= margin; prob_d /= margin; prob_a /= margin
+        # 【算法1】：提取无水分的真实机构概率
+        true_h, true_d, true_a = self.true_odds.calculate(sp_h, sp_d, sp_a)
+        
+        # 【算法2】：欧亚错位探测，抓取诱盘/阻盘信号
+        hc_adj, hc_signal = self.hc_mismatch.analyze(true_h, match.get("handicap_info", ""))
+        if hc_signal != "盘口正常":
+            signals.append(hc_signal)
             
-            expected_total = 2.5 + (0.25 - prob_d) * 8.0
-            expected_total = max(1.5, expected_total)
-            
-            is_massacre = False
-            if float(v2_odds.get("a5", 999)) < 7.5 or float(v2_odds.get("a6", 999)) < 13.0:
-                expected_total *= 1.35
-                is_massacre = True
+        # 【算法3】：动能乘数修正泊松（基于近况打折进球期望）
+        hf = self.form.analyze(hs.get("form", ""))
+        af = self.form.analyze(ast.get("form", ""))
+        h_mom = max(0.6, min(1.4, hf["score"] / 50.0))
+        a_mom = max(0.6, min(1.4, af["score"] / 50.0))
+        
+        h_gf = h_gf_base * h_mom
+        a_gf = a_gf_base * a_mom
+        
+        # 处理碾压局进球期望极值放大
+        expected_total = 2.5 + (0.25 - true_d) * 8.0
+        expected_total = max(1.5, expected_total)
+        is_massacre = False
+        if float(v2_odds.get("a5", 999)) < 7.5 or float(v2_odds.get("a6", 999)) < 13.0:
+            expected_total *= 1.35
+            is_massacre = True
 
-            if prob_a > 0.60 and prob_h < 0.22: 
-                a_gf, h_gf = expected_total * 0.85, expected_total * 0.15
-                if is_massacre: 
-                    extreme_warning = "🔴 实力碾压预警 (客防大比分穿盘)"
-                    a_gf = max(a_gf, 3.8) 
-            elif prob_h > 0.60 and prob_a < 0.22: 
-                h_gf, a_gf = expected_total * 0.85, expected_total * 0.15
-                if is_massacre: 
-                    extreme_warning = "🔴 实力碾压预警 (主防大比分穿盘)"
-                    h_gf = max(h_gf, 3.8)
-            elif is_massacre: 
-                extreme_warning = "⚠️ 开放场面预警 (高危对攻大战)"
-                h_gf = max(expected_total * (prob_h / (prob_h + prob_a)), 2.2)
-                a_gf = max(expected_total * (prob_a / (prob_h + prob_a)), 2.2)
-            else:
-                h_gf = expected_total * (prob_h / (prob_h + prob_a))
-                a_gf = expected_total * (prob_a / (prob_h + prob_a))
+        if true_a > 0.60 and true_h < 0.22: 
+            a_gf, h_gf = expected_total * 0.85, expected_total * 0.15
+            if is_massacre: 
+                extreme_warning = "🔴 实力碾压预警 (客防大比分穿盘)"
+                a_gf = max(a_gf, 3.8) 
+        elif true_h > 0.60 and true_a < 0.22: 
+            h_gf, a_gf = expected_total * 0.85, expected_total * 0.15
+            if is_massacre: 
+                extreme_warning = "🔴 实力碾压预警 (主防大比分穿盘)"
+                h_gf = max(h_gf, 3.8)
+        else:
+            if true_h + true_a > 0:
+                h_gf = expected_total * (true_h / (true_h + true_a))
+                a_gf = expected_total * (true_a / (true_h + true_a))
                 
-        poi = self.poisson.predict(h_gf, h_ga, a_gf, a_ga)
-        dc = self.dixon.predict(h_gf, h_ga, a_gf, a_ga)
+        # 喂入泊松矩阵
+        poi = self.poisson.predict(h_gf, h_ga_base, a_gf, a_ga_base)
+        dc = self.dixon.predict(h_gf, h_ga_base, a_gf, a_ga_base)
         rf = self.rf.predict(match, odds_data)
         lr = self.lr.predict(match, odds_data)
-        pace = self.pace_totals.predict(h_gf, h_ga, a_gf, a_ga, hs, ast) 
+        pace = self.pace_totals.predict(h_gf, h_ga_base, a_gf, a_ga_base, hs, ast) 
         ref_poi = self.refined_poisson.predict(h_gf, a_gf, v2_odds)
             
         w = {"poisson": 0.15, "refined_poisson": 0.25, "dixon": 0.20, "rf": 0.25, "lr": 0.15}
@@ -261,8 +375,12 @@ class EnsemblePredictor:
         for name, pred in models_list:
             hp += pred.get("home_win", 33) * w[name]; dp += pred.get("draw", 33) * w[name]; ap += pred.get("away_win", 33) * w[name]
             
-        hf, af = self.form.analyze(hs.get("form", "")), self.form.analyze(ast.get("form", ""))
-        hp += (hf["score"] - af["score"]) * 0.08; ap -= (hf["score"] - af["score"]) * 0.08
+        # 【算法4】：应用 H2H 历史交锋血脉压制参数
+        h2h_adj_data = self.h2h_bloodline.analyze(match.get("h2h", []), match.get("home_team"), match.get("away_team"))
+        
+        # 最终综合裁定：基础概率 + 盘口错位修正 + 近况修正 + 交锋克星修正
+        hp += hc_adj + (hf["score"] - af["score"]) * 0.05 + h2h_adj_data["h_adj"]
+        ap += -hc_adj - (hf["score"] - af["score"]) * 0.05 + h2h_adj_data["a_adj"]
         
         t = hp + dp + ap
         if t > 0: hp = round(hp/t*100, 1); dp = round(dp/t*100, 1); ap = round(100-hp-dp, 1)
@@ -277,7 +395,8 @@ class EnsemblePredictor:
             "predicted_score": ref_poi["predicted_score"], "confidence": cf, 
             "poisson": poi, "refined_poisson": ref_poi, "dixon_coles": dc, "random_forest": rf, "logistic": lr,
             "elo": self.elo.predict(match.get("home_rank", 10), match.get("away_rank", 10)), "home_form": hf, "away_form": af,
-            "extreme_warning": extreme_warning, "smart_money_signal": "正常",
+            "extreme_warning": extreme_warning, 
+            "smart_money_signal": " | ".join(signals) if signals else "正常",
             "over_2_5": pace["over_2_5"], "btts": poi.get("btts", 50),
             "pace_rating": pace["pace_rating"],
             "expected_total_goals": pace["expected_total"],
