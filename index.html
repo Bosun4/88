@@ -4,36 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小鱼儿足球量化终端 Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap)" rel="stylesheet">
     <style>
-        /* 剔除廉价渐变，采用专业数据终端的冷峻色调 */
         body { font-family: 'Inter', system-ui, sans-serif; background-color: #050505; color: #e2e8f0; }
-        .font-num { font-family: 'JetBrains Mono', monospace; } /* 专用的数据等宽字体 */
+        .font-num { font-family: 'JetBrains Mono', monospace; } 
         
-        /* 严谨的卡片面板 */
         .quant-panel { background: #0f1115; border: 1px solid #1e2430; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); }
         .quant-panel:hover { border-color: #2d3748; }
         
-        /* 顶部推荐卡片特制样式 */
         .top4-card { background: linear-gradient(180deg, #161b22 0%, #0d1117 100%); border-top: 3px solid #d97706; }
         
-        /* 专业概率动能条 */
         .prob-bar-container { background: #1a202c; border: 1px solid #2d3748; overflow: hidden; }
-        .prob-bar-h { background: #2563eb; } /* 主胜-沉稳蓝 */
-        .prob-bar-d { background: #475569; } /* 平局-中性灰 */
-        .prob-bar-a { background: #dc2626; } /* 客胜-警戒红 */
+        .prob-bar-h { background: #2563eb; } 
+        .prob-bar-d { background: #475569; } 
+        .prob-bar-a { background: #dc2626; } 
         
-        /* 报告样式边框 */
         .report-border-gpt { border-left: 3px solid #3b82f6; }
-        .report-border-claude { border-left: 3px solid #0d9488; }
+        .report-border-grok { border-left: 3px solid #0d9488; }
         .report-border-gemini { border-top: 3px solid #6366f1; }
 
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb { background: #334155; }
         
-        /* 专业级选项卡 */
         .tab-btn { flex: 1; text-align: center; padding: 0.5rem 0; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; border-bottom: 2px solid transparent; transition: all 0.2s; }
         .tab-btn.active { color: #e2e8f0; border-bottom-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
         
@@ -48,7 +42,7 @@
         <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-3">
             <div class="flex items-center gap-3">
                 <div class="w-2 h-6 bg-blue-600 rounded-sm"></div>
-                <h1 class="text-xl font-bold tracking-wider text-slate-100 uppercase">小鱼儿 <span class="text-blue-500 font-black">Pro</span> 足球分析系统</h1>
+                <h1 class="text-xl font-bold tracking-wider text-slate-100 uppercase">Quant <span class="text-blue-500 font-black">Pro</span> Terminal</h1>
             </div>
             <div class="flex items-center gap-3 font-num text-xs">
                 <span class="flex items-center gap-1.5 bg-green-900/20 text-green-500 border border-green-800/50 px-2.5 py-1 rounded">
@@ -259,12 +253,12 @@
                                     </div>
                                     <p class="text-[10px] text-slate-400 leading-snug">${cleanMarkdown(p.gpt_analysis)}</p>
                                 </div>
-                                <div class="p-3 report-border-claude bg-[#0f1115]">
+                                <div class="p-3 report-border-grok bg-[#0f1115]">
                                     <div class="flex justify-between items-center mb-1">
-                                        <span class="text-[9px] font-bold text-teal-500 uppercase">Analyst 2 [Claude]</span>
-                                        <span class="text-[10px] font-num text-slate-300">${p.claude_score}</span>
+                                        <span class="text-[9px] font-bold text-teal-500 uppercase">Analyst 2 [Grok]</span>
+                                        <span class="text-[10px] font-num text-slate-300">${p.grok_score}</span>
                                     </div>
-                                    <p class="text-[10px] text-slate-400 leading-snug">${cleanMarkdown(p.claude_analysis)}</p>
+                                    <p class="text-[10px] text-slate-400 leading-snug">${cleanMarkdown(p.grok_analysis)}</p>
                                 </div>
                             </div>
                         </div>
