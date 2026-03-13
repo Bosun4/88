@@ -137,10 +137,10 @@ def call_gpt(prompt):
     url = get_env_var("GPT_API_URL")
     key = get_env_var("GPT_API_KEY")
     # 🔥 严格锁定为你指定的 gpt-5.3-codex
-    return call_ai_model(prompt, url, key, "gpt-5.3-codex")
+    return call_ai_model(prompt, url, key, "gpt-5.2-codex")
 
 def call_grok(prompt): 
-    url = get_env_var("GROK_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
+    url = get_env_var("GROK_API_URL", "[https://api.gemai.cc](https://api.gemai.cc/v1)")
     key = get_env_var("GROK_API_KEY")
     # 🔥 严格锁定为你指定的 grok-4.1-thinking
     return call_ai_model(prompt, url, key, "grok-4.1-thinking")
