@@ -23,48 +23,46 @@ def build_independent_prompt(m):
     sp_a = m.get("sp_away", 0.0)
     intel = m.get("intelligence", {})
     
-    p = f"【系统绝对指令】你是一名冷酷无情的顶级足球量化风控专家。你的任务是且仅是对【{h}】(主队) VS 【{a}】(客队) 的比赛进行胜负与比分推演。\n"
-    p += f"【红色高压警报】绝对禁止在分析中提及任何与本场对阵无关的球队名或球星名（如姆巴佩、哈兰德等）。如果下方情报中出现此类杂音，那是数据串台，请立刻在脑内将其粉碎无视！\n\n"
+    p = f"【系统绝对指令】你是一名冷酷的足球量化风控专家。任务：对【{h}】VS【{a}】进行胜负推演。\n"
+    p += f"【警报】绝对禁止提及与本场无关的球队或球星（如姆巴佩等）。\n\n"
     
-    p += f"【足球基本面与赔率】\n"
-    p += f"- 赛事级别：{lg}\n"
-    p += f"- 初始胜平负赔率：主胜 {sp_h} | 平局 {sp_d} | 客胜 {sp_a}\n"
-    p += f"- 盘口与资金流向：{m.get('handicap_info')} | {m.get('odds_movement')}\n\n"
+    p += f"【足球基本面】\n"
+    p += f"- 赛事：{lg}\n"
+    p += f"- 初始SP值：主胜 {sp_h} | 平局 {sp_d} | 客胜 {sp_a}\n"
+    p += f"- 盘口/资金：{m.get('handicap_info')} | {m.get('odds_movement')}\n\n"
     
-    p += f"【核心阵容隐患】\n"
+    p += f"【阵容隐患】\n"
     p += f"- 主队伤停：{intel.get('h_inj')}\n"
     p += f"- 客队伤停：{intel.get('g_inj')}\n\n"
     
     intro = str(m.get('expert_intro', '')).strip()
     if len(intro) > 150: intro = intro[:150] + "..."
-    p += f"【精简情报】{intro if intro else '无'}\n\n"
+    p += f"【情报】{intro if intro else '无'}\n\n"
     
-    p += "【风控推演要求】\n"
-    p += "1. 结合初始赔率(SP值)和资金水位变化，洞察庄家真实的诱导意图（是阻盘还是诱盘？）。\n"
-    p += "2. 评估伤停对球队核心战力的致命影响，给出极其冷血的比分推演（碾压局果断大比分穿盘，胶着局防守平局）。\n"
-    p += "【格式铁律】必须且只能返回1个纯JSON对象，绝对不允许包含Markdown修饰符(如```json)或任何多余文本！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字的致命复盘，一针见血剖析胜负手，必须严格紧扣这两支队伍！"}'
+    p += "【要求】评估伤停与诱盘意图，给出最冷血的比分。\n"
+    p += "【格式铁律】必须且只能返回纯JSON对象，绝不允许有Markdown修饰符(如```json)！\n"
+    p += '{"ai_score":"1-2","analysis":"不超过100字复盘，只围绕这两支队伍！"}'
     return p
 
 def build_synthesis_prompt(m, gpt_res, grok_res):
     h = m.get("home_team", "主队")
     a = m.get("away_team", "客队")
     
-    p = f"【系统绝对指令】你是首席足球数据裁决官。你的唯一任务是对【{h}】vs【{a}】进行终局判定。\n"
-    p += f"GPT 提交的前瞻: 比分 [{gpt_res.get('ai_score', '无')}] | 逻辑 [{gpt_res.get('analysis', '无')}]\n"
-    p += f"Grok 提交的前瞻: 比分 [{grok_res.get('ai_score', '无')}] | 逻辑 [{grok_res.get('analysis', '无')}]\n\n"
+    p = f"【系统绝对指令】你是首席足球数据裁决官。任务：对【{h}】vs【{a}】进行终局判定。\n"
+    p += f"GPT 前瞻: 比分 [{gpt_res.get('ai_score', '无')}] | 逻辑 [{gpt_res.get('analysis', '无')}]\n"
+    p += f"Grok 前瞻: 比分 [{grok_res.get('ai_score', '无')}] | 逻辑 [{grok_res.get('analysis', '无')}]\n\n"
     
     p += "【终极裁决要求】\n"
-    p += "1. 交叉比对两份前瞻。如果发现任何一份报告出现了幻觉（例如提及了非本场比赛的无关球员或球队），必须在你的裁决中直接摒弃该无效逻辑！\n"
-    p += "2. 结合你自身的足球知识库，做出最无情的比分终裁。\n"
-    p += "【格式铁律】必须且只能返回1个纯JSON对象，绝对不允许包含Markdown修饰符！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字的终局冷酷裁定，一锤定音，不许废话。"}'
+    p += "1. 交叉比对两份前瞻。严禁在回复中提及Claude等未参与分析的模型名称！\n"
+    p += "2. 做出最无情的比分终裁。\n"
+    p += "【格式铁律】必须只能返回纯JSON对象，绝不允许包含Markdown修饰符！\n"
+    p += '{"ai_score":"1-2","analysis":"不超过100字的终局裁定。"}'
     return p
 
 def extract_clean_json(text):
     text = str(text or "").strip()
     fallback_score = "未预测"
-    fallback_analysis = "格式混乱，已启用底线暴力抽取。"
+    fallback_analysis = "格式混乱，已启用底线抽取。"
     
     s_match = re.search(r'"ai_score"\s*:\s*"([^"]+)"', text)
     if s_match: fallback_score = s_match.group(1)
@@ -78,21 +76,29 @@ def extract_clean_json(text):
         json_str = text[start:end+1]
         try:
             return json.loads(json_str)
-        except Exception:
-            pass
+        except Exception: pass
             
     if fallback_score != "未预测":
         return {"ai_score": fallback_score, "analysis": fallback_analysis}
     return None
 
 def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
+    # 🔥 核心修复：强行清除 URL 中的隐藏回车或空格，绝杀 No connection adapters 报错！
+    url = str(url).strip()
+    
     headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
     sys_msg = "你是冷血的JSON数据输出机。严禁输出任何Markdown代码块。"
     
-    print(f"    🤖 启动 {model_name} (无尽等待)...")
+    print(f"    🤖 启动 {model_name} (等待响应)...")
     try:
         if is_gpt_format:
-            payload = {"model": model_name, "messages": [{"role": "system", "content": sys_msg}, {"role": "user", "content": prompt}], "temperature": 0.2}
+            # 🔥 核心修复：补全满血版参数 max_tokens，满足严苛中转站的 400 防火墙要求
+            payload = {
+                "model": model_name, 
+                "messages": [{"role": "system", "content": sys_msg}, {"role": "user", "content": prompt}], 
+                "temperature": 0.2,
+                "max_tokens": 500
+            }
         else:
             payload = {"contents": [{"parts": [{"text": sys_msg + "\n" + prompt}]}], "generationConfig": {"temperature": 0.2}} if "generateContent" in url else {"model": model_name, "messages": [{"role": "user", "content": sys_msg + "\n" + prompt}], "temperature": 0.2}
         
@@ -106,24 +112,24 @@ def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
                 parsed_data["analysis"] = raw_analysis.replace("```json", "").replace("```", "").strip()
                 return parsed_data
             else:
-                print("    ❌ 无法解析返回的格式，API耗损。")
+                print("    ❌ 解析失败。")
         else:
-            print(f"    ❌ API 报错: {r.status_code} - {r.text[:100]}")
+            # 🔥 把具体的报错原因打出来，不再抓瞎！
+            print(f"    ❌ API 报错: {r.status_code} - {r.text[:80]}")
     except Exception as e: print(f"    ⚠️ 异常: {str(e)[:40]}")
     return {}
 
-def call_gpt(prompt): return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
+def call_gpt(prompt): 
+    return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
 
-# 🔥 核心替换：指定全新的专属 API 网关、密钥名称和模型型号！
 def call_grok(prompt): 
     try: grok_key = GROK_API_KEY
     except NameError: grok_key = os.environ.get("GROK_API_KEY", "")
-    
-    # 直接硬编码新的网关，不依赖 config.py
     grok_url = "[https://api.gemai.cc/v1/chat/completions](https://api.gemai.cc/v1/chat/completions)"
     return call_ai_model(prompt, grok_url, grok_key, "grok-420-thinking", True) 
 
-def call_gemini(prompt): return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
+def call_gemini(prompt): 
+    return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
 
 def merge_all(gpt, grok, gemini, stats, match_obj):
     sys_hp, sys_dp, sys_ap = stats.get("home_win_pct", 33), stats.get("draw_pct", 33), stats.get("away_win_pct", 33)
@@ -188,9 +194,9 @@ def run_predictions(raw, use_ai=True):
             syn_prompt = build_synthesis_prompt(m, gpt_res or {}, grok_res or {})
             gemini_res = call_gemini(syn_prompt)
         else:
-            gpt_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
-            grok_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
-            gemini_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
+            gpt_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用。"}
+            grok_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用。"}
+            gemini_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用。"}
             
         mg = merge_all(gpt_res or {}, grok_res or {}, gemini_res or {}, sp, m)
         res.append({**m, "prediction": mg})
