@@ -16,13 +16,20 @@ def main():
     session = "morning" if now_time.hour < 15 else "evening"
 
     print("=" * 70)
-    print("⚽ 量化足球投研终端 (终极全量解耦版)")
+    print("⚽ 量化足球投研终端 (绝对路径物理锁死版)")
     print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
     print("=" * 70)
 
-    os.makedirs("data", exist_ok=True)
-    target_path = "data/predictions.json"
-    history_path = f"data/history_{now_time.strftime('%Y%m%d')}_{session}.json"
+    # 🔥 核心防御装甲：获取当前脚本的绝对物理路径，彻底根除相对路径迷失陷阱！
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(base_dir, "data")
+    
+    # 强制在绝对路径下创建 data 文件夹
+    os.makedirs(data_dir, exist_ok=True)
+    
+    # 将保存路径绑定到绝对物理坐标
+    target_path = os.path.join(data_dir, "predictions.json")
+    history_path = os.path.join(data_dir, f"history_{now_time.strftime('%Y%m%d')}_{session}.json")
 
     final_output = {
         "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -60,7 +67,7 @@ def main():
             if day_key == "today":
                 final_output["top4"] = [{"rank": i + 1, **t} for i, t in enumerate(top4)]
 
-            # 增量安全落盘
+            # 绝对路径安全落盘
             with open(target_path, "w", encoding="utf-8") as f:
                 json.dump(final_output, f, ensure_ascii=False, indent=2)
             with open(history_path, "w", encoding="utf-8") as f:
