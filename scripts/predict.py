@@ -69,7 +69,6 @@ def extract_clean_json(text):
         return {"ai_score": fallback_score, "analysis": fallback_analysis}
     return None
 
-# 🔥 核心修复一：全局环境变量安全抓取，防止没配 URL 时报错
 def get_env_var(name, default=""):
     v = os.environ.get(name)
     if v: return str(v).strip()
@@ -79,7 +78,6 @@ def get_env_var(name, default=""):
     except Exception: pass
     return default
 
-# 🔥 核心修复二：智能补全路由网关，通杀原生和中转接口
 def call_ai_model(prompt, url, key, model_name):
     if not url or not key:
         print(f"    ❌ 缺少 URL 或 Key 配置，已跳过调用 ({model_name})")
@@ -88,16 +86,13 @@ def call_ai_model(prompt, url, key, model_name):
     url = url.strip()
     key = key.strip()
     
-    # 动态探测：网址里有没有谷歌原生标识？
     is_native_gemini = "generateContent" in url
     
-    # 如果不是原生谷歌，且网址没写全，系统帮你自动补全 /chat/completions 绝杀 404/400 报错！
     if not is_native_gemini and "chat/completions" not in url:
         url = url.rstrip("/") + "/chat/completions"
         
     headers = {"Content-Type": "application/json"}
     
-    # 动态适配 Payload 格式
     if is_native_gemini:
         headers["x-goog-api-key"] = key
         payload = {
@@ -112,7 +107,8 @@ def call_ai_model(prompt, url, key, model_name):
                 {"role": "system", "content": "你是无情的JSON输出机。绝对不准带任何Markdown修饰符。"}, 
                 {"role": "user", "content": prompt}
             ], 
-            "temperature": 0.2
+            "temperature": 0.2,
+            "max_tokens": 500
         }
         
     print(f"    🤖 启动 {model_name} | 网关探测: {'OpenAI中转标准' if not is_native_gemini else '谷歌原生标准'}...")
@@ -140,11 +136,10 @@ def call_ai_model(prompt, url, key, model_name):
 def call_gpt(prompt): 
     url = get_env_var("GPT_API_URL")
     key = get_env_var("GPT_API_KEY")
-    # 修正不存在的 gpt-5.4，改为标准的 gpt-4o，防止 400 报错
-    return call_ai_model(prompt, url, key, "gpt-4o")
+    # 🔥 已经为你回滚并死锁为 gpt-5.4
+    return call_ai_model(prompt, url, key, "gpt-5.4")
 
 def call_grok(prompt): 
-    # 赋予默认的中转 URL，防止你在 Secrets 里没配 URL 导致报错
     url = get_env_var("GROK_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
     key = get_env_var("GROK_API_KEY")
     return call_ai_model(prompt, url, key, "grok-420-thinking")
