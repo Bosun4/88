@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-03-14 00:08:23",
+  "update_time": "2026-03-14 01:58:29",
   "top4": [
     {
       "rank": 1,
@@ -41,7 +41,7 @@
       },
       "home_id": 0,
       "away_id": 0,
-      "id": 5,
+      "id": 4,
       "date": "2026-03-13",
       "home_stats": {},
       "away_stats": {},
@@ -59,7 +59,7 @@
         "grok_score": "-",
         "grok_analysis": "未响应或阻断",
         "gemini_score": "1-1",
-        "gemini_analysis": "由于前瞻数据缺失，基于两队近期荷乙联赛的整体表现与历史交锋进行独立裁定。坎布尔主场具备一定进攻优势，但罗达JC防守韧性尚可，预计双方陷入拉锯战，握手言和概率最大。",
+        "gemini_analysis": "鉴于前瞻数据缺失，基于荷乙联赛特性与两队底蕴进行无情盲裁。坎布尔主场具备一定火力但防守存在漏洞，罗达JC客场反击犀利且韧性十足。综合判定双方势均力敌，握手言和概率最大。",
         "value_bets_summary": [
           "主胜 EV:+5.34% (仓位:2.73%)"
         ],
@@ -171,7 +171,7 @@
       },
       "home_id": 0,
       "away_id": 0,
-      "id": 7,
+      "id": 6,
       "date": "2026-03-13",
       "home_stats": {},
       "away_stats": {},
@@ -188,8 +188,8 @@
         "gpt_analysis": "未响应或阻断",
         "grok_score": "-",
         "grok_analysis": "未响应或阻断",
-        "gemini_score": "1-1",
-        "gemini_analysis": "由于缺乏有效前瞻数据，本裁定基于球队基础底蕴。都灵主场防守稳健，但进攻端缺乏绝对统治力；帕尔马具备一定反击韧性。综合判定双方势均力敌，平局收场概率最大。",
+        "gemini_score": "2-1",
+        "gemini_analysis": "格式混乱，已启用底线抽取。",
         "value_bets_summary": [
           "主胜 EV:+15.95% (仓位:3.91%)"
         ],
@@ -301,7 +301,7 @@
       },
       "home_id": 0,
       "away_id": 0,
-      "id": 9,
+      "id": 8,
       "date": "2026-03-13",
       "home_stats": {},
       "away_stats": {},
@@ -319,7 +319,7 @@
         "grok_score": "-",
         "grok_analysis": "未响应或阻断",
         "gemini_score": "1-2",
-        "gemini_analysis": "格式混乱，已启用底线抽取。",
+        "gemini_analysis": "由于缺乏有效前瞻数据，本裁定基于球队客观基本面。斯旺西身处更高级别联赛，整体阵容深度与战术素养占据显著优势。雷克斯虽具一定战斗力，但硬实力存在客观差距。判定客队斯旺西稳中取胜。",
         "value_bets_summary": [
           "主胜 EV:+12.68% (仓位:2.8%)"
         ],
@@ -393,54 +393,54 @@
     },
     {
       "rank": 4,
-      "home_team": "马格德堡",
-      "away_team": "达姆施塔",
-      "league": "德乙",
-      "match_num": "周五003",
-      "match_time": "01:30",
-      "sp_home": 2.34,
-      "sp_draw": 3.55,
-      "sp_away": 2.38,
-      "odds_movement": "主胜升水，客胜降水",
+      "home_team": "克莱蒙",
+      "away_team": "波城FC",
+      "league": "法乙",
+      "match_num": "周五005",
+      "match_time": "03:00",
+      "sp_home": 2.32,
+      "sp_draw": 3.06,
+      "sp_away": 2.69,
+      "odds_movement": "主胜平稳，客胜升水",
       "handicap_info": "让-1",
       "intelligence": {
-        "h_inj": "塔雷克·查希德 停赛 轮休 丹尼尔·赫伯 停赛 轮休 萨缪尔·洛里克 受伤 足部受伤 海瑞莱宁 受伤 胫骨损伤 艾尔丁·佐戈维奇 停赛 轮休",
-        "g_inj": "马修亚斯·巴德尔 受伤 膝关节受伤 法比安·纽伦博格 受伤 受伤 巴托斯·比亚莱克 受伤 踝关节扭伤"
+        "h_inj": "迈蒂尼·杜安 受伤 膝关节受伤 马蒂斯·多纳文 停赛 轮休 肯吉·万·博托 停赛 轮休 亨利·萨维特 停赛 轮休",
+        "g_inj": "乔迪·加斯帕尔 停赛 轮休 奥斯曼·坎特 停赛 轮休"
       },
-      "expert_intro": "马格德堡近4轮联赛全负，入不敷出是球队致命伤，状态持续低迷的马格德堡是役主场难逃沦陷结局。",
+      "expert_intro": "波城过去4轮联赛输了3场并且一胜难求，加上防守发挥极差，波城此番败局已定。",
       "home_rank": 0,
       "away_rank": 0,
       "votes": {
         "win": "38",
-        "same": "25",
-        "lose": "37",
-        "hhad_win": "19",
-        "hhad_same": "20",
+        "same": "29",
+        "lose": "33",
+        "hhad_win": "17",
+        "hhad_same": "22",
         "hhad_lose": "61"
       },
       "v2_odds_dict": {
-        "a1": 7.75,
-        "a2": 4.5,
-        "a3": 3.35,
-        "a4": 3.85,
-        "s11": 7.75,
-        "s22": 9.5,
+        "a1": 5.2,
+        "a2": 3.4,
+        "a3": 3.4,
+        "a4": 5.0,
+        "s11": 6.0,
+        "s22": 11.0,
         "w21": 7.75,
-        "a5": 6.85,
-        "a6": 11.5
+        "a5": 9.5,
+        "a6": 18.0
       },
       "home_id": 0,
       "away_id": 0,
-      "id": 1,
+      "id": 2,
       "date": "2026-03-13",
       "home_stats": {},
       "away_stats": {},
       "h2h": [],
       "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 51.3,
-        "draw_pct": 23.1,
-        "away_win_pct": 25.6,
+        "predicted_score": "1-1",
+        "home_win_pct": 49.2,
+        "draw_pct": 32.4,
+        "away_win_pct": 18.4,
         "confidence": 80,
         "result": "主胜",
         "risk_level": "低",
@@ -448,56 +448,56 @@
         "gpt_analysis": "未响应或阻断",
         "grok_score": "-",
         "grok_analysis": "未响应或阻断",
-        "gemini_score": "-",
-        "gemini_analysis": "未响应或阻断",
+        "gemini_score": "1-1",
+        "gemini_analysis": "由于前瞻数据缺失，本裁决基于球队基础面独立生成。克莱蒙降级后阵容动荡，主场统治力下降；波城FC作为法乙老牌球队，客场具备较强韧性与防守反击能力。综合判定双方握手言和概率最大。",
         "value_bets_summary": [
-          "主胜 EV:+20.04% (仓位:3.74%)"
+          "主胜 EV:+14.14% (仓位:2.68%)"
         ],
         "extreme_warning": "无",
         "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
         "poisson": {
-          "home_win": 50.9,
-          "draw": 23.1,
-          "away_win": 26.0,
-          "predicted_score": "1-1",
-          "home_xg": 1.81,
-          "away_xg": 1.23,
-          "btts": 59.1,
-          "home_expected_goals": 1.81,
-          "away_expected_goals": 1.23
+          "home_win": 48.2,
+          "draw": 29.6,
+          "away_win": 22.2,
+          "predicted_score": "1-0",
+          "home_xg": 1.24,
+          "away_xg": 0.74,
+          "btts": 37.3,
+          "home_expected_goals": 1.24,
+          "away_expected_goals": 0.74
         },
         "refined_poisson": {
-          "home_win": 41.3,
-          "draw": 22.0,
-          "away_win": 36.8,
-          "predicted_score": "2-1",
+          "home_win": 38.5,
+          "draw": 33.3,
+          "away_win": 28.2,
+          "predicted_score": "1-1",
           "top_scores": [
             {
-              "score": "2-1",
-              "prob": 11.4
-            },
-            {
               "score": "1-1",
-              "prob": 9.4
-            },
-            {
-              "score": "1-2",
-              "prob": 7.9
-            },
-            {
-              "score": "2-2",
-              "prob": 6.7
+              "prob": 16.0
             },
             {
               "score": "1-0",
-              "prob": 5.6
+              "prob": 11.4
+            },
+            {
+              "score": "0-1",
+              "prob": 9.9
+            },
+            {
+              "score": "0-0",
+              "prob": 9.7
+            },
+            {
+              "score": "2-1",
+              "prob": 9.6
             }
           ],
           "v2_details": {
-            "p22": "6.7%",
-            "p11": "9.4%",
-            "p21": "11.4%",
-            "p12": "7.9%"
+            "p22": "7.1%",
+            "p11": "16.0%",
+            "p21": "9.6%",
+            "p12": "5.9%"
           }
         },
         "elo": {
@@ -514,146 +514,17 @@
         },
         "model_consensus": 5,
         "total_models": 5,
-        "expected_total_goals": 4.47,
-        "over_2_5": 82.25474271578703,
-        "btts": 59.1
+        "expected_total_goals": 2.9,
+        "over_2_5": 55.46500863407746,
+        "btts": 37.3
       },
-      "recommend_score": 60.49,
+      "recommend_score": 59.86,
       "is_recommended": true
     }
   ],
   "matches": {
     "yesterday": [],
     "today": [
-      {
-        "home_team": "马格德堡",
-        "away_team": "达姆施塔",
-        "league": "德乙",
-        "match_num": "周五003",
-        "match_time": "01:30",
-        "sp_home": 2.34,
-        "sp_draw": 3.55,
-        "sp_away": 2.38,
-        "odds_movement": "主胜升水，客胜降水",
-        "handicap_info": "让-1",
-        "intelligence": {
-          "h_inj": "塔雷克·查希德 停赛 轮休 丹尼尔·赫伯 停赛 轮休 萨缪尔·洛里克 受伤 足部受伤 海瑞莱宁 受伤 胫骨损伤 艾尔丁·佐戈维奇 停赛 轮休",
-          "g_inj": "马修亚斯·巴德尔 受伤 膝关节受伤 法比安·纽伦博格 受伤 受伤 巴托斯·比亚莱克 受伤 踝关节扭伤"
-        },
-        "expert_intro": "马格德堡近4轮联赛全负，入不敷出是球队致命伤，状态持续低迷的马格德堡是役主场难逃沦陷结局。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "38",
-          "same": "25",
-          "lose": "37",
-          "hhad_win": "19",
-          "hhad_same": "20",
-          "hhad_lose": "61"
-        },
-        "v2_odds_dict": {
-          "a1": 7.75,
-          "a2": 4.5,
-          "a3": 3.35,
-          "a4": 3.85,
-          "s11": 7.75,
-          "s22": 9.5,
-          "w21": 7.75,
-          "a5": 6.85,
-          "a6": 11.5
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 1,
-        "date": "2026-03-13",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "2-1",
-          "home_win_pct": 51.3,
-          "draw_pct": 23.1,
-          "away_win_pct": 25.6,
-          "confidence": 80,
-          "result": "主胜",
-          "risk_level": "低",
-          "gpt_score": "-",
-          "gpt_analysis": "未响应或阻断",
-          "grok_score": "-",
-          "grok_analysis": "未响应或阻断",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
-          "value_bets_summary": [
-            "主胜 EV:+20.04% (仓位:3.74%)"
-          ],
-          "extreme_warning": "无",
-          "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
-          "poisson": {
-            "home_win": 50.9,
-            "draw": 23.1,
-            "away_win": 26.0,
-            "predicted_score": "1-1",
-            "home_xg": 1.81,
-            "away_xg": 1.23,
-            "btts": 59.1,
-            "home_expected_goals": 1.81,
-            "away_expected_goals": 1.23
-          },
-          "refined_poisson": {
-            "home_win": 41.3,
-            "draw": 22.0,
-            "away_win": 36.8,
-            "predicted_score": "2-1",
-            "top_scores": [
-              {
-                "score": "2-1",
-                "prob": 11.4
-              },
-              {
-                "score": "1-1",
-                "prob": 9.4
-              },
-              {
-                "score": "1-2",
-                "prob": 7.9
-              },
-              {
-                "score": "2-2",
-                "prob": 6.7
-              },
-              {
-                "score": "1-0",
-                "prob": 5.6
-              }
-            ],
-            "v2_details": {
-              "p22": "6.7%",
-              "p11": "9.4%",
-              "p21": "11.4%",
-              "p12": "7.9%"
-            }
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50
-          },
-          "away_form": {
-            "score": 50
-          },
-          "model_consensus": 5,
-          "total_models": 5,
-          "expected_total_goals": 4.47,
-          "over_2_5": 82.25474271578703,
-          "btts": 59.1
-        },
-        "recommend_score": 60.49,
-        "is_recommended": true
-      },
       {
         "home_team": "胡巴卡德",
         "away_team": "吉达国民",
@@ -693,7 +564,7 @@
         },
         "home_id": 0,
         "away_id": 0,
-        "id": 2,
+        "id": 1,
         "date": "2026-03-13",
         "home_stats": {},
         "away_stats": {},
@@ -710,8 +581,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
+          "gemini_score": "0-2",
+          "gemini_analysis": "由于前瞻数据缺失，基于基础实力面进行裁定。吉达国民阵容配置呈碾压态势，攻防两端均占据绝对优势。胡巴卡德难以抵挡对手的强攻，预计吉达国民将轻松掌控比赛，客场完胜。",
           "value_bets_summary": [
             "主胜 EV:+16.88% (仓位:3.01%)"
           ],
@@ -822,7 +693,7 @@
         },
         "home_id": 0,
         "away_id": 0,
-        "id": 3,
+        "id": 2,
         "date": "2026-03-13",
         "home_stats": {},
         "away_stats": {},
@@ -839,8 +710,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
+          "gemini_score": "1-1",
+          "gemini_analysis": "由于前瞻数据缺失，本裁决基于球队基础面独立生成。克莱蒙降级后阵容动荡，主场统治力下降；波城FC作为法乙老牌球队，客场具备较强韧性与防守反击能力。综合判定双方握手言和概率最大。",
           "value_bets_summary": [
             "主胜 EV:+14.14% (仓位:2.68%)"
           ],
@@ -910,7 +781,7 @@
           "btts": 37.3
         },
         "recommend_score": 59.86,
-        "is_recommended": false
+        "is_recommended": true
       },
       {
         "home_team": "兹沃勒",
@@ -951,7 +822,7 @@
         },
         "home_id": 0,
         "away_id": 0,
-        "id": 4,
+        "id": 3,
         "date": "2026-03-13",
         "home_stats": {},
         "away_stats": {},
@@ -968,8 +839,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "1-2",
-          "gemini_analysis": "由于各方前瞻数据缺失，本裁决基于球队基础底蕴进行独立判定。兹沃勒主场具备一定韧性，但格罗宁根整体战术执行力略胜一筹。综合考量双方近期攻防效率，判定格罗宁根客场险胜。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -1078,7 +949,7 @@
         },
         "home_id": 0,
         "away_id": 0,
-        "id": 5,
+        "id": 4,
         "date": "2026-03-13",
         "home_stats": {},
         "away_stats": {},
@@ -1096,7 +967,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-1",
-          "gemini_analysis": "由于前瞻数据缺失，基于两队近期荷乙联赛的整体表现与历史交锋进行独立裁定。坎布尔主场具备一定进攻优势，但罗达JC防守韧性尚可，预计双方陷入拉锯战，握手言和概率最大。",
+          "gemini_analysis": "鉴于前瞻数据缺失，基于荷乙联赛特性与两队底蕴进行无情盲裁。坎布尔主场具备一定火力但防守存在漏洞，罗达JC客场反击犀利且韧性十足。综合判定双方势均力敌，握手言和概率最大。",
           "value_bets_summary": [
             "主胜 EV:+5.34% (仓位:2.73%)"
           ],
@@ -1207,7 +1078,7 @@
         },
         "home_id": 0,
         "away_id": 0,
-        "id": 6,
+        "id": 5,
         "date": "2026-03-13",
         "home_stats": {},
         "away_stats": {},
@@ -1225,7 +1096,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-0",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于前瞻数据缺失，本裁决基于球队基本面。门兴主场作战具备天然优势，整体阵容深度及顶级联赛经验远优于升班马圣保利。圣保利客场防守压力巨大，难以抵挡主队攻势，看好门兴稳健拿下三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -1334,7 +1205,7 @@
         },
         "home_id": 0,
         "away_id": 0,
-        "id": 7,
+        "id": 6,
         "date": "2026-03-13",
         "home_stats": {},
         "away_stats": {},
@@ -1351,8 +1222,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "1-1",
-          "gemini_analysis": "由于缺乏有效前瞻数据，本裁定基于球队基础底蕴。都灵主场防守稳健，但进攻端缺乏绝对统治力；帕尔马具备一定反击韧性。综合判定双方势均力敌，平局收场概率最大。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+15.95% (仓位:3.91%)"
           ],
@@ -1463,7 +1334,7 @@
         },
         "home_id": 0,
         "away_id": 0,
-        "id": 8,
+        "id": 7,
         "date": "2026-03-13",
         "home_stats": {},
         "away_stats": {},
@@ -1480,8 +1351,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "2-1",
-          "gemini_analysis": "基于球队基本面裁定：马赛主场进攻火力稳定，整体实力明显优于欧塞尔。欧塞尔客战防守薄弱，虽可能凭借反击偷得一球，但无法阻挡马赛掌控比赛节奏。马赛主场全取三分毫无悬念。",
+          "gemini_score": "2-0",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -1590,7 +1461,7 @@
         },
         "home_id": 0,
         "away_id": 0,
-        "id": 9,
+        "id": 8,
         "date": "2026-03-13",
         "home_stats": {},
         "away_stats": {},
@@ -1608,7 +1479,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，本裁定基于球队客观基本面。斯旺西身处更高级别联赛，整体阵容深度与战术素养占据显著优势。雷克斯虽具一定战斗力，但硬实力存在客观差距。判定客队斯旺西稳中取胜。",
           "value_bets_summary": [
             "主胜 EV:+12.68% (仓位:2.8%)"
           ],
@@ -1719,7 +1590,7 @@
         },
         "home_id": 0,
         "away_id": 0,
-        "id": 10,
+        "id": 9,
         "date": "2026-03-13",
         "home_stats": {},
         "away_stats": {},
@@ -2116,8 +1987,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "由于缺乏有效前瞻数据，基于两队K联赛历史底蕴与近期表现裁决：光州FC主场防守坚韧，全北现代虽为传统强队但客场破局困难。综合判定双方势均力敌，握手言和概率最大。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2244,7 +2115,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "在缺乏有效前瞻数据的情况下基于基础面裁决。纽卡斯尔喷气机防守端存在固有漏洞，主场优势有限；奥克兰FC作为新军展现出极强的战术执行力与冲击力。综合判定客队将反客为主，以微弱优势取胜。",
+          "gemini_analysis": "前瞻数据缺失，基于球队基础实力裁定。纽喷气机防守端存在固有隐患，而奥克兰FC作为澳超新军展现出极强的战术执行力与冲击力。综合判定客队将反客为主，利用防守反击击穿主队防线，取得小胜。",
           "value_bets_summary": [
             "主胜 EV:+16.65% (仓位:3.18%)"
           ],
@@ -2372,7 +2243,7 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "1-1",
+          "gemini_score": "1-2",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
@@ -2499,8 +2370,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "1-2",
-          "gemini_analysis": "东京绿茵主场具备防守韧性，但浦和红钻在阵容深度与中场控制力上占据绝对优势。基于硬实力基本面判定，客队将凭借经验与锋线把握能力强攻破局，主队仅能依靠反击打入挽回颜面的一球。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "因缺乏有效前瞻数据，基于基本面裁定。东京绿茵主场具备防守韧性，而浦和红钻客战进攻火力存在波动，难以形成绝对压制。综合判定双方势均力敌，握手言和概率最高。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2627,7 +2498,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "大田市民近期防守端表现不稳，后防线存在明显漏洞。金泉尚武整体战术执行力强，客场具备出色的防守反击能力。综合实力与近期状态对比，客队占据优势，预计金泉尚武能以微弱优势拿下比赛。",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2750,8 +2621,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "4-0",
-          "gemini_analysis": "因前瞻数据缺失，基于双方客观实力差距进行裁定。韩国女足在亚洲足坛具备显著的技战术与身体优势，整体实力全面碾压乌兹别克斯坦女足。预计韩国队将完全掌控比赛节奏，轻松取得一场大胜。",
+          "gemini_score": "3-0",
+          "gemini_analysis": "由于前瞻数据缺失，基于双方历史实力底蕴进行裁决。韩国女足在技战术水平和身体对抗上全面占优，乌兹别克斯坦女足防线难以抵挡高压攻势，预计韩国队将轻松掌控比赛，取得完胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
@@ -2878,7 +2749,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "由于缺乏有效前瞻数据，直接基于德乙基本面裁定。杜塞尔多夫整体实力与战术执行力均优于不伦瑞克，客场具备较强抢分能力，防线更稳固，看好客队反客为主拿下比赛。",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -3005,7 +2876,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-1",
-          "gemini_analysis": "由于前瞻数据缺失，基于基本面裁定。赫罗纳受困于多线作战体能透支，防守端隐患增加；毕尔巴鄂竞技球风硬朗，反击犀利。综合评估，双方实力均衡，预计将陷入焦灼，平局收场概率最大。",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -3260,8 +3131,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "1-1",
-          "gemini_analysis": "由于前瞻数据完全缺失，本裁定基于双方近期基本面。霍芬海姆主场具备一定攻击力但防守端存在隐患，沃尔夫斯堡客战具备韧性且反击犀利。综合评估双方实力均衡，预计本场互有攻守，最终以平局收场。",
+          "gemini_score": "1-2",
+          "gemini_analysis": "鉴于前瞻数据缺失，本裁决基于两队基础实力独立判定。霍芬海姆近期防守端漏洞明显，难以抵挡对手冲击；沃尔夫斯堡客场具备较强反击效率，预计客队能抓住防线破绽，以微弱优势拿下比赛。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
           "smart_money_signal": "正常",
@@ -3387,8 +3258,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "3-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "鉴于双方前瞻数据缺失，基于基础实力模型裁定。多特蒙德整体阵容深度与主场优势显著，进攻端压制力足以撕开对手防线。奥格斯堡虽具反击韧性，但防守端难以全场零封。判定主队小胜。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
           "smart_money_signal": "正常",
@@ -3515,7 +3386,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-0",
-          "gemini_analysis": "由于输入前瞻数据缺失，本裁决基于球队基础实力独立生成。法兰克福具备显著的主场优势与阵容深度，进攻端火力稳定；海登海姆客战能力相对有限。综合判定主队将掌控比赛节奏，取得完胜。",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+10.54% (仓位:6.43%)"
           ],
@@ -3644,7 +3515,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "伯恩利主场防守漏洞较大，缺乏有效的中场拦截。伯恩茅斯近期进攻端展现出更强的侵略性与终结能力，反击战术犀利。综合实力与战术执行力对比，客队更具优势，预计伯恩茅斯客场取胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -3898,7 +3769,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "0-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，本裁决基于球队基础实力进行判定。朗斯整体阵容深度与战术执行力均优于洛里昂，客场作战仍具压制力。洛里昂防线存在隐患，难以抵挡朗斯的攻势。终裁朗斯客场小胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4025,7 +3896,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-0",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，基于球队基础实力进行终裁。那不勒斯整体实力与攻防体系均对莱切形成绝对碾压。莱切客场作战能力薄弱，难以抵挡主队攻势，那不勒斯将稳稳掌控比赛节奏并全取三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4151,8 +4022,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "2-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "由于缺乏有效前瞻数据，本裁定基于两队德乙客观实力。汉堡主场具备优势，但科隆阵容底蕴犹存，攻防两端均具韧性。双方实力在伯仲之间，预计将上演激烈拉锯战，最终握手言和。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4535,7 +4406,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "0-1",
-          "gemini_analysis": "由于前瞻数据缺失，基于基础实力面判定。尤文图斯防守稳健且整体实力占优，乌迪内斯主场虽具韧性，但进攻端难以击穿尤文防线，看好客队凭借战术纪律小胜。",
+          "gemini_analysis": "由于前瞻数据缺失，基于两队基础实力与战术底蕴进行独立裁决。尤文图斯防守体系严密且具备高效反击能力，乌迪内斯主场虽具韧性但整体攻坚手段单一。判定尤文图斯将以微弱优势客场取胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4662,7 +4533,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "3-0",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，本裁定基于双方基础实力差距做出。皇家马德里整体实力呈碾压态势，主场作战优势显著；埃尔切防守薄弱，难以抵挡皇马攻势。判定皇马轻松取胜。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
           "smart_money_signal": "正常",
@@ -4789,7 +4660,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "0-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，基于两队基础实力差距进行裁定。本菲卡作为葡超传统豪门，整体实力呈碾压态势，攻防两端均显著优于阿罗卡。阿罗卡主场难以抵挡豪门冲击，客队全取三分毫无悬念。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (客防大比分穿盘)",
           "smart_money_signal": "正常",
