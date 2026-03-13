@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-03-13 21:32:22",
+  "update_time": "2026-03-13 23:39:22",
   "top4": [
     {
       "rank": 1,
@@ -8,10 +8,10 @@
       "league": "荷乙",
       "match_num": "周五007",
       "match_time": "03:00",
-      "sp_home": 1.47,
-      "sp_draw": 4.22,
-      "sp_away": 4.72,
-      "odds_movement": "主胜降水，客胜升水",
+      "sp_home": 1.49,
+      "sp_draw": 4.15,
+      "sp_away": 4.6,
+      "odds_movement": "主胜升水，客胜降水",
       "handicap_info": "让-1",
       "intelligence": {
         "h_inj": "达安·维瑟 受伤 膝关节受伤 马克·迪默斯 肌肉挫伤",
@@ -21,12 +21,12 @@
       "home_rank": 0,
       "away_rank": 0,
       "votes": {
-        "win": "61",
+        "win": "60",
         "same": "21",
-        "lose": "18",
-        "hhad_win": "35",
+        "lose": "19",
+        "hhad_win": "34",
         "hhad_same": "27",
-        "hhad_lose": "38"
+        "hhad_lose": "39"
       },
       "v2_odds_dict": {
         "a1": 7.6,
@@ -47,10 +47,10 @@
       "away_stats": {},
       "h2h": [],
       "prediction": {
-        "predicted_score": "3-0",
-        "home_win_pct": 77.7,
-        "draw_pct": 14.6,
-        "away_win_pct": 7.7,
+        "predicted_score": "2-0",
+        "home_win_pct": 70.7,
+        "draw_pct": 18.3,
+        "away_win_pct": 11.0,
         "confidence": 90,
         "result": "主胜",
         "risk_level": "低",
@@ -61,53 +61,53 @@
         "gemini_score": "1-1",
         "gemini_analysis": "格式混乱，已启用底线抽取。",
         "value_bets_summary": [
-          "主胜 EV:+14.22% (仓位:7.56%)"
+          "主胜 EV:+5.34% (仓位:2.73%)"
         ],
-        "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
+        "extreme_warning": "无",
         "smart_money_signal": "正常",
         "poisson": {
-          "home_win": 94.3,
-          "draw": 4.4,
-          "away_win": 1.3,
-          "predicted_score": "4-0",
-          "home_xg": 4.03,
-          "away_xg": 0.42,
-          "btts": 31.8,
-          "home_expected_goals": 4.03,
-          "away_expected_goals": 0.42
+          "home_win": 83.6,
+          "draw": 11.0,
+          "away_win": 5.5,
+          "predicted_score": "3-0",
+          "home_xg": 3.02,
+          "away_xg": 0.68,
+          "btts": 46.2,
+          "home_expected_goals": 3.02,
+          "away_expected_goals": 0.68
         },
         "refined_poisson": {
-          "home_win": 91.6,
-          "draw": 6.0,
-          "away_win": 2.4,
-          "predicted_score": "3-0",
+          "home_win": 76.9,
+          "draw": 13.7,
+          "away_win": 9.3,
+          "predicted_score": "2-0",
           "top_scores": [
             {
-              "score": "3-0",
-              "prob": 11.7
-            },
-            {
-              "score": "4-0",
-              "prob": 11.2
-            },
-            {
               "score": "2-0",
-              "prob": 9.3
+              "prob": 9.4
             },
             {
-              "score": "5-0",
-              "prob": 8.5
+              "score": "3-0",
+              "prob": 8.9
+            },
+            {
+              "score": "2-1",
+              "prob": 8.6
             },
             {
               "score": "3-1",
-              "prob": 6.7
+              "prob": 8.2
+            },
+            {
+              "score": "1-0",
+              "prob": 6.6
             }
           ],
           "v2_details": {
-            "p22": "1.5%",
-            "p11": "2.8%",
-            "p21": "5.3%",
-            "p12": "0.8%"
+            "p22": "4.0%",
+            "p11": "6.1%",
+            "p21": "8.6%",
+            "p12": "2.8%"
           }
         },
         "elo": {
@@ -124,11 +124,11 @@
         },
         "model_consensus": 5,
         "total_models": 5,
-        "expected_total_goals": 6.13,
+        "expected_total_goals": 5.19,
         "over_2_5": 85.0,
-        "btts": 31.8
+        "btts": 46.2
       },
-      "recommend_score": 72.41,
+      "recommend_score": 70.31,
       "is_recommended": true
     },
     {
@@ -151,23 +151,23 @@
       "home_rank": 0,
       "away_rank": 0,
       "votes": {
-        "win": "45",
+        "win": "44",
         "same": "32",
-        "lose": "23",
+        "lose": "24",
         "hhad_win": "19",
         "hhad_same": "26",
         "hhad_lose": "55"
       },
       "v2_odds_dict": {
-        "a1": 3.8,
-        "a2": 3.05,
-        "a3": 3.7,
-        "a4": 7.0,
-        "s11": 5.5,
+        "a1": 3.7,
+        "a2": 3.0,
+        "a3": 3.65,
+        "a4": 7.1,
+        "s11": 5.3,
         "s22": 15.0,
-        "w21": 7.0,
-        "a5": 14.0,
-        "a6": 26.0
+        "w21": 7.5,
+        "a5": 15.5,
+        "a6": 32.0
       },
       "home_id": 0,
       "away_id": 0,
@@ -177,10 +177,10 @@
       "away_stats": {},
       "h2h": [],
       "prediction": {
-        "predicted_score": "1-1",
-        "home_win_pct": 56.6,
-        "draw_pct": 32.1,
-        "away_win_pct": 11.3,
+        "predicted_score": "1-0",
+        "home_win_pct": 57.4,
+        "draw_pct": 31.4,
+        "away_win_pct": 11.2,
         "confidence": 80,
         "result": "主胜",
         "risk_level": "低",
@@ -189,9 +189,9 @@
         "grok_score": "-",
         "grok_analysis": "未响应或阻断",
         "gemini_score": "1-1",
-        "gemini_analysis": "格式混乱，已启用底线抽取。",
+        "gemini_analysis": "由于前瞻数据缺失，基于两队基础实力评估。都灵主场具备防守韧性，但进攻端缺乏绝对统治力；帕尔马反击犀利，具备客场拿分能力。综合判定双方握手言和。",
         "value_bets_summary": [
-          "主胜 EV:+14.33% (仓位:3.51%)"
+          "主胜 EV:+15.95% (仓位:3.91%)"
         ],
         "extreme_warning": "无",
         "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
@@ -207,37 +207,37 @@
           "away_expected_goals": 0.53
         },
         "refined_poisson": {
-          "home_win": 50.0,
-          "draw": 29.1,
-          "away_win": 20.9,
-          "predicted_score": "1-1",
+          "home_win": 53.0,
+          "draw": 26.2,
+          "away_win": 20.7,
+          "predicted_score": "1-0",
           "top_scores": [
             {
-              "score": "1-1",
-              "prob": 14.8
-            },
-            {
               "score": "1-0",
-              "prob": 14.7
-            },
-            {
-              "score": "2-0",
-              "prob": 13.1
-            },
-            {
-              "score": "0-0",
-              "prob": 11.6
+              "prob": 15.5
             },
             {
               "score": "2-1",
-              "prob": 9.4
+              "prob": 14.1
+            },
+            {
+              "score": "0-0",
+              "prob": 12.2
+            },
+            {
+              "score": "1-1",
+              "prob": 11.2
+            },
+            {
+              "score": "2-0",
+              "prob": 9.9
             }
           ],
           "v2_details": {
-            "p22": "2.4%",
-            "p11": "14.8%",
-            "p21": "9.4%",
-            "p12": "5.3%"
+            "p22": "2.5%",
+            "p11": "11.2%",
+            "p21": "14.1%",
+            "p12": "5.6%"
           }
         },
         "elo": {
@@ -258,7 +258,7 @@
         "over_2_5": 50.2968940569948,
         "btts": 30.3
       },
-      "recommend_score": 62.08,
+      "recommend_score": 62.32,
       "is_recommended": true
     },
     {
@@ -289,15 +289,15 @@
         "hhad_lose": "58"
       },
       "v2_odds_dict": {
-        "a1": 4.5,
+        "a1": 4.45,
         "a2": 3.1,
-        "a3": 3.3,
+        "a3": 3.4,
         "a4": 5.75,
         "s11": 5.75,
         "s22": 13.0,
         "w21": 7.5,
-        "a5": 12.5,
-        "a6": 30.0
+        "a5": 12.0,
+        "a6": 28.0
       },
       "home_id": 0,
       "away_id": 0,
@@ -307,10 +307,10 @@
       "away_stats": {},
       "h2h": [],
       "prediction": {
-        "predicted_score": "1-0",
-        "home_win_pct": 53.1,
-        "draw_pct": 29.6,
-        "away_win_pct": 17.3,
+        "predicted_score": "1-1",
+        "home_win_pct": 52.9,
+        "draw_pct": 30.1,
+        "away_win_pct": 17.0,
         "confidence": 80,
         "result": "主胜",
         "risk_level": "低",
@@ -319,9 +319,9 @@
         "grok_score": "-",
         "grok_analysis": "未响应或阻断",
         "gemini_score": "1-2",
-        "gemini_analysis": "因前瞻数据缺失，基于球队基本面裁定。斯旺西身处更高级别联赛，阵容深度与战术素养占据优势。雷克斯汉姆虽主场气势如虹，但硬实力存在客观差距。看好客队凭借经验掌控比赛节奏，客场小胜过关。",
+        "gemini_analysis": "由于缺乏有效前瞻数据，本裁决基于球队基础实力。斯旺西处于更高级别联赛，整体技战术素养占优；雷克斯虽势头强劲且有主场加持，但硬实力仍有差距。综合判定客队险胜。",
         "value_bets_summary": [
-          "主胜 EV:+13.1% (仓位:2.9%)"
+          "主胜 EV:+12.68% (仓位:2.8%)"
         ],
         "extreme_warning": "无",
         "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
@@ -337,37 +337,37 @@
           "away_expected_goals": 0.66
         },
         "refined_poisson": {
-          "home_win": 46.7,
-          "draw": 27.6,
-          "away_win": 25.8,
-          "predicted_score": "1-0",
+          "home_win": 45.8,
+          "draw": 29.7,
+          "away_win": 24.6,
+          "predicted_score": "1-1",
           "top_scores": [
             {
-              "score": "1-0",
+              "score": "1-1",
               "prob": 16.0
             },
             {
-              "score": "1-1",
-              "prob": 14.9
-            },
-            {
-              "score": "0-1",
-              "prob": 11.3
+              "score": "1-0",
+              "prob": 12.7
             },
             {
               "score": "2-0",
-              "prob": 10.5
+              "prob": 11.3
             },
             {
               "score": "2-1",
-              "prob": 9.6
+              "prob": 10.3
+            },
+            {
+              "score": "0-0",
+              "prob": 10.0
             }
           ],
           "v2_details": {
-            "p22": "3.0%",
-            "p11": "14.9%",
-            "p21": "9.6%",
-            "p12": "4.8%"
+            "p22": "3.3%",
+            "p11": "16.0%",
+            "p21": "10.3%",
+            "p12": "5.1%"
           }
         },
         "elo": {
@@ -388,7 +388,7 @@
         "over_2_5": 55.542209081532356,
         "btts": 35.7
       },
-      "recommend_score": 61.03,
+      "recommend_score": 60.97,
       "is_recommended": true
     },
     {
@@ -411,23 +411,23 @@
       "home_rank": 0,
       "away_rank": 0,
       "votes": {
-        "win": "39",
+        "win": "38",
         "same": "25",
-        "lose": "36",
+        "lose": "37",
         "hhad_win": "19",
         "hhad_same": "20",
         "hhad_lose": "61"
       },
       "v2_odds_dict": {
-        "a1": 8.0,
-        "a2": 4.6,
-        "a3": 3.15,
+        "a1": 7.75,
+        "a2": 4.5,
+        "a3": 3.35,
         "a4": 3.85,
         "s11": 7.75,
         "s22": 9.5,
         "w21": 7.75,
-        "a5": 7.0,
-        "a6": 12.0
+        "a5": 6.85,
+        "a6": 11.5
       },
       "home_id": 0,
       "away_id": 0,
@@ -449,7 +449,7 @@
         "grok_score": "-",
         "grok_analysis": "未响应或阻断",
         "gemini_score": "1-2",
-        "gemini_analysis": "鉴于输入前瞻数据缺失，基于客观基本面进行无情裁决：马格德堡主场球风激进但防线隐患极大；达姆施塔特作为降班马具备硬核底蕴，客场反击战术极具威胁。判定客队将精准打击主队防守漏洞，带走三分。",
+        "gemini_analysis": "由于缺乏有效前瞻数据，基于球队近期基本面裁定。达姆施塔特近期进攻端火力复苏，状态稳步回升；马格德堡主场防守端存在明显隐患，难以抵挡客队冲击。综合判定达姆施塔特客场取胜。",
         "value_bets_summary": [
           "主胜 EV:+20.04% (仓位:3.74%)"
         ],
@@ -544,23 +544,23 @@
         "home_rank": 0,
         "away_rank": 0,
         "votes": {
-          "win": "39",
+          "win": "38",
           "same": "25",
-          "lose": "36",
+          "lose": "37",
           "hhad_win": "19",
           "hhad_same": "20",
           "hhad_lose": "61"
         },
         "v2_odds_dict": {
-          "a1": 8.0,
-          "a2": 4.6,
-          "a3": 3.15,
+          "a1": 7.75,
+          "a2": 4.5,
+          "a3": 3.35,
           "a4": 3.85,
           "s11": 7.75,
           "s22": 9.5,
           "w21": 7.75,
-          "a5": 7.0,
-          "a6": 12.0
+          "a5": 6.85,
+          "a6": 11.5
         },
         "home_id": 0,
         "away_id": 0,
@@ -582,7 +582,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "鉴于输入前瞻数据缺失，基于客观基本面进行无情裁决：马格德堡主场球风激进但防线隐患极大；达姆施塔特作为降班马具备硬核底蕴，客场反击战术极具威胁。判定客队将精准打击主队防守漏洞，带走三分。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，基于球队近期基本面裁定。达姆施塔特近期进攻端火力复苏，状态稳步回升；马格德堡主场防守端存在明显隐患，难以抵挡客队冲击。综合判定达姆施塔特客场取胜。",
           "value_bets_summary": [
             "主胜 EV:+20.04% (仓位:3.74%)"
           ],
@@ -839,8 +839,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "2-1",
-          "gemini_analysis": "克莱蒙作为降班马具备阵容底蕴，主场作战战意充足。波城FC客战能力有限，防守端存在隐患。综合判定克莱蒙主场小胜，掌控比赛节奏。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+14.14% (仓位:2.68%)"
           ],
@@ -934,20 +934,20 @@
           "win": "36",
           "same": "27",
           "lose": "37",
-          "hhad_win": "61",
+          "hhad_win": "62",
           "hhad_same": "21",
-          "hhad_lose": "18"
+          "hhad_lose": "17"
         },
         "v2_odds_dict": {
           "a1": 6.0,
           "a2": 3.8,
-          "a3": 3.35,
+          "a3": 3.45,
           "a4": 4.5,
           "s11": 6.5,
           "s22": 10.0,
           "w21": 8.0,
-          "a5": 7.75,
-          "a6": 15.0
+          "a5": 7.6,
+          "a6": 14.5
         },
         "home_id": 0,
         "away_id": 0,
@@ -969,7 +969,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，本裁定基于球队基础实力模型。兹沃勒主场防守薄弱，而格罗宁根近期在进攻端展现出更强韧性与战术执行力，看好客队反客为主，险胜对手。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -1045,10 +1045,10 @@
         "league": "荷乙",
         "match_num": "周五007",
         "match_time": "03:00",
-        "sp_home": 1.47,
-        "sp_draw": 4.22,
-        "sp_away": 4.72,
-        "odds_movement": "主胜降水，客胜升水",
+        "sp_home": 1.49,
+        "sp_draw": 4.15,
+        "sp_away": 4.6,
+        "odds_movement": "主胜升水，客胜降水",
         "handicap_info": "让-1",
         "intelligence": {
           "h_inj": "达安·维瑟 受伤 膝关节受伤 马克·迪默斯 肌肉挫伤",
@@ -1058,12 +1058,12 @@
         "home_rank": 0,
         "away_rank": 0,
         "votes": {
-          "win": "61",
+          "win": "60",
           "same": "21",
-          "lose": "18",
-          "hhad_win": "35",
+          "lose": "19",
+          "hhad_win": "34",
           "hhad_same": "27",
-          "hhad_lose": "38"
+          "hhad_lose": "39"
         },
         "v2_odds_dict": {
           "a1": 7.6,
@@ -1084,10 +1084,10 @@
         "away_stats": {},
         "h2h": [],
         "prediction": {
-          "predicted_score": "3-0",
-          "home_win_pct": 77.7,
-          "draw_pct": 14.6,
-          "away_win_pct": 7.7,
+          "predicted_score": "2-0",
+          "home_win_pct": 70.7,
+          "draw_pct": 18.3,
+          "away_win_pct": 11.0,
           "confidence": 90,
           "result": "主胜",
           "risk_level": "低",
@@ -1098,53 +1098,53 @@
           "gemini_score": "1-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
-            "主胜 EV:+14.22% (仓位:7.56%)"
+            "主胜 EV:+5.34% (仓位:2.73%)"
           ],
-          "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
+          "extreme_warning": "无",
           "smart_money_signal": "正常",
           "poisson": {
-            "home_win": 94.3,
-            "draw": 4.4,
-            "away_win": 1.3,
-            "predicted_score": "4-0",
-            "home_xg": 4.03,
-            "away_xg": 0.42,
-            "btts": 31.8,
-            "home_expected_goals": 4.03,
-            "away_expected_goals": 0.42
+            "home_win": 83.6,
+            "draw": 11.0,
+            "away_win": 5.5,
+            "predicted_score": "3-0",
+            "home_xg": 3.02,
+            "away_xg": 0.68,
+            "btts": 46.2,
+            "home_expected_goals": 3.02,
+            "away_expected_goals": 0.68
           },
           "refined_poisson": {
-            "home_win": 91.6,
-            "draw": 6.0,
-            "away_win": 2.4,
-            "predicted_score": "3-0",
+            "home_win": 76.9,
+            "draw": 13.7,
+            "away_win": 9.3,
+            "predicted_score": "2-0",
             "top_scores": [
               {
-                "score": "3-0",
-                "prob": 11.7
-              },
-              {
-                "score": "4-0",
-                "prob": 11.2
-              },
-              {
                 "score": "2-0",
-                "prob": 9.3
+                "prob": 9.4
               },
               {
-                "score": "5-0",
-                "prob": 8.5
+                "score": "3-0",
+                "prob": 8.9
+              },
+              {
+                "score": "2-1",
+                "prob": 8.6
               },
               {
                 "score": "3-1",
-                "prob": 6.7
+                "prob": 8.2
+              },
+              {
+                "score": "1-0",
+                "prob": 6.6
               }
             ],
             "v2_details": {
-              "p22": "1.5%",
-              "p11": "2.8%",
-              "p21": "5.3%",
-              "p12": "0.8%"
+              "p22": "4.0%",
+              "p11": "6.1%",
+              "p21": "8.6%",
+              "p12": "2.8%"
             }
           },
           "elo": {
@@ -1161,11 +1161,11 @@
           },
           "model_consensus": 5,
           "total_models": 5,
-          "expected_total_goals": 6.13,
+          "expected_total_goals": 5.19,
           "over_2_5": 85.0,
-          "btts": 31.8
+          "btts": 46.2
         },
-        "recommend_score": 72.41,
+        "recommend_score": 70.31,
         "is_recommended": true
       },
       {
@@ -1174,9 +1174,9 @@
         "league": "德甲",
         "match_num": "周五008",
         "match_time": "03:30",
-        "sp_home": 1.75,
-        "sp_draw": 3.12,
-        "sp_away": 4.21,
+        "sp_home": 1.73,
+        "sp_draw": 3.14,
+        "sp_away": 4.3,
         "odds_movement": "主胜降水，客胜升水",
         "handicap_info": "让-1",
         "intelligence": {
@@ -1187,23 +1187,23 @@
         "home_rank": 0,
         "away_rank": 0,
         "votes": {
-          "win": "50",
-          "same": "29",
+          "win": "51",
+          "same": "28",
           "lose": "21",
-          "hhad_win": "25",
-          "hhad_same": "27",
+          "hhad_win": "26",
+          "hhad_same": "26",
           "hhad_lose": "48"
         },
         "v2_odds_dict": {
-          "a1": 3.95,
-          "a2": 3.3,
+          "a1": 4.0,
+          "a2": 3.35,
           "a3": 3.6,
           "a4": 6.1,
           "s11": 6.05,
           "s22": 14.0,
           "w21": 6.75,
-          "a5": 13.5,
-          "a6": 26.0
+          "a5": 13.0,
+          "a6": 25.0
         },
         "home_id": 0,
         "away_id": 0,
@@ -1215,8 +1215,8 @@
         "prediction": {
           "predicted_score": "1-0",
           "home_win_pct": 57.8,
-          "draw_pct": 25.4,
-          "away_win_pct": 16.8,
+          "draw_pct": 26.3,
+          "away_win_pct": 15.9,
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
@@ -1225,25 +1225,25 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-0",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于前瞻数据缺失，基于球队基本面进行裁决。门兴整体实力占优且坐拥主场之利，进攻端具备较强压制力；圣保利作为升班马客战能力有限，防线难以抵挡德甲老牌劲旅的冲击。判定主队完胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
           "poisson": {
-            "home_win": 66.7,
-            "draw": 23.1,
-            "away_win": 10.2,
+            "home_win": 67.6,
+            "draw": 22.6,
+            "away_win": 9.8,
             "predicted_score": "1-0",
-            "home_xg": 1.67,
-            "away_xg": 0.48,
-            "btts": 30.9,
-            "home_expected_goals": 1.67,
-            "away_expected_goals": 0.48
+            "home_xg": 1.69,
+            "away_xg": 0.47,
+            "btts": 30.7,
+            "home_expected_goals": 1.69,
+            "away_expected_goals": 0.47
           },
           "refined_poisson": {
-            "home_win": 58.8,
-            "draw": 26.1,
-            "away_win": 15.1,
+            "home_win": 59.7,
+            "draw": 25.7,
+            "away_win": 14.6,
             "predicted_score": "1-0",
             "top_scores": [
               {
@@ -1252,11 +1252,11 @@
               },
               {
                 "score": "1-1",
-                "prob": 13.6
+                "prob": 13.4
               },
               {
                 "score": "2-0",
-                "prob": 11.9
+                "prob": 12.1
               },
               {
                 "score": "2-1",
@@ -1264,14 +1264,14 @@
               },
               {
                 "score": "0-0",
-                "prob": 9.6
+                "prob": 9.5
               }
             ],
             "v2_details": {
               "p22": "2.5%",
-              "p11": "13.6%",
+              "p11": "13.4%",
               "p21": "10.9%",
-              "p12": "4.5%"
+              "p12": "4.4%"
             }
           },
           "elo": {
@@ -1288,9 +1288,9 @@
           },
           "model_consensus": 5,
           "total_models": 5,
-          "expected_total_goals": 3.04,
-          "over_2_5": 58.672806693961775,
-          "btts": 30.9
+          "expected_total_goals": 3.07,
+          "over_2_5": 59.15544639845049,
+          "btts": 30.7
         },
         "recommend_score": 47.44,
         "is_recommended": false
@@ -1314,23 +1314,23 @@
         "home_rank": 0,
         "away_rank": 0,
         "votes": {
-          "win": "45",
+          "win": "44",
           "same": "32",
-          "lose": "23",
+          "lose": "24",
           "hhad_win": "19",
           "hhad_same": "26",
           "hhad_lose": "55"
         },
         "v2_odds_dict": {
-          "a1": 3.8,
-          "a2": 3.05,
-          "a3": 3.7,
-          "a4": 7.0,
-          "s11": 5.5,
+          "a1": 3.7,
+          "a2": 3.0,
+          "a3": 3.65,
+          "a4": 7.1,
+          "s11": 5.3,
           "s22": 15.0,
-          "w21": 7.0,
-          "a5": 14.0,
-          "a6": 26.0
+          "w21": 7.5,
+          "a5": 15.5,
+          "a6": 32.0
         },
         "home_id": 0,
         "away_id": 0,
@@ -1340,10 +1340,10 @@
         "away_stats": {},
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 56.6,
-          "draw_pct": 32.1,
-          "away_win_pct": 11.3,
+          "predicted_score": "1-0",
+          "home_win_pct": 57.4,
+          "draw_pct": 31.4,
+          "away_win_pct": 11.2,
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
@@ -1352,9 +1352,9 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于前瞻数据缺失，基于两队基础实力评估。都灵主场具备防守韧性，但进攻端缺乏绝对统治力；帕尔马反击犀利，具备客场拿分能力。综合判定双方握手言和。",
           "value_bets_summary": [
-            "主胜 EV:+14.33% (仓位:3.51%)"
+            "主胜 EV:+15.95% (仓位:3.91%)"
           ],
           "extreme_warning": "无",
           "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
@@ -1370,37 +1370,37 @@
             "away_expected_goals": 0.53
           },
           "refined_poisson": {
-            "home_win": 50.0,
-            "draw": 29.1,
-            "away_win": 20.9,
-            "predicted_score": "1-1",
+            "home_win": 53.0,
+            "draw": 26.2,
+            "away_win": 20.7,
+            "predicted_score": "1-0",
             "top_scores": [
               {
-                "score": "1-1",
-                "prob": 14.8
-              },
-              {
                 "score": "1-0",
-                "prob": 14.7
-              },
-              {
-                "score": "2-0",
-                "prob": 13.1
-              },
-              {
-                "score": "0-0",
-                "prob": 11.6
+                "prob": 15.5
               },
               {
                 "score": "2-1",
-                "prob": 9.4
+                "prob": 14.1
+              },
+              {
+                "score": "0-0",
+                "prob": 12.2
+              },
+              {
+                "score": "1-1",
+                "prob": 11.2
+              },
+              {
+                "score": "2-0",
+                "prob": 9.9
               }
             ],
             "v2_details": {
-              "p22": "2.4%",
-              "p11": "14.8%",
-              "p21": "9.4%",
-              "p12": "5.3%"
+              "p22": "2.5%",
+              "p11": "11.2%",
+              "p21": "14.1%",
+              "p12": "5.6%"
             }
           },
           "elo": {
@@ -1421,7 +1421,7 @@
           "over_2_5": 50.2968940569948,
           "btts": 30.3
         },
-        "recommend_score": 62.08,
+        "recommend_score": 62.32,
         "is_recommended": true
       },
       {
@@ -1443,12 +1443,12 @@
         "home_rank": 0,
         "away_rank": 0,
         "votes": {
-          "win": "69",
+          "win": "70",
           "same": "19",
-          "lose": "12",
-          "hhad_win": "45",
+          "lose": "11",
+          "hhad_win": "46",
           "hhad_same": "25",
-          "hhad_lose": "30"
+          "hhad_lose": "29"
         },
         "v2_odds_dict": {
           "a1": 6.8,
@@ -1481,7 +1481,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-0",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "鉴于双方前瞻数据缺失，基于基础实力与主场优势进行裁决。马赛整体阵容深度与进攻火力显著优于欧塞尔。主场作战下，马赛将掌控比赛节奏，欧塞尔防线难以抵挡，预计马赛完胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -1578,15 +1578,15 @@
           "hhad_lose": "58"
         },
         "v2_odds_dict": {
-          "a1": 4.5,
+          "a1": 4.45,
           "a2": 3.1,
-          "a3": 3.3,
+          "a3": 3.4,
           "a4": 5.75,
           "s11": 5.75,
           "s22": 13.0,
           "w21": 7.5,
-          "a5": 12.5,
-          "a6": 30.0
+          "a5": 12.0,
+          "a6": 28.0
         },
         "home_id": 0,
         "away_id": 0,
@@ -1596,10 +1596,10 @@
         "away_stats": {},
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
-          "home_win_pct": 53.1,
-          "draw_pct": 29.6,
-          "away_win_pct": 17.3,
+          "predicted_score": "1-1",
+          "home_win_pct": 52.9,
+          "draw_pct": 30.1,
+          "away_win_pct": 17.0,
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
@@ -1608,9 +1608,9 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "因前瞻数据缺失，基于球队基本面裁定。斯旺西身处更高级别联赛，阵容深度与战术素养占据优势。雷克斯汉姆虽主场气势如虹，但硬实力存在客观差距。看好客队凭借经验掌控比赛节奏，客场小胜过关。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，本裁决基于球队基础实力。斯旺西处于更高级别联赛，整体技战术素养占优；雷克斯虽势头强劲且有主场加持，但硬实力仍有差距。综合判定客队险胜。",
           "value_bets_summary": [
-            "主胜 EV:+13.1% (仓位:2.9%)"
+            "主胜 EV:+12.68% (仓位:2.8%)"
           ],
           "extreme_warning": "无",
           "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
@@ -1626,37 +1626,37 @@
             "away_expected_goals": 0.66
           },
           "refined_poisson": {
-            "home_win": 46.7,
-            "draw": 27.6,
-            "away_win": 25.8,
-            "predicted_score": "1-0",
+            "home_win": 45.8,
+            "draw": 29.7,
+            "away_win": 24.6,
+            "predicted_score": "1-1",
             "top_scores": [
               {
-                "score": "1-0",
+                "score": "1-1",
                 "prob": 16.0
               },
               {
-                "score": "1-1",
-                "prob": 14.9
-              },
-              {
-                "score": "0-1",
-                "prob": 11.3
+                "score": "1-0",
+                "prob": 12.7
               },
               {
                 "score": "2-0",
-                "prob": 10.5
+                "prob": 11.3
               },
               {
                 "score": "2-1",
-                "prob": 9.6
+                "prob": 10.3
+              },
+              {
+                "score": "0-0",
+                "prob": 10.0
               }
             ],
             "v2_details": {
-              "p22": "3.0%",
-              "p11": "14.9%",
-              "p21": "9.6%",
-              "p12": "4.8%"
+              "p22": "3.3%",
+              "p11": "16.0%",
+              "p21": "10.3%",
+              "p12": "5.1%"
             }
           },
           "elo": {
@@ -1677,7 +1677,7 @@
           "over_2_5": 55.542209081532356,
           "btts": 35.7
         },
-        "recommend_score": 61.03,
+        "recommend_score": 60.97,
         "is_recommended": true
       },
       {
@@ -1686,10 +1686,10 @@
         "league": "西甲",
         "match_num": "周五012",
         "match_time": "04:00",
-        "sp_home": 3.16,
-        "sp_draw": 3.2,
-        "sp_away": 2.0,
-        "odds_movement": "主胜升水，客胜降水",
+        "sp_home": 3.1,
+        "sp_draw": 3.18,
+        "sp_away": 2.03,
+        "odds_movement": "主胜降水，客胜升水",
         "handicap_info": "让1",
         "intelligence": {
           "h_inj": "法昆多·加尔塞斯 停赛 停赛 卡洛斯·贝纳维德兹 受伤 受伤 乔恩·帕切科 停赛 红牌停赛 安德尔·格瓦拉 停赛 红牌停赛",
@@ -1726,9 +1726,9 @@
         "h2h": [],
         "prediction": {
           "predicted_score": "0-1",
-          "home_win_pct": 28.2,
-          "draw_pct": 28.0,
-          "away_win_pct": 43.8,
+          "home_win_pct": 27.6,
+          "draw_pct": 29.7,
+          "away_win_pct": 42.7,
           "confidence": 80,
           "result": "客胜",
           "risk_level": "低",
@@ -1737,53 +1737,53 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "在缺乏有效前瞻数据的情况下，基于两队基础实力与战术风格进行裁定。比利亚雷亚尔中前场创造力与终结能力优于对手，阿拉维斯虽主场具备韧性，但防线难以全场限制客队攻势。看好客队凭借锋线效率险胜。",
+          "gemini_analysis": "基于基本面裁决：比利亚雷亚尔整体实力与进攻火力更胜一筹。阿拉维斯主场虽具备一定抗压能力，但难以完全限制客队的战术渗透。综合判定黄潜客场险胜全取三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
           "poisson": {
-            "home_win": 32.1,
-            "draw": 31.1,
-            "away_win": 36.8,
+            "home_win": 33.0,
+            "draw": 31.2,
+            "away_win": 35.8,
             "predicted_score": "0-1",
-            "home_xg": 0.94,
-            "away_xg": 1.03,
-            "btts": 39.1,
-            "home_expected_goals": 0.94,
-            "away_expected_goals": 1.03
+            "home_xg": 0.95,
+            "away_xg": 1.01,
+            "btts": 39.0,
+            "home_expected_goals": 0.95,
+            "away_expected_goals": 1.01
           },
           "refined_poisson": {
-            "home_win": 23.9,
-            "draw": 28.4,
-            "away_win": 47.7,
+            "home_win": 24.6,
+            "draw": 28.6,
+            "away_win": 46.7,
             "predicted_score": "0-1",
             "top_scores": [
               {
                 "score": "0-1",
-                "prob": 17.0
+                "prob": 16.9
               },
               {
                 "score": "1-1",
-                "prob": 15.4
+                "prob": 15.5
               },
               {
                 "score": "1-0",
-                "prob": 10.8
+                "prob": 11.1
               },
               {
                 "score": "0-0",
-                "prob": 9.0
+                "prob": 9.1
               },
               {
                 "score": "0-2",
-                "prob": 8.8
+                "prob": 8.6
               }
             ],
             "v2_details": {
               "p22": "3.5%",
-              "p11": "15.4%",
-              "p21": "4.9%",
-              "p12": "7.8%"
+              "p11": "15.5%",
+              "p21": "5.1%",
+              "p12": "7.7%"
             }
           },
           "elo": {
@@ -1800,11 +1800,11 @@
           },
           "model_consensus": 5,
           "total_models": 5,
-          "expected_total_goals": 2.96,
-          "over_2_5": 56.78853951515765,
-          "btts": 39.1
+          "expected_total_goals": 2.95,
+          "over_2_5": 56.51130428860386,
+          "btts": 39.0
         },
-        "recommend_score": 43.24,
+        "recommend_score": 42.91,
         "is_recommended": false
       }
     ],
@@ -1863,7 +1863,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "3-0",
-          "gemini_analysis": "前瞻数据缺失，基于双方绝对实力差距进行独立裁定。中国女足在身体对抗、技术能力与战术执行上均对中国台北女足形成压倒性优势，预计将全面掌控比赛节奏，轻松零封对手取胜。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，基于双方历史交锋与绝对实力差距进行裁决。中国女足在整体实力、战术执行及身体对抗上均对中国台北女足形成全面压制，预计本场比赛将呈现一边倒态势，中国女足轻松零封取胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "🚨 欧亚错位：逆势深盘，强力阻击",
@@ -1989,8 +1989,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "0-1",
-          "gemini_analysis": "由于缺乏有效前瞻数据，基于基本面裁定：神户胜利船整体实力与进攻火力占优，名古屋鲸主场防守虽顽强但反击效率有限。预计神户能凭借关键球能力攻破密集防守，客场小胜带走三分。",
+          "gemini_score": "1-2",
+          "gemini_analysis": "前瞻数据缺失，基于基本面独立裁定。神户胜利船整体实力与进攻火力均优于名古屋鲸鱼，名古屋虽有主场之利但难以抵挡神户的攻势，看好客队全取三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2117,7 +2117,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "因前瞻数据缺失，本裁决基于球队基本面独立生成。光州FC主场作战具备极强韧性，全北现代虽底蕴深厚但客场破局能力存疑。双方中场绞杀激烈，预计场面胶着，最终大概率握手言和。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2243,7 +2243,7 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "0-2",
+          "gemini_score": "1-2",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+16.65% (仓位:3.18%)"
@@ -2373,7 +2373,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "因前瞻数据缺失，基于基本面独立裁决。鹿岛鹿角主场防守稳健，具备较强战术韧性；川崎前锋进攻端火力充足但客战状态偶有起伏。双方整体实力均衡，中场争夺将极其激烈，预计本场难分伯仲，大概率握手言和。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2499,7 +2499,7 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "1-2",
+          "gemini_score": "1-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
@@ -2627,7 +2627,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "由于前瞻数据缺失，基于球队基本面裁定。金泉尚武战术执行力与整体实力占优，大田市民虽有主场之利但防守端存在隐患，难以抵挡客队攻势，看好金泉尚武客场取胜。",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2878,7 +2878,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "基于球队基本面裁定：杜塞尔多夫整体实力与战术执行力均优于不伦瑞克。主队防线存在结构性隐患，难以全程抵挡客队的高效反击与阵地战攻势，客队全取三分概率极大。",
+          "gemini_analysis": "由于缺乏有效前瞻数据，基于两队基础实力进行裁定。杜塞尔多夫整体阵容深度与攻防体系均优于不伦瑞克，客场作战仍具压制力。不伦瑞克防线存在隐患，难以抵挡客队攻势，判定杜塞尔多夫客场小胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -3004,7 +3004,7 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "1-2",
+          "gemini_score": "1-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
@@ -3132,7 +3132,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-1",
-          "gemini_analysis": "由于前瞻数据缺失，本裁决基于基础实力独立判定。国际米兰中场控制力与防线深度占优，亚特兰大虽具冲击力但容错率低，国米将以微弱优势取胜。",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+5.99% (仓位:3.33%)"
           ],
@@ -3261,7 +3261,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "霍芬海姆近期防守端存在明显漏洞，主场优势难以完全弥补后防不稳。沃尔夫斯堡客场战术执行力强，反击犀利，具备较强抓机会能力。综合判定，客队有望在乱战中带走胜利。",
+          "gemini_analysis": "由于前瞻数据缺失，本裁定基于基础面。霍芬海姆近期防守端漏洞较大，而沃尔夫斯堡具备较强的客场反击能力。综合判定客队沃尔夫斯堡更有机会在乱战中带走胜利。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
           "smart_money_signal": "正常",
@@ -3388,7 +3388,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-1",
-          "gemini_analysis": "由于缺乏双端前瞻数据，基于基础实力模型裁定。多特蒙德整体阵容深度占优，但防守端存在隐患，奥格斯堡具备一定反击能力。综合判定多特蒙德主导比赛并取得小胜。",
+          "gemini_analysis": "由于各方前瞻数据缺失，本裁决基于双方历史底蕴与硬实力进行判定。多特蒙德整体阵容深度与进攻火力优于奥格斯堡，尽管防守端偶有失误，但仍具备掌控比赛的能力，预计多特蒙德小胜。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
           "smart_money_signal": "正常",
@@ -3515,7 +3515,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-0",
-          "gemini_analysis": "由于前瞻数据缺失，本裁定基于球队基础实力与主客场因素。法兰克福整体阵容深度与主场优势明显强于海登海姆，客队防守端难以抵挡主队持续攻势，故判定主队稳取三分。",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+10.54% (仓位:6.43%)"
           ],
@@ -3771,7 +3771,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-0",
-          "gemini_analysis": "因前瞻数据缺失，基于球队基本面裁定。马竞主场战力强悍且防守严密，赫塔费客战能力有限且进攻缺乏爆点。综合判定马竞将掌控比赛节奏，以零封姿态稳取三分。",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -3898,7 +3898,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "由于前瞻数据缺失，基于基础实力裁定。朗斯整体战术素养与阵容深度优于洛里昂，客场具备较强压制力。洛里昂防线存在隐患，难以抵挡客队攻势，看好朗斯全取三分。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4025,7 +4025,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "2-0",
-          "gemini_analysis": "基于球队基础实力判定。那不勒斯攻防两端均占据绝对优势，莱切客战能力薄弱，难以抵挡主队攻势。裁定那不勒斯稳取三分。",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4151,8 +4151,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "1-2",
-          "gemini_analysis": "由于缺乏有效前瞻数据，基于两队德乙基本面进行独立裁定。汉堡主场虽具压迫感，但防线屡现致命漏洞；科隆降级后保留核心框架，客场反击更具穿透力。综合判定科隆凭借锋线效率客场险胜。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4407,8 +4407,8 @@
           "gpt_analysis": "未响应或阻断",
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
+          "gemini_score": "3-0",
+          "gemini_analysis": "由于前瞻数据缺失，基于两队客观实力差距进行裁定。埃因霍温作为荷甲传统豪门，整体实力与主场优势显著，奈梅亨防线难以抵挡其猛烈攻势，故判定主队取得完胜。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
           "smart_money_signal": "正常",
@@ -4535,7 +4535,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "0-1",
-          "gemini_analysis": "鉴于前瞻数据缺失，基于球队底蕴与战术特性裁决：尤文图斯防守体系严密，客场作战以稳为主；乌迪内斯主场攻坚能力有限，难以击穿斑马军团防线。判定尤文图斯凭借高效反击或定位球一击致命，客场小胜。",
+          "gemini_analysis": "尤文图斯整体实力与防守体系显著优于乌迪内斯。基于战术执行力与阵容深度，尤文客场更具统治力。乌迪内斯主场破局困难，尤文将以高效反击或定位球一击致命，稳健带走胜利。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4662,7 +4662,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "3-0",
-          "gemini_analysis": "因前瞻数据缺失，基于基础实力模型进行独立裁决。皇家马德里整体实力呈绝对碾压态势，攻防两端均占据统治地位。埃尔切防线脆弱，难以抵挡皇马的持续压迫，预计皇马将轻松取得大胜。",
+          "gemini_analysis": "因缺乏有效前瞻数据，基于基础实力模型裁定。皇马在阵容深度、战术执行及历史交锋上对埃尔切形成绝对碾压。埃尔切防线难以抵挡皇马攻势，预计皇马将轻松掌控比赛并取得大胜。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (主防大比分穿盘)",
           "smart_money_signal": "正常",
@@ -4789,7 +4789,7 @@
           "grok_score": "-",
           "grok_analysis": "未响应或阻断",
           "gemini_score": "0-2",
-          "gemini_analysis": "本菲卡整体实力呈碾压态势，攻防两端均具备显著优势。阿罗卡虽有主场之利，但难以抵挡对手的绝对压制。综合判定客队稳取三分，零封对手概率极高。",
+          "gemini_analysis": "本菲卡整体实力呈碾压态势，攻防两端均占据绝对优势。阿罗卡虽坐镇主场，但防线难以抵挡本菲卡的持续冲击。综合判定本菲卡客场轻松取胜，大概率零封对手。",
           "value_bets_summary": [],
           "extreme_warning": "🔴 实力碾压预警 (客防大比分穿盘)",
           "smart_money_signal": "正常",
