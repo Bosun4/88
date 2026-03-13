@@ -120,7 +120,7 @@ def call_gpt(prompt): return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gp
 def call_claude(prompt): 
     try: claude_key = CLAUDE_API_KEY
     except NameError: claude_key = os.environ.get("CLAUDE_API_KEY", "")
-    return call_ai_model(prompt, GPT_API_URL, claude_key, "claude-sonnet-4-6", True) 
+    return call_ai_model(prompt, GPT_API_URL, claude_key, "claude-opus-4-6", True) 
 
 def call_gemini(prompt): return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
 
