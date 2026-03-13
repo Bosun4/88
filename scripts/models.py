@@ -15,34 +15,24 @@ try:
 except Exception:
     HAS_SK = False
 
-# ==========================================
-# 🩸 新增核心机构级算法组件
-# ==========================================
-
 class TrueOddsModel:
-    """真实概率解析器：剔除庄家抽水利润，还原真实物理概率"""
     def calculate(self, sp_h, sp_d, sp_a):
         if sp_h <= 1.0 or sp_d <= 1.0 or sp_a <= 1.0:
             return 0.33, 0.33, 0.34
-        
         imp_h, imp_d, imp_a = 1.0 / sp_h, 1.0 / sp_d, 1.0 / sp_a
         margin = imp_h + imp_d + imp_a
-        
-        # 采用对数边缘剥离法 (Logarithmic Margin Removal)，比简单按比例除更贴近庄家真实风控
         true_h = imp_h / margin
         true_d = imp_d / margin
         true_a = imp_a / margin
         return true_h, true_d, true_a
 
 class HandicapMismatchModel:
-    """欧亚盘口错位探测模型：抓取诱盘陷阱"""
     def analyze(self, true_h_prob, handicap_str):
         try:
             m = re.search(r'让(-?\d+(\.\d+)?)', str(handicap_str))
             if not m: return 0.0, "盘口正常"
             actual_hc = float(m.group(1))
             
-            # 根据真实胜率推导机构理论让球底线
             if true_h_prob >= 0.80: exp_hc = -1.5
             elif true_h_prob >= 0.70: exp_hc = -1.0
             elif true_h_prob >= 0.60: exp_hc = -0.5
@@ -54,19 +44,15 @@ class HandicapMismatchModel:
             
             diff = actual_hc - exp_hc
             
-            # 错位判定：实际让得非常浅，但胜率却极高（强烈诱上陷阱）
             if diff >= 0.75 and true_h_prob > 0.55: 
                 return -12.0, "🚨 欧亚错位：让球畸浅，强烈诱上"
-            # 错位判定：胜率极低，却强行开深盘（阻盘或者机构有绝密内幕）
             elif diff <= -0.75 and true_h_prob < 0.45:
                 return 8.0, "🚨 欧亚错位：逆势深盘，强力阻击"
-            
             return 0.0, "盘口正常"
         except:
             return 0.0, "盘口正常"
 
 class H2HBloodlineModel:
-    """历史交锋血脉压制引擎：引入时间衰减权重计算玄学克星效应"""
     def analyze(self, h2h_data, current_home, current_away):
         if not h2h_data or not isinstance(h2h_data, list):
             return {"h_adj": 0.0, "a_adj": 0.0}
@@ -74,15 +60,11 @@ class H2HBloodlineModel:
         h_score, a_score, total_weight = 0.0, 0.0, 0.0
         
         for i, match in enumerate(h2h_data):
-            # 时间衰减：最近的一场权重1.0，最远的一场0.2
             weight = max(0.2, 1.0 - i * 0.2) 
             score_str = match.get("score", "")
             m_home = str(match.get("home", ""))
-            
-            try:
-                pts_h, pts_a = map(int, score_str.split("-"))
-            except:
-                continue
+            try: pts_h, pts_a = map(int, score_str.split("-"))
+            except: continue
             
             if str(current_home) in m_home: 
                 if pts_h > pts_a: h_score += 3 * weight
@@ -92,19 +74,11 @@ class H2HBloodlineModel:
                 if pts_a > pts_h: h_score += 3 * weight
                 elif pts_h == pts_a: h_score += 1 * weight; a_score += 1 * weight
                 else: a_score += 3 * weight
-                
             total_weight += 3 * weight
             
         if total_weight == 0: return {"h_adj": 0.0, "a_adj": 0.0}
-        
-        # 计算心理压制差值
         h_adv = (h_score / total_weight) - 0.5 
         return {"h_adj": h_adv * 6.0, "a_adj": -h_adv * 6.0} 
-
-
-# ==========================================
-# 传统基石算法维持稳定
-# ==========================================
 
 class RefinedPoissonModel:
     def predict(self, home_xg, away_xg, odds_dict):
@@ -158,14 +132,14 @@ class RefinedPoissonModel:
         }
 
 def fetch_real_historical_data():
-    leagues, seasons = ['E0', 'SP1', 'I1', 'D1', 'F1'], ['2324', '2223', '2122'] 
+    leagues, seasons = ['E0', 'SP1'], ['2324'] 
     dfs, headers = [], {"User-Agent": "Mozilla/5.0"}
     for season in seasons:
         for league in leagues:
             try:
-                r = requests.get(f"https://www.football-data.co.uk/mmz4281/{season}/{league}.csv", headers=headers, timeout=10)
+                r = requests.get(f"https://www.football-data.co.uk/mmz4281/{season}/{league}.csv", headers=headers, timeout=5)
                 if r.status_code == 200: dfs.append(pd.read_csv(io.StringIO(r.text), on_bad_lines='skip'))
-            except Exception: continue
+            except: continue
     if not dfs: return _fallback_training_data()
     full_df = pd.concat(dfs, ignore_index=True).dropna(subset=['FTR', 'B365H', 'B365D', 'B365A'])
     X, y = [], []
@@ -175,14 +149,24 @@ def fetch_real_historical_data():
             target = {'H': 0, 'D': 1, 'A': 2}.get(str(row['FTR']).upper())
             if target is not None:
                 X.append([prob_h, prob_d, prob_a, prob_h/(prob_h+prob_a), prob_a/(prob_h+prob_a)]); y.append(target)
-        except Exception: continue
+        except: continue
+    if len(X) < 10: return _fallback_training_data()
     return np.array(X), np.array(y)
 
+# 🔥 核心修复：绝对归一化，保证概率总和为1，彻底解决死机报错！
 def _fallback_training_data(n=1000):
     np.random.seed(42); X, y = [], []
     for _ in range(n):
-        ph, pd = np.random.uniform(0.2, 0.8), np.random.uniform(0.15, 0.35); pa = max(0.01, 1 - ph - pd)
-        X.append([ph, pd, pa, ph/(ph+pa), pa/(ph+pa)]); y.append(np.random.choice([0, 1, 2], p=[ph, pd, pa]))
+        ph = np.random.uniform(0.3, 0.6)
+        pd = np.random.uniform(0.2, 0.3)
+        pa = max(0.01, 1.0 - ph - pd)
+        
+        # 强制归一化，保证绝对等于 1.0
+        total = ph + pd + pa
+        ph, pd, pa = ph/total, pd/total, pa/total
+        
+        X.append([ph, pd, pa, ph/(ph+pa), pa/(ph+pa)])
+        y.append(np.random.choice([0, 1, 2], p=[ph, pd, pa]))
     return np.array(X), np.array(y)
 
 def _build_ml_features(match, match_odds):
@@ -203,21 +187,25 @@ class MLPredictorBase:
     def __init__(self, name): self.model = None; self.scaler = None; self.trained = False; self.name = name
     def train(self):
         if not HAS_SK: return
-        X, y = fetch_real_historical_data()
-        self.scaler = StandardScaler(); X = self.scaler.fit_transform(X)
-        self._init_model(); self.model.fit(X, y); self.trained = True
+        try:
+            X, y = fetch_real_historical_data()
+            self.scaler = StandardScaler(); X = self.scaler.fit_transform(X)
+            self._init_model(); self.model.fit(X, y); self.trained = True
+        except Exception: pass
     def predict(self, match, match_odds):
         if not self.trained or not self.model: return {"home_win": 40, "draw": 30, "away_win": 30}
-        proba = self.model.predict_proba(self.scaler.transform([_build_ml_features(match, match_odds)]))[0]
-        return {"home_win": round(proba[0]*100, 1), "draw": round(proba[1]*100, 1), "away_win": round(proba[2]*100, 1)}
+        try:
+            proba = self.model.predict_proba(self.scaler.transform([_build_ml_features(match, match_odds)]))[0]
+            return {"home_win": round(proba[0]*100, 1), "draw": round(proba[1]*100, 1), "away_win": round(proba[2]*100, 1)}
+        except: return {"home_win": 40, "draw": 30, "away_win": 30}
 
 class RandomForestModel(MLPredictorBase):
     def __init__(self): super().__init__("RandomForest")
-    def _init_model(self): self.model = RandomForestClassifier(n_estimators=150, max_depth=6, random_state=42)
+    def _init_model(self): self.model = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42)
 
 class LogisticModel(MLPredictorBase):
     def __init__(self): super().__init__("Logistic")
-    def _init_model(self): self.model = LogisticRegression(C=0.5, max_iter=500, random_state=42)
+    def _init_model(self): self.model = LogisticRegression(C=0.5, max_iter=200, random_state=42)
 
 class PaceTotalGoalsModel:
     def predict(self, h_gf, h_ga, a_gf, a_ga, hs, ast):
@@ -285,10 +273,6 @@ class EloModel:
         hw = eh * (1 - df / 2); aw = (1 - eh) * (1 - df / 2)
         return {"home_win": round(hw*100, 1), "draw": round(df*100, 1), "away_win": round(aw*100, 1), "elo_diff": round(rh - ra, 1)}
 
-
-# ==========================================
-# 🔥 终极量化交汇总线
-# ==========================================
 class EnsemblePredictor:
     def __init__(self):
         self.poisson = PoissonModel()
@@ -300,12 +284,11 @@ class EnsemblePredictor:
         self.form = FormModel()
         self.elo = EloModel()
         
-        # 挂载新版高维组件
         self.true_odds = TrueOddsModel()
         self.hc_mismatch = HandicapMismatchModel()
         self.h2h_bloodline = H2HBloodlineModel()
         
-        print("[Models] 本地四引擎扩容完成，全量装载完毕...")
+        print("[Models] 本地冷酷数学模型矩阵加载完毕...")
         self.rf.train(); self.lr.train()
 
     def predict(self, match, odds_data=None):
@@ -320,15 +303,10 @@ class EnsemblePredictor:
         extreme_warning = "无"
         signals = []
         
-        # 【算法1】：提取无水分的真实机构概率
         true_h, true_d, true_a = self.true_odds.calculate(sp_h, sp_d, sp_a)
-        
-        # 【算法2】：欧亚错位探测，抓取诱盘/阻盘信号
         hc_adj, hc_signal = self.hc_mismatch.analyze(true_h, match.get("handicap_info", ""))
-        if hc_signal != "盘口正常":
-            signals.append(hc_signal)
+        if hc_signal != "盘口正常": signals.append(hc_signal)
             
-        # 【算法3】：动能乘数修正泊松（基于近况打折进球期望）
         hf = self.form.analyze(hs.get("form", ""))
         af = self.form.analyze(ast.get("form", ""))
         h_mom = max(0.6, min(1.4, hf["score"] / 50.0))
@@ -337,7 +315,6 @@ class EnsemblePredictor:
         h_gf = h_gf_base * h_mom
         a_gf = a_gf_base * a_mom
         
-        # 处理碾压局进球期望极值放大
         expected_total = 2.5 + (0.25 - true_d) * 8.0
         expected_total = max(1.5, expected_total)
         is_massacre = False
@@ -360,7 +337,6 @@ class EnsemblePredictor:
                 h_gf = expected_total * (true_h / (true_h + true_a))
                 a_gf = expected_total * (true_a / (true_h + true_a))
                 
-        # 喂入泊松矩阵
         poi = self.poisson.predict(h_gf, h_ga_base, a_gf, a_ga_base)
         dc = self.dixon.predict(h_gf, h_ga_base, a_gf, a_ga_base)
         rf = self.rf.predict(match, odds_data)
@@ -375,10 +351,8 @@ class EnsemblePredictor:
         for name, pred in models_list:
             hp += pred.get("home_win", 33) * w[name]; dp += pred.get("draw", 33) * w[name]; ap += pred.get("away_win", 33) * w[name]
             
-        # 【算法4】：应用 H2H 历史交锋血脉压制参数
         h2h_adj_data = self.h2h_bloodline.analyze(match.get("h2h", []), match.get("home_team"), match.get("away_team"))
         
-        # 最终综合裁定：基础概率 + 盘口错位修正 + 近况修正 + 交锋克星修正
         hp += hc_adj + (hf["score"] - af["score"]) * 0.05 + h2h_adj_data["h_adj"]
         ap += -hc_adj - (hf["score"] - af["score"]) * 0.05 + h2h_adj_data["a_adj"]
         
