@@ -14,7 +14,6 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
-# 🔥 核心重构：注入全部足球硬核参数（赔率、联赛、盘口），以金融风控口吻压榨 AI
 def build_independent_prompt(m):
     h = m.get("home_team", "主队")
     a = m.get("away_team", "客队")
@@ -47,14 +46,13 @@ def build_independent_prompt(m):
     p += '{"ai_score":"1-2","analysis":"不超过100字的致命复盘，一针见血剖析胜负手，必须严格紧扣这两支队伍！"}'
     return p
 
-# 🔥 核心重构：赋予首席数据裁决官最高纠错权
-def build_synthesis_prompt(m, gpt_res, claude_res):
+def build_synthesis_prompt(m, gpt_res, grok_res):
     h = m.get("home_team", "主队")
     a = m.get("away_team", "客队")
     
     p = f"【系统绝对指令】你是首席足球数据裁决官。你的唯一任务是对【{h}】vs【{a}】进行终局判定。\n"
     p += f"GPT 提交的前瞻: 比分 [{gpt_res.get('ai_score', '无')}] | 逻辑 [{gpt_res.get('analysis', '无')}]\n"
-    p += f"Claude 提交的前瞻: 比分 [{claude_res.get('ai_score', '无')}] | 逻辑 [{claude_res.get('analysis', '无')}]\n\n"
+    p += f"Grok 提交的前瞻: 比分 [{grok_res.get('ai_score', '无')}] | 逻辑 [{grok_res.get('analysis', '无')}]\n\n"
     
     p += "【终极裁决要求】\n"
     p += "1. 交叉比对两份前瞻。如果发现任何一份报告出现了幻觉（例如提及了非本场比赛的无关球员或球队），必须在你的裁决中直接摒弃该无效逻辑！\n"
@@ -63,7 +61,6 @@ def build_synthesis_prompt(m, gpt_res, claude_res):
     p += '{"ai_score":"1-2","analysis":"不超过100字的终局冷酷裁定，一锤定音，不许废话。"}'
     return p
 
-# 暴力脱水器：无视大模型格式抽风，确保 API 经费100%转化为有效数据
 def extract_clean_json(text):
     text = str(text or "").strip()
     fallback_score = "未预测"
@@ -117,14 +114,13 @@ def call_ai_model(prompt, url, key, model_name, is_gpt_format=True):
 
 def call_gpt(prompt): return call_ai_model(prompt, GPT_API_URL, GPT_API_KEY, "gpt-5.4", True)
 
-def call_claude(prompt): 
-    try: claude_key = CLAUDE_API_KEY
-    except NameError: claude_key = os.environ.get("CLAUDE_API_KEY", "")
-    return call_ai_model(prompt, GPT_API_URL, claude_key, "claude-opus-4-6", True) 
+# 🔥 换回 Grok 引擎，使用原定的 GEMINI_API_KEY 映射
+def call_grok(prompt): 
+    return call_ai_model(prompt, GPT_API_URL, GEMINI_API_KEY, "[次]grok-420-thinking", True) 
 
 def call_gemini(prompt): return call_ai_model(prompt, GEMINI_API_URL, GEMINI_API_KEY, "[次-流抗截]gemini-3.1-pro-preview-thinking", False)
 
-def merge_all(gpt, claude, gemini, stats, match_obj):
+def merge_all(gpt, grok, gemini, stats, match_obj):
     sys_hp, sys_dp, sys_ap = stats.get("home_win_pct", 33), stats.get("draw_pct", 33), stats.get("away_win_pct", 33)
     sys_cf = stats.get("confidence", 50)
     sys_score = stats.get("predicted_score", "1-1")
@@ -141,7 +137,7 @@ def merge_all(gpt, claude, gemini, stats, match_obj):
         "confidence": sys_cf, "result": result, "risk_level": "低" if sys_cf >= 70 else ("中" if sys_cf >= 50 else "高"),
         
         "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "阻断或解析失败"),
-        "claude_score": claude.get("ai_score", "-"), "claude_analysis": claude.get("analysis", "阻断或解析失败"),
+        "grok_score": grok.get("ai_score", "-"), "grok_analysis": grok.get("analysis", "阻断或解析失败"),
         "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "阻断或解析失败"),
         
         "value_bets_summary": v_tags,
@@ -183,15 +179,15 @@ def run_predictions(raw, use_ai=True):
         if use_ai:
             ind_prompt = build_independent_prompt(m)
             gpt_res = call_gpt(ind_prompt)
-            claude_res = call_claude(ind_prompt)
-            syn_prompt = build_synthesis_prompt(m, gpt_res or {}, claude_res or {})
+            grok_res = call_grok(ind_prompt)
+            syn_prompt = build_synthesis_prompt(m, gpt_res or {}, grok_res or {})
             gemini_res = call_gemini(syn_prompt)
         else:
             gpt_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
-            claude_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
+            grok_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
             gemini_res = {"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}
             
-        mg = merge_all(gpt_res or {}, claude_res or {}, gemini_res or {}, sp, m)
+        mg = merge_all(gpt_res or {}, grok_res or {}, gemini_res or {}, sp, m)
         res.append({**m, "prediction": mg})
         
     t4 = select_top4(res)
