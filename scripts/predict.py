@@ -136,13 +136,14 @@ def call_ai_model(prompt, url, key, model_name):
 def call_gpt(prompt): 
     url = get_env_var("GPT_API_URL")
     key = get_env_var("GPT_API_KEY")
-    # 🔥 已经为你回滚并死锁为 gpt-5.4
-    return call_ai_model(prompt, url, key, "gpt-5.4")
+    # 🔥 严格锁定为你指定的 gpt-5.3-codex
+    return call_ai_model(prompt, url, key, "gpt-5.3-codex")
 
 def call_grok(prompt): 
     url = get_env_var("GROK_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
     key = get_env_var("GROK_API_KEY")
-    return call_ai_model(prompt, url, key, "grok-420-thinking")
+    # 🔥 严格锁定为你指定的 grok-4.1-thinking
+    return call_ai_model(prompt, url, key, "grok-4.1-thinking")
 
 def call_gemini(prompt): 
     url = get_env_var("GEMINI_API_URL")
