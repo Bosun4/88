@@ -131,13 +131,14 @@ class RefinedPoissonModel:
             "v2_details": {"p22": f"{probs[2,2]*100:.1f}%", "p11": f"{probs[1,1]*100:.1f}%", "p21": f"{probs[2,1]*100:.1f}%", "p12": f"{probs[1,2]*100:.1f}%"}
         }
 
+# 🔥 核心修复三：虚拟数据强制严格归一化，彻底铲除数学死机漏洞！
 def fetch_real_historical_data():
     leagues, seasons = ['E0', 'SP1'], ['2324'] 
     dfs, headers = [], {"User-Agent": "Mozilla/5.0"}
     for season in seasons:
         for league in leagues:
             try:
-                r = requests.get(f"https://www.football-data.co.uk/mmz4281/{season}/{league}.csv", headers=headers, timeout=5)
+                r = requests.get(f"[https://www.football-data.co.uk/mmz4281/](https://www.football-data.co.uk/mmz4281/){season}/{league}.csv", headers=headers, timeout=5)
                 if r.status_code == 200: dfs.append(pd.read_csv(io.StringIO(r.text), on_bad_lines='skip'))
             except: continue
     if not dfs: return _fallback_training_data()
@@ -153,7 +154,6 @@ def fetch_real_historical_data():
     if len(X) < 10: return _fallback_training_data()
     return np.array(X), np.array(y)
 
-# 🔥 核心修复：绝对归一化，保证概率总和为1，彻底解决死机报错！
 def _fallback_training_data(n=1000):
     np.random.seed(42); X, y = [], []
     for _ in range(n):
@@ -161,7 +161,7 @@ def _fallback_training_data(n=1000):
         pd = np.random.uniform(0.2, 0.3)
         pa = max(0.01, 1.0 - ph - pd)
         
-        # 强制归一化，保证绝对等于 1.0
+        # 强制归一化处理，保证三个概率相加绝对等于 1.0
         total = ph + pd + pa
         ph, pd, pa = ph/total, pd/total, pa/total
         
