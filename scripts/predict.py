@@ -130,7 +130,7 @@ def call_gpt(prompt):
 
 def call_grok(prompt): 
     # 🔥 核心修复：彻底清除了括号乱码，恢复纯净网址
-    url = get_env_var("GROK_API_URL", "[https://api522.pro/v1](https://api522.pro/v1)")
+    url = get_env_var("GROK_API_URL", "[https://www.api520.pro/v1](https://www.api522.pro/v1)")
     key = get_env_var("GROK_API_KEY")
     return call_ai_model(prompt, url, key, "熊猫-A-6-grok-4.2-thinking")
 
