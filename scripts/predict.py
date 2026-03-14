@@ -136,12 +136,12 @@ def call_ai_model(prompt, url, key, model_name):
 def call_gpt(prompt): 
     url = get_env_var("GPT_API_URL")
     key = get_env_var("GPT_API_KEY")
-    return call_ai_model(prompt, url, key, "gpt-5.2-codex")
+    return call_ai_model(prompt, url, key, "熊猫-A-7-gpt-5.4")
 
 def call_grok(prompt): 
-    url = get_env_var("GROK_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
+    url = get_env_var("GROK_API_URL", "[https://api522.pro/v1](https://api.520.pro/v1)")
     key = get_env_var("GROK_API_KEY")
-    return call_ai_model(prompt, url, key, "grok-4.1-thinking")
+    return call_ai_model(prompt, url, key, "熊猫-A-6-grok-4.2-thinking")
 
 def call_gemini(prompt): 
     url = get_env_var("GEMINI_API_URL")
