@@ -141,7 +141,7 @@ def call_grok(prompt):
 def call_gemini(prompt): 
     url = get_clean_env_url("GEMINI_API_URL")
     key = get_clean_env_key("GEMINI_API_KEY")
-    return call_ai_model(prompt, url, key, "熊猫特供-按量-SSS-gemini-3.1-pro-preview")
+    return call_ai_model(prompt, url, key, "熊猫-顶级特供-X-17-gemini-3.1-pro-preview")
 
 # =========================================================
 
