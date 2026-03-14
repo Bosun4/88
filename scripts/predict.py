@@ -1,213 +1,600 @@
-import json, requests, time, re, os
-from config import *
-from models import EnsemblePredictor
+import math
+import random
+import re
+import numpy as np
 
-ensemble = EnsemblePredictor()
+try:
+    from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.svm import SVC
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.calibration import CalibratedClassifierCV
+    HAS_SK = True
+except Exception:
+    HAS_SK = False
+    print("[WARN] sklearn not available")
 
-def calculate_value_bet(prob_pct, odds):
-    if not odds or odds <= 1.05: return {"ev": 0.0, "kelly": 0.0, "is_value": False}
-    prob = prob_pct / 100.0
-    ev = (prob * odds) - 1.0 
-    b = odds - 1.0
-    q = 1.0 - prob
-    if b <= 0: return {"ev": round(ev * 100, 2), "kelly": 0.0, "is_value": False}
-    kelly = ((b * prob) - q) / b
-    return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
+# ============================================================
+# 1. 赔率数学模型
+# ============================================================
 
-def build_independent_prompt(m):
-    h, a = m.get("home_team", "主队"), m.get("away_team", "客队")
-    lg = m.get("league", "未知赛事")
-    sp_h, sp_d, sp_a = m.get("sp_home", 0.0), m.get("sp_draw", 0.0), m.get("sp_away", 0.0)
-    intel = m.get("intelligence", {})
-    
-    p = f"【系统绝对指令】你是一名冷酷的足球量化风控专家。任务：对【{h}】VS【{a}】进行胜负推演。\n"
-    p += f"【警报】绝对禁止提及与本场无关的球队或球星（如姆巴佩等）。\n\n"
-    p += f"【基本面】赛事：{lg} | 初始SP：主胜{sp_h} 平局{sp_d} 客胜{sp_a} | 盘口与资金：{m.get('handicap_info')} | {m.get('odds_movement')}\n"
-    p += f"【伤停】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
-    
-    intro = str(m.get('expert_intro', '')).strip()
-    p += f"【情报】{intro[:150] if intro else '无'}\n\n"
-    
-    p += "【要求】评估伤停与诱盘意图，给出最冷血的比分。\n"
-    p += "【格式铁律】必须且只能返回纯JSON对象，绝不允许有Markdown修饰符(如```json)！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字复盘，只围绕这两支队伍！"}'
-    return p
+class TrueOddsModel:
+    """欧赔真实概率还原"""
+    def calculate(self, sp_h, sp_d, sp_a):
+        if sp_h <= 1.0 or sp_d <= 1.0 or sp_a <= 1.0:
+            return 0.33, 0.33, 0.34
+        imp_h, imp_d, imp_a = 1.0/sp_h, 1.0/sp_d, 1.0/sp_a
+        margin = imp_h + imp_d + imp_a
+        return imp_h/margin, imp_d/margin, imp_a/margin
 
-def build_synthesis_prompt(m, gpt_res, grok_res):
-    h, a = m.get("home_team", "主队"), m.get("away_team", "客队")
-    
-    p = f"【系统绝对指令】你是首席足球数据裁决官。任务：对【{h}】vs【{a}】进行终局判定。\n"
-    p += f"GPT 前瞻: 比分 [{gpt_res.get('ai_score', '无')}] | 逻辑 [{gpt_res.get('analysis', '无')}]\n"
-    p += f"Grok 前瞻: 比分 [{grok_res.get('ai_score', '无')}] | 逻辑 [{grok_res.get('analysis', '无')}]\n\n"
-    
-    p += "【要求】交叉比对两份前瞻，摒弃含有幻觉的数据，做出最无情的比分终裁。严禁提及未参与本场分析的AI名字。\n"
-    p += "【格式铁律】必须只能返回纯JSON对象，绝不允许包含Markdown修饰符！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字的终局裁定。"}'
-    return p
+class HandicapMismatchModel:
+    """欧亚盘口错位检测"""
+    def analyze(self, true_h_prob, give_ball):
+        try:
+            hc = float(give_ball or 0)
+        except:
+            return 0.0, "盘口正常"
+        if true_h_prob >= 0.80: exp_hc = -1.5
+        elif true_h_prob >= 0.70: exp_hc = -1.0
+        elif true_h_prob >= 0.60: exp_hc = -0.5
+        elif true_h_prob >= 0.55: exp_hc = -0.25
+        elif true_h_prob <= 0.20: exp_hc = 1.5
+        elif true_h_prob <= 0.30: exp_hc = 1.0
+        elif true_h_prob <= 0.40: exp_hc = 0.5
+        else: exp_hc = 0.0
+        diff = hc - exp_hc
+        if diff >= 0.75 and true_h_prob > 0.55:
+            return -12.0, "🚨 欧亚错位：让球畸浅，强烈诱上"
+        elif diff <= -0.75 and true_h_prob < 0.45:
+            return 8.0, "🚨 欧亚错位：逆势深盘，强力阻击"
+        elif abs(diff) >= 0.5:
+            return diff * -5.0, "⚠️ 盘口轻度偏离"
+        return 0.0, "盘口正常"
 
-def extract_clean_json(text):
-    text = str(text or "").strip()
-    fallback_score, fallback_analysis = "未预测", "格式混乱，已启用底线抽取。"
-    
-    s_match = re.search(r'"ai_score"\s*:\s*"([^"]+)"', text)
-    if s_match: fallback_score = s_match.group(1)
-    a_match = re.search(r'"analysis"\s*:\s*"(.*?)"', text, re.DOTALL)
-    if a_match: fallback_analysis = a_match.group(1).replace('"', "'").replace('\n', ' ').strip()
-    
-    start, end = text.find('{'), text.rfind('}')
-    if start != -1 and end != -1:
-        try: return json.loads(text[start:end+1])
-        except Exception: pass
-            
-    if fallback_score != "未预测":
-        return {"ai_score": fallback_score, "analysis": fallback_analysis}
-    return None
+class OddsMovementModel:
+    """赔率变动方向分析(利用change字段)"""
+    def analyze(self, change_dict):
+        if not change_dict or not isinstance(change_dict, dict):
+            return {"signal": "无变动", "adj": 0}
+        win_chg = change_dict.get("win", 0)
+        lose_chg = change_dict.get("lose", 0)
+        same_chg = change_dict.get("same", 0)
+        # 主胜赔率升+客胜赔率降 = 资金流向客胜
+        if win_chg > 0 and lose_chg < 0:
+            return {"signal": "💰 资金流向客胜", "h_adj": -3, "a_adj": 3}
+        elif win_chg < 0 and lose_chg > 0:
+            return {"signal": "💰 资金流向主胜", "h_adj": 3, "a_adj": -3}
+        elif same_chg < 0 and win_chg > 0 and lose_chg > 0:
+            return {"signal": "💰 资金流向平局", "h_adj": -2, "a_adj": -2, "d_adj": 4}
+        return {"signal": "无明显资金流向", "h_adj": 0, "a_adj": 0}
 
-# 🔥 核心防御装甲：智能提取与清洗环境变量，防止任何标点符号污染
-def get_clean_env_url(name, default=""):
-    v = os.environ.get(name, globals().get(name, default))
-    v = str(v).strip(' \t\n\r"\'')
-    # 物理抽离：如果用户复制成了 Markdown [网址](网址)，直接正则抽出干净的 http
-    match = re.search(r'(https?://[a-zA-Z0-9.-]+(?:/[^\s)\]]*)?)', v)
-    if match: return match.group(1)
-    return v
+class VoteModel:
+    """民意投票反向指标"""
+    def analyze(self, vote_dict):
+        if not vote_dict:
+            return {"signal": "无数据", "adj_h": 0, "adj_a": 0}
+        try:
+            vh = int(vote_dict.get("win", 33))
+            vd = int(vote_dict.get("same", 33))
+            va = int(vote_dict.get("lose", 33))
+        except:
+            return {"signal": "无数据", "adj_h": 0, "adj_a": 0}
+        # 逆向思维：大热必死
+        if vh >= 55:
+            return {"signal": "⚠️ 主胜大热(%d%%)，逆向看冷" % vh, "adj_h": -4, "adj_a": 2}
+        elif va >= 55:
+            return {"signal": "⚠️ 客胜大热(%d%%)，逆向看冷" % va, "adj_h": 2, "adj_a": -4}
+        return {"signal": "投票均衡", "adj_h": 0, "adj_a": 0}
 
-def get_clean_env_key(name):
-    v = os.environ.get(name, globals().get(name, ""))
-    return str(v).strip(' \t\n\r"\'')
-
-def call_ai_model(prompt, url, key, model_name):
-    if not url or not key:
-        print(f"    ❌ 缺少 URL 或 Key 配置，已跳过调用 ({model_name})")
-        return {}
-        
-    is_native_gemini = "generateContent" in url
-    
-    # 自动补全后缀，绝杀 404
-    if not is_native_gemini and "chat/completions" not in url:
-        url = url.rstrip("/") + "/chat/completions"
-        
-    headers = {"Content-Type": "application/json"}
-    
-    if is_native_gemini:
-        headers["x-goog-api-key"] = key
-        payload = {
-            "contents": [{"parts": [{"text": "系统指令：你是无情的JSON输出机。绝对不准带Markdown。\n\n" + prompt}]}], 
-            "generationConfig": {"temperature": 0.2}
+class CRSOddsModel:
+    """比分赔率深度分析"""
+    def analyze(self, match_data):
+        scores = {}
+        crs_map = {
+            "w10": "1-0", "w20": "2-0", "w21": "2-1", "w30": "3-0", "w31": "3-1", "w32": "3-2",
+            "w40": "4-0", "w41": "4-1", "w42": "4-2",
+            "s00": "0-0", "s11": "1-1", "s22": "2-2", "s33": "3-3",
+            "l01": "0-1", "l02": "0-2", "l12": "1-2", "l03": "0-3", "l13": "1-3", "l23": "2-3",
         }
-    else:
-        headers["Authorization"] = f"Bearer {key}"
-        payload = {
-            "model": model_name, 
-            "messages": [
-                {"role": "system", "content": "你是无情的JSON输出机。绝对不准带任何Markdown修饰符。"}, 
-                {"role": "user", "content": prompt}
-            ], 
-            "temperature": 0.2,
-            "max_tokens": 500
+        for key, score in crs_map.items():
+            try:
+                odds = float(match_data.get(key, 0))
+                if odds > 1:
+                    scores[score] = {"odds": odds, "prob": round(1/odds*100, 1)}
+            except:
+                continue
+        if not scores:
+            return {"top_scores": [], "signal": "无数据"}
+        sorted_scores = sorted(scores.items(), key=lambda x: x[1]["prob"], reverse=True)
+        top5 = [{"score": s, "odds": d["odds"], "prob": d["prob"]} for s, d in sorted_scores[:5]]
+        # 异常赔率检测
+        signals = []
+        if scores.get("0-0", {}).get("odds", 99) < 8:
+            signals.append("0-0赔率偏低，闷平风险")
+        if scores.get("1-1", {}).get("odds", 99) < 5.5:
+            signals.append("1-1最热，双方有球闷平")
+        return {"top_scores": top5, "signals": signals}
+
+class TotalGoalsOddsModel:
+    """总进球数赔率分析"""
+    def analyze(self, match_data):
+        ttg_map = {"a0": 0, "a1": 1, "a2": 2, "a3": 3, "a4": 4, "a5": 5, "a6": 6, "a7": 7}
+        probs = {}
+        for key, goals in ttg_map.items():
+            try:
+                odds = float(match_data.get(key, 0))
+                if odds > 1:
+                    probs[goals] = round(1/odds*100, 1)
+            except:
+                continue
+        if not probs:
+            return {"expected_goals": 2.5, "over_2_5": 50}
+        total_imp = sum(probs.values())
+        if total_imp > 0:
+            probs = {k: v/total_imp*100 for k, v in probs.items()}
+        expected = sum(g * p/100 for g, p in probs.items())
+        over_25 = sum(p for g, p in probs.items() if g >= 3)
+        most_likely = max(probs, key=probs.get)
+        return {
+            "expected_goals": round(expected, 2),
+            "over_2_5": round(over_25, 1),
+            "most_likely_total": most_likely,
+            "probs": probs
         }
-        
-    print(f"    🤖 启动 {model_name} | 网关: {url.split('/v1')[0] if '/v1' in url else url[:30]}...")
-    try:
-        r = requests.post(url, headers=headers, json=payload, timeout=600)
-        if r.status_code == 200:
-            t = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip() if is_native_gemini else r.json()["choices"][0]["message"]["content"].strip()
-            parsed_data = extract_clean_json(t)
-            if parsed_data:
-                parsed_data["analysis"] = str(parsed_data.get("analysis", "")).replace("```json", "").replace("```", "").strip()
-                return parsed_data
+
+class HalfTimeFullTimeModel:
+    """半全场赔率分析"""
+    def analyze(self, match_data):
+        hf_map = {
+            "ss": "主/主", "sp": "主/平", "sf": "主/负",
+            "ps": "平/主", "pp": "平/平", "pf": "平/负",
+            "fs": "负/主", "fp": "负/平", "ff": "负/负"
+        }
+        results = {}
+        for key, label in hf_map.items():
+            try:
+                odds = float(match_data.get(key, 0))
+                if odds > 1:
+                    results[label] = {"odds": odds, "prob": round(1/odds*100, 1)}
+            except:
+                continue
+        if not results:
+            return {"top": [], "halftime_draw_prob": 0}
+        sorted_r = sorted(results.items(), key=lambda x: x[1]["prob"], reverse=True)
+        ht_draw = sum(v["prob"] for k, v in results.items() if k.startswith("平/"))
+        return {
+            "top": [{"result": k, "odds": v["odds"], "prob": v["prob"]} for k, v in sorted_r[:3]],
+            "halftime_draw_prob": round(ht_draw, 1)
+        }
+
+# ============================================================
+# 2. 交锋与状态模型
+# ============================================================
+
+class H2HBloodlineModel:
+    """交锋血统深度分析"""
+    def analyze(self, h2h_data, current_home, current_away):
+        if not h2h_data or not isinstance(h2h_data, list):
+            return {"h_adj": 0.0, "a_adj": 0.0, "signal": "无交锋数据"}
+        h_score, a_score, total_weight = 0.0, 0.0, 0.0
+        total_goals = []
+        for i, match in enumerate(h2h_data):
+            weight = max(0.2, 1.0 - i * 0.15)
+            score_str = str(match.get("score", ""))
+            m_home = str(match.get("home", ""))
+            try:
+                pts_h, pts_a = map(int, score_str.split("-"))
+            except:
+                continue
+            total_goals.append(pts_h + pts_a)
+            if str(current_home) in m_home:
+                if pts_h > pts_a: h_score += 3 * weight
+                elif pts_h == pts_a: h_score += 1 * weight; a_score += 1 * weight
+                else: a_score += 3 * weight
             else:
-                print("    ❌ 无法解析返回的格式。")
-        else:
-            print(f"    ❌ API 报错 ({model_name}): {r.status_code} - {r.text[:80]}")
-    except Exception as e: 
-        print(f"    ⚠️ 网络异常 ({model_name}): {str(e)[:40]}")
-    return {}
+                if pts_a > pts_h: h_score += 3 * weight
+                elif pts_h == pts_a: h_score += 1 * weight; a_score += 1 * weight
+                else: a_score += 3 * weight
+            total_weight += 3 * weight
+        if total_weight == 0:
+            return {"h_adj": 0.0, "a_adj": 0.0, "signal": "无有效交锋"}
+        h_adv = (h_score / total_weight) - 0.5
+        avg_goals = sum(total_goals) / len(total_goals) if total_goals else 2.5
+        signal = ""
+        if h_adv > 0.2: signal = "主队交锋占优"
+        elif h_adv < -0.2: signal = "客队交锋占优"
+        else: signal = "交锋均势"
+        return {"h_adj": round(h_adv * 6.0, 2), "a_adj": round(-h_adv * 6.0, 2), "avg_goals": round(avg_goals, 1), "signal": signal}
 
-# =========================================================
-# 🔥 精准对齐你的 Secrets 变量名和要求死锁的模型型号
-# =========================================================
+class FormModel:
+    """近期状态深度分析"""
+    def analyze(self, form):
+        if not form:
+            return {"score": 50, "trend": "unknown", "momentum": 50}
+        momentum = sum((3 if c == "W" else 1 if c == "D" else 0) * max(0.2, 1.0 - i * 0.12)
+                       for i, c in enumerate(reversed(form)))
+        tw = sum(3 * max(0.2, 1.0 - i * 0.12) for i in range(len(form)))
+        score = round((momentum / tw) * 100 if tw > 0 else 50, 1)
+        w = form.count("W"); d = form.count("D"); l = form.count("L")
+        rec = form[-5:] if len(form) >= 5 else form
+        rw = rec.count("W"); rl = rec.count("L")
+        if rw >= 4: trend = "🔥火热"
+        elif rw >= 3: trend = "上升"
+        elif rl >= 3: trend = "低迷"
+        elif rl >= 4: trend = "❄️冰冷"
+        else: trend = "一般"
+        streak = 0
+        last = form[-1] if form else ""
+        for c in reversed(form):
+            if c == last: streak += 1
+            else: break
+        return {"score": score, "trend": trend, "wins": w, "draws": d, "losses": l,
+                "recent": rec, "streak": streak, "streak_type": last, "momentum": score}
 
-def call_gpt(prompt): 
-    url = get_clean_env_url("GPT_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
-    key = get_clean_env_key("GPT_API_KEY")
-    return call_ai_model(prompt, url, key, "熊猫-A-7-gpt-5.4")
+# ============================================================
+# 3. 泊松族模型
+# ============================================================
 
-def call_grok(prompt): 
-    url = get_clean_env_url("GROK_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
-    key = get_clean_env_key("GROK_API_KEY")
-    return call_ai_model(prompt, url, key, "熊猫-A-6-grok-4.2-thinking")
+class PoissonModel:
+    """经典泊松分布"""
+    def predict(self, home_gf, home_ga, away_gf, away_ga, league_avg=1.35):
+        try: home_gf=float(home_gf or 1.3);home_ga=float(home_ga or 1.1);away_gf=float(away_gf or 1.1);away_ga=float(away_ga or 1.3)
+        except: home_gf=1.3;home_ga=1.1;away_gf=1.1;away_ga=1.3
+        he = max(0.2, min((home_gf/league_avg)*1.10*(away_ga/league_avg)*league_avg, 5.5))
+        ae = max(0.2, min((away_gf/league_avg)*(home_ga/league_avg)*0.90*league_avg, 5.5))
+        def pmf(k, l): return (l**k)*math.exp(-l)/math.factorial(k)
+        hw, dr, aw, bt, o25, scores = 0, 0, 0, 0, 0, []
+        for i in range(8):
+            for j in range(8):
+                p = pmf(i, he)*pmf(j, ae)
+                if i > j: hw += p
+                elif i == j: dr += p
+                else: aw += p
+                if i > 0 and j > 0: bt += p
+                if i + j > 2: o25 += p
+                scores.append((i, j, p))
+        scores.sort(key=lambda x: x[2], reverse=True)
+        t = hw + dr + aw
+        if t > 0: hw /= t; dr /= t; aw /= t
+        return {"home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1),
+                "predicted_score": "%d-%d" % (scores[0][0], scores[0][1]),
+                "home_xg": round(he, 2), "away_xg": round(ae, 2),
+                "btts": round(bt/(hw+dr+aw)*100 if (hw+dr+aw) > 0 else 50, 1),
+                "over_2_5": round(o25/(hw+dr+aw)*100 if (hw+dr+aw) > 0 else 50, 1),
+                "top_scores": [{"score": "%d-%d"%(s[0],s[1]), "prob": round(s[2]*100, 1)} for s in scores[:5]]}
 
-def call_gemini(prompt): 
-    url = get_clean_env_url("GEMINI_API_URL")
-    key = get_clean_env_key("GEMINI_API_KEY")
-    return call_ai_model(prompt, url, key, "熊猫特供-按量-SSS-gemini-3.1-pro-preview")
+class RefinedPoissonModel:
+    """赔率修正泊松(用比分赔率修正概率矩阵)"""
+    def predict(self, home_xg, away_xg, odds_dict):
+        try: lh = float(home_xg or 1.3); la = float(away_xg or 1.1)
+        except: lh, la = 1.3, 1.1
+        max_g = 7
+        probs = np.zeros((max_g+1, max_g+1))
+        def pmf(k, lam): return (lam**k)*math.exp(-lam)/math.factorial(k)
+        for h in range(max_g+1):
+            for a in range(max_g+1):
+                probs[h, a] = pmf(h, lh)*pmf(a, la)
+        # 用比分赔率修正
+        if odds_dict and isinstance(odds_dict, dict):
+            crs_corrections = {
+                (1,1): "s11", (2,2): "s22", (0,0): "s00",
+                (2,1): "w21", (1,0): "w10", (2,0): "w20",
+                (0,1): "l01", (1,2): "l12", (0,2): "l02",
+            }
+            for (h, a), key in crs_corrections.items():
+                odds_val = float(odds_dict.get(key, 0) or 0)
+                if 3.0 <= odds_val <= 8.0:
+                    probs[h, a] *= 1.3
+                elif 8.0 < odds_val <= 12.0:
+                    probs[h, a] *= 1.15
+            # 总进球数修正
+            ttg_corrections = {"a1": 1, "a2": 2, "a3": 3, "a4": 4}
+            for key, total in ttg_corrections.items():
+                odds_val = float(odds_dict.get(key, 0) or 0)
+                if 3.0 <= odds_val <= 4.0:
+                    for h in range(max_g+1):
+                        for a in range(max_g+1):
+                            if h + a == total: probs[h, a] *= 1.25
+        psum = probs.sum()
+        if psum > 0: probs /= psum
+        hw, dr, aw, scores = 0, 0, 0, []
+        for h in range(max_g+1):
+            for a in range(max_g+1):
+                p = probs[h, a]
+                if h > a: hw += p
+                elif h == a: dr += p
+                else: aw += p
+                scores.append({"score": "%d-%d" % (h, a), "prob": round(p*100, 1)})
+        scores.sort(key=lambda x: x["prob"], reverse=True)
+        return {"home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1),
+                "predicted_score": scores[0]["score"], "top_scores": scores[:5]}
 
-# =========================================================
+class DixonColesModel:
+    """Dixon-Coles低比分修正"""
+    def predict(self, home_gf, home_ga, away_gf, away_ga):
+        try: home_gf=float(home_gf or 1.3);away_gf=float(away_gf or 1.1)
+        except: home_gf=1.3;away_gf=1.1
+        he = max(0.2, min(home_gf*1.05, 5.0)); ae = max(0.2, min(away_gf*0.95, 5.0))
+        rho = -0.15 if abs(he - ae) < 0.5 else -0.05
+        def pmf(k, l): return (l**k)*math.exp(-l)/math.factorial(k)
+        def tau(i, j, lam, mu, r):
+            if i==0 and j==0: return 1-lam*mu*r
+            elif i==0 and j==1: return 1+lam*r
+            elif i==1 and j==0: return 1+mu*r
+            elif i==1 and j==1: return 1-r
+            return 1
+        hw, dr, aw = 0, 0, 0
+        for i in range(7):
+            for j in range(7):
+                p = max(0, tau(i,j,he,ae,rho)*pmf(i,he)*pmf(j,ae))
+                if i > j: hw += p
+                elif i == j: dr += p
+                else: aw += p
+        t = hw+dr+aw
+        if t > 0: hw /= t; dr /= t; aw /= t
+        return {"home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1)}
 
-def merge_all(gpt, grok, gemini, stats, match_obj):
-    sys_hp, sys_dp, sys_ap = stats.get("home_win_pct", 33), stats.get("draw_pct", 33), stats.get("away_win_pct", 33)
-    sys_cf, sys_score = stats.get("confidence", 50), stats.get("predicted_score", "1-1")
-    
-    result = max({"主胜": sys_hp, "平局": sys_dp, "客胜": sys_ap}, key={"主胜": sys_hp, "平局": sys_dp, "客胜": sys_ap}.get)
+# ============================================================
+# 4. 评分模型
+# ============================================================
 
-    val_h = calculate_value_bet(sys_hp, match_obj.get("sp_home", 0))
-    val_d = calculate_value_bet(sys_dp, match_obj.get("sp_draw", 0))
-    val_a = calculate_value_bet(sys_ap, match_obj.get("sp_away", 0))
-    v_tags = [f"{k} EV:+{v['ev']}% (仓位:{v['kelly']}%)" for k, v in zip(["主胜", "平局", "客胜"], [val_h, val_d, val_a]) if v and v.get("is_value")]
-    
-    return {
-        "predicted_score": sys_score, "home_win_pct": sys_hp, "draw_pct": sys_dp, "away_win_pct": sys_ap,
-        "confidence": sys_cf, "result": result, "risk_level": "低" if sys_cf >= 70 else ("中" if sys_cf >= 50 else "高"),
-        
-        "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "未响应或阻断"),
-        "grok_score": grok.get("ai_score", "-"), "grok_analysis": grok.get("analysis", "未响应或阻断"),
-        "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "未响应或阻断"),
-        
-        "value_bets_summary": v_tags, "extreme_warning": stats.get("extreme_warning", "无"),
-        "smart_money_signal": stats.get("smart_money_signal", "正常"),
-        "poisson": {**stats.get("poisson", {}), "home_expected_goals": stats.get("poisson", {}).get("home_xg", "?"), "away_expected_goals": stats.get("poisson", {}).get("away_xg", "?")},
-        "refined_poisson": stats.get("refined_poisson", {}), "elo": stats.get("elo", {}), 
-        "home_form": stats.get("home_form", {}), "away_form": stats.get("away_form", {}),
-        "model_consensus": stats.get("model_consensus", 0), "total_models": stats.get("total_models", 4),
-        "expected_total_goals": stats.get("expected_total_goals", 0), "over_2_5": stats.get("over_2_5", 50), "btts": stats.get("btts", 50)
-    }
+class EloModel:
+    """ELO评分(基于排名)"""
+    def predict(self, home_rank, away_rank):
+        try: hr = int(home_rank or 10); ar = int(away_rank or 10)
+        except: hr = 10; ar = 10
+        rh = 1500 + (20-max(1,hr))*15 + 50
+        ra = 1500 + (20-max(1,ar))*15
+        eh = 1/(1+10**((ra-rh)/400))
+        df = 0.28 if abs(rh-ra) < 100 else 0.22
+        hw = eh*(1-df/2); aw = (1-eh)*(1-df/2)
+        return {"home_win": round(hw*100, 1), "draw": round(df*100, 1), "away_win": round(aw*100, 1), "elo_diff": round(rh-ra, 1)}
 
-def select_top4(preds):
-    for p in preds:
-        pr = p.get("prediction", {})
-        s = pr.get("confidence", 0) * 0.4 + (max(pr.get("home_win_pct", 33), pr.get("away_win_pct", 33)) - 33) * 0.3
-        s += 8 if pr.get("risk_level") == "低" else (-5 if pr.get("risk_level") == "高" else 0)
-        s += 15 if pr.get("value_bets_summary") else 0
-        p["recommend_score"] = round(s, 2)
-    preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
-    return preds[:4]
+class BradleyTerryModel:
+    """Bradley-Terry配对比较"""
+    def predict(self, home_wins, home_played, away_wins, away_played):
+        try:
+            hw=int(home_wins or 5);hp=int(home_played or 15);aw=int(away_wins or 5);ap=int(away_played or 15)
+        except: hw=5;hp=15;aw=5;ap=15
+        h_str = max(0.1, (hw/max(1,hp)))*1.08
+        a_str = max(0.1, (aw/max(1,ap)))*0.92
+        dp = 0.24
+        h = h_str/(h_str+a_str)*(1-dp); a = a_str/(h_str+a_str)*(1-dp)
+        t = h+dp+a
+        return {"home_win": round(h/t*100, 1), "draw": round(dp/t*100, 1), "away_win": round(a/t*100, 1)}
 
-def extract_num(match_str):
-    week_map = {"一": 1000, "二": 2000, "三": 3000, "四": 4000, "五": 5000, "六": 6000, "日": 7000, "天": 7000}
-    base_weight = next((v for k, v in week_map.items() if k in match_str), 0)
-    nums = re.findall(r'\d+', match_str)
-    return base_weight + int(nums[0]) if nums else 9999
+# ============================================================
+# 5. ML模型
+# ============================================================
 
-def run_predictions(raw, use_ai=True):
-    ms = raw.get("matches", []); res = []
-    for i, m in enumerate(ms):
-        sp = ensemble.predict(m, {})
-        
-        if use_ai:
-            ind_prompt = build_independent_prompt(m)
-            gpt_res = call_gpt(ind_prompt)
-            grok_res = call_grok(ind_prompt)
-            syn_prompt = build_synthesis_prompt(m, gpt_res or {}, grok_res or {})
-            gemini_res = call_gemini(syn_prompt)
-        else:
-            gpt_res, grok_res, gemini_res = [{"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}] * 3
-            
-        mg = merge_all(gpt_res or {}, grok_res or {}, gemini_res or {}, sp, m)
-        res.append({**m, "prediction": mg})
-        
-    t4 = select_top4(res)
-    t4ids = [t["id"] for t in t4]
-    for r in res: r["is_recommended"] = r["id"] in t4ids
-    res.sort(key=lambda x: extract_num(x.get("match_num", "")))
-    return res, t4
+def _generate_training_data(n=800):
+    np.random.seed(42); X, y = [], []
+    for _ in range(n):
+        ph = np.random.uniform(0.25, 0.65)
+        pd2 = np.random.uniform(0.15, 0.35)
+        pa = max(0.05, 1.0-ph-pd2)
+        total = ph+pd2+pa; ph/=total; pd2/=total; pa/=total
+        X.append([ph, pd2, pa, ph/(ph+pa+0.001), pa/(ph+pa+0.001)])
+        y.append(np.random.choice([0,1,2], p=[ph, pd2, pa]))
+    return np.array(X), np.array(y)
+
+def _build_ml_features(match, match_odds):
+    try:
+        sp_h = float(match.get("sp_home", 0))
+        sp_d = float(match.get("sp_draw", 0))
+        sp_a = float(match.get("sp_away", 0))
+        if sp_h > 1 and sp_a > 1:
+            ph, pd2, pa = 1/sp_h, 1/sp_d, 1/sp_a
+            t = ph+pd2+pa
+            return [ph/t, pd2/t, pa/t, (ph/t)/((ph+pa)/t+0.001), (pa/t)/((ph+pa)/t+0.001)]
+    except: pass
+    return [0.4, 0.28, 0.32, 0.55, 0.45]
+
+class MLBase:
+    def __init__(self, name):
+        self.model = None; self.scaler = None; self.trained = False; self.name = name
+    def train(self):
+        if not HAS_SK: return
+        try:
+            X, y = _generate_training_data()
+            self.scaler = StandardScaler(); X = self.scaler.fit_transform(X)
+            self._init_model(); self.model.fit(X, y); self.trained = True
+        except: pass
+    def predict(self, match, match_odds=None):
+        if not self.trained or not self.model:
+            return {"home_win": 40, "draw": 30, "away_win": 30}
+        try:
+            feat = _build_ml_features(match, match_odds)
+            proba = self.model.predict_proba(self.scaler.transform([feat]))[0]
+            return {"home_win": round(proba[0]*100, 1), "draw": round(proba[1]*100, 1), "away_win": round(proba[2]*100, 1)}
+        except:
+            return {"home_win": 40, "draw": 30, "away_win": 30}
+
+class RandomForestModel(MLBase):
+    def __init__(self): super().__init__("RandomForest")
+    def _init_model(self): self.model = RandomForestClassifier(n_estimators=200, max_depth=6, random_state=42)
+
+class GradientBoostModel(MLBase):
+    def __init__(self): super().__init__("GradientBoost")
+    def _init_model(self): self.model = GradientBoostingClassifier(n_estimators=150, max_depth=4, learning_rate=0.1, random_state=42)
+
+class NeuralNetModel(MLBase):
+    def __init__(self): super().__init__("NeuralNet")
+    def _init_model(self): self.model = MLPClassifier(hidden_layer_sizes=(64,32,16), max_iter=500, random_state=42, early_stopping=True)
+
+class LogisticModel(MLBase):
+    def __init__(self): super().__init__("Logistic")
+    def _init_model(self): self.model = LogisticRegression(C=0.5, max_iter=500, random_state=42)
+
+class SVMModel(MLBase):
+    def __init__(self): super().__init__("SVM")
+    def _init_model(self): self.model = CalibratedClassifierCV(SVC(kernel="rbf", random_state=42), cv=3)
+
+class KNNModel(MLBase):
+    def __init__(self): super().__init__("KNN")
+    def _init_model(self): self.model = KNeighborsClassifier(n_neighbors=7, weights="distance")
+
+# ============================================================
+# 6. 进球模型
+# ============================================================
+
+class PaceTotalGoalsModel:
+    """节奏与总进球"""
+    def predict(self, h_gf, h_ga, a_gf, a_ga, hs, ast):
+        try:
+            h_cs = float(hs.get("clean_sheets", 2))/max(1, float(hs.get("played", 10)))
+            a_cs = float(ast.get("clean_sheets", 2))/max(1, float(ast.get("played", 10)))
+        except: h_cs, a_cs = 0.2, 0.2
+        try: h_gf=float(h_gf);h_ga=float(h_ga);a_gf=float(a_gf);a_ga=float(a_ga)
+        except: h_gf=1.3;h_ga=1.1;a_gf=1.1;a_ga=1.3
+        exp = (h_gf+a_ga)/2 + (a_gf+h_ga)/2
+        exp *= (1.0 + (0.3 - (h_cs+a_cs)/2))
+        over = 1-(math.exp(-exp)*(1+exp+(exp**2)/2))
+        return {"over_2_5": round(max(15, min(85, over*100)), 1), "expected_total": round(exp, 2),
+                "pace_rating": "极快" if exp > 3.0 else ("慢" if exp < 2.0 else "中等")}
+
+class KellyCriterion:
+    """凯利公式价值投注"""
+    def calculate(self, prob, odds, fraction=0.25):
+        if odds <= 1 or prob <= 0 or prob >= 1: return {"kelly": 0, "value": False, "edge": 0}
+        q = 1-prob; b = odds-1; kelly = (b*prob-q)/b; edge = (prob*odds-1)*100
+        return {"kelly": round(max(0, kelly)*fraction*100, 2), "value": edge > 0, "edge": round(edge, 1)}
+
+# ============================================================
+# 7. 总融合器
+# ============================================================
+
+class EnsemblePredictor:
+    """全模型融合预测器"""
+    def __init__(self):
+        print("[Models] 初始化全模型矩阵...")
+        self.poisson = PoissonModel()
+        self.refined_poisson = RefinedPoissonModel()
+        self.dixon = DixonColesModel()
+        self.elo = EloModel()
+        self.bt = BradleyTerryModel()
+        self.form_model = FormModel()
+        self.pace = PaceTotalGoalsModel()
+        self.kelly = KellyCriterion()
+        self.true_odds = TrueOddsModel()
+        self.hc_model = HandicapMismatchModel()
+        self.odds_move = OddsMovementModel()
+        self.vote_model = VoteModel()
+        self.h2h_model = H2HBloodlineModel()
+        self.crs_model = CRSOddsModel()
+        self.ttg_model = TotalGoalsOddsModel()
+        self.hf_model = HalfTimeFullTimeModel()
+        self.rf = RandomForestModel()
+        self.gb = GradientBoostModel()
+        self.nn = NeuralNetModel()
+        self.lr = LogisticModel()
+        self.svm = SVMModel()
+        self.knn = KNNModel()
+        print("[Models] Training 6 ML models...")
+        for m in [self.rf, self.gb, self.nn, self.lr, self.svm, self.knn]:
+            m.train()
+        print("[Models] All 20+ models ready!")
+
+    def predict(self, match, odds_data=None):
+        hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
+        # 赔率
+        sp_h = float(match.get("sp_home", 0) or 0)
+        sp_d = float(match.get("sp_draw", 0) or 0)
+        sp_a = float(match.get("sp_away", 0) or 0)
+        v2_odds = match.get("v2_odds_dict", {})
+        true_h, true_d, true_a = self.true_odds.calculate(sp_h, sp_d, sp_a)
+        # 状态
+        hf = self.form_model.analyze(hs.get("form", ""))
+        af = self.form_model.analyze(ast.get("form", ""))
+        h_mom = max(0.6, min(1.4, hf["score"]/50.0))
+        a_mom = max(0.6, min(1.4, af["score"]/50.0))
+        # xG
+        try: h_gf=float(hs.get("avg_goals_for",1.3))*h_mom; a_gf=float(ast.get("avg_goals_for",1.1))*a_mom
+        except: h_gf=1.3; a_gf=1.1
+        try: h_ga=float(hs.get("avg_goals_against",1.1)); a_ga=float(ast.get("avg_goals_against",1.3))
+        except: h_ga=1.1; a_ga=1.3
+        # 赔率驱动xG校正
+        if true_h > 0.60: h_gf = max(h_gf, 1.8); a_gf = min(a_gf, 0.9)
+        elif true_a > 0.60: a_gf = max(a_gf, 1.8); h_gf = min(h_gf, 0.9)
+        # 模型预测
+        poi = self.poisson.predict(h_gf, h_ga, a_gf, a_ga)
+        ref_poi = self.refined_poisson.predict(h_gf, a_gf, v2_odds if v2_odds else match)
+        dc = self.dixon.predict(h_gf, h_ga, a_gf, a_ga)
+        elo_r = self.elo.predict(match.get("home_rank", 10), match.get("away_rank", 10))
+        bt_r = self.bt.predict(hs.get("wins"), hs.get("played"), ast.get("wins"), ast.get("played"))
+        rf_r = self.rf.predict(match); gb_r = self.gb.predict(match)
+        nn_r = self.nn.predict(match); lr_r = self.lr.predict(match)
+        svm_r = self.svm.predict(match); knn_r = self.knn.predict(match)
+        pace_r = self.pace.predict(h_gf, h_ga, a_gf, a_ga, hs, ast)
+        # 盘口分析
+        hc_adj, hc_signal = self.hc_model.analyze(true_h, match.get("give_ball", 0))
+        odds_mv = self.odds_move.analyze(match.get("change", {}))
+        vote_r = self.vote_model.analyze(match.get("vote", {}))
+        h2h_r = self.h2h_model.analyze(match.get("h2h", []), match.get("home_team"), match.get("away_team"))
+        crs_r = self.crs_model.analyze(match)
+        ttg_r = self.ttg_model.analyze(match)
+        hf_r = self.hf_model.analyze(match)
+        # 加权融合
+        w = {"poisson": 0.10, "refined_poisson": 0.20, "dixon": 0.10,
+             "elo": 0.05, "bt": 0.05, "rf": 0.12, "gb": 0.12,
+             "nn": 0.08, "lr": 0.06, "svm": 0.06, "knn": 0.06}
+        models = [("poisson",poi),("refined_poisson",ref_poi),("dixon",dc),
+                  ("elo",elo_r),("bt",bt_r),("rf",rf_r),("gb",gb_r),
+                  ("nn",nn_r),("lr",lr_r),("svm",svm_r),("knn",knn_r)]
+        hp, dp, ap = 0, 0, 0
+        for name, pred in models:
+            wt = w.get(name, 0.05)
+            hp += pred.get("home_win", 33)*wt
+            dp += pred.get("draw", 33)*wt
+            ap += pred.get("away_win", 33)*wt
+        # 附加调整
+        fd = hf["score"]-af["score"]
+        hp += hc_adj + fd*0.04 + h2h_r["h_adj"] + odds_mv.get("h_adj", 0) + vote_r.get("adj_h", 0)
+        ap += -hc_adj - fd*0.04 + h2h_r["a_adj"] + odds_mv.get("a_adj", 0) + vote_r.get("adj_a", 0)
+        dp += odds_mv.get("d_adj", 0)
+        t = hp+dp+ap
+        if t > 0: hp = round(hp/t*100, 1); dp = round(dp/t*100, 1); ap = round(100-hp-dp, 1)
+        # 共识
+        agree_h = sum(1 for _, p in models if p.get("home_win",0) > max(p.get("draw",0), p.get("away_win",0)))
+        agree_a = sum(1 for _, p in models if p.get("away_win",0) > max(p.get("home_win",0), p.get("draw",0)))
+        consensus = max(agree_h, agree_a)
+        cf = min(92, max(30, 35 + consensus*5 + (8 if max(hp,dp,ap)>60 else 0) + (5 if fd>15 else 0)))
+        signals = []
+        if hc_signal != "盘口正常": signals.append(hc_signal)
+        if odds_mv.get("signal","").startswith("💰"): signals.append(odds_mv["signal"])
+        if vote_r.get("signal","").startswith("⚠"): signals.append(vote_r["signal"])
+        # 凯利
+        kelly_h = self.kelly.calculate(hp/100, sp_h) if sp_h > 1 else {}
+        kelly_a = self.kelly.calculate(ap/100, sp_a) if sp_a > 1 else {}
+        return {
+            "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap,
+            "predicted_score": ref_poi["predicted_score"], "confidence": cf,
+            "poisson": poi, "refined_poisson": ref_poi, "dixon_coles": dc,
+            "elo": elo_r, "bradley_terry": bt_r,
+            "random_forest": rf_r, "gradient_boost": gb_r, "neural_net": nn_r,
+            "logistic": lr_r, "svm": svm_r, "knn": knn_r,
+            "home_form": hf, "away_form": af,
+            "over_2_5": ttg_r.get("over_2_5", pace_r["over_2_5"]),
+            "btts": poi.get("btts", 50),
+            "pace_rating": pace_r["pace_rating"],
+            "expected_total_goals": ttg_r.get("expected_goals", pace_r["expected_total"]),
+            "crs_analysis": crs_r, "ttg_analysis": ttg_r, "halftime": hf_r,
+            "handicap_signal": hc_signal, "odds_movement": odds_mv,
+            "vote_analysis": vote_r, "h2h_blood": h2h_r,
+            "smart_signals": signals,
+            "kelly_home": kelly_h, "kelly_away": kelly_a,
+            "model_consensus": consensus, "total_models": len(models),
+            "odds": {"implied_home": round(true_h*100,1), "implied_draw": round(true_d*100,1), "implied_away": round(true_a*100,1)},
+        }
+'''
+
+with open("scripts/models.py", "w", encoding="utf-8") as f:
+    f.write(code)
+print("OK models.py - 20+ models upgraded!")
+
+import os
+os.system("cd ~/football-predict && git add -A && git commit -m 'v3: 20+ models full upgrade' && git push")
+print("PUSHED!")
+UPGRADE
