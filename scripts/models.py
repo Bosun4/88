@@ -588,13 +588,3 @@ class EnsemblePredictor:
             "model_consensus": consensus, "total_models": len(models),
             "odds": {"implied_home": round(true_h*100,1), "implied_draw": round(true_d*100,1), "implied_away": round(true_a*100,1)},
         }
-'''
-
-with open("scripts/models.py", "w", encoding="utf-8") as f:
-    f.write(code)
-print("OK models.py - 20+ models upgraded!")
-
-import os
-os.system("cd ~/football-predict && git add -A && git commit -m 'v3: 20+ models full upgrade' && git push")
-print("PUSHED!")
-UPGRADE
