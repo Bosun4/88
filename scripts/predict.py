@@ -131,7 +131,7 @@ def call_ai_model(prompt, url, key, model_name):
 def call_gpt(prompt): 
     url = get_clean_env_url("GPT_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
     key = get_clean_env_key("GPT_API_KEY")
-    return call_ai_model(prompt, url, key, "熊猫-A-7-gpt-5.4")
+    return call_ai_model(prompt, url, key, "熊猫-按量-gpt-5.3-codex-满血")
 
 def call_grok(prompt): 
     url = get_clean_env_url("GROK_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
@@ -141,7 +141,7 @@ def call_grok(prompt):
 def call_gemini(prompt): 
     url = get_clean_env_url("GEMINI_API_URL")
     key = get_clean_env_key("GEMINI_API_KEY")
-    return call_ai_model(prompt, url, key, "熊猫-顶级特供-X-17-gemini-3.1-pro-preview")
+    return call_ai_model(prompt, url, key, "熊猫特供-按量-SSS-gemini-3.1-pro-preview")
 
 # =========================================================
 
