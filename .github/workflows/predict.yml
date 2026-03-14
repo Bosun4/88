@@ -28,9 +28,12 @@ jobs:
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
+          # 🔥 彻底打通所有网关和密钥的环境变量映射
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
-          # 🔥 核心：注入你新设置的独立 Grok 密钥
+          GPT_API_URL: ${{ secrets.GPT_API_URL }}
           GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
+          GROK_API_URL: ${{ secrets.GROK_API_URL }}
         run: |
           cd scripts
           python main.py
@@ -48,7 +51,7 @@ jobs:
           git add data/
           
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (独立Grok网关版)"
+            git commit -m "🤖 Auto-update prediction data (终极密钥网关打通版)"
             git pull --rebase origin main || true
             git push
           else
