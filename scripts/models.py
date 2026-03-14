@@ -451,4 +451,150 @@ class PaceTotalGoalsModel:
         except: h_gf=1.3;h_ga=1.1;a_gf=1.1;a_ga=1.3
         exp = (h_gf+a_ga)/2 + (a_gf+h_ga)/2
         exp *= (1.0 + (0.3 - (h_cs+a_cs)/2))
-        over =​​​​​​​​​​​​​​​​
+        over = 1-(math.exp(-exp)*(1+exp+(exp**2)/2))
+        return {"over_2_5": round(max(15, min(85, over*100)), 1), "expected_total": round(exp, 2),
+                "pace_rating": "极快" if exp > 3.0 else ("慢" if exp < 2.0 else "中等")}
+
+class KellyCriterion:
+    """凯利公式价值投注"""
+    def calculate(self, prob, odds, fraction=0.25):
+        if odds <= 1 or prob <= 0 or prob >= 1: return {"kelly": 0, "value": False, "edge": 0}
+        q = 1-prob; b = odds-1; kelly = (b*prob-q)/b; edge = (prob*odds-1)*100
+        return {"kelly": round(max(0, kelly)*fraction*100, 2), "value": edge > 0, "edge": round(edge, 1)}
+
+# ============================================================
+# 7. 总融合器
+# ============================================================
+
+class EnsemblePredictor:
+    """全模型融合预测器"""
+    def __init__(self):
+        print("[Models] 初始化全模型矩阵...")
+        self.poisson = PoissonModel()
+        self.refined_poisson = RefinedPoissonModel()
+        self.dixon = DixonColesModel()
+        self.elo = EloModel()
+        self.bt = BradleyTerryModel()
+        self.form_model = FormModel()
+        self.pace = PaceTotalGoalsModel()
+        self.kelly = KellyCriterion()
+        self.true_odds = TrueOddsModel()
+        self.hc_model = HandicapMismatchModel()
+        self.odds_move = OddsMovementModel()
+        self.vote_model = VoteModel()
+        self.h2h_model = H2HBloodlineModel()
+        self.crs_model = CRSOddsModel()
+        self.ttg_model = TotalGoalsOddsModel()
+        self.hf_model = HalfTimeFullTimeModel()
+        self.rf = RandomForestModel()
+        self.gb = GradientBoostModel()
+        self.nn = NeuralNetModel()
+        self.lr = LogisticModel()
+        self.svm = SVMModel()
+        self.knn = KNNModel()
+        print("[Models] Training 6 ML models...")
+        for m in [self.rf, self.gb, self.nn, self.lr, self.svm, self.knn]:
+            m.train()
+        print("[Models] All 20+ models ready!")
+
+    def predict(self, match, odds_data=None):
+        hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
+        # 赔率
+        sp_h = float(match.get("sp_home", 0) or 0)
+        sp_d = float(match.get("sp_draw", 0) or 0)
+        sp_a = float(match.get("sp_away", 0) or 0)
+        v2_odds = match.get("v2_odds_dict", {})
+        true_h, true_d, true_a = self.true_odds.calculate(sp_h, sp_d, sp_a)
+        # 状态
+        hf = self.form_model.analyze(hs.get("form", ""))
+        af = self.form_model.analyze(ast.get("form", ""))
+        h_mom = max(0.6, min(1.4, hf["score"]/50.0))
+        a_mom = max(0.6, min(1.4, af["score"]/50.0))
+        # xG
+        try: h_gf=float(hs.get("avg_goals_for",1.3))*h_mom; a_gf=float(ast.get("avg_goals_for",1.1))*a_mom
+        except: h_gf=1.3; a_gf=1.1
+        try: h_ga=float(hs.get("avg_goals_against",1.1)); a_ga=float(ast.get("avg_goals_against",1.3))
+        except: h_ga=1.1; a_ga=1.3
+        # 赔率驱动xG校正
+        if true_h > 0.60: h_gf = max(h_gf, 1.8); a_gf = min(a_gf, 0.9)
+        elif true_a > 0.60: a_gf = max(a_gf, 1.8); h_gf = min(h_gf, 0.9)
+        # 模型预测
+        poi = self.poisson.predict(h_gf, h_ga, a_gf, a_ga)
+        ref_poi = self.refined_poisson.predict(h_gf, a_gf, v2_odds if v2_odds else match)
+        dc = self.dixon.predict(h_gf, h_ga, a_gf, a_ga)
+        elo_r = self.elo.predict(match.get("home_rank", 10), match.get("away_rank", 10))
+        bt_r = self.bt.predict(hs.get("wins"), hs.get("played"), ast.get("wins"), ast.get("played"))
+        rf_r = self.rf.predict(match); gb_r = self.gb.predict(match)
+        nn_r = self.nn.predict(match); lr_r = self.lr.predict(match)
+        svm_r = self.svm.predict(match); knn_r = self.knn.predict(match)
+        pace_r = self.pace.predict(h_gf, h_ga, a_gf, a_ga, hs, ast)
+        # 盘口分析
+        hc_adj, hc_signal = self.hc_model.analyze(true_h, match.get("give_ball", 0))
+        odds_mv = self.odds_move.analyze(match.get("change", {}))
+        vote_r = self.vote_model.analyze(match.get("vote", {}))
+        h2h_r = self.h2h_model.analyze(match.get("h2h", []), match.get("home_team"), match.get("away_team"))
+        crs_r = self.crs_model.analyze(match)
+        ttg_r = self.ttg_model.analyze(match)
+        hf_r = self.hf_model.analyze(match)
+        # 加权融合
+        w = {"poisson": 0.10, "refined_poisson": 0.20, "dixon": 0.10,
+             "elo": 0.05, "bt": 0.05, "rf": 0.12, "gb": 0.12,
+             "nn": 0.08, "lr": 0.06, "svm": 0.06, "knn": 0.06}
+        models = [("poisson",poi),("refined_poisson",ref_poi),("dixon",dc),
+                  ("elo",elo_r),("bt",bt_r),("rf",rf_r),("gb",gb_r),
+                  ("nn",nn_r),("lr",lr_r),("svm",svm_r),("knn",knn_r)]
+        hp, dp, ap = 0, 0, 0
+        for name, pred in models:
+            wt = w.get(name, 0.05)
+            hp += pred.get("home_win", 33)*wt
+            dp += pred.get("draw", 33)*wt
+            ap += pred.get("away_win", 33)*wt
+        # 附加调整
+        fd = hf["score"]-af["score"]
+        hp += hc_adj + fd*0.04 + h2h_r["h_adj"] + odds_mv.get("h_adj", 0) + vote_r.get("adj_h", 0)
+        ap += -hc_adj - fd*0.04 + h2h_r["a_adj"] + odds_mv.get("a_adj", 0) + vote_r.get("adj_a", 0)
+        dp += odds_mv.get("d_adj", 0)
+        t = hp+dp+ap
+        if t > 0: hp = round(hp/t*100, 1); dp = round(dp/t*100, 1); ap = round(100-hp-dp, 1)
+        # 共识
+        agree_h = sum(1 for _, p in models if p.get("home_win",0) > max(p.get("draw",0), p.get("away_win",0)))
+        agree_a = sum(1 for _, p in models if p.get("away_win",0) > max(p.get("home_win",0), p.get("draw",0)))
+        consensus = max(agree_h, agree_a)
+        cf = min(92, max(30, 35 + consensus*5 + (8 if max(hp,dp,ap)>60 else 0) + (5 if fd>15 else 0)))
+        signals = []
+        if hc_signal != "盘口正常": signals.append(hc_signal)
+        if odds_mv.get("signal","").startswith("💰"): signals.append(odds_mv["signal"])
+        if vote_r.get("signal","").startswith("⚠"): signals.append(vote_r["signal"])
+        # 凯利
+        kelly_h = self.kelly.calculate(hp/100, sp_h) if sp_h > 1 else {}
+        kelly_a = self.kelly.calculate(ap/100, sp_a) if sp_a > 1 else {}
+        return {
+            "home_win_pct": hp, "draw_pct": dp, "away_win_pct": ap,
+            "predicted_score": ref_poi["predicted_score"], "confidence": cf,
+            "poisson": poi, "refined_poisson": ref_poi, "dixon_coles": dc,
+            "elo": elo_r, "bradley_terry": bt_r,
+            "random_forest": rf_r, "gradient_boost": gb_r, "neural_net": nn_r,
+            "logistic": lr_r, "svm": svm_r, "knn": knn_r,
+            "home_form": hf, "away_form": af,
+            "over_2_5": ttg_r.get("over_2_5", pace_r["over_2_5"]),
+            "btts": poi.get("btts", 50),
+            "pace_rating": pace_r["pace_rating"],
+            "expected_total_goals": ttg_r.get("expected_goals", pace_r["expected_total"]),
+            "crs_analysis": crs_r, "ttg_analysis": ttg_r, "halftime": hf_r,
+            "handicap_signal": hc_signal, "odds_movement": odds_mv,
+            "vote_analysis": vote_r, "h2h_blood": h2h_r,
+            "smart_signals": signals,
+            "kelly_home": kelly_h, "kelly_away": kelly_a,
+            "model_consensus": consensus, "total_models": len(models),
+            "odds": {"implied_home": round(true_h*100,1), "implied_draw": round(true_d*100,1), "implied_away": round(true_a*100,1)},
+        }
+'''
+
+with open("scripts/models.py", "w", encoding="utf-8") as f:
+    f.write(code)
+print("OK models.py - 20+ models upgraded!")
+
+import os
+os.system("cd ~/football-predict && git add -A && git commit -m 'v3: 20+ models full upgrade' && git push")
+print("PUSHED!")
+UPGRADE
