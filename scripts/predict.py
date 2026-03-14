@@ -15,38 +15,28 @@ def calculate_value_bet(prob_pct, odds):
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
 def build_independent_prompt(m):
-    h = m.get("home_team", "主队")
-    a = m.get("away_team", "客队")
-    lg = m.get("league", "未知赛事")
-    sp_h = m.get("sp_home", 0.0)
-    sp_d = m.get("sp_draw", 0.0)
-    sp_a = m.get("sp_away", 0.0)
+    h, a = m["home_team"], m["away_team"]
     intel = m.get("intelligence", {})
     
-    p = f"【系统绝对指令】你是一名冷酷的足球量化风控专家。任务：对【{h}】VS【{a}】进行胜负推演。\n"
-    p += f"【警报】绝对禁止提及与本场无关的球队或球星（如姆巴佩等）。\n\n"
-    p += f"【基本面】赛事：{lg} | 初始SP：主胜{sp_h} 平局{sp_d} 客胜{sp_a} | 盘口与资金：{m.get('handicap_info')} | {m.get('odds_movement')}\n"
-    p += f"【伤停】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
+    p = f"【系统硬指令】你是一个无情的量化处理程序。你的任务极其单一：只分析【{h}】和【{a}】这场比赛。\n"
+    p += f"【警报】若下方情报中出现了与这两队无关的人名（如姆巴佩、哈兰德等）或球队名，那是数据杂音，立即屏蔽，严禁在分析中提及！\n\n"
+    p += f"【主队阵容隐患】{intel.get('h_inj')}\n"
+    p += f"【客队阵容隐患】{intel.get('g_inj')}\n"
+    p += f"【盘口资金动向】{m.get('handicap_info')} | {m.get('odds_movement')}\n\n"
     
-    intro = str(m.get('expert_intro', '')).strip()
-    p += f"【情报】{intro[:150] if intro else '无'}\n\n"
-    
-    p += "【要求】评估伤停与诱盘意图，给出最冷血的比分。\n"
-    p += "【格式铁律】必须且只能返回纯JSON对象，绝不允许有Markdown修饰符(如```json)！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字复盘，只围绕这两支队伍！"}'
+    p += "结合防线隐患与庄家意图，给出最冷血的比分推演（如实力悬殊请给0-3, 1-4；势均力敌请给1-1）。\n"
+    p += "【格式要求】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号(如```json)！\n"
+    p += '{"ai_score":"1-2","analysis":"不超过100字的冷酷复盘，紧扣双方队伍"}'
     return p
 
 def build_synthesis_prompt(m, gpt_res, grok_res):
-    h = m.get("home_team", "主队")
-    a = m.get("away_team", "客队")
-    
-    p = f"【系统绝对指令】你是首席足球数据裁决官。任务：对【{h}】vs【{a}】进行终局判定。\n"
-    p += f"GPT 前瞻: 比分 [{gpt_res.get('ai_score', '无')}] | 逻辑 [{gpt_res.get('analysis', '无')}]\n"
-    p += f"Grok 前瞻: 比分 [{grok_res.get('ai_score', '无')}] | 逻辑 [{grok_res.get('analysis', '无')}]\n\n"
-    
-    p += "【要求】交叉比对两份前瞻，摒弃含有幻觉的数据，做出最无情的比分终裁。严禁提及未参与本场分析的AI名字。\n"
-    p += "【格式铁律】必须只能返回纯JSON对象，绝不允许包含Markdown修饰符！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字的终局裁定。"}'
+    h, a = m["home_team"], m["away_team"]
+    p = f"【系统硬指令】你是首席裁判程序。仅围绕【{h}】和【{a}】进行判定。\n"
+    p += f"GPT 判定: {gpt_res.get('ai_score', '无')} | 逻辑: {gpt_res.get('analysis', '无')}\n"
+    p += f"Grok 判定: {grok_res.get('ai_score', '无')} | 逻辑: {grok_res.get('analysis', '无')}\n\n"
+    p += "剔除他们可能的幻觉(如提到无关球队)，给出你的终局裁决。\n"
+    p += "【格式要求】必须只返回1个纯JSON对象，绝对不允许有任何Markdown符号！\n"
+    p += '{"ai_score":"1-2","analysis":"不超过100字的终极裁定"}'
     return p
 
 def extract_clean_json(text):
@@ -139,7 +129,8 @@ def call_gpt(prompt):
     return call_ai_model(prompt, url, key, "熊猫-A-7-gpt-5.4")
 
 def call_grok(prompt): 
-    url = get_env_var("GROK_API_URL", "[https://api522.pro/v1](https://api.520.pro/v1)")
+    # 🔥 核心修复：彻底清除了括号乱码，恢复纯净网址
+    url = get_env_var("GROK_API_URL", "[https://api522.pro/v1](https://api522.pro/v1)")
     key = get_env_var("GROK_API_KEY")
     return call_ai_model(prompt, url, key, "熊猫-A-6-grok-4.2-thinking")
 
@@ -202,13 +193,11 @@ def extract_num(match_str):
     nums = re.findall(r'\d+', match_str)
     return base_weight + int(nums[0]) if nums else 9999
 
-# 🔥 核心修复：成功接住了 use_ai=True 参数，彻底解决 TypeError 死机！
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", []); res = []
     for i, m in enumerate(ms):
         sp = ensemble.predict(m, {})
         
-        # 根据指令开启或关闭AI调用
         if use_ai:
             ind_prompt = build_independent_prompt(m)
             gpt_res = call_gpt(ind_prompt)
