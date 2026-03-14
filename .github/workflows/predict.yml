@@ -2,7 +2,8 @@ name: Football AI Predict
 
 on:
   schedule:
-    - cron: '0 0,12 * * *'
+    # 设定为 UTC 时间 02:00，刚好对应北京时间早上 10:00
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 permissions:
@@ -51,7 +52,7 @@ jobs:
           git add data/
           
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (终极密钥网关打通版)"
+            git commit -m "🤖 Auto-update prediction data (同步至北京时间早10点)"
             git pull --rebase origin main || true
             git push
           else
