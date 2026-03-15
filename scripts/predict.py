@@ -184,10 +184,9 @@ def call_gpt(prompt):
     return call_ai_model(prompt, url, key, GPT_MODEL)
 
 def call_grok(prompt):
-    url = get_clean_env_url("GROK_API_URL", globals().get("GROK_API_URL", GPT_API_URL))
+    url = get_clean_env_url("GROK_API_URL", GROK_API_URL)
     key = get_clean_env_key("GROK_API_KEY")
-    model = globals().get("GROK_MODEL", "grok-4.2-thinking")
-    return call_ai_model(prompt, url, key, model)
+    return call_ai_model(prompt, url, key, GROK_MODEL)
 
 def call_gemini(prompt):
     url = get_clean_env_url("GEMINI_API_URL", GEMINI_API_URL)
@@ -195,10 +194,10 @@ def call_gemini(prompt):
     return call_ai_model(prompt, url, key, GEMINI_MODEL)
 
 def call_claude(prompt):
-    url = get_clean_env_url("CLAUDE_API_URL", globals().get("CLAUDE_API_URL", GPT_API_URL))
+    url = get_clean_env_url("CLAUDE_API_URL", CLAUDE_API_URL)
     key = get_clean_env_key("CLAUDE_API_KEY")
-    model = globals().get("CLAUDE_MODEL", "claude-opus-4.6-thinking")
-    return call_ai_model(prompt, url, key, model)
+    return call_ai_model(prompt, url, key, CLAUDE_MODEL)
+
 
 # ============================================================
 # 全维度融合器
