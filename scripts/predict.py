@@ -14,10 +14,6 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
-# ============================================================
-# Phase-1: 三路独立前瞻（GPT / Grok / Gemini 各自独立分析）
-# ============================================================
-
 def build_scout_prompt(m):
     h, a = m.get("home_team", "主队"), m.get("away_team", "客队")
     lg = m.get("league", "未知赛事")
@@ -29,72 +25,101 @@ def build_scout_prompt(m):
     p += "【铁律】① 禁止虚构数据 ② 禁止提及无关球队球星 ③ 只返回纯JSON\n\n"
     p += f"【基本面】赛事：{lg} | 场次：{m.get('match_num', '?')}\n"
     p += f"SP赔率：主{sp_h} 平{sp_d} 客{sp_a} | 让球：{m.get('give_ball', '?')}\n"
-    p += f"赔率变动：{m.get('change', {})}\n"
-    p += f"【主队{h}】排名#{m.get('home_rank', '?')} 近况:{hs.get('form', '?')} "
-    p += f"{hs.get('played', '?')}场{hs.get('wins', '?')}胜{hs.get('draws', '?')}平{hs.get('losses', '?')}负 "
-    p += f"进{hs.get('goals_for', '?')}失{hs.get('goals_against', '?')}\n"
+    p += f"赔率变动：{m.get('odds_movement', '未知')}\n"
+    p += f"\n【主队{h}】排名#{m.get('home_rank', '?')}\n"
+    p += f"战绩：{hs.get('played', '?')}场{hs.get('wins', '?')}胜{hs.get('draws', '?')}平{hs.get('losses', '?')}负\n"
+    p += f"进{hs.get('goals_for', '?')}球失{hs.get('goals_against', '?')}球 场均进{hs.get('avg_goals_for', '?')}失{hs.get('avg_goals_against', '?')}\n"
+    p += f"近况：{hs.get('form', '?')} | 零封：{hs.get('clean_sheets', '?')}场\n"
     p += f"伤停：{intel.get('h_inj', '未知')}\n"
-    p += f"【客队{a}】排名#{m.get('away_rank', '?')} 近况:{ast.get('form', '?')} "
-    p += f"{ast.get('played', '?')}场{ast.get('wins', '?')}胜{ast.get('draws', '?')}平{ast.get('losses', '?')}负 "
-    p += f"进{ast.get('goals_for', '?')}失{ast.get('goals_against', '?')}\n"
+    p += f"\n【客队{a}】排名#{m.get('away_rank', '?')}\n"
+    p += f"战绩：{ast.get('played', '?')}场{ast.get('wins', '?')}胜{ast.get('draws', '?')}平{ast.get('losses', '?')}负\n"
+    p += f"进{ast.get('goals_for', '?')}球失{ast.get('goals_against', '?')}球 场均进{ast.get('avg_goals_for', '?')}失{ast.get('avg_goals_against', '?')}\n"
+    p += f"近况：{ast.get('form', '?')} | 零封：{ast.get('clean_sheets', '?')}场\n"
     p += f"伤停：{intel.get('g_inj', '未知')}\n"
     h2h = m.get("h2h", [])
     if h2h:
-        p += "【交锋】\n"
+        p += "\n【交锋记录】\n"
         for x in h2h[:5]:
             p += f"{x.get('date','')} {x.get('home','')} {x.get('score','')} {x.get('away','')}\n"
+    baseface = str(m.get('baseface', '')).strip()
+    if baseface:
+        p += f"\n【专业基本面分析】\n{baseface[:300]}\n"
+    had = m.get("had_analyse", [])
+    if had:
+        p += f"【官方推荐倾向】{','.join(str(x) for x in had)}\n"
     intro = str(m.get('expert_intro', '')).strip()
     if intro:
-        p += f"【情报】{intro[:200]}\n"
+        p += f"\n【专家情报】{intro[:200]}\n"
     vote = m.get("vote", {})
     if vote:
-        p += f"【民意】主胜{vote.get('win', '?')}% 平{vote.get('same', '?')}% 客胜{vote.get('lose', '?')}%\n"
-    p += "\n【输出】评估伤停与诱盘意图，给出最冷血的比分。只返回纯JSON，禁止Markdown：\n"
-    p += '{"ai_score":"1-2","analysis":"80字以内冷血分析，只围绕本场两队"}'
+        p += f"\n【民意】主胜{vote.get('win', '?')}% 平{vote.get('same', '?')}% 客胜{vote.get('lose', '?')}%\n"
+    v2 = m.get("v2_odds_dict", {})
+    if v2:
+        crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1",
+                   "s00":"0-0","s11":"1-1","s22":"2-2",
+                   "l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3"}
+        crs_probs = []
+        for k, sc in crs_map.items():
+            odds = float(v2.get(k, 0) or 0)
+            if odds > 1:
+                crs_probs.append((sc, odds, round(1/odds*100, 1)))
+        crs_probs.sort(key=lambda x: x[2], reverse=True)
+        if crs_probs:
+            p += "\n【比分赔率热度TOP5】\n"
+            for sc, od, prob in crs_probs[:5]:
+                p += f"  {sc} 赔率{od} 隐含概率{prob}%\n"
+    p += "\n【决策要求】\n"
+    p += "1. 综合赔率、伤停、近况、交锋、基本面分析做出判断\n"
+    p += "2. 重点关注比分赔率最热的比分，那是市场资金的共识\n"
+    p += "3. 如果主胜大热但让球浅，考虑冷门可能\n"
+    p += "4. 如果民意一边倒(>55%)，逆向思考是否有诱盘\n"
+    p += "5. 给出你认为最可能的精确比分\n\n"
+    p += "【输出】纯JSON，禁止Markdown：\n"
+    p += '{"ai_score":"1-2","analysis":"80字冷血分析"}'
     return p
-
-# ============================================================
-# Phase-2: Claude Opus 中控终裁
-# ============================================================
 
 def build_commander_prompt(m, gpt_res, grok_res, gemini_res, stats_pred):
     h, a = m.get("home_team", "主队"), m.get("away_team", "客队")
     poi = stats_pred.get("poisson", {})
     ref = stats_pred.get("refined_poisson", {})
-    p = f"【系统协议·最高权限】你是首席量化裁决官（中控）。你的判定为最终结论，不可被推翻。\n"
+    sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
+    p = f"【系统协议·最高权限】你是首席量化裁决官（中控）。你的判定为最终结论。\n"
     p += f"任务：对【{h}】vs【{a}】进行终局比分裁决。\n\n"
     p += "【三路前瞻情报】\n"
-    p += f"前瞻A (GPT)：比分 [{gpt_res.get('ai_score', '无')}] | 逻辑：{gpt_res.get('analysis', '无')}\n"
-    p += f"前瞻B (Grok)：比分 [{grok_res.get('ai_score', '无')}] | 逻辑：{grok_res.get('analysis', '无')}\n"
-    p += f"前瞻C (Gemini)：比分 [{gemini_res.get('ai_score', '无')}] | 逻辑：{gemini_res.get('analysis', '无')}\n\n"
-    p += "【统计模型矩阵（11个模型融合）】\n"
+    p += f"GPT前瞻：比分[{gpt_res.get('ai_score', '无')}] 逻辑：{gpt_res.get('analysis', '无')}\n"
+    p += f"Grok前瞻：比分[{grok_res.get('ai_score', '无')}] 逻辑：{grok_res.get('analysis', '无')}\n"
+    p += f"Gemini前瞻：比分[{gemini_res.get('ai_score', '无')}] 逻辑：{gemini_res.get('analysis', '无')}\n\n"
+    p += "【统计模型矩阵】\n"
     p += f"泊松比分：{poi.get('predicted_score', '?')} | 修正泊松：{ref.get('predicted_score', '?')}\n"
     p += f"融合概率：主{stats_pred.get('home_win_pct', 33):.1f}% 平{stats_pred.get('draw_pct', 33):.1f}% 客{stats_pred.get('away_win_pct', 33):.1f}%\n"
     p += f"模型共识：{stats_pred.get('model_consensus', 0)}/{stats_pred.get('total_models', 11)}\n"
     p += f"期望总球：{stats_pred.get('expected_total_goals', 2.5):.1f}\n"
+    crs = stats_pred.get("crs_analysis", {})
+    top_crs = crs.get("top_scores", [])[:5]
+    if top_crs:
+        p += "\n【比分赔率市场共识TOP5】\n"
+        for s in top_crs:
+            p += f"  {s.get('score', '?')} 概率{s.get('prob', 0):.1f}% 赔率{s.get('odds', '?')}\n"
+    p += f"\n【原始赔率】SP：主{sp_h} 平{sp_d} 客{sp_a} | 让球：{m.get('give_ball', '?')}\n"
+    intel = m.get("intelligence", {})
+    p += f"【伤停】主队：{intel.get('h_inj', '?')[:80]}\n"
+    p += f"      客队：{intel.get('g_inj', '?')[:80]}\n"
     smart = stats_pred.get("smart_signals", [])
     if smart:
-        p += f"智能信号：{'、'.join(smart)}\n"
-    crs = stats_pred.get("crs_analysis", {})
-    top_crs = crs.get("top_scores", [])[:3]
-    if top_crs:
-        p += "比分赔率TOP3："
-        for s in top_crs:
-            p += f" {s.get('score', '?')}({s.get('prob', 0):.1f}%)"
-        p += "\n"
+        p += f"\n【风控信号】{'  |  '.join(smart)}\n"
+    baseface = str(m.get('baseface', '')).strip()
+    if baseface:
+        p += f"\n【基本面】{baseface[:200]}\n"
     p += "\n【裁决指令】\n"
-    p += "1. 交叉比对三份AI前瞻，识别并摒弃含有幻觉的数据\n"
-    p += "2. 如果2个以上AI预测同一比分，该比分可信度极高\n"
-    p += "3. 用统计模型矩阵校准AI判断\n"
-    p += "4. 如果比分赔率有异常低赔，重点考虑该比分\n"
-    p += "5. 给出你的终局比分和100字裁决理由\n\n"
+    p += "1. 交叉比对三份AI前瞻，如果2个以上AI预测同一比分，该比分可信度极高\n"
+    p += "2. 比分赔率TOP1是市场资金最认可的比分，必须重点考虑\n"
+    p += "3. 如果AI前瞻与比分赔率TOP1一致，大胆采纳\n"
+    p += "4. 如果AI前瞻全部与比分赔率矛盾，以比分赔率为锚，微调即可\n"
+    p += "5. 伤停严重的一方大概率丢球更多\n"
+    p += "6. 风控信号（欧亚错位/资金流向）暗示机构态度，务必重视\n\n"
     p += "【输出】纯JSON，禁止Markdown：\n"
-    p += '{"ai_score":"1-2","analysis":"100字终局裁决理由"}'
+    p += '{"ai_score":"1-2","analysis":"100字终局裁决"}'
     return p
-
-# ============================================================
-# JSON安全解析器
-# ============================================================
 
 def extract_clean_json(text):
     text = str(text or "").strip()
@@ -116,10 +141,6 @@ def extract_clean_json(text):
         return {"ai_score": fallback_score, "analysis": fallback_analysis}
     return None
 
-# ============================================================
-# 环境变量安全读取
-# ============================================================
-
 def get_clean_env_url(name, default=""):
     v = os.environ.get(name, globals().get(name, default))
     v = str(v).strip(' \t\n\r"\'')
@@ -128,10 +149,6 @@ def get_clean_env_url(name, default=""):
 
 def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(' \t\n\r"\'')
-
-# ============================================================
-# AI模型调用引擎
-# ============================================================
 
 def call_ai_model(prompt, url, key, model_name):
     if not url or not key:
@@ -171,10 +188,6 @@ def call_ai_model(prompt, url, key, model_name):
     except Exception as e:
         print(f"    ⚠️ {model_name}: {str(e)[:50]}")
     return {}
-
-# ============================================================
-# 四路AI调用（带自动降级）
-# ============================================================
 
 def call_with_fallback(prompt, url_env, key_env, models_list):
     url = get_clean_env_url(url_env, globals().get(url_env, ""))
@@ -217,10 +230,6 @@ def call_claude(prompt):
         "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking",
         "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6",
     ])
-
-# ============================================================
-# 全维度融合器
-# ============================================================
 
 def merge_all(gpt, grok, gemini, claude, stats, match_obj):
     sys_hp = stats.get("home_win_pct", 33)
@@ -305,10 +314,6 @@ def merge_all(gpt, grok, gemini, claude, stats, match_obj):
         "odds": stats.get("odds", {}),
     }
 
-# ============================================================
-# TOP4推荐引擎
-# ============================================================
-
 def select_top4(preds):
     for p in preds:
         pr = p.get("prediction", {})
@@ -332,14 +337,10 @@ def extract_num(match_str):
     nums = re.findall(r'\d+', str(match_str))
     return base + int(nums[0]) if nums else 9999
 
-# ============================================================
-# 主入口
-# ============================================================
-
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print(f"\n{'='*60}")
-    print(f"  ENSEMBLE ENGINE v4.1 | {len(ms)} matches")
+    print(f"  ENSEMBLE ENGINE v4.2 | {len(ms)} matches")
     print(f"  11 Stats + 4 AI (GPT·Grok·Gemini·Claude中控)")
     print(f"  自动降级：GPT 4级 | Gemini 3级 | Grok 2级 | Claude 3级")
     print(f"{'='*60}")
@@ -356,7 +357,7 @@ def run_predictions(raw, use_ai=True):
         if smart:
             print(f"     信号: {' | '.join(smart)}")
         if use_ai:
-            print("  Phase-1: 三路独立前瞻（自动降级）...")
+            print("  Phase-1: 三路独立前瞻...")
             scout_prompt = build_scout_prompt(m)
             gpt_res = call_gpt(scout_prompt)
             time.sleep(0.5)
@@ -364,7 +365,7 @@ def run_predictions(raw, use_ai=True):
             time.sleep(0.5)
             gemini_res = call_gemini(scout_prompt)
             time.sleep(0.5)
-            print("  Phase-2: Claude中控终裁（自动降级）...")
+            print("  Phase-2: Claude中控终裁...")
             commander_prompt = build_commander_prompt(m, gpt_res or {}, grok_res or {}, gemini_res or {}, sp)
             claude_res = call_claude(commander_prompt)
             time.sleep(0.5)
