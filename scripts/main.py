@@ -20,14 +20,11 @@ def main():
     print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
     print("=" * 70)
 
-    # 🔥 核心防御装甲：获取当前脚本的绝对物理路径，彻底根除相对路径迷失陷阱！
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, "data")
     
-    # 强制在绝对路径下创建 data 文件夹
     os.makedirs(data_dir, exist_ok=True)
     
-    # 将保存路径绑定到绝对物理坐标
     target_path = os.path.join(data_dir, "predictions.json")
     history_path = os.path.join(data_dir, f"history_{now_time.strftime('%Y%m%d')}_{session}.json")
 
@@ -56,18 +53,19 @@ def main():
                 print(f"  [WARN] {target_date} 暂无比赛数据。")
                 continue
 
-            # 🔥 AI 资金节流阀
             use_ai = (day_key in ["today", "tomorrow"])
             if not use_ai:
                 print("  [INFO] 历史赛事，已自动切断AI通道以节省API费用...")
 
             results, top4 = run_predictions(raw_data, use_ai=use_ai)
-            final_output["matches"][day_key] = results
+            
+            clean_results = json.loads(json.dumps(results, ensure_ascii=False, default=str))
+            final_output["matches"][day_key] = clean_results
             
             if day_key == "today":
-                final_output["top4"] = [{"rank": i + 1, **t} for i, t in enumerate(top4)]
+                clean_top4 = json.loads(json.dumps(top4, ensure_ascii=False, default=str))
+                final_output["top4"] = [{"rank": i + 1, **t} for i, t in enumerate(clean_top4)]
 
-            # 绝对路径安全落盘
             with open(target_path, "w", encoding="utf-8") as f:
                 json.dump(final_output, f, ensure_ascii=False, indent=2)
             with open(history_path, "w", encoding="utf-8") as f:
