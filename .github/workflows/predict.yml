@@ -2,7 +2,6 @@ name: Football AI Predict
 
 on:
   schedule:
-    # 设定为 UTC 时间 02:00，刚好对应北京时间早上 10:00
     - cron: '0 2 * * *'
   workflow_dispatch:
 
@@ -28,13 +27,15 @@ jobs:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
-          # 🔥 彻底打通所有网关和密钥的环境变量映射
+          # 🔥 4大引擎环境变量全链路打通
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
           GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
           GROK_API_URL: ${{ secrets.GROK_API_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+          CLAUDE_API_URL: ${{ secrets.CLAUDE_API_URL }}
         run: |
           cd scripts
           python main.py
@@ -52,7 +53,7 @@ jobs:
           git add data/
           
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (同步至北京时间早10点)"
+            git commit -m "🤖 Auto-update prediction data (4引擎满血交叉验证版)"
             git pull --rebase origin main || true
             git push
           else
