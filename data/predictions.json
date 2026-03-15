@@ -1,2263 +1,9 @@
 {
-  "update_time": "2026-03-15 01:02:07",
-  "top4": [
-    {
-      "rank": 1,
-      "home_team": "阿森纳",
-      "away_team": "埃弗顿",
-      "league": "英超",
-      "match_num": "周六022",
-      "match_time": "01:30",
-      "sp_home": 1.3,
-      "sp_draw": 4.2,
-      "sp_away": 8.2,
-      "odds_movement": "主胜升水，客胜降水",
-      "handicap_info": "让-1",
-      "intelligence": {
-        "h_inj": "马丁·厄德高 受伤 膝关节受伤 莱昂德罗·特罗萨德 受伤 米克尔·梅里诺 受伤 腿部受伤",
-        "g_inj": "杰克·格拉利什 受伤 足部受伤 谢默斯·科尔曼 受伤 卡洛斯·阿尔卡拉斯 受伤 受伤"
-      },
-      "expert_intro": "阿森纳目前正处于争冠的关键时刻，球队上下当然不容有失，而且他们最近7轮联赛录得5胜2和的佳绩，期间均场入球数达2.4个，坐镇主场的阿森纳是役有力取得胜利。另一边厢，埃弗顿最近10次对阵阿仙奴仅取得2胜2和6的劣绩，当中包括首循环落败一役，埃弗顿今仗败局已定。",
-      "home_rank": 0,
-      "away_rank": 0,
-      "votes": {
-        "win": "68",
-        "same": "21",
-        "lose": "11",
-        "hhad_win": "42",
-        "hhad_same": "28",
-        "hhad_lose": "30"
-      },
-      "v2_odds_dict": {
-        "a1": 4.5,
-        "a2": 3.25,
-        "a3": 3.5,
-        "a4": 5.4,
-        "s11": 8.25,
-        "s22": 22.0,
-        "w21": 6.75,
-        "a5": 11.0,
-        "a6": 21.0
-      },
-      "home_id": 0,
-      "away_id": 0,
-      "id": 1,
-      "date": "2026-03-14",
-      "home_stats": {},
-      "away_stats": {},
-      "h2h": [],
-      "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 53.6,
-        "draw_pct": 26.0,
-        "away_win_pct": 20.4,
-        "confidence": 90,
-        "result": "主胜",
-        "risk_level": "低",
-        "gpt_score": "2-0",
-        "gpt_analysis": "阿森纳争冠战意极强，近况与交锋均占优。虽主胜升水、客胜降水有诱下嫌疑，但让-1下主队仍有兑现能力。伤停影响主队前场轮换，埃弗顿抗压有限，冷血看主胜两球。",
-        "grok_score": "2-1",
-        "grok_analysis": "阿森纳虽伤停厄德高特罗萨德梅里诺，但主场争冠近7轮5胜2平势头猛。埃弗顿历史10战劣绩+首回合负，让-1主升客降疑诱盘。两队伤停评估显示主队小胜，冷血比分2-1。",
-        "gemini_score": "2-0",
-        "gemini_analysis": "格式混乱，已启用底线抽取。",
-        "value_bets_summary": [
-          "平局 EV:+9.2% (仓位:0.72%)",
-          "客胜 EV:+67.28% (仓位:2.34%)"
-        ],
-        "extreme_warning": "无",
-        "smart_money_signal": "正常",
-        "poisson": {
-          "home_win": 67.0,
-          "draw": 20.9,
-          "away_win": 12.1,
-          "predicted_score": "1-0",
-          "home_xg": 1.91,
-          "away_xg": 0.66,
-          "btts": 41.1,
-          "over_2_5": 47.2,
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 14.6
-            },
-            {
-              "score": "2-0",
-              "prob": 14.0
-            },
-            {
-              "score": "1-1",
-              "prob": 9.7
-            },
-            {
-              "score": "2-1",
-              "prob": 9.2
-            },
-            {
-              "score": "3-0",
-              "prob": 8.9
-            }
-          ],
-          "home_expected_goals": 1.91,
-          "away_expected_goals": 0.66
-        },
-        "refined_poisson": {
-          "home_win": 58.9,
-          "draw": 23.6,
-          "away_win": 17.6,
-          "predicted_score": "2-1",
-          "top_scores": [
-            {
-              "score": "2-1",
-              "prob": 13.6
-            },
-            {
-              "score": "1-1",
-              "prob": 13.3
-            },
-            {
-              "score": "2-0",
-              "prob": 11.6
-            },
-            {
-              "score": "1-0",
-              "prob": 10.3
-            },
-            {
-              "score": "3-0",
-              "prob": 7.0
-            }
-          ]
-        },
-        "elo": {
-          "home_win": 49.1,
-          "draw": 28.0,
-          "away_win": 36.9,
-          "elo_diff": 50
-        },
-        "home_form": {
-          "score": 50,
-          "trend": "unknown",
-          "momentum": 50
-        },
-        "away_form": {
-          "score": 50,
-          "trend": "unknown",
-          "momentum": 50
-        },
-        "model_consensus": 11,
-        "total_models": 11,
-        "expected_total_goals": 2.5,
-        "over_2_5": 50,
-        "btts": 41.1
-      },
-      "recommend_score": 65.18,
-      "is_recommended": true
-    },
-    {
-      "rank": 2,
-      "home_team": "埃因霍温",
-      "away_team": "奈梅亨",
-      "league": "荷甲",
-      "match_num": "周六026",
-      "match_time": "01:45",
-      "sp_home": 1.31,
-      "sp_draw": 5.08,
-      "sp_away": 5.9,
-      "odds_movement": "主胜降水，客胜升水",
-      "handicap_info": "让-1",
-      "intelligence": {
-        "h_inj": "阿拉萨内·普利亚 受伤 膝关节受伤 鲁本·范博梅尔 受伤 膝关节受伤 毛罗·儒尼奥尔 受伤 膝关节受伤 塞尔吉诺·德斯特 受伤 尼克·奥利 受伤 腹股沟受伤 古斯·蒂尔 受伤 肌肉挫伤",
-        "g_inj": "弗里克·恩提乌斯 受伤 膝关节受伤 菲利普·桑德勒 停赛 累计黄牌停赛 布拉扬·佩雷拉 受伤 贡萨洛·克雷塔兹 停赛 轮休"
-      },
-      "expert_intro": "埃因霍温今季在荷甲遥遥领先，均场2.88个入球的进攻火力堪称恐怖，埃因霍温今仗主场3分志在必得。",
-      "home_rank": 0,
-      "away_rank": 0,
-      "votes": {
-        "win": "68",
-        "same": "18",
-        "lose": "14",
-        "hhad_win": "46",
-        "hhad_same": "23",
-        "hhad_lose": "31"
-      },
-      "v2_odds_dict": {
-        "a1": 12.5,
-        "a2": 6.0,
-        "a3": 3.75,
-        "a4": 3.75,
-        "s11": 11.0,
-        "s22": 13.0,
-        "w21": 7.0,
-        "a5": 5.1,
-        "a6": 7.9
-      },
-      "home_id": 0,
-      "away_id": 0,
-      "id": 5,
-      "date": "2026-03-14",
-      "home_stats": {},
-      "away_stats": {},
-      "h2h": [],
-      "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 50.9,
-        "draw_pct": 31.6,
-        "away_win_pct": 17.5,
-        "confidence": 85,
-        "result": "主胜",
-        "risk_level": "低",
-        "gpt_score": "3-1",
-        "gpt_analysis": "主胜1.31配合让-1且主胜降水，资金明显向主队集中。埃因霍温虽有多名伤缺，但进攻基底与主场压制力仍强；奈梅亨后场停赛受损，客胜升水示弱。防范主队失球，冷血比分3-1。",
-        "grok_score": "1-2",
-        "grok_analysis": "埃因霍温多名膝伤球员缺阵削弱后防，进攻火力虽强但漏洞明显。奈梅亨停赛少反击犀利。让-1盘主胜降水诱多投注陷阱，客胜升水示警爆冷，最冷血比分1-2。",
-        "gemini_score": "3-1",
-        "gemini_analysis": "格式混乱，已启用底线抽取。",
-        "value_bets_summary": [
-          "平局 EV:+60.53% (仓位:3.71%)"
-        ],
-        "extreme_warning": "无",
-        "smart_money_signal": "正常",
-        "poisson": {
-          "home_win": 67.0,
-          "draw": 20.9,
-          "away_win": 12.1,
-          "predicted_score": "1-0",
-          "home_xg": 1.91,
-          "away_xg": 0.66,
-          "btts": 41.1,
-          "over_2_5": 47.2,
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 14.6
-            },
-            {
-              "score": "2-0",
-              "prob": 14.0
-            },
-            {
-              "score": "1-1",
-              "prob": 9.7
-            },
-            {
-              "score": "2-1",
-              "prob": 9.2
-            },
-            {
-              "score": "3-0",
-              "prob": 8.9
-            }
-          ],
-          "home_expected_goals": 1.91,
-          "away_expected_goals": 0.66
-        },
-        "refined_poisson": {
-          "home_win": 59.8,
-          "draw": 22.4,
-          "away_win": 17.8,
-          "predicted_score": "2-1",
-          "top_scores": [
-            {
-              "score": "2-1",
-              "prob": 13.9
-            },
-            {
-              "score": "1-1",
-              "prob": 10.9
-            },
-            {
-              "score": "1-0",
-              "prob": 10.6
-            },
-            {
-              "score": "2-0",
-              "prob": 9.5
-            },
-            {
-              "score": "3-0",
-              "prob": 7.1
-            }
-          ]
-        },
-        "elo": {
-          "home_win": 49.1,
-          "draw": 28.0,
-          "away_win": 36.9,
-          "elo_diff": 50
-        },
-        "home_form": {
-          "score": 50,
-          "trend": "unknown",
-          "momentum": 50
-        },
-        "away_form": {
-          "score": 50,
-          "trend": "unknown",
-          "momentum": 50
-        },
-        "model_consensus": 10,
-        "total_models": 11,
-        "expected_total_goals": 2.5,
-        "over_2_5": 50,
-        "btts": 41.1
-      },
-      "recommend_score": 62.37,
-      "is_recommended": true
-    },
-    {
-      "rank": 3,
-      "home_team": "皇马",
-      "away_team": "埃尔切",
-      "league": "西甲",
-      "match_num": "周六030",
-      "match_time": "04:00",
-      "sp_home": 1.2,
-      "sp_draw": 5.5,
-      "sp_away": 8.75,
-      "odds_movement": "主胜平稳，客胜平稳",
-      "handicap_info": "让-2",
-      "intelligence": {
-        "h_inj": "大卫·阿拉巴 受伤 小腿受伤 达尼·塞瓦略斯 受伤 肌肉挫伤 费兰·门迪 受伤 腿筋受伤 埃德尔·米利唐 受伤 腿筋受伤 基利安·姆巴佩 受伤 膝关节受伤 罗德里戈 受伤 膝关节受伤 祖德·贝林厄姆 受伤 腿筋受伤 阿尔瓦罗·卡雷拉斯 受伤 小腿受伤 弗兰科·马斯坦托诺 停赛 红牌停赛",
-        "g_inj": "约翰·唐纳德 受伤 受伤 赫克托·福特 受伤 肩部受伤"
-      },
-      "expert_intro": "据统计，埃尔切上一次同皇马各项赛事交锋赢波要追溯到1978年，这么多年来法定时间内打和的佔比不足三成，前者心理方面处于绝对劣势。更不利的是，埃尔切去年10月份至今联赛作客10场成绩为1和9负，近4场全败，面对渴望赢球避免被巴塞再度拉大分差的银河舰队，埃尔切不得不打定输数。",
-      "home_rank": 0,
-      "away_rank": 0,
-      "votes": {
-        "win": "74",
-        "same": "16",
-        "lose": "10",
-        "hhad_win": "29",
-        "hhad_same": "21",
-        "hhad_lose": "50"
-      },
-      "v2_odds_dict": {
-        "a1": 7.75,
-        "a2": 4.5,
-        "a3": 3.4,
-        "a4": 4.0,
-        "s11": 10.0,
-        "s22": 18.0,
-        "w21": 7.5,
-        "a5": 6.6,
-        "a6": 11.0
-      },
-      "home_id": 0,
-      "away_id": 0,
-      "id": 9,
-      "date": "2026-03-14",
-      "home_stats": {},
-      "away_stats": {},
-      "h2h": [],
-      "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 40.9,
-        "draw_pct": 25.2,
-        "away_win_pct": 33.9,
-        "confidence": 85,
-        "result": "主胜",
-        "risk_level": "低",
-        "gpt_score": "3-0",
-        "gpt_analysis": "皇马SP与让-2匹配，主胜平稳非强诱，伤停虽多但阵容深度仍压制埃尔切。客队作客极差且交锋心理劣势明显，冷血看皇马稳胜，穿盘边缘，防3球。",
-        "grok_score": "2-1",
-        "grok_analysis": "皇马伤停众多削弱实力，让-2盘口意图诱导投注；埃尔切交锋历史劣势大、客场连败心理绝对劣势，不得不输。",
-        "gemini_score": "3-0",
-        "gemini_analysis": "格式混乱，已启用底线抽取。",
-        "value_bets_summary": [
-          "平局 EV:+38.6% (仓位:2.14%)",
-          "客胜 EV:+196.62% (仓位:6.34%)"
-        ],
-        "extreme_warning": "无",
-        "smart_money_signal": "正常",
-        "poisson": {
-          "home_win": 67.0,
-          "draw": 20.9,
-          "away_win": 12.1,
-          "predicted_score": "1-0",
-          "home_xg": 1.91,
-          "away_xg": 0.66,
-          "btts": 41.1,
-          "over_2_5": 47.2,
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 14.6
-            },
-            {
-              "score": "2-0",
-              "prob": 14.0
-            },
-            {
-              "score": "1-1",
-              "prob": 9.7
-            },
-            {
-              "score": "2-1",
-              "prob": 9.2
-            },
-            {
-              "score": "3-0",
-              "prob": 8.9
-            }
-          ],
-          "home_expected_goals": 1.91,
-          "away_expected_goals": 0.66
-        },
-        "refined_poisson": {
-          "home_win": 59.8,
-          "draw": 22.4,
-          "away_win": 17.8,
-          "predicted_score": "2-1",
-          "top_scores": [
-            {
-              "score": "2-1",
-              "prob": 13.9
-            },
-            {
-              "score": "1-1",
-              "prob": 10.9
-            },
-            {
-              "score": "1-0",
-              "prob": 10.6
-            },
-            {
-              "score": "2-0",
-              "prob": 9.5
-            },
-            {
-              "score": "3-0",
-              "prob": 7.1
-            }
-          ]
-        },
-        "elo": {
-          "home_win": 49.1,
-          "draw": 28.0,
-          "away_win": 36.9,
-          "elo_diff": 50
-        },
-        "home_form": {
-          "score": 50,
-          "trend": "unknown",
-          "momentum": 50
-        },
-        "away_form": {
-          "score": 50,
-          "trend": "unknown",
-          "momentum": 50
-        },
-        "model_consensus": 10,
-        "total_models": 11,
-        "expected_total_goals": 2.5,
-        "over_2_5": 50,
-        "btts": 41.1
-      },
-      "recommend_score": 59.37,
-      "is_recommended": true
-    },
-    {
-      "rank": 4,
-      "home_team": "西汉姆联",
-      "away_team": "曼城",
-      "league": "英超",
-      "match_num": "周六029",
-      "match_time": "04:00",
-      "sp_home": 4.65,
-      "sp_draw": 4.2,
-      "sp_away": 1.48,
-      "odds_movement": "主胜升水，客胜降水",
-      "handicap_info": "让1",
-      "intelligence": {
-        "h_inj": "卢卡斯·法比安斯基 受伤 后背受伤 克莱森西奥·萨默维尔 受伤 小腿受伤 奥利弗·斯卡莱斯 撞伤",
-        "g_inj": "马特奥·科瓦契奇 受伤 脚跟损伤 约什科·格瓦迪奥尔 受伤 腿部骨折 里科·刘易斯 踝关节扭伤"
-      },
-      "expert_intro": "西汉姆联上一次英超击败曼城还要追溯至遥远的2015年9月20日，其中目前英超对赛更是惨遭七连败打击，可见曼城面对西汉姆联颇有心得。另外这波英超对赛七连胜当中，蓝月亮多达6场单场入至少3球，全力冲冠的曼城本轮大胜可期。",
-      "home_rank": 0,
-      "away_rank": 0,
-      "votes": {
-        "win": "19",
-        "same": "21",
-        "lose": "60",
-        "hhad_win": "40",
-        "hhad_same": "25",
-        "hhad_lose": "35"
-      },
-      "v2_odds_dict": {
-        "a1": 7.0,
-        "a2": 4.5,
-        "a3": 3.15,
-        "a4": 3.85,
-        "s11": 8.0,
-        "s22": 11.0,
-        "w21": 14.0,
-        "a5": 7.5,
-        "a6": 14.0
-      },
-      "home_id": 0,
-      "away_id": 0,
-      "id": 8,
-      "date": "2026-03-14",
-      "home_stats": {},
-      "away_stats": {},
-      "h2h": [],
-      "prediction": {
-        "predicted_score": "1-1",
-        "home_win_pct": 49.5,
-        "draw_pct": 21.5,
-        "away_win_pct": 29.0,
-        "confidence": 70,
-        "result": "主胜",
-        "risk_level": "低",
-        "gpt_score": "1-3",
-        "gpt_analysis": "西汉姆联伤停削弱轮换与防线稳定，且对曼城英超交锋七连败。盘口让1下客胜降水，资金明显向客队集中，仍属顺势非强诱。曼城虽有伤停，但体系与火力优势更稳，客胜大概率。",
-        "grok_score": "1-3",
-        "grok_analysis": "西汉姆联门将后卫伤停削弱主防，历史对曼城七连败且多场至少三球。曼城后卫伤停但冲冠动力足，客胜降水确认非诱盘，实力碾压大胜可期。",
-        "gemini_score": "-",
-        "gemini_analysis": "未响应或阻断",
-        "value_bets_summary": [
-          "主胜 EV:+130.18% (仓位:8.92%)"
-        ],
-        "extreme_warning": "无",
-        "smart_money_signal": "正常",
-        "poisson": {
-          "home_win": 50.3,
-          "draw": 27.7,
-          "away_win": 22.0,
-          "predicted_score": "1-0",
-          "home_xg": 1.38,
-          "away_xg": 0.81,
-          "btts": 41.4,
-          "over_2_5": 37.3,
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 15.5
-            },
-            {
-              "score": "1-1",
-              "prob": 12.5
-            },
-            {
-              "score": "0-0",
-              "prob": 11.3
-            },
-            {
-              "score": "2-0",
-              "prob": 10.7
-            },
-            {
-              "score": "0-1",
-              "prob": 9.1
-            }
-          ],
-          "home_expected_goals": 1.38,
-          "away_expected_goals": 0.81
-        },
-        "refined_poisson": {
-          "home_win": 40.0,
-          "draw": 29.5,
-          "away_win": 30.5,
-          "predicted_score": "1-1",
-          "top_scores": [
-            {
-              "score": "1-1",
-              "prob": 14.9
-            },
-            {
-              "score": "1-0",
-              "prob": 10.4
-            },
-            {
-              "score": "2-1",
-              "prob": 9.3
-            },
-            {
-              "score": "0-1",
-              "prob": 8.8
-            },
-            {
-              "score": "0-0",
-              "prob": 8.0
-            }
-          ]
-        },
-        "elo": {
-          "home_win": 49.1,
-          "draw": 28.0,
-          "away_win": 36.9,
-          "elo_diff": 50
-        },
-        "home_form": {
-          "score": 50,
-          "trend": "unknown",
-          "momentum": 50
-        },
-        "away_form": {
-          "score": 50,
-          "trend": "unknown",
-          "momentum": 50
-        },
-        "model_consensus": 7,
-        "total_models": 11,
-        "expected_total_goals": 2.5,
-        "over_2_5": 50,
-        "btts": 41.4
-      },
-      "recommend_score": 55.95,
-      "is_recommended": true
-    }
-  ],
+  "update_time": "2026-03-15 10:10:30",
+  "top4": [],
   "matches": {
     "yesterday": [],
-    "today": [
-      {
-        "home_team": "阿森纳",
-        "away_team": "埃弗顿",
-        "league": "英超",
-        "match_num": "周六022",
-        "match_time": "01:30",
-        "sp_home": 1.3,
-        "sp_draw": 4.2,
-        "sp_away": 8.2,
-        "odds_movement": "主胜升水，客胜降水",
-        "handicap_info": "让-1",
-        "intelligence": {
-          "h_inj": "马丁·厄德高 受伤 膝关节受伤 莱昂德罗·特罗萨德 受伤 米克尔·梅里诺 受伤 腿部受伤",
-          "g_inj": "杰克·格拉利什 受伤 足部受伤 谢默斯·科尔曼 受伤 卡洛斯·阿尔卡拉斯 受伤 受伤"
-        },
-        "expert_intro": "阿森纳目前正处于争冠的关键时刻，球队上下当然不容有失，而且他们最近7轮联赛录得5胜2和的佳绩，期间均场入球数达2.4个，坐镇主场的阿森纳是役有力取得胜利。另一边厢，埃弗顿最近10次对阵阿仙奴仅取得2胜2和6的劣绩，当中包括首循环落败一役，埃弗顿今仗败局已定。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "68",
-          "same": "21",
-          "lose": "11",
-          "hhad_win": "42",
-          "hhad_same": "28",
-          "hhad_lose": "30"
-        },
-        "v2_odds_dict": {
-          "a1": 4.5,
-          "a2": 3.25,
-          "a3": 3.5,
-          "a4": 5.4,
-          "s11": 8.25,
-          "s22": 22.0,
-          "w21": 6.75,
-          "a5": 11.0,
-          "a6": 21.0
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 1,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "2-1",
-          "home_win_pct": 53.6,
-          "draw_pct": 26.0,
-          "away_win_pct": 20.4,
-          "confidence": 90,
-          "result": "主胜",
-          "risk_level": "低",
-          "gpt_score": "2-0",
-          "gpt_analysis": "阿森纳争冠战意极强，近况与交锋均占优。虽主胜升水、客胜降水有诱下嫌疑，但让-1下主队仍有兑现能力。伤停影响主队前场轮换，埃弗顿抗压有限，冷血看主胜两球。",
-          "grok_score": "2-1",
-          "grok_analysis": "阿森纳虽伤停厄德高特罗萨德梅里诺，但主场争冠近7轮5胜2平势头猛。埃弗顿历史10战劣绩+首回合负，让-1主升客降疑诱盘。两队伤停评估显示主队小胜，冷血比分2-1。",
-          "gemini_score": "2-0",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [
-            "平局 EV:+9.2% (仓位:0.72%)",
-            "客胜 EV:+67.28% (仓位:2.34%)"
-          ],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 67.0,
-            "draw": 20.9,
-            "away_win": 12.1,
-            "predicted_score": "1-0",
-            "home_xg": 1.91,
-            "away_xg": 0.66,
-            "btts": 41.1,
-            "over_2_5": 47.2,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 14.6
-              },
-              {
-                "score": "2-0",
-                "prob": 14.0
-              },
-              {
-                "score": "1-1",
-                "prob": 9.7
-              },
-              {
-                "score": "2-1",
-                "prob": 9.2
-              },
-              {
-                "score": "3-0",
-                "prob": 8.9
-              }
-            ],
-            "home_expected_goals": 1.91,
-            "away_expected_goals": 0.66
-          },
-          "refined_poisson": {
-            "home_win": 58.9,
-            "draw": 23.6,
-            "away_win": 17.6,
-            "predicted_score": "2-1",
-            "top_scores": [
-              {
-                "score": "2-1",
-                "prob": 13.6
-              },
-              {
-                "score": "1-1",
-                "prob": 13.3
-              },
-              {
-                "score": "2-0",
-                "prob": 11.6
-              },
-              {
-                "score": "1-0",
-                "prob": 10.3
-              },
-              {
-                "score": "3-0",
-                "prob": 7.0
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 11,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 41.1
-        },
-        "recommend_score": 65.18,
-        "is_recommended": true
-      },
-      {
-        "home_team": "切尔西",
-        "away_team": "纽卡斯尔",
-        "league": "英超",
-        "match_num": "周六023",
-        "match_time": "01:30",
-        "sp_home": 1.66,
-        "sp_draw": 3.75,
-        "sp_away": 3.85,
-        "odds_movement": "主胜平稳，客胜升水",
-        "handicap_info": "让-1",
-        "intelligence": {
-          "h_inj": "佩德罗·内托 停赛 红牌停赛 米哈伊洛·穆德里克 停赛 停赛 列维·科尔威尔 受伤 膝关节受伤 杰米·吉滕斯 肌肉挫伤 埃斯特旺·威廉 受伤 肌肉挫伤",
-          "g_inj": "雅各布·拉姆塞 停赛 红牌停赛 法比安·舍尔 受伤 踝关节扭伤 刘易斯·麦利 受伤 膝关节受伤 布鲁诺·吉马良斯 受伤 肌肉挫伤 埃米尔·克拉夫特 受伤 膝关节受伤"
-        },
-        "expert_intro": "切尔西背负争夺来季欧冠联资格的重任，祖奥柏度.祖基拉上轮联赛用一个帽子戏法帮助球队战胜竞争对手阿士东维拉，球员士气大振。反观纽卡斯尔联赛至今作客演出颇为糟糕，期间14轮仅取得3胜4和7负的劣绩，如此作客威力只能沦为倒数，对此坐镇主场的切尔西此番剑指3分。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "54",
-          "same": "24",
-          "lose": "22",
-          "hhad_win": "30",
-          "hhad_same": "24",
-          "hhad_lose": "46"
-        },
-        "v2_odds_dict": {
-          "a1": 7.1,
-          "a2": 4.3,
-          "a3": 3.35,
-          "a4": 4.1,
-          "s11": 7.5,
-          "s22": 10.5,
-          "w21": 6.75,
-          "a5": 7.1,
-          "a6": 12.0
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 2,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 54.6,
-          "draw_pct": 25.0,
-          "away_win_pct": 20.4,
-          "confidence": 90,
-          "result": "主胜",
-          "risk_level": "低",
-          "gpt_score": "2-1",
-          "gpt_analysis": "切尔西主场战意与近期士气占优，客队伤停更伤中后场且客场稳定性差。让-1配合主胜平稳、客胜升水，仍有分流主胜风险，防一球小胜最稳，冷血比分2-1。",
-          "grok_score": "1-2",
-          "grok_analysis": "切尔西主场士气高涨剑指三分但前场伤停严重削弱进攻，纽卡斯尔客场劣绩累累且伤停影响核心，让-1盘口主胜平稳明显诱盘陷阱，综合评估最冷血比分1-2客胜。",
-          "gemini_score": "2-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 50.3,
-            "draw": 27.7,
-            "away_win": 22.0,
-            "predicted_score": "1-0",
-            "home_xg": 1.38,
-            "away_xg": 0.81,
-            "btts": 41.4,
-            "over_2_5": 37.3,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 15.5
-              },
-              {
-                "score": "1-1",
-                "prob": 12.5
-              },
-              {
-                "score": "0-0",
-                "prob": 11.3
-              },
-              {
-                "score": "2-0",
-                "prob": 10.7
-              },
-              {
-                "score": "0-1",
-                "prob": 9.1
-              }
-            ],
-            "home_expected_goals": 1.38,
-            "away_expected_goals": 0.81
-          },
-          "refined_poisson": {
-            "home_win": 41.8,
-            "draw": 28.4,
-            "away_win": 29.8,
-            "predicted_score": "1-1",
-            "top_scores": [
-              {
-                "score": "1-1",
-                "prob": 14.9
-              },
-              {
-                "score": "2-1",
-                "prob": 12.1
-              },
-              {
-                "score": "1-0",
-                "prob": 10.4
-              },
-              {
-                "score": "0-1",
-                "prob": 8.8
-              },
-              {
-                "score": "0-0",
-                "prob": 8.0
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 11,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 41.4
-        },
-        "recommend_score": 50.48,
-        "is_recommended": false
-      },
-      {
-        "home_team": "汉堡",
-        "away_team": "科隆",
-        "league": "德甲",
-        "match_num": "周六024",
-        "match_time": "01:30",
-        "sp_home": 2.15,
-        "sp_draw": 3.1,
-        "sp_away": 2.93,
-        "odds_movement": "主胜升水，客胜降水",
-        "handicap_info": "让-1",
-        "intelligence": {
-          "h_inj": "巴卡里·贾塔 受伤 腿筋受伤 优素福·波尔森 受伤 大腿受伤 亚历山大·罗辛·勒莱西特 受伤 受伤 达米恩·唐斯 受伤 受伤",
-          "g_inj": "蒂莫·许伯斯 受伤 膝关节受伤 阿莱西奥·卡斯特罗-蒙特斯 受伤 肌肉挫伤 卢卡·基利安 受伤 膝关节受伤 乔尔·施密德 受伤 肌肉挫伤 詹·蒂尔曼 受伤 肌肉挫伤 德尼斯·侯赛因巴斯克 受伤 髋关节损伤"
-        },
-        "expert_intro": "科隆本赛季德甲客场均场失球达到1.83球，整体防守表现失色，加之他们近期5场德甲只有1和4负，次循环面对汉堡，科隆要遭失利打击。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "41",
-          "same": "29",
-          "lose": "30",
-          "hhad_win": "19",
-          "hhad_same": "23",
-          "hhad_lose": "58"
-        },
-        "v2_odds_dict": {
-          "a1": 5.25,
-          "a2": 3.7,
-          "a3": 3.35,
-          "a4": 4.7,
-          "s11": 6.25,
-          "s22": 10.5,
-          "w21": 7.25,
-          "a5": 9.0,
-          "a6": 18.0
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 3,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 43.1,
-          "draw_pct": 29.7,
-          "away_win_pct": 27.2,
-          "confidence": 80,
-          "result": "主胜",
-          "risk_level": "低",
-          "gpt_score": "1-2",
-          "gpt_analysis": "汉堡让-1下主胜升水、客胜降水，市场对主队穿盘信心走弱。汉堡有前场伤停，科隆虽防线伤病更多且客场失球偏高，但受让拉力增强，诱主嫌疑明显。冷向看科隆反打，1-2。",
-          "grok_score": "2-1",
-          "grok_analysis": "评估伤停：汉堡进攻受限，科隆防守崩坏。让-1主胜升水为诱盘意图。科隆客场弱+近期惨淡，次循环遭打击。冷血推演汉堡2-1胜。",
-          "gemini_score": "2-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 50.3,
-            "draw": 27.7,
-            "away_win": 22.0,
-            "predicted_score": "1-0",
-            "home_xg": 1.38,
-            "away_xg": 0.81,
-            "btts": 41.4,
-            "over_2_5": 37.3,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 15.5
-              },
-              {
-                "score": "1-1",
-                "prob": 12.5
-              },
-              {
-                "score": "0-0",
-                "prob": 11.3
-              },
-              {
-                "score": "2-0",
-                "prob": 10.7
-              },
-              {
-                "score": "0-1",
-                "prob": 9.1
-              }
-            ],
-            "home_expected_goals": 1.38,
-            "away_expected_goals": 0.81
-          },
-          "refined_poisson": {
-            "home_win": 40.8,
-            "draw": 30.1,
-            "away_win": 29.1,
-            "predicted_score": "1-1",
-            "top_scores": [
-              {
-                "score": "1-1",
-                "prob": 17.5
-              },
-              {
-                "score": "2-1",
-                "prob": 11.4
-              },
-              {
-                "score": "1-0",
-                "prob": 9.8
-              },
-              {
-                "score": "0-1",
-                "prob": 8.3
-              },
-              {
-                "score": "2-0",
-                "prob": 8.0
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 9,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 41.4
-        },
-        "recommend_score": 43.03,
-        "is_recommended": false
-      },
-      {
-        "home_team": "奥维耶多",
-        "away_team": "巴伦西亚",
-        "league": "西甲",
-        "match_num": "周六025",
-        "match_time": "01:30",
-        "sp_home": 2.79,
-        "sp_draw": 2.9,
-        "sp_away": 2.35,
-        "odds_movement": "主胜升水，客胜降水",
-        "handicap_info": "让-1",
-        "intelligence": {
-          "h_inj": "奥维莫诺·艾加利亚 受伤 受伤 卢卡斯·阿伊哈多 受伤 受伤 利恩德·登东克尔 受伤 受伤 蒂亚戈·波巴斯 受伤 受伤",
-          "g_inj": "迪米特里·富尔基耶 受伤 膝关节受伤 穆克塔尔·迪亚卡比 受伤 肌肉挫伤 尤伦·阿吉雷扎巴拉 受伤 膝关节受伤 何塞·科佩特 受伤 踝关节扭伤"
-        },
-        "expert_intro": "虽然巴伦西亚作客取分能力低下，不过球队最近迎来两连胜，也让他们排名上升不少，暂时远离降班危机，精神面貌可谓积极；考虑到他们今季联赛首循环曾输给奥维耶多，积聚了满腔恶气，对方是今季联赛主场表现最差的球队之一，可以期待蝙蝠军团今铺成功复仇。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "32",
-          "same": "31",
-          "lose": "37",
-          "hhad_win": "13",
-          "hhad_same": "20",
-          "hhad_lose": "67"
-        },
-        "v2_odds_dict": {
-          "a1": 3.55,
-          "a2": 3.2,
-          "a3": 3.7,
-          "a4": 7.0,
-          "s11": 5.5,
-          "s22": 14.0,
-          "w21": 9.0,
-          "a5": 16.0,
-          "a6": 30.0
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 4,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 38.9,
-          "draw_pct": 24.5,
-          "away_win_pct": 36.6,
-          "confidence": 65,
-          "result": "主胜",
-          "risk_level": "中",
-          "gpt_score": "1-2",
-          "gpt_analysis": "奥维耶多伤停更重，主场支撑偏弱；巴伦西亚虽客战取分一般，但两连胜提振明显。客胜降水配合复仇题材，有强化客向趋势，防平但更倾向巴伦西亚1球胜。",
-          "grok_score": "1-2",
-          "grok_analysis": "奥维耶多主场最差+四主力伤停，巴伦西亚复仇首循环失利、两连胜避降级，伤停三人但客胜降水让-1主升水明显诱盘，蝙蝠军团冷血取胜。",
-          "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [
-            "主胜 EV:+8.53% (仓位:1.19%)"
-          ],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 50.3,
-            "draw": 27.7,
-            "away_win": 22.0,
-            "predicted_score": "1-0",
-            "home_xg": 1.38,
-            "away_xg": 0.81,
-            "btts": 41.4,
-            "over_2_5": 37.3,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 15.5
-              },
-              {
-                "score": "1-1",
-                "prob": 12.5
-              },
-              {
-                "score": "0-0",
-                "prob": 11.3
-              },
-              {
-                "score": "2-0",
-                "prob": 10.7
-              },
-              {
-                "score": "0-1",
-                "prob": 9.1
-              }
-            ],
-            "home_expected_goals": 1.38,
-            "away_expected_goals": 0.81
-          },
-          "refined_poisson": {
-            "home_win": 40.8,
-            "draw": 28.8,
-            "away_win": 30.4,
-            "predicted_score": "1-1",
-            "top_scores": [
-              {
-                "score": "1-1",
-                "prob": 17.1
-              },
-              {
-                "score": "1-0",
-                "prob": 11.9
-              },
-              {
-                "score": "0-1",
-                "prob": 10.1
-              },
-              {
-                "score": "2-1",
-                "prob": 9.8
-              },
-              {
-                "score": "2-0",
-                "prob": 7.8
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 6,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 41.4
-        },
-        "recommend_score": 42.77,
-        "is_recommended": false
-      },
-      {
-        "home_team": "埃因霍温",
-        "away_team": "奈梅亨",
-        "league": "荷甲",
-        "match_num": "周六026",
-        "match_time": "01:45",
-        "sp_home": 1.31,
-        "sp_draw": 5.08,
-        "sp_away": 5.9,
-        "odds_movement": "主胜降水，客胜升水",
-        "handicap_info": "让-1",
-        "intelligence": {
-          "h_inj": "阿拉萨内·普利亚 受伤 膝关节受伤 鲁本·范博梅尔 受伤 膝关节受伤 毛罗·儒尼奥尔 受伤 膝关节受伤 塞尔吉诺·德斯特 受伤 尼克·奥利 受伤 腹股沟受伤 古斯·蒂尔 受伤 肌肉挫伤",
-          "g_inj": "弗里克·恩提乌斯 受伤 膝关节受伤 菲利普·桑德勒 停赛 累计黄牌停赛 布拉扬·佩雷拉 受伤 贡萨洛·克雷塔兹 停赛 轮休"
-        },
-        "expert_intro": "埃因霍温今季在荷甲遥遥领先，均场2.88个入球的进攻火力堪称恐怖，埃因霍温今仗主场3分志在必得。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "68",
-          "same": "18",
-          "lose": "14",
-          "hhad_win": "46",
-          "hhad_same": "23",
-          "hhad_lose": "31"
-        },
-        "v2_odds_dict": {
-          "a1": 12.5,
-          "a2": 6.0,
-          "a3": 3.75,
-          "a4": 3.75,
-          "s11": 11.0,
-          "s22": 13.0,
-          "w21": 7.0,
-          "a5": 5.1,
-          "a6": 7.9
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 5,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "2-1",
-          "home_win_pct": 50.9,
-          "draw_pct": 31.6,
-          "away_win_pct": 17.5,
-          "confidence": 85,
-          "result": "主胜",
-          "risk_level": "低",
-          "gpt_score": "3-1",
-          "gpt_analysis": "主胜1.31配合让-1且主胜降水，资金明显向主队集中。埃因霍温虽有多名伤缺，但进攻基底与主场压制力仍强；奈梅亨后场停赛受损，客胜升水示弱。防范主队失球，冷血比分3-1。",
-          "grok_score": "1-2",
-          "grok_analysis": "埃因霍温多名膝伤球员缺阵削弱后防，进攻火力虽强但漏洞明显。奈梅亨停赛少反击犀利。让-1盘主胜降水诱多投注陷阱，客胜升水示警爆冷，最冷血比分1-2。",
-          "gemini_score": "3-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [
-            "平局 EV:+60.53% (仓位:3.71%)"
-          ],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 67.0,
-            "draw": 20.9,
-            "away_win": 12.1,
-            "predicted_score": "1-0",
-            "home_xg": 1.91,
-            "away_xg": 0.66,
-            "btts": 41.1,
-            "over_2_5": 47.2,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 14.6
-              },
-              {
-                "score": "2-0",
-                "prob": 14.0
-              },
-              {
-                "score": "1-1",
-                "prob": 9.7
-              },
-              {
-                "score": "2-1",
-                "prob": 9.2
-              },
-              {
-                "score": "3-0",
-                "prob": 8.9
-              }
-            ],
-            "home_expected_goals": 1.91,
-            "away_expected_goals": 0.66
-          },
-          "refined_poisson": {
-            "home_win": 59.8,
-            "draw": 22.4,
-            "away_win": 17.8,
-            "predicted_score": "2-1",
-            "top_scores": [
-              {
-                "score": "2-1",
-                "prob": 13.9
-              },
-              {
-                "score": "1-1",
-                "prob": 10.9
-              },
-              {
-                "score": "1-0",
-                "prob": 10.6
-              },
-              {
-                "score": "2-0",
-                "prob": 9.5
-              },
-              {
-                "score": "3-0",
-                "prob": 7.1
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 10,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 41.1
-        },
-        "recommend_score": 62.37,
-        "is_recommended": true
-      },
-      {
-        "home_team": "赛哈海湾",
-        "away_team": "利雅胜利",
-        "league": "沙职",
-        "match_num": "周六027",
-        "match_time": "03:00",
-        "sp_home": 7.6,
-        "sp_draw": 5.4,
-        "sp_away": 1.23,
-        "odds_movement": "主胜升水，客胜降水",
-        "handicap_info": "让1",
-        "intelligence": {
-          "h_inj": "无重大伤停",
-          "g_inj": "无重大伤停"
-        },
-        "expert_intro": "赛哈海湾过往与利雅胜利交锋劣势明显，而且后者联赛处于连胜之中势不可挡，赛哈海湾今铺只能打定输数。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "12",
-          "same": "16",
-          "lose": "72",
-          "hhad_win": "27",
-          "hhad_same": "23",
-          "hhad_lose": "50"
-        },
-        "v2_odds_dict": {
-          "a1": 8.25,
-          "a2": 4.85,
-          "a3": 3.65,
-          "a4": 4.15,
-          "s11": 11.0,
-          "s22": 15.0,
-          "w21": 20.0,
-          "a5": 5.7,
-          "a6": 9.5
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 6,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 38.1,
-          "draw_pct": 15.9,
-          "away_win_pct": 46.0,
-          "confidence": 70,
-          "result": "客胜",
-          "risk_level": "低",
-          "gpt_score": "0-2",
-          "gpt_analysis": "客队无重大伤停，实力与状态均明显占优，交锋压制强。让1且客胜降水，资金持续流向客队，诱主队受让空间有限。本场大概率为客队稳控节奏取胜。",
-          "grok_score": "0-3",
-          "grok_analysis": "赛哈海湾过往交锋劣势显著，利雅胜利联赛连胜势不可挡。无重大伤停下客队碾压主队，让1盘口主胜升水似诱多，但主队只能打定输数。",
-          "gemini_score": "0-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [
-            "主胜 EV:+189.56% (仓位:7.18%)"
-          ],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 27.0,
-            "draw": 28.0,
-            "away_win": 45.1,
-            "predicted_score": "0-1",
-            "home_xg": 0.95,
-            "away_xg": 1.32,
-            "btts": 45.0,
-            "over_2_5": 39.7,
-            "top_scores": [
-              {
-                "score": "0-1",
-                "prob": 13.6
-              },
-              {
-                "score": "1-1",
-                "prob": 13.0
-              },
-              {
-                "score": "0-0",
-                "prob": 10.3
-              },
-              {
-                "score": "1-0",
-                "prob": 9.8
-              },
-              {
-                "score": "0-2",
-                "prob": 9.0
-              }
-            ],
-            "home_expected_goals": 0.95,
-            "away_expected_goals": 1.32
-          },
-          "refined_poisson": {
-            "home_win": 18.6,
-            "draw": 22.9,
-            "away_win": 58.5,
-            "predicted_score": "1-1",
-            "top_scores": [
-              {
-                "score": "1-1",
-                "prob": 11.7
-              },
-              {
-                "score": "1-2",
-                "prob": 11.4
-              },
-              {
-                "score": "0-1",
-                "prob": 11.3
-              },
-              {
-                "score": "0-2",
-                "prob": 10.2
-              },
-              {
-                "score": "0-3",
-                "prob": 7.6
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 7,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 45.0
-        },
-        "recommend_score": 54.9,
-        "is_recommended": false
-      },
-      {
-        "home_team": "乌迪内斯",
-        "away_team": "尤文图斯",
-        "league": "意甲",
-        "match_num": "周六028",
-        "match_time": "03:45",
-        "sp_home": 6.4,
-        "sp_draw": 4.2,
-        "sp_away": 1.36,
-        "odds_movement": "主胜升水，客胜降水",
-        "handicap_info": "让1",
-        "intelligence": {
-          "h_inj": "尼科洛·贝托拉 受伤 踝关节扭伤 乔丹·泽穆拉 受伤 肌肉挫伤 亚历山德罗·扎诺利 受伤 膝关节受伤 奥马尔·索莱 肌肉挫伤",
-          "g_inj": "阿卡迪乌什·米利克 受伤 埃米尔·霍尔姆 足部受伤"
-        },
-        "expert_intro": "双方实力差距悬殊，过去10年两队合共22次交手，乌迪内斯只取胜2场却输掉18场，加上尤文图斯上仗取得1场4球大胜，球员士气高涨，今铺尤文图斯必定会乘胜追击再下一城。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "14",
-          "same": "21",
-          "lose": "65",
-          "hhad_win": "34",
-          "hhad_same": "28",
-          "hhad_lose": "38"
-        },
-        "v2_odds_dict": {
-          "a1": 4.7,
-          "a2": 3.2,
-          "a3": 3.45,
-          "a4": 5.6,
-          "s11": 6.8,
-          "s22": 17.0,
-          "w21": 14.0,
-          "a5": 10.5,
-          "a6": 20.0
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 7,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 39.8,
-          "draw_pct": 20.0,
-          "away_win_pct": 40.2,
-          "confidence": 70,
-          "result": "客胜",
-          "risk_level": "低",
-          "gpt_score": "0-2",
-          "gpt_analysis": "乌迪内斯多点伤停，主胜升水示弱；尤文图斯客胜降水且往绩压制明显，资金顺势流向客队。让1下仍偏向尤文图斯稳控节奏，诱平防浅胜，冷血比分0-2。",
-          "grok_score": "1-2",
-          "grok_analysis": "乌迪内斯多后防伤停削弱防守，历史对尤文图斯22战仅2胜18负差距悬殊。尤文图斯上仗大胜士气高，让1盘主胜升水疑诱盘但客胜降水资金支持，必乘胜追击再下一城。",
-          "gemini_score": "0-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [
-            "主胜 EV:+154.72% (仓位:7.16%)"
-          ],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 27.0,
-            "draw": 28.0,
-            "away_win": 45.1,
-            "predicted_score": "0-1",
-            "home_xg": 0.95,
-            "away_xg": 1.32,
-            "btts": 45.0,
-            "over_2_5": 39.7,
-            "top_scores": [
-              {
-                "score": "0-1",
-                "prob": 13.6
-              },
-              {
-                "score": "1-1",
-                "prob": 13.0
-              },
-              {
-                "score": "0-0",
-                "prob": 10.3
-              },
-              {
-                "score": "1-0",
-                "prob": 9.8
-              },
-              {
-                "score": "0-2",
-                "prob": 9.0
-              }
-            ],
-            "home_expected_goals": 0.95,
-            "away_expected_goals": 1.32
-          },
-          "refined_poisson": {
-            "home_win": 17.8,
-            "draw": 25.7,
-            "away_win": 56.5,
-            "predicted_score": "1-1",
-            "top_scores": [
-              {
-                "score": "1-1",
-                "prob": 15.3
-              },
-              {
-                "score": "0-2",
-                "prob": 11.8
-              },
-              {
-                "score": "1-2",
-                "prob": 10.6
-              },
-              {
-                "score": "0-1",
-                "prob": 10.5
-              },
-              {
-                "score": "0-3",
-                "prob": 7.1
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 7,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 45.0
-        },
-        "recommend_score": 53.16,
-        "is_recommended": false
-      },
-      {
-        "home_team": "西汉姆联",
-        "away_team": "曼城",
-        "league": "英超",
-        "match_num": "周六029",
-        "match_time": "04:00",
-        "sp_home": 4.65,
-        "sp_draw": 4.2,
-        "sp_away": 1.48,
-        "odds_movement": "主胜升水，客胜降水",
-        "handicap_info": "让1",
-        "intelligence": {
-          "h_inj": "卢卡斯·法比安斯基 受伤 后背受伤 克莱森西奥·萨默维尔 受伤 小腿受伤 奥利弗·斯卡莱斯 撞伤",
-          "g_inj": "马特奥·科瓦契奇 受伤 脚跟损伤 约什科·格瓦迪奥尔 受伤 腿部骨折 里科·刘易斯 踝关节扭伤"
-        },
-        "expert_intro": "西汉姆联上一次英超击败曼城还要追溯至遥远的2015年9月20日，其中目前英超对赛更是惨遭七连败打击，可见曼城面对西汉姆联颇有心得。另外这波英超对赛七连胜当中，蓝月亮多达6场单场入至少3球，全力冲冠的曼城本轮大胜可期。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "19",
-          "same": "21",
-          "lose": "60",
-          "hhad_win": "40",
-          "hhad_same": "25",
-          "hhad_lose": "35"
-        },
-        "v2_odds_dict": {
-          "a1": 7.0,
-          "a2": 4.5,
-          "a3": 3.15,
-          "a4": 3.85,
-          "s11": 8.0,
-          "s22": 11.0,
-          "w21": 14.0,
-          "a5": 7.5,
-          "a6": 14.0
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 8,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 49.5,
-          "draw_pct": 21.5,
-          "away_win_pct": 29.0,
-          "confidence": 70,
-          "result": "主胜",
-          "risk_level": "低",
-          "gpt_score": "1-3",
-          "gpt_analysis": "西汉姆联伤停削弱轮换与防线稳定，且对曼城英超交锋七连败。盘口让1下客胜降水，资金明显向客队集中，仍属顺势非强诱。曼城虽有伤停，但体系与火力优势更稳，客胜大概率。",
-          "grok_score": "1-3",
-          "grok_analysis": "西汉姆联门将后卫伤停削弱主防，历史对曼城七连败且多场至少三球。曼城后卫伤停但冲冠动力足，客胜降水确认非诱盘，实力碾压大胜可期。",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
-          "value_bets_summary": [
-            "主胜 EV:+130.18% (仓位:8.92%)"
-          ],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 50.3,
-            "draw": 27.7,
-            "away_win": 22.0,
-            "predicted_score": "1-0",
-            "home_xg": 1.38,
-            "away_xg": 0.81,
-            "btts": 41.4,
-            "over_2_5": 37.3,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 15.5
-              },
-              {
-                "score": "1-1",
-                "prob": 12.5
-              },
-              {
-                "score": "0-0",
-                "prob": 11.3
-              },
-              {
-                "score": "2-0",
-                "prob": 10.7
-              },
-              {
-                "score": "0-1",
-                "prob": 9.1
-              }
-            ],
-            "home_expected_goals": 1.38,
-            "away_expected_goals": 0.81
-          },
-          "refined_poisson": {
-            "home_win": 40.0,
-            "draw": 29.5,
-            "away_win": 30.5,
-            "predicted_score": "1-1",
-            "top_scores": [
-              {
-                "score": "1-1",
-                "prob": 14.9
-              },
-              {
-                "score": "1-0",
-                "prob": 10.4
-              },
-              {
-                "score": "2-1",
-                "prob": 9.3
-              },
-              {
-                "score": "0-1",
-                "prob": 8.8
-              },
-              {
-                "score": "0-0",
-                "prob": 8.0
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 7,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 41.4
-        },
-        "recommend_score": 55.95,
-        "is_recommended": true
-      },
-      {
-        "home_team": "皇马",
-        "away_team": "埃尔切",
-        "league": "西甲",
-        "match_num": "周六030",
-        "match_time": "04:00",
-        "sp_home": 1.2,
-        "sp_draw": 5.5,
-        "sp_away": 8.75,
-        "odds_movement": "主胜平稳，客胜平稳",
-        "handicap_info": "让-2",
-        "intelligence": {
-          "h_inj": "大卫·阿拉巴 受伤 小腿受伤 达尼·塞瓦略斯 受伤 肌肉挫伤 费兰·门迪 受伤 腿筋受伤 埃德尔·米利唐 受伤 腿筋受伤 基利安·姆巴佩 受伤 膝关节受伤 罗德里戈 受伤 膝关节受伤 祖德·贝林厄姆 受伤 腿筋受伤 阿尔瓦罗·卡雷拉斯 受伤 小腿受伤 弗兰科·马斯坦托诺 停赛 红牌停赛",
-          "g_inj": "约翰·唐纳德 受伤 受伤 赫克托·福特 受伤 肩部受伤"
-        },
-        "expert_intro": "据统计，埃尔切上一次同皇马各项赛事交锋赢波要追溯到1978年，这么多年来法定时间内打和的佔比不足三成，前者心理方面处于绝对劣势。更不利的是，埃尔切去年10月份至今联赛作客10场成绩为1和9负，近4场全败，面对渴望赢球避免被巴塞再度拉大分差的银河舰队，埃尔切不得不打定输数。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "74",
-          "same": "16",
-          "lose": "10",
-          "hhad_win": "29",
-          "hhad_same": "21",
-          "hhad_lose": "50"
-        },
-        "v2_odds_dict": {
-          "a1": 7.75,
-          "a2": 4.5,
-          "a3": 3.4,
-          "a4": 4.0,
-          "s11": 10.0,
-          "s22": 18.0,
-          "w21": 7.5,
-          "a5": 6.6,
-          "a6": 11.0
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 9,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "2-1",
-          "home_win_pct": 40.9,
-          "draw_pct": 25.2,
-          "away_win_pct": 33.9,
-          "confidence": 85,
-          "result": "主胜",
-          "risk_level": "低",
-          "gpt_score": "3-0",
-          "gpt_analysis": "皇马SP与让-2匹配，主胜平稳非强诱，伤停虽多但阵容深度仍压制埃尔切。客队作客极差且交锋心理劣势明显，冷血看皇马稳胜，穿盘边缘，防3球。",
-          "grok_score": "2-1",
-          "grok_analysis": "皇马伤停众多削弱实力，让-2盘口意图诱导投注；埃尔切交锋历史劣势大、客场连败心理绝对劣势，不得不输。",
-          "gemini_score": "3-0",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [
-            "平局 EV:+38.6% (仓位:2.14%)",
-            "客胜 EV:+196.62% (仓位:6.34%)"
-          ],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 67.0,
-            "draw": 20.9,
-            "away_win": 12.1,
-            "predicted_score": "1-0",
-            "home_xg": 1.91,
-            "away_xg": 0.66,
-            "btts": 41.1,
-            "over_2_5": 47.2,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 14.6
-              },
-              {
-                "score": "2-0",
-                "prob": 14.0
-              },
-              {
-                "score": "1-1",
-                "prob": 9.7
-              },
-              {
-                "score": "2-1",
-                "prob": 9.2
-              },
-              {
-                "score": "3-0",
-                "prob": 8.9
-              }
-            ],
-            "home_expected_goals": 1.91,
-            "away_expected_goals": 0.66
-          },
-          "refined_poisson": {
-            "home_win": 59.8,
-            "draw": 22.4,
-            "away_win": 17.8,
-            "predicted_score": "2-1",
-            "top_scores": [
-              {
-                "score": "2-1",
-                "prob": 13.9
-              },
-              {
-                "score": "1-1",
-                "prob": 10.9
-              },
-              {
-                "score": "1-0",
-                "prob": 10.6
-              },
-              {
-                "score": "2-0",
-                "prob": 9.5
-              },
-              {
-                "score": "3-0",
-                "prob": 7.1
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 10,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 41.1
-        },
-        "recommend_score": 59.37,
-        "is_recommended": true
-      },
-      {
-        "home_team": "阿罗卡",
-        "away_team": "本菲卡",
-        "league": "葡超",
-        "match_num": "周六031",
-        "match_time": "04:30",
-        "sp_home": 9.0,
-        "sp_draw": 5.4,
-        "sp_away": 1.2,
-        "odds_movement": "主胜升水，客胜降水",
-        "handicap_info": "让1",
-        "intelligence": {
-          "h_inj": "无重大伤停",
-          "g_inj": "努诺·米格尔·马德拉·费尔南德斯·菲利克斯 受伤 膝关节受伤 若奥·维罗索 受伤 肩部受伤"
-        },
-        "expert_intro": "本菲卡联赛至今保持不败，球队发挥非常稳健，而且他们过往与阿罗卡较量佔尽上风，本菲卡此番必定轻取对手。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "10",
-          "same": "16",
-          "lose": "74",
-          "hhad_win": "25",
-          "hhad_same": "24",
-          "hhad_lose": "51"
-        },
-        "v2_odds_dict": {
-          "a1": 6.25,
-          "a2": 4.3,
-          "a3": 3.05,
-          "a4": 4.1,
-          "s11": 8.5,
-          "s22": 19.0,
-          "w21": 20.0,
-          "a5": 8.0,
-          "a6": 16.0
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 10,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 38.2,
-          "draw_pct": 15.8,
-          "away_win_pct": 46.0,
-          "confidence": 70,
-          "result": "客胜",
-          "risk_level": "低",
-          "gpt_score": "0-2",
-          "gpt_analysis": "本菲卡整体实力、稳定性与交锋优势明显，客胜降水配合让1，市场对客队信心增强。客队虽有伤停，但阵容厚度仍占优；主胜升水削弱阿罗卡拉力，防范客队稳健赢球。",
-          "grok_score": "1-2",
-          "grok_analysis": "阿罗卡无重大伤停却实力悬殊。本菲卡虽努诺膝关节受伤、若奥肩部受伤，但联赛不败且过往占尽上风，轻取阿罗卡。让1盘主胜升水或为诱盘陷阱，客胜降水显示信心，冷血预判1-2。",
-          "gemini_score": "0-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [
-            "主胜 EV:+243.8% (仓位:7.62%)"
-          ],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 27.0,
-            "draw": 28.0,
-            "away_win": 45.1,
-            "predicted_score": "0-1",
-            "home_xg": 0.95,
-            "away_xg": 1.32,
-            "btts": 45.0,
-            "over_2_5": 39.7,
-            "top_scores": [
-              {
-                "score": "0-1",
-                "prob": 13.6
-              },
-              {
-                "score": "1-1",
-                "prob": 13.0
-              },
-              {
-                "score": "0-0",
-                "prob": 10.3
-              },
-              {
-                "score": "1-0",
-                "prob": 9.8
-              },
-              {
-                "score": "0-2",
-                "prob": 9.0
-              }
-            ],
-            "home_expected_goals": 0.95,
-            "away_expected_goals": 1.32
-          },
-          "refined_poisson": {
-            "home_win": 18.6,
-            "draw": 22.9,
-            "away_win": 58.5,
-            "predicted_score": "1-1",
-            "top_scores": [
-              {
-                "score": "1-1",
-                "prob": 11.7
-              },
-              {
-                "score": "1-2",
-                "prob": 11.4
-              },
-              {
-                "score": "0-1",
-                "prob": 11.3
-              },
-              {
-                "score": "0-2",
-                "prob": 10.2
-              },
-              {
-                "score": "0-3",
-                "prob": 7.6
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 7,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 45.0
-        },
-        "recommend_score": 54.9,
-        "is_recommended": false
-      },
-      {
-        "home_team": "达拉斯",
-        "away_team": "圣迭戈FC",
-        "league": "美职",
-        "match_num": "周六032",
-        "match_time": "08:30",
-        "sp_home": 2.35,
-        "sp_draw": 3.34,
-        "sp_away": 2.47,
-        "odds_movement": "主胜平稳，客胜平稳",
-        "handicap_info": "让-1",
-        "intelligence": {
-          "h_inj": "耶稣·乔瓦内 受伤 膝关节受伤 乔纳森·西罗斯 头部受伤 安德森·胡利奥 腿部受伤",
-          "g_inj": "亚历杭德罗·阿尔瓦拉多 受伤 膝关节受伤 安德烈斯·雷耶斯 受伤 腿部受伤 威尔逊·艾斯纳 受伤 腿部受伤"
-        },
-        "expert_intro": "圣迭戈FC美职联前3轮斩获全胜佳绩，当中得失球比为8比0，攻守表现俱佳，圣迭戈FC今仗大胜可期。",
-        "home_rank": 0,
-        "away_rank": 0,
-        "votes": {
-          "win": "38",
-          "same": "27",
-          "lose": "35",
-          "hhad_win": "17",
-          "hhad_same": "22",
-          "hhad_lose": "61"
-        },
-        "v2_odds_dict": {
-          "a1": 5.4,
-          "a2": 3.8,
-          "a3": 3.5,
-          "a4": 4.85,
-          "s11": 6.5,
-          "s22": 11.0,
-          "w21": 7.5,
-          "a5": 8.0,
-          "a6": 14.0
-        },
-        "home_id": 0,
-        "away_id": 0,
-        "id": 11,
-        "date": "2026-03-14",
-        "home_stats": {},
-        "away_stats": {},
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 42.8,
-          "draw_pct": 24.9,
-          "away_win_pct": 32.3,
-          "confidence": 75,
-          "result": "主胜",
-          "risk_level": "低",
-          "gpt_score": "1-2",
-          "gpt_analysis": "主队三处伤停削弱轮换与边路冲击，客队亦有减员但整体攻守延续性更强。初始SP接近却配让-1，结合资金平稳，主队让步偏深有诱主嫌疑，冷看圣迭戈FC赢球。",
-          "grok_score": "1-2",
-          "grok_analysis": "达拉斯多伤停削弱实力，圣迭戈FC前3轮8-0全胜攻守俱佳。让-1盘主胜平稳或为诱盘意图，圣迭戈FC大胜可期，冷血预测1-2客胜。",
-          "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [],
-          "extreme_warning": "无",
-          "smart_money_signal": "正常",
-          "poisson": {
-            "home_win": 50.3,
-            "draw": 27.7,
-            "away_win": 22.0,
-            "predicted_score": "1-0",
-            "home_xg": 1.38,
-            "away_xg": 0.81,
-            "btts": 41.4,
-            "over_2_5": 37.3,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 15.5
-              },
-              {
-                "score": "1-1",
-                "prob": 12.5
-              },
-              {
-                "score": "0-0",
-                "prob": 11.3
-              },
-              {
-                "score": "2-0",
-                "prob": 10.7
-              },
-              {
-                "score": "0-1",
-                "prob": 9.1
-              }
-            ],
-            "home_expected_goals": 1.38,
-            "away_expected_goals": 0.81
-          },
-          "refined_poisson": {
-            "home_win": 40.8,
-            "draw": 30.1,
-            "away_win": 29.1,
-            "predicted_score": "1-1",
-            "top_scores": [
-              {
-                "score": "1-1",
-                "prob": 17.5
-              },
-              {
-                "score": "2-1",
-                "prob": 11.4
-              },
-              {
-                "score": "1-0",
-                "prob": 9.8
-              },
-              {
-                "score": "0-1",
-                "prob": 8.3
-              },
-              {
-                "score": "2-0",
-                "prob": 8.0
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 49.1,
-            "draw": 28.0,
-            "away_win": 36.9,
-            "elo_diff": 50
-          },
-          "home_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "away_form": {
-            "score": 50,
-            "trend": "unknown",
-            "momentum": 50
-          },
-          "model_consensus": 8,
-          "total_models": 11,
-          "expected_total_goals": 2.5,
-          "over_2_5": 50,
-          "btts": 41.4
-        },
-        "recommend_score": 40.94,
-        "is_recommended": false
-      }
-    ],
+    "today": [],
     "tomorrow": [
       {
         "home_team": "日本女",
@@ -2274,7 +20,7 @@
           "h_inj": "无重大伤停",
           "g_inj": "无重大伤停"
         },
-        "expert_intro": "",
+        "expert_intro": "综合整体实力、近期竞技状态以及阵容完整度等多方面因素考量，日本女足的优势极为突出。在攻防两端的表现上，日本女足都远远优于菲律宾女足，预计比赛进程会呈现出一边倒的态势。综合各方面情况判断，日本女足大概率能至少以四球的优势大胜对手，顺利晋级下一轮。",
         "home_rank": 0,
         "away_rank": 0,
         "votes": {
@@ -2308,12 +54,12 @@
           "confidence": 70,
           "result": "平局",
           "risk_level": "低",
-          "gpt_score": "5-0",
-          "gpt_analysis": "日本女实力与阵容完整度明显占优，伤停影响极小。让-4显示机构对主队高看，主客胜平稳说明诱盘意图有限。菲律宾女抗压有限，最冷血比分看日本女大胜零封。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "5-0",
-          "grok_analysis": "日本女足实力远超菲律宾女足，无重大伤停影响双方发挥。盘口让-4，主胜平稳无明显诱盘意图，菲律宾防守脆弱，日本进攻强势。冷血推演：日本大胜。",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
+          "grok_analysis": "无重大伤停影响，盘口让-4资金平稳无诱盘意图。日本女足实力状态阵容全面优于菲律宾女足，攻防两端优势突出，预计至少4球大胜。",
+          "gemini_score": "5-0",
+          "gemini_analysis": "日本女足在实力、阵容与攻防两端全面呈碾压态势。当前让4球盘口资金平稳，无诱盘迹象且无重大伤停干扰。双方存在巨大实力鸿沟，日本女足将完全掌控全场，轻松打穿深盘，预计迎来一场单方面屠杀的零封大胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2419,7 +165,7 @@
           "h_inj": "爱默生·桑塔纳·德克里希亚诺 受伤 膝关节受伤 名仓巧 受伤 患病",
           "g_inj": "辻冈佑真 停赛 红牌停赛"
         },
-        "expert_intro": "",
+        "expert_intro": "综合考量整体实力、近期竞技状态以及阵容的完整程度，长崎航海稍占上风。长崎航海在主场作战时，攻防两端表现较为均衡，而且阵容相对完整齐备。反观福冈黄蜂，客场作战能力欠佳，防线轮换也因人员问题受到限制。基于此，长崎航海此役坐镇主场有望斩获胜利。",
         "home_rank": 0,
         "away_rank": 0,
         "votes": {
@@ -2456,12 +202,12 @@
           "confidence": 90,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "主队两名伤缺削弱轮换与稳定性，客队仅一人停赛影响相对有限。初始主胜偏低但资金与赔率均平稳，让-1对主队支撑略显过深，存在高看主队的诱盘意味，防客队带走分数。",
-          "grok_score": "1-2",
-          "grok_analysis": "长崎航海主队爱默生膝伤、名仓巧患病两将缺阵，进攻严重削弱；福冈黄蜂辻冈佑真红牌停赛但防守稳固。让-1盘口主胜资金平稳实为诱盘陷阱，客队反击得手。冷血比分1-2客胜。",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
+          "grok_score": "1-0",
+          "grok_analysis": "评估伤停：长崎航海膝伤患病影响有限，福冈黄蜂红牌停赛加剧客场弱势。无明显诱盘意图。综合实力长崎主场冷血1-0取胜。",
+          "gemini_score": "1-0",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -2604,12 +350,12 @@
           "confidence": 70,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "首尔初始SP占优但客胜升水，配合让1更像强拉客队热度；济州近三次交锋占优且主场心理加成明显，双方均无重大伤停，首尔防线不稳下更易被逼平。",
-          "grok_score": "2-1",
-          "grok_analysis": "济州SK三连胜首尔FC心理占优，主场对防守欠稳客队剑指3分。无重大伤停，盘口让1诱客胜资金陷阱。冷血推演主胜2-1。",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
+          "grok_score": "1-2",
+          "grok_analysis": "伤停无重大影响。让1盘主胜降水客胜升水疑为诱盘客胜意图。济州SK三连胜心理占优但首尔FC防守欠稳仍难挡其实力，最冷血比分1-2。",
+          "gemini_score": "1-2",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+59.25% (仓位:5.93%)"
           ],
@@ -2754,10 +500,10 @@
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "双方均无重大伤停，战力接近。主让-1但主客胜赔率平稳，诱主意图偏强。两队近期都难求一胜，进攻把握度有限，互相制衡下平局概率最高，冷血比分1比1。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-1",
-          "grok_analysis": "浦项制铁与仁川联近期均未尝胜绩，状态低迷。双方无重大伤停，让-1盘资金平稳疑为诱主胜陷阱。争胜乏力，冷血最准比分1-1。",
+          "grok_analysis": "浦项制铁与仁川联近期均无胜绩，状态低迷，缺乏争胜本钱。无重大伤停，-1盘口存在诱主胜陷阱意图。双方保守为主，最冷血预测1-1平局。",
           "gemini_score": "1-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
@@ -2904,10 +650,10 @@
           "confidence": 90,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "2-1",
-          "gpt_analysis": "墨胜利主胜面更强，但让-1且主客胜赔率平稳，防范赢球不穿。主队后防有伤，客队伤停更重且三连败失8球，战力下滑明显；诱盘偏向主队大胜，冷血看主队仅小胜。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "2-1",
-          "grok_analysis": "麦克阿瑟三连败失8球攻守彻底失衡，此番多名伤停加红牌停赛雪上加霜；墨胜利虽有4伤但主场让-1资金平稳无诱盘迹象，客队败局已定，冷血比分2-1主胜。",
+          "grok_analysis": "麦克阿瑟FC三连败失8球攻守崩盘，多人伤停+红牌停赛客场已无抵抗力；墨胜利主场让-1平稳，尽管自身伤病但盘口资金稳，诱盘意图明显骗大胜注，冷血比分2-1小胜不让球。",
           "gemini_score": "2-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
@@ -3054,12 +800,12 @@
           "confidence": 92,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "2-1",
-          "gpt_analysis": "特温特16轮不败且三连胜，基本面明显占优；但让-1配合主胜平稳，防范赢球输盘。主队有后防伤停，客队伤病更多但仍有反击条件，冷血看特温特小胜。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "2-1",
-          "grok_analysis": "特温特16轮不败三连胜，伤停3人后防受膝伤肌肉挫伤拖累；乌德勒支伤停5人膝盖大腿腹股沟肋骨全线缺阵更虚。让-1盘口资金平稳诱主大胜，冷血比分2-1主队小胜覆盖平局陷阱。",
+          "grok_analysis": "特温特16轮不败三连胜势头猛，膝伤等三人缺阵但主力框架稳，乌德勒支五重伤停更致命，让-1盘口诱主胜资金平稳，实际冷血2-1主胜收官。",
           "gemini_score": "2-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "特温特近期状态极佳且主场作战，乌德勒支遭遇严重伤停危机，阵容受损。盘口支持主队，但需防赢球输盘。综合判定主队一球小胜。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -3162,8 +908,8 @@
         "odds_movement": "主胜升水，客胜降水",
         "handicap_info": "让1",
         "intelligence": {
-          "h_inj": "桑迪·洛夫里奇 轮休 苏阿特·塞尔达 受伤 膝关节受伤 安托万·伯内德 受伤 波尔·利罗拉 肌肉挫伤 阿米尔·贝拉-科沙 受伤 受伤 托拜厄斯·斯洛特萨格 受伤 大腿受伤 于尔根·佩奇 受伤",
-          "g_inj": "米卡尔·埃勒特森 受伤 帕特里齐奥·马西尼 停赛 累计黄牌停赛 托马索·巴尔丹齐 大腿受伤"
+          "h_inj": "桑迪·洛夫里奇 停赛 轮休 苏阿特·塞尔达 受伤 膝关节损伤 安托万·伯内德 受伤 受伤 多马戈吉·布拉达里克 受伤 踝关节受伤 阿米尔·贝拉-科沙 受伤 受伤 托拜厄斯·斯洛特萨格 受伤 大腿受伤",
+          "g_inj": "帕特里齐奥·马西尼 停赛 累计黄牌停赛"
         },
         "expert_intro": "维罗纳上仗终于取得久违的胜利，球队上下重拾信心，是役面对近况飘忽的热那亚，维罗纳有望力保主场不失。另外，维罗纳近7轮联赛有6场的全场入球总数在3球或以上，而热那亚则是有5场。",
         "home_rank": 0,
@@ -3202,12 +948,12 @@
           "confidence": 65,
           "result": "主胜",
           "risk_level": "中",
-          "gpt_score": "1-1",
-          "gpt_analysis": "维罗纳伤停面更重，但主场赢球后信心回升；客胜降水配让1有诱客嫌疑。热那亚阵容也有减员，状态不稳，防平价值更高。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-2",
-          "grok_analysis": "维罗纳7大伤停+轮休，实力崩盘却主胜升水诱多；热那亚停赛少+客胜降水资金涌入，飘忽近况仍占优。高进球趋势下，维罗纳难保不失，冷血推演客胜1-2。",
+          "grok_analysis": "维罗纳多主力伤停信心虽回升，让1盘主胜升水诱盘；热那亚仅一停赛客胜降水，双方近7轮多高球，主场难保不失，冷血客胜。",
           "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "主队多名主力伤停且主胜赔率升水呈诱盘之势；客队阵容齐整仅一停赛，客胜降水受真实防范。双方近期防线均有隐患且多大球，结合伤情基本面与盘口异动，裁定客队全取三分。",
           "value_bets_summary": [
             "主胜 EV:+35.59% (仓位:4.49%)"
           ],
@@ -3306,10 +1052,10 @@
         "league": "德乙",
         "match_num": "周日008",
         "match_time": "20:30",
-        "sp_home": 2.31,
+        "sp_home": 2.25,
         "sp_draw": 3.28,
-        "sp_away": 2.55,
-        "odds_movement": "主胜平稳，客胜平稳",
+        "sp_away": 2.63,
+        "odds_movement": "主胜降水，客胜升水",
         "handicap_info": "让-1",
         "intelligence": {
           "h_inj": "埃米尔·温瑟·霍伊伦 受伤 脚跟损伤 托马斯·卡拉斯 受伤 体能 布莱恩·拉斯梅 受伤 膝关节受伤 维塔利·贝克尔 受伤 撞伤 甘滕贝因 受伤 小腿受伤 芬恩·多米尼克·波拉特 停赛 轮休 亨宁·马特里亚尼 受伤 膝关节受伤 迪伦·伦纳德 受伤 踝关节扭伤 洛里斯·卡里乌斯 后背受伤",
@@ -3346,19 +1092,21 @@
         "h2h": [],
         "prediction": {
           "predicted_score": "1-1",
-          "home_win_pct": 43.0,
-          "draw_pct": 31.2,
-          "away_win_pct": 25.8,
+          "home_win_pct": 44.7,
+          "draw_pct": 32.6,
+          "away_win_pct": 22.7,
           "confidence": 75,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "沙尔克04主场强但伤停面过大，后场与轮换受损明显；汉诺威96仅一处伤停，受让下抗压更稳。初始SP接近且主胜未明显走强，防范主队热度，冷看平局。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-2",
-          "grok_analysis": "沙尔克04主场胜率高且首循环3-0胜汉诺威96，但本轮伤停8人含多名主力严重削弱实力，让-1盘稳诱主胜意图明显；汉诺威96仅1伤防守稳健，反击威胁大，冷血预测客胜1-2。",
+          "grok_analysis": "沙尔克04多主力伤停削弱主场七成胜率，汉诺威96仅一人缺阵，首回合3-0参考失效，让-1主胜降水诱盘明显，客胜升水资金流向，伤停主导下客队冷血取胜。",
           "gemini_score": "1-2",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
-          "value_bets_summary": [],
+          "value_bets_summary": [
+            "平局 EV:+6.93% (仓位:0.76%)"
+          ],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
           "poisson": {
@@ -3445,7 +1193,7 @@
           "over_2_5": 50,
           "btts": 41.4
         },
-        "recommend_score": 41.0,
+        "recommend_score": 56.51,
         "is_recommended": false
       },
       {
@@ -3460,8 +1208,8 @@
         "odds_movement": "主胜平稳，客胜平稳",
         "handicap_info": "让-1",
         "intelligence": {
-          "h_inj": "阿卜顿·普拉茨 受伤 浅野拓磨 受伤 肌肉挫伤 库姆布拉 肌肉挫伤 贾维尔·拉布雷斯 肌肉挫伤 扬·萨拉斯 受伤 膝关节受伤 扬·维吉利 停赛 红牌停赛",
-          "g_inj": "哈维·普阿多 受伤 膝关节受伤 安东尼乌·罗卡 肩部受伤"
+          "h_inj": "阿卜顿·普拉茨 受伤 受伤 浅野拓磨 受伤 肌肉受伤 库姆布拉 受伤 肌肉受伤 卢卡斯·伯格斯特伦 受伤 受伤 贾维尔·拉布雷斯 受伤 肌肉受伤 扬·萨拉斯 受伤 膝关节损伤 扬·维吉利 停赛 红牌停赛",
+          "g_inj": "费尔南多·卡莱罗 受伤 受伤 哈维·普阿多 受伤 膝关节损伤"
         },
         "expert_intro": "马洛卡目前保组压力巨大，过去5轮西甲惨遭1和4负，合计失掉10球之多，同时期间有3场被零封，攻防两端严重失衡；西班牙人则是连续10轮西甲不胜，双方都没有获胜的底气，此番看好打和为妙。",
         "home_rank": 0,
@@ -3500,10 +1248,10 @@
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "马洛卡近5轮1平4负且3场被零封，伤停与停赛削弱攻防；西班牙人虽10轮不胜，但客胜平稳未见强拉。让-1下主队难穿，资金意图偏防主不胜，冷血看平。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-1",
-          "grok_analysis": "马洛卡保级压力爆棚近5轮1平4负失10球，伤停+停赛多达6人攻防崩盘；西班牙人10轮不胜客稳，此役让-1资金诱主胜实为陷阱，双方皆无胜意，冷血平局1-1。",
+          "grok_analysis": "马洛卡7伤1停+5轮1平4负失10球保级崩盘，西班牙人10轮不胜+2伤攻防疲软；让-1盘诱主胜资金，双方皆无胜气，冷血复盘平局1-1。",
           "gemini_score": "1-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
@@ -3648,12 +1396,12 @@
           "confidence": 85,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "3-0",
-          "gpt_analysis": "费耶诺德实力与主场面全面占优，精英四连败且士气低迷。主队虽有多名伤停，但深度仍足以压制；让-2配合主胜平稳，防范赢球输盘，冷血比分看3-0。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "2-1",
-          "grok_analysis": "费耶诺德伤停严重削弱攻击力，让-2盘口诱多资金主胜大胜，SBV精英四连败信心崩盘却客场顽抗，预计主队险胜1球不盖盘。",
-          "gemini_score": "2-0",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "grok_analysis": "费耶诺德多名主力伤停含停赛实力大损，SBV精英四连败信心全无。让-2盘口陷阱明显诱主大胜，资金平稳实为冷血设局，实际小胜2-1。",
+          "gemini_score": "-",
+          "gemini_analysis": "未响应或阻断",
           "value_bets_summary": [
             "平局 EV:+36.95% (仓位:2.05%)",
             "客胜 EV:+215.84% (仓位:6.42%)"
@@ -3799,12 +1547,12 @@
           "confidence": 65,
           "result": "主胜",
           "risk_level": "中",
-          "gpt_score": "0-2",
-          "gpt_analysis": "布兰初始SP优势明显且对赛占优，客胜平稳说明预期稳定。虽有多名伤停，但整体实力仍压制克里斯蒂；让1下主胜平稳带有分流意图，防主队受让热，冷血看布兰赢两球。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-2",
-          "grok_analysis": "布兰历史对赛占优，过去10场赢6场。客队虽多名伤停（托斯维克、奥普萨尔、古蒙德森、马格努森、卡斯特罗），但克里斯蒂近期状态飘忽。让1盘口主客胜资金均平稳，诱盘意图或引主胜投注。布兰取胜仍顺理成章，最冷血比分1-2。",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
+          "grok_analysis": "布兰历史对赛占优，过去10场赢克里斯蒂6场。客队虽多名伤停（特维伯格·托斯维克撞伤、奥普萨尔足伤、古蒙德森伤、阿特利·马格努森膝伤、卡斯特罗伤），但让1盘口资金平稳无明显诱盘。克里斯蒂无伤停却状态飘忽，布兰客胜顺理成章，冷血预测1-2。",
+          "gemini_score": "1-2",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+113.84% (仓位:8.37%)"
           ],
@@ -3909,7 +1657,7 @@
         "odds_movement": "主胜平稳，客胜平稳",
         "handicap_info": "让-1",
         "intelligence": {
-          "h_inj": "爱德华·恩凯蒂亚 受伤 大腿受伤 丹尼尔·穆尼奥斯 肩部受伤 切克·欧马尔·杜库雷 膝关节受伤",
+          "h_inj": "爱德华·恩凯蒂亚 受伤 大腿受伤 丹尼尔·穆尼奥斯 肩部受伤",
           "g_inj": "诺阿·奥卡福 腿筋受伤 多米尼克·卡尔弗特-勒温 膝关节受伤"
         },
         "expert_intro": "利兹联近4轮联赛难求一胜，具体为2和2负，球队目前仍有保组压力。需要注意，利兹联上一次英超客场赢球还要追溯至去年9月20日，当时击败狼队，也是今季英超客场唯一一胜，故此利兹联此行无力实现赛季双杀水晶宫的目标，理应以和局为首要任务。",
@@ -3949,11 +1697,11 @@
           "confidence": 70,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "水晶宫前场与中后场均有伤停，攻守完整度受损；利兹联客场极弱且连续不胜，资金面双方平稳，-1更像压主队热度。客队首要目标拿分，最冷血走向是僵持收平。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-1",
-          "grok_analysis": "水晶宫主场伤停恩凯蒂亚、穆尼奥斯、杜库雷进攻乏力，利兹联客场近4轮2平2负且赛季仅一客胜，保级压力下首选和局，让-1盘稳无诱，双方无力打破平衡。",
-          "gemini_score": "1-1",
+          "grok_analysis": "水晶宫主场缺恩凯蒂亚大腿伤与穆尼奥斯肩伤，进攻防守均受损；利兹联缺奥卡福腿筋伤与卡尔弗特-勒温膝伤，近4轮2平2负客场仅去年一胜，保级压力下无力双杀。此行守和为主，最冷血比分1-1。",
+          "gemini_score": "1-0",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "平局 EV:+5.84% (仓位:0.71%)"
@@ -4099,12 +1847,12 @@
           "confidence": 85,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-2",
-          "gpt_analysis": "诺丁汉近期联赛持续失分，交锋又被富勒姆压制，主队伤停面更广，锋线与后场完整度受损。盘口让-1与SP未强挺主队，存在主热分流嫌疑，富勒姆受让方向更稳，冷血看客胜。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-2",
-          "grok_analysis": "诺丁汉多名主力伤停严重削弱实力，富勒姆仅一伤；让-1盘诱主胜资金陷阱。诺丁汉近况无胜、负富勒姆三连且欧战分心，心理崩盘，注定败北。",
-          "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "grok_analysis": "诺丁汉伤停多达7人且2月起英超未胜，对富勒姆近3场全败心理崩盘，欧战分心无力；富勒姆仅1伤，盘口让-1诱主明显，客队稳胜。",
+          "gemini_score": "-",
+          "gemini_analysis": "未响应或阻断",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4207,8 +1955,8 @@
         "odds_movement": "主胜平稳，客胜平稳",
         "handicap_info": "让-1",
         "intelligence": {
-          "h_inj": "马泰斯·德利赫特 受伤 后背受伤 利桑德罗·马丁内斯 小腿受伤 帕特里克·多古 受伤 腿筋受伤",
-          "g_inj": "尤里·蒂勒曼斯 受伤 踝关节扭伤 布巴卡尔·卡马拉 受伤 膝关节受伤 马蒂·卡什 撞伤 杰登·桑乔 停赛 回避条款无法出战 安德烈斯·加西亚 肌肉挫伤"
+          "h_inj": "利桑德罗·马丁内斯 受伤 小腿受伤 马泰斯·德利赫特 受伤 后背受伤 帕特里克·多古 受伤 腿筋受伤",
+          "g_inj": "尤里·蒂勒曼斯 受伤 踝关节受伤 布巴卡尔·卡马拉 受伤 膝关节损伤 马蒂·卡什 撞伤 杰登·桑乔 停赛 回避条款无法出战"
         },
         "expert_intro": "上轮联赛憾负纽卡素，导致曼联近期不败势头被打破，这同时也是卡历克救火后红魔鬼首败。不败势头被打破对曼联而言未必是一件坏事，再加上输球后球队有充足的调整时间，此番面对近况起伏不定的维拉，养精蓄锐的曼联是役主场具备复仇维拉的本钱。另外曼联过去5个正式赛事主场都能顺利击败维拉。",
         "home_rank": 0,
@@ -4247,12 +1995,12 @@
           "confidence": 90,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "2-1",
-          "gpt_analysis": "曼联主场往绩与赔率面占优，且输球后有调整空间；维拉中后场伤停更伤结构，客胜支撑一般。让1下主胜平稳，防范小胜穿盘不足，最冷血比分看曼联2比1维拉。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "2-1",
-          "grok_analysis": "曼联后防多伤停削弱但历史主场5胜维拉且调整充足，维拉多人伤停起伏；诱盘让-1意图引资金，曼联主场2-1险胜复仇。",
-          "gemini_score": "2-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "grok_analysis": "曼联后防马丁内斯、德利赫特、多古三人伤停，但维拉蒂勒曼斯、卡马拉、卡什受伤加桑乔停赛，主场历史5连胜且调整充分复仇心切，让-1盘口资金平稳，预测冷血主胜2-1。",
+          "gemini_score": "-",
+          "gemini_analysis": "未响应或阻断",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -4355,8 +2103,8 @@
         "odds_movement": "主胜平稳，客胜平稳",
         "handicap_info": "让-1",
         "intelligence": {
-          "h_inj": "西蒙尼·斯库菲特 肌肉挫伤 伊萨克·武拉尔 膝关节受伤 丹尼尔·德农 踝关节扭伤 洛兰·卢卡斯 轮休",
-          "g_inj": "安德烈·贝洛蒂 受伤 膝关节受伤 亚历山德罗·迪奥拉 受伤 耶里·米纳 肌肉挫伤 卢卡·马齐特利 受伤 吉安卢卡·加埃塔诺 受伤 塞巴斯蒂亚诺·埃斯波西托 停赛 累计黄牌停赛 马蒂亚·费利西 受伤 膝关节受伤 杰纳罗·波雷利 大腿受伤 里亚德·伊德里西 受伤 受伤"
+          "h_inj": "胡安·吉列尔莫·夸德拉多 受伤 胃部不适 西蒙尼·斯库菲特 受伤 肌肉受伤 加尔文·斯滕斯 受伤 体能 伊萨克·武拉尔 受伤 膝关节损伤 丹尼尔·德农 受伤 踝关节受伤 洛兰·卢卡斯 停赛 轮休",
+          "g_inj": "安德烈·贝洛蒂 受伤 膝关节损伤 塞巴斯蒂亚诺·埃斯波西托 停赛 累计黄牌停赛 马蒂亚·费利西 受伤 膝关节损伤 杰纳罗·波雷利 受伤 大腿受伤 里亚德·伊德里西 受伤 受伤"
         },
         "expert_intro": "比萨遭遇四连败打击，卡利亚里亦遭遇5轮不胜，双方状态都十分不济，加之彼此近3次交锋均以和局收场，本轮对垒各取1分皆大欢喜。",
         "home_rank": 0,
@@ -4395,11 +2143,11 @@
           "confidence": 90,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "两队近期同样低迷，且近3次交锋全平。比萨主胜SP略低但让-1与资金平稳缺乏强挺，主队伤停较轻、客队减员更多，庄家仍未明显压低主胜，防平意图浓。最冷血走向是互耗各取1分。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-1",
-          "grok_analysis": "比萨四连败加多伤停，卡利亚里五轮不胜+大量伤病停赛，近3交锋全平，双方状态极差，让-1诱盘难中，本场最冷1-1各取1分。",
-          "gemini_score": "1-1",
+          "grok_analysis": "比萨四连败叠加夸德拉多等多名主力伤停，卡利亚里五轮不胜且贝洛蒂等关键球员缺阵，近3次交锋全平，本场让-1盘稳诱主胜资金，实则双方状态低迷皆愿各取1分，伤病与诱盘指向平局。",
+          "gemini_score": "0-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+21.75% (仓位:4.25%)"
@@ -4545,12 +2293,12 @@
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "双方近期主客走势都稳，且近4次交锋3次打出1比1。萨索洛有主场拉力但伤停更多，博洛尼亚两名停赛削弱中后场，初始SP接近属均势盘，资金平稳下诱胜空间有限，平局最冷血。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-1",
-          "grok_analysis": "主队皮尔拉诺罗、波洛卡、坎德、法德拉四伤停阵容大损，客队博尼法齐与弗格森停赛但近两客连胜。让-1盘稳资金诱主胜藏陷阱，交锋三1-1和味浓，此战最冷血1-1。",
+          "grok_analysis": "萨索洛多名球员受伤削弱实力，博洛尼亚停赛两人但客场连胜势头强；近4次交锋3次1-1，和局味道浓，-1盘口或为诱主胜陷阱，冷血预测1-1平。",
           "gemini_score": "1-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gemini_analysis": "萨索洛伤情严重导致战力受损，博洛尼亚虽有核心停赛但近期客场走势强劲。结合历史交锋中极高的1-1平局率，数据让步存在明显的诱导陷阱。综合基本面与盘口逻辑，判定双方势均力敌，1-1握手言和为最合理终裁。",
           "value_bets_summary": [
             "主胜 EV:+8.54% (仓位:1.47%)"
           ],
@@ -4656,7 +2404,7 @@
         "handicap_info": "让-1",
         "intelligence": {
           "h_inj": "米切尔·维泽尔 受伤 膝关节受伤 马克西米利安·沃贝尔 受伤 肌肉挫伤 阿莫斯·皮珀 受伤 膝关节受伤 费利克斯·阿古 肌肉挫伤 维克多·博尼法斯 受伤 膝关节受伤 塞缪尔·姆班古拉·西丰达 腿筋受伤 约万·米洛舍维奇 受伤 后背受伤 韦斯利·阿德 受伤 膝关节受伤 阿卜杜勒·卡里姆·库利巴利 受伤",
-          "g_inj": "施特凡·贝尔 受伤 罗宾·泽特纳 受伤 腹股沟受伤 纳迪姆·阿米里 受伤 脚跟损伤 安德烈亚斯·汉切·奥尔森 受伤 受伤 安东尼·凯西 受伤 大腿受伤 本尼迪克特·霍勒巴赫 受伤 跟腱受伤 西拉斯·瓦曼吉图卡·冯杜 受伤 胫骨受伤 马克西姆·达尔 受伤 膝关节受伤"
+          "g_inj": "施特凡·贝尔 受伤 受伤 罗宾·泽特纳 受伤 腹股沟受伤 纳迪姆·阿米里 受伤 脚跟损伤 安德烈亚斯·汉切·奥尔森 受伤 受伤 安东尼·凯西 受伤 大腿受伤 本尼迪克特·霍勒巴赫 受伤 跟腱受伤 西拉斯·瓦曼吉图卡·冯杜 受伤 胫骨受伤 马克西姆·达尔 受伤 膝关节损伤"
         },
         "expert_intro": "云达不莱梅取得久违的联赛两连胜，并且将自身积分提升到25分，暂时逃离降班区，而今仗对手美因茨的状态不太理想，云达不莱梅迎来冲击联赛三连胜的天赐良机。",
         "home_rank": 0,
@@ -4695,11 +2443,11 @@
           "confidence": 85,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "不来梅虽有连胜题材，但主胜升水、客胜降水，市场对主队信心回落。双方伤停都重，不来梅后防减员更伤稳定性，美因茨拿分机会不低，防平局最冷。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-2",
-          "grok_analysis": "不莱梅伤停9人含博尼法斯等多主力，攻防崩盘；美因茨虽伤病缠身但状态差。让-1主胜升水、客胜降水为典型诱盘。情报利好不莱梅三连胜却被伤病拖累。冷血推演：主队难守住，让球输盘，比分1-2美因茨爆冷胜。",
-          "gemini_score": "1-1",
+          "grok_analysis": "云达不莱梅虽两连胜积25分暂逃降区，但伤停惨重含博尼法斯等多名核心，美因茨状态不佳却同样伤病缠身，-1盘主胜升水客胜降水疑为诱多主队陷阱，冷血比分1-2客胜。",
+          "gemini_score": "1-2",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
@@ -4804,7 +2552,7 @@
         "handicap_info": "让-2",
         "intelligence": {
           "h_inj": "克里斯滕森 受伤 膝关节受伤 弗兰基·德容 受伤 腿筋受伤 朱尔·孔德 受伤 腿筋受伤 亚历杭德罗·巴尔德 受伤 腿筋受伤",
-          "g_inj": "马科斯·特谢拉 受伤 膝关节受伤 佩克·费尔南德斯 受伤 踝关节扭伤 凯克·萨拉斯 受伤 小腿受伤"
+          "g_inj": "马科斯·特谢拉 受伤 膝关节损伤 佩克·费尔南德斯 受伤 踝关节受伤 凯克·萨拉斯 受伤 小腿受伤 阿尔贝托·弗洛雷斯 停赛 轮休 米格尔·塞拉 停赛 轮休"
         },
         "expert_intro": "巴萨今季西甲主场13场悉数告捷，均场得失球比为3.15比0.46，可想而知主场战斗力极其恐怖，今铺面对近11场联赛未试过攻入多过2球的塞维利亚，前者会以一场火力压制延续联赛主场全胜势头。在过去5次各项赛事主迎塞维利亚时，巴萨战无不胜，合计入12球失1球，佔据一面倒的优势。",
         "home_rank": 0,
@@ -4843,12 +2591,12 @@
           "confidence": 85,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "3-0",
-          "gpt_analysis": "巴萨主场统治力极强，13战全胜且攻守碾压；虽有数名伤停，但体系与主场压制仍在。塞维利亚进攻疲弱，客胜平稳难言造冷，让-2偏深更像阻上，最冷血比分看3比0。",
-          "grok_score": "3-0",
-          "grok_analysis": "巴萨主场虽后防克里斯滕森德容孔德巴尔德伤停但火力仍压制近11场低攻塞维利亚，历史主场5战12-1占优，-2盘诱大胜陷阱实则稳控，最冷比分3-0延续全胜。",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
+          "grok_score": "2-0",
+          "grok_analysis": "巴萨后防克里斯滕森、孔德、巴尔德及德容伤停削弱防守，塞维利亚特谢拉等多伤停难破门。-2诱盘意图引重注主让，实际巴萨主场火力压制但难零封。预计2-0，主队小胜延续全胜势头却不让深盘。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "平局 EV:+38.6% (仓位:1.72%)",
             "客胜 EV:+285.0% (仓位:7.92%)"
@@ -4994,12 +2742,12 @@
           "confidence": 90,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "瓦勒伦加让-1但胜赔仅1.82，力度与回报不完全匹配，平客赔偏防范。主队两处伤停削弱稳定性，桑纳菲阵容更整。结合双方近况接近，盘口有诱主嫌疑，冷血看1-1。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-1",
-          "grok_analysis": "瓦勒伦加两将伤停削弱进攻，桑纳菲无伤停状态强劲。让-1盘口或诱主胜，资金平稳下两队势均力敌，激战成和在所难免。冷血比分1-1。",
-          "gemini_score": "-",
-          "gemini_analysis": "未响应或阻断",
+          "grok_analysis": "瓦勒伦加两主力伤停削弱主场实力，桑纳菲无伤停。让-1盘口主胜资金平稳或藏诱盘意图。两队近期状态十足势均力敌，此战激战成和在所难免。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -5142,11 +2890,11 @@
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "0-1",
-          "gpt_analysis": "勒阿弗尔近3轮被零封，进攻乏力且有停赛伤缺，更倾向先守。里昂伤病更多但初始客胜1.92仍占优，资金平稳，诱盘不强。比赛大概率节奏谨慎，里昂小胜。",
-          "grok_score": "0-1",
-          "grok_analysis": "勒阿弗尔卢瓦克·内戈等多伤停且近3轮全被零封，首要保不失；里昂克林顿·马塔等停伤但让1盘客胜资金稳，诱盘疑为主胜陷阱，综合评估冷血比分0-1。",
-          "gemini_score": "0-1",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
+          "grok_score": "-",
+          "grok_analysis": "未响应或阻断",
+          "gemini_score": "1-2",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "主胜 EV:+90.44% (仓位:9.23%)"
@@ -5253,7 +3001,7 @@
         "handicap_info": "让-1",
         "intelligence": {
           "h_inj": "远藤航 受伤 足部受伤 亚历山大·伊萨克 受伤 腿部骨折 康纳·布拉德利 受伤 膝关节受伤 斯特凡·巴伊切蒂奇 受伤 腿筋受伤 乔瓦尼·莱奥尼 受伤 膝关节受伤",
-          "g_inj": "本·戴维斯 受伤 踝关节扭伤 詹姆斯·麦迪逊 受伤 膝关节受伤 若昂·帕利尼亚 受伤 头部受伤 罗德里戈·本坦库尔 受伤 肌肉挫伤 克里斯蒂安·罗梅罗 受伤 头部受伤 伊夫·比苏马 受伤 肌肉挫伤 穆罕默德·库杜斯 受伤 肌肉挫伤 德扬·库卢塞夫斯基 受伤 膝关节受伤 德斯蒂尼·乌多吉 受伤 肌肉挫"
+          "g_inj": "詹姆斯·麦迪逊 受伤 膝关节损伤 伊夫·比苏马 受伤 肌肉受伤 德扬·库卢塞夫斯基 受伤 膝关节损伤 本·戴维斯 受伤 踝关节受伤 克里斯蒂安·罗梅罗 受伤 头部受伤 德斯蒂尼·乌多吉 受伤 肌肉受伤 威尔逊·奥多贝尔 受伤 膝关节损伤 卢卡斯·贝里瓦尔 受伤 踝关节受伤 穆罕默德·库杜斯 受伤 肌"
         },
         "expert_intro": "利物浦近6场英超取得4胜2负，其中主场取得2胜1负，球队主场表现不俗，反观热刺已经11场英超不胜，而且他们今季英超首循环对阵利物浦以1比2输球，对比之下，利物浦本轮值得看高一线。",
         "home_rank": 0,
@@ -5292,12 +3040,12 @@
           "confidence": 85,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "3-1",
-          "gpt_analysis": "利物浦主胜降水配让-1，资金明显向主队，基本面与热刺11轮不胜吻合，诱盘力度有限。热刺伤停覆盖中后场与组织核心，防线完整性受损；利物浦虽有减员，但主场压制力更稳。冷血比分看3-1。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "2-1",
-          "grok_analysis": "双方伤停严重，热刺伤员更多且11场不胜，首回合负利物浦。让-1盘主胜降水显诱盘意图，但利物浦主场强势值得看高一线，冷血比分2-1。",
-          "gemini_score": "3-1",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "grok_analysis": "伤停评估：主队缺远藤航、伊萨克、布拉德利等多将，客队缺麦迪逊、库卢塞夫斯基、罗梅罗、乌多吉等更多关键球员。诱盘意图：让-1盘主胜降水吸筹。热刺11场不胜加首回合负，利物浦主场2-1冷血取胜。",
+          "gemini_score": "-",
+          "gemini_analysis": "未响应或阻断",
           "value_bets_summary": [
             "平局 EV:+41.48% (仓位:2.36%)",
             "客胜 EV:+141.68% (仓位:5.37%)"
@@ -5404,7 +3152,7 @@
         "handicap_info": "让-1",
         "intelligence": {
           "h_inj": "丹尼尔-科菲·基耶雷 受伤 体能 马克西米利安·罗森菲尔德 受伤 受伤",
-          "g_inj": "弗里德里克·劳诺 踝关节扭伤 罗伯特·斯科乌 受伤 肌肉挫伤 迪奥戈·莱特 受伤 肌肉挫伤 安德斯·舍弗 停赛 红牌停赛 汤姆·罗特 受伤 受伤 利奥波德·奎菲尔德 停赛 累计黄牌停赛"
+          "g_inj": "弗里德里克·劳诺 踝关节受伤 罗伯特·斯科乌 受伤 肌肉受伤 迪奥戈·莱特 受伤 肌肉受伤 安德斯·舍弗 停赛 红牌停赛 利奥波德·奎菲尔德 停赛 累计黄牌停赛"
         },
         "expert_intro": "弗赖堡主场演出有保证，他们过去11场德甲主场保持不败并且录得7胜4和的不俗战绩，攻击端在主场均场攻入2球，成为弗赖堡此番主场取胜的法宝。",
         "home_rank": 0,
@@ -5443,10 +3191,10 @@
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "2-1",
-          "gpt_analysis": "弗赖堡主场连续11场不败且场均2球，基本面更硬。柏林联合伤停与停赛更多，后场完整性受损。初始主胜受捧但让-1配合平稳，示强中带阻，防范小胜赢球输盘。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "2-1",
-          "grok_analysis": "弗赖堡主场强势，11场不败均攻2球，客队柏林联合伤停严重，多人缺阵影响防守。盘口让-1平稳，无明显诱盘意图，主胜概率高，冷血推演弗赖堡小胜。",
+          "grok_analysis": "弗赖堡主场11场不败均攻2球攻击有保证；柏林联合5人伤停停赛实力大损。让-1盘资金平稳无诱盘意图，主队伤停影响小，2-1冷胜。",
           "gemini_score": "2-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
@@ -5552,7 +3300,7 @@
         "handicap_info": "让-1",
         "intelligence": {
           "h_inj": "杰登·阿代 受伤 跟腱受伤 马克西莫·佩罗内 受伤",
-          "g_inj": "保罗·迪巴拉 受伤 膝关节受伤 阿尔特姆·多夫比克 受伤 腹股沟受伤 伊万·恩迪卡 停赛 累计黄牌停赛 埃文·弗格森 受伤 踝关节扭伤 马提亚斯·苏莱 腹股沟受伤"
+          "g_inj": "保罗·迪巴拉 受伤 膝关节损伤 阿尔特姆·多夫比克 受伤 腹股沟受伤 伊万·恩迪卡 停赛 累计黄牌停赛 埃文·弗格森 受伤 踝关节受伤 马提亚斯·苏莱 受伤 腹股沟受伤"
         },
         "expert_intro": "科莫近期主场表现不算突出，近6仗联赛主场只取得胜和负各2场战绩，即便今仗面对连续3场联赛作客未尝胜绩的罗马，科莫亦只能以1分为目标。",
         "home_rank": 0,
@@ -5591,10 +3339,10 @@
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "科莫主场近况一般，初始SP主胜偏热但让-1与资金平稳有诱主嫌疑。罗马伤停较多削弱进攻与防线，但客场连续不胜下拿分意图更强，冷血看平。",
-          "grok_score": "1-2",
-          "grok_analysis": "科莫主场战绩平庸，伤停轻微但整体实力不足。罗马客场虽连败，但伤停虽多，核心缺失或致防守漏洞，主胜低赔疑为诱盘，资金平稳掩盖客队反弹潜力，冷血推演罗马反客为主。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
+          "grok_score": "1-1",
+          "grok_analysis": "科莫主场近6仗联赛胜负各2表现平平，罗马客场3连不胜且伤停严重（迪巴拉膝伤、多夫比克腹股沟伤、恩迪卡停赛），让-1盘稳诱主胜但情报显示科莫仅求1分，故冷血推演双方互有顾忌战成1-1。",
           "gemini_score": "1-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
@@ -5701,8 +3449,8 @@
         "odds_movement": "主胜平稳，客胜平稳",
         "handicap_info": "让-1",
         "intelligence": {
-          "h_inj": "伊斯科 受伤 踝关节扭伤 苏菲安·阿姆拉巴特 受伤 踝关节扭伤 吉奥瓦尼·洛塞尔索 受伤 肌肉挫伤",
-          "g_inj": "弗兰科·塞维 轮休 约尔·拉戈 轮休 米格尔·罗曼 受伤 足部受伤"
+          "h_inj": "伊斯科 受伤 踝关节受伤 迭戈·略伦特 受伤 撞伤 吉奥瓦尼·洛塞尔索 受伤 肌肉受伤 巴勃罗·巴斯托 受伤",
+          "g_inj": "弗兰科·塞维 停赛 轮休 约尔·拉戈 停赛 轮休 米格尔·罗曼 受伤 足部受伤"
         },
         "expert_intro": "贝蒂斯上轮西甲输给加泰被终结一波5轮裡面3胜2和的不俗势头，塞尔塔则是输给皇马止步联赛两连胜，大家都渴望尽快重返胜轨。此前4次联赛交锋，大家各赢1次打和2次，各自都是攻入7球，实力非常接近。就近况与对赛成绩来看，这场遭遇战和味浓。",
         "home_rank": 0,
@@ -5741,10 +3489,10 @@
           "confidence": 90,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "贝蒂斯三名中前场伤停削弱创造力，初始主胜偏热但让-1力度与双方接近往绩不完全匹配，资金平稳下更像防主不胜。塞尔塔轮换影响有限，客场拿分概率高，冷血比分1比1。",
-          "grok_score": "1-2",
-          "grok_analysis": "贝蒂斯伤停三人影响中场控制，塞尔塔轮休两人保存体力。盘口让-1诱买主队，但赔率平稳掩盖主队弱势。交锋均衡，塞尔塔反击高效，预计客胜。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
+          "grok_score": "1-1",
+          "grok_analysis": "贝蒂斯四核心伤停进攻断层严重，塞尔塔两停赛轮休防守未崩。双方4次交锋各胜1平2攻入7球均势明显，和味极浓。让-1盘主胜资金平稳实为诱多，客胜平稳暗藏反杀。冷血比分1-1双方各取1分。",
           "gemini_score": "1-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
@@ -5889,12 +3637,12 @@
           "confidence": 80,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-2",
-          "gpt_analysis": "莱红牛近况更稳且首回合占优，斯图加特有主场拉力但让-1下主胜平稳带诱。主队两处伤停影响边路与轮换，客队门将缺席有损，但整体对抗与反击效率更可信，倾向客胜。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-2",
-          "grok_analysis": "莱红牛伤停四主力含门将却近5轮3胜2平且首回合3-1占优，斯图加特让-1盘口诱主胜平稳；欧冠竞争下客队赢面稍先，最冷比分1-2。",
-          "gemini_score": "1-2",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "grok_analysis": "斯图加特伤两后卫，主让-1盘稳诱主胜资金；莱红牛伤门将等四将但近5轮3胜2平且首回合3-1胜，欧冠竞争客稍优。伤停加诱盘陷阱，冷血推演客胜1-2。",
+          "gemini_score": "-",
+          "gemini_analysis": "未响应或阻断",
           "value_bets_summary": [
             "平局 EV:+10.84% (仓位:0.98%)"
           ],
@@ -6000,7 +3748,7 @@
         "handicap_info": "让1",
         "intelligence": {
           "h_inj": "阿莱西奥·罗马尼奥利 小腿受伤 伊万·普罗维德尔 受伤 肩部受伤 达尼洛·卡塔尔迪 受伤 受伤 萨穆尔·吉戈 受伤 踝关节扭伤 托马·巴希奇 受伤 尼古拉·罗维拉 受伤 受伤",
-          "g_inj": "阿德里安·拉比奥 停赛 累计黄牌停赛 马特奥·加比亚 受伤 肌肉挫伤 圣地亚哥·吉梅内斯 踝关节扭伤"
+          "g_inj": "阿德里安·拉比奥 停赛 累计黄牌停赛 马特奥·加比亚 受伤 肌肉受伤 圣地亚哥·吉梅内斯 受伤 踝关节受伤"
         },
         "expert_intro": "拉齐奥近期争胜力十分有限，反观AC米兰收获两连胜，而且前者近6次联赛对阵后者只得1胜1和4负劣绩，拉齐奥难逃失利的厄运。值得留意，蓝鹰近4次对赛失利比分分别为0比1和0比2各两次。",
         "home_rank": 0,
@@ -6039,10 +3787,10 @@
           "confidence": 70,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "0-1",
-          "gpt_analysis": "拉齐奥后场与中场伤停更伤结构，争胜力不足；AC米兰两连胜且交锋压制明显。初始客胜1.85配平稳资金，诱主空间有限，客队小胜概率最高。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "0-2",
-          "grok_analysis": "拉齐奥伤停严重（罗马尼奥利、普罗维德尔等），争胜力弱，近6战米兰1胜1平4负。米兰两连胜。让1盘主胜平稳或诱盘客胜。冷血预测0-2。",
+          "grok_analysis": "拉齐奥伤停众多削弱防线，争胜力有限且历史对AC米兰劣势明显。AC米兰两连胜强势，让1盘口意在诱盘。冷血推演0-2，蓝鹰再遭0比2失利。",
           "gemini_score": "0-2",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
@@ -6149,7 +3897,7 @@
         "odds_movement": "主胜平稳，客胜平稳",
         "handicap_info": "让-1",
         "intelligence": {
-          "h_inj": "阿尔瓦罗·奥德里奥索拉 受伤 膝关节受伤 久保建英 受伤 腿筋受伤 艾亨·穆尼奥斯 受伤 受伤 伊纳基·鲁佩雷斯 受伤 膝关节受伤",
+          "h_inj": "阿尔瓦罗·奥德里奥索拉 受伤 膝关节损伤 久保建英 受伤 腿筋受伤 艾亨·穆尼奥斯 受伤 受伤 伊纳基·鲁佩雷斯 受伤 膝关节损伤",
           "g_inj": "艾克·贝尼托 受伤 膝关节受伤 鲁本·加西亚 停赛 累计黄牌停赛 劳尔·加西亚 停赛 红牌停赛"
         },
         "expert_intro": "双方今季联赛表现相差无几，积分只有1分之差，排名都位居中游，实力较为对等。不过近3次正式比赛交锋，皇家社会在西杯淘汰奥萨苏纳晋级，而上次联赛对赛则是以3比1逆转取胜，前者佔据很大心理优势，奥萨苏纳此行鎩羽的趋势强烈。",
@@ -6189,11 +3937,11 @@
           "confidence": 90,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "1-1",
-          "gpt_analysis": "两队积分接近，基本面并无明显碾压。皇家社会虽有交锋优势，但久保等伤缺削弱进攻，奥萨苏纳虽有停赛仍具韧性。初盘主让-1偏深且主客胜平稳，防范主队不胜，冷看1比1。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
           "grok_score": "1-2",
-          "grok_analysis": "皇家社会膝伤腿筋伤多员缺阵久保进攻乏力，奥萨苏纳停赛两人但联赛积分接近心理劣势下反击得手，让-1诱主胜陷阱明显，此役客胜冷门。",
-          "gemini_score": "1-1",
+          "grok_analysis": "皇家社会多名主力伤停包括久保建英进攻乏力，尽管心理优势但让-1盘口疑似诱主胜资金。奥萨苏纳积分接近实力对等，停赛影响有限，此行客场冷血爆冷取胜。",
+          "gemini_score": "1-2",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [],
           "extreme_warning": "无",
@@ -6334,12 +4082,12 @@
           "confidence": 70,
           "result": "平局",
           "risk_level": "低",
-          "gpt_score": "3-0",
-          "gpt_analysis": "波尔图阵容有伤但整体实力、对赛与主场压制仍明显；让-2配合主胜平稳，诱上嫌疑有限。摩雷伦斯无重大伤停，但抗压与火力不足，冷血看主队稳胜穿盘边缘。",
-          "grok_score": "2-0",
-          "grok_analysis": "波尔图三将伤停削弱进攻但葡超领跑加三连胜摩雷伦斯，让-2主胜平稳，诱盘意图明显为客队资金陷阱，无伤停客队难阻，最冷血比分2-0。",
-          "gemini_score": "2-0",
-          "gemini_analysis": "格式混乱，已启用底线抽取。",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
+          "grok_score": "2-1",
+          "grok_analysis": "波尔图虽内韦恩·佩雷斯、卢克·德容、塞缪尔·阿格霍瓦三人伤停，但葡超领跑+对摩雷伦斯三连胜底蕴仍在，让-2盘明显诱主大胜资金。客队无伤停难爆冷，主队实力压制下稳取2-1小胜过关。",
+          "gemini_score": "-",
+          "gemini_analysis": "未响应或阻断",
           "value_bets_summary": [],
           "extreme_warning": "无",
           "smart_money_signal": "正常",
@@ -6482,11 +4230,11 @@
           "confidence": 85,
           "result": "主胜",
           "risk_level": "低",
-          "gpt_score": "2-0",
-          "gpt_analysis": "温哥华开局强势且攻防效率明显占优，初始SP与让-1匹配，主客胜平稳说明诱盘有限。主队虽有伤停，但整体体系仍强于明尼苏达，客队防守承压，冷血看主胜两球。",
-          "grok_score": "1-2",
-          "grok_analysis": "温哥华5大主力伤停重创攻防，明尼苏达仅2伤资金平稳。让-1盘主胜1.36诱导重注，情报三连胜8-1或陷阱。冷血推客胜1-2。",
-          "gemini_score": "1-2",
+          "gpt_score": "-",
+          "gpt_analysis": "未响应或阻断",
+          "grok_score": "2-1",
+          "grok_analysis": "温哥华白帽新赛季三连胜8比1攻防出色胜券在握，尽管主队伤停较多或为诱让-1盘意图，但明尼苏达伤停亦存实力差距明显，客队难阻败局，主队小胜。",
+          "gemini_score": "2-1",
           "gemini_analysis": "格式混乱，已启用底线抽取。",
           "value_bets_summary": [
             "平局 EV:+37.28% (仓位:2.74%)"
