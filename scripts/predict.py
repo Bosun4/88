@@ -14,13 +14,14 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
+# ➡️ 3名“前线分析师”的专属提示词（独立作业，互不干扰）
 def build_independent_prompt(m):
     h, a = m.get("home_team", "主队"), m.get("away_team", "客队")
     lg = m.get("league", "未知赛事")
     sp_h, sp_d, sp_a = m.get("sp_home", 0.0), m.get("sp_draw", 0.0), m.get("sp_away", 0.0)
     intel = m.get("intelligence", {})
     
-    p = f"【系统绝对指令】你是一名冷酷的足球量化风控专家。任务：对【{h}】VS【{a}】进行胜负推演。\n"
+    p = f"【系统硬指令】你是一名前线足球量化分析师。任务：对【{h}】VS【{a}】进行胜负推演。\n"
     p += f"【警报】绝对禁止提及与本场无关的球队或球星（如姆巴佩等）。\n\n"
     p += f"【基本面】赛事：{lg} | 初始SP：主胜{sp_h} 平局{sp_d} 客胜{sp_a} | 盘口与资金：{m.get('handicap_info')} | {m.get('odds_movement')}\n"
     p += f"【伤停】主队：{intel.get('h_inj')} | 客队：{intel.get('g_inj')}\n"
@@ -28,21 +29,24 @@ def build_independent_prompt(m):
     intro = str(m.get('expert_intro', '')).strip()
     p += f"【情报】{intro[:150] if intro else '无'}\n\n"
     
-    p += "【要求】评估伤停与诱盘意图，给出最冷血的比分。\n"
+    p += "【要求】评估伤停与诱盘意图，给出最冷血的比分推演。\n"
     p += "【格式铁律】必须且只能返回纯JSON对象，绝不允许有Markdown修饰符(如```json)！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字复盘，只围绕这两支队伍！"}'
+    p += '{"ai_score":"1-2","analysis":"不超过100字独立复盘，只围绕这两支队伍！"}'
     return p
 
-def build_synthesis_prompt(m, gpt_res, grok_res):
+# ➡️ 1名“总指挥官”的专属提示词（汇总三方报告，拍板决策）
+def build_synthesis_prompt(m, gpt_res, grok_res, gemini_res):
     h, a = m.get("home_team", "主队"), m.get("away_team", "客队")
     
-    p = f"【系统绝对指令】你是首席足球数据裁决官。任务：对【{h}】vs【{a}】进行终局判定。\n"
-    p += f"GPT 前瞻: 比分 [{gpt_res.get('ai_score', '无')}] | 逻辑 [{gpt_res.get('analysis', '无')}]\n"
-    p += f"Grok 前瞻: 比分 [{grok_res.get('ai_score', '无')}] | 逻辑 [{grok_res.get('analysis', '无')}]\n\n"
+    p = f"【系统绝对指令】你是首席风控指挥官(CIO)。任务：对【{h}】vs【{a}】进行最终判定。\n"
+    p += "你手下的三名顶尖分析师提交了以下报告：\n"
+    p += f"- 分析师1(GPT)判定: 比分 [{gpt_res.get('ai_score', '无')}] | 逻辑 [{gpt_res.get('analysis', '无')}]\n"
+    p += f"- 分析师2(Grok)判定: 比分 [{grok_res.get('ai_score', '无')}] | 逻辑 [{grok_res.get('analysis', '无')}]\n"
+    p += f"- 分析师3(Gemini)判定: 比分 [{gemini_res.get('ai_score', '无')}] | 逻辑 [{gemini_res.get('analysis', '无')}]\n\n"
     
-    p += "【要求】交叉比对两份前瞻，摒弃含有幻觉的数据，做出最无情的比分终裁。严禁提及未参与本场分析的AI名字。\n"
+    p += "【终极要求】交叉比对这三份报告。如果有人出现常识错误或逻辑幻觉，直接摒弃。结合你自身的宗师级足球理解，给出最后的一锤定音。\n"
     p += "【格式铁律】必须只能返回纯JSON对象，绝不允许包含Markdown修饰符！\n"
-    p += '{"ai_score":"1-2","analysis":"不超过100字的终局裁定。"}'
+    p += '{"ai_score":"1-2","analysis":"不超过100字的终局裁定，统领全局。"}'
     return p
 
 def extract_clean_json(text):
@@ -63,11 +67,9 @@ def extract_clean_json(text):
         return {"ai_score": fallback_score, "analysis": fallback_analysis}
     return None
 
-# 🔥 核心防御装甲：智能提取与清洗环境变量，防止任何标点符号污染
-def get_clean_env_url(name, default=""):
+def get_clean_env_url(name, default="[https://www.api520.pro/v1](https://www.api520.pro/v1)"):
     v = os.environ.get(name, globals().get(name, default))
     v = str(v).strip(' \t\n\r"\'')
-    # 物理抽离：如果用户复制成了 Markdown [网址](网址)，直接正则抽出干净的 http
     match = re.search(r'(https?://[a-zA-Z0-9.-]+(?:/[^\s)\]]*)?)', v)
     if match: return match.group(1)
     return v
@@ -78,12 +80,10 @@ def get_clean_env_key(name):
 
 def call_ai_model(prompt, url, key, model_name):
     if not url or not key:
-        print(f"    ❌ 缺少 URL 或 Key 配置，已跳过调用 ({model_name})")
+        print(f"    ❌ 缺少 URL 或 Key，已跳过 ({model_name})")
         return {}
         
     is_native_gemini = "generateContent" in url
-    
-    # 自动补全后缀，绝杀 404
     if not is_native_gemini and "chat/completions" not in url:
         url = url.rstrip("/") + "/chat/completions"
         
@@ -91,23 +91,12 @@ def call_ai_model(prompt, url, key, model_name):
     
     if is_native_gemini:
         headers["x-goog-api-key"] = key
-        payload = {
-            "contents": [{"parts": [{"text": "系统指令：你是无情的JSON输出机。绝对不准带Markdown。\n\n" + prompt}]}], 
-            "generationConfig": {"temperature": 0.2}
-        }
+        payload = {"contents": [{"parts": [{"text": "你是无情的JSON输出机。绝对不准带Markdown。\n" + prompt}]}], "generationConfig": {"temperature": 0.2}}
     else:
         headers["Authorization"] = f"Bearer {key}"
-        payload = {
-            "model": model_name, 
-            "messages": [
-                {"role": "system", "content": "你是无情的JSON输出机。绝对不准带任何Markdown修饰符。"}, 
-                {"role": "user", "content": prompt}
-            ], 
-            "temperature": 0.2,
-            "max_tokens": 500
-        }
+        payload = {"model": model_name, "messages": [{"role": "system", "content": "严禁带Markdown。输出纯JSON。"}, {"role": "user", "content": prompt}], "temperature": 0.2, "max_tokens": 500}
         
-    print(f"    🤖 启动 {model_name} | 网关: {url.split('/v1')[0] if '/v1' in url else url[:30]}...")
+    print(f"    🤖 启动 {model_name}...")
     try:
         r = requests.post(url, headers=headers, json=payload, timeout=600)
         if r.status_code == 200:
@@ -116,61 +105,53 @@ def call_ai_model(prompt, url, key, model_name):
             if parsed_data:
                 parsed_data["analysis"] = str(parsed_data.get("analysis", "")).replace("```json", "").replace("```", "").strip()
                 return parsed_data
-            else:
-                print("    ❌ 无法解析返回的格式。")
         else:
-            print(f"    ❌ API 报错 ({model_name}): {r.status_code} - {r.text[:80]}")
+            print(f"    ❌ 报错 ({model_name[:15]}): {r.status_code}")
     except Exception as e: 
-        print(f"    ⚠️ 网络异常 ({model_name}): {str(e)[:40]}")
+        print(f"    ⚠️ 异常 ({model_name[:15]}): {str(e)[:40]}")
     return {}
 
-# =========================================================
-# 🔥 精准对齐你的 Secrets 变量名和要求死锁的模型型号
-# =========================================================
+# ================= 4大模型绝对锁定 =================
 
 def call_gpt(prompt): 
-    url = get_clean_env_url("GPT_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
-    key = get_clean_env_key("GPT_API_KEY")
-    return call_ai_model(prompt, url, key, "熊猫-A-7-gpt-5.4")
+    return call_ai_model(prompt, get_clean_env_url("GPT_API_URL"), get_clean_env_key("GPT_API_KEY"), "熊猫-A-7-gpt-5.4")
 
 def call_grok(prompt): 
-    url = get_clean_env_url("GROK_API_URL", "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)")
-    key = get_clean_env_key("GROK_API_KEY")
-    return call_ai_model(prompt, url, key, "熊猫-A-6-grok-4.2-thinking")
+    return call_ai_model(prompt, get_clean_env_url("GROK_API_URL"), get_clean_env_key("GROK_API_KEY"), "熊猫-A-6-grok-4.2-thinking")
 
 def call_gemini(prompt): 
-    url = get_clean_env_url("GEMINI_API_URL")
-    key = get_clean_env_key("GEMINI_API_KEY")
-    return call_ai_model(prompt, url, key, "熊猫-顶级特供-X-17-gemini-3.1-pro-preview")
+    return call_ai_model(prompt, get_clean_env_url("GEMINI_API_URL"), get_clean_env_key("GEMINI_API_KEY"), "熊猫特供S-按量-gemini-3-flash-preview")
 
-# =========================================================
+def call_claude(prompt): 
+    return call_ai_model(prompt, get_clean_env_url("CLAUDE_API_URL"), get_clean_env_key("CLAUDE_API_KEY"), "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking")
 
-def merge_all(gpt, grok, gemini, stats, match_obj):
+# =================================================
+
+def merge_all(gpt, grok, gemini, claude, stats, match_obj):
     sys_hp, sys_dp, sys_ap = stats.get("home_win_pct", 33), stats.get("draw_pct", 33), stats.get("away_win_pct", 33)
     sys_cf, sys_score = stats.get("confidence", 50), stats.get("predicted_score", "1-1")
-    
     result = max({"主胜": sys_hp, "平局": sys_dp, "客胜": sys_ap}, key={"主胜": sys_hp, "平局": sys_dp, "客胜": sys_ap}.get)
 
     val_h = calculate_value_bet(sys_hp, match_obj.get("sp_home", 0))
     val_d = calculate_value_bet(sys_dp, match_obj.get("sp_draw", 0))
     val_a = calculate_value_bet(sys_ap, match_obj.get("sp_away", 0))
-    v_tags = [f"{k} EV:+{v['ev']}% (仓位:{v['kelly']}%)" for k, v in zip(["主胜", "平局", "客胜"], [val_h, val_d, val_a]) if v and v.get("is_value")]
+    v_tags = [f"{k} EV:+{v['ev']}%" for k, v in zip(["主胜", "平局", "客胜"], [val_h, val_d, val_a]) if v and v.get("is_value")]
     
     return {
         "predicted_score": sys_score, "home_win_pct": sys_hp, "draw_pct": sys_dp, "away_win_pct": sys_ap,
         "confidence": sys_cf, "result": result, "risk_level": "低" if sys_cf >= 70 else ("中" if sys_cf >= 50 else "高"),
         
-        "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "未响应或阻断"),
-        "grok_score": grok.get("ai_score", "-"), "grok_analysis": grok.get("analysis", "未响应或阻断"),
-        "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "未响应或阻断"),
+        "claude_score": claude.get("ai_score", "-"), "claude_analysis": claude.get("analysis", "总控裁决失败"),
+        "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "报告遗失"),
+        "grok_score": grok.get("ai_score", "-"), "grok_analysis": grok.get("analysis", "报告遗失"),
+        "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "报告遗失"),
         
         "value_bets_summary": v_tags, "extreme_warning": stats.get("extreme_warning", "无"),
         "smart_money_signal": stats.get("smart_money_signal", "正常"),
-        "poisson": {**stats.get("poisson", {}), "home_expected_goals": stats.get("poisson", {}).get("home_xg", "?"), "away_expected_goals": stats.get("poisson", {}).get("away_xg", "?")},
-        "refined_poisson": stats.get("refined_poisson", {}), "elo": stats.get("elo", {}), 
-        "home_form": stats.get("home_form", {}), "away_form": stats.get("away_form", {}),
-        "model_consensus": stats.get("model_consensus", 0), "total_models": stats.get("total_models", 4),
-        "expected_total_goals": stats.get("expected_total_goals", 0), "over_2_5": stats.get("over_2_5", 50), "btts": stats.get("btts", 50)
+        "poisson": stats.get("poisson", {}), "refined_poisson": stats.get("refined_poisson", {}), 
+        "elo": stats.get("elo", {}), "home_form": stats.get("home_form", {}), "away_form": stats.get("away_form", {}),
+        "model_consensus": stats.get("model_consensus", 0), "expected_total_goals": stats.get("expected_total_goals", 0),
+        "over_2_5": stats.get("over_2_5", 50), "btts": stats.get("btts", 50)
     }
 
 def select_top4(preds):
@@ -198,12 +179,15 @@ def run_predictions(raw, use_ai=True):
             ind_prompt = build_independent_prompt(m)
             gpt_res = call_gpt(ind_prompt)
             grok_res = call_grok(ind_prompt)
-            syn_prompt = build_synthesis_prompt(m, gpt_res or {}, grok_res or {})
-            gemini_res = call_gemini(syn_prompt)
-        else:
-            gpt_res, grok_res, gemini_res = [{"ai_score": "-", "analysis": "历史已完场，系统自动阻断 AI 调用以节省算力。"}] * 3
+            gemini_res = call_gemini(ind_prompt)  # 前线分析师3
             
-        mg = merge_all(gpt_res or {}, grok_res or {}, gemini_res or {}, sp, m)
+            # 汇总给总指挥 Claude
+            syn_prompt = build_synthesis_prompt(m, gpt_res or {}, grok_res or {}, gemini_res or {})
+            claude_res = call_claude(syn_prompt)
+        else:
+            gpt_res, grok_res, gemini_res, claude_res = [{"ai_score": "-", "analysis": "历史已完场，免算"}] * 4
+            
+        mg = merge_all(gpt_res or {}, grok_res or {}, gemini_res or {}, claude_res or {}, sp, m)
         res.append({**m, "prediction": mg})
         
     t4 = select_top4(res)
