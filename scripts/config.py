@@ -14,3 +14,12 @@ GPT_MODEL="gpt-5.4"
 C500_URL="https://trade.500.com/jczq/?date={date}"
 OKOOO_DETAIL="https://m.okooo.com/jczq/"
 TIMEZONE="Asia/Shanghai"
+# Claude 中控
+CLAUDE_API_URL = os.environ.get("CLAUDE_API_URL", "")
+CLAUDE_API_KEY = os.environ.get("CLAUDE_API_KEY", "")
+CLAUDE_MODEL = "claude-opus-4.6-thinking"
+
+# Grok
+GROK_API_URL = os.environ.get("GROK_API_URL", "")
+GROK_API_KEY = os.environ.get("GROK_API_KEY", "")
+GROK_MODEL = "grok-4.2-thinking"
