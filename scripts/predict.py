@@ -25,7 +25,6 @@ def build_scout_prompt(m):
     intel = m.get("intelligence", {})
     hs = m.get("home_stats", {})
     ast = m.get("away_stats", {})
-
     p = f"【系统协议】你是冷酷的足球量化风控官。任务：对【{h}】VS【{a}】进行独立胜负推演。\n"
     p += "【铁律】① 禁止虚构数据 ② 禁止提及无关球队球星 ③ 只返回纯JSON\n\n"
     p += f"【基本面】赛事：{lg} | 场次：{m.get('match_num', '?')}\n"
@@ -55,14 +54,13 @@ def build_scout_prompt(m):
     return p
 
 # ============================================================
-# Phase-2: Claude Opus 中控终裁（汇总三路前瞻 + 统计模型矩阵）
+# Phase-2: Claude Opus 中控终裁
 # ============================================================
 
 def build_commander_prompt(m, gpt_res, grok_res, gemini_res, stats_pred):
     h, a = m.get("home_team", "主队"), m.get("away_team", "客队")
     poi = stats_pred.get("poisson", {})
     ref = stats_pred.get("refined_poisson", {})
-
     p = f"【系统协议·最高权限】你是首席量化裁决官（中控）。你的判定为最终结论，不可被推翻。\n"
     p += f"任务：对【{h}】vs【{a}】进行终局比分裁决。\n\n"
     p += "【三路前瞻情报】\n"
@@ -175,29 +173,50 @@ def call_ai_model(prompt, url, key, model_name):
     return {}
 
 # ============================================================
-# 四路AI调用（对齐Secrets）
+# 四路AI调用（带自动降级）
 # ============================================================
 
+def call_with_fallback(prompt, url_env, key_env, models_list):
+    url = get_clean_env_url(url_env, globals().get(url_env, ""))
+    key = get_clean_env_key(key_env)
+    for i, model_name in enumerate(models_list):
+        tag = "主力" if i == 0 else f"备用{i}"
+        print(f"    [{tag}] 尝试 {model_name}...")
+        result = call_ai_model(prompt, url, key, model_name)
+        if result and result.get("ai_score") and result["ai_score"] not in ["未预测", "?", ""]:
+            return result
+        print(f"    [{tag}] {model_name} 失败或格式异常，切换下一个...")
+        time.sleep(0.3)
+    print(f"    ❌ 全部模型耗尽，返回空结果")
+    return {}
+
 def call_gpt(prompt):
-    url = get_clean_env_url("GPT_API_URL", GPT_API_URL)
-    key = get_clean_env_key("GPT_API_KEY")
-    return call_ai_model(prompt, url, key, GPT_MODEL)
+    return call_with_fallback(prompt, "GPT_API_URL", "GPT_API_KEY", [
+        "熊猫-A-7-gpt-5.4",
+        "熊猫-按量-gpt-5.3-codex-满血",
+        "熊猫-A-10-gpt-5.3-codex",
+        "熊猫-A-1-gpt-5.2",
+    ])
 
 def call_grok(prompt):
-    url = get_clean_env_url("GROK_API_URL", GROK_API_URL)
-    key = get_clean_env_key("GROK_API_KEY")
-    return call_ai_model(prompt, url, key, GROK_MODEL)
+    return call_with_fallback(prompt, "GROK_API_URL", "GROK_API_KEY", [
+        "熊猫-A-7-grok-4.2-多智能体讨论",
+        "熊猫-A-4-grok-4.2-fast",
+    ])
 
 def call_gemini(prompt):
-    url = get_clean_env_url("GEMINI_API_URL", GEMINI_API_URL)
-    key = get_clean_env_key("GEMINI_API_KEY")
-    return call_ai_model(prompt, url, key, GEMINI_MODEL)
+    return call_with_fallback(prompt, "GEMINI_API_URL", "GEMINI_API_KEY", [
+        "熊猫特供S-按量-gemini-3-flash-preview",
+        "熊猫特供-按量-SSS-gemini-3.1-pro-preview",
+        "熊猫-2-gemini-3.1-flash-lite-preview",
+    ])
 
 def call_claude(prompt):
-    url = get_clean_env_url("CLAUDE_API_URL", CLAUDE_API_URL)
-    key = get_clean_env_key("CLAUDE_API_KEY")
-    return call_ai_model(prompt, url, key, CLAUDE_MODEL)
-
+    return call_with_fallback(prompt, "CLAUDE_API_URL", "CLAUDE_API_KEY", [
+        "熊猫-按量-顶级特供-官max-claude-opus-4.6",
+        "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking",
+        "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6",
+    ])
 
 # ============================================================
 # 全维度融合器
@@ -209,16 +228,12 @@ def merge_all(gpt, grok, gemini, claude, stats, match_obj):
     sys_ap = stats.get("away_win_pct", 33)
     sys_cf = stats.get("confidence", 50)
     sys_score = stats.get("predicted_score", "1-1")
-
     pcts = {"主胜": sys_hp, "平局": sys_dp, "客胜": sys_ap}
     result = max(pcts, key=pcts.get)
-
-    # 中控Claude的比分优先级最高
     if claude.get("ai_score") and claude["ai_score"] not in ["-", "未预测", "?"]:
         sys_score = claude["ai_score"]
         sys_cf = min(sys_cf + 5, 95)
     else:
-        # 退而求其次：三路前瞻共识
         ai_scores = [x.get("ai_score") for x in [gpt, grok, gemini]
                      if x.get("ai_score") and x["ai_score"] not in ["-", "未预测", "?"]]
         if ai_scores:
@@ -229,9 +244,7 @@ def merge_all(gpt, grok, gemini, claude, stats, match_obj):
                 sys_cf = min(sys_cf + 8, 95)
             else:
                 sys_score = ai_scores[0]
-
     risk = "低" if sys_cf >= 70 else ("中" if sys_cf >= 50 else "高")
-
     val_h = calculate_value_bet(sys_hp, match_obj.get("sp_home", 0))
     val_d = calculate_value_bet(sys_dp, match_obj.get("sp_draw", 0))
     val_a = calculate_value_bet(sys_ap, match_obj.get("sp_away", 0))
@@ -239,29 +252,21 @@ def merge_all(gpt, grok, gemini, claude, stats, match_obj):
     for k, v in zip(["主胜", "平局", "客胜"], [val_h, val_d, val_a]):
         if v and v.get("is_value"):
             v_tags.append(f"{k} EV:+{v['ev']}% 仓位:{v['kelly']}%")
-
     o25 = stats.get("over_2_5", 50)
     bt = stats.get("btts", 50)
-
-    # 检查4路AI是否达成共识
     all_scores = [x.get("ai_score") for x in [gpt, grok, gemini, claude]
                   if x.get("ai_score") and x["ai_score"] not in ["-", "未预测", "?"]]
     model_agreement = len(set(all_scores)) <= 1 if all_scores else False
-
     return {
         "predicted_score": sys_score, "home_win_pct": sys_hp, "draw_pct": sys_dp, "away_win_pct": sys_ap,
         "confidence": sys_cf, "result": result, "risk_level": risk,
         "over_under_2_5": "大" if o25 > 55 else "小",
         "both_score": "是" if bt > 50 else "否",
-
-        # 四路AI
         "gpt_score": gpt.get("ai_score", "-"), "gpt_analysis": gpt.get("analysis", "未响应"),
         "grok_score": grok.get("ai_score", "-"), "grok_analysis": grok.get("analysis", "未响应"),
         "gemini_score": gemini.get("ai_score", "-"), "gemini_analysis": gemini.get("analysis", "未响应"),
         "claude_score": claude.get("ai_score", "-"), "claude_analysis": claude.get("analysis", "未响应"),
         "model_agreement": model_agreement,
-
-        # 模型细节
         "poisson": {**stats.get("poisson", {}),
                     "home_expected_goals": stats.get("poisson", {}).get("home_xg", "?"),
                     "away_expected_goals": stats.get("poisson", {}).get("away_xg", "?")},
@@ -277,8 +282,6 @@ def merge_all(gpt, grok, gemini, claude, stats, match_obj):
         "bradley_terry": stats.get("bradley_terry", {}),
         "home_form": stats.get("home_form", {}),
         "away_form": stats.get("away_form", {}),
-
-        # 信号
         "value_bets_summary": v_tags,
         "extreme_warning": stats.get("extreme_warning", "无"),
         "smart_money_signal": " | ".join(stats.get("smart_signals", [])) if stats.get("smart_signals") else "正常",
@@ -290,8 +293,6 @@ def merge_all(gpt, grok, gemini, claude, stats, match_obj):
         "crs_analysis": stats.get("crs_analysis", {}),
         "ttg_analysis": stats.get("ttg_analysis", {}),
         "halftime": stats.get("halftime", {}),
-
-        # 进球
         "over_2_5": o25, "btts": bt,
         "expected_total_goals": stats.get("expected_total_goals", 2.5),
         "pace_rating": stats.get("pace_rating", ""),
@@ -338,28 +339,24 @@ def extract_num(match_str):
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print(f"\n{'='*60}")
-    print(f"  🧠 ENSEMBLE ENGINE v4.0 | {len(ms)} matches")
+    print(f"  ENSEMBLE ENGINE v4.1 | {len(ms)} matches")
     print(f"  11 Stats + 4 AI (GPT·Grok·Gemini·Claude中控)")
+    print(f"  自动降级：GPT 4级 | Gemini 3级 | Grok 2级 | Claude 3级")
     print(f"{'='*60}")
-
     res = []
     for i, m in enumerate(ms):
         h, a = m.get("home_team", "?"), m.get("away_team", "?")
         print(f"\n{'─'*50}")
         print(f"  [{i+1}/{len(ms)}] {m.get('league', '')} {h} vs {a}")
         print(f"{'─'*50}")
-
-        # Phase 0: 统计模型矩阵
-        print("  📐 Phase-0: Stats Matrix (11 models)...")
+        print("  Phase-0: Stats Matrix (11 models)...")
         sp = ensemble.predict(m, {})
         print(f"     融合: H{sp['home_win_pct']:.1f}% D{sp['draw_pct']:.1f}% A{sp['away_win_pct']:.1f}% 共识:{sp.get('model_consensus', 0)}/{sp.get('total_models', 11)}")
         smart = sp.get("smart_signals", [])
         if smart:
-            print(f"     ⚡ 信号: {' | '.join(smart)}")
-
+            print(f"     信号: {' | '.join(smart)}")
         if use_ai:
-            # Phase 1: 三路独立前瞻
-            print("  🔍 Phase-1: 三路独立前瞻...")
+            print("  Phase-1: 三路独立前瞻（自动降级）...")
             scout_prompt = build_scout_prompt(m)
             gpt_res = call_gpt(scout_prompt)
             time.sleep(0.5)
@@ -367,36 +364,27 @@ def run_predictions(raw, use_ai=True):
             time.sleep(0.5)
             gemini_res = call_gemini(scout_prompt)
             time.sleep(0.5)
-
-            # Phase 2: Claude中控终裁
-            print("  👑 Phase-2: Claude中控终裁...")
+            print("  Phase-2: Claude中控终裁（自动降级）...")
             commander_prompt = build_commander_prompt(m, gpt_res or {}, grok_res or {}, gemini_res or {}, sp)
             claude_res = call_claude(commander_prompt)
             time.sleep(0.5)
         else:
             blocked = {"ai_score": "-", "analysis": "AI调用已阻断"}
             gpt_res = grok_res = gemini_res = claude_res = blocked
-
-        # Phase 3: 全维度融合
-        print("  🔀 Phase-3: 全维度融合...")
+        print("  Phase-3: 全维度融合...")
         mg = merge_all(gpt_res or {}, grok_res or {}, gemini_res or {}, claude_res or {}, sp, m)
-
-        print(f"  ✅ => {mg['result']} ({mg['predicted_score']}) {mg['confidence']:.0f}%")
+        print(f"  => {mg['result']} ({mg['predicted_score']}) {mg['confidence']:.0f}%")
         print(f"     GPT:{mg['gpt_score']} Grok:{mg['grok_score']} Gem:{mg['gemini_score']} Claude:{mg['claude_score']}")
-
         res.append({**m, "prediction": mg})
-
     t4 = select_top4(res)
     t4ids = [t["id"] for t in t4]
     for r in res:
         r["is_recommended"] = r["id"] in t4ids
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
-
     print(f"\n{'='*60}")
-    print("  🏆 TOP4 推荐:")
+    print("  TOP4 推荐:")
     for i, t in enumerate(t4):
         pr = t.get("prediction", {})
         print(f"    {i+1}. {t.get('home_team')} vs {t.get('away_team')} => {pr.get('result')} ({pr.get('predicted_score')}) {pr.get('confidence'):.0f}%")
     print(f"{'='*60}")
-
     return res, t4
