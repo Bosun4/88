@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿量化分析 Pro</title>
+<title>小鱼儿量化终端 Pro Max</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -75,7 +75,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .eb{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:7px;background:none;border:1px solid var(--bd);border-radius:7px;color:var(--t2);font-size:10px;cursor:pointer;transition:all .2s;font-weight:600}
 .eb:hover{background:var(--p2);color:var(--w);border-color:var(--bl)}
 .dp{display:none;padding:0 14px 14px}.dp.op{display:block}
-.mg{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:5px;margin-bottom:8px}
 .mb{background:var(--bg2);border:1px solid var(--bd);border-radius:7px;padding:8px;position:relative;overflow:hidden}
 .mb::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .mb.tg::before{background:var(--grg)}.mb.tb::before{background:var(--blg)}.mb.tp::before{background:linear-gradient(135deg,var(--pr),var(--pk))}.mb.ta::before{background:var(--gold)}.mb.tc::before{background:linear-gradient(135deg,var(--cy),var(--bl))}
@@ -91,6 +91,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .sbox-t{font-size:9px;font-weight:700;color:var(--t2);margin-bottom:4px}
 .sr{display:flex;justify-content:space-between;padding:1px 0;font-size:9px;border-bottom:1px solid rgba(26,39,68,0.4)}.sr:last-child{border:none}
 .srl{color:var(--t3)}.srv{font-family:'JetBrains Mono';font-weight:700;color:var(--w);font-size:9px}
+/* 市场与核心深度数据矩阵 */
+.mk-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px}
+.mk-box{background:var(--bg2);border:1px solid var(--bd);border-radius:7px;padding:8px}
+.mk-title{font-size:10px;font-weight:700;color:var(--am);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.mk-row{display:flex;justify-content:space-between;font-size:9px;padding:3px 0;border-bottom:1px dashed rgba(255,255,255,0.05)}.mk-row:last-child{border:none}
+.mk-v{font-family:'JetBrains Mono';color:var(--w);font-weight:700}.mk-l{color:var(--t2)}
 /* Claude中控面板 */
 .claude-panel{border:1px solid #d97706;border-radius:9px;overflow:hidden;margin-top:8px;background:linear-gradient(135deg,rgba(217,119,6,0.08),rgba(239,68,68,0.05))}
 .claude-head{padding:10px 12px;border-bottom:1px solid rgba(217,119,6,0.3);display:flex;justify-content:space-between;align-items:center}
@@ -98,25 +104,21 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .claude-score{font-family:'DM Sans';font-size:20px;font-weight:900;color:var(--w);background:var(--p);padding:2px 10px;border-radius:6px;border:1px solid var(--am);box-shadow:0 0 10px var(--ag)}
 .claude-text{font-size:10px;color:var(--tx);line-height:1.6;padding:10px 12px;background:rgba(0,0,0,0.15)}
 /* 三路前瞻 */
-.ai3{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd);margin-top:8px}
-.ai3c{padding:10px;border-right:1px solid var(--bd);background:var(--bg2);border-radius:0}
+.ai3{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-top:8px}
+.ai3c{padding:10px;border-right:1px solid var(--bd);background:var(--bg2)}
 .ai3c:last-child{border-right:none}
-.ai3h{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.ai3h{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
 .ai3t{font-size:9px;font-weight:700;font-family:'DM Sans'}
 .ai3t.gpt{color:var(--gn)}.ai3t.grok{color:var(--cy)}.ai3t.gem{color:var(--bl)}
 .ai3s{font-size:11px;font-weight:800;color:var(--w);background:var(--p);padding:1px 5px;border-radius:3px;border:1px solid var(--bd);font-family:'JetBrains Mono'}
-.ai3x{font-size:9px;color:var(--t3);line-height:1.4}
-.h2hr{display:flex;justify-content:space-between;padding:3px 6px;font-size:8px;border-radius:3px;margin-bottom:1px;background:var(--p);font-family:'JetBrains Mono';border:1px solid var(--bd)}
-.h2hs{color:var(--am);font-weight:700}
-.ftg{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
-.ft{background:var(--p);border:1px solid var(--bd);padding:1px 6px;border-radius:100px;font-size:8px;color:var(--t2)}
+.ai3x{font-size:9px;color:var(--t3);line-height:1.5}
 .exb{position:absolute;top:-1px;right:-1px;background:linear-gradient(135deg,var(--red),var(--pr));color:#fff;font-size:8px;font-weight:800;padding:3px 8px;border-radius:0 11px 0 7px;box-shadow:0 0 10px var(--rg);z-index:5}
 .empty{text-align:center;padding:40px;color:var(--t3)}
 .footer{text-align:center;padding:20px;color:var(--t3);font-size:9px;border-top:1px solid var(--bd);margin-top:24px}
 .ld{text-align:center;padding:50px}
 .spinner{width:24px;height:24px;border:3px solid var(--bd);border-top-color:var(--bl);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 8px}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:640px){.mg,.sg{grid-template-columns:1fr}.ai3{grid-template-columns:1fr}.ai3c{border-right:none;border-bottom:1px solid var(--bd)}.ai3c:last-child{border-bottom:none}.t4g{grid-template-columns:1fr}.tn2{font-size:11px}.sb2{font-size:20px}}
+@media(max-width:640px){.ai3,.mk-grid,.sg{grid-template-columns:1fr}.ai3c{border-right:none;border-bottom:1px solid var(--bd)}.ai3c:last-child{border-bottom:none}.t4g{grid-template-columns:1fr}.tn2{font-size:11px}.sb2{font-size:20px}}
 </style>
 </head>
 <body>
@@ -127,19 +129,17 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <div class="t4g" id="t4"></div>
 <div class="tabs"><button class="tab" onclick="sw('yesterday')">昨日完场</button><button class="tab ac" onclick="sw('today')">今日竞彩</button><button class="tab" onclick="sw('tomorrow')">明日早盘</button></div>
 <div id="ms"><div class="ld"><div class="spinner"></div><div style="color:var(--t3)">加载中...</div></div></div>
-<div class="footer"><p>500彩票 · API-Football · Odds-API</p><p style="margin-top:3px">Poisson · Dixon-Coles · ELO · RF · GB · NN · SVM · KNN</p><p style="margin-top:3px">GPT-5 · Grok-4 · Gemini-3 · <b style="color:var(--am)">Claude Opus 中控</b></p><p style="margin-top:3px;color:var(--am)">⚠️ 量化模型仅供参考，理性购彩</p></div>
+<div class="footer"><p>500彩票 · API-Football · Odds-API</p><p style="margin-top:3px">Poisson · ELO · RF · GB · NN · SVM · KNN · B-T</p><p style="margin-top:3px">GPT-5 · Grok-4 · Gemini-3 · <b style="color:var(--am)">Claude Opus 终裁</b></p><p style="margin-top:3px;color:var(--am)">⚠️ 量化模型与凯利指数仅供参考，理性购彩</p></div>
 </div>
 <script>
 var D=null,CT='today';
-function c(t){return t?String(t).replace(/```json/g,'').replace(/```/g,'').trim():'无响应'}
-function fm(f){if(!f)return'?';return f.split('').map(function(x){return x==='W'?'<span style="color:var(--gn)">W</span>':x==='D'?'<span style="color:var(--am)">D</span>':x==='L'?'<span style="color:var(--red)">L</span>':x}).join('')}
-fetch('data/predictions.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){D=d;document.getElementById('ut').textContent=d.update_time||'';rdb();rt4(d.top4||[]);rm()}).catch(function(){document.getElementById('ms').innerHTML='<div class="empty"><p style="font-size:40px;margin-bottom:10px">📡</p><p>等待数据</p></div>'});
-function sw(t){CT=t;document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('ac')});event.target.classList.add('ac');rm()}
-function rdb(){var ms=D.matches||{};var tt=0,cn=0,cf=0;['yesterday','today','tomorrow'].forEach(function(k){var a=ms[k]||[];tt+=a.length;a.forEach(function(m){var p=m.prediction||{};cf+=p.confidence||0;if(p.model_consensus>=3)cn++})});var av=tt?Math.round(cf/tt):0;document.getElementById('db').innerHTML='<div class="dc"><div class="dv c1">'+tt+'</div><div class="dl">竞彩入库</div></div><div class="dc"><div class="dv c2">'+(D.top4?D.top4.length:0)+'</div><div class="dl">价值标的</div></div><div class="dc"><div class="dv c3">'+cn+'</div><div class="dl">逻辑共识</div></div><div class="dc"><div class="dv c4">'+av+'%</div><div class="dl">置信指数</div></div>'}
-function rt4(t4){var el=document.getElementById('t4');if(!t4||!t4.length){el.innerHTML='<div class="empty" style="grid-column:1/-1">暂无精选</div>';return}el.innerHTML=t4.map(function(m,i){var p=m.prediction||{};var cc=p.confidence>=70?'var(--gn)':p.confidence>=50?'var(--am)':'var(--red)';return'<div class="t4" onclick="go(\'m-'+m.id+'\')"><div class="t4r">'+(i+1)+'</div><div class="t4l">'+(m.league||'')+' '+(m.match_num||'')+'</div><div class="t4t"><span class="t4n">'+m.home_team+'</span><span class="t4v">VS</span><span class="t4n aw">'+m.away_team+'</span></div><div class="t4s"><div class="t4si"><div class="t4sl">比分</div><div class="t4sv hl">'+(p.predicted_score||'?')+'</div></div><div class="t4si"><div class="t4sl">倾向</div><div class="t4sv">'+(p.result||'?')+'</div></div><div class="t4si"><div class="t4sl">置信</div><div class="t4sv" style="color:'+cc+'">'+(p.confidence||0)+'%</div></div></div><div class="t4c"><div class="t4cf" style="width:'+(p.confidence||0)+'%;background:'+cc+'"></div></div></div>'}).join('')}
-function rm(){var el=document.getElementById('ms');var ms=(D.matches||{})[CT]||[];if(!ms.length){el.innerHTML='<div class="empty">当前无数据</div>';return}el.innerHTML=ms.map(function(m){var p=m.prediction||{};var hp=p.home_win_pct||33,dp=p.draw_pct||33,ap=p.away_win_pct||33;var rc=p.result==='主胜'?'home':p.result==='平局'?'draw':'away';var poi=p.poisson||{};var ref=p.refined_poisson||{};var elo=p.elo||{};var rf=p.random_forest||{};var gb=p.gradient_boost||{};var nn=p.neural_net||{};var dc=p.dixon_coles||{};var hf=p.home_form||{};var af=p.away_form||{};var hs=m.home_stats||{};var as2=m.away_stats||{};var ts=p.top_scores||[];var h2h=m.h2h||[];var sig='';if(p.extreme_warning&&p.extreme_warning!=='无'&&p.extreme_warning!=='')sig+='<div class="sig sig-d">'+p.extreme_warning+'</div>';if(p.smart_money_signal&&p.smart_money_signal!=='正常'&&p.smart_money_signal!=='')sig+='<div class="sig sig-w">🚨 '+p.smart_money_signal+'</div>';if(p.smart_signals)(p.smart_signals||[]).forEach(function(s){sig+='<div class="sig sig-w">'+s+'</div>'});var ev='';var vbs=p.value_bets_summary||p.value_bets||[];if(vbs&&vbs.length)ev='<div class="evt">'+vbs.map(function(v){return'<span>💰 '+v+'</span>'}).join('')+'</div>';var mdl='<div class="mg"><div class="mb tg"><div class="mbt green">📐 泊松分布</div><div class="mr"><span class="ml2">比分</span><span class="mv2">'+(poi.predicted_score||'?')+'</span></div><div class="mr"><span class="ml2">主/平/客</span><span class="mv2">'+(poi.home_win||'?')+'/'+(poi.draw||'?')+'/'+(poi.away_win||'?')+'%</span></div><div class="mr"><span class="ml2">xG</span><span class="mv2">'+(poi.home_xg||poi.home_expected_goals||'?')+'-'+(poi.away_xg||poi.away_expected_goals||'?')+'</span></div>'+(ts.length?'<div class="schp">'+ts.map(function(s,i){return'<span class="sch'+(i===0?' top':'')+'">'+(s.score||'?')+' '+(s.prob||'?')+'%</span>'}).join('')+'</div>':'')+'</div><div class="mb tb"><div class="mbt blue">📊 ELO</div><div class="mr"><span class="ml2">主/平/客</span><span class="mv2">'+(elo.home_win||'?')+'/'+(elo.draw||'?')+'/'+(elo.away_win||'?')+'%</span></div><div class="mr"><span class="ml2">差值</span><span class="mv2" style="color:'+(parseFloat(elo.elo_diff||0)>0?'var(--gn)':'var(--red)')+'">'+(elo.elo_diff>0?'+':'')+(elo.elo_diff||'?')+'</span></div></div><div class="mb tc"><div class="mbt cyan">🌲 随机森林</div><div class="mr"><span class="ml2">主/平/客</span><span class="mv2">'+(rf.home_win||'?')+'/'+(rf.draw||'?')+'/'+(rf.away_win||'?')+'%</span></div></div><div class="mb tp"><div class="mbt purple">🧠 神经网络</div><div class="mr"><span class="ml2">主/平/客</span><span class="mv2">'+(nn.home_win||'?')+'/'+(nn.draw||'?')+'/'+(nn.away_win||'?')+'%</span></div></div><div class="mb ta"><div class="mbt amber">📈 梯度提升</div><div class="mr"><span class="ml2">主/平/客</span><span class="mv2">'+(gb.home_win||'?')+'/'+(gb.draw||'?')+'/'+(gb.away_win||'?')+'%</span></div></div><div class="mb tg"><div class="mbt green">🔬 Dixon-Coles</div><div class="mr"><span class="ml2">主/平/客</span><span class="mv2">'+(dc.home_win||'?')+'/'+(dc.draw||'?')+'/'+(dc.away_win||'?')+'%</span></div></div></div>';var frm='<div class="mg"><div class="mb tp"><div class="mbt purple">🔥 主队状态</div><div class="mr"><span class="ml2">趋势</span><span class="mv2">'+(hf.trend||'?')+'</span></div><div class="mr"><span class="ml2">评分</span><span class="mv2">'+(hf.score||'?')+'</span></div><div class="mr"><span class="ml2">近况</span><span class="mv2">'+fm(hs.form)+'</span></div></div><div class="mb tc"><div class="mbt cyan">🔥 客队状态</div><div class="mr"><span class="ml2">趋势</span><span class="mv2">'+(af.trend||'?')+'</span></div><div class="mr"><span class="ml2">评分</span><span class="mv2">'+(af.score||'?')+'</span></div><div class="mr"><span class="ml2">近况</span><span class="mv2">'+fm(as2.form)+'</span></div></div></div>';var sts='<div class="sg"><div class="sbox"><div class="sbox-t">'+m.home_team+'</div><div class="sr"><span class="srl">战绩</span><span class="srv">'+(hs.wins||'?')+'W'+(hs.draws||'?')+'D'+(hs.losses||'?')+'L</span></div><div class="sr"><span class="srl">进/失</span><span class="srv">'+(hs.goals_for||'?')+'/'+(hs.goals_against||'?')+'</span></div><div class="sr"><span class="srl">均进</span><span class="srv">'+(hs.avg_goals_for||'?')+'</span></div></div><div class="sbox"><div class="sbox-t">'+m.away_team+'</div><div class="sr"><span class="srl">战绩</span><span class="srv">'+(as2.wins||'?')+'W'+(as2.draws||'?')+'D'+(as2.losses||'?')+'L</span></div><div class="sr"><span class="srl">进/失</span><span class="srv">'+(as2.goals_for||'?')+'/'+(as2.goals_against||'?')+'</span></div><div class="sr"><span class="srl">均进</span><span class="srv">'+(as2.avg_goals_for||'?')+'</span></div></div></div>';var ai='<div class="claude-panel"><div class="claude-head"><div class="claude-title">👑 Claude Opus 中控终裁</div><div class="claude-score">'+(p.claude_score||p.gemini_score||'-')+'</div></div><div class="claude-text">'+c(p.claude_analysis||p.gemini_analysis)+'</div></div><div class="ai3"><div class="ai3c"><div class="ai3h"><span class="ai3t gpt">🤖 GPT</span><span class="ai3s">'+(p.gpt_score||'-')+'</span></div><div class="ai3x">'+c(p.gpt_analysis)+'</div></div><div class="ai3c"><div class="ai3h"><span class="ai3t grok">👽 Grok</span><span class="ai3s">'+(p.grok_score||'-')+'</span></div><div class="ai3x">'+c(p.grok_analysis)+'</div></div><div class="ai3c"><div class="ai3h"><span class="ai3t gem">💎 Gemini</span><span class="ai3s">'+(p.gemini_score||'-')+'</span></div><div class="ai3x">'+c(p.gemini_analysis)+'</div></div></div>';var h2='';if(h2h.length)h2='<div style="margin-top:6px"><div style="font-size:8px;color:var(--t3);margin-bottom:3px">交锋</div>'+h2h.map(function(x){return'<div class="h2hr"><span>'+x.date+'</span><span>'+x.home+' v '+x.away+'</span><span class="h2hs">'+x.score+'</span></div>'}).join('')+'</div>';return'<div class="mc '+(m.is_recommended?'rec':'')+'" id="m-'+m.id+'">'+(p.extreme_warning&&p.extreme_warning!=='无'&&p.extreme_warning!==''?'<div class="exb">'+p.extreme_warning+'</div>':'')+'<div class="mch"><div class="mcl">'+(m.league||'')+' <span class="m">'+(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mcb2">核心推荐</span>':'')+'</div><div class="mct">'+(m.match_time||'')+'</div></div><div class="mcbd"><div class="tr2"><div class="ts2"><div class="tn2">'+m.home_team+'</div></div><div class="sc2"><div class="sb2">'+(p.predicted_score||'?-?')+'</div><span class="rt2 '+rc+'">'+(p.result||'?')+'</span></div><div class="ts2"><div class="tn2">'+m.away_team+'</div></div></div><div class="gr"><div class="gb"><div class="gbl">预期总球</div><div class="gbv" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(1):'?')+'</div></div><div class="gb"><div class="gbl">大2.5球</div><div class="gbv" style="color:var(--pr)">'+(p.over_2_5||'?')+'%</div></div><div class="gb"><div class="gbl">BTTS</div><div class="gbv" style="color:var(--cy)">'+(p.btts||'?')+'%</div></div></div><div class="pw"><div class="ph2"><span class="phh">主胜 '+hp+'%</span><span class="phd">平局 '+dp+'%</span><span class="pha">客胜 '+ap+'%</span></div><div class="pb"><div class="h" style="width:'+hp+'%"></div><div class="d" style="width:'+dp+'%"></div><div class="a" style="width:'+ap+'%"></div></div></div>'+sig+ev+'<button class="eb" onclick="tg(this,\'d-'+m.id+'\')">📊 全模型矩阵 + 4路AI终裁 ▼</button></div><div class="dp" id="d-'+m.id+'">'+mdl+frm+sts+ai+h2+'<div style="text-align:center;margin-top:8px;font-size:9px;color:var(--t3)">'+(p.model_agreement?'✅ 4路AI共识':'⚠️ AI存在分歧')+' | 模型共识:'+(p.model_consensus||0)+'/'+(p.total_models||11)+'</div></div></div>'}).join('')}
-function tg(b,id){var e=document.getElementById(id);if(e.classList.contains('op')){e.classList.remove('op');b.innerHTML='📊 全模型矩阵 + 4路AI终裁 ▼'}else{e.classList.add('op');b.innerHTML='📊 收起 ▲'}}
-function go(id){var e=document.getElementById(id);if(e){e.scrollIntoView({behavior:'smooth',block:'center'});var d=document.getElementById('d-'+id.replace('m-',''));if(d&&!d.classList.contains('op'))d.classList.add('op')}}
-</script>
-</body>
-</html>
+function c(t){return t?String(t).replace(/
+http://googleusercontent.com/immersive_entry_chip/0
+
+### 🛠️ UI 重构核心解析：
+1.  **市场深度剖析区 (Market Depth Panel)**：新增了专门展示 `🎯波胆(CRS) Top3`、`⏳半全场 Top3` 的数据框。
+2.  **机构真实概率与凯利风控 (True Odds & Kelly)**：新增了专门的模块展示经过模型“去水”后的机构真实隐性概率，以及主客胜的**凯利指数 (Kelly Criterion)** 和 EV 价值判断，这是专业玩彩的核心指标。
+3.  **量化模型网格大扩容**：除了原有的泊松、ELO、随机森林，现已完美接入你的 **SVM (支持向量机)**、**KNN (K近邻聚类)** 以及 **Bradley-Terry (B-T)** 模型的数据展示，并按算法流派（树与梯度 / NN与核聚类 / 泊松修正）进行了 UI 归类分组。
+4.  **Claude 专属裁决台**：在面板最下方，Claude Opus 被赋予了“👑 中控裁决”的独立高亮横幅，而另外三个 AI 则作为侦察兵排列在其下方，彻底理顺了你在后端的 3+1 调度逻辑。
+
+这套前端一放上去，你的整个量化系统将呈现出令人震撼的专业感。覆盖刷新即可！
