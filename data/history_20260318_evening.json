@@ -1,535 +1,714 @@
 {
-  "update_time": "2026-03-18 21:54:03",
+  "update_time": "2026-03-18 23:41:21",
   "version": "4.5",
   "top4": [
     {
       "rank": 1,
-      "home_team": "利物浦",
-      "away_team": "加拉塔萨",
+      "home_team": "热刺",
+      "away_team": "马竞",
       "league": "欧冠",
-      "match_num": "周三011",
+      "match_num": "周三009",
       "match_time": "04:00",
-      "sp_home": 1.16,
-      "sp_draw": 6.15,
-      "sp_away": 9.5,
-      "give_ball": -2,
+      "sp_home": 2.32,
+      "sp_draw": 3.62,
+      "sp_away": 2.37,
+      "give_ball": -1,
       "change": {
         "win": -1,
         "same": 1,
-        "lose": 1
+        "lose": 0
       },
       "vote": {
-        "win": "77",
-        "same": "14",
-        "lose": "9",
-        "hhad_win": "36",
-        "hhad_same": "23",
-        "hhad_lose": "41"
+        "win": "38",
+        "same": "25",
+        "lose": "37",
+        "hhad_win": "18",
+        "hhad_same": "21",
+        "hhad_lose": "61"
       },
-      "odds_movement": "主胜降水，客胜升水",
-      "handicap_info": "让-2",
+      "odds_movement": "主胜降水，客胜平稳",
+      "handicap_info": "让-1",
       "intelligence": {
-        "h_inj": "远藤航 受伤 足部受伤 乔·戈麦斯 受伤 亚历山大·伊萨克 受伤 腿部骨折 里斯·威廉姆斯 停赛 轮休 哈维·戴维斯 停赛 轮休 康纳·布拉德利 受伤 膝关节损伤 斯特凡·巴伊切蒂奇 受伤 腿筋受伤 乔瓦尼·莱奥尼 受伤 膝关节损伤",
-        "g_inj": "格克代尼兹·古尔普兹 停赛 轮休 戴维森·桑切斯 停赛 累计黄牌停赛 梅特汉·巴尔塔奇 停赛 停赛 阿尔达·尤尼亚 受伤 受伤 坎 停赛 轮休 雷纳托·纳加 停赛 轮休"
+        "h_inj": "本·戴维斯 受伤 踝关节受伤 詹姆斯·麦迪逊 受伤 膝关节损伤 多米尼克·索兰克 受伤 若昂·帕利尼亚 受伤 头部受伤 罗德里戈·本坦库尔 受伤 肌肉受伤 里沙利松 停赛 累计黄牌停赛 伊夫·比苏马 停赛 轮休 康纳·加拉格尔 患病 穆罕默德·库杜斯 受伤 肌肉受伤 德扬·库卢塞夫斯基 受伤 膝关节",
+        "g_inj": "简·奥布拉克 受伤 肌肉挫伤 巴勃罗·巴里奥斯·里瓦斯 受伤 肌肉挫伤 罗德里戈·门多萨 受伤 受伤"
       },
-      "expert_intro": "首回合的落败并不是利物浦真正实力的体现，以他们在联赛阶段曾在主场战胜马德里双雄的表现来看，利物浦今铺利用主场之利逆转翻盘的成数高。",
-      "baseface": "主队是英超的球队，目前在联赛中30轮积49分，排在第5位。客队是土超的球队，目前在联赛中26轮积64分，排在第1位，状态火热。\n主队各项赛事近6场3胜1平2负，状态一般;近5个主场3胜1平1负，主场状态不错。客队各项赛事近6场5胜1负，状态上佳;近5个客场3胜2负，客场状态不错。\n综合来看，差距不大。\n在本次欧冠杯上回合的比赛中，利物浦客场0:1负于加拉塔萨。双方近2次交锋，利物浦全败，完全处于下风。\n本场半全场分析\n主队上半场领先的可能性为81%\n主队近6场主场的上半场:\n领先5，打平1，落后0/5场有进球，1场有失球\n客队近6场客场的上半场:\n落后2，打平1，领先3/2场有失球，3场有进球",
+      "expert_intro": "热刺正面临英超降班危机，球队无法全身心投入欧冠联赛场，何况首回合2比5的比分已经让他们无心恋战，热刺此番难逃被马体会双杀命运。",
+      "baseface": "主队是英超的球队，目前在联赛中30轮积30分，排在第16位，状态不佳。客队是西甲的球队，目前在联赛中28轮积57分，排在第3位，状态出色。\n主队各项赛事近6场1平5负，状态低迷;近5个主场1胜1平3负，主场状态较差。客队各项赛事近6场5胜1负，状态上佳;近5个客场2胜1平2负，客场状态一般。\n综合来看，客队优势较大。\n在本次欧冠杯上回合的比赛中，热刺客场2:5负于马竞。\n本场半全场分析\n主队上半场落后的可能性为44%\n主队近6场主场的上半场:\n领先1，打平1，落后4/3场有进球，5场有失球\n客队近6场客场的上半场:\n落后2，打平2，领先2/2场有失球，2场有进球",
       "had_analyse": [
-        "win"
+        "lose"
       ],
-      "home_rank": 5,
-      "away_rank": 1,
+      "home_rank": 16,
+      "away_rank": 3,
       "v2_odds_dict": {
-        "a0": 33.0,
-        "a1": 9.25,
-        "a2": 5.4,
-        "a3": 3.65,
-        "a4": 3.8,
-        "a5": 6.25,
-        "a6": 8.5,
-        "a7": 8.6,
-        "s00": 33.0,
-        "s11": 11.5,
-        "s22": 17.5,
-        "s33": 50.0,
-        "w10": 11.0,
-        "w20": 8.0,
-        "w21": 7.5,
-        "w30": 8.5,
-        "w31": 9.0,
-        "w32": 18.0,
-        "w40": 12.0,
-        "w41": 13.0,
-        "w42": 25.0,
-        "l01": 35.0,
-        "l02": 60.0,
-        "l12": 26.0,
-        "l03": 150.0,
-        "l13": 60.0,
-        "l23": 50.0,
-        "ss": 1.53,
-        "sp": 21.0,
-        "sf": 60.0,
-        "ps": 4.15,
-        "pp": 11.0,
-        "pf": 22.0,
-        "fs": 20.0,
-        "fp": 21.0,
-        "ff": 16.5
+        "a0": 16.0,
+        "a1": 6.25,
+        "a2": 3.95,
+        "a3": 3.2,
+        "a4": 4.4,
+        "a5": 8.0,
+        "a6": 15.0,
+        "a7": 21.0,
+        "s00": 16.0,
+        "s11": 7.1,
+        "s22": 11.0,
+        "s33": 40.0,
+        "w10": 10.5,
+        "w20": 13.0,
+        "w21": 7.7,
+        "w30": 25.0,
+        "w31": 18.0,
+        "w32": 22.0,
+        "w40": 50.0,
+        "w41": 40.0,
+        "w42": 45.0,
+        "l01": 11.0,
+        "l02": 14.0,
+        "l12": 8.0,
+        "l03": 28.0,
+        "l13": 19.0,
+        "l23": 23.0,
+        "ss": 3.85,
+        "sp": 14.0,
+        "sf": 23.0,
+        "ps": 5.4,
+        "pp": 6.6,
+        "pf": 5.5,
+        "fs": 22.0,
+        "fp": 14.0,
+        "ff": 4.1
       },
-      "h_icon": "/teamPic/zmbGMwfpqjYcVFg.png",
-      "g_icon": "team/2023-10/1ed354c9e3a4e5274b9e5636bd14a9a960984dae.png",
+      "h_icon": "team/2023-10/5c54791d975c97c6ac09c8246d20da3b8eca2a6c.png",
+      "g_icon": "team/2023-10/a2e937e3124aa163f40cef66b212c7d3985fd6f2.png",
       "home_id": 0,
       "away_id": 0,
-      "home_logo": "/teamPic/zmbGMwfpqjYcVFg.png",
-      "away_logo": "team/2023-10/1ed354c9e3a4e5274b9e5636bd14a9a960984dae.png",
-      "id": 6,
+      "home_logo": "team/2023-10/5c54791d975c97c6ac09c8246d20da3b8eca2a6c.png",
+      "away_logo": "team/2023-10/a2e937e3124aa163f40cef66b212c7d3985fd6f2.png",
+      "id": 3,
       "date": "2026-03-18",
       "home_stats": {
-        "played": 25,
-        "wins": 16,
-        "draws": 6,
-        "losses": 3,
-        "goals_for": 44,
-        "goals_against": 15,
-        "avg_goals_for": "1.78",
-        "avg_goals_against": "0.61",
-        "clean_sheets": 5,
-        "form": "WWDWW",
-        "rank": 5
-      },
-      "away_stats": {
         "played": 25,
         "wins": 9,
         "draws": 6,
         "losses": 10,
-        "goals_for": 25,
-        "goals_against": 33,
-        "avg_goals_for": "1.0",
-        "avg_goals_against": "1.34",
+        "goals_for": 27,
+        "goals_against": 32,
+        "avg_goals_for": "1.07",
+        "avg_goals_against": "1.27",
         "clean_sheets": 3,
-        "form": "LDWDL",
-        "rank": 1
+        "form": "WDLWD",
+        "rank": 16
+      },
+      "away_stats": {
+        "played": 25,
+        "wins": 12,
+        "draws": 6,
+        "losses": 7,
+        "goals_for": 35,
+        "goals_against": 24,
+        "avg_goals_for": "1.38",
+        "avg_goals_against": "0.98",
+        "clean_sheets": 4,
+        "form": "WWDWW",
+        "rank": 3
       },
       "h2h": [],
       "prediction": {
-        "predicted_score": "2-1",
-        "home_win_pct": 60.7,
-        "draw_pct": 22.2,
-        "away_win_pct": 17.1,
-        "confidence": 68,
-        "result": "主胜",
-        "risk_level": "中",
-        "over_under_2_5": "大",
-        "both_score": "是",
+        "predicted_score": "1-2",
+        "home_win_pct": 15.7,
+        "draw_pct": 11.0,
+        "away_win_pct": 73.3,
+        "confidence": 75,
+        "result": "客胜",
+        "risk_level": "低",
+        "over_under_2_5": "小",
+        "both_score": "否",
         "gpt_score": "-",
         "gpt_analysis": "N/A",
-        "grok_score": "2-1",
-        "grok_analysis": "Liverpool home motivation high in title race + strong form (WWDWW) and HT lead tendency (81%) outweigh multiple injuries; Galatasaray suspensions cripple attack (low 1.0 GF avg) despite prior 1-0 win, home edge prevails.",
-        "gemini_score": "-",
-        "gemini_analysis": "N/A",
+        "grok_score": "1-2",
+        "grok_analysis": "Atletico superior league rank/form (WWDWW), Tottenham injuries (8 key) + relegation chaos + 2-5 first-leg loss kill motivation. Away edge larger per analysis; CRS 1-2 top-3 consensus.",
+        "gemini_score": "1-2",
+        "gemini_analysis": "format error",
         "claude_score": "-",
         "claude_analysis": "N/A",
-        "model_agreement": false,
+        "model_agreement": true,
+        "candidate_scores": {
+          "1-2": 1.1
+        },
         "poisson": {
-          "home_xg": 1.79,
-          "away_xg": 0.84
+          "home_win": 22.4,
+          "draw": 25.2,
+          "away_win": 52.5,
+          "predicted_score": "0-1",
+          "home_xg": 0.94,
+          "away_xg": 1.59,
+          "btts": 48.5,
+          "over_2_5": 46.3,
+          "top_scores": [
+            {
+              "score": "0-1",
+              "prob": 12.7
+            },
+            {
+              "score": "1-1",
+              "prob": 11.9
+            },
+            {
+              "score": "0-2",
+              "prob": 10.1
+            },
+            {
+              "score": "1-2",
+              "prob": 9.5
+            },
+            {
+              "score": "0-0",
+              "prob": 8.0
+            },
+            {
+              "score": "1-0",
+              "prob": 7.5
+            }
+          ],
+          "home_expected_goals": 0.94
         },
-        "expected_total_goals": 2.63,
-        "extreme_warning": "无",
-        "smart_signals": [
-          "💰 Sharp资金流向主胜"
+        "refined_poisson": {
+          "home_win": 23.0,
+          "draw": 25.3,
+          "away_win": 51.7,
+          "predicted_score": "1-1",
+          "top_scores": [
+            {
+              "score": "1-1",
+              "prob": 14.3
+            },
+            {
+              "score": "1-2",
+              "prob": 11.4
+            },
+            {
+              "score": "0-1",
+              "prob": 9.6
+            },
+            {
+              "score": "0-2",
+              "prob": 9.0
+            },
+            {
+              "score": "2-1",
+              "prob": 7.0
+            },
+            {
+              "score": "1-0",
+              "prob": 5.9
+            }
+          ]
+        },
+        "value_bets_summary": [
+          "客胜 EV:+73.72% Kelly:13.45%"
         ],
-        "elo": {
-          "home_win": 35.6,
-          "draw": 26.0,
-          "away_win": 51.4,
-          "elo_diff": -64
-        },
-        "random_forest": {
-          "home_win": 81.0,
-          "draw": 13.3,
-          "away_win": 5.7
-        },
+        "extreme_warning": "无",
+        "smart_money_signal": "🚨 长客陷阱 | 🚨 保级死拼",
+        "smart_signals": [
+          "🚨 长客陷阱",
+          "🚨 保级死拼"
+        ],
+        "model_consensus": 11,
+        "total_models": 11,
+        "expected_total_goals": 2.5,
         "top_scores": [
           {
-            "score": "1-0",
-            "prob": 13.0
-          },
-          {
-            "score": "2-0",
-            "prob": 11.8
-          },
-          {
             "score": "1-1",
-            "prob": 11.0
+            "prob": 14.3
+          },
+          {
+            "score": "1-2",
+            "prob": 11.4
+          },
+          {
+            "score": "0-1",
+            "prob": 9.6
+          },
+          {
+            "score": "0-2",
+            "prob": 9.0
           },
           {
             "score": "2-1",
-            "prob": 9.8
+            "prob": 7.0
           },
           {
-            "score": "3-0",
-            "prob": 7.0
+            "score": "1-0",
+            "prob": 5.9
           }
-        ]
+        ],
+        "elo": {
+          "home_win": 26.2,
+          "draw": 20.0,
+          "away_win": 63.8,
+          "elo_diff": -155
+        },
+        "random_forest": {
+          "home_win": 36.4,
+          "draw": 23.7,
+          "away_win": 39.9
+        },
+        "gradient_boost": {
+          "home_win": 35.1,
+          "draw": 25.2,
+          "away_win": 39.7
+        },
+        "neural_net": {
+          "home_win": 34.4,
+          "draw": 24.2,
+          "away_win": 41.4
+        },
+        "logistic": {
+          "home_win": 35.3,
+          "draw": 25.2,
+          "away_win": 39.5
+        },
+        "svm": {
+          "home_win": 35.3,
+          "draw": 23.5,
+          "away_win": 41.2
+        },
+        "knn": {
+          "home_win": 34.6,
+          "draw": 24.8,
+          "away_win": 40.6
+        },
+        "dixon_coles": {
+          "home_win": 24.7,
+          "draw": 25.2,
+          "away_win": 50.1
+        },
+        "bradley_terry": {
+          "home_win": 34.8,
+          "draw": 24.0,
+          "away_win": 41.2
+        },
+        "home_form": {
+          "score": 51.5,
+          "trend": "一般",
+          "momentum": 51.5,
+          "streak": 1,
+          "streak_type": "D"
+        },
+        "away_form": {
+          "score": 86.7,
+          "trend": "上升",
+          "momentum": 86.7,
+          "streak": 2,
+          "streak_type": "W"
+        },
+        "handicap_signal": "盘口正常",
+        "odds_movement": {
+          "signal": "正常",
+          "h_adj": 0,
+          "a_adj": 0,
+          "d_adj": 0
+        },
+        "vote_analysis": {
+          "signal": "均衡",
+          "adj_h": 0,
+          "adj_a": 0
+        },
+        "h2h_blood": {
+          "h_adj": 0.0,
+          "a_adj": 0.0,
+          "signal": "无交锋",
+          "avg_goals": 2.5
+        },
+        "crs_analysis": {
+          "top_scores": [],
+          "signals": []
+        },
+        "ttg_analysis": {
+          "expected_goals": 2.5,
+          "over_2_5": 50,
+          "probs": {}
+        },
+        "halftime": {
+          "top": [],
+          "halftime_draw_prob": 0
+        },
+        "over_2_5": 50,
+        "btts": 48.5,
+        "pace_rating": "中等",
+        "kelly_home": {
+          "kelly": 0.0,
+          "value": "False",
+          "edge": -34.1
+        },
+        "kelly_away": {
+          "kelly": 2.21,
+          "value": "True",
+          "edge": 12.1
+        },
+        "odds": {
+          "implied_home": 38.2,
+          "implied_draw": 24.5,
+          "implied_away": 37.4
+        }
       },
-      "recommend_score": 27.2,
+      "recommend_score": 96.82,
       "is_recommended": true,
       "fusion_summary": "weighted"
     },
     {
       "rank": 2,
-      "home_team": "巴萨",
-      "away_team": "纽卡斯尔",
-      "league": "欧冠",
-      "match_num": "周三007",
-      "match_time": "01:45",
-      "sp_home": 1.42,
-      "sp_draw": 4.3,
-      "sp_away": 5.2,
-      "give_ball": -1,
-      "change": {
-        "win": 1,
-        "same": -1,
-        "lose": 0
-      },
-      "vote": {
-        "win": "63",
-        "same": "19",
-        "lose": "18",
-        "hhad_win": "40",
-        "hhad_same": "24",
-        "hhad_lose": "36"
-      },
-      "odds_movement": "主胜升水，客胜平稳",
-      "handicap_info": "让-1",
-      "intelligence": {
-        "h_inj": "克里斯滕森 受伤 膝关节受伤 弗兰基·德容 受伤 腿筋受伤 朱尔·孔德 受伤 腿筋受伤 亚历杭德罗·巴尔德 受伤 腿筋受伤",
-        "g_inj": "法比安·舍尔 受伤 踝关节受伤 马克·吉莱斯皮 停赛 轮休 埃米尔·克拉夫特 受伤 膝关节损伤 布鲁诺·吉马良斯 受伤 肌肉受伤 刘易斯·麦利 受伤 膝关节损伤"
-      },
-      "expert_intro": "巴萨今季主场战斗力之强有目共睹，今仗次回合移师主场面对作客能力有限的纽卡斯尔，巴萨必定会取胜晋级。",
-      "baseface": "主队是西甲的球队，目前在联赛中28轮积70分，排在第1位，状态火热。客队是英超的球队，目前在联赛中30轮积42分，排在第9位。\n主队各项赛事近6场5胜1平，状态上佳;近5个主场全胜，主场状态火热。客队各项赛事近6场3胜1平2负，状态一般;近5个客场4胜1负，客场状态上佳。\n综合来看，主队优势较大。\n在本次欧冠杯上回合的比赛中，巴塞罗那客场1:1战平纽卡斯尔。双方近2次交锋，巴塞罗那取得1胜1平，占据上风。\n本场半全场分析\n主队上半场领先的可能性为74%\n主队近6场主场的上半场:\n领先5，打平0，落后1/5场有进球，2场有失球\n客队近6场客场的上半场:\n落后3，打平0，领先3/3场有失球，4场有进球",
-      "had_analyse": [
-        "win"
-      ],
-      "home_rank": 1,
-      "away_rank": 9,
-      "v2_odds_dict": {
-        "a0": 29.0,
-        "a1": 9.0,
-        "a2": 5.0,
-        "a3": 3.5,
-        "a4": 3.95,
-        "a5": 6.0,
-        "a6": 9.7,
-        "a7": 10.0,
-        "s00": 29.0,
-        "s11": 9.5,
-        "s22": 12.0,
-        "s33": 30.0,
-        "w10": 12.0,
-        "w20": 10.0,
-        "w21": 7.0,
-        "w30": 13.0,
-        "w31": 9.5,
-        "w32": 13.0,
-        "w40": 22.0,
-        "w41": 17.0,
-        "w42": 24.0,
-        "l01": 24.0,
-        "l02": 35.0,
-        "l12": 15.0,
-        "l03": 70.0,
-        "l13": 33.0,
-        "l23": 28.0,
-        "ss": 2.05,
-        "sp": 17.0,
-        "sf": 31.0,
-        "ps": 4.2,
-        "pp": 8.5,
-        "pf": 12.0,
-        "fs": 18.0,
-        "fp": 17.0,
-        "ff": 8.2
-      },
-      "h_icon": "team/2023-08/d520396e6cea40d1caa4b3623a3e09171a7f3363.png",
-      "g_icon": "team/2023-08/bb3b773aff22348e9c2d098f3b8223bbf90a8c16.png",
-      "home_id": 0,
-      "away_id": 0,
-      "home_logo": "team/2023-08/d520396e6cea40d1caa4b3623a3e09171a7f3363.png",
-      "away_logo": "team/2023-08/bb3b773aff22348e9c2d098f3b8223bbf90a8c16.png",
-      "id": 2,
-      "date": "2026-03-18",
-      "home_stats": {
-        "played": 25,
-        "wins": 15,
-        "draws": 6,
-        "losses": 4,
-        "goals_for": 44,
-        "goals_against": 16,
-        "avg_goals_for": "1.76",
-        "avg_goals_against": "0.63",
-        "clean_sheets": 5,
-        "form": "WWDWW",
-        "rank": 1
-      },
-      "away_stats": {
-        "played": 25,
-        "wins": 8,
-        "draws": 6,
-        "losses": 11,
-        "goals_for": 23,
-        "goals_against": 35,
-        "avg_goals_for": "0.92",
-        "avg_goals_against": "1.41",
-        "clean_sheets": 3,
-        "form": "LDWDL",
-        "rank": 9
-      },
-      "h2h": [],
-      "prediction": {
-        "predicted_score": "2-0",
-        "home_win_pct": 52.8,
-        "draw_pct": 27.0,
-        "away_win_pct": 20.3,
-        "confidence": 60,
-        "result": "主胜",
-        "risk_level": "中",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "gpt_score": "2-0",
-        "gpt_analysis": "巴萨近期状态明显更强，近6场5胜1平且主场5连胜，争冠背景下战意很高，进攻端得到稳定加成。虽然德容、孔德、巴尔德、克里斯滕森缺阵削弱了中后场控制与边路防守，因此主队防守系数下调，但纽卡斯尔自身进攻效率偏低，场均仅0.92球，近期整体表现也只是一般。客队伤缺中，吉马良斯和舍尔的缺席对中场推进与后防稳定性影响较大，使其攻防两端都受损。战术上巴萨更擅长控球压制，纽卡斯尔客场虽有一定反击表现，但首回合1比1后本场在巴萨主场更容易被压制，预计主队主导比赛并完成零封。",
-        "grok_score": "2-1",
-        "grok_analysis": "Barcelona's elite home form (5W last 5), title-race motivation and first-leg edge boost attack; severe defensive injuries (Kounde, Balde, Christensen, De Jong) weaken backline. Newcastle's key absences (Guimaraes, Schar) plus poor league rank blunt attack despite solid away record.",
-        "gemini_score": "-",
-        "gemini_analysis": "N/A",
-        "claude_score": "-",
-        "claude_analysis": "N/A",
-        "model_agreement": false,
-        "poisson": {
-          "home_xg": 1.41,
-          "away_xg": 0.74
-        },
-        "expected_total_goals": 2.15,
-        "extreme_warning": "无",
-        "smart_signals": [],
-        "elo": {
-          "home_win": 60.9,
-          "draw": 20.0,
-          "away_win": 29.1,
-          "elo_diff": 128
-        },
-        "random_forest": {
-          "home_win": 69.1,
-          "draw": 19.4,
-          "away_win": 11.5
-        },
-        "top_scores": [
-          {
-            "score": "1-0",
-            "prob": 16.2
-          },
-          {
-            "score": "1-1",
-            "prob": 11.9
-          },
-          {
-            "score": "0-0",
-            "prob": 11.4
-          },
-          {
-            "score": "2-0",
-            "prob": 11.4
-          },
-          {
-            "score": "0-1",
-            "prob": 9.3
-          }
-        ]
-      },
-      "recommend_score": 24.0,
-      "is_recommended": true,
-      "fusion_summary": "weighted"
-    },
-    {
-      "rank": 3,
-      "home_team": "布拉加",
-      "away_team": "费伦茨",
-      "league": "欧罗巴",
-      "match_num": "周三006",
-      "match_time": "23:30",
-      "sp_home": 1.31,
-      "sp_draw": 4.5,
-      "sp_away": 7.0,
+      "home_team": "南安普敦",
+      "away_team": "诺维奇",
+      "league": "英冠",
+      "match_num": "周三008",
+      "match_time": "03:45",
+      "sp_home": 1.78,
+      "sp_draw": 3.45,
+      "sp_away": 3.6,
       "give_ball": -1,
       "change": {
         "win": -1,
-        "same": 1,
+        "same": 0,
         "lose": 1
       },
       "vote": {
-        "win": "67",
-        "same": "20",
-        "lose": "13",
-        "hhad_win": "41",
-        "hhad_same": "27",
-        "hhad_lose": "32"
+        "win": "50",
+        "same": "26",
+        "lose": "24",
+        "hhad_win": "26",
+        "hhad_same": "24",
+        "hhad_lose": "50"
       },
       "odds_movement": "主胜降水，客胜升水",
       "handicap_info": "让-1",
       "intelligence": {
-        "h_inj": "斯库·尼亚卡特 受伤 维托·卡瓦略 受伤 受伤 阿德里安·莱昂·巴里西奇 受伤 肌肉挫伤 阿明·埃尔·瓦扎尼 足部受伤",
-        "g_inj": "克里斯托弗·扎卡里亚森 停赛 累计黄牌停赛 斯特凡·加滕曼 受伤 受伤 德内斯·迪布兹 停赛 轮休 埃尔顿·阿科拉特斯 停赛 轮休 马吕斯·科尔布 停赛 轮休 卡延 停赛 轮休 阿提拉·奥斯瓦特 停赛 轮休 本斯·奥特沃斯 受伤 受伤"
+        "h_inj": "科勒·拉林 受伤 马德斯·罗尔斯列夫 受伤 跟腱受伤 罗斯·斯图尔特 轮休 威灵顿 受伤 肌肉挫伤 莱昂纳多·斯基恩萨 受伤 受伤 杰·罗宾逊 大腿受伤",
+        "g_inj": "肖恩·达菲 轮休 施鲁普 受伤 腿筋受伤 丹尼尔·格里姆肖 停赛 轮休 米尔科·托别克 受伤 膝关节受伤 本杰明·克里斯汀 受伤 马捷·朱拉塞克 受伤 足部受伤 安特·科纳克 受伤 膝关节受伤 穆罕默德·图雷 受伤 受伤 马卡马 受伤 足部受伤 鲁艾里·麦康维尔 停赛 轮休 奥斯卡·施瓦陶 受伤 腿"
       },
-      "expert_intro": "费伦茨近期状态正佳，加之首回合还取得2比0零封胜利，心理层面佔据上风的费伦茨此行肯定能够凯旋。",
-      "baseface": "主队是葡超的球队，目前在联赛中25轮积46分，排在第4位。客队是匈甲的球队，目前在联赛中25轮积49分，排在第2位，状态出色。\n主队各项赛事近6场3胜1平2负，状态一般;近5个主场4胜1平，主场状态上佳。客队各项赛事近6场全胜，状态火热;近5个客场3胜2负，客场状态不错。\n综合来看，差距不大。\n在本次欧罗巴杯上回合的比赛中，布拉加客场0:2负于费伦茨。\n本场半全场分析\n主队上半场领先的可能性为64%\n主队近6场主场的上半场:\n领先4，打平1，落后1/5场有进球，3场有失球\n客队近6场客场的上半场:\n落后0，打平2，领先4/2场有失球，5场有进球",
+      "expert_intro": "南安普敦连续10轮联赛保持不败，而诺维奇联赛处于四连胜之中，双方今铺激战成和合情合理。",
+      "baseface": "本场为英冠第36轮的一场补赛。目前主队37场积57分，排在第7位。客队37场积51分，排在第12位。\n主队近6轮联赛4胜2平，状态上佳;近5个主场3胜1平1负，主场状态不错。客队近6轮联赛5胜1负，近5个客场4胜1负，状态上佳。\n综合来看，差距不大。\n双方近4次交锋，南安普敦取得1胜2平1负;在南安普敦的主场，近几年双方只交锋过一次，打成平手。\n本场半全场分析\n双方上半场打平的可能性为50%\n主队近6场联赛主场的上半场:\n领先2，打平3，落后1/2场有进球，1场有失球\n客队近6场联赛客场的上半场:\n落后1，打平3，领先2/2场有失球，3场有进球",
       "had_analyse": [
-        "lose"
+        "same"
       ],
-      "home_rank": 4,
-      "away_rank": 2,
+      "home_rank": 7,
+      "away_rank": 12,
       "v2_odds_dict": {
         "a0": 14.0,
-        "a1": 5.75,
-        "a2": 3.75,
+        "a1": 5.6,
+        "a2": 3.55,
         "a3": 3.25,
-        "a4": 4.75,
-        "a5": 8.75,
-        "a6": 15.0,
-        "a7": 23.0,
+        "a4": 5.0,
+        "a5": 8.85,
+        "a6": 16.0,
+        "a7": 25.0,
         "s00": 14.0,
-        "s11": 8.5,
-        "s22": 16.0,
-        "s33": 70.0,
-        "w10": 6.5,
-        "w20": 7.0,
-        "w21": 7.0,
-        "w30": 10.0,
-        "w31": 9.0,
-        "w32": 23.0,
-        "w40": 18.0,
-        "w41": 19.0,
-        "w42": 40.0,
-        "l01": 16.0,
-        "l02": 36.0,
-        "l12": 18.0,
-        "l03": 80.0,
-        "l13": 55.0,
-        "l23": 55.0,
-        "ss": 1.8,
-        "sp": 19.0,
-        "sf": 45.0,
-        "ps": 4.1,
-        "pp": 7.25,
-        "pf": 16.0,
-        "fs": 23.0,
-        "fp": 19.0,
-        "ff": 12.0
+        "s11": 6.3,
+        "s22": 11.5,
+        "s33": 40.0,
+        "w10": 8.0,
+        "w20": 9.5,
+        "w21": 6.5,
+        "w30": 16.0,
+        "w31": 13.0,
+        "w32": 20.0,
+        "w40": 40.0,
+        "w41": 30.0,
+        "w42": 60.0,
+        "l01": 13.5,
+        "l02": 19.0,
+        "l12": 10.0,
+        "l03": 50.0,
+        "l13": 27.0,
+        "l23": 29.0,
+        "ss": 2.95,
+        "sp": 13.0,
+        "sf": 28.0,
+        "ps": 4.3,
+        "pp": 5.75,
+        "pf": 8.75,
+        "fs": 22.0,
+        "fp": 13.0,
+        "ff": 6.25
       },
-      "h_icon": "/teamPic/9VQMqaL8c2jtmd5.png",
-      "g_icon": "team/2023-08/50b92070fb07ba82d033ed0cda1e0938486593cd.png",
+      "h_icon": "team/2023-08/bbc6671950ff977636af903c21fd71e3e5cb653d.png",
+      "g_icon": "/teamPic/CKcXvuDmw8e7V2g.png",
       "home_id": 0,
       "away_id": 0,
-      "home_logo": "/teamPic/9VQMqaL8c2jtmd5.png",
-      "away_logo": "team/2023-08/50b92070fb07ba82d033ed0cda1e0938486593cd.png",
-      "id": 1,
+      "home_logo": "team/2023-08/bbc6671950ff977636af903c21fd71e3e5cb653d.png",
+      "away_logo": "/teamPic/CKcXvuDmw8e7V2g.png",
+      "id": 2,
       "date": "2026-03-18",
       "home_stats": {
         "played": 25,
-        "wins": 15,
+        "wins": 13,
         "draws": 6,
-        "losses": 4,
-        "goals_for": 44,
-        "goals_against": 16,
-        "avg_goals_for": "1.75",
-        "avg_goals_against": "0.64",
-        "clean_sheets": 5,
+        "losses": 6,
+        "goals_for": 37,
+        "goals_against": 22,
+        "avg_goals_for": "1.48",
+        "avg_goals_against": "0.89",
+        "clean_sheets": 4,
         "form": "WWDWW",
-        "rank": 4
+        "rank": 7
       },
       "away_stats": {
         "played": 25,
         "wins": 9,
         "draws": 6,
         "losses": 10,
-        "goals_for": 26,
-        "goals_against": 33,
-        "avg_goals_for": "1.03",
-        "avg_goals_against": "1.31",
+        "goals_for": 24,
+        "goals_against": 34,
+        "avg_goals_for": "0.97",
+        "avg_goals_against": "1.36",
         "clean_sheets": 3,
         "form": "LDWDL",
-        "rank": 2
+        "rank": 12
       },
       "h2h": [],
       "prediction": {
-        "predicted_score": "2-0",
-        "home_win_pct": 51.5,
-        "draw_pct": 27.9,
-        "away_win_pct": 20.6,
-        "confidence": 59,
-        "result": "主胜",
-        "risk_level": "中",
+        "predicted_score": "1-1",
+        "home_win_pct": 25.7,
+        "draw_pct": 66.1,
+        "away_win_pct": 8.2,
+        "confidence": 83,
+        "result": "平局",
+        "risk_level": "低",
         "over_under_2_5": "小",
         "both_score": "否",
-        "gpt_score": "2-0",
-        "gpt_analysis": "布拉加主场表现强势，近5个主场4胜1平，且整体场均失球仅0.64，基础防守质量更高。虽然主队有数名伤员，但更多影响轮换深度，核心主场压制力仍在。费伦茨近期战绩亮眼，但本场伤停与轮休名单很长，尤其门将迪布兹、扎卡里亚森等缺阵削弱阵容完整性，客队防线稳定性和反击效率都受影响。战意方面，布拉加首回合0比2落后，回到主场必然主动提速强攻，形成更高比赛节奏；费伦茨拥有总比分优势，倾向收缩，但残缺阵容下抗压难度增大。综合伤停、主客场状态、追分战意与对位压制，布拉加更可能零封取胜。",
-        "grok_score": "2-1",
-        "grok_analysis": "Braga boosted by excellent home record (4W1D last 5) and high motivation in title race/Europa chase despite defensive injuries; Ferencvaros hot streak nullified by extensive suspensions (including GK Dibusz) and absences lowering attack output.",
-        "gemini_score": "-",
-        "gemini_analysis": "N/A",
+        "gpt_score": "-",
+        "gpt_analysis": "N/A",
+        "grok_score": "1-1",
+        "grok_analysis": "Home unbeaten 10 vs Norwich 4-win streak; H2H draw; top CRS 1-1 (15.9%); balanced injuries -> 1-1",
+        "gemini_score": "1-1",
+        "gemini_analysis": "format error",
         "claude_score": "-",
         "claude_analysis": "N/A",
-        "model_agreement": false,
-        "poisson": {
-          "home_xg": 1.39,
-          "away_xg": 0.76
+        "model_agreement": true,
+        "candidate_scores": {
+          "1-1": 1.1
         },
-        "expected_total_goals": 2.15,
+        "poisson": {
+          "home_win": 79.0,
+          "draw": 15.2,
+          "away_win": 5.8,
+          "predicted_score": "2-0",
+          "home_xg": 2.28,
+          "away_xg": 0.45,
+          "btts": 32.5,
+          "over_2_5": 51.1,
+          "top_scores": [
+            {
+              "score": "2-0",
+              "prob": 16.9
+            },
+            {
+              "score": "1-0",
+              "prob": 14.9
+            },
+            {
+              "score": "3-0",
+              "prob": 12.9
+            },
+            {
+              "score": "2-1",
+              "prob": 7.6
+            },
+            {
+              "score": "4-0",
+              "prob": 7.3
+            },
+            {
+              "score": "1-1",
+              "prob": 6.7
+            }
+          ],
+          "home_expected_goals": 2.28
+        },
+        "refined_poisson": {
+          "home_win": 65.0,
+          "draw": 22.3,
+          "away_win": 12.7,
+          "predicted_score": "2-0",
+          "top_scores": [
+            {
+              "score": "2-0",
+              "prob": 13.2
+            },
+            {
+              "score": "1-0",
+              "prob": 13.1
+            },
+            {
+              "score": "1-1",
+              "prob": 12.9
+            },
+            {
+              "score": "2-1",
+              "prob": 12.5
+            },
+            {
+              "score": "3-0",
+              "prob": 8.4
+            },
+            {
+              "score": "0-0",
+              "prob": 5.9
+            }
+          ]
+        },
+        "value_bets_summary": [
+          "平局 EV:+128.04% Kelly:13.07%"
+        ],
         "extreme_warning": "无",
+        "smart_money_signal": "💰 Sharp资金流向主胜",
         "smart_signals": [
           "💰 Sharp资金流向主胜"
         ],
-        "elo": {
-          "home_win": 39.5,
-          "draw": 26.0,
-          "away_win": 47.5,
-          "elo_diff": -32
-        },
-        "random_forest": {
-          "home_win": 72.3,
-          "draw": 18.5,
-          "away_win": 9.2
-        },
+        "model_consensus": 3,
+        "total_models": 11,
+        "expected_total_goals": 2.5,
         "top_scores": [
           {
+            "score": "2-0",
+            "prob": 13.2
+          },
+          {
             "score": "1-0",
-            "prob": 15.8
+            "prob": 13.1
           },
           {
             "score": "1-1",
+            "prob": 12.9
+          },
+          {
+            "score": "2-1",
             "prob": 12.5
           },
           {
+            "score": "3-0",
+            "prob": 8.4
+          },
+          {
             "score": "0-0",
-            "prob": 12.0
-          },
-          {
-            "score": "2-0",
-            "prob": 11.9
-          },
-          {
-            "score": "0-1",
-            "prob": 9.0
+            "prob": 5.9
           }
-        ]
+        ],
+        "elo": {
+          "home_win": 59.4,
+          "draw": 20.0,
+          "away_win": 30.6,
+          "elo_diff": 115
+        },
+        "random_forest": {
+          "home_win": 53.3,
+          "draw": 24.9,
+          "away_win": 21.8
+        },
+        "gradient_boost": {
+          "home_win": 52.2,
+          "draw": 26.4,
+          "away_win": 21.5
+        },
+        "neural_net": {
+          "home_win": 51.3,
+          "draw": 25.4,
+          "away_win": 23.3
+        },
+        "logistic": {
+          "home_win": 52.1,
+          "draw": 26.3,
+          "away_win": 21.6
+        },
+        "svm": {
+          "home_win": 52.4,
+          "draw": 24.7,
+          "away_win": 22.9
+        },
+        "knn": {
+          "home_win": 51.5,
+          "draw": 26.0,
+          "away_win": 22.4
+        },
+        "dixon_coles": {
+          "home_win": 67.3,
+          "draw": 21.2,
+          "away_win": 11.5
+        },
+        "bradley_terry": {
+          "home_win": 47.1,
+          "draw": 24.0,
+          "away_win": 28.9
+        },
+        "home_form": {
+          "score": 86.7,
+          "trend": "上升",
+          "momentum": 86.7,
+          "streak": 2,
+          "streak_type": "W"
+        },
+        "away_form": {
+          "score": 33.3,
+          "trend": "一般",
+          "momentum": 33.3,
+          "streak": 1,
+          "streak_type": "L"
+        },
+        "handicap_signal": "⚠️ 盘口偏离",
+        "odds_movement": {
+          "signal": "💰 Sharp资金流向主胜",
+          "h_adj": 6,
+          "a_adj": -5,
+          "d_adj": 0
+        },
+        "vote_analysis": {
+          "signal": "均衡",
+          "adj_h": 0,
+          "adj_a": 0
+        },
+        "h2h_blood": {
+          "h_adj": 0.0,
+          "a_adj": 0.0,
+          "signal": "无交锋",
+          "avg_goals": 2.5
+        },
+        "crs_analysis": {
+          "top_scores": [],
+          "signals": []
+        },
+        "ttg_analysis": {
+          "expected_goals": 2.5,
+          "over_2_5": 50,
+          "probs": {}
+        },
+        "halftime": {
+          "top": [],
+          "halftime_draw_prob": 0
+        },
+        "over_2_5": 50,
+        "btts": 32.5,
+        "pace_rating": "中等",
+        "kelly_home": {
+          "kelly": 8.8,
+          "value": "True",
+          "edge": 27.4
+        },
+        "kelly_away": {
+          "kelly": 0.0,
+          "value": "False",
+          "edge": -79.1
+        },
+        "odds": {
+          "implied_home": 49.6,
+          "implied_draw": 25.8,
+          "implied_away": 24.7
+        }
       },
-      "recommend_score": 23.6,
+      "recommend_score": 77.82,
       "is_recommended": true,
       "fusion_summary": "weighted"
     },
     {
-      "rank": 4,
+      "rank": 3,
       "home_team": "拜仁",
       "away_team": "亚特兰大",
       "league": "欧冠",
@@ -609,7 +788,7 @@
       "away_id": 0,
       "home_logo": "team/2023-08/59cecffd93bd3d030d48a902336c8a501b41b3e9.png",
       "away_logo": "/teamPic/ojTeZY7VKg8OqEa.png",
-      "id": 5,
+      "id": 4,
       "date": "2026-03-18",
       "home_stats": {
         "played": 25,
@@ -639,68 +818,599 @@
       },
       "h2h": [],
       "prediction": {
-        "predicted_score": "2-0",
-        "home_win_pct": 51.5,
-        "draw_pct": 28.1,
-        "away_win_pct": 20.4,
-        "confidence": 59,
+        "predicted_score": "3-1",
+        "home_win_pct": 88.2,
+        "draw_pct": 10.0,
+        "away_win_pct": 1.8,
+        "confidence": 67,
         "result": "主胜",
         "risk_level": "中",
         "over_under_2_5": "小",
         "both_score": "否",
-        "gpt_score": "2-0",
-        "gpt_analysis": "拜仁联赛领跑且欧冠战意强，近期整体状态明显优于亚特兰大，主场压制力和上半场领先能力都很突出。进攻端虽有穆西亚拉、奥利塞缺阵，削弱前场创造力，因此进攻加成有限；但亚特兰大近期客场表现一般、防线稳定性不足，仍难完全限制拜仁。防守端拜仁受诺伊尔、基米希、戴维斯缺席影响更大，体系完整性下降，但亚特兰大近期进攻效率偏低、状态起伏，客队进攻提升空间有限。整体看比赛节奏略偏快，拜仁优势明确，最可能结果为2比0。",
+        "gpt_score": "-",
+        "gpt_analysis": "N/A",
         "grok_score": "3-1",
-        "grok_analysis": "Bayern's elite home form (WWDWW), high motivation from title race/UCL and 6-1 first-leg dominance outweigh heavy injuries (Neuer/Davies/Kimmich/Musiala/Olise out); Atalanta's poor away form (LDWDL) and low output limit threat despite single suspension.",
-        "gemini_score": "-",
-        "gemini_analysis": "N/A",
+        "grok_analysis": "Bayern to win 3-1: #1 rank, strong form, huge 6-1 first leg despite injuries; Atalanta #7 weak LDWDL form.",
+        "gemini_score": "2-0",
+        "gemini_analysis": "format error",
         "claude_score": "-",
         "claude_analysis": "N/A",
         "model_agreement": false,
+        "candidate_scores": {
+          "3-1": 0.4,
+          "2-0": 0.25
+        },
         "poisson": {
-          "home_xg": 1.37,
-          "away_xg": 0.75
+          "home_win": 90.7,
+          "draw": 7.1,
+          "away_win": 2.2,
+          "predicted_score": "3-0",
+          "home_xg": 3.3,
+          "away_xg": 0.4,
+          "btts": 31.1,
+          "over_2_5": 69.5,
+          "top_scores": [
+            {
+              "score": "3-0",
+              "prob": 14.8
+            },
+            {
+              "score": "2-0",
+              "prob": 13.5
+            },
+            {
+              "score": "4-0",
+              "prob": 12.2
+            },
+            {
+              "score": "1-0",
+              "prob": 8.2
+            },
+            {
+              "score": "5-0",
+              "prob": 8.1
+            },
+            {
+              "score": "3-1",
+              "prob": 5.9
+            }
+          ],
+          "home_expected_goals": 3.3
         },
-        "expected_total_goals": 2.12,
-        "extreme_warning": "无",
-        "smart_signals": [
-          "💰 Sharp资金流向客胜"
+        "refined_poisson": {
+          "home_win": 80.3,
+          "draw": 12.8,
+          "away_win": 6.9,
+          "predicted_score": "3-0",
+          "top_scores": [
+            {
+              "score": "3-0",
+              "prob": 12.1
+            },
+            {
+              "score": "2-1",
+              "prob": 12.0
+            },
+            {
+              "score": "2-0",
+              "prob": 11.5
+            },
+            {
+              "score": "1-0",
+              "prob": 8.8
+            },
+            {
+              "score": "3-1",
+              "prob": 8.1
+            },
+            {
+              "score": "4-0",
+              "prob": 8.0
+            }
+          ]
+        },
+        "value_bets_summary": [
+          "主胜 EV:+8.49% Kelly:9.22%"
         ],
-        "elo": {
-          "home_win": 57.1,
-          "draw": 20.0,
-          "away_win": 32.9,
-          "elo_diff": 96
-        },
-        "random_forest": {
-          "home_win": 79.0,
-          "draw": 15.0,
-          "away_win": 6.0
-        },
+        "extreme_warning": "无",
+        "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热72%",
+        "smart_signals": [
+          "💰 Sharp资金流向客胜",
+          "🚨 主胜超热72%"
+        ],
+        "model_consensus": 3,
+        "total_models": 11,
+        "expected_total_goals": 2.5,
         "top_scores": [
           {
+            "score": "3-0",
+            "prob": 12.1
+          },
+          {
+            "score": "2-1",
+            "prob": 12.0
+          },
+          {
+            "score": "2-0",
+            "prob": 11.5
+          },
+          {
             "score": "1-0",
-            "prob": 16.1
+            "prob": 8.8
           },
           {
-            "score": "1-1",
-            "prob": 12.8
+            "score": "3-1",
+            "prob": 8.1
           },
           {
-            "score": "0-0",
-            "prob": 11.7
+            "score": "4-0",
+            "prob": 8.0
+          }
+        ],
+        "elo": {
+          "home_win": 61.1,
+          "draw": 20.0,
+          "away_win": 28.9,
+          "elo_diff": 130
+        },
+        "random_forest": {
+          "home_win": 76.8,
+          "draw": 15.4,
+          "away_win": 7.9
+        },
+        "gradient_boost": {
+          "home_win": 75.4,
+          "draw": 16.7,
+          "away_win": 7.9
+        },
+        "neural_net": {
+          "home_win": 75.3,
+          "draw": 16.0,
+          "away_win": 8.7
+        },
+        "logistic": {
+          "home_win": 75.3,
+          "draw": 16.9,
+          "away_win": 7.8
+        },
+        "svm": {
+          "home_win": 76.7,
+          "draw": 15.1,
+          "away_win": 8.1
+        },
+        "knn": {
+          "home_win": 75.6,
+          "draw": 16.5,
+          "away_win": 7.9
+        },
+        "dixon_coles": {
+          "home_win": 80.4,
+          "draw": 13.6,
+          "away_win": 6.0
+        },
+        "bradley_terry": {
+          "home_win": 52.7,
+          "draw": 24.0,
+          "away_win": 23.3
+        },
+        "home_form": {
+          "score": 86.7,
+          "trend": "上升",
+          "momentum": 86.7,
+          "streak": 2,
+          "streak_type": "W"
+        },
+        "away_form": {
+          "score": 33.3,
+          "trend": "一般",
+          "momentum": 33.3,
+          "streak": 1,
+          "streak_type": "L"
+        },
+        "handicap_signal": "⚠️ 盘口偏离",
+        "odds_movement": {
+          "signal": "💰 Sharp资金流向客胜",
+          "h_adj": -5,
+          "a_adj": 6,
+          "d_adj": 0
+        },
+        "vote_analysis": {
+          "signal": "🚨 主胜超热72%",
+          "adj_h": -6,
+          "adj_a": 3
+        },
+        "h2h_blood": {
+          "h_adj": 0.0,
+          "a_adj": 0.0,
+          "signal": "无交锋",
+          "avg_goals": 2.5
+        },
+        "crs_analysis": {
+          "top_scores": [],
+          "signals": []
+        },
+        "ttg_analysis": {
+          "expected_goals": 2.5,
+          "over_2_5": 50,
+          "probs": {}
+        },
+        "halftime": {
+          "top": [],
+          "halftime_draw_prob": 0
+        },
+        "over_2_5": 50,
+        "btts": 31.1,
+        "pace_rating": "极快",
+        "kelly_home": {
+          "kelly": 10.29,
+          "value": "True",
+          "edge": 9.5
+        },
+        "kelly_away": {
+          "kelly": 0,
+          "value": false,
+          "edge": 0
+        },
+        "odds": {
+          "implied_home": 71.8,
+          "implied_draw": 16.3,
+          "implied_away": 11.9
+        }
+      },
+      "recommend_score": 52.75,
+      "is_recommended": true,
+      "fusion_summary": "weighted"
+    },
+    {
+      "rank": 4,
+      "home_team": "巴萨",
+      "away_team": "纽卡斯尔",
+      "league": "欧冠",
+      "match_num": "周三007",
+      "match_time": "01:45",
+      "sp_home": 1.42,
+      "sp_draw": 4.3,
+      "sp_away": 5.2,
+      "give_ball": -1,
+      "change": {
+        "win": 1,
+        "same": -1,
+        "lose": 0
+      },
+      "vote": {
+        "win": "63",
+        "same": "21",
+        "lose": "16",
+        "hhad_win": "40",
+        "hhad_same": "24",
+        "hhad_lose": "36"
+      },
+      "odds_movement": "主胜升水，客胜平稳",
+      "handicap_info": "让-1",
+      "intelligence": {
+        "h_inj": "克里斯滕森 受伤 膝关节受伤 弗兰基·德容 受伤 腿筋受伤 朱尔·孔德 受伤 腿筋受伤 亚历杭德罗·巴尔德 受伤 腿筋受伤",
+        "g_inj": "法比安·舍尔 受伤 踝关节受伤 马克·吉莱斯皮 停赛 轮休 埃米尔·克拉夫特 受伤 膝关节损伤 布鲁诺·吉马良斯 受伤 肌肉受伤 刘易斯·麦利 受伤 膝关节损伤"
+      },
+      "expert_intro": "巴萨今季主场战斗力之强有目共睹，今仗次回合移师主场面对作客能力有限的纽卡斯尔，巴萨必定会取胜晋级。",
+      "baseface": "主队是西甲的球队，目前在联赛中28轮积70分，排在第1位，状态火热。客队是英超的球队，目前在联赛中30轮积42分，排在第9位。\n主队各项赛事近6场5胜1平，状态上佳;近5个主场全胜，主场状态火热。客队各项赛事近6场3胜1平2负，状态一般;近5个客场4胜1负，客场状态上佳。\n综合来看，主队优势较大。\n在本次欧冠杯上回合的比赛中，巴塞罗那客场1:1战平纽卡斯尔。双方近2次交锋，巴塞罗那取得1胜1平，占据上风。\n本场半全场分析\n主队上半场领先的可能性为74%\n主队近6场主场的上半场:\n领先5，打平0，落后1/5场有进球，2场有失球\n客队近6场客场的上半场:\n落后3，打平0，领先3/3场有失球，4场有进球",
+      "had_analyse": [
+        "win"
+      ],
+      "home_rank": 1,
+      "away_rank": 9,
+      "v2_odds_dict": {
+        "a0": 29.0,
+        "a1": 9.0,
+        "a2": 5.0,
+        "a3": 3.5,
+        "a4": 3.95,
+        "a5": 6.0,
+        "a6": 9.7,
+        "a7": 10.0,
+        "s00": 29.0,
+        "s11": 9.5,
+        "s22": 12.0,
+        "s33": 30.0,
+        "w10": 12.0,
+        "w20": 10.0,
+        "w21": 7.0,
+        "w30": 13.0,
+        "w31": 9.5,
+        "w32": 13.0,
+        "w40": 22.0,
+        "w41": 17.0,
+        "w42": 24.0,
+        "l01": 24.0,
+        "l02": 35.0,
+        "l12": 15.0,
+        "l03": 70.0,
+        "l13": 33.0,
+        "l23": 28.0,
+        "ss": 2.05,
+        "sp": 17.0,
+        "sf": 31.0,
+        "ps": 4.2,
+        "pp": 8.5,
+        "pf": 12.0,
+        "fs": 18.0,
+        "fp": 17.0,
+        "ff": 8.2
+      },
+      "h_icon": "team/2023-08/d520396e6cea40d1caa4b3623a3e09171a7f3363.png",
+      "g_icon": "team/2023-08/bb3b773aff22348e9c2d098f3b8223bbf90a8c16.png",
+      "home_id": 0,
+      "away_id": 0,
+      "home_logo": "team/2023-08/d520396e6cea40d1caa4b3623a3e09171a7f3363.png",
+      "away_logo": "team/2023-08/bb3b773aff22348e9c2d098f3b8223bbf90a8c16.png",
+      "id": 1,
+      "date": "2026-03-18",
+      "home_stats": {
+        "played": 25,
+        "wins": 15,
+        "draws": 6,
+        "losses": 4,
+        "goals_for": 44,
+        "goals_against": 16,
+        "avg_goals_for": "1.76",
+        "avg_goals_against": "0.63",
+        "clean_sheets": 5,
+        "form": "WWDWW",
+        "rank": 1
+      },
+      "away_stats": {
+        "played": 25,
+        "wins": 8,
+        "draws": 6,
+        "losses": 11,
+        "goals_for": 23,
+        "goals_against": 35,
+        "avg_goals_for": "0.92",
+        "avg_goals_against": "1.41",
+        "clean_sheets": 3,
+        "form": "LDWDL",
+        "rank": 9
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "2-1",
+        "home_win_pct": 85.1,
+        "draw_pct": 10.0,
+        "away_win_pct": 4.9,
+        "confidence": 66,
+        "result": "主胜",
+        "risk_level": "中",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "gpt_score": "-",
+        "gpt_analysis": "N/A",
+        "grok_score": "2-1",
+        "grok_analysis": "Barcelona home dominance (5 straight wins), title-race motivation, prior 1-1 draw favor 2-1; Newcastle weaker form/league rank offset by injuries per CRS top prob.",
+        "gemini_score": "2-0",
+        "gemini_analysis": "format error",
+        "claude_score": "-",
+        "claude_analysis": "N/A",
+        "model_agreement": false,
+        "candidate_scores": {
+          "2-1": 0.4,
+          "2-0": 0.25
+        },
+        "poisson": {
+          "home_win": 89.1,
+          "draw": 8.3,
+          "away_win": 2.6,
+          "predicted_score": "3-0",
+          "home_xg": 3.09,
+          "away_xg": 0.4,
+          "btts": 31.0,
+          "over_2_5": 66.4,
+          "top_scores": [
+            {
+              "score": "3-0",
+              "prob": 15.0
+            },
+            {
+              "score": "2-0",
+              "prob": 14.6
+            },
+            {
+              "score": "4-0",
+              "prob": 11.6
+            },
+            {
+              "score": "1-0",
+              "prob": 9.4
+            },
+            {
+              "score": "5-0",
+              "prob": 7.2
+            },
+            {
+              "score": "3-1",
+              "prob": 6.0
+            }
+          ],
+          "home_expected_goals": 3.09
+        },
+        "refined_poisson": {
+          "home_win": 77.5,
+          "draw": 14.7,
+          "away_win": 7.8,
+          "predicted_score": "2-1",
+          "top_scores": [
+            {
+              "score": "2-1",
+              "prob": 12.3
+            },
+            {
+              "score": "3-0",
+              "prob": 11.5
+            },
+            {
+              "score": "2-0",
+              "prob": 11.4
+            },
+            {
+              "score": "1-0",
+              "prob": 9.1
+            },
+            {
+              "score": "3-1",
+              "prob": 7.9
+            },
+            {
+              "score": "1-1",
+              "prob": 7.2
+            }
+          ]
+        },
+        "value_bets_summary": [
+          "主胜 EV:+20.84% Kelly:12.41%"
+        ],
+        "extreme_warning": "无",
+        "smart_money_signal": "🚨 主胜超热63%",
+        "smart_signals": [
+          "🚨 主胜超热63%"
+        ],
+        "model_consensus": 3,
+        "total_models": 11,
+        "expected_total_goals": 2.5,
+        "top_scores": [
+          {
+            "score": "2-1",
+            "prob": 12.3
+          },
+          {
+            "score": "3-0",
+            "prob": 11.5
           },
           {
             "score": "2-0",
             "prob": 11.4
           },
           {
-            "score": "0-1",
-            "prob": 9.2
+            "score": "1-0",
+            "prob": 9.1
+          },
+          {
+            "score": "3-1",
+            "prob": 7.9
+          },
+          {
+            "score": "1-1",
+            "prob": 7.2
           }
-        ]
+        ],
+        "elo": {
+          "home_win": 64.4,
+          "draw": 20.0,
+          "away_win": 25.6,
+          "elo_diff": 160
+        },
+        "random_forest": {
+          "home_win": 67.5,
+          "draw": 19.9,
+          "away_win": 12.6
+        },
+        "gradient_boost": {
+          "home_win": 66.5,
+          "draw": 21.3,
+          "away_win": 12.2
+        },
+        "neural_net": {
+          "home_win": 65.5,
+          "draw": 20.4,
+          "away_win": 14.1
+        },
+        "logistic": {
+          "home_win": 66.1,
+          "draw": 21.4,
+          "away_win": 12.5
+        },
+        "svm": {
+          "home_win": 66.8,
+          "draw": 19.6,
+          "away_win": 13.6
+        },
+        "knn": {
+          "home_win": 65.8,
+          "draw": 21.0,
+          "away_win": 13.2
+        },
+        "dixon_coles": {
+          "home_win": 78.4,
+          "draw": 14.8,
+          "away_win": 6.8
+        },
+        "bradley_terry": {
+          "home_win": 51.6,
+          "draw": 24.0,
+          "away_win": 24.4
+        },
+        "home_form": {
+          "score": 86.7,
+          "trend": "上升",
+          "momentum": 86.7,
+          "streak": 2,
+          "streak_type": "W"
+        },
+        "away_form": {
+          "score": 33.3,
+          "trend": "一般",
+          "momentum": 33.3,
+          "streak": 1,
+          "streak_type": "L"
+        },
+        "handicap_signal": "⚠️ 盘口偏离",
+        "odds_movement": {
+          "signal": "正常",
+          "h_adj": 0,
+          "a_adj": 0,
+          "d_adj": 0
+        },
+        "vote_analysis": {
+          "signal": "🚨 主胜超热63%",
+          "adj_h": -6,
+          "adj_a": 3
+        },
+        "h2h_blood": {
+          "h_adj": 0.0,
+          "a_adj": 0.0,
+          "signal": "无交锋",
+          "avg_goals": 2.5
+        },
+        "crs_analysis": {
+          "top_scores": [],
+          "signals": []
+        },
+        "ttg_analysis": {
+          "expected_goals": 2.5,
+          "over_2_5": 50,
+          "probs": {}
+        },
+        "halftime": {
+          "top": [],
+          "halftime_draw_prob": 0
+        },
+        "over_2_5": 50,
+        "btts": 31.0,
+        "pace_rating": "中等",
+        "kelly_home": {
+          "kelly": 8.6,
+          "value": "True",
+          "edge": 14.5
+        },
+        "kelly_away": {
+          "kelly": 0.0,
+          "value": "False",
+          "edge": -93.2
+        },
+        "odds": {
+          "implied_home": 62.1,
+          "implied_draw": 20.8,
+          "implied_away": 17.2
+        }
       },
-      "recommend_score": 23.6,
+      "recommend_score": 51.62,
       "is_recommended": true,
       "fusion_summary": "weighted"
     }
@@ -708,180 +1418,6 @@
   "matches": {
     "yesterday": [],
     "today": [
-      {
-        "home_team": "布拉加",
-        "away_team": "费伦茨",
-        "league": "欧罗巴",
-        "match_num": "周三006",
-        "match_time": "23:30",
-        "sp_home": 1.31,
-        "sp_draw": 4.5,
-        "sp_away": 7.0,
-        "give_ball": -1,
-        "change": {
-          "win": -1,
-          "same": 1,
-          "lose": 1
-        },
-        "vote": {
-          "win": "67",
-          "same": "20",
-          "lose": "13",
-          "hhad_win": "41",
-          "hhad_same": "27",
-          "hhad_lose": "32"
-        },
-        "odds_movement": "主胜降水，客胜升水",
-        "handicap_info": "让-1",
-        "intelligence": {
-          "h_inj": "斯库·尼亚卡特 受伤 维托·卡瓦略 受伤 受伤 阿德里安·莱昂·巴里西奇 受伤 肌肉挫伤 阿明·埃尔·瓦扎尼 足部受伤",
-          "g_inj": "克里斯托弗·扎卡里亚森 停赛 累计黄牌停赛 斯特凡·加滕曼 受伤 受伤 德内斯·迪布兹 停赛 轮休 埃尔顿·阿科拉特斯 停赛 轮休 马吕斯·科尔布 停赛 轮休 卡延 停赛 轮休 阿提拉·奥斯瓦特 停赛 轮休 本斯·奥特沃斯 受伤 受伤"
-        },
-        "expert_intro": "费伦茨近期状态正佳，加之首回合还取得2比0零封胜利，心理层面佔据上风的费伦茨此行肯定能够凯旋。",
-        "baseface": "主队是葡超的球队，目前在联赛中25轮积46分，排在第4位。客队是匈甲的球队，目前在联赛中25轮积49分，排在第2位，状态出色。\n主队各项赛事近6场3胜1平2负，状态一般;近5个主场4胜1平，主场状态上佳。客队各项赛事近6场全胜，状态火热;近5个客场3胜2负，客场状态不错。\n综合来看，差距不大。\n在本次欧罗巴杯上回合的比赛中，布拉加客场0:2负于费伦茨。\n本场半全场分析\n主队上半场领先的可能性为64%\n主队近6场主场的上半场:\n领先4，打平1，落后1/5场有进球，3场有失球\n客队近6场客场的上半场:\n落后0，打平2，领先4/2场有失球，5场有进球",
-        "had_analyse": [
-          "lose"
-        ],
-        "home_rank": 4,
-        "away_rank": 2,
-        "v2_odds_dict": {
-          "a0": 14.0,
-          "a1": 5.75,
-          "a2": 3.75,
-          "a3": 3.25,
-          "a4": 4.75,
-          "a5": 8.75,
-          "a6": 15.0,
-          "a7": 23.0,
-          "s00": 14.0,
-          "s11": 8.5,
-          "s22": 16.0,
-          "s33": 70.0,
-          "w10": 6.5,
-          "w20": 7.0,
-          "w21": 7.0,
-          "w30": 10.0,
-          "w31": 9.0,
-          "w32": 23.0,
-          "w40": 18.0,
-          "w41": 19.0,
-          "w42": 40.0,
-          "l01": 16.0,
-          "l02": 36.0,
-          "l12": 18.0,
-          "l03": 80.0,
-          "l13": 55.0,
-          "l23": 55.0,
-          "ss": 1.8,
-          "sp": 19.0,
-          "sf": 45.0,
-          "ps": 4.1,
-          "pp": 7.25,
-          "pf": 16.0,
-          "fs": 23.0,
-          "fp": 19.0,
-          "ff": 12.0
-        },
-        "h_icon": "/teamPic/9VQMqaL8c2jtmd5.png",
-        "g_icon": "team/2023-08/50b92070fb07ba82d033ed0cda1e0938486593cd.png",
-        "home_id": 0,
-        "away_id": 0,
-        "home_logo": "/teamPic/9VQMqaL8c2jtmd5.png",
-        "away_logo": "team/2023-08/50b92070fb07ba82d033ed0cda1e0938486593cd.png",
-        "id": 1,
-        "date": "2026-03-18",
-        "home_stats": {
-          "played": 25,
-          "wins": 15,
-          "draws": 6,
-          "losses": 4,
-          "goals_for": 44,
-          "goals_against": 16,
-          "avg_goals_for": "1.75",
-          "avg_goals_against": "0.64",
-          "clean_sheets": 5,
-          "form": "WWDWW",
-          "rank": 4
-        },
-        "away_stats": {
-          "played": 25,
-          "wins": 9,
-          "draws": 6,
-          "losses": 10,
-          "goals_for": 26,
-          "goals_against": 33,
-          "avg_goals_for": "1.03",
-          "avg_goals_against": "1.31",
-          "clean_sheets": 3,
-          "form": "LDWDL",
-          "rank": 2
-        },
-        "h2h": [],
-        "prediction": {
-          "predicted_score": "2-0",
-          "home_win_pct": 51.5,
-          "draw_pct": 27.9,
-          "away_win_pct": 20.6,
-          "confidence": 59,
-          "result": "主胜",
-          "risk_level": "中",
-          "over_under_2_5": "小",
-          "both_score": "否",
-          "gpt_score": "2-0",
-          "gpt_analysis": "布拉加主场表现强势，近5个主场4胜1平，且整体场均失球仅0.64，基础防守质量更高。虽然主队有数名伤员，但更多影响轮换深度，核心主场压制力仍在。费伦茨近期战绩亮眼，但本场伤停与轮休名单很长，尤其门将迪布兹、扎卡里亚森等缺阵削弱阵容完整性，客队防线稳定性和反击效率都受影响。战意方面，布拉加首回合0比2落后，回到主场必然主动提速强攻，形成更高比赛节奏；费伦茨拥有总比分优势，倾向收缩，但残缺阵容下抗压难度增大。综合伤停、主客场状态、追分战意与对位压制，布拉加更可能零封取胜。",
-          "grok_score": "2-1",
-          "grok_analysis": "Braga boosted by excellent home record (4W1D last 5) and high motivation in title race/Europa chase despite defensive injuries; Ferencvaros hot streak nullified by extensive suspensions (including GK Dibusz) and absences lowering attack output.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
-          "claude_score": "-",
-          "claude_analysis": "N/A",
-          "model_agreement": false,
-          "poisson": {
-            "home_xg": 1.39,
-            "away_xg": 0.76
-          },
-          "expected_total_goals": 2.15,
-          "extreme_warning": "无",
-          "smart_signals": [
-            "💰 Sharp资金流向主胜"
-          ],
-          "elo": {
-            "home_win": 39.5,
-            "draw": 26.0,
-            "away_win": 47.5,
-            "elo_diff": -32
-          },
-          "random_forest": {
-            "home_win": 72.3,
-            "draw": 18.5,
-            "away_win": 9.2
-          },
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 15.8
-            },
-            {
-              "score": "1-1",
-              "prob": 12.5
-            },
-            {
-              "score": "0-0",
-              "prob": 12.0
-            },
-            {
-              "score": "2-0",
-              "prob": 11.9
-            },
-            {
-              "score": "0-1",
-              "prob": 9.0
-            }
-          ]
-        },
-        "recommend_score": 23.6,
-        "is_recommended": true
-      },
       {
         "home_team": "巴萨",
         "away_team": "纽卡斯尔",
@@ -899,8 +1435,8 @@
         },
         "vote": {
           "win": "63",
-          "same": "19",
-          "lose": "18",
+          "same": "21",
+          "lose": "16",
           "hhad_win": "40",
           "hhad_same": "24",
           "hhad_lose": "36"
@@ -962,7 +1498,7 @@
         "away_id": 0,
         "home_logo": "team/2023-08/d520396e6cea40d1caa4b3623a3e09171a7f3363.png",
         "away_logo": "team/2023-08/bb3b773aff22348e9c2d098f3b8223bbf90a8c16.png",
-        "id": 2,
+        "id": 1,
         "date": "2026-03-18",
         "home_stats": {
           "played": 25,
@@ -992,66 +1528,245 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "2-0",
-          "home_win_pct": 52.8,
-          "draw_pct": 27.0,
-          "away_win_pct": 20.3,
-          "confidence": 60,
+          "predicted_score": "2-1",
+          "home_win_pct": 85.1,
+          "draw_pct": 10.0,
+          "away_win_pct": 4.9,
+          "confidence": 66,
           "result": "主胜",
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "2-0",
-          "gpt_analysis": "巴萨近期状态明显更强，近6场5胜1平且主场5连胜，争冠背景下战意很高，进攻端得到稳定加成。虽然德容、孔德、巴尔德、克里斯滕森缺阵削弱了中后场控制与边路防守，因此主队防守系数下调，但纽卡斯尔自身进攻效率偏低，场均仅0.92球，近期整体表现也只是一般。客队伤缺中，吉马良斯和舍尔的缺席对中场推进与后防稳定性影响较大，使其攻防两端都受损。战术上巴萨更擅长控球压制，纽卡斯尔客场虽有一定反击表现，但首回合1比1后本场在巴萨主场更容易被压制，预计主队主导比赛并完成零封。",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
           "grok_score": "2-1",
-          "grok_analysis": "Barcelona's elite home form (5W last 5), title-race motivation and first-leg edge boost attack; severe defensive injuries (Kounde, Balde, Christensen, De Jong) weaken backline. Newcastle's key absences (Guimaraes, Schar) plus poor league rank blunt attack despite solid away record.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "grok_analysis": "Barcelona home dominance (5 straight wins), title-race motivation, prior 1-1 draw favor 2-1; Newcastle weaker form/league rank offset by injuries per CRS top prob.",
+          "gemini_score": "2-0",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
           "model_agreement": false,
+          "candidate_scores": {
+            "2-1": 0.4,
+            "2-0": 0.25
+          },
           "poisson": {
-            "home_xg": 1.41,
-            "away_xg": 0.74
+            "home_win": 89.1,
+            "draw": 8.3,
+            "away_win": 2.6,
+            "predicted_score": "3-0",
+            "home_xg": 3.09,
+            "away_xg": 0.4,
+            "btts": 31.0,
+            "over_2_5": 66.4,
+            "top_scores": [
+              {
+                "score": "3-0",
+                "prob": 15.0
+              },
+              {
+                "score": "2-0",
+                "prob": 14.6
+              },
+              {
+                "score": "4-0",
+                "prob": 11.6
+              },
+              {
+                "score": "1-0",
+                "prob": 9.4
+              },
+              {
+                "score": "5-0",
+                "prob": 7.2
+              },
+              {
+                "score": "3-1",
+                "prob": 6.0
+              }
+            ],
+            "home_expected_goals": 3.09
           },
-          "expected_total_goals": 2.15,
+          "refined_poisson": {
+            "home_win": 77.5,
+            "draw": 14.7,
+            "away_win": 7.8,
+            "predicted_score": "2-1",
+            "top_scores": [
+              {
+                "score": "2-1",
+                "prob": 12.3
+              },
+              {
+                "score": "3-0",
+                "prob": 11.5
+              },
+              {
+                "score": "2-0",
+                "prob": 11.4
+              },
+              {
+                "score": "1-0",
+                "prob": 9.1
+              },
+              {
+                "score": "3-1",
+                "prob": 7.9
+              },
+              {
+                "score": "1-1",
+                "prob": 7.2
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "主胜 EV:+20.84% Kelly:12.41%"
+          ],
           "extreme_warning": "无",
-          "smart_signals": [],
-          "elo": {
-            "home_win": 60.9,
-            "draw": 20.0,
-            "away_win": 29.1,
-            "elo_diff": 128
-          },
-          "random_forest": {
-            "home_win": 69.1,
-            "draw": 19.4,
-            "away_win": 11.5
-          },
+          "smart_money_signal": "🚨 主胜超热63%",
+          "smart_signals": [
+            "🚨 主胜超热63%"
+          ],
+          "model_consensus": 3,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 16.2
+              "score": "2-1",
+              "prob": 12.3
             },
             {
-              "score": "1-1",
-              "prob": 11.9
-            },
-            {
-              "score": "0-0",
-              "prob": 11.4
+              "score": "3-0",
+              "prob": 11.5
             },
             {
               "score": "2-0",
               "prob": 11.4
             },
             {
-              "score": "0-1",
-              "prob": 9.3
+              "score": "1-0",
+              "prob": 9.1
+            },
+            {
+              "score": "3-1",
+              "prob": 7.9
+            },
+            {
+              "score": "1-1",
+              "prob": 7.2
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 64.4,
+            "draw": 20.0,
+            "away_win": 25.6,
+            "elo_diff": 160
+          },
+          "random_forest": {
+            "home_win": 67.5,
+            "draw": 19.9,
+            "away_win": 12.6
+          },
+          "gradient_boost": {
+            "home_win": 66.5,
+            "draw": 21.3,
+            "away_win": 12.2
+          },
+          "neural_net": {
+            "home_win": 65.5,
+            "draw": 20.4,
+            "away_win": 14.1
+          },
+          "logistic": {
+            "home_win": 66.1,
+            "draw": 21.4,
+            "away_win": 12.5
+          },
+          "svm": {
+            "home_win": 66.8,
+            "draw": 19.6,
+            "away_win": 13.6
+          },
+          "knn": {
+            "home_win": 65.8,
+            "draw": 21.0,
+            "away_win": 13.2
+          },
+          "dixon_coles": {
+            "home_win": 78.4,
+            "draw": 14.8,
+            "away_win": 6.8
+          },
+          "bradley_terry": {
+            "home_win": 51.6,
+            "draw": 24.0,
+            "away_win": 24.4
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 33.3,
+            "trend": "一般",
+            "momentum": 33.3,
+            "streak": 1,
+            "streak_type": "L"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "正常",
+            "h_adj": 0,
+            "a_adj": 0,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "🚨 主胜超热63%",
+            "adj_h": -6,
+            "adj_a": 3
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 31.0,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 8.6,
+            "value": "True",
+            "edge": 14.5
+          },
+          "kelly_away": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -93.2
+          },
+          "odds": {
+            "implied_home": 62.1,
+            "implied_draw": 20.8,
+            "implied_away": 17.2
+          }
         },
-        "recommend_score": 24.0,
+        "recommend_score": 51.62,
         "is_recommended": true
       },
       {
@@ -1134,7 +1849,7 @@
         "away_id": 0,
         "home_logo": "team/2023-08/bbc6671950ff977636af903c21fd71e3e5cb653d.png",
         "away_logo": "/teamPic/CKcXvuDmw8e7V2g.png",
-        "id": 3,
+        "id": 2,
         "date": "2026-03-18",
         "home_stats": {
           "played": 25,
@@ -1164,69 +1879,245 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "2-0",
-          "home_win_pct": 46.3,
-          "draw_pct": 28.4,
-          "away_win_pct": 25.3,
-          "confidence": 54,
-          "result": "主胜",
-          "risk_level": "高",
+          "predicted_score": "1-1",
+          "home_win_pct": 25.7,
+          "draw_pct": 66.1,
+          "away_win_pct": 8.2,
+          "confidence": 83,
+          "result": "平局",
+          "risk_level": "低",
           "over_under_2_5": "小",
-          "both_score": "是",
-          "gpt_score": "2-0",
-          "gpt_analysis": "南安普敦近期联赛走势更稳，4胜2平且场均失球仅0.89，主场控制力较强。虽然前场有部分伤停和轮休，削弱了进攻厚度，但整体体系完整度仍高于诺维奇。诺维奇客场近期战绩不差，但伤停名单明显更长，尤其门将格里姆肖缺阵、后场与边路多人受损，防线稳定性下降。进攻端本就场均仅0.97球，再叠加人员不整，面对南安普敦较强的防守组织，破门难度偏高。战术上主队更可能以中高强度压制和持续控场取胜，比赛节奏不会极端开放，倾向主队零封赢球。",
-          "grok_score": "2-1",
-          "grok_analysis": "Southampton's strong WWDWW form and home tactical edge with limited forward/defensive injuries provide attack boost; Norwich's massive injury crisis across attack (Toure/Jurasek/Coric) and defense (Duffy/Grimshaw/Tobeck/Makama suspensions) severely weakens output despite recent form, leading to narrow home win in close h2h matchup.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "both_score": "否",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "1-1",
+          "grok_analysis": "Home unbeaten 10 vs Norwich 4-win streak; H2H draw; top CRS 1-1 (15.9%); balanced injuries -> 1-1",
+          "gemini_score": "1-1",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
-          "model_agreement": false,
-          "poisson": {
-            "home_xg": 1.25,
-            "away_xg": 0.84
+          "model_agreement": true,
+          "candidate_scores": {
+            "1-1": 1.1
           },
-          "expected_total_goals": 2.09,
+          "poisson": {
+            "home_win": 79.0,
+            "draw": 15.2,
+            "away_win": 5.8,
+            "predicted_score": "2-0",
+            "home_xg": 2.28,
+            "away_xg": 0.45,
+            "btts": 32.5,
+            "over_2_5": 51.1,
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 16.9
+              },
+              {
+                "score": "1-0",
+                "prob": 14.9
+              },
+              {
+                "score": "3-0",
+                "prob": 12.9
+              },
+              {
+                "score": "2-1",
+                "prob": 7.6
+              },
+              {
+                "score": "4-0",
+                "prob": 7.3
+              },
+              {
+                "score": "1-1",
+                "prob": 6.7
+              }
+            ],
+            "home_expected_goals": 2.28
+          },
+          "refined_poisson": {
+            "home_win": 65.0,
+            "draw": 22.3,
+            "away_win": 12.7,
+            "predicted_score": "2-0",
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 13.2
+              },
+              {
+                "score": "1-0",
+                "prob": 13.1
+              },
+              {
+                "score": "1-1",
+                "prob": 12.9
+              },
+              {
+                "score": "2-1",
+                "prob": 12.5
+              },
+              {
+                "score": "3-0",
+                "prob": 8.4
+              },
+              {
+                "score": "0-0",
+                "prob": 5.9
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "平局 EV:+128.04% Kelly:13.07%"
+          ],
           "extreme_warning": "无",
+          "smart_money_signal": "💰 Sharp资金流向主胜",
           "smart_signals": [
             "💰 Sharp资金流向主胜"
           ],
-          "elo": {
-            "home_win": 53.3,
-            "draw": 26.0,
-            "away_win": 33.7,
-            "elo_diff": 80
-          },
-          "random_forest": {
-            "home_win": 54.5,
-            "draw": 24.4,
-            "away_win": 21.1
-          },
+          "model_consensus": 3,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 15.6
+              "score": "2-0",
+              "prob": 13.2
             },
             {
-              "score": "0-0",
-              "prob": 12.6
+              "score": "1-0",
+              "prob": 13.1
             },
             {
               "score": "1-1",
-              "prob": 12.1
+              "prob": 12.9
             },
             {
-              "score": "0-1",
-              "prob": 10.6
+              "score": "2-1",
+              "prob": 12.5
             },
             {
-              "score": "2-0",
-              "prob": 9.9
+              "score": "3-0",
+              "prob": 8.4
+            },
+            {
+              "score": "0-0",
+              "prob": 5.9
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 59.4,
+            "draw": 20.0,
+            "away_win": 30.6,
+            "elo_diff": 115
+          },
+          "random_forest": {
+            "home_win": 53.3,
+            "draw": 24.9,
+            "away_win": 21.8
+          },
+          "gradient_boost": {
+            "home_win": 52.2,
+            "draw": 26.4,
+            "away_win": 21.5
+          },
+          "neural_net": {
+            "home_win": 51.3,
+            "draw": 25.4,
+            "away_win": 23.3
+          },
+          "logistic": {
+            "home_win": 52.1,
+            "draw": 26.3,
+            "away_win": 21.6
+          },
+          "svm": {
+            "home_win": 52.4,
+            "draw": 24.7,
+            "away_win": 22.9
+          },
+          "knn": {
+            "home_win": 51.5,
+            "draw": 26.0,
+            "away_win": 22.4
+          },
+          "dixon_coles": {
+            "home_win": 67.3,
+            "draw": 21.2,
+            "away_win": 11.5
+          },
+          "bradley_terry": {
+            "home_win": 47.1,
+            "draw": 24.0,
+            "away_win": 28.9
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 33.3,
+            "trend": "一般",
+            "momentum": 33.3,
+            "streak": 1,
+            "streak_type": "L"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "💰 Sharp资金流向主胜",
+            "h_adj": 6,
+            "a_adj": -5,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "均衡",
+            "adj_h": 0,
+            "adj_a": 0
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 32.5,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 8.8,
+            "value": "True",
+            "edge": 27.4
+          },
+          "kelly_away": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -79.1
+          },
+          "odds": {
+            "implied_home": 49.6,
+            "implied_draw": 25.8,
+            "implied_away": 24.7
+          }
         },
-        "recommend_score": 11.6,
-        "is_recommended": false
+        "recommend_score": 77.82,
+        "is_recommended": true
       },
       {
         "home_team": "热刺",
@@ -1274,7 +2165,7 @@
           "a6": 15.0,
           "a7": 21.0,
           "s00": 16.0,
-          "s11": 7.0,
+          "s11": 7.1,
           "s22": 11.0,
           "s33": 40.0,
           "w10": 10.5,
@@ -1308,7 +2199,7 @@
         "away_id": 0,
         "home_logo": "team/2023-10/5c54791d975c97c6ac09c8246d20da3b8eca2a6c.png",
         "away_logo": "team/2023-10/a2e937e3124aa163f40cef66b212c7d3985fd6f2.png",
-        "id": 4,
+        "id": 3,
         "date": "2026-03-18",
         "home_stats": {
           "played": 25,
@@ -1338,70 +2229,246 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
-          "home_win_pct": 39.2,
-          "draw_pct": 29.8,
-          "away_win_pct": 31.0,
-          "confidence": 40,
-          "result": "主胜",
-          "risk_level": "高",
+          "predicted_score": "1-2",
+          "home_win_pct": 15.7,
+          "draw_pct": 11.0,
+          "away_win_pct": 73.3,
+          "confidence": 75,
+          "result": "客胜",
+          "risk_level": "低",
           "over_under_2_5": "小",
-          "both_score": "是",
-          "gpt_score": "0-2",
-          "gpt_analysis": "热刺近期整体走势低迷，近6场仅1平5负，且进攻端伤停极其严重：麦迪逊、索兰克、库杜塞夫斯基、库杜斯缺阵，里沙利松停赛，前场创造力与终结能力明显受损。中后场方面，本坦库尔、本·戴维斯缺席，比苏马轮休、加拉格尔患病也削弱了防守稳定性与中场对抗。马竞近况明显更强，近6场5胜1负，联赛高位带来充足战意，西蒙尼体系在领先后控节奏、压缩空间的能力很适合对付人员不整的热刺。虽然马竞有奥布拉克伤缺会略微影响防线，但整体阵型完整度、反击效率和比赛管理能力仍占优。结合首回合热刺已2比5落败，本场更像是马竞凭借纪律性和转换效率再赢一场。",
+          "both_score": "否",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
           "grok_score": "1-2",
-          "grok_analysis": "Tottenham severely weakened by mass injuries to key attackers (Solanke, Richarlison suspended, Kulusevski, Maddison) and defensive mids plus poor form; Atletico boosted by excellent WWDWW streak, title-race motivation and prior 5-2 dominance despite Oblak muscle injury.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "grok_analysis": "Atletico superior league rank/form (WWDWW), Tottenham injuries (8 key) + relegation chaos + 2-5 first-leg loss kill motivation. Away edge larger per analysis; CRS 1-2 top-3 consensus.",
+          "gemini_score": "1-2",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
-          "model_agreement": false,
-          "poisson": {
-            "home_xg": 1.08,
-            "away_xg": 0.92
+          "model_agreement": true,
+          "candidate_scores": {
+            "1-2": 1.1
           },
-          "expected_total_goals": 2.0,
+          "poisson": {
+            "home_win": 22.4,
+            "draw": 25.2,
+            "away_win": 52.5,
+            "predicted_score": "0-1",
+            "home_xg": 0.94,
+            "away_xg": 1.59,
+            "btts": 48.5,
+            "over_2_5": 46.3,
+            "top_scores": [
+              {
+                "score": "0-1",
+                "prob": 12.7
+              },
+              {
+                "score": "1-1",
+                "prob": 11.9
+              },
+              {
+                "score": "0-2",
+                "prob": 10.1
+              },
+              {
+                "score": "1-2",
+                "prob": 9.5
+              },
+              {
+                "score": "0-0",
+                "prob": 8.0
+              },
+              {
+                "score": "1-0",
+                "prob": 7.5
+              }
+            ],
+            "home_expected_goals": 0.94
+          },
+          "refined_poisson": {
+            "home_win": 23.0,
+            "draw": 25.3,
+            "away_win": 51.7,
+            "predicted_score": "1-1",
+            "top_scores": [
+              {
+                "score": "1-1",
+                "prob": 14.3
+              },
+              {
+                "score": "1-2",
+                "prob": 11.4
+              },
+              {
+                "score": "0-1",
+                "prob": 9.6
+              },
+              {
+                "score": "0-2",
+                "prob": 9.0
+              },
+              {
+                "score": "2-1",
+                "prob": 7.0
+              },
+              {
+                "score": "1-0",
+                "prob": 5.9
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "客胜 EV:+73.72% Kelly:13.45%"
+          ],
           "extreme_warning": "无",
+          "smart_money_signal": "🚨 长客陷阱 | 🚨 保级死拼",
           "smart_signals": [
             "🚨 长客陷阱",
-            "🚨 保级队主场死拼"
+            "🚨 保级死拼"
           ],
-          "elo": {
-            "home_win": 20.9,
-            "draw": 20.0,
-            "away_win": 69.1,
-            "elo_diff": -208
-          },
-          "random_forest": {
-            "home_win": 36.1,
-            "draw": 23.2,
-            "away_win": 40.6
-          },
+          "model_consensus": 11,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 15.4
-            },
-            {
-              "score": "0-0",
-              "prob": 13.2
-            },
-            {
               "score": "1-1",
-              "prob": 13.1
+              "prob": 14.3
+            },
+            {
+              "score": "1-2",
+              "prob": 11.4
             },
             {
               "score": "0-1",
-              "prob": 12.2
+              "prob": 9.6
             },
             {
-              "score": "2-0",
-              "prob": 7.5
+              "score": "0-2",
+              "prob": 9.0
+            },
+            {
+              "score": "2-1",
+              "prob": 7.0
+            },
+            {
+              "score": "1-0",
+              "prob": 5.9
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 26.2,
+            "draw": 20.0,
+            "away_win": 63.8,
+            "elo_diff": -155
+          },
+          "random_forest": {
+            "home_win": 36.4,
+            "draw": 23.7,
+            "away_win": 39.9
+          },
+          "gradient_boost": {
+            "home_win": 35.1,
+            "draw": 25.2,
+            "away_win": 39.7
+          },
+          "neural_net": {
+            "home_win": 34.4,
+            "draw": 24.2,
+            "away_win": 41.4
+          },
+          "logistic": {
+            "home_win": 35.3,
+            "draw": 25.2,
+            "away_win": 39.5
+          },
+          "svm": {
+            "home_win": 35.3,
+            "draw": 23.5,
+            "away_win": 41.2
+          },
+          "knn": {
+            "home_win": 34.6,
+            "draw": 24.8,
+            "away_win": 40.6
+          },
+          "dixon_coles": {
+            "home_win": 24.7,
+            "draw": 25.2,
+            "away_win": 50.1
+          },
+          "bradley_terry": {
+            "home_win": 34.8,
+            "draw": 24.0,
+            "away_win": 41.2
+          },
+          "home_form": {
+            "score": 51.5,
+            "trend": "一般",
+            "momentum": 51.5,
+            "streak": 1,
+            "streak_type": "D"
+          },
+          "away_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "handicap_signal": "盘口正常",
+          "odds_movement": {
+            "signal": "正常",
+            "h_adj": 0,
+            "a_adj": 0,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "均衡",
+            "adj_h": 0,
+            "adj_a": 0
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 48.5,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -34.1
+          },
+          "kelly_away": {
+            "kelly": 2.21,
+            "value": "True",
+            "edge": 12.1
+          },
+          "odds": {
+            "implied_home": 38.2,
+            "implied_draw": 24.5,
+            "implied_away": 37.4
+          }
         },
-        "recommend_score": 14.0,
-        "is_recommended": false
+        "recommend_score": 96.82,
+        "is_recommended": true
       },
       {
         "home_team": "拜仁",
@@ -1483,7 +2550,7 @@
         "away_id": 0,
         "home_logo": "team/2023-08/59cecffd93bd3d030d48a902336c8a501b41b3e9.png",
         "away_logo": "/teamPic/ojTeZY7VKg8OqEa.png",
-        "id": 5,
+        "id": 4,
         "date": "2026-03-18",
         "home_stats": {
           "played": 25,
@@ -1513,68 +2580,246 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "2-0",
-          "home_win_pct": 51.5,
-          "draw_pct": 28.1,
-          "away_win_pct": 20.4,
-          "confidence": 59,
+          "predicted_score": "3-1",
+          "home_win_pct": 88.2,
+          "draw_pct": 10.0,
+          "away_win_pct": 1.8,
+          "confidence": 67,
           "result": "主胜",
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "2-0",
-          "gpt_analysis": "拜仁联赛领跑且欧冠战意强，近期整体状态明显优于亚特兰大，主场压制力和上半场领先能力都很突出。进攻端虽有穆西亚拉、奥利塞缺阵，削弱前场创造力，因此进攻加成有限；但亚特兰大近期客场表现一般、防线稳定性不足，仍难完全限制拜仁。防守端拜仁受诺伊尔、基米希、戴维斯缺席影响更大，体系完整性下降，但亚特兰大近期进攻效率偏低、状态起伏，客队进攻提升空间有限。整体看比赛节奏略偏快，拜仁优势明确，最可能结果为2比0。",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
           "grok_score": "3-1",
-          "grok_analysis": "Bayern's elite home form (WWDWW), high motivation from title race/UCL and 6-1 first-leg dominance outweigh heavy injuries (Neuer/Davies/Kimmich/Musiala/Olise out); Atalanta's poor away form (LDWDL) and low output limit threat despite single suspension.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "grok_analysis": "Bayern to win 3-1: #1 rank, strong form, huge 6-1 first leg despite injuries; Atalanta #7 weak LDWDL form.",
+          "gemini_score": "2-0",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
           "model_agreement": false,
+          "candidate_scores": {
+            "3-1": 0.4,
+            "2-0": 0.25
+          },
           "poisson": {
-            "home_xg": 1.37,
-            "away_xg": 0.75
+            "home_win": 90.7,
+            "draw": 7.1,
+            "away_win": 2.2,
+            "predicted_score": "3-0",
+            "home_xg": 3.3,
+            "away_xg": 0.4,
+            "btts": 31.1,
+            "over_2_5": 69.5,
+            "top_scores": [
+              {
+                "score": "3-0",
+                "prob": 14.8
+              },
+              {
+                "score": "2-0",
+                "prob": 13.5
+              },
+              {
+                "score": "4-0",
+                "prob": 12.2
+              },
+              {
+                "score": "1-0",
+                "prob": 8.2
+              },
+              {
+                "score": "5-0",
+                "prob": 8.1
+              },
+              {
+                "score": "3-1",
+                "prob": 5.9
+              }
+            ],
+            "home_expected_goals": 3.3
           },
-          "expected_total_goals": 2.12,
-          "extreme_warning": "无",
-          "smart_signals": [
-            "💰 Sharp资金流向客胜"
+          "refined_poisson": {
+            "home_win": 80.3,
+            "draw": 12.8,
+            "away_win": 6.9,
+            "predicted_score": "3-0",
+            "top_scores": [
+              {
+                "score": "3-0",
+                "prob": 12.1
+              },
+              {
+                "score": "2-1",
+                "prob": 12.0
+              },
+              {
+                "score": "2-0",
+                "prob": 11.5
+              },
+              {
+                "score": "1-0",
+                "prob": 8.8
+              },
+              {
+                "score": "3-1",
+                "prob": 8.1
+              },
+              {
+                "score": "4-0",
+                "prob": 8.0
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "主胜 EV:+8.49% Kelly:9.22%"
           ],
-          "elo": {
-            "home_win": 57.1,
-            "draw": 20.0,
-            "away_win": 32.9,
-            "elo_diff": 96
-          },
-          "random_forest": {
-            "home_win": 79.0,
-            "draw": 15.0,
-            "away_win": 6.0
-          },
+          "extreme_warning": "无",
+          "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热72%",
+          "smart_signals": [
+            "💰 Sharp资金流向客胜",
+            "🚨 主胜超热72%"
+          ],
+          "model_consensus": 3,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 16.1
+              "score": "3-0",
+              "prob": 12.1
             },
             {
-              "score": "1-1",
-              "prob": 12.8
-            },
-            {
-              "score": "0-0",
-              "prob": 11.7
+              "score": "2-1",
+              "prob": 12.0
             },
             {
               "score": "2-0",
-              "prob": 11.4
+              "prob": 11.5
             },
             {
-              "score": "0-1",
-              "prob": 9.2
+              "score": "1-0",
+              "prob": 8.8
+            },
+            {
+              "score": "3-1",
+              "prob": 8.1
+            },
+            {
+              "score": "4-0",
+              "prob": 8.0
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 61.1,
+            "draw": 20.0,
+            "away_win": 28.9,
+            "elo_diff": 130
+          },
+          "random_forest": {
+            "home_win": 76.8,
+            "draw": 15.4,
+            "away_win": 7.9
+          },
+          "gradient_boost": {
+            "home_win": 75.4,
+            "draw": 16.7,
+            "away_win": 7.9
+          },
+          "neural_net": {
+            "home_win": 75.3,
+            "draw": 16.0,
+            "away_win": 8.7
+          },
+          "logistic": {
+            "home_win": 75.3,
+            "draw": 16.9,
+            "away_win": 7.8
+          },
+          "svm": {
+            "home_win": 76.7,
+            "draw": 15.1,
+            "away_win": 8.1
+          },
+          "knn": {
+            "home_win": 75.6,
+            "draw": 16.5,
+            "away_win": 7.9
+          },
+          "dixon_coles": {
+            "home_win": 80.4,
+            "draw": 13.6,
+            "away_win": 6.0
+          },
+          "bradley_terry": {
+            "home_win": 52.7,
+            "draw": 24.0,
+            "away_win": 23.3
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 33.3,
+            "trend": "一般",
+            "momentum": 33.3,
+            "streak": 1,
+            "streak_type": "L"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "💰 Sharp资金流向客胜",
+            "h_adj": -5,
+            "a_adj": 6,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "🚨 主胜超热72%",
+            "adj_h": -6,
+            "adj_a": 3
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 31.1,
+          "pace_rating": "极快",
+          "kelly_home": {
+            "kelly": 10.29,
+            "value": "True",
+            "edge": 9.5
+          },
+          "kelly_away": {
+            "kelly": 0,
+            "value": false,
+            "edge": 0
+          },
+          "odds": {
+            "implied_home": 71.8,
+            "implied_draw": 16.3,
+            "implied_away": 11.9
+          }
         },
-        "recommend_score": 23.6,
+        "recommend_score": 52.75,
         "is_recommended": true
       },
       {
@@ -1657,7 +2902,7 @@
         "away_id": 0,
         "home_logo": "/teamPic/zmbGMwfpqjYcVFg.png",
         "away_logo": "team/2023-10/1ed354c9e3a4e5274b9e5636bd14a9a960984dae.png",
-        "id": 6,
+        "id": 5,
         "date": "2026-03-18",
         "home_stats": {
           "played": 25,
@@ -1688,68 +2933,246 @@
         "h2h": [],
         "prediction": {
           "predicted_score": "2-1",
-          "home_win_pct": 60.7,
-          "draw_pct": 22.2,
-          "away_win_pct": 17.1,
-          "confidence": 68,
+          "home_win_pct": 90.7,
+          "draw_pct": 10.0,
+          "away_win_pct": -0.7,
+          "confidence": 67,
           "result": "主胜",
           "risk_level": "中",
-          "over_under_2_5": "大",
-          "both_score": "是",
+          "over_under_2_5": "小",
+          "both_score": "否",
           "gpt_score": "-",
           "gpt_analysis": "N/A",
           "grok_score": "2-1",
-          "grok_analysis": "Liverpool home motivation high in title race + strong form (WWDWW) and HT lead tendency (81%) outweigh multiple injuries; Galatasaray suspensions cripple attack (low 1.0 GF avg) despite prior 1-0 win, home edge prevails.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "grok_analysis": "Liverpool 2-1: home adv, high motivation, CRS consensus despite injuries & 0-1 first leg loss.",
+          "gemini_score": "3-0",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
           "model_agreement": false,
+          "candidate_scores": {
+            "2-1": 0.4,
+            "3-0": 0.25
+          },
           "poisson": {
-            "home_xg": 1.79,
-            "away_xg": 0.84
+            "home_win": 88.1,
+            "draw": 9.0,
+            "away_win": 2.9,
+            "predicted_score": "2-0",
+            "home_xg": 2.97,
+            "away_xg": 0.4,
+            "btts": 30.9,
+            "over_2_5": 64.3,
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 15.2
+              },
+              {
+                "score": "3-0",
+                "prob": 15.0
+              },
+              {
+                "score": "4-0",
+                "prob": 11.2
+              },
+              {
+                "score": "1-0",
+                "prob": 10.2
+              },
+              {
+                "score": "5-0",
+                "prob": 6.6
+              },
+              {
+                "score": "2-1",
+                "prob": 6.1
+              }
+            ],
+            "home_expected_goals": 2.97
           },
-          "expected_total_goals": 2.63,
-          "extreme_warning": "无",
-          "smart_signals": [
-            "💰 Sharp资金流向主胜"
+          "refined_poisson": {
+            "home_win": 77.6,
+            "draw": 13.9,
+            "away_win": 8.5,
+            "predicted_score": "2-1",
+            "top_scores": [
+              {
+                "score": "2-1",
+                "prob": 12.5
+              },
+              {
+                "score": "3-0",
+                "prob": 10.9
+              },
+              {
+                "score": "2-0",
+                "prob": 10.7
+              },
+              {
+                "score": "1-0",
+                "prob": 9.6
+              },
+              {
+                "score": "3-1",
+                "prob": 8.1
+              },
+              {
+                "score": "4-0",
+                "prob": 6.9
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "主胜 EV:+5.21% Kelly:8.14%"
           ],
-          "elo": {
-            "home_win": 35.6,
-            "draw": 26.0,
-            "away_win": 51.4,
-            "elo_diff": -64
-          },
-          "random_forest": {
-            "home_win": 81.0,
-            "draw": 13.3,
-            "away_win": 5.7
-          },
+          "extreme_warning": "无",
+          "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热77%",
+          "smart_signals": [
+            "💰 Sharp资金流向主胜",
+            "🚨 主胜超热77%"
+          ],
+          "model_consensus": 0,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 13.0
-            },
-            {
-              "score": "2-0",
-              "prob": 11.8
-            },
-            {
-              "score": "1-1",
-              "prob": 11.0
-            },
-            {
               "score": "2-1",
-              "prob": 9.8
+              "prob": 12.5
             },
             {
               "score": "3-0",
-              "prob": 7.0
+              "prob": 10.9
+            },
+            {
+              "score": "2-0",
+              "prob": 10.7
+            },
+            {
+              "score": "1-0",
+              "prob": 9.6
+            },
+            {
+              "score": "3-1",
+              "prob": 8.1
+            },
+            {
+              "score": "4-0",
+              "prob": 6.9
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 41.0,
+            "draw": 26.0,
+            "away_win": 46.0,
+            "elo_diff": -20
+          },
+          "random_forest": {
+            "home_win": 78.6,
+            "draw": 13.6,
+            "away_win": 7.8
+          },
+          "gradient_boost": {
+            "home_win": 77.3,
+            "draw": 14.9,
+            "away_win": 7.8
+          },
+          "neural_net": {
+            "home_win": 77.7,
+            "draw": 14.2,
+            "away_win": 8.0
+          },
+          "logistic": {
+            "home_win": 77.2,
+            "draw": 15.1,
+            "away_win": 7.7
+          },
+          "svm": {
+            "home_win": 78.7,
+            "draw": 13.3,
+            "away_win": 8.0
+          },
+          "knn": {
+            "home_win": 77.4,
+            "draw": 14.7,
+            "away_win": 7.9
+          },
+          "dixon_coles": {
+            "home_win": 77.5,
+            "draw": 15.0,
+            "away_win": 7.5
+          },
+          "bradley_terry": {
+            "home_win": 50.7,
+            "draw": 24.0,
+            "away_win": 25.3
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 33.3,
+            "trend": "一般",
+            "momentum": 33.3,
+            "streak": 1,
+            "streak_type": "L"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "💰 Sharp资金流向主胜",
+            "h_adj": 6,
+            "a_adj": -5,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "🚨 主胜超热77%",
+            "adj_h": -6,
+            "adj_a": 3
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 30.9,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 23.55,
+            "value": "True",
+            "edge": 15.1
+          },
+          "kelly_away": {
+            "kelly": 0,
+            "value": false,
+            "edge": 0
+          },
+          "odds": {
+            "implied_home": 76.0,
+            "implied_draw": 14.6,
+            "implied_away": 9.4
+          }
         },
-        "recommend_score": 27.2,
-        "is_recommended": true
+        "recommend_score": 45.88,
+        "is_recommended": false
       }
     ],
     "tomorrow": [
@@ -1854,67 +3277,242 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 58.2,
-          "draw_pct": 21.8,
-          "away_win_pct": 19.9,
-          "confidence": 43,
-          "result": "主胜",
-          "risk_level": "高",
-          "over_under_2_5": "大",
-          "both_score": "是",
+          "predicted_score": "1-2",
+          "home_win_pct": 9.5,
+          "draw_pct": 13.8,
+          "away_win_pct": 76.7,
+          "confidence": 73,
+          "result": "客胜",
+          "risk_level": "中",
+          "over_under_2_5": "小",
+          "both_score": "否",
           "gpt_score": "-",
           "gpt_analysis": "N/A",
           "grok_score": "1-2",
-          "grok_analysis": "Home desperate relegation motivation plus strong recent overall/home form boosts attack despite poor averages; away solid rankings/GA and single H2H win provide defensive edge in tight matchup with no injuries.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "grok_analysis": "Home strong recent (4W1D1L last6, 4W1L home5) + relegation fight vs away avg form (3W1D2L/6) & recent concede 2/g. Gap small per analysis, intel NK hard win in 90min. CRS anchor 0-3/0-2 but home adv tips 1-2.",
+          "gemini_score": "0-2",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
           "model_agreement": false,
+          "candidate_scores": {
+            "1-2": 0.4,
+            "0-2": 0.25
+          },
           "poisson": {
-            "home_xg": 1.91,
-            "away_xg": 1.04
+            "home_win": 7.5,
+            "draw": 20.5,
+            "away_win": 72.0,
+            "predicted_score": "0-1",
+            "home_xg": 0.4,
+            "away_xg": 1.81,
+            "btts": 27.8,
+            "over_2_5": 38.1,
+            "top_scores": [
+              {
+                "score": "0-1",
+                "prob": 19.7
+              },
+              {
+                "score": "0-2",
+                "prob": 17.9
+              },
+              {
+                "score": "0-0",
+                "prob": 10.9
+              },
+              {
+                "score": "0-3",
+                "prob": 10.8
+              },
+              {
+                "score": "1-1",
+                "prob": 8.0
+              },
+              {
+                "score": "1-2",
+                "prob": 7.2
+              }
+            ],
+            "home_expected_goals": 0.4
           },
-          "expected_total_goals": 2.95,
+          "refined_poisson": {
+            "home_win": 11.3,
+            "draw": 25.1,
+            "away_win": 63.6,
+            "predicted_score": "0-1",
+            "top_scores": [
+              {
+                "score": "0-1",
+                "prob": 23.0
+              },
+              {
+                "score": "0-2",
+                "prob": 17.8
+              },
+              {
+                "score": "0-0",
+                "prob": 14.6
+              },
+              {
+                "score": "1-1",
+                "prob": 9.0
+              },
+              {
+                "score": "0-3",
+                "prob": 7.5
+              },
+              {
+                "score": "1-2",
+                "prob": 7.4
+              }
+            ]
+          },
+          "value_bets_summary": [],
           "extreme_warning": "无",
+          "smart_money_signal": "正常",
           "smart_signals": [],
-          "elo": {
-            "home_win": 4.9,
-            "draw": 20.0,
-            "away_win": 85.1,
-            "elo_diff": -496
-          },
-          "random_forest": {
-            "home_win": 32.5,
-            "draw": 26.7,
-            "away_win": 40.8
-          },
+          "model_consensus": 0,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
+              "score": "0-1",
+              "prob": 23.0
+            },
+            {
+              "score": "0-2",
+              "prob": 17.8
+            },
+            {
+              "score": "0-0",
+              "prob": 14.6
+            },
+            {
               "score": "1-1",
-              "prob": 10.5
+              "prob": 9.0
             },
             {
-              "score": "1-0",
-              "prob": 10.2
+              "score": "0-3",
+              "prob": 7.5
             },
             {
-              "score": "2-1",
-              "prob": 10.1
-            },
-            {
-              "score": "2-0",
-              "prob": 9.8
-            },
-            {
-              "score": "3-1",
-              "prob": 6.5
+              "score": "1-2",
+              "prob": 7.4
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 7.2,
+            "draw": 20.0,
+            "away_win": 82.8,
+            "elo_diff": -425
+          },
+          "random_forest": {
+            "home_win": 33.8,
+            "draw": 27.2,
+            "away_win": 39.0
+          },
+          "gradient_boost": {
+            "home_win": 32.5,
+            "draw": 28.7,
+            "away_win": 38.8
+          },
+          "neural_net": {
+            "home_win": 31.8,
+            "draw": 27.7,
+            "away_win": 40.5
+          },
+          "logistic": {
+            "home_win": 32.7,
+            "draw": 28.6,
+            "away_win": 38.6
+          },
+          "svm": {
+            "home_win": 32.7,
+            "draw": 27.1,
+            "away_win": 40.3
+          },
+          "knn": {
+            "home_win": 31.9,
+            "draw": 28.4,
+            "away_win": 39.7
+          },
+          "dixon_coles": {
+            "home_win": 12.6,
+            "draw": 30.1,
+            "away_win": 57.3
+          },
+          "bradley_terry": {
+            "home_win": 20.8,
+            "draw": 24.0,
+            "away_win": 55.2
+          },
+          "home_form": {
+            "score": 6.7,
+            "trend": "低迷",
+            "momentum": 6.7,
+            "streak": 2,
+            "streak_type": "L"
+          },
+          "away_form": {
+            "score": 51.5,
+            "trend": "一般",
+            "momentum": 51.5,
+            "streak": 1,
+            "streak_type": "D"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "无变动",
+            "h_adj": 0,
+            "a_adj": 0,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "均衡",
+            "adj_h": 0,
+            "adj_a": 0
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 27.8,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 0,
+            "value": false,
+            "edge": 0
+          },
+          "kelly_away": {
+            "kelly": 16.98,
+            "value": "True",
+            "edge": 169.8
+          },
+          "odds": {
+            "implied_home": 40.2,
+            "implied_draw": 31.3,
+            "implied_away": 28.5
+          }
         },
-        "recommend_score": 7.2,
-        "is_recommended": true
+        "recommend_score": 36.47,
+        "is_recommended": false
       },
       {
         "home_team": "弗赖堡",
@@ -2022,66 +3620,244 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 45.1,
-          "draw_pct": 27.9,
-          "away_win_pct": 27.1,
-          "confidence": 40,
-          "result": "主胜",
-          "risk_level": "高",
+          "predicted_score": "1-2",
+          "home_win_pct": 29.6,
+          "draw_pct": 10.0,
+          "away_win_pct": 60.4,
+          "confidence": 71,
+          "result": "客胜",
+          "risk_level": "中",
           "over_under_2_5": "小",
-          "both_score": "是",
-          "gpt_score": "2-0",
-          "gpt_analysis": "弗赖堡首回合0-1落后带来更强追分动机，主场上半场不易落后且整体失球均值很低，防守端稳定性加成明显。亨克进攻均值偏低且有萨迪克患病、埃尔瓦赫迪停赛削弱前场支点与边路/推进质量，客场创造力与转换效率下调；同时客队防线场均失球偏高，在弗赖堡更主动的压迫与定位球/二点争夺下更容易被持续施压。整体节奏因弗赖堡必须提速而略快，但亨克进攻削弱使其回合总进球更偏向主队零封取胜。",
-          "grok_score": "2-1",
-          "grok_analysis": "Freiburg weakened by key injuries (Kyereh attack, Rosenfelder defense) and poor recent form (1W1D4L); Genk slight edge from superior recent record despite Sadick illness and El Ouahdi suspension; similar mid-table strength raises draw chance but home first-half lead probability (54%) drives narrow home win.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "both_score": "否",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "1-2",
+          "grok_analysis": "Genk away strength (4W1L), first-leg 1-0 + analysis edge over Freiburg poor form (1W1D4L). Injuries balance. Predict 1-2.",
+          "gemini_score": "1-2",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
-          "model_agreement": false,
+          "model_agreement": true,
+          "candidate_scores": {
+            "1-2": 1.1
+          },
           "poisson": {
-            "home_xg": 1.38,
-            "away_xg": 1.0
+            "home_win": 85.6,
+            "draw": 10.8,
+            "away_win": 3.5,
+            "predicted_score": "2-0",
+            "home_xg": 2.71,
+            "away_xg": 0.4,
+            "btts": 30.6,
+            "over_2_5": 59.5,
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 16.4
+              },
+              {
+                "score": "3-0",
+                "prob": 14.8
+              },
+              {
+                "score": "1-0",
+                "prob": 12.1
+              },
+              {
+                "score": "4-0",
+                "prob": 10.0
+              },
+              {
+                "score": "2-1",
+                "prob": 6.6
+              },
+              {
+                "score": "3-1",
+                "prob": 5.9
+              }
+            ],
+            "home_expected_goals": 2.71
           },
-          "expected_total_goals": 2.38,
+          "refined_poisson": {
+            "home_win": 72.0,
+            "draw": 18.5,
+            "away_win": 9.5,
+            "predicted_score": "2-0",
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 13.0
+              },
+              {
+                "score": "1-0",
+                "prob": 12.4
+              },
+              {
+                "score": "2-1",
+                "prob": 12.3
+              },
+              {
+                "score": "1-1",
+                "prob": 10.8
+              },
+              {
+                "score": "3-0",
+                "prob": 9.9
+              },
+              {
+                "score": "3-1",
+                "prob": 6.0
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "客胜 EV:+223.14% Kelly:12.82%"
+          ],
           "extreme_warning": "无",
-          "smart_signals": [],
-          "elo": {
-            "home_win": 41.5,
-            "draw": 26.0,
-            "away_win": 45.5,
-            "elo_diff": -16
-          },
-          "random_forest": {
-            "home_win": 65.8,
-            "draw": 20.7,
-            "away_win": 13.5
-          },
+          "smart_money_signal": "🚨 主胜超热62%",
+          "smart_signals": [
+            "🚨 主胜超热62%"
+          ],
+          "model_consensus": 2,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-1",
-              "prob": 12.7
+              "score": "2-0",
+              "prob": 13.0
             },
             {
               "score": "1-0",
-              "prob": 12.0
-            },
-            {
-              "score": "0-0",
-              "prob": 9.5
+              "prob": 12.4
             },
             {
               "score": "2-1",
-              "prob": 9.2
+              "prob": 12.3
             },
             {
-              "score": "0-1",
-              "prob": 9.0
+              "score": "1-1",
+              "prob": 10.8
+            },
+            {
+              "score": "3-0",
+              "prob": 9.9
+            },
+            {
+              "score": "3-1",
+              "prob": 6.0
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 46.6,
+            "draw": 26.0,
+            "away_win": 40.4,
+            "elo_diff": 25
+          },
+          "random_forest": {
+            "home_win": 64.7,
+            "draw": 21.2,
+            "away_win": 14.2
+          },
+          "gradient_boost": {
+            "home_win": 63.6,
+            "draw": 22.6,
+            "away_win": 13.8
+          },
+          "neural_net": {
+            "home_win": 62.7,
+            "draw": 21.7,
+            "away_win": 15.6
+          },
+          "logistic": {
+            "home_win": 63.4,
+            "draw": 22.6,
+            "away_win": 14.0
+          },
+          "svm": {
+            "home_win": 64.0,
+            "draw": 20.9,
+            "away_win": 15.1
+          },
+          "knn": {
+            "home_win": 63.0,
+            "draw": 22.3,
+            "away_win": 14.7
+          },
+          "dixon_coles": {
+            "home_win": 73.8,
+            "draw": 17.3,
+            "away_win": 8.8
+          },
+          "bradley_terry": {
+            "home_win": 48.4,
+            "draw": 24.0,
+            "away_win": 27.6
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 33.3,
+            "trend": "一般",
+            "momentum": 33.3,
+            "streak": 1,
+            "streak_type": "L"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "无变动",
+            "h_adj": 0,
+            "a_adj": 0,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "🚨 主胜超热62%",
+            "adj_h": -6,
+            "adj_a": 3
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 30.6,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 4.95,
+            "value": "True",
+            "edge": 8.7
+          },
+          "kelly_away": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -78.1
+          },
+          "odds": {
+            "implied_home": 61.3,
+            "implied_draw": 22.0,
+            "implied_away": 16.7
+          }
         },
-        "recommend_score": 6.0,
+        "recommend_score": 59.7,
         "is_recommended": false
       },
       {
@@ -2191,66 +3967,242 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
-          "home_win_pct": 44.5,
-          "draw_pct": 29.3,
-          "away_win_pct": 26.2,
-          "confidence": 59,
-          "result": "主胜",
-          "risk_level": "中",
+          "predicted_score": "1-1",
+          "home_win_pct": 22.1,
+          "draw_pct": 67.0,
+          "away_win_pct": 10.9,
+          "confidence": 83,
+          "result": "平局",
+          "risk_level": "低",
           "over_under_2_5": "小",
-          "both_score": "是",
-          "gpt_score": "1-0",
-          "gpt_analysis": "里昂主场表现更稳，防守数据明显优于塞尔塔，而且首回合1比1后本场大概率先以控制风险为主。里昂虽有较多伤病，边路冲击力受损，进攻加成有限，但塞尔塔这边博尔哈·伊格莱西亚斯停赛削弱锋线终结，明格萨停赛也影响后场稳定性。结合双方整体实力接近、平局倾向偏高、上半场僵持概率较大，比赛节奏预计偏谨慎，里昂更可能凭主场与防守质量小胜。",
-          "grok_score": "2-1",
-          "grok_analysis": "Lyon home form WWDWW and superior defensive avg GA 0.86 boosted by venue; Celta attack crippled by Iglesias/Mingueza/Cervi suspensions plus injuries, lowering scoring threat and backline solidity despite solid away form.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "both_score": "否",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "1-1",
+          "grok_analysis": "Similar strength draw higher; first leg 1-1; CRS top 1-1@16.7%; Lyon 3W2D last5H, Celta WDLWD form.",
+          "gemini_score": "1-1",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
           "model_agreement": true,
+          "candidate_scores": {
+            "1-1": 1.1
+          },
           "poisson": {
-            "home_xg": 1.24,
-            "away_xg": 0.87
+            "home_win": 67.7,
+            "draw": 19.9,
+            "away_win": 12.4,
+            "predicted_score": "2-0",
+            "home_xg": 2.02,
+            "away_xg": 0.72,
+            "btts": 44.5,
+            "over_2_5": 51.5,
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 13.1
+              },
+              {
+                "score": "1-0",
+                "prob": 13.0
+              },
+              {
+                "score": "2-1",
+                "prob": 9.5
+              },
+              {
+                "score": "1-1",
+                "prob": 9.4
+              },
+              {
+                "score": "3-0",
+                "prob": 8.8
+              },
+              {
+                "score": "0-0",
+                "prob": 6.5
+              }
+            ],
+            "home_expected_goals": 2.02
           },
-          "expected_total_goals": 2.11,
+          "refined_poisson": {
+            "home_win": 54.6,
+            "draw": 22.8,
+            "away_win": 22.5,
+            "predicted_score": "1-1",
+            "top_scores": [
+              {
+                "score": "1-1",
+                "prob": 12.9
+              },
+              {
+                "score": "2-1",
+                "prob": 12.7
+              },
+              {
+                "score": "1-0",
+                "prob": 8.9
+              },
+              {
+                "score": "2-0",
+                "prob": 8.1
+              },
+              {
+                "score": "1-2",
+                "prob": 6.9
+              },
+              {
+                "score": "3-0",
+                "prob": 5.3
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "平局 EV:+114.4% Kelly:13.0%"
+          ],
           "extreme_warning": "无",
+          "smart_money_signal": "正常",
           "smart_signals": [],
-          "elo": {
-            "home_win": 47.5,
-            "draw": 26.0,
-            "away_win": 39.5,
-            "elo_diff": 32
-          },
-          "random_forest": {
-            "home_win": 49.0,
-            "draw": 26.4,
-            "away_win": 24.5
-          },
+          "model_consensus": 8,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 14.7
-            },
-            {
               "score": "1-1",
-              "prob": 13.1
+              "prob": 12.9
             },
             {
-              "score": "0-0",
-              "prob": 12.4
+              "score": "2-1",
+              "prob": 12.7
             },
             {
-              "score": "0-1",
-              "prob": 10.7
+              "score": "1-0",
+              "prob": 8.9
             },
             {
               "score": "2-0",
-              "prob": 9.1
+              "prob": 8.1
+            },
+            {
+              "score": "1-2",
+              "prob": 6.9
+            },
+            {
+              "score": "3-0",
+              "prob": 5.3
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 52.1,
+            "draw": 26.0,
+            "away_win": 34.9,
+            "elo_diff": 70
+          },
+          "random_forest": {
+            "home_win": 48.1,
+            "draw": 26.9,
+            "away_win": 25.0
+          },
+          "gradient_boost": {
+            "home_win": 46.9,
+            "draw": 28.4,
+            "away_win": 24.7
+          },
+          "neural_net": {
+            "home_win": 46.1,
+            "draw": 27.4,
+            "away_win": 26.5
+          },
+          "logistic": {
+            "home_win": 46.9,
+            "draw": 28.3,
+            "away_win": 24.7
+          },
+          "svm": {
+            "home_win": 47.2,
+            "draw": 26.7,
+            "away_win": 26.1
+          },
+          "knn": {
+            "home_win": 46.3,
+            "draw": 28.1,
+            "away_win": 25.6
+          },
+          "dixon_coles": {
+            "home_win": 57.0,
+            "draw": 22.4,
+            "away_win": 20.6
+          },
+          "bradley_terry": {
+            "home_win": 45.2,
+            "draw": 24.0,
+            "away_win": 30.8
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 51.5,
+            "trend": "一般",
+            "momentum": 51.5,
+            "streak": 1,
+            "streak_type": "D"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "无变动",
+            "h_adj": 0,
+            "a_adj": 0,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "均衡",
+            "adj_h": 0,
+            "adj_a": 0
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 44.5,
+          "pace_rating": "极快",
+          "kelly_home": {
+            "kelly": 2.52,
+            "value": "True",
+            "edge": 9.6
+          },
+          "kelly_away": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -37.3
+          },
+          "odds": {
+            "implied_home": 45.3,
+            "implied_draw": 27.8,
+            "implied_away": 26.9
+          }
         },
-        "recommend_score": 43.6,
+        "recommend_score": 90.55,
         "is_recommended": true
       },
       {
@@ -2359,67 +4311,245 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
-          "home_win_pct": 49.0,
-          "draw_pct": 27.9,
-          "away_win_pct": 23.2,
+          "predicted_score": "2-1",
+          "home_win_pct": 48.0,
+          "draw_pct": 32.9,
+          "away_win_pct": 19.1,
           "confidence": 64,
           "result": "主胜",
           "risk_level": "中",
           "over_under_2_5": "小",
-          "both_score": "是",
-          "gpt_score": "1-0",
-          "gpt_analysis": "中日德兰联赛争三动力很强，且首回合已客场1比0取胜，回到主场更容易以稳守控节奏为主。主队近期整体状态稳定，主场上半场极少落后，防守端连续性较好。虽然主队有数名伤停，但更多削弱轮换和边路活力，体系完整度仍优于客队。诺丁汉近期整体走势偏弱，近6场2平4负，锋线又缺少克里斯·伍德和阿沃尼伊，前场支点与终结能力受损明显，客场上半场落后率也偏高。客队后场同样有伤停，防线稳定性不足，但考虑到中日德兰手握领先优势，本场未必强攻，比赛节奏预计偏慢，最可能是主队低比分再胜。",
+          "both_score": "否",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
           "grok_score": "2-1",
-          "grok_analysis": "Home boosted by title-race motivation, solid home form and 1-0 first-leg win plus full H2H dominance; away hampered by poor recent results, relegation-zone pressure and heavy forward injuries (Wood, Awoniyi, Cunha out).",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "grok_analysis": "Home slight edge from prior 2 wins (1-0 leg1), strong form + title motivation vs away poor form/relegation fight. Odds away trap detected. CRS top adjusted for home adv + injuries.",
+          "gemini_score": "1-1",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
-          "model_agreement": true,
+          "model_agreement": false,
+          "candidate_scores": {
+            "2-1": 0.4,
+            "1-1": 0.25
+          },
           "poisson": {
-            "home_xg": 1.37,
-            "away_xg": 0.83
+            "home_win": 53.9,
+            "draw": 26.2,
+            "away_win": 19.9,
+            "predicted_score": "1-0",
+            "home_xg": 1.5,
+            "away_xg": 0.8,
+            "btts": 42.7,
+            "over_2_5": 40.4,
+            "top_scores": [
+              {
+                "score": "1-0",
+                "prob": 15.1
+              },
+              {
+                "score": "1-1",
+                "prob": 12.0
+              },
+              {
+                "score": "2-0",
+                "prob": 11.3
+              },
+              {
+                "score": "0-0",
+                "prob": 10.0
+              },
+              {
+                "score": "2-1",
+                "prob": 9.0
+              },
+              {
+                "score": "0-1",
+                "prob": 8.0
+              }
+            ],
+            "home_expected_goals": 1.5
           },
-          "expected_total_goals": 2.2,
+          "refined_poisson": {
+            "home_win": 41.3,
+            "draw": 27.8,
+            "away_win": 30.9,
+            "predicted_score": "1-1",
+            "top_scores": [
+              {
+                "score": "1-1",
+                "prob": 16.3
+              },
+              {
+                "score": "1-0",
+                "prob": 10.6
+              },
+              {
+                "score": "2-1",
+                "prob": 10.0
+              },
+              {
+                "score": "1-2",
+                "prob": 9.2
+              },
+              {
+                "score": "0-1",
+                "prob": 8.6
+              },
+              {
+                "score": "2-0",
+                "prob": 7.7
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "主胜 EV:+29.6% Kelly:4.35%",
+            "平局 EV:+11.86% Kelly:1.24%"
+          ],
           "extreme_warning": "无",
+          "smart_money_signal": "正常",
           "smart_signals": [],
-          "elo": {
-            "home_win": 71.9,
-            "draw": 20.0,
-            "away_win": 18.1,
-            "elo_diff": 240
-          },
-          "random_forest": {
-            "home_win": 37.9,
-            "draw": 24.8,
-            "away_win": 37.3
-          },
+          "model_consensus": 6,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 14.9
-            },
-            {
               "score": "1-1",
-              "prob": 12.6
+              "prob": 16.3
             },
             {
-              "score": "0-0",
-              "prob": 11.2
+              "score": "1-0",
+              "prob": 10.6
             },
             {
-              "score": "2-0",
-              "prob": 10.1
+              "score": "2-1",
+              "prob": 10.0
+            },
+            {
+              "score": "1-2",
+              "prob": 9.2
             },
             {
               "score": "0-1",
-              "prob": 9.3
+              "prob": 8.6
+            },
+            {
+              "score": "2-0",
+              "prob": 7.7
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 73.9,
+            "draw": 20.0,
+            "away_win": 16.1,
+            "elo_diff": 265
+          },
+          "random_forest": {
+            "home_win": 36.8,
+            "draw": 25.3,
+            "away_win": 38.0
+          },
+          "gradient_boost": {
+            "home_win": 35.5,
+            "draw": 26.8,
+            "away_win": 37.7
+          },
+          "neural_net": {
+            "home_win": 34.8,
+            "draw": 25.8,
+            "away_win": 39.4
+          },
+          "logistic": {
+            "home_win": 35.7,
+            "draw": 26.7,
+            "away_win": 37.6
+          },
+          "svm": {
+            "home_win": 35.7,
+            "draw": 25.1,
+            "away_win": 39.2
+          },
+          "knn": {
+            "home_win": 34.9,
+            "draw": 26.4,
+            "away_win": 38.6
+          },
+          "dixon_coles": {
+            "home_win": 43.6,
+            "draw": 29.5,
+            "away_win": 26.8
+          },
+          "bradley_terry": {
+            "home_win": 43.7,
+            "draw": 24.0,
+            "away_win": 32.3
+          },
+          "home_form": {
+            "score": 51.5,
+            "trend": "一般",
+            "momentum": 51.5,
+            "streak": 1,
+            "streak_type": "D"
+          },
+          "away_form": {
+            "score": 51.5,
+            "trend": "一般",
+            "momentum": 51.5,
+            "streak": 1,
+            "streak_type": "D"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "无变动",
+            "h_adj": 0,
+            "a_adj": 0,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "均衡",
+            "adj_h": 0,
+            "adj_a": 0
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 42.7,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -22.8
+          },
+          "kelly_away": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -2.6
+          },
+          "odds": {
+            "implied_home": 32.8,
+            "implied_draw": 26.1,
+            "implied_away": 41.1
+          }
         },
-        "recommend_score": 45.6,
-        "is_recommended": true
+        "recommend_score": 49.15,
+        "is_recommended": false
       },
       {
         "home_team": "罗马",
@@ -2528,66 +4658,242 @@
         "h2h": [],
         "prediction": {
           "predicted_score": "1-1",
-          "home_win_pct": 34.7,
-          "draw_pct": 32.0,
-          "away_win_pct": 33.3,
-          "confidence": 42,
-          "result": "主胜",
-          "risk_level": "高",
+          "home_win_pct": 28.3,
+          "draw_pct": 66.1,
+          "away_win_pct": 5.6,
+          "confidence": 83,
+          "result": "平局",
+          "risk_level": "低",
           "over_under_2_5": "小",
-          "both_score": "是",
-          "gpt_score": "1-1",
-          "gpt_analysis": "罗马主场稳定且防守基线更强，但迪巴拉、多夫比克、苏莱等前场减员明显，进攻创造力和终结力都被压低。博洛尼亚近期整体状态和客场表现更热，反击与前场压迫有威胁，不过本身联赛场均进球不高，且后场有门将与边后卫减员，防线完整度下降。两队实力接近、首回合已打平，本场更像谨慎拉锯战，节奏偏慢，平局概率高。",
+          "both_score": "否",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
           "grok_score": "1-1",
-          "grok_analysis": "Roma attack severely weakened by key forward injuries (Dybala knee, Dovbyk groin) plus multiple suspensions; Bologna hot away form and slight H2H edge offset defensive hits (GK bruise, Miranda/De Silvestri suspensions); mid-table derby raises draw likelihood with cautious tactical matchup.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "grok_analysis": "Draw likely: similar strength, Roma injuries (Dybala etc) cut GF, Bologna away hot, H2H even. 1-1.",
+          "gemini_score": "1-1",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
-          "model_agreement": false,
+          "model_agreement": true,
+          "candidate_scores": {
+            "1-1": 1.1
+          },
           "poisson": {
-            "home_xg": 0.98,
-            "away_xg": 0.96
+            "home_win": 86.0,
+            "draw": 10.6,
+            "away_win": 3.4,
+            "predicted_score": "2-0",
+            "home_xg": 2.75,
+            "away_xg": 0.4,
+            "btts": 30.6,
+            "over_2_5": 60.2,
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 16.2
+              },
+              {
+                "score": "3-0",
+                "prob": 14.9
+              },
+              {
+                "score": "1-0",
+                "prob": 11.8
+              },
+              {
+                "score": "4-0",
+                "prob": 10.2
+              },
+              {
+                "score": "2-1",
+                "prob": 6.5
+              },
+              {
+                "score": "3-1",
+                "prob": 5.9
+              }
+            ],
+            "home_expected_goals": 2.75
           },
-          "expected_total_goals": 1.94,
+          "refined_poisson": {
+            "home_win": 71.9,
+            "draw": 18.6,
+            "away_win": 9.5,
+            "predicted_score": "2-0",
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 12.9
+              },
+              {
+                "score": "1-0",
+                "prob": 12.2
+              },
+              {
+                "score": "2-1",
+                "prob": 12.1
+              },
+              {
+                "score": "1-1",
+                "prob": 10.5
+              },
+              {
+                "score": "3-0",
+                "prob": 9.9
+              },
+              {
+                "score": "3-1",
+                "prob": 6.0
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "平局 EV:+123.42% Kelly:12.96%"
+          ],
           "extreme_warning": "无",
+          "smart_money_signal": "正常",
           "smart_signals": [],
-          "elo": {
-            "home_win": 47.5,
-            "draw": 26.0,
-            "away_win": 39.5,
-            "elo_diff": 32
-          },
-          "random_forest": {
-            "home_win": 61.6,
-            "draw": 24.9,
-            "away_win": 13.5
-          },
+          "model_consensus": 2,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "0-0",
-              "prob": 14.8
+              "score": "2-0",
+              "prob": 12.9
             },
             {
               "score": "1-0",
-              "prob": 14.1
+              "prob": 12.2
+            },
+            {
+              "score": "2-1",
+              "prob": 12.1
             },
             {
               "score": "1-1",
-              "prob": 13.6
+              "prob": 10.5
             },
             {
-              "score": "0-1",
-              "prob": 13.5
+              "score": "3-0",
+              "prob": 9.9
             },
             {
-              "score": "0-2",
-              "prob": 7.1
+              "score": "3-1",
+              "prob": 6.0
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 52.1,
+            "draw": 26.0,
+            "away_win": 34.9,
+            "elo_diff": 70
+          },
+          "random_forest": {
+            "home_win": 60.3,
+            "draw": 25.4,
+            "away_win": 14.2
+          },
+          "gradient_boost": {
+            "home_win": 59.3,
+            "draw": 26.9,
+            "away_win": 13.8
+          },
+          "neural_net": {
+            "home_win": 58.4,
+            "draw": 25.9,
+            "away_win": 15.7
+          },
+          "logistic": {
+            "home_win": 59.1,
+            "draw": 26.8,
+            "away_win": 14.1
+          },
+          "svm": {
+            "home_win": 59.6,
+            "draw": 25.2,
+            "away_win": 15.2
+          },
+          "knn": {
+            "home_win": 58.6,
+            "draw": 26.6,
+            "away_win": 14.8
+          },
+          "dixon_coles": {
+            "home_win": 74.5,
+            "draw": 17.0,
+            "away_win": 8.5
+          },
+          "bradley_terry": {
+            "home_win": 48.4,
+            "draw": 24.0,
+            "away_win": 27.6
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 33.3,
+            "trend": "一般",
+            "momentum": 33.3,
+            "streak": 1,
+            "streak_type": "L"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "无变动",
+            "h_adj": 0,
+            "a_adj": 0,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "均衡",
+            "adj_h": 0,
+            "adj_a": 0
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 30.6,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 7.94,
+            "value": "True",
+            "edge": 17.8
+          },
+          "kelly_away": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -85.5
+          },
+          "odds": {
+            "implied_home": 56.5,
+            "implied_draw": 26.3,
+            "implied_away": 17.2
+          }
         },
-        "recommend_score": 6.8,
-        "is_recommended": false
+        "recommend_score": 75.32,
+        "is_recommended": true
       },
       {
         "home_team": "波尔图",
@@ -2696,65 +5002,241 @@
         "h2h": [],
         "prediction": {
           "predicted_score": "2-1",
-          "home_win_pct": 51.9,
-          "draw_pct": 25.9,
-          "away_win_pct": 22.2,
-          "confidence": 59,
+          "home_win_pct": 75.2,
+          "draw_pct": 11.5,
+          "away_win_pct": 13.3,
+          "confidence": 86,
           "result": "主胜",
-          "risk_level": "中",
+          "risk_level": "低",
           "over_under_2_5": "小",
-          "both_score": "是",
-          "gpt_score": "2-1",
-          "gpt_analysis": "波尔图联赛排名第1且处于争冠节奏，战意很强，近期整体状态和主场表现都明显优于斯图加特；首回合客场2比1领先也让他们在比赛控制上更有主动权。进攻端波尔图受个别伤停影响但整体火力仍稳定，主场上半场进入状态很快。防守端波尔图失球率较低，结构更完整。斯图加特近期状态起伏，虽然客场不差，但后防线伤停与轮换问题更明显，边后卫和中后场完整性受损，面对波尔图的高压开局和主场推进容易被针对。考虑到斯图加特仍具备德甲前四级别的反击能力，预计波尔图优势下赢球但难零封。",
+          "both_score": "否",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
           "grok_score": "2-1",
-          "grok_analysis": "Porto’s excellent form (WWDWW), home dominance and title-race motivation offset 5 injuries/suspensions; Stuttgart’s 8 injuries/suspensions cripple attack and defense while mixed form (WDLWD) limits threat, favouring narrow home win as in first leg.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "grok_analysis": "Home adv +0.3g offsets injuries -0.3g net neutral. First-leg 2-1 win + superior form (WWDWW) + title motivation anchor CRS 2-1. Similar strength raises draw risk.",
+          "gemini_score": "2-1",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
-          "model_agreement": false,
+          "model_agreement": true,
+          "candidate_scores": {
+            "2-1": 1.1
+          },
           "poisson": {
-            "home_xg": 1.45,
-            "away_xg": 0.85
+            "home_win": 62.5,
+            "draw": 22.1,
+            "away_win": 15.3,
+            "predicted_score": "1-0",
+            "home_xg": 1.84,
+            "away_xg": 0.78,
+            "btts": 45.6,
+            "over_2_5": 48.7,
+            "top_scores": [
+              {
+                "score": "1-0",
+                "prob": 13.4
+              },
+              {
+                "score": "2-0",
+                "prob": 12.3
+              },
+              {
+                "score": "1-1",
+                "prob": 10.4
+              },
+              {
+                "score": "2-1",
+                "prob": 9.6
+              },
+              {
+                "score": "3-0",
+                "prob": 7.6
+              },
+              {
+                "score": "0-0",
+                "prob": 7.3
+              }
+            ],
+            "home_expected_goals": 1.84
           },
-          "expected_total_goals": 2.3,
+          "refined_poisson": {
+            "home_win": 52.0,
+            "draw": 23.0,
+            "away_win": 25.0,
+            "predicted_score": "1-1",
+            "top_scores": [
+              {
+                "score": "1-1",
+                "prob": 12.7
+              },
+              {
+                "score": "2-1",
+                "prob": 12.6
+              },
+              {
+                "score": "1-2",
+                "prob": 7.4
+              },
+              {
+                "score": "2-0",
+                "prob": 7.3
+              },
+              {
+                "score": "1-0",
+                "prob": 7.1
+              },
+              {
+                "score": "2-2",
+                "prob": 5.3
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "主胜 EV:+57.17% Kelly:13.11%"
+          ],
           "extreme_warning": "无",
+          "smart_money_signal": "正常",
           "smart_signals": [],
-          "elo": {
-            "home_win": 49.5,
-            "draw": 26.0,
-            "away_win": 37.5,
-            "elo_diff": 48
-          },
-          "random_forest": {
-            "home_win": 45.6,
-            "draw": 24.8,
-            "away_win": 29.7
-          },
+          "model_consensus": 10,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 15.5
-            },
-            {
               "score": "1-1",
-              "prob": 11.9
-            },
-            {
-              "score": "2-0",
-              "prob": 10.3
-            },
-            {
-              "score": "0-0",
-              "prob": 9.8
+              "prob": 12.7
             },
             {
               "score": "2-1",
-              "prob": 9.5
+              "prob": 12.6
+            },
+            {
+              "score": "1-2",
+              "prob": 7.4
+            },
+            {
+              "score": "2-0",
+              "prob": 7.3
+            },
+            {
+              "score": "1-0",
+              "prob": 7.1
+            },
+            {
+              "score": "2-2",
+              "prob": 5.3
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 53.9,
+            "draw": 26.0,
+            "away_win": 33.1,
+            "elo_diff": 85
+          },
+          "random_forest": {
+            "home_win": 44.7,
+            "draw": 25.3,
+            "away_win": 30.0
+          },
+          "gradient_boost": {
+            "home_win": 43.5,
+            "draw": 26.8,
+            "away_win": 29.7
+          },
+          "neural_net": {
+            "home_win": 42.7,
+            "draw": 25.8,
+            "away_win": 31.5
+          },
+          "logistic": {
+            "home_win": 43.6,
+            "draw": 26.7,
+            "away_win": 29.7
+          },
+          "svm": {
+            "home_win": 43.8,
+            "draw": 25.1,
+            "away_win": 31.2
+          },
+          "knn": {
+            "home_win": 43.0,
+            "draw": 26.4,
+            "away_win": 30.6
+          },
+          "dixon_coles": {
+            "home_win": 54.8,
+            "draw": 22.5,
+            "away_win": 22.7
+          },
+          "bradley_terry": {
+            "home_win": 43.4,
+            "draw": 24.0,
+            "away_win": 32.6
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 51.5,
+            "trend": "一般",
+            "momentum": 51.5,
+            "streak": 1,
+            "streak_type": "D"
+          },
+          "handicap_signal": "盘口正常",
+          "odds_movement": {
+            "signal": "无变动",
+            "h_adj": 0,
+            "a_adj": 0,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "均衡",
+            "adj_h": 0,
+            "adj_a": 0
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 45.6,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 0.89,
+            "value": "True",
+            "edge": 3.9
+          },
+          "kelly_away": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -27.2
+          },
+          "odds": {
+            "implied_home": 42.3,
+            "implied_draw": 26.1,
+            "implied_away": 31.6
+          }
         },
-        "recommend_score": 23.6,
+        "recommend_score": 98.65,
         "is_recommended": true
       },
       {
@@ -2867,69 +5349,246 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
-          "home_win_pct": 45.2,
-          "draw_pct": 30.3,
-          "away_win_pct": 24.5,
-          "confidence": 40,
-          "result": "主胜",
-          "risk_level": "高",
+          "predicted_score": "1-2",
+          "home_win_pct": 28.3,
+          "draw_pct": 10.0,
+          "away_win_pct": 61.7,
+          "confidence": 72,
+          "result": "客胜",
+          "risk_level": "中",
           "over_under_2_5": "小",
-          "both_score": "是",
-          "gpt_score": "1-1",
-          "gpt_analysis": "维拉虽有主场与首回合1球领先优势，但近期整体状态走低，卡马拉、蒂勒曼斯等伤缺削弱中场控制与防守保护，进攻稳定性也受影响。里尔近况更好，客场表现不差，且落后局面带来更强抢分动力，不过本身伤病较多，尤其中后场与轮换深度受损。战术上维拉更可能偏谨慎控节奏，里尔会主动压上但未必冒进，结合双方实力接近与平局倾向，最像1比1。",
-          "grok_score": "2-1",
-          "grok_analysis": "Villa home edge + superior GF avg + first-leg 1-0 win offset 4 key injuries (midfield/def); Lille's 7-man injury crisis (multiple knee/thigh, captain André) severely caps attack despite recent form.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "both_score": "否",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "1-2",
+          "grok_analysis": "Villa poor form (1W1D4L), injuries; Lille good (4W1D1L). Market to away. Slight adv. Predict 1-2.",
+          "gemini_score": "1-2",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
-          "model_agreement": false,
+          "model_agreement": true,
+          "candidate_scores": {
+            "1-2": 1.1
+          },
           "poisson": {
-            "home_xg": 1.22,
-            "away_xg": 0.82
+            "home_win": 85.8,
+            "draw": 10.7,
+            "away_win": 3.5,
+            "predicted_score": "2-0",
+            "home_xg": 2.73,
+            "away_xg": 0.4,
+            "btts": 30.6,
+            "over_2_5": 59.7,
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 16.3
+              },
+              {
+                "score": "3-0",
+                "prob": 14.8
+              },
+              {
+                "score": "1-0",
+                "prob": 12.0
+              },
+              {
+                "score": "4-0",
+                "prob": 10.1
+              },
+              {
+                "score": "2-1",
+                "prob": 6.5
+              },
+              {
+                "score": "3-1",
+                "prob": 5.9
+              }
+            ],
+            "home_expected_goals": 2.73
           },
-          "expected_total_goals": 2.04,
-          "extreme_warning": "无",
-          "smart_signals": [
-            "💰 Sharp资金流向客胜"
+          "refined_poisson": {
+            "home_win": 72.8,
+            "draw": 17.7,
+            "away_win": 9.5,
+            "predicted_score": "2-1",
+            "top_scores": [
+              {
+                "score": "2-1",
+                "prob": 12.4
+              },
+              {
+                "score": "2-0",
+                "prob": 12.3
+              },
+              {
+                "score": "1-0",
+                "prob": 11.2
+              },
+              {
+                "score": "1-1",
+                "prob": 10.4
+              },
+              {
+                "score": "3-0",
+                "prob": 9.8
+              },
+              {
+                "score": "3-1",
+                "prob": 6.3
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "客胜 EV:+217.76% Kelly:13.12%"
           ],
-          "elo": {
-            "home_win": 45.5,
-            "draw": 26.0,
-            "away_win": 41.5,
-            "elo_diff": 16
-          },
-          "random_forest": {
-            "home_win": 64.8,
-            "draw": 21.8,
-            "away_win": 13.4
-          },
+          "extreme_warning": "无",
+          "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热60%",
+          "smart_signals": [
+            "💰 Sharp资金流向客胜",
+            "🚨 主胜超热60%"
+          ],
+          "model_consensus": 8,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 15.7
-            },
-            {
-              "score": "1-1",
-              "prob": 13.4
-            },
-            {
-              "score": "0-0",
-              "prob": 13.0
-            },
-            {
-              "score": "0-1",
-              "prob": 10.8
+              "score": "2-1",
+              "prob": 12.4
             },
             {
               "score": "2-0",
-              "prob": 9.7
+              "prob": 12.3
+            },
+            {
+              "score": "1-0",
+              "prob": 11.2
+            },
+            {
+              "score": "1-1",
+              "prob": 10.4
+            },
+            {
+              "score": "3-0",
+              "prob": 9.8
+            },
+            {
+              "score": "3-1",
+              "prob": 6.3
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 50.3,
+            "draw": 26.0,
+            "away_win": 36.7,
+            "elo_diff": 55
+          },
+          "random_forest": {
+            "home_win": 63.5,
+            "draw": 22.3,
+            "away_win": 14.2
+          },
+          "gradient_boost": {
+            "home_win": 62.4,
+            "draw": 23.7,
+            "away_win": 13.8
+          },
+          "neural_net": {
+            "home_win": 61.5,
+            "draw": 22.8,
+            "away_win": 15.7
+          },
+          "logistic": {
+            "home_win": 62.2,
+            "draw": 23.7,
+            "away_win": 14.1
+          },
+          "svm": {
+            "home_win": 62.7,
+            "draw": 22.0,
+            "away_win": 15.2
+          },
+          "knn": {
+            "home_win": 61.8,
+            "draw": 23.4,
+            "away_win": 14.8
+          },
+          "dixon_coles": {
+            "home_win": 74.7,
+            "draw": 16.5,
+            "away_win": 8.8
+          },
+          "bradley_terry": {
+            "home_win": 49.6,
+            "draw": 24.0,
+            "away_win": 26.4
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 33.3,
+            "trend": "一般",
+            "momentum": 33.3,
+            "streak": 1,
+            "streak_type": "L"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "💰 Sharp资金流向客胜",
+            "h_adj": -5,
+            "a_adj": 6,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "🚨 主胜超热60%",
+            "adj_h": -6,
+            "adj_a": 3
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 30.6,
+          "pace_rating": "极快",
+          "kelly_home": {
+            "kelly": 1.03,
+            "value": "True",
+            "edge": 2.0
+          },
+          "kelly_away": {
+            "kelly": 0.0,
+            "value": "False",
+            "edge": -44.9
+          },
+          "odds": {
+            "implied_home": 59.6,
+            "implied_draw": 23.2,
+            "implied_away": 17.3
+          }
         },
-        "recommend_score": 6.0,
-        "is_recommended": false
+        "recommend_score": 75.38,
+        "is_recommended": true
       },
       {
         "home_team": "贝蒂斯",
@@ -3037,66 +5696,246 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
-          "home_win_pct": 44.8,
-          "draw_pct": 30.1,
-          "away_win_pct": 25.0,
-          "confidence": 40,
-          "result": "主胜",
+          "predicted_score": "1-2",
+          "home_win_pct": 32.8,
+          "draw_pct": 29.9,
+          "away_win_pct": 37.3,
+          "confidence": 51,
+          "result": "客胜",
           "risk_level": "高",
           "over_under_2_5": "小",
-          "both_score": "是",
-          "gpt_score": "1-1",
-          "gpt_analysis": "贝蒂斯主场有反扑动机，但伊斯科和洛塞尔索缺阵明显削弱前场创造力，略伦特停赛也让防线稳定性下降。帕纳辛纳近期整体状态更好且首回合占优，不过客队本场名单损失更多，后场与中场轮换/缺阵会削弱防守硬度与反击衔接。结合两队实力接近、欧战次回合更谨慎以及平局倾向，本场更像一场低至中节奏的胶着战。",
-          "grok_score": "2-1",
-          "grok_analysis": "Betis strong home form (WWDWW, high GF/low GA) and motivation to overturn 0-1 first-leg deficit offset absences of Isco/Lo Celso/Llorente. Panathinaikos recent form good but crippled by extensive injuries/suspensions/rotations (Sissoko, Renato Sanchez, Villena, multiple defenders/attackers out) severely weakening attack and defense.",
-          "gemini_score": "-",
-          "gemini_analysis": "N/A",
+          "both_score": "否",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "1-2",
+          "grok_analysis": "Betis home fav (odds 1.3) but key injuries (Isco,Llorente) & 0-1 first-leg loss; Panathinaikos strong form (4W2D) predicts 1-2 away win.",
+          "gemini_score": "1-1",
+          "gemini_analysis": "format error",
           "claude_score": "-",
           "claude_analysis": "N/A",
           "model_agreement": false,
+          "candidate_scores": {
+            "1-2": 0.4,
+            "1-1": 0.25
+          },
           "poisson": {
-            "home_xg": 1.2,
-            "away_xg": 0.82
+            "home_win": 88.0,
+            "draw": 9.1,
+            "away_win": 2.9,
+            "predicted_score": "2-0",
+            "home_xg": 2.95,
+            "away_xg": 0.4,
+            "btts": 30.9,
+            "over_2_5": 64.0,
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 15.3
+              },
+              {
+                "score": "3-0",
+                "prob": 15.0
+              },
+              {
+                "score": "4-0",
+                "prob": 11.1
+              },
+              {
+                "score": "1-0",
+                "prob": 10.3
+              },
+              {
+                "score": "5-0",
+                "prob": 6.5
+              },
+              {
+                "score": "2-1",
+                "prob": 6.1
+              }
+            ],
+            "home_expected_goals": 2.95
           },
-          "expected_total_goals": 2.02,
+          "refined_poisson": {
+            "home_win": 75.9,
+            "draw": 15.7,
+            "away_win": 8.4,
+            "predicted_score": "2-0",
+            "top_scores": [
+              {
+                "score": "2-0",
+                "prob": 12.9
+              },
+              {
+                "score": "2-1",
+                "prob": 12.2
+              },
+              {
+                "score": "1-0",
+                "prob": 11.3
+              },
+              {
+                "score": "3-0",
+                "prob": 10.6
+              },
+              {
+                "score": "1-1",
+                "prob": 8.7
+              },
+              {
+                "score": "3-1",
+                "prob": 6.4
+              }
+            ]
+          },
+          "value_bets_summary": [
+            "平局 EV:+32.16% Kelly:2.35%",
+            "客胜 EV:+177.89% Kelly:6.89%"
+          ],
           "extreme_warning": "无",
-          "smart_signals": [],
-          "elo": {
-            "home_win": 41.5,
-            "draw": 26.0,
-            "away_win": 45.5,
-            "elo_diff": -16
-          },
-          "random_forest": {
-            "home_win": 73.0,
-            "draw": 18.8,
-            "away_win": 8.2
-          },
+          "smart_money_signal": "🚨 主胜超热68%",
+          "smart_signals": [
+            "🚨 主胜超热68%"
+          ],
+          "model_consensus": 3,
+          "total_models": 11,
+          "expected_total_goals": 2.5,
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 16.2
+              "score": "2-0",
+              "prob": 12.9
             },
             {
-              "score": "0-0",
-              "prob": 13.5
+              "score": "2-1",
+              "prob": 12.2
+            },
+            {
+              "score": "1-0",
+              "prob": 11.3
+            },
+            {
+              "score": "3-0",
+              "prob": 10.6
             },
             {
               "score": "1-1",
-              "prob": 13.3
+              "prob": 8.7
             },
             {
-              "score": "0-1",
-              "prob": 10.7
-            },
-            {
-              "score": "2-0",
-              "prob": 9.8
+              "score": "3-1",
+              "prob": 6.4
             }
-          ]
+          ],
+          "elo": {
+            "home_win": 46.6,
+            "draw": 26.0,
+            "away_win": 40.4,
+            "elo_diff": 25
+          },
+          "random_forest": {
+            "home_win": 71.7,
+            "draw": 19.3,
+            "away_win": 9.0
+          },
+          "gradient_boost": {
+            "home_win": 70.7,
+            "draw": 20.8,
+            "away_win": 8.6
+          },
+          "neural_net": {
+            "home_win": 69.7,
+            "draw": 19.8,
+            "away_win": 10.5
+          },
+          "logistic": {
+            "home_win": 70.3,
+            "draw": 20.8,
+            "away_win": 8.9
+          },
+          "svm": {
+            "home_win": 71.0,
+            "draw": 19.1,
+            "away_win": 9.9
+          },
+          "knn": {
+            "home_win": 70.0,
+            "draw": 20.4,
+            "away_win": 9.5
+          },
+          "dixon_coles": {
+            "home_win": 77.0,
+            "draw": 15.4,
+            "away_win": 7.6
+          },
+          "bradley_terry": {
+            "home_win": 49.6,
+            "draw": 24.0,
+            "away_win": 26.4
+          },
+          "home_form": {
+            "score": 86.7,
+            "trend": "上升",
+            "momentum": 86.7,
+            "streak": 2,
+            "streak_type": "W"
+          },
+          "away_form": {
+            "score": 33.3,
+            "trend": "一般",
+            "momentum": 33.3,
+            "streak": 1,
+            "streak_type": "L"
+          },
+          "handicap_signal": "⚠️ 盘口偏离",
+          "odds_movement": {
+            "signal": "无变动",
+            "h_adj": 0,
+            "a_adj": 0,
+            "d_adj": 0
+          },
+          "vote_analysis": {
+            "signal": "🚨 主胜超热68%",
+            "adj_h": -6,
+            "adj_a": 3
+          },
+          "h2h_blood": {
+            "h_adj": 0.0,
+            "a_adj": 0.0,
+            "signal": "无交锋",
+            "avg_goals": 2.5
+          },
+          "crs_analysis": {
+            "top_scores": [],
+            "signals": []
+          },
+          "ttg_analysis": {
+            "expected_goals": 2.5,
+            "over_2_5": 50,
+            "probs": {}
+          },
+          "halftime": {
+            "top": [],
+            "halftime_draw_prob": 0
+          },
+          "over_2_5": 50,
+          "btts": 30.9,
+          "pace_rating": "中等",
+          "kelly_home": {
+            "kelly": 6.15,
+            "value": "True",
+            "edge": 7.4
+          },
+          "kelly_away": {
+            "kelly": 0,
+            "value": false,
+            "edge": 0
+          },
+          "odds": {
+            "implied_home": 67.8,
+            "implied_draw": 20.2,
+            "implied_away": 12.0
+          }
         },
-        "recommend_score": 6.0,
+        "recommend_score": 29.42,
         "is_recommended": false
       }
     ]
