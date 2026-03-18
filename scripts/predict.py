@@ -153,7 +153,7 @@ def build_commander_prompt(m, gpt_res, grok_res, gemini_res, stats_pred):
     if baseface:
         p += "[EXPERT] %s\n" % baseface[:200]
     p += "\n[RULES]\n"
-    p += "1. Grok(40%%)+GPT(35%%)=75%% -> if agree, strong adopt\n"
+    p += "1. Grok(40%%)+GPT(30%%)=70%% -> if agree, strong adopt\n"
     p += "2. All 3 agree -> lock\n"
     p += "3. Market TOP1 = anchor\n"
     p += "4. Context: title=tight, relegation=chaos\n"
