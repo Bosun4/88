@@ -130,10 +130,10 @@ def build_commander_prompt(m, gpt_res, grok_res, gemini_res, stats_pred):
     p += "[SYSTEM] Supreme Match Arbiter. Final verdict.\n"
     p += "[TASK] Exact score for [%s] vs [%s].\n" % (h, a)
     p += "[CRITICAL] Make YOUR OWN judgment. Do not blindly copy any AI.\n\n"
-    p += "[AI RECON] Grok=40%% GPT=35%% Gemini=25%%\n"
-    p += "GPT(35%%): %s | %s\n" % (gpt_res.get("ai_score","?"), str(gpt_res.get("analysis","?"))[:120])
+    p += "[AI RECON] Grok=40%% GPT=30%% Gemini=30%%\n"
+    p += "GPT(30%%): %s | %s\n" % (gpt_res.get("ai_score","?"), str(gpt_res.get("analysis","?"))[:120])
     p += "Grok(40%%): %s | %s\n" % (grok_res.get("ai_score","?"), str(grok_res.get("analysis","?"))[:120])
-    p += "Gemini(25%%): %s | %s\n\n" % (gemini_res.get("ai_score","?"), str(gemini_res.get("analysis","?"))[:120])
+    p += "Gemini(30%%): %s | %s\n\n" % (gemini_res.get("ai_score","?"), str(gemini_res.get("analysis","?"))[:120])
     ctx = detect_league_context(m)
     if ctx:
         p += "[CONTEXT] %s\n" % " | ".join(ctx)
@@ -269,6 +269,8 @@ def call_gpt(prompt):
         "\u718a\u732b-\u6309\u91cf-gpt-5.3-codex-\u6ee1\u8840",
         "\u718a\u732b-A-10-gpt-5.3-codex",
         "\u718a\u732b-A-1-gpt-5.2",
+        "\u718a\u732b-A-5-gpt-5.2",
+        "\u718a\u732b-A-8-deepseek-v3.2",
     ])
 
 def call_grok(prompt):
@@ -289,6 +291,11 @@ def call_claude(prompt):
         "\u718a\u732b-\u6309\u91cf-\u9876\u7ea7\u7279\u4f9b-\u5b98max-claude-opus-4.6",
         "\u718a\u732b-\u6309\u91cf-\u9876\u7ea7\u7279\u4f9b-\u5b98max-claude-opus-4.6-thinking",
         "\u718a\u732b-\u6309\u91cf-\u7279\u4f9b\u9876\u7ea7-\u5b98\u65b9\u6b63\u5411\u6ee1\u8840-claude-opus-4.6",
+        "\u718a\u732b-\u7279\u4f9b-\u6309\u91cf-Q-claude-opus-4.6",
+        "\u718a\u732b-\u7279\u4f9b-\u6309\u91cf-Q-claude-opus-4.6-thinking",
+        "\u718a\u732b-\u7279\u4f9b-\u6309\u91cf-Q-claude-sonnet-4.6",
+        "\u718a\u732b-\u7279\u4ef7\u9006-19-claude-opus-4-6",
+        "\u718a\u732b-\u7279\u4ef7\u9006-15-claude-sonnet-4-6",
     ])
 
 
