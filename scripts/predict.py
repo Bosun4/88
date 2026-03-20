@@ -1,6 +1,7 @@
 import json, requests, time, re, os
 from config import *
 from models import EnsemblePredictor
+from league_intel import build_league_intelligence
 
 ensemble = EnsemblePredictor()
 
@@ -17,6 +18,33 @@ def calculate_value_bet(prob_pct, odds):
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
 
+def calc_expected_goals(m):
+    v2 = m.get("v2_odds_dict", {})
+    if not v2: v2 = m
+    ttg = {"a0":0,"a1":1,"a2":2,"a3":3,"a4":4,"a5":5,"a6":6,"a7":7}
+    probs = {}
+    for k, g in ttg.items():
+        ov = float(v2.get(k, 0) or 0)
+        if ov > 1:
+            probs[g] = 1.0 / ov
+    if not probs:
+        return 2.5, 2, ""
+    ti = sum(probs.values())
+    probs = {k: v/ti for k, v in probs.items()}
+    exp = sum(g * p for g, p in probs.items())
+    most_likely = max(probs, key=probs.get)
+    parts = []
+    for g in sorted(probs):
+        parts.append("%dg=%.0f%%" % (g, probs[g]*100))
+    zero_odds = float(v2.get("a0", 0) or 0)
+    summary = "Expected: %.1f goals | Most likely: %d goals | %s" % (exp, most_likely, " ".join(parts))
+    if zero_odds > 0 and zero_odds < 8.5:
+        summary += " | WARNING: 0-goal odds only %.1f = high chance of 0-0!" % zero_odds
+    if float(v2.get("a7", 0) or 0) > 0 and float(v2.get("a7", 0) or 0) < 15:
+        summary += " | WARNING: 7+goals odds only %.1f = HIGH scoring game!" % float(v2.get("a7", 0))
+    return round(exp, 1), most_likely, summary
+
+
 def detect_match_context(m):
     try: hr = int(m.get("home_rank", 10) or 10)
     except: hr = 10
@@ -25,24 +53,22 @@ def detect_match_context(m):
     lg = str(m.get("league", ""))
     baseface = str(m.get("baseface", ""))
     ctx = []
-    is_knockout = False
+    is_ko = False
     if any(k in lg for k in ["\u6b27\u7f57\u5df4","\u6b27\u51a0","\u6b27\u534f\u8054","Europa","Champions","Conference"]):
-        is_knockout = True
-        ctx.append("KNOCKOUT LEG: Elimination match! Teams MUST attack. Goals typically 2.5-4+ per game. Do NOT predict low-scoring draws unless both legs are 0-0.")
-    if "\u6b21\u56de\u5408" in baseface or "\u7b2c\u4e8c\u56de\u5408" in baseface or "2nd leg" in baseface.lower():
-        ctx.append("2ND LEG: Trailing team will go all-out attack, expect MORE goals than 1st leg. Consider aggregate score pressure.")
+        is_ko = True
+        ctx.append("KNOCKOUT: expect 2.5-4+ goals, avoid low-scoring predictions")
     if hr <= 3 or ar <= 3:
-        ctx.append("TITLE RACE: top-3 team, high motivation")
+        ctx.append("TOP TEAM involved")
     if hr >= 16 or ar >= 16:
-        ctx.append("RELEGATION: desperate play, chaotic")
-    if abs(hr - ar) <= 3 and hr <= 10:
-        ctx.append("SIMILAR STRENGTH: competitive match")
+        ctx.append("RELEGATION team: desperate play")
     if hr <= 5 and ar >= 14:
-        ctx.append("MISMATCH: strong home favorite, 2+ goal win likely")
-    return ctx, is_knockout
+        ctx.append("MISMATCH: strong home, 2+ goal win likely")
+    if abs(hr - ar) <= 3 and hr <= 10:
+        ctx.append("SIMILAR STRENGTH: competitive")
+    return ctx, is_ko
 
 
-def get_crs_top5(m):
+def get_crs_top7(m):
     v2 = m.get("v2_odds_dict", {})
     if not v2: v2 = m
     crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2",
@@ -57,25 +83,6 @@ def get_crs_top5(m):
     return crs[:7]
 
 
-def get_ttg_summary(m):
-    v2 = m.get("v2_odds_dict", {})
-    if not v2: v2 = m
-    ttg = {"a0":0,"a1":1,"a2":2,"a3":3,"a4":4,"a5":5,"a6":6,"a7":7}
-    probs = {}
-    for k, g in ttg.items():
-        ov = float(v2.get(k, 0) or 0)
-        if ov > 1:
-            probs[g] = round(1/ov*100, 1)
-    if not probs: return ""
-    ti = sum(probs.values())
-    if ti > 0: probs = {k: round(v/ti*100, 1) for k, v in probs.items()}
-    exp = sum(g * p/100 for g, p in probs.items())
-    parts = []
-    for g in sorted(probs.keys()):
-        parts.append("%dg=%.0f%%" % (g, probs[g]))
-    return "Expected total: %.1f goals | %s" % (exp, " ".join(parts))
-
-
 def parse_score(s):
     try:
         p = str(s).split("-")
@@ -84,188 +91,158 @@ def parse_score(s):
         return None, None
 
 
+def build_goals_constraint(exp_goals, most_likely_total):
+    lo = max(0, most_likely_total - 1)
+    hi = most_likely_total + 2
+    return "HARD CONSTRAINT: Market expects %.1f total goals. Your predicted score MUST have %d-%d total goals. Scores outside this range are WRONG." % (exp_goals, lo, hi)
+
+
 # ====================================================================
-# AI 1: GPT - Tactical Logic + Score Prediction
+# GPT - Tactical Analyst
 # ====================================================================
-def build_gpt_prompt(m):
+def build_gpt_prompt(m, goals_info, goals_constraint):
     h, a = m.get("home_team", "?"), m.get("away_team", "?")
     lg = m.get("league", "?")
     sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
-    intel = m.get("intelligence", {})
     hs = m.get("home_stats", {})
     ast = m.get("away_stats", {})
-    ctx, is_ko = detect_match_context(m)
-    p = "[ROLE] Tactical analyst. Predict exact score using logic and data.\n"
+    intel = m.get("intelligence", {})
+    ctx, _ = detect_match_context(m)
+    p = "[ROLE] Tactical analyst. Predict exact score.\n"
     p += "[MATCH] %s | %s vs %s\n" % (lg, h, a)
     p += "[ODDS] H=%s D=%s A=%s HC=%s\n" % (sp_h, sp_d, sp_a, m.get("give_ball", "?"))
-    if ctx:
-        p += "[CONTEXT] %s\n" % " | ".join(ctx)
-    ttg = get_ttg_summary(m)
-    if ttg:
-        p += "[GOALS MARKET] %s\n" % ttg
+    if ctx: p += "[CONTEXT] %s\n" % " | ".join(ctx)
+    league_info, _, _, _ = build_league_intelligence(m)
+    p += "\n[LEAGUE INTELLIGENCE]\n%s\n" % league_info
+    p += "\n[TOTAL GOALS MARKET]\n%s\n" % goals_info
+    p += "[%s]\n" % goals_constraint
     baseface = str(m.get("baseface", "")).strip()
-    if baseface:
-        p += "\n[ANALYSIS]\n%s\n" % baseface[:500]
-    p += "\n[HOME %s] Rank#%s | %sP %sW %sD %sL | GF=%s GA=%s | AvgGF=%s | Form:%s\n" % (
-        h, m.get("home_rank","?"), hs.get("played","?"), hs.get("wins","?"),
-        hs.get("draws","?"), hs.get("losses","?"), hs.get("goals_for","?"),
-        hs.get("goals_against","?"), hs.get("avg_goals_for","?"), hs.get("form","?"))
-    p += "[AWAY %s] Rank#%s | %sP %sW %sD %sL | GF=%s GA=%s | AvgGF=%s | Form:%s\n" % (
-        a, m.get("away_rank","?"), ast.get("played","?"), ast.get("wins","?"),
-        ast.get("draws","?"), ast.get("losses","?"), ast.get("goals_for","?"),
-        ast.get("goals_against","?"), ast.get("avg_goals_for","?"), ast.get("form","?"))
-    p += "Injuries H: %s\n" % str(intel.get("h_inj","?"))[:120]
-    p += "Injuries A: %s\n" % str(intel.get("g_inj","?"))[:120]
-    crs = get_crs_top5(m)
+    if baseface: p += "\n[ANALYSIS] %s\n" % baseface[:500]
+    p += "\n[HOME %s] Rank#%s | %sW%sD%sL GF=%s GA=%s AvgGF=%s Form:%s\n" % (
+        h, m.get("home_rank","?"), hs.get("wins","?"), hs.get("draws","?"),
+        hs.get("losses","?"), hs.get("goals_for","?"), hs.get("goals_against","?"),
+        hs.get("avg_goals_for","?"), hs.get("form","?"))
+    p += "[AWAY %s] Rank#%s | %sW%sD%sL GF=%s GA=%s AvgGF=%s Form:%s\n" % (
+        a, m.get("away_rank","?"), ast.get("wins","?"), ast.get("draws","?"),
+        ast.get("losses","?"), ast.get("goals_for","?"), ast.get("goals_against","?"),
+        ast.get("avg_goals_for","?"), ast.get("form","?"))
+    p += "Injuries: H=%s | A=%s\n" % (str(intel.get("h_inj","?"))[:120], str(intel.get("g_inj","?"))[:120])
+    crs = get_crs_top7(m)
     if crs:
-        p += "\n[CRS TOP7]\n"
-        for sc, od, prob in crs:
-            p += "  %s @%.2f (%.1f%%)\n" % (sc, od, prob)
+        p += "\n[CRS TOP7] %s\n" % ", ".join(["%s@%.1f(%.1f%%)" % (sc,od,pr) for sc,od,pr in crs])
     had = m.get("had_analyse", [])
-    if had:
-        p += "[OFFICIAL] %s\n" % ",".join(str(x) for x in had)
-    p += "\n[IMPORTANT] Use the GOALS MARKET data to calibrate total goals. "
-    if is_ko:
-        p += "This is a KNOCKOUT match - goals are typically HIGHER than league games. Do NOT default to 1-0 or 1-1.\n"
-    p += "Consider both teams AvgGF to estimate realistic total.\n"
-    p += "[OUTPUT] Pure JSON: {\"ai_score\":\"2-1\",\"analysis\":\"80 char reasoning\"}\n"
+    if had: p += "[OFFICIAL] %s\n" % ",".join(str(x) for x in had)
+    p += "\n[OUTPUT] Pure JSON: {\"ai_score\":\"2-1\",\"analysis\":\"80 char reason\"}\n"
     return p
 
 
 # ====================================================================
-# AI 2: Grok - Skeptical Analyst (NOT blind contrarian)
+# Grok - Skeptical Analyst
 # ====================================================================
-def build_grok_prompt(m):
+def build_grok_prompt(m, goals_info, goals_constraint):
     h, a = m.get("home_team", "?"), m.get("away_team", "?")
     lg = m.get("league", "?")
     sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
     intel = m.get("intelligence", {})
-    ctx, is_ko = detect_match_context(m)
-    p = "[ROLE] Skeptical analyst. You question assumptions but follow evidence.\n"
-    p += "[IMPORTANT] You are NOT a blind contrarian. If data strongly supports the favorite, say so.\n"
-    p += "Only challenge consensus when you find SPECIFIC evidence of a trap or mispricing.\n\n"
+    ctx, _ = detect_match_context(m)
+    p = "[ROLE] Skeptical analyst. Question assumptions but follow evidence.\n"
+    p += "[IMPORTANT] NOT a blind contrarian. If data supports favorite, say so.\n"
     p += "[MATCH] %s | %s vs %s\n" % (lg, h, a)
     p += "[ODDS] H=%s D=%s A=%s HC=%s\n" % (sp_h, sp_d, sp_a, m.get("give_ball", "?"))
-    if ctx:
-        p += "[CONTEXT] %s\n" % " | ".join(ctx)
+    if ctx: p += "[CONTEXT] %s\n" % " | ".join(ctx)
+    league_info, _, _, _ = build_league_intelligence(m)
+    p += "\n[LEAGUE INTELLIGENCE]\n%s\n" % league_info
+    league_info, _, _, _ = build_league_intelligence(m)
+    p += "\n[LEAGUE INTELLIGENCE]\n%s\n" % league_info
+    p += "\n[TOTAL GOALS MARKET]\n%s\n" % goals_info
+    p += "[%s]\n" % goals_constraint
     vote = m.get("vote", {})
-    if vote:
-        p += "[PUBLIC] W=%s%% D=%s%% L=%s%%\n" % (vote.get("win","?"), vote.get("same","?"), vote.get("lose","?"))
+    if vote: p += "[PUBLIC] W=%s%% D=%s%% L=%s%%\n" % (vote.get("win","?"), vote.get("same","?"), vote.get("lose","?"))
     change = m.get("change", {})
     if change and isinstance(change, dict):
         p += "[MOVEMENT] win=%s draw=%s lose=%s\n" % (change.get("win","0"), change.get("same","0"), change.get("lose","0"))
-    ttg = get_ttg_summary(m)
-    if ttg:
-        p += "[GOALS MARKET] %s\n" % ttg
-    h_good = str(intel.get("home_good_news", "")).strip()
     h_bad = str(intel.get("home_bad_news", "")).strip()
-    g_good = str(intel.get("guest_good_news", "")).strip()
     g_bad = str(intel.get("guest_bad_news", "")).strip()
-    if h_bad: p += "\n[HOME WEAKNESS] %s\n" % h_bad[:250]
+    g_good = str(intel.get("guest_good_news", "")).strip()
+    if h_bad: p += "[HOME WEAKNESS] %s\n" % h_bad[:250]
     if g_bad: p += "[AWAY WEAKNESS] %s\n" % g_bad[:250]
     if g_good: p += "[AWAY STRENGTH] %s\n" % g_good[:200]
-    p += "\n[INJURIES] H: %s\n" % str(intel.get("h_inj", intel.get("home_injury", "?")))[:150]
-    p += "A: %s\n" % str(intel.get("g_inj", intel.get("guest_injury", "?")))[:150]
-    crs = get_crs_top5(m)
+    p += "[INJURIES] H=%s | A=%s\n" % (str(intel.get("h_inj","?"))[:120], str(intel.get("g_inj","?"))[:120])
+    crs = get_crs_top7(m)
     if crs:
-        p += "\n[CRS TOP7]\n"
-        for sc, od, prob in crs:
-            p += "  %s @%.2f (%.1f%%)\n" % (sc, od, prob)
-    p += "\n[ANALYSIS STEPS]\n"
-    p += "1. Is the favorite genuinely strong or just popular? Check injuries and form.\n"
-    p += "2. Public >60%% on one side + odds stable = possible trap. But only call it if you have evidence.\n"
-    p += "3. If favorite has clear quality advantage, DO predict them to win.\n"
-    if is_ko:
-        p += "4. KNOCKOUT: expect more goals. Both teams have incentive to score.\n"
-    p += "\n[OUTPUT] Pure JSON: {\"ai_score\":\"1-2\",\"analysis\":\"80 char reasoning\"}\n"
+        p += "[CRS TOP7] %s\n" % ", ".join(["%s@%.1f(%.1f%%)" % (sc,od,pr) for sc,od,pr in crs])
+    p += "\n[OUTPUT] Pure JSON: {\"ai_score\":\"1-2\",\"analysis\":\"80 char reason\"}\n"
     return p
 
 
 # ====================================================================
-# AI 3: Gemini - Data Scorer (simplified for better parsing)
+# Gemini - Data Integrator (simplified prompt)
 # ====================================================================
-def build_gemini_prompt(m):
+def build_gemini_prompt(m, goals_info, goals_constraint):
     h, a = m.get("home_team", "?"), m.get("away_team", "?")
     lg = m.get("league", "?")
     sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
     hs = m.get("home_stats", {})
     ast = m.get("away_stats", {})
     intel = m.get("intelligence", {})
-    ctx, is_ko = detect_match_context(m)
-    p = "[TASK] Predict exact score for %s vs %s (%s).\n" % (h, a, lg)
+    p = "Predict exact score: %s vs %s (%s)\n" % (h, a, lg)
     p += "Odds: H=%s D=%s A=%s\n" % (sp_h, sp_d, sp_a)
-    if ctx:
-        p += "Context: %s\n" % "; ".join(ctx)
-    ttg = get_ttg_summary(m)
-    if ttg:
-        p += "%s\n" % ttg
-    p += "%s: %sW%sD%sL GF=%s GA=%s Form=%s\n" % (
-        h, hs.get("wins","?"), hs.get("draws","?"), hs.get("losses","?"),
-        hs.get("goals_for","?"), hs.get("goals_against","?"), hs.get("form","?"))
-    p += "%s: %sW%sD%sL GF=%s GA=%s Form=%s\n" % (
-        a, ast.get("wins","?"), ast.get("draws","?"), ast.get("losses","?"),
-        ast.get("goals_for","?"), ast.get("goals_against","?"), ast.get("form","?"))
+    league_info, _, _, _ = build_league_intelligence(m)
+    p += "%s\n" % league_info
+    p += "%s\n%s\n" % (goals_info, goals_constraint)
+    p += "%s: %sW%sD%sL GF=%s GA=%s Form=%s\n" % (h, hs.get("wins","?"), hs.get("draws","?"), hs.get("losses","?"), hs.get("goals_for","?"), hs.get("goals_against","?"), hs.get("form","?"))
+    p += "%s: %sW%sD%sL GF=%s GA=%s Form=%s\n" % (a, ast.get("wins","?"), ast.get("draws","?"), ast.get("losses","?"), ast.get("goals_for","?"), ast.get("goals_against","?"), ast.get("form","?"))
     p += "Injuries: H=%s A=%s\n" % (str(intel.get("h_inj","?"))[:80], str(intel.get("g_inj","?"))[:80])
-    crs = get_crs_top5(m)
-    if crs:
-        p += "Market scores: %s\n" % ", ".join(["%s(%.1f%%)" % (sc, prob) for sc, od, prob in crs[:5]])
-    p += "\nRespond ONLY with JSON: {\"ai_score\":\"2-1\",\"analysis\":\"short reason\"}\n"
+    crs = get_crs_top7(m)
+    if crs: p += "Market: %s\n" % ", ".join(["%s(%.1f%%)" % (sc,pr) for sc,od,pr in crs[:5]])
+    p += "Respond ONLY JSON: {\"ai_score\":\"2-1\",\"analysis\":\"short reason\"}\n"
     return p
 
 
 # ====================================================================
-# AI 4: Claude Analyst - Psychology + Narrative
+# Claude Phase-1 - Psychology
 # ====================================================================
-def build_claude_analyst_prompt(m):
+def build_claude_analyst_prompt(m, goals_info, goals_constraint):
     h, a = m.get("home_team", "?"), m.get("away_team", "?")
     lg = m.get("league", "?")
     sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
     intel = m.get("intelligence", {})
-    ctx, is_ko = detect_match_context(m)
-    p = "[ROLE] Football psychology expert. Predict through human factors.\n"
-    p += "[MATCH] %s | %s vs %s\n" % (lg, h, a)
-    p += "[ODDS] H=%s D=%s A=%s\n" % (sp_h, sp_d, sp_a)
-    if ctx:
-        p += "[CONTEXT] %s\n" % " | ".join(ctx)
-    ttg = get_ttg_summary(m)
-    if ttg:
-        p += "[GOALS] %s\n" % ttg
+    ctx, _ = detect_match_context(m)
+    p = "[ROLE] Psychology expert. Human factors behind the match.\n"
+    p += "[MATCH] %s | %s vs %s | H=%s D=%s A=%s\n" % (lg, h, a, sp_h, sp_d, sp_a)
+    if ctx: p += "[CONTEXT] %s\n" % " | ".join(ctx)
+    league_info, _, _, _ = build_league_intelligence(m)
+    p += "\n[LEAGUE]\n%s\n" % league_info
+    p += "\n[GOALS] %s\n[%s]\n" % (goals_info, goals_constraint)
     baseface = str(m.get("baseface", "")).strip()
-    if baseface:
-        p += "\n[SITUATION] %s\n" % baseface[:400]
+    if baseface: p += "[SITUATION] %s\n" % baseface[:400]
     intro = str(m.get("expert_intro", "")).strip()
-    if intro:
-        p += "[EXPERT] %s\n" % intro[:200]
+    if intro: p += "[EXPERT] %s\n" % intro[:200]
     h_good = str(intel.get("home_good_news", "")).strip()
     h_bad = str(intel.get("home_bad_news", "")).strip()
     g_good = str(intel.get("guest_good_news", "")).strip()
     g_bad = str(intel.get("guest_bad_news", "")).strip()
-    if h_good: p += "\n[HOME+] %s\n" % h_good[:200]
+    if h_good: p += "[HOME+] %s\n" % h_good[:200]
     if h_bad: p += "[HOME-] %s\n" % h_bad[:200]
     if g_good: p += "[AWAY+] %s\n" % g_good[:200]
     if g_bad: p += "[AWAY-] %s\n" % g_bad[:200]
-    p += "\n[THINK] Who is mentally stronger? Who has more to lose? What happens if home goes behind?\n"
-    if is_ko:
-        p += "[KNOCKOUT] Elimination pressure = more goals, more drama. Trailing team goes kamikaze.\n"
-    p += "[OUTPUT] Pure JSON: {\"ai_score\":\"1-0\",\"analysis\":\"80 char psychological verdict\"}\n"
+    p += "\n[OUTPUT] Pure JSON: {\"ai_score\":\"1-0\",\"analysis\":\"80 char verdict\"}\n"
     return p
 
 
 # ====================================================================
-# AI 5: Claude Arbiter - DECISIVE judge
+# Claude Arbiter - Final Judge with HARD goals check
 # ====================================================================
-def build_arbiter_prompt(m, gpt_res, grok_res, gemini_res, claude_p1_res, stats_pred):
+def build_arbiter_prompt(m, gpt_res, grok_res, gemini_res, claude_p1_res, stats_pred, exp_goals, goals_info, goals_constraint):
     h, a = m.get("home_team", "?"), m.get("away_team", "?")
     sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
-    ctx, is_ko = detect_match_context(m)
-    p = "[ROLE] Supreme judge. You have 4 expert reports. Make a DECISIVE final call.\n"
+    ctx, _ = detect_match_context(m)
+    p = "[ROLE] Supreme judge. Make DECISIVE final call.\n"
     p += "[CRITICAL RULES]\n"
-    p += "- Do NOT default to draws. Only predict draw if STRONG evidence supports it.\n"
-    p += "- If 3+ experts agree on a direction (home/away win), follow that direction.\n"
-    p += "- Use GOALS MARKET data to pick realistic total goals.\n"
-    if is_ko:
-        p += "- KNOCKOUT MATCH: Goals are typically HIGH (2.5-4+). Avoid 0-0 and 1-0 predictions.\n"
-    p += "\n[4 EXPERT REPORTS] Weight: Grok40%% GPT35%% Gemini15%% Psychology10%%\n"
+    p += "- %s\n" % goals_constraint
+    p += "- If ALL experts agree on direction, follow it.\n"
+    p += "- Do NOT default to draws without strong evidence.\n\n"
+    p += "[4 EXPERTS] Grok=40%% GPT=35%% Gemini=15%% Psychology=10%%\n"
     p += "GPT(35%%): %s | %s\n" % (gpt_res.get("ai_score","?"), str(gpt_res.get("analysis","?"))[:100])
     p += "Grok(40%%): %s | %s\n" % (grok_res.get("ai_score","?"), str(grok_res.get("analysis","?"))[:100])
     p += "Gemini(15%%): %s | %s\n" % (gemini_res.get("ai_score","?"), str(gemini_res.get("analysis","?"))[:100])
@@ -273,27 +250,20 @@ def build_arbiter_prompt(m, gpt_res, grok_res, gemini_res, claude_p1_res, stats_
     scores = [gpt_res.get("ai_score",""), grok_res.get("ai_score",""), gemini_res.get("ai_score",""), claude_p1_res.get("ai_score","")]
     scores = [s for s in scores if s and s not in ["?","-",""]]
     if scores:
-        total_goals = []
-        for s in scores:
-            hg, ag = parse_score(s)
-            if hg is not None:
-                total_goals.append(hg + ag)
-        if total_goals:
-            avg_g = sum(total_goals) / len(total_goals)
-            p += "[AI AVG GOALS] %.1f (if your pick is far below this, reconsider)\n" % avg_g
-    ttg = get_ttg_summary(m)
-    if ttg:
-        p += "[GOALS MARKET] %s\n" % ttg
-    if ctx:
-        p += "[CONTEXT] %s\n" % " | ".join(ctx)
+        tg = [sum(parse_score(s)) for s in scores if parse_score(s)[0] is not None]
+        if tg:
+            p += "[AI AVG GOALS] %.1f | Market expects %.1f\n" % (sum(tg)/len(tg), exp_goals)
+            if abs(sum(tg)/len(tg) - exp_goals) > 1.0:
+                p += "WARNING: AI predictions deviate from market. Trust market expected goals!\n"
+    p += "[GOALS MARKET] %s\n" % goals_info
+    if ctx: p += "[CONTEXT] %s\n" % " | ".join(ctx)
     crs = stats_pred.get("crs_analysis", {}).get("top_scores", [])[:5]
     if crs:
-        p += "[MARKET] %s\n" % ", ".join(["%s(%.1f%%)" % (s.get("score","?"), s.get("prob",0)) for s in crs])
+        p += "[MARKET CRS] %s\n" % ", ".join(["%s(%.1f%%)" % (s.get("score","?"), s.get("prob",0)) for s in crs])
     p += "[ODDS] H=%s D=%s A=%s HC=%s\n" % (sp_h, sp_d, sp_a, m.get("give_ball","?"))
     smart = stats_pred.get("smart_signals", [])
-    if smart:
-        p += "[SIGNALS] %s\n" % " | ".join(smart)
-    p += "\n[VERDICT] Pick ONE exact score. Be DECISIVE. Explain in 100 chars.\n"
+    if smart: p += "[SIGNALS] %s\n" % " | ".join(smart)
+    p += "\n[VERDICT] ONE exact score. Total goals MUST match market range.\n"
     p += "[OUTPUT] Pure JSON: {\"ai_score\":\"2-1\",\"analysis\":\"100 char verdict\"}\n"
     return p
 
@@ -314,10 +284,8 @@ def extract_clean_json(text):
     if s2 != -1 and e2 != -1:
         try: return json.loads(cleaned[s2:e2+1])
         except: pass
-    if fs != "?":
-        return {"ai_score": fs, "analysis": fa}
+    if fs != "?": return {"ai_score": fs, "analysis": fa}
     return None
-
 
 def get_clean_env_url(name, default=""):
     v = os.environ.get(name, globals().get(name, default))
@@ -327,7 +295,6 @@ def get_clean_env_url(name, default=""):
 
 def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
-
 
 def call_ai_model(prompt, url, key, model_name):
     if not url or not key: return {}
@@ -341,7 +308,7 @@ def call_ai_model(prompt, url, key, model_name):
     else:
         headers["Authorization"] = "Bearer " + key
         payload = {"model": model_name, "messages": [
-            {"role": "system", "content": "Output ONLY valid JSON. No markdown, no explanation."},
+            {"role": "system", "content": "Output ONLY valid JSON. No markdown."},
             {"role": "user", "content": prompt}
         ], "temperature": 0.2, "max_tokens": 400}
     gw = url.split("/v1")[0] if "/v1" in url else url[:35]
@@ -349,31 +316,21 @@ def call_ai_model(prompt, url, key, model_name):
     try:
         r = requests.post(url, headers=headers, json=payload, timeout=60)
         if r.status_code == 200:
-            if is_gem:
-                t = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
-            else:
-                t = r.json()["choices"][0]["message"]["content"].strip()
+            if is_gem: t = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+            else: t = r.json()["choices"][0]["message"]["content"].strip()
             parsed = extract_clean_json(t)
             if parsed:
                 parsed["analysis"] = str(parsed.get("analysis","")).replace("```json","").replace("```","").strip()
                 print("    OK %s: %s" % (model_name, parsed.get("ai_score","?")))
                 return parsed
-            else:
-                print("    WARN %s: parse fail" % model_name)
-        else:
-            print("    ERR %s: HTTP %d" % (model_name, r.status_code))
-    except Exception as e:
-        print("    ERR %s: %s" % (model_name, str(e)[:50]))
+            else: print("    WARN %s: parse fail" % model_name)
+        else: print("    ERR %s: HTTP %d" % (model_name, r.status_code))
+    except Exception as e: print("    ERR %s: %s" % (model_name, str(e)[:50]))
     return {}
 
-
-FALLBACK_URLS = [
-    None,
-    "https://api520.pro/v1", "https://www.api520.pro/v1",
+FALLBACK_URLS = [None, "https://api520.pro/v1", "https://www.api520.pro/v1",
     "https://api521.pro/v1", "https://www.api521.pro/v1",
-    "https://api522.pro/v1", "https://www.api522.pro/v1",
-    "https://69.63.213.33:666/v1",
-]
+    "https://api522.pro/v1", "https://www.api522.pro/v1", "https://69.63.213.33:666/v1"]
 
 def call_with_fallback(prompt, url_env, key_env, models_list):
     key = get_clean_env_key(key_env)
@@ -393,18 +350,15 @@ def call_gpt(p):
         "\u718a\u732b-A-7-gpt-5.4","\u718a\u732b-\u6309\u91cf-gpt-5.3-codex-\u6ee1\u8840",
         "\u718a\u732b-A-10-gpt-5.3-codex","\u718a\u732b-A-1-gpt-5.2",
         "\u718a\u732b-A-5-gpt-5.2","\u718a\u732b-A-8-deepseek-v3.2"])
-
 def call_grok(p):
     return call_with_fallback(p, "GROK_API_URL", "GROK_API_KEY", [
         "\u718a\u732b-A-7-grok-4.2-\u591a\u667a\u80fd\u4f53\u8ba8\u8bba",
         "\u718a\u732b-A-4-grok-4.2-fast"])
-
 def call_gemini(p):
     return call_with_fallback(p, "GEMINI_API_URL", "GEMINI_API_KEY", [
         "\u718a\u732b\u7279\u4f9bS-\u6309\u91cf-gemini-3-flash-preview",
         "\u718a\u732b\u7279\u4f9b-\u6309\u91cf-SSS-gemini-3.1-pro-preview",
         "\u718a\u732b-2-gemini-3.1-flash-lite-preview"])
-
 def call_claude(p):
     return call_with_fallback(p, "CLAUDE_API_URL", "CLAUDE_API_KEY", [
         "\u718a\u732b-\u6309\u91cf-\u9876\u7ea7\u7279\u4f9b-\u5b98max-claude-opus-4.6",
@@ -417,7 +371,16 @@ def call_claude(p):
         "\u718a\u732b-\u7279\u4ef7\u9006-15-claude-sonnet-4-6"])
 
 
-def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj):
+def validate_score_goals(score_str, exp_goals, most_likely):
+    hg, ag = parse_score(score_str)
+    if hg is None: return False
+    total = hg + ag
+    lo = max(0, most_likely - 1)
+    hi = most_likely + 2
+    return lo <= total <= hi
+
+
+def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj, exp_goals, most_likely_total):
     sp_h = float(match_obj.get("sp_home", 0) or 0)
     sp_d = float(match_obj.get("sp_draw", 0) or 0)
     sp_a = float(match_obj.get("sp_away", 0) or 0)
@@ -441,11 +404,17 @@ def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj):
     ai_scores = []
     ai_w = {"grok": 0.40, "gpt": 0.35, "gemini": 0.15, "claude_p1": 0.10, "arbiter": 0.35}
     all_ai = [("gpt",gpt),("grok",grok),("gemini",gemini),("claude_p1",claude_p1),("arbiter",claude_arb)]
+
     for name, res in all_ai:
         sc = res.get("ai_score") if isinstance(res, dict) else None
         if sc and sc not in ["-","?",""]:
             if sc not in cands: cands[sc] = {"weight": 0.0, "sources": []}
-            cands[sc]["weight"] += ai_w.get(name, 0.15)
+            w = ai_w.get(name, 0.15)
+            if validate_score_goals(sc, exp_goals, most_likely_total):
+                w *= 1.3
+            else:
+                w *= 0.5
+            cands[sc]["weight"] += w
             cands[sc]["sources"].append(name)
             ai_scores.append(sc)
 
@@ -453,7 +422,10 @@ def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj):
         sc = s.get("score")
         if sc:
             if sc not in cands: cands[sc] = {"weight": 0.0, "sources": []}
-            cands[sc]["weight"] += 0.22
+            w = 0.22
+            if validate_score_goals(sc, exp_goals, most_likely_total):
+                w *= 1.3
+            cands[sc]["weight"] += w
             cands[sc]["sources"].append("market")
 
     has_warn = any("🚨" in str(s) for s in smart) or (extreme and extreme not in ["","\u65e0"])
@@ -534,7 +506,7 @@ def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj):
         "extreme_warning": extreme if extreme else "\u65e0",
         "smart_money_signal": " | ".join(us) if us else "\u6b63\u5e38",
         "smart_signals": us, "model_consensus": mc, "total_models": tm,
-        "expected_total_goals": stats.get("expected_total_goals", 2.5),
+        "expected_total_goals": exp_goals,
         "top_scores": stats.get("refined_poisson",{}).get("top_scores",[]),
         "elo": stats.get("elo",{}), "random_forest": stats.get("random_forest",{}),
         "gradient_boost": stats.get("gradient_boost",{}), "neural_net": stats.get("neural_net",{}),
@@ -565,36 +537,37 @@ def select_top4(preds):
     preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
     return preds[:4]
 
-
 def extract_num(ms):
     wm = {"\u4e00":1000,"\u4e8c":2000,"\u4e09":3000,"\u56db":4000,"\u4e94":5000,"\u516d":6000,"\u65e5":7000,"\u5929":7000}
     base = next((v for k, v in wm.items() if k in str(ms)), 0)
     nums = re.findall(r"\d+", str(ms))
     return base + int(nums[0]) if nums else 9999
 
-
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 60)
-    print("  ENGINE v8.0 | %d matches" % len(ms))
-    print("  5-AI | Goals calibrated | Knockout aware")
+    print("  ENGINE v9.1 | %d matches" % len(ms))
+    print("  League intel + goals constraint + 5-AI")
     print("=" * 60)
     res = []
     for i, m in enumerate(ms):
         h, a = m.get("home_team","?"), m.get("away_team","?")
         print("\n  [%d/%d] %s %s vs %s" % (i+1, len(ms), m.get("league",""), h, a))
+        exp_goals, most_likely, goals_info = calc_expected_goals(m)
+        goals_constraint = build_goals_constraint(exp_goals, most_likely)
+        print("    Goals market: exp=%.1f most_likely=%d" % (exp_goals, most_likely))
         sp = ensemble.predict(m, {})
         if use_ai:
-            gpt_r = call_gpt(build_gpt_prompt(m)); time.sleep(0.3)
-            grok_r = call_grok(build_grok_prompt(m)); time.sleep(0.3)
-            gem_r = call_gemini(build_gemini_prompt(m)); time.sleep(0.3)
-            cl_p1 = call_claude(build_claude_analyst_prompt(m)); time.sleep(0.3)
-            arb_p = build_arbiter_prompt(m, gpt_r or {}, grok_r or {}, gem_r or {}, cl_p1 or {}, sp)
+            gpt_r = call_gpt(build_gpt_prompt(m, goals_info, goals_constraint)); time.sleep(0.3)
+            grok_r = call_grok(build_grok_prompt(m, goals_info, goals_constraint)); time.sleep(0.3)
+            gem_r = call_gemini(build_gemini_prompt(m, goals_info, goals_constraint)); time.sleep(0.3)
+            cl_p1 = call_claude(build_claude_analyst_prompt(m, goals_info, goals_constraint)); time.sleep(0.3)
+            arb_p = build_arbiter_prompt(m, gpt_r or {}, grok_r or {}, gem_r or {}, cl_p1 or {}, sp, exp_goals, goals_info, goals_constraint)
             cl_arb = call_claude(arb_p); time.sleep(0.3)
         else:
             b = {"ai_score": "-", "analysis": "blocked"}
             gpt_r = grok_r = gem_r = cl_p1 = cl_arb = b
-        mg = merge_all(gpt_r or {}, grok_r or {}, gem_r or {}, cl_p1 or {}, cl_arb or {}, sp, m)
+        mg = merge_all(gpt_r or {}, grok_r or {}, gem_r or {}, cl_p1 or {}, cl_arb or {}, sp, m, exp_goals, most_likely)
         print("  => %s (%s) %d%% | GPT:%s Grok:%s Gem:%s Arb:%s" % (
             mg["result"], mg["predicted_score"], mg["confidence"],
             mg["gpt_score"], mg["grok_score"], mg["gemini_score"], mg["claude_score"]))
