@@ -1,6 +1,7 @@
 import json, requests, time, re, os
 from config import *
 from models import EnsemblePredictor
+from odds_engine import predict_score, build_odds_summary, get_over_25_from_odds, get_btts_estimate, calc_ttg_profile
 from league_intel import build_league_intelligence
 
 ensemble = EnsemblePredictor()
@@ -18,71 +19,6 @@ def calculate_value_bet(prob_pct, odds):
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
 
-def calc_expected_goals(m):
-    v2 = m.get("v2_odds_dict", {})
-    if not v2: v2 = m
-    ttg = {"a0":0,"a1":1,"a2":2,"a3":3,"a4":4,"a5":5,"a6":6,"a7":7}
-    probs = {}
-    for k, g in ttg.items():
-        ov = float(v2.get(k, 0) or 0)
-        if ov > 1:
-            probs[g] = 1.0 / ov
-    if not probs:
-        return 2.5, 2, ""
-    ti = sum(probs.values())
-    probs = {k: v/ti for k, v in probs.items()}
-    exp = sum(g * p for g, p in probs.items())
-    most_likely = max(probs, key=probs.get)
-    parts = []
-    for g in sorted(probs):
-        parts.append("%dg=%.0f%%" % (g, probs[g]*100))
-    zero_odds = float(v2.get("a0", 0) or 0)
-    summary = "Expected: %.1f goals | Most likely: %d goals | %s" % (exp, most_likely, " ".join(parts))
-    if zero_odds > 0 and zero_odds < 8.5:
-        summary += " | WARNING: 0-goal odds only %.1f = high chance of 0-0!" % zero_odds
-    if float(v2.get("a7", 0) or 0) > 0 and float(v2.get("a7", 0) or 0) < 15:
-        summary += " | WARNING: 7+goals odds only %.1f = HIGH scoring game!" % float(v2.get("a7", 0))
-    return round(exp, 1), most_likely, summary
-
-
-def detect_match_context(m):
-    try: hr = int(m.get("home_rank", 10) or 10)
-    except: hr = 10
-    try: ar = int(m.get("away_rank", 10) or 10)
-    except: ar = 10
-    lg = str(m.get("league", ""))
-    baseface = str(m.get("baseface", ""))
-    ctx = []
-    is_ko = False
-    if any(k in lg for k in ["\u6b27\u7f57\u5df4","\u6b27\u51a0","\u6b27\u534f\u8054","Europa","Champions","Conference"]):
-        is_ko = True
-        ctx.append("KNOCKOUT: expect 2.5-4+ goals, avoid low-scoring predictions")
-    if hr <= 3 or ar <= 3:
-        ctx.append("TOP TEAM involved")
-    if hr >= 16 or ar >= 16:
-        ctx.append("RELEGATION team: desperate play")
-    if hr <= 5 and ar >= 14:
-        ctx.append("MISMATCH: strong home, 2+ goal win likely")
-    if abs(hr - ar) <= 3 and hr <= 10:
-        ctx.append("SIMILAR STRENGTH: competitive")
-    return ctx, is_ko
-
-
-def get_crs_top7(m):
-    v2 = m.get("v2_odds_dict", {})
-    if not v2: v2 = m
-    crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2",
-               "s00":"0-0","s11":"1-1","s22":"2-2",
-               "l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3"}
-    crs = []
-    for k, sc in crs_map.items():
-        ov = float(v2.get(k, 0) or 0)
-        if ov > 1:
-            crs.append((sc, ov, round(1/ov*100, 1)))
-    crs.sort(key=lambda x: x[2], reverse=True)
-    return crs[:7]
-
-
 def parse_score(s):
     try:
         p = str(s).split("-")
@@ -91,180 +27,40 @@ def parse_score(s):
         return None, None
 
 
-def build_goals_constraint(exp_goals, most_likely_total):
-    lo = max(0, most_likely_total - 1)
-    hi = most_likely_total + 2
-    return "HARD CONSTRAINT: Market expects %.1f total goals. Your predicted score MUST have %d-%d total goals. Scores outside this range are WRONG." % (exp_goals, lo, hi)
-
-
-# ====================================================================
-# GPT - Tactical Analyst
-# ====================================================================
-def build_gpt_prompt(m, goals_info, goals_constraint):
+def build_ai_prompt(m, odds_analysis, league_info, candidates):
     h, a = m.get("home_team", "?"), m.get("away_team", "?")
     lg = m.get("league", "?")
-    sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
-    hs = m.get("home_stats", {})
-    ast = m.get("away_stats", {})
     intel = m.get("intelligence", {})
-    ctx, _ = detect_match_context(m)
-    p = "[ROLE] Tactical analyst. Predict exact score.\n"
-    p += "[MATCH] %s | %s vs %s\n" % (lg, h, a)
-    p += "[ODDS] H=%s D=%s A=%s HC=%s\n" % (sp_h, sp_d, sp_a, m.get("give_ball", "?"))
-    if ctx: p += "[CONTEXT] %s\n" % " | ".join(ctx)
-    league_info, _, _, _ = build_league_intelligence(m)
-    p += "\n[LEAGUE INTELLIGENCE]\n%s\n" % league_info
-    p += "\n[TOTAL GOALS MARKET]\n%s\n" % goals_info
-    p += "[%s]\n" % goals_constraint
+    p = "[TASK] Choose the best exact score for %s vs %s (%s).\n" % (h, a, lg)
+    p += "[IMPORTANT] You must choose from the CANDIDATES below. Do NOT invent other scores.\n\n"
+    p += "%s\n\n" % odds_analysis
+    p += "%s\n\n" % league_info
     baseface = str(m.get("baseface", "")).strip()
-    if baseface: p += "\n[ANALYSIS] %s\n" % baseface[:500]
-    p += "\n[HOME %s] Rank#%s | %sW%sD%sL GF=%s GA=%s AvgGF=%s Form:%s\n" % (
-        h, m.get("home_rank","?"), hs.get("wins","?"), hs.get("draws","?"),
-        hs.get("losses","?"), hs.get("goals_for","?"), hs.get("goals_against","?"),
-        hs.get("avg_goals_for","?"), hs.get("form","?"))
-    p += "[AWAY %s] Rank#%s | %sW%sD%sL GF=%s GA=%s AvgGF=%s Form:%s\n" % (
-        a, m.get("away_rank","?"), ast.get("wins","?"), ast.get("draws","?"),
-        ast.get("losses","?"), ast.get("goals_for","?"), ast.get("goals_against","?"),
-        ast.get("avg_goals_for","?"), ast.get("form","?"))
-    p += "Injuries: H=%s | A=%s\n" % (str(intel.get("h_inj","?"))[:120], str(intel.get("g_inj","?"))[:120])
-    crs = get_crs_top7(m)
-    if crs:
-        p += "\n[CRS TOP7] %s\n" % ", ".join(["%s@%.1f(%.1f%%)" % (sc,od,pr) for sc,od,pr in crs])
-    had = m.get("had_analyse", [])
-    if had: p += "[OFFICIAL] %s\n" % ",".join(str(x) for x in had)
-    p += "\n[OUTPUT] Pure JSON: {\"ai_score\":\"2-1\",\"analysis\":\"80 char reason\"}\n"
-    return p
-
-
-# ====================================================================
-# Grok - Skeptical Analyst
-# ====================================================================
-def build_grok_prompt(m, goals_info, goals_constraint):
-    h, a = m.get("home_team", "?"), m.get("away_team", "?")
-    lg = m.get("league", "?")
-    sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
-    intel = m.get("intelligence", {})
-    ctx, _ = detect_match_context(m)
-    p = "[ROLE] Skeptical analyst. Question assumptions but follow evidence.\n"
-    p += "[IMPORTANT] NOT a blind contrarian. If data supports favorite, say so.\n"
-    p += "[MATCH] %s | %s vs %s\n" % (lg, h, a)
-    p += "[ODDS] H=%s D=%s A=%s HC=%s\n" % (sp_h, sp_d, sp_a, m.get("give_ball", "?"))
-    if ctx: p += "[CONTEXT] %s\n" % " | ".join(ctx)
-    league_info, _, _, _ = build_league_intelligence(m)
-    p += "\n[LEAGUE INTELLIGENCE]\n%s\n" % league_info
-    league_info, _, _, _ = build_league_intelligence(m)
-    p += "\n[LEAGUE INTELLIGENCE]\n%s\n" % league_info
-    p += "\n[TOTAL GOALS MARKET]\n%s\n" % goals_info
-    p += "[%s]\n" % goals_constraint
-    vote = m.get("vote", {})
-    if vote: p += "[PUBLIC] W=%s%% D=%s%% L=%s%%\n" % (vote.get("win","?"), vote.get("same","?"), vote.get("lose","?"))
-    change = m.get("change", {})
-    if change and isinstance(change, dict):
-        p += "[MOVEMENT] win=%s draw=%s lose=%s\n" % (change.get("win","0"), change.get("same","0"), change.get("lose","0"))
-    h_bad = str(intel.get("home_bad_news", "")).strip()
-    g_bad = str(intel.get("guest_bad_news", "")).strip()
-    g_good = str(intel.get("guest_good_news", "")).strip()
-    if h_bad: p += "[HOME WEAKNESS] %s\n" % h_bad[:250]
-    if g_bad: p += "[AWAY WEAKNESS] %s\n" % g_bad[:250]
-    if g_good: p += "[AWAY STRENGTH] %s\n" % g_good[:200]
-    p += "[INJURIES] H=%s | A=%s\n" % (str(intel.get("h_inj","?"))[:120], str(intel.get("g_inj","?"))[:120])
-    crs = get_crs_top7(m)
-    if crs:
-        p += "[CRS TOP7] %s\n" % ", ".join(["%s@%.1f(%.1f%%)" % (sc,od,pr) for sc,od,pr in crs])
-    p += "\n[OUTPUT] Pure JSON: {\"ai_score\":\"1-2\",\"analysis\":\"80 char reason\"}\n"
-    return p
-
-
-# ====================================================================
-# Gemini - Data Integrator (simplified prompt)
-# ====================================================================
-def build_gemini_prompt(m, goals_info, goals_constraint):
-    h, a = m.get("home_team", "?"), m.get("away_team", "?")
-    lg = m.get("league", "?")
-    sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
-    hs = m.get("home_stats", {})
-    ast = m.get("away_stats", {})
-    intel = m.get("intelligence", {})
-    p = "Predict exact score: %s vs %s (%s)\n" % (h, a, lg)
-    p += "Odds: H=%s D=%s A=%s\n" % (sp_h, sp_d, sp_a)
-    league_info, _, _, _ = build_league_intelligence(m)
-    p += "%s\n" % league_info
-    p += "%s\n%s\n" % (goals_info, goals_constraint)
-    p += "%s: %sW%sD%sL GF=%s GA=%s Form=%s\n" % (h, hs.get("wins","?"), hs.get("draws","?"), hs.get("losses","?"), hs.get("goals_for","?"), hs.get("goals_against","?"), hs.get("form","?"))
-    p += "%s: %sW%sD%sL GF=%s GA=%s Form=%s\n" % (a, ast.get("wins","?"), ast.get("draws","?"), ast.get("losses","?"), ast.get("goals_for","?"), ast.get("goals_against","?"), ast.get("form","?"))
-    p += "Injuries: H=%s A=%s\n" % (str(intel.get("h_inj","?"))[:80], str(intel.get("g_inj","?"))[:80])
-    crs = get_crs_top7(m)
-    if crs: p += "Market: %s\n" % ", ".join(["%s(%.1f%%)" % (sc,pr) for sc,od,pr in crs[:5]])
-    p += "Respond ONLY JSON: {\"ai_score\":\"2-1\",\"analysis\":\"short reason\"}\n"
-    return p
-
-
-# ====================================================================
-# Claude Phase-1 - Psychology
-# ====================================================================
-def build_claude_analyst_prompt(m, goals_info, goals_constraint):
-    h, a = m.get("home_team", "?"), m.get("away_team", "?")
-    lg = m.get("league", "?")
-    sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
-    intel = m.get("intelligence", {})
-    ctx, _ = detect_match_context(m)
-    p = "[ROLE] Psychology expert. Human factors behind the match.\n"
-    p += "[MATCH] %s | %s vs %s | H=%s D=%s A=%s\n" % (lg, h, a, sp_h, sp_d, sp_a)
-    if ctx: p += "[CONTEXT] %s\n" % " | ".join(ctx)
-    league_info, _, _, _ = build_league_intelligence(m)
-    p += "\n[LEAGUE]\n%s\n" % league_info
-    p += "\n[GOALS] %s\n[%s]\n" % (goals_info, goals_constraint)
-    baseface = str(m.get("baseface", "")).strip()
-    if baseface: p += "[SITUATION] %s\n" % baseface[:400]
+    if baseface:
+        p += "[MATCH ANALYSIS] %s\n\n" % baseface[:400]
     intro = str(m.get("expert_intro", "")).strip()
-    if intro: p += "[EXPERT] %s\n" % intro[:200]
-    h_good = str(intel.get("home_good_news", "")).strip()
+    if intro:
+        p += "[EXPERT] %s\n" % intro[:200]
     h_bad = str(intel.get("home_bad_news", "")).strip()
-    g_good = str(intel.get("guest_good_news", "")).strip()
     g_bad = str(intel.get("guest_bad_news", "")).strip()
-    if h_good: p += "[HOME+] %s\n" % h_good[:200]
+    h_good = str(intel.get("home_good_news", "")).strip()
+    g_good = str(intel.get("guest_good_news", "")).strip()
     if h_bad: p += "[HOME-] %s\n" % h_bad[:200]
-    if g_good: p += "[AWAY+] %s\n" % g_good[:200]
     if g_bad: p += "[AWAY-] %s\n" % g_bad[:200]
-    p += "\n[OUTPUT] Pure JSON: {\"ai_score\":\"1-0\",\"analysis\":\"80 char verdict\"}\n"
-    return p
-
-
-# ====================================================================
-# Claude Arbiter - Final Judge with HARD goals check
-# ====================================================================
-def build_arbiter_prompt(m, gpt_res, grok_res, gemini_res, claude_p1_res, stats_pred, exp_goals, goals_info, goals_constraint):
-    h, a = m.get("home_team", "?"), m.get("away_team", "?")
-    sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
-    ctx, _ = detect_match_context(m)
-    p = "[ROLE] Supreme judge. Make DECISIVE final call.\n"
-    p += "[CRITICAL RULES]\n"
-    p += "- %s\n" % goals_constraint
-    p += "- If ALL experts agree on direction, follow it.\n"
-    p += "- Do NOT default to draws without strong evidence.\n\n"
-    p += "[4 EXPERTS] Grok=40%% GPT=35%% Gemini=15%% Psychology=10%%\n"
-    p += "GPT(35%%): %s | %s\n" % (gpt_res.get("ai_score","?"), str(gpt_res.get("analysis","?"))[:100])
-    p += "Grok(40%%): %s | %s\n" % (grok_res.get("ai_score","?"), str(grok_res.get("analysis","?"))[:100])
-    p += "Gemini(15%%): %s | %s\n" % (gemini_res.get("ai_score","?"), str(gemini_res.get("analysis","?"))[:100])
-    p += "Psychology(10%%): %s | %s\n\n" % (claude_p1_res.get("ai_score","?"), str(claude_p1_res.get("analysis","?"))[:100])
-    scores = [gpt_res.get("ai_score",""), grok_res.get("ai_score",""), gemini_res.get("ai_score",""), claude_p1_res.get("ai_score","")]
-    scores = [s for s in scores if s and s not in ["?","-",""]]
-    if scores:
-        tg = [sum(parse_score(s)) for s in scores if parse_score(s)[0] is not None]
-        if tg:
-            p += "[AI AVG GOALS] %.1f | Market expects %.1f\n" % (sum(tg)/len(tg), exp_goals)
-            if abs(sum(tg)/len(tg) - exp_goals) > 1.0:
-                p += "WARNING: AI predictions deviate from market. Trust market expected goals!\n"
-    p += "[GOALS MARKET] %s\n" % goals_info
-    if ctx: p += "[CONTEXT] %s\n" % " | ".join(ctx)
-    crs = stats_pred.get("crs_analysis", {}).get("top_scores", [])[:5]
-    if crs:
-        p += "[MARKET CRS] %s\n" % ", ".join(["%s(%.1f%%)" % (s.get("score","?"), s.get("prob",0)) for s in crs])
-    p += "[ODDS] H=%s D=%s A=%s HC=%s\n" % (sp_h, sp_d, sp_a, m.get("give_ball","?"))
-    smart = stats_pred.get("smart_signals", [])
-    if smart: p += "[SIGNALS] %s\n" % " | ".join(smart)
-    p += "\n[VERDICT] ONE exact score. Total goals MUST match market range.\n"
-    p += "[OUTPUT] Pure JSON: {\"ai_score\":\"2-1\",\"analysis\":\"100 char verdict\"}\n"
+    if h_good: p += "[HOME+] %s\n" % h_good[:150]
+    if g_good: p += "[AWAY+] %s\n" % g_good[:150]
+    p += "\n[INJURIES] H: %s\n" % str(intel.get("h_inj", intel.get("home_injury", "?")))[:120]
+    p += "A: %s\n" % str(intel.get("g_inj", intel.get("guest_injury", "?")))[:120]
+    vote = m.get("vote", {})
+    if vote:
+        p += "[PUBLIC] W=%s%% D=%s%% L=%s%%\n" % (vote.get("win","?"), vote.get("same","?"), vote.get("lose","?"))
+    had = m.get("had_analyse", [])
+    if had:
+        p += "[OFFICIAL TIP] %s\n" % ",".join(str(x) for x in had)
+    p += "\n[CANDIDATES] You MUST pick one of these:\n"
+    for i, c in enumerate(candidates):
+        p += "  %d. %s\n" % (i+1, c)
+    p += "\n[OUTPUT] Pure JSON: {\"ai_score\":\"X-X\",\"analysis\":\"50 char reason\"}\n"
     return p
 
 
@@ -304,13 +100,13 @@ def call_ai_model(prompt, url, key, model_name):
     headers = {"Content-Type": "application/json"}
     if is_gem:
         headers["x-goog-api-key"] = key
-        payload = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.2}}
+        payload = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.1}}
     else:
         headers["Authorization"] = "Bearer " + key
         payload = {"model": model_name, "messages": [
             {"role": "system", "content": "Output ONLY valid JSON. No markdown."},
             {"role": "user", "content": prompt}
-        ], "temperature": 0.2, "max_tokens": 400}
+        ], "temperature": 0.1, "max_tokens": 300}
     gw = url.split("/v1")[0] if "/v1" in url else url[:35]
     print("    > %s @ %s" % (model_name, gw))
     try:
@@ -323,7 +119,6 @@ def call_ai_model(prompt, url, key, model_name):
                 parsed["analysis"] = str(parsed.get("analysis","")).replace("```json","").replace("```","").strip()
                 print("    OK %s: %s" % (model_name, parsed.get("ai_score","?")))
                 return parsed
-            else: print("    WARN %s: parse fail" % model_name)
         else: print("    ERR %s: HTTP %d" % (model_name, r.status_code))
     except Exception as e: print("    ERR %s: %s" % (model_name, str(e)[:50]))
     return {}
@@ -371,27 +166,45 @@ def call_claude(p):
         "\u718a\u732b-\u7279\u4ef7\u9006-15-claude-sonnet-4-6"])
 
 
-def validate_score_goals(score_str, exp_goals, most_likely):
-    hg, ag = parse_score(score_str)
-    if hg is None: return False
-    total = hg + ag
-    lo = max(0, most_likely - 1)
-    hi = most_likely + 2
-    return lo <= total <= hi
-
-
-def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj, exp_goals, most_likely_total):
+def merge_all(engine_result, gpt, grok, gemini, claude, stats, match_obj):
     sp_h = float(match_obj.get("sp_home", 0) or 0)
     sp_d = float(match_obj.get("sp_draw", 0) or 0)
     sp_a = float(match_obj.get("sp_away", 0) or 0)
-    sys_score = stats.get("predicted_score", "1-1")
-    o25 = stats.get("over_2_5", 50)
-    bt = stats.get("btts", 50)
+    v2 = match_obj.get("v2_odds_dict", {})
+    if not v2: v2 = match_obj
     mc = stats.get("model_consensus", 0)
     tm = stats.get("total_models", 11)
-    top_crs = stats.get("crs_analysis", {}).get("top_scores", [])[:5]
     smart = stats.get("smart_signals", [])
     extreme = stats.get("extreme_warning", "")
+
+    engine_score = engine_result["score"]
+    engine_conf = engine_result["confidence"]
+    candidates = engine_result.get("candidates", [engine_score])
+
+    o25 = get_over_25_from_odds(v2)
+    bt = get_btts_estimate(v2)
+
+    cands = {engine_score: {"weight": 0.70 * engine_conf / 100, "sources": ["engine"]}}
+
+    ai_all = [("gpt",gpt),("grok",grok),("gemini",gemini),("claude",claude)]
+    ai_w = {"gpt": 0.10, "grok": 0.10, "gemini": 0.05, "claude": 0.05}
+    ai_scores = []
+    for name, res in ai_all:
+        sc = res.get("ai_score") if isinstance(res, dict) else None
+        if sc and sc not in ["-","?",""]:
+            if sc not in cands: cands[sc] = {"weight": 0.0, "sources": []}
+            w = ai_w.get(name, 0.05)
+            if sc in candidates:
+                w *= 1.5
+            else:
+                w *= 0.3
+            cands[sc]["weight"] += w
+            cands[sc]["sources"].append(name)
+            ai_scores.append(sc)
+
+    final_score = max(cands.items(), key=lambda x: x[1]["weight"])[0] if cands else engine_score
+    fh, fa = parse_score(final_score)
+    if fh is None: fh, fa = 1, 1
 
     if sp_h > 1 and sp_d > 1 and sp_a > 1:
         ih, id2, ia = 1/sp_h, 1/sp_d, 1/sp_a
@@ -400,57 +213,14 @@ def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj, exp_go
     else:
         ohp, odp, oap = 33, 33, 34
 
-    cands = {}
-    ai_scores = []
-    ai_w = {"grok": 0.40, "gpt": 0.35, "gemini": 0.15, "claude_p1": 0.10, "arbiter": 0.35}
-    all_ai = [("gpt",gpt),("grok",grok),("gemini",gemini),("claude_p1",claude_p1),("arbiter",claude_arb)]
-
-    for name, res in all_ai:
-        sc = res.get("ai_score") if isinstance(res, dict) else None
-        if sc and sc not in ["-","?",""]:
-            if sc not in cands: cands[sc] = {"weight": 0.0, "sources": []}
-            w = ai_w.get(name, 0.15)
-            if validate_score_goals(sc, exp_goals, most_likely_total):
-                w *= 1.3
-            else:
-                w *= 0.5
-            cands[sc]["weight"] += w
-            cands[sc]["sources"].append(name)
-            ai_scores.append(sc)
-
-    for s in top_crs[:3]:
-        sc = s.get("score")
-        if sc:
-            if sc not in cands: cands[sc] = {"weight": 0.0, "sources": []}
-            w = 0.22
-            if validate_score_goals(sc, exp_goals, most_likely_total):
-                w *= 1.3
-            cands[sc]["weight"] += w
-            cands[sc]["sources"].append("market")
-
-    has_warn = any("🚨" in str(s) for s in smart) or (extreme and extreme not in ["","\u65e0"])
-    mkt_top = top_crs[0].get("score") if top_crs else None
-
-    for sc in cands:
-        if sc == mkt_top: cands[sc]["weight"] += 0.20
-        cnt = ai_scores.count(sc)
-        if cnt >= 3: cands[sc]["weight"] += 0.55
-        elif cnt >= 2: cands[sc]["weight"] += 0.30
-        grok_sc = grok.get("ai_score") if isinstance(grok, dict) else None
-        gpt_sc = gpt.get("ai_score") if isinstance(gpt, dict) else None
-        if sc == grok_sc and sc == gpt_sc: cands[sc]["weight"] += 0.25
-        if has_warn and sc in [s.get("score") for s in top_crs]: cands[sc]["weight"] += 0.10
-
-    final_score = max(cands.items(), key=lambda x: x[1]["weight"])[0] if cands else sys_score
-
     ai_hp = ai_dp = ai_ap = 0.0
     ai_tw = 0.0
-    for name, res in all_ai:
+    for name, res in ai_all:
         sc = res.get("ai_score") if isinstance(res, dict) else None
         if not sc or sc in ["-","?",""]: continue
         hg, ag = parse_score(sc)
         if hg is None: continue
-        w = ai_w.get(name, 0.15)
+        w = ai_w.get(name, 0.05)
         ai_tw += w
         if hg > ag: ai_hp += w
         elif hg == ag: ai_dp += w
@@ -460,21 +230,25 @@ def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj, exp_go
     else:
         ai_hp, ai_dp, ai_ap = ohp, odp, oap
 
-    fhp = ai_hp*0.55 + ohp*0.30 + stats.get("home_win_pct",33)*0.15
-    fdp = ai_dp*0.55 + odp*0.30 + stats.get("draw_pct",33)*0.15
-    fap = ai_ap*0.55 + oap*0.30 + stats.get("away_win_pct",33)*0.15
-    if fdp < 10:
-        b = 10 - fdp; fdp = 10; fhp -= b*0.6; fap -= b*0.4
+    fhp = ohp * 0.70 + ai_hp * 0.15 + stats.get("home_win_pct", 33) * 0.15
+    fdp = odp * 0.70 + ai_dp * 0.15 + stats.get("draw_pct", 33) * 0.15
+    fap = oap * 0.70 + ai_ap * 0.15 + stats.get("away_win_pct", 33) * 0.15
+
+    fhp = max(3, fhp); fdp = max(3, fdp); fap = max(3, fap)
     ft = fhp + fdp + fap
     if ft > 0:
-        fhp = round(fhp/ft*100, 1); fdp = round(fdp/ft*100, 1); fap = round(100-fhp-fdp, 1)
+        fhp = round(fhp/ft*100, 1); fdp = round(fdp/ft*100, 1); fap = round(max(3, 100-fhp-fdp), 1)
+        ft2 = fhp + fdp + fap
+        if abs(ft2 - 100) > 0.5:
+            fhp = round(fhp/ft2*100, 1); fdp = round(fdp/ft2*100, 1); fap = round(100-fhp-fdp, 1)
 
-    uai = len(set(ai_scores))
-    ab = 25 if uai <= 1 and len(ai_scores) >= 3 else (12 if uai <= 2 else 0)
-    mm = 18 if final_score == mkt_top else 0
-    wp = -10 if has_warn else 0
-    cf = min(95, max(35, round(48 + ab + mm + wp + (max(fhp, fdp, fap) - 33) * 0.3)))
-    risk = "\u4f4e" if cf >= 75 else ("\u4e2d" if cf >= 55 else "\u9ad8")
+    cf = engine_conf
+    has_warn = any("🚨" in str(s) for s in smart)
+    if has_warn: cf = max(35, cf - 10)
+    ai_agree = sum(1 for s in ai_scores if s == engine_score)
+    cf = min(95, cf + ai_agree * 5)
+
+    risk = "\u4f4e" if cf >= 70 else ("\u4e2d" if cf >= 50 else "\u9ad8")
 
     vh = calculate_value_bet(fhp, sp_h)
     vd = calculate_value_bet(fdp, sp_d)
@@ -497,8 +271,8 @@ def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj, exp_go
         "gpt_score": gpt.get("ai_score","-"), "gpt_analysis": gpt.get("analysis","N/A"),
         "grok_score": grok.get("ai_score","-"), "grok_analysis": grok.get("analysis","N/A"),
         "gemini_score": gemini.get("ai_score","-"), "gemini_analysis": gemini.get("analysis","N/A"),
-        "claude_score": claude_arb.get("ai_score","-"), "claude_analysis": claude_arb.get("analysis","N/A"),
-        "model_agreement": uai <= 1 if ai_scores else False,
+        "claude_score": claude.get("ai_score","-"), "claude_analysis": claude.get("analysis","N/A"),
+        "model_agreement": len(set(ai_scores)) <= 1 if ai_scores else False,
         "candidate_scores": {sc: round(c["weight"], 2) for sc, c in cands.items()},
         "poisson": {**stats.get("poisson",{}), "home_expected_goals": stats.get("poisson",{}).get("home_xg","?")},
         "refined_poisson": stats.get("refined_poisson",{}),
@@ -506,7 +280,8 @@ def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj, exp_go
         "extreme_warning": extreme if extreme else "\u65e0",
         "smart_money_signal": " | ".join(us) if us else "\u6b63\u5e38",
         "smart_signals": us, "model_consensus": mc, "total_models": tm,
-        "expected_total_goals": exp_goals,
+        "expected_total_goals": calc_ttg_profile(v2).get("exp", 2.5),
+        "over_2_5": o25, "btts": bt,
         "top_scores": stats.get("refined_poisson",{}).get("top_scores",[]),
         "elo": stats.get("elo",{}), "random_forest": stats.get("random_forest",{}),
         "gradient_boost": stats.get("gradient_boost",{}), "neural_net": stats.get("neural_net",{}),
@@ -517,7 +292,7 @@ def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj, exp_go
         "odds_movement": stats.get("odds_movement",{}), "vote_analysis": stats.get("vote_analysis",{}),
         "h2h_blood": stats.get("h2h_blood",{}), "crs_analysis": stats.get("crs_analysis",{}),
         "ttg_analysis": stats.get("ttg_analysis",{}), "halftime": stats.get("halftime",{}),
-        "over_2_5": o25, "btts": bt, "pace_rating": stats.get("pace_rating",""),
+        "pace_rating": stats.get("pace_rating",""),
         "kelly_home": stats.get("kelly_home",{}), "kelly_away": stats.get("kelly_away",{}),
         "odds": stats.get("odds",{}),
     }
@@ -526,12 +301,12 @@ def merge_all(gpt, grok, gemini, claude_p1, claude_arb, stats, match_obj, exp_go
 def select_top4(preds):
     for p in preds:
         pr = p.get("prediction", {})
-        s = pr.get("confidence", 0) * 0.35
+        s = pr.get("confidence", 0) * 0.4
         mx = max(pr.get("home_win_pct",33), pr.get("away_win_pct",33), pr.get("draw_pct",33))
-        s += (mx - 33) * 0.25 + pr.get("model_consensus", 0) * 2.5
-        if pr.get("risk_level") == "\u4f4e": s += 10
+        s += (mx - 33) * 0.2 + pr.get("model_consensus", 0) * 2
+        if pr.get("risk_level") == "\u4f4e": s += 12
         elif pr.get("risk_level") == "\u9ad8": s -= 5
-        if pr.get("model_agreement"): s += 15
+        if pr.get("model_agreement"): s += 10
         if pr.get("value_bets_summary"): s += 8
         p["recommend_score"] = round(s, 2)
     preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
@@ -546,32 +321,40 @@ def extract_num(ms):
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 60)
-    print("  ENGINE v9.1 | %d matches" % len(ms))
-    print("  League intel + goals constraint + 5-AI")
+    print("  ENGINE v10.0 | %d matches" % len(ms))
+    print("  Odds Engine 70%% + AI Advisor 30%%")
     print("=" * 60)
     res = []
     for i, m in enumerate(ms):
         h, a = m.get("home_team","?"), m.get("away_team","?")
         print("\n  [%d/%d] %s %s vs %s" % (i+1, len(ms), m.get("league",""), h, a))
-        exp_goals, most_likely, goals_info = calc_expected_goals(m)
-        goals_constraint = build_goals_constraint(exp_goals, most_likely)
-        print("    Goals market: exp=%.1f most_likely=%d" % (exp_goals, most_likely))
+
+        engine_result = predict_score(m)
+        candidates = engine_result.get("candidates", [engine_result["score"]])
+        print("    Engine: %s (%s) conf=%d%% cands=%s" % (
+            engine_result["score"], engine_result["reason"],
+            engine_result["confidence"], ",".join(candidates)))
+
         sp = ensemble.predict(m, {})
+        odds_analysis = build_odds_summary(m)
+        league_info, _, _, _ = build_league_intelligence(m)
+
         if use_ai:
-            gpt_r = call_gpt(build_gpt_prompt(m, goals_info, goals_constraint)); time.sleep(0.3)
-            grok_r = call_grok(build_grok_prompt(m, goals_info, goals_constraint)); time.sleep(0.3)
-            gem_r = call_gemini(build_gemini_prompt(m, goals_info, goals_constraint)); time.sleep(0.3)
-            cl_p1 = call_claude(build_claude_analyst_prompt(m, goals_info, goals_constraint)); time.sleep(0.3)
-            arb_p = build_arbiter_prompt(m, gpt_r or {}, grok_r or {}, gem_r or {}, cl_p1 or {}, sp, exp_goals, goals_info, goals_constraint)
-            cl_arb = call_claude(arb_p); time.sleep(0.3)
+            prompt = build_ai_prompt(m, odds_analysis, league_info, candidates)
+            gpt_r = call_gpt(prompt); time.sleep(0.3)
+            grok_r = call_grok(prompt); time.sleep(0.3)
+            gem_r = call_gemini(prompt); time.sleep(0.3)
+            cl_r = call_claude(prompt); time.sleep(0.3)
         else:
             b = {"ai_score": "-", "analysis": "blocked"}
-            gpt_r = grok_r = gem_r = cl_p1 = cl_arb = b
-        mg = merge_all(gpt_r or {}, grok_r or {}, gem_r or {}, cl_p1 or {}, cl_arb or {}, sp, m, exp_goals, most_likely)
-        print("  => %s (%s) %d%% | GPT:%s Grok:%s Gem:%s Arb:%s" % (
+            gpt_r = grok_r = gem_r = cl_r = b
+
+        mg = merge_all(engine_result, gpt_r or {}, grok_r or {}, gem_r or {}, cl_r or {}, sp, m)
+        print("  => %s (%s) %d%% | GPT:%s Grok:%s Gem:%s Claude:%s" % (
             mg["result"], mg["predicted_score"], mg["confidence"],
             mg["gpt_score"], mg["grok_score"], mg["gemini_score"], mg["claude_score"]))
         res.append({**m, "prediction": mg})
+
     t4 = select_top4(res)
     t4ids = [t["id"] for t in t4]
     for r in res: r["is_recommended"] = r["id"] in t4ids
