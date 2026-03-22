@@ -139,41 +139,55 @@ FALLBACK_URLS = [None, "https://api520.pro/v1", "https://www.api520.pro/v1",
     "https://api521.pro/v1", "https://www.api521.pro/v1",
     "https://api522.pro/v1", "https://www.api522.pro/v1", "https://69.63.213.33:666/v1"]
 
-ALL_MODELS = [
-    ("GPT_API_URL", "GPT_API_KEY", [
-        "\u718a\u732b-A-7-gpt-5.4","\u718a\u732b-\u6309\u91cf-gpt-5.3-codex-\u6ee1\u8840",
-        "\u718a\u732b-A-10-gpt-5.3-codex","\u718a\u732b-A-1-gpt-5.2"]),
-    ("GROK_API_URL", "GROK_API_KEY", [
-        "\u718a\u732b-A-7-grok-4.2-\u591a\u667a\u80fd\u4f53\u8ba8\u8bba",
-        "\u718a\u732b-A-4-grok-4.2-fast"]),
-    ("CLAUDE_API_URL", "CLAUDE_API_KEY", [
-        "\u718a\u732b-\u6309\u91cf-\u9876\u7ea7\u7279\u4f9b-\u5b98max-claude-opus-4.6",
-        "\u718a\u732b-\u7279\u4f9b-\u6309\u91cf-Q-claude-sonnet-4.6"]),
-    ("GEMINI_API_URL", "GEMINI_API_KEY", [
-        "\u718a\u732b\u7279\u4f9bS-\u6309\u91cf-gemini-3-flash-preview",
-        "\u718a\u732b-2-gemini-3.1-flash-lite-preview"]),
-]
 
-def call_batch_ai(prompt, num_matches):
-    for url_env, key_env, models in ALL_MODELS:
-        key = get_clean_env_key(key_env)
-        primary_url = get_clean_env_url(url_env)
-        if not key: continue
-        urls = [primary_url] + [u for u in FALLBACK_URLS if u and u != primary_url]
-        for mn in models:
-            for url in urls:
-                if not url: continue
-                raw = call_ai_model(prompt, url, key, mn)
-                if raw:
-                    results = parse_batch_response(raw, num_matches)
-                    if len(results) >= num_matches * 0.5:
-                        print("  AI OK: %d/%d matches parsed" % (len(results), num_matches))
-                        return results, mn
-                time.sleep(0.3)
-    return {}, "none"
+def call_one_ai_batch(prompt, url_env, key_env, models_list, num_matches):
+    """Call one AI provider with batch prompt, return parsed results"""
+    key = get_clean_env_key(key_env)
+    primary_url = get_clean_env_url(url_env)
+    if not key: return {}, "no_key"
+    urls = [primary_url] + [u for u in FALLBACK_URLS if u and u != primary_url]
+    for mn in models_list:
+        for url in urls:
+            if not url: continue
+            raw = call_ai_model(prompt, url, key, mn)
+            if raw:
+                results = parse_batch_response(raw, num_matches)
+                if len(results) >= max(1, num_matches * 0.4):
+                    print("    %s OK: %d/%d parsed" % (mn[:20], len(results), num_matches))
+                    return results, mn
+            time.sleep(0.3)
+    return {}, "failed"
+
+def call_all_ai_batch(prompt, num_matches):
+    """Call ALL 4 AIs each once in batch mode. Returns dict of {ai_name: {match_idx: result}}"""
+    ai_configs = [
+        ("gpt", "GPT_API_URL", "GPT_API_KEY", [
+            "\u718a\u732b-A-7-gpt-5.4","\u718a\u732b-\u6309\u91cf-gpt-5.3-codex-\u6ee1\u8840",
+            "\u718a\u732b-A-10-gpt-5.3-codex","\u718a\u732b-A-1-gpt-5.2"]),
+        ("grok", "GROK_API_URL", "GROK_API_KEY", [
+            "\u718a\u732b-A-7-grok-4.2-\u591a\u667a\u80fd\u4f53\u8ba8\u8bba",
+            "\u718a\u732b-A-4-grok-4.2-fast"]),
+        ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
+            "\u718a\u732b-\u6309\u91cf-\u9876\u7ea7\u7279\u4f9b-\u5b98max-claude-opus-4.6",
+            "\u718a\u732b-\u7279\u4f9b-\u6309\u91cf-Q-claude-sonnet-4.6"]),
+        ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", [
+            "\u718a\u732b\u7279\u4f9bS-\u6309\u91cf-gemini-3-flash-preview",
+            "\u718a\u732b-2-gemini-3.1-flash-lite-preview"]),
+    ]
+    all_results = {}
+    for ai_name, url_env, key_env, models in ai_configs:
+        print("  Calling %s batch..." % ai_name.upper())
+        results, model_used = call_one_ai_batch(prompt, url_env, key_env, models, num_matches)
+        all_results[ai_name] = results
+        if results:
+            print("    %s: %d results via %s" % (ai_name, len(results), model_used[:25]))
+        else:
+            print("    %s: FAILED" % ai_name)
+        time.sleep(0.5)
+    return all_results
 
 
-def merge_result(engine_result, ai_result, stats, match_obj):
+def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     sp_h = float(match_obj.get("sp_home", 0) or 0)
     sp_d = float(match_obj.get("sp_draw", 0) or 0)
     sp_a = float(match_obj.get("sp_away", 0) or 0)
@@ -188,14 +202,30 @@ def merge_result(engine_result, ai_result, stats, match_obj):
     o25 = engine_result.get("over_25", 50)
     bt = engine_result.get("btts", 45)
 
-    ai_score = ai_result.get("ai_score", "-") if isinstance(ai_result, dict) else "-"
-    ai_analysis = ai_result.get("analysis", "N/A") if isinstance(ai_result, dict) else "N/A"
+    # Collect all AI scores
+    ai_all = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r, "claude": claude_r}
+    ai_scores = []
+    for name, r in ai_all.items():
+        sc = r.get("ai_score", "-") if isinstance(r, dict) else "-"
+        if sc and sc not in ["-", "?", ""]:
+            ai_scores.append(sc)
 
-    if ai_score in candidates:
-        final_score = ai_score
-    else:
-        final_score = engine_score
+    # Vote: count which candidate gets most AI votes
+    vote_count = {}
+    for sc in ai_scores:
+        if sc in candidates:
+            vote_count[sc] = vote_count.get(sc, 0) + 2  # in-candidate vote = 2
+        else:
+            vote_count[sc] = vote_count.get(sc, 0) + 1  # out-candidate vote = 1
 
+    # Final score: engine default, but AI consensus can override if in candidates
+    final_score = engine_score
+    if vote_count:
+        best_voted = max(vote_count, key=vote_count.get)
+        if best_voted in candidates and vote_count[best_voted] >= 3:
+            final_score = best_voted  # 2+ AIs agree on a candidate → use it
+
+    # Probabilities from odds (75%) + stats (25%)
     hp = engine_result.get("home_prob", 33)
     dp = engine_result.get("draw_prob", 33)
     ap = engine_result.get("away_prob", 34)
@@ -213,9 +243,11 @@ def merge_result(engine_result, ai_result, stats, match_obj):
         if abs(ft2 - 100) > 0.5:
             fhp = round(fhp/ft2*100, 1); fdp = round(fdp/ft2*100, 1); fap = round(100-fhp-fdp, 1)
 
+    # Confidence: engine base + AI agreement bonus
     cf = engine_conf
-    if ai_score == engine_score: cf = min(90, cf + 8)
-    has_warn = any("🚨" in str(s) for s in smart)
+    agree_count = sum(1 for s in ai_scores if s == engine_score)
+    cf = min(90, cf + agree_count * 4)
+    has_warn = any("\U0001f6a8" in str(s) for s in smart)
     if has_warn: cf = max(35, cf - 10)
     risk = "\u4f4e" if cf >= 70 else ("\u4e2d" if cf >= 50 else "\u9ad8")
 
@@ -231,17 +263,30 @@ def merge_result(engine_result, ai_result, stats, match_obj):
     seen = set()
     us = [s for s in smart if s not in seen and not seen.add(s)]
 
+    gpt_sc = gpt_r.get("ai_score", "-") if isinstance(gpt_r, dict) else "-"
+    gpt_an = gpt_r.get("analysis", "N/A") if isinstance(gpt_r, dict) else "N/A"
+    grok_sc = grok_r.get("ai_score", "-") if isinstance(grok_r, dict) else "-"
+    grok_an = grok_r.get("analysis", "N/A") if isinstance(grok_r, dict) else "N/A"
+    gem_sc = gemini_r.get("ai_score", "-") if isinstance(gemini_r, dict) else "-"
+    gem_an = gemini_r.get("analysis", "N/A") if isinstance(gemini_r, dict) else "N/A"
+    cl_sc = claude_r.get("ai_score", "-") if isinstance(claude_r, dict) else "-"
+    cl_an = claude_r.get("analysis", "N/A") if isinstance(claude_r, dict) else "N/A"
+    # Claude display: show engine reason if claude didn't respond
+    if cl_sc == "-":
+        cl_sc = engine_score
+        cl_an = engine_result.get("reason", "odds engine")
+
     return {
         "predicted_score": final_score,
         "home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap,
         "confidence": cf, "result": result, "risk_level": risk,
         "over_under_2_5": "\u5927" if o25 > 55 else "\u5c0f",
         "both_score": "\u662f" if bt > 50 else "\u5426",
-        "gpt_score": ai_score, "gpt_analysis": ai_analysis,
-        "grok_score": "-", "grok_analysis": "batch mode",
-        "gemini_score": "-", "gemini_analysis": "batch mode",
-        "claude_score": engine_score, "claude_analysis": engine_result.get("reason", "odds engine"),
-        "model_agreement": ai_score == engine_score,
+        "gpt_score": gpt_sc, "gpt_analysis": gpt_an,
+        "grok_score": grok_sc, "grok_analysis": grok_an,
+        "gemini_score": gem_sc, "gemini_analysis": gem_an,
+        "claude_score": cl_sc, "claude_analysis": cl_an,
+        "model_agreement": len(set(ai_scores)) <= 1 and len(ai_scores) >= 2,
         "candidate_scores": {sc: round(1.0 if sc == final_score else 0.5, 2) for sc in candidates},
         "poisson": stats.get("poisson", {}),
         "refined_poisson": stats.get("refined_poisson", {}),
@@ -292,7 +337,7 @@ def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 60)
     print("  ENGINE v10 BATCH | %d matches" % len(ms))
-    print("  Odds Engine 80%% + 1x AI batch 20%%")
+    print("  Odds Engine 80%% + 4x AI batch 20%%")
     print("=" * 60)
 
     # Phase 1: Odds Engine for ALL matches
@@ -308,44 +353,33 @@ def run_predictions(raw, use_ai=True):
         print("  [%d] %s vs %s → %s (%s) conf=%d%%" % (
             i+1, h, a, eng["primary_score"], eng["reason"], eng["confidence"]))
 
-    # Phase 2: ONE batch AI call
-    ai_results = {}
-    ai_model_used = "none"
+    # Phase 2: ONE batch prompt → call ALL 4 AIs (4 API calls total)
+    all_ai = {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
     if use_ai and match_analyses:
-        print("\n  Batch AI call for %d matches..." % len(match_analyses))
+        print("\n  Building batch prompt for %d matches..." % len(match_analyses))
         prompt = build_batch_prompt(match_analyses)
-        print("  Prompt: %d chars" % len(prompt))
-        ai_results, ai_model_used = call_batch_ai(prompt, len(match_analyses))
-        print("  AI model: %s | Results: %d" % (ai_model_used, len(ai_results)))
+        print("  Prompt: %d chars | Calling 4 AIs..." % len(prompt))
+        all_ai = call_all_ai_batch(prompt, len(match_analyses))
+        for name, results in all_ai.items():
+            print("  %s: %d results" % (name.upper(), len(results)))
 
-    # Phase 3: Merge
+    # Phase 3: Merge engine + 4 AI results
     res = []
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         eng = ma["engine"]
         sp = ma["stats"]
-        ai_r = ai_results.get(i + 1, {})
-        mg = merge_result(eng, ai_r, sp, m)
-
-        # Override gpt/grok/gemini/claude display based on which AI was used
-        if ai_model_used != "none" and ai_r:
-            if "gpt" in ai_model_used.lower():
-                mg["gpt_score"] = ai_r.get("ai_score", "-")
-                mg["gpt_analysis"] = ai_r.get("analysis", "")
-            elif "grok" in ai_model_used.lower():
-                mg["grok_score"] = ai_r.get("ai_score", "-")
-                mg["grok_analysis"] = ai_r.get("analysis", "")
-            elif "claude" in ai_model_used.lower():
-                mg["claude_score"] = ai_r.get("ai_score", "-")
-                mg["claude_analysis"] = ai_r.get("analysis", "")
-            elif "gemini" in ai_model_used.lower():
-                mg["gemini_score"] = ai_r.get("ai_score", "-")
-                mg["gemini_analysis"] = ai_r.get("analysis", "")
+        idx = i + 1
+        gpt_r = all_ai.get("gpt", {}).get(idx, {})
+        grok_r = all_ai.get("grok", {}).get(idx, {})
+        gem_r = all_ai.get("gemini", {}).get(idx, {})
+        cl_r = all_ai.get("claude", {}).get(idx, {})
+        mg = merge_result(eng, gpt_r, grok_r, gem_r, cl_r, sp, m)
 
         h, a = m.get("home_team", "?"), m.get("away_team", "?")
-        print("  [%d] %s vs %s => %s (%s) %d%% AI:%s" % (
-            i+1, h, a, mg["result"], mg["predicted_score"],
-            mg["confidence"], ai_r.get("ai_score", "-")))
+        print("  [%d] %s vs %s => %s (%s) %d%% | GPT:%s Grok:%s Gem:%s Cl:%s" % (
+            i+1, h, a, mg["result"], mg["predicted_score"], mg["confidence"],
+            mg["gpt_score"], mg["grok_score"], mg["gemini_score"], mg["claude_score"]))
         res.append({**m, "prediction": mg})
 
     t4 = select_top4(res)
