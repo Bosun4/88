@@ -1,7 +1,7 @@
 import json, requests, time, re, os
 from config import *
 from models import EnsemblePredictor
-from odds_engine import predict_score, build_odds_summary, get_over_25_from_odds, get_btts_estimate, calc_ttg_profile
+from odds_engine import predict_match, build_ai_context, calc_ttg, calc_had
 from league_intel import build_league_intelligence
 
 ensemble = EnsemblePredictor()
@@ -177,12 +177,12 @@ def merge_all(engine_result, gpt, grok, gemini, claude, stats, match_obj):
     smart = stats.get("smart_signals", [])
     extreme = stats.get("extreme_warning", "")
 
-    engine_score = engine_result["score"]
+    engine_score = engine_result.get("primary_score", engine_result.get("score", "1-1"))
     engine_conf = engine_result["confidence"]
-    candidates = engine_result.get("candidates", [engine_score])
+    candidates = engine_result.get("top3_scores", [engine_score])
 
-    o25 = get_over_25_from_odds(v2)
-    bt = get_btts_estimate(v2)
+    o25 = engine_result.get("over_25", 50)
+    bt = engine_result.get("btts", 45)
 
     cands = {engine_score: {"weight": 0.70 * engine_conf / 100, "sources": ["engine"]}}
 
@@ -230,9 +230,9 @@ def merge_all(engine_result, gpt, grok, gemini, claude, stats, match_obj):
     else:
         ai_hp, ai_dp, ai_ap = ohp, odp, oap
 
-    fhp = ohp * 0.70 + ai_hp * 0.15 + stats.get("home_win_pct", 33) * 0.15
-    fdp = odp * 0.70 + ai_dp * 0.15 + stats.get("draw_pct", 33) * 0.15
-    fap = oap * 0.70 + ai_ap * 0.15 + stats.get("away_win_pct", 33) * 0.15
+    fhp = ohp * 0.75 + ai_hp * 0.10 + stats.get("home_win_pct", 33) * 0.15
+    fdp = odp * 0.75 + ai_dp * 0.10 + stats.get("draw_pct", 33) * 0.15
+    fap = oap * 0.75 + ai_ap * 0.10 + stats.get("away_win_pct", 33) * 0.15
 
     fhp = max(3, fhp); fdp = max(3, fdp); fap = max(3, fap)
     ft = fhp + fdp + fap
@@ -280,7 +280,7 @@ def merge_all(engine_result, gpt, grok, gemini, claude, stats, match_obj):
         "extreme_warning": extreme if extreme else "\u65e0",
         "smart_money_signal": " | ".join(us) if us else "\u6b63\u5e38",
         "smart_signals": us, "model_consensus": mc, "total_models": tm,
-        "expected_total_goals": calc_ttg_profile(v2).get("exp", 2.5),
+        "expected_total_goals": engine_result.get("expected_goals", 2.5),
         "over_2_5": o25, "btts": bt,
         "top_scores": stats.get("refined_poisson",{}).get("top_scores",[]),
         "elo": stats.get("elo",{}), "random_forest": stats.get("random_forest",{}),
@@ -329,14 +329,14 @@ def run_predictions(raw, use_ai=True):
         h, a = m.get("home_team","?"), m.get("away_team","?")
         print("\n  [%d/%d] %s %s vs %s" % (i+1, len(ms), m.get("league",""), h, a))
 
-        engine_result = predict_score(m)
-        candidates = engine_result.get("candidates", [engine_result["score"]])
-        print("    Engine: %s (%s) conf=%d%% cands=%s" % (
-            engine_result["score"], engine_result["reason"],
+        engine_result = predict_match(m)
+        candidates = engine_result.get("top3_scores", [engine_result["primary_score"]])
+        print("    Engine: %s (%s) conf=%d%% TOP3=%s" % (
+            engine_result["primary_score"], engine_result["reason"],
             engine_result["confidence"], ",".join(candidates)))
 
         sp = ensemble.predict(m, {})
-        odds_analysis = build_odds_summary(m)
+        odds_analysis = build_ai_context(m, engine_result)
         league_info, _, _, _ = build_league_intelligence(m)
 
         if use_ai:
