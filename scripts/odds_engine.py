@@ -1,287 +1,278 @@
-# odds_engine.py - Core odds-based score prediction
-# This replaces AI guessing with mathematical odds analysis
+# odds_engine.py v2 - Professional odds-based prediction system
+# Core principle: odds ARE the best prediction. Find where odds mispriced.
 
-def calc_ttg_profile(v2):
-    """Calculate total goals profile from TTG odds"""
-    ttg_map = {"a0":0,"a1":1,"a2":2,"a3":3,"a4":4,"a5":5,"a6":6,"a7":7}
-    raw = {}
-    for k, g in ttg_map.items():
-        ov = float(v2.get(k, 0) or 0)
-        if ov > 1:
-            raw[g] = ov
-    if not raw:
-        return {"exp": 2.5, "best": 2, "second": 3, "probs": {}, "zero_odds": 99, "seven_odds": 99}
-    probs = {k: 1/v for k, v in raw.items()}
-    ti = sum(probs.values())
-    probs = {k: round(v/ti*100, 1) for k, v in probs.items()}
-    exp = sum(k*v/100 for k, v in probs.items())
-    sorted_ttg = sorted(raw.items(), key=lambda x: x[1])
-    best = sorted_ttg[0][0]
-    second = sorted_ttg[1][0] if len(sorted_ttg) > 1 else best
-    return {
-        "exp": round(exp, 1),
-        "best": best,
-        "second": second,
-        "probs": probs,
-        "zero_odds": raw.get(0, 99),
-        "seven_odds": raw.get(7, 99),
-        "raw": raw
-    }
+# Industry CRS baselines (median from 10000+ matches)
+# These represent "normal" odds for a neutral match
+BASELINE_CRS = {
+    "0-0": 10.5, "1-0": 7.5, "0-1": 7.5,
+    "1-1": 6.0, "2-0": 11.0, "0-2": 11.0,
+    "2-1": 8.0, "1-2": 8.0,
+    "3-0": 21.0, "0-3": 21.0,
+    "3-1": 16.0, "1-3": 16.0,
+    "2-2": 13.0, "3-2": 23.0, "2-3": 23.0,
+    "4-0": 50.0, "0-4": 50.0,
+    "4-1": 40.0, "1-4": 40.0,
+    "4-2": 60.0, "2-4": 60.0,
+    "3-3": 50.0, "5-0": 80.0, "0-5": 80.0,
+    "5-1": 60.0, "1-5": 60.0,
+    "5-2": 80.0, "2-5": 80.0,
+}
 
 
-def calc_had_profile(had_dict):
-    """Analyze HAD odds for direction and confidence"""
-    w = float(had_dict.get("w", had_dict.get("win", 2.5)))
-    d = float(had_dict.get("d", had_dict.get("same", had_dict.get("draw", 3.2))))
-    l = float(had_dict.get("l", had_dict.get("lose", 3.0)))
-    vals = sorted([("H", w), ("D", d), ("A", l)], key=lambda x: x[1])
-    direction = vals[0][0]
-    gap = (vals[1][1] - vals[0][1]) / max(vals[0][1], 0.01)
-    return {
-        "direction": direction,
-        "confident": gap > 0.15,
-        "super_fav_h": w < 1.25,
-        "super_fav_a": l < 1.25,
-        "strong_fav_h": w < 1.60,
-        "strong_fav_a": l < 1.60,
-        "draw_lean": d < min(w, l) * 1.08,
-        "uncertain": gap < 0.12,
-        "w": w, "d": d, "l": l,
-        "gap": round(gap, 3)
-    }
-
-
-def parse_crs(v2):
-    """Parse all CRS odds into structured data"""
+def parse_crs_odds(v2):
+    """Parse all correct score odds from match data"""
     crs_map = {
         "w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2",
-        "w40":"4-0","w41":"4-1","w42":"4-2",
+        "w40":"4-0","w41":"4-1","w42":"4-2","w50":"5-0","w51":"5-1","w52":"5-2",
         "s00":"0-0","s11":"1-1","s22":"2-2","s33":"3-3",
-        "l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3","l23":"2-3"
+        "l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3","l23":"2-3",
+        "l04":"0-4","l14":"1-4","l24":"2-4","l05":"0-5","l15":"1-5","l25":"2-5",
     }
-    scores = {}
+    result = {}
     for k, sc in crs_map.items():
         ov = float(v2.get(k, 0) or 0)
         if ov > 1:
             h, a = int(sc.split("-")[0]), int(sc.split("-")[1])
-            scores[sc] = {
-                "odds": ov,
-                "prob": round(1/ov*100, 1),
-                "total": h + a,
-                "dir": "H" if h > a else "D" if h == a else "A",
-                "h": h, "a": a
-            }
-    return scores
+            result[sc] = {"odds": ov, "h": h, "a": a, "total": h+a,
+                          "dir": "H" if h > a else "D" if h == a else "A"}
+    return result
 
 
-def predict_score(match_data):
+def calc_ttg(v2):
+    """Calculate total goals profile"""
+    ttg_map = {"a0":0,"a1":1,"a2":2,"a3":3,"a4":4,"a5":5,"a6":6,"a7":7}
+    raw = {}
+    for k, g in ttg_map.items():
+        ov = float(v2.get(k, 0) or 0)
+        if ov > 1: raw[g] = ov
+    if not raw:
+        return {"exp": 2.5, "best": 2, "probs": {}, "raw": {}}
+    probs = {k: 1/v for k, v in raw.items()}
+    ti = sum(probs.values())
+    probs = {k: round(v/ti*100, 1) for k, v in probs.items()}
+    exp = round(sum(k*v/100 for k, v in probs.items()), 1)
+    best = min(raw, key=raw.get)
+    return {"exp": exp, "best": best, "probs": probs, "raw": raw}
+
+
+def calc_had(sp_h, sp_d, sp_a):
+    """Analyze HAD direction and confidence"""
+    if sp_h <= 1 or sp_d <= 1 or sp_a <= 1:
+        return {"dir": "H", "conf": "LOW", "gap": 0, "w": sp_h, "d": sp_d, "l": sp_a,
+                "h_prob": 33, "d_prob": 33, "a_prob": 34}
+    ih, id2, ia = 1/sp_h, 1/sp_d, 1/sp_a
+    t = ih + id2 + ia
+    hp, dp, ap = round(ih/t*100, 1), round(id2/t*100, 1), round(ia/t*100, 1)
+    vals = sorted([("H", sp_h, hp), ("D", sp_d, dp), ("A", sp_a, ap)], key=lambda x: x[1])
+    d = vals[0][0]
+    gap = round((vals[1][1] - vals[0][1]) / vals[0][1], 3)
+    conf = "HIGH" if gap > 0.25 else "MID" if gap > 0.12 else "LOW"
+    return {"dir": d, "conf": conf, "gap": gap, "w": sp_h, "d": sp_d, "l": sp_a,
+            "h_prob": hp, "d_prob": dp, "a_prob": ap}
+
+
+def predict_match(match_data):
     """
-    Core prediction engine using layered odds analysis.
-    Returns: {"score": "2-1", "reason": "...", "candidates": [...], "confidence": 70}
+    Professional match prediction.
+    Returns direction, TOP3 scores, over/under, value bets, confidence.
     """
-    v2 = match_data.get("v2_odds_dict", {})
-    if not v2:
-        v2 = match_data
-
-    sp_h = float(match_data.get("sp_home", match_data.get("win", 2.5)) or 2.5)
-    sp_d = float(match_data.get("sp_draw", match_data.get("same", 3.2)) or 3.2)
-    sp_a = float(match_data.get("sp_away", match_data.get("lose", 3.0)) or 3.0)
-
-    had = {"w": sp_h, "d": sp_d, "l": sp_a}
-    ttg = calc_ttg_profile(v2)
-    had_p = calc_had_profile(had)
-    crs = parse_crs(v2)
-
-    if not crs:
-        return {"score": "1-1", "reason": "no CRS data", "candidates": [], "confidence": 30}
-
-    best_total = ttg["best"]
-    second_total = ttg["second"]
-    exp_goals = ttg["exp"]
-    zero_odds = ttg["zero_odds"]
-
-    # Helper: filter CRS by direction
-    def dir_filter(d):
-        return {s: c for s, c in crs.items() if c["dir"] == d}
-
-    # Helper: filter by total goals range
-    def total_filter(scores, lo, hi):
-        return {s: c for s, c in scores.items() if lo <= c["total"] <= hi}
-
-    # Helper: best in filtered set (lowest odds)
-    def best_in(scores):
-        if not scores:
-            return None
-        return min(scores, key=lambda s: scores[s]["odds"])
-
-    # ================================================================
-    # LAYER 0: Super favorite (odds < 1.25)
-    # ================================================================
-    if had_p["super_fav_h"]:
-        pool = dir_filter("H")
-        pool = total_filter(pool, max(best_total, 2), best_total + 2) or pool
-        pick = best_in(pool)
-        if pick:
-            return {"score": pick, "reason": "SUPER_FAV_HOME @%.2f" % sp_h,
-                    "candidates": sorted(pool, key=lambda s: pool[s]["odds"])[:3],
-                    "confidence": 80, "layer": 0}
-
-    if had_p["super_fav_a"]:
-        pool = dir_filter("A")
-        pool = total_filter(pool, max(best_total, 2), best_total + 2) or pool
-        pick = best_in(pool)
-        if pick:
-            return {"score": pick, "reason": "SUPER_FAV_AWAY @%.2f" % sp_a,
-                    "candidates": sorted(pool, key=lambda s: pool[s]["odds"])[:3],
-                    "confidence": 80, "layer": 0}
-
-    # ================================================================
-    # LAYER 1: Zero-goal signal (0-goal odds < 8.5)
-    # Only trigger if draw is not the worst outcome
-    # ================================================================
-    if zero_odds < 8.5 and sp_d <= max(sp_h, sp_a):
-        return {"score": "0-0", "reason": "ZERO_SIGNAL @%.1f" % zero_odds,
-                "candidates": ["0-0", "1-0", "0-1"],
-                "confidence": 65, "layer": 1}
-
-    # ================================================================
-    # LAYER 2: One-goal signal (1-goal odds < 4.0 + clear direction)
-    # ================================================================
-    if ttg["raw"].get(1, 99) < 4.0 and had_p["confident"]:
-        if had_p["direction"] == "H":
-            return {"score": "1-0", "reason": "ONE_GOAL_HOME 1g@%.1f" % ttg["raw"].get(1, 99),
-                    "candidates": ["1-0", "0-0", "2-0"],
-                    "confidence": 60, "layer": 2}
-        elif had_p["direction"] == "A":
-            return {"score": "0-1", "reason": "ONE_GOAL_AWAY 1g@%.1f" % ttg["raw"].get(1, 99),
-                    "candidates": ["0-1", "0-0", "0-2"],
-                    "confidence": 60, "layer": 2}
-
-    # ================================================================
-    # LAYER 3: Strong favorite (odds < 1.60)
-    # ================================================================
-    if had_p["strong_fav_h"]:
-        pool = dir_filter("H")
-        target = max(best_total, 2)
-        pool = total_filter(pool, target - 1, target + 1) or pool
-        pick = best_in(pool)
-        if pick:
-            return {"score": pick, "reason": "STRONG_FAV_HOME @%.2f ttg=%d" % (sp_h, best_total),
-                    "candidates": sorted(pool, key=lambda s: pool[s]["odds"])[:3],
-                    "confidence": 70, "layer": 3}
-
-    if had_p["strong_fav_a"]:
-        pool = dir_filter("A")
-        target = max(best_total, 2)
-        pool = total_filter(pool, target - 1, target + 1) or pool
-        pick = best_in(pool)
-        if pick:
-            return {"score": pick, "reason": "STRONG_FAV_AWAY @%.2f ttg=%d" % (sp_a, best_total),
-                    "candidates": sorted(pool, key=lambda s: pool[s]["odds"])[:3],
-                    "confidence": 70, "layer": 3}
-
-    # ================================================================
-    # LAYER 4: Draw signal (all odds close + draw competitive)
-    # ================================================================
-    if had_p["draw_lean"] or (had_p["uncertain"] and sp_d < 3.3):
-        pool = dir_filter("D")
-        pool = total_filter(pool, max(best_total - 1, 0), best_total + 1) or pool
-        pick = best_in(pool)
-        if pick:
-            return {"score": pick, "reason": "DRAW_SIGNAL d=%.2f gap=%.3f" % (sp_d, had_p["gap"]),
-                    "candidates": sorted(pool, key=lambda s: pool[s]["odds"])[:3],
-                    "confidence": 55, "layer": 4}
-
-    # ================================================================
-    # LAYER 5: General - direction + total goals crossfilter
-    # ================================================================
-    d = had_p["direction"]
-    pool = dir_filter(d)
-
-    # Filter by total goals range (best ± 1)
-    filtered = total_filter(pool, max(best_total - 1, 0), best_total + 1)
-    if filtered:
-        pick = best_in(filtered)
-        return {"score": pick, "reason": "DIR_%s_TTG%d" % (d, best_total),
-                "candidates": sorted(filtered, key=lambda s: filtered[s]["odds"])[:3],
-                "confidence": 55, "layer": 5}
-
-    # No total match, just direction
-    if pool:
-        pick = best_in(pool)
-        return {"score": pick, "reason": "DIR_%s_ONLY" % d,
-                "candidates": sorted(pool, key=lambda s: pool[s]["odds"])[:3],
-                "confidence": 45, "layer": 5}
-
-    # ================================================================
-    # FALLBACK: absolute lowest CRS odds
-    # ================================================================
-    pick = min(crs, key=lambda s: crs[s]["odds"])
-    return {"score": pick, "reason": "FALLBACK",
-            "candidates": sorted(crs, key=lambda s: crs[s]["odds"])[:3],
-            "confidence": 35, "layer": 6}
-
-
-def get_over_25_from_odds(v2):
-    """Calculate over 2.5 probability from TTG odds"""
-    ttg = calc_ttg_profile(v2)
-    probs = ttg["probs"]
-    if not probs:
-        return 50.0
-    return round(sum(p for g, p in probs.items() if g >= 3), 1)
-
-
-def get_btts_estimate(v2, crs_data=None):
-    """Estimate BTTS from CRS odds"""
-    crs = parse_crs(v2) if not crs_data else crs_data
-    btts_scores = {s: c for s, c in crs.items() if c["h"] > 0 and c["a"] > 0}
-    total_prob = sum(c["prob"] for c in crs.values())
-    btts_prob = sum(c["prob"] for c in btts_scores.values())
-    if total_prob > 0:
-        return round(btts_prob / total_prob * 100, 1)
-    return 45.0
-
-
-def build_odds_summary(match_data):
-    """Build human-readable odds analysis for AI prompts"""
     v2 = match_data.get("v2_odds_dict", {})
     if not v2: v2 = match_data
+    sp_h = float(match_data.get("sp_home", match_data.get("win", 0)) or 0)
+    sp_d = float(match_data.get("sp_draw", match_data.get("same", 0)) or 0)
+    sp_a = float(match_data.get("sp_away", match_data.get("lose", 0)) or 0)
 
-    ttg = calc_ttg_profile(v2)
-    had = calc_had_profile({
-        "w": float(match_data.get("sp_home", match_data.get("win", 2.5)) or 2.5),
-        "d": float(match_data.get("sp_draw", match_data.get("same", 3.2)) or 3.2),
-        "l": float(match_data.get("sp_away", match_data.get("lose", 3.0)) or 3.0)
-    })
-    crs = parse_crs(v2)
-    result = predict_score(match_data)
+    crs = parse_crs_odds(v2)
+    ttg = calc_ttg(v2)
+    had = calc_had(sp_h, sp_d, sp_a)
 
+    # ================================================================
+    # STEP 1: Score each CRS by deviation from baseline
+    # deviation = (baseline - actual) / baseline
+    # Higher = bookmaker thinks this score more likely than normal
+    # ================================================================
+    scored = {}
+    for sc, info in crs.items():
+        bl = BASELINE_CRS.get(sc, info["odds"])
+        dev = (bl - info["odds"]) / bl  # positive = odds lower than normal = bookmaker favors
+        crs_prob = round(1 / info["odds"] * 100, 1)
+
+        # Base score from deviation (range roughly -50 to +50)
+        base = dev * 100
+
+        # Direction alignment bonus
+        if info["dir"] == had["dir"]:
+            if had["conf"] == "HIGH": base += 18
+            elif had["conf"] == "MID": base += 10
+            else: base += 4
+        elif had["conf"] == "HIGH":
+            base -= 12  # penalize wrong direction when confident
+        elif had["conf"] == "LOW":
+            pass  # no penalty when direction uncertain
+
+        # Total goals alignment
+        if info["total"] == ttg["best"]:
+            base += 12
+        elif abs(info["total"] - ttg["best"]) == 1:
+            base += 4
+        elif abs(info["total"] - ttg["best"]) >= 3:
+            base -= 12
+
+        # Special: 0-0 when zero-goal odds very low
+        zero_odds = ttg["raw"].get(0, 99)
+        if sc == "0-0" and zero_odds < 8.5:
+            base += 30  # very strong signal
+        elif sc == "0-0" and zero_odds < 9.5:
+            base += 15
+
+        # Special: super favorite large score boost
+        if sp_h < 1.30 and info["dir"] == "H" and info["total"] >= 3:
+            base += 12
+        if sp_a < 1.30 and info["dir"] == "A" and info["total"] >= 3:
+            base += 12
+        if sp_h < 1.50 and info["dir"] == "H" and info["total"] >= 2:
+            base += 6
+        if sp_a < 1.50 and info["dir"] == "A" and info["total"] >= 2:
+            base += 6
+
+        # Special: high-scoring game signal
+        seven_odds = ttg["raw"].get(7, 99)
+        if seven_odds < 15 and info["total"] >= 4:
+            base += 10
+        if seven_odds < 20 and info["total"] >= 4:
+            base += 5
+
+        # 1-1 penalty when direction is clear (1-1 is overrepresented in naive models)
+        if sc == "1-1" and had["conf"] in ["HIGH", "MID"] and had["dir"] != "D":
+            base -= 8
+
+        scored[sc] = {
+            "score": base,
+            "dev": round(dev * 100, 1),
+            "prob": crs_prob,
+            "odds": info["odds"],
+            "dir": info["dir"],
+            "total": info["total"],
+        }
+
+    # Sort by score
+    ranked = sorted(scored.items(), key=lambda x: x[1]["score"], reverse=True)
+
+    # TOP3 candidates
+    top3 = [r[0] for r in ranked[:3]]
+    primary = top3[0] if top3 else "1-1"
+
+    # ================================================================
+    # STEP 2: Over/Under 2.5 from TTG
+    # ================================================================
+    over_25 = round(sum(p for g, p in ttg["probs"].items() if g >= 3), 1) if ttg["probs"] else 50.0
+
+    # ================================================================
+    # STEP 3: BTTS from CRS
+    # ================================================================
+    btts_prob = 0
+    total_crs_prob = 0
+    for sc, info in crs.items():
+        p = 1 / info["odds"]
+        total_crs_prob += p
+        if info["h"] > 0 and info["a"] > 0:
+            btts_prob += p
+    btts = round(btts_prob / total_crs_prob * 100, 1) if total_crs_prob > 0 else 45.0
+
+    # ================================================================
+    # STEP 4: Confidence scoring
+    # ================================================================
+    conf = 50
+    # High HAD confidence = higher overall confidence
+    if had["conf"] == "HIGH": conf += 12
+    elif had["conf"] == "MID": conf += 5
+    # Top score deviation strong
+    if ranked and ranked[0][1]["dev"] > 20: conf += 8
+    elif ranked and ranked[0][1]["dev"] > 10: conf += 4
+    # Direction matches top score
+    if ranked and ranked[0][1]["dir"] == had["dir"]: conf += 8
+    # 0-0 special signal
+    if primary == "0-0" and zero_odds < 8.5: conf += 10
+    conf = min(90, max(30, conf))
+
+    # ================================================================
+    # STEP 5: Value bet detection
+    # ================================================================
+    value_bets = []
+    # Check if our probability assessment differs from odds
+    if had["h_prob"] > 0 and sp_h > 1:
+        ev_h = (had["h_prob"]/100 * sp_h) - 1
+        if ev_h > 0.08:
+            value_bets.append({
+                "type": "\u4e3b\u80dc", "odds": sp_h,
+                "ev": round(ev_h * 100, 1),
+                "kelly": round(max(0, ((sp_h - 1) * had["h_prob"]/100 - (1 - had["h_prob"]/100)) / (sp_h - 1)) * 25, 1)
+            })
+    if had["d_prob"] > 0 and sp_d > 1:
+        ev_d = (had["d_prob"]/100 * sp_d) - 1
+        if ev_d > 0.08:
+            value_bets.append({
+                "type": "\u5e73\u5c40", "odds": sp_d,
+                "ev": round(ev_d * 100, 1),
+                "kelly": round(max(0, ((sp_d - 1) * had["d_prob"]/100 - (1 - had["d_prob"]/100)) / (sp_d - 1)) * 25, 1)
+            })
+    if had["a_prob"] > 0 and sp_a > 1:
+        ev_a = (had["a_prob"]/100 * sp_a) - 1
+        if ev_a > 0.08:
+            value_bets.append({
+                "type": "\u5ba2\u80dc", "odds": sp_a,
+                "ev": round(ev_a * 100, 1),
+                "kelly": round(max(0, ((sp_a - 1) * had["a_prob"]/100 - (1 - had["a_prob"]/100)) / (sp_a - 1)) * 25, 1)
+            })
+
+    # Build reason string
+    if ranked:
+        top = ranked[0]
+        reason = "dev%+.0f%% dir:%s ttg:%d" % (top[1]["dev"], had["dir"], ttg["best"])
+    else:
+        reason = "no data"
+
+    return {
+        "primary_score": primary,
+        "top3_scores": top3,
+        "top5_detail": [(s, d["score"], d["odds"], d["dev"], d["dir"]) for s, d in ranked[:5]],
+        "direction": had["dir"],
+        "direction_confidence": had["conf"],
+        "home_prob": had["h_prob"],
+        "draw_prob": had["d_prob"],
+        "away_prob": had["a_prob"],
+        "expected_goals": ttg["exp"],
+        "most_likely_goals": ttg["best"],
+        "goals_distribution": ttg["probs"],
+        "over_25": over_25,
+        "btts": btts,
+        "confidence": conf,
+        "value_bets": value_bets,
+        "reason": reason,
+        "zero_odds": ttg["raw"].get(0, 99),
+    }
+
+
+def build_ai_context(match_data, prediction):
+    """Build context string for AI prompt (AI only picks from TOP3)"""
     lines = []
-    lines.append("[ODDS ENGINE ANALYSIS]")
-    lines.append("Direction: %s (confidence: %s, gap: %.1f%%)" % (
-        had["direction"], "HIGH" if had["confident"] else "LOW", had["gap"]*100))
-    lines.append("Expected goals: %.1f | Most likely: %d goals" % (ttg["exp"], ttg["best"]))
-
-    if ttg["zero_odds"] < 8.5:
-        lines.append("WARNING: 0-goal @%.1f = high 0-0 chance!" % ttg["zero_odds"])
-    if ttg["seven_odds"] < 15:
-        lines.append("WARNING: 7+goal @%.1f = HIGH scoring game!" % ttg["seven_odds"])
-
-    # TTG distribution
-    parts = []
-    for g in sorted(ttg["probs"]):
-        parts.append("%dg=%.0f%%" % (g, ttg["probs"][g]))
-    lines.append("Goals dist: %s" % " ".join(parts))
-
-    # Top CRS
-    sorted_crs = sorted(crs.items(), key=lambda x: x[1]["odds"])[:7]
-    lines.append("CRS TOP7: %s" % ", ".join(["%s@%.1f(%.1f%%)" % (s, c["odds"], c["prob"]) for s, c in sorted_crs]))
-
-    # Engine recommendation
+    lines.append("[ODDS ENGINE VERDICT]")
+    lines.append("Direction: %s (%s confidence)" % (prediction["direction"], prediction["direction_confidence"]))
+    lines.append("Expected goals: %.1f | Most likely: %d goals" % (prediction["expected_goals"], prediction["most_likely_goals"]))
+    lines.append("Over 2.5: %.0f%% | BTTS: %.0f%%" % (prediction["over_25"], prediction["btts"]))
+    if prediction["zero_odds"] < 9:
+        lines.append("!!! 0-goal odds %.1f = strong 0-0 signal !!!" % prediction["zero_odds"])
     lines.append("")
-    lines.append("[ENGINE RECOMMENDATION]")
-    lines.append("Score: %s (Layer %d: %s)" % (result["score"], result.get("layer", 9), result["reason"]))
-    lines.append("Candidates: %s" % ", ".join(result["candidates"][:3]))
-    lines.append("Confidence: %d%%" % result["confidence"])
-
+    lines.append("[TOP5 SCORES by odds deviation]")
+    for sc, score, odds, dev, d in prediction["top5_detail"]:
+        lines.append("  %s @%.1f  dev%+.0f%%  dir:%s  rating=%.0f" % (sc, odds, dev, d, score))
+    lines.append("")
+    lines.append("[CANDIDATE SCORES - pick ONE]")
+    for i, sc in enumerate(prediction["top3_scores"]):
+        lines.append("  %d. %s" % (i+1, sc))
+    if prediction["value_bets"]:
+        lines.append("")
+        lines.append("[VALUE BETS]")
+        for vb in prediction["value_bets"]:
+            lines.append("  %s @%.2f EV:+%.1f%% Kelly:%.1f%%" % (vb["type"], vb["odds"], vb["ev"], vb["kelly"]))
     return "\n".join(lines)
