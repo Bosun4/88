@@ -1,163 +1,153 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿足球预测系统Pro v5.1 - 满血版</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#060910;--p:#0d1420;--p2:#111c2d;--bd:#1a2744;--tx:#c8d6e5;--t2:#7b8da4;--t3:#4a5c73;--w:#f0f4f8;--red:#ef4444;--gn:#10b981;--bl:#3b82f6;--am:#f59e0b;--pr:#a855f7;--cy:#06b6d4;--pk:#ec4899;--or:#f97316}
-body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased}
-.mono{font-family:'JetBrains Mono',monospace}
-.hdr{position:sticky;top:0;z-index:99;background:rgba(6,9,16,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:0 16px}
-.hdr-in{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:48px}
-.logo{display:flex;align-items:center;gap:8px}
-.logo-i{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#000}
-.logo-t{font-family:'DM Sans';font-size:16px;font-weight:800;color:var(--w)}
-.logo-t span{color:var(--am)}
-.live{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t2);background:var(--p);border:1px solid var(--bd);border-radius:99px;padding:3px 10px}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--gn);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.wrap{max-width:1200px;margin:0 auto;padding:12px}
-.dash{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px}
-.d-card{background:var(--p);border:1px solid var(--bd);border-radius:8px;padding:10px;text-align:center}
-.d-val{font-family:'DM Sans';font-size:24px;font-weight:900}
-.d-lbl{font-size:9px;color:var(--t3);margin-top:2px}
-.sec{font-family:'DM Sans';font-size:14px;font-weight:800;color:var(--w);margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.badge{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#000;font-size:8px;font-weight:800;padding:2px 6px;border-radius:99px}
-.t4g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:6px;margin-bottom:18px}
-.t4{background:var(--p);border:1px solid var(--bd);border-radius:10px;padding:12px;position:relative;cursor:pointer;transition:.2s}
-.t4:hover{border-color:var(--am);transform:translateY(-1px)}
-.t4::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--am),var(--red));border-radius:10px 10px 0 0}
-.t4-r{position:absolute;top:8px;right:8px;width:20px;height:20px;background:linear-gradient(135deg,var(--am),var(--red));border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#000}
-.t4-lg{font-size:9px;color:var(--am);font-weight:700;margin-bottom:4px}
-.t4-tm{display:flex;align-items:center;gap:4px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--w)}
-.t4-tm span{flex:1}.t4-tm span:last-child{text-align:right}
-.t4-vs{color:var(--t3);font-size:8px;font-weight:800}
-.t4-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
-.t4-cell{text-align:center;padding:4px;background:var(--bg);border-radius:4px}
-.t4-cl{font-size:7px;color:var(--t3)}.t4-cv{font-size:11px;font-weight:700;color:var(--w)}.t4-cv.hl{color:var(--gn)}
-.tabs{display:flex;gap:2px;background:var(--p);border:1px solid var(--bd);border-radius:99px;padding:3px;max-width:360px;margin:0 auto 16px}
-.tab{flex:1;text-align:center;padding:5px 8px;border-radius:99px;font-size:11px;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:.2s}
-.tab.ac{background:var(--bl);color:#fff}
-.mc{background:var(--p);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:6px}
-.mc.rec{border-color:var(--am)}
-.mc-h{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:var(--bg);border-bottom:1px solid var(--bd)}
-.mc-lg{font-size:10px;color:var(--bl);font-weight:700}
-.mc-tm{font-size:9px;color:var(--t3)}
-.mc-rec{background:linear-gradient(135deg,var(--am),var(--red));color:#000;font-size:7px;font-weight:800;padding:1px 5px;border-radius:99px;margin-left:4px}
-.mc-b{padding:12px}
-.teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.tm{width:36%;text-align:center}
-.tm-n{font-size:12px;font-weight:700;color:var(--w)}
-.sc-c{text-align:center}
-.sc-big{font-family:'DM Sans';font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--bl),var(--pr));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.res-tag{display:inline-block;font-size:8px;padding:2px 6px;border-radius:99px;font-weight:700;margin-top:2px}
-.res-tag.h{background:#ef444420;color:var(--red)}.res-tag.d{background:#f59e0b20;color:var(--am)}.res-tag.a{background:#3b82f620;color:var(--bl)}
+import json
+import os
+import sys
+import subprocess
+import traceback
+import asyncio
+from datetime import datetime, timedelta, timezone
 
-/* 核心情报窗 */
-.intel-box{background:var(--p2);border:1px solid var(--bd);border-radius:8px;padding:8px;margin-bottom:10px;display:flex;justify-content:space-around;align-items:center}
-.intel-item{text-align:center}
-.intel-l{font-size:7px;color:var(--t3);text-transform:uppercase}
-.intel-v{font-family:'JetBrains Mono';font-size:11px;font-weight:800;color:var(--w)}
-.intel-sep{width:1px;height:20px;background:var(--bd)}
+# ============================================================
+#  自动安装依赖（首次运行自动执行，后续跳过）
+# ============================================================
+REQUIRED_PACKAGES = {
+    "penaltyblog": "penaltyblog",
+    "soccerdata": "soccerdata",
+    "scipy": "scipy",
+    "numpy": "numpy",
+    "requests": "requests",
+    "aiohttp": "aiohttp",
+}
 
-.g-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:8px}
-.g-box{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:6px;text-align:center}
-.g-l{font-size:8px;color:var(--t3)}.g-v{font-family:'JetBrains Mono';font-size:12px;font-weight:700}
-.prob{margin-bottom:8px;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:7px 10px}
-.prob-h{display:flex;justify-content:space-between;font-size:9px;font-weight:700;margin-bottom:3px}
-.prob-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--p2)}
-.prob-bar .h{background:var(--red)}.prob-bar .d{background:#64748b}.prob-bar .a{background:var(--bl)}
+def auto_install():
+    missing = []
+    for import_name, pip_name in REQUIRED_PACKAGES.items():
+        try:
+            __import__(import_name)
+        except ImportError:
+            missing.append(pip_name)
+    if missing:
+        print("📦 首次运行，正在安装缺失依赖: %s" % ", ".join(missing))
+        for pkg in missing:
+            try:
+                subprocess.check_call([
+                    sys.executable, "-m", "pip", "install", pkg,
+                    "--break-system-packages", "-q"
+                ])
+                print("  ✅ %s 安装成功" % pkg)
+            except subprocess.CalledProcessError:
+                print("  ⚠️ %s 安装失败，部分高级功能将降级运行" % pkg)
+        print()
 
-/* 警报闪烁 */
-.sig{padding:6px 8px;border-radius:6px;font-size:10px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:4px}
-.sig-r{background:#ef444412;border:1px solid #ef444440;color:var(--red);animation:blink 1.5s infinite}
-@keyframes blink{0%{opacity:1}50%{opacity:0.6}100%{opacity:1}}
-.sig-a{background:#f59e0b10;border:1px solid #f59e0b20;color:var(--am)}
+auto_install()
 
-.ev-row{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
-.ev-t{background:#f59e0b10;color:var(--am);font-size:9px;padding:2px 6px;border-radius:4px;border:1px solid #f59e0b20;font-family:'JetBrains Mono'}
-.exp-btn{width:100%;padding:6px;background:none;border:1px solid var(--bd);border-radius:6px;color:var(--t2);font-size:10px;cursor:pointer;font-weight:600;transition:.2s}
-.exp-btn:hover{background:var(--p2);color:var(--w)}
-.det{display:none;padding:0 12px 12px}.det.open{display:block}
-.mg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
-.mb{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:7px;position:relative;overflow:hidden}
-.mb::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.mb.c1::before{background:var(--gn)}.mb.c2::before{background:var(--bl)}.mb.c3::before{background:var(--pr)}.mb.c4::before{background:var(--am)}.mb.c5::before{background:var(--cy)}.mb.c6::before{background:var(--pk)}.mb.c7::before{background:var(--or)}
-.mb-t{font-size:9px;font-weight:700;margin-bottom:3px}
-.mb-t.c1{color:var(--gn)}.mb-t.c2{color:var(--bl)}.mb-t.c3{color:var(--pr)}.mb-t.c4{color:var(--am)}.mb-t.c5{color:var(--cy)}.mb-t.c6{color:var(--pk)}.mb-t.c7{color:var(--or)}
-.mb-r{display:flex;justify-content:space-between;font-size:9px;padding:1px 0}
-.mb-l{color:var(--t3)}.mb-v{font-family:'JetBrains Mono';font-weight:700;color:var(--w);font-size:9px}
-.chip{display:inline-block;background:var(--p);border:1px solid var(--bd);padding:1px 4px;border-radius:3px;font-size:8px;font-family:'JetBrains Mono';color:var(--t3);margin:1px}
-.chip.top{border-color:var(--gn);color:var(--gn)}
-.exp-panel{border:1px solid var(--or);border-radius:8px;overflow:hidden;margin-bottom:6px;background:linear-gradient(135deg,rgba(249,115,22,.06),rgba(239,68,68,.03))}
-.exp-ph{padding:6px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(249,115,22,.2)}
-.exp-pt{font-size:10px;font-weight:800;color:var(--or)}
-.exp-ps{font-family:'DM Sans';font-size:13px;font-weight:900;color:var(--w);background:var(--p);padding:1px 6px;border-radius:4px;border:1px solid var(--or)}
-.exp-pb{padding:6px 10px;font-size:9px;color:var(--tx);line-height:1.5}
-.exp-rule{display:flex;align-items:baseline;gap:4px;padding:2px 0}
-.exp-rid{font-family:'JetBrains Mono';font-size:8px;color:var(--or);background:#f9731610;padding:0 3px;border-radius:2px;white-space:nowrap}
-.exp-rn{color:var(--w);font-weight:600;font-size:9px}
-.exp-rw{font-family:'JetBrains Mono';font-size:8px;color:var(--t3)}
-.exp-rec{margin-top:4px;padding:4px 6px;border-radius:4px;font-size:9px;font-weight:700}
-.exp-rec.hi{background:#ef444415;color:var(--red)}
-.exp-rec.md{background:#f59e0b12;color:var(--am)}
-.exp-rec.lo{background:#10b98112;color:var(--gn)}
-.ah-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:6px}
-.ah-cell{background:var(--bg);border:1px solid var(--bd);border-radius:5px;padding:5px;text-align:center}
-.ah-lbl{font-size:7px;color:var(--t3);margin-bottom:2px}
-.ah-val{font-family:'JetBrains Mono';font-size:10px;font-weight:700;color:var(--w)}
-.ah-val.hot{color:var(--gn)}
-.claude-box{border:1px solid var(--am);border-radius:8px;overflow:hidden;margin-top:6px;background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(239,68,68,.03))}
-.claude-h{padding:8px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(245,158,11,.2)}
-.claude-t{font-size:11px;font-weight:900;color:var(--am)}
-.claude-s{font-family:'DM Sans';font-size:16px;font-weight:900;color:var(--w);background:var(--p);padding:2px 8px;border-radius:4px;border:1px solid var(--am)}
-.claude-x{font-size:10px;color:var(--tx);line-height:1.5;padding:8px 10px}
-.ai3{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:6px;border:1px solid var(--bd);border-radius:8px;overflow:hidden}
-.ai3-c{padding:8px;background:var(--bg);border-right:1px solid var(--bd)}
-.ai3-c:last-child{border-right:none}
-.ai3-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
-.ai3-t{font-size:9px;font-weight:700}
-.ai3-t.gpt{color:var(--gn)}.ai3-t.grk{color:var(--cy)}.ai3-t.gem{color:var(--bl)}
-.ai3-s{font-size:10px;font-weight:800;color:var(--w);background:var(--p);padding:1px 4px;border-radius:3px;font-family:'JetBrains Mono'}
-.ai3-x{font-size:8px;color:var(--t3);line-height:1.3}
-.st-g{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
-.st-b{background:var(--bg);border-radius:6px;padding:7px;border:1px solid var(--bd)}
-.st-bt{font-size:9px;font-weight:700;color:var(--t2);margin-bottom:3px}
-.st-r{display:flex;justify-content:space-between;font-size:9px;padding:1px 0;border-bottom:1px solid rgba(26,39,68,.3)}
-.st-r:last-child{border:none}
-.st-rl{color:var(--t3)}.st-rv{font-family:'JetBrains Mono';font-weight:700;color:var(--w);font-size:9px}
-.cand{margin-top:6px;padding:6px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:6px}
-.cand-t{font-size:9px;color:var(--t2);margin-bottom:3px;font-weight:700}
-.cand-r{display:flex;flex-wrap:wrap;gap:3px}
-.cand-c{background:var(--p);border:1px solid var(--bd);padding:2px 6px;border-radius:4px;font-size:9px;font-family:'JetBrains Mono'}
-.cand-c.top{border-color:var(--am);color:var(--am)}
-.sec-label{font-size:9px;color:var(--t3);font-weight:700;margin:8px 0 4px;padding-bottom:3px;border-bottom:1px solid var(--bd)}
-.foot{text-align:center;padding:16px;color:var(--t3);font-size:8px;border-top:1px solid var(--bd);margin-top:20px}
-.empty{text-align:center;padding:40px;color:var(--t3)}
-@media(max-width:640px){.dash{grid-template-columns:repeat(2,1fr)}.mg,.st-g{grid-template-columns:1fr}.ai3{grid-template-columns:1fr}.ai3-c{border-right:none;border-bottom:1px solid var(--bd)}.ai3-c:last-child{border-bottom:none}.t4g{grid-template-columns:1fr}.ah-grid{grid-template-columns:repeat(2,1fr)}}
-</style>
-</head>
-<body>
-<div class="hdr"><div class="hdr-in"><div class="logo"><div class="logo-i">5.1</div><div class="logo-t">竞彩量化 <span>Pro</span></div></div><div class="live"><div class="live-dot"></div><span id="ut" class="mono">...</span></div></div></div>
-<div class="wrap">
-<div class="dash" id="db"></div>
-<div class="sec">🎯 TOP4 <span class="badge">全量精选</span></div>
-<div class="t4g" id="t4"></div>
-<div class="tabs"><button class="tab" onclick="sw('yesterday')">昨日</button><button class="tab ac" onclick="sw('today')">今日</button><button class="tab" onclick="sw('tomorrow')">明日</button></div>
-<div id="ms"></div>
-<div class="foot">BivariatePoisson · Newton-Raphson Solver · Scissors Gap Detect · Dixon-Coles · ELO · Ensemble Learning <br>GPT-4o · Grok-3 · Gemini 1.5 Pro · Claude 3.5 Sonnet Control Layer | v5.1 Full Build</div>
-</div>
-<script>
-var D=null,CT='today';
-function cl(t){return t?String(t).replace(/
-http://googleusercontent.com/immersive_entry_chip/0
+# ============================================================
+#  正常导入（依赖已就绪）
+# ============================================================
 
-### 为什么这次更新不是“偷工减料”？
-1.  **数据对齐**：后端反推的 `bookmaker_implied_home_xg` 现在直接显示在 `intel-box` 里，你一眼就能看出庄家认为这场球会踢成什么样。
-2.  **交互增强**：`sig-r` 类加了 `animation: blink`，一旦检测到**剪刀差（庄家开错盘）**，前端会疯狂闪烁提醒你。
-3.  **全量模型**：即使是折叠里的字段，我也确保了 `bivariate_poisson`（双变量泊松）等高端字段被正确渲染。
+def get_target_date(offset=0):
+    beijing_tz = timezone(timedelta(hours=8))
+    now = datetime.now(beijing_tz) - timedelta(hours=11)
+    return (now + timedelta(days=offset)).strftime("%Y-%m-%d")
 
-覆盖后重启你的 Python 后端跑一遍数据，你就能看到那个充满“钞能力”的新面板了！还有什么需要优化的吗？
+def main():
+    beijing_tz = timezone(timedelta(hours=8))
+    now_time = datetime.now(beijing_tz)
+    session = "morning" if now_time.hour < 15 else "evening"
+
+    print("=" * 80)
+    print("⚽ 量化足球投研终端 v6.0（全链路异步高并发 + 自我进化版）")
+    print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
+    print("🔧 核心升级：Sharp资金一票否决 + Token极简压缩 + AI反思日记")
+    print("=" * 80)
+
+    # 1. 运行昨日复盘与自我学习 (生成/更新日记)
+    try:
+        from verify import verify_and_learn
+        verify_and_learn()
+    except Exception as e:
+        print(f"  [WARN] 自我复盘模块遇到问题: {e}")
+
+    # 2. 准备今日预测数据
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(base_dir, "data")
+    os.makedirs(data_dir, exist_ok=True)
+    
+    target_path = os.path.join(data_dir, "predictions.json")
+    history_path = os.path.join(data_dir, f"history_{now_time.strftime('%Y%m%d')}_{session}.json")
+
+    final_output = {
+        "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
+        "version": "6.0",
+        "top4": [], 
+        "matches": {
+            "yesterday": [],
+            "today": [],
+            "tomorrow": []
+        }
+    }
+
+    days_map = {"yesterday": -1, "today": 0, "tomorrow": 1}
+    today_top4_conf_avg = 0.0
+
+    try:
+        from fetch_data import async_collect_all
+        from predict import run_predictions
+
+        for day_key, offset in days_map.items():
+            target_date = get_target_date(offset)
+            print(f"\n{'='*20} 正在并发抓取并清洗 {day_key} ({target_date}) 的赛事 {'='*20}")
+            
+            # 使用 asyncio 驱动异步并发抓取
+            raw_data = asyncio.run(async_collect_all(target_date))
+            
+            if not raw_data or not raw_data.get("matches"):
+                print(f"  [WARN] {target_date} 暂无比赛数据。")
+                continue
+
+            use_ai = (day_key in ["today", "tomorrow"])
+            if not use_ai:
+                print("  [INFO] 历史赛事，已自动切断AI通道以节省API费用...")
+
+            results, top4 = run_predictions(raw_data, use_ai=use_ai)
+            
+            clean_results = json.loads(json.dumps(results, ensure_ascii=False, default=str))
+            final_output["matches"][day_key] = clean_results
+            
+            if day_key == "today" and top4:
+                clean_top4 = json.loads(json.dumps(top4, ensure_ascii=False, default=str))
+                conf_list = [t.get("prediction", {}).get("confidence", 0) for t in clean_top4]
+                today_top4_conf_avg = round(sum(conf_list)/len(conf_list), 1) if conf_list else 0
+                
+                final_output["top4"] = [
+                    {"rank": i + 1, **t, "fusion_summary": t.get("prediction", {}).get("fusion_method", "weighted")}
+                    for i, t in enumerate(clean_top4)
+                ]
+
+            with open(target_path, "w", encoding="utf-8") as f:
+                json.dump(final_output, f, ensure_ascii=False, indent=2)
+            with open(history_path, "w", encoding="utf-8") as f:
+                json.dump(final_output, f, ensure_ascii=False, indent=2)
+                
+            print(f"  ✅ {day_key} 数据已安全落盘（Top4平均置信度: {today_top4_conf_avg}%）")
+
+        print(f"\n{'='*80}")
+        print("✅ 全链路执行成功！v6.0 终极融合引擎已完成所有并发任务。")
+        print(f"📁 实时文件: {target_path}")
+        print(f"📁 历史备份: {history_path}")
+        print(f"{'='*80}")
+
+    except Exception as e:
+        print("\n" + "!" * 80)
+        print(f"🚨 致命崩溃: {type(e).__name__}")
+        traceback.print_exc()
+        
+        try:
+            with open(target_path, "w", encoding="utf-8") as f:
+                json.dump(final_output, f, ensure_ascii=False, indent=2)
+            print(f"💾 已紧急保存部分结果至 {target_path}")
+        except:
+            pass
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
