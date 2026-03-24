@@ -155,9 +155,16 @@ def call_ai_model(prompt, url, key, model_name):
     return None
 
 
-FALLBACK_URLS = [None, "https://api520.pro/v1", "https://www.api520.pro/v1",
-                 "https://api521.pro/v1", "https://www.api521.pro/v1",
-                 "https://api522.pro/v1", "https://www.api522.pro/v1", "https://69.63.213.33:666/v1"]
+# 🔥 针对截图新增的核心网关容灾列表
+FALLBACK_URLS = [
+    None, 
+    "[https://api521.pro/v1](https://api521.pro/v1)",
+    "[https://api.gemai.cc/v1](https://api.gemai.cc/v1)", 
+    "[https://www.api520.pro/v1](https://www.api520.pro/v1)",
+    "[https://api520.pro/v1](https://api520.pro/v1)",
+    "[https://api522.pro/v1](https://api522.pro/v1)",
+    "[https://69.63.213.33:666/v1](https://69.63.213.33:666/v1)"
+]
 
 
 def call_one_ai_batch(prompt, url_env, key_env, models_list, num_matches):
@@ -181,19 +188,34 @@ def call_one_ai_batch(prompt, url_env, key_env, models_list, num_matches):
 
 def call_all_ai_batch(prompt, num_matches):
     """Call ALL 4 AIs each once in batch mode. Returns dict of {ai_name: {match_idx: result}}"""
+    # 🔥 核心更新：完美匹配截图模型，严格按照“最聪明/思考优先”的逻辑降级
     ai_configs = [
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
-            "\u718a\u732b-A-7-gpt-5.4","\u718a\u732b-\u6309\u91cf-gpt-5.3-codex-\u6ee1\u8840",
-            "\u718a\u732b-A-10-gpt-5.3-codex","\u718a\u732b-A-1-gpt-5.2"]),
+            "熊猫-A-7-gpt-5.4",                                    # 你指定的首选
+            "熊猫-按量-gpt-5.3-codex-满血",
+            "熊猫-A-10-gpt-5.3-codex",
+            "gpt-4o"                                              # 终极兜底
+        ]),
         ("grok", "GROK_API_URL", "GROK_API_KEY", [
-            "\u718a\u732b-A-7-grok-4.2-\u591a\u667a\u80fd\u4f53\u8ba8\u8bba",
-            "\u718a\u732b-A-4-grok-4.2-fast"]),
+            "熊猫-A-6-grok-4.2-thinking",                          # 优先思考模型 (截图1)
+            "熊猫-A-7-grok-4.2-多智能体讨论",                      # 次选 (截图2)
+            "grok-2"                                              # 终极兜底
+        ]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
-            "\u718a\u732b-\u6309\u91cf-\u9876\u7ea7\u7279\u4f9b-\u5b98max-claude-opus-4.6",
-            "\u718a\u732b-\u7279\u4f9b-\u6309\u91cf-Q-claude-sonnet-4.6"]),
+            "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking",    # 最顶级 Opus + Thinking
+            "熊猫-按量-特供顶级-官方正向满血-claude-sonnet-4.6-thinking", # 顶级 Sonnet + Thinking
+            "熊猫-按量-满血copilot-claude-opus-4.6-thinking",      # 满血 Copilot Opus + Thinking
+            "熊猫-按量-满血copilot-claude-sonnet-4.6-thinking",    # 满血 Copilot Sonnet + Thinking
+            "熊猫-按量-顶级特供-官max-claude-opus-4.6",             # 降级：无Thinking的 Opus
+            "claude-3-5-sonnet-latest"                            # 终极兜底
+        ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", [
-            "\u718a\u732b\u7279\u4f9bS-\u6309\u91cf-gemini-3-flash-preview",
-            "\u718a\u732b-2-gemini-3.1-flash-lite-preview"]),
+            "熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking",    # 优先 SSS按量 + 3.1 + thinking
+            "熊猫-特供-X-12-gemini-3.1-pro-preview-thinking",      # 备选 X-12 + 3.1 + thinking
+            "熊猫-顶级特供-X-17-gemini-3.1-pro-preview",           # 备选 X-17 + 3.1
+            "熊猫特供-按量-SSS-gemini-3.1-pro-preview",            # 备选 SSS按量无thinking
+            "gemini-1.5-pro"                                      # 终极兜底
+        ]),
     ]
     all_results = {}
     for ai_name, url_env, key_env, models in ai_configs:
@@ -451,3 +473,4 @@ def run_predictions(raw, use_ai=True):
             i+1, t.get("home_team"), t.get("away_team"),
             pr.get("result"), pr.get("predicted_score"), pr.get("confidence", 0), exp_str))
     return res, t4
+
