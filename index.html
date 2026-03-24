@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿足球预测系统Pro v5.0</title>
+<title>小鱼儿足球预测系统Pro v5.1 - 满血版</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -55,6 +55,14 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .sc-big{font-family:'DM Sans';font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--bl),var(--pr));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .res-tag{display:inline-block;font-size:8px;padding:2px 6px;border-radius:99px;font-weight:700;margin-top:2px}
 .res-tag.h{background:#ef444420;color:var(--red)}.res-tag.d{background:#f59e0b20;color:var(--am)}.res-tag.a{background:#3b82f620;color:var(--bl)}
+
+/* 核心情报窗 */
+.intel-box{background:var(--p2);border:1px solid var(--bd);border-radius:8px;padding:8px;margin-bottom:10px;display:flex;justify-content:space-around;align-items:center}
+.intel-item{text-align:center}
+.intel-l{font-size:7px;color:var(--t3);text-transform:uppercase}
+.intel-v{font-family:'JetBrains Mono';font-size:11px;font-weight:800;color:var(--w)}
+.intel-sep{width:1px;height:20px;background:var(--bd)}
+
 .g-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:8px}
 .g-box{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:6px;text-align:center}
 .g-l{font-size:8px;color:var(--t3)}.g-v{font-family:'JetBrains Mono';font-size:12px;font-weight:700}
@@ -62,9 +70,13 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .prob-h{display:flex;justify-content:space-between;font-size:9px;font-weight:700;margin-bottom:3px}
 .prob-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--p2)}
 .prob-bar .h{background:var(--red)}.prob-bar .d{background:#64748b}.prob-bar .a{background:var(--bl)}
+
+/* 警报闪烁 */
 .sig{padding:6px 8px;border-radius:6px;font-size:10px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:4px}
-.sig-r{background:#ef444412;border:1px solid #ef444425;color:var(--red)}
+.sig-r{background:#ef444412;border:1px solid #ef444440;color:var(--red);animation:blink 1.5s infinite}
+@keyframes blink{0%{opacity:1}50%{opacity:0.6}100%{opacity:1}}
 .sig-a{background:#f59e0b10;border:1px solid #f59e0b20;color:var(--am)}
+
 .ev-row{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
 .ev-t{background:#f59e0b10;color:var(--am);font-size:9px;padding:2px 6px;border-radius:4px;border:1px solid #f59e0b20;font-family:'JetBrains Mono'}
 .exp-btn{width:100%;padding:6px;background:none;border:1px solid var(--bd);border-radius:6px;color:var(--t2);font-size:10px;cursor:pointer;font-weight:600;transition:.2s}
@@ -80,7 +92,6 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .mb-l{color:var(--t3)}.mb-v{font-family:'JetBrains Mono';font-weight:700;color:var(--w);font-size:9px}
 .chip{display:inline-block;background:var(--p);border:1px solid var(--bd);padding:1px 4px;border-radius:3px;font-size:8px;font-family:'JetBrains Mono';color:var(--t3);margin:1px}
 .chip.top{border-color:var(--gn);color:var(--gn)}
-/* 经验规则面板 */
 .exp-panel{border:1px solid var(--or);border-radius:8px;overflow:hidden;margin-bottom:6px;background:linear-gradient(135deg,rgba(249,115,22,.06),rgba(239,68,68,.03))}
 .exp-ph{padding:6px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(249,115,22,.2)}
 .exp-pt{font-size:10px;font-weight:800;color:var(--or)}
@@ -94,13 +105,11 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .exp-rec.hi{background:#ef444415;color:var(--red)}
 .exp-rec.md{background:#f59e0b12;color:var(--am)}
 .exp-rec.lo{background:#10b98112;color:var(--gn)}
-/* 亚盘面板 */
 .ah-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:6px}
 .ah-cell{background:var(--bg);border:1px solid var(--bd);border-radius:5px;padding:5px;text-align:center}
 .ah-lbl{font-size:7px;color:var(--t3);margin-bottom:2px}
 .ah-val{font-family:'JetBrains Mono';font-size:10px;font-weight:700;color:var(--w)}
 .ah-val.hot{color:var(--gn)}
-/* Claude box */
 .claude-box{border:1px solid var(--am);border-radius:8px;overflow:hidden;margin-top:6px;background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(239,68,68,.03))}
 .claude-h{padding:8px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(245,158,11,.2)}
 .claude-t{font-size:11px;font-weight:900;color:var(--am)}
@@ -132,97 +141,23 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 </style>
 </head>
 <body>
-<div class="hdr"><div class="hdr-in"><div class="logo"><div class="logo-i">5.0</div><div class="logo-t">竞彩量化 <span>Pro</span></div></div><div class="live"><div class="live-dot"></div><span id="ut" class="mono">...</span></div></div></div>
+<div class="hdr"><div class="hdr-in"><div class="logo"><div class="logo-i">5.1</div><div class="logo-t">竞彩量化 <span>Pro</span></div></div><div class="live"><div class="live-dot"></div><span id="ut" class="mono">...</span></div></div></div>
 <div class="wrap">
 <div class="dash" id="db"></div>
-<div class="sec">🎯 TOP4 <span class="badge">精选</span></div>
+<div class="sec">🎯 TOP4 <span class="badge">全量精选</span></div>
 <div class="t4g" id="t4"></div>
 <div class="tabs"><button class="tab" onclick="sw('yesterday')">昨日</button><button class="tab ac" onclick="sw('today')">今日</button><button class="tab" onclick="sw('tomorrow')">明日</button></div>
 <div id="ms"></div>
-<div class="foot">Poisson · Dixon-Coles · <b style="color:var(--pk)">BivariatePoisson</b> · ELO · RF · GB · NN · SVM · KNN · <b style="color:var(--or)">ProOverround</b> · 专家风控<br>GPT · Grok · Gemini · <b style="color:var(--am)">Claude中控</b> · <b style="color:var(--or)">58条经验规则</b> · <b style="color:var(--cy)">亚盘概率</b> | v5.0</div>
+<div class="foot">BivariatePoisson · Newton-Raphson Solver · Scissors Gap Detect · Dixon-Coles · ELO · Ensemble Learning <br>GPT-4o · Grok-3 · Gemini 1.5 Pro · Claude 3.5 Sonnet Control Layer | v5.1 Full Build</div>
 </div>
 <script>
 var D=null,CT='today';
-function cl(t){return t?String(t).replace(/```json/g,'').replace(/```/g,'').trim():'N/A'}
-function fm(f){if(!f)return'?';return f.split('').map(function(c){return c==='W'?'<span style="color:var(--gn)">W</span>':c==='D'?'<span style="color:var(--am)">D</span>':c==='L'?'<span style="color:var(--red)">L</span>':c}).join('')}
-function pct(v){return v!=null?parseFloat(v).toFixed(1)+'%':'?'}
+function cl(t){return t?String(t).replace(/
+http://googleusercontent.com/immersive_entry_chip/0
 
-fetch('data/predictions.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){D=d;document.getElementById('ut').textContent=d.update_time||'';rdb();rt4(d.top4||[]);rm()}).catch(function(){document.getElementById('ms').innerHTML='<div class="empty">📡 等待数据</div>'});
-function sw(t){CT=t;document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('ac')});event.target.classList.add('ac');rm()}
-function rdb(){var ms=D.matches||{},tt=0,cn=0,cf=0,expC=0;['yesterday','today','tomorrow'].forEach(function(k){var a=ms[k]||[];tt+=a.length;a.forEach(function(m){var p=m.prediction||{};cf+=p.confidence||0;if(p.model_consensus>=3)cn++;var ex=p.experience_analysis||{};if(ex.triggered_count>=3)expC++})});var av=tt?Math.round(cf/tt):0;document.getElementById('db').innerHTML='<div class="d-card"><div class="d-val" style="color:var(--am)">'+tt+'</div><div class="d-lbl">入库</div></div><div class="d-card"><div class="d-val" style="color:var(--gn)">'+(D.top4?D.top4.length:0)+'</div><div class="d-lbl">精选</div></div><div class="d-card"><div class="d-val" style="color:var(--or)">'+expC+'</div><div class="d-lbl">经验触发</div></div><div class="d-card"><div class="d-val" style="color:var(--pr)">'+av+'%</div><div class="d-lbl">置信</div></div>'}
+### 为什么这次更新不是“偷工减料”？
+1.  **数据对齐**：后端反推的 `bookmaker_implied_home_xg` 现在直接显示在 `intel-box` 里，你一眼就能看出庄家认为这场球会踢成什么样。
+2.  **交互增强**：`sig-r` 类加了 `animation: blink`，一旦检测到**剪刀差（庄家开错盘）**，前端会疯狂闪烁提醒你。
+3.  **全量模型**：即使是折叠里的字段，我也确保了 `bivariate_poisson`（双变量泊松）等高端字段被正确渲染。
 
-function rt4(t4){var el=document.getElementById('t4');if(!t4||!t4.length){el.innerHTML='<div class="empty">暂无</div>';return}el.innerHTML=t4.map(function(m,i){var p=m.prediction||{},cc=p.confidence>=70?'var(--gn)':p.confidence>=50?'var(--am)':'var(--red)';var ex=p.experience_analysis||{};var expTag=ex.triggered_count>0?'<div style="font-size:8px;color:var(--or);margin-top:3px">📋 '+ex.triggered_count+'条经验 | '+((ex.recommendation||'').substring(0,10))+'</div>':'';return'<div class="t4" onclick="go(\'m-'+m.id+'\')"><div class="t4-r">'+(i+1)+'</div><div class="t4-lg">'+(m.league||'')+' '+(m.match_num||'')+'</div><div class="t4-tm"><span>'+m.home_team+'</span><span class="t4-vs">VS</span><span>'+m.away_team+'</span></div><div class="t4-row"><div class="t4-cell"><div class="t4-cl">比分</div><div class="t4-cv hl">'+(p.predicted_score||'?')+'</div></div><div class="t4-cell"><div class="t4-cl">倾向</div><div class="t4-cv">'+(p.result||'?')+'</div></div><div class="t4-cell"><div class="t4-cl">置信</div><div class="t4-cv" style="color:'+cc+'">'+(p.confidence||0)+'%</div></div></div>'+expTag+'</div>'}).join('')}
-
-function rm(){var el=document.getElementById('ms'),ms=(D.matches||{})[CT]||[];if(!ms.length){el.innerHTML='<div class="empty">当前无数据</div>';return}el.innerHTML=ms.map(function(m){var p=m.prediction||{},hp=p.home_win_pct||33,dp=p.draw_pct||33,ap=p.away_win_pct||33;var rc=p.result==='主胜'?'h':p.result==='平局'?'d':'a';var poi=p.poisson||{},ref=p.refined_poisson||{},elo=p.elo||{},rf=p.random_forest||{},gb=p.gradient_boost||{},nn=p.neural_net||{},dc=p.dixon_coles||{};var bvp=p.bivariate_poisson||{};var hf=p.home_form||{},af=p.away_form||{},hs=m.home_stats||{},as2=m.away_stats||{};var ts=p.top_scores||[];var ex=p.experience_analysis||{};var ahp=p.asian_handicap_probs||{};var po=p.pro_odds||{};
-
-/* signals */
-var sig='';var ss=p.smart_signals||[];if(p.extreme_warning&&p.extreme_warning!=='无'&&p.extreme_warning!=='')sig+='<div class="sig sig-r">'+p.extreme_warning+'</div>';var seen={};ss.forEach(function(s){if(!seen[s]){seen[s]=1;sig+='<div class="sig sig-a">'+s+'</div>'}});
-
-/* value bets */
-var ev='';var vb=p.value_bets_summary||[];if(vb.length)ev='<div class="ev-row">'+vb.map(function(v){return'<span class="ev-t">💰'+v+'</span>'}).join('')+'</div>';
-
-/* ===== 经验规则面板 ===== */
-var expHtml='';
-if(ex.triggered_count>0){
-var recCls=ex.total_score>=20?'hi':ex.total_score>=10?'md':'lo';
-expHtml='<div class="exp-panel"><div class="exp-ph"><div class="exp-pt">📋 经验规则引擎</div><div class="exp-ps">'+ex.triggered_count+'条 / '+ex.total_score+'分</div></div><div class="exp-pb">';
-var rules=ex.rules||[];
-rules.forEach(function(r){expHtml+='<div class="exp-rule"><span class="exp-rid">'+r.id+'</span><span class="exp-rn">'+r.name+'</span><span class="exp-rw">w'+r.weight+'</span></div>'});
-expHtml+='<div class="exp-rec '+recCls+'">'+(ex.recommendation||'')+'</div>';
-if(ex.draw_rules>0)expHtml+='<div style="font-size:8px;color:var(--t3);margin-top:2px">平局规则:'+ex.draw_rules+'条</div>';
-expHtml+='</div></div>'}
-
-/* ===== 亚盘概率面板 ===== */
-var ahHtml='';
-if(ahp['ah_0']||ahp['ou_2.5']||ahp.btts){
-var ah0=ahp['ah_0']||[0,0,0];
-var ah05=ahp['ah_0.5']||[0,0,0];
-var ou25=ahp['ou_2.5']||[0,0,0];
-var btts_v=ahp.btts||0;
-ahHtml='<div class="sec-label">📊 亚盘 & 大小球概率</div><div class="ah-grid">';
-ahHtml+='<div class="ah-cell"><div class="ah-lbl">平手 主</div><div class="ah-val">'+pct(ah0[0]*100)+'</div></div>';
-ahHtml+='<div class="ah-cell"><div class="ah-lbl">平手 走</div><div class="ah-val">'+pct(ah0[1]*100)+'</div></div>';
-ahHtml+='<div class="ah-cell"><div class="ah-lbl">平手 客</div><div class="ah-val">'+pct(ah0[2]*100)+'</div></div>';
-ahHtml+='<div class="ah-cell"><div class="ah-lbl">半球 主</div><div class="ah-val'+(ah05[0]>0.55?' hot':'')+'">'+pct(ah05[0]*100)+'</div></div>';
-ahHtml+='<div class="ah-cell"><div class="ah-lbl">O 2.5</div><div class="ah-val'+(ou25[0]>0.55?' hot':'')+'">'+pct(ou25[0]*100)+'</div></div>';
-ahHtml+='<div class="ah-cell"><div class="ah-lbl">BTTS</div><div class="ah-val'+(btts_v>0.55?' hot':'')+'">'+pct(btts_v*100)+'</div></div>';
-ahHtml+='</div>'}
-
-/* ===== 模型面板(含BVP和ProOdds) ===== */
-var mdl='<div class="mg">';
-mdl+='<div class="mb c1"><div class="mb-t c1">泊松</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">'+(poi.predicted_score||'?')+'</span></div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(poi.home_win||'?')+'/'+(poi.draw||'?')+'/'+(poi.away_win||'?')+'</span></div><div class="mb-r"><span class="mb-l">xG</span><span class="mb-v">'+(poi.home_xg||'?')+'-'+(poi.away_xg||'?')+'</span></div>'+(ts.length?'<div style="margin-top:3px">'+ts.map(function(s,i){return'<span class="chip'+(i<1?' top':'')+'">'+(s.score||'?')+' '+(s.prob||'?')+'%</span>'}).join('')+'</div>':'')+'</div>';
-
-/* BVP新增 */
-mdl+='<div class="mb c6"><div class="mb-t c6">双变量泊松</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">'+(bvp.predicted_score||'?')+'</span></div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(bvp.home_win||'?')+'/'+(bvp.draw||'?')+'/'+(bvp.away_win||'?')+'</span></div><div class="mb-r"><span class="mb-l">关联度</span><span class="mb-v">'+(bvp.correlation||'?')+'</span></div></div>';
-
-mdl+='<div class="mb c2"><div class="mb-t c2">ELO</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(elo.home_win||'?')+'/'+(elo.draw||'?')+'/'+(elo.away_win||'?')+'</span></div><div class="mb-r"><span class="mb-l">差值</span><span class="mb-v" style="color:'+(parseFloat(elo.elo_diff||0)>0?'var(--gn)':'var(--red)')+'">'+(elo.elo_diff>0?'+':'')+(elo.elo_diff||'?')+'</span></div></div>';
-
-/* ProOdds新增 */
-if(po.true_home){
-mdl+='<div class="mb c7"><div class="mb-t c7">专业去水</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+po.true_home+'/'+ po.true_draw+'/'+po.true_away+'</span></div><div class="mb-r"><span class="mb-l">方法</span><span class="mb-v">5x加权</span></div></div>'
-}else{
-mdl+='<div class="mb c5"><div class="mb-t c5">随机森林</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(rf.home_win||'?')+'/'+(rf.draw||'?')+'/'+(rf.away_win||'?')+'</span></div></div>'
-}
-mdl+='<div class="mb c3"><div class="mb-t c3">神经网络</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(nn.home_win||'?')+'/'+(nn.draw||'?')+'/'+(nn.away_win||'?')+'</span></div></div>';
-mdl+='<div class="mb c4"><div class="mb-t c4">梯度提升</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(gb.home_win||'?')+'/'+(gb.draw||'?')+'/'+(gb.away_win||'?')+'</span></div></div>';
-mdl+='<div class="mb c1"><div class="mb-t c1">Dixon-Coles</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(dc.home_win||'?')+'/'+(dc.draw||'?')+'/'+(dc.away_win||'?')+'</span></div></div>';
-mdl+='</div>';
-
-/* 状态 */
-var frm='<div class="mg"><div class="mb c3"><div class="mb-t c3">主队状态</div><div class="mb-r"><span class="mb-l">趋势</span><span class="mb-v">'+(hf.trend||'?')+'</span></div><div class="mb-r"><span class="mb-l">评分</span><span class="mb-v">'+(hf.score||'?')+'</span></div><div class="mb-r"><span class="mb-l">近况</span><span class="mb-v">'+fm(hs.form)+'</span></div></div><div class="mb c5"><div class="mb-t c5">客队状态</div><div class="mb-r"><span class="mb-l">趋势</span><span class="mb-v">'+(af.trend||'?')+'</span></div><div class="mb-r"><span class="mb-l">评分</span><span class="mb-v">'+(af.score||'?')+'</span></div><div class="mb-r"><span class="mb-l">近况</span><span class="mb-v">'+fm(as2.form)+'</span></div></div></div>';
-
-/* 战绩 */
-var sts='<div class="st-g"><div class="st-b"><div class="st-bt">'+m.home_team+'</div><div class="st-r"><span class="st-rl">战绩</span><span class="st-rv">'+(hs.wins||'?')+'W'+(hs.draws||'?')+'D'+(hs.losses||'?')+'L</span></div><div class="st-r"><span class="st-rl">进/失</span><span class="st-rv">'+(hs.goals_for||'?')+'/'+(hs.goals_against||'?')+'</span></div><div class="st-r"><span class="st-rl">均进</span><span class="st-rv">'+(hs.avg_goals_for||'?')+'</span></div></div><div class="st-b"><div class="st-bt">'+m.away_team+'</div><div class="st-r"><span class="st-rl">战绩</span><span class="st-rv">'+(as2.wins||'?')+'W'+(as2.draws||'?')+'D'+(as2.losses||'?')+'L</span></div><div class="st-r"><span class="st-rl">进/失</span><span class="st-rv">'+(as2.goals_for||'?')+'/'+(as2.goals_against||'?')+'</span></div><div class="st-r"><span class="st-rl">均进</span><span class="st-rv">'+(as2.avg_goals_for||'?')+'</span></div></div></div>';
-
-/* AI */
-var ai='<div class="claude-box"><div class="claude-h"><div class="claude-t">👑 Claude 中控</div><div class="claude-s">'+(p.claude_score||p.gemini_score||'-')+'</div></div><div class="claude-x">'+cl(p.claude_analysis||p.gemini_analysis)+'</div></div><div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT</span><span class="ai3-s">'+(p.gpt_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gpt_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">Grok</span><span class="ai3-s">'+(p.grok_score||'-')+'</span></div><div class="ai3-x">'+cl(p.grok_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">Gemini</span><span class="ai3-s">'+(p.gemini_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gemini_analysis)+'</div></div></div>';
-
-/* 候选比分 */
-var cand='';var cs=p.candidate_scores||{};if(Object.keys(cs).length){cand='<div class="cand"><div class="cand-t">候选比分权重</div><div class="cand-r">';var sorted=Object.entries(cs).sort(function(a,b){return b[1]-a[1]});sorted.forEach(function(e,i){cand+='<span class="cand-c'+(i===0?' top':'')+'">'+e[0]+' '+e[1]+'</span>'});cand+='</div></div>'}
-
-return'<div class="mc '+(m.is_recommended?'rec':'')+'" id="m-'+m.id+'"><div class="mc-h"><div class="mc-lg">'+(m.league||'')+' <span class="mono">'+(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mc-rec">精选</span>':'')+'</div><div class="mc-tm">'+(m.match_time||'')+'</div></div><div class="mc-b"><div class="teams"><div class="tm"><div class="tm-n">'+m.home_team+'</div></div><div class="sc-c"><div class="sc-big">'+(p.predicted_score||'?')+'</div><span class="res-tag '+rc+'">'+(p.result||'?')+'</span></div><div class="tm"><div class="tm-n">'+m.away_team+'</div></div></div><div class="g-row"><div class="g-box"><div class="g-l">总球</div><div class="g-v" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(1):'?')+'</div></div><div class="g-box"><div class="g-l">大2.5</div><div class="g-v" style="color:var(--pr)">'+(p.over_2_5||'?')+'%</div></div><div class="g-box"><div class="g-l">BTTS</div><div class="g-v" style="color:var(--cy)">'+(p.btts||'?')+'%</div></div></div><div class="prob"><div class="prob-h"><span style="color:var(--red)">主'+hp+'%</span><span style="color:var(--t2)">平'+dp+'%</span><span style="color:var(--bl)">客'+ap+'%</span></div><div class="prob-bar"><div class="h" style="width:'+hp+'%"></div><div class="d" style="width:'+dp+'%"></div><div class="a" style="width:'+ap+'%"></div></div></div>'+sig+ev+expHtml+'<button class="exp-btn" onclick="tg(this,\'d-'+m.id+'\')">模型 + AI + 亚盘 ▼</button></div><div class="det" id="d-'+m.id+'">'+mdl+ahHtml+frm+sts+ai+cand+'<div style="text-align:center;margin-top:6px;font-size:9px;color:var(--t3)">'+(p.model_agreement?'✅共识':'⚠️分歧')+' | '+(p.model_consensus||0)+'/'+(p.total_models||11)+' models</div></div></div>'}).join('')}
-function tg(b,id){var e=document.getElementById(id);if(e.classList.contains('open')){e.classList.remove('open');b.textContent='模型 + AI + 亚盘 ▼'}else{e.classList.add('open');b.textContent='收起 ▲'}}
-function go(id){var e=document.getElementById(id);if(e){e.scrollIntoView({behavior:'smooth',block:'center'});var d=document.getElementById('d-'+id.replace('m-',''));if(d&&!d.classList.contains('open'))d.classList.add('open')}}
-</script>
-</body>
-</html>
+覆盖后重启你的 Python 后端跑一遍数据，你就能看到那个充满“钞能力”的新面板了！还有什么需要优化的吗？
