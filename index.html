@@ -153,11 +153,4 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 <script>
 var D=null,CT='today';
 function cl(t){return t?String(t).replace(/
-http://googleusercontent.com/immersive_entry_chip/0
 
-### 为什么这次更新不是“偷工减料”？
-1.  **数据对齐**：后端反推的 `bookmaker_implied_home_xg` 现在直接显示在 `intel-box` 里，你一眼就能看出庄家认为这场球会踢成什么样。
-2.  **交互增强**：`sig-r` 类加了 `animation: blink`，一旦检测到**剪刀差（庄家开错盘）**，前端会疯狂闪烁提醒你。
-3.  **全量模型**：即使是折叠里的字段，我也确保了 `bivariate_poisson`（双变量泊松）等高端字段被正确渲染。
-
-覆盖后重启你的 Python 后端跑一遍数据，你就能看到那个充满“钞能力”的新面板了！还有什么需要优化的吗？
