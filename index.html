@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿足球预测系统 Pro v5.0</title>
+<title>竞彩量化终端 Pro v5.0</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -139,7 +139,7 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 <div class="t4g" id="t4"></div>
 <div class="tabs"><button class="tab" onclick="sw('yesterday')">昨日</button><button class="tab ac" onclick="sw('today')">今日</button><button class="tab" onclick="sw('tomorrow')">明日</button></div>
 <div id="ms"></div>
-<div class="foot">Poisson · Dixon-Coles · <b style="color:var(--pk)">BivariatePoisson</b> · ELO · RF · GB · NN · SVM · KNN · <b style="color:var(--or)">ProOverround</b> · 专家风控<br>深度分析4引擎 ·深度学习2模型  ·G模型  · <b style="color:var(--am)">Claude中控</b> · <b style="color:var(--or)">58条经验规则</b> · <b style="color:var(--cy)">亚盘概率</b> | v5.0</div>
+<div class="foot">Poisson · Dixon-Coles · <b style="color:var(--pk)">BivariatePoisson</b> · ELO · RF · GB · NN · SVM · KNN · <b style="color:var(--or)">ProOverround</b> · 专家风控<br>GPT · Grok · Gemini · <b style="color:var(--am)">Claude中控</b> · <b style="color:var(--or)">58条经验规则</b> · <b style="color:var(--cy)">亚盘概率</b> | v5.0</div>
 </div>
 <script>
 var D=null,CT='today';
@@ -174,10 +174,10 @@ expHtml+='</div></div>'}
 
 /* ===== 亚盘概率面板 ===== */
 var ahHtml='';
-if(ahp.ah_0||ahp.ou_2_5||ahp.btts){
-var ah0=ahp['ah_0']||ahp.ah_0||[0,0,0];
-var ah05=ahp['ah_0.5']||ahp['ah_05']||[0,0,0];
-var ou25=ahp['ou_2.5']||ahp['ou_25']||[0,0,0];
+if(ahp['ah_0']||ahp['ou_2.5']||ahp.btts){
+var ah0=ahp['ah_0']||[0,0,0];
+var ah05=ahp['ah_0.5']||[0,0,0];
+var ou25=ahp['ou_2.5']||[0,0,0];
 var btts_v=ahp.btts||0;
 ahHtml='<div class="sec-label">📊 亚盘 & 大小球概率</div><div class="ah-grid">';
 ahHtml+='<div class="ah-cell"><div class="ah-lbl">平手 主</div><div class="ah-val">'+pct(ah0[0]*100)+'</div></div>';
@@ -215,7 +215,7 @@ var frm='<div class="mg"><div class="mb c3"><div class="mb-t c3">主队状态</d
 var sts='<div class="st-g"><div class="st-b"><div class="st-bt">'+m.home_team+'</div><div class="st-r"><span class="st-rl">战绩</span><span class="st-rv">'+(hs.wins||'?')+'W'+(hs.draws||'?')+'D'+(hs.losses||'?')+'L</span></div><div class="st-r"><span class="st-rl">进/失</span><span class="st-rv">'+(hs.goals_for||'?')+'/'+(hs.goals_against||'?')+'</span></div><div class="st-r"><span class="st-rl">均进</span><span class="st-rv">'+(hs.avg_goals_for||'?')+'</span></div></div><div class="st-b"><div class="st-bt">'+m.away_team+'</div><div class="st-r"><span class="st-rl">战绩</span><span class="st-rv">'+(as2.wins||'?')+'W'+(as2.draws||'?')+'D'+(as2.losses||'?')+'L</span></div><div class="st-r"><span class="st-rl">进/失</span><span class="st-rv">'+(as2.goals_for||'?')+'/'+(as2.goals_against||'?')+'</span></div><div class="st-r"><span class="st-rl">均进</span><span class="st-rv">'+(as2.avg_goals_for||'?')+'</span></div></div></div>';
 
 /* AI */
-var ai='<div class="claude-box"><div class="claude-h"><div class="claude-t">👑 Claude 中控</div><div class="claude-s">'+(p.claude_score||p.gemini_score||'-')+'</div></div><div class="claude-x">'+cl(p.claude_analysis||p.gemini_analysis)+'</div></div><div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">Alpha</span><span class="ai3-s">'+(p.gpt_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gpt_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">X分析引擎</span><span class="ai3-s">'+(p.grok_score||'-')+'</span></div><div class="ai3-x">'+cl(p.grok_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">G分析引擎</span><span class="ai3-s">'+(p.gemini_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gemini_analysis)+'</div></div></div>';
+var ai='<div class="claude-box"><div class="claude-h"><div class="claude-t">👑 Claude 中控</div><div class="claude-s">'+(p.claude_score||p.gemini_score||'-')+'</div></div><div class="claude-x">'+cl(p.claude_analysis||p.gemini_analysis)+'</div></div><div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT</span><span class="ai3-s">'+(p.gpt_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gpt_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">Grok</span><span class="ai3-s">'+(p.grok_score||'-')+'</span></div><div class="ai3-x">'+cl(p.grok_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">Gemini</span><span class="ai3-s">'+(p.gemini_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gemini_analysis)+'</div></div></div>';
 
 /* 候选比分 */
 var cand='';var cs=p.candidate_scores||{};if(Object.keys(cs).length){cand='<div class="cand"><div class="cand-t">候选比分权重</div><div class="cand-r">';var sorted=Object.entries(cs).sort(function(a,b){return b[1]-a[1]});sorted.forEach(function(e,i){cand+='<span class="cand-c'+(i===0?' top':'')+'">'+e[0]+' '+e[1]+'</span>'});cand+='</div></div>'}
