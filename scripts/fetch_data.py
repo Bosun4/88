@@ -2,12 +2,23 @@ import os
 import re
 import json
 import asyncio
-import aiohttp
 import requests
 import time
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict
 from config import *
+
+# ==================== 自动修复 aiohttp（关键修复） ====================
+try:
+    import aiohttp
+except ModuleNotFoundError:
+    print("🔧 检测到 aiohttp 缺失，正在自动安装...")
+    import subprocess
+    import sys
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "aiohttp"])
+    import aiohttp
+    print("✅ aiohttp 安装成功")
+# =====================================================================
 
 # 极限球队映射字典
 TEAM_NAME_MAPPING = {
@@ -151,4 +162,3 @@ async def async_collect_all(date_str):
         tasks = [enrich_match_data(session, m, i, date_str) for i, m in enumerate(matches)]
         enriched = await asyncio.gather(*tasks)
     return {"date": date_str, "matches": enriched}
-
