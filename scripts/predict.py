@@ -3,8 +3,11 @@ from config import *
 from models import EnsemblePredictor
 from odds_engine import predict_match, build_ai_context
 from league_intel import build_league_intelligence
+from experience_rules import ExperienceEngine, apply_experience_to_prediction
 
 ensemble = EnsemblePredictor()
+exp_engine = ExperienceEngine()
+
 
 def calculate_value_bet(prob_pct, odds):
     if not odds or odds <= 1.05:
@@ -18,6 +21,7 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
+
 def parse_score(s):
     try:
         p = str(s).split("-")
@@ -29,6 +33,7 @@ def parse_score(s):
 # ====================================================================
 # BATCH AI: One prompt for ALL matches
 # ====================================================================
+
 def build_batch_prompt(match_analyses):
     p = "[ROLE] Football analyst. For each match below, pick the best score from the candidates.\n"
     p += "[RULES] You MUST pick from CANDIDATES only. Output JSON array.\n\n"
@@ -36,16 +41,28 @@ def build_batch_prompt(match_analyses):
         m = ma["match"]
         eng = ma["engine"]
         league_info = ma["league_info"]
+        exp_result = ma.get("experience", {})
         h, a = m.get("home_team", "?"), m.get("away_team", "?")
         lg = m.get("league", "?")
         sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
         top3 = eng.get("top3_scores", ["1-1"])
         intel = m.get("intelligence", {})
-        p += "--- MATCH %d: %s vs %s (%s) ---\n" % (i+1, h, a, lg)
+        p += "— MATCH %d: %s vs %s (%s) —\n" % (i+1, h, a, lg)
         p += "Odds: H=%.2f D=%.2f A=%.2f | Dir:%s(%s) | ExpGoals:%.1f\n" % (
             sp_h, sp_d, sp_a, eng["direction"], eng["direction_confidence"], eng["expected_goals"])
         p += "O2.5:%.0f%% BTTS:%.0f%% | 0g@%.1f\n" % (eng["over_25"], eng["btts"], eng.get("zero_odds", 99))
         p += "%s\n" % league_info
+
+        # === 经验规则注入 AI prompt ===
+        if exp_result.get("triggered_count", 0) > 0:
+            exp_lines = []
+            for t in exp_result.get("triggered", [])[:5]:
+                exp_lines.append("%s(w%d)" % (t["name"], t["weight"]))
+            p += "[EXP] %s | draw_boost:%.1f | rec:%s\n" % (
+                ", ".join(exp_lines), exp_result.get("draw_boost", 0), exp_result.get("recommendation", ""))
+            if exp_result.get("risk_signals"):
+                p += "[RISK] %s\n" % " | ".join(exp_result["risk_signals"][:3])
+
         baseface = str(m.get("baseface", "")).strip()
         if baseface:
             p += "%s\n" % baseface[:250]
@@ -68,7 +85,7 @@ def build_batch_prompt(match_analyses):
         p += "CANDIDATES: %s\n" % ", ".join(top3)
         p += "\n"
     p += "[OUTPUT] Return ONLY a JSON array with %d objects:\n" % len(match_analyses)
-    p += '[{"match":1,"score":"X-X","reason":"30chars"},{"match":2,"score":"X-X","reason":"30chars"},...]\n'
+    p += '[{"match":1,"score":"X-X","reason":"30chars"},{"match":2,"score":"X-X","reason":"30chars"},…]\n'
     return p
 
 
@@ -106,8 +123,10 @@ def get_clean_env_url(name, default=""):
     match = re.search(r"(https?://[a-zA-Z0-9._:/-]+)", v)
     return match.group(1) if match else v
 
+
 def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
+
 
 def call_ai_model(prompt, url, key, model_name):
     if not url or not key: return None
@@ -135,9 +154,10 @@ def call_ai_model(prompt, url, key, model_name):
     except Exception as e: print("  ERR: %s" % str(e)[:60])
     return None
 
+
 FALLBACK_URLS = [None, "https://api520.pro/v1", "https://www.api520.pro/v1",
-    "https://api521.pro/v1", "https://www.api521.pro/v1",
-    "https://api522.pro/v1", "https://www.api522.pro/v1", "https://69.63.213.33:666/v1"]
+                 "https://api521.pro/v1", "https://www.api521.pro/v1",
+                 "https://api522.pro/v1", "https://www.api522.pro/v1", "https://69.63.213.33:666/v1"]
 
 
 def call_one_ai_batch(prompt, url_env, key_env, models_list, num_matches):
@@ -157,6 +177,7 @@ def call_one_ai_batch(prompt, url_env, key_env, models_list, num_matches):
                     return results, mn
             time.sleep(0.3)
     return {}, "failed"
+
 
 def call_all_ai_batch(prompt, num_matches):
     """Call ALL 4 AIs each once in batch mode. Returns dict of {ai_name: {match_idx: result}}"""
@@ -223,7 +244,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if vote_count:
         best_voted = max(vote_count, key=vote_count.get)
         if best_voted in candidates and vote_count[best_voted] >= 3:
-            final_score = best_voted  # 2+ AIs agree on a candidate → use it
+            final_score = best_voted  # 2+ AIs agree on a candidate -> use it
 
     # Probabilities from odds (75%) + stats (25%)
     hp = engine_result.get("home_prob", 33)
@@ -322,9 +343,24 @@ def select_top4(preds):
         elif pr.get("risk_level") == "\u9ad8": s -= 5
         if pr.get("model_agreement"): s += 10
         if pr.get("value_bets_summary"): s += 8
+
+        # === 经验规则加成 ===
+        exp_info = pr.get("experience_analysis", {})
+        exp_score = exp_info.get("total_score", 0)
+        exp_draw_rules = exp_info.get("draw_rules", 0)
+        # 经验规则得分高的比赛：如果预测方向与经验一致则加分
+        if exp_score >= 15 and pr.get("result") == "\u5e73\u5c40" and exp_draw_rules >= 3:
+            s += 12  # 经验强烈看平且模型也看平 -> 大幅加分
+        elif exp_score >= 10:
+            s += 5   # 经验信号较强
+        # 经验风险信号扣分
+        if exp_info.get("recommendation", "").startswith("\u26a0"):
+            s -= 3  # 有高度警惕信号则保守
+
         p["recommend_score"] = round(s, 2)
     preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
     return preds[:4]
+
 
 def extract_num(ms):
     wm = {"\u4e00":1000,"\u4e8c":2000,"\u4e09":3000,"\u56db":4000,"\u4e94":5000,"\u516d":6000,"\u65e5":7000,"\u5929":7000}
@@ -336,39 +372,49 @@ def extract_num(ms):
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 60)
-    print("  ENGINE v10 BATCH | %d matches" % len(ms))
-    print("  Odds Engine 80%% + 4x AI batch 20%%")
+    print("  ENGINE v11 BATCH | %d matches | + ExperienceEngine v3.0" % len(ms))
+    print("  Odds Engine 80%% + 4x AI batch 20%% + 58 Experience Rules")
     print("=" * 60)
 
-    # Phase 1: Odds Engine for ALL matches
+    # Phase 1: Odds Engine + Experience Rules for ALL matches
     match_analyses = []
     for i, m in enumerate(ms):
         h, a = m.get("home_team", "?"), m.get("away_team", "?")
         eng = predict_match(m)
         league_info, _, _, _ = build_league_intelligence(m)
         sp = ensemble.predict(m, {})
-        match_analyses.append({
-            "match": m, "engine": eng, "league_info": league_info, "stats": sp, "index": i
-        })
-        print("  [%d] %s vs %s → %s (%s) conf=%d%%" % (
-            i+1, h, a, eng["primary_score"], eng["reason"], eng["confidence"]))
 
-    # Phase 2: ONE batch prompt → call ALL 4 AIs (4 API calls total)
+        # === 经验规则分析 ===
+        exp_result = exp_engine.analyze(m)
+        exp_count = exp_result.get("triggered_count", 0)
+        exp_tag = ""
+        if exp_count >= 3:
+            exp_tag = " [EXP:%d rules, score=%d]" % (exp_count, exp_result["total_score"])
+
+        match_analyses.append({
+            "match": m, "engine": eng, "league_info": league_info,
+            "stats": sp, "index": i, "experience": exp_result,
+        })
+        print("  [%d] %s vs %s -> %s (%s) conf=%d%%%s" % (
+            i+1, h, a, eng["primary_score"], eng["reason"], eng["confidence"], exp_tag))
+
+    # Phase 2: ONE batch prompt -> call ALL 4 AIs (4 API calls total)
     all_ai = {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
     if use_ai and match_analyses:
-        print("\n  Building batch prompt for %d matches..." % len(match_analyses))
+        print("\n  Building batch prompt for %d matches (+ experience context)..." % len(match_analyses))
         prompt = build_batch_prompt(match_analyses)
         print("  Prompt: %d chars | Calling 4 AIs..." % len(prompt))
         all_ai = call_all_ai_batch(prompt, len(match_analyses))
         for name, results in all_ai.items():
             print("  %s: %d results" % (name.upper(), len(results)))
 
-    # Phase 3: Merge engine + 4 AI results
+    # Phase 3: Merge engine + 4 AI results + Experience Rules
     res = []
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         eng = ma["engine"]
         sp = ma["stats"]
+        exp_result = ma["experience"]
         idx = i + 1
         gpt_r = all_ai.get("gpt", {}).get(idx, {})
         grok_r = all_ai.get("grok", {}).get(idx, {})
@@ -376,10 +422,17 @@ def run_predictions(raw, use_ai=True):
         cl_r = all_ai.get("claude", {}).get(idx, {})
         mg = merge_result(eng, gpt_r, grok_r, gem_r, cl_r, sp, m)
 
+        # === 经验规则融合（核心新增） ===
+        mg = apply_experience_to_prediction(m, mg, exp_engine)
+
         h, a = m.get("home_team", "?"), m.get("away_team", "?")
-        print("  [%d] %s vs %s => %s (%s) %d%% | GPT:%s Grok:%s Gem:%s Cl:%s" % (
+        exp_info = mg.get("experience_analysis", {})
+        exp_tag = ""
+        if exp_info.get("triggered_count", 0) > 0:
+            exp_tag = " EXP:%d/%d" % (exp_info["triggered_count"], exp_info["total_score"])
+        print("  [%d] %s vs %s => %s (%s) %d%% | GPT:%s Grok:%s Gem:%s Cl:%s%s" % (
             i+1, h, a, mg["result"], mg["predicted_score"], mg["confidence"],
-            mg["gpt_score"], mg["grok_score"], mg["gemini_score"], mg["claude_score"]))
+            mg["gpt_score"], mg["grok_score"], mg["gemini_score"], mg["claude_score"], exp_tag))
         res.append({**m, "prediction": mg})
 
     t4 = select_top4(res)
@@ -390,7 +443,11 @@ def run_predictions(raw, use_ai=True):
     print("\n  TOP4:")
     for i, t in enumerate(t4):
         pr = t.get("prediction", {})
-        print("    %d. %s vs %s => %s (%s) %d%%" % (
+        exp_info = pr.get("experience_analysis", {})
+        exp_str = ""
+        if exp_info.get("triggered_count", 0) > 0:
+            exp_str = " | EXP:%d rules(%s)" % (exp_info["triggered_count"], exp_info.get("recommendation", "")[:15])
+        print("    %d. %s vs %s => %s (%s) %d%%%s" % (
             i+1, t.get("home_team"), t.get("away_team"),
-            pr.get("result"), pr.get("predicted_score"), pr.get("confidence", 0)))
+            pr.get("result"), pr.get("predicted_score"), pr.get("confidence", 0), exp_str))
     return res, t4
