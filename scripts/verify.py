@@ -1,153 +1,140 @@
 import json
 import os
-import sys
-import subprocess
-import traceback
-import asyncio
-from datetime import datetime, timedelta, timezone
+import requests
+import time
+import re
+from datetime import datetime, timedelta
+from config import *
 
-# ============================================================
-#  自动安装依赖（首次运行自动执行，后续跳过）
-# ============================================================
-REQUIRED_PACKAGES = {
-    "penaltyblog": "penaltyblog",
-    "soccerdata": "soccerdata",
-    "scipy": "scipy",
-    "numpy": "numpy",
-    "requests": "requests",
-    "aiohttp": "aiohttp",
-}
+def get_yesterday():
+    from zoneinfo import ZoneInfo
+    return (datetime.now(ZoneInfo(TIMEZONE)) - timedelta(days=1)).strftime("%Y-%m-%d")
 
-def auto_install():
-    missing = []
-    for import_name, pip_name in REQUIRED_PACKAGES.items():
-        try:
-            __import__(import_name)
-        except ImportError:
-            missing.append(pip_name)
-    if missing:
-        print("📦 首次运行，正在安装缺失依赖: %s" % ", ".join(missing))
-        for pkg in missing:
-            try:
-                subprocess.check_call([
-                    sys.executable, "-m", "pip", "install", pkg,
-                    "--break-system-packages", "-q"
-                ])
-                print("  ✅ %s 安装成功" % pkg)
-            except subprocess.CalledProcessError:
-                print("  ⚠️ %s 安装失败，部分高级功能将降级运行" % pkg)
-        print()
-
-auto_install()
-
-# ============================================================
-#  正常导入（依赖已就绪）
-# ============================================================
-
-def get_target_date(offset=0):
-    beijing_tz = timezone(timedelta(hours=8))
-    now = datetime.now(beijing_tz) - timedelta(hours=11)
-    return (now + timedelta(days=offset)).strftime("%Y-%m-%d")
-
-def main():
-    beijing_tz = timezone(timedelta(hours=8))
-    now_time = datetime.now(beijing_tz)
-    session = "morning" if now_time.hour < 15 else "evening"
-
-    print("=" * 80)
-    print("⚽ 量化足球投研终端 v6.0（全链路异步高并发 + 自我进化版）")
-    print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
-    print("🔧 核心升级：Sharp资金一票否决 + Token极简压缩 + AI反思日记")
-    print("=" * 80)
-
-    # 1. 运行昨日复盘与自我学习 (生成/更新日记)
-    try:
-        from verify import verify_and_learn
-        verify_and_learn()
-    except Exception as e:
-        print(f"  [WARN] 自我复盘模块遇到问题: {e}")
-
-    # 2. 准备今日预测数据
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(base_dir, "data")
-    os.makedirs(data_dir, exist_ok=True)
+def fetch_actual_results(target_date):
+    h = {"x-apisports-key": API_FOOTBALL_KEY}
+    results = {}
+    d = datetime.strptime(target_date, "%Y-%m-%d")
+    dates_to_fetch = [
+        target_date,
+        (d + timedelta(days=1)).strftime("%Y-%m-%d")
+    ]
     
-    target_path = os.path.join(data_dir, "predictions.json")
-    history_path = os.path.join(data_dir, f"history_{now_time.strftime('%Y%m%d')}_{session}.json")
-
-    final_output = {
-        "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
-        "version": "6.0",
-        "top4": [], 
-        "matches": {
-            "yesterday": [],
-            "today": [],
-            "tomorrow": []
-        }
-    }
-
-    days_map = {"yesterday": -1, "today": 0, "tomorrow": 1}
-    today_top4_conf_avg = 0.0
-
-    try:
-        from fetch_data import async_collect_all
-        from predict import run_predictions
-
-        for day_key, offset in days_map.items():
-            target_date = get_target_date(offset)
-            print(f"\n{'='*20} 正在并发抓取并清洗 {day_key} ({target_date}) 的赛事 {'='*20}")
-            
-            # 使用 asyncio 驱动异步并发抓取
-            raw_data = asyncio.run(async_collect_all(target_date))
-            
-            if not raw_data or not raw_data.get("matches"):
-                print(f"  [WARN] {target_date} 暂无比赛数据。")
-                continue
-
-            use_ai = (day_key in ["today", "tomorrow"])
-            if not use_ai:
-                print("  [INFO] 历史赛事，已自动切断AI通道以节省API费用...")
-
-            results, top4 = run_predictions(raw_data, use_ai=use_ai)
-            
-            clean_results = json.loads(json.dumps(results, ensure_ascii=False, default=str))
-            final_output["matches"][day_key] = clean_results
-            
-            if day_key == "today" and top4:
-                clean_top4 = json.loads(json.dumps(top4, ensure_ascii=False, default=str))
-                conf_list = [t.get("prediction", {}).get("confidence", 0) for t in clean_top4]
-                today_top4_conf_avg = round(sum(conf_list)/len(conf_list), 1) if conf_list else 0
-                
-                final_output["top4"] = [
-                    {"rank": i + 1, **t, "fusion_summary": t.get("prediction", {}).get("fusion_method", "weighted")}
-                    for i, t in enumerate(clean_top4)
-                ]
-
-            with open(target_path, "w", encoding="utf-8") as f:
-                json.dump(final_output, f, ensure_ascii=False, indent=2)
-            with open(history_path, "w", encoding="utf-8") as f:
-                json.dump(final_output, f, ensure_ascii=False, indent=2)
-                
-            print(f"  ✅ {day_key} 数据已安全落盘（Top4平均置信度: {today_top4_conf_avg}%）")
-
-        print(f"\n{'='*80}")
-        print("✅ 全链路执行成功！v6.0 终极融合引擎已完成所有并发任务。")
-        print(f"📁 实时文件: {target_path}")
-        print(f"📁 历史备份: {history_path}")
-        print(f"{'='*80}")
-
-    except Exception as e:
-        print("\n" + "!" * 80)
-        print(f"🚨 致命崩溃: {type(e).__name__}")
-        traceback.print_exc()
-        
+    for date_str in dates_to_fetch:
         try:
-            with open(target_path, "w", encoding="utf-8") as f:
-                json.dump(final_output, f, ensure_ascii=False, indent=2)
-            print(f"💾 已紧急保存部分结果至 {target_path}")
-        except:
+            r = requests.get(API_FOOTBALL_BASE + "/fixtures", headers=h, params={"date": date_str}, timeout=15)
+            data = r.json()
+            if data.get("response"):
+                for m in data["response"]:
+                    if m["fixture"]["status"]["short"] in ["FT", "AET", "PEN"]:
+                        hid = str(m["teams"]["home"]["id"])
+                        aid = str(m["teams"]["away"]["id"])
+                        h_name = m["teams"]["home"]["name"].lower()
+                        a_name = m["teams"]["away"]["name"].lower()
+                        
+                        res_data = {
+                            "home_goals": m["goals"]["home"], 
+                            "away_goals": m["goals"]["away"], 
+                            "status": "FT"
+                        }
+                        results[f"{hid}_{aid}"] = res_data
+                        results[f"{h_name}_vs_{a_name}"] = res_data
+        except Exception as e:
             pass
-        sys.exit(1)
+    return results
+
+def verify_and_learn():
+    yesterday = get_yesterday()
+    print(f"\n🧠 [AI 自我复盘引擎] 启动... 对账日期: {yesterday}")
+    
+    pred_file = f"data/history_{yesterday.replace('-','')}_evening.json" 
+    if not os.path.exists(pred_file):
+        pred_file = "data/predictions.json"
+        
+    if not os.path.exists(pred_file):
+        print("  ⚠️ 无预测记录，跳过对账。")
+        return
+        
+    with open(pred_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        
+    matches = data.get("matches", {}).get("today", data.get("results", []))
+    if not matches:
+        print("  ⚠️ 预测记录中无赛事数据。")
+        return
+
+    actual = fetch_actual_results(yesterday)
+    review_log = []
+    correct, total = 0, 0
+    verified = []
+
+    for match in matches:
+        hid = str(match.get("home_id", ""))
+        aid = str(match.get("away_id", ""))
+        home = match["home_team"].lower()
+        away = match["away_team"].lower()
+        pred = match.get("prediction", {})
+        
+        found = actual.get(f"{hid}_{aid}")
+        if not found:
+            for key, res in actual.items():
+                if home in key and away in key:
+                    found = res
+                    break
+                    
+        if found:
+            total += 1
+            hg, ag = found["home_goals"], found["away_goals"]
+            actual_res = "主胜" if hg > ag else ("平局" if hg == ag else "客胜")
+            is_correct = pred.get("result", "") == actual_res
+            if is_correct: correct += 1
+            
+            verified.append({
+                "match": f"{match['home_team']} vs {match['away_team']}",
+                "result_correct": is_correct,
+                "was_recommended": match.get("is_recommended", False)
+            })
+            
+            review_log.append({
+                "match": f"{match['home_team']} vs {match['away_team']}",
+                "pred": f"{pred.get('result', '')} ({pred.get('predicted_score', '')})",
+                "actual": f"{actual_res} ({hg}-{ag})",
+                "correct": is_correct
+            })
+
+    if total == 0:
+        print("  ⏳ 比赛尚未全部结束或获取不到结果。")
+        return
+
+    win_rate = (correct / total) * 100
+    
+    rec_matches = [v for v in verified if v["was_recommended"]]
+    rec_correct = sum(1 for v in rec_matches if v["result_correct"])
+    rec_win_rate = (rec_correct / len(rec_matches) * 100) if rec_matches else 0
+    
+    print(f"  🎯 昨日总体胜率: {win_rate:.1f}% ({correct}/{total})")
+    print(f"  🔥 核心推荐胜率: {rec_win_rate:.1f}% ({rec_correct}/{len(rec_matches)})")
+
+    prompt = f"你是量化足球AI。昨日总体胜率 {win_rate:.1f}%，精选推荐胜率 {rec_win_rate:.1f}%。复盘记录：{json.dumps(review_log, ensure_ascii=False)}。请深度反思预测失败的比赛，输出一段精炼的调参建议。严格返回纯JSON: {{\"reflection\": \"反思与今日策略(80字以内)\", \"risk_adjustment\": \"稳健/防冷/激进\"}}"
+    
+    try:
+        h = {"Authorization": f"Bearer {GPT_API_KEY}", "Content-Type": "application/json"}
+        payload = {"model": "gpt-5.4", "messages": [{"role": "user", "content": prompt}], "temperature": 0.5}
+        r = requests.post(GPT_API_URL, headers=h, json=payload, timeout=20)
+        
+        clean = re.sub(r"```\w*", "", r.json()["choices"][0]["message"]["content"]).strip()
+        start = clean.find("{")
+        end = clean.rfind("}") + 1
+        diary_data = json.loads(clean[start:end])
+        diary_data["yesterday_win_rate"] = f"{win_rate:.1f}%"
+        diary_data["yesterday_rec_win_rate"] = f"{rec_win_rate:.1f}%"
+        diary_data["update_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        os.makedirs("data", exist_ok=True)
+        with open("data/ai_diary.json", "w", encoding="utf-8") as f:
+            json.dump(diary_data, f, ensure_ascii=False, indent=2)
+        print(f"  ✅ 自我进化完成! 今日AI策略: {diary_data['reflection']}")
+    except Exception as e:
+        print(f"  ❌ AI反思请求失败: {e}")
 
 if __name__ == "__main__":
-    main()
+    verify_and_learn()
