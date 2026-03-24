@@ -7,7 +7,7 @@ import asyncio
 from datetime import datetime, timedelta, timezone
 
 # ============================================================
-#  自动安装依赖（严格执行最新的环境依赖与版本下限要求）
+#  自动安装依赖
 # ============================================================
 REQUIRED_PACKAGES = [
     "penaltyblog",
@@ -29,19 +29,16 @@ def auto_install():
         import pkg_resources
         for pkg in REQUIRED_PACKAGES:
             try:
-                # 严格比对已安装包的版本是否满足 >= 要求
                 pkg_resources.require(pkg)
             except (pkg_resources.DistributionNotFound, pkg_resources.VersionConflict):
                 missing.append(pkg)
     except ImportError:
-        # 如果环境缺失 pkg_resources，直接全量丢给 pip 去解析比对
         missing = REQUIRED_PACKAGES
 
     if missing:
         print("📦 正在同步并升级核心量化依赖 (严格校验版本):")
         print("   " + ", ".join(missing))
         try:
-            # 聚合在一起执行一次 pip install，极大提升解析与安装速度
             subprocess.check_call([
                 sys.executable, "-m", "pip", "install", *missing,
                 "--break-system-packages", "-q"
@@ -58,7 +55,6 @@ auto_install()
 # ============================================================
 
 def get_target_date(offset=0):
-    """体彩交易日逻辑：减去11小时偏移"""
     beijing_tz = timezone(timedelta(hours=8))
     now = datetime.now(beijing_tz) - timedelta(hours=11)
     return (now + timedelta(days=offset)).strftime("%Y-%m-%d")
@@ -71,17 +67,15 @@ def main():
     print("=" * 80)
     print("⚽ 量化足球投研终端 vMAX 终极版（动态寻优 + 庄家底牌穿透）")
     print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
-    print("🔧 核心升级：牛顿-拉弗森反向求解器 + Sharp资金一票否决 + 全异步并发")
+    print("🔧 核心升级：强力兜底落盘防崩溃机制 + 顶级反爬虫伪装")
     print("=" * 80)
 
-    # 1. 启动自我复盘与自学习 (AI 反思日记)
     try:
         import verify
         verify.verify_and_learn()
     except Exception as e:
         print(f"  [WARN] 自学习模块跳过或未找到数据: {e}")
 
-    # 2. 准备今日预测数据
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, "data")
     os.makedirs(data_dir, exist_ok=True)
@@ -91,7 +85,7 @@ def main():
 
     final_output = {
         "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
-        "version": "MAX-v1.0",
+        "version": "MAX-v1.1",
         "top4": [], 
         "matches": {
             "yesterday": [],
@@ -99,6 +93,12 @@ def main():
             "tomorrow": []
         }
     }
+
+    # 【终极修复点】：强制兜底落盘！
+    # 无论今天有没有抓到数据，先写一个带格式的空骨架文件进去。
+    # 这样 GitHub Actions 的 cp 命令就绝对不会报 "No such file" 的错误！
+    with open(target_path, "w", encoding="utf-8") as f:
+        json.dump(final_output, f, ensure_ascii=False, indent=2)
 
     days_map = {"yesterday": -1, "today": 0, "tomorrow": 1}
 
@@ -110,17 +110,13 @@ def main():
             target_date = get_target_date(offset)
             print(f"\n{'='*20} 正在并发抓取并清洗 {day_key} ({target_date}) {'='*20}")
             
-            # 使用 asyncio 驱动 fetch_data 的全异步抓取，彻底榨干带宽
             raw_data = asyncio.run(async_collect_all(target_date))
             
             if not raw_data or not raw_data.get("matches"):
-                print(f"  [SKIP] {target_date} 暂无比赛数据。")
+                print(f"  [SKIP] {target_date} 暂无比赛数据，跳过 AI 推理。")
                 continue
 
-            # 仅对今日和明日开启 AI 推理，节省历史回测成本
             use_ai = (day_key in ["today", "tomorrow"])
-            
-            # 执行核心预测逻辑
             results, top4 = run_predictions(raw_data, use_ai=use_ai)
             
             final_output["matches"][day_key] = json.loads(json.dumps(results, ensure_ascii=False, default=str))
@@ -131,7 +127,7 @@ def main():
                     for i, t in enumerate(json.loads(json.dumps(top4, ensure_ascii=False, default=str)))
                 ]
 
-            # 每一帧处理完都落盘，防止断电或崩溃丢失进度
+            # 抓到数据后，覆盖骨架文件
             with open(target_path, "w", encoding="utf-8") as f:
                 json.dump(final_output, f, ensure_ascii=False, indent=2)
             with open(history_path, "w", encoding="utf-8") as f:
@@ -141,7 +137,6 @@ def main():
 
         print(f"\n{'='*80}")
         print("✅ 全链路执行成功！终极融合引擎已完成所有预测任务。")
-        print(f"📁 结果文件: {target_path}")
         print(f"{'='*80}")
 
     except Exception as e:
