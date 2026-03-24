@@ -13,23 +13,22 @@ C500_URL = "https://trade.500.com/jczq/?date={date}"
 OKOOO_DETAIL = "https://m.okooo.com/jczq/"
 TIMEZONE = "Asia/Shanghai"
 
-# GPT
+# GPT（thinking优先）
 GPT_API_URL = os.environ.get("GPT_API_URL", "")
 GPT_API_KEY = os.environ.get("GPT_API_KEY", "")
 GPT_MODEL = "熊猫-A-7-gpt-5.4"
 
-# Gemini
+# Gemini（3.1 pro thinking优先）
 GEMINI_API_URL = os.environ.get("GEMINI_API_URL", "")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 GEMINI_MODEL = "熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"
 
-# Grok
+# Grok（thinking优先）
 GROK_API_URL = os.environ.get("GROK_API_URL", "")
 GROK_API_KEY = os.environ.get("GROK_API_KEY", "")
 GROK_MODEL = "熊猫-A-6-grok-4.2-thinking"
 
-# Claude 中控
+# Claude 中控（opus thinking优先）
 CLAUDE_API_URL = os.environ.get("CLAUDE_API_URL", "")
 CLAUDE_API_KEY = os.environ.get("CLAUDE_API_KEY", "")
-CLAUDE_MODEL = "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"
-
+CLAUDE_MODEL = "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking"
