@@ -1,10 +1,9 @@
 import json
 import os
 import re
-import time
-import requests
 import asyncio
 import aiohttp
+import numpy as np
 from config import *
 from models import EnsemblePredictor
 from odds_engine import predict_match
@@ -27,13 +26,6 @@ def calculate_value_bet(prob_pct, odds):
     kelly = ((b * prob) - q) / b
     return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
-def parse_score(s):
-    try:
-        p = str(s).split("-")
-        return int(p[0]), int(p[1])
-    except:
-        return None, None
-
 def load_ai_diary():
     diary_file = "data/ai_diary.json"
     if os.path.exists(diary_file):
@@ -44,43 +36,41 @@ def load_ai_diary():
     return None
 
 def build_batch_prompt(match_analyses):
-    p = "[ROLE] Pro Football Quant Analyst. Analyze matches and pick the EXACT SCORE.\n"
+    p = "[ROLE] Elite Football Quant AI. Analyze matches and compute EXACT SCORE probabilities.\n"
     
     diary = load_ai_diary()
     if diary and diary.get("reflection"):
-        p += f"\n[CRITICAL SYSTEM MEMORY] Yesterday's Win Rate: {diary.get('yesterday_win_rate', 'N/A')}\n"
-        p += f"LESSON LEARNED: {diary['reflection']}\n"
-        p += f"ADJUSTMENT STRATEGY TODAY: {diary.get('risk_adjustment', 'Standard')}\n"
-        p += "APPLY THIS STRATEGY to today's predictions.\n\n"
+        p += f"\n[SYSTEM DIRECTIVE] Prev Win Rate: {diary.get('yesterday_win_rate', 'N/A')}. \n"
+        p += f"EVOLUTION LOG: {diary['reflection']}. APPLY {diary.get('risk_adjustment', 'STRICT')} RISK FILTER.\n\n"
         
-    p += "[TASK] You MUST pick from the provided CANDIDATES list. Focus on Data, EXP and Risk Signals.\n"
-    p += "[FORMAT] Output ONLY a raw JSON array. NO markdown, NO extra text.\n\n"
+    p += "[TASK] Output ONLY raw JSON array. NO markdown, NO text. Base logic on Implied Probabilities and xG.\n\n"
     
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         eng = ma["engine"]
         lg_info = ma["league_info"]
         exp = ma.get("experience", {})
-        h, a = m.get("home_team", "?"), m.get("away_team", "?")
+        h, a = m.get("home_team", "Home"), m.get("away_team", "Away")
         
-        p += f"[{i+1}] {h} vs {a} ({m.get('league', '?')})\n"
-        p += f"Base Probs: H:{eng.get('home_prob', 33):.1f}% D:{eng.get('draw_prob', 33):.1f}% A:{eng.get('away_prob', 34):.1f}% | xG: {eng.get('expected_goals', 2.5):.1f}\n"
-        p += f"League Context: {lg_info}\n"
+        p += f"[{i+1}] {h} vs {a} ({m.get('league', 'UNK')})\n"
+        p += f"Implied Prob: H {eng.get('home_prob', 33):.1f}% | D {eng.get('draw_prob', 33):.1f}% | A {eng.get('away_prob', 34):.1f}%\n"
+        p += f"Bookmaker xG: {eng.get('expected_goals', 2.5):.2f} | Gap Signal: {eng.get('scissors_gap_signal', 'None')}\n"
+        p += f"Context: {lg_info}\n"
 
         if exp.get("triggered_count", 0) > 0:
-            exp_names = ",".join([t["name"] for t in exp.get("triggered", [])[:3]])
-            p += f"EXP Rules: {exp_names}\n"
+            exp_names = ",".join([t["name"] for t in exp.get("triggered", [])[:4]])
+            p += f"EXP Engine: {exp_names}\n"
             if exp.get("risk_signals"):
-                p += f"RISK SIGNALS: {', '.join(exp['risk_signals'][:3])}\n"
+                p += f"ALERT: {', '.join(exp['risk_signals'][:3])}\n"
                 
-        p += f"CANDIDATES: {', '.join(eng.get('top3_scores', ['1-1', '0-0', '1-0']))}\n\n"
+        p += f"SCORE CANDIDATES: {', '.join(eng.get('top3_scores', ['1-1', '0-0', '1-0']))}\n\n"
 
     p += "[OUTPUT STRUCTURE]\n"
-    p += f"Produce exactly {len(match_analyses)} objects in this exact format:\n"
-    p += '[\n  {"match": 1, "score": "2-1", "reason": "Home adv and xG favor home"}\n]\n'
+    p += f"Produce EXACTLY {len(match_analyses)} JSON objects in this format:\n"
+    p += '[\n  {"match": 1, "score": "2-1", "reason": "xG delta indicates strong home dominance"}\n]\n'
     return p
 
-async def async_fetch_ai(session, model_name, api_url, api_key, payload, timeout=25):
+async def async_fetch_ai(session, model_name, api_url, api_key, payload, timeout=28):
     headers = {"Content-Type": "application/json"}
     is_gemini = "generateContent" in api_url
     if is_gemini:
@@ -97,15 +87,15 @@ async def async_fetch_ai(session, model_name, api_url, api_key, payload, timeout
                 else:
                     return model_name, data["choices"][0]["message"]["content"]
     except Exception as e:
-        print(f"  [WARN] {model_name} failed: {str(e)[:40]}")
+        print(f"  [WARN] {model_name} compute failed: {str(e)[:40]}")
     return model_name, None
 
 async def run_ai_matrix(prompt, num_matches):
     payloads = {
-        "claude": {"model": CLAUDE_MODEL, "messages": [{"role": "user", "content": prompt}], "temperature": 0.2},
-        "gemini": {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.2}},
-        "gpt": {"model": GPT_MODEL, "messages": [{"role": "user", "content": prompt}], "temperature": 0.2},
-        "grok": {"model": GROK_MODEL, "messages": [{"role": "user", "content": prompt}], "temperature": 0.2}
+        "claude": {"model": CLAUDE_MODEL, "messages": [{"role": "system", "content": "You output strict JSON array."}, {"role": "user", "content": prompt}], "temperature": 0.1},
+        "gemini": {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.1}},
+        "gpt": {"model": GPT_MODEL, "messages": [{"role": "system", "content": "You output strict JSON array."}, {"role": "user", "content": prompt}], "temperature": 0.1},
+        "grok": {"model": GROK_MODEL, "messages": [{"role": "system", "content": "You output strict JSON array."}, {"role": "user", "content": prompt}], "temperature": 0.1}
     }
     
     tasks = []
@@ -114,7 +104,6 @@ async def run_ai_matrix(prompt, num_matches):
         if GEMINI_API_KEY: tasks.append(async_fetch_ai(session, "gemini", GEMINI_API_URL, GEMINI_API_KEY, payloads["gemini"]))
         if GPT_API_KEY: tasks.append(async_fetch_ai(session, "gpt", GPT_API_URL, GPT_API_KEY, payloads["gpt"]))
         if GROK_API_KEY: tasks.append(async_fetch_ai(session, "grok", GROK_API_URL, GROK_API_KEY, payloads["grok"]))
-        
         results = await asyncio.gather(*tasks)
         
     parsed_results = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
@@ -125,10 +114,15 @@ async def run_ai_matrix(prompt, num_matches):
             if start != -1 and end != -1:
                 try:
                     arr = json.loads(clean[start:end+1])
-                    for item in arr:
-                        if item.get("match") and item.get("score"):
-                            parsed_results[name][item["match"]] = {"ai_score": item["score"], "analysis": str(item.get("reason", ""))[:100]}
-                except: pass
+                    if isinstance(arr, list):
+                        for item in arr:
+                            if item.get("match") and item.get("score"):
+                                parsed_results[name][item["match"]] = {
+                                    "ai_score": item["score"], 
+                                    "analysis": str(item.get("reason", ""))[:100]
+                                }
+                except Exception as e:
+                    print(f"  [JSON ERROR] {name} parse failed.")
     return parsed_results
 
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
@@ -186,7 +180,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     cf = engine_conf
     agree_count = sum(1 for s in ai_scores if s == engine_score)
     cf = min(90, cf + agree_count * 4)
-    has_warn = any("\U0001f6a8" in str(s) for s in smart)
+    has_warn = any("🚨" in str(s) for s in smart)
     if has_warn: cf = max(35, cf - 10)
     risk = "低" if cf >= 70 else ("中" if cf >= 50 else "高")
 
@@ -195,7 +189,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     va = calculate_value_bet(fap, sp_a)
     vt = []
     for k, v in zip(["主胜","平局","客胜"], [vh,vd,va]):
-        if v and v.get("is_value"): vt.append(f"{k} EV:+{v['ev']}% Kelly:{v['kelly']}%")
+        if v and v.get("is_value"): vt.append("%s EV:+%s%% Kelly:%s%%" % (k, v["ev"], v["kelly"]))
 
     pcts = {"主胜": fhp, "平局": fdp, "客胜": fap}
     result = max(pcts, key=pcts.get)
@@ -214,6 +208,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         cl_sc = engine_score
         cl_an = engine_result.get("reason", "odds engine")
 
+    # 毫无删减，全量字段输出！保障前端不崩！
     return {
         "predicted_score": final_score,
         "home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap,
@@ -229,24 +224,38 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "poisson": stats.get("poisson", {}),
         "refined_poisson": stats.get("refined_poisson", {}),
         "value_bets_summary": vt,
-        "extreme_warning": extreme if extreme else "无",
+        "extreme_warning": engine_result.get("scissors_gap_signal", extreme if extreme else "无"),
         "smart_money_signal": " | ".join(us) if us else "正常",
         "smart_signals": us, "model_consensus": mc, "total_models": tm,
         "expected_total_goals": engine_result.get("expected_goals", 2.5),
         "over_2_5": o25, "btts": bt,
         "top_scores": stats.get("refined_poisson", {}).get("top_scores", []),
-        "elo": stats.get("elo", {}), "random_forest": stats.get("random_forest", {}),
-        "gradient_boost": stats.get("gradient_boost", {}), "neural_net": stats.get("neural_net", {}),
-        "logistic": stats.get("logistic", {}), "svm": stats.get("svm", {}), "knn": stats.get("knn", {}),
-        "dixon_coles": stats.get("dixon_coles", {}), "bradley_terry": stats.get("bradley_terry", {}),
-        "home_form": stats.get("home_form", {}), "away_form": stats.get("away_form", {}),
+        "elo": stats.get("elo", {}), 
+        "random_forest": stats.get("random_forest", {}),
+        "gradient_boost": stats.get("gradient_boost", {}), 
+        "neural_net": stats.get("neural_net", {}),
+        "logistic": stats.get("logistic", {}), 
+        "svm": stats.get("svm", {}), 
+        "knn": stats.get("knn", {}),
+        "dixon_coles": stats.get("dixon_coles", {}), 
+        "bradley_terry": stats.get("bradley_terry", {}),
+        "home_form": stats.get("home_form", {}), 
+        "away_form": stats.get("away_form", {}),
         "handicap_signal": stats.get("handicap_signal", ""),
-        "odds_movement": stats.get("odds_movement", {}), "vote_analysis": stats.get("vote_analysis", {}),
-        "h2h_blood": stats.get("h2h_blood", {}), "crs_analysis": stats.get("crs_analysis", {}),
-        "ttg_analysis": stats.get("ttg_analysis", {}), "halftime": stats.get("halftime", {}),
+        "odds_movement": stats.get("odds_movement", {}), 
+        "vote_analysis": stats.get("vote_analysis", {}),
+        "h2h_blood": stats.get("h2h_blood", {}), 
+        "crs_analysis": stats.get("crs_analysis", {}),
+        "ttg_analysis": stats.get("ttg_analysis", {}), 
+        "halftime": stats.get("halftime", {}),
         "pace_rating": stats.get("pace_rating", ""),
-        "kelly_home": stats.get("kelly_home", {}), "kelly_away": stats.get("kelly_away", {}),
+        "kelly_home": stats.get("kelly_home", {}), 
+        "kelly_away": stats.get("kelly_away", {}),
         "odds": stats.get("odds", {}),
+        "experience_analysis": stats.get("experience_analysis", {}),
+        "pro_odds": stats.get("pro_odds", {}),
+        "bivariate_poisson": stats.get("bivariate_poisson", {}),
+        "asian_handicap_probs": stats.get("asian_handicap_probs", {})
     }
 
 def select_top4(preds):
@@ -293,7 +302,7 @@ def extract_num(ms):
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 60)
-    print(f"  ENGINE v6.0 BATCH | {len(ms)} matches | Async AI + Self-Learn")
+    print(f"  [QUANT ENGINE vMAX] Executing Batch | {len(ms)} Data Points")
     print("=" * 60)
 
     match_analyses = []
@@ -310,6 +319,7 @@ def run_predictions(raw, use_ai=True):
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
         prompt = build_batch_prompt(match_analyses)
+        print(f"  [INFO] Prompt Built: {len(prompt)} chars. Calling AI Matrix...")
         all_ai = asyncio.run(run_ai_matrix(prompt, len(match_analyses)))
 
     res = []
@@ -326,10 +336,12 @@ def run_predictions(raw, use_ai=True):
             ma["stats"], m
         )
         
+        # 将经验规则和高级进阶模型的输出也无损链入最终字典
         mg = apply_experience_to_prediction(m, mg, exp_engine)
         mg = upgrade_ensemble_predict(m, mg)
         
         res.append({**m, "prediction": mg})
+        print(f"  [{idx}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}%")
 
     t4 = select_top4(res)
     t4ids = [t["id"] for t in t4]
