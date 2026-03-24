@@ -3,7 +3,6 @@ import os
 import sys
 import subprocess
 import traceback
-import asyncio
 from datetime import datetime, timedelta, timezone
 
 # ============================================================
@@ -15,7 +14,6 @@ REQUIRED_PACKAGES = {
     "scipy": "scipy",
     "numpy": "numpy",
     "requests": "requests",
-    "aiohttp": "aiohttp",
 }
 
 def auto_install():
@@ -52,24 +50,18 @@ def get_target_date(offset=0):
 def main():
     beijing_tz = timezone(timedelta(hours=8))
     now_time = datetime.now(beijing_tz)
+        
     session = "morning" if now_time.hour < 15 else "evening"
 
     print("=" * 80)
-    print("⚽ 量化足球投研终端 v6.0（全链路异步高并发 + 自我进化版）")
+    print("⚽ 量化足球投研终端 v5.0（高级模型 + 经验规则引擎已激活）")
     print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
-    print("🔧 核心升级：Sharp资金一票否决 + Token极简压缩 + AI反思日记")
+    print("🔧 核心升级：ProDixonColes + BivariatPoisson + 58条经验规则 + 真实xG")
     print("=" * 80)
 
-    # 1. 运行昨日复盘与自我学习 (生成/更新日记)
-    try:
-        from verify import verify_and_learn
-        verify_and_learn()
-    except Exception as e:
-        print(f"  [WARN] 自我复盘模块遇到问题: {e}")
-
-    # 2. 准备今日预测数据
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, "data")
+    
     os.makedirs(data_dir, exist_ok=True)
     
     target_path = os.path.join(data_dir, "predictions.json")
@@ -77,7 +69,7 @@ def main():
 
     final_output = {
         "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
-        "version": "6.0",
+        "version": "5.0",
         "top4": [], 
         "matches": {
             "yesterday": [],
@@ -90,16 +82,14 @@ def main():
     today_top4_conf_avg = 0.0
 
     try:
-        from fetch_data import async_collect_all
+        from fetch_data import collect_all
         from predict import run_predictions
 
         for day_key, offset in days_map.items():
             target_date = get_target_date(offset)
-            print(f"\n{'='*20} 正在并发抓取并清洗 {day_key} ({target_date}) 的赛事 {'='*20}")
+            print(f"\n{'='*20} 正在抓取并清洗 {day_key} ({target_date}) 的赛事 {'='*20}")
             
-            # 使用 asyncio 驱动异步并发抓取
-            raw_data = asyncio.run(async_collect_all(target_date))
-            
+            raw_data = collect_all(target_date)
             if not raw_data or not raw_data.get("matches"):
                 print(f"  [WARN] {target_date} 暂无比赛数据。")
                 continue
@@ -131,7 +121,7 @@ def main():
             print(f"  ✅ {day_key} 数据已安全落盘（Top4平均置信度: {today_top4_conf_avg}%）")
 
         print(f"\n{'='*80}")
-        print("✅ 全链路执行成功！v6.0 终极融合引擎已完成所有并发任务。")
+        print("✅ 全链路执行成功！v5.0 高级融合引擎已完成所有预测")
         print(f"📁 实时文件: {target_path}")
         print(f"📁 历史备份: {history_path}")
         print(f"{'='*80}")
