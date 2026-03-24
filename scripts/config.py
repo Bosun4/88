@@ -21,7 +21,7 @@ GPT_MODEL = "熊猫-A-7-gpt-5.4"
 # Gemini
 GEMINI_API_URL = os.environ.get("GEMINI_API_URL", "")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL = "熊猫特供S-按量-gemini-3-flash-preview"
+GEMINI_MODEL = "熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"
 
 # Grok
 GROK_API_URL = os.environ.get("GROK_API_URL", "")
@@ -31,5 +31,5 @@ GROK_MODEL = "熊猫-A-6-grok-4.2-thinking"
 # Claude 中控
 CLAUDE_API_URL = os.environ.get("CLAUDE_API_URL", "")
 CLAUDE_API_KEY = os.environ.get("CLAUDE_API_KEY", "")
-CLAUDE_MODEL = "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking"
+CLAUDE_MODEL = "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"
 
