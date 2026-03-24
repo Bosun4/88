@@ -56,7 +56,7 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .res-tag{display:inline-block;font-size:8px;padding:2px 6px;border-radius:99px;font-weight:700;margin-top:2px}
 .res-tag.h{background:#ef444420;color:var(--red)}.res-tag.d{background:#f59e0b20;color:var(--am)}.res-tag.a{background:#3b82f620;color:var(--bl)}
 
-/* 新增：情报分析框 */
+/* 新增：情报分析框 (庄家真实xG) */
 .intel-box{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:8px;margin-bottom:8px;display:flex;justify-content:space-around;align-items:center}
 .intel-item{text-align:center}
 .intel-l{font-size:8px;color:var(--t3);text-transform:uppercase;margin-bottom:2px}
@@ -70,10 +70,13 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .prob-h{display:flex;justify-content:space-between;font-size:9px;font-weight:700;margin-bottom:3px}
 .prob-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--p2)}
 .prob-bar .h{background:var(--red)}.prob-bar .d{background:#64748b}.prob-bar .a{background:var(--bl)}
+
+/* 警报闪烁：用于剪刀差信号 */
 .sig{padding:6px 8px;border-radius:6px;font-size:10px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:4px}
-.sig-r{background:#ef444412;border:1px solid #ef444425;color:var(--red);animation:blink 1.5s infinite} /* 修改：加入红色闪烁动画 */
-@keyframes blink{0%{opacity:1}50%{opacity:0.5}100%{opacity:1}}
+.sig-r{background:#ef444412;border:1px solid #ef444430;color:var(--red);animation:blink 1.5s infinite} 
+@keyframes blink{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
 .sig-a{background:#f59e0b10;border:1px solid #f59e0b20;color:var(--am)}
+
 .ev-row{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
 .ev-t{background:#f59e0b10;color:var(--am);font-size:9px;padding:2px 6px;border-radius:4px;border:1px solid #f59e0b20;font-family:'JetBrains Mono'}
 .exp-btn{width:100%;padding:6px;background:none;border:1px solid var(--bd);border-radius:6px;color:var(--t2);font-size:10px;cursor:pointer;font-weight:600;transition:.2s}
@@ -120,7 +123,7 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .ai3-t.gpt{color:var(--gn)}.ai3-t.grk{color:var(--cy)}.ai3-t.gem{color:var(--bl)}
 .ai3-s{font-size:10px;font-weight:800;color:var(--w);background:var(--p);padding:1px 4px;border-radius:3px;font-family:'JetBrains Mono'}
 .ai3-x{font-size:8px;color:var(--t3);line-height:1.3}
-.st-g{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
+.st-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:6px}
 .st-b{background:var(--bg);border-radius:6px;padding:7px;border:1px solid var(--bd)}
 .st-bt{font-size:9px;font-weight:700;color:var(--t2);margin-bottom:3px}
 .st-r{display:flex;justify-content:space-between;font-size:9px;padding:1px 0;border-bottom:1px solid rgba(26,39,68,.3)}
