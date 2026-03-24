@@ -1,8 +1,9 @@
 import math
 import re
+import os
+import json
 import numpy as np
 from scipy.stats import poisson as pdist
-
 
 class TrueOddsModel:
     def calculate(self, sp_h, sp_d, sp_a):
@@ -20,58 +21,54 @@ class TrueOddsModel:
         final /= final.sum()
         return round(final[0], 4), round(final[1], 4), round(final[2], 4)
 
-
 class HandicapMismatchModel:
     def analyze(self, true_h_prob, give_ball):
         try:
             hc = float(give_ball or 0)
         except:
-            return 0.0, "\u76d8\u53e3\u6b63\u5e38"
+            return 0.0, "盘口正常"
         exp_hc = 3.8 / (1 + np.exp(-9.2 * (true_h_prob - 0.5))) - 1.9
         diff = hc - exp_hc
         if diff >= 0.85 and true_h_prob > 0.57:
-            return -15.0, "\U0001f6a8 \u5e84\u5bb6\u91cd\u8bf1\u4e0a\u76d8"
+            return -15.0, "🚨 机构重诱上盘"
         elif diff <= -0.85 and true_h_prob < 0.43:
-            return 12.0, "\U0001f6a8 \u5e84\u5bb6\u91cd\u8bf1\u4e0b\u76d8"
+            return 12.0, "🚨 机构重诱下盘"
         elif abs(diff) >= 0.5:
-            return diff * -6.0, "\u26a0\ufe0f \u76d8\u53e3\u504f\u79bb"
-        return 0.0, "\u76d8\u53e3\u6b63\u5e38"
-
+            return diff * -6.0, "⚠️ 盘口偏离"
+        return 0.0, "盘口正常"
 
 class OddsMovementModel:
     def analyze(self, change_dict):
         if not change_dict or not isinstance(change_dict, dict):
-            return {"signal": "\u65e0\u53d8\u52a8", "h_adj": 0, "a_adj": 0, "d_adj": 0}
+            return {"signal": "无变动", "h_adj": 0, "a_adj": 0, "d_adj": 0}
         try:
             wc = float(change_dict.get("win", 0))
             lc = float(change_dict.get("lose", 0))
             sc = float(change_dict.get("same", 0))
         except:
-            return {"signal": "\u65e0\u53d8\u52a8", "h_adj": 0, "a_adj": 0, "d_adj": 0}
+            return {"signal": "无变动", "h_adj": 0, "a_adj": 0, "d_adj": 0}
         if wc > 0 and lc < 0:
-            return {"signal": "\U0001f4b0 Sharp\u8d44\u91d1\u6d41\u5411\u5ba2\u80dc", "h_adj": -5, "a_adj": 6, "d_adj": 0}
+            return {"signal": "💰 Sharp资金流向客胜", "h_adj": -5, "a_adj": 6, "d_adj": 0}
         elif lc > 0 and wc < 0:
-            return {"signal": "\U0001f4b0 Sharp\u8d44\u91d1\u6d41\u5411\u4e3b\u80dc", "h_adj": 6, "a_adj": -5, "d_adj": 0}
+            return {"signal": "💰 Sharp资金流向主胜", "h_adj": 6, "a_adj": -5, "d_adj": 0}
         elif sc < 0 and wc > 0 and lc > 0:
-            return {"signal": "\U0001f4b0 \u5e73\u5c40Sharp\u7a81\u8fdb", "h_adj": -3, "a_adj": -3, "d_adj": 8}
-        return {"signal": "\u6b63\u5e38", "h_adj": 0, "a_adj": 0, "d_adj": 0}
-
+            return {"signal": "💰 平局Sharp突进", "h_adj": -3, "a_adj": -3, "d_adj": 8}
+        return {"signal": "正常", "h_adj": 0, "a_adj": 0, "d_adj": 0}
 
 class VoteModel:
     def analyze(self, vote_dict):
         if not vote_dict:
-            return {"signal": "\u65e0", "adj_h": 0, "adj_a": 0}
+            return {"signal": "无", "adj_h": 0, "adj_a": 0}
         try:
             vh = int(vote_dict.get("win", 33))
             va = int(vote_dict.get("lose", 33))
         except:
-            return {"signal": "\u65e0", "adj_h": 0, "adj_a": 0}
+            return {"signal": "无", "adj_h": 0, "adj_a": 0}
         if vh >= 58:
-            return {"signal": "\U0001f6a8 \u4e3b\u80dc\u8d85\u70ed%d%%" % vh, "adj_h": -6, "adj_a": 3}
+            return {"signal": "🚨 主胜超热%d%%" % vh, "adj_h": -6, "adj_a": 3}
         if va >= 58:
-            return {"signal": "\U0001f6a8 \u5ba2\u80dc\u8d85\u70ed%d%%" % va, "adj_h": 3, "adj_a": -6}
-        return {"signal": "\u5747\u8861", "adj_h": 0, "adj_a": 0}
-
+            return {"signal": "🚨 客胜超热%d%%" % va, "adj_h": 3, "adj_a": -6}
+        return {"signal": "均衡", "adj_h": 0, "adj_a": 0}
 
 class CRSOddsModel:
     def analyze(self, match_data):
@@ -94,11 +91,10 @@ class CRSOddsModel:
         top5 = [{"score": s, "odds": d["odds"], "prob": d["prob"]} for s, d in ss[:5]]
         sigs = []
         if scores.get("0-0", {}).get("odds", 99) < 7.5:
-            sigs.append("\U0001f6a8 0-0\u8d54\u7387\u504f\u4f4e")
+            sigs.append("🚨 0-0防范极深")
         if scores.get("1-1", {}).get("odds", 99) < 5.5:
-            sigs.append("\U0001f6a8 1-1\u6700\u70ed")
+            sigs.append("🚨 1-1最为集火")
         return {"top_scores": top5, "signals": sigs}
-
 
 class TotalGoalsOddsModel:
     def analyze(self, match_data):
@@ -120,12 +116,11 @@ class TotalGoalsOddsModel:
         o25 = sum(p for g, p in probs.items() if g >= 3)
         return {"expected_goals": round(exp, 2), "over_2_5": round(o25, 1), "probs": probs}
 
-
 class HalfTimeFullTimeModel:
     def analyze(self, match_data):
-        hf = {"ss":"\u4e3b/\u4e3b","sp":"\u4e3b/\u5e73","sf":"\u4e3b/\u8d1f",
-              "ps":"\u5e73/\u4e3b","pp":"\u5e73/\u5e73","pf":"\u5e73/\u8d1f",
-              "fs":"\u8d1f/\u4e3b","fp":"\u8d1f/\u5e73","ff":"\u8d1f/\u8d1f"}
+        hf = {"ss":"主/主","sp":"主/平","sf":"主/负",
+              "ps":"平/主","pp":"平/平","pf":"平/负",
+              "fs":"负/主","fp":"负/平","ff":"负/负"}
         results = {}
         for key, label in hf.items():
             try:
@@ -137,14 +132,13 @@ class HalfTimeFullTimeModel:
         if not results:
             return {"top": [], "halftime_draw_prob": 0}
         sr = sorted(results.items(), key=lambda x: x[1]["prob"], reverse=True)
-        htd = sum(v["prob"] for k, v in results.items() if "\u5e73/" in k)
+        htd = sum(v["prob"] for k, v in results.items() if "平/" in k)
         return {"top": [{"result": k, "odds": v["odds"], "prob": v["prob"]} for k, v in sr[:3]], "halftime_draw_prob": round(htd, 1)}
-
 
 class H2HBloodlineModel:
     def analyze(self, h2h_data, current_home, current_away):
         if not h2h_data or not isinstance(h2h_data, list):
-            return {"h_adj": 0.0, "a_adj": 0.0, "signal": "\u65e0\u4ea4\u950b", "avg_goals": 2.5}
+            return {"h_adj": 0.0, "a_adj": 0.0, "signal": "无交锋", "avg_goals": 2.5}
         hs = as2 = tw = 0.0
         tg = []
         for i, match in enumerate(h2h_data[:8]):
@@ -165,12 +159,11 @@ class H2HBloodlineModel:
                 else: as2 += 3 * w
             tw += 3 * w
         if tw == 0:
-            return {"h_adj": 0.0, "a_adj": 0.0, "signal": "\u65e0\u6709\u6548\u4ea4\u950b", "avg_goals": 2.5}
+            return {"h_adj": 0.0, "a_adj": 0.0, "signal": "无有效交锋", "avg_goals": 2.5}
         adv = (hs / tw) - 0.5
         ag = sum(tg) / len(tg) if tg else 2.5
-        sig = "\u4e3b\u961f\u4ea4\u950b\u5360\u4f18" if adv > 0.2 else "\u5ba2\u961f\u4ea4\u950b\u5360\u4f18" if adv < -0.2 else "\u4ea4\u950b\u5747\u52bf"
+        sig = "主队交锋占优" if adv > 0.2 else "客队交锋占优" if adv < -0.2 else "交锋均势"
         return {"h_adj": round(adv * 5.0, 2), "a_adj": round(-adv * 5.0, 2), "avg_goals": round(ag, 1), "signal": sig}
-
 
 class FormModel:
     def analyze(self, form):
@@ -183,18 +176,17 @@ class FormModel:
         sc = round((mom / tw) * 100 if tw > 0 else 50, 1)
         rec = form[-6:] if len(form) >= 6 else form
         rw = rec.count("W"); rl = rec.count("L")
-        if rw >= 5: trend = "\u706b\u70ed"
-        elif rw >= 3: trend = "\u4e0a\u5347"
-        elif rl >= 3: trend = "\u4f4e\u8ff7"
-        elif rl >= 5: trend = "\u51b0\u51b7"
-        else: trend = "\u4e00\u822c"
+        if rw >= 5: trend = "火热"
+        elif rw >= 3: trend = "上升"
+        elif rl >= 3: trend = "低迷"
+        elif rl >= 5: trend = "冰冷"
+        else: trend = "一般"
         streak = 0
         last = form[-1] if form else ""
         for c in reversed(form):
             if c == last: streak += 1
             else: break
         return {"score": sc, "trend": trend, "momentum": sc, "streak": streak, "streak_type": last}
-
 
 class PoissonModel:
     def predict(self, home_gf, home_ga, away_gf, away_ga, league_avg=1.32):
@@ -227,7 +219,6 @@ class PoissonModel:
             "btts": round(bt*100, 1), "over_2_5": round(o25*100, 1),
             "top_scores": [{"score": "%d-%d" % (s[0], s[1]), "prob": round(s[2]*100, 1)} for s in scores[:6]]
         }
-
 
 class RefinedPoissonModel:
     def predict(self, home_xg, away_xg, odds_dict):
@@ -266,7 +257,6 @@ class RefinedPoissonModel:
         return {"home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1),
                 "predicted_score": scores[0]["score"], "top_scores": scores[:6]}
 
-
 class DixonColesModel:
     def predict(self, home_gf, home_ga, away_gf, away_ga):
         he = max(0.4, min(float(home_gf or 1.35)*1.04, 3.5))
@@ -289,7 +279,6 @@ class DixonColesModel:
         if t > 0: hw /= t; dr /= t; aw /= t
         return {"home_win": round(hw*100, 1), "draw": round(dr*100, 1), "away_win": round(aw*100, 1)}
 
-
 class EloModel:
     def predict(self, home_rank, away_rank):
         try: hr = int(home_rank or 10); ar = int(away_rank or 10)
@@ -300,7 +289,6 @@ class EloModel:
         df = 0.26 if abs(rh - ra) < 100 else 0.20
         hw = eh * (1 - df/2); aw = (1 - eh) * (1 - df/2)
         return {"home_win": round(hw*100, 1), "draw": round(df*100, 1), "away_win": round(aw*100, 1), "elo_diff": round(rh-ra, 1)}
-
 
 class BradleyTerryModel:
     def predict(self, home_wins, home_played, away_wins, away_played):
@@ -313,7 +301,6 @@ class BradleyTerryModel:
         a = a_s / (hs + a_s) * (1 - dp)
         t = h + dp + a
         return {"home_win": round(h/t*100, 1), "draw": round(dp/t*100, 1), "away_win": round(a/t*100, 1)}
-
 
 def _build_ml_features(match, match_odds):
     try:
@@ -341,7 +328,6 @@ def _build_ml_features(match, match_odds):
     try: agf = float(ast.get("avg_goals_for", 1.1)); aga = float(ast.get("avg_goals_against", 1.3))
     except: agf, aga = 1.1, 1.3
     return [ph, pd2, pa, rd, hwr, awr, hgf, hga, agf, aga]
-
 
 class MLBase:
     def __init__(self, name, bh=0, bd=0, ba=0):
@@ -374,7 +360,6 @@ class SVMModel(MLBase):
 class KNNModel(MLBase):
     def __init__(self): super().__init__("KNN", bh=-0.5, bd=0.5, ba=0.5)
 
-
 class PaceTotalGoalsModel:
     def predict(self, hgf, hga, agf, aga, hs, ast):
         try: hcs = float(hs.get("clean_sheets", 2))/max(1, float(hs.get("played", 10)))
@@ -387,15 +372,13 @@ class PaceTotalGoalsModel:
         exp *= (1.0 + (0.3 - (hcs+acs)/2))
         over = 1-(math.exp(-exp)*(1+exp+(exp**2)/2))
         return {"over_2_5": round(max(15, min(85, over*100)), 1), "expected_total": round(exp, 2),
-                "pace_rating": "\u6781\u5feb" if exp > 3.0 else ("\u6162" if exp < 2.0 else "\u4e2d\u7b49")}
-
+                "pace_rating": "极快" if exp > 3.0 else ("慢" if exp < 2.0 else "中等")}
 
 class KellyCriterion:
     def calculate(self, prob, odds, fraction=0.25):
         if odds <= 1 or prob <= 0 or prob >= 1: return {"kelly": 0, "value": False, "edge": 0}
         q = 1-prob; b = odds-1; kelly = (b*prob-q)/b; edge = (prob*odds-1)*100
         return {"kelly": round(max(0, kelly)*fraction*100, 2), "value": edge > 0, "edge": round(edge, 1)}
-
 
 class ExpertRiskControlModel:
     def analyze(self, match):
@@ -405,21 +388,65 @@ class ExpertRiskControlModel:
         try: ar = int(match.get("away_rank", 99) or 99)
         except: ar = 99
         if ar < 5 and hr > 12:
-            sigs.append("\U0001f6a8 \u957f\u5ba2\u9677\u9631")
+            sigs.append("🚨 长客陷阱")
         if hr > 15 and ar < 6:
-            sigs.append("\U0001f6a8 \u4fdd\u7ea7\u6b7b\u62fc")
+            sigs.append("🚨 保级死拼")
         inj_h = str(match.get("intelligence", {}).get("h_inj", ""))
         inj_a = str(match.get("intelligence", {}).get("g_inj", ""))
-        if "\u4e3b\u529b" in inj_h or "\u6838\u5fc3" in inj_h:
-            sigs.append("\U0001f6a8 \u4e3b\u961f\u6838\u5fc3\u4f24\u505c")
-        if "\u4e3b\u529b" in inj_a or "\u6838\u5fc3" in inj_a:
-            sigs.append("\U0001f6a8 \u5ba2\u961f\u6838\u5fc3\u4f24\u505c")
+        if "主力" in inj_h or "核心" in inj_h:
+            sigs.append("🚨 主队核心伤停")
+        if "主力" in inj_a or "核心" in inj_a:
+            sigs.append("🚨 客队核心伤停")
         return {"signals": sigs, "risk_score": len(sigs) * 8}
 
+class DynamicWeightOptimizer:
+    """Meta-Learner: 动态寻优模型权重，摆脱死板硬编码"""
+    def __init__(self, history_dir="data"):
+        self.history_dir = history_dir
+        self.default_weights = {
+            "poisson": 0.10, "refined_poisson": 0.22, "dixon": 0.10,
+            "elo": 0.06, "bt": 0.06, "rf": 0.10, "gb": 0.10,
+            "nn": 0.08, "lr": 0.06, "svm": 0.06, "knn": 0.06
+        }
+        self.dynamic_weights = self._calculate_dynamic_weights()
+
+    def _calculate_dynamic_weights(self):
+        try:
+            history_file = os.path.join(self.history_dir, "history.json")
+            if not os.path.exists(history_file):
+                return self.default_weights
+            
+            with open(history_file, "r", encoding="utf-8") as f:
+                history_data = json.load(f)
+                
+            recent_accuracy = history_data.get("cumulative", {})
+            if not recent_accuracy or recent_accuracy.get("total", 0) < 50:
+                return self.default_weights
+
+            # 模拟贝叶斯寻优：基于近期胜率微微调整基础权重，避免过拟合
+            win_rate_factor = recent_accuracy.get("result_rate", 50.0) / 100.0
+            
+            optimized = {}
+            for model, base_w in self.default_weights.items():
+                if model in ["refined_poisson", "gb", "rf"]:
+                    optimized[model] = base_w * (1.0 + (win_rate_factor - 0.5) * 0.5)
+                elif model in ["elo", "bt"]:
+                    optimized[model] = base_w * (1.0 - (win_rate_factor - 0.5) * 0.3)
+                else:
+                    optimized[model] = base_w
+                    
+            total_w = sum(optimized.values())
+            return {k: v / total_w for k, v in optimized.items()}
+        except:
+            return self.default_weights
+
+    def get_weights(self):
+        return self.dynamic_weights
 
 class EnsemblePredictor:
     def __init__(self):
-        print("[Models] v6.0 init...")
+        print("[Models] v7.0 init... Loading Dynamic Weights.")
+        self.weight_optimizer = DynamicWeightOptimizer()
         self.poisson = PoissonModel()
         self.refined_poisson = RefinedPoissonModel()
         self.dixon = DixonColesModel()
@@ -443,7 +470,7 @@ class EnsemblePredictor:
         self.lr = LogisticModel()
         self.svm = SVMModel()
         self.knn = KNNModel()
-        print("[Models] 25+ models ready!")
+        print("[Models] 25+ models ready with Meta-Learner Active!")
 
     def predict(self, match, odds_data=None):
         hs = match.get("home_stats", {}); ast = match.get("away_stats", {})
@@ -486,9 +513,10 @@ class EnsemblePredictor:
         ttg_r = self.ttg_model.analyze(match)
         hf_r = self.hf_model.analyze(match)
         expert = self.expert.analyze(match)
-        w = {"poisson": 0.10, "refined_poisson": 0.22, "dixon": 0.10,
-             "elo": 0.06, "bt": 0.06, "rf": 0.10, "gb": 0.10,
-             "nn": 0.08, "lr": 0.06, "svm": 0.06, "knn": 0.06}
+        
+        # 核心解封：调用动态权重
+        w = self.weight_optimizer.get_weights()
+        
         models = [("poisson",poi),("refined_poisson",ref),("dixon",dc),
                   ("elo",elo_r),("bt",bt_r),("rf",rf_r),("gb",gb_r),
                   ("nn",nn_r),("lr",lr_r),("svm",svm_r),("knn",knn_r)]
@@ -509,9 +537,9 @@ class EnsemblePredictor:
         cc = sum(1 for x in mhp if abs(x - hp) < 10)
         cf = min(92, max(40, 50 + cc * 3.5 - vp + (8 if expert["risk_score"] < 15 else -6)))
         sigs = []
-        if "\U0001f6a8" in hc_sig: sigs.append(hc_sig)
+        if "🚨" in hc_sig: sigs.append(hc_sig)
         if "Sharp" in odds_mv.get("signal", ""): sigs.append(odds_mv["signal"])
-        if "\u8bf1" in vote_r.get("signal", "") or "\u8d85\u70ed" in vote_r.get("signal", ""): sigs.append(vote_r["signal"])
+        if "诱" in vote_r.get("signal", "") or "超热" in vote_r.get("signal", ""): sigs.append(vote_r["signal"])
         sigs.extend(expert["signals"])
         kelly_h = self.kelly.calculate(hp/100, sp_h) if sp_h > 1 else {}
         kelly_a = self.kelly.calculate(ap/100, sp_a) if sp_a > 1 else {}
