@@ -1,144 +1,140 @@
-import json,os,requests,time
-from datetime import datetime,timedelta
+import json
+import os
+import requests
+import time
+import re
+from datetime import datetime, timedelta
 from config import *
 
 def get_yesterday():
     from zoneinfo import ZoneInfo
-    return (datetime.now(ZoneInfo(TIMEZONE))-timedelta(days=1)).strftime("%Y-%m-%d")
+    return (datetime.now(ZoneInfo(TIMEZONE)) - timedelta(days=1)).strftime("%Y-%m-%d")
 
-def fetch_actual_results(date):
-    """从API获取昨日实际比分"""
-    h={"x-apisports-key":API_FOOTBALL_KEY}
-    results={}
-    try:
-        r=requests.get(API_FOOTBALL_BASE+"/fixtures",headers=h,params={"date":date},timeout=15)
-        d=r.json()
-        if d.get("response"):
-            for m in d["response"]:
-                if m["fixture"]["status"]["short"] in ["FT","AET","PEN"]:
-                    key=m["teams"]["home"]["name"]+"_"+m["teams"]["away"]["name"]
-                    results[key]={"home_goals":m["goals"]["home"],"away_goals":m["goals"]["away"],"status":"FT"}
-    except Exception as e:
-        print("Fetch results error:%s"%e)
+def fetch_actual_results(target_date):
+    h = {"x-apisports-key": API_FOOTBALL_KEY}
+    results = {}
+    d = datetime.strptime(target_date, "%Y-%m-%d")
+    dates_to_fetch = [
+        target_date,
+        (d + timedelta(days=1)).strftime("%Y-%m-%d")
+    ]
+    
+    for date_str in dates_to_fetch:
+        try:
+            r = requests.get(API_FOOTBALL_BASE + "/fixtures", headers=h, params={"date": date_str}, timeout=15)
+            data = r.json()
+            if data.get("response"):
+                for m in data["response"]:
+                    if m["fixture"]["status"]["short"] in ["FT", "AET", "PEN"]:
+                        hid = str(m["teams"]["home"]["id"])
+                        aid = str(m["teams"]["away"]["id"])
+                        h_name = m["teams"]["home"]["name"].lower()
+                        a_name = m["teams"]["away"]["name"].lower()
+                        
+                        res_data = {
+                            "home_goals": m["goals"]["home"], 
+                            "away_goals": m["goals"]["away"], 
+                            "status": "FT"
+                        }
+                        results[f"{hid}_{aid}"] = res_data
+                        results[f"{h_name}_vs_{a_name}"] = res_data
+        except Exception as e:
+            pass
     return results
 
-def verify_predictions(pred_file,date):
-    """对比预测vs实际"""
+def verify_and_learn():
+    yesterday = get_yesterday()
+    print(f"\n🧠 [AI 自我复盘引擎] 启动... 对账日期: {yesterday}")
+    
+    pred_file = f"data/history_{yesterday.replace('-','')}_evening.json" 
     if not os.path.exists(pred_file):
-        print("No prediction file for %s"%date)
-        return None
-    with open(pred_file,"r",encoding="utf-8") as f:
-        data=json.load(f)
-    actual=fetch_actual_results(date)
-    print("Found %d actual results"%len(actual))
-    verified=[]
-    total=0;correct_result=0;correct_score=0;correct_ou=0
-    for match in data.get("results",[]):
-        home=match["home_team"];away=match["away_team"]
-        pred=match.get("prediction",{})
-        # 尝试匹配
-        found=None
-        for key,res in actual.items():
-            if home.lower() in key.lower() or away.lower() in key.lower():
-                found=res;break
-        if not found:continue
-        total+=1
-        hg=found["home_goals"];ag=found["away_goals"]
-        actual_result="主胜" if hg>ag else("平局" if hg==ag else "客胜")
-        actual_score="%d-%d"%(hg,ag)
-        actual_ou="大" if hg+ag>2 else "小"
-        actual_btts="是" if hg>0 and ag>0 else "否"
-        pred_correct=pred.get("result","")==actual_result
-        score_correct=pred.get("predicted_score","")==actual_score
-        ou_correct=pred.get("over_under_2_5","")==actual_ou
-        if pred_correct:correct_result+=1
-        if score_correct:correct_score+=1
-        if ou_correct:correct_ou+=1
-        verified.append({
-            "home_team":home,"away_team":away,"league":match.get("league",""),
-            "predicted_result":pred.get("result","?"),
-            "actual_result":actual_result,
-            "predicted_score":pred.get("predicted_score","?"),
-            "actual_score":actual_score,
-            "confidence":pred.get("confidence",0),
-            "result_correct":pred_correct,
-            "score_correct":score_correct,
-            "ou_correct":ou_correct,
-            "was_recommended":match.get("is_recommended",False),
-            "model_consensus":pred.get("model_consensus",0),
-        })
-    stats={
-        "date":date,
-        "total_verified":total,
-        "result_correct":correct_result,
-        "score_correct":correct_score,
-        "ou_correct":correct_ou,
-        "result_rate":round(correct_result/total*100,1) if total else 0,
-        "score_rate":round(correct_score/total*100,1) if total else 0,
-        "ou_rate":round(correct_ou/total*100,1) if total else 0,
-        "matches":verified,
-    }
-    # 推荐场次单独统计
-    rec=[v for v in verified if v["was_recommended"]]
-    rec_correct=sum(1 for v in rec if v["result_correct"])
-    stats["recommended_total"]=len(rec)
-    stats["recommended_correct"]=rec_correct
-    stats["recommended_rate"]=round(rec_correct/len(rec)*100,1) if rec else 0
-    # 高置信度统计
-    high=[v for v in verified if v["confidence"]>=65]
-    high_correct=sum(1 for v in high if v["result_correct"])
-    stats["high_conf_total"]=len(high)
-    stats["high_conf_correct"]=high_correct
-    stats["high_conf_rate"]=round(high_correct/len(high)*100,1) if high else 0
-    return stats
-
-def load_history():
-    """加载历史记录"""
-    hfile="data/history.json"
-    if os.path.exists(hfile):
-        with open(hfile,"r",encoding="utf-8") as f:
-            return json.load(f)
-    return{"days":[],"cumulative":{"total":0,"result_correct":0,"score_correct":0,"ou_correct":0,"rec_total":0,"rec_correct":0}}
-
-def save_history(history):
-    with open("data/history.json","w",encoding="utf-8") as f:
-        json.dump(history,f,ensure_ascii=False,indent=2)
-
-def run_verify():
-    yesterday=get_yesterday()
-    print("Verifying %s..."%yesterday)
-    pred_file="data/predictions_%s.json"%yesterday
+        pred_file = "data/predictions.json"
+        
     if not os.path.exists(pred_file):
-        pred_file="data/predictions.json"
-    stats=verify_predictions(pred_file,yesterday)
-    if not stats or stats["total_verified"]==0:
-        print("No matches to verify")
+        print("  ⚠️ 无预测记录，跳过对账。")
         return
-    # 保存当日验证
-    os.makedirs("data",exist_ok=True)
-    with open("data/verify_%s.json"%yesterday,"w",encoding="utf-8") as f:
-        json.dump(stats,f,ensure_ascii=False,indent=2)
-    # 更新累计历史
-    history=load_history()
-    # 检查是否已验证过
-    if any(d.get("date")==yesterday for d in history["days"]):
-        print("Already verified %s"%yesterday)
+        
+    with open(pred_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        
+    matches = data.get("matches", {}).get("today", data.get("results", []))
+    if not matches:
+        print("  ⚠️ 预测记录中无赛事数据。")
         return
-    day_summary={"date":yesterday,"total":stats["total_verified"],"result_correct":stats["result_correct"],"result_rate":stats["result_rate"],"score_correct":stats["score_correct"],"ou_correct":stats["ou_correct"],"rec_total":stats["recommended_total"],"rec_correct":stats["recommended_correct"],"rec_rate":stats["recommended_rate"]}
-    history["days"].append(day_summary)
-    history["days"]=history["days"][-30:]
-    c=history["cumulative"]
-    c["total"]+=stats["total_verified"]
-    c["result_correct"]+=stats["result_correct"]
-    c["score_correct"]+=stats["score_correct"]
-    c["ou_correct"]+=stats["ou_correct"]
-    c["rec_total"]+=stats["recommended_total"]
-    c["rec_correct"]+=stats["recommended_correct"]
-    c["result_rate"]=round(c["result_correct"]/c["total"]*100,1) if c["total"] else 0
-    c["score_rate"]=round(c["score_correct"]/c["total"]*100,1) if c["total"] else 0
-    c["rec_rate"]=round(c["rec_correct"]/c["rec_total"]*100,1) if c["rec_total"] else 0
-    save_history(history)
-    print("Verified! Result rate:%.1f%% (%d/%d) Rec rate:%.1f%%"%(stats["result_rate"],stats["result_correct"],stats["total_verified"],stats["recommended_rate"]))
 
-if __name__=="__main__":
-    run_verify()
+    actual = fetch_actual_results(yesterday)
+    review_log = []
+    correct, total = 0, 0
+    verified = []
+
+    for match in matches:
+        hid = str(match.get("home_id", ""))
+        aid = str(match.get("away_id", ""))
+        home = match["home_team"].lower()
+        away = match["away_team"].lower()
+        pred = match.get("prediction", {})
+        
+        found = actual.get(f"{hid}_{aid}")
+        if not found:
+            for key, res in actual.items():
+                if home in key and away in key:
+                    found = res
+                    break
+                    
+        if found:
+            total += 1
+            hg, ag = found["home_goals"], found["away_goals"]
+            actual_res = "主胜" if hg > ag else ("平局" if hg == ag else "客胜")
+            is_correct = pred.get("result", "") == actual_res
+            if is_correct: correct += 1
+            
+            verified.append({
+                "match": f"{match['home_team']} vs {match['away_team']}",
+                "result_correct": is_correct,
+                "was_recommended": match.get("is_recommended", False)
+            })
+            
+            review_log.append({
+                "match": f"{match['home_team']} vs {match['away_team']}",
+                "pred": f"{pred.get('result', '')} ({pred.get('predicted_score', '')})",
+                "actual": f"{actual_res} ({hg}-{ag})",
+                "correct": is_correct
+            })
+
+    if total == 0:
+        print("  ⏳ 比赛尚未全部结束或获取不到结果。")
+        return
+
+    win_rate = (correct / total) * 100
+    
+    rec_matches = [v for v in verified if v["was_recommended"]]
+    rec_correct = sum(1 for v in rec_matches if v["result_correct"])
+    rec_win_rate = (rec_correct / len(rec_matches) * 100) if rec_matches else 0
+    
+    print(f"  🎯 昨日总体胜率: {win_rate:.1f}% ({correct}/{total})")
+    print(f"  🔥 核心推荐胜率: {rec_win_rate:.1f}% ({rec_correct}/{len(rec_matches)})")
+
+    prompt = f"你是量化足球AI。昨日总体胜率 {win_rate:.1f}%，精选推荐胜率 {rec_win_rate:.1f}%。复盘记录：{json.dumps(review_log, ensure_ascii=False)}。请深度反思预测失败的比赛，输出一段精炼的调参建议。严格返回纯JSON: {{\"reflection\": \"反思与今日策略(80字以内)\", \"risk_adjustment\": \"稳健/防冷/激进\"}}"
+    
+    try:
+        h = {"Authorization": f"Bearer {GPT_API_KEY}", "Content-Type": "application/json"}
+        payload = {"model": "gpt-5.4", "messages": [{"role": "user", "content": prompt}], "temperature": 0.5}
+        r = requests.post(GPT_API_URL, headers=h, json=payload, timeout=20)
+        
+        clean = re.sub(r"```\w*", "", r.json()["choices"][0]["message"]["content"]).strip()
+        start = clean.find("{")
+        end = clean.rfind("}") + 1
+        diary_data = json.loads(clean[start:end])
+        diary_data["yesterday_win_rate"] = f"{win_rate:.1f}%"
+        diary_data["yesterday_rec_win_rate"] = f"{rec_win_rate:.1f}%"
+        diary_data["update_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        os.makedirs("data", exist_ok=True)
+        with open("data/ai_diary.json", "w", encoding="utf-8") as f:
+            json.dump(diary_data, f, ensure_ascii=False, indent=2)
+        print(f"  ✅ 自我进化完成! 今日AI策略: {diary_data['reflection']}")
+    except Exception as e:
+        print(f"  ❌ AI反思请求失败: {e}")
+
+if __name__ == "__main__":
+    verify_and_learn()
