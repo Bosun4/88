@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿足球预测系统Pro v5.1 - 满血版</title>
+<title>小鱼儿足球预测系统Pro v5.1</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -56,11 +56,11 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .res-tag{display:inline-block;font-size:8px;padding:2px 6px;border-radius:99px;font-weight:700;margin-top:2px}
 .res-tag.h{background:#ef444420;color:var(--red)}.res-tag.d{background:#f59e0b20;color:var(--am)}.res-tag.a{background:#3b82f620;color:var(--bl)}
 
-/* 核心情报窗 */
-.intel-box{background:var(--p2);border:1px solid var(--bd);border-radius:8px;padding:8px;margin-bottom:10px;display:flex;justify-content:space-around;align-items:center}
+/* 新增：情报分析框 */
+.intel-box{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:8px;margin-bottom:8px;display:flex;justify-content:space-around;align-items:center}
 .intel-item{text-align:center}
-.intel-l{font-size:7px;color:var(--t3);text-transform:uppercase}
-.intel-v{font-family:'JetBrains Mono';font-size:11px;font-weight:800;color:var(--w)}
+.intel-l{font-size:8px;color:var(--t3);text-transform:uppercase;margin-bottom:2px}
+.intel-v{font-family:'JetBrains Mono';font-size:12px;font-weight:700;color:var(--am)}
 .intel-sep{width:1px;height:20px;background:var(--bd)}
 
 .g-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:8px}
@@ -70,13 +70,10 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .prob-h{display:flex;justify-content:space-between;font-size:9px;font-weight:700;margin-bottom:3px}
 .prob-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--p2)}
 .prob-bar .h{background:var(--red)}.prob-bar .d{background:#64748b}.prob-bar .a{background:var(--bl)}
-
-/* 警报闪烁 */
 .sig{padding:6px 8px;border-radius:6px;font-size:10px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:4px}
-.sig-r{background:#ef444412;border:1px solid #ef444440;color:var(--red);animation:blink 1.5s infinite}
-@keyframes blink{0%{opacity:1}50%{opacity:0.6}100%{opacity:1}}
+.sig-r{background:#ef444412;border:1px solid #ef444425;color:var(--red);animation:blink 1.5s infinite} /* 修改：加入红色闪烁动画 */
+@keyframes blink{0%{opacity:1}50%{opacity:0.5}100%{opacity:1}}
 .sig-a{background:#f59e0b10;border:1px solid #f59e0b20;color:var(--am)}
-
 .ev-row{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
 .ev-t{background:#f59e0b10;color:var(--am);font-size:9px;padding:2px 6px;border-radius:4px;border:1px solid #f59e0b20;font-family:'JetBrains Mono'}
 .exp-btn{width:100%;padding:6px;background:none;border:1px solid var(--bd);border-radius:6px;color:var(--t2);font-size:10px;cursor:pointer;font-weight:600;transition:.2s}
@@ -144,13 +141,14 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 <div class="hdr"><div class="hdr-in"><div class="logo"><div class="logo-i">5.1</div><div class="logo-t">竞彩量化 <span>Pro</span></div></div><div class="live"><div class="live-dot"></div><span id="ut" class="mono">...</span></div></div></div>
 <div class="wrap">
 <div class="dash" id="db"></div>
-<div class="sec">🎯 TOP4 <span class="badge">全量精选</span></div>
+<div class="sec">🎯 TOP4 <span class="badge">精选</span></div>
 <div class="t4g" id="t4"></div>
 <div class="tabs"><button class="tab" onclick="sw('yesterday')">昨日</button><button class="tab ac" onclick="sw('today')">今日</button><button class="tab" onclick="sw('tomorrow')">明日</button></div>
 <div id="ms"></div>
-<div class="foot">BivariatePoisson · Newton-Raphson Solver · Scissors Gap Detect · Dixon-Coles · ELO · Ensemble Learning <br>GPT-4o · Grok-3 · Gemini 1.5 Pro · Claude 3.5 Sonnet Control Layer | v5.1 Full Build</div>
+<div class="foot">Poisson · Newton-Raphson Solver · Scissors Gap · BivariatePoisson · ELO · RF · GB · NN · SVM · KNN<br>GPT · Grok · Gemini · Claude中控 · 经验规则 · 亚盘概率 | v5.1</div>
 </div>
 <script>
 var D=null,CT='today';
 function cl(t){return t?String(t).replace(/
+
 
