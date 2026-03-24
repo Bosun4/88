@@ -4,6 +4,7 @@ from models import EnsemblePredictor
 from odds_engine import predict_match, build_ai_context
 from league_intel import build_league_intelligence
 from experience_rules import ExperienceEngine, apply_experience_to_prediction
+from advanced_models import upgrade_ensemble_predict
 
 ensemble = EnsemblePredictor()
 exp_engine = ExperienceEngine()
@@ -444,6 +445,9 @@ def run_predictions(raw, use_ai=True):
 
         # === 经验规则融合（核心新增） ===
         mg = apply_experience_to_prediction(m, mg, exp_engine)
+
+        # === 高级模型融合（BVP + 专业去水 + 亚盘概率） ===
+        mg = upgrade_ensemble_predict(m, mg)
 
         h, a = m.get("home_team", "?"), m.get("away_team", "?")
         exp_info = mg.get("experience_analysis", {})
