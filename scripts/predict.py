@@ -52,7 +52,8 @@ def build_batch_prompt(match_analyses):
         p += f"\n[SYSTEM DIRECTIVE] Prev Win Rate: {diary.get('yesterday_win_rate', 'N/A')}. \n"
         p += f"EVOLUTION LOG: {diary['reflection']}. APPLY {diary.get('risk_adjustment', 'STRICT')} RISK FILTER.\n\n"
         
-    p += "[TASK] Output ONLY raw JSON array. NO markdown, NO text. Base logic on Implied Probabilities and xG.\n\n"
+    # 核心修复 1：强制要求使用专业中文，并限制字数防止废话
+    p += "[TASK] Output ONLY raw JSON array. NO markdown. The 'reason' field MUST BE in professional Chinese (中文) and strictly under 40 words.\n\n"
     
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
@@ -76,11 +77,12 @@ def build_batch_prompt(match_analyses):
 
     p += "[OUTPUT STRUCTURE]\n"
     p += f"Produce EXACTLY {len(match_analyses)} JSON objects in this format:\n"
-    p += '[\n  {"match": 1, "score": "2-1", "reason": "xG delta indicates strong home dominance"}\n]\n'
+    # 核心修复 2：用中文示例引导大模型
+    p += '[\n  {"match": 1, "score": "2-1", "reason": "庄家真实xG支持主队，且防冷平规则触发，看好主胜穿盘。"}\n]\n'
     return p
 
 # ====================================================================
-# 终极高可用 AI 矩阵轮询 + 异步并发引擎 (严禁删减特供模型)
+# 终极高可用 AI 矩阵轮询 + 异步并发引擎
 # ====================================================================
 
 FALLBACK_URLS = [
@@ -101,7 +103,7 @@ def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
 
 async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
-    """异步单路 AI 轮询：遍历模型池和备用URL，直到成功解析为止"""
+    """异步单路 AI 轮询"""
     key = get_clean_env_key(key_env)
     primary_url = get_clean_env_url(url_env)
     if not key: 
@@ -145,7 +147,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         else: 
                             raw_text = data["choices"][0]["message"]["content"].strip()
                             
-                        # 解析 JSON
                         clean = re.sub(r"```\w*", "", raw_text).strip()
                         start, end = clean.find("["), clean.rfind("]")
                         results = {}
@@ -155,13 +156,14 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 if isinstance(arr, list):
                                     for item in arr:
                                         if item.get("match") and item.get("score"):
+                                            # 核心修复 3：解除 [:100] 的暴力截断，保留 AI 完整的句子
+                                            analysis_text = str(item.get("reason", "")).strip()
                                             results[item["match"]] = {
                                                 "ai_score": item["score"], 
-                                                "analysis": str(item.get("reason", ""))[:100]
+                                                "analysis": analysis_text
                                             }
                             except: pass
                             
-                        # 如果解析成功的比赛场次 >= 40%，视为该模型调用成功，直接熔断返回！
                         if len(results) >= max(1, num_matches * 0.4):
                             print(f"    ✅ {ai_name.upper()} 成功: {len(results)}/{num_matches} 已解析 (模型: {mn[:20]})")
                             return ai_name, results, mn
@@ -170,14 +172,12 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
             except Exception as e:
                 print(f"    ⚠️ 超时或异常 ({str(e)[:30]}) - 切换线路...")
             
-            # 被拦截或失败，短暂休眠后重试下一个 URL/模型
             await asyncio.sleep(0.3)
             
     print(f"    ❌ {ai_name.upper()} 所有备用模型与线路均已失效！")
     return ai_name, {}, "failed"
 
 async def run_ai_matrix(prompt, num_matches):
-    """绝对满血：四大 AI 矩阵异步并发 + 全量特供模型降级轮询"""
     ai_configs = [
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
             "熊猫-A-7-gpt-5.4",
@@ -306,7 +306,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         cl_sc = engine_score
         cl_an = engine_result.get("reason", "odds engine")
 
-    # 毫无删减，全量字段满血输出！
     return {
         "predicted_score": final_score,
         "home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap,
@@ -448,3 +447,5 @@ def run_predictions(raw, use_ai=True):
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
 
     return res, t4
+
+
