@@ -6,7 +6,10 @@ import aiohttp
 from datetime import datetime, timedelta, timezone
 from config import *
 
-# 极限球队映射字典
+# ==========================================
+# 🚨 强制更新补丁 vMAX 2026-03-25 (破除Git缓存)
+# ==========================================
+
 TEAM_NAME_MAPPING = {
     "西汉姆联": "West Ham", "布伦特": "Brentford", "阿森纳": "Arsenal",
     "曼城": "Manchester City", "利物浦": "Liverpool", "曼联": "Manchester United",
