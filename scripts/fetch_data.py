@@ -1,151 +1,170 @@
-import json
 import os
-import sys
-import subprocess
-import traceback
+import re
+import json
 import asyncio
+import aiohttp
 from datetime import datetime, timedelta, timezone
+from config import *
 
-# ============================================================
-#  自动安装依赖
-# ============================================================
-REQUIRED_PACKAGES = [
-    "penaltyblog",
-    "soccerdata",
-    "aiohttp",
-    "Requests>=2.32.0",
-    "beautifulsoup4>=4.12.0",
-    "lxml>=5.0.0",
-    "numpy>=1.26.0",
-    "scikit-learn>=1.4.0",
-    "pandas>=2.2.0",
-    "scipy>=1.12.0",
-    "deep-translator>=1.11.4"
-]
+# 极限球队映射字典
+TEAM_NAME_MAPPING = {
+    "西汉姆联": "West Ham", "布伦特": "Brentford", "阿森纳": "Arsenal",
+    "曼城": "Manchester City", "利物浦": "Liverpool", "曼联": "Manchester United",
+    "切尔西": "Chelsea", "热刺": "Tottenham", "拉齐奥": "Lazio",
+    "萨索洛": "Sassuolo", "皇马": "Real Madrid", "巴萨": "Barcelona",
+    "马竞": "Atletico Madrid", "拜仁": "Bayern Munich", "亚特兰大": "Atalanta",
+    "国际米兰": "Inter Milan", "AC米兰": "AC Milan", "尤文图斯": "Juventus",
+    "唐卡斯特": "Doncaster", "维尔港": "Port Vale", "埃门": "Emmen", "坎布尔": "Cambuur"
+}
 
-def auto_install():
-    missing = []
+def translate_team_name(name):
+    if not name: return ""
+    name = str(name).strip()
+    if name in TEAM_NAME_MAPPING: return TEAM_NAME_MAPPING[name]
     try:
-        import pkg_resources
-        for pkg in REQUIRED_PACKAGES:
-            try:
-                pkg_resources.require(pkg)
-            except (pkg_resources.DistributionNotFound, pkg_resources.VersionConflict):
-                missing.append(pkg)
-    except ImportError:
-        missing = REQUIRED_PACKAGES
+        from deep_translator import GoogleTranslator
+        clean = name.replace("女足", " Women").replace("联", " United")
+        return GoogleTranslator(source='zh-CN', target='en').translate(clean).replace("FC", "").strip()
+    except: return name
 
-    if missing:
-        print("📦 正在同步并升级核心量化依赖 (严格校验版本):")
-        print("   " + ", ".join(missing))
-        try:
-            subprocess.check_call([
-                sys.executable, "-m", "pip", "install", *missing,
-                "--break-system-packages", "-q"
-            ])
-            print("  ✅ 所有依赖环境已同步至最新/指定版本")
-        except subprocess.CalledProcessError:
-            print("  ⚠️ 部分依赖安装或升级失败，系统将尝试降级运行")
-        print()
+def _safe_dict(val): return val if isinstance(val, dict) else {}
+def _get_float(val, default=0.0):
+    try: return float(val) if val is not None else default
+    except: return default
 
-auto_install()
-
-# ============================================================
-#  正常逻辑启动
-# ============================================================
-
-def get_target_date(offset=0):
-    beijing_tz = timezone(timedelta(hours=8))
-    now = datetime.now(beijing_tz) - timedelta(hours=11)
-    return (now + timedelta(days=offset)).strftime("%Y-%m-%d")
-
-def main():
-    beijing_tz = timezone(timedelta(hours=8))
-    now_time = datetime.now(beijing_tz)
-    session = "morning" if now_time.hour < 15 else "evening"
-
-    print("=" * 80)
-    print("⚽ 量化足球投研终端 vMAX 终极版（动态寻优 + 庄家底牌穿透）")
-    print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
-    print("🔧 核心升级：强力兜底落盘防崩溃机制 + 顶级反爬虫伪装")
-    print("=" * 80)
-
-    try:
-        import verify
-        verify.verify_and_learn()
-    except Exception as e:
-        print(f"  [WARN] 自学习模块跳过或未找到数据: {e}")
-
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(base_dir, "data")
-    os.makedirs(data_dir, exist_ok=True)
+async def scrape_wencai_jczq_async(session, date_str):
+    """加入顶级伪装，防止 API 拦截海外 GitHub 服务器请求"""
+    url = f"https://edu.wencaivip.cn/api/v1.reference/matches?date={date_str}"
+    football_matches = []
     
-    target_path = os.path.join(data_dir, "predictions.json")
-    history_path = os.path.join(data_dir, f"history_{now_time.strftime('%Y%m%d')}_{session}.json")
-
-    final_output = {
-        "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
-        "version": "MAX-v1.1",
-        "top4": [], 
-        "matches": {
-            "yesterday": [],
-            "today": [],
-            "tomorrow": []
-        }
+    # 核心修复点：全面伪装成普通浏览器
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+        "Origin": "https://edu.wencaivip.cn",
+        "Referer": "https://edu.wencaivip.cn/"
     }
-
-    # 【终极修复点】：强制兜底落盘！
-    # 无论今天有没有抓到数据，先写一个带格式的空骨架文件进去。
-    # 这样 GitHub Actions 的 cp 命令就绝对不会报 "No such file" 的错误！
-    with open(target_path, "w", encoding="utf-8") as f:
-        json.dump(final_output, f, ensure_ascii=False, indent=2)
-
-    days_map = {"yesterday": -1, "today": 0, "tomorrow": 1}
-
+    
     try:
-        from fetch_data import async_collect_all
-        from predict import run_predictions
-
-        for day_key, offset in days_map.items():
-            target_date = get_target_date(offset)
-            print(f"\n{'='*20} 正在并发抓取并清洗 {day_key} ({target_date}) {'='*20}")
-            
-            raw_data = asyncio.run(async_collect_all(target_date))
-            
-            if not raw_data or not raw_data.get("matches"):
-                print(f"  [SKIP] {target_date} 暂无比赛数据，跳过 AI 推理。")
-                continue
-
-            use_ai = (day_key in ["today", "tomorrow"])
-            results, top4 = run_predictions(raw_data, use_ai=use_ai)
-            
-            final_output["matches"][day_key] = json.loads(json.dumps(results, ensure_ascii=False, default=str))
-            
-            if day_key == "today" and top4:
-                final_output["top4"] = [
-                    {"rank": i + 1, **t, "fusion_summary": "vMAX-Dynamic-Hybrid"}
-                    for i, t in enumerate(json.loads(json.dumps(top4, ensure_ascii=False, default=str)))
-                ]
-
-            # 抓到数据后，覆盖骨架文件
-            with open(target_path, "w", encoding="utf-8") as f:
-                json.dump(final_output, f, ensure_ascii=False, indent=2)
-            with open(history_path, "w", encoding="utf-8") as f:
-                json.dump(final_output, f, ensure_ascii=False, indent=2)
+        async with session.get(url, headers=headers, timeout=15) as r:
+            if r.status != 200:
+                print(f"  ❌ 抓取失败 HTTP {r.status} (可能是网络波动或 IP 被盾)")
+                return []
                 
-            print(f"  ✅ {day_key} 任务完成，数据已同步至 predictions.json")
+            data = await r.json()
+            if "data" not in data or not data["data"]:
+                print(f"  ⚠️ 接口未返回数据核心结构: {str(data)[:100]}")
+                return []
+                
+            matches_raw = data.get("data", {}).get("matches", {})
+            list_1 = matches_raw.get("1", [])
+            
+            if not list_1:
+                print(f"  [INFO] 当日足球赛事列表为空")
+                return []
+                
+            for item in list_1:
+                try:
+                    m_num = str(item.get("week", "")) + str(item.get("week_no", ""))
+                    info = _safe_dict(item.get("information"))
+                    analyse = _safe_dict(item.get("analyse"))
+                    pts = _safe_dict(item.get("points"))
+                    
+                    v2_odds = {}
+                    for k in ["a0","a1","a2","a3","a4","a5","a6","a7","s00","s11","s22","s33",
+                               "w10","w20","w21","w30","w31","w32","w40","w41","w42",
+                               "l01","l02","l12","l03","l13","l23",
+                               "ss","sp","sf","ps","pp","pf","fs","fp","ff"]:
+                        val = item.get(k)
+                        if val is not None: v2_odds[k] = _get_float(val)
 
-        print(f"\n{'='*80}")
-        print("✅ 全链路执行成功！终极融合引擎已完成所有预测任务。")
-        print(f"{'='*80}")
+                    football_matches.append({
+                        "home_team": str(item.get("home", "未知")), 
+                        "away_team": str(item.get("guest", "未知")),
+                        "league": str(item.get("cup", "未知")), 
+                        "match_num": m_num,
+                        "sp_home": _get_float(item.get("win")),
+                        "sp_draw": _get_float(item.get("same")),
+                        "sp_away": _get_float(item.get("lose")),
+                        "give_ball": _get_float(item.get("give_ball")),
+                        "change": _safe_dict(item.get("change")),
+                        "vote": _safe_dict(item.get("vote")),
+                        "intelligence": {
+                            "h_inj": str(info.get("home_injury", "无")), 
+                            "g_inj": str(info.get("guest_injury", "无")),
+                            "home_bad_news": str(info.get("home_bad_news", "")),
+                            "guest_bad_news": str(info.get("guest_bad_news", ""))
+                        },
+                        "expert_intro": str(item.get("intro", "")),
+                        "baseface": str(analyse.get("baseface", "")),
+                        "had_analyse": analyse.get("had_analyse", []),
+                        "home_rank": int(re.findall(r'\d+', str(pts.get("home_position", "10")))[0] if re.findall(r'\d+', str(pts.get("home_position", ""))) else 10),
+                        "away_rank": int(re.findall(r'\d+', str(pts.get("guest_position", "10")))[0] if re.findall(r'\d+', str(pts.get("guest_position", ""))) else 10),
+                        "v2_odds_dict": v2_odds
+                    })
+                except Exception as inner_e:
+                    continue
+                    
+    except Exception as e: print(f"  ❌ 网络抓取异常: {e}")
+    return football_matches
 
-    except Exception as e:
-        print("\n" + "!" * 80)
-        print(f"🚨 致命崩溃: {type(e).__name__}")
-        traceback.print_exc()
-        sys.exit(1)
+async def async_fetch_api(session, endpoint, params, sema):
+    """【并发锁】：传入局部信号量防止闭环报错"""
+    if not API_FOOTBALL_KEY: return []
+    headers = {"x-apisports-key": API_FOOTBALL_KEY}
+    async with sema:
+        try:
+            async with session.get(f"{API_FOOTBALL_BASE}{endpoint}", headers=headers, params=params, timeout=10) as r:
+                if r.status == 200:
+                    d = await r.json()
+                    return d.get("response", [])
+        except: return []
+    return []
 
-if __name__ == "__main__":
-    main()
+async def enrich_match_data(session, m, i, date_str, sema):
+    m["id"] = i + 1
+    m["date"] = date_str
+    
+    h_task = async_fetch_api(session, "/teams", {"search": translate_team_name(m["home_team"])}, sema)
+    a_task = async_fetch_api(session, "/teams", {"search": translate_team_name(m["away_team"])}, sema)
+    h_res, a_res = await asyncio.gather(h_task, a_task)
+    
+    m["home_id"] = h_res[0]["team"]["id"] if h_res else 0
+    m["away_id"] = a_res[0]["team"]["id"] if a_res else 0
+
+    tasks = []
+    if m["home_id"]: tasks.append(async_fetch_api(session, "/teams/statistics", {"team": m["home_id"], "season": 2024}, sema))
+    else: tasks.append(asyncio.sleep(0))
+    if m["away_id"]: tasks.append(async_fetch_api(session, "/teams/statistics", {"team": m["away_id"], "season": 2024}, sema))
+    else: tasks.append(asyncio.sleep(0))
+    if m["home_id"] and m["away_id"]: tasks.append(async_fetch_api(session, "/fixtures/headtohead", {"h2h": f"{m['home_id']}-{m['away_id']}", "last": 5}, sema))
+    else: tasks.append(asyncio.sleep(0))
+
+    results = await asyncio.gather(*tasks)
+    
+    if results[0] and isinstance(results[0], dict) and "fixtures" in results[0]:
+        r = results[0]
+        m["home_stats"] = {"played": r["fixtures"]["played"]["total"], "wins": r["fixtures"]["wins"]["total"], "avg_goals_for": str(r["goals"]["for"]["average"]["total"]), "form": r.get("form", ""), "clean_sheets": r["clean_sheet"]["total"]}
+    else: m["home_stats"] = {"played": 25, "wins": 10, "avg_goals_for": "1.3", "form": "WDLWD", "clean_sheets": 5}
+    
+    if results[1] and isinstance(results[1], dict) and "fixtures" in results[1]:
+        r = results[1]
+        m["away_stats"] = {"played": r["fixtures"]["played"]["total"], "wins": r["fixtures"]["wins"]["total"], "avg_goals_for": str(r["goals"]["for"]["average"]["total"]), "form": r.get("form", ""), "clean_sheets": r["clean_sheet"]["total"]}
+    else: m["away_stats"] = {"played": 25, "wins": 7, "avg_goals_for": "1.1", "form": "LDWDL", "clean_sheets": 3}
+
+    m["h2h"] = [{"score": f"{x['goals']['home']}-{x['goals']['away']}"} for x in results[2] if isinstance(results[2], list)] if results[2] else []
+    return m
+
+async def async_collect_all(date_str):
+    # 将 Semaphore 定义在函数内部，完美解决 RuntimeError: Event loop is closed 问题
+    sema = asyncio.Semaphore(8)
+    
+    async with aiohttp.ClientSession() as session:
+        matches = await scrape_wencai_jczq_async(session, date_str)
+        if not matches: return {"date": date_str, "matches": []}
+        tasks = [enrich_match_data(session, m, i, date_str, sema) for i, m in enumerate(matches)]
+        enriched = await asyncio.gather(*tasks)
+    return {"date": date_str, "matches": enriched}
 
 
