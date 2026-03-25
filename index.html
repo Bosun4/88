@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿足球预测系统Pro v5.1 - 满血版</title>
+<title>小鱼儿量化终端 Pro v5</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -13,17 +13,15 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .hdr{position:sticky;top:0;z-index:99;background:rgba(6,9,16,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:0 16px}
 .hdr-in{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:48px}
 .logo{display:flex;align-items:center;gap:8px}
-.logo-i{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:900;color:#000}
-.logo-t{font-family:'DM Sans';font-size:16px;font-weight:800;color:var(--w)}
-.logo-t span{color:var(--am)}
+.logo-i{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#000}
+.logo-t{font-family:'DM Sans';font-size:16px;font-weight:800;color:var(--w)}.logo-t span{color:var(--am)}
 .live{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t2);background:var(--p);border:1px solid var(--bd);border-radius:99px;padding:3px 10px}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--gn);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .wrap{max-width:1200px;margin:0 auto;padding:12px}
 .dash{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px}
 .d-card{background:var(--p);border:1px solid var(--bd);border-radius:8px;padding:10px;text-align:center}
-.d-val{font-family:'DM Sans';font-size:24px;font-weight:900}
-.d-lbl{font-size:9px;color:var(--t3);margin-top:2px}
+.d-val{font-family:'DM Sans';font-size:24px;font-weight:900}.d-lbl{font-size:9px;color:var(--t3);margin-top:2px}
 .sec{font-family:'DM Sans';font-size:14px;font-weight:800;color:var(--w);margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .badge{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#000;font-size:8px;font-weight:800;padding:2px 6px;border-radius:99px}
 .t4g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:6px;margin-bottom:18px}
@@ -32,34 +30,24 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .t4::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--am),var(--red));border-radius:10px 10px 0 0}
 .t4-r{position:absolute;top:8px;right:8px;width:20px;height:20px;background:linear-gradient(135deg,var(--am),var(--red));border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#000}
 .t4-lg{font-size:9px;color:var(--am);font-weight:700;margin-bottom:4px}
-.t4-tm{display:flex;align-items:center;gap:4px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--w)}
-.t4-tm span{flex:1}.t4-tm span:last-child{text-align:right}
+.t4-tm{display:flex;align-items:center;gap:4px;margin-bottom:8px;font-size:11px;font-weight:700;color:var(--w)}.t4-tm span{flex:1}.t4-tm span:last-child{text-align:right}
 .t4-vs{color:var(--t3);font-size:8px;font-weight:800}
 .t4-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
 .t4-cell{text-align:center;padding:4px;background:var(--bg);border-radius:4px}
 .t4-cl{font-size:7px;color:var(--t3)}.t4-cv{font-size:11px;font-weight:700;color:var(--w)}.t4-cv.hl{color:var(--gn)}
 .tabs{display:flex;gap:2px;background:var(--p);border:1px solid var(--bd);border-radius:99px;padding:3px;max-width:360px;margin:0 auto 16px}
-.tab{flex:1;text-align:center;padding:5px 8px;border-radius:99px;font-size:11px;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:.2s}
-.tab.ac{background:var(--bl);color:#fff}
-.mc{background:var(--p);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:6px}
-.mc.rec{border-color:var(--am)}
+.tab{flex:1;text-align:center;padding:5px 8px;border-radius:99px;font-size:11px;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:.2s}.tab.ac{background:var(--bl);color:#fff}
+.mc{background:var(--p);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:6px}.mc.rec{border-color:var(--am)}
 .mc-h{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:var(--bg);border-bottom:1px solid var(--bd)}
-.mc-lg{font-size:10px;color:var(--bl);font-weight:700}
-.mc-tm{font-size:9px;color:var(--t3)}
+.mc-lg{font-size:10px;color:var(--bl);font-weight:700}.mc-tm{font-size:9px;color:var(--t3)}
 .mc-rec{background:linear-gradient(135deg,var(--am),var(--red));color:#000;font-size:7px;font-weight:800;padding:1px 5px;border-radius:99px;margin-left:4px}
 .mc-b{padding:12px}
 .teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.tm{width:36%;text-align:center}
-.tm-n{font-size:12px;font-weight:700;color:var(--w)}
+.tm{width:36%;text-align:center}.tm-n{font-size:12px;font-weight:700;color:var(--w)}
 .sc-c{text-align:center}
 .sc-big{font-family:'DM Sans';font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--bl),var(--pr));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .res-tag{display:inline-block;font-size:8px;padding:2px 6px;border-radius:99px;font-weight:700;margin-top:2px}
 .res-tag.h{background:#ef444420;color:var(--red)}.res-tag.d{background:#f59e0b20;color:var(--am)}.res-tag.a{background:#3b82f620;color:var(--bl)}
-.intel-box{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:8px;margin-bottom:8px;display:flex;justify-content:space-around;align-items:center}
-.intel-item{text-align:center}
-.intel-l{font-size:8px;color:var(--t3);text-transform:uppercase;margin-bottom:2px}
-.intel-v{font-family:'JetBrains Mono';font-size:12px;font-weight:700;color:var(--am)}
-.intel-sep{width:1px;height:20px;background:var(--bd)}
 .g-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:8px}
 .g-box{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:6px;text-align:center}
 .g-l{font-size:8px;color:var(--t3)}.g-v{font-family:'JetBrains Mono';font-size:12px;font-weight:700}
@@ -67,14 +55,13 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .prob-h{display:flex;justify-content:space-between;font-size:9px;font-weight:700;margin-bottom:3px}
 .prob-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--p2)}
 .prob-bar .h{background:var(--red)}.prob-bar .d{background:#64748b}.prob-bar .a{background:var(--bl)}
-.sig{padding:6px 8px;border-radius:6px;font-size:10px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:4px}
-.sig-r{background:#ef444412;border:1px solid #ef444440;color:var(--red);animation:blink 1.5s infinite}
-@keyframes blink{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
+.sig{padding:6px 8px;border-radius:6px;font-size:10px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.sig-r{background:#ef444412;border:1px solid #ef444425;color:var(--red)}
 .sig-a{background:#f59e0b10;border:1px solid #f59e0b20;color:var(--am)}
+.sig-g{background:#10b98110;border:1px solid #10b98120;color:var(--gn)}
 .ev-row{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
 .ev-t{background:#f59e0b10;color:var(--am);font-size:9px;padding:2px 6px;border-radius:4px;border:1px solid #f59e0b20;font-family:'JetBrains Mono'}
-.exp-btn{width:100%;padding:6px;background:none;border:1px solid var(--bd);border-radius:6px;color:var(--t2);font-size:10px;cursor:pointer;font-weight:600;transition:.2s}
-.exp-btn:hover{background:var(--p2);color:var(--w)}
+.exp-btn{width:100%;padding:6px;background:none;border:1px solid var(--bd);border-radius:6px;color:var(--t2);font-size:10px;cursor:pointer;font-weight:600;transition:.2s}.exp-btn:hover{background:var(--p2);color:var(--w)}
 .det{display:none;padding:0 12px 12px}.det.open{display:block}
 .mg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
 .mb{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:7px;position:relative;overflow:hidden}
@@ -82,148 +69,147 @@ body{font-family:'Noto Sans SC','DM Sans',sans-serif;background:var(--bg);color:
 .mb.c1::before{background:var(--gn)}.mb.c2::before{background:var(--bl)}.mb.c3::before{background:var(--pr)}.mb.c4::before{background:var(--am)}.mb.c5::before{background:var(--cy)}.mb.c6::before{background:var(--pk)}.mb.c7::before{background:var(--or)}
 .mb-t{font-size:9px;font-weight:700;margin-bottom:3px}
 .mb-t.c1{color:var(--gn)}.mb-t.c2{color:var(--bl)}.mb-t.c3{color:var(--pr)}.mb-t.c4{color:var(--am)}.mb-t.c5{color:var(--cy)}.mb-t.c6{color:var(--pk)}.mb-t.c7{color:var(--or)}
-.mb-r{display:flex;justify-content:space-between;font-size:9px;padding:1px 0}
-.mb-l{color:var(--t3)}.mb-v{font-family:'JetBrains Mono';font-weight:700;color:var(--w);font-size:9px}
-.chip{display:inline-block;background:var(--p);border:1px solid var(--bd);padding:1px 4px;border-radius:3px;font-size:8px;font-family:'JetBrains Mono';color:var(--t3);margin:1px}
-.chip.top{border-color:var(--gn);color:var(--gn)}
+.mb-r{display:flex;justify-content:space-between;font-size:9px;padding:1px 0}.mb-l{color:var(--t3)}.mb-v{font-family:'JetBrains Mono';font-weight:700;color:var(--w);font-size:9px}
+.chip{display:inline-block;background:var(--p);border:1px solid var(--bd);padding:1px 4px;border-radius:3px;font-size:8px;font-family:'JetBrains Mono';color:var(--t3);margin:1px}.chip.top{border-color:var(--gn);color:var(--gn)}
 .exp-panel{border:1px solid var(--or);border-radius:8px;overflow:hidden;margin-bottom:6px;background:linear-gradient(135deg,rgba(249,115,22,.06),rgba(239,68,68,.03))}
 .exp-ph{padding:6px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(249,115,22,.2)}
-.exp-pt{font-size:10px;font-weight:800;color:var(--or)}
-.exp-ps{font-family:'DM Sans';font-size:13px;font-weight:900;color:var(--w);background:var(--p);padding:1px 6px;border-radius:4px;border:1px solid var(--or)}
+.exp-pt{font-size:10px;font-weight:800;color:var(--or)}.exp-ps{font-family:'DM Sans';font-size:13px;font-weight:900;color:var(--w);background:var(--p);padding:1px 6px;border-radius:4px;border:1px solid var(--or)}
 .exp-pb{padding:6px 10px;font-size:9px;color:var(--tx);line-height:1.5}
 .exp-rule{display:flex;align-items:baseline;gap:4px;padding:2px 0}
 .exp-rid{font-family:'JetBrains Mono';font-size:8px;color:var(--or);background:#f9731610;padding:0 3px;border-radius:2px;white-space:nowrap}
-.exp-rn{color:var(--w);font-weight:600;font-size:9px}
-.exp-rw{font-family:'JetBrains Mono';font-size:8px;color:var(--t3)}
+.exp-rn{color:var(--w);font-weight:600;font-size:9px}.exp-rw{font-family:'JetBrains Mono';font-size:8px;color:var(--t3)}
 .exp-rec{margin-top:4px;padding:4px 6px;border-radius:4px;font-size:9px;font-weight:700}
-.exp-rec.hi{background:#ef444415;color:var(--red)}
-.exp-rec.md{background:#f59e0b12;color:var(--am)}
-.exp-rec.lo{background:#10b98112;color:var(--gn)}
+.exp-rec.hi{background:#ef444415;color:var(--red)}.exp-rec.md{background:#f59e0b12;color:var(--am)}.exp-rec.lo{background:#10b98112;color:var(--gn)}
 .ah-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:6px}
 .ah-cell{background:var(--bg);border:1px solid var(--bd);border-radius:5px;padding:5px;text-align:center}
-.ah-lbl{font-size:7px;color:var(--t3);margin-bottom:2px}
-.ah-val{font-family:'JetBrains Mono';font-size:10px;font-weight:700;color:var(--w)}
-.ah-val.hot{color:var(--gn)}
+.ah-lbl{font-size:7px;color:var(--t3);margin-bottom:2px}.ah-val{font-family:'JetBrains Mono';font-size:10px;font-weight:700;color:var(--w)}.ah-val.hot{color:var(--gn)}
 .claude-box{border:1px solid var(--am);border-radius:8px;overflow:hidden;margin-top:6px;background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(239,68,68,.03))}
 .claude-h{padding:8px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(245,158,11,.2)}
-.claude-t{font-size:11px;font-weight:900;color:var(--am)}
-.claude-s{font-family:'DM Sans';font-size:16px;font-weight:900;color:var(--w);background:var(--p);padding:2px 8px;border-radius:4px;border:1px solid var(--am)}
+.claude-t{font-size:11px;font-weight:900;color:var(--am)}.claude-s{font-family:'DM Sans';font-size:16px;font-weight:900;color:var(--w);background:var(--p);padding:2px 8px;border-radius:4px;border:1px solid var(--am)}
 .claude-x{font-size:10px;color:var(--tx);line-height:1.5;padding:8px 10px}
 .ai3{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:6px;border:1px solid var(--bd);border-radius:8px;overflow:hidden}
-.ai3-c{padding:8px;background:var(--bg);border-right:1px solid var(--bd)}
-.ai3-c:last-child{border-right:none}
+.ai3-c{padding:8px;background:var(--bg);border-right:1px solid var(--bd)}.ai3-c:last-child{border-right:none}
 .ai3-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
-.ai3-t{font-size:9px;font-weight:700}
-.ai3-t.gpt{color:var(--gn)}.ai3-t.grk{color:var(--cy)}.ai3-t.gem{color:var(--bl)}
+.ai3-t{font-size:9px;font-weight:700}.ai3-t.gpt{color:var(--gn)}.ai3-t.grk{color:var(--cy)}.ai3-t.gem{color:var(--bl)}
 .ai3-s{font-size:10px;font-weight:800;color:var(--w);background:var(--p);padding:1px 4px;border-radius:3px;font-family:'JetBrains Mono'}
 .ai3-x{font-size:8px;color:var(--t3);line-height:1.3}
-.st-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:6px}
+.st-g{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
 .st-b{background:var(--bg);border-radius:6px;padding:7px;border:1px solid var(--bd)}
 .st-bt{font-size:9px;font-weight:700;color:var(--t2);margin-bottom:3px}
-.st-r{display:flex;justify-content:space-between;font-size:9px;padding:1px 0;border-bottom:1px solid rgba(26,39,68,.3)}
-.st-r:last-child{border:none}
+.st-r{display:flex;justify-content:space-between;font-size:9px;padding:1px 0;border-bottom:1px solid rgba(26,39,68,.3)}.st-r:last-child{border:none}
 .st-rl{color:var(--t3)}.st-rv{font-family:'JetBrains Mono';font-weight:700;color:var(--w);font-size:9px}
 .cand{margin-top:6px;padding:6px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:6px}
 .cand-t{font-size:9px;color:var(--t2);margin-bottom:3px;font-weight:700}
 .cand-r{display:flex;flex-wrap:wrap;gap:3px}
-.cand-c{background:var(--p);border:1px solid var(--bd);padding:2px 6px;border-radius:4px;font-size:9px;font-family:'JetBrains Mono'}
-.cand-c.top{border-color:var(--am);color:var(--am)}
-.sec-label{font-size:9px;color:var(--t3);font-weight:700;margin:8px 0 4px;padding-bottom:3px;border-bottom:1px solid var(--bd)}
+.cand-c{background:var(--p);border:1px solid var(--bd);padding:2px 6px;border-radius:4px;font-size:9px;font-family:'JetBrains Mono'}.cand-c.top{border-color:var(--am);color:var(--am)}
+.sl{font-size:9px;color:var(--t3);font-weight:700;margin:8px 0 4px;padding-bottom:3px;border-bottom:1px solid var(--bd)}
 .foot{text-align:center;padding:16px;color:var(--t3);font-size:8px;border-top:1px solid var(--bd);margin-top:20px}
 .empty{text-align:center;padding:40px;color:var(--t3)}
 @media(max-width:640px){.dash{grid-template-columns:repeat(2,1fr)}.mg,.st-g{grid-template-columns:1fr}.ai3{grid-template-columns:1fr}.ai3-c{border-right:none;border-bottom:1px solid var(--bd)}.ai3-c:last-child{border-bottom:none}.t4g{grid-template-columns:1fr}.ah-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
-<div class="hdr"><div class="hdr-in"><div class="logo"><div class="logo-i">5.1</div><div class="logo-t">竞彩量化 <span>Pro</span></div></div><div class="live"><div class="live-dot"></div><span id="ut" class="mono">连接中...</span></div></div></div>
-
+<div class="hdr"><div class="hdr-in"><div class="logo"><div class="logo-i">MAX</div><div class="logo-t">竞彩量化 <span>Pro</span></div></div><div class="live"><div class="live-dot"></div><span id="ut" class="mono">...</span></div></div></div>
 <div class="wrap">
-    <!-- 仪表盘 -->
-    <div class="dash" id="db"></div>
-    
-    <!-- 精选区 -->
-    <div class="sec">🎯 TOP4 <span class="badge">精选</span></div>
-    <div class="t4g" id="t4"></div>
-    
-    <!-- 选项卡 -->
-    <div class="tabs">
-        <button class="tab" onclick="sw('yesterday')">昨日</button>
-        <button class="tab ac" onclick="sw('today')">今日</button>
-        <button class="tab" onclick="sw('tomorrow')">明日</button>
-    </div>
-    
-    <!-- 列表区，默认写入加载状态，防止黑屏 -->
-    <div id="ms">
-        <div class="empty" style="color:var(--cy); margin-top:40px;">
-            <div style="font-size: 24px; margin-bottom: 10px;">⏳</div>
-            正在连接底层数据服务器...<br>
-            <span style="font-size:10px;color:var(--t3); display:inline-block; margin-top: 8px;">(如果在获取过程中卡住，请刷新页面或清理缓存)</span>
-        </div>
-    </div>
-    
-    <div class="foot">Poisson · Newton-Raphson Solver · Scissors Gap · BivariatePoisson · ELO · RF · GB · NN · SVM · KNN<br>GPT · Grok · Gemini · Claude中控 · 经验规则 · 亚盘概率 | v5.1</div>
+<div class="dash" id="db"></div>
+<div class="sec">🎯 TOP4 <span class="badge">精选</span></div>
+<div class="t4g" id="t4"></div>
+<div class="tabs"><button class="tab" onclick="sw('yesterday')">昨日</button><button class="tab ac" onclick="sw('today')">今日</button><button class="tab" onclick="sw('tomorrow')">明日</button></div>
+<div id="ms"></div>
+<div class="foot">Poisson · Dixon-Coles · <b style="color:var(--pk)">BivariatePoisson</b> · <b style="color:var(--cy)">Markov</b> · ELO · RF · GB · NN · SVM · KNN<br><b style="color:var(--or)">ProOverround</b> · <b style="color:var(--gn)">CLV检测</b> · 概率校准 · 专家风控<br>GPT · Grok · Gemini · <b style="color:var(--am)">Claude中控</b> · <b style="color:var(--or)">58条经验规则</b> · <b style="color:var(--cy)">亚盘概率</b> | vMAX</div>
 </div>
-
 <script>
-// ==========================================
-// 全局变量定义
-// ==========================================
-let D = null;
-let CT = 'today';
+var D=null,CT='today';
+function cl(t){return t?String(t).replace(/```json/g,'').replace(/```/g,'').trim():'N/A'}
+function fm(f){if(!f)return'?';return f.split('').map(function(c){return c==='W'?'<span style="color:var(--gn)">W</span>':c==='D'?'<span style="color:var(--am)">D</span>':c==='L'?'<span style="color:var(--red)">L</span>':c}).join('')}
+function pct(v){return v!=null?(parseFloat(v)*100).toFixed(1)+'%':'?'}
+function pctR(v){return v!=null?parseFloat(v).toFixed(1)+'%':'?'}
 
-// ==========================================
-// 🚀 上帝模式智能数据寻址
-// ==========================================
-// 直接跨域读取你 GitHub 的数据（这里默认你的仓库名是 88）
-const rawGithubUrl = 'https://raw.githubusercontent.com/Bosun4/88/main/scripts/data/predictions.json';
+fetch('data/predictions.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){D=d;document.getElementById('ut').textContent=(d.update_time||'')+'  '+( d.version||'');rdb();rt4(d.top4||[]);rm()}).catch(function(){document.getElementById('ms').innerHTML='<div class="empty">📡 等待数据</div>'});
 
-const dataPaths = [
-    'scripts/data/predictions.json',
-    './scripts/data/predictions.json',
-    'data/predictions.json',
-    './data/predictions.json',
-    'predictions.json',
-    './predictions.json',
-    rawGithubUrl 
-];
+function sw(t){CT=t;document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('ac')});event.target.classList.add('ac');rm()}
 
-async function autoFetchData() {
-    let isLoaded = false;
-    for (let path of dataPaths) {
-        try {
-            let separator = path.includes('?') ? '&' : '?';
-            let res = await fetch(path + separator + 't=' + Date.now());
-            if (res.ok) {
-                let jsonStr = await res.text();
-                try {
-                    D = JSON.parse(jsonStr);
-                    document.getElementById('ut').textContent = D.update_time || '刚刚更新';
-                    rdb();
-                    rt4(D.top4 || []);
-                    rm();
-                    isLoaded = true;
-                    console.log("✅ 成功命中数据源: " + path);
-                    break;
-                } catch (parseError) {
-                    console.log("❌ JSON解析失败: " + path);
-                }
-            }
-        } catch (e) {
-            console.log("路径未命中: " + path);
-        }
-    }
-    
-    if (!isLoaded) {
-        document.getElementById('ms').innerHTML = '<div class="empty" style="color:var(--red); line-height:1.6;">❌ 读取量化数据失败！<br><br><span style="font-size:11px;color:var(--tx)">系统提示：<br>1. 请确认 GitHub Actions 已经成功运行完毕。<br>2. 网页部署缓存可能会有 1-3 分钟延迟，请稍后刷新重试。<br>3. 请确保存储 JSON 的文件没有任何语法被截断。</span></div>';
-    }
-}
+function rdb(){var ms=D.matches||{},tt=0,cn=0,cf=0,expC=0;['yesterday','today','tomorrow'].forEach(function(k){var a=ms[k]||[];tt+=a.length;a.forEach(function(m){var p=m.prediction||{};cf+=p.confidence||0;if(p.model_consensus>=3)cn++;var ex=p.experience_analysis||{};if(ex.triggered_count>=3)expC++})});var av=tt?Math.round(cf/tt):0;document.getElementById('db').innerHTML='<div class="d-card"><div class="d-val" style="color:var(--am)">'+tt+'</div><div class="d-lbl">入库</div></div><div class="d-card"><div class="d-val" style="color:var(--gn)">'+(D.top4?D.top4.length:0)+'</div><div class="d-lbl">精选</div></div><div class="d-card"><div class="d-val" style="color:var(--or)">'+expC+'</div><div class="d-lbl">经验触发</div></div><div class="d-card"><div class="d-val" style="color:var(--pr)">'+av+'%</div><div class="d-lbl">置信</div></div>'}
 
-// 启动数据加载
-autoFetchData();
+function rt4(t4){var el=document.getElementById('t4');if(!t4||!t4.length){el.innerHTML='<div class="empty">暂无</div>';return}el.innerHTML=t4.map(function(m,i){var p=m.prediction||{},cc=p.confidence>=70?'var(--gn)':p.confidence>=50?'var(--am)':'var(--red)';var ex=p.experience_analysis||{};var et=ex.triggered_count>0?'<div style="font-size:8px;color:var(--or);margin-top:3px">📋 '+ex.triggered_count+'条经验 | '+(ex.recommendation||'').substring(0,12)+'</div>':'';return'<div class="t4" onclick="go(\'m-'+m.id+'\')"><div class="t4-r">'+(i+1)+'</div><div class="t4-lg">'+(m.league||'')+' '+(m.match_num||'')+'</div><div class="t4-tm"><span>'+m.home_team+'</span><span class="t4-vs">VS</span><span>'+m.away_team+'</span></div><div class="t4-row"><div class="t4-cell"><div class="t4-cl">比分</div><div class="t4-cv hl">'+(p.predicted_score||'?')+'</div></div><div class="t4-cell"><div class="t4-cl">倾向</div><div class="t4-cv">'+(p.result||'?')+'</div></div><div class="t4-cell"><div class="t4-cl">置信</div><div class="t4-cv" style="color:'+cc+'">'+(p.confidence||0)+'%</div></div></div>'+et+'</div>'}).join('')}
 
-// ==========================================
-// 核心渲染逻辑
-// ==========================================
-function cl(t){return t?String(t).replace(/
+function rm(){var el=document.getElementById('ms'),ms=(D.matches||{})[CT]||[];if(!ms.length){el.innerHTML='<div class="empty">当前无数据</div>';return}
+el.innerHTML=ms.map(function(m){var p=m.prediction||{},hp=p.home_win_pct||33,dp=p.draw_pct||33,ap=p.away_win_pct||33;
+var rc=p.result==='主胜'?'h':p.result==='平局'?'d':'a';
+var poi=p.poisson||{},bvp=p.bivariate_poisson||{},elo=p.elo||{},rf=p.random_forest||{},gb=p.gradient_boost||{},nn=p.neural_net||{},dc=p.dixon_coles||{};
+var hf=p.home_form||{},af=p.away_form||{},hs=m.home_stats||{},as2=m.away_stats||{},ts=p.top_scores||[];
+var ex=p.experience_analysis||{},ahp=p.asian_handicap_probs||{},po=p.pro_odds||{};
+var ixg_h=p.bookmaker_implied_home_xg,ixg_a=p.bookmaker_implied_away_xg;
 
+// Signals (CLV + Sharp + 经验)
+var sig='';var ss=p.smart_signals||[];
+var ew=p.extreme_warning||p.scissors_gap_signal||'';
+if(ew&&ew!=='无'&&ew!=='')sig+='<div class="sig sig-r">'+ew+'</div>';
+var seen={};ss.forEach(function(s){if(!seen[s]){seen[s]=1;
+if(s.indexOf('🔥')>=0||s.indexOf('CLV')>=0)sig+='<div class="sig sig-g">'+s+'</div>';
+else sig+='<div class="sig sig-a">'+s+'</div>'}});
 
+// Value bets
+var ev='';var vb=p.value_bets_summary||[];if(vb.length)ev='<div class="ev-row">'+vb.map(function(v){return'<span class="ev-t">💰'+v+'</span>'}).join('')+'</div>';
+
+// 经验规则面板
+var expH='';
+if(ex.triggered_count>0){var rc2=ex.total_score>=20?'hi':ex.total_score>=10?'md':'lo';
+expH='<div class="exp-panel"><div class="exp-ph"><div class="exp-pt">📋 经验规则</div><div class="exp-ps">'+ex.triggered_count+'条 / '+ex.total_score+'分</div></div><div class="exp-pb">';
+(ex.rules||[]).forEach(function(r){expH+='<div class="exp-rule"><span class="exp-rid">'+r.id+'</span><span class="exp-rn">'+r.name+'</span><span class="exp-rw">w'+r.weight+'</span></div>'});
+expH+='<div class="exp-rec '+rc2+'">'+(ex.recommendation||'')+'</div></div></div>'}
+
+// 模型面板
+var mdl='<div class="mg">';
+// 泊松
+mdl+='<div class="mb c1"><div class="mb-t c1">泊松</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">'+(poi.predicted_score||'?')+'</span></div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(poi.home_win||'?')+'/'+(poi.draw||'?')+'/'+(poi.away_win||'?')+'</span></div><div class="mb-r"><span class="mb-l">xG</span><span class="mb-v">'+(poi.home_xg||'?')+'-'+(poi.away_xg||'?')+'</span></div>';
+if(ts.length)mdl+='<div style="margin-top:3px">'+ts.map(function(s,i){return'<span class="chip'+(i<1?' top':'')+'">'+(s.score||'?')+' '+(s.prob||'?')+'%</span>'}).join('')+'</div>';
+mdl+='</div>';
+// BVP
+mdl+='<div class="mb c6"><div class="mb-t c6">双变量泊松</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">'+(bvp.predicted_score||'?')+'</span></div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(bvp.home_win||'?')+'/'+(bvp.draw||'?')+'/'+(bvp.away_win||'?')+'</span></div><div class="mb-r"><span class="mb-l">关联度</span><span class="mb-v">'+(bvp.correlation||'?')+'</span></div></div>';
+// ELO
+mdl+='<div class="mb c2"><div class="mb-t c2">ELO</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(elo.home_win||'?')+'/'+(elo.draw||'?')+'/'+(elo.away_win||'?')+'</span></div><div class="mb-r"><span class="mb-l">差值</span><span class="mb-v" style="color:'+(parseFloat(elo.elo_diff||0)>0?'var(--gn)':'var(--red)')+'">'+(elo.elo_diff>0?'+':'')+(elo.elo_diff||'?')+'</span></div></div>';
+// ProOdds / 随机森林
+if(po.true_home){mdl+='<div class="mb c7"><div class="mb-t c7">专业去水</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+po.true_home+'/'+po.true_draw+'/'+po.true_away+'</span></div><div class="mb-r"><span class="mb-l">方法</span><span class="mb-v">Shin+Power+Mult</span></div></div>'}
+else{mdl+='<div class="mb c5"><div class="mb-t c5">随机森林</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(rf.home_win||'?')+'/'+(rf.draw||'?')+'/'+(rf.away_win||'?')+'</span></div></div>'}
+mdl+='<div class="mb c3"><div class="mb-t c3">神经网络</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(nn.home_win||'?')+'/'+(nn.draw||'?')+'/'+(nn.away_win||'?')+'</span></div></div>';
+mdl+='<div class="mb c4"><div class="mb-t c4">梯度提升</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(gb.home_win||'?')+'/'+(gb.draw||'?')+'/'+(gb.away_win||'?')+'</span></div></div>';
+mdl+='<div class="mb c1"><div class="mb-t c1">Dixon-Coles</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+(dc.home_win||'?')+'/'+(dc.draw||'?')+'/'+(dc.away_win||'?')+'</span></div></div>';
+mdl+='</div>';
+
+// 庄家反推xG
+var ixgH='';
+if(ixg_h&&ixg_h!=='?'){ixgH='<div class="sl">🎯 庄家底牌 Implied xG</div><div class="g-row"><div class="g-box"><div class="g-l">主队xG</div><div class="g-v" style="color:var(--am)">'+ixg_h+'</div></div><div class="g-box"><div class="g-l">客队xG</div><div class="g-v" style="color:var(--cy)">'+ixg_a+'</div></div><div class="g-box"><div class="g-l">总期望</div><div class="g-v" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(2):'?')+'</div></div></div>'}
+
+// 亚盘面板
+var ahH='';
+if(ahp['ah_0']||ahp['ou_2.5']||ahp.btts){
+var ah0=ahp['ah_0']||[0,0,0];var ah05=ahp['ah_0.5']||[0,0,0];var ou25=ahp['ou_2.5']||[0,0,0];var bv=ahp.btts||0;
+ahH='<div class="sl">📊 亚盘 & 大小球概率</div><div class="ah-grid">';
+ahH+='<div class="ah-cell"><div class="ah-lbl">平手 主</div><div class="ah-val">'+pct(ah0[0])+'</div></div>';
+ahH+='<div class="ah-cell"><div class="ah-lbl">平手 走</div><div class="ah-val">'+pct(ah0[1])+'</div></div>';
+ahH+='<div class="ah-cell"><div class="ah-lbl">平手 客</div><div class="ah-val">'+pct(ah0[2])+'</div></div>';
+ahH+='<div class="ah-cell"><div class="ah-lbl">半球 主</div><div class="ah-val'+(ah05[0]>0.55?' hot':'')+'">'+pct(ah05[0])+'</div></div>';
+ahH+='<div class="ah-cell"><div class="ah-lbl">O 2.5</div><div class="ah-val'+(ou25[0]>0.55?' hot':'')+'">'+pct(ou25[0])+'</div></div>';
+ahH+='<div class="ah-cell"><div class="ah-lbl">BTTS</div><div class="ah-val'+(bv>0.55?' hot':'')+'">'+pct(bv)+'</div></div>';
+ahH+='</div>'}
+
+// 状态
+var frm='<div class="mg"><div class="mb c3"><div class="mb-t c3">主队状态</div><div class="mb-r"><span class="mb-l">趋势</span><span class="mb-v">'+(hf.trend||'?')+'</span></div><div class="mb-r"><span class="mb-l">评分</span><span class="mb-v">'+(hf.score||'?')+'</span></div><div class="mb-r"><span class="mb-l">近况</span><span class="mb-v">'+fm(hs.form)+'</span></div></div><div class="mb c5"><div class="mb-t c5">客队状态</div><div class="mb-r"><span class="mb-l">趋势</span><span class="mb-v">'+(af.trend||'?')+'</span></div><div class="mb-r"><span class="mb-l">评分</span><span class="mb-v">'+(af.score||'?')+'</span></div><div class="mb-r"><span class="mb-l">近况</span><span class="mb-v">'+fm(as2.form)+'</span></div></div></div>';
+
+// 战绩
+var sts='<div class="st-g"><div class="st-b"><div class="st-bt">'+m.home_team+'</div><div class="st-r"><span class="st-rl">战绩</span><span class="st-rv">'+(hs.wins||'?')+'W'+(hs.draws||'?')+'D'+(hs.losses||'?')+'L</span></div><div class="st-r"><span class="st-rl">进/失</span><span class="st-rv">'+(hs.goals_for||'?')+'/'+(hs.goals_against||'?')+'</span></div><div class="st-r"><span class="st-rl">均进</span><span class="st-rv">'+(hs.avg_goals_for||'?')+'</span></div></div><div class="st-b"><div class="st-bt">'+m.away_team+'</div><div class="st-r"><span class="st-rl">战绩</span><span class="st-rv">'+(as2.wins||'?')+'W'+(as2.draws||'?')+'D'+(as2.losses||'?')+'L</span></div><div class="st-r"><span class="st-rl">进/失</span><span class="st-rv">'+(as2.goals_for||'?')+'/'+(as2.goals_against||'?')+'</span></div><div class="st-r"><span class="st-rl">均进</span><span class="st-rv">'+(as2.avg_goals_for||'?')+'</span></div></div></div>';
+
+// AI
+var ai='<div class="claude-box"><div class="claude-h"><div class="claude-t">👑 Claude 中控</div><div class="claude-s">'+(p.claude_score||'-')+'</div></div><div class="claude-x">'+cl(p.claude_analysis)+'</div></div><div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT</span><span class="ai3-s">'+(p.gpt_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gpt_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">Grok</span><span class="ai3-s">'+(p.grok_score||'-')+'</span></div><div class="ai3-x">'+cl(p.grok_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">Gemini</span><span class="ai3-s">'+(p.gemini_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gemini_analysis)+'</div></div></div>';
+
+// 候选比分
+var cand='';var cs=p.candidate_scores||{};if(Object.keys(cs).length){cand='<div class="cand"><div class="cand-t">候选比分权重</div><div class="cand-r">';Object.entries(cs).sort(function(a,b){return b[1]-a[1]}).forEach(function(e,i){cand+='<span class="cand-c'+(i===0?' top':'')+'">'+e[0]+' '+e[1]+'</span>'});cand+='</div></div>'}
+
+return'<div class="mc '+(m.is_recommended?'rec':'')+'" id="m-'+m.id+'"><div class="mc-h"><div class="mc-lg">'+(m.league||'')+' <span class="mono">'+(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mc-rec">精选</span>':'')+'</div><div class="mc-tm">'+(m.match_time||'')+'</div></div><div class="mc-b"><div class="teams"><div class="tm"><div class="tm-n">'+m.home_team+'</div></div><div class="sc-c"><div class="sc-big">'+(p.predicted_score||'?')+'</div><span class="res-tag '+rc+'">'+(p.result||'?')+'</span></div><div class="tm"><div class="tm-n">'+m.away_team+'</div></div></div><div class="g-row"><div class="g-box"><div class="g-l">总球</div><div class="g-v" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(1):'?')+'</div></div><div class="g-box"><div class="g-l">大2.5</div><div class="g-v" style="color:var(--pr)">'+(p.over_2_5||'?')+'%</div></div><div class="g-box"><div class="g-l">BTTS</div><div class="g-v" style="color:var(--cy)">'+(p.btts||'?')+'%</div></div></div><div class="prob"><div class="prob-h"><span style="color:var(--red)">主'+hp+'%</span><span style="color:var(--t2)">平'+dp+'%</span><span style="color:var(--bl)">客'+ap+'%</span></div><div class="prob-bar"><div class="h" style="width:'+hp+'%"></div><div class="d" style="width:'+dp+'%"></div><div class="a" style="width:'+ap+'%"></div></div></div>'+sig+ev+expH+'<button class="exp-btn" onclick="tg(this,\'d-'+m.id+'\')">模型 + AI + 亚盘 ▼</button></div><div class="det" id="d-'+m.id+'">'+mdl+ixgH+ahH+frm+sts+ai+cand+'<div style="text-align:center;margin-top:6px;font-size:9px;color:var(--t3)">'+(p.model_agreement?'✅共识':'⚠️分歧')+' | '+(p.model_consensus||0)+'/'+(p.total_models||11)+' models</div></div></div>'}).join('')}
+
+function tg(b,id){var e=document.getElementById(id);if(e.classList.contains('open')){e.classList.remove('open');b.textContent='模型 + AI + 亚盘 ▼'}else{e.classList.add('open');b.textContent='收起 ▲'}}
+function go(id){var e=document.getElementById(id);if(e){e.scrollIntoView({behavior:'smooth',block:'center'});var d=document.getElementById('d-'+id.replace('m-',''));if(d&&!d.classList.contains('open'))d.classList.add('open')}}
+</script>
+</body>
+</html>
