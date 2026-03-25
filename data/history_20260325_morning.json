@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-03-25 12:17:38",
+  "update_time": "2026-03-25 13:42:15",
   "version": "MAX-v1.1",
   "top4": [
     {
@@ -103,7 +103,7 @@
       },
       "h2h": [],
       "prediction": {
-        "predicted_score": "1-1",
+        "predicted_score": "1-0",
         "home_win_pct": 54.7,
         "draw_pct": 28.7,
         "away_win_pct": 16.6,
@@ -112,18 +112,18 @@
         "risk_level": "低",
         "over_under_2_5": "小",
         "both_score": "否",
-        "gpt_score": "1-1",
-        "gpt_analysis": "Moderate home edge but close defensive profile and 2.16 xG support a tight game; draw protection is ",
-        "grok_score": "1-1",
-        "grok_analysis": "Implied H 51.2% near draw 27.7% with xG 2.16 and exp 攻防接近必防平",
-        "gemini_score": "1-1",
-        "gemini_analysis": "Relegation '6-pointer' context and close defensive data suggest a high probability of a draw in a lo",
-        "claude_score": "1-1",
-        "claude_analysis": "攻防数据接近必防平+保级六分战: xG2.16中低产, 双方实力接近拉锯, 威尔士主场有威胁但波黑绝境反击得分, 平局终场",
-        "model_agreement": true,
+        "gpt_score": "-",
+        "gpt_analysis": "N/A",
+        "grok_score": "-",
+        "grok_analysis": "N/A",
+        "gemini_score": "-",
+        "gemini_analysis": "N/A",
+        "claude_score": "1-0",
+        "claude_analysis": "赔率底牌反推正常",
+        "model_agreement": false,
         "candidate_scores": {
-          "1-0": 0.5,
-          "1-1": 1.0,
+          "1-0": 1.0,
+          "1-1": 0.5,
           "0-0": 0.5
         },
         "poisson": {
@@ -444,12 +444,455 @@
           "model": 0.18
         }
       },
-      "recommend_score": 73.34,
+      "recommend_score": 63.34,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     },
     {
       "rank": 2,
+      "home_team": "土耳其",
+      "away_team": "罗马尼亚",
+      "league": "世预赛",
+      "match_num": "周四001",
+      "sp_home": 1.33,
+      "sp_draw": 4.4,
+      "sp_away": 6.65,
+      "give_ball": -1.0,
+      "change": {},
+      "vote": {
+        "win": "67",
+        "same": "20",
+        "lose": "13",
+        "hhad_win": "44",
+        "hhad_same": "24",
+        "hhad_lose": "32"
+      },
+      "odds_movement": "主胜平稳，客胜平稳",
+      "intelligence": {
+        "h_inj": "无",
+        "g_inj": "无",
+        "home_bad_news": "1.土耳其本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.土耳其在防守端的表现确实存在明显短板，整体稳定性亟待加强。回顾近9场各类赛事，球队仅有1场成功零封对手。期间场均失球数达到1.67个，这样的数据反映出后防体系在专注度与协同性上仍有较大提升空间。面对高强度对抗时，防守球员",
+        "guest_bad_news": "1.罗马尼亚本赛季近10个客场比赛，在领先的情况下最终客场输球率达100%。 2.罗马尼亚国家队主帅卢塞斯库2月初因感冒并发症紧急入院，虽曾接受24小时监护，但2月3日病情急剧恶化再次送医。这位80岁老帅深受复杂慢性病困扰，状况十分危急。媒体透露，医生怀疑其难以在3月底前康复，罗马尼亚足协恐需紧急另"
+      },
+      "expert_intro": "土耳其最近4仗斩获3胜1和佳绩，球队战斗力值得肯定，加上此番坐拥主场之利，土耳其值得看高一线。",
+      "baseface": "主队各项赛事近6场4胜1平1负，状态上佳;近3个主场2胜1负，主场状态不错。客队各项赛事近6场3胜1平2负，状态一般;近3个客场1平2负，客场状态低迷。\n综合来看，主队优势较大。",
+      "had_analyse": [
+        "win"
+      ],
+      "home_rank": 25,
+      "away_rank": 49,
+      "v2_odds_dict": {
+        "a0": 16.0,
+        "a1": 6.5,
+        "a2": 3.75,
+        "a3": 3.45,
+        "a4": 4.6,
+        "a5": 7.8,
+        "a6": 13.0,
+        "a7": 17.0,
+        "s00": 16.0,
+        "s11": 8.25,
+        "s22": 15.0,
+        "s33": 70.0,
+        "w10": 7.5,
+        "w20": 6.8,
+        "w21": 7.0,
+        "w30": 8.75,
+        "w31": 9.5,
+        "w32": 20.0,
+        "w40": 15.0,
+        "w41": 18.0,
+        "w42": 50.0,
+        "l01": 18.0,
+        "l02": 50.0,
+        "l12": 16.0,
+        "l03": 150.0,
+        "l13": 60.0,
+        "l23": 60.0,
+        "ss": 1.95,
+        "sp": 18.0,
+        "sf": 45.0,
+        "ps": 3.85,
+        "pp": 7.25,
+        "pf": 14.0,
+        "fs": 23.0,
+        "fp": 18.0,
+        "ff": 10.5
+      },
+      "id": 1,
+      "date": "2026-03-25",
+      "home_id": 0,
+      "away_id": 0,
+      "home_stats": {
+        "played": 25,
+        "wins": 12,
+        "draws": 6,
+        "losses": 7,
+        "goals_for": 33,
+        "goals_against": 26,
+        "avg_goals_for": "1.33",
+        "avg_goals_against": "1.02",
+        "clean_sheets": 4,
+        "form": "WDLWD"
+      },
+      "away_stats": {
+        "played": 25,
+        "wins": 5,
+        "draws": 6,
+        "losses": 14,
+        "goals_for": 15,
+        "goals_against": 43,
+        "avg_goals_for": "0.6",
+        "avg_goals_against": "1.73",
+        "clean_sheets": 2,
+        "form": "LLDLL"
+      },
+      "h2h": [],
+      "prediction": {
+        "predicted_score": "1-0",
+        "home_win_pct": 69.8,
+        "draw_pct": 20.9,
+        "away_win_pct": 9.3,
+        "confidence": 63.0,
+        "result": "主胜",
+        "risk_level": "中",
+        "over_under_2_5": "小",
+        "both_score": "否",
+        "gpt_score": "-",
+        "gpt_analysis": "N/A",
+        "grok_score": "-",
+        "grok_analysis": "N/A",
+        "gemini_score": "-",
+        "gemini_analysis": "N/A",
+        "claude_score": "1-0",
+        "claude_analysis": "🚨 机构强开深盘虚构主队战力 (诱盘警告)",
+        "model_agreement": false,
+        "candidate_scores": {
+          "1-0": 1.0,
+          "2-0": 0.5,
+          "1-1": 0.5
+        },
+        "poisson": {
+          "home_win": 80.1,
+          "draw": 14.8,
+          "away_win": 5.1,
+          "predicted_score": "2-0",
+          "home_xg": 2.27,
+          "away_xg": 0.4,
+          "btts": 29.5,
+          "over_2_5": 49.7,
+          "top_scores": [
+            {
+              "score": "2-0",
+              "prob": 17.8
+            },
+            {
+              "score": "1-0",
+              "prob": 15.7
+            },
+            {
+              "score": "3-0",
+              "prob": 13.5
+            },
+            {
+              "score": "4-0",
+              "prob": 7.7
+            },
+            {
+              "score": "2-1",
+              "prob": 7.1
+            },
+            {
+              "score": "0-0",
+              "prob": 6.9
+            }
+          ]
+        },
+        "refined_poisson": {
+          "home_win": 65.7,
+          "draw": 24.5,
+          "away_win": 9.9,
+          "predicted_score": "1-0",
+          "top_scores": [
+            {
+              "score": "1-0",
+              "prob": 25.2
+            },
+            {
+              "score": "2-0",
+              "prob": 14.6
+            },
+            {
+              "score": "0-0",
+              "prob": 12.8
+            },
+            {
+              "score": "1-1",
+              "prob": 10.0
+            },
+            {
+              "score": "2-1",
+              "prob": 8.5
+            },
+            {
+              "score": "3-0",
+              "prob": 7.3
+            }
+          ]
+        },
+        "value_bets_summary": [],
+        "extreme_warning": "🚨 机构强开深盘虚构主队战力 (诱盘警告)",
+        "smart_money_signal": "🚨 主胜超热67%",
+        "smart_signals": [
+          "🚨 主胜超热67%",
+          "🚨 大热必死",
+          "⚠️ 负CLV-36.2% [客胜]"
+        ],
+        "model_consensus": 8,
+        "total_models": 15,
+        "expected_total_goals": 2.71,
+        "over_2_5": 50.5,
+        "btts": 46.0,
+        "top_scores": [
+          {
+            "score": "1-0",
+            "prob": 25.2
+          },
+          {
+            "score": "2-0",
+            "prob": 14.6
+          },
+          {
+            "score": "0-0",
+            "prob": 12.8
+          },
+          {
+            "score": "1-1",
+            "prob": 10.0
+          },
+          {
+            "score": "2-1",
+            "prob": 8.5
+          },
+          {
+            "score": "3-0",
+            "prob": 7.3
+          }
+        ],
+        "elo": {
+          "home_win": 81.8,
+          "draw": 20.0,
+          "away_win": 8.2,
+          "elo_diff": 400
+        },
+        "random_forest": {
+          "home_win": 72.9,
+          "draw": 19.3,
+          "away_win": 7.9
+        },
+        "gradient_boost": {
+          "home_win": 71.5,
+          "draw": 20.6,
+          "away_win": 7.9
+        },
+        "neural_net": {
+          "home_win": 71.5,
+          "draw": 19.9,
+          "away_win": 8.6
+        },
+        "logistic": {
+          "home_win": 71.5,
+          "draw": 20.7,
+          "away_win": 7.8
+        },
+        "svm": {
+          "home_win": 72.8,
+          "draw": 19.2,
+          "away_win": 8.0
+        },
+        "knn": {
+          "home_win": 71.6,
+          "draw": 20.5,
+          "away_win": 7.9
+        },
+        "dixon_coles": {
+          "home_win": 65.1,
+          "draw": 25.5,
+          "away_win": 9.3
+        },
+        "bradley_terry": {
+          "home_win": 55.5,
+          "draw": 24.0,
+          "away_win": 20.5
+        },
+        "home_form": {
+          "score": 51.5,
+          "trend": "一般",
+          "momentum": 51.5,
+          "streak": 1,
+          "streak_type": "D"
+        },
+        "away_form": {
+          "score": 6.7,
+          "trend": "低迷",
+          "momentum": 6.7,
+          "streak": 2,
+          "streak_type": "L"
+        },
+        "handicap_signal": "⚠️ 盘口偏离",
+        "odds_movement": {
+          "signal": "无变动",
+          "h_adj": 0,
+          "a_adj": 0,
+          "d_adj": 0
+        },
+        "vote_analysis": {
+          "signal": "🚨 主胜超热67%",
+          "adj_h": -6,
+          "adj_a": 3
+        },
+        "h2h_blood": {
+          "h_adj": 0.0,
+          "a_adj": 0.0,
+          "signal": "无交锋",
+          "avg_goals": 2.5
+        },
+        "crs_analysis": {
+          "top_scores": [],
+          "signals": []
+        },
+        "ttg_analysis": {
+          "expected_goals": 2.5,
+          "over_2_5": 50,
+          "probs": {}
+        },
+        "halftime": {
+          "top": [],
+          "halftime_draw_prob": 0
+        },
+        "pace_rating": "中等",
+        "kelly_home": {
+          "kelly": 5.65,
+          "value": "True",
+          "edge": 7.5
+        },
+        "kelly_away": {
+          "kelly": 0,
+          "value": false,
+          "edge": 0
+        },
+        "odds": {
+          "implied_home": 66.2,
+          "implied_draw": 20.3,
+          "implied_away": 13.4
+        },
+        "experience_analysis": {
+          "triggered_count": 2,
+          "total_score": 15,
+          "draw_rules": 1,
+          "recommendation": "🔶 经验信号较强，建议重点关注",
+          "over_adj": 0.0,
+          "rules": [
+            {
+              "id": "D01",
+              "name": "大热必死",
+              "weight": 8
+            },
+            {
+              "id": "M01",
+              "name": "保级队激战",
+              "weight": 7
+            }
+          ]
+        },
+        "pro_odds": {
+          "true_home": 66.2,
+          "true_draw": 20.3,
+          "true_away": 13.5
+        },
+        "bivariate_poisson": {
+          "home_win": 64.4,
+          "draw": 23.2,
+          "away_win": 12.3,
+          "predicted_score": "1-0",
+          "btts": 46.5,
+          "over_2_5": 49.7,
+          "correlation": 0.1,
+          "p0_inflate": 0.01,
+          "top_scores": [
+            {
+              "score": "1-0",
+              "prob": 13.07
+            },
+            {
+              "score": "2-0",
+              "prob": 12.37
+            },
+            {
+              "score": "1-1",
+              "prob": 10.07
+            },
+            {
+              "score": "2-1",
+              "prob": 9.59
+            },
+            {
+              "score": "0-0",
+              "prob": 8.69
+            },
+            {
+              "score": "3-0",
+              "prob": 7.59
+            }
+          ]
+        },
+        "asian_handicap_probs": {
+          "ah_0": [
+            0.6504,
+            0.2097,
+            0.14
+          ],
+          "ah_0.5": [
+            0.6504,
+            0.0,
+            0.3496
+          ],
+          "ah_1.0": [
+            0.3974,
+            0.253,
+            0.3496
+          ],
+          "ou_1.5": [
+            0.7527,
+            0.0,
+            0.2473
+          ],
+          "ou_2.5": [
+            0.5081,
+            0.0,
+            0.4919
+          ],
+          "ou_3.5": [
+            0.2872,
+            0.0,
+            0.7128
+          ],
+          "btts": 0.4587
+        },
+        "bookmaker_implied_home_xg": 1.942,
+        "bookmaker_implied_away_xg": 0.767,
+        "predictability_score": 77,
+        "fusion_weights": {
+          "market": 0.82,
+          "model": 0.18
+        }
+      },
+      "recommend_score": 53.56,
+      "is_recommended": true,
+      "fusion_summary": "vMAX-Dynamic-Hybrid"
+    },
+    {
+      "rank": 3,
       "home_team": "波兰",
       "away_team": "阿尔巴尼",
       "league": "世预赛",
@@ -553,20 +996,20 @@
         "home_win_pct": 58.8,
         "draw_pct": 28.5,
         "away_win_pct": 12.7,
-        "confidence": 86.0,
+        "confidence": 70.0,
         "result": "主胜",
         "risk_level": "低",
         "over_under_2_5": "小",
         "both_score": "否",
-        "gpt_score": "1-0",
-        "gpt_analysis": "Poland hold a modest home advantage, yet 2.00 total xG and low-0-goal pricing imply a cagey match; n",
-        "grok_score": "1-0",
-        "grok_analysis": "Implied H 54.3% and xG 2.00 with 0球赔率偏低 point to low-scoring home edge",
-        "gemini_score": "1-0",
-        "gemini_analysis": "Low xG (2.00) and relegation desperation favor a conservative approach with a single-goal margin for",
+        "gpt_score": "-",
+        "gpt_analysis": "N/A",
+        "grok_score": "-",
+        "grok_analysis": "N/A",
+        "gemini_score": "-",
+        "gemini_analysis": "N/A",
         "claude_score": "1-0",
-        "claude_analysis": "xG仅2.00低产+0球赔率偏低暗示进球困难: 波兰主场小胜, 阿尔巴尼保级防守顽强, 全场仅一球决胜",
-        "model_agreement": true,
+        "claude_analysis": "赔率底牌反推正常",
+        "model_agreement": false,
         "candidate_scores": {
           "1-0": 1.0,
           "0-0": 0.5,
@@ -885,450 +1328,7 @@
           "model": 0.18
         }
       },
-      "recommend_score": 68.56,
-      "is_recommended": true,
-      "fusion_summary": "vMAX-Dynamic-Hybrid"
-    },
-    {
-      "rank": 3,
-      "home_team": "土耳其",
-      "away_team": "罗马尼亚",
-      "league": "世预赛",
-      "match_num": "周四001",
-      "sp_home": 1.33,
-      "sp_draw": 4.4,
-      "sp_away": 6.65,
-      "give_ball": -1.0,
-      "change": {},
-      "vote": {
-        "win": "67",
-        "same": "20",
-        "lose": "13",
-        "hhad_win": "44",
-        "hhad_same": "24",
-        "hhad_lose": "32"
-      },
-      "odds_movement": "主胜平稳，客胜平稳",
-      "intelligence": {
-        "h_inj": "无",
-        "g_inj": "无",
-        "home_bad_news": "1.土耳其本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.土耳其在防守端的表现确实存在明显短板，整体稳定性亟待加强。回顾近9场各类赛事，球队仅有1场成功零封对手。期间场均失球数达到1.67个，这样的数据反映出后防体系在专注度与协同性上仍有较大提升空间。面对高强度对抗时，防守球员",
-        "guest_bad_news": "1.罗马尼亚本赛季近10个客场比赛，在领先的情况下最终客场输球率达100%。 2.罗马尼亚国家队主帅卢塞斯库2月初因感冒并发症紧急入院，虽曾接受24小时监护，但2月3日病情急剧恶化再次送医。这位80岁老帅深受复杂慢性病困扰，状况十分危急。媒体透露，医生怀疑其难以在3月底前康复，罗马尼亚足协恐需紧急另"
-      },
-      "expert_intro": "土耳其最近4仗斩获3胜1和佳绩，球队战斗力值得肯定，加上此番坐拥主场之利，土耳其值得看高一线。",
-      "baseface": "主队各项赛事近6场4胜1平1负，状态上佳;近3个主场2胜1负，主场状态不错。客队各项赛事近6场3胜1平2负，状态一般;近3个客场1平2负，客场状态低迷。\n综合来看，主队优势较大。",
-      "had_analyse": [
-        "win"
-      ],
-      "home_rank": 25,
-      "away_rank": 49,
-      "v2_odds_dict": {
-        "a0": 16.0,
-        "a1": 6.5,
-        "a2": 3.75,
-        "a3": 3.45,
-        "a4": 4.6,
-        "a5": 7.8,
-        "a6": 13.0,
-        "a7": 17.0,
-        "s00": 16.0,
-        "s11": 8.25,
-        "s22": 15.0,
-        "s33": 70.0,
-        "w10": 7.5,
-        "w20": 6.8,
-        "w21": 7.0,
-        "w30": 8.75,
-        "w31": 9.5,
-        "w32": 20.0,
-        "w40": 15.0,
-        "w41": 18.0,
-        "w42": 50.0,
-        "l01": 18.0,
-        "l02": 50.0,
-        "l12": 16.0,
-        "l03": 150.0,
-        "l13": 60.0,
-        "l23": 60.0,
-        "ss": 1.95,
-        "sp": 18.0,
-        "sf": 45.0,
-        "ps": 3.85,
-        "pp": 7.25,
-        "pf": 14.0,
-        "fs": 23.0,
-        "fp": 18.0,
-        "ff": 10.5
-      },
-      "id": 1,
-      "date": "2026-03-25",
-      "home_id": 0,
-      "away_id": 0,
-      "home_stats": {
-        "played": 25,
-        "wins": 12,
-        "draws": 6,
-        "losses": 7,
-        "goals_for": 33,
-        "goals_against": 26,
-        "avg_goals_for": "1.33",
-        "avg_goals_against": "1.02",
-        "clean_sheets": 4,
-        "form": "WDLWD"
-      },
-      "away_stats": {
-        "played": 25,
-        "wins": 5,
-        "draws": 6,
-        "losses": 14,
-        "goals_for": 15,
-        "goals_against": 43,
-        "avg_goals_for": "0.6",
-        "avg_goals_against": "1.73",
-        "clean_sheets": 2,
-        "form": "LLDLL"
-      },
-      "h2h": [],
-      "prediction": {
-        "predicted_score": "1-1",
-        "home_win_pct": 69.8,
-        "draw_pct": 20.9,
-        "away_win_pct": 9.3,
-        "confidence": 67.0,
-        "result": "主胜",
-        "risk_level": "中",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "gpt_score": "1-1",
-        "gpt_analysis": "Home implied edge is strong, but xG 2.71 with deep-line trap and hot-favorite warning points to unde",
-        "grok_score": "1-1",
-        "grok_analysis": "Implied H 65.1% and xG 2.71 overridden by Gap Signal trap warning plus 🚨大热必死 in desperate relegation",
-        "gemini_score": "1-0",
-        "gemini_analysis": "Trap warning on deep handicap and 'Hot Favorite Dies' signal suggest a narrow home victory despite h",
-        "claude_score": "1-1",
-        "claude_analysis": "诱盘警告+大热必死: 机构虚构主队深盘, 罗马尼亚保级拼命, xG2.71被高估, 实际攻防紧凑, 双方各入一球收场",
-        "model_agreement": false,
-        "candidate_scores": {
-          "1-0": 0.5,
-          "2-0": 0.5,
-          "1-1": 1.0
-        },
-        "poisson": {
-          "home_win": 80.1,
-          "draw": 14.8,
-          "away_win": 5.1,
-          "predicted_score": "2-0",
-          "home_xg": 2.27,
-          "away_xg": 0.4,
-          "btts": 29.5,
-          "over_2_5": 49.7,
-          "top_scores": [
-            {
-              "score": "2-0",
-              "prob": 17.8
-            },
-            {
-              "score": "1-0",
-              "prob": 15.7
-            },
-            {
-              "score": "3-0",
-              "prob": 13.5
-            },
-            {
-              "score": "4-0",
-              "prob": 7.7
-            },
-            {
-              "score": "2-1",
-              "prob": 7.1
-            },
-            {
-              "score": "0-0",
-              "prob": 6.9
-            }
-          ]
-        },
-        "refined_poisson": {
-          "home_win": 65.7,
-          "draw": 24.5,
-          "away_win": 9.9,
-          "predicted_score": "1-0",
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 25.2
-            },
-            {
-              "score": "2-0",
-              "prob": 14.6
-            },
-            {
-              "score": "0-0",
-              "prob": 12.8
-            },
-            {
-              "score": "1-1",
-              "prob": 10.0
-            },
-            {
-              "score": "2-1",
-              "prob": 8.5
-            },
-            {
-              "score": "3-0",
-              "prob": 7.3
-            }
-          ]
-        },
-        "value_bets_summary": [],
-        "extreme_warning": "🚨 机构强开深盘虚构主队战力 (诱盘警告)",
-        "smart_money_signal": "🚨 主胜超热67%",
-        "smart_signals": [
-          "🚨 主胜超热67%",
-          "🚨 大热必死",
-          "⚠️ 负CLV-36.2% [客胜]"
-        ],
-        "model_consensus": 8,
-        "total_models": 15,
-        "expected_total_goals": 2.71,
-        "over_2_5": 50.5,
-        "btts": 46.0,
-        "top_scores": [
-          {
-            "score": "1-0",
-            "prob": 25.2
-          },
-          {
-            "score": "2-0",
-            "prob": 14.6
-          },
-          {
-            "score": "0-0",
-            "prob": 12.8
-          },
-          {
-            "score": "1-1",
-            "prob": 10.0
-          },
-          {
-            "score": "2-1",
-            "prob": 8.5
-          },
-          {
-            "score": "3-0",
-            "prob": 7.3
-          }
-        ],
-        "elo": {
-          "home_win": 81.8,
-          "draw": 20.0,
-          "away_win": 8.2,
-          "elo_diff": 400
-        },
-        "random_forest": {
-          "home_win": 72.9,
-          "draw": 19.3,
-          "away_win": 7.9
-        },
-        "gradient_boost": {
-          "home_win": 71.5,
-          "draw": 20.6,
-          "away_win": 7.9
-        },
-        "neural_net": {
-          "home_win": 71.5,
-          "draw": 19.9,
-          "away_win": 8.6
-        },
-        "logistic": {
-          "home_win": 71.5,
-          "draw": 20.7,
-          "away_win": 7.8
-        },
-        "svm": {
-          "home_win": 72.8,
-          "draw": 19.2,
-          "away_win": 8.0
-        },
-        "knn": {
-          "home_win": 71.6,
-          "draw": 20.5,
-          "away_win": 7.9
-        },
-        "dixon_coles": {
-          "home_win": 65.1,
-          "draw": 25.5,
-          "away_win": 9.3
-        },
-        "bradley_terry": {
-          "home_win": 55.5,
-          "draw": 24.0,
-          "away_win": 20.5
-        },
-        "home_form": {
-          "score": 51.5,
-          "trend": "一般",
-          "momentum": 51.5,
-          "streak": 1,
-          "streak_type": "D"
-        },
-        "away_form": {
-          "score": 6.7,
-          "trend": "低迷",
-          "momentum": 6.7,
-          "streak": 2,
-          "streak_type": "L"
-        },
-        "handicap_signal": "⚠️ 盘口偏离",
-        "odds_movement": {
-          "signal": "无变动",
-          "h_adj": 0,
-          "a_adj": 0,
-          "d_adj": 0
-        },
-        "vote_analysis": {
-          "signal": "🚨 主胜超热67%",
-          "adj_h": -6,
-          "adj_a": 3
-        },
-        "h2h_blood": {
-          "h_adj": 0.0,
-          "a_adj": 0.0,
-          "signal": "无交锋",
-          "avg_goals": 2.5
-        },
-        "crs_analysis": {
-          "top_scores": [],
-          "signals": []
-        },
-        "ttg_analysis": {
-          "expected_goals": 2.5,
-          "over_2_5": 50,
-          "probs": {}
-        },
-        "halftime": {
-          "top": [],
-          "halftime_draw_prob": 0
-        },
-        "pace_rating": "中等",
-        "kelly_home": {
-          "kelly": 5.65,
-          "value": "True",
-          "edge": 7.5
-        },
-        "kelly_away": {
-          "kelly": 0,
-          "value": false,
-          "edge": 0
-        },
-        "odds": {
-          "implied_home": 66.2,
-          "implied_draw": 20.3,
-          "implied_away": 13.4
-        },
-        "experience_analysis": {
-          "triggered_count": 2,
-          "total_score": 15,
-          "draw_rules": 1,
-          "recommendation": "🔶 经验信号较强，建议重点关注",
-          "over_adj": 0.0,
-          "rules": [
-            {
-              "id": "D01",
-              "name": "大热必死",
-              "weight": 8
-            },
-            {
-              "id": "M01",
-              "name": "保级队激战",
-              "weight": 7
-            }
-          ]
-        },
-        "pro_odds": {
-          "true_home": 66.2,
-          "true_draw": 20.3,
-          "true_away": 13.5
-        },
-        "bivariate_poisson": {
-          "home_win": 64.4,
-          "draw": 23.2,
-          "away_win": 12.3,
-          "predicted_score": "1-0",
-          "btts": 46.5,
-          "over_2_5": 49.7,
-          "correlation": 0.1,
-          "p0_inflate": 0.01,
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 13.07
-            },
-            {
-              "score": "2-0",
-              "prob": 12.37
-            },
-            {
-              "score": "1-1",
-              "prob": 10.07
-            },
-            {
-              "score": "2-1",
-              "prob": 9.59
-            },
-            {
-              "score": "0-0",
-              "prob": 8.69
-            },
-            {
-              "score": "3-0",
-              "prob": 7.59
-            }
-          ]
-        },
-        "asian_handicap_probs": {
-          "ah_0": [
-            0.6504,
-            0.2097,
-            0.14
-          ],
-          "ah_0.5": [
-            0.6504,
-            0.0,
-            0.3496
-          ],
-          "ah_1.0": [
-            0.3974,
-            0.253,
-            0.3496
-          ],
-          "ou_1.5": [
-            0.7527,
-            0.0,
-            0.2473
-          ],
-          "ou_2.5": [
-            0.5081,
-            0.0,
-            0.4919
-          ],
-          "ou_3.5": [
-            0.2872,
-            0.0,
-            0.7128
-          ],
-          "btts": 0.4587
-        },
-        "bookmaker_implied_home_xg": 1.942,
-        "bookmaker_implied_away_xg": 0.767,
-        "predictability_score": 77,
-        "fusion_weights": {
-          "market": 0.82,
-          "model": 0.18
-        }
-      },
-      "recommend_score": 55.16,
+      "recommend_score": 52.16,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     },
@@ -1367,25 +1367,25 @@
       "home_rank": 44,
       "away_rank": 79,
       "v2_odds_dict": {
-        "a0": 7.25,
-        "a1": 3.75,
+        "a0": 7.0,
+        "a1": 3.6,
         "a2": 3.0,
-        "a3": 4.0,
-        "a4": 7.2,
-        "a5": 15.0,
-        "a6": 28.0,
-        "a7": 40.0,
-        "s00": 7.25,
+        "a3": 4.1,
+        "a4": 7.4,
+        "a5": 15.5,
+        "a6": 30.0,
+        "a7": 43.0,
+        "s00": 7.0,
         "s11": 5.7,
         "s22": 16.0,
         "s33": 90.0,
         "w10": 5.7,
         "w20": 8.0,
         "w21": 7.0,
-        "w30": 16.0,
+        "w30": 17.0,
         "w31": 17.0,
         "w32": 35.0,
-        "w40": 50.0,
+        "w40": 55.0,
         "w41": 50.0,
         "w42": 100.0,
         "l01": 8.0,
@@ -1434,7 +1434,7 @@
       },
       "h2h": [],
       "prediction": {
-        "predicted_score": "0-0",
+        "predicted_score": "1-0",
         "home_win_pct": 47.3,
         "draw_pct": 32.2,
         "away_win_pct": 20.5,
@@ -1443,18 +1443,18 @@
         "risk_level": "中",
         "over_under_2_5": "小",
         "both_score": "否",
-        "gpt_score": "0-0",
-        "gpt_analysis": "Implied probabilities are relatively balanced and total xG is only 1.93; strong draw/low-goal indica",
-        "grok_score": "0-0",
-        "grok_analysis": "Balanced implied probs and low xG 1.93 combined with 🚨0球@7.25 and exp 攻防接近必防平",
-        "gemini_score": "0-0",
-        "gemini_analysis": "Low xG (1.93) combined with specific alerts on low 0-goal odds and close defensive metrics point to ",
-        "claude_score": "1-1",
-        "claude_analysis": "九配走平+攻防接近必防平: xG仅1.93低产, 0球@7.25赔率异常低属陷阱, 避开0-0选1-1, 双方保级激战各有斩获",
+        "gpt_score": "-",
+        "gpt_analysis": "N/A",
+        "grok_score": "-",
+        "grok_analysis": "N/A",
+        "gemini_score": "-",
+        "gemini_analysis": "N/A",
+        "claude_score": "1-0",
+        "claude_analysis": "赔率底牌反推正常",
         "model_agreement": false,
         "candidate_scores": {
-          "1-0": 0.5,
-          "0-0": 1.0,
+          "1-0": 1.0,
+          "0-0": 0.5,
           "1-1": 0.5
         },
         "poisson": {
@@ -1529,7 +1529,7 @@
         "extreme_warning": "",
         "smart_money_signal": "正常",
         "smart_signals": [
-          "🚨 0球@7.25",
+          "🚨 0球@7.0",
           "⚠️ 负CLV-22.9% [客胜]"
         ],
         "model_consensus": 9,
@@ -2251,8 +2251,8 @@
         "intelligence": {
           "h_inj": "无",
           "g_inj": "无",
-          "home_bad_news": "1.意大利本赛季近10个客场比赛，在领先的情况下最终客场输球率达50%。",
-          "guest_bad_news": "1.北爱尔兰近5年面对意大利客场输球率达到100%。 2.北爱尔兰近10场主场比赛得失球不超过2球的场次达到9场。"
+          "home_bad_news": "",
+          "guest_bad_news": "1.北爱尔兰近5年面对意大利客场输球率达到100%。"
         },
         "expert_intro": "意大利此前2次对阵北爱尔兰1胜1和保持不败，加上他们的整体实力远超后者，今仗还是主场作战，意大利誓取胜利。",
         "baseface": "意大利各项赛事近6场5胜1负，状态上佳。北爱尔兰各项赛事近6场3胜3负，状态一般。\n综合来看，主队优势较大。",
@@ -2710,25 +2710,25 @@
         "home_rank": 44,
         "away_rank": 79,
         "v2_odds_dict": {
-          "a0": 7.25,
-          "a1": 3.75,
+          "a0": 7.0,
+          "a1": 3.6,
           "a2": 3.0,
-          "a3": 4.0,
-          "a4": 7.2,
-          "a5": 15.0,
-          "a6": 28.0,
-          "a7": 40.0,
-          "s00": 7.25,
+          "a3": 4.1,
+          "a4": 7.4,
+          "a5": 15.5,
+          "a6": 30.0,
+          "a7": 43.0,
+          "s00": 7.0,
           "s11": 5.7,
           "s22": 16.0,
           "s33": 90.0,
           "w10": 5.7,
           "w20": 8.0,
           "w21": 7.0,
-          "w30": 16.0,
+          "w30": 17.0,
           "w31": 17.0,
           "w32": 35.0,
-          "w40": 50.0,
+          "w40": 55.0,
           "w41": 50.0,
           "w42": 100.0,
           "l01": 8.0,
@@ -2872,7 +2872,7 @@
           "extreme_warning": "",
           "smart_money_signal": "正常",
           "smart_signals": [
-            "🚨 0球@7.25",
+            "🚨 0球@7.0",
             "⚠️ 负CLV-22.9% [客胜]"
           ],
           "model_consensus": 9,
@@ -4037,7 +4037,7 @@
           "h_inj": "无",
           "g_inj": "无",
           "home_bad_news": "",
-          "guest_bad_news": "1.爱尔兰本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。"
+          "guest_bad_news": "1.爱尔兰本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.爱尔兰队在客场作战时的实际竞争力显得较为有限，球队在最近9场各项赛事的客场征程中仅取得3胜1平5负的战绩，胜率仅为33%。回顾此前世欧预阶段的3个客场比赛，他们取得1胜2负的结果，先后不敌葡萄牙与亚美尼亚，仅最后一轮逆转"
         },
         "expert_intro": "爱尔兰过去3场世杯欧洲都取得胜利，还曾以2比0完胜葡萄牙，表现出色的爱尔兰今铺有力取胜。",
         "baseface": "捷克各项赛事近6场3胜2平1负，状态不错。爱尔兰各项赛事近6场3胜1平2负，状态一般。\n综合来看，主队稍占优势。",
@@ -5007,28 +5007,28 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "1-0",
           "home_win_pct": 69.8,
           "draw_pct": 20.9,
           "away_win_pct": 9.3,
-          "confidence": 67.0,
+          "confidence": 63.0,
           "result": "主胜",
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-1",
-          "gpt_analysis": "Home implied edge is strong, but xG 2.71 with deep-line trap and hot-favorite warning points to unde",
-          "grok_score": "1-1",
-          "grok_analysis": "Implied H 65.1% and xG 2.71 overridden by Gap Signal trap warning plus 🚨大热必死 in desperate relegation",
-          "gemini_score": "1-0",
-          "gemini_analysis": "Trap warning on deep handicap and 'Hot Favorite Dies' signal suggest a narrow home victory despite h",
-          "claude_score": "1-1",
-          "claude_analysis": "诱盘警告+大热必死: 机构虚构主队深盘, 罗马尼亚保级拼命, xG2.71被高估, 实际攻防紧凑, 双方各入一球收场",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "1-0",
+          "claude_analysis": "🚨 机构强开深盘虚构主队战力 (诱盘警告)",
           "model_agreement": false,
           "candidate_scores": {
-            "1-0": 0.5,
+            "1-0": 1.0,
             "2-0": 0.5,
-            "1-1": 1.0
+            "1-1": 0.5
           },
           "poisson": {
             "home_win": 80.1,
@@ -5345,7 +5345,7 @@
             "model": 0.18
           }
         },
-        "recommend_score": 55.16,
+        "recommend_score": 53.56,
         "is_recommended": true
       },
       {
@@ -5370,8 +5370,8 @@
         "intelligence": {
           "h_inj": "无",
           "g_inj": "无",
-          "home_bad_news": "1.意大利本赛季近10个客场比赛，在领先的情况下最终客场输球率达50%。",
-          "guest_bad_news": "1.北爱尔兰近5年面对意大利客场输球率达到100%。 2.北爱尔兰近10场主场比赛得失球不超过2球的场次达到9场。"
+          "home_bad_news": "",
+          "guest_bad_news": "1.北爱尔兰近5年面对意大利客场输球率达到100%。"
         },
         "expert_intro": "意大利此前2次对阵北爱尔兰1胜1和保持不败，加上他们的整体实力远超后者，今仗还是主场作战，意大利誓取胜利。",
         "baseface": "意大利各项赛事近6场5胜1负，状态上佳。北爱尔兰各项赛事近6场3胜3负，状态一般。\n综合来看，主队优势较大。",
@@ -5448,27 +5448,27 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
+          "predicted_score": "2-0",
           "home_win_pct": 78.3,
           "draw_pct": 16.7,
           "away_win_pct": 5.0,
-          "confidence": 68.0,
+          "confidence": 64.0,
           "result": "主胜",
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-0",
-          "gpt_analysis": "Italy have dominant implied probability, but inflated home pricing and upset signals reduce blowout ",
-          "grok_score": "1-0",
-          "grok_analysis": "Implied H 73.4% and xG 2.66 favor narrow home win but 🚨大热必死 + 🚨主胜超热75% alert caps scoring at 1-0",
-          "gemini_score": "2-0",
-          "gemini_analysis": "Market overheating (75% home win) and trap alerts indicate a controlled win that likely falls short ",
-          "claude_score": "1-0",
-          "claude_analysis": "大热必死+主胜超热75%: 意大利深盘诱注, 北爱保级拼抢凶狠封锁空间, xG2.66难以兑现, 意大利仅靠一球勉强过关不覆盖深让",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "2-0",
+          "claude_analysis": "🚨 机构强开深盘虚构主队战力 (诱盘警告)",
           "model_agreement": false,
           "candidate_scores": {
-            "2-0": 0.5,
-            "1-0": 1.0,
+            "2-0": 1.0,
+            "1-0": 0.5,
             "3-0": 0.5
           },
           "poisson": {
@@ -5792,7 +5792,7 @@
             "model": 0.26
           }
         },
-        "recommend_score": 45.26,
+        "recommend_score": 43.66,
         "is_recommended": false
       },
       {
@@ -5829,25 +5829,25 @@
         "home_rank": 44,
         "away_rank": 79,
         "v2_odds_dict": {
-          "a0": 7.25,
-          "a1": 3.75,
+          "a0": 7.0,
+          "a1": 3.6,
           "a2": 3.0,
-          "a3": 4.0,
-          "a4": 7.2,
-          "a5": 15.0,
-          "a6": 28.0,
-          "a7": 40.0,
-          "s00": 7.25,
+          "a3": 4.1,
+          "a4": 7.4,
+          "a5": 15.5,
+          "a6": 30.0,
+          "a7": 43.0,
+          "s00": 7.0,
           "s11": 5.7,
           "s22": 16.0,
           "s33": 90.0,
           "w10": 5.7,
           "w20": 8.0,
           "w21": 7.0,
-          "w30": 16.0,
+          "w30": 17.0,
           "w31": 17.0,
           "w32": 35.0,
-          "w40": 50.0,
+          "w40": 55.0,
           "w41": 50.0,
           "w42": 100.0,
           "l01": 8.0,
@@ -5896,7 +5896,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "0-0",
+          "predicted_score": "1-0",
           "home_win_pct": 47.3,
           "draw_pct": 32.2,
           "away_win_pct": 20.5,
@@ -5905,18 +5905,18 @@
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "0-0",
-          "gpt_analysis": "Implied probabilities are relatively balanced and total xG is only 1.93; strong draw/low-goal indica",
-          "grok_score": "0-0",
-          "grok_analysis": "Balanced implied probs and low xG 1.93 combined with 🚨0球@7.25 and exp 攻防接近必防平",
-          "gemini_score": "0-0",
-          "gemini_analysis": "Low xG (1.93) combined with specific alerts on low 0-goal odds and close defensive metrics point to ",
-          "claude_score": "1-1",
-          "claude_analysis": "九配走平+攻防接近必防平: xG仅1.93低产, 0球@7.25赔率异常低属陷阱, 避开0-0选1-1, 双方保级激战各有斩获",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "1-0",
+          "claude_analysis": "赔率底牌反推正常",
           "model_agreement": false,
           "candidate_scores": {
-            "1-0": 0.5,
-            "0-0": 1.0,
+            "1-0": 1.0,
+            "0-0": 0.5,
             "1-1": 0.5
           },
           "poisson": {
@@ -5991,7 +5991,7 @@
           "extreme_warning": "",
           "smart_money_signal": "正常",
           "smart_signals": [
-            "🚨 0球@7.25",
+            "🚨 0球@7.0",
             "⚠️ 负CLV-22.9% [客胜]"
           ],
           "model_consensus": 9,
@@ -6346,7 +6346,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "1-0",
           "home_win_pct": 54.7,
           "draw_pct": 28.7,
           "away_win_pct": 16.6,
@@ -6355,18 +6355,18 @@
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-1",
-          "gpt_analysis": "Moderate home edge but close defensive profile and 2.16 xG support a tight game; draw protection is ",
-          "grok_score": "1-1",
-          "grok_analysis": "Implied H 51.2% near draw 27.7% with xG 2.16 and exp 攻防接近必防平",
-          "gemini_score": "1-1",
-          "gemini_analysis": "Relegation '6-pointer' context and close defensive data suggest a high probability of a draw in a lo",
-          "claude_score": "1-1",
-          "claude_analysis": "攻防数据接近必防平+保级六分战: xG2.16中低产, 双方实力接近拉锯, 威尔士主场有威胁但波黑绝境反击得分, 平局终场",
-          "model_agreement": true,
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "1-0",
+          "claude_analysis": "赔率底牌反推正常",
+          "model_agreement": false,
           "candidate_scores": {
-            "1-0": 0.5,
-            "1-1": 1.0,
+            "1-0": 1.0,
+            "1-1": 0.5,
             "0-0": 0.5
           },
           "poisson": {
@@ -6687,7 +6687,7 @@
             "model": 0.18
           }
         },
-        "recommend_score": 73.34,
+        "recommend_score": 63.34,
         "is_recommended": true
       },
       {
@@ -6794,20 +6794,20 @@
           "home_win_pct": 58.8,
           "draw_pct": 28.5,
           "away_win_pct": 12.7,
-          "confidence": 86.0,
+          "confidence": 70.0,
           "result": "主胜",
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-0",
-          "gpt_analysis": "Poland hold a modest home advantage, yet 2.00 total xG and low-0-goal pricing imply a cagey match; n",
-          "grok_score": "1-0",
-          "grok_analysis": "Implied H 54.3% and xG 2.00 with 0球赔率偏低 point to low-scoring home edge",
-          "gemini_score": "1-0",
-          "gemini_analysis": "Low xG (2.00) and relegation desperation favor a conservative approach with a single-goal margin for",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
           "claude_score": "1-0",
-          "claude_analysis": "xG仅2.00低产+0球赔率偏低暗示进球困难: 波兰主场小胜, 阿尔巴尼保级防守顽强, 全场仅一球决胜",
-          "model_agreement": true,
+          "claude_analysis": "赔率底牌反推正常",
+          "model_agreement": false,
           "candidate_scores": {
             "1-0": 1.0,
             "0-0": 0.5,
@@ -7126,7 +7126,7 @@
             "model": 0.18
           }
         },
-        "recommend_score": 68.56,
+        "recommend_score": 52.16,
         "is_recommended": true
       },
       {
@@ -7156,7 +7156,7 @@
           "h_inj": "无",
           "g_inj": "无",
           "home_bad_news": "",
-          "guest_bad_news": "1.爱尔兰本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。"
+          "guest_bad_news": "1.爱尔兰本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.爱尔兰队在客场作战时的实际竞争力显得较为有限，球队在最近9场各项赛事的客场征程中仅取得3胜1平5负的战绩，胜率仅为33%。回顾此前世欧预阶段的3个客场比赛，他们取得1胜2负的结果，先后不敌葡萄牙与亚美尼亚，仅最后一轮逆转"
         },
         "expert_intro": "爱尔兰过去3场世杯欧洲都取得胜利，还曾以2比0完胜葡萄牙，表现出色的爱尔兰今铺有力取胜。",
         "baseface": "捷克各项赛事近6场3胜2平1负，状态不错。爱尔兰各项赛事近6场3胜1平2负，状态一般。\n综合来看，主队稍占优势。",
@@ -7233,27 +7233,27 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "1-0",
           "home_win_pct": 50.0,
           "draw_pct": 28.5,
           "away_win_pct": 21.5,
-          "confidence": 73.0,
+          "confidence": 69.0,
           "result": "主胜",
-          "risk_level": "低",
+          "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-1",
-          "gpt_analysis": "Home edge is limited and both sides project close on market strength; with 2.26 xG and draw-oriented",
-          "grok_score": "1-1",
-          "grok_analysis": "Implied H 48.1% balanced with draw 27.6% and xG 2.26 plus exp 攻防接近必防平",
-          "gemini_score": "1-0",
-          "gemini_analysis": "Balanced defensive stats and high draw probability suggest a tight match decided by a single moment ",
-          "claude_score": "1-1",
-          "claude_analysis": "攻防数据接近必防平+保级激战: 双方隐含概率极接近(48%vs24%), xG2.26支撑双方各入一球, 爱尔兰客场拼命抢分",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "1-0",
+          "claude_analysis": "赔率底牌反推正常",
           "model_agreement": false,
           "candidate_scores": {
-            "1-0": 0.5,
-            "1-1": 1.0,
+            "1-0": 1.0,
+            "1-1": 0.5,
             "0-0": 0.5
           },
           "poisson": {
@@ -7570,7 +7570,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 37.6,
+        "recommend_score": 24.0,
         "is_recommended": false
       },
       {
@@ -7673,27 +7673,27 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
+          "predicted_score": "2-0",
           "home_win_pct": 74.2,
           "draw_pct": 19.4,
           "away_win_pct": 6.4,
-          "confidence": 67.0,
+          "confidence": 63.0,
           "result": "主胜",
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-0",
-          "gpt_analysis": "Denmark rate much stronger on implied probability, but severe favorite-trap warnings and 2.67 xG arg",
-          "grok_score": "1-0",
-          "grok_analysis": "Implied H 69.8% and xG 2.67 tempered by 🚨大热必死 alert and exp 下游两连胜无三连",
-          "gemini_score": "2-0",
-          "gemini_analysis": "Overheated home win signal (72%) and trap warning suggest the favorite will win but fail to exceed t",
-          "claude_score": "1-0",
-          "claude_analysis": "大热必死+两连胜无三连+诱盘警告: 丹麦70%超热被虚构, 北马其顿保级殊死抵抗, xG2.67严重高估, 丹麦仅险胜一球未覆盖深盘",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "2-0",
+          "claude_analysis": "🚨 机构强开深盘虚构主队战力 (诱盘警告)",
           "model_agreement": false,
           "candidate_scores": {
-            "2-0": 0.5,
-            "1-0": 1.0,
+            "2-0": 1.0,
+            "1-0": 0.5,
             "3-0": 0.5
           },
           "poisson": {
@@ -8021,7 +8021,7 @@
             "model": 0.26
           }
         },
-        "recommend_score": 41.04,
+        "recommend_score": 39.44,
         "is_recommended": false
       }
     ],
@@ -8126,7 +8126,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "1-0",
           "home_win_pct": 69.8,
           "draw_pct": 20.9,
           "away_win_pct": 9.3,
@@ -8135,19 +8135,19 @@
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-1",
-          "gpt_analysis": "High home implied probability is offset by strong trap warning and ‘大热必死’; with xG 2.71 and desperat",
-          "grok_score": "1-1",
-          "grok_analysis": "Implied H 65.1% contradicted by Gap Signal trap + 大热必死 ALERT; desperate relegation 6-pointer + xG 2.",
-          "gemini_score": "1-1",
-          "gemini_analysis": "Market trap signal and 'Hot Favorite' alert suggest underperformance relative to 2.71 xG expectation",
-          "claude_score": "1-1",
-          "claude_analysis": "大热必死 alert + 诱盘警告: bookmaker inflating Turkey strength. Relegation 6-pointer grinds to draw. xG 2.71",
-          "model_agreement": true,
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "1-0",
+          "claude_analysis": "🚨 机构强开深盘虚构主队战力 (诱盘警告)",
+          "model_agreement": false,
           "candidate_scores": {
-            "1-0": 0.5,
+            "1-0": 1.0,
             "2-0": 0.5,
-            "1-1": 1.0
+            "1-1": 0.5
           },
           "poisson": {
             "home_win": 80.1,
@@ -8464,7 +8464,7 @@
             "model": 0.18
           }
         },
-        "recommend_score": 63.56,
+        "recommend_score": 53.56,
         "is_recommended": true
       },
       {
@@ -8489,8 +8489,8 @@
         "intelligence": {
           "h_inj": "无",
           "g_inj": "无",
-          "home_bad_news": "1.意大利本赛季近10个客场比赛，在领先的情况下最终客场输球率达50%。",
-          "guest_bad_news": "1.北爱尔兰近5年面对意大利客场输球率达到100%。 2.北爱尔兰近10场主场比赛得失球不超过2球的场次达到9场。"
+          "home_bad_news": "",
+          "guest_bad_news": "1.北爱尔兰近5年面对意大利客场输球率达到100%。"
         },
         "expert_intro": "意大利此前2次对阵北爱尔兰1胜1和保持不败，加上他们的整体实力远超后者，今仗还是主场作战，意大利誓取胜利。",
         "baseface": "意大利各项赛事近6场5胜1负，状态上佳。北爱尔兰各项赛事近6场3胜3负，状态一般。\n综合来看，主队优势较大。",
@@ -8567,27 +8567,27 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
+          "predicted_score": "2-0",
           "home_win_pct": 78.3,
           "draw_pct": 16.7,
           "away_win_pct": 5.0,
-          "confidence": 68.0,
+          "confidence": 64.0,
           "result": "主胜",
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-0",
-          "gpt_analysis": "Italy have clear implied edge, but deep-line inflation, ultra-hot home bias warning, and anti-favori",
-          "grok_score": "1-0",
-          "grok_analysis": "Implied H 73.4% with 🚨主胜超热75% + 大热必死 ALERT + trap signal; survival relegation desperation + xG 2.66 ",
-          "gemini_score": "2-0",
-          "gemini_analysis": "High implied home win probability (73.4%) tempered by extreme market heat (75%) limiting blowout pot",
-          "claude_score": "1-0",
-          "claude_analysis": "Double alert 大热必死 + 主胜超热75% signals massive overbet on Italy. 诱盘警告 confirms inflated deep handicap. ",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "2-0",
+          "claude_analysis": "🚨 机构强开深盘虚构主队战力 (诱盘警告)",
           "model_agreement": false,
           "candidate_scores": {
-            "2-0": 0.5,
-            "1-0": 1.0,
+            "2-0": 1.0,
+            "1-0": 0.5,
             "3-0": 0.5
           },
           "poisson": {
@@ -8911,7 +8911,7 @@
             "model": 0.26
           }
         },
-        "recommend_score": 45.26,
+        "recommend_score": 43.66,
         "is_recommended": false
       },
       {
@@ -8948,25 +8948,25 @@
         "home_rank": 44,
         "away_rank": 79,
         "v2_odds_dict": {
-          "a0": 7.25,
-          "a1": 3.75,
+          "a0": 7.0,
+          "a1": 3.6,
           "a2": 3.0,
-          "a3": 4.0,
-          "a4": 7.2,
-          "a5": 15.0,
-          "a6": 28.0,
-          "a7": 40.0,
-          "s00": 7.25,
+          "a3": 4.1,
+          "a4": 7.4,
+          "a5": 15.5,
+          "a6": 30.0,
+          "a7": 43.0,
+          "s00": 7.0,
           "s11": 5.7,
           "s22": 16.0,
           "s33": 90.0,
           "w10": 5.7,
           "w20": 8.0,
           "w21": 7.0,
-          "w30": 16.0,
+          "w30": 17.0,
           "w31": 17.0,
           "w32": 35.0,
-          "w40": 50.0,
+          "w40": 55.0,
           "w41": 50.0,
           "w42": 100.0,
           "l01": 8.0,
@@ -9015,7 +9015,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "0-0",
+          "predicted_score": "1-0",
           "home_win_pct": 47.3,
           "draw_pct": 32.2,
           "away_win_pct": 20.5,
@@ -9024,18 +9024,18 @@
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "0-0",
-          "gpt_analysis": "Implied probabilities are relatively balanced, total xG is only 1.93, and explicit low-0-goal pricin",
-          "grok_score": "0-0",
-          "grok_analysis": "Near-even implied (H44.6%) + 攻防接近必防平 + 🚨0球@7.25 low-odds signal in relegation 6-pointer; xG 1.93 sup",
-          "gemini_score": "0-0",
-          "gemini_analysis": "Low bookmaker xG (1.93) combined with specific low-odds alerts for a zero-goal outcome.",
-          "claude_score": "1-1",
-          "claude_analysis": "九配走平口 + 必防平 engine signals strongly favor draw. Low xG 1.93 supports ≤2 total goals. 0球@7.25 alert m",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "1-0",
+          "claude_analysis": "赔率底牌反推正常",
           "model_agreement": false,
           "candidate_scores": {
-            "1-0": 0.5,
-            "0-0": 1.0,
+            "1-0": 1.0,
+            "0-0": 0.5,
             "1-1": 0.5
           },
           "poisson": {
@@ -9110,7 +9110,7 @@
           "extreme_warning": "",
           "smart_money_signal": "正常",
           "smart_signals": [
-            "🚨 0球@7.25",
+            "🚨 0球@7.0",
             "⚠️ 负CLV-22.9% [客胜]"
           ],
           "model_consensus": 9,
@@ -9465,7 +9465,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "1-0",
           "home_win_pct": 54.7,
           "draw_pct": 28.7,
           "away_win_pct": 16.6,
@@ -9474,18 +9474,18 @@
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-1",
-          "gpt_analysis": "Home edge is modest rather than decisive, xG 2.16 supports limited scoring, and ‘攻防数据接近必防平’ strongly",
-          "grok_score": "1-1",
-          "grok_analysis": "Implied H51.2% + 攻防数据接近必防平 in desperate relegation 6-pointer; xG 2.16 aligns with draw over outright",
-          "gemini_score": "1-1",
-          "gemini_analysis": "Statistical parity in offensive/defensive metrics and high-stakes relegation context favor a draw.",
-          "claude_score": "1-1",
-          "claude_analysis": "必防平 engine call with near-equal attack/defense metrics. xG 2.16 and 0球赔率偏低 suggest exactly 2 goals m",
-          "model_agreement": true,
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "1-0",
+          "claude_analysis": "赔率底牌反推正常",
+          "model_agreement": false,
           "candidate_scores": {
-            "1-0": 0.5,
-            "1-1": 1.0,
+            "1-0": 1.0,
+            "1-1": 0.5,
             "0-0": 0.5
           },
           "poisson": {
@@ -9806,7 +9806,7 @@
             "model": 0.18
           }
         },
-        "recommend_score": 73.34,
+        "recommend_score": 63.34,
         "is_recommended": true
       },
       {
@@ -9913,20 +9913,20 @@
           "home_win_pct": 58.8,
           "draw_pct": 28.5,
           "away_win_pct": 12.7,
-          "confidence": 86.0,
+          "confidence": 70.0,
           "result": "主胜",
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-0",
-          "gpt_analysis": "Poland hold the stronger implied win chance, but low total xG of 2.00 and low-0-goal signal suggest ",
-          "grok_score": "1-0",
-          "grok_analysis": "Implied H54.3% + 0球赔率偏低 in relegation 6-pointer; xG 2.00 indicates low-scoring home edge without tra",
-          "gemini_score": "1-0",
-          "gemini_analysis": "Low xG environment (2.00) and relegation desperation favor a narrow, low-scoring home victory.",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
           "claude_score": "1-0",
-          "claude_analysis": "Lowest xG in set at 2.00 with 0球赔率偏低 flagging tight affair. Poland slight home edge (54.3%) enough f",
-          "model_agreement": true,
+          "claude_analysis": "赔率底牌反推正常",
+          "model_agreement": false,
           "candidate_scores": {
             "1-0": 1.0,
             "0-0": 0.5,
@@ -10245,7 +10245,7 @@
             "model": 0.18
           }
         },
-        "recommend_score": 68.56,
+        "recommend_score": 52.16,
         "is_recommended": true
       },
       {
@@ -10275,7 +10275,7 @@
           "h_inj": "无",
           "g_inj": "无",
           "home_bad_news": "",
-          "guest_bad_news": "1.爱尔兰本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。"
+          "guest_bad_news": "1.爱尔兰本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.爱尔兰队在客场作战时的实际竞争力显得较为有限，球队在最近9场各项赛事的客场征程中仅取得3胜1平5负的战绩，胜率仅为33%。回顾此前世欧预阶段的3个客场比赛，他们取得1胜2负的结果，先后不敌葡萄牙与亚美尼亚，仅最后一轮逆转"
         },
         "expert_intro": "爱尔兰过去3场世杯欧洲都取得胜利，还曾以2比0完胜葡萄牙，表现出色的爱尔兰今铺有力取胜。",
         "baseface": "捷克各项赛事近6场3胜2平1负，状态不错。爱尔兰各项赛事近6场3胜1平2负，状态一般。\n综合来看，主队稍占优势。",
@@ -10352,7 +10352,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "1-0",
           "home_win_pct": 50.0,
           "draw_pct": 28.5,
           "away_win_pct": 21.5,
@@ -10361,18 +10361,18 @@
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-1",
-          "gpt_analysis": "Probabilities are close, xG 2.26 is moderate, and the engine explicitly flags draw protection in a d",
-          "grok_score": "1-1",
-          "grok_analysis": "Implied H48.1% + 攻防数据接近必防平 in relegation 6-pointer; xG 2.26 supports controlled draw",
-          "gemini_score": "1-1",
-          "gemini_analysis": "Close data profiles and 'must-defend-draw' engine signal suggest a split result in a 6-pointer match",
-          "claude_score": "1-1",
-          "claude_analysis": "必防平 engine directive with most balanced implied probs in set (H48.1/A24.3). xG 2.26 supports 2-goal ",
-          "model_agreement": true,
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "1-0",
+          "claude_analysis": "赔率底牌反推正常",
+          "model_agreement": false,
           "candidate_scores": {
-            "1-0": 0.5,
-            "1-1": 1.0,
+            "1-0": 1.0,
+            "1-1": 0.5,
             "0-0": 0.5
           },
           "poisson": {
@@ -10689,7 +10689,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 34.0,
+        "recommend_score": 24.0,
         "is_recommended": false
       },
       {
@@ -10792,27 +10792,27 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-0",
+          "predicted_score": "2-0",
           "home_win_pct": 74.2,
           "draw_pct": 19.4,
           "away_win_pct": 6.4,
-          "confidence": 67.0,
+          "confidence": 63.0,
           "result": "主胜",
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-0",
-          "gpt_analysis": "Denmark are rated strongly by market, but deep handicap inflation and multiple anti-favorite alerts ",
-          "grok_score": "1-0",
-          "grok_analysis": "Implied H69.8% overridden by 🚨大热必死 + trap signal + downstream streak; relegation desperation + xG 2.",
-          "gemini_score": "2-0",
-          "gemini_analysis": "Strong home dominance (69.8%) but 'Hot Favorite' alert and trap signal cap the expected goal margin.",
-          "claude_score": "1-0",
-          "claude_analysis": "Triple alert: 大热必死 + 主胜超热72% + 两连胜无三连. Strongest contrarian signal in entire slate. 诱盘警告 confirms ar",
+          "gpt_score": "-",
+          "gpt_analysis": "N/A",
+          "grok_score": "-",
+          "grok_analysis": "N/A",
+          "gemini_score": "-",
+          "gemini_analysis": "N/A",
+          "claude_score": "2-0",
+          "claude_analysis": "🚨 机构强开深盘虚构主队战力 (诱盘警告)",
           "model_agreement": false,
           "candidate_scores": {
-            "2-0": 0.5,
-            "1-0": 1.0,
+            "2-0": 1.0,
+            "1-0": 0.5,
             "3-0": 0.5
           },
           "poisson": {
@@ -11140,7 +11140,7 @@
             "model": 0.26
           }
         },
-        "recommend_score": 41.04,
+        "recommend_score": 39.44,
         "is_recommended": false
       }
     ]
