@@ -448,5 +448,3 @@ def run_predictions(raw, use_ai=True):
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
 
     return res, t4
-
-
