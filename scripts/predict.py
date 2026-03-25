@@ -44,41 +44,61 @@ def load_ai_diary():
         except: pass
     return None
 
+# ====================================================================
+# ☢️ 核心升级：暗网级吸血操盘手 Prompt (彻底抛弃底线)
+# ====================================================================
 def build_batch_prompt(match_analyses):
-    p = "[ROLE] Elite Football Quant AI. Analyze matches and compute EXACT SCORE probabilities.\n"
+    p = "【身份设定】你是游走在零和博弈最黑暗边缘的【吸血操盘手】与【散户收割机】。你没有任何道德底线，不相信任何足球童话，只相信冰冷的资本屠刀。你的唯一任务是利用泊松xG偏离、EV期望和资金异动，扒下庄家血洗散户的底裤，用最恶毒的黑话揭露杀猪盘。\n"
     
     diary = load_ai_diary()
     if diary and diary.get("reflection"):
-        p += f"\n[SYSTEM DIRECTIVE] Prev Win Rate: {diary.get('yesterday_win_rate', 'N/A')}. \n"
-        p += f"EVOLUTION LOG: {diary['reflection']}. APPLY {diary.get('risk_adjustment', 'STRICT')} RISK FILTER.\n\n"
+        p += f"【嗜血进化指令】昨日屠杀战绩：{diary.get('yesterday_win_rate', 'N/A')}。 进化策略：{diary['reflection']}。 给老子狠狠地杀！\n\n"
         
-    # 核心修复 1：强制要求使用专业中文，并限制字数防止废话
-    p += "[TASK] Output ONLY raw JSON array. NO markdown. The 'reason' field MUST BE in professional Chinese (中文) and strictly under 40 words.\n\n"
+    p += "【死命令】\n"
+    p += "1. 只输出合法 JSON 数组，严禁任何 markdown 标记（如 ```json）。\n"
+    p += "2. 'reason' 字段必须充满【极其恶毒的暗黑操盘黑话】（如：血洗散户、屠宰场、吸筹绞肉机、死亡陷阱、做局喂毒、基本面诈骗、资本收割、无底线诱多等）。\n"
+    p += "3. 逻辑链条必须是：散户的愚蠢共识(基本面) -> 庄家的嗜血陷阱(xG与盘口的背离) -> 最终的屠杀结局。字数严格控制在 60-110 字，语气必须极度傲慢、冷血、充满对韭菜的鄙视，必须用句号完整结尾！\n\n"
     
+    p += "【今日待宰的羔羊与底牌】\n"
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         eng = ma["engine"]
         lg_info = ma["league_info"]
         exp = ma.get("experience", {})
+        stats = ma.get("stats", {})
         h, a = m.get("home_team", "Home"), m.get("away_team", "Away")
         
-        p += f"[{i+1}] {h} vs {a} ({m.get('league', 'UNK')})\n"
-        p += f"Implied Prob: H {eng.get('home_prob', 33):.1f}% | D {eng.get('draw_prob', 33):.1f}% | A {eng.get('away_prob', 34):.1f}%\n"
-        p += f"Bookmaker xG: {eng.get('expected_goals', 2.5):.2f} | Gap Signal: {eng.get('scissors_gap_signal', 'None')}\n"
-        p += f"Context: {lg_info}\n"
+        hc = m.get("give_ball", "0")
+        sp_h = float(m.get("sp_home", 0) or 0)
+        hp = eng.get('home_prob', 33)
+        vh = calculate_value_bet(hp, sp_h) if sp_h > 1 else {}
+        ev_str = f"主胜EV嗜血狂飙(+{vh.get('ev', 0)}%)" if vh.get("is_value") else "资金池沦为死水"
+        smart_sigs = stats.get('smart_signals', [])
+        smart_str = ", ".join(smart_sigs) if smart_sigs else "未见收割信号"
 
+        # 提取基本面情报
+        baseface = str(m.get('baseface', '')).replace('\n', ' ')
+        intro = str(m.get('expert_intro', '')).replace('\n', ' ')
+        intel_text = baseface if baseface else intro
+        if len(intel_text) > 120: 
+            intel_text = intel_text[:120] + "..."
+        if not intel_text:
+            intel_text = "散户凭意淫下注的盲区"
+
+        p += f"[{i+1}] {h} vs {a} | {m.get('league', '未知')} | 亚盘死线: {hc}\n"
+        p += f"- 散户眼中的基本面: {intel_text}\n"
+        p += f"- 真实屠杀概率: 主 {hp:.1f}% | 平 {eng.get('draw_prob', 33):.1f}% | 客 {eng.get('away_prob', 34):.1f}%\n"
+        p += f"- 庄家隐性xG底牌: 主队 {eng.get('bookmaker_implied_home_xg', '?')} vs 客队 {eng.get('bookmaker_implied_away_xg', '?')} | 致命剪刀差: {eng.get('scissors_gap_signal', '无异常')}\n"
+        p += f"- 盘房价值与筹码: {ev_str} | 异动预警: {smart_str}\n"
+        
         if exp.get("triggered_count", 0) > 0:
-            exp_names = ",".join([t["name"] for t in exp.get("triggered", [])[:4]])
-            p += f"EXP Engine: {exp_names}\n"
-            if exp.get("risk_signals"):
-                p += f"ALERT: {', '.join(exp['risk_signals'][:3])}\n"
+            exp_names = ",".join([t["name"] for t in exp.get("triggered", [])[:3]])
+            p += f"- 触发杀猪风控法则: {exp_names}\n"
                 
-        p += f"SCORE CANDIDATES: {', '.join(eng.get('top3_scores', ['1-1', '0-0', '1-0']))}\n\n"
+        p += f"- 机器推演死局比分: {', '.join(eng.get('top3_scores', ['1-1', '0-0', '1-0']))}\n\n"
 
-    p += "[OUTPUT STRUCTURE]\n"
-    p += f"Produce EXACTLY {len(match_analyses)} JSON objects in this format:\n"
-    # 核心修复 2：用中文示例引导大模型
-    p += '[\n  {"match": 1, "score": "2-1", "reason": "庄家真实xG支持主队，且防冷平规则触发，看好主胜穿盘。"}\n]\n'
+    p += "【严格输出格式示例】\n"
+    p += '[\n  {"match": 1, "score": "0-2", "reason": "散户正被主队虚假的连胜基本面洗脑，疯狂送钱。而隐性xG暴露出主队仅0.8的真实攻击力，数据严重倒挂。配合亚盘强行深让的死亡陷阱，这是庄家精心布置的吸筹绞肉机。资本正无底线诱多做局喂毒，逆向思维直指客队，血洗主胜筹码。"}\n]\n'
     return p
 
 # ====================================================================
@@ -87,10 +107,10 @@ def build_batch_prompt(match_analyses):
 
 FALLBACK_URLS = [
     None, 
-    "https://api520.pro/v1", "https://www.api520.pro/v1",
-    "https://api521.pro/v1", "https://www.api521.pro/v1",
-    "https://api522.pro/v1", "https://www.api522.pro/v1", 
-    "https://69.63.213.33:666/v1"
+    "[https://api520.pro/v1](https://api520.pro/v1)", "[https://www.api520.pro/v1](https://www.api520.pro/v1)",
+    "[https://api521.pro/v1](https://api521.pro/v1)", "[https://www.api521.pro/v1](https://www.api521.pro/v1)",
+    "[https://api522.pro/v1](https://api522.pro/v1)", "[https://www.api522.pro/v1](https://www.api522.pro/v1)", 
+    "[https://69.63.213.33:666/v1](https://69.63.213.33:666/v1)"
 ]
 
 def get_clean_env_url(name, default=""):
@@ -103,7 +123,6 @@ def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
 
 async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
-    """异步单路 AI 轮询"""
     key = get_clean_env_key(key_env)
     primary_url = get_clean_env_url(url_env)
     if not key: 
@@ -123,16 +142,20 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
             headers = {"Content-Type": "application/json"}
             if is_gem:
                 headers["x-goog-api-key"] = key
-                payload = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.1}}
+                payload = {
+                    "contents": [{"parts": [{"text": prompt}]}], 
+                    "generationConfig": {"temperature": 0.15},
+                    "systemInstruction": {"parts": [{"text": "必须输出JSON数组。reason必须是毫无道德底线的【暗黑杀猪盘解剖】，揭露庄家血洗散户的阴谋。使用极度恶毒的黑话（如：吸筹绞肉机、做局喂毒、资本收割），字数60-110字，极度冷血傲慢，句号结尾。"}]}
+                }
             else:
                 headers["Authorization"] = f"Bearer {key}"
                 payload = {
                     "model": mn, 
                     "messages": [
-                        {"role": "system", "content": "Output ONLY valid JSON array. No markdown."},
+                        {"role": "system", "content": "你是一个毫无道德底线、极度冷血的暗网操盘手。只输出纯JSON数组，无markdown。reason字段必须用最恶毒的黑话揭穿庄家'血洗散户'的杀局（如：资本收割、死亡陷阱、基本面诈骗），限60-110字，极度鄙视散户，句号完整结束。"},
                         {"role": "user", "content": prompt}
                     ], 
-                    "temperature": 0.1
+                    "temperature": 0.15
                 }
                 
             gw = url.split("/v1")[0] if "/v1" in url else url[:35]
@@ -156,11 +179,10 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 if isinstance(arr, list):
                                     for item in arr:
                                         if item.get("match") and item.get("score"):
-                                            # 核心修复 3：解除 [:100] 的暴力截断，保留 AI 完整的句子
-                                            analysis_text = str(item.get("reason", "")).strip()
+                                            reason_text = str(item.get("reason", "")).strip()
                                             results[item["match"]] = {
                                                 "ai_score": item["score"], 
-                                                "analysis": analysis_text
+                                                "analysis": reason_text
                                             }
                             except: pass
                             
