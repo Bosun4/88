@@ -12,11 +12,21 @@ from odds_engine import predict_match
 from league_intel import build_league_intelligence
 from experience_rules import ExperienceEngine, apply_experience_to_prediction
 from advanced_models import upgrade_ensemble_predict
-from quant_edge import apply_quant_edge
 
-# 新增导入（根据你的新模块路径，如果不在同一目录请自行调整）
-# from odds_history import apply_odds_history      # czl0325历史匹配模块
-# from quant_edge import apply_quant_edge          # 新增量化边缘模块
+# ====================================================================
+# 🛡️ 终极防御装甲：动态加载你的自定义模块，防暴毙！
+# ====================================================================
+try:
+    from odds_history import apply_odds_history
+except Exception as e:
+    print(f"  [WARN] ⚠️ 历史盘口模块 (odds_history) 加载失败或未找到，系统自动降级跳过: {e}")
+    def apply_odds_history(m, mg): return mg  # 兜底函数，防止崩溃
+
+try:
+    from quant_edge import apply_quant_edge
+except Exception as e:
+    print(f"  [WARN] ⚠️ 量化边缘模块 (quant_edge) 加载失败或未找到，系统自动降级跳过: {e}")
+    def apply_quant_edge(m, mg): return mg  # 兜底函数，防止崩溃
 
 ensemble = EnsemblePredictor()
 exp_engine = ExperienceEngine()
@@ -24,13 +34,6 @@ exp_engine = ExperienceEngine()
 # ====================================================================
 # ☢️ 极致压榨AI v2.1 核心升级思路（继续吸血进化）
 # ====================================================================
-# 1. Prompt 继续保持 v2.0 的极致毒性 + 多字段输出（ai_confidence + value_kill + dark_verdict）
-# 2. AI矩阵调用保持极限压榨（3轮重试 + 429智能休眠 + 动态排序高成功率模型）
-# 3. run_predictions 调用链已按你要求精确改成：
-#    apply_experience_to_prediction → apply_odds_history → apply_quant_edge → upgrade_ensemble_predict
-# 4. 增加调用日志，方便你实时看到每一步“屠杀加成”
-# 5. 其余全部保持 v2.0 极致压榨风格（日记闭环、铁壁解析、AI权重融合等）
-
 def calculate_value_bet(prob_pct, odds):
     if not odds or odds <= 1.05:
         return {"ev": 0.0, "kelly": 0.0, "is_value": False}
@@ -432,7 +435,6 @@ def select_top4(preds):
         if pr.get("risk_level") == "低": s += 12
         elif pr.get("risk_level") == "高": s -= 5
         if pr.get("model_agreement"): s += 10
-        if pr.get("value_bets_summary"): s += 8
 
         exp_info = pr.get("experience_analysis", {})
         exp_score = exp_info.get("total_score", 0)
@@ -505,19 +507,27 @@ def run_predictions(raw, use_ai=True):
             ma["stats"], m
         )
         
+        # 1. 注入经验法则
         mg = apply_experience_to_prediction(m, mg, exp_engine)
         print(f"    → apply_experience_to_prediction 已注入（经验法则加成）")
         
-        mg = apply_odds_history(m, mg)                    # czl0325历史匹配
-        print(f"    → apply_odds_history 已注入（历史盘口血洗信号）")
+        # 2. 注入历史盘口血洗信号（自带异常降级装甲）
+        mg = apply_odds_history(m, mg)                    
+        print(f"    → apply_odds_history 已尝试注入（历史盘口血洗信号）")
         
-        mg = apply_quant_edge(m, mg)                      # ← 新增这行（量化边缘优势）
-        print(f"    → apply_quant_edge 已注入（极致量化边缘屠杀）")
+        # 3. 注入量化边缘优势（自带异常降级装甲）
+        mg = apply_quant_edge(m, mg)                      
+        print(f"    → apply_quant_edge 已尝试注入（极致量化边缘屠杀）")
         
+        # 4. 最终集成强化
         mg = upgrade_ensemble_predict(m, mg)
         print(f"    → upgrade_ensemble_predict 已注入（最终集成强化）")
         # =====================================================================
         
+        # 补充缺失的 result 字段（防止前端报错）
+        pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
+        mg["result"] = max(pcts, key=pcts.get)
+
         res.append({**m, "prediction": mg})
         print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | AI信心: {mg.get('ai_avg_confidence', 0)}")
 
@@ -529,8 +539,10 @@ def run_predictions(raw, use_ai=True):
 
     # 自动更新杀猪日记（闭环进化）
     diary = load_ai_diary()
-    diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{len(res)}"
+    diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
     diary["reflection"] = "今天AI矩阵已彻底入魔 + 新增历史匹配+量化边缘，屠杀信号更精准，下次继续加毒"
     save_ai_diary(diary)
 
     return res, t4
+
+
