@@ -260,7 +260,6 @@ async def run_ai_matrix(prompt, num_matches):
     # ==========================================================
     ai_configs = [
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
-            "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking",
             "熊猫-按量-满血copilot-claude-opus-4.6-thinking",
             "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking",
         ]),
@@ -469,7 +468,7 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# ☢️ run_predictions v2.1 —— 精确调用链
+# ☢️ run_predictions v2.1 —— 精确调用链 + try/except防崩溃
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
@@ -500,7 +499,6 @@ def run_predictions(raw, use_ai=True):
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         
-        # ====================== 精确无损的装甲调用链 ======================
         mg = merge_result(
             ma["engine"],
             all_ai["gpt"].get(i+1, {}),
@@ -510,24 +508,32 @@ def run_predictions(raw, use_ai=True):
             ma["stats"], m
         )
         
-        # 1. 注入经验法则
-        mg = apply_experience_to_prediction(m, mg, exp_engine)
-        print(f"    → apply_experience_to_prediction 已注入（经验法则加成）")
+        # ============ 4层增强管线（每层独立try/except防崩溃） ============
+        try:
+            mg = apply_experience_to_prediction(m, mg, exp_engine)
+            print(f"    → apply_experience_to_prediction 已注入（经验法则加成）")
+        except Exception as e:
+            print(f"    ⚠️ experience_rules跳过: {e}")
         
-        # 2. 注入历史盘口血洗信号（自带异常降级装甲）
-        mg = apply_odds_history(m, mg)                    
-        print(f"    → apply_odds_history 已尝试注入（历史盘口血洗信号）")
+        try:
+            mg = apply_odds_history(m, mg)
+            print(f"    → apply_odds_history 已尝试注入（历史盘口血洗信号）")
+        except Exception as e:
+            print(f"    ⚠️ odds_history跳过: {e}")
         
-        # 3. 注入量化边缘优势（自带异常降级装甲）
-        mg = apply_quant_edge(m, mg)                      
-        print(f"    → apply_quant_edge 已尝试注入（极致量化边缘屠杀）")
+        try:
+            mg = apply_quant_edge(m, mg)
+            print(f"    → apply_quant_edge 已尝试注入（极致量化边缘屠杀）")
+        except Exception as e:
+            print(f"    ⚠️ quant_edge跳过: {e}")
         
-        # 4. 最终集成强化
-        mg = upgrade_ensemble_predict(m, mg)
-        print(f"    → upgrade_ensemble_predict 已注入（最终集成强化）")
+        try:
+            mg = upgrade_ensemble_predict(m, mg)
+            print(f"    → upgrade_ensemble_predict 已注入（最终集成强化）")
+        except Exception as e:
+            print(f"    ⚠️ advanced_models跳过: {e}")
         # =====================================================================
         
-        # 补充缺失的 result 字段（防止前端报错）
         pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
         mg["result"] = max(pcts, key=pcts.get)
 
@@ -540,12 +546,9 @@ def run_predictions(raw, use_ai=True):
         r["is_recommended"] = r["id"] in t4ids
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
 
-    # 自动更新杀猪日记（闭环进化）
     diary = load_ai_diary()
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
     diary["reflection"] = "今天AI矩阵已彻底入魔 + 新增历史匹配+量化边缘，屠杀信号更精准，下次继续加毒"
     save_ai_diary(diary)
 
     return res, t4
-
-
