@@ -191,11 +191,8 @@ async def run_ai_matrix(prompt, num_matches):
     ai_configs = [
         ("claude","CLAUDE_API_URL","CLAUDE_API_KEY",[
             "熊猫-按量-满血copilot-claude-opus-4.6-thinking",
-            "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking",
             "熊猫-按量-顶级特供-官max-claude-opus-4.6",
             "熊猫-特供-按量-Q-claude-opus-4.6",
-            "熊猫-按量-特供顶级-官方正向满血-claude-sonnet-4.6-thinking",
-            "熊猫-按量-满血copilot-claude-sonnet-4.6-thinking",
         ]),
         ("grok","GROK_API_URL","GROK_API_KEY",[
             "熊猫-A-6-grok-4.2-thinking",
