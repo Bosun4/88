@@ -98,11 +98,13 @@ class OddsPatternAnalyzer:
         if sp_h>5.0:return {"pattern":"大冷门主","adj_h":-3,"adj_d":1,"adj_a":2,"signal":"📊 主队冷门(>5.0)实际胜率低于隐含8%"}
         return {"pattern":"正常","adj_h":0,"adj_d":0,"adj_a":0,"signal":""}
 
-_matcher=None
+# ==================== 全局缓存 ====================
+_history_cache = None
 def get_matcher():
-    global _matcher
-    if _matcher is None:_matcher=OddsHistoryMatcher()
-    return _matcher
+    global _history_cache
+    if _history_cache is None:
+        _history_cache = OddsHistoryMatcher()
+    return _history_cache
 
 def apply_odds_history(match,prediction):
     sp_h=float(match.get("sp_home",0) or 0);sp_d=float(match.get("sp_draw",0) or 0);sp_a=float(match.get("sp_away",0) or 0)
