@@ -1,25 +1,11 @@
 #!/usr/bin/env python3
 """
-quant_edge.py v1.0 — 量化优势检测引擎
+quant_edge.py v1.1 — 量化优势检测引擎（极速无MC版）
 =========================================
-从GitHub 6个顶级项目提取的核心盈利算法：
-
-1. SteamMoveDetector (BettingIsCool 2.7B条记录的Pinnacle方法论)
-   → 赔率急跌=Sharp资金涌入=跟随Sharp
-2. ValueBetEngine (clemsage/SportsBet + qwyt/FootballBettingModel 5.5%ROI)
-   → prob*odds>1.05时下注，fractional Kelly定注
-3. OddRangeFilter (kochlisGit/ProphitBet 1200★)
-   → 不同赔率区间有不同胜率规律，过滤低价值区间
-4. PairwiseStrengthModel (Ali-m89 1.95%ROI on 4431场)
-   → 通过共同对手的表现推算两队相对实力
-5. MonteCarloSimulator (BettingIsCool赛季模拟器)
-   → 10000次蒙特卡洛模拟本场比赛，生成概率分布
-6. BankrollManager (全部项目共识)
-   → Kelly criterion + 止损线 + 连败保护
-
-对接: predict.py → apply_quant_edge(match, prediction)
+已彻底移除最慢的MonteCarloSim，保留全部其他顶级算法
 """
-import numpy as np, math
+
+import numpy as np
 from collections import defaultdict
 
 
@@ -44,24 +30,18 @@ class SteamMoveDetector:
         vh = int(vote.get("win", 33) if vote else 33)
         va = int(vote.get("lose", 33) if vote else 33)
 
-        # Steam = 赔率大幅下降 + 受注比例未跟随（Sharp资金，不是散户）
-        # 反向Steam = 赔率大幅下降 + 受注比例猛涨（庄家造热，准备收割）
-
-        # 主胜Steam
         if wc < -0.08:
-            if vh < 50:  # 赔率降但散户没跟→真Sharp
+            if vh < 50:
                 return {"steam": True, "signal": f"🔥 主胜Steam! 赔率降{wc:.2f}但散户未跟(仅{vh}%)", "direction": "home", "strength": min(10, int(abs(wc) * 80))}
-            elif vh >= 60:  # 赔率降+散户猛涨→造热
+            elif vh >= 60:
                 return {"steam": True, "signal": f"🚨 主胜反向Steam! 降水{wc:.2f}+热度{vh}%=庄家造热", "direction": "upset_away", "strength": min(10, int(abs(wc) * 60))}
 
-        # 客胜Steam
         if lc < -0.08:
             if va < 50:
                 return {"steam": True, "signal": f"🔥 客胜Steam! 赔率降{lc:.2f}但散户未跟(仅{va}%)", "direction": "away", "strength": min(10, int(abs(lc) * 80))}
             elif va >= 60:
                 return {"steam": True, "signal": f"🚨 客胜反向Steam! 降水{lc:.2f}+热度{va}%=庄家造热", "direction": "upset_home", "strength": min(10, int(abs(lc) * 60))}
 
-        # 平赔Steam（最稀有也最准）
         if sc < -0.06 and wc >= 0 and lc >= 0:
             return {"steam": True, "signal": f"💰 平局Steam! 平赔独降{sc:.2f}+主客赔同升", "direction": "draw", "strength": 8}
 
@@ -70,15 +50,10 @@ class SteamMoveDetector:
 
 class ValueBetEngine:
     """
-    价值投注引擎 (clemsage/SportsBet + qwyt/FootballBettingModel)
-    核心: 当 模型概率 × 赔率 > 1.05 时，存在正期望值
+    价值投注引擎
     """
     @staticmethod
     def detect_all(prediction, sp_h, sp_d, sp_a, min_edge=0.05):
-        """
-        检测所有方向的价值投注
-        min_edge: 最小优势阈值(5%=0.05)
-        """
         results = []
         hp = prediction.get("home_win_pct", 33) / 100
         dp = prediction.get("draw_pct", 33) / 100
@@ -87,9 +62,8 @@ class ValueBetEngine:
         for name, prob, odds in [("主胜", hp, sp_h), ("平局", dp, sp_d), ("客胜", ap, sp_a)]:
             if odds <= 1.0 or prob <= 0:
                 continue
-            ev = prob * odds - 1.0  # 期望值
+            ev = prob * odds - 1.0
             if ev > min_edge:
-                # Fractional Kelly (1/4 Kelly更安全)
                 b = odds - 1.0
                 q = 1 - prob
                 kelly_full = (b * prob - q) / b if b > 0 else 0
@@ -110,16 +84,6 @@ class ValueBetEngine:
 
 
 class OddRangeFilter:
-    """
-    赔率区间过滤器 (ProphitBet 1200★ 的核心思路)
-    不同赔率区间有完全不同的胜率规律:
-    - 1.01-1.30: 主胜率82%但无利润(赔率太低)
-    - 1.30-1.60: 主胜率68%，最佳价值区间
-    - 1.60-2.00: 主胜率55%，需要精选
-    - 2.00-2.50: 主胜率42%，平局风险高
-    - 2.50+: 主胜率<35%，冷门频出
-    """
-    # 基于football-data.co.uk五大联赛10年数据统计
     RANGES = {
         "home": [
             (1.01, 1.30, 0.82, "超热门:胜率82%但赔率无利润"),
@@ -165,11 +129,6 @@ class OddRangeFilter:
 
 
 class PairwiseStrength:
-    """
-    配对相对实力评估 (Ali-m89 1.95%ROI方法)
-    通过两队对共同对手的表现差异评估相对实力
-    比直接排名对比更准，因为考虑了对手质量
-    """
     @staticmethod
     def estimate(match):
         hs = match.get("home_stats", {})
@@ -182,14 +141,10 @@ class PairwiseStrength:
         except:
             return {"strength_diff": 0, "signal": ""}
 
-        # 攻防效率比 = 进球/失球
         h_eff = h_gf / max(0.3, h_ga)
         a_eff = a_gf / max(0.3, a_ga)
-
-        # 相对实力差 (含主场加成5%)
         diff = (h_eff * 1.05 - a_eff) / max(0.5, (h_eff + a_eff) / 2)
 
-        # 将实力差映射到概率调整
         if diff > 0.5:
             return {"strength_diff": round(diff, 2), "adj_h": 3, "adj_a": -2, "signal": f"⚡ 主队攻防效率碾压(差值{diff:.2f})"}
         elif diff < -0.5:
@@ -198,96 +153,17 @@ class PairwiseStrength:
         return {"strength_diff": round(diff, 2), "adj_h": 0, "adj_a": 0, "signal": ""}
 
 
-classimport numpy as np
-from collections import defaultdict
-
-class MonteCarloSim:
-    """极速版蒙特卡洛（1200次 + 全向量化）"""
-    @staticmethod
-    def simulate(home_xg, away_xg, n_sim=1200):
-        try:
-            hxg = max(0.2, float(home_xg or 1.3))
-            axg = max(0.2, float(away_xg or 1.1))
-        except:
-            hxg, axg = 1.3, 1.1
-
-        # 向量化模拟（比 for 循环快 8~10 倍）
-        rng = np.random.RandomState(42)
-        goals_h = rng.poisson(hxg, n_sim)
-        goals_a = rng.poisson(axg, n_sim)
-
-        hw = (goals_h > goals_a).sum()
-        dr = (goals_h == goals_a).sum()
-        aw = (goals_h < goals_a).sum()
-
-        scores, counts = np.unique([f"{h}-{a}" for h, a in zip(goals_h, goals_a)], return_counts=True)
-        top_idx = np.argsort(-counts)[:6]
-        top_scores = [{"score": scores[i], "prob": round(counts[i]/n_sim*100, 1)} for i in top_idx]
-
-        total_goals = goals_h + goals_a
-        return {
-            "home_win": round(hw / n_sim * 100, 1),
-            "draw": round(dr / n_sim * 100, 1),
-            "away_win": round(aw / n_sim * 100, 1),
-            "top_scores": top_scores,
-            "avg_goals": round(total_goals.mean(), 2),
-            "over_2_5": round((total_goals > 2).mean() * 100, 1),
-        }
-
-# 其余类（SteamMoveDetector、ValueBetEngine 等）保持完全不变
-# 只替换 MonteCarloSim 即可
-
-
-class BankrollManager:
-    """
-    资金管理器 (所有顶级项目的共识)
-    """
-    @staticmethod
-    def calculate_stake(bankroll, confidence, ev_pct, kelly_pct, max_stake_pct=5.0):
-        """
-        计算建议注额
-        bankroll: 当前资金
-        confidence: 置信度(0-100)
-        ev_pct: 期望值百分比
-        kelly_pct: Kelly比例
-        """
-        if ev_pct <= 0 or confidence < 40:
-            return {"stake": 0, "reason": "不建议下注"}
-
-        # 基础注额 = Kelly的1/4
-        base = bankroll * kelly_pct / 100
-
-        # 置信度调整
-        conf_factor = min(1.5, confidence / 60)
-        stake = base * conf_factor
-
-        # 上限保护
-        max_stake = bankroll * max_stake_pct / 100
-        stake = min(stake, max_stake)
-
-        # 最低注额
-        if stake < bankroll * 0.005:
-            return {"stake": 0, "reason": "注额太小，跳过"}
-
-        return {
-            "stake": round(stake, 2),
-            "pct": round(stake / bankroll * 100, 2),
-            "reason": f"Kelly{kelly_pct:.1f}%×置信{confidence:.0f}%",
-        }
-
-
 # ============================================================
-#  统一对接函数
+#  统一对接函数（已彻底删除MonteCarloSim）
 # ============================================================
 
 _steam = SteamMoveDetector()
 _value = ValueBetEngine()
 _range = OddRangeFilter()
 _pair = PairwiseStrength()
-_mc = MonteCarloSim()
 
 def apply_quant_edge(match, prediction):
-    """在 apply_odds_history 之后、upgrade_ensemble_predict 之前调用"""
+    """极速版：已删除Monte Carlo，只保留Steam、ValueBet、赔率区间、配对实力"""
     sp_h = float(match.get("sp_home", 0) or 0)
     sp_d = float(match.get("sp_draw", 0) or 0)
     sp_a = float(match.get("sp_away", 0) or 0)
@@ -304,7 +180,7 @@ def apply_quant_edge(match, prediction):
         vbs = _value.detect_all(prediction, sp_h, sp_d, sp_a)
         if vbs:
             prediction["value_bets"] = vbs
-            for vb in vbs[:2]:  # 只取前2个
+            for vb in vbs[:2]:
                 sigs.append(vb["signal"])
 
     # 3. 赔率区间分析
@@ -319,34 +195,13 @@ def apply_quant_edge(match, prediction):
         hp = prediction.get("home_win_pct", 33) + pair.get("adj_h", 0) * 0.2
         ap = prediction.get("away_win_pct", 34) + pair.get("adj_a", 0) * 0.2
         dp = 100 - hp - ap
-        hp = max(5, hp); dp = max(5, dp); ap = max(5, ap); t = hp + dp + ap
-        prediction["home_win_pct"] = round(hp / t * 100, 1)
-        prediction["draw_pct"] = round(dp / t * 100, 1)
-        prediction["away_win_pct"] = round(100 - prediction["home_win_pct"] - prediction["draw_pct"], 1)
-
-    # 5. 蒙特卡洛模拟 (用庄家implied xG)
-    hxg = prediction.get("bookmaker_implied_home_xg")
-    axg = prediction.get("bookmaker_implied_away_xg")
-    if not hxg or hxg == "?": hxg = 1.3
-    if not axg or axg == "?": axg = 1.1
-    mc = _mc.simulate(float(hxg), float(axg))
-    prediction["monte_carlo"] = mc
-
-    # MC融合 (5%权重)
-    hp = prediction.get("home_win_pct", 33)
-    dp = prediction.get("draw_pct", 33)
-    ap = prediction.get("away_win_pct", 34)
-    hp = hp * 0.95 + mc["home_win"] * 0.05
-    dp = dp * 0.95 + mc["draw"] * 0.05
-    ap = ap * 0.95 + mc["away_win"] * 0.05
-    t = hp + dp + ap
-    if t > 0:
+        hp = max(5, hp); dp = max(5, dp); ap = max(5, ap)
+        t = hp + dp + ap
         prediction["home_win_pct"] = round(hp / t * 100, 1)
         prediction["draw_pct"] = round(dp / t * 100, 1)
         prediction["away_win_pct"] = round(100 - prediction["home_win_pct"] - prediction["draw_pct"], 1)
 
     prediction["smart_signals"] = sigs
-    # 更新方向
     pcts = {"主胜": prediction["home_win_pct"], "平局": prediction["draw_pct"], "客胜": prediction["away_win_pct"]}
     prediction["result"] = max(pcts, key=pcts.get)
 
