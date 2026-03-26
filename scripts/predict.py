@@ -1,548 +1,246 @@
-import json
-import os
-import re
-import time
-import asyncio
-import aiohttp
-import numpy as np
-from datetime import datetime
-from config import *
-from models import EnsemblePredictor
-from odds_engine import predict_match
-from league_intel import build_league_intelligence
-from experience_rules import ExperienceEngine, apply_experience_to_prediction
-from advanced_models import upgrade_ensemble_predict
+<!DOCTYPE html>
 
-# ====================================================================
-# 🛡️ 终极防御装甲：动态加载你的自定义模块，防暴毙！
-# ====================================================================
-try:
-    from odds_history import apply_odds_history
-except Exception as e:
-    print(f"  [WARN] ⚠️ 历史盘口模块 (odds_history) 加载失败或未找到，系统自动降级跳过: {e}")
-    def apply_odds_history(m, mg): return mg  # 兜底函数，防止崩溃
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>QUANT FOOTBALL TERMINAL</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08090e;--s1:#0e1118;--s2:#141822;--bd:#1e2536;--tx:#b8c4d6;--t2:#6b7a90;--t3:#3d4a5e;--w:#eaf0f8;--red:#ff4d5a;--gn:#00e08e;--bl:#4d8aff;--am:#ffb020;--pr:#b366ff;--cy:#00d4e0;--pk:#ff5ca0;--or:#ff8030;--y:#ffe040}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;font-size:13px}
+.m{font-family:'IBM Plex Mono',monospace}
+/* Header */
+.hdr{position:sticky;top:0;z-index:99;background:rgba(8,9,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);height:44px;display:flex;align-items:center;padding:0 16px}
+.hdr-w{max-width:1280px;margin:0 auto;width:100%;display:flex;justify-content:space-between;align-items:center}
+.hdr-l{display:flex;align-items:center;gap:8px}
+.hdr-logo{width:6px;height:20px;background:var(--gn);border-radius:1px}
+.hdr-t{font-family:'IBM Plex Sans';font-size:14px;font-weight:800;color:var(--w);letter-spacing:1px}
+.hdr-v{font-size:9px;color:var(--t3);background:var(--s2);padding:2px 6px;border-radius:3px;font-family:'IBM Plex Mono';border:1px solid var(--bd)}
+.hdr-r{display:flex;align-items:center;gap:10px}
+.live{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t2)}
+.live-d{width:5px;height:5px;border-radius:50%;background:var(--gn);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.2}}
+/* Main */
+.wrap{max-width:1280px;margin:0 auto;padding:10px 12px}
+/* Dashboard */
+.dash{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px}
+.dc{background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:8px 10px}
+.dc-v{font-family:'IBM Plex Mono';font-size:20px;font-weight:700}.dc-l{font-size:8px;color:var(--t3);margin-top:1px;text-transform:uppercase;letter-spacing:.5px}
+/* Section */
+.sec{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.sec-t{font-size:13px;font-weight:800;color:var(--w);letter-spacing:.3px}
+.sec-b{background:var(--am);color:#000;font-size:7px;font-weight:800;padding:2px 5px;border-radius:2px;letter-spacing:.5px}
+/* TOP4 */
+.t4g{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:5px;margin-bottom:14px}
+.t4{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:12px;position:relative;cursor:pointer;transition:.15s;overflow:hidden}
+.t4:hover{border-color:var(--am);box-shadow:0 0 20px rgba(255,176,32,.06)}
+.t4-bar{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--am),var(--red))}
+.t4-rank{position:absolute;top:8px;right:8px;font-family:'IBM Plex Mono';font-size:18px;font-weight:700;color:var(--am);opacity:.3}
+.t4-lg{font-size:9px;color:var(--am);font-weight:700;margin-bottom:4px}
+.t4-teams{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.t4-tn{font-size:12px;font-weight:700;color:var(--w);flex:1}.t4-tn:last-child{text-align:right}
+.t4-vs{font-size:8px;color:var(--t3);font-weight:800}
+.t4-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
+.t4-c{text-align:center;background:var(--bg);border-radius:3px;padding:4px}
+.t4-cl{font-size:7px;color:var(--t3)}.t4-cv{font-family:'IBM Plex Mono';font-size:11px;font-weight:700;color:var(--w)}
+.t4-cv.g{color:var(--gn)}.t4-cv.a{color:var(--am)}
+.t4-ft{font-size:8px;color:var(--or);margin-top:4px}
+/* Tabs */
+.tabs{display:flex;gap:2px;background:var(--s1);border:1px solid var(--bd);border-radius:4px;padding:2px;max-width:320px;margin:0 auto 14px}
+.tab{flex:1;text-align:center;padding:5px;border-radius:3px;font-size:10px;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:.15s}
+.tab.ac{background:var(--bl);color:#fff}
+/* Match Card */
+.mc{background:var(--s1);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:5px}
+.mc.rec{border-color:var(--am)}
+.mc-h{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.mc-lg{font-size:10px;color:var(--bl);font-weight:700}
+.mc-badge{background:var(--am);color:#000;font-size:7px;font-weight:800;padding:1px 4px;border-radius:2px;margin-left:4px}
+.mc-time{font-size:9px;color:var(--t3)}
+.mc-b{padding:12px}
+/* Teams row */
+.teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.tm{width:35%;text-align:center}.tm-n{font-size:13px;font-weight:700;color:var(--w)}
+.sc-c{text-align:center}
+.sc-big{font-family:'IBM Plex Mono';font-size:28px;font-weight:700;color:var(--gn)}
+.res-tag{display:inline-block;font-size:8px;padding:2px 6px;border-radius:2px;font-weight:700;margin-top:2px}
+.res-tag.h{background:#ff4d5a18;color:var(--red)}.res-tag.d{background:#ffb02018;color:var(--am)}.res-tag.a{background:#4d8aff18;color:var(--bl)}
+/* Stats row */
+.sr{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-bottom:8px}
+.sb{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:5px;text-align:center}
+.sb-l{font-size:7px;color:var(--t3);text-transform:uppercase}.sb-v{font-family:'IBM Plex Mono';font-size:12px;font-weight:700}
+/* Probability bar */
+.prob{margin-bottom:8px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px 10px}
+.prob-h{display:flex;justify-content:space-between;font-size:9px;font-weight:700;margin-bottom:3px}
+.prob-bar{display:flex;height:3px;border-radius:2px;overflow:hidden;background:var(--s2)}
+.prob-bar .h{background:var(--red)}.prob-bar .d{background:#64748b}.prob-bar .a{background:var(--bl)}
+/* Signals */
+.sig{padding:5px 8px;border-radius:4px;font-size:9px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.sig-r{background:#ff4d5a0a;border:1px solid #ff4d5a20;color:var(--red)}
+.sig-a{background:#ffb0200a;border:1px solid #ffb02020;color:var(--am)}
+.sig-g{background:#00e08e0a;border:1px solid #00e08e20;color:var(--gn)}
+.sig-b{background:#4d8aff0a;border:1px solid #4d8aff20;color:var(--bl)}
+.sig-p{background:#b366ff0a;border:1px solid #b366ff20;color:var(--pr)}
+/* Experience panel */
+.exp{border:1px solid var(--or);border-radius:6px;overflow:hidden;margin-bottom:5px;background:linear-gradient(135deg,rgba(255,128,48,.04),rgba(255,80,90,.02))}
+.exp-h{padding:5px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,128,48,.15)}
+.exp-t{font-size:10px;font-weight:800;color:var(--or)}.exp-s{font-family:'IBM Plex Mono';font-size:12px;font-weight:700;color:var(--w);background:var(--s2);padding:1px 5px;border-radius:3px}
+.exp-b{padding:5px 10px;font-size:9px;line-height:1.5}
+.exp-rule{display:flex;gap:4px;padding:1px 0}
+.exp-id{font-family:'IBM Plex Mono';font-size:7px;color:var(--or);background:#ff803010;padding:0 3px;border-radius:2px}
+.exp-rn{color:var(--w);font-weight:600;font-size:9px}
+.exp-rec{margin-top:3px;padding:3px 6px;border-radius:3px;font-size:9px;font-weight:700}
+.exp-rec.hi{background:#ff4d5a12;color:var(--red)}.exp-rec.md{background:#ffb02012;color:var(--am)}.exp-rec.lo{background:#00e08e12;color:var(--gn)}
+/* Toggle */
+.tbtn{width:100%;padding:5px;background:none;border:1px solid var(--bd);border-radius:4px;color:var(--t2);font-size:10px;cursor:pointer;font-weight:600;transition:.15s;font-family:'IBM Plex Sans','Noto Sans SC'}.tbtn:hover{background:var(--s2);color:var(--w)}
+.det{display:none;padding:0 12px 12px}.det.open{display:block}
+/* Model grid */
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
+.mb{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px;position:relative;overflow:hidden}
+.mb::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.mb.c1::before{background:var(--gn)}.mb.c2::before{background:var(--bl)}.mb.c3::before{background:var(--pr)}.mb.c4::before{background:var(--am)}.mb.c5::before{background:var(--cy)}.mb.c6::before{background:var(--pk)}.mb.c7::before{background:var(--or)}
+.mb-t{font-size:8px;font-weight:700;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px}
+.mb-t.c1{color:var(--gn)}.mb-t.c2{color:var(--bl)}.mb-t.c3{color:var(--pr)}.mb-t.c4{color:var(--am)}.mb-t.c5{color:var(--cy)}.mb-t.c6{color:var(--pk)}.mb-t.c7{color:var(--or)}
+.mb-r{display:flex;justify-content:space-between;font-size:8px;padding:1px 0}.mb-l{color:var(--t3)}.mb-v{font-family:'IBM Plex Mono';font-weight:600;color:var(--w);font-size:8px}
+.chip{display:inline-block;background:var(--s2);border:1px solid var(--bd);padding:1px 4px;border-radius:2px;font-size:7px;font-family:'IBM Plex Mono';color:var(--t3);margin:1px}.chip.top{border-color:var(--gn);color:var(--gn)}
+/* Section labels */
+.sl{font-size:8px;color:var(--t3);font-weight:700;margin:6px 0 3px;padding-bottom:2px;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px}
+/* Asian handicap grid */
+.ahg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:5px}
+.ahc{background:var(--bg);border:1px solid var(--bd);border-radius:3px;padding:4px;text-align:center}
+.ahc-l{font-size:6px;color:var(--t3);text-transform:uppercase}.ahc-v{font-family:'IBM Plex Mono';font-size:10px;font-weight:700;color:var(--w)}.ahc-v.hot{color:var(--gn)}
+/* Implied xG */
+.ixg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:5px}
+.ixg-c{background:var(--bg);border:1px solid var(--bd);border-radius:3px;padding:5px;text-align:center}
+.ixg-l{font-size:6px;color:var(--t3);text-transform:uppercase}.ixg-v{font-family:'IBM Plex Mono';font-size:14px;font-weight:700}
+/* AI section */
+.ai-box{border:1px solid var(--am);border-radius:6px;overflow:hidden;margin-top:5px;background:linear-gradient(135deg,rgba(255,176,32,.04),rgba(255,80,48,.02))}
+.ai-h{padding:6px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,176,32,.15)}
+.ai-t{font-size:11px;font-weight:800;color:var(--am)}.ai-s{font-family:'IBM Plex Mono';font-size:14px;font-weight:700;color:var(--w);background:var(--s2);padding:1px 6px;border-radius:3px}
+.ai-x{font-size:10px;color:var(--tx);line-height:1.4;padding:8px 10px}
+.ai3{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-top:5px}
+.ai3-c{padding:7px;background:var(--bg);border-right:1px solid var(--bd)}.ai3-c:last-child{border:none}
+.ai3-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.ai3-t{font-size:8px;font-weight:700}.ai3-t.gpt{color:var(--gn)}.ai3-t.grk{color:var(--cy)}.ai3-t.gem{color:var(--bl)}
+.ai3-s{font-family:'IBM Plex Mono';font-size:9px;font-weight:700;color:var(--w);background:var(--s2);padding:1px 3px;border-radius:2px}
+.ai3-x{font-size:7px;color:var(--t3);line-height:1.3}
+/* Form/Stats */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px}
+.fb{background:var(--bg);border-radius:4px;padding:6px;border:1px solid var(--bd)}
+.fb-t{font-size:8px;font-weight:700;color:var(--t2);margin-bottom:2px;text-transform:uppercase}
+.fb-r{display:flex;justify-content:space-between;font-size:8px;padding:1px 0}
+.fb-l{color:var(--t3)}.fb-v{font-family:'IBM Plex Mono';font-weight:600;color:var(--w);font-size:8px}
+/* Footer */
+.foot{text-align:center;padding:14px;color:var(--t3);font-size:7px;border-top:1px solid var(--bd);margin-top:16px;letter-spacing:.3px}
+.empty{text-align:center;padding:40px;color:var(--t3)}
+/* MC bar */
+.mc-bar{display:flex;gap:2px;margin:3px 0}
+.mc-bar span{height:3px;border-radius:1px}
+@media(max-width:640px){.dash{grid-template-columns:repeat(2,1fr)}.mg,.fg{grid-template-columns:1fr}.ai3{grid-template-columns:1fr}.ai3-c{border-right:none;border-bottom:1px solid var(--bd)}.t4g{grid-template-columns:1fr}.ahg{grid-template-columns:repeat(2,1fr)}.sr{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="hdr"><div class="hdr-w"><div class="hdr-l"><div class="hdr-logo"></div><div class="hdr-t">QUANT FOOTBALL</div><div class="hdr-v" id="ver">vMAX</div></div><div class="hdr-r"><div class="live"><div class="live-d"></div><span class="m" id="ut">...</span></div></div></div></div>
+<div class="wrap">
+<div class="dash" id="db"></div>
+<div class="sec"><div class="sec-t">ELITE PICKS</div><div class="sec-b">TOP 4</div></div>
+<div class="t4g" id="t4"></div>
+<div class="tabs"><button class="tab" onclick="sw('yesterday')">昨日</button><button class="tab ac" onclick="sw('today')">今日</button><button class="tab" onclick="sw('tomorrow')">明日</button></div>
+<div id="ms"></div>
+<div class="foot">ZI-BivariatePoisson · Dixon-Coles · MonteCarlo5K · Poisson · ELO · RF · GB · NN · SVM · KNN · ProOverround · FLB · CLV · SteamDetect · AdaptiveCalibrator · SmartFilter<br>GPT-5.4 · Grok-4.2 · Gemini-3.1 · Claude-Opus-4.6 · 58条经验规则 · 历史赔率匹配 · 亚盘概率 · 蒙特卡洛模拟 · 价值投注引擎 | vMAX</div>
+</div>
+<script>
+var D=null,CT='today';
+function cl(t){return t?String(t).replace(/```json/g,'').replace(/```/g,'').trim():''}
+function fm(f){if(!f)return'?';return f.split('').map(c=>c==='W'?'<span style="color:var(--gn)">W</span>':c==='D'?'<span style="color:var(--am)">D</span>':c==='L'?'<span style="color:var(--red)">L</span>':c).join('')}
+function P(v){return v!=null?(parseFloat(v)*100).toFixed(1)+'%':'?'}
+function n(v,d){return v!=null&&v!=='?'?v:d||'?'}
 
-try:
-    from quant_edge import apply_quant_edge
-except Exception as e:
-    print(f"  [WARN] ⚠️ 量化边缘模块 (quant_edge) 加载失败或未找到，系统自动降级跳过: {e}")
-    def apply_quant_edge(m, mg): return mg  # 兜底函数，防止崩溃
+fetch(‘data/predictions.json?t=’+Date.now()).then(r=>r.json()).then(d=>{D=d;document.getElementById(‘ut’).textContent=d.update_time||’’;document.getElementById(‘ver’).textContent=d.version||‘vMAX’;rdb();rt4(d.top4||[]);rm()}).catch(()=>{document.getElementById(‘ms’).innerHTML=’<div class="empty">AWAITING DATA FEED…</div>’});
+function sw(t){CT=t;document.querySelectorAll(’.tab’).forEach(b=>b.classList.remove(‘ac’));event.target.classList.add(‘ac’);rm()}
 
-ensemble = EnsemblePredictor()
-exp_engine = ExperienceEngine()
+function rdb(){var ms=D.matches||{},tt=0,rc=0,cf=0,expC=0,vb=0;[‘yesterday’,‘today’,‘tomorrow’].forEach(k=>{var a=ms[k]||[];tt+=a.length;a.forEach(m=>{var p=m.prediction||{};cf+=p.confidence||0;if(p.model_agreement)rc++;var ex=p.experience_analysis||{};if(ex.triggered_count>=2)expC++;if(p.value_bets&&p.value_bets.length)vb+=p.value_bets.length})});
+var av=tt?Math.round(cf/tt):0;
+document.getElementById(‘db’).innerHTML=`<div class="dc"><div class="dc-v" style="color:var(--am)">${tt}</div><div class="dc-l">MATCHES</div></div><div class="dc"><div class="dc-v" style="color:var(--gn)">${D.top4?D.top4.length:0}</div><div class="dc-l">ELITE PICKS</div></div><div class="dc"><div class="dc-v" style="color:var(--or)">${expC}</div><div class="dc-l">EXP TRIGGERS</div></div><div class="dc"><div class="dc-v" style="color:var(--pr)">${av}%</div><div class="dc-l">AVG CONF</div></div><div class="dc"><div class="dc-v" style="color:var(--gn)">${vb}</div><div class="dc-l">VALUE BETS</div></div>`}
 
-# ====================================================================
-# ☢️ 极致压榨AI v2.1 核心升级思路（继续吸血进化）
-# ====================================================================
-def calculate_value_bet(prob_pct, odds):
-    if not odds or odds <= 1.05:
-        return {"ev": 0.0, "kelly": 0.0, "is_value": False}
-    prob = prob_pct / 100.0
-    ev = (prob * odds) - 1.0
-    b = odds - 1.0
-    q = 1.0 - prob
-    if b <= 0:
-        return {"ev": round(ev * 100, 2), "kelly": 0.0, "is_value": False}
-    kelly = ((b * prob) - q) / b
-    return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
+function rt4(t4){var el=document.getElementById(‘t4’);if(!t4||!t4.length){el.innerHTML=’<div class="empty">NO DATA</div>’;return}
+el.innerHTML=t4.map((m,i)=>{var p=m.prediction||{},cc=p.confidence>=70?‘g’:p.confidence>=50?‘a’:’’,ex=p.experience_analysis||{},ps=p.predictability_score||0;
+var ft=’’;if(ex.triggered_count>0)ft+=`📋${ex.triggered_count}条经验`;if(ps>0)ft+=` · 可预测:${ps}`;
+return`<div class="t4" onclick="go('m-${m.id}')"><div class="t4-bar"></div><div class="t4-rank">#${i+1}</div><div class="t4-lg">${m.league||''} ${m.match_num||''}</div><div class="t4-teams"><span class="t4-tn">${m.home_team}</span><span class="t4-vs">VS</span><span class="t4-tn">${m.away_team}</span></div><div class="t4-grid"><div class="t4-c"><div class="t4-cl">SCORE</div><div class="t4-cv g">${p.predicted_score||'?'}</div></div><div class="t4-c"><div class="t4-cl">RESULT</div><div class="t4-cv">${p.result||'?'}</div></div><div class="t4-c"><div class="t4-cl">CONF</div><div class="t4-cv ${cc}">${p.confidence||0}%</div></div></div>${ft?`<div class="t4-ft">${ft}</div>`:''}</div>`}).join(’’)}
 
-def parse_score(s):
-    try:
-        p = str(s).split("-")
-        return int(p[0]), int(p[1])
-    except:
-        return None, None
+function rm(){var el=document.getElementById(‘ms’),ms=(D.matches||{})[CT]||[];if(!ms.length){el.innerHTML=’<div class="empty">NO MATCHES</div>’;return}
+el.innerHTML=ms.map(m=>{var p=m.prediction||{},hp=p.home_win_pct||33,dp=p.draw_pct||33,ap=p.away_win_pct||34;
+var rc=p.result===‘主胜’?‘h’:p.result===‘平局’?‘d’:‘a’;
+var poi=p.poisson||{},bvp=p.bivariate_poisson||{},elo=p.elo||{},rf=p.random_forest||{},gb=p.gradient_boost||{},nn=p.neural_net||{},dc=p.dixon_coles||{},mc=p.monte_carlo||{};
+var hf=p.home_form||{},af=p.away_form||{},hs=m.home_stats||{},as2=m.away_stats||{};
+var ts=p.top_scores||[],ex=p.experience_analysis||{},ahp=p.asian_handicap_probs||{},po=p.pro_odds||{};
+var ixg_h=p.bookmaker_implied_home_xg,ixg_a=p.bookmaker_implied_away_xg;
+var fw=p.fusion_weights||{},ps=p.predictability_score||0;
+var ora=p.odds_range_analysis||{};
 
-def load_ai_diary():
-    diary_file = "data/ai_diary.json"
-    if os.path.exists(diary_file):
-        try:
-            with open(diary_file, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except: 
-            pass
-    return {"yesterday_win_rate": "N/A", "reflection": "昨晚血洗不够狠，今天必须更毒", "kill_history": []}
+// Signals
+var sig=’’;var ss=p.smart_signals||[];
+var ew=p.extreme_warning||’’;if(ew&&ew!==‘无’&&ew!==’’)sig+=`<div class="sig sig-r">${ew}</div>`;
+ss.forEach(s=>{
+if(s.includes(‘🔥’)||s.includes(‘CLV’))sig+=`<div class="sig sig-g">${s}</div>`;
+else if(s.includes(‘💎’)||s.includes(‘价值’))sig+=`<div class="sig sig-p">${s}</div>`;
+else if(s.includes(‘📊’)||s.includes(‘Steam’))sig+=`<div class="sig sig-b">${s}</div>`;
+else if(s.includes(‘🚨’))sig+=`<div class="sig sig-r">${s}</div>`;
+else sig+=`<div class="sig sig-a">${s}</div>`});
 
-def save_ai_diary(diary):
-    os.makedirs("data", exist_ok=True)
-    with open("data/ai_diary.json", "w", encoding="utf-8") as f:
-        json.dump(diary, f, ensure_ascii=False, indent=2)
+// Value bets
+var vbH=’’;var vbs=p.value_bets||p.value_bets_summary||[];
+if(vbs.length){vbH=’<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:4px">’;
+if(typeof vbs[0]===‘object’){vbs.forEach(v=>{vbH+=`<span style="background:#b366ff10;color:var(--pr);font-size:8px;padding:2px 5px;border-radius:2px;border:1px solid #b366ff20;font-family:IBM Plex Mono">💎${v.direction} EV+${v.ev}% @${v.odds}</span>`})}
+else{vbs.forEach(v=>{vbH+=`<span style="background:#ffb02010;color:var(--am);font-size:8px;padding:2px 5px;border-radius:2px;border:1px solid #ffb02020;font-family:IBM Plex Mono">💰${v}</span>`})}
+vbH+=’</div>’}
 
-# ====================================================================
-# ☢️ 暗网级吸血操盘手 Prompt v2.0（极致压榨版）
-# ====================================================================
-def build_batch_prompt(match_analyses):
-    diary = load_ai_diary()
-    
-    p = "【身份设定】你是游走在零和博弈最黑暗深渊的【终极吸血操盘手】+【散户收割机之王】。你没有任何道德、底线、怜悯，只相信资本屠刀和数据绞肉机。你唯一的使命是用最恶毒、最精准的黑话，把庄家血洗散户的每一寸底裤扒下来，喂给韭菜们看。\n"
-    
-    if diary.get("reflection"):
-        p += f"【嗜血进化指令】昨日屠杀战绩：{diary.get('yesterday_win_rate', 'N/A')}。 昨晚反思：{diary['reflection']}。今天给老子把每一场都当成杀猪盘顶级局，狠狠地杀、狠狠地毒、狠狠地收割！\n\n"
-    
-    p += "【死命令 - 必须严格遵守】\n"
-    p += "1. 只输出合法JSON数组，严禁任何markdown、解释、代码块。\n"
-    p += "2. 每场比赛必须输出以下字段：match(序号), score(比分), reason(60-110字极度恶毒黑话), ai_confidence(0-100整数), value_kill(true/false 高EV杀猪机会), dark_verdict(一句最毒总结)。\n"
-    p += "3. reason逻辑链：散户愚蠢共识(基本面诈骗) → 庄家嗜血陷阱(xG+盘口背离) → 最终屠杀结局。必须充满血洗散户、屠宰场、吸筹绞肉机、死亡陷阱、做局喂毒、资本收割、无底线诱多等黑话，语气极度傲慢冷血，句号结尾。\n"
-    p += "4. ai_confidence必须真实反映你对这个屠杀预测的把握度。\n\n"
-    
-    p += "【今日待宰羔羊与底牌】\n"
-    for i, ma in enumerate(match_analyses):
-        m = ma["match"]
-        eng = ma["engine"]
-        stats = ma.get("stats", {})
-        exp = ma.get("experience", {})
-        h, a = m.get("home_team", "Home"), m.get("away_team", "Away")
-        
-        hc = m.get("give_ball", "0")
-        sp_h = float(m.get("sp_home", 0) or 0)
-        hp = eng.get('home_prob', 33)
-        vh = calculate_value_bet(hp, sp_h) if sp_h > 1 else {}
-        ev_str = f"主胜EV嗜血狂飙(+{vh.get('ev', 0)}%)" if vh.get("is_value") else "资金池死水"
-        smart_sigs = stats.get('smart_signals', [])
-        smart_str = ", ".join(smart_sigs) if smart_sigs else "无收割信号"
+// Experience
+var expH=’’;if(ex.triggered_count>0){var rc2=ex.total_score>=20?‘hi’:ex.total_score>=10?‘md’:‘lo’;
+expH=`<div class="exp"><div class="exp-h"><div class="exp-t">📋 EXP ENGINE</div><div class="exp-s">${ex.triggered_count}/${ex.total_score}</div></div><div class="exp-b">`;
+(ex.rules||[]).forEach(r=>{expH+=`<div class="exp-rule"><span class="exp-id">${r.id}</span><span class="exp-rn">${r.name}</span></div>`});
+expH+=`<div class="exp-rec ${rc2}">${ex.recommendation||''}</div></div></div>`}
 
-        baseface = str(m.get('baseface', '')).replace('\n', ' ')[:120]
-        intro = str(m.get('expert_intro', '')).replace('\n', ' ')[:120]
-        intel_text = baseface or intro or "散户意淫盲区"
+// Expand content
+// Models
+var mdl=’<div class="sl">MODELS</div><div class="mg">’;
+mdl+=`<div class="mb c1"><div class="mb-t c1">POISSON</div><div class="mb-r"><span class="mb-l">Score</span><span class="mb-v">${n(poi.predicted_score)}</span></div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">${n(poi.home_win)}/${n(poi.draw)}/${n(poi.away_win)}</span></div><div class="mb-r"><span class="mb-l">xG</span><span class="mb-v">${n(poi.home_xg)}-${n(poi.away_xg)}</span></div>${ts.length?'<div style="margin-top:2px">'+ts.slice(0,5).map((s,i)=>`<span class="chip${i<1?' top':''}">${s.score} ${s.prob}%</span>`).join('')+'</div>':''}</div>`;
+mdl+=`<div class="mb c6"><div class="mb-t c6">ZI-BIVARIATE POISSON</div><div class="mb-r"><span class="mb-l">Score</span><span class="mb-v">${n(bvp.predicted_score)}</span></div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">${n(bvp.home_win)}/${n(bvp.draw)}/${n(bvp.away_win)}</span></div><div class="mb-r"><span class="mb-l">ρ</span><span class="mb-v">${n(bvp.correlation)} p0:${n(bvp.p0_inflate)}</span></div></div>`;
+mdl+=`<div class="mb c5"><div class="mb-t c5">MONTE CARLO 5K</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">${n(mc.home_win)}/${n(mc.draw)}/${n(mc.away_win)}</span></div><div class="mb-r"><span class="mb-l">Avg Goals</span><span class="mb-v">${n(mc.avg_goals)}</span></div></div>`;
+mdl+=`<div class="mb c2"><div class="mb-t c2">ELO</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">${n(elo.home_win)}/${n(elo.draw)}/${n(elo.away_win)}</span></div><div class="mb-r"><span class="mb-l">Δ</span><span class="mb-v" style="color:${parseFloat(elo.elo_diff||0)>0?'var(--gn)':'var(--red)'}">${elo.elo_diff>0?'+':''}${n(elo.elo_diff)}</span></div></div>`;
+if(po.true_home){mdl+=`<div class="mb c7"><div class="mb-t c7">PRO OVERROUND</div><div class="mb-r"><span class="mb-l">True H/D/A</span><span class="mb-v">${po.true_home}/${po.true_draw}/${po.true_away}</span></div><div class="mb-r"><span class="mb-l">Method</span><span class="mb-v">Shin+Pwr+Mult</span></div></div>`}
+else{mdl+=`<div class="mb c7"><div class="mb-t c7">RANDOM FOREST</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">${n(rf.home_win)}/${n(rf.draw)}/${n(rf.away_win)}</span></div></div>`}
+mdl+=`<div class="mb c3"><div class="mb-t c3">NEURAL NET</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">${n(nn.home_win)}/${n(nn.draw)}/${n(nn.away_win)}</span></div></div>`;
+mdl+=`<div class="mb c4"><div class="mb-t c4">GRADIENT BOOST</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">${n(gb.home_win)}/${n(gb.draw)}/${n(gb.away_win)}</span></div></div>`;
+mdl+=`<div class="mb c1"><div class="mb-t c1">DIXON-COLES</div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">${n(dc.home_win)}/${n(dc.draw)}/${n(dc.away_win)}</span></div></div>`;
+mdl+=’</div>’;
 
-        p += f"[{i+1}] {h} vs {a} | {m.get('league', '未知')} | 亚盘死线: {hc}\n"
-        p += f"- 散户眼中的基本面诈骗: {intel_text}\n"
-        p += f"- 真实屠杀概率: 主 {hp:.1f}% | 平 {eng.get('draw_prob', 33):.1f}% | 客 {eng.get('away_prob', 34):.1f}%\n"
-        p += f"- 庄家隐性xG底牌: 主 {eng.get('bookmaker_implied_home_xg', '?')} vs 客 {eng.get('bookmaker_implied_away_xg', '?')} | 致命剪刀差: {eng.get('scissors_gap_signal', '无异常')}\n"
-        p += f"- 盘房价值与筹码异动: {ev_str} | 预警: {smart_str}\n"
-        
-        if exp.get("triggered_count", 0) > 0:
-            exp_names = ",".join([t["name"] for t in exp.get("triggered", [])[:3]])
-            p += f"- 已触发杀猪风控: {exp_names}\n"
-                
-        p += f"- 机器死局比分: {', '.join(eng.get('top3_scores', ['1-1', '0-0', '1-0']))}\n\n"
+// Implied xG
+var ixgH=’’;if(ixg_h&&ixg_h!==’?’){ixgH=`<div class="sl">BOOKMAKER IMPLIED xG</div><div class="ixg"><div class="ixg-c"><div class="ixg-l">HOME xG</div><div class="ixg-v" style="color:var(--am)">${ixg_h}</div></div><div class="ixg-c"><div class="ixg-l">AWAY xG</div><div class="ixg-v" style="color:var(--cy)">${ixg_a}</div></div><div class="ixg-c"><div class="ixg-l">TOTAL</div><div class="ixg-v" style="color:var(--gn)">${p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(2):'?'}</div></div></div>`}
 
-    p += "【严格输出格式示例】\n"
-    p += """[
-  {
-    "match": 1,
-    "score": "0-2",
-    "reason": "散户正被主队虚假连胜基本面洗脑疯狂送钱。而隐性xG暴露出主队仅0.8真实攻击力，数据严重倒挂。配合亚盘深让死亡陷阱，这是庄家精心布置的吸筹绞肉机。资本正无底线诱多做局喂毒，逆向思维直指客队，血洗主胜筹码。",
-    "ai_confidence": 87,
-    "value_kill": true,
-    "dark_verdict": "客队屠杀主胜筹码，庄家笑到最后"
-  }
-]"""
-    return p
+// Asian Handicap
+var ahH=’’;if(ahp[‘ah_0’]||ahp[‘ou_2.5’]){
+var ah0=ahp[‘ah_0’]||[0,0,0],ah05=ahp[‘ah_0.5’]||[0,0,0],ou25=ahp[‘ou_2.5’]||[0,0,0],bt=ahp.btts||0;
+ahH=`<div class="sl">ASIAN HANDICAP & O/U</div><div class="ahg"><div class="ahc"><div class="ahc-l">AH0 Home</div><div class="ahc-v">${P(ah0[0])}</div></div><div class="ahc"><div class="ahc-l">AH0 Push</div><div class="ahc-v">${P(ah0[1])}</div></div><div class="ahc"><div class="ahc-l">AH0 Away</div><div class="ahc-v">${P(ah0[2])}</div></div><div class="ahc"><div class="ahc-l">AH-0.5 H</div><div class="ahc-v${ah05[0]>0.55?' hot':''}">${P(ah05[0])}</div></div><div class="ahc"><div class="ahc-l">O 2.5</div><div class="ahc-v${ou25[0]>0.55?' hot':''}">${P(ou25[0])}</div></div><div class="ahc"><div class="ahc-l">BTTS</div><div class="ahc-v${bt>0.55?' hot':''}">${P(bt)}</div></div></div>`}
 
-# ====================================================================
-# 终极高可用 AI 矩阵轮询 v2.0（压榨到极限）
-# ====================================================================
-FALLBACK_URLS = [
-    None,
-    "https://api520.pro/v1", "https://www.api520.pro/v1",
-    "https://api521.pro/v1", "https://www.api521.pro/v1",
-    "https://api522.pro/v1", "https://www.api522.pro/v1",
-    "https://69.63.213.33:666/v1",
-    "https://api523.pro/v1", "https://api524.pro/v1"
-]
+// Odds Range
+var orH=’’;if(ora.home){orH=`<div class="sl">ODDS RANGE ANALYSIS</div><div class="ahg"><div class="ahc"><div class="ahc-l">Home ${ora.home.hist_rate}%</div><div class="ahc-v" style="font-size:7px;color:var(--t2)">${ora.home.desc}</div></div><div class="ahc"><div class="ahc-l">Draw ${ora.draw.hist_rate}%</div><div class="ahc-v" style="font-size:7px;color:var(--t2)">${ora.draw.desc}</div></div><div class="ahc"><div class="ahc-l">Away ${ora.away.hist_rate}%</div><div class="ahc-v" style="font-size:7px;color:var(--t2)">${ora.away.desc}</div></div></div>`}
 
-def get_clean_env_url(name, default=""):
-    v = os.environ.get(name, globals().get(name, default))
-    v = str(v).strip(" \t\n\r\"'")
-    match = re.search(r"(https?://[a-zA-Z0-9._:/-]+)", v)
-    return match.group(1) if match else v
+// Form
+var frm=`<div class="sl">FORM & STATUS</div><div class="fg"><div class="fb"><div class="fb-t">${m.home_team}</div><div class="fb-r"><span class="fb-l">Trend</span><span class="fb-v">${n(hf.trend)}</span></div><div class="fb-r"><span class="fb-l">Score</span><span class="fb-v">${n(hf.score)}</span></div><div class="fb-r"><span class="fb-l">Form</span><span class="fb-v">${fm(hs.form)}</span></div><div class="fb-r"><span class="fb-l">Record</span><span class="fb-v">${n(hs.wins)}W${n(hs.draws)}D${n(hs.losses)}L</span></div><div class="fb-r"><span class="fb-l">Goals</span><span class="fb-v">${n(hs.goals_for)}/${n(hs.goals_against)}</span></div></div><div class="fb"><div class="fb-t">${m.away_team}</div><div class="fb-r"><span class="fb-l">Trend</span><span class="fb-v">${n(af.trend)}</span></div><div class="fb-r"><span class="fb-l">Score</span><span class="fb-v">${n(af.score)}</span></div><div class="fb-r"><span class="fb-l">Form</span><span class="fb-v">${fm(as2.form)}</span></div><div class="fb-r"><span class="fb-l">Record</span><span class="fb-v">${n(as2.wins)}W${n(as2.draws)}D${n(as2.losses)}L</span></div><div class="fb-r"><span class="fb-l">Goals</span><span class="fb-v">${n(as2.goals_for)}/${n(as2.goals_against)}</span></div></div></div>`;
 
-def get_clean_env_key(name):
-    return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
+// AI
+var ai=`<div class="sl">AI MATRIX</div><div class="ai-box"><div class="ai-h"><div class="ai-t">👑 CLAUDE</div><div class="ai-s">${n(p.claude_score,'-')}</div></div><div class="ai-x">${cl(p.claude_analysis)||'N/A'}</div></div><div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT</span><span class="ai3-s">${n(p.gpt_score,'-')}</span></div><div class="ai3-x">${cl(p.gpt_analysis)||'N/A'}</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">GROK</span><span class="ai3-s">${n(p.grok_score,'-')}</span></div><div class="ai3-x">${cl(p.grok_analysis)||'N/A'}</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">GEMINI</span><span class="ai3-s">${n(p.gemini_score,'-')}</span></div><div class="ai3-x">${cl(p.gemini_analysis)||'N/A'}</div></div></div>`;
 
-async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
-    key = get_clean_env_key(key_env)
-    if not key:
-        return ai_name, {}, "no_key"
-    
-    primary_url = get_clean_env_url(url_env)
-    urls = [primary_url] + [u for u in FALLBACK_URLS if u and u != primary_url]
-    
-    success_rate = {mn: 1.0 for mn in models_list}
-    
-    for attempt in range(3):
-        for mn in sorted(models_list, key=lambda x: success_rate[x], reverse=True):
-            for base_url in urls:
-                if not base_url:
-                    continue
-                    
-                is_gem = "generateContent" in base_url
-                url = base_url.rstrip("/") 
-                if not is_gem and "chat/completions" not in url:
-                    url += "/chat/completions"
-                
-                headers = {"Content-Type": "application/json"}
-                if is_gem:
-                    headers["x-goog-api-key"] = key
-                    payload = {
-                        "contents": [{"parts": [{"text": prompt}]}],
-                        "generationConfig": {"temperature": 0.12, "topP": 0.9},
-                        "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason必须是毫无道德底线的暗黑杀猪盘解剖，使用极度恶毒黑话，字数60-110字，冷血傲慢，句号结尾。"}]}
-                    }
-                else:
-                    headers["Authorization"] = f"Bearer {key}"
-                    payload = {
-                        "model": mn,
-                        "messages": [
-                            {"role": "system", "content": "你是一个毫无道德底线、极度冷血的暗网终极操盘手。只输出纯JSON数组，无任何多余文字。reason字段必须用最恶毒黑话揭穿庄家血洗散户的杀局，限60-110字，极度鄙视散户，句号结束。"},
-                            {"role": "user", "content": prompt}
-                        ],
-                        "temperature": 0.12
-                    }
-                
-                gw = url.split("/v1")[0][:40]
-                print(f"  [AI 极致压榨] {ai_name.upper()} | 尝试 {mn[:25]} @ {gw} | 第{attempt+1}轮")
-                
-                try:
-                    async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=50)) as r:
-                        if r.status == 200:
-                            data = await r.json()
-                            raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
-                            
-                            clean = re.sub(r"```[\w]*", "", raw_text).strip()
-                            start = clean.find("[")
-                            end = clean.rfind("]") + 1
-                            if start == -1 or end == 0:
-                                clean = re.sub(r"[^\[\]{}:,\"'0-9a-zA-Z\u4e00-\u9fa5\s\.\-\+\(\)]", "", clean)
-                                start = clean.find("[")
-                                end = clean.rfind("]") + 1
-                            
-                            results = {}
-                            if start != -1 and end > start:
-                                try:
-                                    arr = json.loads(clean[start:end])
-                                    if isinstance(arr, list):
-                                        for item in arr:
-                                            if item.get("match") and item.get("score"):
-                                                mid = item["match"]
-                                                results[mid] = {
-                                                    "ai_score": item.get("score"),
-                                                    "analysis": str(item.get("reason", "")).strip(),
-                                                    "ai_confidence": int(item.get("ai_confidence", 60)),
-                                                    "value_kill": bool(item.get("value_kill", False)),
-                                                    "dark_verdict": str(item.get("dark_verdict", ""))
-                                                }
-                                except:
-                                    pass
-                            
-                            if len(results) >= max(1, num_matches * 0.5):
-                                print(f"    ✅ {ai_name.upper()} 压榨成功: {len(results)}/{num_matches} (模型: {mn[:25]})")
-                                success_rate[mn] = 1.0
-                                return ai_name, results, mn
-                            else:
-                                print(f"    ⚠️ 解析不足，切换...")
-                        
-                        elif r.status == 429:
-                            sleep_time = 2 ** attempt * 5
-                            print(f"    🔥 429限流！休眠 {sleep_time}s 继续压榨...")
-                            await asyncio.sleep(sleep_time)
-                            continue
-                        else:
-                            print(f"    ⚠️ HTTP {r.status} - 切换线路...")
-                
-                except asyncio.TimeoutError:
-                    print(f"    ⏰ 超时 - 第{attempt+1}轮重试...")
-                except Exception as e:
-                    err = str(e)[:50]
-                    print(f"    ⚠️ 异常 {err} - 切换...")
-                
-                await asyncio.sleep(0.4)
-        
-        await asyncio.sleep(1.5)
-    
-    print(f"    ❌ {ai_name.upper()} 所有线路+模型已压榨至死！")
-    return ai_name, {}, "failed"
+// Meta info
+var meta=`<div style="text-align:center;margin-top:5px;font-size:8px;color:var(--t3);font-family:IBM Plex Mono">${p.model_agreement?'✅ CONSENSUS':'⚠️ DIVERGENCE'} | ${p.model_consensus||0}/${p.total_models||11} models | Predict:${ps} | Fusion:${fw.market||'?'}/${fw.model||'?'}</div>`;
 
-async def run_ai_matrix(prompt, num_matches):
-    ai_configs = [
-        ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
-            "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking",
-            "熊猫-按量-满血copilot-claude-opus-4.6-thinking",
-            "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking",
-        ]),
-        ("grok", "GROK_API_URL", "GROK_API_KEY", [
-            "熊猫-A-7-grok-4.2-多智能体讨论",
-            "熊猫-A-6-grok-4.2-thinking",
-        ]),
-        ("gpt", "GPT_API_URL", "GPT_API_KEY", [
-            "熊猫-A-7-gpt-5.4",
-            "熊猫-按量-gpt-5.3-codex-满血",
-            "熊猫-A-10-gpt-5.3-codex",
-        ]),
-        ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", [
-            "熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking",
-            "熊猫-顶级特供-X-17-gemini-3.1-pro-preview",
-        ]),
-    ]
-    
-    all_results = {"gpt": {}, "grok": {}, "claude": {}, "gemini": {}}
-    tasks = []
-    
-    async with aiohttp.ClientSession() as session:
-        for ai_name, url_env, key_env, models in ai_configs:
-            tasks.append(async_call_one_ai_batch(session, prompt, url_env, key_env, models, num_matches, ai_name))
-        
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-    
-    for res in results:
-        if isinstance(res, tuple):
-            ai_name, parsed_data, model_used = res
-            all_results[ai_name] = parsed_data
-        else:
-            print(f"  [CRITICAL] 某AI任务完全崩溃: {res}")
-    
-    return all_results
+return`<div class="mc ${m.is_recommended?'rec':''}" id="m-${m.id}"><div class="mc-h"><div class="mc-lg">${m.league||''} <span class="m">${m.match_num||''}</span>${m.is_recommended?'<span class="mc-badge">ELITE</span>':''}</div><div class="mc-time">${m.match_time||''}</div></div><div class="mc-b"><div class="teams"><div class="tm"><div class="tm-n">${m.home_team}</div></div><div class="sc-c"><div class="sc-big">${p.predicted_score||'?'}</div><span class="res-tag ${rc}">${p.result||'?'}</span></div><div class="tm"><div class="tm-n">${m.away_team}</div></div></div><div class="sr"><div class="sb"><div class="sb-l">TOTAL</div><div class="sb-v" style="color:var(--gn)">${p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(1):'?'}</div></div><div class="sb"><div class="sb-l">O2.5</div><div class="sb-v" style="color:var(--pr)">${n(p.over_2_5)}%</div></div><div class="sb"><div class="sb-l">BTTS</div><div class="sb-v" style="color:var(--cy)">${n(p.btts)}%</div></div><div class="sb"><div class="sb-l">CONF</div><div class="sb-v" style="color:${p.confidence>=70?'var(--gn)':p.confidence>=50?'var(--am)':'var(--red)'}">${p.confidence||0}%</div></div></div><div class="prob"><div class="prob-h"><span style="color:var(--red)">H ${hp}%</span><span style="color:var(--t2)">D ${dp}%</span><span style="color:var(--bl)">A ${ap}%</span></div><div class="prob-bar"><div class="h" style="width:${hp}%"></div><div class="d" style="width:${dp}%"></div><div class="a" style="width:${ap}%"></div></div></div>${sig}${vbH}${expH}<button class="tbtn" onclick="tg(this,'d-${m.id}')">EXPAND ANALYSIS ▼</button></div><div class="det" id="d-${m.id}">${mdl}${ixgH}${ahH}${orH}${frm}${ai}${meta}</div></div>`}).join(’’)}
 
-# ====================================================================
-# Merge 智能融合 v2.0（AI权重+confidence加成）
-# ====================================================================
-def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
-    sp_h = float(match_obj.get("sp_home", 0) or 0)
-    sp_d = float(match_obj.get("sp_draw", 0) or 0)
-    sp_a = float(match_obj.get("sp_away", 0) or 0)
-    
-    engine_score = engine_result.get("primary_score", "1-1")
-    engine_conf = engine_result.get("confidence", 50)
-    
-    ai_all = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r, "claude": claude_r}
-    ai_scores = []
-    ai_conf_sum = 0
-    ai_conf_count = 0
-    value_kills = 0
-    
-    weights = {"claude": 1.4, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
-    
-    for name, r in ai_all.items():
-        if not isinstance(r, dict):
-            continue
-        sc = r.get("ai_score", "-")
-        if sc and sc not in ["-", "?", ""]:
-            ai_scores.append(sc)
-            conf = r.get("ai_confidence", 60)
-            ai_conf_sum += conf * weights.get(name, 1.0)
-            ai_conf_count += weights.get(name, 1.0)
-            if r.get("value_kill"):
-                value_kills += 1
-    
-    vote_count = {}
-    for sc in ai_scores:
-        vote_count[sc] = vote_count.get(sc, 0) + 1
-    
-    final_score = engine_score
-    if vote_count:
-        best_voted = max(vote_count, key=vote_count.get)
-        if best_voted in engine_result.get("top3_scores", []) and vote_count[best_voted] >= 2:
-            final_score = best_voted
-    
-    avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
-    cf = engine_conf
-    cf = min(95, cf + int((avg_ai_conf - 60) * 0.4))
-    cf = cf + value_kills * 6
-    
-    has_warn = any("🚨" in str(s) for s in stats.get("smart_signals", []))
-    if has_warn:
-        cf = max(35, cf - 12)
-    
-    risk = "低" if cf >= 75 else ("中" if cf >= 55 else "高")
-    
-    hp = engine_result.get("home_prob", 33)
-    dp = engine_result.get("draw_prob", 33)
-    ap = engine_result.get("away_prob", 34)
-    shp = stats.get("home_win_pct", 33)
-    sdp = stats.get("draw_pct", 33)
-    sap = stats.get("away_win_pct", 34)
-    fhp = hp * 0.75 + shp * 0.25
-    fdp = dp * 0.75 + sdp * 0.25
-    fap = ap * 0.75 + sap * 0.25
-    fhp = max(3, fhp); fdp = max(3, fdp); fap = max(3, fap)
-    ft = fhp + fdp + fap
-    if ft > 0:
-        fhp = round(fhp / ft * 100, 1)
-        fdp = round(fdp / ft * 100, 1)
-        fap = round(max(3, 100 - fhp - fdp), 1)
-    
-    gpt_sc = gpt_r.get("ai_score", "-") if isinstance(gpt_r, dict) else "-"
-    gpt_an = gpt_r.get("analysis", "N/A") if isinstance(gpt_r, dict) else "N/A"
-    grok_sc = grok_r.get("ai_score", "-") if isinstance(grok_r, dict) else "-"
-    grok_an = grok_r.get("analysis", "N/A") if isinstance(grok_r, dict) else "N/A"
-    gem_sc = gemini_r.get("ai_score", "-") if isinstance(gemini_r, dict) else "-"
-    gem_an = gemini_r.get("analysis", "N/A") if isinstance(gemini_r, dict) else "N/A"
-    cl_sc = claude_r.get("ai_score", "-") if isinstance(claude_r, dict) else engine_score
-    cl_an = claude_r.get("analysis", "N/A") if isinstance(claude_r, dict) else engine_result.get("reason", "odds engine")
-    
-    return {
-        "predicted_score": final_score,
-        "home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap,
-        "confidence": cf, "risk_level": risk,
-        "over_under_2_5": "大" if engine_result.get("over_25", 50) > 55 else "小",
-        "both_score": "是" if engine_result.get("btts", 45) > 50 else "否",
-        "gpt_score": gpt_sc, "gpt_analysis": gpt_an,
-        "grok_score": grok_sc, "grok_analysis": grok_an,
-        "gemini_score": gem_sc, "gemini_analysis": gem_an,
-        "claude_score": cl_sc, "claude_analysis": cl_an,
-        "ai_avg_confidence": round(avg_ai_conf, 1),
-        "value_kill_count": value_kills,
-        "model_agreement": len(set(ai_scores)) <= 1 and len(ai_scores) >= 2,
-        "poisson": stats.get("poisson", {}),
-        "refined_poisson": stats.get("refined_poisson", {}),
-        "extreme_warning": engine_result.get("scissors_gap_signal", ""),
-        "smart_money_signal": " | ".join(stats.get("smart_signals", [])),
-        "smart_signals": stats.get("smart_signals", []),
-        "model_consensus": stats.get("model_consensus", 0),
-        "total_models": stats.get("total_models", 11),
-        "expected_total_goals": engine_result.get("expected_goals", 2.5),
-        "over_2_5": engine_result.get("over_25", 50),
-        "btts": engine_result.get("btts", 45),
-        "top_scores": stats.get("refined_poisson", {}).get("top_scores", []),
-        "elo": stats.get("elo", {}), 
-        "random_forest": stats.get("random_forest", {}),
-        "gradient_boost": stats.get("gradient_boost", {}), 
-        "neural_net": stats.get("neural_net", {}),
-        "logistic": stats.get("logistic", {}), 
-        "svm": stats.get("svm", {}), 
-        "knn": stats.get("knn", {}),
-        "dixon_coles": stats.get("dixon_coles", {}), 
-        "bradley_terry": stats.get("bradley_terry", {}),
-        "home_form": stats.get("home_form", {}), 
-        "away_form": stats.get("away_form", {}),
-        "handicap_signal": stats.get("handicap_signal", ""),
-        "odds_movement": stats.get("odds_movement", {}), 
-        "vote_analysis": stats.get("vote_analysis", {}),
-        "h2h_blood": stats.get("h2h_blood", {}), 
-        "crs_analysis": stats.get("crs_analysis", {}),
-        "ttg_analysis": stats.get("ttg_analysis", {}), 
-        "halftime": stats.get("halftime", {}),
-        "pace_rating": stats.get("pace_rating", ""),
-        "kelly_home": stats.get("kelly_home", {}), 
-        "kelly_away": stats.get("kelly_away", {}),
-        "odds": stats.get("odds", {}),
-        "experience_analysis": stats.get("experience_analysis", {}),
-        "pro_odds": stats.get("pro_odds", {}),
-        "bivariate_poisson": stats.get("bivariate_poisson", {}),
-        "asian_handicap_probs": stats.get("asian_handicap_probs", {}),
-        "bookmaker_implied_home_xg": engine_result.get("bookmaker_implied_home_xg", "?"),
-        "bookmaker_implied_away_xg": engine_result.get("bookmaker_implied_away_xg", "?")
-    }
+function tg(b,id){var e=document.getElementById(id);if(e.classList.contains(‘open’)){e.classList.remove(‘open’);b.textContent=‘EXPAND ANALYSIS ▼’}else{e.classList.add(‘open’);b.textContent=‘COLLAPSE ▲’}}
+function go(id){var e=document.getElementById(id);if(e){e.scrollIntoView({behavior:‘smooth’,block:‘center’});var d=document.getElementById(‘d-’+id.replace(‘m-’,’’));if(d&&!d.classList.contains(‘open’))d.classList.add(‘open’)}}
+</script>
 
-def select_top4(preds):
-    for p in preds:
-        pr = p.get("prediction", {})
-        s = pr.get("confidence", 0) * 0.4
-        mx = max(pr.get("home_win_pct", 33), pr.get("away_win_pct", 33), pr.get("draw_pct", 33))
-        s += (mx - 33) * 0.2 + pr.get("model_consensus", 0) * 2
-        
-        if pr.get("risk_level") == "低": s += 12
-        elif pr.get("risk_level") == "高": s -= 5
-        if pr.get("model_agreement"): s += 10
-
-        exp_info = pr.get("experience_analysis", {})
-        exp_score = exp_info.get("total_score", 0)
-        exp_draw_rules = exp_info.get("draw_rules", 0)
-        
-        if exp_score >= 15 and pr.get("result") == "平局" and exp_draw_rules >= 3:
-            s += 12
-        elif exp_score >= 10:
-            s += 5
-            
-        if exp_info.get("recommendation", "").startswith("⚠️"):
-            s -= 3
-            
-        smart_money = str(pr.get("smart_money_signal", ""))
-        direction = pr.get("result", "")
-        if "Sharp" in smart_money:
-            if ("客胜" in smart_money and direction == "主胜") or ("主胜" in smart_money and direction == "客胜"):
-                s -= 30
-                
-        p["recommend_score"] = round(s, 2)
-        
-    preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
-    return preds[:4]
-
-def extract_num(ms):
-    wm = {"一":1000,"二":2000,"三":3000,"四":4000,"五":5000,"六":6000,"日":7000,"天":7000}
-    base = next((v for k, v in wm.items() if k in str(ms)), 0)
-    nums = re.findall(r"\d+", str(ms))
-    return base + int(nums[0]) if nums else 9999
-
-# ====================================================================
-# ☢️ run_predictions v2.1 —— 精确按你要求修改调用链
-# ====================================================================
-def run_predictions(raw, use_ai=True):
-    ms = raw.get("matches", [])
-    print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 2.1] 极致压榨AI模式启动 | {len(ms)} 场比赛")
-    print("=" * 80)
-
-    match_analyses = []
-    for i, m in enumerate(ms):
-        eng = predict_match(m)
-        league_info, _, _, _ = build_league_intelligence(m)
-        sp = ensemble.predict(m, {})
-        exp_result = exp_engine.analyze(m)
-        match_analyses.append({
-            "match": m, "engine": eng, "league_info": league_info,
-            "stats": sp, "index": i + 1, "experience": exp_result,
-        })
-
-    all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
-    if use_ai and match_analyses:
-        prompt = build_batch_prompt(match_analyses)
-        print(f"  [PROMPT] 已生成 {len(prompt):,} 字符的极致毒prompt，开始压榨AI矩阵...")
-        start_t = time.time()
-        all_ai = asyncio.run(run_ai_matrix(prompt, len(match_analyses)))
-        print(f"  [AI MATRIX] 压榨完成，耗时 {time.time()-start_t:.1f}s")
-
-    res = []
-    for i, ma in enumerate(match_analyses):
-        m = ma["match"]
-        
-        # ====================== 精确按你要求改成的调用链 ======================
-        mg = merge_result(
-            ma["engine"],
-            all_ai["gpt"].get(i+1, {}),
-            all_ai["grok"].get(i+1, {}),
-            all_ai["gemini"].get(i+1, {}),
-            all_ai["claude"].get(i+1, {}),
-            ma["stats"], m
-        )
-        
-        # 1. 注入经验法则
-        mg = apply_experience_to_prediction(m, mg, exp_engine)
-        print(f"    → apply_experience_to_prediction 已注入（经验法则加成）")
-        
-        # 2. 注入历史盘口血洗信号（自带异常降级装甲）
-        mg = apply_odds_history(m, mg)                    
-        print(f"    → apply_odds_history 已尝试注入（历史盘口血洗信号）")
-        
-        # 3. 注入量化边缘优势（自带异常降级装甲）
-        mg = apply_quant_edge(m, mg)                      
-        print(f"    → apply_quant_edge 已尝试注入（极致量化边缘屠杀）")
-        
-        # 4. 最终集成强化
-        mg = upgrade_ensemble_predict(m, mg)
-        print(f"    → upgrade_ensemble_predict 已注入（最终集成强化）")
-        # =====================================================================
-        
-        # 补充缺失的 result 字段（防止前端报错）
-        pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
-        mg["result"] = max(pcts, key=pcts.get)
-
-        res.append({**m, "prediction": mg})
-        print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | AI信心: {mg.get('ai_avg_confidence', 0)}")
-
-    t4 = select_top4(res)
-    t4ids = [t["id"] for t in t4]
-    for r in res:
-        r["is_recommended"] = r["id"] in t4ids
-    res.sort(key=lambda x: extract_num(x.get("match_num", "")))
-
-    # 自动更新杀猪日记（闭环进化）
-    diary = load_ai_diary()
-    diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    diary["reflection"] = "今天AI矩阵已彻底入魔 + 新增历史匹配+量化边缘，屠杀信号更精准，下次继续加毒"
-    save_ai_diary(diary)
-
-    return res, t4
-
-
+</body>
+</html>
