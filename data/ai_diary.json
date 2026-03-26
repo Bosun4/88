@@ -1,5 +1,5 @@
 {
-  "yesterday_win_rate": "12/12",
-  "reflection": "AI矩阵+历史匹配+量化边缘+经验规则+高级模型全链路运行",
-  "kill_history": []
+  "yesterday_win_rate": "N/A",
+  "reflection": "Claude=StatBrain概率融合(20%w)+一票否决+Scout省88%token",
+  "streak": 0
 }
