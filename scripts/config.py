@@ -31,4 +31,4 @@ GROK_MODEL = "熊猫-A-6-grok-4.2-thinking"
 # Claude 中控（opus thinking优先）
 CLAUDE_API_URL = os.environ.get("CLAUDE_API_URL", "")
 CLAUDE_API_KEY = os.environ.get("CLAUDE_API_KEY", "")
-CLAUDE_MODEL = "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking"
+CLAUDE_MODEL = "熊猫-按量-满血copilot-claude-opus-4.6-thinking"
