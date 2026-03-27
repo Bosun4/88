@@ -108,7 +108,6 @@ def build_batch_prompt(match_analyses):
         intro = str(m.get('expert_intro', '')).replace('\n', ' ')[:120]
         intel_text = baseface or intro or "散户意淫盲区"
 
-        # 使用模型矩阵提供的更精准的进球期望
         exp_goals = eng.get('expected_goals', stats.get('expected_total_goals', 2.5))
         btts_prob = eng.get('btts', stats.get('btts', 45))
 
@@ -180,7 +179,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     url += "/chat/completions"
                 
                 headers = {"Content-Type": "application/json"}
-                # 🚀 升维改动：将温度(temperature)提升到 0.45，让 AI 摆脱 1-1, 1-0 的无脑复读，敢于尝试 2-2, 3-2！
                 if is_gem:
                     headers["x-goog-api-key"] = key
                     payload = {
@@ -203,18 +201,23 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 print(f"  [AI 逆向升维] {ai_name.upper()} | 尝试 {mn[:25]} @ {gw} | 第{attempt+1}轮")
                 
                 try:
-                    async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=70)) as r:
+                    # 🔥 核心修改 1：大幅提升超时容忍度，从 70 调整至 300，给思考模型留足满血思考时间！
+                    async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=300)) as r:
                         if r.status == 200:
                             data = await r.json()
                             raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
                             
-                            clean = re.sub(r"```[\w]*", "", raw_text).strip()
+                            # 🔥 核心修改 2：硬核暴力清洗 Markdown 符号，防止 JSON 解析炸裂
+                            if raw_text.startswith("```"):
+                                # 砍掉开头的 ``` 或 ```json
+                                raw_text = raw_text.split('\n', 1)[-1]
+                            if raw_text.endswith("```"):
+                                # 砍掉结尾的 ```
+                                raw_text = raw_text.rsplit('\n', 1)[0]
+                                
+                            clean = raw_text.strip()
                             start = clean.find("[")
                             end = clean.rfind("]") + 1
-                            if start == -1 or end == 0:
-                                clean = re.sub(r"[^\[\]{}:,\"'0-9a-zA-Z\u4e00-\u9fa5\s\.\-\+\(\)]", "", clean)
-                                start = clean.find("[")
-                                end = clean.rfind("]") + 1
                             
                             results = {}
                             if start != -1 and end > start:
@@ -231,7 +234,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                                     "value_kill": bool(item.get("value_kill", False)),
                                                     "dark_verdict": str(item.get("dark_verdict", ""))
                                                 }
-                                except:
+                                except Exception as e:
+                                    print(f"    ⚠️ JSON加载失败: {e} | 清理后的文本头尾: {clean[:20]}...{clean[-20:]}")
                                     pass
                             
                             if len(results) >= max(1, num_matches * 0.4): 
@@ -250,7 +254,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             print(f"    ⚠️ HTTP {r.status} - 切换线路...")
                 
                 except asyncio.TimeoutError:
-                    print(f"    ⏰ 深度思考超时 - 第{attempt+1}轮重试...")
+                    print(f"    ⏰ 深度思考超时(300s) - 第{attempt+1}轮重试...")
                 except Exception as e:
                     err = str(e)[:50]
                     print(f"    ⚠️ 异常 {err} - 切换...")
@@ -263,7 +267,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     return ai_name, {}, "failed"
 
 async def run_ai_matrix(prompt, num_matches):
-    # 绝对保留用户提供的心智模型列表，一字未动
     ai_configs = [
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
             "熊猫-特供-A-55-claude-opus-4.6-thinking",
@@ -314,7 +317,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     engine_score = engine_result.get("primary_score", "1-1")
     engine_conf = engine_result.get("confidence", 50)
     
-    # 获取所有的安全字典，防止 None 引发异常
     gpt_r = gpt_r if isinstance(gpt_r, dict) else {}
     grok_r = grok_r if isinstance(grok_r, dict) else {}
     gemini_r = gemini_r if isinstance(gemini_r, dict) else {}
@@ -326,7 +328,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     ai_conf_count = 0
     value_kills = 0
     
-    # 权重：优先听大哥的
     weights = {"claude": 1.6, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
     
     for name, r in ai_all.items():
@@ -346,12 +347,11 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     
     final_score = engine_score
     
-    # 🚀 升维改动：彻底解除本地束缚，只要 Claude 或任意两个 AI 给出大比分（2-1, 2-2 等），直接推翻本地预测！
     claude_score = claude_r.get("ai_score", "")
     if claude_score and "-" in claude_score:
         c_h, c_a = parse_score(claude_score)
         if c_h is not None and (c_h + c_a >= 3) and engine_result.get("over_25", 0) >= 45:
-            final_score = claude_score # 强行采纳 Claude 的高进球比分推演
+            final_score = claude_score
             
     elif vote_count:
         best_voted = max(vote_count, key=vote_count.get)
@@ -360,7 +360,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     
     avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
     cf = engine_conf
-    cf = min(96, cf + int((avg_ai_conf - 55) * 0.50)) # 进一步提高优质大模型思维的置信度权重
+    cf = min(96, cf + int((avg_ai_conf - 55) * 0.50))
     cf = cf + value_kills * 7
     
     has_warn = any("🚨" in str(s) for s in stats.get("smart_signals", []))
@@ -376,7 +376,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     sdp = stats.get("draw_pct", 33)
     sap = stats.get("away_win_pct", 34)
     
-    fhp = hp * 0.65 + shp * 0.35 # 增加统计模型的融合比例
+    fhp = hp * 0.65 + shp * 0.35
     fdp = dp * 0.65 + sdp * 0.35
     fap = ap * 0.65 + sap * 0.35
     fhp = max(3, fhp); fdp = max(3, fdp); fap = max(3, fap)
@@ -509,13 +509,11 @@ def run_predictions(raw, use_ai=True):
             "stats": sp, "index": i + 1, "experience": exp_result,
         })
 
-    # 给全量字典加上兜底保护，防止完全无响应
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
         prompt = build_batch_prompt(match_analyses)
         print(f"  [PROMPT] 温度限制已解除！允许AI进行大开大合的冷门大比分逆推。")
         start_t = time.time()
-        # 强制更新字典，防止任务奔溃返回 None
         ai_res = asyncio.run(run_ai_matrix(prompt, len(match_analyses)))
         if ai_res:
             all_ai.update(ai_res)
@@ -526,7 +524,6 @@ def run_predictions(raw, use_ai=True):
         m = ma["match"]
         idx = i + 1
         
-        # 🛡️ 终极安全抓取，双重 .get 防止引发 KeyError 导致程序自尽！
         gpt_r = all_ai.get("gpt", {}).get(idx, {})
         grok_r = all_ai.get("grok", {}).get(idx, {})
         gemini_r = all_ai.get("gemini", {}).get(idx, {})
@@ -549,7 +546,6 @@ def run_predictions(raw, use_ai=True):
 
     t4 = select_top4(res)
     
-    # 🛡️ 终极防崩溃：修复某些场次没有 "id" 导致的 KeyError 崩溃！
     t4ids = [t.get("id", t.get("match_num", str(i))) for i, t in enumerate(t4)]
     for i, r in enumerate(res):
         r["is_recommended"] = r.get("id", r.get("match_num", str(i))) in t4ids
@@ -562,5 +558,3 @@ def run_predictions(raw, use_ai=True):
     save_ai_diary(diary)
 
     return res, t4
-
-
