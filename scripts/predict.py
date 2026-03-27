@@ -32,7 +32,7 @@ ensemble = EnsemblePredictor()
 exp_engine = ExperienceEngine()
 
 # ====================================================================
-# ☢️ 极致压榨AI v3.0 核心升级思路（进球数逆向工程 + 解除降智封印）
+# ☢️ 极致压榨AI v4.0 核心升级（进球逆推 + 温度解封）
 # ====================================================================
 def calculate_value_bet(prob_pct, odds):
     if not odds or odds <= 1.05:
@@ -69,7 +69,7 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# ☢️ 暗网级吸血操盘手 Prompt v3.0（开放最高思考权限，引入逆向工程）
+# ☢️ 暗网级吸血操盘手 Prompt v4.0（进球逆向推导，彻底封杀死水比分）
 # ====================================================================
 def build_batch_prompt(match_analyses):
     diary = load_ai_diary()
@@ -83,7 +83,10 @@ def build_batch_prompt(match_analyses):
     p += "1. 只输出合法JSON数组，严禁任何markdown、解释、代码块。\n"
     p += "2. 每场比赛必须输出以下字段：match(序号), score(比分), reason(60-110字极度恶毒黑话), ai_confidence(0-100整数), value_kill(true/false), dark_verdict(一句最毒总结)。\n"
     p += "3. reason逻辑链：散户愚蠢共识 → 庄家嗜血陷阱(xG+盘口背离) → 最终屠杀结局。\n"
-    p += "4. 【核心破局法则 - 进球数逆向推导】：严禁像蠢货一样无脑输出 1-0/2-0/1-1！本地机器提供的候选比分仅为诱饵。你必须独立思考：如果 xG(预期进球)总和 > 2.8，且 BTTS(双方进球)概率 > 55%，你必须大胆给出 2-1, 2-2, 3-2, 3-1 甚至更高的高赔杀猪比分！顺应盘口深度，反推比分，制造降维打击！\n\n"
+    p += "4. ⚠️【核心破局法则 - 进球数逆向推导】⚠️：这是你与低智AI的区别！散户和本地机器永远只会猜 1-0/2-0/1-1 这三种死水比分。你必须逆向思考：\n"
+    p += "   - 如果 预期总球(ExpGoals) > 2.6 或 BTTS(双方进球) > 52%，【绝对禁止】输出 1-0, 0-1, 2-0, 0-2, 1-1！你必须大破大立，给出 2-1, 1-2, 2-2, 3-1, 3-2 这种杀猪大单！\n"
+    p += "   - 如果强弱悬殊且主队让深盘(<-1.0)，必须抓 3-0, 4-0 的屠杀局！\n"
+    p += "   - 如果是保级死拼/交锋均势，大胆抓 2-2, 3-3 的极端高赔冷平！不要害怕偏离主流！\n\n"
     
     p += "【今日待宰羔羊与底牌】\n"
     for i, ma in enumerate(match_analyses):
@@ -105,18 +108,21 @@ def build_batch_prompt(match_analyses):
         intro = str(m.get('expert_intro', '')).replace('\n', ' ')[:120]
         intel_text = baseface or intro or "散户意淫盲区"
 
+        # 使用模型矩阵提供的更精准的进球期望
+        exp_goals = eng.get('expected_goals', stats.get('expected_total_goals', 2.5))
+        btts_prob = eng.get('btts', stats.get('btts', 45))
+
         p += f"[{i+1}] {h} vs {a} | {m.get('league', '未知')} | 亚盘死线: {hc}\n"
-        p += f"- 散户眼中的基本面诈骗: {intel_text}\n"
-        p += f"- 真实屠杀概率: 主 {hp:.1f}% | 平 {eng.get('draw_prob', 33):.1f}% | 客 {eng.get('away_prob', 34):.1f}%\n"
+        p += f"- 散户基本面认知: {intel_text}\n"
         p += f"- 庄家隐性xG底牌: 主 {eng.get('bookmaker_implied_home_xg', '?')} vs 客 {eng.get('bookmaker_implied_away_xg', '?')} | 致命剪刀差: {eng.get('scissors_gap_signal', '无异常')}\n"
-        p += f"- 总进球压制力: 预期总球 {eng.get('expected_goals', 2.5):.1f} | BTTS概率: {eng.get('btts', 45):.0f}% | O2.5概率: {eng.get('over_25', 50):.0f}%\n"
-        p += f"- 盘房价值与筹码异动: {ev_str} | 预警: {smart_str}\n"
+        p += f"- 总进球压制力: 预期总球 {exp_goals:.1f} | BTTS概率: {btts_prob:.0f}% | O2.5概率: {eng.get('over_25', 50):.0f}%\n"
+        p += f"- 盘房价值与筹码: {ev_str} | 预警: {smart_str}\n"
         
         if exp.get("triggered_count", 0) > 0:
             exp_names = ",".join([t["name"] for t in exp.get("triggered", [])[:3]])
             p += f"- 已触发杀猪风控: {exp_names}\n"
                 
-        p += f"- 本地机器低智参考比分(仅供鄙视): {', '.join(eng.get('top3_scores', ['1-1', '0-0']))}\n\n"
+        p += f"- 本地低智保守比分(仅供鄙视避雷): {', '.join(eng.get('top3_scores', ['1-1', '0-0']))}\n\n"
 
     p += "【严格输出格式示例】\n"
     p += """[
@@ -132,7 +138,7 @@ def build_batch_prompt(match_analyses):
     return p
 
 # ====================================================================
-# 终极高可用 AI 矩阵轮询 v3.0（压榨到极限，绝对保留你的API接口）
+# 终极高可用 AI 矩阵轮询 v4.0（解封温度，彻底释放思考算力）
 # ====================================================================
 FALLBACK_URLS = [
     None,
@@ -174,29 +180,30 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     url += "/chat/completions"
                 
                 headers = {"Content-Type": "application/json"}
+                # 🚀 升维改动：将温度(temperature)提升到 0.45，让 AI 摆脱 1-1, 1-0 的无脑复读，敢于尝试 2-2, 3-2！
                 if is_gem:
                     headers["x-goog-api-key"] = key
                     payload = {
                         "contents": [{"parts": [{"text": prompt}]}],
-                        "generationConfig": {"temperature": 0.15, "topP": 0.9},
-                        "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason必须是毫无道德底线的暗黑杀猪盘解剖，使用极度恶毒黑话，包含逆向比分推导思维，冷血傲慢，句号结尾。"}]}
+                        "generationConfig": {"temperature": 0.45, "topP": 0.9},
+                        "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason必须是毫无道德底线的暗黑杀猪盘解剖，使用极度恶毒黑话，包含逆向高赔比分推导思维，冷血傲慢，句号结尾。"}]}
                     }
                 else:
                     headers["Authorization"] = f"Bearer {key}"
                     payload = {
                         "model": mn,
                         "messages": [
-                            {"role": "system", "content": "你是一个毫无道德底线的暗网终极操盘手。只输出纯JSON数组。reason字段必须用最恶毒黑话揭穿庄家杀局，通过进球期望(xG)逆向推导冷门高倍比分，绝对不甘于平庸的1-0。"},
+                            {"role": "system", "content": "你是一个毫无道德底线的暗网终极操盘手。只输出纯JSON数组。reason字段必须用最恶毒黑话揭穿庄家杀局，通过进球期望(xG)逆向推导冷门高倍大比分，绝对不甘于平庸的1-0/1-1/2-0。"},
                             {"role": "user", "content": prompt}
                         ],
-                        "temperature": 0.15
+                        "temperature": 0.45
                     }
                 
                 gw = url.split("/v1")[0][:40]
-                print(f"  [AI 极致压榨] {ai_name.upper()} | 尝试 {mn[:25]} @ {gw} | 第{attempt+1}轮")
+                print(f"  [AI 逆向升维] {ai_name.upper()} | 尝试 {mn[:25]} @ {gw} | 第{attempt+1}轮")
                 
                 try:
-                    async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=60)) as r:
+                    async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=70)) as r:
                         if r.status == 200:
                             data = await r.json()
                             raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
@@ -227,8 +234,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 except:
                                     pass
                             
-                            if len(results) >= max(1, num_matches * 0.4): # 降低一点解析阈值，防止高维度长篇回复被截断
-                                print(f"    ✅ {ai_name.upper()} 高阶思维解析成功: {len(results)}/{num_matches} (模型: {mn[:25]})")
+                            if len(results) >= max(1, num_matches * 0.4): 
+                                print(f"    ✅ {ai_name.upper()} 高维度逆向推演成功: {len(results)}/{num_matches} (模型: {mn[:25]})")
                                 success_rate[mn] = 1.0
                                 return ai_name, results, mn
                             else:
@@ -297,7 +304,7 @@ async def run_ai_matrix(prompt, num_matches):
     return all_results
 
 # ====================================================================
-# Merge 智能融合 v3.0（尊重 AI 的逆向大比分推断）
+# Merge 智能融合 v4.0（彻底赋权 AI 逆推的高分结果）
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     sp_h = float(match_obj.get("sp_home", 0) or 0)
@@ -338,15 +345,22 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         vote_count[sc] = vote_count.get(sc, 0) + 1
     
     final_score = engine_score
-    if vote_count:
+    
+    # 🚀 升维改动：彻底解除本地束缚，只要 Claude 或任意两个 AI 给出大比分（2-1, 2-2 等），直接推翻本地预测！
+    claude_score = claude_r.get("ai_score", "")
+    if claude_score and "-" in claude_score:
+        c_h, c_a = parse_score(claude_score)
+        if c_h is not None and (c_h + c_a >= 3) and engine_result.get("over_25", 0) >= 45:
+            final_score = claude_score # 强行采纳 Claude 的高进球比分推演
+            
+    elif vote_count:
         best_voted = max(vote_count, key=vote_count.get)
-        # 解除封印！只要有两个 AI 敢推冷门大比分，或者 Claude 亲自下场认定，直接采用！不再受限于本地引擎！
-        if vote_count[best_voted] >= 2 or (claude_r.get("ai_score") == best_voted and claude_r.get("ai_confidence", 0) >= 80):
+        if vote_count[best_voted] >= 2 or (claude_r.get("ai_score") == best_voted and claude_r.get("ai_confidence", 0) >= 75):
             final_score = best_voted
     
     avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
     cf = engine_conf
-    cf = min(96, cf + int((avg_ai_conf - 55) * 0.45)) # 提高 AI 自信心的权重
+    cf = min(96, cf + int((avg_ai_conf - 55) * 0.50)) # 进一步提高优质大模型思维的置信度权重
     cf = cf + value_kills * 7
     
     has_warn = any("🚨" in str(s) for s in stats.get("smart_signals", []))
@@ -362,9 +376,9 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     sdp = stats.get("draw_pct", 33)
     sap = stats.get("away_win_pct", 34)
     
-    fhp = hp * 0.70 + shp * 0.30
-    fdp = dp * 0.70 + sdp * 0.30
-    fap = ap * 0.70 + sap * 0.30
+    fhp = hp * 0.65 + shp * 0.35 # 增加统计模型的融合比例
+    fdp = dp * 0.65 + sdp * 0.35
+    fap = ap * 0.65 + sap * 0.35
     fhp = max(3, fhp); fdp = max(3, fdp); fap = max(3, fap)
     ft = fhp + fdp + fap
     if ft > 0:
@@ -401,9 +415,9 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "smart_signals": stats.get("smart_signals", []),
         "model_consensus": stats.get("model_consensus", 0),
         "total_models": stats.get("total_models", 11),
-        "expected_total_goals": engine_result.get("expected_goals", 2.5),
-        "over_2_5": engine_result.get("over_25", 50),
-        "btts": engine_result.get("btts", 45),
+        "expected_total_goals": engine_result.get("expected_goals", stats.get("expected_total_goals", 2.5)),
+        "over_2_5": engine_result.get("over_25", stats.get("over_2_5", 50)),
+        "btts": engine_result.get("btts", stats.get("btts", 45)),
         "top_scores": stats.get("refined_poisson", {}).get("top_scores", []),
         "elo": stats.get("elo", {}), 
         "random_forest": stats.get("random_forest", {}),
@@ -476,12 +490,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# ☢️ run_predictions v3.0 —— 终极解围版，杜绝字典解析越界
+# ☢️ run_predictions v4.0 —— 终极解围版，彻底封杀 KeyError 与降智表现
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 3.0] 突破束缚，进球数逆推模式启动 | {len(ms)} 场")
+    print(f"  [QUANT ENGINE vMAX 4.0] 突破束缚，进球数逆推 + 算力解封模式启动 | {len(ms)} 场")
     print("=" * 80)
 
     match_analyses = []
@@ -499,7 +513,7 @@ def run_predictions(raw, use_ai=True):
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
         prompt = build_batch_prompt(match_analyses)
-        print(f"  [PROMPT] 解除封印！允许AI进行高赔大比分逆推。")
+        print(f"  [PROMPT] 温度限制已解除！允许AI进行大开大合的冷门大比分逆推。")
         start_t = time.time()
         # 强制更新字典，防止任务奔溃返回 None
         ai_res = asyncio.run(run_ai_matrix(prompt, len(match_analyses)))
@@ -534,14 +548,17 @@ def run_predictions(raw, use_ai=True):
         print(f"  [{idx}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}%")
 
     t4 = select_top4(res)
-    t4ids = [t["id"] for t in t4]
-    for r in res:
-        r["is_recommended"] = r["id"] in t4ids
+    
+    # 🛡️ 终极防崩溃：修复某些场次没有 "id" 导致的 KeyError 崩溃！
+    t4ids = [t.get("id", t.get("match_num", str(i))) for i, t in enumerate(t4)]
+    for i, r in enumerate(res):
+        r["is_recommended"] = r.get("id", r.get("match_num", str(i))) in t4ids
+        
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
 
     diary = load_ai_diary()
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    diary["reflection"] = "已解锁进球逆推思维，打破了1-0的低智束缚，高赔比分捕捉能力已全面释放。"
+    diary["reflection"] = "已彻底解锁AI思考温度限制与大比分逆推机制。现在系统会主动追猎 2-2, 3-2 等高价值冷门赛果，抛弃 1-0 保守思维。"
     save_ai_diary(diary)
 
     return res, t4
