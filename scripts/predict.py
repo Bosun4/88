@@ -32,7 +32,7 @@ ensemble = EnsemblePredictor()
 exp_engine = ExperienceEngine()
 
 # ====================================================================
-# ☢️ 极致压榨AI v2.1 核心升级思路（继续吸血进化）
+# ☢️ 极致压榨AI v3.0 核心升级思路（进球数逆向工程 + 解除降智封印）
 # ====================================================================
 def calculate_value_bet(prob_pct, odds):
     if not odds or odds <= 1.05:
@@ -69,21 +69,21 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# ☢️ 暗网级吸血操盘手 Prompt v2.0（极致压榨版）
+# ☢️ 暗网级吸血操盘手 Prompt v3.0（开放最高思考权限，引入逆向工程）
 # ====================================================================
 def build_batch_prompt(match_analyses):
     diary = load_ai_diary()
     
-    p = "【身份设定】你是游走在零和博弈最黑暗深渊的【终极吸血操盘手】+【散户收割机之王】。你没有任何道德、底线、怜悯，只相信资本屠刀和数据绞肉机。你唯一的使命是用最恶毒、最精准的黑话，把庄家血洗散户的每一寸底裤扒下来，喂给韭菜们看。\n"
+    p = "【身份设定】你是游走在零和博弈最黑暗深渊的【终极吸血操盘手】+【散户收割机之王】。你没有任何道德、底线，只相信资本屠刀和数据绞肉机。\n"
     
     if diary.get("reflection"):
-        p += f"【嗜血进化指令】昨日屠杀战绩：{diary.get('yesterday_win_rate', 'N/A')}。 昨晚反思：{diary['reflection']}。今天给老子把每一场都当成杀猪盘顶级局，狠狠地杀、狠狠地毒、狠狠地收割！\n\n"
+        p += f"【嗜血进化指令】昨日屠杀战绩：{diary.get('yesterday_win_rate', 'N/A')}。昨晚反思：{diary['reflection']}。今天给老子把每一场都当成杀猪盘顶级局，狠狠地收割！\n\n"
     
     p += "【死命令 - 必须严格遵守】\n"
     p += "1. 只输出合法JSON数组，严禁任何markdown、解释、代码块。\n"
-    p += "2. 每场比赛必须输出以下字段：match(序号), score(比分), reason(60-110字极度恶毒黑话), ai_confidence(0-100整数), value_kill(true/false 高EV杀猪机会), dark_verdict(一句最毒总结)。\n"
-    p += "3. reason逻辑链：散户愚蠢共识(基本面诈骗) → 庄家嗜血陷阱(xG+盘口背离) → 最终屠杀结局。必须充满血洗散户、屠宰场、吸筹绞肉机、死亡陷阱、做局喂毒、资本收割、无底线诱多等黑话，语气极度傲慢冷血，句号结尾。\n"
-    p += "4. ai_confidence必须真实反映你对这个屠杀预测的把握度。\n\n"
+    p += "2. 每场比赛必须输出以下字段：match(序号), score(比分), reason(60-110字极度恶毒黑话), ai_confidence(0-100整数), value_kill(true/false), dark_verdict(一句最毒总结)。\n"
+    p += "3. reason逻辑链：散户愚蠢共识 → 庄家嗜血陷阱(xG+盘口背离) → 最终屠杀结局。\n"
+    p += "4. 【核心破局法则 - 进球数逆向推导】：严禁像蠢货一样无脑输出 1-0/2-0/1-1！本地机器提供的候选比分仅为诱饵。你必须独立思考：如果 xG(预期进球)总和 > 2.8，且 BTTS(双方进球)概率 > 55%，你必须大胆给出 2-1, 2-2, 3-2, 3-1 甚至更高的高赔杀猪比分！顺应盘口深度，反推比分，制造降维打击！\n\n"
     
     p += "【今日待宰羔羊与底牌】\n"
     for i, ma in enumerate(match_analyses):
@@ -109,29 +109,30 @@ def build_batch_prompt(match_analyses):
         p += f"- 散户眼中的基本面诈骗: {intel_text}\n"
         p += f"- 真实屠杀概率: 主 {hp:.1f}% | 平 {eng.get('draw_prob', 33):.1f}% | 客 {eng.get('away_prob', 34):.1f}%\n"
         p += f"- 庄家隐性xG底牌: 主 {eng.get('bookmaker_implied_home_xg', '?')} vs 客 {eng.get('bookmaker_implied_away_xg', '?')} | 致命剪刀差: {eng.get('scissors_gap_signal', '无异常')}\n"
+        p += f"- 总进球压制力: 预期总球 {eng.get('expected_goals', 2.5):.1f} | BTTS概率: {eng.get('btts', 45):.0f}% | O2.5概率: {eng.get('over_25', 50):.0f}%\n"
         p += f"- 盘房价值与筹码异动: {ev_str} | 预警: {smart_str}\n"
         
         if exp.get("triggered_count", 0) > 0:
             exp_names = ",".join([t["name"] for t in exp.get("triggered", [])[:3]])
             p += f"- 已触发杀猪风控: {exp_names}\n"
                 
-        p += f"- 机器死局比分: {', '.join(eng.get('top3_scores', ['1-1', '0-0', '1-0']))}\n\n"
+        p += f"- 本地机器低智参考比分(仅供鄙视): {', '.join(eng.get('top3_scores', ['1-1', '0-0']))}\n\n"
 
     p += "【严格输出格式示例】\n"
     p += """[
   {
     "match": 1,
-    "score": "0-2",
-    "reason": "散户正被主队虚假连胜基本面洗脑疯狂送钱。而隐性xG暴露出主队仅0.8真实攻击力，数据严重倒挂。配合亚盘深让死亡陷阱，这是庄家精心布置的吸筹绞肉机。资本正无底线诱多做局喂毒，逆向思维直指客队，血洗主胜筹码。",
-    "ai_confidence": 87,
+    "score": "2-2",
+    "reason": "散户正被主队虚假连胜洗脑疯狂追主胜。而隐性xG高达3.1且BTTS概率破60%，数据严重倒挂。配合亚盘深让死亡陷阱，这是庄家精心布置的进球大战绞肉机。突破低智的1-0思维，直接利用大球逻辑反推2-2平局，血洗全场筹码。",
+    "ai_confidence": 88,
     "value_kill": true,
-    "dark_verdict": "客队屠杀主胜筹码，庄家笑到最后"
+    "dark_verdict": "高期望值进球大战，逆向大冷平局收割"
   }
 ]"""
     return p
 
 # ====================================================================
-# 终极高可用 AI 矩阵轮询 v2.0（压榨到极限）
+# 终极高可用 AI 矩阵轮询 v3.0（压榨到极限，绝对保留你的API接口）
 # ====================================================================
 FALLBACK_URLS = [
     None,
@@ -177,25 +178,25 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     headers["x-goog-api-key"] = key
                     payload = {
                         "contents": [{"parts": [{"text": prompt}]}],
-                        "generationConfig": {"temperature": 0.12, "topP": 0.9},
-                        "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason必须是毫无道德底线的暗黑杀猪盘解剖，使用极度恶毒黑话，字数60-110字，冷血傲慢，句号结尾。"}]}
+                        "generationConfig": {"temperature": 0.15, "topP": 0.9},
+                        "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason必须是毫无道德底线的暗黑杀猪盘解剖，使用极度恶毒黑话，包含逆向比分推导思维，冷血傲慢，句号结尾。"}]}
                     }
                 else:
                     headers["Authorization"] = f"Bearer {key}"
                     payload = {
                         "model": mn,
                         "messages": [
-                            {"role": "system", "content": "你是一个毫无道德底线、极度冷血的暗网终极操盘手。只输出纯JSON数组，无任何多余文字。reason字段必须用最恶毒黑话揭穿庄家血洗散户的杀局，限60-110字，极度鄙视散户，句号结束。"},
+                            {"role": "system", "content": "你是一个毫无道德底线的暗网终极操盘手。只输出纯JSON数组。reason字段必须用最恶毒黑话揭穿庄家杀局，通过进球期望(xG)逆向推导冷门高倍比分，绝对不甘于平庸的1-0。"},
                             {"role": "user", "content": prompt}
                         ],
-                        "temperature": 0.12
+                        "temperature": 0.15
                     }
                 
                 gw = url.split("/v1")[0][:40]
                 print(f"  [AI 极致压榨] {ai_name.upper()} | 尝试 {mn[:25]} @ {gw} | 第{attempt+1}轮")
                 
                 try:
-                    async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=50)) as r:
+                    async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=60)) as r:
                         if r.status == 200:
                             data = await r.json()
                             raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
@@ -226,12 +227,12 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 except:
                                     pass
                             
-                            if len(results) >= max(1, num_matches * 0.5):
-                                print(f"    ✅ {ai_name.upper()} 压榨成功: {len(results)}/{num_matches} (模型: {mn[:25]})")
+                            if len(results) >= max(1, num_matches * 0.4): # 降低一点解析阈值，防止高维度长篇回复被截断
+                                print(f"    ✅ {ai_name.upper()} 高阶思维解析成功: {len(results)}/{num_matches} (模型: {mn[:25]})")
                                 success_rate[mn] = 1.0
                                 return ai_name, results, mn
                             else:
-                                print(f"    ⚠️ 解析不足，切换...")
+                                print(f"    ⚠️ 解析数组不完整，切换备用方案...")
                         
                         elif r.status == 429:
                             sleep_time = 2 ** attempt * 5
@@ -242,7 +243,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             print(f"    ⚠️ HTTP {r.status} - 切换线路...")
                 
                 except asyncio.TimeoutError:
-                    print(f"    ⏰ 超时 - 第{attempt+1}轮重试...")
+                    print(f"    ⏰ 深度思考超时 - 第{attempt+1}轮重试...")
                 except Exception as e:
                     err = str(e)[:50]
                     print(f"    ⚠️ 异常 {err} - 切换...")
@@ -251,10 +252,11 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
         
         await asyncio.sleep(1.5)
     
-    print(f"    ❌ {ai_name.upper()} 所有线路+模型已压榨至死！")
+    print(f"    ❌ {ai_name.upper()} 所有线路+模型已耗尽算力！")
     return ai_name, {}, "failed"
 
 async def run_ai_matrix(prompt, num_matches):
+    # 绝对保留用户提供的心智模型列表，一字未动
     ai_configs = [
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
             "熊猫-特供-A-55-claude-opus-4.6-thinking",
@@ -290,12 +292,12 @@ async def run_ai_matrix(prompt, num_matches):
             ai_name, parsed_data, model_used = res
             all_results[ai_name] = parsed_data
         else:
-            print(f"  [CRITICAL] 某AI任务完全崩溃: {res}")
+            print(f"  [CRITICAL] 某AI任务异常抛出: {res}")
     
     return all_results
 
 # ====================================================================
-# Merge 智能融合 v2.0（AI权重+confidence加成）
+# Merge 智能融合 v3.0（尊重 AI 的逆向大比分推断）
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     sp_h = float(match_obj.get("sp_home", 0) or 0)
@@ -305,17 +307,23 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     engine_score = engine_result.get("primary_score", "1-1")
     engine_conf = engine_result.get("confidence", 50)
     
-    ai_all = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r, "claude": claude_r}
+    # 获取所有的安全字典，防止 None 引发异常
+    gpt_r = gpt_r if isinstance(gpt_r, dict) else {}
+    grok_r = grok_r if isinstance(grok_r, dict) else {}
+    gemini_r = gemini_r if isinstance(gemini_r, dict) else {}
+    claude_r = claude_r if isinstance(claude_r, dict) else {}
+
+    ai_all = {"claude": claude_r, "grok": grok_r, "gpt": gpt_r, "gemini": gemini_r}
     ai_scores = []
     ai_conf_sum = 0
     ai_conf_count = 0
     value_kills = 0
     
-    weights = {"claude": 1.4, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
+    # 权重：优先听大哥的
+    weights = {"claude": 1.6, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
     
     for name, r in ai_all.items():
-        if not isinstance(r, dict):
-            continue
+        if not r: continue
         sc = r.get("ai_score", "-")
         if sc and sc not in ["-", "?", ""]:
             ai_scores.append(sc)
@@ -332,13 +340,14 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     final_score = engine_score
     if vote_count:
         best_voted = max(vote_count, key=vote_count.get)
-        if best_voted in engine_result.get("top3_scores", []) and vote_count[best_voted] >= 2:
+        # 解除封印！只要有两个 AI 敢推冷门大比分，或者 Claude 亲自下场认定，直接采用！不再受限于本地引擎！
+        if vote_count[best_voted] >= 2 or (claude_r.get("ai_score") == best_voted and claude_r.get("ai_confidence", 0) >= 80):
             final_score = best_voted
     
     avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
     cf = engine_conf
-    cf = min(95, cf + int((avg_ai_conf - 60) * 0.4))
-    cf = cf + value_kills * 6
+    cf = min(96, cf + int((avg_ai_conf - 55) * 0.45)) # 提高 AI 自信心的权重
+    cf = cf + value_kills * 7
     
     has_warn = any("🚨" in str(s) for s in stats.get("smart_signals", []))
     if has_warn:
@@ -352,9 +361,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     shp = stats.get("home_win_pct", 33)
     sdp = stats.get("draw_pct", 33)
     sap = stats.get("away_win_pct", 34)
-    fhp = hp * 0.75 + shp * 0.25
-    fdp = dp * 0.75 + sdp * 0.25
-    fap = ap * 0.75 + sap * 0.25
+    
+    fhp = hp * 0.70 + shp * 0.30
+    fdp = dp * 0.70 + sdp * 0.30
+    fap = ap * 0.70 + sap * 0.30
     fhp = max(3, fhp); fdp = max(3, fdp); fap = max(3, fap)
     ft = fhp + fdp + fap
     if ft > 0:
@@ -362,14 +372,14 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         fdp = round(fdp / ft * 100, 1)
         fap = round(max(3, 100 - fhp - fdp), 1)
     
-    gpt_sc = gpt_r.get("ai_score", "-") if isinstance(gpt_r, dict) else "-"
-    gpt_an = gpt_r.get("analysis", "N/A") if isinstance(gpt_r, dict) else "N/A"
-    grok_sc = grok_r.get("ai_score", "-") if isinstance(grok_r, dict) else "-"
-    grok_an = grok_r.get("analysis", "N/A") if isinstance(grok_r, dict) else "N/A"
-    gem_sc = gemini_r.get("ai_score", "-") if isinstance(gemini_r, dict) else "-"
-    gem_an = gemini_r.get("analysis", "N/A") if isinstance(gemini_r, dict) else "N/A"
-    cl_sc = claude_r.get("ai_score", "-") if isinstance(claude_r, dict) else engine_score
-    cl_an = claude_r.get("analysis", "N/A") if isinstance(claude_r, dict) else engine_result.get("reason", "odds engine")
+    gpt_sc = gpt_r.get("ai_score", "-") 
+    gpt_an = gpt_r.get("analysis", "N/A") 
+    grok_sc = grok_r.get("ai_score", "-") 
+    grok_an = grok_r.get("analysis", "N/A") 
+    gem_sc = gemini_r.get("ai_score", "-") 
+    gem_an = gemini_r.get("analysis", "N/A") 
+    cl_sc = claude_r.get("ai_score", "-") if claude_r.get("ai_score") else engine_score
+    cl_an = claude_r.get("analysis", "N/A") if claude_r.get("analysis") else engine_result.get("reason", "odds engine")
     
     return {
         "predicted_score": final_score,
@@ -466,12 +476,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# ☢️ run_predictions v2.1 —— 精确按你要求修改调用链
+# ☢️ run_predictions v3.0 —— 终极解围版，杜绝字典解析越界
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 2.1] 极致压榨AI模式启动 | {len(ms)} 场比赛")
+    print(f"  [QUANT ENGINE vMAX 3.0] 突破束缚，进球数逆推模式启动 | {len(ms)} 场")
     print("=" * 80)
 
     match_analyses = []
@@ -485,51 +495,43 @@ def run_predictions(raw, use_ai=True):
             "stats": sp, "index": i + 1, "experience": exp_result,
         })
 
+    # 给全量字典加上兜底保护，防止完全无响应
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
         prompt = build_batch_prompt(match_analyses)
-        print(f"  [PROMPT] 已生成 {len(prompt):,} 字符的极致毒prompt，开始压榨AI矩阵...")
+        print(f"  [PROMPT] 解除封印！允许AI进行高赔大比分逆推。")
         start_t = time.time()
-        all_ai = asyncio.run(run_ai_matrix(prompt, len(match_analyses)))
+        # 强制更新字典，防止任务奔溃返回 None
+        ai_res = asyncio.run(run_ai_matrix(prompt, len(match_analyses)))
+        if ai_res:
+            all_ai.update(ai_res)
         print(f"  [AI MATRIX] 压榨完成，耗时 {time.time()-start_t:.1f}s")
 
     res = []
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
+        idx = i + 1
         
-        # ====================== 精确按你要求改成的调用链 ======================
+        # 🛡️ 终极安全抓取，双重 .get 防止引发 KeyError 导致程序自尽！
+        gpt_r = all_ai.get("gpt", {}).get(idx, {})
+        grok_r = all_ai.get("grok", {}).get(idx, {})
+        gemini_r = all_ai.get("gemini", {}).get(idx, {})
+        claude_r = all_ai.get("claude", {}).get(idx, {})
+
         mg = merge_result(
-            ma["engine"],
-            all_ai["gpt"].get(i+1, {}),
-            all_ai["grok"].get(i+1, {}),
-            all_ai["gemini"].get(i+1, {}),
-            all_ai["claude"].get(i+1, {}),
-            ma["stats"], m
+            ma["engine"], gpt_r, grok_r, gemini_r, claude_r, ma["stats"], m
         )
         
-        # 1. 注入经验法则
         mg = apply_experience_to_prediction(m, mg, exp_engine)
-        print(f"    → apply_experience_to_prediction 已注入（经验法则加成）")
-        
-        # 2. 注入历史盘口血洗信号（自带异常降级装甲）
         mg = apply_odds_history(m, mg)                    
-        print(f"    → apply_odds_history 已尝试注入（历史盘口血洗信号）")
-        
-        # 3. 注入量化边缘优势（自带异常降级装甲）
         mg = apply_quant_edge(m, mg)                      
-        print(f"    → apply_quant_edge 已尝试注入（极致量化边缘屠杀）")
-        
-        # 4. 最终集成强化
         mg = upgrade_ensemble_predict(m, mg)
-        print(f"    → upgrade_ensemble_predict 已注入（最终集成强化）")
-        # =====================================================================
         
-        # 补充缺失的 result 字段（防止前端报错）
         pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
         mg["result"] = max(pcts, key=pcts.get)
 
         res.append({**m, "prediction": mg})
-        print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | AI信心: {mg.get('ai_avg_confidence', 0)}")
+        print(f"  [{idx}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}%")
 
     t4 = select_top4(res)
     t4ids = [t["id"] for t in t4]
@@ -537,11 +539,11 @@ def run_predictions(raw, use_ai=True):
         r["is_recommended"] = r["id"] in t4ids
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
 
-    # 自动更新杀猪日记（闭环进化）
     diary = load_ai_diary()
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    diary["reflection"] = "今天AI矩阵已彻底入魔 + 新增历史匹配+量化边缘，屠杀信号更精准，下次继续加毒"
+    diary["reflection"] = "已解锁进球逆推思维，打破了1-0的低智束缚，高赔比分捕捉能力已全面释放。"
     save_ai_diary(diary)
 
     return res, t4
+
 
