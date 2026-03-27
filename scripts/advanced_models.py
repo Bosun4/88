@@ -199,7 +199,9 @@ def upgrade_ensemble_predict(match,prediction,odds_data=None):
     mw,mdw=DynamicFusionWeight.get_weights(match,prediction)
     bs=0.15;hp_f=hp*(1-bs)+bvp_result["home_win"]*bs;dp_f=dp*(1-bs)+bvp_result["draw"]*bs;ap_f=ap*(1-bs)+bvp_result["away_win"]*bs
     if "pro_odds" in prediction:
-        po=prediction["pro_odds"];ps=0.08;hp_f=hp_f*(1-ps)+po["true_home"]*ps;dp_f=dp_f*(1-ps)+po["true_draw"]*ps;ap_f=ap_f*(1-ps)+po["true_away"]*ps
+        po=prediction.get("pro_odds", {})
+        if po and "true_home" in po and "true_draw" in po and "true_away" in po:
+            ps=0.08;hp_f=hp_f*(1-ps)+po["true_home"]*ps;dp_f=dp_f*(1-ps)+po["true_draw"]*ps;ap_f=ap_f*(1-ps)+po["true_away"]*ps
     t=hp_f+dp_f+ap_f
     if t>0:prediction["home_win_pct"]=round(hp_f/t*100,1);prediction["draw_pct"]=round(dp_f/t*100,1);prediction["away_win_pct"]=round(100-prediction["home_win_pct"]-prediction["draw_pct"],1)
     sigs=prediction.get("smart_signals",[])
@@ -217,3 +219,5 @@ def upgrade_ensemble_predict(match,prediction,odds_data=None):
     prediction["confidence"]=_cal.adjust_confidence(prediction.get("confidence",50))
     prediction["total_models"]=prediction.get("total_models",11)+4;prediction["fusion_weights"]={"market":mw,"model":mdw}
     return prediction
+
+
