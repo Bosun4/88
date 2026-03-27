@@ -28,11 +28,6 @@ except Exception as e:
     print(f"  [WARN] ⚠️ 量化边缘模块 (quant_edge) 加载失败或未找到，系统自动降级跳过: {e}")
     def apply_quant_edge(m, mg): return mg  # 兜底函数，防止崩溃
 
-try:
-    from wencai_intel import apply_wencai_intel
-except:
-    def apply_wencai_intel(m, mg): return mg
-
 ensemble = EnsemblePredictor()
 exp_engine = ExperienceEngine()
 
@@ -58,107 +53,6 @@ def parse_score(s):
     except:
         return None, None
 
-# ====================================================================
-# 🧊 冷门猎手引擎 + 深度赔率映射（v3.3新增，不影响原有逻辑）
-# ====================================================================
-REALISTIC_MAP = {
-    "ultra_low": ["0-0", "1-0", "0-1", "1-1"],
-    "low": ["1-0", "0-1", "1-1", "2-0", "0-2", "2-1", "1-2"],
-    "medium": ["2-1", "1-2", "2-0", "0-2", "1-1", "2-2", "3-1", "1-3"],
-    "high": ["2-1", "1-2", "3-1", "1-3", "2-2", "3-0", "0-3", "3-2", "2-3"]
-}
-
-class ColdDoorDetector:
-    """独立冷门信号识别引擎"""
-    @staticmethod
-    def detect(match, prediction):
-        signals = []
-        strength = 0
-
-        # 1. 反向Steam
-        steam = prediction.get("steam_move", {})
-        if steam.get("steam") and "反向" in str(steam.get("signal", "")):
-            signals.append("❄️ 反向Steam！庄家造热收割")
-            strength += 5
-
-        # 2. 散户极端偏向
-        vote = match.get("vote", {})
-        try:
-            vh = int(vote.get("win", 33)); va = int(vote.get("lose", 33))
-            max_vote = max(vh, va)
-            if max_vote >= 65:
-                signals.append(f"❄️ 散户极端偏向{max_vote}%！冷门高危")
-                strength += 4
-            elif max_vote >= 58:
-                strength += 2
-        except: pass
-
-        # 3. 热门队坏消息爆炸
-        info = match.get("intelligence", match.get("information", {}))
-        home_bad = str(info.get("home_bad_news", ""))
-        away_bad = str(info.get("guest_bad_news", info.get("g_inj", "")))
-        hp = prediction.get("home_win_pct", 50)
-        ap = prediction.get("away_win_pct", 50)
-        if len(home_bad) > 80 and hp > 58:
-            signals.append("❄️ 主队坏消息爆炸+散户狂热")
-            strength += 5
-        if len(away_bad) > 80 and ap > 58:
-            signals.append("❄️ 客队坏消息爆炸+散户狂热")
-            strength += 5
-
-        # 4. 赔率-模型严重背离
-        sp_h = float(match.get("sp_home", match.get("win", 0)) or 0)
-        if sp_h > 1:
-            implied_h = 100 / sp_h * 0.92
-            if abs(implied_h - hp) > 15 and hp > 58:
-                signals.append(f"❄️ 赔率vs模型背离{abs(implied_h-hp):.0f}%")
-                strength += 4
-
-        # 5. 盘口太便宜
-        for s in prediction.get("smart_signals", []):
-            if "盘口太便宜" in str(s):
-                signals.append("❄️ 盘口太便宜=庄家不看好")
-                strength += 3
-                break
-
-        # 6. 赔率变动造热
-        line = prediction.get("line_movement_anomaly", {})
-        if line.get("has_anomaly") and "造热" in str(line.get("signal", "")):
-            signals.append("❄️ 赔率变动造热=诱盘")
-            strength += 4
-
-        is_cold = strength >= 7
-        level = "顶级" if strength >= 12 else "高危" if strength >= 7 else "普通"
-        return {
-            "is_cold_door": is_cold, "strength": strength, "level": level,
-            "signals": signals,
-            "dark_verdict": f"❄️ {level}冷门！{len(signals)}条触发" if is_cold else ""
-        }
-
-def calibrate_realistic_score(current_score, sp_h, sp_d, sp_a, cold_door):
-    """赔率映射+冷门强度联合校准：防止输出不合理高比分"""
-    if cold_door.get("is_cold_door") and cold_door.get("level") == "顶级":
-        return current_score  # 顶级冷门允许原预测
-
-    implied_total = (1/sp_h + 1/sp_d + 1/sp_a) * 100 if sp_h > 1 and sp_d > 1 and sp_a > 1 else 300
-    if implied_total < 280: allowed = REALISTIC_MAP["ultra_low"]
-    elif implied_total < 310: allowed = REALISTIC_MAP["low"]
-    elif implied_total < 340: allowed = REALISTIC_MAP["medium"]
-    else: allowed = REALISTIC_MAP["high"]
-
-    if current_score in allowed:
-        return current_score
-    try:
-        home, away = map(int, current_score.split("-"))
-        if home + away <= 2: return "1-0" if home >= away else "0-1"
-        elif home + away <= 3: return "2-1" if home >= away else "1-2"
-        else: return "2-1" if home >= away else "1-2"
-    except:
-        return "1-1"
-
-# ====================================================================
-# AI日记
-# ====================================================================
 def load_ai_diary():
     diary_file = "data/ai_diary.json"
     if os.path.exists(diary_file):
@@ -175,7 +69,7 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# ☢️ 暗网级吸血操盘手 Prompt v2.0（极致压榨版）— 原版一字不动
+# ☢️ 暗网级吸血操盘手 Prompt v2.0（极致压榨版）
 # ====================================================================
 def build_batch_prompt(match_analyses):
     diary = load_ai_diary()
@@ -237,7 +131,7 @@ def build_batch_prompt(match_analyses):
     return p
 
 # ====================================================================
-# 终极高可用 AI 矩阵轮询 v2.0 — 原版一字不动
+# 终极高可用 AI 矩阵轮询 v2.0（压榨到极限）
 # ====================================================================
 FALLBACK_URLS = [
     None,
@@ -363,8 +257,9 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 async def run_ai_matrix(prompt, num_matches):
     ai_configs = [
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
+            "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking",
             "熊猫-按量-满血copilot-claude-opus-4.6-thinking",
-            "熊猫-按量-满血copilot-claude-opus-4.6",
+            "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking",
         ]),
         ("grok", "GROK_API_URL", "GROK_API_KEY", [
             "熊猫-A-7-grok-4.2-多智能体讨论",
@@ -400,7 +295,7 @@ async def run_ai_matrix(prompt, num_matches):
     return all_results
 
 # ====================================================================
-# Merge 智能融合 v2.0 — 原版逻辑 + 冷门检测 + 比分校准
+# Merge 智能融合 v2.0（AI权重+confidence加成）
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     sp_h = float(match_obj.get("sp_home", 0) or 0)
@@ -475,24 +370,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     gem_an = gemini_r.get("analysis", "N/A") if isinstance(gemini_r, dict) else "N/A"
     cl_sc = claude_r.get("ai_score", "-") if isinstance(claude_r, dict) else engine_score
     cl_an = claude_r.get("analysis", "N/A") if isinstance(claude_r, dict) else engine_result.get("reason", "odds engine")
-
-    # ========== v3.3新增：冷门信号识别 ==========
-    pre_pred = {
-        "home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap,
-        "steam_move": stats.get("steam_move", {}),
-        "smart_signals": stats.get("smart_signals", []),
-        "line_movement_anomaly": stats.get("line_movement_anomaly", {}),
-    }
-    cold_door = ColdDoorDetector.detect(match_obj, pre_pred)
     
-    sigs = list(stats.get("smart_signals", []))
-    if cold_door["is_cold_door"]:
-        sigs.extend(cold_door["signals"])
-        cf = max(30, cf - 5)
-
-    # ========== v3.3新增：比分现实校准 ==========
-    final_score = calibrate_realistic_score(final_score, sp_h, sp_d, sp_a, cold_door)
-
     return {
         "predicted_score": final_score,
         "home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap,
@@ -509,8 +387,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "poisson": stats.get("poisson", {}),
         "refined_poisson": stats.get("refined_poisson", {}),
         "extreme_warning": engine_result.get("scissors_gap_signal", ""),
-        "smart_money_signal": " | ".join(sigs),
-        "smart_signals": sigs,
+        "smart_money_signal": " | ".join(stats.get("smart_signals", [])),
+        "smart_signals": stats.get("smart_signals", []),
         "model_consensus": stats.get("model_consensus", 0),
         "total_models": stats.get("total_models", 11),
         "expected_total_goals": engine_result.get("expected_goals", 2.5),
@@ -544,8 +422,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "bivariate_poisson": stats.get("bivariate_poisson", {}),
         "asian_handicap_probs": stats.get("asian_handicap_probs", {}),
         "bookmaker_implied_home_xg": engine_result.get("bookmaker_implied_home_xg", "?"),
-        "bookmaker_implied_away_xg": engine_result.get("bookmaker_implied_away_xg", "?"),
-        "cold_door": cold_door,
+        "bookmaker_implied_away_xg": engine_result.get("bookmaker_implied_away_xg", "?")
     }
 
 def select_top4(preds):
@@ -576,11 +453,6 @@ def select_top4(preds):
         if "Sharp" in smart_money:
             if ("客胜" in smart_money and direction == "主胜") or ("主胜" in smart_money and direction == "客胜"):
                 s -= 30
-
-        # v3.3新增：冷门比赛降级
-        cold = pr.get("cold_door", {})
-        if cold.get("is_cold_door"):
-            s -= 8
                 
         p["recommend_score"] = round(s, 2)
         
@@ -594,12 +466,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# ☢️ run_predictions v3.3 — 原版调用链 + 5层try/except + 冷门标签
+# ☢️ run_predictions v2.1 —— 精确按你要求修改调用链
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 3.3] 冷门猎手模式 | {len(ms)} 场比赛")
+    print(f"  [QUANT ENGINE vMAX 2.1] 极致压榨AI模式启动 | {len(ms)} 场比赛")
     print("=" * 80)
 
     match_analyses = []
@@ -625,6 +497,7 @@ def run_predictions(raw, use_ai=True):
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         
+        # ====================== 精确按你要求改成的调用链 ======================
         mg = merge_result(
             ma["engine"],
             all_ai["gpt"].get(i+1, {}),
@@ -634,47 +507,29 @@ def run_predictions(raw, use_ai=True):
             ma["stats"], m
         )
         
-        # ============ 5层增强管线（每层独立try/except防崩溃） ============
-        try:
-            mg = apply_experience_to_prediction(m, mg, exp_engine)
-            print(f"    → apply_experience_to_prediction 已注入（经验法则加成）")
-        except Exception as e:
-            print(f"    ⚠️ experience_rules跳过: {e}")
+        # 1. 注入经验法则
+        mg = apply_experience_to_prediction(m, mg, exp_engine)
+        print(f"    → apply_experience_to_prediction 已注入（经验法则加成）")
         
-        try:
-            mg = apply_odds_history(m, mg)
-            print(f"    → apply_odds_history 已尝试注入（历史盘口血洗信号）")
-        except Exception as e:
-            print(f"    ⚠️ odds_history跳过: {e}")
+        # 2. 注入历史盘口血洗信号（自带异常降级装甲）
+        mg = apply_odds_history(m, mg)                    
+        print(f"    → apply_odds_history 已尝试注入（历史盘口血洗信号）")
         
-        try:
-            mg = apply_quant_edge(m, mg)
-            print(f"    → apply_quant_edge 已尝试注入（极致量化边缘屠杀）")
-        except Exception as e:
-            print(f"    ⚠️ quant_edge跳过: {e}")
-
-        try:
-            mg = apply_wencai_intel(m, mg)
-            print(f"    → apply_wencai_intel 已注入（文彩情报增强）")
-        except Exception as e:
-            print(f"    ⚠️ wencai_intel跳过: {e}")
+        # 3. 注入量化边缘优势（自带异常降级装甲）
+        mg = apply_quant_edge(m, mg)                      
+        print(f"    → apply_quant_edge 已尝试注入（极致量化边缘屠杀）")
         
-        try:
-            mg = upgrade_ensemble_predict(m, mg)
-            print(f"    → upgrade_ensemble_predict 已注入（最终集成强化）")
-        except Exception as e:
-            print(f"    ⚠️ advanced_models跳过: {e}")
+        # 4. 最终集成强化
+        mg = upgrade_ensemble_predict(m, mg)
+        print(f"    → upgrade_ensemble_predict 已注入（最终集成强化）")
         # =====================================================================
         
+        # 补充缺失的 result 字段（防止前端报错）
         pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
         mg["result"] = max(pcts, key=pcts.get)
 
         res.append({**m, "prediction": mg})
-        
-        # v3.3新增：冷门标签
-        cold = mg.get("cold_door", {})
-        cold_tag = f" [❄️{cold.get('level','')}冷门]" if cold.get("is_cold_door") else ""
-        print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | AI信心: {mg.get('ai_avg_confidence', 0)}{cold_tag}")
+        print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | AI信心: {mg.get('ai_avg_confidence', 0)}")
 
     t4 = select_top4(res)
     t4ids = [t["id"] for t in t4]
@@ -682,10 +537,11 @@ def run_predictions(raw, use_ai=True):
         r["is_recommended"] = r["id"] in t4ids
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
 
+    # 自动更新杀猪日记（闭环进化）
     diary = load_ai_diary()
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    cold_count = len([r for r in res if r.get("prediction", {}).get("cold_door", {}).get("is_cold_door")])
-    diary["reflection"] = f"vMAX3.3冷门猎手 | {cold_count}场冷门信号 | 5层增强管线"
+    diary["reflection"] = "今天AI矩阵已彻底入魔 + 新增历史匹配+量化边缘，屠杀信号更精准，下次继续加毒"
     save_ai_diary(diary)
 
     return res, t4
+
