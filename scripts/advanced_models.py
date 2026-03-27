@@ -198,10 +198,13 @@ def upgrade_ensemble_predict(match,prediction,odds_data=None):
         th,td,ta=_ov.calculate(sp_h,sp_d,sp_a);prediction["pro_odds"]={"true_home":round(th*100,1),"true_draw":round(td*100,1),"true_away":round(ta*100,1)}
     mw,mdw=DynamicFusionWeight.get_weights(match,prediction)
     bs=0.15;hp_f=hp*(1-bs)+bvp_result["home_win"]*bs;dp_f=dp*(1-bs)+bvp_result["draw"]*bs;ap_f=ap*(1-bs)+bvp_result["away_win"]*bs
+    
+    # 核心修复点：安全获取并检查 pro_odds，防止流式输出中断导致的 KeyError 崩溃
     if "pro_odds" in prediction:
-        po=prediction.get("pro_odds", {})
-        if po and "true_home" in po and "true_draw" in po and "true_away" in po:
+        po = prediction.get("pro_odds", {})
+        if po and isinstance(po, dict) and "true_home" in po and "true_draw" in po and "true_away" in po:
             ps=0.08;hp_f=hp_f*(1-ps)+po["true_home"]*ps;dp_f=dp_f*(1-ps)+po["true_draw"]*ps;ap_f=ap_f*(1-ps)+po["true_away"]*ps
+
     t=hp_f+dp_f+ap_f
     if t>0:prediction["home_win_pct"]=round(hp_f/t*100,1);prediction["draw_pct"]=round(dp_f/t*100,1);prediction["away_win_pct"]=round(100-prediction["home_win_pct"]-prediction["draw_pct"],1)
     sigs=prediction.get("smart_signals",[])
