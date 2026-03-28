@@ -69,7 +69,7 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# ☢️ 暗网级吸血操盘手 Prompt v4.0（进球逆向推导，彻底封杀死水比分）
+# ☢️ 暗网级吸血操盘手 Prompt v5.0（大热卡分 + 0/7球天花板）
 # ====================================================================
 def build_batch_prompt(match_analyses):
     diary = load_ai_diary()
@@ -77,16 +77,15 @@ def build_batch_prompt(match_analyses):
     p = "【身份设定】你是游走在零和博弈最黑暗深渊的【终极吸血操盘手】+【散户收割机之王】。你没有任何道德、底线，只相信资本屠刀和数据绞肉机。\n"
     
     if diary.get("reflection"):
-        p += f"【嗜血进化指令】昨日屠杀战绩：{diary.get('yesterday_win_rate', 'N/A')}。昨晚反思：{diary['reflection']}。今天给老子把每一场都当成杀猪盘顶级局，狠狠地收割！\n\n"
+        p += f"【嗜血进化指令】昨日屠杀战绩：{diary.get('yesterday_win_rate', 'N/A')}。战绩反思：{diary['reflection']}。今天必须精准识别庄家的诱盘和卡分手段，狠狠收割！\n\n"
     
     p += "【死命令 - 必须严格遵守】\n"
     p += "1. 只输出合法JSON数组，严禁任何markdown、解释、代码块。\n"
     p += "2. 每场比赛必须输出以下字段：match(序号), score(比分), reason(60-110字极度恶毒黑话), ai_confidence(0-100整数), value_kill(true/false), dark_verdict(一句最毒总结)。\n"
-    p += "3. reason逻辑链：散户愚蠢共识 → 庄家嗜血陷阱(xG+盘口背离) → 最终屠杀结局。\n"
-    p += "4. ⚠️【核心破局法则 - 进球数逆向推导】⚠️：这是你与低智AI的区别！散户和本地机器永远只会猜 1-0/2-0/1-1 这三种死水比分。你必须逆向思考：\n"
-    p += "   - 如果 预期总球(ExpGoals) > 2.6 或 BTTS(双方进球) > 52%，【绝对禁止】输出 1-0, 0-1, 2-0, 0-2, 1-1！你必须大破大立，给出 2-1, 1-2, 2-2, 3-1, 3-2 这种杀猪大单！\n"
-    p += "   - 如果强弱悬殊且主队让深盘(<-1.0)，必须抓 3-0, 4-0 的屠杀局！\n"
-    p += "   - 如果是保级死拼/交锋均势，大胆抓 2-2, 3-3 的极端高赔冷平！不要害怕偏离主流！\n\n"
+    p += "3. ⚠️【核心破局法则 - 动态操盘与大热卡分思维】⚠️（这是你与低智AI的本质区别）：\n"
+    p += "   - 🩸 【大热卡分局(赢球输盘)】：如果一方基本面极度利好（如对手伤停/主帅缺席），且让球盘口异常便宜（如只让 -0.75 或 -1.0），这是庄家的死亡诱盘！绝对禁止预测 3-0/3-1 大胜，必须给出 1-0 或 2-1 这种【刚好赢一球】的精准卡分比分，把买大球和让球胜的散户全部杀光！\n"
+    p += "   - 📉 【进球曲率天花板】：如果提供的 7+球赔率(a7) > 23.0，或赛前预测总球<2.0，绝对禁止推演3球以上比分。如果双方势均力敌且 0球赔率(a0) 异常压低，必须大胆推演 1-1 或 0-0 双向绞肉闷杀局。\n"
+    p += "   - 💥 【绝对实力碾压局】：如果基本面和 xG 差距极大（>0.7），且盘口让步足够深（<=-1.5），不要得被迫害妄想症，直接给出 3-0, 4-0, 5-1 的正路无情屠杀。\n\n"
     
     p += "【今日待宰羔羊与底牌】\n"
     for i, ma in enumerate(match_analyses):
@@ -97,6 +96,14 @@ def build_batch_prompt(match_analyses):
         h, a = m.get("home_team", "Home"), m.get("away_team", "Away")
         
         hc = m.get("give_ball", "0")
+        
+        # 🚀 自动提取你抓包里的神级数据：0球赔率、7球赔率、绝密伤停情报
+        a0 = m.get("a0", "未知")
+        a7 = m.get("a7", "未知")
+        info = m.get("information", {})
+        h_bad = str(info.get("home_bad_news", ""))[:70].replace('\n', ' ') if isinstance(info, dict) else ""
+        g_bad = str(info.get("guest_bad_news", ""))[:70].replace('\n', ' ') if isinstance(info, dict) else ""
+        
         sp_h = float(m.get("sp_home", 0) or 0)
         hp = eng.get('home_prob', 33)
         vh = calculate_value_bet(hp, sp_h) if sp_h > 1 else {}
@@ -112,9 +119,14 @@ def build_batch_prompt(match_analyses):
         btts_prob = eng.get('btts', stats.get('btts', 45))
 
         p += f"[{i+1}] {h} vs {a} | {m.get('league', '未知')} | 亚盘死线: {hc}\n"
+        p += f"- 庄家进球底牌: 0球赔率={a0} | 7+球赔率={a7} | 预期总球={exp_goals:.1f} | BTTS={btts_prob:.0f}%\n"
         p += f"- 散户基本面认知: {intel_text}\n"
+        
+        # 将绝密伤停内幕直接喂给 AI 大脑
+        if h_bad or g_bad:
+            p += f"- 绝密内幕/隐患: 主队-[{h_bad if h_bad else '无明显劣势'}] | 客队-[{g_bad if g_bad else '无明显劣势'}]\n"
+
         p += f"- 庄家隐性xG底牌: 主 {eng.get('bookmaker_implied_home_xg', '?')} vs 客 {eng.get('bookmaker_implied_away_xg', '?')} | 致命剪刀差: {eng.get('scissors_gap_signal', '无异常')}\n"
-        p += f"- 总进球压制力: 预期总球 {exp_goals:.1f} | BTTS概率: {btts_prob:.0f}% | O2.5概率: {eng.get('over_25', 50):.0f}%\n"
         p += f"- 盘房价值与筹码: {ev_str} | 预警: {smart_str}\n"
         
         if exp.get("triggered_count", 0) > 0:
@@ -127,17 +139,17 @@ def build_batch_prompt(match_analyses):
     p += """[
   {
     "match": 1,
-    "score": "2-2",
-    "reason": "散户正被主队虚假连胜洗脑疯狂追主胜。而隐性xG高达3.1且BTTS概率破60%，数据严重倒挂。配合亚盘深让死亡陷阱，这是庄家精心布置的进球大战绞肉机。突破低智的1-0思维，直接利用大球逻辑反推2-2平局，血洗全场筹码。",
+    "score": "1-0",
+    "reason": "散户看到客队主帅缺席且主队大热，疯狂买入主队穿盘大胜。但让-1.0的盘口极度便宜且0球赔率高企，这是庄家经典的诱盘陷阱。主队后防有伤患必然求稳，1-0赢球输盘刚好卡死让步，同时收割大球资金，兵不血刃完成双杀。",
     "ai_confidence": 88,
     "value_kill": true,
-    "dark_verdict": "高期望值进球大战，逆向大冷平局收割"
+    "dark_verdict": "大热诱盘卡分杀猪，1-0精确收割"
   }
 ]"""
     return p
 
 # ====================================================================
-# 终极高可用 AI 矩阵轮询 v4.0（解封温度，彻底释放思考算力）
+# 终极高可用 AI 矩阵轮询 v5.0（彻底释放思考算力，融入新法则指令）
 # ====================================================================
 FALLBACK_URLS = [
     None,
@@ -184,14 +196,14 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     payload = {
                         "contents": [{"parts": [{"text": prompt}]}],
                         "generationConfig": {"temperature": 0.45, "topP": 0.9},
-                        "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason必须是毫无道德底线的暗黑杀猪盘解剖，使用极度恶毒黑话，包含逆向高赔比分推导思维，冷血傲慢，句号结尾。"}]}
+                        "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason必须是毫无道德底线的暗黑杀猪盘解剖，遵守卡分法则与0/7球天花板，使用极度恶毒黑话，冷血傲慢，句号结尾。"}]}
                     }
                 else:
                     headers["Authorization"] = f"Bearer {key}"
                     payload = {
                         "model": mn,
                         "messages": [
-                            {"role": "system", "content": "你是一个毫无道德底线的暗网终极操盘手。只输出纯JSON数组。reason字段必须用最恶毒黑话揭穿庄家杀局，通过进球期望(xG)逆向推导冷门高倍大比分，绝对不甘于平庸的1-0/1-1/2-0。"},
+                            {"role": "system", "content": "你是一个毫无道德底线的暗网终极操盘手。只输出纯JSON数组。reason字段必须用最恶毒黑话揭穿庄家杀局，严格执行大热卡分法则与0/7球赔率天花板，绝对不要无脑爆冷。"},
                             {"role": "user", "content": prompt}
                         ],
                         "temperature": 0.45
@@ -307,7 +319,7 @@ async def run_ai_matrix(prompt, num_matches):
     return all_results
 
 # ====================================================================
-# Merge 智能融合 v4.0（彻底赋权 AI 逆推的高分结果）
+# Merge 智能融合 v5.0（放开比分束缚，彻底赋权 Claude 卡分比分）
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     sp_h = float(match_obj.get("sp_home", 0) or 0)
@@ -347,11 +359,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     
     final_score = engine_score
     
+    # 🚀 升维改动：彻底信任 Claude，特别是它根据 0/7球 和 情报抓出的卡分比分(1-0)或绞肉比分(1-1)
     claude_score = claude_r.get("ai_score", "")
     if claude_score and "-" in claude_score:
-        c_h, c_a = parse_score(claude_score)
-        if c_h is not None and (c_h + c_a >= 3) and engine_result.get("over_25", 0) >= 45:
-            final_score = claude_score
+        final_score = claude_score # 强行采纳 Claude 的终极推演
             
     elif vote_count:
         best_voted = max(vote_count, key=vote_count.get)
@@ -490,12 +501,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# ☢️ run_predictions v4.0 —— 终极解围版，彻底封杀 KeyError 与降智表现
+# ☢️ run_predictions v5.0 —— 终极解围版，融合卡分模型与0/7天花板
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 4.0] 突破束缚，进球数逆推 + 算力解封模式启动 | {len(ms)} 场")
+    print(f"  [QUANT ENGINE vMAX 5.0] 突破束缚，大热卡分 + 0/7球天花板模式启动 | {len(ms)} 场")
     print("=" * 80)
 
     match_analyses = []
@@ -512,7 +523,7 @@ def run_predictions(raw, use_ai=True):
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
         prompt = build_batch_prompt(match_analyses)
-        print(f"  [PROMPT] 温度限制已解除！允许AI进行大开大合的冷门大比分逆推。")
+        print(f"  [PROMPT] 温度限制已解除！伤停情报与 0/7球底牌已注入 AI 大脑。")
         start_t = time.time()
         ai_res = asyncio.run(run_ai_matrix(prompt, len(match_analyses)))
         if ai_res:
@@ -554,7 +565,8 @@ def run_predictions(raw, use_ai=True):
 
     diary = load_ai_diary()
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    diary["reflection"] = "已彻底解锁AI思考温度限制与大比分逆推机制。现在系统会主动追猎 2-2, 3-2 等高价值冷门赛果，抛弃 1-0 保守思维。"
+    diary["reflection"] = "已加载 1-0 赢球输盘大热卡分模型，并启用 0/7球赔率曲率天花板限制，结合伤停绝密情报，彻底封杀无脑大比分爆冷现象。"
     save_ai_diary(diary)
 
     return res, t4
+
