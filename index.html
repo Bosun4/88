@@ -49,6 +49,7 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 .tm{width:35%;text-align:center}.tm-n{font-size:13px;font-weight:700;color:var(--w)}
 .sc-c{text-align:center}
 .sc-big{font-family:'IBM Plex Mono';font-size:28px;font-weight:700;color:var(--gn)}
+.sc-sub{font-family:'IBM Plex Mono';font-size:9px;color:var(--t3);margin-top:1px}
 .res-tag{display:inline-block;font-size:8px;padding:2px 6px;border-radius:2px;font-weight:700;margin-top:2px}
 .res-tag.h{background:#ff4d5a18;color:var(--red)}.res-tag.d{background:#ffb02018;color:var(--am)}.res-tag.a{background:#4d8aff18;color:var(--bl)}
 .sr{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-bottom:8px}
@@ -87,11 +88,11 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 .ahg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:5px}
 .ahc{background:var(--bg);border:1px solid var(--bd);border-radius:3px;padding:4px;text-align:center}
 .ahc-l{font-size:6px;color:var(--t3);text-transform:uppercase}.ahc-v{font-family:'IBM Plex Mono';font-size:10px;font-weight:700;color:var(--w)}.ahc-v.hot{color:var(--gn)}
-.ai-box{border:1px solid var(--am);border-radius:6px;overflow:hidden;margin-top:5px;background:linear-gradient(135deg,rgba(255,176,32,.04),rgba(255,80,48,.02))}
+.ai-box{border:1px solid var(--am);border-radius:6px;overflow:hidden;margin-bottom:5px;background:linear-gradient(135deg,rgba(255,176,32,.04),rgba(255,80,48,.02))}
 .ai-h{padding:6px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,176,32,.15)}
 .ai-t{font-size:11px;font-weight:800;color:var(--am)}.ai-s{font-family:'IBM Plex Mono';font-size:14px;font-weight:700;color:var(--w);background:var(--s2);padding:1px 6px;border-radius:3px}
 .ai-x{font-size:10px;color:var(--tx);line-height:1.4;padding:8px 10px}
-.ai3{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-top:5px}
+.ai3{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:5px}
 .ai3-c{padding:7px;background:var(--bg);border-right:1px solid var(--bd)}.ai3-c:last-child{border:none}
 .ai3-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
 .ai3-t{font-size:8px;font-weight:700}.ai3-t.gpt{color:var(--gn)}.ai3-t.grk{color:var(--cy)}.ai3-t.gem{color:var(--bl)}
@@ -124,6 +125,7 @@ function fm(f){if(!f)return'?';var o='';for(var i=0;i<f.length;i++){var c=f[i];i
 function V(v){return v!=null&&v!=='?'?v:'?'}
 function P(v){if(v==null)return'?';return(parseFloat(v)*100).toFixed(1)+'%'}
 function cc(c){return c>=70?'color:var(--gn)':c>=50?'color:var(--am)':'color:var(--red)'}
+function DS(p){var cs=p.claude_score||'';if(cs&&cs!=='-'&&cs!=='?')return cs;return p.predicted_score||'?'}
 
 fetch('data/predictions.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){D=d;document.getElementById('ut').textContent=d.update_time||'';document.getElementById('ver').textContent=d.version||'vMAX';rdb();rt4(d.top4||[]);rm()}).catch(function(e){document.getElementById('ms').innerHTML='<div class="empty">AWAITING DATA... '+e+'</div>'});
 
@@ -136,7 +138,7 @@ document.getElementById('db').innerHTML='<div class="dc"><div class="dc-v" style
 function rt4(t4){var el=document.getElementById('t4');if(!t4||!t4.length){el.innerHTML='<div class="empty">NO DATA</div>';return}
 el.innerHTML=t4.map(function(m,i){var p=m.prediction||{};var ex=p.experience_analysis||{};var ps=p.predictability_score||0;
 var ft='';if(ex.triggered_count>0)ft+='EXP:'+ex.triggered_count;if(ps>0)ft+=' P:'+ps;
-return'<div class="t4" onclick="go(\'m-'+m.id+'\')"><div class="t4-bar"></div><div class="t4-rank">#'+(i+1)+'</div><div class="t4-lg">'+(m.league||'')+' '+(m.match_num||'')+'</div><div class="t4-teams"><span class="t4-tn">'+m.home_team+'</span><span class="t4-vs">VS</span><span class="t4-tn">'+m.away_team+'</span></div><div class="t4-grid"><div class="t4-c"><div class="t4-cl">SCORE</div><div class="t4-cv" style="color:var(--gn)">'+(p.predicted_score||'?')+'</div></div><div class="t4-c"><div class="t4-cl">RESULT</div><div class="t4-cv">'+(p.result||'?')+'</div></div><div class="t4-c"><div class="t4-cl">CONF</div><div class="t4-cv" style="'+cc(p.confidence||0)+'">'+(p.confidence||0)+'%</div></div></div>'+(ft?'<div class="t4-ft">'+ft+'</div>':'')+'</div>'}).join('')}
+return'<div class="t4" onclick="go(\'m-'+m.id+'\')"><div class="t4-bar"></div><div class="t4-rank">#'+(i+1)+'</div><div class="t4-lg">'+(m.league||'')+' '+(m.match_num||'')+'</div><div class="t4-teams"><span class="t4-tn">'+m.home_team+'</span><span class="t4-vs">VS</span><span class="t4-tn">'+m.away_team+'</span></div><div class="t4-grid"><div class="t4-c"><div class="t4-cl">SCORE</div><div class="t4-cv" style="color:var(--gn)">'+DS(p)+'</div></div><div class="t4-c"><div class="t4-cl">RESULT</div><div class="t4-cv">'+(p.result||'?')+'</div></div><div class="t4-c"><div class="t4-cl">CONF</div><div class="t4-cv" style="'+cc(p.confidence||0)+'">'+(p.confidence||0)+'%</div></div></div>'+(ft?'<div class="t4-ft">'+ft+'</div>':'')+'</div>'}).join('')}
 
 function rm(){var el=document.getElementById('ms'),ms=(D.matches||{})[CT]||[];if(!ms.length){el.innerHTML='<div class="empty">NO MATCHES</div>';return}
 el.innerHTML=ms.map(function(m){var p=m.prediction||{};var hp=p.home_win_pct||33,dp=p.draw_pct||33,ap=p.away_win_pct||34;
@@ -146,6 +148,10 @@ var hf=p.home_form||{},af=p.away_form||{},hs=m.home_stats||{},as2=m.away_stats||
 var ts=p.top_scores||[],ex=p.experience_analysis||{},ahp=p.asian_handicap_probs||{},po=p.pro_odds||{};
 var ixh=p.bookmaker_implied_home_xg,ixa=p.bookmaker_implied_away_xg;
 var fw=p.fusion_weights||{},ps=p.predictability_score||0;
+var displayScore=DS(p);
+
+// AI MATRIX (moved before signals)
+var ai='<div class="ai-box"><div class="ai-h"><div class="ai-t">👑 CLAUDE</div><div class="ai-s">'+(p.claude_score||'-')+'</div></div><div class="ai-x">'+cl(p.claude_analysis)+'</div></div><div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT</span><span class="ai3-s">'+(p.gpt_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gpt_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">GROK</span><span class="ai3-s">'+(p.grok_score||'-')+'</span></div><div class="ai3-x">'+cl(p.grok_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">GEMINI</span><span class="ai3-s">'+(p.gemini_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gemini_analysis)+'</div></div></div>';
 
 // Signals
 var sig='';var ss=p.smart_signals||[];
@@ -175,8 +181,7 @@ expH='<div class="exp"><div class="exp-h"><div class="exp-t">📋 EXP ENGINE</di
 var rules=ex.rules||[];for(var ri=0;ri<rules.length;ri++){var r=rules[ri];expH+='<div class="exp-rule"><span class="exp-id">'+r.id+'</span><span class="exp-rn">'+r.name+'</span></div>'}
 expH+='<div class="exp-rec '+rc2+'">'+(ex.recommendation||'')+'</div></div></div>'}
 
-// ===== DETAIL SECTION =====
-// Models
+// ===== DETAIL: Models =====
 var mdl='<div class="sl">MODELS</div><div class="mg">';
 mdl+='<div class="mb c1"><div class="mb-t c1">POISSON</div><div class="mb-r"><span class="mb-l">Score</span><span class="mb-v">'+V(poi.predicted_score)+'</span></div><div class="mb-r"><span class="mb-l">H/D/A</span><span class="mb-v">'+V(poi.home_win)+'/'+V(poi.draw)+'/'+V(poi.away_win)+'</span></div><div class="mb-r"><span class="mb-l">xG</span><span class="mb-v">'+V(poi.home_xg)+'-'+V(poi.away_xg)+'</span></div>';
 if(ts.length){mdl+='<div style="margin-top:2px">';for(var ti=0;ti<Math.min(ts.length,5);ti++){mdl+='<span class="chip'+(ti<1?' top':'')+'">'+ts[ti].score+' '+ts[ti].prob+'%</span>'}mdl+='</div>'}
@@ -211,13 +216,11 @@ ahH+='</div>'}
 // Form
 var frm='<div class="sl">FORM</div><div class="fg"><div class="fb"><div class="fb-t">'+m.home_team+'</div><div class="fb-r"><span class="fb-l">Trend</span><span class="fb-v">'+V(hf.trend)+'</span></div><div class="fb-r"><span class="fb-l">Score</span><span class="fb-v">'+V(hf.score)+'</span></div><div class="fb-r"><span class="fb-l">Form</span><span class="fb-v">'+fm(hs.form)+'</span></div><div class="fb-r"><span class="fb-l">W/D/L</span><span class="fb-v">'+V(hs.wins)+'W'+V(hs.draws)+'D'+V(hs.losses)+'L</span></div></div><div class="fb"><div class="fb-t">'+m.away_team+'</div><div class="fb-r"><span class="fb-l">Trend</span><span class="fb-v">'+V(af.trend)+'</span></div><div class="fb-r"><span class="fb-l">Score</span><span class="fb-v">'+V(af.score)+'</span></div><div class="fb-r"><span class="fb-l">Form</span><span class="fb-v">'+fm(as2.form)+'</span></div><div class="fb-r"><span class="fb-l">W/D/L</span><span class="fb-v">'+V(as2.wins)+'W'+V(as2.draws)+'D'+V(as2.losses)+'L</span></div></div></div>';
 
-// AI
-var ai='<div class="sl">AI MATRIX</div><div class="ai-box"><div class="ai-h"><div class="ai-t">👑 CLAUDE</div><div class="ai-s">'+(p.claude_score||'-')+'</div></div><div class="ai-x">'+cl(p.claude_analysis)+'</div></div><div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT</span><span class="ai3-s">'+(p.gpt_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gpt_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">GROK</span><span class="ai3-s">'+(p.grok_score||'-')+'</span></div><div class="ai3-x">'+cl(p.grok_analysis)+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">GEMINI</span><span class="ai3-s">'+(p.gemini_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gemini_analysis)+'</div></div></div>';
-
 // Meta
-var meta='<div style="text-align:center;margin-top:5px;font-size:8px;color:var(--t3)">'+(p.model_agreement?'✅CONSENSUS':'⚠️DIVERGE')+' | '+V(p.model_consensus)+'/'+V(p.total_models)+' | P:'+ps+' | W:'+V(fw.market)+'/'+V(fw.model)+'</div>';
+var meta='<div style="text-align:center;margin-top:5px;font-size:8px;color:var(--t3)">'+(p.model_agreement?'✅CONSENSUS':'⚠️DIVERGE')+' | '+V(p.model_consensus)+'/'+V(p.total_models)+' | P:'+ps+' | W:'+V(fw.market)+'/'+V(fw.model)+' | Engine:'+V(p.predicted_score)+'</div>';
 
-return'<div class="mc '+(m.is_recommended?'rec':'')+'" id="m-'+m.id+'"><div class="mc-h"><div class="mc-lg">'+(m.league||'')+' <span class="m">'+(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mc-badge">ELITE</span>':'')+'</div></div><div class="mc-b"><div class="teams"><div class="tm"><div class="tm-n">'+m.home_team+'</div></div><div class="sc-c"><div class="sc-big">'+(p.predicted_score||'?')+'</div><span class="res-tag '+rc+'">'+(p.result||'?')+'</span></div><div class="tm"><div class="tm-n">'+m.away_team+'</div></div></div><div class="sr"><div class="sb"><div class="sb-l">TOTAL</div><div class="sb-v" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(1):'?')+'</div></div><div class="sb"><div class="sb-l">O2.5</div><div class="sb-v" style="color:var(--pr)">'+V(p.over_2_5)+'%</div></div><div class="sb"><div class="sb-l">BTTS</div><div class="sb-v" style="color:var(--cy)">'+V(p.btts)+'%</div></div><div class="sb"><div class="sb-l">CONF</div><div class="sb-v" style="'+cc(p.confidence||0)+'">'+(p.confidence||0)+'%</div></div></div><div class="prob"><div class="prob-h"><span style="color:var(--red)">H '+hp+'%</span><span style="color:var(--t2)">D '+dp+'%</span><span style="color:var(--bl)">A '+ap+'%</span></div><div class="prob-bar"><div class="h" style="width:'+hp+'%"></div><div class="d" style="width:'+dp+'%"></div><div class="a" style="width:'+ap+'%"></div></div></div>'+sig+vbH+expH+'<button class="tbtn" onclick="tg(this,\'d-'+m.id+'\')">EXPAND ▼</button></div><div class="det" id="d-'+m.id+'">'+mdl+ixgH+ahH+frm+ai+meta+'</div></div>'}).join('')}
+// ===== LAYOUT: score → stats → prob → AI → signals → value → exp → expand → detail =====
+return'<div class="mc '+(m.is_recommended?'rec':'')+'" id="m-'+m.id+'"><div class="mc-h"><div class="mc-lg">'+(m.league||'')+' <span class="m">'+(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mc-badge">ELITE</span>':'')+'</div></div><div class="mc-b"><div class="teams"><div class="tm"><div class="tm-n">'+m.home_team+'</div></div><div class="sc-c"><div class="sc-big">'+displayScore+'</div><div class="sc-sub">Engine: '+(p.predicted_score||'?')+'</div><span class="res-tag '+rc+'">'+(p.result||'?')+'</span></div><div class="tm"><div class="tm-n">'+m.away_team+'</div></div></div><div class="sr"><div class="sb"><div class="sb-l">TOTAL</div><div class="sb-v" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(1):'?')+'</div></div><div class="sb"><div class="sb-l">O2.5</div><div class="sb-v" style="color:var(--pr)">'+V(p.over_2_5)+'%</div></div><div class="sb"><div class="sb-l">BTTS</div><div class="sb-v" style="color:var(--cy)">'+V(p.btts)+'%</div></div><div class="sb"><div class="sb-l">CONF</div><div class="sb-v" style="'+cc(p.confidence||0)+'">'+(p.confidence||0)+'%</div></div></div><div class="prob"><div class="prob-h"><span style="color:var(--red)">H '+hp+'%</span><span style="color:var(--t2)">D '+dp+'%</span><span style="color:var(--bl)">A '+ap+'%</span></div><div class="prob-bar"><div class="h" style="width:'+hp+'%"></div><div class="d" style="width:'+dp+'%"></div><div class="a" style="width:'+ap+'%"></div></div></div>'+ai+sig+vbH+expH+'<button class="tbtn" onclick="tg(this,\'d-'+m.id+'\')">EXPAND ▼</button></div><div class="det" id="d-'+m.id+'">'+mdl+ixgH+ahH+frm+meta+'</div></div>'}).join('')}
 
 function tg(b,id){var e=document.getElementById(id);if(e.classList.contains('open')){e.classList.remove('open');b.textContent='EXPAND ▼'}else{e.classList.add('open');b.textContent='COLLAPSE ▲'}}
 function go(id){var e=document.getElementById(id);if(e){e.scrollIntoView({behavior:'smooth',block:'center'});var d=document.getElementById('d-'+id.replace('m-',''));if(d&&!d.classList.contains('open'))d.classList.add('open')}}
