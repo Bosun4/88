@@ -67,7 +67,7 @@ def main():
     print("=" * 80)
     print("⚽ 量化足球投研终端 vMAX 终极版（动态寻优 + 庄家底牌穿透）")
     print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
-    print("🔧 核心升级：强力兜底落盘防崩溃机制 + 顶级反爬虫伪装")
+    print("🔧 核心升级：绝密情报网接入 + 强力兜底落盘防崩溃机制")
     print("=" * 80)
 
     try:
@@ -105,6 +105,20 @@ def main():
     try:
         from fetch_data import async_collect_all
         from predict import run_predictions
+        
+        # ============================================================
+        # 🔥 核心升级：在此处启动口袋绝密情报网，截获今日伤停底牌
+        # ============================================================
+        all_intel_map = {}
+        try:
+            from koudai_intel import KoudaiSpider
+            print("\n" + "=" * 80)
+            print("🕵️‍♂️ [INTEL NETWORK] 正在启动独立情报网，截获绝密伤停与资金动向...")
+            spider = KoudaiSpider()
+            all_intel_map = spider.run_all_intel()
+        except Exception as e:
+            print(f"  [WARN] ⚠️ 绝密情报引擎启动失败或未找到 koudai_intel.py: {e}")
+        # ============================================================
 
         for day_key, offset in days_map.items():
             target_date = get_target_date(offset)
@@ -115,6 +129,33 @@ def main():
             if not raw_data or not raw_data.get("matches"):
                 print(f"  [SKIP] {target_date} 暂无比赛数据，跳过 AI 推理。")
                 continue
+
+            # ============================================================
+            # 🔥 核心对接：将截获的绝密情报，精确注射进每一场比赛数据中
+            # ============================================================
+            if all_intel_map and "matches" in raw_data:
+                for match in raw_data["matches"]:
+                    h_team = match.get("home_team", "").strip()
+                    a_team = match.get("away_team", "").strip()
+                    match_key = f"{h_team}_{a_team}"
+                    
+                    if match_key in all_intel_map:
+                        match["information"] = all_intel_map[match_key]
+                    else:
+                        # 尝试模糊匹配 (比如有些带了 FC 或者联队)
+                        matched = False
+                        for k_key, v_val in all_intel_map.items():
+                            if (h_team in k_key or k_key.split('_')[0] in h_team) and \
+                               (a_team in k_key or k_key.split('_')[1] in a_team):
+                                match["information"] = v_val
+                                matched = True
+                                break
+                        if not matched:
+                            match["information"] = {}
+            else:
+                for match in raw_data.get("matches", []):
+                    match["information"] = {}
+            # ============================================================
 
             use_ai = (day_key in ["today", "tomorrow"])
             results, top4 = run_predictions(raw_data, use_ai=use_ai)
@@ -147,5 +188,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
