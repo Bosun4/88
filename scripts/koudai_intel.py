@@ -178,8 +178,9 @@ class KoudaiSpider:
         返回格式: {"主队名_客队名": {"home_bad_news": "...", ...}}
         """
         final_intel_map = {}
-        match_list = self.get_match_list()
+        raw_debug_data = {} # 专门用来存原始数据的字典，方便你排查
         
+        match_list = self.get_match_list()
         if not match_list:
             return final_intel_map
 
@@ -192,6 +193,10 @@ class KoudaiSpider:
             print(f"🕵️‍♂️ 正在窃取情报: {home_team} VS {away_team}")
             
             traces = self.get_detail_intel(m_id)
+            
+            # 把原始数据存起来，备用
+            raw_debug_data[match_key] = traces
+            
             if traces:
                 # 结构化分类
                 structured_intel = self.classify_traces(traces, home_team, away_team)
@@ -208,6 +213,29 @@ class KoudaiSpider:
             # 随机停顿 1.5 到 3.5 秒，模仿人类真实节奏，极其重要！
             time.sleep(random.uniform(1.5, 3.5))
             
+        # =========================================================
+        # 🔥 核心新增：自动保存到 data/ 目录供你查看！
+        # =========================================================
+        try:
+            os.makedirs("data", exist_ok=True)
+            debug_path = os.path.join("data", "koudai_debug_latest.json")
+            
+            output_content = {
+                "update_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "total_matches": len(match_list),
+                "raw_data_from_api": raw_debug_data,       # 原汁原味的接口数据
+                "parsed_intel_for_ai": final_intel_map     # 咱们处理后的5大字段
+            }
+            
+            with open(debug_path, "w", encoding="utf-8") as f:
+                json.dump(output_content, f, ensure_ascii=False, indent=2)
+                
+            print(f"\n📁 [KoudaiSpider] 【数据已落盘】赶紧去查看: {debug_path}")
+            print(f"   👉 打开这个文件，你可以完整对比原始 JSON 和处理后的结果！")
+        except Exception as e:
+            print(f"\n⚠️ [KoudaiSpider] 数据保存到 data/ 失败: {e}")
+        # =========================================================
+            
         print("\n🎉 [KoudaiSpider] 所有可用绝密情报提取完毕！可以移交 AI 矩阵！")
         return final_intel_map
 
@@ -217,11 +245,5 @@ class KoudaiSpider:
 if __name__ == "__main__":
     spider = KoudaiSpider()
     all_intel = spider.run_all_intel()
-    
-    # 随便打印一场看看效果
-    if all_intel:
-        first_match = list(all_intel.keys())[0]
-        print(f"\n--- 测试输出 [{first_match}] 的结构化情报 ---")
-        print(json.dumps(all_intel[first_match], indent=2, ensure_ascii=False))
 
 
