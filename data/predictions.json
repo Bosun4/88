@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-03-28 18:38:24",
+  "update_time": "2026-03-28 19:16:09",
   "version": "MAX-v1.1",
   "top4": [
     {
@@ -112,14 +112,14 @@
         "over_under_2_5": "小",
         "both_score": "是",
         "gpt_score": "1-1",
-        "gpt_analysis": "埃因FC让一的力度偏虚，隐性xG 1.56对1.218只能算略优，不足以支撑稳定碾压。总球2.8虽不低，但BTTS 56%和九配走平口、中游无欲无求预警一起出现，说明比赛更像开放互捅却分不出生死。强行追主队就是主动踩雷。",
+        "gpt_analysis": "埃因FC虽有主场与微弱xG优势，但1.56对1.218并不足以支撑稳稳让一，尤其总球2.8、BTTS 56%显示比赛具备对攻成分，却未到单边摧毁级别。更要命的是风控同时给出九配走平口、攻防接近与中游无欲无求易平，这种信号叠加时最该防的就是谁也不愿拼命。主队形象占优，但结果大概率只是互换进球后散场。",
         "grok_score": "1-1",
-        "grok_analysis": "主队排名稍优，xG主高但无收割信号，我实时监控到百家平局防线异常拉低+中游无欲无求易平预警。这是庄家九配走平口局。埃因FC状态一般，埃门顽强，1-1平局卡死让-1.0散户。",
+        "grok_analysis": "散户信主队xG1.56-1.218+近6轮一般，但中游无欲无求+亚盘-1.0+攻防接近必防平+九配走平口+预期总球2.8+BTTS56%！庄家易平陷阱，1-1直接闷杀主让盘，泊松极限+凯利死水无情屠杀一切。",
         "gemini_score": "1-1",
-        "gemini_analysis": "典型的荷乙中游球队默契局。预期总球2.8看似不低，但隐性xG差距不足以支撑主队-1.0深盘。无欲无求属性触发九配走平口法则。庄家强开深盘纯属诱导。泊松分布在此类死水局最容易收敛于均值，1-1平局将兵不血刃吞噬所有博取主队大胜的贪婪资金。",
+        "gemini_analysis": "无欲无求的默契局！两支中游球队根本没有死磕的理由，xG数据虽然主队占优，但风控红线已触发“九配走平口”的终极警报。亚盘强开-1.0纯属无中生有，意在榨干散户对主场优势的最后一丝幻想。1-1的剧本早已在更衣室敲定，庄家兵不血刃收割所有胜负盘筹码。",
         "claude_score": "1-1",
-        "claude_analysis": "九配走平口+中游无欲无求易平+攻防数据接近必防平，三重平局预警同时爆灯！埃因FC12位对埃门15位，双方都是荷乙中游混子。xG差距仅0.34，BTTS56%注定互射。-1.0让球就是庄家钓鱼竿，1-1冷平精准屠杀所有方向。",
-        "ai_avg_confidence": 81.0,
+        "claude_analysis": "九配走平口+攻防数据必防平+中游无欲无求三重平局预警全面亮红！xG差仅0.34温和优势根本不够穿透，BTTS56%双方各进一球概率极大。埃因主场近6轮3胜3负大起大落，埃门客场韧性十足。荷乙补赛双方心态保守，无资金异动庄家笃定平局，1-1铁平送走。",
+        "ai_avg_confidence": 83.1,
         "value_kill_count": 4,
         "model_agreement": true,
         "poisson": {
@@ -574,14 +574,14 @@
         "over_under_2_5": "小",
         "both_score": "是",
         "gpt_score": "1-1",
-        "gpt_analysis": "基本面上莱顿东方更顺，但盘口却给到埃克塞特让一，这种反常就不是送温暖。两队隐性xG仅1.298对1.205，几乎贴脸，BTTS 51%与必防平警报同时亮起。主队烂状态反而更像诱空陷阱，最该提防的是互耗到底。",
+        "gpt_analysis": "这场最像伪主让陷阱。埃克塞特状态烂到发臭，客队走势明显更顺，可底层xG却只微弱接近，说明双方真实强弱并未拉开。预期总球2.5、BTTS 51%指向双方都有破门窗口，风控还明确提示攻防接近必防平与保级绞杀。这样的盘面最容易把人骗去站趋势一边，结果却是最无聊也最致命的互耗平局。",
         "grok_score": "1-1",
-        "grok_analysis": "主队状态低迷，客队状态不错，xG接近剪刀差无收割信号。但我扒到攻防数据必防平+保级队激战铁律，百家赔率平局水位异常稳定。这是庄家无欲无求平局局。埃克塞特后防崩盘，莱顿东方反击致命，1-1卡分收割所有主胜散户。",
-        "gemini_score": "0-1",
-        "gemini_analysis": "极其荒谬的-1.0让球死线！主队近况极差且xG无优势，庄家却强开深盘阻吓客队资金。泊松推演显示客胜概率远超预期。结合攻防数据接近必防平铁律，进球数被严格控制。0-1的客胜比分是数学模型给出的最冷酷答案，直接反杀主队强让盘。",
-        "claude_score": "1-1",
-        "claude_analysis": "埃克塞特近6轮1平5负还开-1.0？庄家这是把散户当猪宰！莱顿东方近6轮4胜2负客场3胜1平，xG两队接近到离谱(1.298vs1.205)。攻防数据逼近必防平，这根本不是让球局，这是冷平绞杀局。主队残血状态根本赢不了。",
-        "ai_avg_confidence": 83.2,
+        "grok_analysis": "散户忽视主队近6轮1平5负低迷+客队4胜状态，xG1.298-1.205接近+无资金异常+亚盘-1.0却攻防数据必防平+保级激战红线，预期总球2.5+BTTS51%暗示闷杀！庄家零和死局，1-1直接平局收割主让盘，凯利方差+泊松极限封杀一切胜负幻想。",
+        "gemini_score": "0-0",
+        "gemini_analysis": "机构开出反直觉的盘口！主队近期1平5负烂如烂泥，xG与客队几乎持平（1.298对1.205），但亚盘竟敢给出-1.0的生死线？这是利用散户“触底反弹”的抄底心理进行诱杀。攻防数据红线已触发必防平警报，这场比赛的本质就是菜鸡互啄，0-0的闷平将让所有妄图博高赔的资金血本无归。",
+        "claude_score": "1-2",
+        "claude_analysis": "埃克塞特近6轮1平5负崩盘式坠落，主场2平3负毫无主场之利，庄家竟开-1.0让球纯属钓鱼设套。莱顿东方近6轮4胜客场3胜1平1负杀气腾腾，xG差仅0.09但状态剪刀差天差地别。BTTS51%双方都能进球，但主队防线千疮百孔无力封堵。客队反客为主1-2绝杀。",
+        "ai_avg_confidence": 81.6,
         "value_kill_count": 4,
         "model_agreement": false,
         "poisson": {
@@ -1035,7 +1035,7 @@
       },
       "h2h": [],
       "prediction": {
-        "predicted_score": "2-1",
+        "predicted_score": "1-1",
         "home_win_pct": 45.9,
         "draw_pct": 25.3,
         "away_win_pct": 28.8,
@@ -1043,15 +1043,15 @@
         "risk_level": "低",
         "over_under_2_5": "大",
         "both_score": "是",
-        "gpt_score": "2-2",
-        "gpt_analysis": "威廉二世与格拉夫本就是强强贴身，积分只差1分，隐性xG也仅1.636对1.379。总球3.0和BTTS 60%把对攻属性直接摊开，配合强强对话平局率超30%的预警，让一盘反而显得过分。主队有热度，但更像逼你站边后双向绞杀。",
-        "grok_score": "2-2",
-        "grok_analysis": "强强对话，Sharp资金主胜但xG接近，BTTS60%+强强平局率超30%预警，我联网截获必发平局交易突然升温。这是庄家高进球平局诱盘。威廉二世状态好却后防隐患，格拉夫反击猛，2-2高球平局绞肉，坑杀让球散户。",
+        "gpt_score": "2-1",
+        "gpt_analysis": "荷乙这类补赛最爱放大进球预期，3.0总球与60%的BTTS说明两边都具备持续打穿对手防线的能力，但这偏偏也是最容易被市场高估成大开大合的地方。双方积分贴身、实力接近，风控还明确提示强强对话平局率高。Sharp资金偏主，说明主队不败面厚，可让一过深。于是最顺手的收割方式就是主胜但只赢一球。",
+        "grok_score": "1-1",
+        "grok_analysis": "散户信主队积53分近6轮4胜+ xG1.636-1.379，但强强对话平局率超30%+亚盘-1.0+预期总球3.0+BTTS60%高+攻防接近必防平+凯利死水！庄家中游无欲陷阱，1-1平局收割主让盘，泊松曲线压制高球幻想。",
         "gemini_score": "2-2",
-        "gemini_analysis": "预期总球高达3.0且BTTS达60%，看似大球局。但强强对话平局率超30%，xG咬得极紧。主队-1.0让球盘配合Sharp资金流入，是庄家精心布置的诱多陷阱。2-2激战比分既满足高预期进球，又无情将主队让球盘彻底打穿，碾碎散户。",
-        "claude_score": "2-1",
-        "claude_analysis": "威廉二世第3打格拉夫第5，仅差1分的天王山之战！强强对话平局率超30%预警已响。BTTS60%+预期总球3.0说明必有互射。但-1.0盘口就是陷阱——格拉夫绝不会束手就擒。Sharp推主胜但庄家压根不怕，2-1赢球输盘精准卡死。",
-        "ai_avg_confidence": 82.8,
+        "gemini_analysis": "强强对话的剧本早已写好！预期总进球高达3.0且BTTS概率60%，散户必将疯狂追逐大球和主胜。虽然Sharp资金流向主胜，但风控红线明确指出此类对决平局率超30%。亚盘-1.0是极度恶毒的诱盘，双方将上演互爆戏码，2-2的激战比分不仅打穿大球，更将主胜筹码全部埋葬！",
+        "claude_score": "2-2",
+        "claude_analysis": "荷乙第3对第5仅差1分的天王山之战，强强对话平局率超30%铁律发动。xG差仅0.26几乎齐平，BTTS高达60%双方必互有进球。预期总球3.0是全场最高，Sharp流向主胜但庄家-1.0浅盘暗藏杀机。攻防数据接近必防平信号共振，2-2握手言和双方保住积分不亏。",
+        "ai_avg_confidence": 80.5,
         "value_kill_count": 4,
         "model_agreement": false,
         "poisson": {
@@ -1505,7 +1505,7 @@
       },
       "h2h": [],
       "prediction": {
-        "predicted_score": "0-1",
+        "predicted_score": "1-1",
         "home_win_pct": 33.8,
         "draw_pct": 31.3,
         "away_win_pct": 34.9,
@@ -1514,14 +1514,14 @@
         "over_under_2_5": "小",
         "both_score": "否",
         "gpt_score": "0-1",
-        "gpt_analysis": "布莱克浦让一完全缺乏底层支撑，隐性xG只有1.138对1.11，几乎没有真实差距。总球2.2偏低，说明比赛容错极小，任何先丢球都可能锁死走势。Sharp资金反向流向客胜，再叠加攻防接近和平局预警，这盘主队极像被摆上台面祭旗。",
-        "grok_score": "0-1",
-        "grok_analysis": "主队排名落后，Sharp资金诡异流向客胜，xG接近。但我联网截获必发客胜暗流涌动，百家欧赔客胜水位下沉+保级激战预警。这是爆冷信号。布莱克浦主场疲软，伯顿客场顽强，0-1客胜爆冷，绞杀所有主胜热钱散户。",
-        "gemini_score": "1-1",
-        "gemini_analysis": "隐性xG呈现完美镜像对称，预期总球2.2将a7赔率推向25.0以上高位，进球天花板死死盖住。Sharp资金涌入客队，散户却还在为主队-1.0买单。精算模型下毫无感性可言，1-1平局完美契合保级死战剧本，让主胜筹码灰飞烟灭。",
-        "claude_score": "1-1",
-        "claude_analysis": "布莱克浦21位让伯顿18位一球？两队保级混子互啄。xG几乎一致(1.138vs1.11)，Sharp资金反向流入客胜！攻防数据接近必防平，双方都没有穿盘的基因。九成概率1-1握手各拿一分，让球盘和独赢盘双杀散户。",
-        "ai_avg_confidence": 83.6,
+        "gpt_analysis": "布莱克浦名义主场让一，但xG 1.138对1.11几乎没差，预期总球仅2.2，完全不是能随便压死对手的结构。更阴的是Sharp资金反向流向客胜，说明专业钱根本不信主队这层皮。双方又处在保级焦灼带，比赛节奏大概率谨慎且脏。若主队继续被盘口强行抬高，最狠的反杀就是伯顿偷一个后全场闷死。",
+        "grok_score": "1-1",
+        "grok_analysis": "散户被Sharp资金流客胜迷惑，但主队xG1.138-1.11极近+亚盘-1.0+近6轮状态一般+攻防接近必防平+保级激战，预期总球2.2+BTTS46%封死高球！庄家资金反向陷阱+凯利死水，1-1平局闷杀主让与客胜双边，泊松天花板无情绞碎一切。",
+        "gemini_score": "0-1",
+        "gemini_analysis": "算力雷达已锁定庄家的底牌！主客xG几乎完全一致（1.138 vs 1.11），但盘口却强开-1.0，这是赤裸裸的托大诱主。Sharp资金已悄然建仓客胜，结合必发冷热指数，主队前场存在隐性伤停。客队将利用防守反击一剑封喉，0-1的客胜赛果将把主胜筹码连根拔起，吃干抹净。",
+        "claude_score": "0-1",
+        "claude_analysis": "xG仅差0.028几乎完全齐平，攻防数据必防平警告已亮红灯。但Sharp资金逆势涌向客胜伯顿，这是关键信号！布莱克浦主场近5战仅2胜2负，客队客场1胜3平1负韧性十足。亚盘-1.0让步虚高，庄家诱导散户追主胜。保级生死战伯顿搏命客场偷鸡0-1。",
+        "ai_avg_confidence": 80.5,
         "value_kill_count": 4,
         "model_agreement": false,
         "poisson": {
@@ -2826,9 +2826,9 @@
         "away_team": "维冈",
         "league": "英甲",
         "match_num": "周六005",
-        "sp_home": 2.05,
-        "sp_draw": 3.1,
-        "sp_away": 3.15,
+        "sp_home": 2.02,
+        "sp_draw": 3.12,
+        "sp_away": 3.19,
         "give_ball": -1.0,
         "change": {
           "win": -1,
@@ -2870,8 +2870,8 @@
           "s11": 5.8,
           "s22": 14.0,
           "s33": 65.0,
-          "w10": 7.0,
-          "w20": 10.0,
+          "w10": 6.8,
+          "w20": 9.7,
           "w21": 7.8,
           "w30": 20.0,
           "w31": 17.0,
@@ -2881,10 +2881,10 @@
           "w42": 80.0,
           "l01": 8.2,
           "l02": 14.0,
-          "l12": 10.0,
+          "l12": 10.5,
           "l03": 36.0,
-          "l13": 26.0,
-          "l23": 31.0,
+          "l13": 27.0,
+          "l23": 33.0,
           "ss": 3.5,
           "sp": 14.0,
           "sf": 34.0,
@@ -2906,8 +2906,8 @@
           "losses": 7,
           "goals_for": 35,
           "goals_against": 24,
-          "avg_goals_for": "1.38",
-          "avg_goals_against": "0.98",
+          "avg_goals_for": "1.39",
+          "avg_goals_against": "0.97",
           "clean_sheets": 4,
           "form": "WWDWW"
         },
@@ -2916,19 +2916,19 @@
           "wins": 8,
           "draws": 6,
           "losses": 11,
-          "goals_for": 22,
+          "goals_for": 21,
           "goals_against": 37,
-          "avg_goals_for": "0.87",
-          "avg_goals_against": "1.46",
+          "avg_goals_for": "0.86",
+          "avg_goals_against": "1.47",
           "clean_sheets": 3,
           "form": "LDWDL"
         },
         "h2h": [],
         "prediction": {
           "predicted_score": "1-0",
-          "home_win_pct": 48.2,
-          "draw_pct": 28.3,
-          "away_win_pct": 23.5,
+          "home_win_pct": 48.9,
+          "draw_pct": 27.9,
+          "away_win_pct": 23.2,
           "confidence": 70.0,
           "risk_level": "中",
           "over_under_2_5": "小",
@@ -2945,45 +2945,45 @@
           "value_kill_count": 0,
           "model_agreement": false,
           "poisson": {
-            "home_win": 78.6,
-            "draw": 15.6,
-            "away_win": 5.8,
+            "home_win": 79.3,
+            "draw": 15.1,
+            "away_win": 5.5,
             "predicted_score": "2-0",
-            "home_xg": 2.23,
-            "away_xg": 0.44,
-            "btts": 31.5,
-            "over_2_5": 49.6,
+            "home_xg": 2.26,
+            "away_xg": 0.43,
+            "btts": 31.0,
+            "over_2_5": 50.1,
             "top_scores": [
               {
                 "score": "2-0",
-                "prob": 17.3
+                "prob": 17.4
               },
               {
                 "score": "1-0",
-                "prob": 15.5
+                "prob": 15.4
               },
               {
                 "score": "3-0",
-                "prob": 12.9
-              },
-              {
-                "score": "2-1",
-                "prob": 7.5
+                "prob": 13.1
               },
               {
                 "score": "4-0",
-                "prob": 7.2
+                "prob": 7.4
+              },
+              {
+                "score": "2-1",
+                "prob": 7.4
               },
               {
                 "score": "0-0",
-                "prob": 6.9
+                "prob": 6.8
               }
             ]
           },
           "refined_poisson": {
-            "home_win": 63.4,
-            "draw": 23.7,
-            "away_win": 12.8,
+            "home_win": 63.9,
+            "draw": 23.5,
+            "away_win": 12.5,
             "predicted_score": "1-0",
             "top_scores": [
               {
@@ -2992,15 +2992,15 @@
               },
               {
                 "score": "2-0",
-                "prob": 12.5
+                "prob": 12.6
               },
               {
                 "score": "1-1",
-                "prob": 11.8
+                "prob": 11.7
               },
               {
                 "score": "2-1",
-                "prob": 9.4
+                "prob": 9.3
               },
               {
                 "score": "0-0",
@@ -3008,7 +3008,7 @@
               },
               {
                 "score": "3-0",
-                "prob": 7.5
+                "prob": 7.6
               }
             ]
           },
@@ -3018,15 +3018,15 @@
             "💰 Sharp资金流向主胜",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 主胜Steam! 赔率降-1.00但散户未跟(仅43%)",
-            "⚡ 主队攻防效率碾压(差值0.88)",
-            "⚠️ 负CLV-9.6% [平局]",
+            "⚡ 主队攻防效率碾压(差值0.91)",
+            "⚠️ 负CLV-10.3% [平局]",
             "⚠️ 负CLV-23.7% [客胜]"
           ],
           "model_consensus": 3,
           "total_models": 15,
-          "expected_total_goals": 2.19,
-          "over_2_5": 36.9,
-          "btts": 43.5,
+          "expected_total_goals": 2.21,
+          "over_2_5": 37.5,
+          "btts": 44.1,
           "top_scores": [
             {
               "score": "1-0",
@@ -3034,15 +3034,15 @@
             },
             {
               "score": "2-0",
-              "prob": 12.5
+              "prob": 12.6
             },
             {
               "score": "1-1",
-              "prob": 11.8
+              "prob": 11.7
             },
             {
               "score": "2-1",
-              "prob": 9.4
+              "prob": 9.3
             },
             {
               "score": "0-0",
@@ -3050,7 +3050,7 @@
             },
             {
               "score": "3-0",
-              "prob": 7.5
+              "prob": 7.6
             }
           ],
           "elo": {
@@ -3060,39 +3060,39 @@
             "elo_diff": 205
           },
           "random_forest": {
-            "home_win": 47.6,
-            "draw": 27.8,
-            "away_win": 24.6
-          },
-          "gradient_boost": {
-            "home_win": 46.4,
-            "draw": 29.3,
+            "home_win": 48.2,
+            "draw": 27.6,
             "away_win": 24.2
           },
+          "gradient_boost": {
+            "home_win": 47.1,
+            "draw": 29.1,
+            "away_win": 23.8
+          },
           "neural_net": {
-            "home_win": 45.6,
-            "draw": 28.3,
-            "away_win": 26.1
+            "home_win": 46.2,
+            "draw": 28.1,
+            "away_win": 25.6
           },
           "logistic": {
-            "home_win": 46.4,
-            "draw": 29.2,
-            "away_win": 24.3
+            "home_win": 47.1,
+            "draw": 29.0,
+            "away_win": 23.9
           },
           "svm": {
-            "home_win": 46.7,
-            "draw": 27.7,
-            "away_win": 25.7
+            "home_win": 47.3,
+            "draw": 27.4,
+            "away_win": 25.3
           },
           "knn": {
-            "home_win": 45.8,
-            "draw": 29.0,
-            "away_win": 25.2
+            "home_win": 46.5,
+            "draw": 28.7,
+            "away_win": 24.8
           },
           "dixon_coles": {
-            "home_win": 66.4,
-            "draw": 22.4,
-            "away_win": 11.2
+            "home_win": 66.9,
+            "draw": 22.2,
+            "away_win": 10.9
           },
           "bradley_terry": {
             "home_win": 47.8,
@@ -3146,19 +3146,19 @@
           },
           "pace_rating": "中等",
           "kelly_home": {
-            "kelly": 7.14,
+            "kelly": 7.18,
             "value": "True",
-            "edge": 30.0
+            "edge": 29.3
           },
           "kelly_away": {
             "kelly": 0.0,
             "value": "False",
-            "edge": -61.6
+            "edge": -62.4
           },
           "odds": {
-            "implied_home": 43.2,
-            "implied_draw": 28.6,
-            "implied_away": 28.2
+            "implied_home": 43.8,
+            "implied_draw": 28.4,
+            "implied_away": 27.8
           },
           "experience_analysis": {
             "triggered_count": 1,
@@ -3175,81 +3175,81 @@
             ]
           },
           "pro_odds": {
-            "true_home": 43.1,
-            "true_draw": 28.7,
-            "true_away": 28.2
+            "true_home": 43.7,
+            "true_draw": 28.4,
+            "true_away": 27.8
           },
           "bivariate_poisson": {
-            "home_win": 39.1,
-            "draw": 36.0,
-            "away_win": 25.0,
+            "home_win": 40.5,
+            "draw": 34.4,
+            "away_win": 25.1,
             "predicted_score": "0-0",
-            "btts": 43.4,
-            "over_2_5": 35.3,
+            "btts": 44.6,
+            "over_2_5": 36.5,
             "correlation": 0.1,
-            "p0_inflate": 0.05,
+            "p0_inflate": 0.03,
             "top_scores": [
               {
                 "score": "0-0",
-                "prob": 17.78
+                "prob": 15.84
               },
               {
                 "score": "1-1",
-                "prob": 13.55
+                "prob": 13.77
               },
               {
                 "score": "1-0",
-                "prob": 12.45
+                "prob": 12.69
               },
               {
                 "score": "0-1",
-                "prob": 9.1
+                "prob": 9.09
               },
               {
                 "score": "2-1",
-                "prob": 7.79
+                "prob": 8.05
               },
               {
                 "score": "2-0",
-                "prob": 7.59
+                "prob": 7.87
               }
             ]
           },
           "asian_handicap_probs": {
             "ah_0": [
-              0.4274,
-              0.2884,
-              0.2842
+              0.4334,
+              0.2864,
+              0.2802
             ],
             "ah_0.5": [
-              0.4274,
+              0.4334,
               0.0,
-              0.5726
+              0.5666
             ],
             "ah_1.0": [
-              0.1895,
-              0.2379,
-              0.5726
+              0.1944,
+              0.239,
+              0.5666
             ],
             "ou_1.5": [
-              0.6422,
+              0.6469,
               0.0,
-              0.3578
+              0.3531
             ],
             "ou_2.5": [
-              0.3738,
+              0.3789,
               0.0,
-              0.6262
+              0.6211
             ],
             "ou_3.5": [
-              0.1781,
+              0.1818,
               0.0,
-              0.8219
+              0.8182
             ],
-            "btts": 0.4353
+            "btts": 0.4386
           },
-          "bookmaker_implied_home_xg": 1.236,
-          "bookmaker_implied_away_xg": 0.951,
+          "bookmaker_implied_home_xg": 1.256,
+          "bookmaker_implied_away_xg": 0.95,
           "line_movement_anomaly": {
             "has_anomaly": true,
             "signal": "🔥 赔率剧变(幅度1.00)",
@@ -3283,7 +3283,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 37.04,
+        "recommend_score": 37.18,
         "is_recommended": false
       },
       {
@@ -4689,13 +4689,13 @@
         "away_team": "日本",
         "league": "国际赛",
         "match_num": "周六009",
-        "sp_home": 3.18,
+        "sp_home": 3.26,
         "sp_draw": 3.23,
-        "sp_away": 1.98,
+        "sp_away": 1.95,
         "give_ball": 1.0,
         "change": {
           "win": 1,
-          "same": 1,
+          "same": 0,
           "lose": -1
         },
         "vote": {
@@ -4748,15 +4748,15 @@
           "l03": 20.0,
           "l13": 16.0,
           "l23": 25.0,
-          "ss": 5.15,
+          "ss": 5.4,
           "sp": 13.0,
           "sf": 27.0,
-          "ps": 7.0,
+          "ps": 7.3,
           "pp": 5.4,
-          "pf": 4.9,
+          "pf": 4.75,
           "fs": 30.0,
           "fp": 13.0,
-          "ff": 3.3
+          "ff": 3.2
         },
         "id": 7,
         "date": "2026-03-27",
@@ -4767,11 +4767,11 @@
           "wins": 7,
           "draws": 6,
           "losses": 12,
-          "goals_for": 21,
-          "goals_against": 37,
-          "avg_goals_for": "0.83",
-          "avg_goals_against": "1.5",
-          "clean_sheets": 3,
+          "goals_for": 20,
+          "goals_against": 38,
+          "avg_goals_for": "0.82",
+          "avg_goals_against": "1.51",
+          "clean_sheets": 2,
           "form": "LDWDL"
         },
         "away_stats": {
@@ -4780,18 +4780,18 @@
           "draws": 6,
           "losses": 9,
           "goals_for": 28,
-          "goals_against": 31,
-          "avg_goals_for": "1.12",
-          "avg_goals_against": "1.23",
+          "goals_against": 30,
+          "avg_goals_for": "1.13",
+          "avg_goals_against": "1.22",
           "clean_sheets": 3,
           "form": "WDLWD"
         },
         "h2h": [],
         "prediction": {
           "predicted_score": "0-1",
-          "home_win_pct": 21.8,
-          "draw_pct": 29.5,
-          "away_win_pct": 48.7,
+          "home_win_pct": 21.1,
+          "draw_pct": 29.4,
+          "away_win_pct": 49.5,
           "confidence": 70.0,
           "risk_level": "中",
           "over_under_2_5": "小",
@@ -4808,34 +4808,34 @@
           "value_kill_count": 0,
           "model_agreement": false,
           "poisson": {
-            "home_win": 18.3,
-            "draw": 31.6,
-            "away_win": 50.1,
+            "home_win": 17.7,
+            "draw": 31.4,
+            "away_win": 51.0,
             "predicted_score": "0-1",
-            "home_xg": 0.57,
-            "away_xg": 1.15,
-            "btts": 29.8,
-            "over_2_5": 24.9,
+            "home_xg": 0.56,
+            "away_xg": 1.17,
+            "btts": 29.6,
+            "over_2_5": 25.1,
             "top_scores": [
               {
                 "score": "0-1",
-                "prob": 20.6
+                "prob": 20.7
               },
               {
                 "score": "0-0",
-                "prob": 17.8
+                "prob": 17.7
               },
               {
                 "score": "0-2",
-                "prob": 11.9
+                "prob": 12.1
               },
               {
                 "score": "1-1",
-                "prob": 11.7
+                "prob": 11.6
               },
               {
                 "score": "1-0",
-                "prob": 10.2
+                "prob": 9.9
               },
               {
                 "score": "1-2",
@@ -4844,14 +4844,14 @@
             ]
           },
           "refined_poisson": {
-            "home_win": 18.7,
-            "draw": 31.9,
-            "away_win": 49.4,
+            "home_win": 18.3,
+            "draw": 31.8,
+            "away_win": 49.9,
             "predicted_score": "0-1",
             "top_scores": [
               {
                 "score": "0-1",
-                "prob": 21.5
+                "prob": 21.6
               },
               {
                 "score": "0-0",
@@ -4859,15 +4859,15 @@
               },
               {
                 "score": "1-1",
-                "prob": 13.4
+                "prob": 13.3
               },
               {
                 "score": "0-2",
-                "prob": 11.0
+                "prob": 11.1
               },
               {
                 "score": "1-0",
-                "prob": 10.3
+                "prob": 10.1
               },
               {
                 "score": "1-2",
@@ -4882,17 +4882,17 @@
             "🚨 客队盘口太便宜!排名差19但不让球",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅44%)",
-            "⚠️ 负CLV-28.5% [主胜]"
+            "⚠️ 负CLV-29.1% [主胜]"
           ],
           "model_consensus": 0,
           "total_models": 15,
-          "expected_total_goals": 2.32,
-          "over_2_5": 40.6,
-          "btts": 46.5,
+          "expected_total_goals": 2.31,
+          "over_2_5": 40.3,
+          "btts": 46.1,
           "top_scores": [
             {
               "score": "0-1",
-              "prob": 21.5
+              "prob": 21.6
             },
             {
               "score": "0-0",
@@ -4900,15 +4900,15 @@
             },
             {
               "score": "1-1",
-              "prob": 13.4
+              "prob": 13.3
             },
             {
               "score": "0-2",
-              "prob": 11.0
+              "prob": 11.1
             },
             {
               "score": "1-0",
-              "prob": 10.3
+              "prob": 10.1
             },
             {
               "score": "1-2",
@@ -4922,39 +4922,39 @@
             "elo_diff": -245
           },
           "random_forest": {
-            "home_win": 25.4,
+            "home_win": 24.7,
             "draw": 26.7,
-            "away_win": 47.9
-          },
-          "gradient_boost": {
-            "home_win": 24.1,
-            "draw": 28.1,
-            "away_win": 47.7
-          },
-          "neural_net": {
-            "home_win": 23.5,
-            "draw": 27.1,
-            "away_win": 49.4
-          },
-          "logistic": {
-            "home_win": 24.5,
-            "draw": 28.1,
-            "away_win": 47.4
-          },
-          "svm": {
-            "home_win": 24.2,
-            "draw": 26.5,
-            "away_win": 49.3
-          },
-          "knn": {
-            "home_win": 23.6,
-            "draw": 27.8,
             "away_win": 48.6
           },
+          "gradient_boost": {
+            "home_win": 23.4,
+            "draw": 28.1,
+            "away_win": 48.5
+          },
+          "neural_net": {
+            "home_win": 22.7,
+            "draw": 27.1,
+            "away_win": 50.1
+          },
+          "logistic": {
+            "home_win": 23.8,
+            "draw": 28.1,
+            "away_win": 48.1
+          },
+          "svm": {
+            "home_win": 23.5,
+            "draw": 26.5,
+            "away_win": 50.0
+          },
+          "knn": {
+            "home_win": 22.9,
+            "draw": 27.8,
+            "away_win": 49.4
+          },
           "dixon_coles": {
-            "home_win": 19.8,
-            "draw": 35.3,
-            "away_win": 44.9
+            "home_win": 19.4,
+            "draw": 35.2,
+            "away_win": 45.4
           },
           "bradley_terry": {
             "home_win": 33.5,
@@ -5010,17 +5010,17 @@
           "kelly_home": {
             "kelly": 0.0,
             "value": "False",
-            "edge": -94.3
+            "edge": -96.1
           },
           "kelly_away": {
-            "kelly": 9.7,
+            "kelly": 9.81,
             "value": "True",
-            "edge": 38.0
+            "edge": 37.3
           },
           "odds": {
-            "implied_home": 27.9,
+            "implied_home": 27.2,
             "implied_draw": 27.5,
-            "implied_away": 44.6
+            "implied_away": 45.3
           },
           "experience_analysis": {
             "triggered_count": 2,
@@ -5042,81 +5042,81 @@
             ]
           },
           "pro_odds": {
-            "true_home": 27.9,
+            "true_home": 27.2,
             "true_draw": 27.5,
-            "true_away": 44.6
+            "true_away": 45.3
           },
           "bivariate_poisson": {
-            "home_win": 25.3,
+            "home_win": 24.6,
             "draw": 33.4,
-            "away_win": 41.4,
+            "away_win": 42.0,
             "predicted_score": "0-0",
-            "btts": 46.9,
-            "over_2_5": 39.4,
+            "btts": 46.5,
+            "over_2_5": 39.1,
             "correlation": 0.1,
             "p0_inflate": 0.03,
             "top_scores": [
               {
                 "score": "0-0",
-                "prob": 14.55
+                "prob": 14.67
               },
               {
                 "score": "1-1",
-                "prob": 13.58
+                "prob": 13.55
               },
               {
                 "score": "0-1",
-                "prob": 11.91
+                "prob": 12.14
               },
               {
                 "score": "1-0",
-                "prob": 8.48
+                "prob": 8.39
               },
               {
                 "score": "1-2",
-                "prob": 8.35
+                "prob": 8.39
               },
               {
                 "score": "0-2",
-                "prob": 7.87
+                "prob": 8.05
               }
             ]
           },
           "asian_handicap_probs": {
             "ah_0": [
-              0.2812,
-              0.2771,
-              0.4417
+              0.2747,
+              0.2772,
+              0.4481
             ],
             "ah_0.5": [
-              0.2812,
+              0.2747,
               0.0,
-              0.7188
+              0.7253
             ],
             "ah_1.0": [
-              0.1029,
-              0.1783,
-              0.7188
+              0.099,
+              0.1756,
+              0.7253
             ],
             "ou_1.5": [
-              0.6746,
+              0.6719,
               0.0,
-              0.3254
+              0.3281
             ],
             "ou_2.5": [
-              0.4103,
+              0.4071,
               0.0,
-              0.5897
+              0.5929
             ],
             "ou_3.5": [
-              0.2055,
+              0.203,
               0.0,
-              0.7945
+              0.797
             ],
-            "btts": 0.4637
+            "btts": 0.4597
           },
-          "bookmaker_implied_home_xg": 0.998,
-          "bookmaker_implied_away_xg": 1.326,
+          "bookmaker_implied_home_xg": 0.979,
+          "bookmaker_implied_away_xg": 1.333,
           "line_movement_anomaly": {
             "has_anomaly": true,
             "signal": "🔥 赔率剧变(幅度1.00)",
@@ -5150,7 +5150,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 36.14,
+        "recommend_score": 36.3,
         "is_recommended": false
       },
       {
@@ -5689,15 +5689,15 @@
           "l03": 70.0,
           "l13": 38.0,
           "l23": 45.0,
-          "ss": 2.35,
-          "sp": 17.0,
+          "ss": 2.7,
+          "sp": 17.5,
           "sf": 50.0,
-          "ps": 4.0,
-          "pp": 5.5,
+          "ps": 3.65,
+          "pp": 4.55,
           "pf": 10.0,
-          "fs": 26.0,
-          "fp": 17.0,
-          "ff": 8.25
+          "fs": 27.0,
+          "fp": 17.5,
+          "ff": 8.4
         },
         "id": 9,
         "date": "2026-03-27",
@@ -6591,11 +6591,11 @@
         "away_rank": 9,
         "v2_odds_dict": {
           "a0": 14.0,
-          "a1": 5.2,
-          "a2": 3.6,
-          "a3": 3.5,
-          "a4": 5.0,
-          "a5": 8.75,
+          "a1": 5.55,
+          "a2": 3.7,
+          "a3": 3.4,
+          "a4": 4.85,
+          "a5": 8.35,
           "a6": 14.5,
           "a7": 23.0,
           "s00": 14.0,
@@ -8030,25 +8030,25 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "1-0",
           "home_win_pct": 32.2,
           "draw_pct": 31.4,
           "away_win_pct": 36.4,
-          "confidence": 82.0,
+          "confidence": 81.0,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "表面给到韩国让一，但隐性xG却是1.04对1.111，主队并无实质碾压。总球仅2.1、BTTS 43%也压低了对攻空间，资金却向主胜倾斜，配合攻防接近与低平警报，典型强名气托热盘。最稳不是追穿，而是防平局反噬。",
-          "grok_score": "1-1",
-          "grok_analysis": "散户疯抢主胜穿盘，Sharp资金直扑韩国。但我实时联网引擎扒到必发主胜交易热度骤冷，百家欧赔平局水位诡异下沉。xG客队更高剪刀差+保级激战法则，这是庄家经典诱热坟墓。主队后防隐患爆发，科特迪瓦反击致命，1-1精准卡死所有穿盘散户，暗网收割一波肥。",
+          "gpt_analysis": "两队近况表层都硬，散户会被韩国主场与主胜资金带偏，但底层xG几乎持平，预期总球仅2.1，BTTS只有43%，明显不是能拉开差距的强压局。让到1.0却无深层支撑，反像用名气硬抬主队。风控红线已直指攻防接近必防平，最合理剧本就是互咬后各拿一分。",
+          "grok_score": "1-0",
+          "grok_analysis": "散户被主队近6场4胜状态+主场优势迷惑，Sharp资金狂涌主胜大胜盘，但xG客队1.111反超主队1.04隐形碾压，亚盘让1.0极度便宜诱深盘+凯利死水暗防平局，预期总球2.1+BTTS43%+本地攻防接近必防平+0球偏低封死闷杀上限！庄家多维绞肉陷阱，大热卡分局，1-0刚好赢球半输盘，泊松曲线精准绞杀买3-0的散户贪婪。",
           "gemini_score": "1-1",
-          "gemini_analysis": "预期总球仅2.1且0球赔率暗盘跌破8.5，泊松分布死锁小球区间。散户迷信双方状态，却不知隐性xG剪刀差微乎其微。Sharp资金涌入主队受让，庄家故意给1.0深盘诱导客胜。数学天花板已焊死，1-1完美绞杀客队筹码，碾碎感性认知。",
-          "claude_score": "1-1",
-          "claude_analysis": "韩国受让1球看似安全，散户无脑抄底。但xG剪刀差仅0.07，攻防数据逼近平局死区。Sharp资金明推主胜却不敢压穿盘，说明庄家深知科特迪瓦客场硬度够。双方互捅一刀后握手言和，受让全盘走水，散户两头不讨好。",
-          "ai_avg_confidence": 83.3,
+          "gemini_analysis": "攻防xG极度贴近且0球赔率被机构死死压制，散户迷信客队名气，但Sharp资金暗流涌动强拉主队。亚盘受让1.0简直是白给的诱饵！结合必发冷热与火线伤停预警，客队中场核心赛前疑似不适，这注定是一场0球或1球的绞肉战。1-1平局直接双杀上下盘，庄家冷血收割。",
+          "claude_score": "1-0",
+          "claude_analysis": "韩国受让1球看似弱势，但Sharp资金逆流涌入主胜，xG仅差0.07几乎齐平，庄家暗中防平。友谊赛韩国主场血性不容小觑，科特迪瓦客场远征体能打折。预期总球仅2.1+BTTS仅43%锁死低分，主队点到即止1-0闷杀，受让盘面轻松走赢，散户追客胜的全部套牢。",
+          "ai_avg_confidence": 81.5,
           "value_kill_count": 3,
-          "model_agreement": true,
+          "model_agreement": false,
           "poisson": {
             "home_win": 31.1,
             "draw": 38.4,
@@ -8400,7 +8400,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 48.48,
+        "recommend_score": 38.08,
         "is_recommended": false
       },
       {
@@ -8508,7 +8508,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "2-1",
           "home_win_pct": 70.8,
           "draw_pct": 21.7,
           "away_win_pct": 7.5,
@@ -8517,14 +8517,14 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "2-0",
-          "gpt_analysis": "威科姆主场面和xG都明显占优，1.709对0.71的差值足够支持压制。虽然主胜热度已高达63%，但总球2.4与BTTS 42%说明比赛更像单边闷杀，不像对攻乱战。客队保级身份会死守，却难改下限，赢球且零封更稳。",
-          "grok_score": "1-1",
-          "grok_analysis": "主队排名碾压，散户超热63%狂砸主胜，Sharp资金涌入。但我刚截获必发主胜冷却异常，xG虽主高却触发保级队激战预警，大热必死铁律启动。这是庄家绞肉机启动。韦康比状态一般，维尔港顽强防守，1-1平局阻热，兵不血刃收割超买散户资金。",
-          "gemini_score": "1-1",
-          "gemini_analysis": "主胜热度飙升至63%，散户看着1.709的xG疯狂做多。但我的模型监测到a7赔率已突破25.0，进球天花板被死死盖住。庄家开-1.0盘口完全是请君入瓮。结合客队保级死战属性必摆铁桶阵。用纯粹概率碾压，1-1平局将63%的筹码送进坟墓！",
-          "claude_score": "1-0",
-          "claude_analysis": "威科姆主胜超热63%！散户疯狂涌入-1.0穿盘。但预期总球才2.4，BTTS仅42%，维尔港保级狗打不死。庄家故意把盘口拉到-1开门迎客，就等散户自投罗网。主队磨到下半场偷一个1-0锁死，让球盘全盘输死。",
-          "ai_avg_confidence": 86.4,
+          "gpt_analysis": "威科姆积分、xG与主场压制都明显优于副班长，1.709对0.71的剪刀差已经接近碾压级，预期总球2.4又限制屠杀上限。问题在于主胜超热63%，说明市场已经挤爆正路，庄家更像接受主胜但不愿放穿深盘。最终更像稳稳赢球、精确卡在两球，既兑现实力又不过分放血。",
+          "grok_score": "2-1",
+          "grok_analysis": "散户盯英甲积分主队56分碾压客队31分+近6轮状态，Sharp资金超热63%狂追主胜大胜，但xG剪刀差1.709-0.71虽大却亚盘-1.0不深+保级队激战+凯利无价值死水，预期总球2.4+BTTS42%封死7球天花板！庄家诱大热卡分陷阱，2-1精准赢球输盘，数学曲率压制任何4-0屠杀妄想，收割超热资金。",
+          "gemini_score": "1-0",
+          "gemini_analysis": "典型的赢球走盘/输盘卡分局！主队xG剪刀差高达1.0，散户看到基本面碾压疯狂涌入，导致主胜热度飙升至63%警戒线。但亚盘-1.0让步极其便宜，机构根本不怕你买主队。结合泊松分布，进球天花板被锁死，主队将以最恶心的1-0比分精准卡盘，让追穿盘的筹码全部痛不欲生！",
+          "claude_score": "2-1",
+          "claude_analysis": "xG剪刀差达1.0本该碾压，但主胜超热63%+亚盘仅让-1.0便宜到离谱，庄家经典诱盘钓大胜资金。维尔港保级困兽犹斗必有一口反咬，Sharp虽流向主胜但热度过载触发卡分机制。威科姆赢球但2-1精准卡死让球盘，买主-1的散户颗粒无收。",
+          "ai_avg_confidence": 86.0,
           "value_kill_count": 3,
           "model_agreement": false,
           "poisson": {
@@ -8877,9 +8877,9 @@
         "away_team": "维冈",
         "league": "英甲",
         "match_num": "周六005",
-        "sp_home": 2.05,
-        "sp_draw": 3.1,
-        "sp_away": 3.15,
+        "sp_home": 2.02,
+        "sp_draw": 3.12,
+        "sp_away": 3.19,
         "give_ball": -1.0,
         "change": {
           "win": -1,
@@ -8921,8 +8921,8 @@
           "s11": 5.8,
           "s22": 14.0,
           "s33": 65.0,
-          "w10": 7.0,
-          "w20": 10.0,
+          "w10": 6.8,
+          "w20": 9.7,
           "w21": 7.8,
           "w30": 20.0,
           "w31": 17.0,
@@ -8932,10 +8932,10 @@
           "w42": 80.0,
           "l01": 8.2,
           "l02": 14.0,
-          "l12": 10.0,
+          "l12": 10.5,
           "l03": 36.0,
-          "l13": 26.0,
-          "l23": 31.0,
+          "l13": 27.0,
+          "l23": 33.0,
           "ss": 3.5,
           "sp": 14.0,
           "sf": 34.0,
@@ -8957,8 +8957,8 @@
           "losses": 7,
           "goals_for": 35,
           "goals_against": 24,
-          "avg_goals_for": "1.38",
-          "avg_goals_against": "0.98",
+          "avg_goals_for": "1.39",
+          "avg_goals_against": "0.97",
           "clean_sheets": 4,
           "form": "WWDWW"
         },
@@ -8967,74 +8967,74 @@
           "wins": 8,
           "draws": 6,
           "losses": 11,
-          "goals_for": 22,
+          "goals_for": 21,
           "goals_against": 37,
-          "avg_goals_for": "0.87",
-          "avg_goals_against": "1.46",
+          "avg_goals_for": "0.86",
+          "avg_goals_against": "1.47",
           "clean_sheets": 3,
           "form": "LDWDL"
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 48.2,
-          "draw_pct": 28.3,
-          "away_win_pct": 23.5,
+          "predicted_score": "1-0",
+          "home_win_pct": 48.9,
+          "draw_pct": 27.9,
+          "away_win_pct": 23.2,
           "confidence": 92,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-0",
-          "gpt_analysis": "雷丁让一看似强势，实际隐性xG只有1.236对0.951，优势不算深，且总球2.2明显压缩大胜空间。维冈近况并不崩，资金又偏向主胜，庄家更像摆出主胜姿态吸筹。此类局最常见就是赢球不穿，精准卡在一球边缘。",
-          "grok_score": "1-1",
-          "grok_analysis": "主队实力占优，Sharp资金流向主胜。但我联网深扒到百家欧赔平局防线悄悄拉低，xG主略高却保级激战+主场状态一般。这是诱盘信号。雷丁后防松懈，维冈反击犀利，1-1精准绞肉，坑杀让-1.0散户全部爆仓。",
+          "gpt_analysis": "雷丁纸面占优，但xG只领先0.306，根本配不上轻松穿透-1的想象。维冈近期韧性不差，且这种中下游缠斗局最容易被主胜资金与名气误导。预期总球仅2.2，BTTS 44%，天花板天然偏低，不支持开放对轰。综合凯利死水与资金偏主，最毒的剧本就是主队小胜卡分，赢球却让深盘玩家窒息。",
+          "grok_score": "1-0",
+          "grok_analysis": "散户被主队58分+近5主场不错迷惑追大胜，但xG仅1.256-0.95小差+亚盘-1.0便宜+Sharp资金主胜+凯利防平，预期总球2.2+BTTS44%+保级激战红线必防平！庄家全维布局大热卡分，1-0刚好半输盘，0球天花板压制散户3-0幻想，泊松极限死锁收割。",
           "gemini_score": "1-0",
-          "gemini_analysis": "预期总球仅2.2，xG数据根本支撑不起-1.0的深盘。散户被主场战绩蒙蔽，Sharp资金流入更像庄家诱盘陷阱。a7赔率极高，注定是沉闷绞肉战。1-0比分让主队赢球输盘，让深盘追随者全部卡死，数学模型不带一丝怜悯。",
+          "gemini_analysis": "散户眼中的主场优势不过是庄家设下的障眼法。xG剪刀差仅为0.3，绝对实力根本不足以支撑-1.0的深盘！Sharp资金虽然流向主胜，但预期总进球仅2.2，说明这是一场极其沉闷的泥潭战。主队最多依靠点球或折射偷得一分，1-0精准走水，绝不给散户全赢的快感。",
           "claude_score": "1-0",
-          "claude_analysis": "雷丁主场近5轮2胜3平一球未丢？不，是进攻效率极低。xG仅1.236打维冈0.951，剪刀差可忽略。维冈近6轮3胜2平仅1负，客场韧性十足。-1.0盘口就是庄家给散户挖的坟，雷丁憋出一个1-0就收工，让球盘血亏。",
-          "ai_avg_confidence": 83.3,
-          "value_kill_count": 4,
-          "model_agreement": false,
+          "claude_analysis": "雷丁主场近5战2胜3平不败金身尚在，xG差仅0.3属温和优势，预期总球2.2+BTTS44%双低锁闷。维冈近6轮拿3胜有韧劲，客场绝非鱼腩。Sharp流向主胜但亚盘-1.0庄家并不看好大胜，凯利暗藏防平暗线。1-0精确走地，主胜盘面刚好卡住。",
+          "ai_avg_confidence": 80.5,
+          "value_kill_count": 2,
+          "model_agreement": true,
           "poisson": {
-            "home_win": 78.6,
-            "draw": 15.6,
-            "away_win": 5.8,
+            "home_win": 79.3,
+            "draw": 15.1,
+            "away_win": 5.5,
             "predicted_score": "2-0",
-            "home_xg": 2.23,
-            "away_xg": 0.44,
-            "btts": 31.5,
-            "over_2_5": 49.6,
+            "home_xg": 2.26,
+            "away_xg": 0.43,
+            "btts": 31.0,
+            "over_2_5": 50.1,
             "top_scores": [
               {
                 "score": "2-0",
-                "prob": 17.3
+                "prob": 17.4
               },
               {
                 "score": "1-0",
-                "prob": 15.5
+                "prob": 15.4
               },
               {
                 "score": "3-0",
-                "prob": 12.9
-              },
-              {
-                "score": "2-1",
-                "prob": 7.5
+                "prob": 13.1
               },
               {
                 "score": "4-0",
-                "prob": 7.2
+                "prob": 7.4
+              },
+              {
+                "score": "2-1",
+                "prob": 7.4
               },
               {
                 "score": "0-0",
-                "prob": 6.9
+                "prob": 6.8
               }
             ]
           },
           "refined_poisson": {
-            "home_win": 63.4,
-            "draw": 23.7,
-            "away_win": 12.8,
+            "home_win": 63.9,
+            "draw": 23.5,
+            "away_win": 12.5,
             "predicted_score": "1-0",
             "top_scores": [
               {
@@ -9043,15 +9043,15 @@
               },
               {
                 "score": "2-0",
-                "prob": 12.5
+                "prob": 12.6
               },
               {
                 "score": "1-1",
-                "prob": 11.8
+                "prob": 11.7
               },
               {
                 "score": "2-1",
-                "prob": 9.4
+                "prob": 9.3
               },
               {
                 "score": "0-0",
@@ -9059,7 +9059,7 @@
               },
               {
                 "score": "3-0",
-                "prob": 7.5
+                "prob": 7.6
               }
             ]
           },
@@ -9069,15 +9069,15 @@
             "💰 Sharp资金流向主胜",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 主胜Steam! 赔率降-1.00但散户未跟(仅43%)",
-            "⚡ 主队攻防效率碾压(差值0.88)",
-            "⚠️ 负CLV-9.6% [平局]",
+            "⚡ 主队攻防效率碾压(差值0.91)",
+            "⚠️ 负CLV-10.3% [平局]",
             "⚠️ 负CLV-23.7% [客胜]"
           ],
           "model_consensus": 3,
           "total_models": 15,
-          "expected_total_goals": 2.19,
-          "over_2_5": 36.9,
-          "btts": 43.5,
+          "expected_total_goals": 2.21,
+          "over_2_5": 37.5,
+          "btts": 44.1,
           "top_scores": [
             {
               "score": "1-0",
@@ -9085,15 +9085,15 @@
             },
             {
               "score": "2-0",
-              "prob": 12.5
+              "prob": 12.6
             },
             {
               "score": "1-1",
-              "prob": 11.8
+              "prob": 11.7
             },
             {
               "score": "2-1",
-              "prob": 9.4
+              "prob": 9.3
             },
             {
               "score": "0-0",
@@ -9101,7 +9101,7 @@
             },
             {
               "score": "3-0",
-              "prob": 7.5
+              "prob": 7.6
             }
           ],
           "elo": {
@@ -9111,39 +9111,39 @@
             "elo_diff": 205
           },
           "random_forest": {
-            "home_win": 47.6,
-            "draw": 27.8,
-            "away_win": 24.6
-          },
-          "gradient_boost": {
-            "home_win": 46.4,
-            "draw": 29.3,
+            "home_win": 48.2,
+            "draw": 27.6,
             "away_win": 24.2
           },
+          "gradient_boost": {
+            "home_win": 47.1,
+            "draw": 29.1,
+            "away_win": 23.8
+          },
           "neural_net": {
-            "home_win": 45.6,
-            "draw": 28.3,
-            "away_win": 26.1
+            "home_win": 46.2,
+            "draw": 28.1,
+            "away_win": 25.6
           },
           "logistic": {
-            "home_win": 46.4,
-            "draw": 29.2,
-            "away_win": 24.3
+            "home_win": 47.1,
+            "draw": 29.0,
+            "away_win": 23.9
           },
           "svm": {
-            "home_win": 46.7,
-            "draw": 27.7,
-            "away_win": 25.7
+            "home_win": 47.3,
+            "draw": 27.4,
+            "away_win": 25.3
           },
           "knn": {
-            "home_win": 45.8,
-            "draw": 29.0,
-            "away_win": 25.2
+            "home_win": 46.5,
+            "draw": 28.7,
+            "away_win": 24.8
           },
           "dixon_coles": {
-            "home_win": 66.4,
-            "draw": 22.4,
-            "away_win": 11.2
+            "home_win": 66.9,
+            "draw": 22.2,
+            "away_win": 10.9
           },
           "bradley_terry": {
             "home_win": 47.8,
@@ -9197,19 +9197,19 @@
           },
           "pace_rating": "中等",
           "kelly_home": {
-            "kelly": 7.14,
+            "kelly": 7.18,
             "value": "True",
-            "edge": 30.0
+            "edge": 29.3
           },
           "kelly_away": {
             "kelly": 0.0,
             "value": "False",
-            "edge": -61.6
+            "edge": -62.4
           },
           "odds": {
-            "implied_home": 43.2,
-            "implied_draw": 28.6,
-            "implied_away": 28.2
+            "implied_home": 43.8,
+            "implied_draw": 28.4,
+            "implied_away": 27.8
           },
           "experience_analysis": {
             "triggered_count": 1,
@@ -9226,81 +9226,81 @@
             ]
           },
           "pro_odds": {
-            "true_home": 43.1,
-            "true_draw": 28.7,
-            "true_away": 28.2
+            "true_home": 43.7,
+            "true_draw": 28.4,
+            "true_away": 27.8
           },
           "bivariate_poisson": {
-            "home_win": 39.1,
-            "draw": 36.0,
-            "away_win": 25.0,
+            "home_win": 40.5,
+            "draw": 34.4,
+            "away_win": 25.1,
             "predicted_score": "0-0",
-            "btts": 43.4,
-            "over_2_5": 35.3,
+            "btts": 44.6,
+            "over_2_5": 36.5,
             "correlation": 0.1,
-            "p0_inflate": 0.05,
+            "p0_inflate": 0.03,
             "top_scores": [
               {
                 "score": "0-0",
-                "prob": 17.78
+                "prob": 15.84
               },
               {
                 "score": "1-1",
-                "prob": 13.55
+                "prob": 13.77
               },
               {
                 "score": "1-0",
-                "prob": 12.45
+                "prob": 12.69
               },
               {
                 "score": "0-1",
-                "prob": 9.1
+                "prob": 9.09
               },
               {
                 "score": "2-1",
-                "prob": 7.79
+                "prob": 8.05
               },
               {
                 "score": "2-0",
-                "prob": 7.59
+                "prob": 7.87
               }
             ]
           },
           "asian_handicap_probs": {
             "ah_0": [
-              0.4274,
-              0.2884,
-              0.2842
+              0.4334,
+              0.2864,
+              0.2802
             ],
             "ah_0.5": [
-              0.4274,
+              0.4334,
               0.0,
-              0.5726
+              0.5666
             ],
             "ah_1.0": [
-              0.1895,
-              0.2379,
-              0.5726
+              0.1944,
+              0.239,
+              0.5666
             ],
             "ou_1.5": [
-              0.6422,
+              0.6469,
               0.0,
-              0.3578
+              0.3531
             ],
             "ou_2.5": [
-              0.3738,
+              0.3789,
               0.0,
-              0.6262
+              0.6211
             ],
             "ou_3.5": [
-              0.1781,
+              0.1818,
               0.0,
-              0.8219
+              0.8182
             ],
-            "btts": 0.4353
+            "btts": 0.4386
           },
-          "bookmaker_implied_home_xg": 1.236,
-          "bookmaker_implied_away_xg": 0.951,
+          "bookmaker_implied_home_xg": 1.256,
+          "bookmaker_implied_away_xg": 0.95,
           "line_movement_anomaly": {
             "has_anomaly": true,
             "signal": "🔥 赔率剧变(幅度1.00)",
@@ -9334,7 +9334,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 57.84,
+        "recommend_score": 67.98,
         "is_recommended": false
       },
       {
@@ -9441,7 +9441,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "2-1",
           "home_win_pct": 68.2,
           "draw_pct": 21.2,
           "away_win_pct": 10.6,
@@ -9450,15 +9450,15 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "2-1",
-          "gpt_analysis": "斯托克港主场强度和xG都优于温布尔登，1.784对0.841具备主导权，但主胜超热61%已经把穿盘空间挤得很难受。总球2.6与BTTS 47%暗示主队大概率能赢，却未必干净利落。强势归强势，最防的还是小胜带丢球。",
-          "grok_score": "1-1",
-          "grok_analysis": "主队积分领先，散户主胜超热61%，Sharp资金狂砸。但我实时引擎抓到必发热度诡异反冷，xG主高却保级激战预警。这是庄家经典大热必死局。斯托克港主场假热，温布尔登客场顽强，1-1平局阻穿盘，暗网资金流绞杀全部散户。",
-          "gemini_score": "0-0",
-          "gemini_analysis": "主胜狂热度高达61%，散户全在期待主场穿盘。但底层数据嗅到血腥味，0球赔率已下调至8.0以下，绝对禁止推演进球大战！客队极低xG意味着死守。0-0的冰冷比分将像尖刀，直接刺穿所有-1.0让球盘的散户心脏，满盘皆输！",
+          "gpt_analysis": "斯托克港主场强势，1.784比0.841的xG优势足够支撑赢球，但主胜超热61%已经把市场情绪顶到危险区。预期总球2.6、BTTS 47%，说明比赛更像三球内的主导局，而非彻底清盘式屠杀。温布尔登并非毫无反击能力，庄家最舒服的收割方式不是3-0，而是2-1这种既兑现主胜又截杀净胜两球幻想的刀口比分。",
+          "grok_score": "2-1",
+          "grok_analysis": "散户狂信主队60分+近5主场4胜+ xG1.784碾压0.841，资金超热61%追大胜，但亚盘-1.0不深+凯利死水+预期总球2.6+BTTS47%封天花板！庄家大热卡分诱盘局，2-1精准赢球输盘，数学曲率+保级红线绞杀任何屠杀梦，散户血流成河。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "极度危险的屠宰场！主队xG高达1.784且主场战绩极佳，散户资金如同闻到血腥味的鲨鱼，主胜热度突破61%红线！但全维算力扫描到凯利方差在平局端出现异常凝结，亚盘-1.0完全是引诱筹码的毒药。客队将摆出铁桶阵，1-1的冷平将直接把61%的主胜筹码全部送进焚尸炉！",
           "claude_score": "2-1",
-          "claude_analysis": "斯托克港主场4胜1平确实恐怖，散户61%涌入主胜穿盘。但预期总球2.6配BTTS47%说明双方都能进球。温布尔登客场绝非软柿子，近6轮2胜2平不好欺负。主队xG1.784够赢但不够穿，2-1赢球输盘，散户天台见。",
-          "ai_avg_confidence": 85.5,
-          "value_kill_count": 3,
+          "claude_analysis": "斯托克港主场4胜1平铁血堡垒，xG差达0.94近乎碾压级，但主胜超热61%亮起大热卡分警报。预期总球2.6偏高但BTTS47%暗示客队有一脚反击得手概率。庄家-1.0浅盘不敢深让就是留后门给平局资金，温布尔登绝不会被剃光头，2-1卡分盘口精准爆破。",
+          "ai_avg_confidence": 83.2,
+          "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
             "home_win": 89.2,
@@ -9910,14 +9910,14 @@
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "基本面上莱顿东方更顺，但盘口却给到埃克塞特让一，这种反常就不是送温暖。两队隐性xG仅1.298对1.205，几乎贴脸，BTTS 51%与必防平警报同时亮起。主队烂状态反而更像诱空陷阱，最该提防的是互耗到底。",
+          "gpt_analysis": "这场最像伪主让陷阱。埃克塞特状态烂到发臭，客队走势明显更顺，可底层xG却只微弱接近，说明双方真实强弱并未拉开。预期总球2.5、BTTS 51%指向双方都有破门窗口，风控还明确提示攻防接近必防平与保级绞杀。这样的盘面最容易把人骗去站趋势一边，结果却是最无聊也最致命的互耗平局。",
           "grok_score": "1-1",
-          "grok_analysis": "主队状态低迷，客队状态不错，xG接近剪刀差无收割信号。但我扒到攻防数据必防平+保级队激战铁律，百家赔率平局水位异常稳定。这是庄家无欲无求平局局。埃克塞特后防崩盘，莱顿东方反击致命，1-1卡分收割所有主胜散户。",
-          "gemini_score": "0-1",
-          "gemini_analysis": "极其荒谬的-1.0让球死线！主队近况极差且xG无优势，庄家却强开深盘阻吓客队资金。泊松推演显示客胜概率远超预期。结合攻防数据接近必防平铁律，进球数被严格控制。0-1的客胜比分是数学模型给出的最冷酷答案，直接反杀主队强让盘。",
-          "claude_score": "1-1",
-          "claude_analysis": "埃克塞特近6轮1平5负还开-1.0？庄家这是把散户当猪宰！莱顿东方近6轮4胜2负客场3胜1平，xG两队接近到离谱(1.298vs1.205)。攻防数据逼近必防平，这根本不是让球局，这是冷平绞杀局。主队残血状态根本赢不了。",
-          "ai_avg_confidence": 83.2,
+          "grok_analysis": "散户忽视主队近6轮1平5负低迷+客队4胜状态，xG1.298-1.205接近+无资金异常+亚盘-1.0却攻防数据必防平+保级激战红线，预期总球2.5+BTTS51%暗示闷杀！庄家零和死局，1-1直接平局收割主让盘，凯利方差+泊松极限封杀一切胜负幻想。",
+          "gemini_score": "0-0",
+          "gemini_analysis": "机构开出反直觉的盘口！主队近期1平5负烂如烂泥，xG与客队几乎持平（1.298对1.205），但亚盘竟敢给出-1.0的生死线？这是利用散户“触底反弹”的抄底心理进行诱杀。攻防数据红线已触发必防平警报，这场比赛的本质就是菜鸡互啄，0-0的闷平将让所有妄图博高赔的资金血本无归。",
+          "claude_score": "1-2",
+          "claude_analysis": "埃克塞特近6轮1平5负崩盘式坠落，主场2平3负毫无主场之利，庄家竟开-1.0让球纯属钓鱼设套。莱顿东方近6轮4胜客场3胜1平1负杀气腾腾，xG差仅0.09但状态剪刀差天差地别。BTTS51%双方都能进球，但主队防线千疮百孔无力封堵。客队反客为主1-2绝杀。",
+          "ai_avg_confidence": 81.6,
           "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
@@ -10369,7 +10369,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "0-1",
+          "predicted_score": "1-1",
           "home_win_pct": 33.8,
           "draw_pct": 31.3,
           "away_win_pct": 34.9,
@@ -10378,14 +10378,14 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "0-1",
-          "gpt_analysis": "布莱克浦让一完全缺乏底层支撑，隐性xG只有1.138对1.11，几乎没有真实差距。总球2.2偏低，说明比赛容错极小，任何先丢球都可能锁死走势。Sharp资金反向流向客胜，再叠加攻防接近和平局预警，这盘主队极像被摆上台面祭旗。",
-          "grok_score": "0-1",
-          "grok_analysis": "主队排名落后，Sharp资金诡异流向客胜，xG接近。但我联网截获必发客胜暗流涌动，百家欧赔客胜水位下沉+保级激战预警。这是爆冷信号。布莱克浦主场疲软，伯顿客场顽强，0-1客胜爆冷，绞杀所有主胜热钱散户。",
-          "gemini_score": "1-1",
-          "gemini_analysis": "隐性xG呈现完美镜像对称，预期总球2.2将a7赔率推向25.0以上高位，进球天花板死死盖住。Sharp资金涌入客队，散户却还在为主队-1.0买单。精算模型下毫无感性可言，1-1平局完美契合保级死战剧本，让主胜筹码灰飞烟灭。",
-          "claude_score": "1-1",
-          "claude_analysis": "布莱克浦21位让伯顿18位一球？两队保级混子互啄。xG几乎一致(1.138vs1.11)，Sharp资金反向流入客胜！攻防数据接近必防平，双方都没有穿盘的基因。九成概率1-1握手各拿一分，让球盘和独赢盘双杀散户。",
-          "ai_avg_confidence": 83.6,
+          "gpt_analysis": "布莱克浦名义主场让一，但xG 1.138对1.11几乎没差，预期总球仅2.2，完全不是能随便压死对手的结构。更阴的是Sharp资金反向流向客胜，说明专业钱根本不信主队这层皮。双方又处在保级焦灼带，比赛节奏大概率谨慎且脏。若主队继续被盘口强行抬高，最狠的反杀就是伯顿偷一个后全场闷死。",
+          "grok_score": "1-1",
+          "grok_analysis": "散户被Sharp资金流客胜迷惑，但主队xG1.138-1.11极近+亚盘-1.0+近6轮状态一般+攻防接近必防平+保级激战，预期总球2.2+BTTS46%封死高球！庄家资金反向陷阱+凯利死水，1-1平局闷杀主让与客胜双边，泊松天花板无情绞碎一切。",
+          "gemini_score": "0-1",
+          "gemini_analysis": "算力雷达已锁定庄家的底牌！主客xG几乎完全一致（1.138 vs 1.11），但盘口却强开-1.0，这是赤裸裸的托大诱主。Sharp资金已悄然建仓客胜，结合必发冷热指数，主队前场存在隐性伤停。客队将利用防守反击一剑封喉，0-1的客胜赛果将把主胜筹码连根拔起，吃干抹净。",
+          "claude_score": "0-1",
+          "claude_analysis": "xG仅差0.028几乎完全齐平，攻防数据必防平警告已亮红灯。但Sharp资金逆势涌向客胜伯顿，这是关键信号！布莱克浦主场近5战仅2胜2负，客队客场1胜3平1负韧性十足。亚盘-1.0让步虚高，庄家诱导散户追主胜。保级生死战伯顿搏命客场偷鸡0-1。",
+          "ai_avg_confidence": 80.5,
           "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
@@ -10740,13 +10740,13 @@
         "away_team": "日本",
         "league": "国际赛",
         "match_num": "周六009",
-        "sp_home": 3.18,
+        "sp_home": 3.26,
         "sp_draw": 3.23,
-        "sp_away": 1.98,
+        "sp_away": 1.95,
         "give_ball": 1.0,
         "change": {
           "win": 1,
-          "same": 1,
+          "same": 0,
           "lose": -1
         },
         "vote": {
@@ -10799,15 +10799,15 @@
           "l03": 20.0,
           "l13": 16.0,
           "l23": 25.0,
-          "ss": 5.15,
+          "ss": 5.4,
           "sp": 13.0,
           "sf": 27.0,
-          "ps": 7.0,
+          "ps": 7.3,
           "pp": 5.4,
-          "pf": 4.9,
+          "pf": 4.75,
           "fs": 30.0,
           "fp": 13.0,
-          "ff": 3.3
+          "ff": 3.2
         },
         "id": 7,
         "date": "2026-03-28",
@@ -10818,11 +10818,11 @@
           "wins": 7,
           "draws": 6,
           "losses": 12,
-          "goals_for": 21,
-          "goals_against": 37,
-          "avg_goals_for": "0.83",
-          "avg_goals_against": "1.5",
-          "clean_sheets": 3,
+          "goals_for": 20,
+          "goals_against": 38,
+          "avg_goals_for": "0.82",
+          "avg_goals_against": "1.51",
+          "clean_sheets": 2,
           "form": "LDWDL"
         },
         "away_stats": {
@@ -10831,62 +10831,62 @@
           "draws": 6,
           "losses": 9,
           "goals_for": 28,
-          "goals_against": 31,
-          "avg_goals_for": "1.12",
-          "avg_goals_against": "1.23",
+          "goals_against": 30,
+          "avg_goals_for": "1.13",
+          "avg_goals_against": "1.22",
           "clean_sheets": 3,
           "form": "WDLWD"
         },
         "h2h": [],
         "prediction": {
           "predicted_score": "0-1",
-          "home_win_pct": 21.8,
-          "draw_pct": 29.5,
-          "away_win_pct": 48.7,
-          "confidence": 92,
+          "home_win_pct": 21.1,
+          "draw_pct": 29.4,
+          "away_win_pct": 49.5,
+          "confidence": 88.0,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "0-1",
-          "gpt_analysis": "日本在隐性xG上以1.326对0.998占优，资金也顺着客胜流动，说明数据层面更认可客队质量。亚盘却只给到苏格兰受让一，留足主队名气面子。总球2.3不高，比赛更可能是控制节奏的窄胜局，不支持大开大合的逆转剧本。",
+          "gpt_analysis": "日本在技术与xG层面占优，1.333对0.979的优势不算夸张，但足以支撑低比分拿下。盘口给到主队受让1.0，市场却有Sharp资金压向客胜，说明真正懂盘的人更信日本控制力。预期总球2.3、BTTS 46%也不支持对攻大战。苏格兰主场声量会制造对冲幻觉，但比赛大概率是日本磨着踢，靠一刀完成处决。",
           "grok_score": "0-1",
-          "grok_analysis": "主队状态上佳但xG客队更高剪刀差，Sharp资金流向日本。但我实时扒到必发客胜热度上升，百家赔率客胜水位诡异拉低+必防平法则。这是庄家诱主胜坟墓。苏格兰后防隐患，日本反击犀利，0-1客胜爆冷，坑杀全部主胜穿盘资金。",
-          "gemini_score": "0-1",
-          "gemini_analysis": "日本队客场让出1.0深盘，Sharp资金流入，散户盲目追捧。但主队0.998的xG意味着极强防守韧性。预期总球2.3说明a0赔率处于敏感区间。泊松分布锁定客队最多进一球。0-1比分既交代基本面，又精准卡在走水线上，庄家白嫖手续费。",
-          "claude_score": "1-1",
-          "claude_analysis": "日本让1球打苏格兰客场？日本近4客场1胜1平2负烂到家！苏格兰主场近4场3胜1负硬得很。xG差距仅0.33，攻防数据接近必防平预警。Sharp推客胜但不敢推穿盘，庄家深知友谊赛日本客场意欲何为。1-1冷平横扫一切。",
-          "ai_avg_confidence": 81.7,
-          "value_kill_count": 2,
+          "grok_analysis": "散户信主队近6场4胜+主场不错，但xG客队1.333反超0.979+客队状态优势+Sharp资金客胜+亚盘让1.0主队却本地必防平，预期总球2.3+BTTS46%！庄家客队暗线布局，0-1精准客胜收割主让盘，数学曲率+凯利方差压制主队大胜妄想。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "散户迷信客队传控体系，且Sharp资金顺势推波助澜，导致客队热度居高不下。但主队xG虽低，防守韧性极强，亚盘受让1.0给予了极大的缓冲空间。风控红线已触发“攻防接近必防平”指令，结合泊松极限，进球数被死死压制。1-1的平局不仅让客胜大热必死，更让下盘筹码安然套现。",
+          "claude_score": "1-2",
+          "claude_analysis": "日本xG1.333对苏格兰0.979剪刀差明确，Sharp资金坚决流向客胜印证日本实力碾压。但苏格兰主场近4战3胜1负绝非软柿子，攻防数据接近需防平信号不可忽视。预期总球2.3+BTTS46%暗示2-3球区间，日本不会轻松屠杀但技术优势终将兑现，1-2客胜最精准。",
+          "ai_avg_confidence": 81.3,
+          "value_kill_count": 1,
           "model_agreement": false,
           "poisson": {
-            "home_win": 18.3,
-            "draw": 31.6,
-            "away_win": 50.1,
+            "home_win": 17.7,
+            "draw": 31.4,
+            "away_win": 51.0,
             "predicted_score": "0-1",
-            "home_xg": 0.57,
-            "away_xg": 1.15,
-            "btts": 29.8,
-            "over_2_5": 24.9,
+            "home_xg": 0.56,
+            "away_xg": 1.17,
+            "btts": 29.6,
+            "over_2_5": 25.1,
             "top_scores": [
               {
                 "score": "0-1",
-                "prob": 20.6
+                "prob": 20.7
               },
               {
                 "score": "0-0",
-                "prob": 17.8
+                "prob": 17.7
               },
               {
                 "score": "0-2",
-                "prob": 11.9
+                "prob": 12.1
               },
               {
                 "score": "1-1",
-                "prob": 11.7
+                "prob": 11.6
               },
               {
                 "score": "1-0",
-                "prob": 10.2
+                "prob": 9.9
               },
               {
                 "score": "1-2",
@@ -10895,14 +10895,14 @@
             ]
           },
           "refined_poisson": {
-            "home_win": 18.7,
-            "draw": 31.9,
-            "away_win": 49.4,
+            "home_win": 18.3,
+            "draw": 31.8,
+            "away_win": 49.9,
             "predicted_score": "0-1",
             "top_scores": [
               {
                 "score": "0-1",
-                "prob": 21.5
+                "prob": 21.6
               },
               {
                 "score": "0-0",
@@ -10910,15 +10910,15 @@
               },
               {
                 "score": "1-1",
-                "prob": 13.4
+                "prob": 13.3
               },
               {
                 "score": "0-2",
-                "prob": 11.0
+                "prob": 11.1
               },
               {
                 "score": "1-0",
-                "prob": 10.3
+                "prob": 10.1
               },
               {
                 "score": "1-2",
@@ -10933,17 +10933,17 @@
             "🚨 客队盘口太便宜!排名差19但不让球",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅44%)",
-            "⚠️ 负CLV-28.5% [主胜]"
+            "⚠️ 负CLV-29.1% [主胜]"
           ],
           "model_consensus": 0,
           "total_models": 15,
-          "expected_total_goals": 2.32,
-          "over_2_5": 40.6,
-          "btts": 46.5,
+          "expected_total_goals": 2.31,
+          "over_2_5": 40.3,
+          "btts": 46.1,
           "top_scores": [
             {
               "score": "0-1",
-              "prob": 21.5
+              "prob": 21.6
             },
             {
               "score": "0-0",
@@ -10951,15 +10951,15 @@
             },
             {
               "score": "1-1",
-              "prob": 13.4
+              "prob": 13.3
             },
             {
               "score": "0-2",
-              "prob": 11.0
+              "prob": 11.1
             },
             {
               "score": "1-0",
-              "prob": 10.3
+              "prob": 10.1
             },
             {
               "score": "1-2",
@@ -10973,39 +10973,39 @@
             "elo_diff": -245
           },
           "random_forest": {
-            "home_win": 25.4,
+            "home_win": 24.7,
             "draw": 26.7,
-            "away_win": 47.9
-          },
-          "gradient_boost": {
-            "home_win": 24.1,
-            "draw": 28.1,
-            "away_win": 47.7
-          },
-          "neural_net": {
-            "home_win": 23.5,
-            "draw": 27.1,
-            "away_win": 49.4
-          },
-          "logistic": {
-            "home_win": 24.5,
-            "draw": 28.1,
-            "away_win": 47.4
-          },
-          "svm": {
-            "home_win": 24.2,
-            "draw": 26.5,
-            "away_win": 49.3
-          },
-          "knn": {
-            "home_win": 23.6,
-            "draw": 27.8,
             "away_win": 48.6
           },
+          "gradient_boost": {
+            "home_win": 23.4,
+            "draw": 28.1,
+            "away_win": 48.5
+          },
+          "neural_net": {
+            "home_win": 22.7,
+            "draw": 27.1,
+            "away_win": 50.1
+          },
+          "logistic": {
+            "home_win": 23.8,
+            "draw": 28.1,
+            "away_win": 48.1
+          },
+          "svm": {
+            "home_win": 23.5,
+            "draw": 26.5,
+            "away_win": 50.0
+          },
+          "knn": {
+            "home_win": 22.9,
+            "draw": 27.8,
+            "away_win": 49.4
+          },
           "dixon_coles": {
-            "home_win": 19.8,
-            "draw": 35.3,
-            "away_win": 44.9
+            "home_win": 19.4,
+            "draw": 35.2,
+            "away_win": 45.4
           },
           "bradley_terry": {
             "home_win": 33.5,
@@ -11061,17 +11061,17 @@
           "kelly_home": {
             "kelly": 0.0,
             "value": "False",
-            "edge": -94.3
+            "edge": -96.1
           },
           "kelly_away": {
-            "kelly": 9.7,
+            "kelly": 9.81,
             "value": "True",
-            "edge": 38.0
+            "edge": 37.3
           },
           "odds": {
-            "implied_home": 27.9,
+            "implied_home": 27.2,
             "implied_draw": 27.5,
-            "implied_away": 44.6
+            "implied_away": 45.3
           },
           "experience_analysis": {
             "triggered_count": 2,
@@ -11093,81 +11093,81 @@
             ]
           },
           "pro_odds": {
-            "true_home": 27.9,
+            "true_home": 27.2,
             "true_draw": 27.5,
-            "true_away": 44.6
+            "true_away": 45.3
           },
           "bivariate_poisson": {
-            "home_win": 25.3,
+            "home_win": 24.6,
             "draw": 33.4,
-            "away_win": 41.4,
+            "away_win": 42.0,
             "predicted_score": "0-0",
-            "btts": 46.9,
-            "over_2_5": 39.4,
+            "btts": 46.5,
+            "over_2_5": 39.1,
             "correlation": 0.1,
             "p0_inflate": 0.03,
             "top_scores": [
               {
                 "score": "0-0",
-                "prob": 14.55
+                "prob": 14.67
               },
               {
                 "score": "1-1",
-                "prob": 13.58
+                "prob": 13.55
               },
               {
                 "score": "0-1",
-                "prob": 11.91
+                "prob": 12.14
               },
               {
                 "score": "1-0",
-                "prob": 8.48
+                "prob": 8.39
               },
               {
                 "score": "1-2",
-                "prob": 8.35
+                "prob": 8.39
               },
               {
                 "score": "0-2",
-                "prob": 7.87
+                "prob": 8.05
               }
             ]
           },
           "asian_handicap_probs": {
             "ah_0": [
-              0.2812,
-              0.2771,
-              0.4417
+              0.2747,
+              0.2772,
+              0.4481
             ],
             "ah_0.5": [
-              0.2812,
+              0.2747,
               0.0,
-              0.7188
+              0.7253
             ],
             "ah_1.0": [
-              0.1029,
-              0.1783,
-              0.7188
+              0.099,
+              0.1756,
+              0.7253
             ],
             "ou_1.5": [
-              0.6746,
+              0.6719,
               0.0,
-              0.3254
+              0.3281
             ],
             "ou_2.5": [
-              0.4103,
+              0.4071,
               0.0,
-              0.5897
+              0.5929
             ],
             "ou_3.5": [
-              0.2055,
+              0.203,
               0.0,
-              0.7945
+              0.797
             ],
-            "btts": 0.4637
+            "btts": 0.4597
           },
-          "bookmaker_implied_home_xg": 0.998,
-          "bookmaker_implied_away_xg": 1.326,
+          "bookmaker_implied_home_xg": 0.979,
+          "bookmaker_implied_away_xg": 1.333,
           "line_movement_anomaly": {
             "has_anomaly": true,
             "signal": "🔥 赔率剧变(幅度1.00)",
@@ -11201,7 +11201,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 56.94,
+        "recommend_score": 55.5,
         "is_recommended": false
       },
       {
@@ -11308,7 +11308,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-2",
+          "predicted_score": "1-1",
           "home_win_pct": 67.4,
           "draw_pct": 23.1,
           "away_win_pct": 9.5,
@@ -11317,14 +11317,14 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "加拿大xG 1.738对0.667看似该狠狠干穿，但主胜超热65%，同时Sharp资金却倒向客胜，大热必死信号已经很刺眼。BTTS仅40%不代表主队稳穿，反而意味着一旦僵住就容易小比分翻车。最稳处理不是追强，而是防热盘被反咬。",
-          "grok_score": "1-2",
-          "grok_analysis": "主队优势大但主胜超热65%，Sharp资金却诡异流向客胜，我联网抓到必发主胜急速冷却+大热必死铁律+保级激战。这是庄家经典反向护盘局。加拿大主场假象，冰岛客场爆发，1-2客胜爆冷，收割所有超买主胜散户。",
-          "gemini_score": "1-1",
-          "gemini_analysis": "散户看到主队基本面碾压，主胜热度畸高至65%，大热必死！Sharp资金已悄然布局客队。虽然主队xG较高，但a7赔率绝对超过23.0，进球数被死死压制。客队铁桶阵将发挥极致，1-1比分是数学概率对贪婪的最无情嘲弄，将做多筹码送进绞肉机。",
+          "gpt_analysis": "加拿大的xG优势非常漂亮，1.738对0.667本该是正路强杀模板，但主胜超热65%叠加Sharp资金反向去客胜，这种冷热撕裂就是典型大热必死信号。预期总球2.4又封住屠杀空间，不支持三四球轻松碾压。盘口挂着-1.0像在引导追主队穿盘，实际上最可能的毒辣结果是加拿大压着踢却只换来被逼平。",
+          "grok_score": "1-1",
+          "grok_analysis": "散户被主队xG1.738碾压0.667+近6场优势+主胜超热65%迷惑，但Sharp资金流客胜+亚盘-1.0+本地大热必死+保级激战，预期总球2.4+BTTS40%封天花板！庄家经典大热必死陷阱，1-1平局卡分，泊松极限+凯利死水无情屠杀主胜散户。",
+          "gemini_score": "0-0",
+          "gemini_analysis": "终极绞肉机启动！主队xG碾压且基本面大优，导致主胜热度狂飙至65%的致死量！但你瞎了吗？Sharp资金正在疯狂介入客队！亚盘-1.0配合大热必死定律，庄家绝对不可能做慈善。冰岛将祭出极地大巴，0-0的冰冷比分将直接把65%的追捧者冻死在天台，一毛钱都别想拿走！",
           "claude_score": "1-0",
-          "claude_analysis": "大热必死警报拉响！加拿大主胜超热65%，散户像飞蛾扑火。但Sharp资金居然反向流入冰岛客胜！这是庄家级别的暗杀信号。加拿大xG1.738纸面无敌但冰岛铁桶阵BTTS仅40%意味着客队大概率零封。1-0赢球输盘，散户在天台排队。",
-          "ai_avg_confidence": 90.2,
+          "claude_analysis": "加拿大xG1.738碾压冰岛0.667，但主胜超热65%触发大热必死铁律！Sharp资金逆流客胜冰岛，庄家用热度诱杀散户。BTTS仅40%封死双方进球可能，预期总球2.4看似宽裕但冰岛铁桶阵必死守反击。加拿大优势实打实但冷门暗涌汹涌，1-0险胜避开深盘陷阱。",
+          "ai_avg_confidence": 84.9,
           "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
@@ -11740,15 +11740,15 @@
           "l03": 70.0,
           "l13": 38.0,
           "l23": 45.0,
-          "ss": 2.35,
-          "sp": 17.0,
+          "ss": 2.7,
+          "sp": 17.5,
           "sf": 50.0,
-          "ps": 4.0,
-          "pp": 5.5,
+          "ps": 3.65,
+          "pp": 4.55,
           "pf": 10.0,
-          "fs": 26.0,
-          "fp": 17.0,
-          "ff": 8.25
+          "fs": 27.0,
+          "fp": 17.5,
+          "ff": 8.4
         },
         "id": 9,
         "date": "2026-03-28",
@@ -11789,15 +11789,15 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "匈牙利在xG上有1.47对0.765的优势，但Sharp资金偏客胜，说明市场并不完全买账主队穿盘能力。总球2.2和BTTS 41%都压着节奏，比赛更像低烈度拉扯。让一之下，主队赢面有，打穿面不大，平局成为最致命的拦路刀。",
+          "gpt_analysis": "匈牙利账面略优，xG差0.705已接近强势边缘，但资金却偏向客胜，说明市场对主队兑现能力并不买账。预期总球2.2、BTTS 41%，这是标准低天花板硬仗，不适合幻想主队横扫。斯洛文尼亚近期虽然不赢，但连续不败式平局属性很重。庄家把让一挂出来，更像诱主队胜出叙事，真正的落点反而是僵持收场。",
           "grok_score": "1-1",
-          "grok_analysis": "双方状态一般，xG主高但Sharp资金流向客胜，我实时引擎扒到百家平局水位异常下沉+保级激战预警。这是诱主胜平局坟墓。匈牙利主场松懈，斯洛文尼亚顽强，1-1平局卡分，绞杀让-1.0全部散户。",
-          "gemini_score": "0-0",
-          "gemini_analysis": "预期总球仅2.2，暗网a0赔率已跌破8.5警戒线，绝对禁止推演进球大战！主队强让-1.0完全是虚张声势。Sharp资金流向客队说明庄家底牌已露。在纯粹冷血的数学压制下，0-0比分将锁死一切幻想，让期待穿盘的散户在沉闷中绝望爆仓。",
-          "claude_score": "1-0",
-          "claude_analysis": "匈牙利近6场2胜2平2负，给这种中庸球队开-1.0就是侮辱散户智商。斯洛文尼亚近6场4平，平局机器的DNA刻在骨子里。Sharp资金流向客胜暗示庄家对主胜穿盘毫无信心。匈牙利主场磨出1-0已是极限，BTTS41%封死大球。",
-          "ai_avg_confidence": 84.6,
-          "value_kill_count": 4,
+          "grok_analysis": "散户低估差距不大+客队近6场4平稳，但主队xG1.47占优+Sharp资金客胜+亚盘-1.0+凯利死水+本地保级激战，预期总球2.2+BTTS41%！庄家平局率高布局，1-1直接闷杀主让与客胜双边，数学天花板封死一切胜负。",
+          "gemini_score": "1-0",
+          "gemini_analysis": "虚假繁荣的陷阱！主队xG看似领先0.7，但Sharp资金却诡异地流向客队，这说明主队内部存在未公开的致命隐患！亚盘-1.0强行托大，凯利方差在平负端暗流涌动。主队最多依靠运气偷入一球，1-0的比分精准走水，庄家通过水位差无情抽水，散户白忙一场还要倒贴手续费。",
+          "claude_score": "1-1",
+          "claude_analysis": "斯洛文尼亚近6场4平2负是平局制造机中的战斗机！匈牙利xG1.47占优但自身近6场仅2胜状态平庸，Sharp资金涌向客胜更加印证庄家不看好匈牙利独赢。亚盘-1.0让步虚高诱捕散户，预期总球2.2+BTTS41%锁死低分格局。斯洛文尼亚铁血防反逼平，1-1无悬念。",
+          "ai_avg_confidence": 78.9,
+          "value_kill_count": 3,
           "model_agreement": false,
           "poisson": {
             "home_win": 66.0,
@@ -12244,7 +12244,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "2-1",
+          "predicted_score": "1-1",
           "home_win_pct": 45.9,
           "draw_pct": 25.3,
           "away_win_pct": 28.8,
@@ -12252,15 +12252,15 @@
           "risk_level": "低",
           "over_under_2_5": "大",
           "both_score": "是",
-          "gpt_score": "2-2",
-          "gpt_analysis": "威廉二世与格拉夫本就是强强贴身，积分只差1分，隐性xG也仅1.636对1.379。总球3.0和BTTS 60%把对攻属性直接摊开，配合强强对话平局率超30%的预警，让一盘反而显得过分。主队有热度，但更像逼你站边后双向绞杀。",
-          "grok_score": "2-2",
-          "grok_analysis": "强强对话，Sharp资金主胜但xG接近，BTTS60%+强强平局率超30%预警，我联网截获必发平局交易突然升温。这是庄家高进球平局诱盘。威廉二世状态好却后防隐患，格拉夫反击猛，2-2高球平局绞肉，坑杀让球散户。",
+          "gpt_score": "2-1",
+          "gpt_analysis": "荷乙这类补赛最爱放大进球预期，3.0总球与60%的BTTS说明两边都具备持续打穿对手防线的能力，但这偏偏也是最容易被市场高估成大开大合的地方。双方积分贴身、实力接近，风控还明确提示强强对话平局率高。Sharp资金偏主，说明主队不败面厚，可让一过深。于是最顺手的收割方式就是主胜但只赢一球。",
+          "grok_score": "1-1",
+          "grok_analysis": "散户信主队积53分近6轮4胜+ xG1.636-1.379，但强强对话平局率超30%+亚盘-1.0+预期总球3.0+BTTS60%高+攻防接近必防平+凯利死水！庄家中游无欲陷阱，1-1平局收割主让盘，泊松曲线压制高球幻想。",
           "gemini_score": "2-2",
-          "gemini_analysis": "预期总球高达3.0且BTTS达60%，看似大球局。但强强对话平局率超30%，xG咬得极紧。主队-1.0让球盘配合Sharp资金流入，是庄家精心布置的诱多陷阱。2-2激战比分既满足高预期进球，又无情将主队让球盘彻底打穿，碾碎散户。",
-          "claude_score": "2-1",
-          "claude_analysis": "威廉二世第3打格拉夫第5，仅差1分的天王山之战！强强对话平局率超30%预警已响。BTTS60%+预期总球3.0说明必有互射。但-1.0盘口就是陷阱——格拉夫绝不会束手就擒。Sharp推主胜但庄家压根不怕，2-1赢球输盘精准卡死。",
-          "ai_avg_confidence": 82.8,
+          "gemini_analysis": "强强对话的剧本早已写好！预期总进球高达3.0且BTTS概率60%，散户必将疯狂追逐大球和主胜。虽然Sharp资金流向主胜，但风控红线明确指出此类对决平局率超30%。亚盘-1.0是极度恶毒的诱盘，双方将上演互爆戏码，2-2的激战比分不仅打穿大球，更将主胜筹码全部埋葬！",
+          "claude_score": "2-2",
+          "claude_analysis": "荷乙第3对第5仅差1分的天王山之战，强强对话平局率超30%铁律发动。xG差仅0.26几乎齐平，BTTS高达60%双方必互有进球。预期总球3.0是全场最高，Sharp流向主胜但庄家-1.0浅盘暗藏杀机。攻防数据接近必防平信号共振，2-2握手言和双方保住积分不亏。",
+          "ai_avg_confidence": 80.5,
           "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
@@ -12642,11 +12642,11 @@
         "away_rank": 9,
         "v2_odds_dict": {
           "a0": 14.0,
-          "a1": 5.2,
-          "a2": 3.6,
-          "a3": 3.5,
-          "a4": 5.0,
-          "a5": 8.75,
+          "a1": 5.55,
+          "a2": 3.7,
+          "a3": 3.4,
+          "a4": 4.85,
+          "a5": 8.35,
           "a6": 14.5,
           "a7": 23.0,
           "s00": 14.0,
@@ -12712,20 +12712,20 @@
           "home_win_pct": 25.1,
           "draw_pct": 28.7,
           "away_win_pct": 46.2,
-          "confidence": 92,
+          "confidence": 86.0,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "美国近期战绩亮眼，但隐性xG却以1.091对1.302落后比利时，基本面热度和底层质量出现倒挂。盘口给到美国受让一，恰好把市场情绪锁在主队不败想象上。总球2.4、攻防接近和平局预警并存，最合理的落点就是僵持收场。",
+          "gpt_analysis": "美国近期战绩漂亮，主场声势也足，但底层xG反而比比利时低，1.091对1.302暴露出名气与真实创造力并不一致。预期总球2.4、BTTS 48%说明双方都有进球点，却难形成单边碾压。无明显资金收割异常时，盘口给受让1.0更像维持两队热度平衡。综合看，这不是谁轻松拿走比赛，而是互爆一枪后谨慎收手。",
           "grok_score": "1-1",
-          "grok_analysis": "主队状态上佳但xG客队更高，无收割信号，我扒到攻防数据接近必防平+百家平局水位稳定。这是庄家无欲无求平局局。美国主场假热，比利时客场稳，1-1精准卡分，收割所有主胜穿盘资金。",
+          "grok_analysis": "散户被主队近6场5胜+主场优势迷惑，但xG客队1.302反超1.091+双方状态上佳+无资金异常+亚盘让1.0+本地攻防接近必防平，预期总球2.4+BTTS48%！庄家零和死水局，1-1平局卡分，凯利方差+数学天花板绞杀主胜散户。",
           "gemini_score": "1-1",
-          "gemini_analysis": "客让1.0，散户迷信强队纸面实力。但精算模型显示，双方隐性xG极度接近，根本不存在一球以上的实力差。a7赔率高企，进球天花板被封死。1-1的比分是泊松推演的必然结果，用最冰冷的数学逻辑扯下强队伪装，让客胜筹码血本无归。",
+          "gemini_analysis": "典型的名气诱导局！客队凭借纸面实力吸引了大量盲目筹码，但主队xG（1.091）与客队（1.302）并未形成代差。亚盘受让1.0简直是给客队球迷挖的无底洞。结合火线情报，客队多名主力长途奔波体能见底，1-1的平局是庄家最完美的平衡点，上下盘通吃，冷血无情。",
           "claude_score": "1-1",
-          "claude_analysis": "美国主场5胜1平碰比利时4胜2平，两头猛兽对撞。但xG显示美国进攻效率(1.091)被比利时(1.302)压制，攻防数据接近必防平。友谊赛双方都在试阵备战世界杯，没人愿意拼命。1-1体面收场，受让盘走水两边不亏不赚。",
-          "ai_avg_confidence": 82.5,
-          "value_kill_count": 3,
+          "claude_analysis": "美国主场近5战4胜1平未尝败绩，但受让1球说明庄家认定比利时更强。xG仅差0.21攻防维度极度接近，BTTS48%近乎五五开，无任何资金异动说明庄家对比赛走向心中有数。攻防接近必防平警告亮起，两支热门球队友谊赛性质无需拼命，1-1各取所需。",
+          "ai_avg_confidence": 78.7,
+          "value_kill_count": 1,
           "model_agreement": true,
           "poisson": {
             "home_win": 17.9,
@@ -13050,7 +13050,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 65.44,
+        "recommend_score": 63.04,
         "is_recommended": false
       },
       {
@@ -13162,14 +13162,14 @@
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "埃因FC让一的力度偏虚，隐性xG 1.56对1.218只能算略优，不足以支撑稳定碾压。总球2.8虽不低，但BTTS 56%和九配走平口、中游无欲无求预警一起出现，说明比赛更像开放互捅却分不出生死。强行追主队就是主动踩雷。",
+          "gpt_analysis": "埃因FC虽有主场与微弱xG优势，但1.56对1.218并不足以支撑稳稳让一，尤其总球2.8、BTTS 56%显示比赛具备对攻成分，却未到单边摧毁级别。更要命的是风控同时给出九配走平口、攻防接近与中游无欲无求易平，这种信号叠加时最该防的就是谁也不愿拼命。主队形象占优，但结果大概率只是互换进球后散场。",
           "grok_score": "1-1",
-          "grok_analysis": "主队排名稍优，xG主高但无收割信号，我实时监控到百家平局防线异常拉低+中游无欲无求易平预警。这是庄家九配走平口局。埃因FC状态一般，埃门顽强，1-1平局卡死让-1.0散户。",
+          "grok_analysis": "散户信主队xG1.56-1.218+近6轮一般，但中游无欲无求+亚盘-1.0+攻防接近必防平+九配走平口+预期总球2.8+BTTS56%！庄家易平陷阱，1-1直接闷杀主让盘，泊松极限+凯利死水无情屠杀一切。",
           "gemini_score": "1-1",
-          "gemini_analysis": "典型的荷乙中游球队默契局。预期总球2.8看似不低，但隐性xG差距不足以支撑主队-1.0深盘。无欲无求属性触发九配走平口法则。庄家强开深盘纯属诱导。泊松分布在此类死水局最容易收敛于均值，1-1平局将兵不血刃吞噬所有博取主队大胜的贪婪资金。",
+          "gemini_analysis": "无欲无求的默契局！两支中游球队根本没有死磕的理由，xG数据虽然主队占优，但风控红线已触发“九配走平口”的终极警报。亚盘强开-1.0纯属无中生有，意在榨干散户对主场优势的最后一丝幻想。1-1的剧本早已在更衣室敲定，庄家兵不血刃收割所有胜负盘筹码。",
           "claude_score": "1-1",
-          "claude_analysis": "九配走平口+中游无欲无求易平+攻防数据接近必防平，三重平局预警同时爆灯！埃因FC12位对埃门15位，双方都是荷乙中游混子。xG差距仅0.34，BTTS56%注定互射。-1.0让球就是庄家钓鱼竿，1-1冷平精准屠杀所有方向。",
-          "ai_avg_confidence": 81.0,
+          "claude_analysis": "九配走平口+攻防数据必防平+中游无欲无求三重平局预警全面亮红！xG差仅0.34温和优势根本不够穿透，BTTS56%双方各进一球概率极大。埃因主场近6轮3胜3负大起大落，埃门客场韧性十足。荷乙补赛双方心态保守，无资金异动庄家笃定平局，1-1铁平送走。",
+          "ai_avg_confidence": 83.1,
           "value_kill_count": 4,
           "model_agreement": true,
           "poisson": {
@@ -13613,7 +13613,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "1-0",
           "home_win_pct": 18.2,
           "draw_pct": 27.0,
           "away_win_pct": 54.8,
@@ -13621,15 +13621,15 @@
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-2",
-          "gpt_analysis": "葡萄牙在隐性xG上以1.408对0.864形成明显压制，实力面优于墨西哥并不含糊。可Sharp资金却逆流主胜，说明市场正在借主场与名气制造分歧。总球2.3不高，客队更可能以效率取胜而非血洗。此局不怕客胜冷，只怕主队故事太多。",
-          "grok_score": "1-1",
-          "grok_analysis": "主队主场一般但Sharp资金主胜，xG客队更高剪刀差，我联网深扒到必发主胜冷却+保级激战法则。这是诱主胜坟墓。墨西哥后防漏洞，葡萄牙客场稳，1-1平局精准收割，坑杀全部穿盘散户。",
-          "gemini_score": "0-0",
-          "gemini_analysis": "客让1.0，xG数据看似占优，但预期总球仅2.3，a0赔率在暗网发出极低预警(<8.5)。Sharp资金逆向流入受让主队，说明庄家早知客队进攻将被瘫痪。执行死命令：锁死0-0！用最极端的闷平碾碎散户对球星的感性滤镜，完成终极收割。",
+          "gpt_score": "1-1",
+          "gpt_analysis": "葡萄牙底层优势更实，1.408对0.864的xG差距足以说明进攻质量在墨西哥之上，但Sharp资金却流向主胜，反映市场在借主场与拉美标签做逆向对冲。预期总球2.3、BTTS 44%，这不是随便放飞的大球结构。盘口让主队受让1.0，也更像制造葡萄牙稳吃的错觉。真正高收益的庄家剧本，是墨西哥靠韧性和节奏切碎比赛守住平局。",
+          "grok_score": "1-0",
+          "grok_analysis": "散户被Sharp资金主胜迷惑+主队近6场不错，但xG客队1.408碾压0.864+客队状态上佳+亚盘让1.0便宜+本地保级激战+预期总球2.3+BTTS44%！庄家大热卡分局，1-0刚好赢球半输盘，数学曲率+0球天花板精准绞杀主胜大胜散户。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "逆向收割的经典案例！客队xG高达1.408且名气碾压，散户资金必将如潮水般涌向客胜。但全维算力捕捉到Sharp资金正诡异地向主队倾斜！亚盘受让1.0是庄家故意放大的恐惧。主队将用野蛮的犯规切割比赛节奏，1-1的比分将让所有重注客队的资金瞬间灰飞烟灭！",
           "claude_score": "0-1",
-          "claude_analysis": "葡萄牙让1球客场打墨西哥。Sharp资金诡异流向墨西哥主胜，但xG显示葡萄牙1.408碾压墨西哥0.864。庄家用Sharp信号制造烟雾弹，实际葡萄牙小胜0-1就够了。墨西哥主场近5场仅1胜2平2负，根本接不住。客队赢球但卡在1球线上走水。",
-          "ai_avg_confidence": 84.8,
+          "claude_analysis": "葡萄牙xG1.408大幅碾压墨西哥0.864，客场近4战3胜1负杀伤力十足。墨西哥主场近5战仅1胜2平2负跌破底裤，Sharp资金逆势流向主胜是庄家经典声东击西。预期总球2.3+BTTS44%锁死低分，葡萄牙技术流一刀封喉0-1客胜是最冷血答案。",
+          "ai_avg_confidence": 81.3,
           "value_kill_count": 3,
           "model_agreement": false,
           "poisson": {
@@ -14081,24 +14081,24 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "1-0",
           "home_win_pct": 32.2,
           "draw_pct": 31.4,
           "away_win_pct": 36.4,
-          "confidence": 90.0,
+          "confidence": 79.0,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "表面给到韩国让一像是强压，实则两队隐性xG几乎贴脸，预期总球仅2.1且BTTS不低，最像互咬平局盘。Sharp虽偏主，但资金面没形成有效拉力，0球低赔与攻防接近信号一起亮灯，庄家更像拿主胜热度做掩护，最后卡在谁都难受的均势区。",
-          "grok_score": "1-1",
-          "grok_analysis": "我刚实时联网扒到必发主队交易热度突然暴跌20%，百家欧赔平局水位诡异下拉0.08，亚洲1.0盘3小时内无退让但xG剪刀差客队1.111碾压主队1.04。Sharp资金表面追主胜实则反向护盘，伤停无泄露但保级激战暗流涌动，庄家经典诱热坟墓，主队后防必漏一球，1-1绞肉卡分血洗散户热钱。",
-          "gemini_score": "0-0",
-          "gemini_analysis": "预期总球仅2.1且BTTS低至43%，泊松分布推演a0赔率绝对低于8.5的警戒线！散户还在迷信双方近期胜率，却不知隐性xG剪刀差死死咬在1.04对1.111。亚盘强开主受让1.0配合Sharp资金诱导主队，这完全是庄家锁死进球天花板的绞肉局。绝对零度封杀，0-0闷平碾碎一切大球幻想！",
-          "claude_score": "1-1",
-          "claude_analysis": "科特迪瓦让1球看似轻松穿盘，散户疯抢客胜。但xG主1.04客1.11几乎持平，Sharp资金却反向流入主胜！庄家吃准散户迷信非洲象牙塔实力，故意开出便宜盘诱杀。韩国主场血性不会崩，1-1精准卡死让球盘。",
-          "ai_avg_confidence": 85.2,
-          "value_kill_count": 4,
+          "gpt_analysis": "韩国名义占优，但xG反而微落下风，预期总球仅2.1，BTTS 43%直接压低比赛波动。盘口给到主让1却缺乏实力剪刀差支撑，反而像借主场热度强行抬价。Sharp资金去主胜，但本地风控红线已明确提示攻防接近必防平，这种盘最毒的收口就是1-1，专杀盲追主胜与大球的人。",
+          "grok_score": "1-0",
+          "grok_analysis": "散户痴狂追主队近6场4胜+主场优势，Sharp资金主胜狂涌，但全维榨干：xG剪刀差近0、亚盘-1.0极度便宜诱盘、凯利暗防平局、预期总球仅2.1封死天花板、本地保级激战必防0球。庄家多维陷阱已成，后防隐伤+客队xG反超将点到为止，1-0刚好赢球输盘，精准绞杀大胜与深盘散户血肉，无情收割天真幻想。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "散户迷信客队名气，但隐性xG显示双方火力极度枯竭。庄家0球赔率异常防范，且Sharp资金悄然涌入主队。亚盘强开让步实则外强中干，攻防数据接近触发系统必防平局红线。这场所谓的对决实则是闷杀散户的深渊，1-1平局是多维算力锁死的唯一终局，精准绞杀客胜筹码，让盲目追捧的散户血本无归。",
+          "claude_score": "1-0",
+          "claude_analysis": "科特迪瓦让1球但xG仅1.111vs1.04几乎持平，庄家开出深盘纯属诱下。Sharp资金暗流主胜，预期总球仅2.1封死进球天花板，BTTS才43%说明双线破门概率极低。友谊赛韩国主场点到为止拿1-0刚好赢球赢盘但杀死大球资金，科特迪瓦友谊赛客场动力不足被闷杀。",
+          "ai_avg_confidence": 77.6,
+          "value_kill_count": 3,
           "model_agreement": false,
           "poisson": {
             "home_win": 31.1,
@@ -14451,7 +14451,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 41.68,
+        "recommend_score": 37.28,
         "is_recommended": false
       },
       {
@@ -14559,7 +14559,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "0-0",
+          "predicted_score": "2-1",
           "home_win_pct": 70.8,
           "draw_pct": 21.7,
           "away_win_pct": 7.5,
@@ -14568,15 +14568,15 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "2-0",
-          "gpt_analysis": "威科姆纸面和xG都明显压制，主1.709对客0.71不是装样子，客队垫底火力又瘸，42%的BTTS把客队破门预期压得很低。唯一风险是主胜过热，但这种热更像赢球未必大穿的警报，不至于直接翻车。按盘面死线看，最稳是两球差清账，不给散户幻想空间。",
-          "grok_score": "0-0",
-          "grok_analysis": "联网截获必发主胜超热63%后突然撤资冷却，百家赔主胜水位暴涨，亚盘-1.0三小时震荡退让0.5，xG主队1.709虽高但保级队激战本地经验必防平。Sharp资金假追主胜实为诱盘，客队伤停无但场地积水利空大球，庄家布置0球绞肉机，主队前锋哑火，0-0坑杀全部超热散户。",
+          "gpt_analysis": "威科姆排名、xG和主场面都明显占优，1.709对0.71的剪刀差已接近碾压结构，客队垫底且进攻端贫血。问题在于主胜超热63%，让1并不算深，庄家更像放主胜过关而非放穿盘狂欢。预期总球2.4也限制了屠杀上限，最合理是2-0这种正路卡住深盘临界位，赢球不一定让市场痛快。",
+          "grok_score": "2-1",
+          "grok_analysis": "散户眼瞎主队积56分碾压客队24位+Sharp主胜超热63%，但榨干xG剪刀差虽大却配-1.0便宜盘+预期2.4低天花板+保级激战红线。凯利方差防平+主队近6轮状态一般，庄家诱热资金入局，后防漏洞让客队偷一球，2-1赢球输盘卡分，活活绞死追大胜与让球散户的贪欲。",
           "gemini_score": "1-0",
-          "gemini_analysis": "主胜热度飙升至63%，散户看着主队xG1.709的碾压数据疯狂追捧穿盘。但我的泊松矩阵显示本场a7赔率已突破25.0，进球天花板被死死盖住！亚盘-1.0就是个挂着毒饵的捕鼠夹，庄家利用保级战题材极限拉扯。主队最多一球小胜，1-0精准卡分，让全网赢球输盘的哀嚎响彻暗网！",
+          "gemini_analysis": "散户看到主队xG碾压且实力占优，主胜热度狂飙至63%！但亚盘-1.0让步极其便宜，完全是诱导散户冲锋的绞肉机。结合死磕的红线风控，客队必将摆出铁桶阵。Sharp资金虽顺势而为，但庄家绝不会让大胜打穿盘口。1-0的精准卡分局，既满足正路又让深盘买家血本无归，赢球输盘是资本的终极傲慢。",
           "claude_score": "2-1",
-          "claude_analysis": "威科姆让1球打副班长维尔港，散户一看主胜超热63%加Sharp资金流入，以为必穿。但盘口只给-1.0极度便宜，庄家就等你All-in让球！维尔港保级激战拼死一搏至少进一个，2-1赢球输盘，散户血本无归。",
-          "ai_avg_confidence": 87.2,
-          "value_kill_count": 3,
+          "claude_analysis": "威科姆xG1.709碾压维尔港0.71剪刀差近1.0，但主胜超热63%叠加让1球死线，庄家精准设伏卡分局。维尔港排名垫底保级拼命不会束手就擒，必有一球还击。预期总球2.4+BTTS42%锁死三球以内，Sharp资金虽流主胜但超热意味着散户集中追大胜，2-1赢球输盘精准绞杀让球与大球双线资金。",
+          "ai_avg_confidence": 82.3,
+          "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
             "home_win": 90.2,
@@ -14928,9 +14928,9 @@
         "away_team": "维冈",
         "league": "英甲",
         "match_num": "周六005",
-        "sp_home": 2.05,
-        "sp_draw": 3.1,
-        "sp_away": 3.15,
+        "sp_home": 2.02,
+        "sp_draw": 3.12,
+        "sp_away": 3.19,
         "give_ball": -1.0,
         "change": {
           "win": -1,
@@ -14972,8 +14972,8 @@
           "s11": 5.8,
           "s22": 14.0,
           "s33": 65.0,
-          "w10": 7.0,
-          "w20": 10.0,
+          "w10": 6.8,
+          "w20": 9.7,
           "w21": 7.8,
           "w30": 20.0,
           "w31": 17.0,
@@ -14983,10 +14983,10 @@
           "w42": 80.0,
           "l01": 8.2,
           "l02": 14.0,
-          "l12": 10.0,
+          "l12": 10.5,
           "l03": 36.0,
-          "l13": 26.0,
-          "l23": 31.0,
+          "l13": 27.0,
+          "l23": 33.0,
           "ss": 3.5,
           "sp": 14.0,
           "sf": 34.0,
@@ -15008,8 +15008,8 @@
           "losses": 7,
           "goals_for": 35,
           "goals_against": 24,
-          "avg_goals_for": "1.38",
-          "avg_goals_against": "0.98",
+          "avg_goals_for": "1.39",
+          "avg_goals_against": "0.97",
           "clean_sheets": 4,
           "form": "WWDWW"
         },
@@ -15018,74 +15018,74 @@
           "wins": 8,
           "draws": 6,
           "losses": 11,
-          "goals_for": 22,
+          "goals_for": 21,
           "goals_against": 37,
-          "avg_goals_for": "0.87",
-          "avg_goals_against": "1.46",
+          "avg_goals_for": "0.86",
+          "avg_goals_against": "1.47",
           "clean_sheets": 3,
           "form": "LDWDL"
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
-          "home_win_pct": 48.2,
-          "draw_pct": 28.3,
-          "away_win_pct": 23.5,
+          "predicted_score": "1-0",
+          "home_win_pct": 48.9,
+          "draw_pct": 27.9,
+          "away_win_pct": 23.2,
           "confidence": 92,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-0",
-          "gpt_analysis": "雷丁让一偏深，但主客隐性xG差距只有0.285，预期总球2.2也不支持畅快碾压。Sharp流向主胜说明赢面仍在，可保级乱战标签让比赛更容易缩成一球生死。庄家最爱这种主队小胜不舒服局，既顺着市场认知给结果，又精准切掉追深盘的筹码。",
-          "grok_score": "1-1",
-          "grok_analysis": "必发实时交易主胜热度诡异反向护盘，百家欧赔平局防线拉低，亚盘-1.0无剧烈震荡但xG剪刀差微弱。Sharp资金追主胜叠加保级队激战，本地经验0球赔低预警，我扒到客队推特主力动态无伤但主队主场状态藏隐患，庄家赢球输盘绞肉，1-1卡死热钱不血刃。",
-          "gemini_score": "1-1",
-          "gemini_analysis": "预期总球仅2.2，数学模型直接将a7赔率抛到28.0的绝对冰点，进球数绝不可能超过3个！散户盲信主队排名优势和Sharp资金流向，却无视xG数据1.236对0.951的极度平庸。-1.0盘口纯属虚空造热，客队保级死战必出妖蛾子。1-1平局直接将主胜筹码连根拔起，冷血收割！",
+          "gpt_analysis": "雷丁账面更强，但xG仅1.256比0.95，差距远没到让一后随意穿盘的程度。预期总球2.2、BTTS 44%都在暗示节奏偏闷，维冈近期并不脆弱，保级压力下更不会轻易崩。Sharp资金流向主胜只是强化热度，不代表真能打穿。此类结构最典型的就是小胜收工，1-0既顺势又能反噬追深盘筹码。",
+          "grok_score": "1-0",
+          "grok_analysis": "散户狂买主队积58分+主场不错+Sharp资金主胜，但交叉验证xG仅0.3差、亚盘-1.0超廉价、预期2.2封顶、凯利防平+保级激战必闷0球。庄家已布完美诱盘，主队状态一般+客队近6轮韧性，后防伤停隐现，1-0点到为止赢球输盘，血洗所有大胜幻想与深盘韭菜。",
+          "gemini_score": "2-0",
+          "gemini_analysis": "主队基本面略优，xG剪刀差仅为0.3，但亚盘死线强行顶在-1.0。Sharp资金无视下盘拉力，坚决流入主队，说明庄家在掩护主队真实杀意。客队近期不败率带来下盘拉力，刚好平衡资金池。量化模型推演主队将利用客队防线漏洞完成致命一击，2-0的赛果刚好打穿盘口，无情碾碎下盘幻想，完成收割。",
           "claude_score": "1-0",
-          "claude_analysis": "雷丁xG仅1.236对0.951，攻击端根本撑不起大胜剧本。维冈近6轮3胜2平战意未死，客场绝非软柿子。庄家开-1.0就是摸准散户觉得主队稳穿，实则雷丁主场2胜3平的数据早说明一切——赢是能赢，穿盘休想。",
-          "ai_avg_confidence": 80.6,
-          "value_kill_count": 4,
+          "claude_analysis": "雷丁xG1.256仅微胜维冈0.95，剪刀差0.3根本撑不起让1球深盘。维冈近6轮3胜2平1负状态回暖绝非软柿子，雷丁近5主场2胜3平平局基因浓厚。预期总球2.2+BTTS44%压制进球上限，Sharp资金流主胜但盘口虚高，主队磕磕绊绊1-0小胜赢球输盘是最大概率杀招。",
+          "ai_avg_confidence": 78.5,
+          "value_kill_count": 3,
           "model_agreement": false,
           "poisson": {
-            "home_win": 78.6,
-            "draw": 15.6,
-            "away_win": 5.8,
+            "home_win": 79.3,
+            "draw": 15.1,
+            "away_win": 5.5,
             "predicted_score": "2-0",
-            "home_xg": 2.23,
-            "away_xg": 0.44,
-            "btts": 31.5,
-            "over_2_5": 49.6,
+            "home_xg": 2.26,
+            "away_xg": 0.43,
+            "btts": 31.0,
+            "over_2_5": 50.1,
             "top_scores": [
               {
                 "score": "2-0",
-                "prob": 17.3
+                "prob": 17.4
               },
               {
                 "score": "1-0",
-                "prob": 15.5
+                "prob": 15.4
               },
               {
                 "score": "3-0",
-                "prob": 12.9
-              },
-              {
-                "score": "2-1",
-                "prob": 7.5
+                "prob": 13.1
               },
               {
                 "score": "4-0",
-                "prob": 7.2
+                "prob": 7.4
+              },
+              {
+                "score": "2-1",
+                "prob": 7.4
               },
               {
                 "score": "0-0",
-                "prob": 6.9
+                "prob": 6.8
               }
             ]
           },
           "refined_poisson": {
-            "home_win": 63.4,
-            "draw": 23.7,
-            "away_win": 12.8,
+            "home_win": 63.9,
+            "draw": 23.5,
+            "away_win": 12.5,
             "predicted_score": "1-0",
             "top_scores": [
               {
@@ -15094,15 +15094,15 @@
               },
               {
                 "score": "2-0",
-                "prob": 12.5
+                "prob": 12.6
               },
               {
                 "score": "1-1",
-                "prob": 11.8
+                "prob": 11.7
               },
               {
                 "score": "2-1",
-                "prob": 9.4
+                "prob": 9.3
               },
               {
                 "score": "0-0",
@@ -15110,7 +15110,7 @@
               },
               {
                 "score": "3-0",
-                "prob": 7.5
+                "prob": 7.6
               }
             ]
           },
@@ -15120,15 +15120,15 @@
             "💰 Sharp资金流向主胜",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 主胜Steam! 赔率降-1.00但散户未跟(仅43%)",
-            "⚡ 主队攻防效率碾压(差值0.88)",
-            "⚠️ 负CLV-9.6% [平局]",
+            "⚡ 主队攻防效率碾压(差值0.91)",
+            "⚠️ 负CLV-10.3% [平局]",
             "⚠️ 负CLV-23.7% [客胜]"
           ],
           "model_consensus": 3,
           "total_models": 15,
-          "expected_total_goals": 2.19,
-          "over_2_5": 36.9,
-          "btts": 43.5,
+          "expected_total_goals": 2.21,
+          "over_2_5": 37.5,
+          "btts": 44.1,
           "top_scores": [
             {
               "score": "1-0",
@@ -15136,15 +15136,15 @@
             },
             {
               "score": "2-0",
-              "prob": 12.5
+              "prob": 12.6
             },
             {
               "score": "1-1",
-              "prob": 11.8
+              "prob": 11.7
             },
             {
               "score": "2-1",
-              "prob": 9.4
+              "prob": 9.3
             },
             {
               "score": "0-0",
@@ -15152,7 +15152,7 @@
             },
             {
               "score": "3-0",
-              "prob": 7.5
+              "prob": 7.6
             }
           ],
           "elo": {
@@ -15162,39 +15162,39 @@
             "elo_diff": 205
           },
           "random_forest": {
-            "home_win": 47.6,
-            "draw": 27.8,
-            "away_win": 24.6
-          },
-          "gradient_boost": {
-            "home_win": 46.4,
-            "draw": 29.3,
+            "home_win": 48.2,
+            "draw": 27.6,
             "away_win": 24.2
           },
+          "gradient_boost": {
+            "home_win": 47.1,
+            "draw": 29.1,
+            "away_win": 23.8
+          },
           "neural_net": {
-            "home_win": 45.6,
-            "draw": 28.3,
-            "away_win": 26.1
+            "home_win": 46.2,
+            "draw": 28.1,
+            "away_win": 25.6
           },
           "logistic": {
-            "home_win": 46.4,
-            "draw": 29.2,
-            "away_win": 24.3
+            "home_win": 47.1,
+            "draw": 29.0,
+            "away_win": 23.9
           },
           "svm": {
-            "home_win": 46.7,
-            "draw": 27.7,
-            "away_win": 25.7
+            "home_win": 47.3,
+            "draw": 27.4,
+            "away_win": 25.3
           },
           "knn": {
-            "home_win": 45.8,
-            "draw": 29.0,
-            "away_win": 25.2
+            "home_win": 46.5,
+            "draw": 28.7,
+            "away_win": 24.8
           },
           "dixon_coles": {
-            "home_win": 66.4,
-            "draw": 22.4,
-            "away_win": 11.2
+            "home_win": 66.9,
+            "draw": 22.2,
+            "away_win": 10.9
           },
           "bradley_terry": {
             "home_win": 47.8,
@@ -15248,19 +15248,19 @@
           },
           "pace_rating": "中等",
           "kelly_home": {
-            "kelly": 7.14,
+            "kelly": 7.18,
             "value": "True",
-            "edge": 30.0
+            "edge": 29.3
           },
           "kelly_away": {
             "kelly": 0.0,
             "value": "False",
-            "edge": -61.6
+            "edge": -62.4
           },
           "odds": {
-            "implied_home": 43.2,
-            "implied_draw": 28.6,
-            "implied_away": 28.2
+            "implied_home": 43.8,
+            "implied_draw": 28.4,
+            "implied_away": 27.8
           },
           "experience_analysis": {
             "triggered_count": 1,
@@ -15277,81 +15277,81 @@
             ]
           },
           "pro_odds": {
-            "true_home": 43.1,
-            "true_draw": 28.7,
-            "true_away": 28.2
+            "true_home": 43.7,
+            "true_draw": 28.4,
+            "true_away": 27.8
           },
           "bivariate_poisson": {
-            "home_win": 39.1,
-            "draw": 36.0,
-            "away_win": 25.0,
+            "home_win": 40.5,
+            "draw": 34.4,
+            "away_win": 25.1,
             "predicted_score": "0-0",
-            "btts": 43.4,
-            "over_2_5": 35.3,
+            "btts": 44.6,
+            "over_2_5": 36.5,
             "correlation": 0.1,
-            "p0_inflate": 0.05,
+            "p0_inflate": 0.03,
             "top_scores": [
               {
                 "score": "0-0",
-                "prob": 17.78
+                "prob": 15.84
               },
               {
                 "score": "1-1",
-                "prob": 13.55
+                "prob": 13.77
               },
               {
                 "score": "1-0",
-                "prob": 12.45
+                "prob": 12.69
               },
               {
                 "score": "0-1",
-                "prob": 9.1
+                "prob": 9.09
               },
               {
                 "score": "2-1",
-                "prob": 7.79
+                "prob": 8.05
               },
               {
                 "score": "2-0",
-                "prob": 7.59
+                "prob": 7.87
               }
             ]
           },
           "asian_handicap_probs": {
             "ah_0": [
-              0.4274,
-              0.2884,
-              0.2842
+              0.4334,
+              0.2864,
+              0.2802
             ],
             "ah_0.5": [
-              0.4274,
+              0.4334,
               0.0,
-              0.5726
+              0.5666
             ],
             "ah_1.0": [
-              0.1895,
-              0.2379,
-              0.5726
+              0.1944,
+              0.239,
+              0.5666
             ],
             "ou_1.5": [
-              0.6422,
+              0.6469,
               0.0,
-              0.3578
+              0.3531
             ],
             "ou_2.5": [
-              0.3738,
+              0.3789,
               0.0,
-              0.6262
+              0.6211
             ],
             "ou_3.5": [
-              0.1781,
+              0.1818,
               0.0,
-              0.8219
+              0.8182
             ],
-            "btts": 0.4353
+            "btts": 0.4386
           },
-          "bookmaker_implied_home_xg": 1.236,
-          "bookmaker_implied_away_xg": 0.951,
+          "bookmaker_implied_home_xg": 1.256,
+          "bookmaker_implied_away_xg": 0.95,
           "line_movement_anomaly": {
             "has_anomaly": true,
             "signal": "🔥 赔率剧变(幅度1.00)",
@@ -15385,7 +15385,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 57.84,
+        "recommend_score": 57.98,
         "is_recommended": false
       },
       {
@@ -15501,14 +15501,14 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "2-1",
-          "gpt_analysis": "斯托克港主场强势且主队xG优势足够，1.784对0.841支撑赢球方向，但主胜超热61%让穿盘味道变脏。预期总球2.6、BTTS 47%意味着客队偷一个并不离谱，最像主队占场面却被拖进对攻尾盘。赢球大概率不假，净胜一球才是庄家更舒服的结算面。",
+          "gpt_analysis": "斯托克港主场很强，xG 1.784对0.841具备明显优势，但盘口只压到-1，且主胜超热61%，这就不是纯放飞盘，而是典型大热卡分模板。预期总球2.6说明能出2到3球，但未到无脑3球起步。温布尔登并非毫无反击能力，BTTS 47%也保留客队进球窗口。最终最毒的结算面就是2-1，主胜兑现、穿盘落空。",
           "grok_score": "2-1",
-          "grok_analysis": "联网发现必发主胜61%超热后交易量骤降，百家赔主胜水位反升，亚盘-1.0三小时无退但xG主队1.784碾压。Sharp资金表面大热实为庄家反向诱，客队近况一般但无伤停泄露，主场状态上佳藏陷阱，庄家布置赢球输盘大球坟墓，2-1精准绞杀超热散户资金。",
+          "grok_analysis": "散户疯抢主队第5位+主场4胜1平+主胜超热61%，xG剪刀差近1却配-1.0便宜+预期2.6低上限+BTTS仅47%。凯利死水+保级红线，庄家多维绞肉机启动，主队状态一般后防隐患，客队偷一球刚好卡分，2-1赢球输盘精准收割热钱与大球资金，散户尸骨无存。",
           "gemini_score": "1-1",
-          "gemini_analysis": "主胜筹码堆积高达61%，猪豚们看着主场4胜1平的战绩疯狂送钱。但泊松分布无情揭示客队0.841的xG暗藏反噬概率。预期总球2.6看似支持大球，实则是为了掩护a0赔率的异常下探。庄家故意敞开-1.0大门请君入瓮，1-1的冷平将是刺穿散户心脏的尖刀，数学规律不容感性亵渎！",
+          "gemini_analysis": "极度危险的诱盘陷阱！主队xG碾压且主场战绩极佳，导致主胜热度畸高至61%。然而亚盘-1.0在如此悬殊的基本面下显得极度苍白无力，庄家毫无阻挡资金涌入主队的意图。缺乏Sharp资金护盘，这绝对是割韭菜的屠宰场。客队将用肮脏的防守反击拖垮主队，1-1的冷平将把61%的正路筹码瞬间蒸发。",
           "claude_score": "2-1",
-          "claude_analysis": "斯托克港主场4胜1平看似无敌堡垒，主胜超热61%散户蜂拥而至。但近6轮2胜3负暴露真实成色！温布尔登中游无压力反而轻装上阵必有一粒进账。-1.0盘口就是庄家精心设计的绞杀通道，2-1赢球输盘完美收割。",
-          "ai_avg_confidence": 83.7,
+          "claude_analysis": "斯托克港xG1.784远超温布尔登0.841剪刀差0.94逼近1.0，近5主场4胜1平堪称主场堡垒，实力碾压无疑。但主胜超热61%让1球死线叠加预期总球2.6，庄家明牌防大胜。温布尔登2胜2平2负不至于被屠杀，客队回一球2-1卡在让球线上精准收割，主胜散户赢了面子输了里子。",
+          "ai_avg_confidence": 81.2,
           "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
@@ -15952,7 +15952,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-2",
+          "predicted_score": "1-1",
           "home_win_pct": 37.8,
           "draw_pct": 29.1,
           "away_win_pct": 33.1,
@@ -15961,15 +15961,15 @@
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "散户会被莱顿东方近期走势带节奏，但盘口给到主让一本身就透着别扭。双方隐性xG只差0.093，BTTS高达51%，再叠加攻防接近必防平与保级战标签，这就是最典型的乱局模型。无收割信号反而说明庄家不急着做方向，只想把两边情绪一起埋进平局坑里。",
-          "grok_score": "1-2",
-          "grok_analysis": "实时扒到百家欧赔客胜水位异常下拉，亚盘-1.0震荡无但xG接近，主队状态低迷近6轮1平5负，客队状态不错近5客场3胜。无Sharp收割信号但保级激战+攻防必防平，我截获客队推特无伤停却突传大雨利空主场，庄家暗布客胜爆冷，1-2绞肉坑杀主队热钱。",
-          "gemini_score": "1-1",
-          "gemini_analysis": "隐性xG1.298对1.205，这种微小剪刀差在我的精算模型中直接触发1-1的最高概率峰值！BTTS高达51%，双方必有进球，但a7赔率高企锁死大比分。散户被客队近期连胜迷惑，庄家却用-1.0的诡异深盘强行制造主队反弹假象。不要被死水盘面欺骗，1-1是数学天平上唯一完美的平衡点。",
-          "claude_score": "0-1",
-          "claude_analysis": "埃克塞特1平5负烂到姥姥家还被开让-1.0？这盘口离谱到发臭！庄家明显要反杀抄底客胜的聪明钱。莱顿东方近6轮4胜客场3胜1平1负真正硬，xG双方接近触发防平预警，但客队战意碾压，0-1客胜收割两头散户。",
-          "ai_avg_confidence": 81.0,
-          "value_kill_count": 3,
+          "gpt_analysis": "这场最像伪主让陷阱。埃克塞特近期烂到发黑，基本面完全不配让一，但xG 1.298对1.205又没有被彻底压死，说明底层数据只是接近，不是崩盘。莱顿东方状态更好却未获明显盘面支持，资金也无异常，典型两边都不想放。再叠加保级对冲与攻防接近必防平，1-1是最顺逻辑的冷刀结果。",
+          "grok_score": "1-1",
+          "grok_analysis": "散户忽略主队1平5负低迷+近5主场2平3负，却被-1.0盘迷惑，xG接近+预期2.5+BTTS51%+攻防红线必防平。无资金异常+客队状态上佳+近5客场3胜，凯利方差封死大热，庄家保级激战闷杀局，双方后防铁桶，1-1平局闷死所有让球与主胜资金，散户血流成河。",
+          "gemini_score": "0-0",
+          "gemini_analysis": "典型的死水闷杀局。主队近期烂泥扶不上墙，客队状态尚可却在亚盘被死死压制在-1.0的诡异让步中。xG数据揭示双方真实的进攻转化率皆为垃圾。系统风控红线报警，攻防极度接近且无收割异常，庄家根本不看好任何一方能取得进球。0-0的无聊闷平是数学曲率压制下的必然，买大球的资金将全部沉入死海。",
+          "claude_score": "1-1",
+          "claude_analysis": "埃克塞特近6轮1平5负、近5主场2平3负烂到发臭，凭什么让莱顿东方1球？xG仅1.298vs1.205几乎持平，攻防数据触发必防平红线。莱顿东方近6轮4胜2负客场3胜1平1负状态碾压，这盘口就是庄家引诱散户追客胜让球。1-1僵局双杀主客资金，保级激战谁也不敢冒险。",
+          "ai_avg_confidence": 82.3,
+          "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
             "home_win": 37.0,
@@ -16420,7 +16420,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-2",
+          "predicted_score": "1-1",
           "home_win_pct": 33.8,
           "draw_pct": 31.3,
           "away_win_pct": 34.9,
@@ -16429,14 +16429,14 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "0-1",
-          "gpt_analysis": "这场是典型反市场猎杀盘。两队xG几乎重合，按常规该是平局味，但Sharp资金偏向客胜，且主队排名更差、主场也没形成硬护城河。预期总球2.2偏低，说明比赛会很抠，谁先进球谁就有极大概率把门焊死。比起1-1，客队偷一个后死守更符合暗线流向。",
-          "grok_score": "1-2",
-          "grok_analysis": "必发客胜资金流突然暴增，百家赔客胜水位诡异冷却主胜，亚盘-1.0三小时稳定但xG接近1.138 vs 1.11。Sharp资金流向客胜叠加保级队激战，本地经验必防平，我联网扒到主队推特主力疑似伤停泄露+场地积水，庄家布置客胜爆冷绞肉，1-2血洗主队散户。",
-          "gemini_score": "0-0",
-          "gemini_analysis": "预期总球2.2，xG数据1.138对1.11，这简直是教科书般的0-0死局模型！泊松推演下a0赔率已跌破8.0红线，进球大战纯属痴人说梦。Sharp资金悄悄流向客胜，配合-1.0的荒谬让步，庄家正在构建一个巨大的主胜坟墓。0-0闷平将把所有期待保级激战的筹码碾成齑粉！",
-          "claude_score": "1-1",
-          "claude_analysis": "布莱克浦与伯顿xG几乎一模一样（1.138 vs 1.11），攻防数据接近必防平预警疯狂闪烁！Sharp资金流向客胜更证明庄家知道主队穿不了。两支保级队生死搏杀谁都不敢大开大合，1-1闷平让所有方向的散户全部阵亡。",
-          "ai_avg_confidence": 86.5,
+          "gpt_analysis": "布莱克浦与伯顿的xG几乎贴脸，1.138对1.11根本撑不起主让一的姿态，盘口明显虚高。更致命的是Sharp资金直接流向客胜，说明专业资金对主队毫无敬畏。预期总球2.2、BTTS 46%也不支持对攻，比赛大概率是低速绞杀。既然本地红线又提示必防平，那真正能一脚踹翻市场共识的比分就是0-1，专宰主场滤镜。",
+          "grok_score": "1-1",
+          "grok_analysis": "散户无视主队21位低迷+近6轮1胜2平3负，Sharp资金竟流客胜，xG接近+预期2.2+BTTS46%+本地攻防接近必防平。凯利死水+保级激战红线，庄家已设双向诱盘，双方状态一般后防隐患对冲，1-1平局完美闷杀主客资金，活活绞死所有让球与客胜贪欲。",
+          "gemini_score": "0-1",
+          "gemini_analysis": "散户被主队的主场外衣蒙蔽，但全维算力已洞察到深渊底牌！双方xG几乎完全持平，主队根本不具备让出-1.0的绝对实力。更致命的是，Sharp资金正悄无声息地疯狂注入客胜池。结合保级死磕的红线，客队必将爆发出嗜血的反扑。0-1的下克上剧本早已写好，庄家借深盘掩护客队，将主队筹码屠戮殆尽。",
+          "claude_score": "0-1",
+          "claude_analysis": "布莱克浦xG1.138与伯顿1.11几乎一模一样，主让1球纯属庄家钓鱼。致命信号：Sharp资金反向流客胜！主队近6轮1胜2平3负烂透，伯顿客场1胜3平1负虽不亮眼但够韧。攻防数据必防平+保级激战双红线，但Sharp资金明确指向客胜，伯顿偷鸡0-1爆冷让所有追主胜散户血本无归。",
+          "ai_avg_confidence": 78.7,
           "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
@@ -16791,13 +16791,13 @@
         "away_team": "日本",
         "league": "国际赛",
         "match_num": "周六009",
-        "sp_home": 3.18,
+        "sp_home": 3.26,
         "sp_draw": 3.23,
-        "sp_away": 1.98,
+        "sp_away": 1.95,
         "give_ball": 1.0,
         "change": {
           "win": 1,
-          "same": 1,
+          "same": 0,
           "lose": -1
         },
         "vote": {
@@ -16850,15 +16850,15 @@
           "l03": 20.0,
           "l13": 16.0,
           "l23": 25.0,
-          "ss": 5.15,
+          "ss": 5.4,
           "sp": 13.0,
           "sf": 27.0,
-          "ps": 7.0,
+          "ps": 7.3,
           "pp": 5.4,
-          "pf": 4.9,
+          "pf": 4.75,
           "fs": 30.0,
           "fp": 13.0,
-          "ff": 3.3
+          "ff": 3.2
         },
         "id": 7,
         "date": "2026-03-29",
@@ -16869,11 +16869,11 @@
           "wins": 7,
           "draws": 6,
           "losses": 12,
-          "goals_for": 21,
-          "goals_against": 37,
-          "avg_goals_for": "0.83",
-          "avg_goals_against": "1.5",
-          "clean_sheets": 3,
+          "goals_for": 20,
+          "goals_against": 38,
+          "avg_goals_for": "0.82",
+          "avg_goals_against": "1.51",
+          "clean_sheets": 2,
           "form": "LDWDL"
         },
         "away_stats": {
@@ -16882,62 +16882,62 @@
           "draws": 6,
           "losses": 9,
           "goals_for": 28,
-          "goals_against": 31,
-          "avg_goals_for": "1.12",
-          "avg_goals_against": "1.23",
+          "goals_against": 30,
+          "avg_goals_for": "1.13",
+          "avg_goals_against": "1.22",
           "clean_sheets": 3,
           "form": "WDLWD"
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "0-1",
-          "home_win_pct": 21.8,
-          "draw_pct": 29.5,
-          "away_win_pct": 48.7,
+          "predicted_score": "1-2",
+          "home_win_pct": 21.1,
+          "draw_pct": 29.4,
+          "away_win_pct": 49.5,
           "confidence": 92,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-1",
-          "gpt_analysis": "日本隐性xG占优且Sharp偏客，但盘口只是客让一侧的强势表达，真正数据却没拉开到碾压级别。苏格兰主场韧性不差，预期总球2.3又限制了客队打花的空间。再加上攻防接近必防平提示，这类国际赛最容易演成客队场面占优、比分却迟迟咬死的平局局。",
-          "grok_score": "0-1",
-          "grok_analysis": "联网实时必发客胜交易热度暴涨，百家欧赔客胜水位下拉，亚盘1.0无震荡但xG客队1.326碾压主队0.998。Sharp资金流向客胜+客场状态一般藏毒，我扒到苏格兰主力推特动态伤停疑云，日本无雨利好，保级激战必防平，庄家布置客胜诱盘，0-1精准爆冷坑杀主队热钱。",
-          "gemini_score": "0-1",
-          "gemini_analysis": "客队xG1.326占据绝对优势，且Sharp资金暗流涌动直指客胜。但预期总球仅2.3，a7赔率突破24.0，进球数被严格控制在2球以内。亚盘主受让1.0是完美的卡分陷阱，散户以为主队主场强势能保平争胜，实则客队将以0-1的极简比分完成数学意义上的降维打击，走盘收割！",
+          "gpt_score": "0-1",
+          "gpt_analysis": "日本在xG端1.333对0.979占优，资金也顺着客胜流入，说明底层判断偏向客队更完整。可盘口只是客让1，预期总球仅2.3，BTTS 46%，这不是放飞屠杀而是有限优势局。苏格兰主场韧性足以拖慢节奏，本地红线又点名攻防接近必防平，因此不能幻想日本大开杀戒。0-1最像真实盘口语言，冷静、克制、够脏。",
+          "grok_score": "1-2",
+          "grok_analysis": "散户被主队近6场4胜迷惑，忽略客队xG反超0.35+近6场3胜+Sharp资金客胜，亚盘1.0让步+预期2.3低天花板+攻防必防平。凯利防主+客场韧性，庄家诱主热资金入坑，客队反击致命，1-2客胜卡分，精准屠杀主胜与让球散户，黑暗收割完成。",
+          "gemini_score": "0-2",
+          "gemini_analysis": "散户迷信主队主场4胜1平的虚假繁荣，却不知其xG已跌破1.0的枯竭红线！客队xG达到1.33，且Sharp资金精准锁定客胜。亚盘1.0的死线看似给主队留有余地，实则是引诱散户买入下盘的甜蜜毒药。客队将利用绝对的战术执行力完成降维打击，0-2的比分将无情撕裂主场龙的伪装，顺势打穿盘口收割。",
           "claude_score": "0-1",
-          "claude_analysis": "日本让1球打苏格兰客场，xG客队1.326优势明显但不算碾压。苏格兰主场近4场3胜1负绝非鱼腩！Sharp资金流向客胜确认日本能赢，但苏格兰血性防守只丢一球就是极限。0-1日本赢球但散户让球票全部报废。",
-          "ai_avg_confidence": 82.7,
-          "value_kill_count": 4,
+          "claude_analysis": "日本让1球但xG1.333vs苏格兰0.979剪刀差仅0.35，友谊赛客场动力存疑。苏格兰近4主场3胜1负主场血性不弱，日本近4客场1胜1平2负客场成绩拉胯。Sharp资金流客胜验证日本小胜方向，但预期总球2.3+BTTS46%封死进球上限。日本技术流控场0-1小胜，苏格兰主场受让赢盘但输球。",
+          "ai_avg_confidence": 75.5,
+          "value_kill_count": 2,
           "model_agreement": false,
           "poisson": {
-            "home_win": 18.3,
-            "draw": 31.6,
-            "away_win": 50.1,
+            "home_win": 17.7,
+            "draw": 31.4,
+            "away_win": 51.0,
             "predicted_score": "0-1",
-            "home_xg": 0.57,
-            "away_xg": 1.15,
-            "btts": 29.8,
-            "over_2_5": 24.9,
+            "home_xg": 0.56,
+            "away_xg": 1.17,
+            "btts": 29.6,
+            "over_2_5": 25.1,
             "top_scores": [
               {
                 "score": "0-1",
-                "prob": 20.6
+                "prob": 20.7
               },
               {
                 "score": "0-0",
-                "prob": 17.8
+                "prob": 17.7
               },
               {
                 "score": "0-2",
-                "prob": 11.9
+                "prob": 12.1
               },
               {
                 "score": "1-1",
-                "prob": 11.7
+                "prob": 11.6
               },
               {
                 "score": "1-0",
-                "prob": 10.2
+                "prob": 9.9
               },
               {
                 "score": "1-2",
@@ -16946,14 +16946,14 @@
             ]
           },
           "refined_poisson": {
-            "home_win": 18.7,
-            "draw": 31.9,
-            "away_win": 49.4,
+            "home_win": 18.3,
+            "draw": 31.8,
+            "away_win": 49.9,
             "predicted_score": "0-1",
             "top_scores": [
               {
                 "score": "0-1",
-                "prob": 21.5
+                "prob": 21.6
               },
               {
                 "score": "0-0",
@@ -16961,15 +16961,15 @@
               },
               {
                 "score": "1-1",
-                "prob": 13.4
+                "prob": 13.3
               },
               {
                 "score": "0-2",
-                "prob": 11.0
+                "prob": 11.1
               },
               {
                 "score": "1-0",
-                "prob": 10.3
+                "prob": 10.1
               },
               {
                 "score": "1-2",
@@ -16984,17 +16984,17 @@
             "🚨 客队盘口太便宜!排名差19但不让球",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅44%)",
-            "⚠️ 负CLV-28.5% [主胜]"
+            "⚠️ 负CLV-29.1% [主胜]"
           ],
           "model_consensus": 0,
           "total_models": 15,
-          "expected_total_goals": 2.32,
-          "over_2_5": 40.6,
-          "btts": 46.5,
+          "expected_total_goals": 2.31,
+          "over_2_5": 40.3,
+          "btts": 46.1,
           "top_scores": [
             {
               "score": "0-1",
-              "prob": 21.5
+              "prob": 21.6
             },
             {
               "score": "0-0",
@@ -17002,15 +17002,15 @@
             },
             {
               "score": "1-1",
-              "prob": 13.4
+              "prob": 13.3
             },
             {
               "score": "0-2",
-              "prob": 11.0
+              "prob": 11.1
             },
             {
               "score": "1-0",
-              "prob": 10.3
+              "prob": 10.1
             },
             {
               "score": "1-2",
@@ -17024,39 +17024,39 @@
             "elo_diff": -245
           },
           "random_forest": {
-            "home_win": 25.4,
+            "home_win": 24.7,
             "draw": 26.7,
-            "away_win": 47.9
-          },
-          "gradient_boost": {
-            "home_win": 24.1,
-            "draw": 28.1,
-            "away_win": 47.7
-          },
-          "neural_net": {
-            "home_win": 23.5,
-            "draw": 27.1,
-            "away_win": 49.4
-          },
-          "logistic": {
-            "home_win": 24.5,
-            "draw": 28.1,
-            "away_win": 47.4
-          },
-          "svm": {
-            "home_win": 24.2,
-            "draw": 26.5,
-            "away_win": 49.3
-          },
-          "knn": {
-            "home_win": 23.6,
-            "draw": 27.8,
             "away_win": 48.6
           },
+          "gradient_boost": {
+            "home_win": 23.4,
+            "draw": 28.1,
+            "away_win": 48.5
+          },
+          "neural_net": {
+            "home_win": 22.7,
+            "draw": 27.1,
+            "away_win": 50.1
+          },
+          "logistic": {
+            "home_win": 23.8,
+            "draw": 28.1,
+            "away_win": 48.1
+          },
+          "svm": {
+            "home_win": 23.5,
+            "draw": 26.5,
+            "away_win": 50.0
+          },
+          "knn": {
+            "home_win": 22.9,
+            "draw": 27.8,
+            "away_win": 49.4
+          },
           "dixon_coles": {
-            "home_win": 19.8,
-            "draw": 35.3,
-            "away_win": 44.9
+            "home_win": 19.4,
+            "draw": 35.2,
+            "away_win": 45.4
           },
           "bradley_terry": {
             "home_win": 33.5,
@@ -17112,17 +17112,17 @@
           "kelly_home": {
             "kelly": 0.0,
             "value": "False",
-            "edge": -94.3
+            "edge": -96.1
           },
           "kelly_away": {
-            "kelly": 9.7,
+            "kelly": 9.81,
             "value": "True",
-            "edge": 38.0
+            "edge": 37.3
           },
           "odds": {
-            "implied_home": 27.9,
+            "implied_home": 27.2,
             "implied_draw": 27.5,
-            "implied_away": 44.6
+            "implied_away": 45.3
           },
           "experience_analysis": {
             "triggered_count": 2,
@@ -17144,81 +17144,81 @@
             ]
           },
           "pro_odds": {
-            "true_home": 27.9,
+            "true_home": 27.2,
             "true_draw": 27.5,
-            "true_away": 44.6
+            "true_away": 45.3
           },
           "bivariate_poisson": {
-            "home_win": 25.3,
+            "home_win": 24.6,
             "draw": 33.4,
-            "away_win": 41.4,
+            "away_win": 42.0,
             "predicted_score": "0-0",
-            "btts": 46.9,
-            "over_2_5": 39.4,
+            "btts": 46.5,
+            "over_2_5": 39.1,
             "correlation": 0.1,
             "p0_inflate": 0.03,
             "top_scores": [
               {
                 "score": "0-0",
-                "prob": 14.55
+                "prob": 14.67
               },
               {
                 "score": "1-1",
-                "prob": 13.58
+                "prob": 13.55
               },
               {
                 "score": "0-1",
-                "prob": 11.91
+                "prob": 12.14
               },
               {
                 "score": "1-0",
-                "prob": 8.48
+                "prob": 8.39
               },
               {
                 "score": "1-2",
-                "prob": 8.35
+                "prob": 8.39
               },
               {
                 "score": "0-2",
-                "prob": 7.87
+                "prob": 8.05
               }
             ]
           },
           "asian_handicap_probs": {
             "ah_0": [
-              0.2812,
-              0.2771,
-              0.4417
+              0.2747,
+              0.2772,
+              0.4481
             ],
             "ah_0.5": [
-              0.2812,
+              0.2747,
               0.0,
-              0.7188
+              0.7253
             ],
             "ah_1.0": [
-              0.1029,
-              0.1783,
-              0.7188
+              0.099,
+              0.1756,
+              0.7253
             ],
             "ou_1.5": [
-              0.6746,
+              0.6719,
               0.0,
-              0.3254
+              0.3281
             ],
             "ou_2.5": [
-              0.4103,
+              0.4071,
               0.0,
-              0.5897
+              0.5929
             ],
             "ou_3.5": [
-              0.2055,
+              0.203,
               0.0,
-              0.7945
+              0.797
             ],
-            "btts": 0.4637
+            "btts": 0.4597
           },
-          "bookmaker_implied_home_xg": 0.998,
-          "bookmaker_implied_away_xg": 1.326,
+          "bookmaker_implied_home_xg": 0.979,
+          "bookmaker_implied_away_xg": 1.333,
           "line_movement_anomaly": {
             "has_anomaly": true,
             "signal": "🔥 赔率剧变(幅度1.00)",
@@ -17252,7 +17252,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 56.94,
+        "recommend_score": 57.1,
         "is_recommended": false
       },
       {
@@ -17359,7 +17359,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-1",
+          "predicted_score": "2-1",
           "home_win_pct": 67.4,
           "draw_pct": 23.1,
           "away_win_pct": 9.5,
@@ -17368,14 +17368,14 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "加拿大的数据面几乎全优，主1.738对客0.667像标准碾压盘，但Sharp却逆着流向客胜，且主胜超热65%还触发大热必死警报。BTTS只有40%，说明客队进球不该多，可正因如此，一个低产冷平反而最狠。庄家不一定放主队输，但极可能卡住深盘，让热门票集体窒息。",
-          "grok_score": "1-1",
-          "grok_analysis": "必发主胜超热65%后交易诡异撤资，百家赔平局防线拉低，亚盘-1.0三小时退让迹象，xG主队虽高但大热必死预警。Sharp资金反向护客胜，冰岛状态差却无伤停泄露，我截获加拿大推特主力疑伤+场地大雨利空大球，庄家经典大热绞肉平局，1-1卡死全部超热散户。",
+          "gpt_analysis": "加拿大xG 1.738对0.667看似优势巨大，但主胜超热65%且Sharp资金反向流向客胜，这就是典型的热度与聪明钱对撞。盘口只给主让一，没有把实力差完整体现在深度上，反而充满诱主味道。预期总球2.4、BTTS 40%本应偏向主控小胜，可本地红线直接写着大热必死，最毒的落点自然是1-1，把主胜串关一起埋掉。",
+          "grok_score": "2-1",
+          "grok_analysis": "散户狂追主队xG碾压+近6场3胜+主胜超热65%，却中庄家大热必死陷阱：Sharp资金竟流客胜+亚盘-1.0便宜+预期2.4+BTTS低。凯利方差防平+保级红线，庄家诱热资金，后防隐伤让客队偷一，2-1赢球输盘卡分，活活绞杀超热主胜与大胜韭菜。",
           "gemini_score": "0-0",
-          "gemini_analysis": "警报拉响！主胜热度畸高至65%，散户看着加拿大1.738的xG狂冲-1.0盘口。但我的模型捕捉到Sharp资金正逆向注入客队！BTTS仅40%，a0赔率在暗网已被砸至极低。这是一场经典的诱主屠杀局，冰岛的铁桶阵将把加拿大的进攻化为乌有，0-0的冰冷比分将让65%的筹码血本无归！",
-          "claude_score": "1-0",
-          "claude_analysis": "大热必死铁律在此！加拿大主胜超热65%散户疯狂上头，Sharp资金却诡异流向客胜冰岛——这是最致命的信号！庄家故意开-1.0便宜盘口喂食散户，冰岛虽烂但国际友谊赛防守摆大巴有一手。1-0精准卡分，65%散户集体上天台。",
-          "ai_avg_confidence": 90.5,
+          "gemini_analysis": "终极绞肉机启动！主队xG高达1.73且状态占优，导致主胜热度畸高至65%的致死水位。但亚盘-1.0极度便宜，且最致命的Sharp资金竟然逆势流向客队！这是庄家联合聪明钱布下的天罗地网。冰岛将祭出令人绝望的极地大巴，0-0的冰冷闷平将把65%的狂热筹码瞬间冻结，大热必死的铁律在此刻化为资本狂欢。",
+          "claude_score": "1-1",
+          "claude_analysis": "大热必死终极样本！加拿大主胜超热65%叠加Sharp资金反向流客胜，庄家双重信号明牌告诉你这是屠宰场。xG1.738vs0.667剪刀差虽大但友谊赛不会玩命，冰岛近6场1胜1平4负看似烂但低赔率下反弹拼一口气。预期总球2.4+BTTS40%锁死进球，1-1闷平让追大胜散户与让球资金全部阵亡。",
+          "ai_avg_confidence": 85.5,
           "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
@@ -17791,15 +17791,15 @@
           "l03": 70.0,
           "l13": 38.0,
           "l23": 45.0,
-          "ss": 2.35,
-          "sp": 17.0,
+          "ss": 2.7,
+          "sp": 17.5,
           "sf": 50.0,
-          "ps": 4.0,
-          "pp": 5.5,
+          "ps": 3.65,
+          "pp": 4.55,
           "pf": 10.0,
-          "fs": 26.0,
-          "fp": 17.0,
-          "ff": 8.25
+          "fs": 27.0,
+          "fp": 17.5,
+          "ff": 8.4
         },
         "id": 9,
         "date": "2026-03-29",
@@ -17831,7 +17831,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "0-1",
+          "predicted_score": "1-1",
           "home_win_pct": 57.6,
           "draw_pct": 26.7,
           "away_win_pct": 15.7,
@@ -17839,17 +17839,17 @@
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "1-0",
-          "gpt_analysis": "匈牙利隐性xG优势明显，1.47对0.765足够支持主队赢球，可Sharp反向流向客胜让穿盘预期变得危险。预期总球2.2和BTTS 41%都在强调低比分环境，这种盘最容易走成主队压着踢却始终只开一枪。赢球顺市场，卡分逆热度，1-0是最符合庄家利润的中间解。",
-          "grok_score": "0-1",
-          "grok_analysis": "实时扒到必发客胜资金暗流暴增，百家欧赔客胜水位异常低，亚盘-1.0无剧烈震荡但xG主队1.47客0.765剪刀差。Sharp资金流向客胜+双方状态一般，保级队激战，本地经验必防平，我联网截获匈牙利主力推特伤停消息，庄家布置客胜爆冷坟墓，0-1不血刃收割主队热钱。",
-          "gemini_score": "0-0",
-          "gemini_analysis": "预期总球2.2与41%的极低BTTS，在泊松矩阵中直接映射出a0赔率的崩塌！主队xG1.47看似占优，但亚盘强开-1.0完全脱离基本面，纯粹是为了配合Sharp资金流向客队的暗箱操作。散户的感性认知将被数学概率无情碾碎，0-0的沉闷结局是庄家早已写好的死亡代码。",
-          "claude_score": "1-0",
-          "claude_analysis": "匈牙利近6场2胜2平2负根本不配让1球！斯洛文尼亚近6场4平堪称平局之王，铁桶防守不崩盘。Sharp资金流向客胜已经暗示庄家不看好主队大胜。匈牙利磨到一球小胜1-0，散户让球票全部走水或输盘，庄家通吃。",
-          "ai_avg_confidence": 83.5,
+          "gpt_score": "1-1",
+          "gpt_analysis": "匈牙利纸面略强，xG 1.47对0.765也有优势，但Sharp资金却偏向客胜，说明市场对主让一并不服。预期总球2.2与BTTS 41%都在收缩空间，这类盘面最怕主队迟迟打不开。再看散户认知本就觉得差距不大，庄家却强行抬到让一，像极了制造主胜筹码堆积后反手平杀的路数。1-1是最稳的对冲解。",
+          "grok_score": "1-1",
+          "grok_analysis": "散户低估差距不大+双方状态一般，xG虽主优却配-1.0盘+预期2.2封顶+BTTS41%+保级激战红线。Sharp资金客胜+凯利死水，庄家已设平局闷杀，双方攻防接近，后防铁桶对冲，1-1完美平局绞杀主客让球资金，散户尸横遍野。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "主队xG表面占优，但亚盘强开-1.0完全脱离了双方差距不大的基本面认知。Sharp资金敏锐捕捉到了庄家的诱盘意图，果断介入客队。客队近期4平2负的战绩充满韧性，绝非任人宰割的羔羊。主队进攻端将陷入泥沼，1-1的平局不仅让主胜筹码化为泡影，更让深盘买家体验到被钝刀割肉的绝望，庄家通吃。",
+          "claude_score": "1-1",
+          "claude_analysis": "斯洛文尼亚近6场4平2负——平局制造机！匈牙利xG1.47vs客0.765剪刀差0.7看似碾压但让1球盘口虚高，Sharp资金流向客胜反向验证主队难以打穿。匈牙利近6场2胜2平2负状态平庸，预期总球2.2+BTTS41%低进球天花板。斯洛文尼亚平局DNA发作，1-1僵局让主让散户全灭。",
+          "ai_avg_confidence": 80.6,
           "value_kill_count": 4,
-          "model_agreement": false,
+          "model_agreement": true,
           "poisson": {
             "home_win": 66.0,
             "draw": 24.7,
@@ -18188,7 +18188,7 @@
             "model": 0.23
           }
         },
-        "recommend_score": 41.72,
+        "recommend_score": 51.72,
         "is_recommended": false
       },
       {
@@ -18295,7 +18295,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "2-2",
+          "predicted_score": "2-1",
           "home_win_pct": 45.9,
           "draw_pct": 25.3,
           "away_win_pct": 28.8,
@@ -18304,16 +18304,16 @@
           "over_under_2_5": "大",
           "both_score": "是",
           "gpt_score": "2-2",
-          "gpt_analysis": "荷乙补赛总球3.0，BTTS高达60%，这已经把对攻底色写在墙上。可两队积分只差1分，隐性xG也只差0.257，强强对话平局率超30%的预警非常关键。Sharp偏主并不代表能顺穿，反而容易把市场拽向主胜端。庄家最舒服的结局就是互有攻势、你来我往、最后谁也吃不干净。",
-          "grok_score": "2-2",
-          "grok_analysis": "必发主胜交易热度冷却，百家赔平局水位暴降，亚盘-1.0三小时无退但xG接近1.636 vs 1.379。强强对话平局率超30%+攻防接近必防平，Sharp资金追主胜实为诱，我扒到双方推特无伤但荷乙补赛无欲无求，庄家布置高球绞肉平局，2-2精准卡分坑杀散户。",
-          "gemini_score": "2-2",
-          "gemini_analysis": "预期总球高达3.0，BTTS突破60%，a7赔率大幅下探，这表明进球天花板已被掀开！但不要被主队高居第3的排名骗了，隐性xG1.636对1.379预示着防线互爆。强强对话平局率超30%，-1.0盘口是庄家故意放出的致命毒饵。2-2的进球大战将完美打穿盘口逻辑，让追捧主胜的资金灰飞烟灭！",
+          "gpt_analysis": "荷乙这场是强强对话，双方积分咬死，xG 1.636对1.379差距极小，却被摆成主让一，明显有借主场与排名造热之嫌。预期总球3.0、BTTS 60%把对攻信号直接写在脸上，而本地红线又提示强强对话平局率超30%。既然有主胜资金流入，庄家最舒服的结算不是主赢，而是高比分平局。2-2能同时绞杀胜负两端情绪。",
+          "grok_score": "2-1",
+          "grok_analysis": "散户见主队第3位+近6轮4胜+Sharp主胜，忽略强强对话平局率超30%+xG接近+预期3.0高BTTS60%+中游攻防必防平。亚盘-1.0+凯利方差，庄家诱热入局，后防隐伤让客队偷一，2-1赢球输盘卡分，精准屠杀追大胜与让球的贪婪散户。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "强强对话的巅峰算计！双方实力极其接近，平局拉力极大。但亚盘强硬顶在-1.0，且Sharp资金坚决涌入主队，说明庄家在利用平局预期进行洗盘。高预期总球数与60%的BTTS预示着进球大战，但主队将凭借微弱的xG优势在最后时刻完成绝杀。2-1的比分既打出正路，又精准卡在赢球输盘的边缘，利益最大化。",
           "claude_score": "2-2",
-          "claude_analysis": "53分对52分的强强对话，平局率超30%预警直接拉满！BTTS高达60%双方都有弹药，xG也极度接近。庄家开-1.0就是引诱散户觉得主场之利可以穿盘。两支争升级附加赛的队伍火拼到底，2-2握手言和把让球散户全部绞杀。",
-          "ai_avg_confidence": 81.9,
+          "claude_analysis": "威廉二世53分vs格拉夫52分仅差1分，强强对话平局率超30%红线亮起。xG1.636vs1.379剪刀差仅0.26根本撑不起让1球，预期总球3.0+BTTS60%说明双方互有攻守开放打法。Sharp资金虽流主胜但攻防必防平双重红线不可忽视，两队都要争升级附加赛谁都不敢输，2-2激战握手言和。",
+          "ai_avg_confidence": 77.8,
           "value_kill_count": 4,
-          "model_agreement": true,
+          "model_agreement": false,
           "poisson": {
             "home_win": 60.0,
             "draw": 23.8,
@@ -18656,7 +18656,7 @@
             "model": 0.3
           }
         },
-        "recommend_score": 82.38,
+        "recommend_score": 72.38,
         "is_recommended": true
       },
       {
@@ -18693,11 +18693,11 @@
         "away_rank": 9,
         "v2_odds_dict": {
           "a0": 14.0,
-          "a1": 5.2,
-          "a2": 3.6,
-          "a3": 3.5,
-          "a4": 5.0,
-          "a5": 8.75,
+          "a1": 5.55,
+          "a2": 3.7,
+          "a3": 3.4,
+          "a4": 4.85,
+          "a5": 8.35,
           "a6": 14.5,
           "a7": 23.0,
           "s00": 14.0,
@@ -18768,14 +18768,14 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "美国近况更亮眼，市场很容易先入为主，但隐性xG反倒是比利时更高，且盘口仅在客让一侧给出姿态，没有形成真正的压倒性结构。预期总球2.4、BTTS 48%都在指向僵持中的双向进球。又触发攻防接近必防平，最合理不是谁狠狠干碎谁，而是高质量拉扯后的均分。",
+          "gpt_analysis": "美国近期战绩极亮眼，主场声量也足，但xG却是1.091落后比利时1.302，说明表面走势优于底层质量。盘口给到受让1，双方预期总球2.4、BTTS 48%，标准的中低波动强强试探局。资金面无明显收割异常，反而意味着市场分歧较大，庄家更容易吃到平局回报。结合本地红线攻防接近必防平，1-1是最冷静也最恶心的答案。",
           "grok_score": "1-1",
-          "grok_analysis": "联网发现百家欧赔平局防线诡异拉低，亚盘1.0震荡微弱，xG客队1.302略高主队1.091。双方状态上佳无收割信号但攻防接近必防平，我截获美国主力推特动态疑伤+比利时客场稳定，庄家布置平局诱盘，1-1绞杀主队稍优认知的散户资金。",
+          "grok_analysis": "散户追主队近6场5胜+主场强势，却xG客优+亚盘1.0+预期2.4+BTTS48%+攻防接近必防平。无资金异常+凯利防主，庄家双向诱盘，双方状态上佳后防对冲，1-1闷平完美收割主客让球资金，散户天真幻想彻底粉碎。",
           "gemini_score": "1-1",
-          "gemini_analysis": "隐性xG极度接近，攻防数据在泊松分布中形成完美的死结。预期总球2.4且a7赔率高企，注定这是一场被锁死在3球以内的拉锯战。亚盘主受让1.0看似保护主队，实则是利用主场龙题材诱导下盘。1-1的比分不仅符合数学期望，更能将上下盘资金精准切割，庄家稳坐钓鱼台。",
+          "gemini_analysis": "散户被主队近6场5胜的华丽外衣迷惑，但底层xG揭示了客队更具威胁的进攻底蕴。亚盘1.0的让步在无收割异常的死水盘中显得极为暧昧。系统风控红线直接锁死攻防接近的平局终局。双方将在中场展开无效绞杀，1-1的比分是多方博弈后最圆滑的妥协，买卖双方的资金都将被庄家无情抽水，沦为零和博弈的牺牲品。",
           "claude_score": "1-1",
-          "claude_analysis": "美国主场5胜1平看似无敌，但受让1球说明比利时更强！比利时客场2胜2平不败金身加持，xG客队1.302反压主队。攻防接近必防平预警已触发，友谊赛两强试阵无需拼命。1-1各取一分，两头散户全部沦为韭菜肥料。",
-          "ai_avg_confidence": 81.7,
+          "claude_analysis": "比利时让1球但xG1.302仅微胜美国1.091，友谊赛客场深盘纯属虚设。美国近6场5胜1平+近5主场4胜1平主场堡垒坚固，攻防数据触发必防平红线。双方状态都极佳互不相让，预期总球2.4+BTTS48%中等偏低，友谊赛谁都不愿受伤。1-1平局让追比利时深盘散户吃瘪，美国受让轻松赢盘。",
+          "ai_avg_confidence": 79.8,
           "value_kill_count": 4,
           "model_agreement": true,
           "poisson": {
@@ -19213,16 +19213,16 @@
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "这场从头到脚都是平局体质：中游无欲无求、九配走平口、攻防数据接近必防平，三重信号一起压上来。主队xG略优却不够形成稳定碾压，客队也有1.218的反击底子，配合2.8总球和56% BTTS，最像双方各拿一个然后进入无聊拉锯。没有收割信号时，平局往往就是庄家默认答案。",
-          "grok_score": "2-2",
-          "grok_analysis": "必发交易无明显异动但百家赔平局水位异常低，亚盘-1.0无震荡，xG主队1.56客1.218接近。中游无欲无求+九配走平口预警，我扒到双方推特无伤停泄露但荷乙补赛保级激战，庄家经典高球平局绞肉机，2-2兵不血刃坑杀所有散户。",
+          "gpt_analysis": "埃因FC虽然主场让一，但xG仅1.56对1.218，没有形成足够碾压；预期总球2.8和BTTS 56%说明双方都有进球基础，却未到单边屠杀格局。更关键的是本地红线连续提示九配走平口、攻防接近必防平、中游无欲无求易平，这种信息密度已经把庄家意图写透了。主队被做成热门壳，真正的落点更像1-1这种软刀放血局。",
+          "grok_score": "1-1",
+          "grok_analysis": "散户忽略中游无欲无求+双方近6轮状态一般，xG主略优却配-1.0+预期2.8+BTTS56%+九配走平口红线。凯利死水+攻防接近，庄家设平局陷阱，双方后防稳固对冲，1-1易平闷杀所有让球资金，散户血本无归。",
           "gemini_score": "1-1",
-          "gemini_analysis": "中游球队无欲无求，九配走平口法则在此刻闪烁着致命红光！xG数据1.56对1.218看似主队占优，但-1.0的深盘完全违背了泊松分布的基础逻辑。预期总球2.8掩护了庄家做局的真实意图，1-1的平局将是双方默契的数学最优解，所有妄图博取主队穿盘的筹码都将沦为暗网的养料。",
+          "gemini_analysis": "中游球队无欲无求的默契局！主客双方积分接近，xG差距不足以支撑-1.0的深盘让步。本地经验风控红线狂闪：九配走平口，攻防数据极度接近。在这片毫无波澜的死水资金池中，双方根本没有死磕的动力。1-1的默契平局是数学期望的必然归宿，庄家利用深盘强行制造主队优势假象，实则将所有上盘资金拖入死局。",
           "claude_score": "1-1",
-          "claude_analysis": "九配走平口铁律加持！中游无欲无求易平预警狂闪！xG主1.56客1.22接近触发防平线，BTTS56%双方都能进球。两支中游球队补赛心态松散到极致，1-1闷平完美应验所有预警规则，散户让球票全线崩溃。",
-          "ai_avg_confidence": 84.9,
+          "claude_analysis": "三重平局红线同时亮灯：九配走平口+攻防数据必防平+中游无欲无求易平！埃因FC1.56vs埃门1.218xG差仅0.34撑不起让1球，双方积分中游（40vs37）毫无争胜动力。预期总球2.8+BTTS56%虽偏高但中游队交锋强度不够支撑大球，1-1默契球两队各取一分相忘于江湖。",
+          "ai_avg_confidence": 82.0,
           "value_kill_count": 4,
-          "model_agreement": false,
+          "model_agreement": true,
           "poisson": {
             "home_win": 61.8,
             "draw": 26.0,
@@ -19557,7 +19557,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 78.86,
+        "recommend_score": 88.86,
         "is_recommended": true
       },
       {
@@ -19664,7 +19664,7 @@
         },
         "h2h": [],
         "prediction": {
-          "predicted_score": "1-2",
+          "predicted_score": "1-1",
           "home_win_pct": 18.2,
           "draw_pct": 27.0,
           "away_win_pct": 54.8,
@@ -19672,15 +19672,15 @@
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
-          "gpt_score": "0-1",
-          "gpt_analysis": "葡萄牙隐性xG优势巨大，0.864对1.408已经把实力差写得够清楚，但Sharp资金却反流主胜，明显在给市场制造墨西哥抗衡幻觉。预期总球2.3不高，意味着客队即便占优也大概率是控制型收割，不会放成大比分烟花。最狠的剧本不是葡萄牙狂胜，而是稳稳一刀后把节奏锁死。",
-          "grok_score": "1-2",
-          "grok_analysis": "实时联网必发主胜热度冷却，百家欧赔客胜水位暴降，亚盘1.0三小时稳定但xG客队1.408碾压主队0.864。Sharp资金表面追主胜实反向护客，保级队激战，本地经验必防平，我截获墨西哥主力推特伤停疑云+葡萄牙客场状态上佳，庄家布置客胜爆冷坟墓，1-2血洗主队热钱。",
-          "gemini_score": "0-0",
-          "gemini_analysis": "客队xG1.408看似碾压主队0.864，但Sharp资金却诡异地涌向主队！预期总球仅2.3，a0赔率在我的精算模型中已跌至冰点。亚盘主受让1.0是庄家精心布置的迷魂阵，利用客队名气吸引筹码。0-0的枯燥比分将彻底冰封比赛，用纯粹冷血的数学概率碾碎散户对客队大胜的意淫！",
-          "claude_score": "0-1",
-          "claude_analysis": "葡萄牙让1球打墨西哥客场，xG客队1.408领先但墨西哥主场xG0.864也非吃素。Sharp资金诡异流向墨西哥主胜暗示庄家防冷！但葡萄牙底蕴终究压一头，0-1小胜刚好卡死让球盘，散户穿盘美梦在最后一刻碎成齑粉。",
-          "ai_avg_confidence": 86.9,
+          "gpt_score": "1-1",
+          "gpt_analysis": "葡萄牙底层优势很清晰，xG 1.408对0.864，但Sharp资金却逆流去主胜，说明市场并未单边倒向客队，这种分歧最容易把比赛拖进僵持。盘口客让1却配合预期总球2.3，明显不支持客队打出酣畅大胜。墨西哥主场虽不稳，但韧性与节奏控制仍在，足以把比赛拉进低比分拉扯。最终1-1最能同时埋掉客胜与主胜搏冷的筹码。",
+          "grok_score": "1-1",
+          "grok_analysis": "散户被Sharp主胜迷惑，忽略客队xG反超+近6场4胜+亚盘1.0+预期2.3+BTTS44%+保级激战。凯利方差防主+双方状态接近，庄家诱主热入局，后防隐患对冲，1-1平局完美绞杀主胜与让球散户，黑暗收割一网打尽。",
+          "gemini_score": "1-0",
+          "gemini_analysis": "终极反直觉绞杀！客队xG远超主队且近期状态极佳，散户必然疯狂追捧客胜。但亚盘1.0的死线配合Sharp资金诡异地流向主队，这是庄家布下的惊天陷阱！主队将在极其被动的局面下，利用客队压上后的致命失误完成一击必杀。1-0的超级冷门将把所有迷信xG和基本面的客胜筹码瞬间清零，资本的镰刀滴血不沾。",
+          "claude_score": "1-1",
+          "claude_analysis": "葡萄牙让1球xG1.408vs墨西哥0.864剪刀差0.54看似明确但友谊赛客场水分极大。致命信号：Sharp资金反向流主胜墨西哥！墨西哥主场虽1胜2平2负但面子工程必拼一口气。预期总球2.3+BTTS44%封死进球上限，葡萄牙友谊赛不会全力以赴，1-1平局让追客胜让球资金全部套牢。",
+          "ai_avg_confidence": 80.4,
           "value_kill_count": 4,
           "model_agreement": false,
           "poisson": {
