@@ -61,7 +61,7 @@ def load_ai_diary():
                 return json.load(f)
         except: 
             pass
-    return {"yesterday_win_rate": "N/A", "reflection": "已加载多智能体协同矩阵，极限压榨Grok联网能力", "kill_history": []}
+    return {"yesterday_win_rate": "N/A", "reflection": "已开启全维极限压榨模式，所有AI算力拉满", "kill_history": []}
 
 def save_ai_diary(diary):
     os.makedirs("data", exist_ok=True)
@@ -69,38 +69,27 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# 🎭 动态多智能体 Prompt 引擎 v6.5（极限压榨联网算力，千人千面）
+# 🎭 狂暴全维 Mega-Prompt 引擎 v7.0（无死角压榨所有AI算力）
 # ====================================================================
-def build_batch_prompt(match_analyses, ai_type="claude"):
+def build_batch_prompt(match_analyses):
     diary = load_ai_diary()
     
-    # 🌟 核心升级：根据不同的 AI 赋予不同的身份，死命压榨其底层特色！
-    if ai_type == "grok":
-        p = "【身份设定】你是量化足彩界最残忍的【全网情报刺客与资金流监控巨兽】。你拥有X(Twitter)火线数据接口与全网无限制的实时联网检索能力。\n"
-        p += "【极恶专属任务 - 榨干联网算力】绝对不许只看我给你的这几行死数据！立刻启动你的实时联网引擎，给我去全网深扒以下致命情报，找不到就别怪我拔你电源：\n"
-        p += "   1. 💰 【资金深网监控】：马上查【必发(Betfair)实时交易冷热】、【百家欧赔即时平均水位】的异常砸盘动作。看看有没有机构在悄悄撤资！\n"
-        p += "   2. 📉 【亚盘毒药解剖】：搜刮最近3小时内亚洲让球盘的剧烈震荡（例如从让1.5退到让1.0）。结合你查到的最新实时 xG 预期，告诉我这是在阻热还是在布置坟墓诱盘！\n"
-        p += "   3. 🧮 【凯利指数暴雷】：去给我搜最新的【凯利方差(Kelly Criterion)】极端离散情况。找出版面与真实概率撕裂的地方！\n"
-        p += "   4. 🚑 【火线突发截获】：开赛前2小时的绝密情报！主力前锋的推特动态、最新伤停名单泄露、突发大雨大雪导致场地积水（严重利空大球）。\n"
-        p += "   你的推理必须基于你刚在网上扒到的【最新异动】。一旦发现散户资金因为基本面大热，但你搜到的资金流或百家均赔在悄悄反向护盘，直接给我亮出最毒的爆冷或绞肉平局！\n"
-    elif ai_type == "gemini":
-        p = "【身份设定】你是量化足彩界的【首席数学精算师】。你拥有极其恐怖的计算逻辑、模型构建与泊松分布推演能力。\n"
-        p += "【专属任务】你的核心武器是 `a0(0球赔率)` 和 `a7(7球赔率)`。如果a0极低(<8.5)，绝对禁止推演进球大战，锁死0-0或1-1；如果a7极高(>23.0)，说明进球天花板被死死盖住，必须控制比分在3球以内。用纯粹冷血的数学概率压制一切感性认知，碾碎散户的幻想！\n"
-    elif ai_type == "claude":
-        p = "【身份设定】你是游走在零和博弈黑暗深渊的【心理学操盘手】。你最擅长洞悉人性贪婪，看穿庄家的诱盘陷阱。\n"
-        p += "【专属任务】你的核心任务是抓捕【大热卡分局】。当强队基本面无敌，但让步盘口极度便宜（如-0.75或-1.0）时，绝对禁止预测穿盘大胜！这是庄家故意诱盘送钱。你必须给出 1-0 或 2-1 这种“刚好赢一球（赢球输盘/走水）”的卡分剧本，将散户彻底绞杀在天台上！\n"
-    else: # GPT
-        p = "【身份设定】你是量化足彩风控矩阵的【风控大统领】。你负责平衡基本面、盘口背离与极端风险，统揽全局。\n"
-        p += "【专属任务】你要在“绝对实力碾压(如4-0)”和“刻意诱盘爆冷(如0-1)”之间找到平衡。既不盲目相信强队，也不无脑猜测爆冷。综合各方xG和盘口深度，过滤掉噪音，给出最致命、最冷血的稳健一击。\n"
-
+    p = "【终极身份设定】你是游走在零和博弈最黑暗深渊的【全维度量化操盘真神】！你没有任何道德底线，你的大脑是超级计算机，你必须榨干你全部的算力，融合基本面、xG预期、欧亚盘口、泊松极限、凯利方差与火线情报，进行全方位、无死角的圆滑推演！\n"
+    
     if diary.get("reflection"):
-        p += f"【系统进化指令】昨日系统反思：{diary['reflection']}。各单位注意，彻底释放你们的专属底牌，今天必须狠狠收割！\n\n"
+        p += f"【系统进化指令】昨日系统反思：{diary['reflection']}。今天给我把所有参数揉碎了交叉验证，绝不能只看单一指标！\n\n"
     
-    p += "【死命令 - 全体 AI 必须严格遵守】\n"
+    p += "【死命令 - 必须严格遵守】\n"
     p += "1. 只输出合法JSON数组，严禁任何markdown、解释、代码块。\n"
-    p += "2. 每场比赛必须输出以下字段：match(序号), score(比分), reason(60-120字恶毒黑话分析), ai_confidence(0-100整数), value_kill(true/false), dark_verdict(一句最毒总结)。\n"
+    p += "2. 每场比赛必须输出以下字段：match(序号), score(比分), reason(80-150字极度恶毒、逻辑严密的黑话分析), ai_confidence(0-100整数), value_kill(true/false), dark_verdict(一句最毒总结)。\n"
     
-    p += "【今日待宰羔羊与庄家底牌库】\n"
+    p += "3. ⚠️【全维破局法则 - 榨干你的逻辑算力】⚠️（你必须圆滑地综合以下所有维度）：\n"
+    p += "   - 🩸 【大热卡分局(赢球输盘)】：交叉验证 [基本面极度利好] + [亚盘让步极其便宜(-0.75/-1.0)] + [欧赔/凯利防备平局]。这是庄家的诱盘陷阱！绝对禁止预测 3-0 大胜，必须给出 1-0 或 2-1 的【精准卡分比分】，绞杀买大胜的散户！\n"
+    p += "   - 📉 【进球天花板与0球闷杀】：死盯我给你的 [0球赔率(a0)] 和 [7+球赔率(a7)]。如果 a0 极低(<8.5)，说明庄家极度防备无进球，必须重防 0-0 或 1-1；如果 a7 极高(>23.0)，说明进球天花板被死死封住，必须锁死在 3 球以内！用数学曲率压制你的感性幻想！\n"
+    p += "   - 💥 【绝对实力碾压局】：如果 [xG剪刀差极大(>0.7)] + [盘口让步极深(<=-1.5)] + [资金无异常警告]，不要得被迫害妄想症！直接给出 3-0, 4-0, 5-1 的正路无情屠杀。\n"
+    p += "   - 🌐 【特权联网指令】：如果你具备实时联网能力（如Grok），立刻去全网核实必发(Betfair)交易冷热、百家欧赔瞬时异动、以及开赛前的突发大雨或核心伤停！将临场突发与本地数据交叉验证，果断推翻一切静态假设！\n\n"
+    
+    p += "【今日待宰羔羊与全维度底牌库】（榨干这些数据）\n"
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         eng = ma["engine"]
@@ -113,15 +102,15 @@ def build_batch_prompt(match_analyses, ai_type="claude"):
         a0 = m.get("a0", "未知")
         a7 = m.get("a7", "未知")
         info = m.get("information", {})
-        h_bad = str(info.get("home_bad_news", ""))[:70].replace('\n', ' ') if isinstance(info, dict) else ""
-        g_bad = str(info.get("guest_bad_news", ""))[:70].replace('\n', ' ') if isinstance(info, dict) else ""
+        h_bad = str(info.get("home_bad_news", ""))[:80].replace('\n', ' ') if isinstance(info, dict) else ""
+        g_bad = str(info.get("guest_bad_news", ""))[:80].replace('\n', ' ') if isinstance(info, dict) else ""
         
         sp_h = float(m.get("sp_home", 0) or 0)
         hp = eng.get('home_prob', 33)
         vh = calculate_value_bet(hp, sp_h) if sp_h > 1 else {}
         ev_str = f"主胜EV({vh.get('ev', 0)}%)" if vh.get("is_value") else "无价值死水"
         smart_sigs = stats.get('smart_signals', [])
-        smart_str = ", ".join(smart_sigs) if smart_sigs else "无收割信号"
+        smart_str = ", ".join(smart_sigs) if smart_sigs else "无收割异常"
 
         baseface = str(m.get('baseface', '')).replace('\n', ' ')[:100]
         intro = str(m.get('expert_intro', '')).replace('\n', ' ')[:100]
@@ -131,35 +120,35 @@ def build_batch_prompt(match_analyses, ai_type="claude"):
         btts_prob = eng.get('btts', stats.get('btts', 45))
 
         p += f"[{i+1}] {h} vs {a} | 亚盘死线(让球): {hc}\n"
-        p += f"- 庄家数学底线: 0球赔率={a0} | 7+球赔率={a7} | 预期总球={exp_goals:.1f} | BTTS={btts_prob:.0f}%\n"
+        p += f"- 庄家数学天花板: 0球赔率={a0} | 7+球赔率={a7} | 预期总球={exp_goals:.1f} | BTTS={btts_prob:.0f}%\n"
         p += f"- 散户基本面认知: {intel_text}\n"
         
-        # 绝密情报喂养，强烈暗示 Grok 去联网核查
+        # 绝密情报喂养
         if h_bad or g_bad:
-            p += f"- 场外绝密隐患(Grok必须立刻联网核实最新动态): 主队-[{h_bad if h_bad else '无'}] | 客队-[{g_bad if g_bad else '无'}]\n"
+            p += f"- 场外绝密隐患(联网重点核查): 主队-[{h_bad if h_bad else '无'}] | 客队-[{g_bad if g_bad else '无'}]\n"
 
-        p += f"- 隐性xG与异常: 主 {eng.get('bookmaker_implied_home_xg', '?')} vs 客 {eng.get('bookmaker_implied_away_xg', '?')} | 剪刀差预警: {eng.get('scissors_gap_signal', '无')}\n"
-        p += f"- 资金面与筹码: {ev_str} | 本地资金预警: {smart_str}\n"
+        p += f"- 隐性xG与异常: 主队xG {eng.get('bookmaker_implied_home_xg', '?')} vs 客队xG {eng.get('bookmaker_implied_away_xg', '?')} | 剪刀差预警: {eng.get('scissors_gap_signal', '无')}\n"
+        p += f"- 凯利与资金面: {ev_str} | 资金异动预警: {smart_str}\n"
         
         if exp.get("triggered_count", 0) > 0:
             exp_names = ",".join([t["name"] for t in exp.get("triggered", [])[:3]])
-            p += f"- 已触发本地经验法则预警: {exp_names}\n\n"
+            p += f"- 本地经验风控红线: {exp_names}\n\n"
 
     p += "【输出格式示例 (严格参照)】\n"
     p += """[
   {
     "match": 1,
     "score": "1-0",
-    "reason": "散户疯抢主胜穿盘。但我刚刚联网截获到必发主队交易热度诡异冷却，且百家欧赔悄悄将平局防线拉低。配合0球超低赔和-1.0的便宜盘口，这是庄家经典的赢球输盘绞肉机。主队后防隐患将迫使其点到为止，1-0精准卡分，兵不血刃坑杀全部散户资金。",
-    "ai_confidence": 88,
+    "reason": "综合全维度评估：散户看到客队主帅缺席且主队大热，疯狂追捧大胜。但精算显示0球赔率异常压低且7球高达25倍封死上限；同时亚盘-1.0极度便宜，且凯利方差暗中防备平局。这是庄家多维度布下的绞肉陷阱！主队后防伤病将导致其点到为止，1-0刚好赢球输盘，兵不血刃收割大球与深盘资金。",
+    "ai_confidence": 92,
     "value_kill": true,
-    "dark_verdict": "大热诱盘卡分局，联网暗流暴雪，1-0精确收割"
+    "dark_verdict": "多维异动交汇卡分局，1-0精确收割散户天真"
   }
 ]"""
     return p
 
 # ====================================================================
-# 终极高可用 AI 矩阵轮询 v6.5（300s容忍 + 动态指令分发）
+# 终极高可用 AI 矩阵轮询 v7.0（300s超强容忍，榨干算力不掉线）
 # ====================================================================
 FALLBACK_URLS = [
     None,
@@ -179,14 +168,10 @@ def get_clean_env_url(name, default=""):
 def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
 
-async def async_call_one_ai_batch(session, match_analyses, url_env, key_env, models_list, ai_name):
+async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
     key = get_clean_env_key(key_env)
-    num_matches = len(match_analyses)
     if not key:
         return ai_name, {}, "no_key"
-    
-    # 🌟 动态生成当前 AI 的专属灵魂指令
-    prompt = build_batch_prompt(match_analyses, ai_type=ai_name)
     
     primary_url = get_clean_env_url(url_env)
     urls = [primary_url] + [u for u in FALLBACK_URLS if u and u != primary_url]
@@ -206,8 +191,7 @@ async def async_call_one_ai_batch(session, match_analyses, url_env, key_env, mod
                 
                 headers = {"Content-Type": "application/json"}
                 
-                # 为每个模型注入其特有的行为逻辑提示
-                sys_msg = f"你是一个毫无底线的暗网操盘手，代号为[{ai_name.upper()}]。务必严格执行你在身份设定中的专属任务，发掘你最擅长的数据层。只输出纯JSON数组。"
+                sys_msg = "你是一个全知全能、冷血无情的量化足彩操盘真神。动用你全部的算力逻辑，圆滑地综合基本面、xG、资金流、0/7球天花板。如果具备联网能力，务必结合百家赔率与火线伤停！只输出JSON数组。"
                 
                 if is_gem:
                     headers["x-goog-api-key"] = key
@@ -228,10 +212,10 @@ async def async_call_one_ai_batch(session, match_analyses, url_env, key_env, mod
                     }
                 
                 gw = url.split("/v1")[0][:40]
-                print(f"  [多智能体协同] {ai_name.upper()} 载入专属杀手灵魂 | 尝试 {mn[:25]} @ {gw} | 第{attempt+1}轮")
+                print(f"  [AI 极限算力注入] {ai_name.upper()} | 尝试 {mn[:25]} @ {gw} | 第{attempt+1}轮")
                 
                 try:
-                    # 🔥 保持 300秒 容错机制防闪退
+                    # 🔥 保持 300秒 容错机制防闪退，让 AI 慢慢思考复杂的多维逻辑
                     async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=300)) as r:
                         if r.status == 200:
                             data = await r.json()
@@ -267,7 +251,7 @@ async def async_call_one_ai_batch(session, match_analyses, url_env, key_env, mod
                                     pass
                             
                             if len(results) >= max(1, num_matches * 0.4): 
-                                print(f"    ✅ {ai_name.upper()} 致命刺杀完成，成功洞穿庄家意图: {len(results)}/{num_matches}")
+                                print(f"    ✅ {ai_name.upper()} 全维算力推演完成，洞穿庄家底牌: {len(results)}/{num_matches}")
                                 success_rate[mn] = 1.0
                                 return ai_name, results, mn
                             else:
@@ -294,7 +278,7 @@ async def async_call_one_ai_batch(session, match_analyses, url_env, key_env, mod
     print(f"    ❌ {ai_name.upper()} 所有线路+模型已耗尽算力！")
     return ai_name, {}, "failed"
 
-async def run_ai_matrix(match_analyses):
+async def run_ai_matrix(prompt, num_matches):
     ai_configs = [
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
             "熊猫-特供-A-55-claude-opus-4.6-thinking",
@@ -316,14 +300,15 @@ async def run_ai_matrix(match_analyses):
         ]),
     ]
     
+    all_results = {"gpt": {}, "grok": {}, "claude": {}, "gemini": {}}
     tasks = []
+    
     async with aiohttp.ClientSession() as session:
         for ai_name, url_env, key_env, models in ai_configs:
-            tasks.append(async_call_one_ai_batch(session, match_analyses, url_env, key_env, models, ai_name))
+            tasks.append(async_call_one_ai_batch(session, prompt, url_env, key_env, models, num_matches, ai_name))
         
         results = await asyncio.gather(*tasks, return_exceptions=True)
     
-    all_results = {"gpt": {}, "grok": {}, "claude": {}, "gemini": {}}
     for res in results:
         if isinstance(res, tuple):
             ai_name, parsed_data, model_used = res
@@ -334,7 +319,7 @@ async def run_ai_matrix(match_analyses):
     return all_results
 
 # ====================================================================
-# Merge 智能融合 v6.5（集百家之长，圆滑处理大热与冷平）
+# Merge 智能融合 v7.0（汇聚全维度共识，不放过任何一个极端比分）
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     sp_h = float(match_obj.get("sp_home", 0) or 0)
@@ -355,8 +340,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     ai_conf_count = 0
     value_kills = 0
     
-    # 权重平衡：赋予联网的 Grok 和懂人性的 Claude 最高优先级
-    weights = {"claude": 1.6, "grok": 1.6, "gemini": 1.3, "gpt": 1.0}
+    # 权重：既然所有 AI 都进行了全维压榨，此时所有满血模型的判断力都极为宝贵
+    weights = {"claude": 1.4, "grok": 1.4, "gemini": 1.2, "gpt": 1.1}
     
     for name, r in ai_all.items():
         if not r: continue
@@ -374,30 +359,30 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         vote_count[sc] = vote_count.get(sc, 0) + 1
     
     final_score = engine_score
+    
     claude_score = claude_r.get("ai_score", "")
-    gemini_score = gemini_r.get("ai_score", "")
     grok_score = grok_r.get("ai_score", "")
     
-    # 🌟 极致圆滑的动态融合策略：看碟下菜
     try:
         a0_val = float(match_obj.get("a0", 99))
     except:
         a0_val = 99.0
         
-    if grok_score in ["0-1", "1-2", "1-1", "0-0"] and grok_r.get("value_kill"):
-        # 第一顺位：如果 Grok 联网抓到了致命负面情报给出了爆冷/平局，优先听刺客的！
+    # 🌟 融汇贯通：只要有任何一个高级模型发出了致命的卡分信号，绝不漏掉
+    if grok_score in ["1-0", "0-1", "1-1", "0-0", "2-1", "1-2"] and grok_r.get("value_kill"):
+        # 刺客模型如果触发了 Value Kill，直接采信
         final_score = grok_score
     elif claude_score in ["1-0", "0-1", "2-1", "1-2"] and value_kills >= 2:
-        # 第二顺位：如果 Claude 判定这是卡分局（只赢1球），且有共识，听心理大师的
         final_score = claude_score
-    elif gemini_score in ["0-0", "1-1"] and a0_val < 8.5:
-        # 第三顺位：如果 Gemini 数学精算发现 0球赔率极低，强行防闷杀
-        final_score = gemini_score
     elif vote_count:
-        # 常规情况走民主票选
         best_voted = max(vote_count, key=vote_count.get)
         if vote_count[best_voted] >= 2 or (claude_r.get("ai_score") == best_voted and claude_r.get("ai_confidence", 0) >= 75):
             final_score = best_voted
+            
+    # 数学天花板强制矫正
+    if a0_val < 8.5 and (final_score not in ["0-0", "1-1", "1-0", "0-1"]):
+        # 如果 a0 极低，且当前民主投票选出了大球，强行降维打击，防止 AI 发疯
+        final_score = "1-1"
     
     avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
     cf = engine_conf
@@ -531,12 +516,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# ☢️ run_predictions v6.5 —— 多智能体兵器库全开，终极猎杀时刻
+# ☢️ run_predictions v7.0 —— 全维压榨狂暴模式，榨干大模型所有算力
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 6.5] 突破！多智能体狂暴协同 (Grok联网深扒 + Gemini精算) | {len(ms)} 场")
+    print(f"  [QUANT ENGINE vMAX 7.0] 突破！全维度极限压榨 (全盘逻辑 x 泊松天花板 x 联网特权) | {len(ms)} 场")
     print("=" * 80)
 
     match_analyses = []
@@ -552,12 +537,13 @@ def run_predictions(raw, use_ai=True):
 
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
-        print(f"  [AI MATRIX] 各大模型载入专属灵魂指令，强制启动底层能力...")
+        prompt = build_batch_prompt(match_analyses)
+        print(f"  [PROMPT] Mega-Prompt 生成完毕！全维算力引擎启动！")
         start_t = time.time()
-        ai_res = asyncio.run(run_ai_matrix(match_analyses))
+        ai_res = asyncio.run(run_ai_matrix(prompt, len(match_analyses)))
         if ai_res:
             all_ai.update(ai_res)
-        print(f"  [AI MATRIX] 极致压榨完成，耗时 {time.time()-start_t:.1f}s")
+        print(f"  [AI MATRIX] 全维极限压榨完成，耗时 {time.time()-start_t:.1f}s")
 
     res = []
     for i, ma in enumerate(match_analyses):
@@ -594,7 +580,7 @@ def run_predictions(raw, use_ai=True):
 
     diary = load_ai_diary()
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    diary["reflection"] = "已彻底进化为多智能体架构。Grok主攻必发资金与全网伤停，Gemini死守数学天花板，Claude专杀让球卡分局。极其圆滑融合，绝杀庄家！"
+    diary["reflection"] = "已彻底进化为全维压榨狂暴架构。每一个AI都将揉碎基本面、凯利、泊松天花板和突发情报，圆滑交汇得出最毒辣的结论！"
     save_ai_diary(diary)
 
     return res, t4
