@@ -353,8 +353,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
     
-    # 按AI类型设置超时（Grok联网搜索需要更多时间）
-    timeout_map = {"claude": 300, "grok": 200, "gpt": 150, "gemini": 200}
+    # 按AI类型设置超时（Claude thinking实测需856秒！必须给够）
+    timeout_map = {"claude": 1200, "grok": 250, "gpt": 200, "gemini": 300}
     timeout_sec = timeout_map.get(ai_name, 180)
     
     best_results = {}
@@ -430,19 +430,24 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 headers["x-goog-api-key"] = key
                 payload = {
                     "contents": [{"parts": [{"text": prompt}]}],
-                    "generationConfig": {"temperature": ai_temp, "topP": 0.92},
+                    "generationConfig": {"temperature": ai_temp},
                     "systemInstruction": {"parts": [{"text": sys_msg}]}
                 }
             else:
                 headers["Authorization"] = f"Bearer {key}"
-                payload = {
+                # Claude API不允许temperature+top_p同时存在，代理会自动注入top_p
+                # 所以Claude不传temperature（thinking模型用默认值效果最好）
+                # 其他AI正常传temperature
+                base_payload = {
                     "model": mn,
                     "messages": [
                         {"role": "system", "content": sys_msg},
                         {"role": "user", "content": prompt}
-                    ],
-                    "temperature": ai_temp
+                    ]
                 }
+                if ai_name != "claude":
+                    base_payload["temperature"] = ai_temp
+                payload = base_payload
             
             gw = url.split("/v1")[0][:35]
             print(f"  [⏳{timeout_sec}s] {ai_name.upper()} | {mn[:22]} @ {gw}")
