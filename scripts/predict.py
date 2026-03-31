@@ -321,7 +321,7 @@ def build_batch_prompt(match_analyses):
     return p
 
 # ====================================================================
-# 终极高可用 AI 矩阵轮询 v2.0 — 1500秒超长容错等待版
+# 终极高可用 AI 矩阵轮询 v2.0 — 原版一字不动
 # ====================================================================
 FALLBACK_URLS = [
     None,
@@ -342,109 +342,148 @@ def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
 
 async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
+    """
+    代理实测：全部非流式，Claude thinking需120-300s，GPT/Grok 70-100s，Gemini 120s
+    策略：按AI类型给超时 + 500错误直接跳模型（上游崩≠URL问题）+ 每模型最多试2个URL
+    """
     key = get_clean_env_key(key_env)
     if not key:
         return ai_name, {}, "no_key"
     
     primary_url = get_clean_env_url(url_env)
-    urls = [primary_url] + [u for u in FALLBACK_URLS if u and u != primary_url]
+    backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
+    urls = [primary_url] + backup
     
-    success_rate = {mn: 1.0 for mn in models_list}
+    # 按AI类型设置超时（基于实测数据）
+    timeout_map = {"claude": 300, "grok": 150, "gpt": 150, "gemini": 200}
+    timeout_sec = timeout_map.get(ai_name, 180)
     
-    for attempt in range(3):
-        for mn in sorted(models_list, key=lambda x: success_rate[x], reverse=True):
-            for base_url in urls:
-                if not base_url:
-                    continue
+    best_results = {}
+    best_model = ""
+    
+    for mn in models_list:
+        skip_model = False
+        
+        for base_url in urls:
+            if not base_url or skip_model:
+                continue
+                
+            is_gem = "generateContent" in base_url
+            url = base_url.rstrip("/") 
+            if not is_gem and "chat/completions" not in url:
+                url += "/chat/completions"
+            
+            headers = {"Content-Type": "application/json"}
+            if is_gem:
+                headers["x-goog-api-key"] = key
+                payload = {
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {"temperature": 0.12, "topP": 0.9},
+                    "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason字段60-110字恶毒黑话，句号结尾。"}]}
+                }
+            else:
+                headers["Authorization"] = f"Bearer {key}"
+                payload = {
+                    "model": mn,
+                    "messages": [
+                        {"role": "system", "content": "你是一个毫无道德底线、极度冷血的暗网终极操盘手。只输出纯JSON数组，无任何多余文字。reason字段必须用最恶毒黑话揭穿庄家血洗散户的杀局，限60-110字，极度鄙视散户，句号结束。"},
+                        {"role": "user", "content": prompt}
+                    ],
+                    "temperature": 0.12
+                }
+            
+            gw = url.split("/v1")[0][:35]
+            print(f"  [⏳{timeout_sec}s] {ai_name.upper()} | {mn[:22]} @ {gw}")
+            t0 = time.time()
+            
+            try:
+                async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=timeout_sec, connect=15)) as r:
+                    elapsed = round(time.time() - t0, 1)
                     
-                is_gem = "generateContent" in base_url
-                url = base_url.rstrip("/") 
-                if not is_gem and "chat/completions" not in url:
-                    url += "/chat/completions"
-                
-                headers = {"Content-Type": "application/json"}
-                if is_gem:
-                    headers["x-goog-api-key"] = key
-                    payload = {
-                        "contents": [{"parts": [{"text": prompt}]}],
-                        "generationConfig": {"temperature": 0.12, "topP": 0.9},
-                        "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason必须是毫无道德底线的暗黑杀猪盘解剖，使用极度恶毒黑话，字数60-110字，冷血傲慢，句号结尾。"}]}
-                    }
-                else:
-                    headers["Authorization"] = f"Bearer {key}"
-                    payload = {
-                        "model": mn,
-                        "messages": [
-                            {"role": "system", "content": "你是一个毫无道德底线、极度冷血的暗网终极操盘手。只输出纯JSON数组，无任何多余文字。reason字段必须用最恶毒黑话揭穿庄家血洗散户的杀局，限60-110字，极度鄙视散户，句号结束。"},
-                            {"role": "user", "content": prompt}
-                        ],
-                        "temperature": 0.12
-                    }
-                
-                gw = url.split("/v1")[0][:40]
-                print(f"  [AI 极致压榨] {ai_name.upper()} | 尝试 {mn[:25]} @ {gw} | 第{attempt+1}轮")
-                
-                try:
-                    # 🔥 核心修改点：设置极长超时等待时长 (total=1500秒，即25分钟)。
-                    # 保证 AI 只要还在慢慢生成数据，无论多慢，客户端都死守连接绝不断开！
-                    custom_timeout = aiohttp.ClientTimeout(total=1500, sock_read=1500)
-                    async with session.post(url, headers=headers, json=payload, timeout=custom_timeout) as r:
-                        if r.status == 200:
-                            data = await r.json()
-                            raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
-                            
-                            clean = re.sub(r"```[\w]*", "", raw_text).strip()
+                    if r.status == 200:
+                        data = await r.json()
+                        raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
+                        
+                        clean = re.sub(r"```[\w]*", "", raw_text).strip()
+                        start = clean.find("[")
+                        end = clean.rfind("]") + 1
+                        if start == -1 or end == 0:
+                            clean = re.sub(r"[^\[\]{}:,\"'0-9a-zA-Z\u4e00-\u9fa5\s\.\-\+\(\)]", "", clean)
                             start = clean.find("[")
                             end = clean.rfind("]") + 1
-                            if start == -1 or end == 0:
-                                clean = re.sub(r"[^\[\]{}:,\"'0-9a-zA-Z\u4e00-\u9fa5\s\.\-\+\(\)]", "", clean)
-                                start = clean.find("[")
-                                end = clean.rfind("]") + 1
-                            
-                            results = {}
-                            if start != -1 and end > start:
-                                try:
-                                    arr = json.loads(clean[start:end])
-                                    if isinstance(arr, list):
-                                        for item in arr:
-                                            if item.get("match") and item.get("score"):
-                                                mid = item["match"]
-                                                results[mid] = {
-                                                    "ai_score": item.get("score"),
-                                                    "analysis": str(item.get("reason", "")).strip(),
-                                                    "ai_confidence": int(item.get("ai_confidence", 60)),
-                                                    "value_kill": bool(item.get("value_kill", False)),
-                                                    "dark_verdict": str(item.get("dark_verdict", ""))
-                                                }
-                                except:
-                                    pass
-                            
-                            if len(results) >= max(1, num_matches * 0.5):
-                                print(f"    ✅ {ai_name.upper()} 压榨成功: {len(results)}/{num_matches} (模型: {mn[:25]})")
-                                success_rate[mn] = 1.0
-                                return ai_name, results, mn
-                            else:
-                                print(f"    ⚠️ 解析不足，切换...")
                         
-                        elif r.status == 429:
-                            sleep_time = 2 ** attempt * 5
-                            print(f"    🔥 429限流！休眠 {sleep_time}s 继续压榨...")
-                            await asyncio.sleep(sleep_time)
-                            continue
+                        results = {}
+                        if start != -1 and end > start:
+                            try:
+                                arr = json.loads(clean[start:end])
+                                if isinstance(arr, list):
+                                    for item in arr:
+                                        if item.get("match") and item.get("score"):
+                                            results[item["match"]] = {
+                                                "ai_score": item.get("score"),
+                                                "analysis": str(item.get("reason", "")).strip()[:200],
+                                                "ai_confidence": int(item.get("ai_confidence", 60)),
+                                                "value_kill": bool(item.get("value_kill", False)),
+                                                "dark_verdict": str(item.get("dark_verdict", ""))
+                                            }
+                            except:
+                                pass
+                        
+                        if len(results) >= max(1, num_matches * 0.5):
+                            print(f"    ✅ {ai_name.upper()} 成功: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
+                            return ai_name, results, mn
+                        
+                        if len(results) > len(best_results):
+                            best_results = results
+                            best_model = mn
+                            print(f"    ⚠️ 部分 {len(results)}/{num_matches} | {elapsed}s")
                         else:
-                            print(f"    ⚠️ HTTP {r.status} - 切换线路...")
-                
-                except asyncio.TimeoutError:
-                    print(f"    ⏰ 无响应死机(1500s) - 第{attempt+1}轮重试...")
-                except Exception as e:
-                    err = str(e)[:50]
-                    print(f"    ⚠️ 异常 {err} - 切换...")
-                
-                await asyncio.sleep(0.4)
+                            print(f"    ⚠️ 解析不足 {len(results)}条 | {elapsed}s")
+                    
+                    elif r.status == 429:
+                        print(f"    🔥 429限流 | {elapsed}s")
+                        await asyncio.sleep(3)
+                        continue
+                    
+                    elif r.status >= 500:
+                        # 500/502/503 = 上游模型崩溃，换URL没用，直接跳这个模型
+                        print(f"    💀 HTTP {r.status} 上游崩溃 | {elapsed}s → 跳过此模型")
+                        skip_model = True
+                        break
+                    
+                    else:
+                        print(f"    ⚠️ HTTP {r.status} | {elapsed}s")
+            
+            except asyncio.TimeoutError:
+                elapsed = round(time.time() - t0, 1)
+                # 超时 = 模型卡死，换URL大概率也卡，直接跳模型
+                print(f"    ⏰ {elapsed}s超时 → 跳过此模型")
+                skip_model = True
+                break
+            
+            except Exception as e:
+                elapsed = round(time.time() - t0, 1)
+                err = str(e)[:40]
+                # 连接错误才换URL，其他错误跳模型
+                if "connect" in err.lower() or "resolve" in err.lower():
+                    print(f"    ⚠️ 连接失败 {err} | {elapsed}s → 换URL")
+                else:
+                    print(f"    ⚠️ {err} | {elapsed}s → 跳过此模型")
+                    skip_model = True
+                    break
+            
+            await asyncio.sleep(0.3)
         
-        await asyncio.sleep(1.5)
+        # 当前模型结束，检查是否够用
+        if len(best_results) >= max(1, num_matches * 0.4):
+            print(f"    ✅ {ai_name.upper()} 采用: {len(best_results)}/{num_matches} ({best_model[:20]})")
+            return ai_name, best_results, best_model
     
-    print(f"    ❌ {ai_name.upper()} 所有线路+模型已压榨至死！")
+    if best_results:
+        print(f"    ⚠️ {ai_name.upper()} 勉强采用: {len(best_results)}条")
+        return ai_name, best_results, best_model
+    
+    print(f"    ❌ {ai_name.upper()} 全部失败")
     return ai_name, {}, "failed"
 
 async def run_ai_matrix(prompt, num_matches):
@@ -772,9 +811,7 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
     cold_count = len([r for r in res if r.get("prediction", {}).get("cold_door", {}).get("is_cold_door")])
-    diary["reflection"] = f"vMAX3.3冷门猎手 | {cold_count}场冷门信号 | 5层增强管线 | 1500s超长死守"
+    diary["reflection"] = f"vMAX3.3冷门猎手 | {cold_count}场冷门信号 | 5层增强管线"
     save_ai_diary(diary)
 
     return res, t4
-
-
