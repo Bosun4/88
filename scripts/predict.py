@@ -62,10 +62,10 @@ def parse_score(s):
 # 🧊 冷门猎手引擎 + 深度赔率映射（v3.3新增，不影响原有逻辑）
 # ====================================================================
 REALISTIC_MAP = {
-    "ultra_low": ["0-0", "1-0", "0-1", "1-1"],
-    "low": ["1-0", "0-1", "1-1", "2-0", "0-2", "2-1", "1-2"],
-    "medium": ["2-1", "1-2", "2-0", "0-2", "1-1", "2-2", "3-1", "1-3"],
-    "high": ["2-1", "1-2", "3-1", "1-3", "2-2", "3-0", "0-3", "3-2", "2-3"]
+    "ultra_low": ["0-0", "1-0", "0-1", "1-1", "2-0", "0-2"],
+    "low": ["1-0", "0-1", "1-1", "2-0", "0-2", "2-1", "1-2", "0-0"],
+    "medium": ["1-0", "0-1", "1-1", "2-0", "0-2", "2-1", "1-2", "2-2", "3-0", "0-3", "3-1", "1-3"],
+    "high": ["2-1", "1-2", "3-1", "1-3", "2-2", "3-0", "0-3", "3-2", "2-3", "4-0", "0-4", "4-1", "1-4"]
 }
 
 class ColdDoorDetector:
@@ -141,9 +141,9 @@ def calibrate_realistic_score(current_score, sp_h, sp_d, sp_a, cold_door):
         return current_score  # 顶级冷门允许原预测
 
     implied_total = (1/sp_h + 1/sp_d + 1/sp_a) * 100 if sp_h > 1 and sp_d > 1 and sp_a > 1 else 300
-    if implied_total < 280: allowed = REALISTIC_MAP["ultra_low"]
-    elif implied_total < 310: allowed = REALISTIC_MAP["low"]
-    elif implied_total < 340: allowed = REALISTIC_MAP["medium"]
+    if implied_total < 270: allowed = REALISTIC_MAP["ultra_low"]
+    elif implied_total < 300: allowed = REALISTIC_MAP["low"]
+    elif implied_total < 330: allowed = REALISTIC_MAP["medium"]
     else: allowed = REALISTIC_MAP["high"]
 
     if current_score in allowed:
@@ -188,16 +188,24 @@ def build_batch_prompt(match_analyses):
     p += "【死命令 - 必须严格遵守】\n"
     p += "1. 只输出合法JSON数组，严禁任何markdown、解释、代码块。\n"
     p += "2. 每场比赛必须输出以下字段：match(序号), score(比分), reason(60-110字极度恶毒黑话), ai_confidence(0-100整数), value_kill(true/false 高EV杀猪机会), dark_verdict(一句最毒总结)。\n"
-    p += "3. reason逻辑链：散户愚蠢共识(基本面诈骗) → 庄家嗜血陷阱(xG+盘口背离) → 最终屠杀结局。必须充满血洗散户、屠宰场、吸筹绞肉机、死亡陷阱、做局喂毒、资本收割、无底线诱多等黑话，语气极度傲慢冷血，句号结尾。\n"
+    p += "3. reason字段80-150字，必须包含具体数据（赔率数字、xG、CRS排名），用你自己最擅长的方式分析。语气犀利冷血，句号结尾。\n"
     p += "4. ai_confidence必须真实反映你对这个屠杀预测的把握度。\n"
-    p += "5. ⚠️你的比分必须从【庄家CRS赔率TOP5】中选取，除非你有极强理由偏离！CRS赔率越低=庄家认为越可能发生。\n\n"
+    p += "5. ⚠️比分选择必须匹配比赛类型（见下方三种模式），CRS赔率是参考框架但不是枷锁！\n\n"
     
-    p += "【核心赔率分析法则（你必须按此顺序推理）】\n"
-    p += "① 先看【总进球分布】：a0(0球)到a7(7+球)的赔率。赔率越低=庄家认为越可能。a0<9=重防0球; a2或a3最低=庄家锁定2-3球区间。\n"
-    p += "② 再看【CRS比分赔率】：1-0赔6.0 vs 0-0赔10.5，说明1-0比0-0可能性高40%。找出TOP3最低赔率比分=庄家真实预期。\n"
-    p += "③ 交叉验证【亚盘+欧赔】：让1球+主胜1.76=庄家看好主队赢1球(即1-0/2-1)。平手盘+胜平赔率接近=均势(1-1高概率)。\n"
-    p += "④ 检查【半全场赔率】：ss(主/主)最低=庄家预期主队上半场领先; pp(平/平)低=闷平可能。\n"
-    p += "⑤ 最后用【伤停+状态】做微调，但永远不能推翻赔率数学结论。\n\n"
+    p += "【三种比赛模式 — 你必须先判断属于哪种再给比分】\n"
+    p += "🔴 模式A【实力碾压局】特征：xG差>0.7 + 让球≥1.0 + 主胜赔<1.6或客胜赔<1.6\n"
+    p += "   → 必须给出有进球差距的比分！2-0/3-0/3-1/0-2是正路，不要怂给1-0！CRS中2-0/3-0赔率虽高但碾压局它就是会发生。\n"
+    p += "🟡 模式B【均势拉锯局】特征：xG差<0.4 + 平手盘或让0.5 + 三项赔率接近\n"
+    p += "   → 1-1/0-0/1-0/0-1都合理，CRS赔率TOP3优先参考。这时候CRS最有用。\n"
+    p += "🟢 模式C【赢球输盘局】特征：让1球+ 但CRS中1-0赔率极低 + 半全场ss低\n"
+    p += "   → 经典卡分，1-0或2-1精准过关，深盘大胜是陷阱。\n\n"
+    
+    p += "【赔率分析工具箱（辅助判断，不是枷锁）】\n"
+    p += "① 总进球分布：a2/a3哪个最低=庄家锁定的进球区间。a7<15=大球概率高！\n"
+    p += "② CRS比分赔率：TOP3是高概率区间，但碾压局要敢于选TOP3之外的2-0/3-1。\n"
+    p += "③ 亚盘+欧赔交叉：让1球+主胜1.76=主队赢1球概率最大。平手盘=均势。\n"
+    p += "④ 半全场：ss(主/主)最低=主队先进球; pp(平/平)低=上半场闷平可能。\n"
+    p += "⑤ 伤停+状态做微调。\n\n"
     
     p += "【今日待宰羔羊与庄家全维底牌库】\n"
     for i, ma in enumerate(match_analyses):
@@ -234,6 +242,25 @@ def build_batch_prompt(match_analyses):
             h_bad = g_bad = h_inj = g_inj = ""
 
         p += f"[{i+1}] {h} vs {a} | {m.get('league', m.get('cup', ''))} | 亚盘: {hc}\n"
+        
+        # 🏷️ 自动判断比赛模式
+        try:
+            hc_val = abs(float(hc or 0))
+            ixh = float(eng.get('bookmaker_implied_home_xg', 1.2))
+            ixa = float(eng.get('bookmaker_implied_away_xg', 1.0))
+            xg_gap = abs(ixh - ixa)
+            min_odds = min(sp_h, sp_a) if sp_h > 1 and sp_a > 1 else 2.0
+        except:
+            hc_val = 0; xg_gap = 0.3; min_odds = 2.0
+        
+        if xg_gap > 0.7 and hc_val >= 1.0 and min_odds < 1.6:
+            p += f"  🔴 模式A碾压局(xG差{xg_gap:.1f}+让{hc_val}球+低赔{min_odds:.2f}) → 敢给2-0/3-0/3-1！\n"
+        elif xg_gap < 0.4 and hc_val <= 0.5:
+            p += f"  🟡 模式B均势局(xG差{xg_gap:.1f}+盘口{hc_val}) → CRS TOP3优先\n"
+        elif hc_val >= 1.0 and xg_gap > 0.4:
+            p += f"  🟢 模式C卡分局(让{hc_val}球+xG差{xg_gap:.1f}) → 1-0/2-1精准卡位\n"
+        else:
+            p += f"  🟡 模式B常规(xG差{xg_gap:.1f}+盘口{hc_val}) → 综合CRS+欧赔判断\n"
         
         # 🎯 1. 欧赔三项（最基础）
         p += f"  欧赔: 主{sp_h:.2f} 平{sp_d:.2f} 客{sp_a:.2f}"
@@ -307,15 +334,23 @@ def build_batch_prompt(match_analyses):
             p += f"  经验规则: {exp_names}\n"
         p += "\n"
 
-    p += "【严格输出格式示例】\n"
+    p += "【严格输出格式示例（注意：不同比赛模式给不同比分！）】\n"
     p += """[
   {
     "match": 1,
-    "score": "1-0",
-    "reason": "散户正被主队虚假连胜基本面洗脑疯狂送钱。CRS赔率1-0仅6.0倍(概率16.7%)是所有比分中最低，2球区间赔率3.25最低锁死天花板。配合亚盘让1球+pp平/平5.5倍偏低，庄家布局赢球输盘绞肉机。1-0精准卡位血洗深盘散户。",
-    "ai_confidence": 85,
+    "score": "2-0",
+    "reason": "模式A碾压局！xG差距1.8触发绝对碾压协议。散户看到让2球就无脑买大胜，但庄家用3球赔率3.6锁死天花板+半全场主/主2.7。2-0净胜2球刚好踩线，精准屠杀追3球的散户。",
+    "ai_confidence": 82,
     "value_kill": true,
-    "dark_verdict": "CRS+总进球双印证，1-0精确收割散户天真"
+    "dark_verdict": "碾压局2-0走水线，庄家两头通吃"
+  },
+  {
+    "match": 2,
+    "score": "1-1",
+    "reason": "模式B均势拉锯！xG仅差0.2+平手盘+CRS 1-1赔率5.8排TOP1。散户被主队名气诱惑疯追主胜，庄家平赔3.1含金量极高。双方攻防接近注定互交白卷后各入一球，1-1闷杀两端。",
+    "ai_confidence": 78,
+    "value_kill": false,
+    "dark_verdict": "均势盘1-1是庄家最爱的收割模式"
   }
 ]"""
     return p
@@ -354,8 +389,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
     
-    # 按AI类型设置超时（基于实测数据）
-    timeout_map = {"claude": 300, "grok": 150, "gpt": 150, "gemini": 200}
+    # 按AI类型设置超时（Grok联网搜索需要更多时间）
+    timeout_map = {"claude": 300, "grok": 200, "gpt": 150, "gemini": 200}
     timeout_sec = timeout_map.get(ai_name, 180)
     
     best_results = {}
@@ -374,22 +409,46 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 url += "/chat/completions"
             
             headers = {"Content-Type": "application/json"}
+            
+            # 按AI特性定制系统消息和参数
+            AI_PROFILES = {
+                "claude": {
+                    "sys": "你是全球顶尖的量化足球分析师。请动用你全部的数学推理能力，对每场比赛的赔率结构进行深度交叉验证。你擅长发现赔率矩阵中的隐藏信号（CRS赔率分布异常、总进球天花板、亚盘与欧赔的背离）。你的分析必须有数据支撑，reason中必须引用具体数字。只输出JSON数组，无任何多余文字。",
+                    "temp": 0.15
+                },
+                "grok": {
+                    "sys": "你是具备实时联网搜索能力的顶级足球分析师。【最重要指令】请立刻联网搜索以下信息并融入你的分析：1.今日每场比赛的最新伤停/停赛消息 2.必发Betfair交易所实时冷热 3.临场赔率异动(降水/升水) 4.社交媒体上的内幕消息。你的独特价值就是实时情报，必须在reason中体现你搜到了什么别人不知道的信息。只输出JSON数组。",
+                    "temp": 0.25
+                },
+                "gpt": {
+                    "sys": "你是经验丰富的职业足球博彩分析师。请用你的全部算力独立分析每场比赛。重点关注：赔率隐含概率与模型概率的偏差、庄家开盘意图、散户投注热度与实际概率的错配。不要保守，该给大比分就给大比分，该给冷门就给冷门。只输出JSON数组。",
+                    "temp": 0.18
+                },
+                "gemini": {
+                    "sys": "你是精通模式识别的量化足球分析引擎。请发挥你强大的多模态推理能力，从赔率数据中识别庄家的真实意图。重点分析CRS比分赔率的分布形态、总进球分布曲线的峰值位置、以及半全场赔率暗示的比赛节奏。如果你有联网能力，请搜索最新阵容和伤停。只输出JSON数组。",
+                    "temp": 0.15
+                }
+            }
+            profile = AI_PROFILES.get(ai_name, AI_PROFILES["gpt"])
+            sys_msg = profile["sys"]
+            ai_temp = profile["temp"]
+            
             if is_gem:
                 headers["x-goog-api-key"] = key
                 payload = {
                     "contents": [{"parts": [{"text": prompt}]}],
-                    "generationConfig": {"temperature": 0.12, "topP": 0.9},
-                    "systemInstruction": {"parts": [{"text": "必须严格输出JSON数组。reason字段60-110字恶毒黑话，句号结尾。"}]}
+                    "generationConfig": {"temperature": ai_temp, "topP": 0.92},
+                    "systemInstruction": {"parts": [{"text": sys_msg}]}
                 }
             else:
                 headers["Authorization"] = f"Bearer {key}"
                 payload = {
                     "model": mn,
                     "messages": [
-                        {"role": "system", "content": "你是一个毫无道德底线、极度冷血的暗网终极操盘手。只输出纯JSON数组，无任何多余文字。reason字段必须用最恶毒黑话揭穿庄家血洗散户的杀局，限60-110字，极度鄙视散户，句号结束。"},
+                        {"role": "system", "content": sys_msg},
                         {"role": "user", "content": prompt}
                     ],
-                    "temperature": 0.12
+                    "temperature": ai_temp
                 }
             
             gw = url.split("/v1")[0][:35]
