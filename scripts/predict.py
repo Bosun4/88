@@ -321,7 +321,7 @@ def build_batch_prompt(match_analyses):
     return p
 
 # ====================================================================
-# 终极高可用 AI 矩阵轮询 v2.0 — 原版一字不动
+# 终极高可用 AI 矩阵轮询 v2.0 — 解除时间封印版
 # ====================================================================
 FALLBACK_URLS = [
     None,
@@ -385,7 +385,10 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 print(f"  [AI 极致压榨] {ai_name.upper()} | 尝试 {mn[:25]} @ {gw} | 第{attempt+1}轮")
                 
                 try:
-                    async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=50)) as r:
+                    # 🔥 核心修改点：彻底解除总时长限制 (total=None)，仅设置 socket 假死防范 (sock_read=900即15分钟)
+                    # 这样可以保证 AI 思考多久就等多久，绝不中途挂断引发重复扣费！
+                    no_limit_timeout = aiohttp.ClientTimeout(total=None, sock_read=900)
+                    async with session.post(url, headers=headers, json=payload, timeout=no_limit_timeout) as r:
                         if r.status == 200:
                             data = await r.json()
                             raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
@@ -432,7 +435,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             print(f"    ⚠️ HTTP {r.status} - 切换线路...")
                 
                 except asyncio.TimeoutError:
-                    print(f"    ⏰ 超时 - 第{attempt+1}轮重试...")
+                    print(f"    ⏰ 无响应死机(900s) - 第{attempt+1}轮重试...")
                 except Exception as e:
                     err = str(e)[:50]
                     print(f"    ⚠️ 异常 {err} - 切换...")
@@ -773,3 +776,5 @@ def run_predictions(raw, use_ai=True):
     save_ai_diary(diary)
 
     return res, t4
+
+
