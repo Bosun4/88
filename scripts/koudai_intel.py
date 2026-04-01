@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 koudai_intel.py
-机构内部绝密情报抓取与结构化引擎 (针对真实抓包结构优化版)
+机构内部绝密情报抓取与结构化引擎 (针对真实抓包结构优化版 - 修复不打印及验签拦截问题)
 """
 
 import requests
@@ -17,9 +17,14 @@ class KoudaiSpider:
     def __init__(self):
         self.list_url = "https://apic.91bixin.net/api/match/getReportBriefData"
         self.detail_url = "https://apic.91bixin.net/api/match/reportList"
+        
+        # --- 【核心必改区：你的抓包通行证】 ---
+        # 必须确保这里的 sign, token, ts, nonce 是同一批次抓包获取的，否则100%被服务器拦截报错！
         self.fixed_sign = "2b9b53ce7573dc0f29c05d57bd1761d364e49503016de3d2c6a4b4fedfe1aa5a"
         self.fixed_token = "1is2oo21h54kkf1d8i6ta19c8l06sdtqiu1e5mgha1mzed3n"
         self.station_user_id = "50168030"
+        self.fixed_ts = "1774700632"         # 固定回你抓包时的时间戳
+        self.fixed_nonce = "hyew3dzzo1puccl1" # 固定回你抓包时的随机数
 
     @staticmethod
     def get_random_user_agent():
@@ -28,14 +33,6 @@ class KoudaiSpider:
         os_ver = random.choice(os_versions)
         safari_ver = random.choice(safari_versions)
         return f"Mozilla/5.0 (iPhone; CPU iPhone OS {os_ver} like Mac OS X) AppleWebKit/{safari_ver} (KHTML, like Gecko) Version/26.3 Mobile/15E148 Safari/604.1"
-
-    @staticmethod
-    def get_random_nonce(length=16):
-        return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
-
-    @staticmethod
-    def get_current_timestamp():
-        return str(int(time.time()))
 
     @staticmethod
     def get_current_t_param():
@@ -81,6 +78,7 @@ class KoudaiSpider:
             "Accept": "application/json"
         }
         
+        # --- 核心修正：取消随机时间戳，还原固定参数以通过签名防伪校验 ---
         data = {
             "sign": self.fixed_sign,
             "token": self.fixed_token,
@@ -88,8 +86,8 @@ class KoudaiSpider:
             "match_id2": match_id,
             "lottery_id": "90",
             "enc": "0",
-            "ts": self.get_current_timestamp(),
-            "nonce": self.get_random_nonce()
+            "ts": self.fixed_ts,
+            "nonce": self.fixed_nonce
         }
 
         try:
@@ -118,7 +116,8 @@ class KoudaiSpider:
             
         for trace in traces:
             title = trace.get("title", "")
-            tag_name = trace.get("tag_info", {}).get("name", "")
+            # --- 核心修正：默认加上爆料标签，避免漏掉数据 ---
+            tag_name = trace.get("tag_info", {}).get("name", "爆料") 
             content = trace.get("content", "").replace('\n', ' ')
             belong_team = str(trace.get("belong_team", "0"))
             
@@ -131,6 +130,7 @@ class KoudaiSpider:
                 intel_dict["neutral_news"] += full_text
                 continue
             
+            # --- 核心修正：加入了真实抓包里的 "爆料" 和 "情报" 标签 ---
             if tag_name in ["有利", "利好", "大名单齐整", "战意", "核心复出"]:
                 if is_home_related and not is_guest_related:
                     intel_dict["home_good_news"] += full_text
@@ -139,7 +139,7 @@ class KoudaiSpider:
                 else:
                     intel_dict["neutral_news"] += full_text
                     
-            elif tag_name in ["不利", "伤停", "缺席", "内讧", "连败", "体能"]:
+            elif tag_name in ["不利", "伤停", "缺席", "内讧", "连败", "体能", "爆料", "情报"]: 
                 if is_home_related and not is_guest_related:
                     intel_dict["home_bad_news"] += full_text
                 elif is_guest_related and not is_home_related:
@@ -165,6 +165,7 @@ class KoudaiSpider:
             away_team = match.get('away_team_name', '').strip()
             match_key = f"{home_team}_{away_team}"
             
+            print(f"{'='*50}")
             print(f"🕵️‍♂️ 正在窃取情报: {home_team} VS {away_team}")
             
             traces = self.get_detail_intel(m_id)
@@ -173,12 +174,21 @@ class KoudaiSpider:
             if traces:
                 structured_intel = self.classify_traces(traces, home_team, away_team)
                 final_intel_map[match_key] = structured_intel
-                bad_h = len(structured_intel['home_bad_news']) > 0
-                bad_g = len(structured_intel['guest_bad_news']) > 0
-                print(f"   ┖─ 提取成功! ⚠️主队隐患:{bad_h} | ⚠️客队隐患:{bad_g}")
+                
+                # --- 核心修正：直接把分类好的新闻打印到屏幕上！ ---
+                print(f"   ┖─ 提取成功! 详细情报如下：")
+                if structured_intel['home_good_news']: print(f"      🟢 [主队利好] {structured_intel['home_good_news'].strip()}")
+                if structured_intel['home_bad_news']: print(f"      🔴 [主队隐患] {structured_intel['home_bad_news'].strip()}")
+                if structured_intel['guest_good_news']: print(f"      🟢 [客队利好] {structured_intel['guest_good_news'].strip()}")
+                if structured_intel['guest_bad_news']: print(f"      🔴 [客队隐患] {structured_intel['guest_bad_news'].strip()}")
+                if structured_intel['neutral_news']: print(f"      🔵 [中立/综合] {structured_intel['neutral_news'].strip()}")
             else:
-                final_intel_map[match_key] = self.classify_traces([], home_team, away_team)
-                print(f"   ┖─ ⚠️ 暂无深度情报或抓取失败")
+                # 兜底方案：如果高级情报失败，使用列表自带的简略摘要
+                brief_title = match.get('title', '')
+                brief_content = match.get('content', '').replace('\n', '')
+                final_intel_map[match_key] = {"neutral_news": f"{brief_title} {brief_content}"}
+                print(f"   ┖─ ⚠️ 高级抓取受限，使用基础摘要:")
+                print(f"      🔵 [基础摘要] {brief_title} {brief_content}")
             
             time.sleep(random.uniform(1.5, 3.5))
             
@@ -196,9 +206,9 @@ class KoudaiSpider:
             with open(debug_path, "w", encoding="utf-8") as f:
                 json.dump(output_content, f, ensure_ascii=False, indent=2)
                 
-            print(f"\n📁 [KoudaiSpider] 【数据已落盘】赶紧去查看: {debug_path}")
+            print(f"\n📁 [KoudaiSpider] 【数据已落盘】完整JSON文件保存在: {debug_path}")
         except Exception as e:
-            print(f"\n⚠️ [KoudaiSpider] 数据保存到 data/ 失败: {e}")
+            print(f"\n⚠️ [KoudaiSpider] 数据保存到 data/ 目录失败: {e}")
             
         print("\n🎉 [KoudaiSpider] 所有可用绝密情报提取完毕！可以移交 AI 矩阵！")
         return final_intel_map
