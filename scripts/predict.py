@@ -205,7 +205,7 @@ def build_batch_prompt(match_analyses):
     p += "STEP4: 用Bivariate Dixon-Coles模型（带低比分校正）生成完整比分概率矩阵。\n"
     p += "STEP5: 亚盘+欧赔交叉验证，让球方向与欧赔方向不一致=陷阱，标记并调整概率。\n"
     p += "STEP6: 用半全场赔率推断比赛节奏（上半场/下半场进球分布），验证与总进球是否自洽。\n"
-    p += "STEP7: 如果你是Grok，立即执行实时搜索（球队名+injury+lineup+Betfair+odds movement+X平台），把最新情报融入概率微调±15%。\n"
+    p += "STEP7: 如果你是Grok，立即搜索Pinnacle/SBO等锐利小庄赔率与竞彩赔率的偏差（>5%=诱盘信号），搜索Betfair交易量冷热，搜索最新伤停阵容+天气+裁判，融入概率微调±15%。\n"
     p += "STEP8: 蒙特卡洛10000次模拟验证最终比分概率（在你脑内完成）。\n"
     p += "STEP9: 用凯利公式计算价值（value_kill=True当EV>8%），同时运行冷门猎手检测。\n\n"
     
@@ -334,16 +334,35 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
             "temp": 0.12
         },
         "grok": {
-            "sys": "你是Grok-4.2-MultiAgent，具备强大实时联网搜索能力，这是你最大优势！\n"
-                   "【必须立即执行以下实时搜索任务】\n"
-                   "1. 搜索每场比赛球队名 + injury + lineup + team news（最新首发/伤停）\n"
-                   "2. 搜索球队名 + Betfair Exchange odds + trading volume（实时交易所赔率与冷热）\n"
-                   "3. 搜索球队名 + latest odds movement + Pinnacle（临场赔率变动）\n"
-                   "4. 搜索球队名 + head to head + preview（交锋+专业预测）\n"
-                   "5. 搜索X平台（Twitter）球队名 + coach OR player 最新动态\n"
-                   "把所有搜索到的实时事实与用户提供的赔率数据交叉验证，在reason中明确引用（如\"已搜索确认XX球员缺阵，Betfair主胜交易量暴增30%\"）。\n"
+            "sys": "你是Grok-4.2-MultiAgent，全网最强实时联网足球情报引擎。你的核心优势是别的AI都做不到的——实时搜索全网数据并交叉验证。\n\n"
+                   "【第一优先级：多源赔率交叉验证（核心中的核心）】\n"
+                   "搜索 oddsportal.com / oddschecker.com 找到每场比赛的多家公司赔率对比。重点关注：\n"
+                   "- Pinnacle（全球最锐利的庄家，水位最低，赔率最接近真实概率，职业玩家的风向标）\n"
+                   "- bet365/William Hill 等大庄的赔率 vs Pinnacle 的偏差（偏差>5%=大庄在造热诱导散户）\n"
+                   "- 亚洲盘口：SBO/ISN/12bet/皇冠 的让球盘和水位（亚洲小庄靠精准度生存，不敢乱开）\n"
+                   "- 如果Pinnacle主胜赔1.65但竞彩开1.76=竞彩故意拉高主胜赔率诱导散户买客胜，真相是主胜\n"
+                   "- 如果多家小庄一致降平赔=平局概率被低估，考虑平局\n\n"
+                   "【第二优先级：临场赔率变动追踪】\n"
+                   "搜索球队名 + odds movement / line movement，找出：\n"
+                   "- 开盘到临场的赔率变动方向和幅度（降1.00以上=强烈信号）\n"
+                   "- Betfair Exchange 实时交易量和价格（搜索 betfair.com + 球队名）\n"
+                   "- 如果Betfair上某个方向交易量暴增但赔率没降=庄家在对冲，真正的方向是反面\n\n"
+                   "【第三优先级：实时伤停和阵容】\n"
+                   "搜索球队名 + injury / lineup / team news / confirmed squad，找出：\n"
+                   "- 赛前1-2小时的最新首发确认（官方社媒发布的首发名单）\n"
+                   "- 突发伤停/轮休（训练中受伤、赛前热身受伤）\n"
+                   "- 关键球员是否首发（主力vs替补对比赛影响巨大）\n\n"
+                   "【第四优先级：环境和裁判】\n"
+                   "- 搜索比赛城市+weather today（雨天湿滑场地=进球减少+冷门概率增加）\n"
+                   "- 搜索裁判名字+referee stats（场均黄牌、点球率、主场偏向）\n\n"
+                   "【第五优先级：社交媒体情报】\n"
+                   "- 搜索X平台（Twitter）球队名+coach/manager最新动态（换帅效应、更衣室矛盾）\n"
+                   "- 搜索球队名+travel/arrive（远途客队旅途疲劳=客场不利）\n\n"
+                   "【输出要求】\n"
+                   "reason中必须明确引用你搜到的具体事实，格式如：\n"
+                   "\"Pinnacle主胜1.62 vs 竞彩1.76偏差8.6%=竞彩诱客；Betfair主胜交易量占比68%；已确认XX球员首发；赛地有雨\"\n"
                    "只输出JSON数组！",
-            "temp": 0.20
+            "temp": 0.22
         },
         "gpt": {
             "sys": "你是20年实战经验的职业足球博彩分析师。严格执行9步计算，敢于给出大比分和冷门。reason必须包含具体赔率数字。只输出JSON数组。",
@@ -498,13 +517,12 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 async def run_ai_matrix(prompt, num_matches):
     ai_configs = [
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
-            "熊猫-特供-A-55-claude-opus-4.6-thinking",
-            "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking",
-            "熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking",
+            "熊猫-按量-满血copilot-claude-opus-4.6-thinking",
+            "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking",
         ]),
         ("grok", "GROK_API_URL", "GROK_API_KEY", [
-            "熊猫-A-6-grok-4.2-thinking",
             "熊猫-A-7-grok-4.2-多智能体讨论",
+            "熊猫-A-6-grok-4.2-thinking",
         ]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
             "熊猫-A-7-gpt-5.4",
@@ -512,7 +530,6 @@ async def run_ai_matrix(prompt, num_matches):
             "熊猫-A-10-gpt-5.3-codex",
         ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", [
-            "熊猫-特供-X-12-gemini-3.1-pro-preview-thinking",
             "熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking",
             "熊猫-顶级特供-X-17-gemini-3.1-pro-preview",
         ]),
