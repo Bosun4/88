@@ -558,6 +558,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 async def run_ai_matrix(prompt, num_matches):
     ai_configs = [
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
+            "熊猫-特供-A-55-claude-opus-4.6",
             "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking",
             "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking",
         ]),
