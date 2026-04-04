@@ -16,7 +16,7 @@ TIMEZONE = "Asia/Shanghai"
 # GPT（thinking优先）
 GPT_API_URL = os.environ.get("GPT_API_URL", "")
 GPT_API_KEY = os.environ.get("GPT_API_KEY", "")
-GPT_MODEL = "熊猫-A-7-gpt-5.4"
+GPT_MODEL = "熊猫-A-10-gpt-5.4"
 
 # Gemini（3.1 pro thinking优先）
 GEMINI_API_URL = os.environ.get("GEMINI_API_URL", "")
@@ -31,4 +31,4 @@ GROK_MODEL = "熊猫-A-6-grok-4.2-thinking"
 # Claude 中控（opus thinking优先）
 CLAUDE_API_URL = os.environ.get("CLAUDE_API_URL", "")
 CLAUDE_API_KEY = os.environ.get("CLAUDE_API_KEY", "")
-CLAUDE_MODEL = "熊猫-按量-满血copilot-claude-opus-4.6-thinking"
+CLAUDE_MODEL = "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking"
