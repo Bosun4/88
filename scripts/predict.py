@@ -320,7 +320,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     p2_prompt = build_phase2_prompt(match_analyses, p1_results)
     claude_r = {}
     async with aiohttp.ClientSession() as session:
-        _, claude_r, _ = await async_call_one_ai_batch(session, p2_prompt, "CLAUDE_API_URL", "CLAUDE_API_KEY", ["熊猫特供-claude-opus-4.6-thinking"], num, "claude")
+        _, claude_r, _ = await async_call_one_ai_batch(session, p2_prompt, "CLAUDE_API_URL", "CLAUDE_API_KEY", ["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking"], num, "claude")
     all_r = p1_results.copy()
     all_r["claude"] = claude_r
     return all_r
