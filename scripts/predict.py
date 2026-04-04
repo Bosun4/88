@@ -308,9 +308,9 @@ async def run_ai_matrix_two_phase(match_analyses):
     p1_results = {"gpt": {}, "grok": {}, "gemini": {}}
     async with aiohttp.ClientSession() as session:
         tasks = [
-            async_call_one_ai_batch(session, p1_prompt, "GPT_API_URL", "GPT_API_KEY", ["熊猫-按量-gpt-5.4"], num, "gpt"),
+            async_call_one_ai_batch(session, p1_prompt, "GPT_API_URL", "GPT_API_KEY", ["熊猫-A-10-gpt-5.4"], "熊猫-按量-gpt-5.4"),
             async_call_one_ai_batch(session, p1_prompt, "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"], num, "grok"),
-            async_call_one_ai_batch(session, p1_prompt, "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-gemini-3.1-pro"], num, "gemini")
+            async_call_one_ai_batch(session, p1_prompt, "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫-顶级特供-X-17-gemini-3.1-pro-preview"], num, "gemini")
         ]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         for res in results:
