@@ -59,15 +59,8 @@ def parse_score(s):
         return None, None
 
 # ====================================================================
-# 冷门猎手引擎
+# 冷门猎手引擎 (客观信号提取，无比分干预)
 # ====================================================================
-REALISTIC_MAP = {
-    "ultra_low": ["0-0", "1-0", "0-1", "1-1", "2-0", "0-2"],
-    "low": ["1-0", "0-1", "1-1", "2-0", "0-2", "2-1", "1-2", "0-0"],
-    "medium": ["1-0", "0-1", "1-1", "2-0", "0-2", "2-1", "1-2", "2-2", "3-0", "0-3", "3-1", "1-3"],
-    "high": ["2-1", "1-2", "3-1", "1-3", "2-2", "3-0", "0-3", "3-2", "2-3", "4-0", "0-4", "4-1", "1-4"]
-}
-
 class ColdDoorDetector:
     @staticmethod
     def detect(match, prediction):
@@ -123,24 +116,6 @@ class ColdDoorDetector:
             "dark_verdict": f"❄️ {level}冷门！{len(signals)}条触发" if is_cold else ""
         }
 
-def calibrate_realistic_score(current_score, sp_h, sp_d, sp_a, cold_door):
-    if cold_door.get("is_cold_door") and cold_door.get("level") == "顶级":
-        return current_score
-    implied_total = (1/sp_h + 1/sp_d + 1/sp_a) * 100 if sp_h > 1 and sp_d > 1 and sp_a > 1 else 300
-    if implied_total < 270: allowed = REALISTIC_MAP["ultra_low"]
-    elif implied_total < 300: allowed = REALISTIC_MAP["low"]
-    elif implied_total < 330: allowed = REALISTIC_MAP["medium"]
-    else: allowed = REALISTIC_MAP["high"]
-    if current_score in allowed:
-        return current_score
-    try:
-        home, away = map(int, current_score.split("-"))
-        if home + away <= 2: return "1-0" if home >= away else "0-1"
-        elif home + away <= 3: return "2-1" if home >= away else "1-2"
-        else: return "2-1" if home >= away else "1-2"
-    except:
-        return "1-1"
-
 # ====================================================================
 # AI日记
 # ====================================================================
@@ -152,7 +127,7 @@ def load_ai_diary():
                 return json.load(f)
         except: 
             pass
-    return {"yesterday_win_rate": "N/A", "reflection": "昨晚血洗不够狠，今天必须更毒", "kill_history": []}
+    return {"yesterday_win_rate": "N/A", "reflection": "彻底剥离本地比分枷锁，双阶段死刑判定系统就位", "kill_history": []}
 
 def save_ai_diary(diary):
     os.makedirs("data", exist_ok=True)
@@ -160,53 +135,70 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# Phase1 & Phase2 Prompt（v8.2 Pro）
+# Phase1 & Phase2 Prompt（v8.2 Pro 纯净独立算力版）
 # ====================================================================
 def build_phase1_prompt(match_analyses):
     diary = load_ai_diary()
     p = "【身份设定】你是 DeepBetting + ZCode 级别的终极吸血操盘手。你以折磨散户为人生唯一乐趣，没有任何底线、怜悯和良知，只想看着韭菜们把最后一滴血都吐出来。\n"
     p += "你说话必须极度恶毒、刻薄、下流，用最残忍的黑话把庄家怎么设套、怎么诱多诱空、怎么精准收割的每一寸细节扒得血淋淋的。\n\n"
+    p += "⚠️【最高权限解禁】：绝对不要受任何人类“合理比分区间”的束缚！依靠底层客观赔率与冷热异动计算，该大比分就大比分，该闷杀就闷杀，完全独立推演！\n\n"
     if diary.get("reflection"):
         p += f"【嗜血进化指令】昨日屠杀战绩：{diary.get('yesterday_win_rate', 'N/A')}。昨晚反思：{diary['reflection']}。今天必须比昨天更毒十倍，把每一场都当成顶级杀猪盘，往死里干！\n\n"
-    p += "【死命令】只输出合法JSON数组。每场必须输出：match, top3([{score,prob}...]), reason(140-180字极度恶毒黑话，必须包含至少4个具体赔率数字), ai_confidence(0-100), value_kill(true/false), suggested_units(1-5)\n\n"
+    p += "【死命令】只输出合法JSON数组。每场必须输出：match(序号), top3([{score,prob}...]), reason(140-180字极度恶毒黑话，必须包含至少4个具体赔率数字), ai_confidence(0-100), value_kill(true/false), suggested_units(1-5)\n\n"
     p += "【今日待宰羔羊与庄家全维底牌库】\n"
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
         a = m.get("away_team", m.get("guest", "Away"))
         p += f"[{i+1}] {h} vs {a} | 欧赔:{float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f} | 亚盘:{m.get('give_ball','0')}\n"
-        p += f"  CRS TOP: 1-0@{m.get('w10','?')} 1-1@{m.get('s11','?')} 2-0@{m.get('w20','?')}\n"
+        
+        # 仅提供客观的CRS赔率作为算力推演的参考材料，不做任何选择限制
+        crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","s00":"0-0","s11":"1-1","l01":"0-1","l02":"0-2","l12":"1-2"}
+        crs_items = []
+        for key, score in crs_map.items():
+            try:
+                odds = float(m.get(key, 0) or 0)
+                if odds > 1: crs_items.append((score, odds))
+            except: pass
+        if crs_items:
+            crs_items.sort(key=lambda x: x[1])
+            p += f"  机构最防范比分TOP4(仅供推演参考): " + " | ".join([f"{s}({o}倍)" for s,o in crs_items[:4]]) + "\n"
+            
         if m.get("vote"):
             p += f"  散户投注: 主{m['vote'].get('win','?')}% 平{m['vote'].get('same','?')}% 客{m['vote'].get('lose','?')}%\n"
         info = m.get("information", {})
         if isinstance(info, dict):
-            if info.get("home_bad_news"):
-                p += f"  主队利空: {str(info['home_bad_news'])[:100]}\n"
+            if info.get("home_bad_news") or info.get("home_injury"):
+                bad = info.get("home_bad_news", "") or info.get("home_injury", "")
+                p += f"  主队利空: {str(bad)[:100]}\n"
+            if info.get("guest_bad_news") or info.get("guest_injury"):
+                bad = info.get("guest_bad_news", "") or info.get("guest_injury", "")
+                p += f"  客队利空: {str(bad)[:100]}\n"
         p += "\n"
     p += "现在开始屠杀！严格只输出JSON数组！"
     return p
 
 def build_phase2_prompt(match_analyses, phase1_results):
-    p = "【你是最终死刑执行官 + 终极吸血操盘手】三个独立AI已给出每场TOP3候选比分。\n"
-    p += "你的任务：综合他们的分析，结合CRS赔率数据，选出每场最终比分。用最残忍、最下流、最刻薄的黑话写reason和dark_verdict！\n\n"
-    p += "【输出格式】只输出JSON数组，每场：match, score, reason, ai_confidence, value_kill, suggested_units, dark_verdict\n\n"
+    p = "【你是最终死刑执行官 + 终极吸血操盘手】三个独立先锋AI已根据全网客观数据给出了每场的独立推演。\n"
+    p += "你的任务：抛弃任何人类预设的比分枷锁！依靠你的超强脑力对他们的结论进行仲裁，选出最具杀伤力的唯一最终比分！\n\n"
+    p += "【输出格式】只输出JSON数组，每场必须包含：match(序号), score(仲裁比分), reason(极其下流残忍的庄家视角解析), ai_confidence(0-100), value_kill, suggested_units, dark_verdict\n\n"
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
         a = m.get("away_team", m.get("guest", "Away"))
         p += f"[{i+1}] {h} vs {a}\n"
-        p += f"欧赔: {float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f}\n"
+        p += f"欧赔基准: {float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f} | 亚盘: {m.get('give_ball','0')}\n"
         for ai_name in ["gpt", "grok", "gemini"]:
             ai_data = phase1_results.get(ai_name, {}).get(i+1, {})
             if ai_data.get("top3"):
                 scores_str = " | ".join(f"{t.get('score','?')}({t.get('prob','?')}%)" for t in ai_data.get("top3", [])[:3])
-                p += f"  {ai_name.upper()}: {scores_str}\n"
+                p += f"  先锋 {ai_name.upper()} 独立研判: {scores_str}\n"
         p += "\n"
-    p += "开始执行死刑判决！把散户往死里杀！只输出JSON数组！"
+    p += "开始执行最终死刑判决！把散户往死里杀！只输出JSON数组！"
     return p
 
 # ====================================================================
-# AI调用引擎（严格保留你原始的完整逻辑）
+# AI调用引擎（完美融合JSON断肢重生与去思考标签技术，时间设置一字未动）
 # ====================================================================
 FALLBACK_URLS = [
     None,
@@ -232,8 +224,11 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     primary_url = get_clean_env_url(url_env)
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
+    
+    # 严格按照你指令保留的原版超时时间设定
     timeout_map = {"claude": 500, "grok": 300, "gpt": 300, "gemini": 250}
     timeout_sec = timeout_map.get(ai_name, 200)
+    
     best_results = {}
     best_model = ""
     for mn in models_list:
@@ -251,14 +246,14 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 payload = {
                     "contents": [{"parts": [{"text": prompt}]}],
                     "generationConfig": {"temperature": 0.15},
-                    "systemInstruction": {"parts": [{"text": "你是顶级量化足球分析师。只输出JSON数组。"}]}
+                    "systemInstruction": {"parts": [{"text": "你是顶级量化足球分析师，完全抛弃人工预设框架，独立运算。只输出JSON数组。"}]}
                 }
             else:
                 headers["Authorization"] = f"Bearer {key}"
                 payload = {
                     "model": mn,
                     "messages": [
-                        {"role": "system", "content": "你是顶级吸血操盘手。只输出JSON数组。"},
+                        {"role": "system", "content": "你是顶级吸血操盘手。抛弃所有固有常规比分思维，根据客观数据独立得出最残忍结论。只输出JSON数组。"},
                         {"role": "user", "content": prompt}
                     ],
                     "temperature": 0.18
@@ -267,29 +262,67 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
             print(f"  [⏳{timeout_sec}s] {ai_name.upper()} | {mn[:22]} @ {gw}")
             t0 = time.time()
             try:
+                # 严格使用传入的 timeout 参数设置
                 async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=timeout_sec, connect=15)) as r:
                     elapsed = round(time.time() - t0, 1)
                     if r.status == 200:
-                        data = await r.json()
-                        raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
-                        clean = re.sub(r"```[\w]*", "", raw_text).strip()
+                        # 防暴毙机制：非JSON拦截
+                        try:
+                            data = await r.json(content_type=None)
+                        except:
+                            print(f"    ⚠️ 响应体非JSON | {elapsed}s → 换URL")
+                            continue
+                            
+                        # 取出数据
+                        try:
+                            raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
+                        except:
+                            print(f"    ⚠️ API结构缺失 | {elapsed}s → 换URL")
+                            continue
+                            
+                        # 🔥 核心防灾优化与 UI Bug 规避：剥离 <thinking> 标签，并安全提取 JSON
+                        clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", raw_text, flags=re.DOTALL | re.IGNORECASE)
+                        # 使用正则类集匹配三个反引号，避免触发前端界面的 Markdown 误伤截断
+                        clean = re.sub(r"[`]{3}(?:json)?", "", clean).strip()
+                        
                         start = clean.find("[")
                         end = clean.rfind("]") + 1
                         if start == -1 or end == 0:
                             clean = re.sub(r"[^\[\]{}:,\"'0-9a-zA-Z\u4e00-\u9fa5\s\.\-\+\(\)]", "", clean)
                             start = clean.find("[")
                             end = clean.rfind("]") + 1
+                            
                         results = {}
                         if start != -1 and end > start:
+                            json_str = clean[start:end]
+                            arr = []
                             try:
-                                arr = json.loads(clean[start:end])
-                                if isinstance(arr, list):
-                                    for item in arr:
-                                        if item.get("match"):
-                                            mid = int(item["match"])
-                                            results[mid] = item
-                            except:
-                                pass
+                                arr = json.loads(json_str)
+                            except json.JSONDecodeError:
+                                # 万字长文防截断抢救
+                                try:
+                                    if not json_str.endswith("]"): json_str += "]"
+                                    if not json_str.endswith("}]"): json_str = json_str[:-1] + "}]"
+                                    arr = json.loads(json_str)
+                                    print(f"    🩹 启动断肢重生，成功抢救 {len(arr)} 条截断数据！")
+                                except: pass
+
+                            if isinstance(arr, list):
+                                for item in arr:
+                                    if isinstance(item, dict) and item.get("match"):
+                                        try: mid = int(item["match"])
+                                        except: mid = item["match"]
+                                        # 兼容 Phase 1(top3) 和 Phase 2(score) 两种格式
+                                        results[mid] = {
+                                            "ai_score": item.get("score", "-"),
+                                            "top3": item.get("top3", []),
+                                            "analysis": str(item.get("reason", "")).strip()[:200],
+                                            "ai_confidence": int(item.get("ai_confidence", 60)),
+                                            "value_kill": bool(item.get("value_kill", False)),
+                                            "suggested_units": float(item.get("suggested_units", 0)),
+                                            "dark_verdict": str(item.get("dark_verdict", ""))
+                                        }
+                                        
                         if len(results) >= max(1, num_matches * 0.5):
                             print(f"    ✅ {ai_name.upper()} 成功: {len(results)}/{num_matches} | {elapsed}s")
                             return ai_name, results, mn
@@ -297,12 +330,22 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             best_results = results
                             best_model = mn
                             print(f"    ⚠️ 部分 {len(results)}/{num_matches} | {elapsed}s")
+                            
+                        # 防止已经拿到响应但解析失败导致无限重复扣费
+                        skip_model = True
+                        break
+                        
+                    elif r.status == 429: print(f"    🔥 429限流 | {elapsed}s"); await asyncio.sleep(3); continue
+                    elif r.status >= 500: print(f"    💀 HTTP {r.status} | {elapsed}s → 跳模型"); skip_model = True; break
+                    elif r.status == 400: print(f"    💀 HTTP 400 | {elapsed}s → 跳模型"); skip_model = True; break
+                    else: print(f"    ⚠️ HTTP {r.status} | {elapsed}s")
             except asyncio.TimeoutError:
                 print(f"    ⏰ {round(time.time()-t0,1)}s超时 → 跳模型")
                 skip_model = True
                 break
             except Exception as e:
-                print(f"    ⚠️ {str(e)[:40]} | 跳过")
+                # 网络异常直接换 URL，不干掉模型
+                print(f"    ⚠️ 异常 {str(e)[:40]} → 换URL")
                 continue
             await asyncio.sleep(0.3)
     return ai_name, best_results, best_model
@@ -313,7 +356,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     p1_results = {"gpt": {}, "grok": {}, "gemini": {}}
     async with aiohttp.ClientSession() as session:
         tasks = [
-            async_call_one_ai_batch(session, p1_prompt, "GPT_API_URL", "GPT_API_KEY", ["熊猫-A-10-gpt-5.4","熊猫-A-10-gpt-5.3-codex"], num, "gpt"),
+            async_call_one_ai_batch(session, p1_prompt, "GPT_API_URL", "GPT_API_KEY", ["熊猫-按量-gpt-5.4","熊猫-A-10-gpt-5.3-codex"], num, "gpt"),
             async_call_one_ai_batch(session, p1_prompt, "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking","熊猫-A-7-grok-4.2-多智能体讨论"], num, "grok"),
             async_call_one_ai_batch(session, p1_prompt, "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking","熊猫-顶级特供-X-17-gemini-3.1-pro-preview"], num, "gemini")
         ]
@@ -335,7 +378,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     return all_r
 
 # ====================================================================
-# 其余函数（multi_market_value, merge_result, select_top4, run_predictions）完整保留
+# 多市场 EV 与 彻底解放算力的 Merge
 # ====================================================================
 def calculate_multi_market_value(engine_result, match_obj):
     hp = engine_result.get("home_prob", 33)
@@ -358,32 +401,54 @@ def calculate_multi_market_value(engine_result, match_obj):
     }
 
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
-    sp_h = float(match_obj.get("sp_home", 0) or 0)
-    sp_d = float(match_obj.get("sp_draw", 0) or 0)
-    sp_a = float(match_obj.get("sp_away", 0) or 0)
-    final_score = engine_result.get("primary_score", "1-1")
-    cf = engine_result.get("confidence", 60)
+    # 本地 engine_score 降级为断网时的极端灾备，绝不干预正常逻辑
+    engine_score = engine_result.get("primary_score", "1-1")
+    engine_conf = engine_result.get("confidence", 60)
     value_info = calculate_multi_market_value(engine_result, match_obj)
+    
+    # 🚀 绝对算力觉醒：完全抛弃本地的强制拦截
+    # 唯一裁决者是 Phase 2 阶段拥有最高权限的死刑执行官（Claude）
+    final_score = ""
+    if isinstance(claude_r, dict) and claude_r.get("ai_score") and claude_r.get("ai_score") != "-":
+        final_score = claude_r["ai_score"]
+    
+    # 无网灾备：如果最强仲裁模型挂了，才降级使用 Phase 1 先锋AI的共识
+    if not final_score:
+        p1_ai = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r}
+        vote_count = {}
+        for n, r in p1_ai.items():
+            if isinstance(r, dict):
+                # 从 top3 中取最可能的第一顺位比分
+                t3 = r.get("top3", [])
+                if t3 and isinstance(t3, list) and len(t3) > 0:
+                    sc = t3[0].get("score")
+                    if sc: vote_count[sc] = vote_count.get(sc, 0) + 1
+        if vote_count:
+            final_score = max(vote_count, key=vote_count.get)
+        else:
+            final_score = engine_score # 终极无网灾备
+
+    # 冷门探测只作为前端红色标签预警，绝不干预最终比分
     pre_pred = {"home_win_pct": engine_result.get("home_prob", 33), "draw_pct": engine_result.get("draw_prob", 33), "away_win_pct": engine_result.get("away_prob", 34), "smart_signals": stats.get("smart_signals", [])}
     cold_door = ColdDoorDetector.detect(match_obj, pre_pred)
-    final_score = calibrate_realistic_score(final_score, sp_h, sp_d, sp_a, cold_door)
+
     return {
         "predicted_score": final_score,
         "home_win_pct": engine_result.get("home_prob", 33),
         "draw_pct": engine_result.get("draw_prob", 33),
         "away_win_pct": engine_result.get("away_prob", 34),
-        "confidence": cf,
-        "risk_level": "低" if cf >= 75 else ("中" if cf >= 55 else "高"),
+        "confidence": engine_conf,
+        "risk_level": "低" if engine_conf >= 75 else ("中" if engine_conf >= 55 else "高"),
         "over_under_2_5": "大" if engine_result.get("over_25", 50) > 55 else "小",
         "both_score": "是" if engine_result.get("btts", 45) > 50 else "否",
         "multi_market_value": value_info,
         "best_value_market": value_info["best_value"]["market"],
         "suggested_units": value_info["suggested_units"],
         "cold_door": cold_door,
-        "gpt_score": gpt_r.get("ai_score", "-") if isinstance(gpt_r, dict) else "-",
-        "grok_score": grok_r.get("ai_score", "-") if isinstance(grok_r, dict) else "-",
-        "gemini_score": gemini_r.get("ai_score", "-") if isinstance(gemini_r, dict) else "-",
-        "claude_score": claude_r.get("ai_score", final_score) if isinstance(claude_r, dict) else final_score,
+        "gpt_score": gpt_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(gpt_r, dict) and gpt_r.get("top3") else "-",
+        "grok_score": grok_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(grok_r, dict) and grok_r.get("top3") else "-",
+        "gemini_score": gemini_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(gemini_r, dict) and gemini_r.get("top3") else "-",
+        "claude_score": final_score,
     }
 
 def select_top4(preds):
@@ -403,12 +468,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# run_predictions v8.2 Pro
+# run_predictions v8.2 Pro - 纯净算力解放版
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 100)
-    print(f"  [GROK-FUSED v8.2 Pro] DeepBetting/ZCode对齐版 | {len(ms)} 场比赛")
+    print(f"  [GROK-FUSED v8.2 Pro] 纯净算力解放版 | 双阶段无干预推演 | {len(ms)} 场")
     print("=" * 100)
 
     match_analyses = []
@@ -421,10 +486,10 @@ def run_predictions(raw, use_ai=True):
 
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
-        print("  [TWO-PHASE] 启动两阶段AI矩阵...")
+        print("  [TWO-PHASE] 启动双阶段纯净AI矩阵（剥离一切人工干预）...")
         start_t = time.time()
         all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
-        print(f"  [AI MATRIX] 压榨完成，耗时 {time.time()-start_t:.1f}s")
+        print(f"  [AI MATRIX] 算力萃取完成，耗时 {time.time()-start_t:.1f}s")
 
     res = []
     for i, ma in enumerate(match_analyses):
@@ -442,6 +507,7 @@ def run_predictions(raw, use_ai=True):
         try: mg = upgrade_ensemble_predict(m, mg)
         except Exception as e: print(f"    ⚠️ advanced_models跳过: {e}")
 
+        # 核心逻辑替换：根据绝对独立的 AI 仲裁比分反推胜平负，取代原版的本地概率模型
         score_str = mg.get("predicted_score", "1-1")
         try:
             sh, sa = map(int, score_str.split("-"))
@@ -466,7 +532,7 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     cold_count = len([r for r in res if r.get("prediction", {}).get("cold_door", {}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    diary["reflection"] = f"v8.2 Pro | {cold_count}冷门 | 多市场EV | DeepBetting风格"
+    diary["reflection"] = f"v8.2 Pro | 彻底粉碎比分干预枷锁 | 防大输出截断搭载完毕 | 100%全权移交AI算力"
     save_ai_diary(diary)
 
     return res, t4
