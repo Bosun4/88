@@ -354,7 +354,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     primary_url = get_clean_env_url(url_env)
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
-    timeout_map = {"claude": 300, "grok": 250, "gpt": 250, "gemini": 250}
+    timeout_map = {"claude": 700, "grok": 250, "gpt": 250, "gemini": 250}
     timeout_sec = timeout_map.get(ai_name, 200)
 
     AI_PROFILES = {
@@ -484,7 +484,7 @@ async def run_ai_matrix_two_phase(match_analyses):
 
     p1_configs = [
         ("grok","GROK_API_URL","GROK_API_KEY",["熊猫-A-6-grok-4.2-thinking","熊猫-A-7-grok-4.2-多智能体讨论"]),
-        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-A-10-gpt-5.4","熊猫-按量-gpt-5.4"]),
+        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-按量-gpt-5.4","熊猫-A-10-gpt-5.4"]),
         ("gemini","GEMINI_API_URL","GEMINI_API_KEY",["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking","熊猫-顶级特供-X-17-gemini-3.1-pro-preview"]),
     ]
     p1_results = {"gpt":{},"grok":{},"gemini":{}}
