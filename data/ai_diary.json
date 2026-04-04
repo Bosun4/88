@@ -1,5 +1,5 @@
 {
-  "yesterday_win_rate": "45/63",
-  "reflection": "vMAX6.0 | 12冷门预警 | 彻底切断本地约束，100%拥抱全球AI算力",
+  "yesterday_win_rate": "41/61",
+  "reflection": "vMAX7.0 | 已修复重复扣费死循环 | 12冷门预警",
   "kill_history": []
 }
