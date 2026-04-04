@@ -559,6 +559,3 @@ def run_predictions(raw, use_ai=True):
     diary["reflection"] = f"vMAX6.0 | {cold_count}冷门预警 | 彻底切断本地约束，100%拥抱全球AI算力"
     save_ai_diary(diary)
     return res, t4
-
-
-```
