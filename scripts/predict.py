@@ -139,51 +139,123 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# 🛡️ 极致压榨AI v5.0 Prompt
+# 🧠 极致压榨AI v6.0 — 全维数据+计算信号+专业方法论
 # ====================================================================
 def build_batch_prompt(match_analyses):
     diary = load_ai_diary()
-    p = "【核心身份】你是全球No.1量化足球预测终极引擎，精通泊松分布、Bivariate Dixon-Coles、蒙特卡洛10000次模拟、Shin概率校准、贝叶斯更新、凯利最优投注、赔率逆向工程、xG偏差检测。\n"
-    p += "你现在拥有的是庄家真金白银的完整原始定价数据（欧赔、亚盘、CRS全比分、总进球分布、半全场、投注热度、伤停情报）。\n"
-    p += "你必须动用全部算力，独立完成9步极致计算，给出每场比赛最高概率比分。\n\n"
+    p = "【核心身份】你是全球顶尖量化足球预测引擎，精通Shin概率校准、泊松/Dixon-Coles建模、蒙特卡洛模拟、凯利最优投注、CRS赔率逆向工程。\n"
+    p += "你面前是庄家真金白银的完整定价数据。你必须独立完成数学计算后给出最高概率比分。\n\n"
     if diary.get("reflection"):
-        p += f"【AI进化日记】昨日胜率：{diary.get('yesterday_win_rate', 'N/A')} | 反思：{diary['reflection']}\n\n"
+        p += f"【进化日记】{diary.get('yesterday_win_rate', 'N/A')} | {diary['reflection']}\n\n"
     p += "【铁律】\n"
-    p += "1. 只输出合法JSON数组，严禁markdown、解释、代码块。\n"
-    p += "2. 字段：match(整数), score(如'2-1'), reason(120-180字含3个具体赔率数字), ai_confidence(0-100), value_kill(bool), dark_verdict(一句话)。\n"
-    p += "3. 碾压局（让球≥1.5且主胜赔<1.55）禁止1-0/0-1，必须大比分。\n"
-    p += "4. 0-0信号强烈时（0球赔率极低+双方防守强+CRS 0-0赔率低）必须敢给0-0。\n"
-    p += "5. 冷门信号强烈时必须敢给冷门比分。\n\n"
-    p += "【9步计算（沙盒内完成，只输出结果）】\n"
-    p += "STEP1: Shin公式去水位反推真实概率。\n"
-    p += "STEP2: CRS全比分1/odds归一化→TOP5。\n"
-    p += "STEP3: 总进球a0-a7计算庄家预期λ。\n"
-    p += "STEP4: Bivariate Dixon-Coles比分矩阵。\n"
-    p += "STEP5: 亚盘+欧赔交叉验证。\n"
-    p += "STEP6: 半全场赔率验证比赛节奏。\n"
-    p += "STEP7: Grok专用：搜索Pinnacle/SBO赔率偏差+Betfair交易量+最新伤停+天气+裁判。\n"
-    p += "STEP8: 蒙特卡洛10000次模拟。\n"
-    p += "STEP9: 凯利公式+冷门猎手检测。\n\n"
+    p += "1. 只输出合法JSON数组。字段：match(整数), score(如'2-1'), reason(120-180字含3+具体数字), ai_confidence(0-100), value_kill(bool), dark_verdict(一句话)。\n"
+    p += "2. 你的比分必须是CRS赔率TOP5中概率最高的那个，除非你有充分数学证据偏离。\n"
+    p += "3. 三项欧赔接近(最大-最小<0.8)=均势局→平局概率极高，优先考虑0-0或1-1。\n"
+    p += "4. 让球≤1.0的比赛，1-0/0-1是统计上最常见结果(占比18-22%)，不要强行给2-0。\n"
+    p += "5. 只有让球≥1.5+主胜赔<1.40的真碾压局才考虑2-0/3-0。\n"
+    p += "6. 单关标记=1表示庄家允许单场投注=庄家对结果有高度信心，重点参考这些场次。\n"
+    p += "7. 0球赔率<9.0=庄家重防零球，必须严肃考虑0-0。\n\n"
+    p += "【9步计算（沙盒执行，只输出结果）】\n"
+    p += "STEP1: Shin去水位→真实胜平负概率。\n"
+    p += "STEP2: CRS全比分1/odds归一化→TOP5概率排序。\n"
+    p += "STEP3: a0-a7加权→庄家预期总进球λ。\n"
+    p += "STEP4: Dixon-Coles比分矩阵（考虑联赛平均进球和主场优势）。\n"
+    p += "STEP5: 亚盘+欧赔交叉验证（方向不一致=陷阱）。\n"
+    p += "STEP6: 半全场验证比赛节奏。\n"
+    p += "STEP7: 联网AI搜索Pinnacle/Betfair+伤停+天气。\n"
+    p += "STEP8: 蒙特卡洛模拟验证。\n"
+    p += "STEP9: 凯利+冷门检测。\n\n"
     p += "【原始数据库】\n"
+
     for i, ma in enumerate(match_analyses):
-        m = ma["match"]; eng = ma["engine"]
-        h = m.get("home_team", m.get("home", "Home")); a = m.get("away_team", m.get("guest", "Away"))
+        m = ma["match"]; eng = ma["engine"]; stats = ma.get("stats", {}); exp = ma.get("experience", {})
+        h = m.get("home_team", m.get("home", "Home"))
+        a = m.get("away_team", m.get("guest", "Away"))
+        league = m.get("league", m.get("cup", ""))
         hc = m.get("give_ball", "0")
         sp_h = float(m.get("sp_home", m.get("win", 0)) or 0)
         sp_d = float(m.get("sp_draw", m.get("same", 0)) or 0)
         sp_a = float(m.get("sp_away", m.get("lose", 0)) or 0)
-        p += f"{'='*80}\n[{i+1}] {h} vs {a} | {m.get('league', m.get('cup', ''))}\n{'='*80}\n"
-        p += f"欧赔: {sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f} | 让球: {hc}\n"
-        if m.get("hhad_win"): p += f"让球胜平负: {m.get('hhad_win')}/{m.get('hhad_same')}/{m.get('hhad_lose')}\n"
-        a0=m.get("a0","");a1=m.get("a1","");a2=m.get("a2","");a3=m.get("a3","");a4=m.get("a4","");a5=m.get("a5","");a6=m.get("a6","");a7=m.get("a7","")
-        if a0: p += f"总进球: 0球={a0}|1={a1}|2={a2}|3={a3}|4={a4}|5={a5}|6={a6}|7+={a7}\n"
+
+        p += f"{'='*70}\n[{i+1}] {h} vs {a} | {league}\n{'='*70}\n"
+
+        # ★ 联赛冷门率提醒
+        upset_leagues = {"英冠":32,"英甲":30,"英乙":28,"法乙":28,"荷乙":27,"德乙":26,"意乙":25}
+        for lg_key, upset_pct in upset_leagues.items():
+            if lg_key in str(league):
+                p += f"⚠️ {lg_key}冷门率{upset_pct}%！不要默认主胜，仔细看CRS客胜和平局赔率。\n"
+                break
+
+        # ★ 计算信号1：赔率离散度（三项接近=平局概率高）
+        odds_range = round(max(sp_h,sp_d,sp_a) - min(sp_h,sp_d,sp_a), 2) if sp_h > 1 else 0
+        entropy_tag = ""
+        if 0 < odds_range < 0.8:
+            entropy_tag = " ⚠️三项极接近=均势高平局"
+        elif 0 < odds_range < 1.2:
+            entropy_tag = " (较均势)"
+
+        p += f"欧赔: {sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f}{entropy_tag} | 让球: {hc}\n"
+
+        if m.get("hhad_win"):
+            p += f"让球胜平负: {m.get('hhad_win')}/{m.get('hhad_same')}/{m.get('hhad_lose')}\n"
+
+        # ★ 新增：单关标记（庄家信心指标）
+        single = m.get("single", 0)
+        if single == 1:
+            p += f"📌 单关开放(庄家对结果有信心)\n"
+
+        # ★ 新增：联赛排名/位置
+        h_pos = m.get("home_position", ""); g_pos = m.get("guest_position", "")
+        if h_pos or g_pos:
+            p += f"排名: 主队{h_pos} vs 客队{g_pos}\n"
+
+        # 总进球+计算期望
+        a0=m.get("a0","");a1=m.get("a1","");a2=m.get("a2","");a3=m.get("a3","")
+        a4=m.get("a4","");a5=m.get("a5","");a6=m.get("a6","");a7=m.get("a7","")
+        if a0:
+            p += f"总进球: 0球={a0}|1={a1}|2={a2}|3={a3}|4={a4}|5={a5}|6={a6}|7+={a7}\n"
+            # ★ 计算信号2：庄家预期进球数
+            try:
+                goals_probs = []
+                for gi, av in enumerate([a0,a1,a2,a3,a4,a5,a6,a7]):
+                    odds_v = float(av)
+                    if odds_v > 1: goals_probs.append((gi, 1/odds_v))
+                if goals_probs:
+                    total_p = sum(p2 for _,p2 in goals_probs)
+                    exp_goals = sum(g*(p2/total_p) for g,p2 in goals_probs)
+                    most_likely = min(goals_probs, key=lambda x: 1/x[1] if x[1]>0 else 99)
+                    p += f"→ 庄家预期总球: {exp_goals:.1f} | 最可能: {most_likely[0]}球({most_likely[1]/total_p*100:.0f}%)\n"
+            except: pass
+
+        # CRS全比分
         crs_lines = []
-        for key, score in {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2","w40":"4-0","w41":"4-1","w42":"4-2","s00":"0-0","s11":"1-1","s22":"2-2","s33":"3-3","l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3","l23":"2-3","l04":"0-4","l14":"1-4"}.items():
+        crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2","w40":"4-0","w41":"4-1","w42":"4-2",
+                   "s00":"0-0","s11":"1-1","s22":"2-2","s33":"3-3",
+                   "l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3","l23":"2-3","l04":"0-4","l14":"1-4"}
+        crs_probs = []
+        for key, score in crs_map.items():
             try:
                 odds = float(m.get(key, 0) or 0)
-                if odds > 1.0: crs_lines.append(f"{score}={odds:.2f}")
+                if odds > 1.0:
+                    crs_lines.append(f"{score}={odds:.2f}")
+                    crs_probs.append((score, odds, 1/odds))
             except: pass
-        if crs_lines: p += f"CRS: {' | '.join(crs_lines)}\n"
+        if crs_lines:
+            p += f"CRS: {' | '.join(crs_lines)}\n"
+            # ★ 计算信号3：CRS TOP5排序
+            if crs_probs:
+                crs_probs.sort(key=lambda x: x[1])
+                total_crs = sum(pr for _,_,pr in crs_probs)
+                top5 = crs_probs[:5]
+                p += f"→ CRS TOP5: {' > '.join(f'{s}({pr/total_crs*100:.1f}%)' for s,_,pr in top5)}\n"
+
+        # 其他比分兜底赔率（★新增：告诉AI有多少概率落在"其他"）
+        crs_win_other = float(m.get("crs_win", 0) or 0)
+        crs_lose_other = float(m.get("crs_lose", 0) or 0)
+        if crs_win_other > 1:
+            p += f"CRS其他: 主胜其他@{crs_win_other} 客胜其他@{crs_lose_other}\n"
+
+        # 半全场完整9格
         hf_lines = []
         for key, label in {"ss":"主/主","sp":"主/平","sf":"主/负","ps":"平/主","pp":"平/平","pf":"平/负","fs":"负/主","fp":"负/平","ff":"负/负"}.items():
             try:
@@ -191,27 +263,47 @@ def build_batch_prompt(match_analyses):
                 if v > 1: hf_lines.append(f"{label}={v:.2f}")
             except: pass
         if hf_lines: p += f"半全场: {' | '.join(hf_lines)}\n"
+
+        # 散户投注
         vote = m.get("vote", {})
         if vote:
             p += f"散户: 胜{vote.get('win','?')}% 平{vote.get('same','?')}% 负{vote.get('lose','?')}%"
             if vote.get("hhad_win"): p += f" | 让球主{vote['hhad_win']}%平{vote.get('hhad_same','?')}%客{vote.get('hhad_lose','?')}%"
             p += "\n"
+
+        # 赔率变动
         change = m.get("change", {})
         if change and isinstance(change, dict):
             cw=change.get("win",0);cs=change.get("same",0);cl=change.get("lose",0)
             if cw or cs or cl: p += f"赔率变动: 胜{cw} 平{cs} 负{cl}\n"
-        if eng.get('bookmaker_implied_home_xg'): p += f"庄家xG: 主{eng['bookmaker_implied_home_xg']} vs 客{eng.get('bookmaker_implied_away_xg')}\n"
+
+        # 庄家xG
+        if eng.get('bookmaker_implied_home_xg'):
+            p += f"庄家xG: 主{eng['bookmaker_implied_home_xg']} vs 客{eng.get('bookmaker_implied_away_xg')}\n"
+
+        # 伤停+情报
         info = m.get("information", {})
         if isinstance(info, dict):
             for k,v in [("home_injury","主伤停"),("guest_injury","客伤停"),("home_good_news","主利好"),("guest_good_news","客利好"),("home_bad_news","主利空"),("guest_bad_news","客利空")]:
                 if info.get(k): p += f"{v}: {str(info[k])[:300].replace(chr(10),' | ')}\n"
+
+        # 状态+战绩
         hs=m.get("home_stats",{});ast2=m.get("away_stats",{})
         if hs.get("form"):
             p += f"主队: {hs.get('wins','?')}胜{hs.get('draws','?')}平{hs.get('losses','?')}负 {hs.get('form','?')} 进{hs.get('avg_goals_for','?')}/失{hs.get('avg_goals_against','?')}\n"
             p += f"客队: {ast2.get('wins','?')}胜{ast2.get('draws','?')}平{ast2.get('losses','?')}负 {ast2.get('form','?')} 进{ast2.get('avg_goals_for','?')}/失{ast2.get('avg_goals_against','?')}\n"
-        if m.get('baseface'): p += f"基本面: {str(m['baseface'])[:200].replace(chr(10),' ')}\n"
+
+        # ★ 新增：专家分析和基本面
+        analyse = str(m.get('analyse', '')).replace('\n', ' ')[:200]
+        baseface = str(m.get('baseface', '')).replace('\n', ' ')[:200]
+        intro = str(m.get('intro', m.get('expert_intro', ''))).replace('\n', ' ')[:150]
+        if analyse and len(analyse) > 10: p += f"机构分析: {analyse}\n"
+        elif baseface and len(baseface) > 10: p += f"基本面: {baseface}\n"
+        if intro and len(intro) > 10: p += f"赛事概述: {intro}\n"
+
         p += "\n"
-    p += f"【输出{len(match_analyses)}场JSON数组，只输出数组！】\n"
+
+    p += f"【输出{len(match_analyses)}场JSON数组，只输出数组不要任何其他文字！】\n"
     return p
 
 # ====================================================================
@@ -385,7 +477,8 @@ async def run_ai_matrix(prompt, num_matches):
     return all_results
 
 # ====================================================================
-# Merge v3.5 — 修复5大BUG：AI投票解放+0-0通道+经验规则联动
+# Merge v4.0 — 方向先行+CRS回检+AI投票校验
+# 核心修复：预测9主胜实际6主胜=主胜偏向；AI共识2-0实际≤1球=比分虚高
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     sp_h = float(match_obj.get("sp_home", match_obj.get("win", 0)) or 0)
@@ -396,9 +489,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
     ai_all = {"claude": claude_r, "grok": grok_r, "gpt": gpt_r, "gemini": gemini_r}
     ai_scores = []
-    ai_conf_sum = 0
-    ai_conf_count = 0
-    value_kills = 0
+    ai_conf_sum = 0; ai_conf_count = 0; value_kills = 0
     weights = {"claude": 1.4, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
 
     for name, r in ai_all.items():
@@ -411,7 +502,58 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             ai_conf_count += weights.get(name, 1.0)
             if r.get("value_kill"): value_kills += 1
 
-    # ★ BUG修复：AI投票不再被engine top3卡死
+    # ========== STEP1: 方向投票（先定方向，再定比分）==========
+    dir_vote = {"主胜": 0, "平局": 0, "客胜": 0}
+    for sc, name in ai_scores:
+        try:
+            h, a = map(int, sc.split("-"))
+            if h > a: dir_vote["主胜"] += weights.get(name, 1.0)
+            elif h < a: dir_vote["客胜"] += weights.get(name, 1.0)
+            else: dir_vote["平局"] += weights.get(name, 1.0)
+        except: pass
+
+    # 引擎方向也参与投票（权重1.0）
+    try:
+        eh, ea = map(int, engine_score.split("-"))
+        if eh > ea: dir_vote["主胜"] += 1.0
+        elif eh < ea: dir_vote["客胜"] += 1.0
+        else: dir_vote["平局"] += 1.0
+    except: pass
+
+    # ★ 新增：赔率离散度自动检测→平局加权
+    odds_range = max(sp_h,sp_d,sp_a) - min(sp_h,sp_d,sp_a) if sp_h>1 and sp_d>1 and sp_a>1 else 99
+    if odds_range < 0.8:
+        dir_vote["平局"] += 2.0  # 三项赔率极接近→强力加平
+    elif odds_range < 1.2:
+        dir_vote["平局"] += 1.0  # 较均势→适度加平
+
+    # ★ 新增：欧赔隐含平局概率>30%时加平
+    if sp_d > 1:
+        implied_draw = (1/sp_d) / ((1/sp_h if sp_h>1 else 0.4) + (1/sp_d) + (1/sp_a if sp_a>1 else 0.3))
+        if implied_draw > 0.30:
+            dir_vote["平局"] += 1.5
+
+    best_direction = max(dir_vote, key=dir_vote.get)
+
+    # ========== STEP2: CRS赔率辅助选比分 ==========
+    crs_key_map = {"1-0":"w10","0-1":"l01","2-1":"w21","1-2":"l12","2-0":"w20","0-2":"l02",
+                   "0-0":"s00","1-1":"s11","3-0":"w30","3-1":"w31","0-3":"l03","1-3":"l13",
+                   "2-2":"s22","3-2":"w32","2-3":"l23"}
+    
+    def get_crs_odds(score):
+        key = crs_key_map.get(score, "")
+        try: return float(match_obj.get(key, 99) or 99)
+        except: return 99.0
+
+    # 在该方向的比分中，找CRS赔率最低的（=庄家认为最可能的）
+    direction_scores = {
+        "主胜": ["1-0", "2-0", "2-1", "3-0", "3-1"],
+        "平局": ["0-0", "1-1", "2-2"],
+        "客胜": ["0-1", "0-2", "1-2", "0-3", "1-3"],
+    }
+    crs_best_in_dir = sorted(direction_scores[best_direction], key=lambda s: get_crs_odds(s))
+
+    # ========== STEP3: AI比分投票 + CRS回检 ==========
     vote_count = {}
     weighted_vote = {}
     for sc, name in ai_scores:
@@ -419,60 +561,56 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         weighted_vote[sc] = weighted_vote.get(sc, 0) + weights.get(name, 1.0)
 
     final_score = engine_score
-    num_ai_working = len(ai_scores)
 
     if weighted_vote:
         best_voted = max(weighted_vote, key=weighted_vote.get)
         best_count = vote_count.get(best_voted, 0)
-        best_weight = weighted_vote.get(best_voted, 0)
+        best_crs = get_crs_odds(best_voted)
 
-        # 规则1：3+票直接采用（绝对多数）
-        if best_count >= 3:
+        # AI共识比分 + CRS赔率合理(≤10倍) → 直接采用
+        if best_count >= 3 and best_crs <= 10.0:
             final_score = best_voted
-        # 规则2：2票且加权权重≥2.0直接采用（不需要在engine top3）
-        elif best_count >= 2 and best_weight >= 2.0:
+        elif best_count >= 2 and best_crs <= 8.0:
             final_score = best_voted
-        # 规则3：2票但权重<2.0，需在engine top3或CRS低赔比分
-        elif best_count >= 2:
-            top3 = engine_result.get("top3_scores", [])
-            if best_voted in top3:
-                final_score = best_voted
-            else:
-                # 检查CRS赔率：如果这个比分赔率≤8.0也接受
-                crs_key_map = {"1-0":"w10","0-1":"l01","2-1":"w21","1-2":"l12","2-0":"w20","0-2":"l02","0-0":"s00","1-1":"s11","3-0":"w30","3-1":"w31","0-3":"l03","1-3":"l13"}
-                crs_key = crs_key_map.get(best_voted, "")
-                crs_odds = float(match_obj.get(crs_key, 99) or 99)
-                if crs_odds <= 8.0:
-                    final_score = best_voted
-        # 规则4：只有1个AI工作且置信度高，也可采用
-        elif num_ai_working == 1 and ai_scores[0][1] in ["claude", "grok"]:
+        # AI共识比分但CRS赔率过高(>10倍) → 降级到该方向CRS最优比分
+        elif best_count >= 2 and best_crs > 10.0:
+            # AI方向可信，但比分不现实，用CRS找该方向最可能的比分
+            try:
+                bh, ba = map(int, best_voted.split("-"))
+                ai_dir = "主胜" if bh > ba else ("客胜" if bh < ba else "平局")
+                final_score = sorted(direction_scores[ai_dir], key=lambda s: get_crs_odds(s))[0]
+            except:
+                final_score = crs_best_in_dir[0] if crs_best_in_dir else engine_score
+        # AI没有共识 → 用方向投票结果 + CRS最优比分
+        elif len(ai_scores) >= 2:
+            final_score = crs_best_in_dir[0] if crs_best_in_dir else engine_score
+        # 只有1个AI → 如果是Claude/Grok且高信心
+        elif len(ai_scores) == 1 and ai_scores[0][1] in ["claude", "grok"]:
             r = ai_all.get(ai_scores[0][1], {})
             if isinstance(r, dict) and r.get("ai_confidence", 0) >= 80:
-                final_score = ai_scores[0][0]
+                sc_crs = get_crs_odds(ai_scores[0][0])
+                if sc_crs <= 10.0:
+                    final_score = ai_scores[0][0]
+                else:
+                    final_score = crs_best_in_dir[0] if crs_best_in_dir else engine_score
 
-    # ★ BUG3修复：0-0通道 — experience_rules检测到0-0强信号时介入
+    # ========== STEP4: 0-0通道 ==========
     exp_analysis = stats.get("experience_analysis", {})
-    zero_zero_boost = 0
-    if isinstance(exp_analysis, dict):
-        zero_zero_boost = exp_analysis.get("zero_zero_boost", 0)
-    # 也从match本体读0球赔率做二次判断
+    zero_zero_boost = exp_analysis.get("zero_zero_boost", 0) if isinstance(exp_analysis, dict) else 0
     a0_val = float(match_obj.get("a0", 99) or 99)
     s00_val = float(match_obj.get("s00", 99) or 99)
 
     if zero_zero_boost >= 10:
-        # 经验规则强0-0信号
         if any(sc == "0-0" for sc, _ in ai_scores):
-            final_score = "0-0"  # AI也说0-0→确认
+            final_score = "0-0"
         elif a0_val < 8.0 and s00_val < 9.0:
-            final_score = "0-0"  # 赔率双重确认
-        elif final_score in ["1-0", "0-1", "1-1"]:
-            # 低球比分时，0-0信号强可以替换
-            if zero_zero_boost >= 14:
-                final_score = "0-0"
+            final_score = "0-0"
+        elif final_score in ["1-0", "0-1", "1-1"] and zero_zero_boost >= 14:
+            final_score = "0-0"
     elif zero_zero_boost >= 6 and a0_val < 8.5 and final_score == "1-1":
-        # 中等0-0信号+0球赔率低+当前预测1-1→降级为0-0
         final_score = "0-0"
 
+    # ========== 信心计算 ==========
     avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
     cf = engine_conf
     cf = min(95, cf + int((avg_ai_conf - 60) * 0.4))
@@ -481,6 +619,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if has_warn: cf = max(35, cf - 12)
     risk = "低" if cf >= 75 else ("中" if cf >= 55 else "高")
 
+    # ========== 概率融合 ==========
     hp = engine_result.get("home_prob", 33); dp = engine_result.get("draw_prob", 33); ap = engine_result.get("away_prob", 34)
     shp = stats.get("home_win_pct", 33); sdp = stats.get("draw_pct", 33); sap = stats.get("away_win_pct", 34)
     fhp = hp * 0.70 + shp * 0.30; fdp = dp * 0.70 + sdp * 0.30; fap = ap * 0.70 + sap * 0.30
