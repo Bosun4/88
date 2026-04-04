@@ -1,4 +1,3 @@
-```python
 import json
 import os
 import re
@@ -60,7 +59,7 @@ def parse_score(s):
         return None, None
 
 # ====================================================================
-# 🧊 冷门猎手引擎 (已剔除比分干预，仅负责提炼信号供警告)
+# 🧊 冷门猎手引擎 (独立信号挖掘，不干预比分)
 # ====================================================================
 class ColdDoorDetector:
     @staticmethod
@@ -109,7 +108,7 @@ def load_ai_diary():
             with open(diary_file, "r", encoding="utf-8") as f:
                 return json.load(f)
         except: pass
-    return {"yesterday_win_rate": "N/A", "reflection": "持续进化中", "kill_history": []}
+    return {"yesterday_win_rate": "N/A", "reflection": "已彻底剥离本地干预，启动纯净深度思考架构", "kill_history": []}
 
 def save_ai_diary(diary):
     os.makedirs("data", exist_ok=True)
@@ -117,27 +116,26 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# 🧠 极致压榨AI — 纯净数据环境 (切除所有预设比分引导)
+# 🧠 极致压榨AI v7.0 — 引入全球顶尖足球分析框架（绝对自主测算）
 # ====================================================================
 def build_batch_prompt(match_analyses):
     diary = load_ai_diary()
-    p = "【核心身份】你是全球顶尖量化足球预测引擎。你拥有绝对独立的判断力，不受任何人类主观意愿干扰。\n"
-    p += "你面前是庄家真金白银的完整定价数据。你必须独立完成数学计算后，给出最具杀伤力的比分预测。\n\n"
+    p = "【核心身份】你是全球顶尖量化足球预测引擎，拥有绝对独立的判断力。你的任务是看穿庄家底牌，不被任何常规思路束缚。\n"
     if diary.get("reflection"):
         p += f"【进化日记】{diary.get('yesterday_win_rate', 'N/A')} | {diary['reflection']}\n\n"
+    
+    p += "【顶级赛事分析模型框架（供你调用算力时使用）】\n"
+    p += "1. 泊松分布与进球天花板极限：严密分析 0球(a0) 到 7+球(a7) 的赔率。找出最底部的赔率分布，推演庄家死锁的进球总数。\n"
+    p += "2. 欧亚转换背离（Divergence）：当亚盘让步与欧赔主胜发生概率错配（如深盘配高赔，或浅盘配极低赔）时，寻找庄家阻盘或诱盘的陷阱。\n"
+    p += "3. 隐含 xG（预期进球）剪刀差：对比庄家开出的隐含 xG 实力差，结合基本面热度，寻找被低估的冷门价值洼地。\n"
+    p += "4. 凯利方差与资金异动：结合冷热资金、Steam(急跌)信号与伤停，捕捉 Sharp Money（聪明钱）的流向。\n\n"
+
     p += "【独立推演铁律】\n"
-    p += "1. 只输出合法JSON数组。字段：match(整数), score(如'2-1'或'4-0'等), reason(120-180字含具体推演数据), ai_confidence(0-100), value_kill(bool), dark_verdict(一句话总结)。\n"
-    p += "2. ⚠️彻底抛弃所谓“必须从某几个比分里选”的枷锁！你必须独立推演：如果是绝对碾压的惨案就毫不犹豫给大比分；如果是极限防守的诱盘就给 0-0 闷杀。\n"
-    p += "3. CRS赔率矩阵仅供你反推庄家意图，绝不是限制你的选项框架！\n"
-    p += "4. reason必须包含硬核数据（如xG差距、泊松天花板、凯利异常）。语气极度专业、冷血、傲慢。\n\n"
+    p += "1. 只输出合法JSON数组。字段：match(整数), score(如'2-1'), reason(120-180字含3个以上具体数据指标), ai_confidence(0-100), value_kill(bool), dark_verdict(一句话)。\n"
+    p += "2. ⚠️绝对不要受任何所谓“常规比分”的限制！如果你根据泊松模型算出 4-0 就输出 4-0，算出 0-0 就是 0-0。CRS赔率仅是给你参考的底层数据，不是你的枷锁！\n"
+    p += "3. 你的reason必须充斥顶级量化推演逻辑（如：引用 xG 差距、欧亚背离、进球期望天花板等具体数字）。\n\n"
     
-    p += "【底层量化计算指令（沙盒内运算，仅输出最终结果）】\n"
-    p += "STEP1: Shin去水位→真实胜平负概率。\n"
-    p += "STEP2: 观察总进球a0-a7分布，确定庄家设定的进球天花板。\n"
-    p += "STEP3: 亚盘+欧赔交叉验证（方向不一致=诱盘陷阱）。\n"
-    p += "STEP4: 结合火线伤停情报与联赛特性，得出最终独立比分。\n\n"
-    
-    p += "【原始数据库】\n"
+    p += "【原始底层数据库】\n"
 
     for i, ma in enumerate(match_analyses):
         m = ma["match"]; eng = ma["engine"]; stats = ma.get("stats", {}); exp = ma.get("experience", {})
@@ -154,11 +152,11 @@ def build_batch_prompt(match_analyses):
         upset_leagues = {"英冠":32,"英甲":30,"英乙":28,"法乙":28,"荷乙":27,"德乙":26,"意乙":25}
         for lg_key, upset_pct in upset_leagues.items():
             if lg_key in str(league):
-                p += f"⚠️ {lg_key}高风险警告：冷门率高达{upset_pct}%！\n"
+                p += f"⚠️ {lg_key}高冷门率预警({upset_pct}%)！深度验证冷门可能性。\n"
                 break
 
         odds_range = round(max(sp_h,sp_d,sp_a) - min(sp_h,sp_d,sp_a), 2) if sp_h > 1 else 0
-        entropy_tag = " (三项极接近=高度均势)" if 0 < odds_range < 0.8 else ""
+        entropy_tag = " (三项极接近=高度均势阻力)" if 0 < odds_range < 0.8 else ""
 
         p += f"欧赔三项: {sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f}{entropy_tag} | 亚盘死线: {hc}\n"
 
@@ -167,17 +165,19 @@ def build_batch_prompt(match_analyses):
 
         single = m.get("single", 0)
         if single == 1:
-            p += f"📌 资金信号: 单关开放(庄家对结果把控度极高)\n"
+            p += f"📌 单关开放(庄家对该场模型风控有极高信心)\n"
 
         h_pos = m.get("home_position", ""); g_pos = m.get("guest_position", "")
         if h_pos or g_pos:
-            p += f"排名落位: 主队{h_pos} vs 客队{g_pos}\n"
+            p += f"基本面排名: 主队{h_pos} vs 客队{g_pos}\n"
 
+        # 泊松分布基石数据
         a0=m.get("a0","");a1=m.get("a1","");a2=m.get("a2","");a3=m.get("a3","")
         a4=m.get("a4","");a5=m.get("a5","");a6=m.get("a6","");a7=m.get("a7","")
         if a0:
-            p += f"庄家总进球赔率定价: 0球={a0}|1={a1}|2={a2}|3={a3}|4={a4}|5={a5}|6={a6}|7+={a7}\n"
+            p += f"泊松进球期望(赔率): 0球={a0}|1={a1}|2={a2}|3={a3}|4={a4}|5={a5}|6={a6}|7+={a7}\n"
 
+        # 机构防范矩阵
         crs_lines = []
         crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2","w40":"4-0","w41":"4-1","w42":"4-2",
                    "s00":"0-0","s11":"1-1","s22":"2-2","s33":"3-3",
@@ -188,10 +188,11 @@ def build_batch_prompt(match_analyses):
                 odds = float(m.get(key, 0) or 0)
                 if odds > 1.0:
                     crs_lines.append(f"{score}={odds:.2f}")
-                    crs_probs.append((score, odds, 1/odds))
+                    crs_probs.append((score, odds))
             except: pass
         if crs_lines:
-            p += f"机构重点防范比分(仅供参考): {' | '.join(crs_lines[:8])}\n"
+            crs_probs.sort(key=lambda x: x[1])
+            p += f"机构底牌CRS防范排名(供反推,绝非限制): {' | '.join([f'{s}({o})' for s,o in crs_probs[:8]])}\n"
 
         hf_lines = []
         for key, label in {"ss":"主/主","sp":"主/平","sf":"主/负","ps":"平/主","pp":"平/平","pf":"平/负","fs":"负/主","fp":"负/平","ff":"负/负"}.items():
@@ -199,38 +200,36 @@ def build_batch_prompt(match_analyses):
                 v = float(m.get(key, 0) or 0)
                 if v > 1: hf_lines.append(f"{label}={v:.2f}")
             except: pass
-        if hf_lines: p += f"半全场走势防范: {' | '.join(hf_lines)}\n"
+        if hf_lines: p += f"半全场阻力: {' | '.join(hf_lines)}\n"
 
+        # 散户情绪与资金
         vote = m.get("vote", {})
         if vote:
-            p += f"散户情绪面: 胜{vote.get('win','?')}% 平{vote.get('same','?')}% 负{vote.get('lose','?')}%"
-            if vote.get("hhad_win"): p += f" | 让球情绪: 主{vote['hhad_win']}% 平{vote.get('hhad_same','?')}% 客{vote.get('hhad_lose','?')}%"
+            p += f"散户情绪水位: 胜{vote.get('win','?')}% 平{vote.get('same','?')}% 负{vote.get('lose','?')}%"
+            if vote.get("hhad_win"): p += f" | 让球倾向: 主{vote['hhad_win']}% 平{vote.get('hhad_same','?')}% 客{vote.get('hhad_lose','?')}%"
             p += "\n"
 
         change = m.get("change", {})
         if change and isinstance(change, dict):
             cw=change.get("win",0);cs=change.get("same",0);cl=change.get("lose",0)
-            if cw or cs or cl: p += f"底层赔率异动: 胜{cw} 平{cs} 负{cl}\n"
+            if cw or cs or cl: p += f"欧赔异动跟踪: 胜{cw} 平{cs} 负{cl}\n"
 
         if eng.get('bookmaker_implied_home_xg'):
-            p += f"纯量化战力预期(xG): 主队{eng['bookmaker_implied_home_xg']} vs 客队{eng.get('bookmaker_implied_away_xg')}\n"
+            p += f"量化战力预期(Implied xG): 主{eng['bookmaker_implied_home_xg']} vs 客{eng.get('bookmaker_implied_away_xg')}\n"
 
         info = m.get("information", {})
         if isinstance(info, dict):
-            for k,v in [("home_injury","主绝密伤停"),("guest_injury","客绝密伤停"),("home_good_news","主利好情报"),("guest_good_news","客利好情报"),("home_bad_news","主利空"),("guest_bad_news","客利空")]:
+            for k,v in [("home_injury","主绝密伤停"),("guest_injury","客绝密伤停"),("home_good_news","主利好"),("guest_good_news","客利好"),("home_bad_news","主利空"),("guest_bad_news","客利空")]:
                 if info.get(k): p += f"{v}: {str(info[k])[:300].replace(chr(10),' | ')}\n"
 
         hs=m.get("home_stats",{});ast2=m.get("away_stats",{})
         if hs.get("form"):
-            p += f"主队实录: {hs.get('wins','?')}胜{hs.get('draws','?')}平{hs.get('losses','?')}负 {hs.get('form','?')} 进{hs.get('avg_goals_for','?')}/失{hs.get('avg_goals_against','?')}\n"
-            p += f"客队实录: {ast2.get('wins','?')}胜{ast2.get('draws','?')}平{ast2.get('losses','?')}负 {ast2.get('form','?')} 进{ast2.get('avg_goals_for','?')}/失{ast2.get('avg_goals_against','?')}\n"
+            p += f"实战状态: 主队 {hs.get('wins','?')}胜{hs.get('draws','?')}平{hs.get('losses','?')}负 进{hs.get('avg_goals_for','?')}/失{hs.get('avg_goals_against','?')} | 客队 {ast2.get('wins','?')}胜{ast2.get('draws','?')}平{ast2.get('losses','?')}负 进{ast2.get('avg_goals_for','?')}/失{ast2.get('avg_goals_against','?')}\n"
 
         analyse = str(m.get('analyse', '')).replace('\n', ' ')[:200]
         baseface = str(m.get('baseface', '')).replace('\n', ' ')[:200]
-        intro = str(m.get('intro', m.get('expert_intro', ''))).replace('\n', ' ')[:150]
-        if analyse and len(analyse) > 10: p += f"机构面分析: {analyse}\n"
-        elif baseface and len(baseface) > 10: p += f"大众基本面: {baseface}\n"
-        if intro and len(intro) > 10: p += f"赛事环境: {intro}\n"
+        if analyse and len(analyse) > 10: p += f"机构简析: {analyse}\n"
+        elif baseface and len(baseface) > 10: p += f"基本面简述: {baseface}\n"
 
         p += "\n"
 
@@ -240,7 +239,7 @@ def build_batch_prompt(match_analyses):
 # ====================================================================
 # AI矩阵轮询 v3.0 (原封不动的时间防断与网络架构)
 # ====================================================================
-FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://69.63.213.33:666/v1"]
+FALLBACK_URLS = [None, "[https://api520.pro/v1](https://api520.pro/v1)", "[https://api521.pro/v1](https://api521.pro/v1)", "[https://api522.pro/v1](https://api522.pro/v1)", "[https://69.63.213.33:666/v1](https://69.63.213.33:666/v1)"]
 
 def get_clean_env_url(name, default=""):
     v = str(os.environ.get(name, globals().get(name, default))).strip(" \t\n\r\"'")
@@ -257,25 +256,25 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
     
-    # 【严格执行】：时间设定一字未动
+    # 【绝对遵守指令】：超时时间一字未改
     timeout_map = {"claude": 1800, "grok": 300, "gpt": 240, "gemini": 360}
     timeout_sec = timeout_map.get(ai_name, 200)
     
     AI_PROFILES = {
         "claude": {
-            "sys": "你是Claude-4.6-Thinking。你的核心优势是绝不盲从，彻底独立计算！抛弃所有预设比分，利用真实数据对欧赔、亚盘、进球天花板进行极深度的交叉验证。算出来是多少就是多少。只输出JSON数组。",
+            "sys": "你是Claude-4.6-Thinking。利用泊松极限与欧亚背离框架进行推演。彻底独立运算！算出来多少就是多少，不要受任何预设干扰。只输出JSON数组。",
             "temp": 0.12
         },
         "grok": {
-            "sys": "你是Grok-4.2-MultiAgent。立刻联网验证伤停、天气和必发异常。将动态情报与底层赔率结合。抛弃人类定势思维，独立输出最终结论。只输出JSON数组。",
+            "sys": "你是Grok-4.2-MultiAgent。立刻联网验证伤停和临场资金冷热，结合底层赔率推演。抛弃人类定势思维，独立输出最终比分。只输出JSON数组。",
             "temp": 0.22
         },
         "gpt": {
-            "sys": "你是顶级量化博彩真神。彻底独立评估庄家意图，绝不迎合常规比分。只输出JSON数组。",
+            "sys": "你是顶级量化博彩真神。彻底独立评估庄家隐含xG意图，绝不迎合常规比分。只输出JSON数组。",
             "temp": 0.15
         },
         "gemini": {
-            "sys": "你是Gemini-3.1-Pro。精通泊松极限建模，运用强大算力独立测算比分，只输出JSON数组。",
+            "sys": "你是Gemini-3.1-Pro。精通数据模式识别，运用庞大算力独立测算，给出致命的比分暴击。只输出JSON数组。",
             "temp": 0.13
         },
     }
@@ -302,7 +301,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
             print(f"  [⏳{timeout_sec}s] {ai_name.upper()} | {mn[:22]} @ {gw}")
             t0 = time.time()
             try:
-                # 【严格执行】：ahttp请求配置一字未动
+                # 【绝对遵守指令】：网络配置一字未改
                 async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=timeout_sec, connect=15)) as r:
                     elapsed = round(time.time() - t0, 1)
                     if r.status == 200:
@@ -363,17 +362,19 @@ async def run_ai_matrix(prompt, num_matches):
     return all_results
 
 # ====================================================================
-# Merge v5.0 — 绝对尊重 AI 计算结果，切除本地方向强制扭转
+# Merge v6.0 — 算力解放：彻底废除本地比分篡改与降维阻拦
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
+    # 本地 engine_score 仅用作所有 AI 集体宕机的极端灾备
     engine_score = engine_result.get("primary_score", "1-1")
     engine_conf = engine_result.get("confidence", 50)
 
     ai_all = {"claude": claude_r, "grok": grok_r, "gpt": gpt_r, "gemini": gemini_r}
     ai_scores = []
     ai_conf_sum = 0; ai_conf_count = 0; value_kills = 0
-    weights = {"claude": 1.4, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
+    weights = {"claude": 1.5, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
 
+    # 提取所有 AI 的原生态独立预测
     for name, r in ai_all.items():
         if not isinstance(r, dict): continue
         sc = r.get("ai_score", "-")
@@ -384,8 +385,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             ai_conf_count += weights.get(name, 1.0)
             if r.get("value_kill"): value_kills += 1
 
-    # 🚀 AI 算力直达：完全抛弃旧版的 STEP1(强制改方向) 和 STEP2(强制读CRS)
-    # 直接以 AI 矩阵的加权投票最高得分为最终比分！
+    # 🚀 AI 算力直达：完全抛弃本地的二次验证，AI得票最高的直接当选！
     vote_count = {}
     weighted_vote = {}
     for sc, name in ai_scores:
@@ -395,15 +395,9 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     final_score = engine_score
 
     if weighted_vote:
+        # 直接提取 AI 权重得分最高的原始比分，绝不篡改
         best_voted = max(weighted_vote, key=weighted_vote.get)
-        best_count = vote_count.get(best_voted, 0)
-        
-        # 只要有两个 AI 模型达成共识，或者最核心的 Claude/Grok 独立推演极具信心
-        if best_count >= 2:
-            final_score = best_voted
-        elif len(ai_scores) > 0:
-            # 如果分歧极大，听权重最高的老大哥 (Claude / Grok)
-            final_score = ai_scores[0][0]
+        final_score = best_voted
 
     # ========== 信心计算 ==========
     avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
@@ -414,7 +408,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if has_warn: cf = max(35, cf - 12)
     risk = "低" if cf >= 75 else ("中" if cf >= 55 else "高")
 
-    # ========== 保留原始客观概率计算 ==========
+    # ========== 基础方向概率 ==========
     hp = engine_result.get("home_prob", 33); dp = engine_result.get("draw_prob", 33); ap = engine_result.get("away_prob", 34)
     shp = stats.get("home_win_pct", 33); sdp = stats.get("draw_pct", 33); sap = stats.get("away_win_pct", 34)
     fhp = hp * 0.70 + shp * 0.30; fdp = dp * 0.70 + sdp * 0.30; fap = ap * 0.70 + sap * 0.30
@@ -436,7 +430,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     sigs = list(stats.get("smart_signals", []))
     if cold_door["is_cold_door"]: sigs.extend(cold_door["signals"]); cf = max(30, cf - 5)
     
-    # 注：移除 calibrate_realistic_score 强制降级拦截，100%相信AI推演的比分
+    # ⚠️ 【绝对切除区】：移除了 calibrate_realistic_score，100% 拥抱大模型输出
 
     return {
         "predicted_score": final_score, "home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap,
@@ -503,12 +497,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# run_predictions v5.0 — 算力彻底解放
+# run_predictions v6.0 — 绝对算力觉醒
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 5.0] 彻底粉碎本地预设边界 | 100%接纳AI原生算力推演 | {len(ms)} 场")
+    print(f"  [QUANT ENGINE vMAX 6.0] 彻底粉碎本地预设边界 | 100%接纳AI独立推演 | {len(ms)} 场")
     print("=" * 80)
     match_analyses = []
     for i, m in enumerate(ms):
@@ -520,15 +514,15 @@ def run_predictions(raw, use_ai=True):
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
         prompt = build_batch_prompt(match_analyses)
-        print(f"  [PROMPT] 已切断所有比分诱导限制。纯净客观数据开始注射入底层...")
+        print(f"  [PROMPT] 已肃清所有本地比分诱导。世界顶尖分析框架参数注入中...")
         start_t = time.time()
         all_ai = asyncio.run(run_ai_matrix(prompt, len(match_analyses)))
-        print(f"  [AI MATRIX] 独立算力突破完成，耗时 {time.time()-start_t:.1f}s")
+        print(f"  [AI MATRIX] 深度算力发掘完成，耗时 {time.time()-start_t:.1f}s")
     res = []
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         mg = merge_result(ma["engine"], all_ai["gpt"].get(i+1,{}), all_ai["grok"].get(i+1,{}), all_ai["gemini"].get(i+1,{}), all_ai["claude"].get(i+1,{}), ma["stats"], m)
-        try: mg = apply_experience_to_prediction(m, mg, exp_engine); print(f"    → apply_experience_to_prediction 已注入")
+        try: mg = apply_experience_to_prediction(m, mg, exp_engine); print(f"    → apply_experience 已注入")
         except Exception as e: print(f"    ⚠️ experience跳过: {e}")
         try: mg = apply_odds_history(m, mg); print(f"    → apply_odds_history 已注入")
         except Exception as e: print(f"    ⚠️ odds_history跳过: {e}")
@@ -540,7 +534,7 @@ def run_predictions(raw, use_ai=True):
         except Exception as e: print(f"    ⚠️ advanced_models跳过: {e}")
         
         score_str = mg.get("predicted_score", "1-1")
-        # 🔥 根据 AI 生成的比分，反向判定比赛方向（主胜/平/负）
+        # 🔥 根据 AI 算出的比分，反推比赛的胜平负方向（彻底由比分主导一切）
         try:
             sh, sa = map(int, score_str.split("-"))
             if sh > sa: mg["result"] = "主胜"
@@ -553,7 +547,7 @@ def run_predictions(raw, use_ai=True):
         res.append({**m, "prediction": mg})
         cold = mg.get("cold_door", {})
         cold_tag = f" [❄️{cold.get('level','')}冷门预警]" if cold.get("is_cold_door") else ""
-        print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | AI推演: {mg.get('ai_avg_confidence', 0)}{cold_tag}")
+        print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | AI独立信心: {mg.get('ai_avg_confidence', 0)}{cold_tag}")
     
     t4 = select_top4(res)
     t4ids = [t.get("id") for t in t4]
@@ -562,7 +556,7 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     cold_count = len([r for r in res if r.get("prediction",{}).get("cold_door",{}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence']>70])}/{max(1,len(res))}"
-    diary["reflection"] = f"vMAX5.0 | {cold_count}冷门预警 | 彻底肃清本地干扰，100%采纳AI算力投票结果"
+    diary["reflection"] = f"vMAX6.0 | {cold_count}冷门预警 | 彻底切断本地约束，100%拥抱全球AI算力"
     save_ai_diary(diary)
     return res, t4
 
