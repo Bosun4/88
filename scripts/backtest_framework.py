@@ -1,15 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-足球预测回测框架 v1.0（专为你的 Ensemble v4.5 设计）
-直接复制为 backtest_framework.py，与你的原代码零冲突
-预计回测 1000+ 场历史数据只需 3-8 分钟（视AI调用量）
-
-核心升级（比普通回测强 3 倍）：
-1. 全维度指标（精确比分 / 胜平负 / 大小球 / BTTS / Value EV）
-2. Kelly仓位真实模拟 + 资金曲线（含最大回撤、夏普比率）
-3. 置信度分层回测（>80% / >65% / >50%）
-4. 推荐Top4过滤 + 诱盘自动排除
-5. CSV + 图表一键导出（ equity_curve.png + metrics_report.csv ）
-6. Monte Carlo 置信区间（1000次模拟真实收益率分布）
+足球预测回测框架 v2.0（专为 vMAX 7.0 设计 | 数学逻辑彻底修复版）
+修复: 蒙特卡洛置信区间坍塌Bug、夏普比率跨领域错用Bug、空比分TypeError崩溃
 """
 
 import json
@@ -17,51 +10,64 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
-from collections import defaultdict
 import os
 from tqdm import tqdm
 
-# ====================== 你的原有模块导入 ======================
-from your_main_script import run_predictions, EnsemblePredictor, calculate_value_bet
-# 替换为你的实际文件名，例如：
-# from main import run_predictions, ensemble
+# ====================== 原有模块导入 ======================
+# 注意：请确保这些模块在你的项目根目录下
+from main import run_predictions
+from predict import KellyCriterion
 
-ensemble = EnsemblePredictor()  # 你的统计模型实例
+# 实例化 Kelly 计算器
+kelly_calc = KellyCriterion()
+
+def calculate_value_bet(prob_pct, odds):
+    """提取的辅助函数，适配你的 KellyCriterion 返回格式"""
+    prob = prob_pct / 100.0
+    return kelly_calc.calculate(prob, odds, fraction=1.0) # 这里取全凯利，下面再打折
+
 
 # ====================== 回测核心函数 ======================
 def run_backtest(
-    historical_json_path: str,          # 历史比赛JSON路径（格式必须和run_predictions的raw一致）
+    historical_json_path: str,          # 历史比赛JSON路径
     output_dir: str = "backtest_results",
     confidence_threshold: float = 55.0, # 只投注置信度 >= 此值
-    kelly_fraction: float = 0.25,       # Kelly仓位折扣（安全起见建议0.25）
-    use_ai: bool = True,                # 是否开启4路AI（关闭可加速10倍）
+    kelly_fraction: float = 0.25,       # Kelly仓位折扣（1/4 Kelly）
+    use_ai: bool = True,                # 是否开启多模态AI推理
     min_odds: float = 1.60,             # 最低赔率过滤
-    top4_only: bool = True              # 只回测你的select_top4推荐场次
+    top4_only: bool = True              # 只回测推荐场次
 ):
     os.makedirs(output_dir, exist_ok=True)
     
-    # 1. 加载历史数据（必须包含 "actual_score": "2-1", "actual_result": "home"/"draw"/"away"）
+    # 1. 加载历史数据
+    if not os.path.exists(historical_json_path):
+        print(f"❌ 找不到历史文件: {historical_json_path}")
+        return None, None, ""
+        
     with open(historical_json_path, "r", encoding="utf-8") as f:
         raw = json.load(f)
     matches = raw.get("matches", [])
-    print(f"开始回测 {len(matches)} 场历史比赛...")
+    print(f"🚀 开始回测 {len(matches)} 场历史比赛...")
 
     results = []
-    equity = 1000.0          # 初始资金 1000 单位
+    equity = 1000.0          # 初始本金 1000 单位
     equity_curve = [equity]
     bet_history = []
 
     for m in tqdm(matches, desc="回测进度"):
         match_id = m.get("id", m.get("match_num", "未知"))
         home, away = m.get("home_team"), m.get("away_team")
-        actual_score = m.get("actual_score")          # 必须字段！格式 "2-1"
-        actual_result = m.get("actual_result")        # "home", "draw", "away"
-        sp_h, sp_d, sp_a = m.get("sp_home", 0), m.get("sp_draw", 0), m.get("sp_away", 0)
+        # ★ 强制字符串转换防御 KeyError/TypeError
+        actual_score = str(m.get("actual_score", "0-0")) 
+        actual_result = m.get("actual_result")        
+        sp_h = float(m.get("sp_home", 0) or 0)
+        sp_d = float(m.get("sp_draw", 0) or 0)
+        sp_a = float(m.get("sp_away", 0) or 0)
 
-        if not actual_score or not actual_result:
+        if not actual_score or actual_score == "0-0" and not actual_result:
             continue
 
-        # 运行你的完整预测引擎
+        # 运行完整预测引擎
         _, top4 = run_predictions({"matches": [m]}, use_ai=use_ai)
         pred = top4[0]["prediction"] if top4 and top4_only else \
                next((x["prediction"] for x in [{"prediction": m.get("prediction", {})}] if m.get("prediction")), None)
@@ -69,7 +75,7 @@ def run_backtest(
         if not pred:
             continue
 
-        pred_score = pred.get("predicted_score")
+        pred_score = str(pred.get("predicted_score", "0-0"))
         conf = pred.get("confidence", 0)
         result_pred = pred.get("result")
         fused_hp = pred.get("home_win_pct", 33)
@@ -78,13 +84,11 @@ def run_backtest(
         risk = pred.get("risk_level")
 
         # ====================== 投注决策 ======================
-        bet = None
         stake = 0.0
         profit = 0.0
         ev = 0.0
 
         if conf >= confidence_threshold:
-            # 主胜价值
             val_h = calculate_value_bet(fused_hp, sp_h)
             val_d = calculate_value_bet(fused_dp, sp_d)
             val_a = calculate_value_bet(fused_ap, sp_a)
@@ -102,13 +106,13 @@ def run_backtest(
                 prob = best_val[3] / 100.0
                 ev = best_val[0]["ev"]
 
-                # Kelly 仓位
+                # Quarter Kelly 动态仓位管理
                 kelly = max(0.0, best_val[0]["kelly"] / 100 * kelly_fraction)
                 stake = equity * kelly
-                if stake < 10: stake = 0  # 最小投注过滤
+                if stake < 10: stake = 0  
 
                 if stake > 0:
-                    # 实际结果判断
+                    # 结算利润
                     if (bet_type == "home" and actual_result == "home") or \
                        (bet_type == "draw" and actual_result == "draw") or \
                        (bet_type == "away" and actual_result == "away"):
@@ -135,7 +139,7 @@ def run_backtest(
         exact_hit = (pred_score == actual_score)
         win_hit = (result_pred == actual_result) if result_pred else False
         total_goals_pred = sum(int(x) for x in pred_score.split("-")) if "-" in pred_score else 2
-        total_goals_actual = sum(int(x) for x in actual_score.split("-"))
+        total_goals_actual = sum(int(x) for x in actual_score.split("-")) if "-" in actual_score else 2
         over_hit = (total_goals_actual > 2.5) == (pred.get("over_under_2_5") == "大")
 
         results.append({
@@ -160,35 +164,56 @@ def run_backtest(
 
         equity_curve.append(equity)
 
-    # ====================== 生成报告 ======================
+    # ====================== 生成报告与统计 ======================
     df = pd.DataFrame(results)
     df_bet = pd.DataFrame(bet_history)
 
-    # 核心指标
     total_matches = len(df)
-    exact_acc = df["exact_hit"].mean() * 100
-    win_acc = df["win_hit"].mean() * 100
-    over_acc = df["over_hit"].mean() * 100
-    btts_acc = df["btts_hit"].mean() * 100
+    exact_acc = df["exact_hit"].mean() * 100 if total_matches > 0 else 0
+    win_acc = df["win_hit"].mean() * 100 if total_matches > 0 else 0
+    over_acc = df["over_hit"].mean() * 100 if total_matches > 0 else 0
+    btts_acc = df["btts_hit"].mean() * 100 if total_matches > 0 else 0
 
+    # ★ 彻底修复的统计指标逻辑 ★
     if len(df_bet) > 0:
         total_stake = df_bet["stake"].sum()
         total_profit = df_bet["profit"].sum()
         roi = (total_profit / total_stake * 100) if total_stake > 0 else 0
-        yield_ = (total_profit / total_matches * 100) if total_matches > 0 else 0
+        yield_ = roi  # 足球Yield等于ROI
         win_rate = (df_bet["profit"] > 0).mean() * 100
-        max_drawdown = ((pd.Series(equity_curve).cummax() - pd.Series(equity_curve)) / pd.Series(equity_curve).cummax()).max() * 100
-        sharpe = (df_bet["profit"].mean() / df_bet["profit"].std()) * np.sqrt(252) if df_bet["profit"].std() > 0 else 0
+        
+        # 最大回撤计算
+        cum_max = pd.Series(equity_curve).cummax()
+        max_drawdown = ((cum_max - pd.Series(equity_curve)) / cum_max).max() * 100
+        
+        # 修正版单注夏普比率 (Per-Bet Sharpe)
+        if total_stake > 0 and df_bet["profit"].std() > 0:
+            bet_returns = df_bet["profit"] / df_bet["stake"]
+            sharpe = bet_returns.mean() / bet_returns.std()
+        else:
+            sharpe = 0.0
     else:
         roi = yield_ = win_rate = max_drawdown = sharpe = 0
         total_stake = total_profit = 0
 
-    # Monte Carlo 模拟（1000次随机抽样）
+    # ★ 彻底修复的 Monte Carlo 模拟 (NumPy 矩阵极速版) ★
     if len(df_bet) > 30:
         mc_returns = []
+        profits_array = df_bet["profit"].values
+        stakes_array = df_bet["stake"].values
+        num_bets = len(df_bet)
+
         for _ in range(1000):
-            sample = df_bet["profit"].sample(frac=1, replace=True)
-            mc_returns.append(sample.sum() / sample.sum() * 100 if sample.sum() != 0 else 0)
+            # 有放回随机抽样
+            sample_indices = np.random.choice(num_bets, size=num_bets, replace=True)
+            sampled_profit = profits_array[sample_indices].sum()
+            sampled_stake = stakes_array[sample_indices].sum()
+            
+            if sampled_stake > 0:
+                mc_returns.append((sampled_profit / sampled_stake) * 100)
+            else:
+                mc_returns.append(0)
+                
         mc_mean = np.mean(mc_returns)
         mc_95_low = np.percentile(mc_returns, 5)
         mc_95_high = np.percentile(mc_returns, 95)
@@ -198,10 +223,10 @@ def run_backtest(
     # ====================== 输出报告 ======================
     report = f"""
 ╔══════════════════════════════════════════════════════════════╗
-║                 足球预测回测报告（{datetime.now().strftime('%Y-%m-%d')}）                
+║                 vMAX 足球量化回测报告（{datetime.now().strftime('%Y-%m-%d')}）                
 ║══════════════════════════════════════════════════════════════║
 ║ 总场次          : {total_matches} 场
-║ 精确比分命中率  : {exact_acc:.2f}%   ← 行业顶级（普通模型仅8-12%）
+║ 精确比分命中率  : {exact_acc:.2f}%   
 ║ 胜平负命中率    : {win_acc:.2f}%
 ║ 大小球命中率    : {over_acc:.2f}%
 ║ BTTS命中率      : {btts_acc:.2f}%
@@ -212,49 +237,44 @@ def run_backtest(
 ║ Yield（场均收益）: {yield_:.2f}%
 ║ 投注胜率        : {win_rate:.2f}%
 ║ 最大回撤        : {max_drawdown:.2f}%
-║ 夏普比率        : {sharpe:.2f}
+║ 夏普比率        : {sharpe:.4f}  ← (真实 Per-Bet Sharpe)
 ║ Monte Carlo 95% 置信区间 : [{mc_95_low:.1f}% ~ {mc_95_high:.1f}%]
 ╚══════════════════════════════════════════════════════════════╝
 """
     print(report)
 
-    # 保存文件
+    # 导出结果
     df.to_csv(f"{output_dir}/full_results.csv", index=False, encoding="utf-8-sig")
-    df_bet.to_csv(f"{output_dir}/bet_history.csv", index=False, encoding="utf-8-sig")
+    if len(df_bet) > 0:
+        df_bet.to_csv(f"{output_dir}/bet_history.csv", index=False, encoding="utf-8-sig")
     
-    # 资金曲线图
+    # 绘制真实资金曲线
     plt.figure(figsize=(12, 6))
     plt.plot(equity_curve, label="Equity Curve", color="#00ff00", linewidth=2)
-    plt.title("Kelly仓位资金曲线（初始1000单位）")
+    plt.title("Quarter Kelly 资金复利曲线 (初始 1000 单位)")
     plt.xlabel("投注场次")
-    plt.ylabel("资金（单位）")
+    plt.ylabel("资金 (单位)")
     plt.grid(True, alpha=0.3)
     plt.legend()
     plt.savefig(f"{output_dir}/equity_curve.png", dpi=300, bbox_inches="tight")
     plt.close()
 
-    # 分置信度表现表
     if len(df) > 0:
         print("\n分置信度表现：")
         for thresh in [50, 60, 70, 80]:
             sub = df[df["confidence"] >= thresh]
             if len(sub) > 5:
-                print(f"  ≥{thresh}% → 精确比分 {sub['exact_hit'].mean()*100:.1f}% | 场次 {len(sub)}")
+                print(f"  ≥{thresh}% → 胜率 {sub['win_hit'].mean()*100:.1f}% | 场次 {len(sub)}")
 
-    print(f"\n✅ 回测完成！所有报告已保存至 {output_dir}/ 文件夹")
+    print(f"\n✅ 回测引擎执行完毕！报告及资金曲线已保存至 {output_dir}/ 目录。")
     return df, df_bet, report
 
-
-# ====================== 使用示例 ======================
 if __name__ == "__main__":
-    # 1. 准备你的历史数据JSON（格式和run_predictions一致，但每场比赛加两个字段）：
-    #    "actual_score": "2-1",
-    #    "actual_result": "home"   # 或 "draw" / "away"
-    
+    # 直接运行即可进行测试
     run_backtest(
-        historical_json_path="historical_matches_2024-2025.json",  # ← 改成你的文件
-        confidence_threshold=58,      # 建议58-65（平衡数量与质量）
+        historical_json_path="historical_matches.json", 
+        confidence_threshold=58,      
         kelly_fraction=0.25,
-        use_ai=True,                  # 第一次回测建议True，验证AI提升效果
+        use_ai=True,                  
         top4_only=True
     )
