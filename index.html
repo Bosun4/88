@@ -109,29 +109,29 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 </style>
 </head>
 <body>
-<div class="hdr"><div class="hdr-w"><div class="hdr-l"><div class="hdr-logo"></div><div class="hdr-t">小鱼儿量化足球V4.22</div><div class="hdr-v" id="ver">vMAX</div></div><div class="live"><div class="live-d"></div><span class="m" id="ut">...</span></div></div></div>
+<div class="hdr"><div class="hdr-w"><div class="hdr-l"><div class="hdr-logo"></div><div class="hdr-t">小鱼儿量化足球V4.22</div><div class="hdr-v" id="ver">MAX-v1.1</div></div><div class="live"><div class="live-d"></div><span class="m" id="ut">...</span></div></div></div>
 <div class="wrap">
 <div class="dash" id="db"></div>
 <div class="sec"><div class="sec-t">精选推荐</div><div class="sec-b">前4精选</div></div>
 <div class="t4g" id="t4"></div>
-<div class="tabs"><button class="tab" onclick="sw('yesterday')">昨日</button><button class="tab ac" onclick="sw('today')">今日</button><button class="tab" onclick="sw('tomorrow')">明日</button></div>
+<div class="sec" style="margin-top:10px"><div class="sec-t">全部赛事</div><div class="sec-b" id="allCount">0</div></div>
 <div id="ms"></div>
-<div class="foot">零膨胀泊松 · 泊松 · 迪克森修正 · 蒙特卡洛 · ELO · 随机森林 · 梯度提升 · 神经网络 · SVM · KNN · 专业去水 · 冷热偏差 · CLV · Steam检测 · 自适应校准 · 智能过滤<br>GPT · Grok · Gemini · Claude · 58条经验规则 · 历史赔率 · 亚盘分析 · 量化边缘 | vMAX</div>
+<div class="foot">零膨胀泊松 · 迪克森修正 · 蒙特卡洛 · ELO · 随机森林 · 梯度提升 · 神经网络 · SVM · KNN · Shin校准 · CLV · Steam检测 · 自适应校准<br>GPT · Grok · Gemini · Claude(裁判) · 65条经验规则 · 两阶段AI v7.0 | vMAX</div>
 </div>
 <script>
-var D=null,CT='today';
+var D=null;
 function cl(t){return t?String(t).replace(/```json/g,'').replace(/```/g,'').trim():''}
 function fm(f){if(!f)return'?';var o='';for(var i=0;i<f.length;i++){var c=f[i];if(c==='W')o+='<span style="color:var(--gn)">W</span>';else if(c==='D')o+='<span style="color:var(--am)">D</span>';else if(c==='L')o+='<span style="color:var(--red)">L</span>';else o+=c}return o}
 function V(v){return v!=null&&v!=='?'?v:'?'}
 function P(v){if(v==null)return'?';return(parseFloat(v)*100).toFixed(1)+'%'}
 function cc(c){return c>=70?'color:var(--gn)':c>=50?'color:var(--am)':'color:var(--red)'}
 function DS(p){var cs=p.claude_score||'';if(cs&&cs!=='-'&&cs!=='?')return cs;return p.predicted_score||'?'}
+function getAllMatches(){if(!D||!D.matches)return[];var all=[];if(Array.isArray(D.matches))return D.matches;['yesterday','today','tomorrow'].forEach(function(k){var a=D.matches[k]||[];for(var i=0;i<a.length;i++)all.push(a[i])});return all}
 
-fetch('data/predictions.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){D=d;document.getElementById('ut').textContent=d.update_time||'';document.getElementById('ver').textContent=d.version||'vMAX';rdb();rt4(d.top4||[]);rm()}).catch(function(e){document.getElementById('ms').innerHTML='<div class="empty">等待数据... '+e+'</div>'});
+fetch('data/predictions.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){D=d;document.getElementById('ut').textContent=d.update_time||'';document.getElementById('ver').textContent=d.version||'MAX-v1.1';rdb();rt4(d.top4||[]);rm()}).catch(function(e){document.getElementById('ms').innerHTML='<div class="empty">等待数据... '+e+'</div>'});
 
-function sw(t){CT=t;document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('ac')});event.target.classList.add('ac');rm()}
-
-function rdb(){var ms=D.matches||{},tt=0,expC=0,cf=0,vb=0;['yesterday','today','tomorrow'].forEach(function(k){var a=ms[k]||[];tt+=a.length;a.forEach(function(m){var p=m.prediction||{};cf+=p.confidence||0;var ex=p.experience_analysis||{};if(ex.triggered_count>=2)expC++;if(p.value_bets&&p.value_bets.length)vb+=p.value_bets.length;if(p.value_kill_count)vb+=p.value_kill_count})});
+function rdb(){var ms=getAllMatches(),tt=ms.length,expC=0,cf=0,vb=0;
+ms.forEach(function(m){var p=m.prediction||{};cf+=p.confidence||0;var ex=p.experience_analysis||{};if(ex.triggered_count>=2)expC++;if(p.value_bets&&p.value_bets.length)vb+=p.value_bets.length;if(p.value_kill_count)vb+=p.value_kill_count});
 var av=tt?Math.round(cf/tt):0;
 document.getElementById('db').innerHTML='<div class="dc"><div class="dc-v" style="color:var(--am)">'+tt+'</div><div class="dc-l">赛事</div></div><div class="dc"><div class="dc-v" style="color:var(--gn)">'+(D.top4?D.top4.length:0)+'</div><div class="dc-l">精选</div></div><div class="dc"><div class="dc-v" style="color:var(--or)">'+expC+'</div><div class="dc-l">经验触发</div></div><div class="dc"><div class="dc-v" style="color:var(--pr)">'+av+'%</div><div class="dc-l">平均信心</div></div><div class="dc"><div class="dc-v" style="color:var(--gn)">'+vb+'</div><div class="dc-l">价值注</div></div>'}
 
@@ -140,7 +140,7 @@ el.innerHTML=t4.map(function(m,i){var p=m.prediction||{};var ex=p.experience_ana
 var ft='';if(ex.triggered_count>0)ft+='经验:'+ex.triggered_count;if(ps>0)ft+=' 可预测:'+ps;
 return'<div class="t4" onclick="go(\'m-'+m.id+'\')"><div class="t4-bar"></div><div class="t4-rank">#'+(i+1)+'</div><div class="t4-lg">'+(m.league||'')+' '+(m.match_num||'')+'</div><div class="t4-teams"><span class="t4-tn">'+m.home_team+'</span><span class="t4-vs">VS</span><span class="t4-tn">'+m.away_team+'</span></div><div class="t4-grid"><div class="t4-c"><div class="t4-cl">比分</div><div class="t4-cv" style="color:var(--gn)">'+DS(p)+'</div></div><div class="t4-c"><div class="t4-cl">结果</div><div class="t4-cv">'+(p.result||'?')+'</div></div><div class="t4-c"><div class="t4-cl">信心</div><div class="t4-cv" style="'+cc(p.confidence||0)+'">'+(p.confidence||0)+'%</div></div></div>'+(ft?'<div class="t4-ft">'+ft+'</div>':'')+'</div>'}).join('')}
 
-function rm(){var el=document.getElementById('ms'),ms=(D.matches||{})[CT]||[];if(!ms.length){el.innerHTML='<div class="empty">暂无比赛</div>';return}
+function rm(){var el=document.getElementById('ms'),ms=getAllMatches();document.getElementById('allCount').textContent=ms.length;if(!ms.length){el.innerHTML='<div class="empty">暂无比赛</div>';return}
 el.innerHTML=ms.map(function(m){var p=m.prediction||{};var hp=p.home_win_pct||33,dp=p.draw_pct||33,ap=p.away_win_pct||34;
 var rc=p.result==='主胜'?'h':p.result==='平局'?'d':'a';
 var poi=p.poisson||{},bvp=p.bivariate_poisson||{},elo=p.elo||{},rf=p.random_forest||{},gb=p.gradient_boost||{},nn=p.neural_net||{},dc=p.dixon_coles||{},mc=p.monte_carlo||{};
