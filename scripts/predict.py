@@ -257,7 +257,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     urls = [primary_url] + backup
     
     # 【绝对遵守指令】：超时时间一字未改
-    timeout_map = {"claude": 1800, "grok": 300, "gpt": 240, "gemini": 360}
+    timeout_map = {"claude": 600, "grok": 300, "gpt": 240, "gemini": 360}
     timeout_sec = timeout_map.get(ai_name, 200)
     
     AI_PROFILES = {
