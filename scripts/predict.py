@@ -127,7 +127,7 @@ def load_ai_diary():
                 return json.load(f)
         except: 
             pass
-    return {"yesterday_win_rate": "N/A", "reflection": "搭载军工级JSON断肢重生算法，算力榨取滴水不漏", "kill_history": []}
+    return {"yesterday_win_rate": "N/A", "reflection": "已修复前端渲染黑屏Bug，全维度战力释放", "kill_history": []}
 
 def save_ai_diary(diary):
     os.makedirs("data", exist_ok=True)
@@ -195,7 +195,7 @@ def build_phase2_prompt(match_analyses, phase1_results):
             top3 = ai_data.get("top3", [])
             if top3:
                 scores_str = " | ".join(f"{t.get('score','?')}({t.get('prob','?')}%)" for t in top3[:3])
-                # 🚀 优化点：对先锋AI的恶毒长文进行压缩截取，避免触发 Claude 的Token上限与记忆迷失
+                # 优化点：对先锋AI的恶毒长文进行压缩截取，避免触发 Claude 的Token上限与记忆迷失
                 p += f"  先锋 {ai_name.upper()} 独立研判: {scores_str} | {str(ai_data.get('reason',''))[:60]}...\n"
             else:
                 sc = ai_data.get("ai_score", "-")
@@ -312,7 +312,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 try:
                                     last_brace_idx = json_str.rfind('}')
                                     if last_brace_idx != -1:
-                                        # 切除最后一场不完整的残尸，保留前面所有完整的比赛对象，安全闭合
                                         safe_json_str = json_str[:last_brace_idx+1] + "]"
                                         arr = json.loads(safe_json_str)
                                         print(f"    🩹 触发军工级断肢重生，精准抢救回 {len(arr)} 条数据！")
@@ -435,7 +434,7 @@ def calculate_multi_market_value(engine_result, match_obj):
     }
 
 # ====================================================================
-# Merge v8.6 — 完全去势版：没有任何本地强制篡改，唯独尊崇 AI
+# Merge v8.6 — 完全去势版：包含前端必需字段，彻底治愈黑屏
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     engine_score = engine_result.get("primary_score", "1-1")
@@ -448,8 +447,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         final_score = claude_r["ai_score"]
         
     # 如果 Claude 彻底宕机，采纳 Phase 1 阶段最高票共识
+    p1_ai = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r}
     if not final_score:
-        p1_ai = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r}
         vote_count = {}
         for n, r in p1_ai.items():
             if isinstance(r, dict):
@@ -462,27 +461,117 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         else:
             final_score = engine_score # 终极断网灾备
 
+    # 提取各AI的比分和文本，为了前端渲染使用（非常重要，不写会导致页面崩溃）
+    gpt_sc = gpt_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(gpt_r, dict) and gpt_r.get("top3") else gpt_r.get("ai_score", "-") if isinstance(gpt_r, dict) else "-"
+    gpt_an = gpt_r.get("reason", gpt_r.get("analysis", "N/A")) if isinstance(gpt_r, dict) else "N/A"
+
+    grok_sc = grok_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(grok_r, dict) and grok_r.get("top3") else grok_r.get("ai_score", "-") if isinstance(grok_r, dict) else "-"
+    grok_an = grok_r.get("reason", grok_r.get("analysis", "N/A")) if isinstance(grok_r, dict) else "N/A"
+
+    gem_sc = gemini_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(gemini_r, dict) and gemini_r.get("top3") else gemini_r.get("ai_score", "-") if isinstance(gemini_r, dict) else "-"
+    gem_an = gemini_r.get("reason", gemini_r.get("analysis", "N/A")) if isinstance(gemini_r, dict) else "N/A"
+
+    cl_sc = final_score
+    cl_an = claude_r.get("analysis", claude_r.get("reason", "等待深层演算...")) if isinstance(claude_r, dict) else engine_result.get("reason", "odds engine")
+
     # 抽取冷门预警红点，但不干预比分
     pre_pred = {"home_win_pct": engine_result.get("home_prob", 33), "draw_pct": engine_result.get("draw_prob", 33), "away_win_pct": engine_result.get("away_prob", 34), "smart_signals": stats.get("smart_signals", [])}
     cold_door = ColdDoorDetector.detect(match_obj, pre_pred)
+    
+    # 信心融合计算
+    ai_all = {"claude": claude_r, "grok": grok_r, "gpt": gpt_r, "gemini": gemini_r}
+    ai_conf_sum = 0; ai_conf_count = 0; value_kills = 0
+    weights = {"claude": 1.5, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
+    ai_scores_list = []
+    
+    for name, r in ai_all.items():
+        if not isinstance(r, dict): continue
+        sc = r.get("ai_score", r.get("top3", [{"score":"-"}])[0].get("score", "-") if r.get("top3") else "-")
+        if sc and sc not in ["-", "?", ""]:
+            ai_scores_list.append(sc)
+        conf = r.get("ai_confidence", 60)
+        ai_conf_sum += conf * weights.get(name, 1.0)
+        ai_conf_count += weights.get(name, 1.0)
+        if r.get("value_kill"): value_kills += 1
 
+    avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
+    cf = engine_conf
+    cf = min(95, cf + int((avg_ai_conf - 60) * 0.4))
+    cf = cf + value_kills * 6
+    sigs = list(stats.get("smart_signals", []))
+    if cold_door["is_cold_door"]: sigs.extend(cold_door["signals"]); cf = max(30, cf - 5)
+    has_warn = any("🚨" in str(s) for s in sigs)
+    if has_warn: cf = max(35, cf - 12)
+    risk = "低" if cf >= 75 else ("中" if cf >= 55 else "高")
+
+    # 返回极度丰富的全字段数据字典，防备前端 JS 出现 undefined 崩溃！
     return {
         "predicted_score": final_score,
         "home_win_pct": engine_result.get("home_prob", 33),
         "draw_pct": engine_result.get("draw_prob", 33),
         "away_win_pct": engine_result.get("away_prob", 34),
-        "confidence": engine_conf,
-        "risk_level": "低" if engine_conf >= 75 else ("中" if engine_conf >= 55 else "高"),
+        "confidence": cf,
+        "risk_level": risk,
         "over_under_2_5": "大" if engine_result.get("over_25", 50) > 55 else "小",
         "both_score": "是" if engine_result.get("btts", 45) > 50 else "否",
         "multi_market_value": value_info,
         "best_value_market": value_info["best_value"]["market"],
         "suggested_units": value_info["suggested_units"],
         "cold_door": cold_door,
-        "gpt_score": gpt_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(gpt_r, dict) and gpt_r.get("top3") else "-",
-        "grok_score": grok_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(grok_r, dict) and grok_r.get("top3") else "-",
-        "gemini_score": gemini_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(gemini_r, dict) and gemini_r.get("top3") else "-",
-        "claude_score": final_score,
+        
+        # 前端展示必备：AI 各家比分与文本分析
+        "gpt_score": gpt_sc,
+        "gpt_analysis": gpt_an,
+        "grok_score": grok_sc,
+        "grok_analysis": grok_an,
+        "gemini_score": gem_sc,
+        "gemini_analysis": gem_an,
+        "claude_score": cl_sc,
+        "claude_analysis": cl_an,
+        "ai_avg_confidence": round(avg_ai_conf, 1),
+        "value_kill_count": value_kills,
+        "model_agreement": len(set(ai_scores_list)) <= 1 and len(ai_scores_list) >= 2,
+        
+        # 前端渲染雷达图、量化数据展示框必备的底层字段
+        "poisson": stats.get("poisson", {}),
+        "refined_poisson": stats.get("refined_poisson", {}),
+        "extreme_warning": engine_result.get("scissors_gap_signal", ""),
+        "smart_money_signal": " | ".join(sigs),
+        "smart_signals": sigs,
+        "model_consensus": stats.get("model_consensus", 0),
+        "total_models": stats.get("total_models", 11),
+        "expected_total_goals": engine_result.get("expected_goals", 2.5),
+        "over_2_5": engine_result.get("over_25", 50),
+        "btts": engine_result.get("btts", 45),
+        "top_scores": stats.get("refined_poisson", {}).get("top_scores", []),
+        "elo": stats.get("elo", {}),
+        "random_forest": stats.get("random_forest", {}),
+        "gradient_boost": stats.get("gradient_boost", {}),
+        "neural_net": stats.get("neural_net", {}),
+        "logistic": stats.get("logistic", {}),
+        "svm": stats.get("svm", {}),
+        "knn": stats.get("knn", {}),
+        "dixon_coles": stats.get("dixon_coles", {}),
+        "bradley_terry": stats.get("bradley_terry", {}),
+        "home_form": stats.get("home_form", {}),
+        "away_form": stats.get("away_form", {}),
+        "handicap_signal": stats.get("handicap_signal", ""),
+        "odds_movement": stats.get("odds_movement", {}),
+        "vote_analysis": stats.get("vote_analysis", {}),
+        "h2h_blood": stats.get("h2h_blood", {}),
+        "crs_analysis": stats.get("crs_analysis", {}),
+        "ttg_analysis": stats.get("ttg_analysis", {}),
+        "halftime": stats.get("halftime", {}),
+        "pace_rating": stats.get("pace_rating", ""),
+        "kelly_home": stats.get("kelly_home", {}),
+        "kelly_away": stats.get("kelly_away", {}),
+        "odds": stats.get("odds", {}),
+        "experience_analysis": stats.get("experience_analysis", {}),
+        "pro_odds": stats.get("pro_odds", {}),
+        "bivariate_poisson": stats.get("bivariate_poisson", {}),
+        "asian_handicap_probs": stats.get("asian_handicap_probs", {}),
+        "bookmaker_implied_home_xg": engine_result.get("bookmaker_implied_home_xg", "?"),
+        "bookmaker_implied_away_xg": engine_result.get("bookmaker_implied_away_xg", "?"),
     }
 
 def select_top4(preds):
@@ -507,7 +596,7 @@ def extract_num(ms):
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 100)
-    print(f"  [GROK-FUSED v8.6 Pro] 纯净无界算力版 | 军工级防断连体系 | {len(ms)} 场")
+    print(f"  [GROK-FUSED v8.6 Pro] 纯净无界算力版 | 修复前端白屏兼容补丁 | {len(ms)} 场")
     print("=" * 100)
 
     match_analyses = []
@@ -566,8 +655,7 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     cold_count = len([r for r in res if r.get("prediction", {}).get("cold_door", {}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    diary["reflection"] = f"v8.6 Pro | 彻底粉碎本地设限 | 升级版断肢重生护盾就位 | 100%全权移交AI算力推演"
+    diary["reflection"] = f"v8.6 Pro | 修复前端白屏兼容Bug | 100%全权移交AI算力推演"
     save_ai_diary(diary)
 
     return res, t4
-
