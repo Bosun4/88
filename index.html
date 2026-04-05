@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿量化足球V4.22</title>
+<title>小鱼儿量化足球 vMAX</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#08090e;--s1:#0e1118;--s2:#141822;--bd:#1e2536;--tx:#b8c4d6;--t2:#6b7a90;--t3:#3d4a5e;--w:#eaf0f8;--red:#ff4d5a;--gn:#00e08e;--bl:#4d8aff;--am:#ffb020;--pr:#b366ff;--cy:#00d4e0;--pk:#ff5ca0;--or:#ff8030}
@@ -110,167 +110,345 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 </style>
 </head>
 <body>
-<div class="hdr"><div class="hdr-w"><div class="hdr-l"><div class="hdr-logo"></div><div class="hdr-t">小鱼儿量化足球V4.22</div><div class="hdr-v" id="ver">vMAX</div></div><div class="live"><div class="live-d"></div><span class="m" id="ut">...</span></div></div></div>
+<div class="hdr"><div class="hdr-w"><div class="hdr-l"><div class="hdr-logo"></div><div class="hdr-t">小鱼儿量化足球 vMAX</div><div class="hdr-v" id="ver">v8.6</div></div><div class="live"><div class="live-d"></div><span class="m" id="ut">...</span></div></div></div>
 <div class="wrap">
 <div class="dash" id="db"></div>
 <div class="sec"><div class="sec-t">精选推荐</div><div class="sec-b">核心杀招</div></div>
 <div class="t4g" id="t4"></div>
 <div class="tabs"><button class="tab" onclick="sw('yesterday')">昨日</button><button class="tab ac" onclick="sw('today')">今日</button><button class="tab" onclick="sw('tomorrow')">明日</button></div>
 <div id="ms"></div>
-<div class="foot">零膨胀泊松 · 泊松 · 迪克森修正 · 蒙特卡洛 · ELO · 随机森林 · 梯度提升 · 神经网络 · SVM · KNN · 专业去水 · 冷热偏差 · CLV · Steam检测 · 自适应校准 · 智能过滤<br>GPT · Grok · Gemini · Claude · 58条经验规则 · 历史赔率 · 亚盘分析 · 量化边缘 | vMAX</div>
+<div class="foot">零膨胀泊松 · 泊松 · 迪克森修正 · 蒙特卡洛 · ELO · 随机森林 · 梯度提升 · 神经网络 · SVM · KNN · 专业去水 · 冷热偏差 · CLV · Steam检测 · 自适应校准 · 智能过滤<br>GPT · Grok · Gemini · Claude · 58条经验规则 · 历史赔率 · 亚盘分析 · 量化边缘 | vMAX 防崩溃内核</div>
 </div>
 <script>
-var D=null,CT='today';
+// ==========================================
+// 🛡️ 军工级前端防爆毙框架 (防缺失、防undefined)
+// ==========================================
+var D = null, CT = 'today';
 
 // 防截断解析器：清除AI输出带有的Markdown代码块符号
-function cl(t){return t?String(t).replace(/
-json/g,'').replace(//g,'').trim()
-function fm(f){if(!f)return'?';var o='';for(var i=0;i<f.length;i++){var c=f[i];if(c==='W')o+='<span style="color:var(--gn)">W</span>';else if(c==='D')o+='<span style="color:var(--am)">D</span>';else if(c==='L')o+='<span style="color:var(--red)">L</span>';else o+=c}return o}
-function V(v){return v!=null&&v!=='?'?v:'?'}
-function P(v){if(v==null)return'?';return(parseFloat(v)*100).toFixed(1)+'%'}
-function cc(c){return c>=70?'color:var(--gn)':c>=50?'color:var(--am)':'color:var(--red)'}
-function DS(p){var cs=p.claude_score||'';if(cs&&cs!=='-'&&cs!=='?')return cs;return p.predicted_score||'?'}
-// 加载数据 (修复了致命的中文引号错误)
-fetch('data/predictions.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
-D=d;
-document.getElementById('ut').textContent=d.update_time||'';
-document.getElementById('ver').textContent=d.version||'vMAX';
-rdb();
-rt4(d.top4||[]);
-rm()
-}).catch(function(e){
-document.getElementById('ms').innerHTML='<div class="empty">等待数据同步或解析失败: '+e+'</div>'
-});
-function sw(t){CT=t;document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('ac')});event.target.classList.add('ac');rm()}
-function rdb(){
-var ms=D.matches||{},tt=0,expC=0,cf=0,vb=0;
-['yesterday','today','tomorrow'].forEach(function(k){
-var a=ms[k]||[];
-tt+=a.length;
-a.forEach(function(m){
-var p=m.prediction||{};
-cf+=p.confidence||0;
-var ex=p.experience_analysis||{};
-if(ex.triggered_count>=2)expC++;
-// 兼容新的 value_bets 和 multi_market_value 结构
-if(p.value_bets&&p.value_bets.length)vb+=p.value_bets.length;
-if(p.multi_market_value&&p.multi_market_value.best_value&&p.multi_market_value.best_value.is_value==='True')vb++;
-})
-});
-var av=tt?Math.round(cf/tt):0;
-document.getElementById('db').innerHTML='<div class="dc"><div class="dc-v" style="color:var(--am)">'+tt+'</div><div class="dc-l">赛事</div></div><div class="dc"><div class="dc-v" style="color:var(--gn)">'+(D.top4?D.top4.length:0)+'</div><div class="dc-l">精选</div></div><div class="dc"><div class="dc-v" style="color:var(--or)">'+expC+'</div><div class="dc-l">规则触发</div></div><div class="dc"><div class="dc-v" style="color:var(--pr)">'+av+'%</div><div class="dc-l">平均信心</div></div><div class="dc"><div class="dc-v" style="color:var(--gn)">'+vb+'</div><div class="dc-l">价值注</div></div>'
+function cl(t) {
+    if (!t) return '正在进行极深度的逻辑推演，或该场次无特定解析...';
+    return String(t).replace(/```json/g, '').replace(/```/g, '').trim();
 }
-function rt4(t4){
-var el=document.getElementById('t4');
-if(!t4||!t4.length){el.innerHTML='<div class="empty">暂无数据</div>';return}
-el.innerHTML=t4.map(function(m,i){
-var p=m.prediction||{};
-var ex=p.experience_analysis||{};
-// 核心信息组合展示
-var ft='';
-if(p.suggested_units && p.suggested_units > 0) ft+='<span style="color:var(--gn);margin-right:6px">💰 注码推荐: '+p.suggested_units+'U</span>';
-if(ex.triggered_count>0) ft+='<span style="color:var(--t2);margin-right:6px">经验规则:'+ex.triggered_count+'</span>';
-if(p.cold_door && p.cold_door.is_cold_door) ft+='<span style="color:var(--red)">'+(p.cold_door.dark_verdict||'高危冷门')+'</span>';
-return'<div class="t4" onclick="go(\'m-'+m.id+'\')"><div class="t4-bar"></div><div class="t4-rank">#'+(i+1)+'</div><div class="t4-lg">'+(m.league||'')+' '+(m.match_num||'')+'</div><div class="t4-teams"><span class="t4-tn">'+m.home_team+'</span><span class="t4-vs">VS</span><span class="t4-tn">'+m.away_team+'</span></div><div class="t4-grid"><div class="t4-c"><div class="t4-cl">比分</div><div class="t4-cv" style="color:var(--gn)">'+DS(p)+'</div></div><div class="t4-c"><div class="t4-cl">结果</div><div class="t4-cv">'+(p.result||'?')+'</div></div><div class="t4-c"><div class="t4-cl">信心</div><div class="t4-cv" style="'+cc(p.confidence||0)+'">'+(p.confidence||0)+'%</div></div></div>'+(ft?'<div class="t4-ft">'+ft+'</div>':'')+'</div>'
-}).join('')
+
+function fm(f) {
+    if (!f) return '?';
+    var o = '';
+    for (var i = 0; i < f.length; i++) {
+        var c = f[i];
+        if (c === 'W') o += '<span style="color:var(--gn)">W</span>';
+        else if (c === 'D') o += '<span style="color:var(--am)">D</span>';
+        else if (c === 'L') o += '<span style="color:var(--red)">L</span>';
+        else o += c;
+    }
+    return o;
 }
-function rm(){
-var el=document.getElementById('ms'),ms=(D.matches||{})[CT]||[];
-if(!ms.length){el.innerHTML='<div class="empty">暂无比赛</div>';return}
-el.innerHTML=ms.map(function(m){
-var p=m.prediction||{};
-var hp=p.home_win_pct||33,dp=p.draw_pct||33,ap=p.away_win_pct||34;
-var rc=p.result==='主胜'?'h':p.result==='平局'?'d':'a';
-var poi=p.poisson||{},bvp=p.bivariate_poisson||{},elo=p.elo||{},rf=p.random_forest||{},gb=p.gradient_boost||{},nn=p.neural_net||{},dc=p.dixon_coles||{},mc=p.monte_carlo||{};
-var hf=p.home_form||{},af=p.away_form||{},hs=m.home_stats||{},as2=m.away_stats||{};
-var ts=p.top_scores||[],ex=p.experience_analysis||{},ahp=p.asian_handicap_probs||{},po=p.pro_odds||{};
-var ixh=p.bookmaker_implied_home_xg,ixa=p.bookmaker_implied_away_xg;
-var fw=p.fusion_weights||{},ps=p.predictability_score||0;
-var displayScore=DS(p);
-// 🩸 提取恶毒裁决
-var dark_verdict = '';
-if(p.cold_door && p.cold_door.is_cold_door && p.cold_door.dark_verdict) {
-dark_verdict = '<div class="ai-verdict">⚠️ 庄家陷阱: ' + p.cold_door.dark_verdict + '</div>';
+
+function V(v) { return (v != null && v !== '?') ? v : '?'; }
+function P(v) { if (v == null) return '?'; return (parseFloat(v) * 100).toFixed(1) + '%'; }
+function cc(c) { return c >= 70 ? 'color:var(--gn)' : c >= 50 ? 'color:var(--am)' : 'color:var(--red)'; }
+function DS(p) { 
+    var cs = p.claude_score || ''; 
+    if (cs && cs !== '-' && cs !== '?') return cs; 
+    return p.predicted_score || '?'; 
 }
-// 🧠 AI Matrix 渲染 (防御空文本)
-var ai='<div class="ai-box">'+dark_verdict+'<div class="ai-h"><div class="ai-t">👑 CLAUDE 终极裁决</div><div class="ai-s">'+(p.claude_score||'-')+'</div></div><div class="ai-x">'+cl(p.claude_analysis||'AI正在进行极深度的逻辑推演，或该场次无特定解析。')+'</div></div><div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT先锋</span><span class="ai3-s">'+(p.gpt_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gpt_analysis||'暂无数据')+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">GROK先锋</span><span class="ai3-s">'+(p.grok_score||'-')+'</span></div><div class="ai3-x">'+cl(p.grok_analysis||'暂无数据')+'</div></div><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">GEMINI先锋</span><span class="ai3-s">'+(p.gemini_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gemini_analysis||'暂无数据')+'</div></div></div>';
-// 💡 信号塔
-var sig='';var ss=p.smart_signals||[];
-var ew=p.extreme_warning||'';
-if(ew&&ew!=='无'&&ew!=='')sig+='<div class="sig sig-r">'+ew+'</div>';
-var seen={};
-for(var si=0;si<ss.length;si++){
-var s=ss[si];if(seen[s])continue;seen[s]=1;
-if(s.indexOf('🔥')>=0||s.indexOf('CLV')>=0)sig+='<div class="sig sig-g">'+s+'</div>';
-else if(s.indexOf('💎')>=0||s.indexOf('价值')>=0)sig+='<div class="sig sig-p">'+s+'</div>';
-else if(s.indexOf('📊')>=0)sig+='<div class="sig sig-b">'+s+'</div>';
-else if(s.indexOf('🚨')>=0)sig+='<div class="sig sig-r">'+s+'</div>';
-else sig+='<div class="sig sig-a">'+s+'</div>'
+
+// 动态寻址雷达：无论后端把 matches 放在哪里都能找到
+function getMatches(dataObj, tabName) {
+    if (!dataObj) return [];
+    if (dataObj.matches && Array.isArray(dataObj.matches[tabName])) return dataObj.matches[tabName];
+    if (Array.isArray(dataObj[tabName])) return dataObj[tabName];
+    return [];
 }
-// 💰 多市场价值注 (解析 multi_market_value)
-var vbH='';
-if(p.multi_market_value && p.multi_market_value.best_value && (p.multi_market_value.best_value.is_value === true || p.multi_market_value.best_value.is_value === "True")){
-var bv = p.multi_market_value.best_value;
-var marketName = bv.market.replace('1X2_home','主胜').replace('1X2_draw','平局').replace('1X2_away','客胜').replace('Over_','大球').replace('Under_','小球');
-vbH='<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px">';
-vbH+='<span style="background:#b366ff15;color:var(--pr);font-size:10px;padding:3px 6px;border-radius:4px;border:1px solid #b366ff30;font-weight:700">💎 EV之王: ' + marketName + ' (+'+bv.ev+'%)</span>';
-if(p.suggested_units > 0){
-vbH+='<span style="background:#00e08e15;color:var(--gn);font-size:10px;padding:3px 6px;border-radius:4px;border:1px solid #00e08e30;font-weight:700">🎯 推荐投入: ' + p.suggested_units + ' U</span>';
+
+// ==========================================
+// 📡 数据获取
+// ==========================================
+fetch('data/predictions.json?t=' + Date.now())
+    .then(function(r){ 
+        if(!r.ok) throw new Error('网络请求失败 HTTP ' + r.status);
+        return r.json(); 
+    })
+    .then(function(d){
+        D = d;
+        document.getElementById('ut').textContent = d.update_time || '数据已最新';
+        document.getElementById('ver').textContent = d.version || 'vMAX';
+        rdb();
+        rt4(d.top4 || []);
+        rm();
+    })
+    .catch(function(e){
+        console.error("加载预测数据失败:", e);
+        document.getElementById('ms').innerHTML = '<div class="empty">等待数据同步或解析失败<br><span style="font-size:10px;opacity:0.5">'+e.message+'</span></div>';
+    });
+
+function sw(t) {
+    CT = t;
+    document.querySelectorAll('.tab').forEach(function(b) { b.classList.remove('ac'); });
+    event.target.classList.add('ac');
+    rm();
 }
-vbH+='</div>';
-} else {
-// 回退兼容老版本的 value_bets 数组
-var vbs=p.value_bets||[];var vbs2=p.value_bets_summary||[];
-if(vbs.length){vbH='<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:4px">';
-for(var vi=0;vi<vbs.length;vi++){var v=vbs[vi];if(typeof v==='object')vbH+='<span style="background:#b366ff10;color:var(--pr);font-size:8px;padding:2px 5px;border-radius:2px;border:1px solid #b366ff20">💎'+v.direction+' EV+'+v.ev+'%</span>';else vbH+='<span style="background:#ffb02010;color:var(--am);font-size:8px;padding:2px 5px;border-radius:2px;border:1px solid #ffb02020">'+v+'</span>'}
-vbH+='</div>'}
+
+// ==========================================
+// 📊 顶部数据面板
+// ==========================================
+function rdb() {
+    var tt = 0, expC = 0, cf = 0, vb = 0;
+    ['yesterday', 'today', 'tomorrow'].forEach(function(k) {
+        var a = getMatches(D, k);
+        tt += a.length;
+        a.forEach(function(m) {
+            var p = m.prediction || {};
+            cf += p.confidence || 0;
+            var ex = p.experience_analysis || {};
+            if (ex.triggered_count >= 2) expC++;
+            
+            // 兼容新的 value_bets 和 multi_market_value 结构
+            if (p.value_bets && p.value_bets.length) vb += p.value_bets.length;
+            if (p.multi_market_value && p.multi_market_value.best_value && 
+               (p.multi_market_value.best_value.is_value === 'True' || p.multi_market_value.best_value.is_value === true)) {
+                vb++;
+            }
+        });
+    });
+    var av = tt ? Math.round(cf / tt) : 0;
+    document.getElementById('db').innerHTML = 
+        '<div class="dc"><div class="dc-v" style="color:var(--am)">' + tt + '</div><div class="dc-l">赛事</div></div>' +
+        '<div class="dc"><div class="dc-v" style="color:var(--gn)">' + (D.top4 ? D.top4.length : 0) + '</div><div class="dc-l">精选</div></div>' +
+        '<div class="dc"><div class="dc-v" style="color:var(--or)">' + expC + '</div><div class="dc-l">规则触发</div></div>' +
+        '<div class="dc"><div class="dc-v" style="color:var(--pr)">' + av + '%</div><div class="dc-l">平均信心</div></div>' +
+        '<div class="dc"><div class="dc-v" style="color:var(--gn)">' + vb + '</div><div class="dc-l">价值注</div></div>';
 }
-// 📋 经验引擎
-var expH='';
-if(ex.triggered_count>0){var rc2=ex.total_score>=20?'hi':ex.total_score>=10?'md':'lo';
-expH='<div class="exp"><div class="exp-h"><div class="exp-t">📋 本地风控引擎</div><div class="exp-s">'+ex.triggered_count+'条触发</div></div><div class="exp-b">';
-var rules=ex.rules||[];for(var ri=0;ri<rules.length;ri++){var r=rules[ri];expH+='<div class="exp-rule"><span class="exp-id">'+r.id+'</span><span class="exp-rn">'+r.name+'</span></div>'}
-expH+='<div class="exp-rec '+rc2+'">'+(ex.recommendation||'')+'</div></div></div>'}
-// 📊 模型详参
-var mdl='<div class="sl">量化底层矩阵</div><div class="mg">';
-mdl+='<div class="mb c1"><div class="mb-t c1">泊松分布</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">'+V(poi.predicted_score)+'</span></div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(poi.home_win)+'/'+V(poi.draw)+'/'+V(poi.away_win)+'</span></div><div class="mb-r"><span class="mb-l">期望进球</span><span class="mb-v">'+V(poi.home_xg)+'-'+V(poi.away_xg)+'</span></div>';
-if(ts.length){mdl+='<div style="margin-top:2px">';for(var ti=0;ti<Math.min(ts.length,5);ti++){mdl+='<span class="chip'+(ti<1?' top':'')+'">'+ts[ti].score+' '+ts[ti].prob+'%</span>'}mdl+='</div>'}
-mdl+='</div>';
-mdl+='<div class="mb c6"><div class="mb-t c6">零膨胀双变量泊松</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">'+V(bvp.predicted_score)+'</span></div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(bvp.home_win)+'/'+V(bvp.draw)+'/'+V(bvp.away_win)+'</span></div><div class="mb-r"><span class="mb-l">ρ/p0</span><span class="mb-v">'+V(bvp.correlation)+'/'+V(bvp.p0_inflate)+'</span></div></div>';
-mdl+='<div class="mb c5"><div class="mb-t c5">蒙特卡洛模拟</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(mc.home_win)+'/'+V(mc.draw)+'/'+V(mc.away_win)+'</span></div><div class="mb-r"><span class="mb-l">场均进球</span><span class="mb-v">'+V(mc.avg_goals)+'</span></div></div>';
-mdl+='<div class="mb c2"><div class="mb-t c2">ELO评分</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(elo.home_win)+'/'+V(elo.draw)+'/'+V(elo.away_win)+'</span></div><div class="mb-r"><span class="mb-l">Δ</span><span class="mb-v" style="'+(parseFloat(elo.elo_diff||0)>0?'color:var(--gn)':'color:var(--red)')+'">'+(elo.elo_diff>0?'+':'')+V(elo.elo_diff)+'</span></div></div>';
-if(po.true_home){mdl+='<div class="mb c7"><div class="mb-t c7">专业去水</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+po.true_home+'/'+po.true_draw+'/'+po.true_away+'</span></div></div>'}
-else{mdl+='<div class="mb c7"><div class="mb-t c7">随机森林</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(rf.home_win)+'/'+V(rf.draw)+'/'+V(rf.away_win)+'</span></div></div>'}
-mdl+='<div class="mb c3"><div class="mb-t c3">神经网络</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(nn.home_win)+'/'+V(nn.draw)+'/'+V(nn.away_win)+'</span></div></div>';
-mdl+='<div class="mb c4"><div class="mb-t c4">梯度提升</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(gb.home_win)+'/'+V(gb.draw)+'/'+V(gb.away_win)+'</span></div></div>';
-mdl+='<div class="mb c1"><div class="mb-t c1">迪克森修正</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(dc.home_win)+'/'+V(dc.draw)+'/'+V(dc.away_win)+'</span></div></div>';
-mdl+='</div>';
-// 📈 隐含 xG
-var ixgH='';
-if(ixh&&ixh!=='?'){ixgH='<div class="sl">庄家隐含期望进球</div><div class="ahg"><div class="ahc"><div class="ahc-l">主队xG</div><div class="ahc-v" style="color:var(--am)">'+ixh+'</div></div><div class="ahc"><div class="ahc-l">客队xG</div><div class="ahc-v" style="color:var(--cy)">'+ixa+'</div></div><div class="ahc"><div class="ahc-l">总进球</div><div class="ahc-v" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(2):'?')+'</div></div></div>'}
-// 🎯 亚盘
-var ahH='';
-if(ahp['ah_0']||ahp['ou_2.5']){
-var ah0=ahp['ah_0']||[0,0,0];var ah05=ahp['ah_0.5']||[0,0,0];var ou25=ahp['ou_2.5']||[0,0,0];var bt=ahp.btts||0;
-ahH='<div class="sl">亚盘 & 大小球</div><div class="ahg">';
-ahH+='<div class="ahc"><div class="ahc-l">让0主</div><div class="ahc-v">'+P(ah0[0])+'</div></div>';
-ahH+='<div class="ahc"><div class="ahc-l">让0走</div><div class="ahc-v">'+P(ah0[1])+'</div></div>';
-ahH+='<div class="ahc"><div class="ahc-l">让0客</div><div class="ahc-v">'+P(ah0[2])+'</div></div>';
-ahH+='<div class="ahc"><div class="ahc-l">让半主</div><div class="ahc-v'+(ah05[0]>0.55?' hot':'')+'">'+P(ah05[0])+'</div></div>';
-ahH+='<div class="ahc"><div class="ahc-l">大2.5</div><div class="ahc-v'+(ou25[0]>0.55?' hot':'')+'">'+P(ou25[0])+'</div></div>';
-ahH+='<div class="ahc"><div class="ahc-l">双方进球</div><div class="ahc-v'+(bt>0.55?' hot':'')+'">'+P(bt)+'</div></div>';
-ahH+='</div>'
+
+// ==========================================
+// 🏆 TOP4 精选
+// ==========================================
+function rt4(t4) {
+    var el = document.getElementById('t4');
+    if (!t4 || !t4.length) { el.innerHTML = '<div class="empty">暂无核心杀招数据</div>'; return; }
+    
+    el.innerHTML = t4.map(function(m, i) {
+        try {
+            var p = m.prediction || {};
+            var ex = p.experience_analysis || {};
+            var ft = '';
+            
+            // 高价值注码推荐
+            if(p.suggested_units && p.suggested_units > 0) {
+                ft += '<span style="color:var(--gn);margin-right:6px;background:#00e08e15;padding:2px 4px;border-radius:2px;">💰 推荐: '+p.suggested_units+'U</span>';
+            }
+            if(ex.triggered_count > 0) {
+                ft += '<span style="color:var(--t2);margin-right:6px">风控拦截:'+ex.triggered_count+'条</span>';
+            }
+            if(p.cold_door && p.cold_door.is_cold_door) {
+                ft += '<span style="color:var(--red)">'+(p.cold_door.dark_verdict || '高危冷门')+'</span>';
+            }
+
+            return '<div class="t4" onclick="go(\'m-' + m.id + '\')"><div class="t4-bar"></div><div class="t4-rank">#' + (i + 1) + '</div><div class="t4-lg">' + (m.league || '') + ' ' + (m.match_num || '') + '</div><div class="t4-teams"><span class="t4-tn">' + m.home_team + '</span><span class="t4-vs">VS</span><span class="t4-tn">' + m.away_team + '</span></div><div class="t4-grid"><div class="t4-c"><div class="t4-cl">比分</div><div class="t4-cv" style="color:var(--gn)">' + DS(p) + '</div></div><div class="t4-c"><div class="t4-cl">结果</div><div class="t4-cv">' + (p.result || '?') + '</div></div><div class="t4-c"><div class="t4-cl">信心</div><div class="t4-cv" style="' + cc(p.confidence || 0) + '">' + (p.confidence || 0) + '%</div></div></div>' + (ft ? '<div class="t4-ft">' + ft + '</div>' : '') + '</div>';
+        } catch (err) {
+            console.error("TOP4 渲染异常:", err);
+            return '';
+        }
+    }).join('');
 }
-// 🏃 状态
-var frm='<div class="sl">近期状态</div><div class="fg"><div class="fb"><div class="fb-t">'+m.home_team+'</div><div class="fb-r"><span class="fb-l">走势</span><span class="fb-v">'+V(hf.trend)+'</span></div><div class="fb-r"><span class="fb-l">评分</span><span class="fb-v">'+V(hf.score)+'</span></div><div class="fb-r"><span class="fb-l">状态</span><span class="fb-v">'+fm(hs.form)+'</span></div><div class="fb-r"><span class="fb-l">胜/平/负</span><span class="fb-v">'+V(hs.wins)+'胜'+V(hs.draws)+'平'+V(hs.losses)+'负</span></div></div><div class="fb"><div class="fb-t">'+m.away_team+'</div><div class="fb-r"><span class="fb-l">走势</span><span class="fb-v">'+V(af.trend)+'</span></div><div class="fb-r"><span class="fb-l">评分</span><span class="fb-v">'+V(af.score)+'</span></div><div class="fb-r"><span class="fb-l">状态</span><span class="fb-v">'+fm(as2.form)+'</span></div><div class="fb-r"><span class="fb-l">胜/平/负</span><span class="fb-v">'+V(as2.wins)+'胜'+V(as2.draws)+'平'+V(as2.losses)+'负</span></div></div></div>';
-var meta='<div style="text-align:center;margin-top:5px;font-size:8px;color:var(--t3)">AI决策共识: '+(p.model_agreement?'✅一致':'⚠️分歧')+' | 量化引擎: '+V(p.predicted_score)+' | 本地置信度: '+V(engine_score_cf||50)+'%</div>';
-var engine_score_cf = p.confidence;
-// 拼接成完整的卡片
-return'<div class="mc '+(m.is_recommended?'rec':'')+'" id="m-'+m.id+'"><div class="mc-h"><div class="mc-lg">'+(m.league||'')+' <span class="m">'+(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mc-badge">核心杀招</span>':'')+'</div></div><div class="mc-b"><div class="teams"><div class="tm"><div class="tm-n">'+m.home_team+'</div></div><div class="sc-c"><div class="sc-big">'+displayScore+'</div><div class="sc-sub">终极裁定</div><span class="res-tag '+rc+'">'+(p.result||'?')+'</span></div><div class="tm"><div class="tm-n">'+m.away_team+'</div></div></div><div class="sr"><div class="sb"><div class="sb-l">期望进球</div><div class="sb-v" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(1):'?')+'</div></div><div class="sb"><div class="sb-l">大2.5</div><div class="sb-v" style="color:var(--pr)">'+V(p.over_2_5)+'%</div></div><div class="sb"><div class="sb-l">双方进球</div><div class="sb-v" style="color:var(--cy)">'+V(p.btts)+'%</div></div><div class="sb"><div class="sb-l">AI信心</div><div class="sb-v" style="'+cc(p.ai_avg_confidence||0)+'">'+(p.ai_avg_confidence||0)+'%</div></div></div><div class="prob"><div class="prob-h"><span style="color:var(--red)">主 '+hp+'%</span><span style="color:var(--t2)">平 '+dp+'%</span><span style="color:var(--bl)">客 '+ap+'%</span></div><div class="prob-bar"><div class="h" style="width:'+hp+'%"></div><div class="d" style="width:'+dp+'%"></div><div class="a" style="width:'+ap+'%"></div></div></div>'+ai+sig+vbH+expH+'<button class="tbtn" onclick="tg(this,\'d-'+m.id+'\')">展开底层量化数据 ▼</button></div><div class="det" id="d-'+m.id+'">'+mdl+ixgH+ahH+frm+meta+'</div></div>'
-}).join('')
+
+// ==========================================
+// 🏟️ 赛事列表主渲染引擎 (防爆隔离舱设计)
+// ==========================================
+function rm() {
+    var el = document.getElementById('ms');
+    var ms = getMatches(D, CT);
+    
+    if (!ms || !ms.length) { 
+        el.innerHTML = '<div class="empty">暂无比赛数据</div>'; 
+        return; 
+    }
+    
+    el.innerHTML = ms.map(function(m, idx) {
+        try {
+            var p = m.prediction || {};
+            var hp = p.home_win_pct || 33, dp = p.draw_pct || 33, ap = p.away_win_pct || 34;
+            var rc = p.result === '主胜' ? 'h' : p.result === '平局' ? 'd' : 'a';
+            
+            // 安全提取量化模型对象
+            var poi = p.poisson || {}, bvp = p.bivariate_poisson || {}, elo = p.elo || {};
+            var rf = p.random_forest || {}, gb = p.gradient_boost || {}, nn = p.neural_net || {};
+            var dc = p.dixon_coles || {}, mc = p.monte_carlo || {};
+            var hf = p.home_form || {}, af = p.away_form || {}, hs = m.home_stats || {}, as2 = m.away_stats || {};
+            var ts = p.top_scores || [], ex = p.experience_analysis || {};
+            var ahp = p.asian_handicap_probs || {}, po = p.pro_odds || {};
+            
+            var ixh = p.bookmaker_implied_home_xg, ixa = p.bookmaker_implied_away_xg;
+            var fw = p.fusion_weights || {}, ps = p.predictability_score || 0;
+            var engine_score_cf = p.confidence;
+            var displayScore = DS(p);
+            
+            // 🩸 提取恶毒裁决
+            var dark_verdict = '';
+            if(p.cold_door && p.cold_door.is_cold_door && p.cold_door.dark_verdict) {
+                dark_verdict = '<div class="ai-verdict">⚠️ 庄家陷阱: ' + p.cold_door.dark_verdict + '</div>';
+            }
+
+            // 🧠 AI Matrix 渲染 (防御空文本)
+            var ai = '<div class="ai-box">' + dark_verdict + '<div class="ai-h"><div class="ai-t">👑 CLAUDE 终极裁决</div><div class="ai-s">' + (p.claude_score || '-') + '</div></div><div class="ai-x">' + cl(p.claude_analysis) + '</div></div>' +
+                     '<div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT先锋</span><span class="ai3-s">' + (p.gpt_score || '-') + '</span></div><div class="ai3-x">' + cl(p.gpt_analysis) + '</div></div>' +
+                     '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">GROK先锋</span><span class="ai3-s">' + (p.grok_score || '-') + '</span></div><div class="ai3-x">' + cl(p.grok_analysis) + '</div></div>' +
+                     '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">GEMINI先锋</span><span class="ai3-s">' + (p.gemini_score || '-') + '</span></div><div class="ai3-x">' + cl(p.gemini_analysis) + '</div></div></div>';
+
+            // 💡 信号塔
+            var sig = '';
+            var ss = p.smart_signals || [];
+            var ew = p.extreme_warning || '';
+            if (ew && ew !== '无' && ew !== '') sig += '<div class="sig sig-r">' + ew + '</div>';
+            var seen = {};
+            for (var si = 0; si < ss.length; si++) {
+                var s = ss[si];
+                if (seen[s]) continue;
+                seen[s] = 1;
+                if (s.indexOf('🔥') >= 0 || s.indexOf('CLV') >= 0) sig += '<div class="sig sig-g">' + s + '</div>';
+                else if (s.indexOf('💎') >= 0 || s.indexOf('价值') >= 0) sig += '<div class="sig sig-p">' + s + '</div>';
+                else if (s.indexOf('📊') >= 0) sig += '<div class="sig sig-b">' + s + '</div>';
+                else if (s.indexOf('🚨') >= 0) sig += '<div class="sig sig-r">' + s + '</div>';
+                else sig += '<div class="sig sig-a">' + s + '</div>';
+            }
+
+            // 💰 多市场价值注 (安全解析)
+            var vbH = '';
+            if (p.multi_market_value && p.multi_market_value.best_value && 
+               (p.multi_market_value.best_value.is_value === true || p.multi_market_value.best_value.is_value === "True")) {
+                var bv = p.multi_market_value.best_value;
+                var marketName = (bv.market || "未知玩法").replace('1X2_home', '主胜').replace('1X2_draw', '平局').replace('1X2_away', '客胜').replace('Over_', '大球').replace('Under_', '小球');
+                vbH = '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px">';
+                vbH += '<span style="background:#b366ff15;color:var(--pr);font-size:10px;padding:3px 6px;border-radius:4px;border:1px solid #b366ff30;font-weight:700">💎 EV之王: ' + marketName + ' (+' + bv.ev + '%)</span>';
+                if (p.suggested_units > 0) {
+                    vbH += '<span style="background:#00e08e15;color:var(--gn);font-size:10px;padding:3px 6px;border-radius:4px;border:1px solid #00e08e30;font-weight:700">🎯 推荐投入: ' + p.suggested_units + ' U</span>';
+                }
+                vbH += '</div>';
+            } else {
+                // 兼容老版本的 value_bets 数组
+                var vbs = p.value_bets || [];
+                if (vbs.length) {
+                    vbH = '<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:4px">';
+                    for (var vi = 0; vi < vbs.length; vi++) {
+                        var v = vbs[vi];
+                        if (typeof v === 'object') {
+                            vbH += '<span style="background:#b366ff10;color:var(--pr);font-size:8px;padding:2px 5px;border-radius:2px;border:1px solid #b366ff20">💎' + (v.direction||'') + ' EV+' + (v.ev||0) + '%</span>';
+                        } else {
+                            vbH += '<span style="background:#ffb02010;color:var(--am);font-size:8px;padding:2px 5px;border-radius:2px;border:1px solid #ffb02020">' + v + '</span>';
+                        }
+                    }
+                    vbH += '</div>';
+                }
+            }
+
+            // 📋 本地风控引擎
+            var expH = '';
+            if (ex.triggered_count > 0) {
+                var rc2 = ex.total_score >= 20 ? 'hi' : ex.total_score >= 10 ? 'md' : 'lo';
+                expH = '<div class="exp"><div class="exp-h"><div class="exp-t">📋 本地风控拦截网</div><div class="exp-s">' + ex.triggered_count + '条预警触发</div></div><div class="exp-b">';
+                var rules = ex.rules || [];
+                for (var ri = 0; ri < rules.length; ri++) {
+                    var r = rules[ri];
+                    expH += '<div class="exp-rule"><span class="exp-id">' + (r.id||'') + '</span><span class="exp-rn">' + (r.name||'') + '</span></div>';
+                }
+                expH += '<div class="exp-rec ' + rc2 + '">' + (ex.recommendation || '') + '</div></div></div>';
+            }
+
+            // 📊 模型详参 (安全访问属性)
+            var mdl = '<div class="sl">底层量化数据矩阵</div><div class="mg">';
+            mdl += '<div class="mb c1"><div class="mb-t c1">泊松分布</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">' + V(poi.predicted_score) + '</span></div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">' + V(poi.home_win) + '/' + V(poi.draw) + '/' + V(poi.away_win) + '</span></div><div class="mb-r"><span class="mb-l">期望进球</span><span class="mb-v">' + V(poi.home_xg) + '-' + V(poi.away_xg) + '</span></div>';
+            if (ts.length) {
+                mdl += '<div style="margin-top:2px">';
+                for (var ti = 0; ti < Math.min(ts.length, 5); ti++) {
+                    mdl += '<span class="chip' + (ti < 1 ? ' top' : '') + '">' + (ts[ti].score||'') + ' ' + (ts[ti].prob||'') + '%</span>';
+                }
+                mdl += '</div>';
+            }
+            mdl += '</div>';
+            
+            mdl += '<div class="mb c6"><div class="mb-t c6">零膨胀双变量泊松</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">' + V(bvp.predicted_score) + '</span></div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">' + V(bvp.home_win) + '/' + V(bvp.draw) + '/' + V(bvp.away_win) + '</span></div><div class="mb-r"><span class="mb-l">ρ/p0</span><span class="mb-v">' + V(bvp.correlation) + '/' + V(bvp.p0_inflate) + '</span></div></div>';
+            mdl += '<div class="mb c5"><div class="mb-t c5">蒙特卡洛模拟</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">' + V(mc.home_win) + '/' + V(mc.draw) + '/' + V(mc.away_win) + '</span></div><div class="mb-r"><span class="mb-l">场均进球</span><span class="mb-v">' + V(mc.avg_goals) + '</span></div></div>';
+            mdl += '<div class="mb c2"><div class="mb-t c2">ELO评分</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">' + V(elo.home_win) + '/' + V(elo.draw) + '/' + V(elo.away_win) + '</span></div><div class="mb-r"><span class="mb-l">Δ</span><span class="mb-v" style="' + (parseFloat(elo.elo_diff || 0) > 0 ? 'color:var(--gn)' : 'color:var(--red)') + '">' + (elo.elo_diff > 0 ? '+' : '') + V(elo.elo_diff) + '</span></div></div>';
+            
+            if (po.true_home) {
+                mdl += '<div class="mb c7"><div class="mb-t c7">专业去水</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">' + po.true_home + '/' + po.true_draw + '/' + po.true_away + '</span></div></div>';
+            } else {
+                mdl += '<div class="mb c7"><div class="mb-t c7">随机森林</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">' + V(rf.home_win) + '/' + V(rf.draw) + '/' + V(rf.away_win) + '</span></div></div>';
+            }
+            
+            mdl += '<div class="mb c3"><div class="mb-t c3">神经网络</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">' + V(nn.home_win) + '/' + V(nn.draw) + '/' + V(nn.away_win) + '</span></div></div>';
+            mdl += '<div class="mb c4"><div class="mb-t c4">梯度提升</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">' + V(gb.home_win) + '/' + V(gb.draw) + '/' + V(gb.away_win) + '</span></div></div>';
+            mdl += '<div class="mb c1"><div class="mb-t c1">迪克森修正</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">' + V(dc.home_win) + '/' + V(dc.draw) + '/' + V(dc.away_win) + '</span></div></div>';
+            mdl += '</div>';
+
+            // 📈 隐含 xG
+            var ixgH = '';
+            if (ixh && ixh !== '?') {
+                ixgH = '<div class="sl">庄家隐含期望进球</div><div class="ahg"><div class="ahc"><div class="ahc-l">主队xG</div><div class="ahc-v" style="color:var(--am)">' + ixh + '</div></div><div class="ahc"><div class="ahc-l">客队xG</div><div class="ahc-v" style="color:var(--cy)">' + ixa + '</div></div><div class="ahc"><div class="ahc-l">总进球</div><div class="ahc-v" style="color:var(--gn)">' + (p.expected_total_goals ? parseFloat(p.expected_total_goals).toFixed(2) : '?') + '</div></div></div>';
+            }
+            
+            // 🎯 亚盘
+            var ahH = '';
+            if (ahp['ah_0'] || ahp['ou_2.5']) {
+                var ah0 = ahp['ah_0'] || [0, 0, 0];
+                var ah05 = ahp['ah_0.5'] || [0, 0, 0];
+                var ou25 = ahp['ou_2.5'] || [0, 0, 0];
+                var bt = ahp.btts || 0;
+                ahH = '<div class="sl">亚盘 & 大小球</div><div class="ahg">';
+                ahH += '<div class="ahc"><div class="ahc-l">让0主</div><div class="ahc-v">' + P(ah0[0]) + '</div></div>';
+                ahH += '<div class="ahc"><div class="ahc-l">让0走</div><div class="ahc-v">' + P(ah0[1]) + '</div></div>';
+                ahH += '<div class="ahc"><div class="ahc-l">让0客</div><div class="ahc-v">' + P(ah0[2]) + '</div></div>';
+                ahH += '<div class="ahc"><div class="ahc-l">让半主</div><div class="ahc-v' + (ah05[0] > 0.55 ? ' hot' : '') + '">' + P(ah05[0]) + '</div></div>';
+                ahH += '<div class="ahc"><div class="ahc-l">大2.5</div><div class="ahc-v' + (ou25[0] > 0.55 ? ' hot' : '') + '">' + P(ou25[0]) + '</div></div>';
+                ahH += '<div class="ahc"><div class="ahc-l">双方进球</div><div class="ahc-v' + (bt > 0.55 ? ' hot' : '') + '">' + P(bt) + '</div></div>';
+                ahH += '</div>';
+            }
+            
+            // 🏃 状态
+            var frm = '<div class="sl">近期状态</div><div class="fg"><div class="fb"><div class="fb-t">' + (m.home_team||'') + '</div><div class="fb-r"><span class="fb-l">走势</span><span class="fb-v">' + V(hf.trend) + '</span></div><div class="fb-r"><span class="fb-l">评分</span><span class="fb-v">' + V(hf.score) + '</span></div><div class="fb-r"><span class="fb-l">状态</span><span class="fb-v">' + fm(hs.form) + '</span></div><div class="fb-r"><span class="fb-l">胜/平/负</span><span class="fb-v">' + V(hs.wins) + '胜' + V(hs.draws) + '平' + V(hs.losses) + '负</span></div></div><div class="fb"><div class="fb-t">' + (m.away_team||'') + '</div><div class="fb-r"><span class="fb-l">走势</span><span class="fb-v">' + V(af.trend) + '</span></div><div class="fb-r"><span class="fb-l">评分</span><span class="fb-v">' + V(af.score) + '</span></div><div class="fb-r"><span class="fb-l">状态</span><span class="fb-v">' + fm(as2.form) + '</span></div><div class="fb-r"><span class="fb-l">胜/平/负</span><span class="fb-v">' + V(as2.wins) + '胜' + V(as2.draws) + '平' + V(as2.losses) + '负</span></div></div></div>';
+            
+            var meta = '<div style="text-align:center;margin-top:5px;font-size:8px;color:var(--t3)">AI决策共识: ' + (p.model_agreement ? '✅一致' : '⚠️分歧') + ' | 引擎备用分: ' + V(engine_score_cf||'?') + ' | 本地置信度: ' + V(p.ai_avg_confidence||50) + '%</div>';
+
+            // 最终拼接防爆组装
+            return '<div class="mc ' + (m.is_recommended ? 'rec' : '') + '" id="m-' + m.id + '">' +
+                   '<div class="mc-h"><div class="mc-lg">' + (m.league || '') + ' <span class="m">' + (m.match_num || '') + '</span>' + (m.is_recommended ? '<span class="mc-badge">核心杀招</span>' : '') + '</div></div>' +
+                   '<div class="mc-b">' +
+                   '<div class="teams"><div class="tm"><div class="tm-n">' + (m.home_team||'') + '</div></div><div class="sc-c"><div class="sc-big">' + displayScore + '</div><div class="sc-sub">独立裁定</div><span class="res-tag ' + rc + '">' + (p.result || '?') + '</span></div><div class="tm"><div class="tm-n">' + (m.away_team||'') + '</div></div></div>' +
+                   '<div class="sr"><div class="sb"><div class="sb-l">期望进球</div><div class="sb-v" style="color:var(--gn)">' + (p.expected_total_goals ? parseFloat(p.expected_total_goals).toFixed(1) : '?') + '</div></div><div class="sb"><div class="sb-l">大2.5</div><div class="sb-v" style="color:var(--pr)">' + V(p.over_2_5) + '%</div></div><div class="sb"><div class="sb-l">双方进球</div><div class="sb-v" style="color:var(--cy)">' + V(p.btts) + '%</div></div><div class="sb"><div class="sb-l">AI确信度</div><div class="sb-v" style="' + cc(p.ai_avg_confidence || 0) + '">' + (p.ai_avg_confidence || 0) + '%</div></div></div>' +
+                   '<div class="prob"><div class="prob-h"><span style="color:var(--red)">主 ' + hp + '%</span><span style="color:var(--t2)">平 ' + dp + '%</span><span style="color:var(--bl)">客 ' + ap + '%</span></div><div class="prob-bar"><div class="h" style="width:' + hp + '%"></div><div class="d" style="width:' + dp + '%"></div><div class="a" style="width:' + ap + '%"></div></div></div>' +
+                   ai + sig + vbH + expH +
+                   '<button class="tbtn" onclick="tg(this,\'d-' + m.id + '\')">展开底层量化数据 ▼</button>' +
+                   '</div>' +
+                   '<div class="det" id="d-' + m.id + '">' + mdl + ixgH + ahH + frm + meta + '</div>' +
+                   '</div>';
+
+        } catch (err) {
+            console.error("单场比赛渲染失败 ID:" + m.id, err);
+            return '<div class="mc"><div class="mc-b" style="color:var(--red);text-align:center;padding:20px;">数据缺失，本场渲染跳过<br><span style="font-size:10px;color:var(--t3)">'+err.message+'</span></div></div>';
+        }
+    }).join('');
 }
-function tg(b,id){var e=document.getElementById(id);if(e.classList.contains('open')){e.classList.remove('open');b.textContent='展开底层量化数据 ▼'}else{e.classList.add('open');b.textContent='收起 ▲'}}
-function go(id){var e=document.getElementById(id);if(e){e.scrollIntoView({behavior:'smooth',block:'center'});var d=document.getElementById('d-'+id.replace('m-',''));if(d&&!d.classList.contains('open'))d.classList.add('open')}}
+
+// 交互操作
+function tg(b, id) {
+    var e = document.getElementById(id);
+    if (e.classList.contains('open')) {
+        e.classList.remove('open');
+        b.textContent = '展开底层量化数据 ▼';
+    } else {
+        e.classList.add('open');
+        b.textContent = '收起 ▲';
+    }
+}
+
+function go(id) {
+    var e = document.getElementById(id);
+    if (e) {
+        e.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var d = document.getElementById('d-' + id.replace('m-', ''));
+        if (d && !d.classList.contains('open')) d.classList.add('open');
+    }
+}
 </script>
 </body>
 </html>
