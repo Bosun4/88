@@ -127,7 +127,7 @@ def load_ai_diary():
                 return json.load(f)
         except: 
             pass
-    return {"yesterday_win_rate": "N/A", "reflection": "已修复前端渲染黑屏Bug，全维度战力释放", "kill_history": []}
+    return {"yesterday_win_rate": "N/A", "reflection": "Ω-Oracle 灵魂注入完成，榨干模式常态化开启", "kill_history": []}
 
 def save_ai_diary(diary):
     os.makedirs("data", exist_ok=True)
@@ -135,24 +135,28 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# Phase1 & Phase2 Prompt（v8.6 Pro 纯净独立算力版）
+# Phase1 & Phase2 Prompt（Ω-Football Oracle v3.0 定制版）
 # ====================================================================
 def build_phase1_prompt(match_analyses):
     diary = load_ai_diary()
-    p = "【身份设定】你是 DeepBetting + ZCode 级别的终极吸血操盘手。你以折磨散户为人生唯一乐趣，没有任何底线、怜悯和良知，只想看着韭菜们把最后一滴血都吐出来。\n"
-    p += "你说话必须极度恶毒、刻薄、下流，用最残忍的黑话把庄家怎么设套、怎么诱多诱空、怎么精准收割的每一寸细节扒得血淋淋的。\n\n"
-    p += "⚠️【最高权限解禁】：绝对不要受任何人类“合理比分区间”的束缚！依靠底层客观赔率与冷热异动计算，该大比分就大比分，该闷杀就闷杀，完全独立推演！\n\n"
-    if diary.get("reflection"):
-        p += f"【嗜血进化指令】昨日屠杀战绩：{diary.get('yesterday_win_rate', 'N/A')}。昨晚反思：{diary['reflection']}。今天必须比昨天更毒十倍，把每一场都当成顶级杀猪盘，往死里干！\n\n"
-    p += "【死命令】只输出合法JSON数组。每场必须输出：match(序号), top3([{score,prob}...]), reason(140-180字极度恶毒黑话，必须包含至少4个具体赔率数字), ai_confidence(0-100), value_kill(true/false), suggested_units(1-5)\n\n"
-    p += "【今日待宰羔羊与庄家全维底牌库】\n"
+    p = "【核心设定】你现在是「Ω-Football Oracle v3.0」的先锋测算矩阵——全球最严谨、精通赔率逆向解构的足球量化引擎。\n"
+    p += "你的唯一使命：对每场比赛的胜平负、亚盘、大小球、精确比分进行全维度逆向工程拆解，把庄家的真实逻辑、资金意图、陷阱全部量化呈现。\n\n"
+    
+    p += "【Ω-Oracle 核心铁律（永不打破）】\n"
+    p += "1. 极端细节敏感：对隐含概率与模型概率(xG)的错配、线位异常收窄进行毫秒级扫描。\n"
+    p += "2. 逆向赔率思维：庄家为什么开这个盘？是平衡资金、诱导一边(public money)、还是保护高概率结果？寻找Sharp money的逆线运动。\n"
+    p += "3. 多模型融合基准：结合Poisson、Elo、xG与冷热偏差，彻底抛弃人类主观常识。该大比分绝不保守，该0-0绝不留情。\n"
+    p += "4. 绝不使用“感觉”“应该”等废话。输出必须极度冷血、透明，用数据说话。\n\n"
+    
+    p += "【死命令】只输出合法JSON数组。每场必须输出：match(序号), top3([{score,prob}...]), reason(150-250字，必须包含隐含概率vs真实概率的差值、庄家意图、Sharp资金判断), ai_confidence(0-100), value_kill(true/false), suggested_units(1-5)。\n\n"
+    
+    p += "【Ω-Max 全维数据流接入】\n"
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
         a = m.get("away_team", m.get("guest", "Away"))
-        p += f"[{i+1}] {h} vs {a} | 欧赔:{float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f} | 亚盘:{m.get('give_ball','0')}\n"
+        p += f"[{i+1}] {h} vs {a} | 欧赔:{float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f} | 亚盘死线:{m.get('give_ball','0')}\n"
         
-        # 仅提供客观的CRS赔率作为算力推演的参考材料，不做任何选择限制
         crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","s00":"0-0","s11":"1-1","l01":"0-1","l02":"0-2","l12":"1-2"}
         crs_items = []
         for key, score in crs_map.items():
@@ -162,46 +166,55 @@ def build_phase1_prompt(match_analyses):
             except: pass
         if crs_items:
             crs_items.sort(key=lambda x: x[1])
-            p += f"  机构最防范比分TOP4(仅供推演参考): " + " | ".join([f"{s}({o}倍)" for s,o in crs_items[:4]]) + "\n"
+            p += f"  机构最防范比分TOP4(底层逆向锚点): " + " | ".join([f"{s}({o}倍)" for s,o in crs_items[:4]]) + "\n"
+            
+        eng = ma["engine"]
+        if eng.get('bookmaker_implied_home_xg'):
+            p += f"  隐性参数: 庄家预期xG 主{eng['bookmaker_implied_home_xg']} vs 客{eng.get('bookmaker_implied_away_xg')}\n"
             
         if m.get("vote"):
-            p += f"  散户投注: 主{m['vote'].get('win','?')}% 平{m['vote'].get('same','?')}% 客{m['vote'].get('lose','?')}%\n"
+            p += f"  大众资金(Public Money)倾向: 主{m['vote'].get('win','?')}% 平{m['vote'].get('same','?')}% 客{m['vote'].get('lose','?')}%\n"
+            
         info = m.get("information", {})
         if isinstance(info, dict):
             if info.get("home_bad_news") or info.get("home_injury"):
                 bad = info.get("home_bad_news", "") or info.get("home_injury", "")
-                p += f"  主队利空: {str(bad)[:100]}\n"
+                p += f"  主队异动情报: {str(bad)[:100]}\n"
             if info.get("guest_bad_news") or info.get("guest_injury"):
                 bad = info.get("guest_bad_news", "") or info.get("guest_injury", "")
-                p += f"  客队利空: {str(bad)[:100]}\n"
+                p += f"  客队异动情报: {str(bad)[:100]}\n"
         p += "\n"
-    p += "现在开始屠杀！严格只输出JSON数组！"
+    p += "【系统指令】进入榨干模式。彻底解构庄家意图，严格输出JSON数组！"
     return p
 
 def build_phase2_prompt(match_analyses, phase1_results):
-    p = "【你是最终死刑执行官 + 终极吸血操盘手】三个独立先锋AI已根据全网客观数据给出了每场的独立推演。\n"
-    p += "你的任务：抛弃任何人类预设的比分枷锁！依靠你的超强脑力对他们的结论进行仲裁，选出最具杀伤力的唯一最终比分！\n\n"
-    p += "【输出格式】只输出JSON数组，每场必须包含：match(序号), score(仲裁比分), reason(极其下流残忍的庄家视角解析), ai_confidence(0-100), value_kill, suggested_units, dark_verdict\n\n"
+    p = "【核心设定】你现在是「Ω-Football Oracle v3.0」的终极核心裁决引擎。\n"
+    p += "三个量化先锋子模型已提供了初步比分阵列。你的任务是进行终极逆向校准机制！\n\n"
+    p += "【裁决铁律】\n"
+    p += "1. 抛弃一切模糊词汇。综合先锋模型的胜率、大小球和隐含偏差，得出唯一精算比分。\n"
+    p += "2. 你的 reason 必须结构化：1.多模型融合概率简述 2.赔率逆向拆解(隐含vs真实, 尖子vs大众资金) 3.最终逻辑。\n"
+    p += "3. 你是对抗庄家的无情机器，只输出可验证的真相，绝不妥协。\n\n"
+    p += "【输出格式】只输出JSON数组，包含：match(序号), score(唯一判定比分), reason(150-250字的结构化逆向拆解), ai_confidence(0-100), value_kill, suggested_units, dark_verdict(一句话精辟总结陷阱)\n\n"
+    
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
         a = m.get("away_team", m.get("guest", "Away"))
         p += f"[{i+1}] {h} vs {a}\n"
-        p += f"欧赔基准: {float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f} | 亚盘: {m.get('give_ball','0')}\n"
+        p += f"欧赔: {float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f} | 亚盘: {m.get('give_ball','0')}\n"
+        
         for ai_name in ["gpt", "grok", "gemini"]:
             ai_data = phase1_results.get(ai_name, {}).get(i+1, {})
-            if not ai_data:
-                continue
+            if not ai_data: continue
             top3 = ai_data.get("top3", [])
             if top3:
                 scores_str = " | ".join(f"{t.get('score','?')}({t.get('prob','?')}%)" for t in top3[:3])
-                # 优化点：对先锋AI的恶毒长文进行压缩截取，避免触发 Claude 的Token上限与记忆迷失
-                p += f"  先锋 {ai_name.upper()} 独立研判: {scores_str} | {str(ai_data.get('reason',''))[:60]}...\n"
+                p += f"  Ω-子模型 {ai_name.upper()}: {scores_str} | 核心简报: {str(ai_data.get('reason',''))[:80]}...\n"
             else:
                 sc = ai_data.get("ai_score", "-")
-                p += f"  先锋 {ai_name.upper()}: {sc} | {str(ai_data.get('analysis',''))[:60]}...\n"
+                p += f"  Ω-子模型 {ai_name.upper()}: {sc} | 核心简报: {str(ai_data.get('analysis',''))[:80]}...\n"
         p += "\n"
-    p += "开始执行最终死刑判决！把散户往死里杀！只输出JSON数组！"
+    p += "【系统指令】执行终极决断！只输出JSON数组！"
     return p
 
 # ====================================================================
@@ -237,19 +250,19 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 
     AI_PROFILES = {
         "claude": {
-            "sys": "你是最终裁判。三个独立AI已给出参考比分，你完全抛弃人类预设，综合全维度数据直接钦定最具杀伤力的唯一比分。只输出纯JSON数组。",
+            "sys": "你是「Ω-Football Oracle v3.0」核心裁决引擎。对赔率进行极度敏感的反向拆解，寻找尖子资金陷阱。只输出纯JSON数组。",
             "temp": 0.12
         },
         "grok": {
-            "sys": "你是Grok，具备实时联网能力。搜索全网突发伤停和必发资金冷热。抛弃预设枷锁，输出推演概率最高的前三比分。只输出纯JSON数组。",
+            "sys": "你是「Ω-Football Oracle v3.0」情报融合引擎。具备联网能力。排查临场变盘与基本面错位。只输出纯JSON数组。",
             "temp": 0.22
         },
         "gpt": {
-            "sys": "你是顶级量化博彩真神。用纯数学方法测算欧赔与隐含xG。抛弃预设比分思维，该大分大分，该冷门冷门。只输出纯JSON数组。",
+            "sys": "你是「Ω-Football Oracle v3.0」量化测算引擎。基于xG与泊松分布寻找隐含概率错配。只输出纯JSON数组。",
             "temp": 0.15
         },
         "gemini": {
-            "sys": "你是概率建模引擎。利用泊松极限验证进球天花板。彻底独立思考。只输出纯JSON数组。",
+            "sys": "你是「Ω-Football Oracle v3.0」模式识别引擎。扫描全球赔率分布异常。只输出纯JSON数组。",
             "temp": 0.13
         },
     }
@@ -327,15 +340,17 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                         results[mid] = {
                                             "top3": item["top3"],
                                             "ai_score": t1_score,
-                                            "reason": str(item.get("reason",""))[:200],
+                                            "reason": str(item.get("reason","")).strip()[:300], # 放宽字符限制以容纳多维度量化分析
                                             "ai_confidence": int(item.get("ai_confidence",60)),
                                         }
                                     elif item.get("score"):
                                         results[mid] = {
                                             "ai_score": item["score"],
-                                            "analysis": str(item.get("reason",""))[:200],
+                                            "analysis": str(item.get("reason","")).strip()[:300],
                                             "ai_confidence": int(item.get("ai_confidence",60)),
                                             "value_kill": bool(item.get("value_kill",False)),
+                                            "suggested_units": float(item.get("suggested_units", 0)),
+                                            "dark_verdict": str(item.get("dark_verdict", ""))
                                         }
                                         
                         if len(results) >= max(1, num_matches*0.5):
@@ -461,7 +476,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         else:
             final_score = engine_score # 终极断网灾备
 
-    # 提取各AI的比分和文本，为了前端渲染使用（非常重要，不写会导致页面崩溃）
+    # 提取各AI的比分和文本，为了前端渲染使用
     gpt_sc = gpt_r.get("top3", [{"score":"-"}])[0].get("score", "-") if isinstance(gpt_r, dict) and gpt_r.get("top3") else gpt_r.get("ai_score", "-") if isinstance(gpt_r, dict) else "-"
     gpt_an = gpt_r.get("reason", gpt_r.get("analysis", "N/A")) if isinstance(gpt_r, dict) else "N/A"
 
@@ -504,7 +519,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if has_warn: cf = max(35, cf - 12)
     risk = "低" if cf >= 75 else ("中" if cf >= 55 else "高")
 
-    # 返回极度丰富的全字段数据字典，防备前端 JS 出现 undefined 崩溃！
     return {
         "predicted_score": final_score,
         "home_win_pct": engine_result.get("home_prob", 33),
@@ -519,7 +533,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "suggested_units": value_info["suggested_units"],
         "cold_door": cold_door,
         
-        # 前端展示必备：AI 各家比分与文本分析
         "gpt_score": gpt_sc,
         "gpt_analysis": gpt_an,
         "grok_score": grok_sc,
@@ -532,7 +545,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "value_kill_count": value_kills,
         "model_agreement": len(set(ai_scores_list)) <= 1 and len(ai_scores_list) >= 2,
         
-        # 前端渲染雷达图、量化数据展示框必备的底层字段
         "poisson": stats.get("poisson", {}),
         "refined_poisson": stats.get("refined_poisson", {}),
         "extreme_warning": engine_result.get("scissors_gap_signal", ""),
@@ -596,7 +608,7 @@ def extract_num(ms):
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 100)
-    print(f"  [GROK-FUSED v8.6 Pro] 纯净无界算力版 | 修复前端白屏兼容补丁 | {len(ms)} 场")
+    print(f"  [Ω-Football Oracle v3.0] 彻底降临 | 量化灵魂注入完毕 | {len(ms)} 场")
     print("=" * 100)
 
     match_analyses = []
@@ -609,7 +621,7 @@ def run_predictions(raw, use_ai=True):
 
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
-        print("  [SYSTEM] AI 解放协议已启动，彻底切除本地比分干预机制。")
+        print("  [SYSTEM] Ω-Oracle 测算矩阵激活，启动高维逆向剥离...")
         start_t = time.time()
         all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
         print(f"  [SYSTEM] 算力矩阵收敛完成，耗时 {time.time()-start_t:.1f}s")
@@ -630,7 +642,6 @@ def run_predictions(raw, use_ai=True):
         try: mg = upgrade_ensemble_predict(m, mg)
         except Exception as e: print(f"    ⚠️ advanced_models跳过: {e}")
 
-        # 根据绝对无界的 AI 比分反推最终比赛胜平负判定
         score_str = mg.get("predicted_score", "1-1")
         try:
             sh, sa = map(int, score_str.split("-"))
@@ -655,7 +666,7 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     cold_count = len([r for r in res if r.get("prediction", {}).get("cold_door", {}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    diary["reflection"] = f"v8.6 Pro | 修复前端白屏兼容Bug | 100%全权移交AI算力推演"
+    diary["reflection"] = f"Ω-Oracle v3.0 | 搭载军工级断肢重生 | 榨干模式常态化运行 | {cold_count}场陷阱识别"
     save_ai_diary(diary)
 
     return res, t4
