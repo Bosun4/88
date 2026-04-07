@@ -483,8 +483,8 @@ async def run_ai_matrix_two_phase(match_analyses):
     print(f"  [Phase1] {len(p1_prompt):,} 字符 → GPT/Grok/Gemini 并行...")
 
     p1_configs = [
-        ("grok","GROK_API_URL","GROK_API_KEY",["熊猫-A-6-grok-4.2-thinking","熊猫-A-7-grok-4.2-多智能体讨论"]),
-        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-A-10-gpt-5.4","熊猫-按量-gpt-5.4"]),
+        ("grok","GROK_API_URL","GROK_API_KEY",["熊猫-A-7-grok-4.2-多智能体讨论","熊猫-A-6-grok-4.2-thinking"]),
+        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-A-10-gpt-5.4","熊猫-按量-gpt-5.4","熊猫-A-10-gpt-5.3-codex"]),
         ("gemini","GEMINI_API_URL","GEMINI_API_KEY",["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking","熊猫-顶级特供-X-17-gemini-3.1-pro-preview"]),
     ]
     p1_results = {"gpt":{},"grok":{},"gemini":{}}
@@ -507,7 +507,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     async with aiohttp.ClientSession() as session:
         _,claude_r,_ = await async_call_one_ai_batch(
             session, p2_prompt, "CLAUDE_API_URL","CLAUDE_API_KEY",
-            ["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
+            ["熊猫-特供-A-55-claude-opus-4.6-thinking","熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
             num, "claude"
         )
 
@@ -701,7 +701,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "gpt_score": gpt_sc, "gpt_analysis": gpt_an, "grok_score": grok_sc, "grok_analysis": grok_an,
         "gemini_score": gem_sc, "gemini_analysis": gem_an, "claude_score": cl_sc, "claude_analysis": cl_an,
         "ai_avg_confidence": round(avg_ai_conf, 1), "value_kill_count": value_kills,
-        "model_agreement": len(set(sc for sc,_ in ai_scores)) <= 1 and len(ai_scores) >= 2,
+        "model_agreement": len(set(sc for sc,_ in all_scores)) <= 1 and len(all_scores) >= 2,
         "poisson": stats.get("poisson", {}), "refined_poisson": stats.get("refined_poisson", {}),
         "extreme_warning": engine_result.get("scissors_gap_signal", ""),
         "smart_money_signal": " | ".join(sigs), "smart_signals": sigs,
