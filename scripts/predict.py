@@ -338,7 +338,7 @@ def build_phase2_prompt(match_analyses, phase1_results):
 # ====================================================================
 # AI调用引擎（处理top3和score两种格式）
 # ====================================================================
-FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://69.63.213.33:666/v1"]
+FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://www.api520.pro/v1", "https://www.api521.pro/v1", "https://69.63.213.33:666/v1"]
 
 def get_clean_env_url(name, default=""):
     v = str(os.environ.get(name, globals().get(name, default))).strip(" \t\n\r\"'")
