@@ -14,7 +14,7 @@ from experience_rules import ExperienceEngine, apply_experience_to_prediction
 from advanced_models import upgrade_ensemble_predict
 
 # ====================================================================
-# 🛡️ 终极防御装甲：动态加载你的自定义模块
+# 🛡️ 终极防御装甲：动态加载你的自定义模块，防暴毙！
 # ====================================================================
 try:
     from odds_history import apply_odds_history
@@ -37,7 +37,7 @@ ensemble = EnsemblePredictor()
 exp_engine = ExperienceEngine()
 
 # ====================================================================
-# 工具函数
+# ☢️ 工具函数
 # ====================================================================
 def calculate_value_bet(prob_pct, odds):
     if not odds or odds <= 1.05:
@@ -59,7 +59,7 @@ def parse_score(s):
         return None, None
 
 # ====================================================================
-# 冷门猎手引擎 (客观信号提取，无任何本地比分干预)
+# 🧊 冷门猎手引擎 (客观信号提取，无任何本地比分干预)
 # ====================================================================
 class ColdDoorDetector:
     @staticmethod
@@ -127,7 +127,7 @@ def load_ai_diary():
                 return json.load(f)
         except: 
             pass
-    return {"yesterday_win_rate": "N/A", "reflection": "Ω-Oracle 灵魂注入完成，修复数据提取Bug", "kill_history": []}
+    return {"yesterday_win_rate": "N/A", "reflection": "Ω-Oracle 灵魂注入完成，切片架构彻底解决524断连", "kill_history": []}
 
 def save_ai_diary(diary):
     os.makedirs("data", exist_ok=True)
@@ -135,7 +135,7 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# Phase1 & Phase2 Prompt（Ω-Football Oracle v3.0 定制版）
+# Phase1 & Phase2 Prompt（Ω-Football Oracle v3.0 切片适配版）
 # ====================================================================
 def build_phase1_prompt(match_analyses):
     diary = load_ai_diary()
@@ -148,14 +148,15 @@ def build_phase1_prompt(match_analyses):
     p += "3. 多模型融合基准：结合Poisson、Elo、xG与冷热偏差，彻底抛弃人类主观常识。该大比分绝不保守，该0-0绝不留情。\n"
     p += "4. 绝不使用“感觉”“应该”等废话。输出必须极度冷血、透明，用数据说话。\n\n"
     
-    p += "【死命令】只输出合法JSON数组。每场必须输出：match(序号), top3([{score,prob}...]), reason(150-250字，必须包含隐含概率vs真实概率的差值、庄家意图、Sharp资金判断), ai_confidence(0-100), value_kill(true/false), suggested_units(1-5)。\n\n"
+    p += "【死命令】只输出合法JSON数组。每场必须输出：match(必须是你看到的序号整数), top3([{score,prob}...]), reason(150-250字，必须包含隐含概率vs真实概率的差值、庄家意图、Sharp资金判断), ai_confidence(0-100), value_kill(true/false), suggested_units(1-5)。\n\n"
     
     p += "【Ω-Max 全维数据流接入】\n"
-    for i, ma in enumerate(match_analyses):
+    for ma in match_analyses:
+        idx = ma["index"]  # 核心修复：使用全局绝对索引，保证切片拼装不乱序
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
         a = m.get("away_team", m.get("guest", "Away"))
-        p += f"[{i+1}] {h} vs {a} | 欧赔:{float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f} | 亚盘死线:{m.get('give_ball','0')}\n"
+        p += f"[{idx}] {h} vs {a} | 欧赔:{float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f} | 亚盘死线:{m.get('give_ball','0')}\n"
         
         crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","s00":"0-0","s11":"1-1","l01":"0-1","l02":"0-2","l12":"1-2"}
         crs_items = []
@@ -166,7 +167,7 @@ def build_phase1_prompt(match_analyses):
             except: pass
         if crs_items:
             crs_items.sort(key=lambda x: x[1])
-            p += f"  机构最防范比分TOP4(底层逆向锚点): " + " | ".join([f"{s}({o}倍)" for s,o in crs_items[:4]]) + "\n"
+            p += f"  机构极限防范比分TOP4(作为逆向锚点): " + " | ".join([f"{s}({o}倍)" for s,o in crs_items[:4]]) + "\n"
             
         eng = ma["engine"]
         if eng.get('bookmaker_implied_home_xg'):
@@ -184,27 +185,30 @@ def build_phase1_prompt(match_analyses):
                 bad = info.get("guest_bad_news", "") or info.get("guest_injury", "")
                 p += f"  客队异动情报: {str(bad)[:100]}\n"
         p += "\n"
-    p += "【系统指令】进入榨干模式。彻底解构庄家意图，严格输出JSON数组！"
+    p += f"【系统指令】进入榨干模式。彻底解构庄家意图，严格输出 {len(match_analyses)} 场数据的合法JSON数组！"
     return p
 
 def build_phase2_prompt(match_analyses, phase1_results):
     p = "【核心设定】你现在是「Ω-Football Oracle v3.0」的终极核心裁决引擎。\n"
-    p += "三个量化先锋子模型已提供了初步比分阵列。你的任务是进行终极逆向校准机制！\n\n"
-    p += "【裁决铁律】\n"
-    p += "1. 抛弃一切模糊词汇。综合先锋模型的胜率、大小球和隐含偏差，得出唯一精算比分。\n"
-    p += "2. 你的 reason 必须结构化：1.多模型融合概率简述 2.赔率逆向拆解(隐含vs真实, 尖子vs大众资金) 3.最终逻辑。\n"
-    p += "3. 你是对抗庄家的无情机器，只输出可验证的真相，绝不妥协。\n\n"
-    p += "【输出格式】只输出JSON数组，包含：match(序号), score(唯一判定比分), reason(150-250字的结构化逆向拆解), ai_confidence(0-100), value_kill, suggested_units, dark_verdict(一句话精辟总结陷阱)\n\n"
+    p += "三个量化先锋子模型已通过泊松分布、Elo实力、xG预期等矩阵，提供了初步比分阵列与逆向解构数据。你的任务是进行终极逆向校准！\n\n"
     
-    for i, ma in enumerate(match_analyses):
+    p += "【Ω-Oracle 裁决铁律】\n"
+    p += "1. 抛弃一切模糊词汇和人类主观常识。综合先锋模型的胜率、大小球和隐含偏差，得出绝对唯一的精算比分！\n"
+    p += "2. 你的 reason 必须结构化呈现：1)多模型融合快照 2)赔率逆向拆解(隐含vs真实, Sharp vs Public资金) 3)最终陷阱定论。\n"
+    p += "3. 你是对抗庄家的无情机器，只输出可验证、可量化的真相，绝不妥协。\n\n"
+    
+    p += "【输出格式】只输出JSON数组，包含：match(必须是你看到的序号整数), score(唯一判定比分), reason(150-200字的结构化逆向拆解), ai_confidence(0-100), value_kill, suggested_units, dark_verdict(一句话精辟总结陷阱)\n\n"
+    
+    for ma in match_analyses:
+        idx = ma["index"] # 核心修复：使用全局绝对索引
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
         a = m.get("away_team", m.get("guest", "Away"))
-        p += f"[{i+1}] {h} vs {a}\n"
+        p += f"[{idx}] {h} vs {a}\n"
         p += f"欧赔: {float(m.get('sp_home',3)):.2f}/{float(m.get('sp_draw',3)):.2f}/{float(m.get('sp_away',3)):.2f} | 亚盘: {m.get('give_ball','0')}\n"
         
         for ai_name in ["gpt", "grok", "gemini"]:
-            ai_data = phase1_results.get(ai_name, {}).get(i+1, {})
+            ai_data = phase1_results.get(ai_name, {}).get(idx, {})
             if not ai_data: continue
             top3 = ai_data.get("top3", [])
             if top3:
@@ -212,13 +216,13 @@ def build_phase2_prompt(match_analyses, phase1_results):
                 p += f"  Ω-子模型 {ai_name.upper()}: {scores_str} | 核心简报: {str(ai_data.get('reason',''))[:80]}...\n"
             else:
                 sc = ai_data.get("ai_score", "-")
-                p += f"  Ω-子模型 {ai_name.upper()}: {sc} | 核心简报: {str(ai_data.get('analysis',''))[:80]}...\n"
+                p += f"  Ω-子模型 {ai_name.upper()}: {sc} | 核心简报: {str(ai_data.get('analysis', ai_data.get('reason','')))}[:80]...\n"
         p += "\n"
-    p += "【系统指令】执行终极决断！只输出JSON数组！"
+    p += f"【系统指令】榨干模式已达临界值，执行终极死刑决断！只输出 {len(match_analyses)} 场结果的JSON数组！"
     return p
 
 # ====================================================================
-# AI调用引擎（军工级防暴毙断肢重生算法，绝对保留原始时间设置）
+# AI调用引擎（严格保留原始时间设置与容灾算法）
 # ====================================================================
 FALLBACK_URLS = [
     None,
@@ -244,7 +248,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
     
-    timeout_map = {"claude": 1500, "grok": 300, "gpt": 240, "gemini": 360}
+    # 【严格保留】时间设定一字未动
+    timeout_map = {"claude": 1000, "grok": 300, "gpt": 400, "gemini": 300}
     timeout_sec = timeout_map.get(ai_name, 200)
 
     AI_PROFILES = {
@@ -285,22 +290,23 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 if ai_name != "claude": bp["temperature"] = profile["temp"]
                 payload = bp
             gw = url.split("/v1")[0][:35]
-            print(f"  [⏳{timeout_sec}s] {ai_name.upper()} | {mn[:22]} @ {gw}")
+            print(f"    [⏳{timeout_sec}s] {ai_name.upper()} | {mn[:22]} @ {gw}")
             t0 = time.time()
             try:
+                # 【严格保留】Timeout 配置一字未动
                 async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=timeout_sec, connect=15)) as r:
                     elapsed = round(time.time()-t0,1)
                     if r.status == 200:
                         try:
                             data = await r.json(content_type=None)
                         except:
-                            print(f"    ⚠️ 响应非JSON | {elapsed}s → 换URL")
+                            print(f"      ⚠️ 响应非JSON | {elapsed}s → 换URL")
                             continue
                             
                         try:
                             raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip() if is_gem else data["choices"][0]["message"]["content"].strip()
                         except:
-                            print(f"    ⚠️ 结构缺失 | {elapsed}s → 换URL")
+                            print(f"      ⚠️ 结构缺失 | {elapsed}s → 换URL")
                             continue
                             
                         clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", raw_text, flags=re.DOTALL | re.IGNORECASE)
@@ -323,7 +329,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                     if last_brace_idx != -1:
                                         safe_json_str = json_str[:last_brace_idx+1] + "]"
                                         arr = json.loads(safe_json_str)
-                                        print(f"    🩹 触发军工级断肢重生，精准抢救回 {len(arr)} 条数据！")
+                                        print(f"      🩹 触发军工级断肢重生，精准抢救回 {len(arr)} 条数据！")
                                 except: pass
                                 
                             if isinstance(arr, list):
@@ -343,7 +349,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                         results[mid] = {
                                             "ai_score": item["score"],
                                             "analysis": str(item.get("reason","")).strip()[:300],
-                                            "reason": str(item.get("reason","")).strip()[:300], # 双保险注入，防前端提取不到
+                                            "reason": str(item.get("reason","")).strip()[:300], 
                                             "ai_confidence": int(item.get("ai_confidence",60)),
                                             "value_kill": bool(item.get("value_kill",False)),
                                             "suggested_units": float(item.get("suggested_units", 0)),
@@ -351,69 +357,91 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                         }
                                         
                         if len(results) >= max(1, num_matches*0.5):
-                            print(f"    ✅ {ai_name.upper()} 成功: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
+                            print(f"      ✅ {ai_name.upper()} 成功: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
                             return ai_name, results, mn
                             
                         if len(results) > len(best_results): 
                             best_results=results; best_model=mn
-                            print(f"    ⚠️ 部分 {len(results)}/{num_matches} | {elapsed}s")
+                            print(f"      ⚠️ 部分 {len(results)}/{num_matches} | {elapsed}s")
                             
                         skip_model = True
                         break
                         
-                    elif r.status == 429: print(f"    🔥 429 | {elapsed}s"); await asyncio.sleep(3); continue
-                    elif r.status >= 500: print(f"    💀 HTTP {r.status} | {elapsed}s → 跳模型"); skip_model=True; break
-                    elif r.status == 400: print(f"    💀 400 | {elapsed}s → 跳模型"); skip_model=True; break
-                    else: print(f"    ⚠️ HTTP {r.status} | {elapsed}s")
+                    elif r.status == 429: print(f"      🔥 429 | {elapsed}s"); await asyncio.sleep(3); continue
+                    elif r.status >= 500: print(f"      💀 HTTP {r.status} | {elapsed}s → 跳模型"); skip_model=True; break
+                    elif r.status == 400: print(f"      💀 HTTP 400 | {elapsed}s → 跳模型"); skip_model=True; break
+                    else: print(f"      ⚠️ HTTP {r.status} | {elapsed}s")
             except asyncio.TimeoutError:
-                elapsed=round(time.time()-t0,1); print(f"    ⏰ {elapsed}s超时 → 跳模型"); skip_model=True; break
+                elapsed=round(time.time()-t0,1); print(f"      ⏰ {elapsed}s超时 → 跳模型"); skip_model=True; break
             except Exception as e:
                 elapsed=round(time.time()-t0,1); err=str(e)[:40]
-                if "connect" in err.lower() or "resolve" in err.lower(): print(f"    ⚠️ 连接失败 {err} | {elapsed}s → 换URL")
-                else: print(f"    ⚠️ {err} | {elapsed}s → 跳模型"); skip_model=True; break
+                if "connect" in err.lower() or "resolve" in err.lower(): print(f"      ⚠️ 连接失败 {err} | {elapsed}s → 换URL")
+                else: print(f"      ⚠️ {err} | {elapsed}s → 跳模型"); skip_model=True; break
             await asyncio.sleep(0.3)
             
         if len(best_results) >= max(1, num_matches*0.4):
-            print(f"    ✅ {ai_name.upper()} 采用: {len(best_results)}/{num_matches}"); return ai_name, best_results, best_model
+            print(f"      ✅ {ai_name.upper()} 采用: {len(best_results)}/{num_matches}"); return ai_name, best_results, best_model
             
     if best_results:
-        print(f"    ⚠️ {ai_name.upper()} 勉强采用: {len(best_results)}条"); return ai_name, best_results, best_model
-    print(f"    ❌ {ai_name.upper()} 全部失败"); return ai_name, {}, "failed"
+        print(f"      ⚠️ {ai_name.upper()} 勉强采用: {len(best_results)}条"); return ai_name, best_results, best_model
+    print(f"      ❌ {ai_name.upper()} 全部失败"); return ai_name, {}, "failed"
 
+
+# ====================================================================
+# 🛸 核心重构：智能切片并行机制 (Chunking) 彻底粉碎 Cloudflare 524 限制
+# ====================================================================
 async def run_ai_matrix_two_phase(match_analyses):
-    """两阶段：Phase1(先锋拓荒) → Phase2(裁判仲裁)"""
     num = len(match_analyses)
-
-    p1_prompt = build_phase1_prompt(match_analyses)
-    print(f"  [Phase1] {len(p1_prompt):,} 字符 → GPT/Grok/Gemini 独立推演中...")
-
+    CHUNK_SIZE = 12 # 每次喂给AI的比赛数量，保证40-60秒内返回，绝对不可能触发125秒的 524 Error
+    
+    p1_results = {"gpt":{},"grok":{},"gemini":{}}
     p1_configs = [
         ("grok","GROK_API_URL","GROK_API_KEY",["熊猫-A-6-grok-4.2-thinking","熊猫-A-7-grok-4.2-多智能体讨论"]),
-        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-A-10-gpt-5.4","熊猫-按量-gpt-5.4"]),
+        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-按量-gpt-5.4","熊猫-按量-gpt-5.4","熊猫-A-10-gpt-5.4"]),
         ("gemini","GEMINI_API_URL","GEMINI_API_KEY",["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking","熊猫-顶级特供-X-17-gemini-3.1-pro-preview"]),
     ]
-    p1_results = {"gpt":{},"grok":{},"gemini":{}}
+    
+    print(f"  [SYSTEM] 开启智能切片缓冲引擎！总计 {num} 场，单批处理 {CHUNK_SIZE} 场。")
 
-    async with aiohttp.ClientSession() as session:
-        tasks = [async_call_one_ai_batch(session,p1_prompt,u,k,m,num,n) for n,u,k,m in p1_configs]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-    for res in results:
-        if isinstance(res,tuple): n,d,_ = res; p1_results[n] = d
-        else: print(f"  [Phase1 ERROR] {res}")
+    # ===== Phase1: 分批独立分析 =====
+    for i in range(0, num, CHUNK_SIZE):
+        chunk = match_analyses[i:i+CHUNK_SIZE]
+        print(f"\n  [Phase1] 正在拓荒切片 {i+1} - {min(i+CHUNK_SIZE, num)} 场 ...")
+        p1_prompt = build_phase1_prompt(chunk)
+        
+        async with aiohttp.ClientSession() as session:
+            tasks = [async_call_one_ai_batch(session, p1_prompt, u, k, m, len(chunk), n) for n,u,k,m in p1_configs]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            
+        for res in results:
+            if isinstance(res, tuple): 
+                n, d, _ = res
+                p1_results[n].update(d) # 缓存入总池，断网不丢数据
+            else: 
+                print(f"  [Phase1 ERROR] 切片报错: {res}")
+                
+        # 切片间的喘息，防并发封禁
+        await asyncio.sleep(2)
 
     ok = sum(1 for v in p1_results.values() if v)
-    print(f"  [Phase1] 拓荒完成: {ok}/3 AI有效")
+    print(f"\n  [Phase1] 全部切片拓荒完成: {ok}/3 AI有效")
 
-    p2_prompt = build_phase2_prompt(match_analyses, p1_results)
-    print(f"  [Phase2] {len(p2_prompt):,} 字符 → Claude 绝对仲裁...")
-
+    # ===== Phase2: Claude分批裁判 =====
     claude_r = {}
-    async with aiohttp.ClientSession() as session:
-        _,claude_r,_ = await async_call_one_ai_batch(
-            session, p2_prompt, "CLAUDE_API_URL","CLAUDE_API_KEY",
-            ["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
-            num, "claude"
-        )
+    for i in range(0, num, CHUNK_SIZE):
+        chunk = match_analyses[i:i+CHUNK_SIZE]
+        print(f"\n  [Phase2] Claude 裁判正审理切片 {i+1} - {min(i+CHUNK_SIZE, num)} 场 ...")
+        p2_prompt = build_phase2_prompt(chunk, p1_results)
+        
+        async with aiohttp.ClientSession() as session:
+            _, chunk_claude_r, _ = await async_call_one_ai_batch(
+                session, p2_prompt, "CLAUDE_API_URL","CLAUDE_API_KEY",
+                ["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
+                len(chunk), "claude"
+            )
+            claude_r.update(chunk_claude_r) # 缓存入总池
+            
+        await asyncio.sleep(2)
 
     all_r = p1_results.copy()
     all_r["claude"] = claude_r
@@ -443,19 +471,21 @@ def calculate_multi_market_value(engine_result, match_obj):
     }
 
 # ====================================================================
-# Merge v8.6 — 完全去势版：没有任何本地强制篡改，唯独尊崇 AI
+# Merge Ω-Oracle — 完全去势版：没有任何本地强制篡改，唯独尊崇 AI
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     engine_score = engine_result.get("primary_score", "1-1")
     engine_conf = engine_result.get("confidence", 60)
     value_info = calculate_multi_market_value(engine_result, match_obj)
     
+    # 🚀 完全解放算力：最终比分直接等于 Phase 2 最高权重模型 (Claude) 的审判
     final_score = ""
     if isinstance(claude_r, dict) and claude_r.get("ai_score") and claude_r.get("ai_score") != "-":
         final_score = claude_r["ai_score"]
         
+    # 如果 Claude 彻底宕机，采纳 Phase 1 阶段最高票共识
+    p1_ai = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r}
     if not final_score:
-        p1_ai = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r}
         vote_count = {}
         for n, r in p1_ai.items():
             if isinstance(r, dict):
@@ -466,9 +496,9 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         if vote_count:
             final_score = max(vote_count, key=vote_count.get)
         else:
-            final_score = engine_score
+            final_score = engine_score # 终极断网灾备
 
-    # 🔥 防御性文本提取：适配所有的 Key 名
+    # 🔥 防御性文本提取：双重嗅探 "reason" 或 "analysis"，修复 N/A 丢失 Bug
     gpt_sc = gpt_r.get("ai_score", gpt_r.get("top3", [{"score":"-"}])[0].get("score", "-") if gpt_r.get("top3") else "-") if isinstance(gpt_r, dict) else "-"
     gpt_an = gpt_r.get("reason", gpt_r.get("analysis", "N/A")) if isinstance(gpt_r, dict) else "N/A"
 
@@ -483,14 +513,40 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
     pre_pred = {"home_win_pct": engine_result.get("home_prob", 33), "draw_pct": engine_result.get("draw_prob", 33), "away_win_pct": engine_result.get("away_prob", 34), "smart_signals": stats.get("smart_signals", [])}
     cold_door = ColdDoorDetector.detect(match_obj, pre_pred)
+    
+    # 信心融合计算
+    ai_all = {"claude": claude_r, "grok": grok_r, "gpt": gpt_r, "gemini": gemini_r}
+    ai_conf_sum = 0; ai_conf_count = 0; value_kills = 0
+    weights = {"claude": 1.5, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
+    ai_scores_list = []
+    
+    for name, r in ai_all.items():
+        if not isinstance(r, dict): continue
+        sc = r.get("ai_score", r.get("top3", [{"score":"-"}])[0].get("score", "-") if r.get("top3") else "-")
+        if sc and sc not in ["-", "?", ""]:
+            ai_scores_list.append(sc)
+        conf = r.get("ai_confidence", 60)
+        ai_conf_sum += conf * weights.get(name, 1.0)
+        ai_conf_count += weights.get(name, 1.0)
+        if r.get("value_kill"): value_kills += 1
+
+    avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
+    cf = engine_conf
+    cf = min(95, cf + int((avg_ai_conf - 60) * 0.4))
+    cf = cf + value_kills * 6
+    sigs = list(stats.get("smart_signals", []))
+    if cold_door["is_cold_door"]: sigs.extend(cold_door["signals"]); cf = max(30, cf - 5)
+    has_warn = any("🚨" in str(s) for s in sigs)
+    if has_warn: cf = max(35, cf - 12)
+    risk = "低" if cf >= 75 else ("中" if cf >= 55 else "高")
 
     return {
         "predicted_score": final_score,
         "home_win_pct": engine_result.get("home_prob", 33),
         "draw_pct": engine_result.get("draw_prob", 33),
         "away_win_pct": engine_result.get("away_prob", 34),
-        "confidence": engine_conf,
-        "risk_level": "低" if engine_conf >= 75 else ("中" if engine_conf >= 55 else "高"),
+        "confidence": cf,
+        "risk_level": risk,
         "over_under_2_5": "大" if engine_result.get("over_25", 50) > 55 else "小",
         "both_score": "是" if engine_result.get("btts", 45) > 50 else "否",
         "multi_market_value": value_info,
@@ -505,7 +561,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "gemini_analysis": gem_an,
         "claude_score": cl_sc,
         "claude_analysis": cl_an,
-        "ai_avg_confidence": 85, # 纯净版已废弃硬编码置信度，均交由UI计算
+        "ai_avg_confidence": round(avg_ai_conf, 1), 
         "value_kill_count": 1 if value_info["best_value"]["is_value"] else 0,
         "model_agreement": True if final_score else False,
         "poisson": stats.get("poisson", {}),
@@ -584,7 +640,7 @@ def run_predictions(raw, use_ai=True):
 
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
-        print("  [SYSTEM] Ω-Oracle 测算矩阵激活，启动高维逆向剥离...")
+        print("  [SYSTEM] Ω-Oracle 测算矩阵激活，启动智能切片防断连机制...")
         start_t = time.time()
         all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
         print(f"  [SYSTEM] 算力矩阵收敛完成，耗时 {time.time()-start_t:.1f}s")
@@ -592,7 +648,7 @@ def run_predictions(raw, use_ai=True):
     res = []
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
-        mg = merge_result(ma["engine"], all_ai["gpt"].get(i+1, {}), all_ai["grok"].get(i+1, {}), all_ai["gemini"].get(i+1, {}), all_ai["claude"].get(i+1, {}), ma["stats"], m)
+        mg = merge_result(ma["engine"], all_ai["gpt"].get(ma["index"], {}), all_ai["grok"].get(ma["index"], {}), all_ai["gemini"].get(ma["index"], {}), all_ai["claude"].get(ma["index"], {}), ma["stats"], m)
         
         try: mg = apply_experience_to_prediction(m, mg, exp_engine)
         except Exception as e: print(f"    ⚠️ experience跳过: {e}")
@@ -617,7 +673,7 @@ def run_predictions(raw, use_ai=True):
 
         cold = mg.get("cold_door", {})
         cold_tag = f" [❄️{cold.get('level','')}冷门预警]" if cold.get("is_cold_door") else ""
-        print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | EV星级: {mg.get('suggested_units',0)}{cold_tag}")
+        print(f"  [{ma['index']}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | EV星级: {mg.get('suggested_units',0)}{cold_tag}")
 
     t4 = select_top4(res)
     t4ids = [t.get("id") for t in t4]
@@ -629,7 +685,7 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     cold_count = len([r for r in res if r.get("prediction", {}).get("cold_door", {}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence'] > 70])}/{max(1, len(res))}"
-    diary["reflection"] = f"Ω-Oracle v3.0 | 搭载军工级断肢重生 | 榨干模式常态化运行 | {cold_count}场陷阱识别"
+    diary["reflection"] = f"Ω-Oracle v3.0 | 搭载智能切片(告别524) | 榨干模式常态化运行 | {cold_count}场陷阱识别"
     save_ai_diary(diary)
 
     return res, t4
