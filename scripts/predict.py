@@ -354,7 +354,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     primary_url = get_clean_env_url(url_env)
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
-    timeout_map = {"claude": 1500, "grok": 300, "gpt": 720, "gemini": 360}
+    timeout_map = {"claude": 300, "grok": 300, "gpt": 300, "gemini": 300}
     timeout_sec = timeout_map.get(ai_name, 200)
 
     AI_PROFILES = {
