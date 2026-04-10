@@ -455,13 +455,26 @@ def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
 
 async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
+    """
+    vMAX 8.0 — 连上就等·连不上就换
+    
+    逻辑极简：
+      连接超时30秒：能不能连上服务器
+      读取超时：无限（连上了就死等数据回来，因为钱已经花了）
+      只有连接失败/502/504才换下一个模型
+      连上了=这份钱花定了，等到底
+    
+    模型顺序按价格从低到高：按量→A系列→99额度
+    一个AI只花一份钱，不会重复消耗
+    """
     key = get_clean_env_key(key_env)
     if not key: return ai_name, {}, "no_key"
     primary_url = get_clean_env_url(url_env)
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
-    timeout_map = {"claude": 300, "grok": 300, "gpt": 300, "gemini": 300}
-    timeout_sec = timeout_map.get(ai_name, 200)
+
+    CONNECT_TIMEOUT = 30      # 连接超时30秒：连不上就换
+    READ_TIMEOUT = 600        # 连上后最长等10分钟（实际上等于无限，模型一定会在这之内返回）
 
     AI_PROFILES = {
         "claude": {
@@ -505,16 +518,19 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     }
 
     best_results = {}; best_model = ""
-    struct_fail_count = 0
+    profile = AI_PROFILES.get(ai_name, AI_PROFILES["gpt"])
+
     for mn in models_list:
-        skip_model = False
+        connected = False  # 标记是否已经连上（=钱已花）
+
         for base_url in urls:
-            if not base_url or skip_model: continue
+            if not base_url: continue
+
             is_gem = "generateContent" in base_url
             url = base_url.rstrip("/")
             if not is_gem and "chat/completions" not in url: url += "/chat/completions"
             headers = {"Content-Type": "application/json"}
-            profile = AI_PROFILES.get(ai_name, AI_PROFILES["gpt"])
+
             if is_gem:
                 headers["x-goog-api-key"] = key
                 payload = {"contents":[{"parts":[{"text":prompt}]}],"generationConfig":{"temperature":profile["temp"]},"systemInstruction":{"parts":[{"text":profile["sys"]}]}}
@@ -523,96 +539,163 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 bp = {"model":mn,"messages":[{"role":"system","content":profile["sys"]},{"role":"user","content":prompt}]}
                 if ai_name != "claude": bp["temperature"] = profile["temp"]
                 payload = bp
+
             gw = url.split("/v1")[0][:35]
-            print(f"  [⏳{timeout_sec}s] {ai_name.upper()} | {mn[:22]} @ {gw}")
+            print(f"  [🔌连接中] {ai_name.upper()} | {mn[:22]} @ {gw}")
             t0 = time.time()
+
             try:
-                async with session.post(url, headers=headers, json=payload, timeout=aiohttp.ClientTimeout(total=timeout_sec, connect=15)) as r:
-                    elapsed = round(time.time()-t0,1)
-                    if r.status == 200:
-                        try:
-                            data = await r.json(content_type=None)
-                        except:
-                            print(f"    ⚠️ 响应非JSON | {elapsed}s → 换URL")
-                            continue
-                        raw_text = ""
-                        try:
-                            if is_gem:
-                                raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
-                            else:
-                                msg = data.get("choices", [{}])[0].get("message", {})
-                                raw_text = (msg.get("content") or "").strip()
-                                if not raw_text:
-                                    raw_text = (msg.get("reasoning_content") or "").strip()
-                                if not raw_text:
-                                    raw_text = (msg.get("text") or "").strip()
-                                if not raw_text:
-                                    raw_text = json.dumps(data, ensure_ascii=False)
-                        except: pass
-                        if not raw_text or len(raw_text) < 10:
-                            struct_fail_count += 1
-                            print(f"    ⚠️ 结构缺失(#{struct_fail_count}) | {elapsed}s → {'跳模型' if struct_fail_count >= 2 else '换URL'}")
-                            if struct_fail_count >= 2: skip_model = True; break
-                            continue
-                        clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", raw_text, flags=re.DOTALL|re.IGNORECASE)
-                        clean = re.sub(r"```[\w]*","",clean).strip()
+                timeout = aiohttp.ClientTimeout(
+                    total=None,              # 总超时不限
+                    connect=CONNECT_TIMEOUT,  # 连接30秒
+                    sock_connect=CONNECT_TIMEOUT,
+                    sock_read=READ_TIMEOUT,   # 连上后等10分钟
+                )
+                async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
+                    elapsed_connect = round(time.time()-t0, 1)
+
+                    # ===== 连接失败类：换URL或换模型 =====
+                    if r.status in (502, 504):
+                        print(f"    💀 HTTP {r.status} 网关超时 | {elapsed_connect}s → 换下一个")
+                        continue
+
+                    if r.status == 400:
+                        print(f"    💀 400 模型不支持 | {elapsed_connect}s → 换模型")
+                        break  # 这个模型不行，换下一个模型
+
+                    if r.status == 429:
+                        print(f"    🔥 429 限流 | {elapsed_connect}s → 换URL")
+                        await asyncio.sleep(2)
+                        continue
+
+                    if r.status != 200:
+                        print(f"    ⚠️ HTTP {r.status} | {elapsed_connect}s → 换下一个")
+                        continue
+
+                    # ===== 200 = 连上了！钱已花，死等数据 =====
+                    connected = True
+                    print(f"    ✅ 已连上！{elapsed_connect}s | 等待模型思考返回数据...")
+
+                    try:
+                        data = await r.json(content_type=None)
+                    except:
+                        elapsed = round(time.time()-t0, 1)
+                        print(f"    ⚠️ 响应非JSON | {elapsed}s | 钱已花但数据坏了")
+                        # 连上了但数据坏了，不再重试（钱已花）
+                        return ai_name, best_results, best_model or "json_error"
+
+                    elapsed = round(time.time()-t0, 1)
+
+                    # 提取token消耗（仅打印）
+                    usage = data.get("usage", {})
+                    req_tokens = usage.get("total_tokens", 0) or (
+                        usage.get("prompt_tokens", 0) + usage.get("completion_tokens", 0)
+                    )
+                    if not req_tokens:
+                        um = data.get("usageMetadata", {})
+                        req_tokens = um.get("totalTokenCount", 0)
+                    if req_tokens:
+                        print(f"    📊 消耗: {req_tokens:,} token | 耗时: {elapsed}s")
+
+                    # 提取文本
+                    raw_text = ""
+                    try:
+                        if is_gem:
+                            raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                        else:
+                            msg = data.get("choices", [{}])[0].get("message", {})
+                            raw_text = (msg.get("content") or "").strip()
+                            if not raw_text:
+                                raw_text = (msg.get("reasoning_content") or "").strip()
+                            if not raw_text:
+                                raw_text = (msg.get("text") or "").strip()
+                            if not raw_text:
+                                raw_text = json.dumps(data, ensure_ascii=False)
+                    except: pass
+
+                    if not raw_text or len(raw_text) < 10:
+                        print(f"    ⚠️ 模型返回空数据 | {elapsed}s | 钱已花")
+                        return ai_name, best_results, best_model or "empty"
+
+                    # 解析JSON
+                    clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", raw_text, flags=re.DOTALL|re.IGNORECASE)
+                    clean = re.sub(r"```[\w]*","",clean).strip()
+                    start=clean.find("["); end=clean.rfind("]")+1
+                    if start==-1 or end==0:
+                        clean = re.sub(r"[^\[\]{}:,\"'0-9a-zA-Z\u4e00-\u9fa5\s\.\-\+\(\)]","",clean)
                         start=clean.find("["); end=clean.rfind("]")+1
-                        if start==-1 or end==0:
-                            clean = re.sub(r"[^\[\]{}:,\"'0-9a-zA-Z\u4e00-\u9fa5\s\.\-\+\(\)]","",clean)
-                            start=clean.find("["); end=clean.rfind("]")+1
-                        results = {}
-                        if start != -1 and end > start:
-                            json_str = clean[start:end]
-                            arr = []
-                            try: arr = json.loads(json_str)
-                            except json.JSONDecodeError:
-                                try:
-                                    last_brace = json_str.rfind('}')
-                                    if last_brace != -1:
-                                        arr = json.loads(json_str[:last_brace+1] + "]")
-                                        print(f"    🩹 断肢重生: 抢救 {len(arr)} 条")
-                                except: pass
-                            if isinstance(arr, list):
-                                for item in arr:
-                                    if not isinstance(item, dict) or not item.get("match"): continue
-                                    try: mid = int(item["match"])
-                                    except: mid = item["match"]
-                                    if item.get("top3"):
-                                        t1_score = item["top3"][0].get("score","1-1") if item["top3"] else "1-1"
-                                        results[mid] = {
-                                            "top3": item["top3"],
-                                            "ai_score": t1_score,
-                                            "reason": str(item.get("reason",""))[:200],
-                                            "ai_confidence": int(item.get("ai_confidence",60)),
-                                        }
-                                    elif item.get("score"):
-                                        results[mid] = {
-                                            "ai_score": item["score"],
-                                            "analysis": str(item.get("reason",""))[:200],
-                                            "ai_confidence": int(item.get("ai_confidence",60)),
-                                            "value_kill": bool(item.get("value_kill",False)),
-                                        }
-                        if len(results) >= max(1, num_matches*0.5):
-                            print(f"    ✅ {ai_name.upper()} 成功: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
-                            return ai_name, results, mn
-                        if len(results) > len(best_results): best_results=results; best_model=mn; print(f"    ⚠️ 部分 {len(results)}/{num_matches} | {elapsed}s")
-                        else: print(f"    ⚠️ 解析不足 {len(results)}条 | {elapsed}s")
-                    elif r.status == 429: print(f"    🔥 429 | {elapsed}s"); await asyncio.sleep(3); continue
-                    elif r.status >= 500: print(f"    💀 HTTP {r.status} | {elapsed}s → 跳模型"); skip_model=True; break
-                    elif r.status == 400: print(f"    💀 400 | {elapsed}s → 跳模型"); skip_model=True; break
-                    else: print(f"    ⚠️ HTTP {r.status} | {elapsed}s")
+
+                    results = {}
+                    if start != -1 and end > start:
+                        json_str = clean[start:end]
+                        arr = []
+                        try: arr = json.loads(json_str)
+                        except json.JSONDecodeError:
+                            try:
+                                last_brace = json_str.rfind('}')
+                                if last_brace != -1:
+                                    arr = json.loads(json_str[:last_brace+1] + "]")
+                                    print(f"    🩹 断肢重生: 抢救 {len(arr)} 条")
+                            except: pass
+                        if isinstance(arr, list):
+                            for item in arr:
+                                if not isinstance(item, dict) or not item.get("match"): continue
+                                try: mid = int(item["match"])
+                                except: mid = item["match"]
+                                if item.get("top3"):
+                                    t1_score = item["top3"][0].get("score","1-1") if item["top3"] else "1-1"
+                                    results[mid] = {
+                                        "top3": item["top3"],
+                                        "ai_score": t1_score,
+                                        "reason": str(item.get("reason",""))[:200],
+                                        "ai_confidence": int(item.get("ai_confidence",60)),
+                                    }
+                                elif item.get("score"):
+                                    results[mid] = {
+                                        "ai_score": item["score"],
+                                        "analysis": str(item.get("reason",""))[:200],
+                                        "ai_confidence": int(item.get("ai_confidence",60)),
+                                        "value_kill": bool(item.get("value_kill",False)),
+                                    }
+
+                    print(f"    ✅ {ai_name.upper()} 完成: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
+                    # 连上了就用这个结果，不管解析了多少条，不再重试
+                    return ai_name, results, mn
+
+            except aiohttp.ClientConnectorError as e:
+                elapsed = round(time.time()-t0, 1)
+                print(f"    🔌 连接失败 {str(e)[:30]} | {elapsed}s → 换URL")
+                continue  # 没连上=没花钱，换URL
+
             except asyncio.TimeoutError:
-                elapsed=round(time.time()-t0,1); print(f"    ⏰ {elapsed}s超时 → 跳模型"); skip_model=True; break
+                elapsed = round(time.time()-t0, 1)
+                if not connected:
+                    # 连接阶段超时=没花钱，换下一个
+                    print(f"    🔌 {elapsed}s连接超时 → 换下一个")
+                    continue
+                else:
+                    # 已连上但读取超时（极罕见，600秒还没返回）
+                    print(f"    ⏰ 已连上但{elapsed}s仍无数据 | 钱已花")
+                    return ai_name, best_results, best_model or "read_timeout"
+
             except Exception as e:
-                elapsed=round(time.time()-t0,1); err=str(e)[:40]
-                if "connect" in err.lower() or "resolve" in err.lower(): print(f"    ⚠️ 连接失败 {err} | {elapsed}s → 换URL")
-                else: print(f"    ⚠️ {err} | {elapsed}s → 跳模型"); skip_model=True; break
-            await asyncio.sleep(0.3)
-        if len(best_results) >= max(1, num_matches*0.4):
-            print(f"    ✅ {ai_name.upper()} 采用: {len(best_results)}/{num_matches}"); return ai_name, best_results, best_model
-    if best_results:
-        print(f"    ⚠️ {ai_name.upper()} 勉强采用: {len(best_results)}条"); return ai_name, best_results, best_model
-    print(f"    ❌ {ai_name.upper()} 全部失败"); return ai_name, {}, "failed"
+                elapsed = round(time.time()-t0, 1)
+                err = str(e)[:40]
+                if not connected:
+                    print(f"    ⚠️ {err} | {elapsed}s → 换下一个")
+                    continue
+                else:
+                    print(f"    ⚠️ 已连上但异常: {err} | {elapsed}s | 钱已花")
+                    return ai_name, best_results, best_model or "error"
+
+            await asyncio.sleep(0.2)
+
+        # 如果这个模型连上过（connected=True），上面已经return了
+        # 走到这里说明这个模型所有URL都连不上，试下一个模型
+
+    # 所有模型都连不上
+    print(f"    ❌ {ai_name.upper()} 所有模型均连接失败（未花钱）")
+    return ai_name, {}, "all_connect_failed"
 
 
 async def run_ai_matrix_two_phase(match_analyses):
