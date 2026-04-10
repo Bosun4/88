@@ -596,75 +596,91 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     if req_tokens:
                         print(f"    📊 消耗: {req_tokens:,} token | 耗时: {elapsed}s")
 
-                    # 提取文本 — 兼容所有已知API格式
+                    # 提取文本 — 极简版：先直接取，不要花哨
                     raw_text = ""
                     try:
                         if is_gem:
                             raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
                         else:
-                            # === 格式1: 标准OpenAI choices格式 ===
-                            msg = data.get("choices", [{}])[0].get("message", {}) if data.get("choices") else {}
-                            content_text = (msg.get("content") or "").strip()
-                            reasoning_text = (msg.get("reasoning_content") or "").strip()
+                            # 第一步：直接从choices取，这是标准格式
+                            if data.get("choices") and isinstance(data["choices"], list) and len(data["choices"]) > 0:
+                                msg = data["choices"][0].get("message", {})
+                                if isinstance(msg, dict):
+                                    # 打印所有message字段帮助调试
+                                    msg_keys = [k for k in msg.keys() if msg[k] and str(msg[k]).strip()]
+                                    print(f"    🔍 message字段: {msg_keys}")
 
-                            # === 格式2: GPT-5.4 Response API格式 ===
-                            # output是数组，里面有type="message"的item，item.content是数组
-                            output_items = data.get("output", [])
-                            response_text = ""
-                            if isinstance(output_items, list):
-                                for out_item in output_items:
+                                    # 遍历所有字段，找最长的包含[的文本
+                                    best_with_bracket = ""
+                                    best_any = ""
+                                    for key in msg:
+                                        val = msg[key]
+                                        if not val or not isinstance(val, str): continue
+                                        val = val.strip()
+                                        if not val: continue
+                                        # 优先：包含JSON数组标记的
+                                        if "[" in val and "{" in val and len(val) > len(best_with_bracket):
+                                            best_with_bracket = val
+                                        # 备选：最长的文本
+                                        if len(val) > len(best_any):
+                                            best_any = val
+
+                                    raw_text = best_with_bracket or best_any
+                                    if raw_text:
+                                        print(f"    🔍 取到文本: {len(raw_text)}字 | 含[:{('[' in raw_text)} | 前80字: {raw_text[:80]}")
+
+                            # 第二步：output数组格式（某些代理）
+                            if not raw_text and data.get("output") and isinstance(data["output"], list):
+                                for out_item in data["output"]:
                                     if not isinstance(out_item, dict): continue
-                                    # type="message" → content数组
                                     if out_item.get("type") == "message":
                                         for ct in out_item.get("content", []):
-                                            if isinstance(ct, dict) and ct.get("type") == "text":
-                                                response_text += (ct.get("text") or "") + "\n"
-                                    # type="reasoning" → summary数组
-                                    elif out_item.get("type") == "reasoning":
-                                        for sm in out_item.get("summary", []):
-                                            if isinstance(sm, dict) and sm.get("type") == "text":
-                                                pass  # thinking内容不要
-                                    # 直接有text字段
-                                    elif out_item.get("text"):
-                                        response_text += out_item["text"] + "\n"
-                                    # content是字符串
+                                            if isinstance(ct, dict) and ct.get("text"):
+                                                txt = ct["text"].strip()
+                                                if len(txt) > len(raw_text):
+                                                    raw_text = txt
                                     elif isinstance(out_item.get("content"), str):
-                                        response_text += out_item["content"] + "\n"
-                            response_text = response_text.strip()
+                                        txt = out_item["content"].strip()
+                                        if len(txt) > len(raw_text):
+                                            raw_text = txt
 
-                            # === 格式3: 直接在顶层有content/text ===
-                            top_content = ""
-                            if isinstance(data.get("content"), str):
-                                top_content = data["content"].strip()
-                            elif isinstance(data.get("content"), list):
-                                for ct in data["content"]:
-                                    if isinstance(ct, dict) and ct.get("text"):
-                                        top_content += ct["text"] + "\n"
-                                top_content = top_content.strip()
-                            top_text = (data.get("text") or "").strip()
-
-                            # 所有候选文本，按优先级排列
-                            candidates = [content_text, response_text, reasoning_text, top_content, top_text]
-
-                            # 策略：谁里面有JSON数组就用谁
-                            for candidate in candidates:
-                                if candidate and "[" in candidate and "]" in candidate and "{" in candidate:
-                                    raw_text = candidate
-                                    break
-
-                            # 都没有JSON数组？拼接所有非空字段一起找
+                            # 第三步：全部失败，dump整个response
                             if not raw_text:
-                                combined = " ".join(filter(None, candidates))
-                                if combined and len(combined) > 10:
-                                    raw_text = combined
-
-                            # 最终兜底：整个response转字符串找JSON
-                            if not raw_text or ("[" not in raw_text):
                                 full_str = json.dumps(data, ensure_ascii=False)
-                                if "[{" in full_str:
+                                # 智能提取：在dump字符串里找 "match" 附近的JSON数组
+                                # 找 [{"match" 模式
+                                import re as _re
+                                m = _re.search(r'\[\s*\{\s*"match"', full_str)
+                                if m:
+                                    start_pos = m.start()
+                                    # 从这里开始数括号找匹配的]
+                                    depth = 0
+                                    end_pos = start_pos
+                                    for ci in range(start_pos, min(start_pos + 100000, len(full_str))):
+                                        if full_str[ci] == '[': depth += 1
+                                        elif full_str[ci] == ']': depth -= 1
+                                        if depth == 0:
+                                            end_pos = ci + 1
+                                            break
+                                    if end_pos > start_pos:
+                                        extracted = full_str[start_pos:end_pos]
+                                        # 处理JSON字符串转义 (\")
+                                        if '\\"' in extracted:
+                                            try:
+                                                extracted = json.loads('"' + extracted + '"')
+                                            except:
+                                                extracted = extracted.replace('\\"', '"')
+                                        raw_text = extracted
+                                        print(f"    🔍 从dump中提取到JSON: {len(raw_text)}字")
+
+                                if not raw_text:
                                     raw_text = full_str
+                                    print(f"    ⚠️ 用整个response做raw_text: {len(raw_text)}字")
+
                     except Exception as ex:
                         print(f"    ⚠️ 文本提取异常: {str(ex)[:80]}")
+                        try: raw_text = json.dumps(data, ensure_ascii=False)
+                        except: pass
 
                     if not raw_text or len(raw_text) < 10:
                         print(f"    ⚠️ 模型返回空数据 | {elapsed}s")
