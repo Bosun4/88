@@ -580,9 +580,9 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         data = await r.json(content_type=None)
                     except:
                         elapsed = round(time.time()-t0, 1)
-                        print(f"    ⚠️ 响应非JSON | {elapsed}s | 钱已花但数据坏了")
-                        # 连上了但数据坏了，不再重试（钱已花）
-                        return ai_name, best_results, best_model or "json_error"
+                        print(f"    ⚠️ 响应非JSON | {elapsed}s → 继续试下一个")
+                        connected = False
+                        continue
 
                     elapsed = round(time.time()-t0, 1)
 
@@ -597,28 +597,48 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     if req_tokens:
                         print(f"    📊 消耗: {req_tokens:,} token | 耗时: {elapsed}s")
 
-                    # 提取文本
+                    # 提取文本 — 兼容thinking模型的多种格式
                     raw_text = ""
                     try:
                         if is_gem:
                             raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
                         else:
                             msg = data.get("choices", [{}])[0].get("message", {})
-                            raw_text = (msg.get("content") or "").strip()
+                            # thinking模型：content=最终答案, reasoning_content=思考过程
+                            # 非thinking模型：content=全部内容
+                            # 代理可能格式不同，全部尝试
+                            content_text = (msg.get("content") or "").strip()
+                            reasoning_text = (msg.get("reasoning_content") or "").strip()
+                            text_field = (msg.get("text") or "").strip()
+
+                            # 策略：谁里面有JSON数组就用谁
+                            for candidate in [content_text, reasoning_text, text_field]:
+                                if candidate and "[" in candidate and "]" in candidate:
+                                    raw_text = candidate
+                                    break
+
+                            # 都没有JSON数组？拼接所有非空字段一起找
                             if not raw_text:
-                                raw_text = (msg.get("reasoning_content") or "").strip()
-                            if not raw_text:
-                                raw_text = (msg.get("text") or "").strip()
-                            if not raw_text:
+                                combined = " ".join(filter(None, [content_text, reasoning_text, text_field]))
+                                if combined:
+                                    raw_text = combined
+
+                            # 最终兜底：整个response转字符串
+                            if not raw_text or len(raw_text) < 10:
                                 raw_text = json.dumps(data, ensure_ascii=False)
                     except: pass
 
                     if not raw_text or len(raw_text) < 10:
-                        print(f"    ⚠️ 模型返回空数据 | {elapsed}s | 钱已花")
-                        return ai_name, best_results, best_model or "empty"
+                        print(f"    ⚠️ 模型返回空数据 | {elapsed}s")
+                        print(f"    🔍 原始响应: {json.dumps(data, ensure_ascii=False)[:500]}")
+                        connected = False  # 标记为未成功，允许继续试
+                        continue
 
-                    # 解析JSON
-                    clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", raw_text, flags=re.DOTALL|re.IGNORECASE)
+                    # 解析JSON — 多层清理
+                    clean = raw_text
+                    # 清理各种thinking标签格式
+                    clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", clean, flags=re.DOTALL|re.IGNORECASE)
+                    clean = re.sub(r"<\|begin_of_thought\|>.*?<\|end_of_thought\|>", "", clean, flags=re.DOTALL)
                     clean = re.sub(r"```[\w]*","",clean).strip()
                     start=clean.find("["); end=clean.rfind("]")+1
                     if start==-1 or end==0:
@@ -658,9 +678,16 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                         "value_kill": bool(item.get("value_kill",False)),
                                     }
 
-                    print(f"    ✅ {ai_name.upper()} 完成: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
-                    # 连上了就用这个结果，不管解析了多少条，不再重试
-                    return ai_name, results, mn
+                    if len(results) > 0:
+                        print(f"    ✅ {ai_name.upper()} 完成: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
+                        return ai_name, results, mn
+                    else:
+                        # 花了钱但解析出0条 → 打印原文帮助调试，继续试下一个模型
+                        print(f"    ⚠️ 花了钱但解析0条 | {elapsed}s | 继续试下一个模型")
+                        print(f"    🔍 raw_text前300字: {raw_text[:300]}")
+                        print(f"    🔍 clean后前300字: {clean[:300]}")
+                        connected = False  # 允许继续
+                        continue
 
             except aiohttp.ClientConnectorError as e:
                 elapsed = round(time.time()-t0, 1)
@@ -729,7 +756,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     async with aiohttp.ClientSession() as session:
         _,claude_r,_ = await async_call_one_ai_batch(
             session, p2_prompt, "CLAUDE_API_URL","CLAUDE_API_KEY",
-            ["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
+            ["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
             num, "claude"
         )
 
