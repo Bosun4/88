@@ -181,7 +181,7 @@ def build_phase1_prompt(match_analyses):
     p += "比分出现率: 1-0(11.5%) > 2-1(10.2%) > 1-1(9.8%) > 0-0(7.5%) > 0-1(7.2%) > 2-0(6.5%) > 1-2(5.8%) > 0-2(4.5%) > 3-1(4.2%) > 2-2(3.8%) > 3-0(3.2%) > 1-3(2.8%)\n"
     p += "关键发现: 2-1的出现率几乎等于1-0！但CRS赔率通常是1-0的1.5倍→2-1被系统性低估\n"
     p += "3-1出现率4.2%=每25场出一次，不算罕见。3-2出现率2.1%=每50场一次。\n"
-    p += "体彩经常开出的"冷门"比分: 3-1, 0-3, 2-3, 4-0, 4-1 这些比分出现的频率远高于散户认知\n\n"
+    p += '体彩经常开出的"冷门"比分: 3-1, 0-3, 2-3, 4-0, 4-1 这些比分出现的频率远高于散户认知\n\n'
 
     p += "【原始数据+预计算信号】\n"
     for i, ma in enumerate(match_analyses):
@@ -460,7 +460,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     primary_url = get_clean_env_url(url_env)
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
-    timeout_map = {"claude": 600, "grok": 300, "gpt": 300, "gemini": 300}
+    timeout_map = {"claude": 300, "grok": 300, "gpt": 300, "gemini": 300}
     timeout_sec = timeout_map.get(ai_name, 200)
 
     AI_PROFILES = {
