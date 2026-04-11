@@ -74,15 +74,16 @@ def robust_json_extract(text):
     """高鲁棒性 JSON 提取引擎：多重降维打击异常格式"""
     if not text: return []
     
-    # 1. 清理思考标签和 Markdown 结构 (使用拼接防止UI解析器截断代码块)
+    # 1. 清理思考标签和 Markdown 结构 (防截断处理)
     think_pattern = r"<" + r"think(?:ing)?>.*?</" + r"think(?:ing)?>"
     text = re.sub(think_pattern, "", text, flags=re.DOTALL|re.IGNORECASE)
     
     bot_pattern = r"<\|" + r"begin_of_thought\|>.*?<\|" + r"end_of_thought\|>"
     text = re.sub(bot_pattern, "", text, flags=re.DOTALL)
     
-    text = re.sub(r"
-
+    # 【核心修复】不使用连写的反引号，使用 ASCII (96) 拼接防止 Markdown 解析器断层崩溃
+    bt = chr(96) * 3
+    text = re.sub(rf"{bt}(?:json)?|{bt}", "", text).strip()
     
     # 2. 尝试标准提取
     match = re.search(r'\[\s*\{.*?\}\s*\]', text, flags=re.DOTALL)
@@ -164,7 +165,6 @@ def save_ai_diary(diary):
 
 # ====================================================================
 # 🧠 两阶段AI架构 vMAX 9.0 Pro
-# 还原您所有心血构建的 Prompt 字段
 # ====================================================================
 def build_phase1_prompt(match_analyses):
     """Phase1 Prompt: 多维情报 + 反常识思维 + 独立判断"""
@@ -481,7 +481,7 @@ def build_phase2_prompt(match_analyses, phase1_results):
 # 🌐 异步并发网络层 vMAX 9.0 Pro
 # 采用会话复用，消灭所有的裸 except:，极大提高 IO 效率和稳健性
 # ====================================================================
-FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://www.api522.pro/v1"]
+FALLBACK_URLS = [None, "[https://api520.pro/v1](https://api520.pro/v1)", "[https://api521.pro/v1](https://api521.pro/v1)", "[https://api522.pro/v1](https://api522.pro/v1)", "[https://www.api522.pro/v1](https://www.api522.pro/v1)"]
 
 def get_clean_env_url(name, default=""):
     v = str(os.environ.get(name, globals().get(name, default))).strip(" \t\n\r\"'")
