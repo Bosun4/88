@@ -4,9 +4,7 @@ import re
 import time
 import asyncio
 import aiohttp
-import logging
 import numpy as np
-import math
 from datetime import datetime
 from config import *
 from models import EnsemblePredictor
@@ -16,33 +14,30 @@ from experience_rules import ExperienceEngine, apply_experience_to_prediction
 from advanced_models import upgrade_ensemble_predict
 
 # ====================================================================
-# 🛡️ 基础设施与日志系统
+# 🛡️ 终极防御装甲：动态加载你的自定义模块，防暴毙！
 # ====================================================================
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - [%(levelname)s] %(message)s')
-logger = logging.getLogger("QuantEngine_v9")
-
 try:
     from odds_history import apply_odds_history
 except Exception as e:
-    logger.warning(f"  [WARN] ⚠️ 历史盘口模块加载失败或未找到，系统自动降级跳过: {e}")
+    print(f"  [WARN] ⚠️ 历史盘口模块 (odds_history) 加载失败或未找到，系统自动降级跳过: {e}")
     def apply_odds_history(m, mg): return mg
 
 try:
     from quant_edge import apply_quant_edge
 except Exception as e:
-    logger.warning(f"  [WARN] ⚠️ 量化边缘模块加载失败或未找到，系统自动降级跳过: {e}")
+    print(f"  [WARN] ⚠️ 量化边缘模块 (quant_edge) 加载失败或未找到，系统自动降级跳过: {e}")
     def apply_quant_edge(m, mg): return mg
 
 try:
     from wencai_intel import apply_wencai_intel
-except Exception:
+except:
     def apply_wencai_intel(m, mg): return mg
 
 ensemble = EnsemblePredictor()
 exp_engine = ExperienceEngine()
 
 # ====================================================================
-# ☢️ 核心量化工具
+# ☢️ 工具函数
 # ====================================================================
 def calculate_value_bet(prob_pct, odds):
     if not odds or odds <= 1.05:
@@ -54,36 +49,17 @@ def calculate_value_bet(prob_pct, odds):
     if b <= 0:
         return {"ev": round(ev * 100, 2), "kelly": 0.0, "is_value": False}
     kelly = ((b * prob) - q) / b
-    safe_kelly = max(0.0, min(kelly * 0.25, 0.05))
-    return {"ev": round(ev * 100, 2), "kelly": round(safe_kelly * 100, 2), "is_value": ev > 0.05}
+    return {"ev": round(ev * 100, 2), "kelly": round(max(0.0, kelly * 0.25) * 100, 2), "is_value": ev > 0.05}
 
 def parse_score(s):
     try:
-        p = str(s).replace(" ", "").split("-")
+        p = str(s).split("-")
         return int(p[0]), int(p[1])
-    except Exception:
+    except:
         return None, None
 
-def robust_json_extract(text):
-    if not text: return []
-    # 使用 HEX 编码替换所有敏感字符，防止 UI 解析器强制断层
-    text = re.sub(r"\x3cthink(?:\w+)?\x3e.*?\x3c/think(?:\w+)?\x3e", "", text, flags=re.DOTALL|re.IGNORECASE)
-    text = re.sub(r"\x3c\|begin_of_thought\|\x3e.*?\x3c\|end_of_thought\|\x3e", "", text, flags=re.DOTALL)
-    text = re.sub(r"\x60\x60\x60(?:json)?|\x60\x60\x60", "", text).strip()
-    
-    match = re.search(r'\[\s*\{.*?\}\s*\]', text, flags=re.DOTALL)
-    if match:
-        try: return json.loads(match.group(0))
-        except Exception: pass
-            
-    objects = re.findall(r'\{[^{}]*"match"[^{}]*\}', text)
-    if objects:
-        try: return json.loads("[" + ",".join(objects) + "]")
-        except Exception: pass
-    return []
-
 # ====================================================================
-# 🧊 冷门猎手引擎 (100% 还原原版)
+# 🧊 冷门猎手引擎
 # ====================================================================
 class ColdDoorDetector:
     @staticmethod
@@ -93,15 +69,13 @@ class ColdDoorDetector:
         steam = prediction.get("steam_move", {})
         if steam.get("steam") and "反向" in str(steam.get("signal", "")):
             signals.append("❄️ 反向Steam！庄家造热收割"); strength += 5
-            
         vote = match.get("vote", {})
         try:
             vh = int(vote.get("win", 33)); va = int(vote.get("lose", 33))
             max_vote = max(vh, va)
             if max_vote >= 65: signals.append(f"❄️ 散户极端偏向{max_vote}%！冷门高危"); strength += 4
             elif max_vote >= 58: strength += 2
-        except Exception: pass
-        
+        except: pass
         info = match.get("intelligence", match.get("information", {}))
         if isinstance(info, dict):
             home_bad = str(info.get("home_bad_news", ""))
@@ -110,19 +84,15 @@ class ColdDoorDetector:
             ap = prediction.get("away_win_pct", 50)
             if len(home_bad) > 80 and hp > 58: signals.append("❄️ 主队坏消息爆炸+散户狂热"); strength += 5
             if len(away_bad) > 80 and ap > 58: signals.append("❄️ 客队坏消息爆炸+散户狂热"); strength += 5
-            
         sp_h = float(match.get("sp_home", match.get("win", 0)) or 0)
         if sp_h > 1:
             hp2 = prediction.get("home_win_pct", 50)
             implied_h = 100 / sp_h * 0.92
             if abs(implied_h - hp2) > 15 and hp2 > 58: signals.append(f"❄️ 赔率vs模型背离{abs(implied_h-hp2):.0f}%"); strength += 4
-            
         for s in prediction.get("smart_signals", []):
             if "盘口太便宜" in str(s): signals.append("❄️ 盘口太便宜=庄家不看好"); strength += 3; break
-            
         line = prediction.get("line_movement_anomaly", {})
         if line.get("has_anomaly") and "造热" in str(line.get("signal", "")): signals.append("❄️ 赔率变动造热=诱盘"); strength += 4
-        
         is_cold = strength >= 7
         level = "顶级" if strength >= 12 else "高危" if strength >= 7 else "普通"
         return {"is_cold_door": is_cold, "strength": strength, "level": level, "signals": signals,
@@ -137,7 +107,7 @@ def load_ai_diary():
         try:
             with open(diary_file, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except Exception: pass
+        except: pass
     return {"yesterday_win_rate": "N/A", "reflection": "持续进化中", "kill_history": []}
 
 def save_ai_diary(diary):
@@ -145,11 +115,20 @@ def save_ai_diary(diary):
     with open("data/ai_diary.json", "w", encoding="utf-8") as f:
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
+
 # ====================================================================
-# 🧠 两阶段AI架构 vMAX 9.0 Pro
-# (100% 还原您的所有提示词逻辑与字典映射，且加入了变量兜底修复)
+# 🧠 两阶段AI架构 vMAX 8.0 — AI自主决策·赔率仅做参考
+#
+# 核心哲学变革：
+#   旧版: 赔率=约束 → AI被CRS锁死在1-0/0-1/1-1
+#   新版: 赔率=情报 → AI综合所有维度独立判断，CRS只是加减分
+#
+# Phase1: GPT/Grok/Gemini 独立深度分析 → TOP3候选比分+概率
+# Phase2: Claude 裁判综合 → 加权评分选出最终比分（无否决制）
 # ====================================================================
+
 def build_phase1_prompt(match_analyses):
+    """Phase1 Prompt: 多维情报 + 反常识思维 + 独立判断"""
     diary = load_ai_diary()
 
     p = "【身份】你是管理50亿美金体育基金的首席量化分析师。你的工作不是猜最常见比分，而是找到概率被市场错误定价的比分。\n\n"
@@ -206,10 +185,6 @@ def build_phase1_prompt(match_analyses):
 
     p += "【原始数据+预计算信号】\n"
     for i, ma in enumerate(match_analyses):
-        # 兜底变量，彻底防止没有数据导致的 NameError 崩溃
-        shin_h, shin_d, shin_a = 33.3, 33.3, 33.3
-        eg = 2.5
-        
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
         a = m.get("away_team", m.get("guest", "Away"))
@@ -221,6 +196,7 @@ def build_phase1_prompt(match_analyses):
 
         p += f"{'='*60}\n[{i+1}] {h} vs {a} | {league}\n"
 
+        # 联赛DNA标签
         league_dna = {
             "英超": "大球联赛 均场2.8球 冷门率28% 2-1出现率12%",
             "英冠": "混战联赛 冷门率32% 1-0/0-1占25% 平局率28%",
@@ -241,32 +217,33 @@ def build_phase1_prompt(match_analyses):
                 p += f"🧬 联赛DNA: {dna}\n"
                 break
 
+        # 欧赔 + 离散度
         p += f"欧赔: {sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f} | 让球: {hc}\n"
 
         if sp_h > 1 and sp_d > 1 and sp_a > 1:
             odds_range = round(max(sp_h, sp_d, sp_a) - min(sp_h, sp_d, sp_a), 2)
             if odds_range < 0.8:
                 p += f"⚠️ 三项极接近(差{odds_range})=均势→平局概率被低估\n"
-            try:
-                margin = 1/sp_h + 1/sp_d + 1/sp_a
-                shin_h = round((1/sp_h) / margin * 100, 1)
-                shin_d = round((1/sp_d) / margin * 100, 1)
-                shin_a = round((1/sp_a) / margin * 100, 1)
-                p += f"Shin真实概率: 主{shin_h}% 平{shin_d}% 客{shin_a}%\n"
-                ret_rate = round(1/margin*100, 1)
-                if ret_rate < 92:
-                    p += f"⚠️ 返还率{ret_rate}%偏低=庄家对这场有把握\n"
-            except Exception: pass
+            # Shin概率
+            margin = 1/sp_h + 1/sp_d + 1/sp_a
+            shin_h = round((1/sp_h) / margin * 100, 1)
+            shin_d = round((1/sp_d) / margin * 100, 1)
+            shin_a = round((1/sp_a) / margin * 100, 1)
+            p += f"Shin真实概率: 主{shin_h}% 平{shin_d}% 客{shin_a}%\n"
+            ret_rate = round(1/margin*100, 1)
+            if ret_rate < 92:
+                p += f"⚠️ 返还率{ret_rate}%偏低=庄家对这场有把握\n"
 
         if m.get("hhad_win"):
             p += f"让球胜平负: {m['hhad_win']}/{m.get('hhad_same','')}/{m.get('hhad_lose','')}\n"
+            # 交叉验证
             try:
                 hhad_w = float(m.get("hhad_win", 0) or 0)
                 if 1.30 <= sp_h <= 1.50 and hhad_w > 2.10:
                     p += f"⚠️ 交叉矛盾: 标赔看好主队{sp_h} 但让球胜{hhad_w}>2.10=庄家不看好让球\n"
                 elif sp_h > 2.5 and hhad_w < 1.60:
                     p += f"⚠️ 交叉矛盾: 标赔不看好主队{sp_h} 但让球胜{hhad_w}<1.60=庄家让球看好主队\n"
-            except Exception: pass
+            except: pass
 
         if m.get("single") == 1:
             p += f"📌 单关开放\n"
@@ -274,6 +251,7 @@ def build_phase1_prompt(match_analyses):
         if h_pos or g_pos:
             p += f"排名: 主{h_pos} vs 客{g_pos}\n"
 
+        # 总进球 + 预期λ + 泊松分布
         a0=m.get("a0","");a1=m.get("a1","");a2=m.get("a2","");a3=m.get("a3","")
         a4=m.get("a4","");a5=m.get("a5","");a6=m.get("a6","");a7=m.get("a7","")
         if a0:
@@ -283,13 +261,16 @@ def build_phase1_prompt(match_analyses):
                 tp=sum(p2 for _,p2 in gp); eg=sum(g*(p2/tp) for g,p2 in gp)
                 ml=min(gp, key=lambda x:1/x[1])
                 p += f"→ 期望进球λ={eg:.2f} | 最可能{ml[0]}球({ml[1]/tp*100:.0f}%)\n"
+                # 泊松分布参考
+                from math import exp, factorial
                 lam = eg
                 poisson_goals = {}
                 for g in range(6):
-                    poisson_goals[g] = math.exp(-lam) * (lam**g) / math.factorial(g)
+                    poisson_goals[g] = exp(-lam) * (lam**g) / factorial(g)
                 p += f"→ 泊松分布: " + " ".join(f"{g}球{poisson_goals[g]*100:.0f}%" for g in range(6)) + "\n"
-            except Exception: pass
+            except: pass
 
+        # CRS + TOP7（扩大到7个，不要只看TOP3）
         crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2","w40":"4-0","w41":"4-1","w42":"4-2",
                    "s00":"0-0","s11":"1-1","s22":"2-2","s33":"3-3",
                    "l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3","l23":"2-3","l04":"0-4","l14":"1-4"}
@@ -298,21 +279,23 @@ def build_phase1_prompt(match_analyses):
             try:
                 odds=float(m.get(key,0) or 0)
                 if odds>1: crs_lines.append(f"{score}={odds:.2f}"); crs_probs.append((score,odds,1/odds))
-            except Exception: pass
-            
+            except: pass
         if crs_lines:
             p += f"CRS全量: {' | '.join(crs_lines)}\n"
             if crs_probs:
                 crs_probs.sort(key=lambda x:x[1])
                 tp2=sum(pr for _,_,pr in crs_probs)
                 p += f"→ CRS概率TOP7: {' > '.join(f'{s}({pr/tp2*100:.1f}%)' for s,_,pr in crs_probs[:7])}\n"
+                # 泊松vs CRS偏差检测
                 try:
                     for s, odds_val, pr in crs_probs[:7]:
-                        sh_score, sa_score = map(int, s.split("-"))
+                        sh, sa = map(int, s.split("-"))
+                        # 简单泊松估算
                         if eg > 0:
                             home_lam = eg * shin_h / (shin_h + shin_a) if (shin_h + shin_a) > 0 else eg/2
                             away_lam = eg - home_lam
-                            poisson_pr = math.exp(-home_lam) * (home_lam**sh_score) / math.factorial(sh_score) * math.exp(-away_lam) * (away_lam**sa_score) / math.factorial(sa_score)
+                            from math import exp, factorial
+                            poisson_pr = exp(-home_lam) * (home_lam**sh) / factorial(sh) * exp(-away_lam) * (away_lam**sa) / factorial(sa)
                             crs_pr = pr / tp2
                             if poisson_pr > 0 and crs_pr > 0:
                                 ratio = poisson_pr / crs_pr
@@ -320,16 +303,18 @@ def build_phase1_prompt(match_analyses):
                                     p += f"  💡 {s}: 泊松概率是CRS的{ratio:.1f}倍→可能被低估\n"
                                 elif ratio < 0.6:
                                     p += f"  ⚠️ {s}: CRS概率是泊松的{1/ratio:.1f}倍→庄家可能在诱导\n"
-                except Exception: pass
+                except: pass
 
+        # 半全场
         hf_l=[]
         for k,lb in {"ss":"主/主","sp":"主/平","sf":"主/负","ps":"平/主","pp":"平/平","pf":"平/负","fs":"负/主","fp":"负/平","ff":"负/负"}.items():
             try:
                 v=float(m.get(k,0) or 0)
                 if v>1: hf_l.append(f"{lb}={v:.2f}")
-            except Exception: pass
+            except: pass
         if hf_l: p += f"半全场: {' | '.join(hf_l)}\n"
 
+        # 散户
         vote=m.get("vote",{})
         if vote:
             vh = int(vote.get("win",33) or 33); va = int(vote.get("lose",33) or 33)
@@ -341,11 +326,13 @@ def build_phase1_prompt(match_analyses):
                 p += f" ⚠️散户{max(vh,va)}%押{hot_side}→反向价值"
             p += "\n"
 
+        # 赔率变动
         change=m.get("change",{})
         if change and isinstance(change,dict):
             cw=change.get("win",0);cs=change.get("same",0);cl=change.get("lose",0)
             if cw or cs or cl:
                 p += f"赔率变动: 胜{cw} 平{cs} 负{cl}"
+                # 变动方向分析
                 directions = []
                 if cw and float(str(cw).replace("+","")) < 0: directions.append("主胜↓(钱涌入)")
                 if cs and float(str(cs).replace("+","")) < 0: directions.append("平局↓(钱涌入)")
@@ -353,11 +340,13 @@ def build_phase1_prompt(match_analyses):
                 if directions: p += f" → {','.join(directions)}"
                 p += "\n"
 
+        # 伤停情报
         info=m.get("information",{})
         if isinstance(info,dict):
             for k,v in [("home_injury","主伤停"),("guest_injury","客伤停"),("home_good_news","主利好"),("guest_good_news","客利好"),("home_bad_news","主利空"),("guest_bad_news","客利空")]:
                 if info.get(k): p += f"{v}: {str(info[k])[:250].replace(chr(10),' | ')}\n"
 
+        # 状态
         hs=m.get("home_stats",{}); ast2=m.get("away_stats",{})
         if hs.get("form"):
             p += f"主队: {hs.get('wins','?')}胜{hs.get('draws','?')}平{hs.get('losses','?')}负 近况{hs.get('form','?')} 场均进{hs.get('avg_goals_for','?')}/失{hs.get('avg_goals_against','?')}\n"
@@ -371,7 +360,9 @@ def build_phase1_prompt(match_analyses):
     p += f"【输出{len(match_analyses)}场JSON数组，每场含top3。你的TOP1不应全是1-0/0-1/1-1——如果数据指向2-1或3-1就大胆给出。只输出数组！】\n"
     return p
 
+
 def build_phase2_prompt(match_analyses, phase1_results):
+    """Phase2: Claude裁判——加权评分制，无否决制"""
     p = "【你是最终裁判】三个独立AI已各自给出TOP3候选比分。你综合分析选出最终比分。\n\n"
 
     p += "【裁决方法——加权评分制（没有任何比分被一票否决）】\n"
@@ -394,7 +385,6 @@ def build_phase2_prompt(match_analyses, phase1_results):
     p += "只输出JSON数组！\n\n"
 
     for i, ma in enumerate(match_analyses):
-        eg = 2.5
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
         a = m.get("away_team", m.get("guest", "Away"))
@@ -407,6 +397,7 @@ def build_phase2_prompt(match_analyses, phase1_results):
         p += f"{'='*50}\n[{idx}] {h} vs {a} | {league}\n"
         p += f"欧赔: {sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f} | 让球: {m.get('give_ball','0')}\n"
 
+        # 预期进球
         try:
             gp = []
             for gi, field in enumerate(["a0","a1","a2","a3","a4","a5","a6","a7"]):
@@ -416,8 +407,9 @@ def build_phase2_prompt(match_analyses, phase1_results):
                 tp = sum(p2 for _,p2 in gp)
                 eg = sum(g*(p2/tp) for g,p2 in gp)
                 p += f"期望进球λ={eg:.2f}\n"
-        except Exception: pass
+        except: pass
 
+        # CRS TOP7
         crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2",
                    "s00":"0-0","s11":"1-1","s22":"2-2",
                    "l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3","l23":"2-3"}
@@ -426,11 +418,12 @@ def build_phase2_prompt(match_analyses, phase1_results):
             try:
                 odds=float(m.get(key,0) or 0)
                 if odds>1: crs_probs.append((score,odds))
-            except Exception: pass
+            except: pass
         if crs_probs:
             crs_probs.sort(key=lambda x:x[1])
             p += f"CRS参考(非约束): {' > '.join(f'{s}@{o:.1f}' for s,o in crs_probs[:7])}\n"
 
+        # 三家AI结果
         for ai_name in ["gpt", "grok", "gemini"]:
             ai_data = phase1_results.get(ai_name, {}).get(idx, {})
             if not ai_data:
@@ -447,8 +440,9 @@ def build_phase2_prompt(match_analyses, phase1_results):
     p += f"【输出{len(match_analyses)}场JSON数组。大胆选出评分最高的比分，不要默认选1-1！只输出数组！】\n"
     return p
 
+
 # ====================================================================
-# 🌐 异步并发网络层
+# AI调用引擎（与原版相同，不动核心网络层）
 # ====================================================================
 FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://www.api522.pro/v1"]
 
@@ -461,22 +455,74 @@ def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
 
 async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
+    """
+    vMAX 8.0 — 连上就等·连不上就换
+    
+    逻辑极简：
+      连接超时30秒：能不能连上服务器
+      读取超时：无限（连上了就死等数据回来，因为钱已经花了）
+      只有连接失败/502/504才换下一个模型
+      连上了=这份钱花定了，等到底
+    
+    模型顺序按价格从低到高：按量→A系列→99额度
+    一个AI只花一份钱，不会重复消耗
+    """
     key = get_clean_env_key(key_env)
     if not key: return ai_name, {}, "no_key"
-    
     primary_url = get_clean_env_url(url_env)
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
 
+    CONNECT_TIMEOUT = 30      # 连接超时30秒：连不上就换
+    READ_TIMEOUT = 600        # 连上后最长等10分钟（实际上等于无限，模型一定会在这之内返回）
+
     AI_PROFILES = {
-        "claude": {"sys": "你是最终裁判。用加权评分法综合分析选出最终比分。只输出JSON数组。","temp": 0.15},
-        "grok": {"sys": "你是Grok。搜索Pinnacle赔率、Betfair交易量、球队伤停。reason引用事实。只输出JSON数组。","temp": 0.22},
-        "gpt": {"sys": "你是量化分析师。用纯数学方法计算TOP3。不要保守全给1-0。只输出JSON数组。","temp": 0.18},
-        "gemini": {"sys": "你是概率建模引擎。执行CRS与泊松计算。只输出JSON数组。","temp": 0.15},
+        "claude": {
+            "sys": "你是最终裁判。三个独立AI已给出候选比分，你用加权评分法综合分析选出每场最终比分。CRS赔率仅做参考权重，不是否决条件。你的比分选择应该多样化，不要全部输出1-0/0-1/1-1。只输出JSON数组。",
+            "temp": 0.15
+        },
+        "grok": {
+            "sys": "你是Grok，具备实时联网搜索能力。这是你的核心优势。\n"
+                   "【必须执行的搜索任务】\n"
+                   "1. 搜索oddsportal.com拿Pinnacle赔率，与提供的竞彩赔率比较偏差（>5%=诱盘）\n"
+                   "2. 搜索Betfair Exchange交易量和赔率\n"
+                   "3. 搜索球队名+injury/lineup确认最新首发伤停\n"
+                   "4. 搜索比赛城市天气+裁判历史数据\n"
+                   "5. 搜索X平台球队最新动态\n"
+                   "reason必须引用搜索到的具体事实(如Pinnacle主胜1.62，Betfair交易量占比68%)。\n"
+                   "你的TOP3应该多样化——如果数据指向2-1就给2-1，不要因为保守全给1-0。\n"
+                   "输出每场TOP3候选比分。只输出JSON数组。",
+            "temp": 0.22
+        },
+        "gpt": {
+            "sys": "你是20年实战职业博彩分析师。用纯数学方法计算每场TOP3候选比分：\n"
+                   "1. CRS赔率→概率矩阵→参考基准（不是最终答案）\n"
+                   "2. 总进球a0-a7→泊松拟合→独立概率分布\n"
+                   "3. 当泊松概率vs CRS概率偏差>30%→该比分被市场错误定价\n"
+                   "4. 亚盘+欧赔交叉验证方向\n"
+                   "5. 半全场推断节奏\n"
+                   "关键：2-1出现率几乎等于1-0(10% vs 11.5%)，不要忽视。3-1出现率4.2%不算罕见。\n"
+                   "该2-1就2-1，该3-1就3-1，不要保守。只输出JSON数组。",
+            "temp": 0.18
+        },
+        "gemini": {
+            "sys": "你是概率建模引擎。严格执行数学计算：\n"
+                   "1. CRS全比分→概率矩阵（这是庄家的定价，不是真实概率）\n"
+                   "2. 总进球→泊松分布→独立计算每个比分概率\n"
+                   "3. 对比泊松概率 vs CRS概率→找出被低估的比分\n"
+                   "4. 欧赔去水位→Shin概率\n"
+                   "5. 你的输出应反映数学计算结果，不要人为压向1-0/1-1\n"
+                   "输出每场TOP3候选比分及概率。只输出JSON数组。",
+            "temp": 0.15
+        },
     }
+
+    best_model = ""
     profile = AI_PROFILES.get(ai_name, AI_PROFILES["gpt"])
 
     for mn in models_list:
+        connected = False  # 标记是否已经连上（=钱已花）
+
         for base_url in urls:
             if not base_url: continue
 
@@ -495,74 +541,278 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 payload = bp
 
             gw = url.split("/v1")[0][:35]
-            logger.info(f"[🔌请求] {ai_name.upper()} | {mn[:22]} @ {gw}")
+            print(f"  [🔌连接中] {ai_name.upper()} | {mn[:22]} @ {gw}")
             t0 = time.time()
 
             try:
-                timeout = aiohttp.ClientTimeout(connect=15, sock_read=300)
+                timeout = aiohttp.ClientTimeout(
+                    total=None,              # 总超时不限
+                    connect=CONNECT_TIMEOUT,  # 连接30秒
+                    sock_connect=CONNECT_TIMEOUT,
+                    sock_read=READ_TIMEOUT,   # 连上后等10分钟
+                )
                 async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
+                    elapsed_connect = round(time.time()-t0, 1)
+
+                    # ===== 连接失败类：换URL或换模型 =====
+                    if r.status in (502, 504):
+                        print(f"    💀 HTTP {r.status} 网关超时 | {elapsed_connect}s → 换下一个")
+                        continue
+
+                    if r.status == 400:
+                        print(f"    💀 400 模型不支持 | {elapsed_connect}s → 换模型")
+                        break  # 这个模型不行，换下一个模型
+
+                    if r.status == 429:
+                        print(f"    🔥 429 限流 | {elapsed_connect}s → 换URL")
+                        await asyncio.sleep(2)
+                        continue
+
+                    if r.status != 200:
+                        print(f"    ⚠️ HTTP {r.status} | {elapsed_connect}s → 换下一个")
+                        continue
+
+                    # ===== 200 = 连上了！钱已花，死等数据 =====
+                    connected = True
+                    print(f"    ✅ 已连上！{elapsed_connect}s | 等待模型思考返回数据...")
+
+                    try:
+                        data = await r.json(content_type=None)
+                    except:
+                        elapsed = round(time.time()-t0, 1)
+                        print(f"    ⚠️ 响应非JSON | {elapsed}s → 换模型")
+                        break  # 同模型同格式，换URL也一样
+
                     elapsed = round(time.time()-t0, 1)
 
-                    if r.status in (502, 504): continue
-                    if r.status == 400: break 
-                    if r.status == 429: await asyncio.sleep(2); continue
-                    if r.status != 200: continue
+                    # 提取token消耗（仅打印）
+                    usage = data.get("usage", {})
+                    req_tokens = usage.get("total_tokens", 0) or (
+                        usage.get("prompt_tokens", 0) + usage.get("completion_tokens", 0)
+                    )
+                    if not req_tokens:
+                        um = data.get("usageMetadata", {})
+                        req_tokens = um.get("totalTokenCount", 0)
+                    if req_tokens:
+                        print(f"    📊 消耗: {req_tokens:,} token | 耗时: {elapsed}s")
 
-                    data = await r.json(content_type=None)
+                    # 提取文本 — 极简版：先直接取，不要花哨
                     raw_text = ""
-                    if is_gem: raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
-                    else:
-                        if data.get("choices"): raw_text = data["choices"][0].get("message", {}).get("content", "")
-                        elif data.get("output"): raw_text = str(data["output"])
+                    try:
+                        if is_gem:
+                            raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                        else:
+                            # 第一步：直接从choices取，这是标准格式
+                            if data.get("choices") and isinstance(data["choices"], list) and len(data["choices"]) > 0:
+                                msg = data["choices"][0].get("message", {})
+                                if isinstance(msg, dict):
+                                    # 打印所有message字段帮助调试
+                                    msg_keys = [k for k in msg.keys() if msg[k] and str(msg[k]).strip()]
+                                    print(f"    🔍 message字段: {msg_keys}")
 
-                    arr = robust_json_extract(raw_text)
-                    if not arr: break
+                                    # 遍历所有字段，找最长的包含[的文本
+                                    best_with_bracket = ""
+                                    best_any = ""
+                                    for key in msg:
+                                        val = msg[key]
+                                        if not val or not isinstance(val, str): continue
+                                        val = val.strip()
+                                        if not val: continue
+                                        # 优先：包含JSON数组标记的
+                                        if "[" in val and "{" in val and len(val) > len(best_with_bracket):
+                                            best_with_bracket = val
+                                        # 备选：最长的文本
+                                        if len(val) > len(best_any):
+                                            best_any = val
+
+                                    raw_text = best_with_bracket or best_any
+                                    if raw_text:
+                                        print(f"    🔍 取到文本: {len(raw_text)}字 | 含[:{('[' in raw_text)} | 前80字: {raw_text[:80]}")
+
+                            # 第二步：output数组格式（某些代理）
+                            if not raw_text and data.get("output") and isinstance(data["output"], list):
+                                for out_item in data["output"]:
+                                    if not isinstance(out_item, dict): continue
+                                    if out_item.get("type") == "message":
+                                        for ct in out_item.get("content", []):
+                                            if isinstance(ct, dict) and ct.get("text"):
+                                                txt = ct["text"].strip()
+                                                if len(txt) > len(raw_text):
+                                                    raw_text = txt
+                                    elif isinstance(out_item.get("content"), str):
+                                        txt = out_item["content"].strip()
+                                        if len(txt) > len(raw_text):
+                                            raw_text = txt
+
+                            # 第三步：全部失败，dump整个response
+                            if not raw_text:
+                                full_str = json.dumps(data, ensure_ascii=False)
+                                # 智能提取：在dump字符串里找 "match" 附近的JSON数组
+                                # 找 [{"match" 模式
+                                import re as _re
+                                m = _re.search(r'\[\s*\{\s*"match"', full_str)
+                                if m:
+                                    start_pos = m.start()
+                                    # 从这里开始数括号找匹配的]
+                                    depth = 0
+                                    end_pos = start_pos
+                                    for ci in range(start_pos, min(start_pos + 100000, len(full_str))):
+                                        if full_str[ci] == '[': depth += 1
+                                        elif full_str[ci] == ']': depth -= 1
+                                        if depth == 0:
+                                            end_pos = ci + 1
+                                            break
+                                    if end_pos > start_pos:
+                                        extracted = full_str[start_pos:end_pos]
+                                        # 处理JSON字符串转义 (\")
+                                        if '\\"' in extracted:
+                                            try:
+                                                extracted = json.loads('"' + extracted + '"')
+                                            except:
+                                                extracted = extracted.replace('\\"', '"')
+                                        raw_text = extracted
+                                        print(f"    🔍 从dump中提取到JSON: {len(raw_text)}字")
+
+                                if not raw_text:
+                                    raw_text = full_str
+                                    print(f"    ⚠️ 用整个response做raw_text: {len(raw_text)}字")
+
+                    except Exception as ex:
+                        print(f"    ⚠️ 文本提取异常: {str(ex)[:80]}")
+                        try: raw_text = json.dumps(data, ensure_ascii=False)
+                        except: pass
+
+                    if not raw_text or len(raw_text) < 10:
+                        print(f"    ⚠️ 模型返回空数据 | {elapsed}s")
+                        print(f"    🔍 响应keys: {list(data.keys()) if isinstance(data,dict) else type(data)}")
+                        print(f"    🔍 响应前500字: {json.dumps(data, ensure_ascii=False)[:500]}")
+                        # 同模型换URL格式也一样，break换下一个模型
+                        break
+
+                    # 解析JSON — 多层清理
+                    clean = raw_text
+                    # 清理各种thinking标签格式
+                    clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", clean, flags=re.DOTALL|re.IGNORECASE)
+                    clean = re.sub(r"<\|begin_of_thought\|>.*?<\|end_of_thought\|>", "", clean, flags=re.DOTALL)
+                    clean = re.sub(r"```[\w]*","",clean).strip()
+                    start=clean.find("["); end=clean.rfind("]")+1
+                    if start==-1 or end==0:
+                        clean = re.sub(r"[^\[\]{}:,\"'0-9a-zA-Z\u4e00-\u9fa5\s\.\-\+\(\)]","",clean)
+                        start=clean.find("["); end=clean.rfind("]")+1
 
                     results = {}
-                    for item in arr:
-                        if not isinstance(item, dict) or not item.get("match"): continue
-                        mid = int(item["match"]) if str(item["match"]).isdigit() else item["match"]
-                        top1_sc = str(item.get("score") or (item.get("top3", [{}])[0].get("score") if item.get("top3") else "1-1")).replace(" ", "")
-                        
-                        results[mid] = {
-                            "ai_score": top1_sc,
-                            "top3": item.get("top3", []),
-                            "analysis": str(item.get("reason", ""))[:150],
-                            "ai_confidence": int(item.get("ai_confidence", 60)),
-                            "value_kill": bool(item.get("value_kill", False)),
-                        }
+                    if start != -1 and end > start:
+                        json_str = clean[start:end]
+                        arr = []
+                        try: arr = json.loads(json_str)
+                        except json.JSONDecodeError:
+                            try:
+                                last_brace = json_str.rfind('}')
+                                if last_brace != -1:
+                                    arr = json.loads(json_str[:last_brace+1] + "]")
+                                    print(f"    🩹 断肢重生: 抢救 {len(arr)} 条")
+                            except: pass
+                        if isinstance(arr, list):
+                            for item in arr:
+                                if not isinstance(item, dict) or not item.get("match"): continue
+                                try: mid = int(item["match"])
+                                except: mid = item["match"]
+                                if item.get("top3"):
+                                    t1_score = item["top3"][0].get("score","1-1").replace(" ","").strip() if item["top3"] else "1-1"
+                                    results[mid] = {
+                                        "top3": item["top3"],
+                                        "ai_score": t1_score,
+                                        "reason": str(item.get("reason",""))[:200],
+                                        "ai_confidence": int(item.get("ai_confidence",60)),
+                                    }
+                                elif item.get("score"):
+                                    results[mid] = {
+                                        "ai_score": item["score"].replace(" ","").strip(),
+                                        "analysis": str(item.get("reason",""))[:200],
+                                        "ai_confidence": int(item.get("ai_confidence",60)),
+                                        "value_kill": bool(item.get("value_kill",False)),
+                                    }
 
                     if len(results) > 0:
-                        logger.info(f"  ✅ {ai_name.upper()} 完成: {len(results)}/{num_matches} | {elapsed}s")
+                        print(f"    ✅ {ai_name.upper()} 完成: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
                         return ai_name, results, mn
-                    else: break
+                    else:
+                        # 花了钱但解析0条 → 同模型换URL格式一样，break换下一个模型
+                        print(f"    ⚠️ 花了钱但解析0条 | {elapsed}s | 换下一个模型")
+                        print(f"    🔍 响应keys: {list(data.keys()) if isinstance(data,dict) else '?'}")
+                        print(f"    🔍 raw前200字: {raw_text[:200]}")
+                        break  # ← 关键：break跳出URL循环，换下一个模型
 
-            except Exception: continue
+            except aiohttp.ClientConnectorError as e:
+                elapsed = round(time.time()-t0, 1)
+                print(f"    🔌 连接失败 {str(e)[:30]} | {elapsed}s → 换URL")
+                continue  # 没连上=没花钱，换URL
+
+            except asyncio.TimeoutError:
+                elapsed = round(time.time()-t0, 1)
+                if not connected:
+                    # 连接阶段超时=没花钱，换下一个
+                    print(f"    🔌 {elapsed}s连接超时 → 换下一个")
+                    continue
+                else:
+                    # 已连上但读取超时（极罕见，600秒还没返回）
+                    print(f"    ⏰ 已连上但{elapsed}s仍无数据 | 钱已花")
+                    return ai_name, {}, "read_timeout"
+
+            except Exception as e:
+                elapsed = round(time.time()-t0, 1)
+                err = str(e)[:40]
+                if not connected:
+                    print(f"    ⚠️ {err} | {elapsed}s → 换下一个")
+                    continue
+                else:
+                    print(f"    ⚠️ 已连上但异常: {err} | {elapsed}s | 钱已花")
+                    return ai_name, {}, "error"
+
             await asyncio.sleep(0.2)
 
+        # 如果这个模型连上过（connected=True），上面已经return了
+        # 走到这里说明这个模型所有URL都连不上，试下一个模型
+
+    # 所有模型都连不上
+    print(f"    ❌ {ai_name.upper()} 所有模型均连接失败（未花钱）")
     return ai_name, {}, "all_connect_failed"
 
+
 async def run_ai_matrix_two_phase(match_analyses):
+    """两阶段：Phase1(GPT/Grok/Gemini并行)→ Phase2(Claude裁判)"""
     num = len(match_analyses)
+
     p1_prompt = build_phase1_prompt(match_analyses)
-    
+    print(f"  [Phase1] {len(p1_prompt):,} 字符 → GPT/Grok/Gemini 并行...")
+
     p1_configs = [
         ("grok","GROK_API_URL","GROK_API_KEY",["熊猫-A-6-grok-4.2-thinking","熊猫-A-7-grok-4.2-多智能体讨论"]),
-        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-按量-gpt-5.4"]),
-        ("gemini","GEMINI_API_URL","GEMINI_API_KEY",["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking","熊猫-顶级特供-X-17-gemini-3.1-pro-preview"])
+        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-按量-gpt-5.4","熊猫-A-10-gpt-5.4"]),
+        ("gemini","GEMINI_API_URL","GEMINI_API_KEY",["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking","熊猫-顶级特供-X-17-gemini-3.1-pro-preview"]),
     ]
     p1_results = {"gpt":{},"grok":{},"gemini":{}}
 
-    connector = aiohttp.TCPConnector(limit=20, force_close=False)
+    # 共享一个session复用TCP连接池，减少502/504
+    connector = aiohttp.TCPConnector(limit=10, ttl_dns_cache=300)
     async with aiohttp.ClientSession(connector=connector) as session:
-        tasks = [async_call_one_ai_batch(session, p1_prompt, u, k, m, num, n) for n, u, k, m in p1_configs]
+        # Phase1: 三家并行
+        tasks = [async_call_one_ai_batch(session,p1_prompt,u,k,m,num,n) for n,u,k,m in p1_configs]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         for res in results:
-            if isinstance(res, tuple): p1_results[res[0]] = res[1]
+            if isinstance(res,tuple): n,d,_ = res; p1_results[n] = d
+            else: print(f"  [Phase1 ERROR] {res}")
 
+        ok = sum(1 for v in p1_results.values() if v)
+        print(f"  [Phase1] 完成: {ok}/3 AI有数据")
+
+        # Phase2: Claude裁判（复用同一个session）
         p2_prompt = build_phase2_prompt(match_analyses, p1_results)
-        _, claude_r, _ = await async_call_one_ai_batch(
-            session, p2_prompt, "CLAUDE_API_URL", "CLAUDE_API_KEY",
+        print(f"  [Phase2] {len(p2_prompt):,} 字符 → Claude 裁判...")
+
+        claude_r = {}
+        _,claude_r,_ = await async_call_one_ai_batch(
+            session, p2_prompt, "CLAUDE_API_URL","CLAUDE_API_KEY",
             ["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
             num, "claude"
         )
@@ -571,36 +821,100 @@ async def run_ai_matrix_two_phase(match_analyses):
     all_r["claude"] = claude_r
     return all_r
 
+
 # ====================================================================
-# 🧬 Merge vMAX 9.0 Pro (100% 还原所有几十个属性字段 + 高斯加权)
+# Merge v5.0 — 加权评分制·无否决制·AI自主决策
+#
+# 核心变革：
+#   旧版: CRS>10倍→否决, 3/3共识→强制, 预期进球→否决
+#   新版: 所有因素都是加减分, 最终比分=得分最高的候选
+#
+# 评分维度:
+#   1. Claude裁判权重 (35分) — Claude是最终裁判，权重最高
+#   2. Phase1 AI共识 (25分) — 多家AI选同一比分加分
+#   3. CRS概率排名 (15分) — CRS低=加分，但不否决
+#   4. 预期进球吻合 (15分) — 比分总球vs λ的匹配度
+#   5. 联赛风格匹配 (10分) — 联赛DNA加分
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
-    engine_score = engine_result.get("primary_score", "1-1").replace(" ", "")
+    sp_h = float(match_obj.get("sp_home", match_obj.get("win", 0)) or 0)
+    sp_d = float(match_obj.get("sp_draw", match_obj.get("same", 0)) or 0)
+    sp_a = float(match_obj.get("sp_away", match_obj.get("lose", 0)) or 0)
+    engine_score = engine_result.get("primary_score", "1-1")
     engine_conf = engine_result.get("confidence", 50)
-    
-    ai_inputs = {"gpt": (gpt_r, 1.1), "grok": (grok_r, 1.3), "gemini": (gemini_r, 1.0), "claude": (claude_r, 1.5)}
-    candidates = {}
-    all_scores = []
-    
-    for name, (r_data, base_weight) in ai_inputs.items():
-        if not r_data or not isinstance(r_data, dict): continue
-        sc = str(r_data.get("ai_score", "-")).replace(" ", "")
-        conf = r_data.get("ai_confidence", 60)
-        
-        if sc and sc not in ["-", "?", ""]:
-            all_scores.append((sc, name))
-            if sc not in candidates: candidates[sc] = 0.0
-            candidates[sc] += base_weight * (conf / 100.0) * 10
-            
-        for rank, t in enumerate(r_data.get("top3", [])[1:3]):
-            sub_sc = str(t.get("score", "")).replace(" ", "")
-            if sub_sc and sub_sc not in ["-", "?", ""]:
-                if sub_sc not in candidates: candidates[sub_sc] = 0.0
-                candidates[sub_sc] += base_weight * (2.0 - rank) 
-                
-    if engine_score not in candidates: candidates[engine_score] = 0.0
-    candidates[engine_score] += 3.0
+    league = str(match_obj.get("league", match_obj.get("cup", "")))
 
+    # 比分清洗：去空格、全角转半角
+    def clean_score(s):
+        if not s or not isinstance(s, str): return ""
+        s = s.strip().replace(" ", "").replace("：", "-").replace(":", "-")
+        s = s.replace("\u2013", "-").replace("\u2014", "-")  # en-dash, em-dash
+        if re.match(r"^\d+-\d+$", s): return s
+        return ""
+
+    # ========== 收集所有候选比分 ==========
+    p1_ai = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r}
+    all_candidates = {}  # score -> {sources: [], total_score: 0}
+
+    # 从Phase1三家AI收集
+    for name, r in p1_ai.items():
+        if not isinstance(r, dict): continue
+        # TOP1
+        sc = clean_score(r.get("ai_score", ""))
+        if not sc:
+            t3 = r.get("top3", [])
+            if t3 and isinstance(t3, list) and len(t3) > 0:
+                sc = clean_score(t3[0].get("score", ""))
+        if sc:
+            if sc not in all_candidates:
+                all_candidates[sc] = {"sources": [], "score": 0.0}
+            all_candidates[sc]["sources"].append(name)
+        # TOP2/TOP3也纳入候选（较低权重）
+        t3 = r.get("top3", [])
+        if isinstance(t3, list):
+            for rank, t in enumerate(t3[1:3], 2):
+                s2 = clean_score(t.get("score", ""))
+                if s2:
+                    if s2 not in all_candidates:
+                        all_candidates[s2] = {"sources": [], "score": 0.0}
+                    # 标记为次选
+                    all_candidates[s2]["sources"].append(f"{name}_top{rank}")
+
+    # Claude裁判比分
+    claude_score = ""
+    if isinstance(claude_r, dict):
+        claude_score = clean_score(claude_r.get("ai_score", ""))
+    if claude_score:
+        if claude_score not in all_candidates:
+            all_candidates[claude_score] = {"sources": [], "score": 0.0}
+        all_candidates[claude_score]["sources"].append("claude")
+
+    # 引擎比分也纳入
+    if engine_score and engine_score not in ["-", "?"]:
+        if engine_score not in all_candidates:
+            all_candidates[engine_score] = {"sources": [], "score": 0.0}
+        all_candidates[engine_score]["sources"].append("engine")
+
+    # ========== CRS工具 ==========
+    crs_key_map = {"1-0":"w10","0-1":"l01","2-1":"w21","1-2":"l12","2-0":"w20","0-2":"l02",
+                   "0-0":"s00","1-1":"s11","3-0":"w30","3-1":"w31","0-3":"l03","1-3":"l13",
+                   "2-2":"s22","3-2":"w32","2-3":"l23","4-0":"w40","4-1":"w41","0-4":"l04","1-4":"l14"}
+    def get_crs(score):
+        key = crs_key_map.get(score, "")
+        try: return float(match_obj.get(key, 99) or 99)
+        except: return 99.0
+
+    # CRS概率排名
+    crs_all = []
+    for score, key in crs_key_map.items():
+        try:
+            odds = float(match_obj.get(key, 0) or 0)
+            if odds > 1: crs_all.append((score, odds))
+        except: pass
+    crs_all.sort(key=lambda x: x[1])
+    crs_rank = {score: rank+1 for rank, (score, _) in enumerate(crs_all)}
+
+    # 预期总进球
     exp_goals = engine_result.get("expected_goals", 2.3)
     try:
         gp = []
@@ -610,39 +924,128 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         if gp:
             tp = sum(p for _,p in gp)
             exp_goals = sum(g*(p/tp) for g,p in gp)
-    except Exception: pass
+    except: pass
 
-    crs_map = {"1-0":"w10","2-0":"w20","2-1":"w21","3-0":"w30","3-1":"w31",
-               "0-0":"s00","1-1":"s11","2-2":"s22",
-               "0-1":"l01","0-2":"l02","1-2":"l12","0-3":"l03","1-3":"l13"}
-               
-    for sc in list(candidates.keys()):
+    # ========== 加权评分 ==========
+    for score, info in all_candidates.items():
+        s = 0.0
+        sources = info["sources"]
+
+        # ① Claude裁判权重 [35分]
+        if "claude" in sources:
+            claude_conf = claude_r.get("ai_confidence", 60) if isinstance(claude_r, dict) else 60
+            s += 25 + (claude_conf - 50) * 0.2  # 25-35分范围
+
+        # ② Phase1 AI共识 [25分]
+        p1_top1_count = sum(1 for src in sources if src in ["gpt", "grok", "gemini"])
+        p1_top2_count = sum(1 for src in sources if src.endswith("_top2"))
+        p1_top3_count = sum(1 for src in sources if src.endswith("_top3"))
+        s += p1_top1_count * 10  # 每个TOP1 = 10分
+        s += p1_top2_count * 4   # 每个TOP2 = 4分
+        s += p1_top3_count * 2   # 每个TOP3 = 2分
+
+        # ③ CRS概率排名 [15分] — 排名越高分越高，但不否决
+        rank = crs_rank.get(score, 20)
+        if rank == 1: s += 15
+        elif rank == 2: s += 13
+        elif rank == 3: s += 11
+        elif rank <= 5: s += 8
+        elif rank <= 7: s += 5
+        elif rank <= 10: s += 3
+        else: s += 1  # 即使CRS排名很低也不是0分
+
+        # ④ 预期进球吻合 [15分] — 高斯衰减，平滑连续
         try:
-            sh, sa = map(int, sc.split("-"))
-            goal_diff = abs((sh + sa) - exp_goals)
-            candidates[sc] *= (0.6 + 0.4 * math.exp(- (goal_diff ** 2) / 2.5))
-            
-            odds_key = crs_map.get(sc, "")
-            crs_odds = float(match_obj.get(odds_key, 99) or 99)
-            if crs_odds < 30.0 and candidates[sc] > 8.0:
-                candidates[sc] *= 1.15
-        except Exception: pass
+            sh, sa = map(int, score.split("-"))
+            total = sh + sa
+            goal_diff = abs(total - exp_goals)
+            # 高斯衰减: 15 * exp(-diff^2 / 2)，避免0.49和0.51之间的悬崖效应
+            import math
+            s += round(15 * math.exp(-(goal_diff ** 2) / 2), 1)
+        except: pass
 
-    final_score = engine_score
-    if candidates:
-        ranked = sorted(candidates.items(), key=lambda x: x[1], reverse=True)
+        # ⑤ 联赛风格匹配 [10分]
+        try:
+            sh, sa = map(int, score.split("-"))
+            total = sh + sa
+
+            # 德甲：大球联赛，2球+比分加分
+            if any(lg in league for lg in ["德甲", "德乙", "荷甲"]):
+                if total >= 3: s += 10
+                elif total == 2: s += 7
+                elif total == 1: s += 3
+                elif total == 0: s += 1
+
+            # 意甲/法乙：小球联赛，1-2球比分加分
+            elif any(lg in league for lg in ["意甲", "意乙", "法乙"]):
+                if total <= 1: s += 10
+                elif total == 2: s += 8
+                elif total == 3: s += 4
+                else: s += 1
+
+            # 英超/英冠：均衡偏大
+            elif any(lg in league for lg in ["英超", "英冠", "英甲"]):
+                if total == 2: s += 8
+                elif total == 3: s += 10
+                elif total == 1: s += 5
+                elif total >= 4: s += 4
+                else: s += 3
+
+            # 其他联赛：中性
+            else:
+                if 1 <= total <= 3: s += 7
+                elif total == 0: s += 5
+                else: s += 3
+        except: pass
+
+        # 引擎也给一点分
+        if "engine" in sources:
+            s += 3
+
+        info["score"] = round(s, 2)
+
+    # ========== 选出得分最高的比分 ==========
+    if not all_candidates:
+        final_score = engine_score
+    else:
+        ranked = sorted(all_candidates.items(), key=lambda x: x[1]["score"], reverse=True)
         final_score = ranked[0][0]
+        top_score_val = ranked[0][1]["score"]
 
-    cf_sum = 0; cf_count = 0; v_kills = 0
-    for name, (r, w) in ai_inputs.items():
+        # 打印评分排名（调试用）
+        print(f"    📊 比分评分: {' > '.join(f'{sc}({info['score']:.0f}分)' for sc, info in ranked[:5])}")
+
+    # ========== 0-0特殊通道（保留但软化）==========
+    exp_analysis = stats.get("experience_analysis", {})
+    zero_zero_boost = exp_analysis.get("zero_zero_boost", 0) if isinstance(exp_analysis, dict) else 0
+    a0_val = float(match_obj.get("a0", 99) or 99)
+    s00_val = float(match_obj.get("s00", 99) or 99)
+
+    # 只在极强信号时才覆盖
+    if zero_zero_boost >= 14 and a0_val < 7.5 and s00_val < 8.0:
+        if "0-0" in all_candidates:
+            # 只有当0-0本身评分也不差时才覆盖
+            zero_score = all_candidates.get("0-0", {}).get("score", 0)
+            if zero_score >= top_score_val * 0.6:
+                print(f"    🔒 0-0通道: boost={zero_zero_boost} a0={a0_val} → 采用0-0")
+                final_score = "0-0"
+
+    # ========== 信心/概率/输出 ==========
+    weights = {"claude": 1.4, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
+    ai_conf_sum = 0; ai_conf_count = 0; value_kills = 0
+    for name, r in {**p1_ai, "claude": claude_r}.items():
         if not isinstance(r, dict): continue
-        cf_sum += r.get("ai_confidence", 60) * w
-        cf_count += w
-        if r.get("value_kill"): v_kills += 1
-        
-    avg_ai_conf = (cf_sum / cf_count) if cf_count > 0 else 60
-    cf = min(95, engine_conf + int((avg_ai_conf - 60) * 0.4)) + v_kills * 6
-    if any("🚨" in str(s) for s in stats.get("smart_signals", [])): cf = max(35, cf - 12)
+        conf = r.get("ai_confidence", 60)
+        ai_conf_sum += conf * weights.get(name, 1.0)
+        ai_conf_count += weights.get(name, 1.0)
+        if r.get("value_kill"): value_kills += 1
+
+    avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
+    cf = engine_conf
+    cf = min(95, cf + int((avg_ai_conf - 60) * 0.4))
+    cf = cf + value_kills * 6
+    has_warn = any("🚨" in str(s) for s in stats.get("smart_signals", []))
+    if has_warn: cf = max(35, cf - 12)
     risk = "低" if cf >= 75 else ("中" if cf >= 55 else "高")
 
     hp = engine_result.get("home_prob", 33); dp = engine_result.get("draw_prob", 33); ap = engine_result.get("away_prob", 34)
@@ -650,14 +1053,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     fhp = hp * 0.70 + shp * 0.30; fdp = dp * 0.70 + sdp * 0.30; fap = ap * 0.70 + sap * 0.30
     fhp = max(3, fhp); fdp = max(3, fdp); fap = max(3, fap)
     ft = fhp + fdp + fap
-    fhp = round(fhp/ft*100, 1); fdp = round(fdp/ft*100, 1); fap = round(100-fhp-fdp, 1)
-
-    pre_pred = {"home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap, "steam_move": stats.get("steam_move", {}), "smart_signals": stats.get("smart_signals", []), "line_movement_anomaly": stats.get("line_movement_anomaly", {})}
-    cold_door = ColdDoorDetector.detect(match_obj, pre_pred)
-    sigs = list(stats.get("smart_signals", []))
-    if cold_door["is_cold_door"]: 
-        sigs.extend(cold_door["signals"])
-        cf = max(30, cf - 8)
+    if ft > 0: fhp = round(fhp/ft*100, 1); fdp = round(fdp/ft*100, 1); fap = round(max(3, 100-fhp-fdp), 1)
 
     gpt_sc = gpt_r.get("ai_score","-") if isinstance(gpt_r, dict) else "-"
     gpt_an = gpt_r.get("reason", gpt_r.get("analysis","N/A")) if isinstance(gpt_r, dict) else "N/A"
@@ -665,16 +1061,29 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     grok_an = grok_r.get("reason", grok_r.get("analysis","N/A")) if isinstance(grok_r, dict) else "N/A"
     gem_sc = gemini_r.get("ai_score","-") if isinstance(gemini_r, dict) else "-"
     gem_an = gemini_r.get("reason", gemini_r.get("analysis","N/A")) if isinstance(gemini_r, dict) else "N/A"
+    cl_sc = final_score
     cl_an = claude_r.get("reason", claude_r.get("analysis","N/A")) if isinstance(claude_r, dict) else "N/A"
 
-    # 【重要修复】100% 完整原封不动地返回您原版的 59 个属性映射字段
+    # 计算所有AI的TOP1
+    all_scores = []
+    for name, r in p1_ai.items():
+        if isinstance(r, dict):
+            sc = r.get("ai_score", "-")
+            if sc and sc not in ["-", "?"]: all_scores.append((sc, name))
+    if claude_score: all_scores.append((claude_score, "claude"))
+
+    pre_pred = {"home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap, "steam_move": stats.get("steam_move", {}), "smart_signals": stats.get("smart_signals", []), "line_movement_anomaly": stats.get("line_movement_anomaly", {})}
+    cold_door = ColdDoorDetector.detect(match_obj, pre_pred)
+    sigs = list(stats.get("smart_signals", []))
+    if cold_door["is_cold_door"]: sigs.extend(cold_door["signals"]); cf = max(30, cf - 5)
+
     return {
         "predicted_score": final_score, "home_win_pct": fhp, "draw_pct": fdp, "away_win_pct": fap,
         "confidence": cf, "risk_level": risk,
         "over_under_2_5": "大" if engine_result.get("over_25", 50) > 55 else "小",
         "both_score": "是" if engine_result.get("btts", 45) > 50 else "否",
         "gpt_score": gpt_sc, "gpt_analysis": gpt_an, "grok_score": grok_sc, "grok_analysis": grok_an,
-        "gemini_score": gem_sc, "gemini_analysis": gem_an, "claude_score": final_score, "claude_analysis": cl_an,
+        "gemini_score": gem_sc, "gemini_analysis": gem_an, "claude_score": cl_sc, "claude_analysis": cl_an,
         "ai_avg_confidence": round(avg_ai_conf, 1), "value_kill_count": value_kills,
         "model_agreement": len(set(sc for sc,_ in all_scores)) <= 1 and len(all_scores) >= 2,
         "poisson": stats.get("poisson", {}), "refined_poisson": stats.get("refined_poisson", {}),
@@ -702,36 +1111,27 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "cold_door": cold_door,
     }
 
-# ====================================================================
-# 主控制流 (100% 还原原版精细经验打分规则)
-# ====================================================================
 def select_top4(preds):
     for p in preds:
         pr = p.get("prediction", {})
         s = pr.get("confidence", 0) * 0.4
         mx = max(pr.get("home_win_pct", 33), pr.get("away_win_pct", 33), pr.get("draw_pct", 33))
         s += (mx - 33) * 0.2 + pr.get("model_consensus", 0) * 2
-        
         if pr.get("risk_level") == "低": s += 12
         elif pr.get("risk_level") == "高": s -= 5
         if pr.get("model_agreement"): s += 10
-        
-        # 还原：被我误删的珍贵打分机制
         exp_info = pr.get("experience_analysis", {})
         exp_score = exp_info.get("total_score", 0)
         if exp_score >= 15 and pr.get("result") == "平局" and exp_info.get("draw_rules", 0) >= 3: s += 12
         elif exp_score >= 10: s += 5
-        if str(exp_info.get("recommendation", "")).startswith("⚠️"): s -= 3
-        
+        if exp_info.get("recommendation", "").startswith("⚠️"): s -= 3
         smart_money = str(pr.get("smart_money_signal", ""))
         direction = pr.get("result", "")
         if "Sharp" in smart_money:
             if ("客胜" in smart_money and direction == "主胜") or ("主胜" in smart_money and direction == "客胜"): s -= 30
-            
         cold = pr.get("cold_door", {})
         if cold.get("is_cold_door"): s -= 8
         p["recommend_score"] = round(s, 2)
-        
     preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
     return preds[:4]
 
@@ -741,12 +1141,14 @@ def extract_num(ms):
     nums = re.findall(r"\d+", str(ms))
     return base + int(nums[0]) if nums else 9999
 
+# ====================================================================
+# run_predictions v3.5
+# ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE v9.0 Pro] 全量还原版·高斯收敛网络 | {len(ms)} 场")
+    print(f"  [QUANT ENGINE vMAX 8.0] AI自主决策模式 | {len(ms)} 场比赛")
     print("=" * 80)
-    
     match_analyses = []
     for i, m in enumerate(ms):
         eng = predict_match(m)
@@ -754,58 +1156,46 @@ def run_predictions(raw, use_ai=True):
         sp = ensemble.predict(m, {})
         exp_result = exp_engine.analyze(m)
         match_analyses.append({"match": m, "engine": eng, "league_info": league_info, "stats": sp, "index": i+1, "experience": exp_result})
-        
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
+        print(f"  [TWO-PHASE] 启动两阶段AI架构...")
         start_t = time.time()
         all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
-        logger.info(f"[AI MATRIX] 异步推理完毕，耗时: {time.time()-start_t:.1f}s")
-        
+        print(f"  [AI MATRIX] 压榨完成，耗时 {time.time()-start_t:.1f}s")
     res = []
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         mg = merge_result(ma["engine"], all_ai["gpt"].get(i+1,{}), all_ai["grok"].get(i+1,{}), all_ai["gemini"].get(i+1,{}), all_ai["claude"].get(i+1,{}), ma["stats"], m)
-        
-        # 还原：所有插件的调用日志
-        try: mg = apply_experience_to_prediction(m, mg, exp_engine); logger.info("    → apply_experience_to_prediction 已注入")
-        except Exception as e: logger.warning(f"    ⚠️ experience跳过: {e}")
-        
-        try: mg = apply_odds_history(m, mg); logger.info("    → apply_odds_history 已注入")
-        except Exception as e: logger.warning(f"    ⚠️ odds_history跳过: {e}")
-        
-        try: mg = apply_quant_edge(m, mg); logger.info("    → apply_quant_edge 已注入")
-        except Exception as e: logger.warning(f"    ⚠️ quant_edge跳过: {e}")
-        
-        try: mg = apply_wencai_intel(m, mg); logger.info("    → apply_wencai_intel 已注入")
-        except Exception as e: logger.warning(f"    ⚠️ wencai_intel跳过: {e}")
-        
-        try: mg = upgrade_ensemble_predict(m, mg); logger.info("    → upgrade_ensemble_predict 已注入")
-        except Exception as e: logger.warning(f"    ⚠️ advanced_models跳过: {e}")
-        
+        try: mg = apply_experience_to_prediction(m, mg, exp_engine); print(f"    → apply_experience_to_prediction 已注入")
+        except Exception as e: print(f"    ⚠️ experience跳过: {e}")
+        try: mg = apply_odds_history(m, mg); print(f"    → apply_odds_history 已注入")
+        except Exception as e: print(f"    ⚠️ odds_history跳过: {e}")
+        try: mg = apply_quant_edge(m, mg); print(f"    → apply_quant_edge 已注入")
+        except Exception as e: print(f"    ⚠️ quant_edge跳过: {e}")
+        try: mg = apply_wencai_intel(m, mg); print(f"    → apply_wencai_intel 已注入")
+        except Exception as e: print(f"    ⚠️ wencai_intel跳过: {e}")
+        try: mg = upgrade_ensemble_predict(m, mg); print(f"    → upgrade_ensemble_predict 已注入")
+        except Exception as e: print(f"    ⚠️ advanced_models跳过: {e}")
         score_str = mg.get("predicted_score", "1-1")
         try:
             sh, sa = map(int, score_str.split("-"))
             if sh > sa: mg["result"] = "主胜"
             elif sh < sa: mg["result"] = "客胜"
             else: mg["result"] = "平局"
-        except Exception:
+        except:
             pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
             mg["result"] = max(pcts, key=pcts.get)
-            
         res.append({**m, "prediction": mg})
         cold = mg.get("cold_door", {})
         cold_tag = f" [❄️{cold.get('level','')}冷门]" if cold.get("is_cold_door") else ""
-        print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% {cold_tag}")
-        
+        print(f"  [{i+1}] {m.get('home_team')} vs {m.get('away_team')} => {mg['result']} ({mg['predicted_score']}) | CF: {mg['confidence']}% | AI信心: {mg.get('ai_avg_confidence', 0)}{cold_tag}")
     t4 = select_top4(res)
     t4ids = [t.get("id") for t in t4]
     for r in res: r["is_recommended"] = r.get("id") in t4ids
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
-    
     diary = load_ai_diary()
+    cold_count = len([r for r in res if r.get("prediction",{}).get("cold_door",{}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence']>70])}/{max(1,len(res))}"
-    diary["reflection"] = "vMAX9.0 Pro | 全量无损还原 + 修复底层崩溃"
+    diary["reflection"] = f"vMAX8.0 | {cold_count}冷门 | AI自主决策·加权评分·无否决制"
     save_ai_diary(diary)
-    
     return res, t4
-
