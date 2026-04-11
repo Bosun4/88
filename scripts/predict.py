@@ -473,8 +473,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
     urls = [primary_url] + backup
 
-    CONNECT_TIMEOUT = 30      # 连接超时30秒：连不上就换
-    READ_TIMEOUT = 600        # 连上后最长等10分钟（实际上等于无限，模型一定会在这之内返回）
+    CONNECT_TIMEOUT = 15      # 连接超时30秒：连不上就换
+    READ_TIMEOUT = 700        # 连上后最长等10分钟（实际上等于无限，模型一定会在这之内返回）
 
     AI_PROFILES = {
         "claude": {
