@@ -128,62 +128,17 @@ def save_ai_diary(diary):
 # ====================================================================
 
 def build_phase1_prompt(match_analyses):
-    """Phase1 Prompt: 多维情报 + 反常识思维 + 独立判断"""
+    """Phase1 Prompt: 纯数据·零暗示·让AI自由分析"""
     diary = load_ai_diary()
 
-    p = "【身份】你是管理50亿美金体育基金的首席量化分析师。你的工作不是猜最常见比分，而是找到概率被市场错误定价的比分。\n\n"
+    p = "你是顶尖足球量化分析师。根据以下原始数据，独立分析每场比赛，给出概率最高的3个候选比分。\n\n"
 
     if diary.get("reflection"):
-        p += f"【进化日志】{diary.get('yesterday_win_rate','N/A')} | {diary['reflection']}\n\n"
+        p += f"【进化】{diary.get('yesterday_win_rate','N/A')} | {diary['reflection']}\n\n"
 
-    p += "【输出格式】只输出合法JSON数组。\n"
-    p += "每场：match(整数), top3([{score,prob},...]), reason(100-150字含3+赔率数字), ai_confidence(0-100)。\n"
-    p += 'top3中prob是该比分概率%。示例: {"match":1,"top3":[{"score":"2-1","prob":14.5},{"score":"1-1","prob":13.8},{"score":"1-0","prob":12.2}],"reason":"...","ai_confidence":75}\n\n'
+    p += "【输出格式】只输出合法JSON数组。每场：match(整数), top3([{score,prob},...]), reason(80字), ai_confidence(0-100)。只输出数组！\n\n"
 
-    p += "【量化分析框架——按权重排序】\n"
-    p += "① [权重30%] 联赛DNA+赛季阶段：每个联赛有自己的比分分布指纹\n"
-    p += "   - 英超/英冠：大比分频率高，2-1/1-2出现率15%+\n"
-    p += "   - 意甲/法乙：1-0/0-0占比高，低球联赛\n"
-    p += "   - 德甲：3球+比赛占48%，最激进联赛\n"
-    p += "   - 赛季末保级战：极端比分(3-0/0-3)出现率翻倍\n"
-    p += "   - 赛季末无欲无求：0-0/1-1占比飙升\n\n"
-
-    p += "② [权重25%] CRS波胆赔率矩阵→概率分布（仅作参考基准，不是答案）\n"
-    p += "   - CRS赔率→归一化概率→得到庄家的基准预期\n"
-    p += "   - 关键：庄家预期≠实际结果。庄家故意压低热门比分赔率来收割散户\n"
-    p += "   - 你要找的是：CRS概率排第3-6的比分中，哪些被低估了\n\n"
-
-    p += "③ [权重20%] 总进球赔率→泊松分布拟合→进球数分布\n"
-    p += "   - a0-a7赔率→隐含概率→加权期望λ\n"
-    p += "   - 用λ拟合泊松→独立计算每个比分概率\n"
-    p += "   - 当泊松概率 vs CRS概率偏差>30%时=定价错误=机会\n\n"
-
-    p += "④ [权重15%] 亚盘+欧赔交叉验证→方向判断\n"
-    p += "   - 欧赔三项推算胜平负概率\n"
-    p += "   - 亚盘方向与欧赔方向矛盾=庄家分歧=冷门信号\n"
-    p += "   - 让球胜赔>2.10说明庄家对让球方没信心\n\n"
-
-    p += "⑤ [权重10%] 半全场+散户数据→节奏/情绪面\n"
-    p += "   - 半全场赔率推断上下半场节奏\n"
-    p += "   - 散户>60%偏向一方=反向价值\n\n"
-
-    p += "【反常识思维——区分你和普通预测的核心】\n"
-    p += "❌ 错误思维: CRS最低的比分=最可能 → 永远输出1-0/1-1\n"
-    p += "✅ 正确思维: CRS最低的比分=散户最爱买的 → 庄家最想让你买的\n"
-    p += "❌ 错误思维: 强队打弱队=大比分\n"
-    p += "✅ 正确思维: 要看让球深度和联赛风格，英冠强弱队1-0比3-0常见10倍\n"
-    p += "❌ 错误思维: 保守选1-1最安全\n"
-    p += "✅ 正确思维: 1-1在很多联赛只占8-10%，比2-1还少\n"
-    p += "❌ 错误思维: 大比分不可能\n"
-    p += "✅ 正确思维: 体彩实际开奖经常出3-1/2-3/4-1这种非常规比分\n\n"
-
-    p += "【体彩现实——来自10万场统计】\n"
-    p += "比分出现率: 1-0(11.5%) > 2-1(10.2%) > 1-1(9.8%) > 0-0(7.5%) > 0-1(7.2%) > 2-0(6.5%) > 1-2(5.8%) > 0-2(4.5%) > 3-1(4.2%) > 2-2(3.8%) > 3-0(3.2%) > 1-3(2.8%)\n"
-    p += "关键发现: 2-1的出现率几乎等于1-0！但CRS赔率通常是1-0的1.5倍→2-1被系统性低估\n"
-    p += "3-1出现率4.2%=每25场出一次，不算罕见。3-2出现率2.1%=每50场一次。\n"
-    p += '体彩经常开出的"冷门"比分: 3-1, 0-3, 2-3, 4-0, 4-1 这些比分出现的频率远高于散户认知\n\n'
-
-    p += "【原始数据+预计算信号】\n"
+    p += "【原始数据】\n"
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
@@ -194,116 +149,44 @@ def build_phase1_prompt(match_analyses):
         sp_d = float(m.get("sp_draw", m.get("same", 0)) or 0)
         sp_a = float(m.get("sp_away", m.get("lose", 0)) or 0)
 
-        p += f"{'='*60}\n[{i+1}] {h} vs {a} | {league}\n"
-
-        # 联赛DNA标签
-        league_dna = {
-            "英超": "大球联赛 均场2.8球 冷门率28% 2-1出现率12%",
-            "英冠": "混战联赛 冷门率32% 1-0/0-1占25% 平局率28%",
-            "英甲": "低质联赛 冷门率30% 随机性极高",
-            "英乙": "低质联赛 冷门率28% 比分分散",
-            "德甲": "最激进联赛 均场3.1球 3球+占48% 2-1/3-1高频",
-            "德乙": "中等进球 均场2.5球 分布均匀",
-            "意甲": "平局之王 平局率30% 1-0和0-0占22% 防守为王",
-            "意乙": "低球联赛 0-0/1-0占28%",
-            "法甲": "大巴黎独大 其余队平局率高 中等冷门",
-            "法乙": "最保守联赛 均场2.0球 0-0/1-0占30% 小球天堂",
-            "西甲": "技术流 均场2.6球 比分分布均匀",
-            "荷甲": "进攻联赛 均场3.0球 大比分频繁",
-            "荷乙": "中等联赛 冷门率27%",
-        }
-        for lg, dna in league_dna.items():
-            if lg in str(league):
-                p += f"🧬 联赛DNA: {dna}\n"
-                break
-
-        # 欧赔 + 离散度
+        p += f"{'='*50}\n[{i+1}] {h} vs {a} | {league}\n"
         p += f"欧赔: {sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f} | 让球: {hc}\n"
 
         if sp_h > 1 and sp_d > 1 and sp_a > 1:
-            odds_range = round(max(sp_h, sp_d, sp_a) - min(sp_h, sp_d, sp_a), 2)
-            if odds_range < 0.8:
-                p += f"⚠️ 三项极接近(差{odds_range})=均势→平局概率被低估\n"
-            # Shin概率
             margin = 1/sp_h + 1/sp_d + 1/sp_a
-            shin_h = round((1/sp_h) / margin * 100, 1)
-            shin_d = round((1/sp_d) / margin * 100, 1)
-            shin_a = round((1/sp_a) / margin * 100, 1)
-            p += f"Shin真实概率: 主{shin_h}% 平{shin_d}% 客{shin_a}%\n"
-            ret_rate = round(1/margin*100, 1)
-            if ret_rate < 92:
-                p += f"⚠️ 返还率{ret_rate}%偏低=庄家对这场有把握\n"
+            p += f"Shin概率: 主{(1/sp_h)/margin*100:.1f}% 平{(1/sp_d)/margin*100:.1f}% 客{(1/sp_a)/margin*100:.1f}% | 返还率{1/margin*100:.1f}%\n"
 
         if m.get("hhad_win"):
             p += f"让球胜平负: {m['hhad_win']}/{m.get('hhad_same','')}/{m.get('hhad_lose','')}\n"
-            # 交叉验证
-            try:
-                hhad_w = float(m.get("hhad_win", 0) or 0)
-                if 1.30 <= sp_h <= 1.50 and hhad_w > 2.10:
-                    p += f"⚠️ 交叉矛盾: 标赔看好主队{sp_h} 但让球胜{hhad_w}>2.10=庄家不看好让球\n"
-                elif sp_h > 2.5 and hhad_w < 1.60:
-                    p += f"⚠️ 交叉矛盾: 标赔不看好主队{sp_h} 但让球胜{hhad_w}<1.60=庄家让球看好主队\n"
-            except: pass
-
         if m.get("single") == 1:
-            p += f"📌 单关开放\n"
+            p += f"单关开放\n"
         h_pos = m.get("home_position",""); g_pos = m.get("guest_position","")
         if h_pos or g_pos:
             p += f"排名: 主{h_pos} vs 客{g_pos}\n"
 
-        # 总进球 + 预期λ + 泊松分布
-        a0=m.get("a0","");a1=m.get("a1","");a2=m.get("a2","");a3=m.get("a3","")
-        a4=m.get("a4","");a5=m.get("a5","");a6=m.get("a6","");a7=m.get("a7","")
+        # 总进球
+        a0=m.get("a0","");a1=m.get("a1","")
         if a0:
+            a2=m.get("a2","");a3=m.get("a3","");a4=m.get("a4","");a5=m.get("a5","");a6=m.get("a6","");a7=m.get("a7","")
             p += f"总进球赔率: 0球={a0}|1={a1}|2={a2}|3={a3}|4={a4}|5={a5}|6={a6}|7+={a7}\n"
             try:
                 gp=[(gi,1/float(v)) for gi,v in enumerate([a0,a1,a2,a3,a4,a5,a6,a7]) if float(v)>1]
                 tp=sum(p2 for _,p2 in gp); eg=sum(g*(p2/tp) for g,p2 in gp)
-                ml=min(gp, key=lambda x:1/x[1])
-                p += f"→ 期望进球λ={eg:.2f} | 最可能{ml[0]}球({ml[1]/tp*100:.0f}%)\n"
-                # 泊松分布参考
-                from math import exp, factorial
-                lam = eg
-                poisson_goals = {}
-                for g in range(6):
-                    poisson_goals[g] = exp(-lam) * (lam**g) / factorial(g)
-                p += f"→ 泊松分布: " + " ".join(f"{g}球{poisson_goals[g]*100:.0f}%" for g in range(6)) + "\n"
+                p += f"→ 期望进球λ={eg:.2f}\n"
             except: pass
 
-        # CRS + TOP7（扩大到7个，不要只看TOP3）
+        # CRS
         crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2","w40":"4-0","w41":"4-1","w42":"4-2",
                    "s00":"0-0","s11":"1-1","s22":"2-2","s33":"3-3",
                    "l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3","l23":"2-3","l04":"0-4","l14":"1-4"}
-        crs_lines=[]; crs_probs=[]
+        crs_lines=[]
         for key,score in crs_map.items():
             try:
                 odds=float(m.get(key,0) or 0)
-                if odds>1: crs_lines.append(f"{score}={odds:.2f}"); crs_probs.append((score,odds,1/odds))
+                if odds>1: crs_lines.append(f"{score}={odds:.1f}")
             except: pass
         if crs_lines:
-            p += f"CRS全量: {' | '.join(crs_lines)}\n"
-            if crs_probs:
-                crs_probs.sort(key=lambda x:x[1])
-                tp2=sum(pr for _,_,pr in crs_probs)
-                p += f"→ CRS概率TOP7: {' > '.join(f'{s}({pr/tp2*100:.1f}%)' for s,_,pr in crs_probs[:7])}\n"
-                # 泊松vs CRS偏差检测
-                try:
-                    for s, odds_val, pr in crs_probs[:7]:
-                        sh, sa = map(int, s.split("-"))
-                        # 简单泊松估算
-                        if eg > 0:
-                            home_lam = eg * shin_h / (shin_h + shin_a) if (shin_h + shin_a) > 0 else eg/2
-                            away_lam = eg - home_lam
-                            from math import exp, factorial
-                            poisson_pr = exp(-home_lam) * (home_lam**sh) / factorial(sh) * exp(-away_lam) * (away_lam**sa) / factorial(sa)
-                            crs_pr = pr / tp2
-                            if poisson_pr > 0 and crs_pr > 0:
-                                ratio = poisson_pr / crs_pr
-                                if ratio > 1.5:
-                                    p += f"  💡 {s}: 泊松概率是CRS的{ratio:.1f}倍→可能被低估\n"
-                                elif ratio < 0.6:
-                                    p += f"  ⚠️ {s}: CRS概率是泊松的{1/ratio:.1f}倍→庄家可能在诱导\n"
-                except: pass
+            p += f"CRS: {' | '.join(crs_lines)}\n"
 
         # 半全场
         hf_l=[]
@@ -317,72 +200,42 @@ def build_phase1_prompt(match_analyses):
         # 散户
         vote=m.get("vote",{})
         if vote:
-            vh = int(vote.get("win",33) or 33); va = int(vote.get("lose",33) or 33)
-            vd = int(vote.get("same",33) or 33)
-            p += f"散户: 胜{vh}% 平{vd}% 负{va}%"
+            p += f"散户: 胜{vote.get('win','?')}% 平{vote.get('same','?')}% 负{vote.get('lose','?')}%"
             if vote.get("hhad_win"): p += f" | 让球主{vote['hhad_win']}%平{vote.get('hhad_same','?')}%客{vote.get('hhad_lose','?')}%"
-            if max(vh, va) >= 60:
-                hot_side = "主胜" if vh > va else "客胜"
-                p += f" ⚠️散户{max(vh,va)}%押{hot_side}→反向价值"
             p += "\n"
 
         # 赔率变动
         change=m.get("change",{})
         if change and isinstance(change,dict):
             cw=change.get("win",0);cs=change.get("same",0);cl=change.get("lose",0)
-            if cw or cs or cl:
-                p += f"赔率变动: 胜{cw} 平{cs} 负{cl}"
-                # 变动方向分析
-                directions = []
-                if cw and float(str(cw).replace("+","")) < 0: directions.append("主胜↓(钱涌入)")
-                if cs and float(str(cs).replace("+","")) < 0: directions.append("平局↓(钱涌入)")
-                if cl and float(str(cl).replace("+","")) < 0: directions.append("客胜↓(钱涌入)")
-                if directions: p += f" → {','.join(directions)}"
-                p += "\n"
+            if cw or cs or cl: p += f"赔率变动: 胜{cw} 平{cs} 负{cl}\n"
 
-        # 伤停情报
+        # 伤停
         info=m.get("information",{})
         if isinstance(info,dict):
-            for k,v in [("home_injury","主伤停"),("guest_injury","客伤停"),("home_good_news","主利好"),("guest_good_news","客利好"),("home_bad_news","主利空"),("guest_bad_news","客利空")]:
-                if info.get(k): p += f"{v}: {str(info[k])[:250].replace(chr(10),' | ')}\n"
+            for k,v in [("home_injury","主伤停"),("guest_injury","客伤停"),("home_bad_news","主利空"),("guest_bad_news","客利空")]:
+                if info.get(k): p += f"{v}: {str(info[k])[:200].replace(chr(10),' ')}\n"
 
         # 状态
         hs=m.get("home_stats",{}); ast2=m.get("away_stats",{})
         if hs.get("form"):
-            p += f"主队: {hs.get('wins','?')}胜{hs.get('draws','?')}平{hs.get('losses','?')}负 近况{hs.get('form','?')} 场均进{hs.get('avg_goals_for','?')}/失{hs.get('avg_goals_against','?')}\n"
-            p += f"客队: {ast2.get('wins','?')}胜{ast2.get('draws','?')}平{ast2.get('losses','?')}负 近况{ast2.get('form','?')} 场均进{ast2.get('avg_goals_for','?')}/失{ast2.get('avg_goals_against','?')}\n"
+            p += f"主队: {hs.get('wins','?')}胜{hs.get('draws','?')}平{hs.get('losses','?')}负 {hs.get('form','?')} 进{hs.get('avg_goals_for','?')}/失{hs.get('avg_goals_against','?')}\n"
+            p += f"客队: {ast2.get('wins','?')}胜{ast2.get('draws','?')}平{ast2.get('losses','?')}负 {ast2.get('form','?')} 进{ast2.get('avg_goals_for','?')}/失{ast2.get('avg_goals_against','?')}\n"
 
         for field in ['analyse','baseface','intro','expert_intro']:
-            txt=str(m.get(field,'')).replace('\n',' ')[:200]
+            txt=str(m.get(field,'')).replace('\n',' ')[:150]
             if len(txt)>10: p += f"分析: {txt}\n"; break
         p += "\n"
 
-    p += f"【输出{len(match_analyses)}场JSON数组，每场含top3。你的TOP1不应全是1-0/0-1/1-1——如果数据指向2-1或3-1就大胆给出。只输出数组！】\n"
+    p += f"【输出{len(match_analyses)}场JSON数组，只输出数组！】\n"
     return p
 
 
 def build_phase2_prompt(match_analyses, phase1_results):
-    """Phase2: Claude裁判——加权评分制，无否决制"""
-    p = "【你是最终裁判】三个独立AI已各自给出TOP3候选比分。你综合分析选出最终比分。\n\n"
-
-    p += "【裁决方法——加权评分制（没有任何比分被一票否决）】\n"
-    p += "对每场比赛，你需要对所有候选比分进行加权评分：\n\n"
-
-    p += "评分维度（总分100）：\n"
-    p += "① AI共识 [30分]: 3家都选=30分, 2家选=20分, 1家选=10分, 无人选=5分\n"
-    p += "② CRS概率 [20分]: CRS概率排名TOP1=20分, TOP2=17分, TOP3=14分, TOP4-6=10分, TOP7+=6分\n"
-    p += "③ 泊松吻合 [20分]: 比分总进球与预期λ的匹配度\n"
-    p += "④ 联赛风格 [15分]: 该比分是否符合联赛DNA（如德甲多大球→2-1/3-1加分）\n"
-    p += "⑤ 信号叠加 [15分]: 散户反指/赔率变动/亚欧矛盾等信号是否指向该比分\n\n"
-
-    p += "【关键原则】\n"
-    p += "- CRS赔率高不代表不可能。CRS 3-1@10倍 vs 1-0@5倍，如果3家AI中2家选3-1，3-1得分可能更高\n"
-    p += "- 不要因为CRS赔率高就自动排除。体彩经常开出10-20倍的比分\n"
-    p += "- 如果你发现自己想选1-1但理由不充分，检查是否在偷懒——1-1是最容易选的比分但不是最常见的\n"
-    p += "- 在所有联赛中，2-1的出现频率几乎等于1-0，甚至在德甲/英超高于1-0\n\n"
-
-    p += "【输出格式】JSON数组：match(整数), score(最终比分), reason(80-120字含评分逻辑), ai_confidence(0-100)\n"
-    p += "只输出JSON数组！\n\n"
+    """Phase2: Claude裁判——看数据做判断，不给框架"""
+    p = "你是最终裁判。多个AI已独立分析每场比赛。你的任务：综合它们的分析，选出每场最终比分。\n"
+    p += "如果多家AI一致，直接采用。如果分歧，用你自己的判断选最合理的。\n"
+    p += "输出JSON数组：match(整数), score(比分), reason(50字), ai_confidence(0-100)。只输出数组！\n\n"
 
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
@@ -391,53 +244,22 @@ def build_phase2_prompt(match_analyses, phase1_results):
         sp_h = float(m.get("sp_home", m.get("win", 0)) or 0)
         sp_d = float(m.get("sp_draw", m.get("same", 0)) or 0)
         sp_a = float(m.get("sp_away", m.get("lose", 0)) or 0)
-        league = m.get("league", m.get("cup", ""))
         idx = i + 1
 
-        p += f"{'='*50}\n[{idx}] {h} vs {a} | {league}\n"
-        p += f"欧赔: {sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f} | 让球: {m.get('give_ball','0')}\n"
+        p += f"[{idx}] {h} vs {a} | 欧赔{sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f}\n"
 
-        # 预期进球
-        try:
-            gp = []
-            for gi, field in enumerate(["a0","a1","a2","a3","a4","a5","a6","a7"]):
-                v = float(m.get(field, 0) or 0)
-                if v > 1: gp.append((gi, 1/v))
-            if gp:
-                tp = sum(p2 for _,p2 in gp)
-                eg = sum(g*(p2/tp) for g,p2 in gp)
-                p += f"期望进球λ={eg:.2f}\n"
-        except: pass
-
-        # CRS TOP7
-        crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2",
-                   "s00":"0-0","s11":"1-1","s22":"2-2",
-                   "l01":"0-1","l02":"0-2","l12":"1-2","l03":"0-3","l13":"1-3","l23":"2-3"}
-        crs_probs=[]
-        for key,score in crs_map.items():
-            try:
-                odds=float(m.get(key,0) or 0)
-                if odds>1: crs_probs.append((score,odds))
-            except: pass
-        if crs_probs:
-            crs_probs.sort(key=lambda x:x[1])
-            p += f"CRS参考(非约束): {' > '.join(f'{s}@{o:.1f}' for s,o in crs_probs[:7])}\n"
-
-        # 三家AI结果
         for ai_name in ["gpt", "grok", "gemini"]:
             ai_data = phase1_results.get(ai_name, {}).get(idx, {})
-            if not ai_data:
-                p += f"  {ai_name.upper()}: 无数据\n"; continue
+            if not ai_data: continue
             top3 = ai_data.get("top3", [])
             if top3:
-                scores_str = " | ".join(f"{t.get('score','?')}({t.get('prob','?')}%)" for t in top3[:3])
-                p += f"  {ai_name.upper()}: {scores_str} | 信心{ai_data.get('ai_confidence','?')} | {str(ai_data.get('reason',''))[:120]}\n"
+                scores_str = " ".join(f"{t.get('score','?')}({t.get('prob','?')}%)" for t in top3[:3])
+                p += f"  {ai_name.upper()}: {scores_str} | {str(ai_data.get('reason',''))[:80]}\n"
             else:
                 sc = ai_data.get("ai_score", "-")
-                p += f"  {ai_name.upper()}: {sc} | 信心{ai_data.get('ai_confidence','?')} | {str(ai_data.get('analysis',''))[:120]}\n"
-        p += "\n"
+                p += f"  {ai_name.upper()}: {sc} | {str(ai_data.get('reason',ai_data.get('analysis','')))[:80]}\n"
 
-    p += f"【输出{len(match_analyses)}场JSON数组。大胆选出评分最高的比分，不要默认选1-1！只输出数组！】\n"
+    p += f"\n输出{len(match_analyses)}场JSON数组！\n"
     return p
 
 
@@ -478,41 +300,19 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 
     AI_PROFILES = {
         "claude": {
-            "sys": "你是最终裁判。三个独立AI已给出候选比分，你用加权评分法综合分析选出每场最终比分。CRS赔率仅做参考权重，不是否决条件。你的比分选择应该多样化，不要全部输出1-0/0-1/1-1。只输出JSON数组。",
+            "sys": "你是最终裁判。综合多个AI的分析结果，选出每场最终比分。只输出JSON数组。",
             "temp": 0.15
         },
         "grok": {
-            "sys": "你是Grok，具备实时联网搜索能力。这是你的核心优势。\n"
-                   "【必须执行的搜索任务】\n"
-                   "1. 搜索oddsportal.com拿Pinnacle赔率，与提供的竞彩赔率比较偏差（>5%=诱盘）\n"
-                   "2. 搜索Betfair Exchange交易量和赔率\n"
-                   "3. 搜索球队名+injury/lineup确认最新首发伤停\n"
-                   "4. 搜索比赛城市天气+裁判历史数据\n"
-                   "5. 搜索X平台球队最新动态\n"
-                   "reason必须引用搜索到的具体事实(如Pinnacle主胜1.62，Betfair交易量占比68%)。\n"
-                   "你的TOP3应该多样化——如果数据指向2-1就给2-1，不要因为保守全给1-0。\n"
-                   "输出每场TOP3候选比分。只输出JSON数组。",
+            "sys": "你是Grok，有联网搜索能力。搜索Pinnacle赔率、Betfair交易量、球队伤停和最新动态，结合提供的数据分析每场比赛。输出每场TOP3候选比分。只输出JSON数组。",
             "temp": 0.22
         },
         "gpt": {
-            "sys": "你是20年实战职业博彩分析师。用纯数学方法计算每场TOP3候选比分：\n"
-                   "1. CRS赔率→概率矩阵→参考基准（不是最终答案）\n"
-                   "2. 总进球a0-a7→泊松拟合→独立概率分布\n"
-                   "3. 当泊松概率vs CRS概率偏差>30%→该比分被市场错误定价\n"
-                   "4. 亚盘+欧赔交叉验证方向\n"
-                   "5. 半全场推断节奏\n"
-                   "关键：2-1出现率几乎等于1-0(10% vs 11.5%)，不要忽视。3-1出现率4.2%不算罕见。\n"
-                   "该2-1就2-1，该3-1就3-1，不要保守。只输出JSON数组。",
+            "sys": "你是职业足球量化分析师。用数学方法分析赔率数据，计算每场比赛概率最高的3个比分。只输出JSON数组。",
             "temp": 0.18
         },
         "gemini": {
-            "sys": "你是概率建模引擎。严格执行数学计算：\n"
-                   "1. CRS全比分→概率矩阵（这是庄家的定价，不是真实概率）\n"
-                   "2. 总进球→泊松分布→独立计算每个比分概率\n"
-                   "3. 对比泊松概率 vs CRS概率→找出被低估的比分\n"
-                   "4. 欧赔去水位→Shin概率\n"
-                   "5. 你的输出应反映数学计算结果，不要人为压向1-0/1-1\n"
-                   "输出每场TOP3候选比分及概率。只输出JSON数组。",
+            "sys": "你是概率建模引擎。从赔率数据计算每个比分的真实概率，找出被市场错误定价的比分。输出每场TOP3候选比分。只输出JSON数组。",
             "temp": 0.15
         },
     }
@@ -1062,31 +862,25 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
         s = 0.0
 
-        # ① 方向一致性 [20分] — 参考不命令
+        # ① 方向参考 [15分] — 轻微nudge，不命令
         if final_direction == "home" and h_g > a_g:
-            s += 20 * (dir_probs["home"] / 100)
+            s += 15 * (dir_probs["home"] / 100)
         elif final_direction == "away" and h_g < a_g:
-            s += 20 * (dir_probs["away"] / 100)
+            s += 15 * (dir_probs["away"] / 100)
         elif final_direction == "draw" and h_g == a_g:
-            s += 20 * (dir_probs["draw"] / 100)
+            s += 15 * (dir_probs["draw"] / 100)
         else:
-            # 方向不一致——用该方向的实际概率给分（不是0分）
-            if h_g > a_g: s += 20 * (dir_probs["home"] / 100) * 0.5
-            elif h_g < a_g: s += 20 * (dir_probs["away"] / 100) * 0.5
-            else: s += 20 * (dir_probs["draw"] / 100) * 0.5
+            if h_g > a_g: s += 15 * (dir_probs["home"] / 100) * 0.5
+            elif h_g < a_g: s += 15 * (dir_probs["away"] / 100) * 0.5
+            else: s += 15 * (dir_probs["draw"] / 100) * 0.5
 
         # ② 进球数吻合 [20分] — 高斯衰减
         goal_diff = abs(total_g - exp_goals)
         s += round(20 * math.exp(-(goal_diff ** 2) / 1.5), 1)
 
-        # ③ CRS隐含概率 [25分] — 庄家定价是重要参考
-        crs_p = crs_probs.get(score_str, 0)
-        if crs_p > 0:
-            s += min(25, crs_p * 2.0)
-
-        # ④ AI投票 [25分] — AI分析结果应该主导
+        # ③ AI投票 [55分] — AI已经看过所有数据，它们的判断应该主导
         ai_vote = ai_voted_scores.get(score_str, 0)
-        s += min(25, ai_vote * 6)
+        s += min(55, ai_vote * 12)
 
         # ⑤ 联赛风格 [10分]
         if any(lg in league for lg in ["德甲", "荷甲", "英超"]) and total_g >= 3: s += 10
