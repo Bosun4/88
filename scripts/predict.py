@@ -849,20 +849,19 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     # ================================================================
     direction_scores = {"home": 0.0, "draw": 0.0, "away": 0.0}
 
-    # --- 信号1: 欧赔隐含概率 [权重25] ---
+    # --- 信号1: 欧赔隐含概率 [权重30] — 最客观的基准 ---
     if sp_h > 1 and sp_d > 1 and sp_a > 1:
         margin = 1/sp_h + 1/sp_d + 1/sp_a
         shin_h = (1/sp_h) / margin * 100
         shin_d = (1/sp_d) / margin * 100
         shin_a = (1/sp_a) / margin * 100
-        # 按概率分配25分
-        direction_scores["home"] += shin_h / 100 * 25
-        direction_scores["draw"] += shin_d / 100 * 25
-        direction_scores["away"] += shin_a / 100 * 25
+        direction_scores["home"] += shin_h / 100 * 30
+        direction_scores["draw"] += shin_d / 100 * 30
+        direction_scores["away"] += shin_a / 100 * 30
     else:
-        direction_scores["home"] += 8.3; direction_scores["draw"] += 8.3; direction_scores["away"] += 8.3
+        direction_scores["home"] += 10; direction_scores["draw"] += 10; direction_scores["away"] += 10
 
-    # --- 信号2: Sharp资金流向 [权重25] — 最重要的方向信号 ---
+    # --- 信号2: Sharp资金流向 [权重12] — 重要但不主导 ---
     smart_signals = stats.get("smart_signals", [])
     smart_str = " ".join(str(s) for s in smart_signals)
     sharp_detected = False
@@ -870,77 +869,63 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if "Sharp" in smart_str or "sharp" in smart_str:
         sharp_detected = True
         if "客胜" in smart_str or "客队" in smart_str:
-            direction_scores["away"] += 25
-            print(f"    💰 Sharp资金→客胜 +25")
+            direction_scores["away"] += 12
+            print(f"    💰 Sharp→客胜 +12")
         elif "主胜" in smart_str or "主队" in smart_str:
-            direction_scores["home"] += 25
-            print(f"    💰 Sharp资金→主胜 +25")
+            direction_scores["home"] += 12
+            print(f"    💰 Sharp→主胜 +12")
         elif "平局" in smart_str or "平赔" in smart_str:
-            direction_scores["draw"] += 25
-            print(f"    💰 Sharp资金→平局 +25")
+            direction_scores["draw"] += 12
+            print(f"    💰 Sharp→平局 +12")
         else:
-            direction_scores["home"] += 8; direction_scores["draw"] += 8; direction_scores["away"] += 9
-    # Steam信号（赔率变动方向）
+            direction_scores["home"] += 4; direction_scores["draw"] += 4; direction_scores["away"] += 4
+    # Steam信号 [权重8]
     if "Steam" in smart_str:
         if "客胜Steam" in smart_str or "客胜反向" in smart_str:
-            direction_scores["away"] += 15
-            print(f"    🔥 Steam→客胜 +15")
+            direction_scores["away"] += 8
         elif "主胜Steam" in smart_str or "主胜反向" in smart_str:
-            direction_scores["home"] += 15
-            print(f"    🔥 Steam→主胜 +15")
+            direction_scores["home"] += 8
         elif "平局Steam" in smart_str:
-            direction_scores["draw"] += 15
+            direction_scores["draw"] += 8
 
-    # --- 信号3: 散户反指 [权重15] ---
+    # --- 信号3: 散户反指 [权重10] ---
     vote = match_obj.get("vote", {})
     try:
         vh = int(vote.get("win", 33) or 33)
         vd = int(vote.get("same", 33) or 33)
         va = int(vote.get("lose", 33) or 33)
         max_vote = max(vh, vd, va)
-        if max_vote >= 55:
-            # 散户>55%偏向一方=反向加分
+        if max_vote >= 58:
             if vh == max_vote:
-                # 散户押主胜→反向给平局和客胜加分
-                contrarian_weight = min(15, (vh - 50) * 0.75)
+                contrarian_weight = min(10, (vh - 50) * 0.6)
                 direction_scores["away"] += contrarian_weight * 0.6
                 direction_scores["draw"] += contrarian_weight * 0.4
-                if vh >= 60:
-                    print(f"    🔄 散户{vh}%押主胜→反指客胜/平局 +{contrarian_weight:.0f}")
             elif va == max_vote:
-                contrarian_weight = min(15, (va - 50) * 0.75)
+                contrarian_weight = min(10, (va - 50) * 0.6)
                 direction_scores["home"] += contrarian_weight * 0.6
                 direction_scores["draw"] += contrarian_weight * 0.4
-                if va >= 60:
-                    print(f"    🔄 散户{va}%押客胜→反指主胜/平局 +{contrarian_weight:.0f}")
-            else:
-                direction_scores["draw"] += 5  # 散户押平局较少需反指
         else:
-            # 散户均衡，按比例分配
-            direction_scores["home"] += 5; direction_scores["draw"] += 5; direction_scores["away"] += 5
+            direction_scores["home"] += 3; direction_scores["draw"] += 3; direction_scores["away"] += 3
     except:
-        direction_scores["home"] += 5; direction_scores["draw"] += 5; direction_scores["away"] += 5
+        direction_scores["home"] += 3; direction_scores["draw"] += 3; direction_scores["away"] += 3
 
-    # --- 信号4: 冷门预警 [权重10] ---
-    # 先用引擎概率做初步冷门检测
+    # --- 信号4: 冷门预警 [权重8] ---
     hp_eng = engine_result.get("home_prob", 33)
     ap_eng = engine_result.get("away_prob", 33)
     hot_side = "home" if hp_eng > ap_eng else "away"
     cold_signals_raw = [s for s in smart_signals if "❄️" in str(s) or "冷门" in str(s) or "大热" in str(s) or "造热" in str(s)]
     if cold_signals_raw:
-        # 冷门信号=热门方向扣分，冷门方向加分
-        cold_weight = min(10, len(cold_signals_raw) * 3)
+        cold_weight = min(8, len(cold_signals_raw) * 2.5)
         if hot_side == "home":
             direction_scores["home"] -= cold_weight
-            direction_scores["away"] += cold_weight * 0.6
-            direction_scores["draw"] += cold_weight * 0.4
+            direction_scores["away"] += cold_weight * 0.5
+            direction_scores["draw"] += cold_weight * 0.5
         else:
             direction_scores["away"] -= cold_weight
-            direction_scores["home"] += cold_weight * 0.6
-            direction_scores["draw"] += cold_weight * 0.4
-        print(f"    ❄️ 冷门预警{len(cold_signals_raw)}条→热门{hot_side}扣{cold_weight}分")
+            direction_scores["home"] += cold_weight * 0.5
+            direction_scores["draw"] += cold_weight * 0.5
 
-    # --- 信号5: AI方向共识 [权重15] ---
+    # --- 信号5: AI方向共识 [权重25] — AI分析结果应该主导 ---
     ai_directions = {"home": 0, "draw": 0, "away": 0}
     for name, r in {**p1_ai, "claude": claude_r}.items():
         if not isinstance(r, dict): continue
@@ -952,7 +937,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         if sc:
             try:
                 sh, sa = map(int, sc.split("-"))
-                w = 1.4 if name == "claude" else 1.0
+                w = 1.5 if name == "claude" else 1.0
                 if sh > sa: ai_directions["home"] += w
                 elif sh < sa: ai_directions["away"] += w
                 else: ai_directions["draw"] += w
@@ -960,23 +945,21 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     total_ai_votes = sum(ai_directions.values())
     if total_ai_votes > 0:
         for d in ["home", "draw", "away"]:
-            direction_scores[d] += (ai_directions[d] / total_ai_votes) * 15
+            direction_scores[d] += (ai_directions[d] / total_ai_votes) * 25
 
-    # --- 信号6: 赔率变动方向 [权重10] ---
+    # --- 信号6: 赔率变动方向 [权重7] ---
     change = match_obj.get("change", {})
     if change and isinstance(change, dict):
         try:
             cw = float(str(change.get("win", 0)).replace("+", "") or 0)
             cs = float(str(change.get("same", 0)).replace("+", "") or 0)
             cl = float(str(change.get("lose", 0)).replace("+", "") or 0)
-            # 赔率下降=钱涌入=庄家看好
-            if cw < -0.05: direction_scores["home"] += 5
-            if cs < -0.05: direction_scores["draw"] += 5
-            if cl < -0.05: direction_scores["away"] += 5
-            # 赔率上升=庄家不看好
-            if cw > 0.05: direction_scores["home"] -= 3
-            if cs > 0.05: direction_scores["draw"] -= 3
-            if cl > 0.05: direction_scores["away"] -= 3
+            if cw < -0.05: direction_scores["home"] += 4
+            if cs < -0.05: direction_scores["draw"] += 4
+            if cl < -0.05: direction_scores["away"] += 4
+            if cw > 0.05: direction_scores["home"] -= 2
+            if cs > 0.05: direction_scores["draw"] -= 2
+            if cl > 0.05: direction_scores["away"] -= 2
         except: pass
 
     # 归一化方向概率
@@ -1079,37 +1062,39 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
         s = 0.0
 
-        # ① 方向一致性 [40分] — 最重要
+        # ① 方向一致性 [20分] — 参考不命令
         if final_direction == "home" and h_g > a_g:
-            s += 40 * (dir_probs["home"] / 100)
+            s += 20 * (dir_probs["home"] / 100)
         elif final_direction == "away" and h_g < a_g:
-            s += 40 * (dir_probs["away"] / 100)
+            s += 20 * (dir_probs["away"] / 100)
         elif final_direction == "draw" and h_g == a_g:
-            s += 40 * (dir_probs["draw"] / 100)
+            s += 20 * (dir_probs["draw"] / 100)
         else:
-            # 方向不一致但不是0分——次方向也有概率
-            if h_g > a_g: s += 40 * (dir_probs["home"] / 100) * 0.3
-            elif h_g < a_g: s += 40 * (dir_probs["away"] / 100) * 0.3
-            else: s += 40 * (dir_probs["draw"] / 100) * 0.3
+            # 方向不一致——用该方向的实际概率给分（不是0分）
+            if h_g > a_g: s += 20 * (dir_probs["home"] / 100) * 0.5
+            elif h_g < a_g: s += 20 * (dir_probs["away"] / 100) * 0.5
+            else: s += 20 * (dir_probs["draw"] / 100) * 0.5
 
-        # ② 进球数吻合 [25分] — 高斯衰减
+        # ② 进球数吻合 [20分] — 高斯衰减
         goal_diff = abs(total_g - exp_goals)
-        s += round(25 * math.exp(-(goal_diff ** 2) / 1.5), 1)
+        s += round(20 * math.exp(-(goal_diff ** 2) / 1.5), 1)
 
-        # ③ CRS隐含概率 [15分]
+        # ③ CRS隐含概率 [25分] — 庄家定价是重要参考
         crs_p = crs_probs.get(score_str, 0)
         if crs_p > 0:
-            # CRS概率越高分越高，用log避免极端值
-            s += min(15, crs_p * 1.2)
+            s += min(25, crs_p * 2.0)
 
-        # ④ AI投票 [15分]
+        # ④ AI投票 [25分] — AI分析结果应该主导
         ai_vote = ai_voted_scores.get(score_str, 0)
-        s += min(15, ai_vote * 4)
+        s += min(25, ai_vote * 6)
 
-        # ⑤ 联赛风格微调 [5分]
-        if any(lg in league for lg in ["德甲", "荷甲", "英超"]) and total_g >= 3: s += 5
-        elif any(lg in league for lg in ["意甲", "法乙"]) and total_g <= 2: s += 5
-        elif any(lg in league for lg in ["英冠", "英甲"]) and 2 <= total_g <= 3: s += 3
+        # ⑤ 联赛风格 [10分]
+        if any(lg in league for lg in ["德甲", "荷甲", "英超"]) and total_g >= 3: s += 10
+        elif any(lg in league for lg in ["德甲", "荷甲"]) and total_g == 2: s += 5
+        elif any(lg in league for lg in ["意甲", "法乙"]) and total_g <= 2: s += 10
+        elif any(lg in league for lg in ["意甲"]) and h_g == a_g: s += 5  # 意甲平局加分
+        elif any(lg in league for lg in ["英冠", "英甲"]) and 2 <= total_g <= 3: s += 6
+        elif any(lg in league for lg in ["日职", "韩职", "澳超"]) and total_g >= 2: s += 5
 
         if s > 0:
             score_ratings[score_str] = round(s, 2)
