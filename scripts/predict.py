@@ -470,11 +470,11 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     key = get_clean_env_key(key_env)
     if not key: return ai_name, {}, "no_key"
     primary_url = get_clean_env_url(url_env)
-    backup = [u for u in FALLBACK_URLS if u and u != primary_url][:2]
+    backup = [u for u in FALLBACK_URLS if u and u != primary_url][:1]
     urls = [primary_url] + backup
 
-    CONNECT_TIMEOUT = 15      # 连接超时30秒：连不上就换
-    READ_TIMEOUT = 700        # 连上后最长等10分钟（实际上等于无限，模型一定会在这之内返回）
+    CONNECT_TIMEOUT = 20      # 连接超时20秒
+    READ_TIMEOUT = 400        # 连上后等400秒（实际最慢350秒）
 
     AI_PROFILES = {
         "claude": {
@@ -547,26 +547,25 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
             try:
                 timeout = aiohttp.ClientTimeout(
                     total=None,              # 总超时不限
-                    connect=CONNECT_TIMEOUT,  # 连接30秒
+                    connect=CONNECT_TIMEOUT,
                     sock_connect=CONNECT_TIMEOUT,
-                    sock_read=READ_TIMEOUT,   # 连上后等10分钟
+                    sock_read=READ_TIMEOUT,
                 )
                 async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
                     elapsed_connect = round(time.time()-t0, 1)
 
                     # ===== 连接失败类：换URL或换模型 =====
                     if r.status in (502, 504):
-                        print(f"    💀 HTTP {r.status} 网关超时 | {elapsed_connect}s → 换下一个")
-                        continue
+                        print(f"    💀 HTTP {r.status} 网关超时 | {elapsed_connect}s → 换模型")
+                        break
 
                     if r.status == 400:
                         print(f"    💀 400 模型不支持 | {elapsed_connect}s → 换模型")
                         break  # 这个模型不行，换下一个模型
 
                     if r.status == 429:
-                        print(f"    🔥 429 限流 | {elapsed_connect}s → 换URL")
-                        await asyncio.sleep(2)
-                        continue
+                        print(f"    🔥 429 限流 | {elapsed_connect}s → 换模型（同key换URL也429）")
+                        break
 
                     if r.status != 200:
                         print(f"    ⚠️ HTTP {r.status} | {elapsed_connect}s → 换下一个")
@@ -606,10 +605,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             if data.get("choices") and isinstance(data["choices"], list) and len(data["choices"]) > 0:
                                 msg = data["choices"][0].get("message", {})
                                 if isinstance(msg, dict):
-                                    # 打印所有message字段帮助调试
-                                    msg_keys = [k for k in msg.keys() if msg[k] and str(msg[k]).strip()]
-                                    print(f"    🔍 message字段: {msg_keys}")
-
                                     # 遍历所有字段，找最长的包含[的文本
                                     best_with_bracket = ""
                                     best_any = ""
@@ -626,8 +621,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                             best_any = val
 
                                     raw_text = best_with_bracket or best_any
-                                    if raw_text:
-                                        print(f"    🔍 取到文本: {len(raw_text)}字 | 含[:{('[' in raw_text)} | 前80字: {raw_text[:80]}")
 
                             # 第二步：output数组格式（某些代理）
                             if not raw_text and data.get("output") and isinstance(data["output"], list):
@@ -649,10 +642,9 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 full_str = json.dumps(data, ensure_ascii=False)
                                 # 智能提取：在dump字符串里找 "match" 附近的JSON数组
                                 # 找 [{"match" 模式
-                                import re as _re
-                                m = _re.search(r'\[\s*\{\s*"match"', full_str)
-                                if m:
-                                    start_pos = m.start()
+                                m_match = re.search(r'\[\s*\{\s*"match"', full_str)
+                                if m_match:
+                                    start_pos = m_match.start()
                                     # 从这里开始数括号找匹配的]
                                     depth = 0
                                     end_pos = start_pos
@@ -683,10 +675,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         except: pass
 
                     if not raw_text or len(raw_text) < 10:
-                        print(f"    ⚠️ 模型返回空数据 | {elapsed}s")
-                        print(f"    🔍 响应keys: {list(data.keys()) if isinstance(data,dict) else type(data)}")
-                        print(f"    🔍 响应前500字: {json.dumps(data, ensure_ascii=False)[:500]}")
-                        # 同模型换URL格式也一样，break换下一个模型
+                        print(f"    ⚠️ 模型返回空数据 | {elapsed}s | 换模型")
                         break
 
                     # 解析JSON — 多层清理
@@ -737,11 +726,9 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         print(f"    ✅ {ai_name.upper()} 完成: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
                         return ai_name, results, mn
                     else:
-                        # 花了钱但解析0条 → 同模型换URL格式一样，break换下一个模型
-                        print(f"    ⚠️ 花了钱但解析0条 | {elapsed}s | 换下一个模型")
-                        print(f"    🔍 响应keys: {list(data.keys()) if isinstance(data,dict) else '?'}")
-                        print(f"    🔍 raw前200字: {raw_text[:200]}")
-                        break  # ← 关键：break跳出URL循环，换下一个模型
+                        # 花了钱但解析0条 → break换下一个模型（Claude可从99额度→按量）
+                        print(f"    ⚠️ 解析0条 | {elapsed}s | 换下一个模型")
+                        break
 
             except aiohttp.ClientConnectorError as e:
                 elapsed = round(time.time()-t0, 1)
@@ -813,7 +800,7 @@ async def run_ai_matrix_two_phase(match_analyses):
         claude_r = {}
         _,claude_r,_ = await async_call_one_ai_batch(
             session, p2_prompt, "CLAUDE_API_URL","CLAUDE_API_KEY",
-            ["熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
+            ["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
             num, "claude"
         )
 
