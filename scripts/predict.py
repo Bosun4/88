@@ -137,6 +137,8 @@ def build_phase1_prompt(match_analyses):
     p += "【原始数据】\n"
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
+        eng = ma.get("engine", {})
+        stats = ma.get("stats", {})
         h = m.get("home_team", m.get("home", "Home"))
         a = m.get("away_team", m.get("guest", "Away"))
         league = m.get("league", m.get("cup", ""))
@@ -150,12 +152,16 @@ def build_phase1_prompt(match_analyses):
 
         if sp_h > 1 and sp_d > 1 and sp_a > 1:
             margin = 1/sp_h + 1/sp_d + 1/sp_a
-            p += f"Shin概率: 主{(1/sp_h)/margin*100:.1f}% 平{(1/sp_d)/margin*100:.1f}% 客{(1/sp_a)/margin*100:.1f}% | 返还率{1/margin*100:.1f}%\n"
+            p += f"Shin概率: 主{(1/sp_h)/margin*100:.1f}% 平{(1/sp_d)/margin*100:.1f}% 客{(1/sp_a)/margin*100:.1f}%\n"
 
         if m.get("hhad_win"):
             p += f"让球胜平负: {m['hhad_win']}/{m.get('hhad_same','')}/{m.get('hhad_lose','')}\n"
-        if m.get("single") == 1:
-            p += f"单关开放\n"
+
+        # 庄家隐含xG（关键数据，merge用它算泊松）
+        hxg = eng.get('bookmaker_implied_home_xg', '?')
+        axg = eng.get('bookmaker_implied_away_xg', '?')
+        p += f"庄家隐含xG: 主{hxg} vs 客{axg}\n"
+
         h_pos = m.get("home_position",""); g_pos = m.get("guest_position","")
         if h_pos or g_pos:
             p += f"排名: 主{h_pos} vs 客{g_pos}\n"
@@ -221,6 +227,11 @@ def build_phase1_prompt(match_analyses):
         for field in ['analyse','baseface','intro','expert_intro']:
             txt=str(m.get(field,'')).replace('\n',' ')[:150]
             if len(txt)>10: p += f"分析: {txt}\n"; break
+
+        # 盘口信号（来自引擎预计算）
+        smart_sigs = stats.get('smart_signals', [])
+        if smart_sigs:
+            p += f"盘口信号: {', '.join(str(s) for s in smart_sigs[:4])}\n"
         p += "\n"
 
     p += f"【输出{len(match_analyses)}场JSON数组，只输出数组！】\n"
@@ -257,8 +268,10 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:1]
     urls = [primary_url] + backup
 
-    CONNECT_TIMEOUT = 20      # 连接超时20秒
-    READ_TIMEOUT = 400        # 连上后等400秒（实际最慢350秒）
+    CONNECT_TIMEOUT = 20
+    # 按AI类型设超时（Claude thinking需要更久）
+    READ_TIMEOUT_MAP = {"claude": 350, "grok": 200, "gpt": 200, "gemini": 250}
+    READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     AI_PROFILES = {
         "claude": {
@@ -996,7 +1009,7 @@ def run_predictions(raw, use_ai=True):
         match_analyses.append({"match": m, "engine": eng, "league_info": league_info, "stats": sp, "index": i+1, "experience": exp_result})
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
-        print(f"  [TWO-PHASE] 启动两阶段AI架构...")
+        print(f"  [单阶段] 4个AI并行启动...")
         start_t = time.time()
         all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
         print(f"  [AI MATRIX] 压榨完成，耗时 {time.time()-start_t:.1f}s")
