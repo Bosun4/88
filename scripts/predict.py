@@ -117,14 +117,10 @@ def save_ai_diary(diary):
 
 
 # ====================================================================
-# 🧠 两阶段AI架构 vMAX 8.0 — AI自主决策·赔率仅做参考
+# 🧠 单阶段AI架构 vMAX 9.0 — xG双泊松数学选分·AI仅提供方向参考
 #
-# 核心哲学变革：
-#   旧版: 赔率=约束 → AI被CRS锁死在1-0/0-1/1-1
-#   新版: 赔率=情报 → AI综合所有维度独立判断，CRS只是加减分
-#
-# Phase1: GPT/Grok/Gemini 独立深度分析 → TOP3候选比分+概率
-# Phase2: Claude 裁判综合 → 加权评分选出最终比分（无否决制）
+# 核心：比分由数学算，不由AI选
+# 4个AI并行分析 → 提供方向共识 → xG双泊松产出比分
 # ====================================================================
 
 def build_phase1_prompt(match_analyses):
@@ -231,41 +227,7 @@ def build_phase1_prompt(match_analyses):
     return p
 
 
-def build_phase2_prompt(match_analyses, phase1_results):
-    """Phase2: Claude裁判——看数据做判断，不给框架"""
-    p = "你是最终裁判。多个AI已独立分析每场比赛。你的任务：综合它们的分析，选出每场最终比分。\n"
-    p += "如果多家AI一致，直接采用。如果分歧，用你自己的判断选最合理的。\n"
-    p += "输出JSON数组：match(整数), score(比分), reason(50字), ai_confidence(0-100)。只输出数组！\n\n"
 
-    for i, ma in enumerate(match_analyses):
-        m = ma["match"]
-        h = m.get("home_team", m.get("home", "Home"))
-        a = m.get("away_team", m.get("guest", "Away"))
-        sp_h = float(m.get("sp_home", m.get("win", 0)) or 0)
-        sp_d = float(m.get("sp_draw", m.get("same", 0)) or 0)
-        sp_a = float(m.get("sp_away", m.get("lose", 0)) or 0)
-        idx = i + 1
-
-        p += f"[{idx}] {h} vs {a} | 欧赔{sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f}\n"
-
-        for ai_name in ["gpt", "grok", "gemini"]:
-            ai_data = phase1_results.get(ai_name, {}).get(idx, {})
-            if not ai_data: continue
-            top3 = ai_data.get("top3", [])
-            if top3:
-                scores_str = " ".join(f"{t.get('score','?')}({t.get('prob','?')}%)" for t in top3[:3])
-                p += f"  {ai_name.upper()}: {scores_str} | {str(ai_data.get('reason',''))[:80]}\n"
-            else:
-                sc = ai_data.get("ai_score", "-")
-                p += f"  {ai_name.upper()}: {sc} | {str(ai_data.get('reason',ai_data.get('analysis','')))[:80]}\n"
-
-    p += f"\n输出{len(match_analyses)}场JSON数组！\n"
-    return p
-
-
-# ====================================================================
-# AI调用引擎（与原版相同，不动核心网络层）
-# ====================================================================
 FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://www.api522.pro/v1"]
 
 def get_clean_env_url(name, default=""):
@@ -567,46 +529,31 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 
 
 async def run_ai_matrix_two_phase(match_analyses):
-    """两阶段：Phase1(GPT/Grok/Gemini并行)→ Phase2(Claude裁判)"""
+    """单阶段：4个AI并行跑同一个prompt，省掉Phase2 Claude裁判费用"""
     num = len(match_analyses)
 
-    p1_prompt = build_phase1_prompt(match_analyses)
-    print(f"  [Phase1] {len(p1_prompt):,} 字符 → GPT/Grok/Gemini 并行...")
+    prompt = build_phase1_prompt(match_analyses)
+    print(f"  [单阶段] {len(prompt):,} 字符 → 4个AI并行...")
 
-    p1_configs = [
+    ai_configs = [
         ("grok","GROK_API_URL","GROK_API_KEY",["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-按量-gpt-5.4"]),
         ("gemini","GEMINI_API_URL","GEMINI_API_KEY",["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
+        ("claude","CLAUDE_API_URL","CLAUDE_API_KEY",["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"]),
     ]
-    p1_results = {"gpt":{},"grok":{},"gemini":{}}
+    all_results = {"gpt":{},"grok":{},"gemini":{},"claude":{}}
 
-    # 共享一个session复用TCP连接池，减少502/504
     connector = aiohttp.TCPConnector(limit=10, ttl_dns_cache=300)
     async with aiohttp.ClientSession(connector=connector) as session:
-        # Phase1: 三家并行
-        tasks = [async_call_one_ai_batch(session,p1_prompt,u,k,m,num,n) for n,u,k,m in p1_configs]
+        tasks = [async_call_one_ai_batch(session,prompt,u,k,m,num,n) for n,u,k,m in ai_configs]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         for res in results:
-            if isinstance(res,tuple): n,d,_ = res; p1_results[n] = d
-            else: print(f"  [Phase1 ERROR] {res}")
+            if isinstance(res,tuple): n,d,_ = res; all_results[n] = d
+            else: print(f"  [ERROR] {res}")
 
-        ok = sum(1 for v in p1_results.values() if v)
-        print(f"  [Phase1] 完成: {ok}/3 AI有数据")
-
-        # Phase2: Claude裁判（复用同一个session）
-        p2_prompt = build_phase2_prompt(match_analyses, p1_results)
-        print(f"  [Phase2] {len(p2_prompt):,} 字符 → Claude 裁判...")
-
-        claude_r = {}
-        _,claude_r,_ = await async_call_one_ai_batch(
-            session, p2_prompt, "CLAUDE_API_URL","CLAUDE_API_KEY",
-            ["熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking","熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"],
-            num, "claude"
-        )
-
-    all_r = p1_results.copy()
-    all_r["claude"] = claude_r
-    return all_r
+    ok = sum(1 for v in all_results.values() if v)
+    print(f"  [完成] {ok}/4 AI有数据")
+    return all_results
 
 
 # ====================================================================
@@ -1038,7 +985,7 @@ def extract_num(ms):
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 8.0] AI自主决策模式 | {len(ms)} 场比赛")
+    print(f"  [QUANT ENGINE vMAX 9.0] xG双泊松·单阶段 | {len(ms)} 场比赛")
     print("=" * 80)
     match_analyses = []
     for i, m in enumerate(ms):
@@ -1087,6 +1034,6 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     cold_count = len([r for r in res if r.get("prediction",{}).get("cold_door",{}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence']>70])}/{max(1,len(res))}"
-    diary["reflection"] = f"vMAX8.0 | {cold_count}冷门 | AI自主决策·加权评分·无否决制"
+    diary["reflection"] = f"vMAX9.0 | xG双泊松选分·AI提供方向·单阶段省钱"
     save_ai_diary(diary)
     return res, t4
