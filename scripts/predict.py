@@ -800,36 +800,61 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     print(f"    ⚽ 进球决策: λ={exp_goals:.2f} → 最可能{most_likely_goals}球 范围{goal_range}")
 
     # ================================================================
-    # 第三层：比分选择
-    # 在方向+进球数范围内，对所有可能比分评分
+    # 第三层：比分选择 — xG驱动双泊松 + AI微调
+    #
+    # 核心：每场比赛的home_xg和away_xg不同，泊松自然产出不同比分
+    # Sharp/冷门信号调整xG → 数学产出多样化比分
+    # AI投票只在概率接近时起决定作用
     # ================================================================
 
-    # 生成所有可能比分
-    all_possible_scores = []
-    for total_g in range(8):
-        for h_g in range(total_g + 1):
-            a_g = total_g - h_g
-            all_possible_scores.append(f"{h_g}-{a_g}")
+    # 获取xG（引擎已经从赔率算好了）
+    home_xg = engine_result.get("bookmaker_implied_home_xg", 1.3)
+    away_xg = engine_result.get("bookmaker_implied_away_xg", 0.9)
+    try: home_xg = float(home_xg)
+    except: home_xg = 1.3
+    try: away_xg = float(away_xg)
+    except: away_xg = 0.9
 
-    # CRS赔率工具
-    crs_key_map = {"1-0":"w10","0-1":"l01","2-1":"w21","1-2":"l12","2-0":"w20","0-2":"l02",
-                   "0-0":"s00","1-1":"s11","3-0":"w30","3-1":"w31","0-3":"l03","1-3":"l13",
-                   "2-2":"s22","3-2":"w32","2-3":"l23","4-0":"w40","4-1":"w41","0-4":"l04","1-4":"l14"}
-    def get_crs_odds(score):
-        key = crs_key_map.get(score, "")
-        try: return float(match_obj.get(key, 99) or 99)
-        except: return 99.0
+    # 根据方向信号调整xG
+    xg_adjust_log = []
+    if sharp_detected:
+        if "客胜" in smart_str or "客队" in smart_str:
+            home_xg *= 0.85; away_xg *= 1.20
+            xg_adjust_log.append("Sharp→客胜: 主xG↓15% 客xG↑20%")
+        elif "主胜" in smart_str or "主队" in smart_str:
+            home_xg *= 1.15; away_xg *= 0.85
+            xg_adjust_log.append("Sharp→主胜: 主xG↑15% 客xG↓15%")
+        elif "平局" in smart_str or "平赔" in smart_str:
+            # 平局信号→双方xG靠拢
+            avg = (home_xg + away_xg) / 2
+            home_xg = home_xg * 0.7 + avg * 0.3
+            away_xg = away_xg * 0.7 + avg * 0.3
+            xg_adjust_log.append("Sharp→平局: xG靠拢")
 
-    # CRS隐含概率
-    crs_probs = {}
-    crs_total = 0
-    for score_str, key in crs_key_map.items():
-        odds = get_crs_odds(score_str)
-        if odds > 1 and odds < 200:
-            crs_probs[score_str] = 1.0 / odds
-            crs_total += 1.0 / odds
-    if crs_total > 0:
-        for k in crs_probs: crs_probs[k] = crs_probs[k] / crs_total * 100
+    if cold_signals_raw and len(cold_signals_raw) >= 2:
+        if hot_side == "home":
+            home_xg *= 0.90; away_xg *= 1.10
+            xg_adjust_log.append("冷门→主热扣: 主xG↓10% 客xG↑10%")
+        else:
+            away_xg *= 0.90; home_xg *= 1.10
+            xg_adjust_log.append("冷门→客热扣: 客xG↓10% 主xG↑10%")
+
+    # 保底
+    home_xg = max(0.3, min(4.0, home_xg))
+    away_xg = max(0.2, min(3.5, away_xg))
+
+    print(f"    ⚽ xG决策: 主{home_xg:.2f} 客{away_xg:.2f} (λ={home_xg+away_xg:.2f}) {' | '.join(xg_adjust_log) if xg_adjust_log else ''}")
+
+    # 双泊松分布计算每个比分概率
+    from math import exp, factorial
+    poisson_scores = {}
+    for h_g in range(6):
+        p_h = exp(-home_xg) * (home_xg ** h_g) / factorial(h_g)
+        for a_g in range(6):
+            p_a = exp(-away_xg) * (away_xg ** a_g) / factorial(a_g)
+            prob = p_h * p_a * 100
+            score_str = f"{h_g}-{a_g}"
+            poisson_scores[score_str] = round(prob, 2)
 
     # 收集AI投票的比分
     ai_voted_scores = {}
@@ -843,65 +868,43 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         if sc:
             w = 1.5 if name == "claude" else (1.3 if name == "grok" else 1.0)
             ai_voted_scores[sc] = ai_voted_scores.get(sc, 0) + w
-        # TOP2/TOP3
         t3 = r.get("top3", [])
         if isinstance(t3, list):
             for rank, t in enumerate(t3[1:3], 2):
                 s2 = clean_score(t.get("score", ""))
                 if s2:
-                    w2 = (0.5 if name == "claude" else 0.3) if rank == 2 else 0.2
+                    w2 = 0.4 if rank == 2 else 0.2
                     ai_voted_scores[s2] = ai_voted_scores.get(s2, 0) + w2
 
-    # 对所有比分评分
+    # 综合评分: 泊松概率(60%) + AI投票(30%) + 联赛(10%)
     score_ratings = {}
-    for score_str in all_possible_scores:
-        try:
-            h_g, a_g = map(int, score_str.split("-"))
-        except: continue
+    for score_str, poisson_prob in poisson_scores.items():
+        h_g, a_g = map(int, score_str.split("-"))
         total_g = h_g + a_g
-
         s = 0.0
 
-        # ① 方向参考 [15分] — 轻微nudge，不命令
-        if final_direction == "home" and h_g > a_g:
-            s += 15 * (dir_probs["home"] / 100)
-        elif final_direction == "away" and h_g < a_g:
-            s += 15 * (dir_probs["away"] / 100)
-        elif final_direction == "draw" and h_g == a_g:
-            s += 15 * (dir_probs["draw"] / 100)
-        else:
-            if h_g > a_g: s += 15 * (dir_probs["home"] / 100) * 0.5
-            elif h_g < a_g: s += 15 * (dir_probs["away"] / 100) * 0.5
-            else: s += 15 * (dir_probs["draw"] / 100) * 0.5
+        # ① 泊松概率 [60分] — 数学主导，每场不同
+        s += poisson_prob * 4.5  # 最高概率约13% → 58分
 
-        # ② 进球数吻合 [20分] — 高斯衰减
-        goal_diff = abs(total_g - exp_goals)
-        s += round(20 * math.exp(-(goal_diff ** 2) / 1.5), 1)
-
-        # ③ AI投票 [55分] — AI已经看过所有数据，它们的判断应该主导
+        # ② AI投票 [30分] — AI共识做微调
         ai_vote = ai_voted_scores.get(score_str, 0)
-        s += min(55, ai_vote * 12)
+        s += min(30, ai_vote * 8)
 
-        # ⑤ 联赛风格 [10分]
-        if any(lg in league for lg in ["德甲", "荷甲", "英超"]) and total_g >= 3: s += 10
-        elif any(lg in league for lg in ["德甲", "荷甲"]) and total_g == 2: s += 5
-        elif any(lg in league for lg in ["意甲", "法乙"]) and total_g <= 2: s += 10
-        elif any(lg in league for lg in ["意甲"]) and h_g == a_g: s += 5  # 意甲平局加分
-        elif any(lg in league for lg in ["英冠", "英甲"]) and 2 <= total_g <= 3: s += 6
-        elif any(lg in league for lg in ["日职", "韩职", "澳超"]) and total_g >= 2: s += 5
+        # ③ 联赛风格 [10分]
+        if any(lg in league for lg in ["德甲", "荷甲", "英超", "澳超"]) and total_g >= 3: s += 8
+        elif any(lg in league for lg in ["意甲", "法乙"]) and total_g <= 2: s += 8
+        elif any(lg in league for lg in ["意甲"]) and h_g == a_g: s += 5
+        elif any(lg in league for lg in ["英冠", "英甲"]) and 2 <= total_g <= 3: s += 5
+        elif any(lg in league for lg in ["日职", "韩职", "日乙"]) and total_g >= 2: s += 4
 
-        if s > 0:
-            score_ratings[score_str] = round(s, 2)
+        score_ratings[score_str] = round(s, 2)
 
     # 选出得分最高的比分
-    if not score_ratings:
-        final_score = engine_score
-    else:
-        ranked = sorted(score_ratings.items(), key=lambda x: x[1], reverse=True)
-        final_score = ranked[0][0]
+    ranked = sorted(score_ratings.items(), key=lambda x: x[1], reverse=True)
+    final_score = ranked[0][0] if ranked else engine_score
 
-        # 打印TOP5
-        print(f"    📊 比分评分: {' > '.join(f'{sc}({pts:.0f})' for sc, pts in ranked[:5])}")
+    # 打印TOP5
+    print(f"    📊 比分: {' > '.join(f'{sc}({pts:.0f}|P{poisson_scores.get(sc,0):.1f}%)' for sc, pts in ranked[:6])}")
 
     # ================================================================
     # 0-0特殊通道（仅极端信号）
