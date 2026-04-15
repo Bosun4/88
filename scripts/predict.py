@@ -52,7 +52,7 @@ ensemble = EnsemblePredictor()
 exp_engine = ExperienceEngine()
 
 # ====================================================================
-# ☢️ v14.2 核心量化引擎：动态Dixon-Coles + 工具函数
+# ☢️ v14.3 核心量化引擎：动态Dixon-Coles + 工具函数
 # ====================================================================
 def dixon_coles_tau(hg: int, ag: int, lambda_h: float, lambda_a: float, rho: float) -> float:
     if hg == 0 and ag == 0: 
@@ -99,7 +99,7 @@ def parse_score(s):
         return None, None
 
 # ====================================================================
-# 🧊 冷门猎手引擎 v14.2
+# 🧊 冷门猎手引擎 v14.3
 # ====================================================================
 class ColdDoorDetector:
     @staticmethod
@@ -181,7 +181,7 @@ class ColdDoorDetector:
         }
 
 # ====================================================================
-# AI日记 v14.2
+# AI日记 v14.3
 # ====================================================================
 def load_ai_diary():
     diary_file = "data/ai_diary.json"
@@ -199,7 +199,7 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# 🧠 两阶段AI架构 v14.2
+# 🧠 两阶段AI架构 v14.3
 # ====================================================================
 def build_phase1_prompt(match_analyses):
     diary = load_ai_diary()
@@ -329,9 +329,9 @@ def build_phase2_prompt(match_analyses, phase1_results):
     return p
 
 # ====================================================================
-# 防暴毙 AI 调用引擎：防弹级 JSON 提取器 (避开前端渲染 Bug)
+# 防暴毙 AI 调用引擎：终极暴力 JSON 提取器 (无视所有干扰)
 # ====================================================================
-FALLBACK_URLS = [None, "[https://api520.pro/v1](https://api520.pro/v1)", "[https://api521.pro/v1](https://api521.pro/v1)", "[https://api522.pro/v1](https://api522.pro/v1)", "[https://www.api522.pro/v1](https://www.api522.pro/v1)"]
+FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://www.api522.pro/v1"]
 
 def get_clean_env_url(name, default=""):
     v = str(os.environ.get(name, globals().get(name, default))).strip(" \t\n\r\"'")
@@ -472,39 +472,38 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         break
 
                     # ====================================================================
-                    # 🔥 v14.2 终极智能 JSON 提取器 (彻底规避 Markdown 渲染断层 Bug)
+                    # 🔥 v14.3 终极暴力字符级 JSON 提取器 (彻底解决空格换行与废话干扰)
                     # ====================================================================
                     clean = raw_text
                     clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", clean, flags=re.DOTALL|re.IGNORECASE)
                     clean = re.sub(r"<\|begin_of_thought\|>.*?<\|end_of_thought\|>", "", clean, flags=re.DOTALL)
                     
-                    json_str = ""
-                    # 使用 chr(96) 生成反引号，防止在此处直接打断整个代码块输出
-                    b_ticks = chr(96) * 3
-                    md_pattern = b_ticks + r"(?:json)?\s*(\[\s*\{.*?\}\s*\])\s*" + b_ticks
-                    md_match = re.search(md_pattern, clean, re.DOTALL | re.IGNORECASE)
+                    # 使用 \x60 过滤所有的 Markdown 代码块标记，绝不触发前端打断
+                    clean = re.sub(r"\x60\x60\x60(?:json)?", "", clean, flags=re.IGNORECASE)
+                    clean = re.sub(r"\x60\x60\x60", "", clean)
                     
-                    if md_match:
-                        json_str = md_match.group(1)
-                    else:
-                        clean = re.sub(b_ticks + r"[\w]*", "", clean).strip()
-                        # 精准寻找对象数组开头，防止独立括号被误捕获
-                        start = clean.find("[{")
-                        if start == -1: 
-                            start = clean.find("[\n{")
-                        if start == -1: 
-                            start = clean.find("[\r\n{")
-                        if start == -1: 
-                            start = clean.find("[") 
-                        end = clean.rfind("]")+1
-                        if start != -1 and end > start:
-                            json_str = clean[start:end]
-
+                    json_str = ""
+                    # 暴力扫描：寻找真正的 JSON 数组起点 [ 后面紧跟 { (允许中间有任意空格和换行)
+                    start_idx = -1
+                    for i in range(len(clean)):
+                        if clean[i] == '[':
+                            j = i + 1
+                            while j < len(clean) and clean[j].isspace():
+                                j += 1
+                            if j < len(clean) and clean[j] == '{':
+                                start_idx = i
+                                break
+                    
+                    if start_idx != -1:
+                        end_idx = clean.rfind(']')
+                        if end_idx > start_idx:
+                            json_str = clean[start_idx:end_idx+1]
+                    
                     results = {}
                     if json_str:
-                        start = 0
-                        end = len(json_str)
                         clean = json_str
+                        start = 0
+                        end = len(clean)
                         # ====================================================================
 
                         try:
@@ -584,7 +583,7 @@ async def run_ai_matrix_two_phase(match_analyses):
 
 
 # ====================================================================
-# 🌟 修复版 merge_result v14.2：彻底修复算法黑洞
+# 🌟 修复版 merge_result v14.3：彻底修复算法黑洞
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     import math
@@ -937,12 +936,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# run_predictions vMAX 14.2 终极上帝视角
+# run_predictions vMAX 14.3 终极上帝视角
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 14.2] 动态泊松 + 蒙特卡洛矩阵 + 漏洞热修复 | {len(ms)} 场比赛")
+    print(f"  [QUANT ENGINE vMAX 14.3] 动态泊松 + 蒙特卡洛矩阵 + 漏洞热修复 | {len(ms)} 场比赛")
     print("=" * 80)
     
     match_analyses = []
@@ -1022,12 +1021,11 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     cold_count = len([r for r in res if r.get("prediction",{}).get("cold_door",{}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence']>70])}/{max(1,len(res))}"
-    diary["reflection"] = f"vMAX14.2 | {cold_count}冷门 | 强力防弹JSON解析+高维意志释放"
+    diary["reflection"] = f"vMAX14.3 | {cold_count}冷门 | 强力防弹JSON解析+高维意志释放"
     save_ai_diary(diary)
     
     return res, t4
 
 if __name__ == "__main__":
-    logger.info("vMAX 14.2 Boot Sequence Initiated")
-    print("✅ vMAX 14.2 终极防弹版（无删减/极强JSON提取）启动成功！")
-
+    logger.info("vMAX 14.3 Boot Sequence Initiated")
+    print("✅ vMAX 14.3 终极防弹版（无删减/极强JSON提取）启动成功！")
