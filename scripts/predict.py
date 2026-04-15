@@ -34,13 +34,13 @@ except ImportError as e:
 try:
     from odds_history import apply_odds_history
 except Exception as e:
-    logger.warning("⚠️ 历史盘口模块 (odds_history) 加载失败，系统自动降级", error=str(e))
+    logger.warning("⚠️ 历史盘口模块 (odds_history) 加载失败，系统自动降级", exc_info=True)
     def apply_odds_history(m, mg): return mg
 
 try:
     from quant_edge import apply_quant_edge
 except Exception as e:
-    logger.warning("⚠️ 量化边缘模块 (quant_edge) 加载失败，系统自动降级", error=str(e))
+    logger.warning("⚠️ 量化边缘模块 (quant_edge) 加载失败，系统自动降级", exc_info=True)
     def apply_quant_edge(m, mg): return mg
 
 try:
@@ -55,10 +55,14 @@ exp_engine = ExperienceEngine()
 # ☢️ v14.2 核心量化引擎：动态Dixon-Coles + 工具函数
 # ====================================================================
 def dixon_coles_tau(hg: int, ag: int, lambda_h: float, lambda_a: float, rho: float) -> float:
-    if hg == 0 and ag == 0: return 1 - (lambda_h * lambda_a * rho)
-    elif hg == 0 and ag == 1: return 1 + (lambda_h * rho)
-    elif hg == 1 and ag == 0: return 1 + (lambda_a * rho)
-    elif hg == 1 and ag == 1: return 1 - rho
+    if hg == 0 and ag == 0: 
+        return 1 - (lambda_h * lambda_a * rho)
+    elif hg == 0 and ag == 1: 
+        return 1 + (lambda_h * rho)
+    elif hg == 1 and ag == 0: 
+        return 1 + (lambda_a * rho)
+    elif hg == 1 and ag == 1: 
+        return 1 - rho
     return 1.0
 
 def calculate_dynamic_rho(league: str, total_goals_expected: float) -> float:
@@ -123,7 +127,8 @@ class ColdDoorDetector:
                 strength += 4
             elif max_vote >= 58: 
                 strength += 2
-        except: pass
+        except: 
+            pass
             
         info = match.get("intelligence", match.get("information", {}))
         if isinstance(info, dict):
@@ -159,9 +164,12 @@ class ColdDoorDetector:
             strength += 4
             
         is_cold = strength >= 7
-        if strength >= 12: level = "顶级"
-        elif strength >= 7: level = "高危"
-        else: level = "普通"
+        if strength >= 12: 
+            level = "顶级"
+        elif strength >= 7: 
+            level = "高危"
+        else: 
+            level = "普通"
             
         return {
             "is_cold_door": is_cold, 
@@ -181,7 +189,8 @@ def load_ai_diary():
         try:
             with open(diary_file, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except: pass
+        except: 
+            pass
     return {"yesterday_win_rate": "N/A", "yesterday_mc_accuracy": "计算中...", "reflection": "持续进化中", "kill_history": []}
 
 def save_ai_diary(diary):
@@ -238,7 +247,8 @@ def build_phase1_prompt(match_analyses):
                 tp=sum(p2 for _,p2 in gp)
                 eg=sum(g*(p2/tp) for g,p2 in gp)
                 p += f"→ 期望进球λ={eg:.2f} (严禁背离该期望)\n"
-            except: pass
+            except: 
+                pass
 
         crs_map = {"w10":"1-0","w20":"2-0","w21":"2-1","w30":"3-0","w31":"3-1","w32":"3-2","w40":"4-0","w41":"4-1","w42":"4-2",
                    "s00":"0-0","s11":"1-1","s22":"2-2","s33":"3-3",
@@ -249,18 +259,21 @@ def build_phase1_prompt(match_analyses):
                 odds=float(m.get(key,0) or 0)
                 if odds>1: crs_lines.append(f"{score}={odds:.1f}")
             except: pass
-        if crs_lines: p += f"CRS: {' | '.join(crs_lines)}\n"
+        if crs_lines: 
+            p += f"CRS: {' | '.join(crs_lines)}\n"
 
         vote=m.get("vote",{})
         if vote:
             p += f"散户: 胜{vote.get('win','?')}% 平{vote.get('same','?')}% 负{vote.get('lose','?')}%"
-            if max(int(vote.get('win',33)), int(vote.get('lose',33))) >= 60: p += " (大热预警)"
+            if max(int(vote.get('win',33)), int(vote.get('lose',33))) >= 60: 
+                p += " (大热预警)"
             p += "\n"
 
         change=m.get("change",{})
         if change and isinstance(change,dict):
             cw=change.get("win",0); cs=change.get("same",0); cl=change.get("lose",0)
-            if cw or cs or cl: p += f"赔率变动: 胜{cw} 平{cs} 负{cl}\n"
+            if cw or cs or cl: 
+                p += f"赔率变动: 胜{cw} 平{cs} 负{cl}\n"
 
         hs=m.get("home_stats",{}); ast2=m.get("away_stats",{})
         if hs.get("form"):
@@ -297,7 +310,8 @@ def build_phase2_prompt(match_analyses, phase1_results):
                 tp = sum(p2 for _, p2 in gp)
                 eg = sum(g * (p2/tp) for g, p2 in gp)
                 p += f"⭐期望进球λ={eg:.2f} (绝对核心约束！)\n"
-        except: pass
+        except: 
+            pass
 
         for ai_name in ["gpt", "grok", "gemini"]:
             ai_data = phase1_results.get(ai_name, {}).get(idx, {})
@@ -329,7 +343,8 @@ def get_clean_env_key(name):
 
 async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
     key = get_clean_env_key(key_env)
-    if not key: return ai_name, {}, "no_key"
+    if not key: 
+        return ai_name, {}, "no_key"
         
     primary_url = get_clean_env_url(url_env)
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:1]
@@ -350,10 +365,12 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     for mn in models_list:
         connected = False
         for base_url in urls:
-            if not base_url: continue
+            if not base_url: 
+                continue
             is_gem = "generateContent" in base_url
             url = base_url.rstrip("/")
-            if not is_gem and "chat/completions" not in url: url += "/chat/completions"
+            if not is_gem and "chat/completions" not in url: 
+                url += "/chat/completions"
             headers = {"Content-Type": "application/json"}
 
             if is_gem:
@@ -369,7 +386,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     "model": mn,
                     "messages": [{"role": "system", "content": profile["sys"]}, {"role": "user", "content": prompt}]
                 }
-                if ai_name != "claude": bp["temperature"] = profile["temp"]
+                if ai_name != "claude": 
+                    bp["temperature"] = profile["temp"]
                 payload = bp
 
             gw = url.split("/v1")[0][:35]
@@ -384,11 +402,14 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     if r.status in (502, 504, 400, 429):
                         print(f"    💀 HTTP {r.status} | {elapsed_connect}s → 换模型")
                         break
-                    if r.status != 200: continue
+                    if r.status != 200: 
+                        continue
 
                     connected = True
-                    try: data = await r.json(content_type=None)
-                    except: break
+                    try: 
+                        data = await r.json(content_type=None)
+                    except: 
+                        break
 
                     elapsed = round(time.time()-t0, 1)
                     raw_text = ""
@@ -403,9 +424,11 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                     best_any = ""
                                     for key in msg:
                                         val = msg[key]
-                                        if not val or not isinstance(val, str): continue
+                                        if not val or not isinstance(val, str): 
+                                            continue
                                         val = val.strip()
-                                        if not val: continue
+                                        if not val: 
+                                            continue
                                         if "[" in val and "{" in val and len(val) > len(best_with_bracket):
                                             best_with_bracket = val
                                         if len(val) > len(best_any):
@@ -418,17 +441,21 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                         for ct in out_item.get("content", []):
                                             if isinstance(ct, dict) and ct.get("text"):
                                                 txt = ct["text"].strip()
-                                                if len(txt) > len(raw_text): raw_text = txt
+                                                if len(txt) > len(raw_text): 
+                                                    raw_text = txt
 
                             if not raw_text:
                                 full_str = json.dumps(data, ensure_ascii=False)
                                 m_match = re.search(r'\[\s*\{\s*"match"', full_str)
                                 if m_match:
                                     start_pos = m_match.start()
-                                    depth = 0; end_pos = start_pos
+                                    depth = 0
+                                    end_pos = start_pos
                                     for ci in range(start_pos, min(start_pos + 100000, len(full_str))):
-                                        if full_str[ci] == '[': depth += 1
-                                        elif full_str[ci] == ']': depth -= 1
+                                        if full_str[ci] == '[': 
+                                            depth += 1
+                                        elif full_str[ci] == ']': 
+                                            depth -= 1
                                         if depth == 0:
                                             end_pos = ci + 1
                                             break
@@ -438,9 +465,11 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                             try: extracted = json.loads('"' + extracted + '"')
                                             except: extracted = extracted.replace('\\"', '"')
                                         raw_text = extracted
-                    except: pass
+                    except: 
+                        pass
 
-                    if not raw_text or len(raw_text) < 10: break
+                    if not raw_text or len(raw_text) < 10: 
+                        break
 
                     # ====================================================================
                     # 🔥 v14.2 终极智能 JSON 提取器 (防大模型小作文)
@@ -451,15 +480,20 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     
                     json_str = ""
                     md_match = re.search(r"
+
+
                     if md_match:
                         json_str = md_match.group(1)
                     else:
                         clean = re.sub(r"```[\w]*","",clean).strip()
                         # 精准寻找对象数组开头，防止独立括号被误捕获
                         start = clean.find("[{")
-                        if start == -1: start = clean.find("[\n{")
-                        if start == -1: start = clean.find("[\r\n{")
-                        if start == -1: start = clean.find("[") 
+                        if start == -1: 
+                            start = clean.find("[\n{")
+                        if start == -1: 
+                            start = clean.find("[\r\n{")
+                        if start == -1: 
+                            start = clean.find("[") 
                         end = clean.rfind("]")+1
                         if start != -1 and end > start:
                             json_str = clean[start:end]
@@ -474,9 +508,12 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         try:
                             arr = json.loads(clean[start:end])
                             for item in arr:
-                                if not item.get("match"): continue
-                                try: mid = int(item["match"])
-                                except: continue
+                                if not item.get("match"): 
+                                    continue
+                                try: 
+                                    mid = int(item["match"])
+                                except: 
+                                    continue
                                 if item.get("top3"):
                                     t1 = item["top3"][0].get("score","1-1").replace(" ","").strip() if item["top3"] else "1-1"
                                     results[mid] = {"top3": item["top3"], "ai_score": t1, "reason": str(item.get("reason",""))[:200], "ai_confidence": int(item.get("ai_confidence",60))}
@@ -488,22 +525,28 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 if last_brace != -1:
                                     arr = json.loads(clean[start:end][:last_brace+1] + "]")
                                     for item in arr:
-                                        if not item.get("match"): continue
-                                        try: mid = int(item["match"])
-                                        except: continue
+                                        if not item.get("match"): 
+                                            continue
+                                        try: 
+                                            mid = int(item["match"])
+                                        except: 
+                                            continue
                                         if item.get("top3"):
                                             t1 = item["top3"][0].get("score","1-1").replace(" ","").strip() if item["top3"] else "1-1"
                                             results[mid] = {"top3": item["top3"], "ai_score": t1, "reason": str(item.get("reason",""))[:200], "ai_confidence": int(item.get("ai_confidence",60))}
                                         elif item.get("score"):
                                             results[mid] = {"ai_score": item["score"].replace(" ","").strip(), "analysis": str(item.get("reason",""))[:200], "ai_confidence": int(item.get("ai_confidence",60)), "value_kill": bool(item.get("value_kill",False))}
-                            except: pass
+                            except: 
+                                pass
 
                     if len(results) > 0:
                         print(f"    ✅ {ai_name.upper()} 完成: {len(results)}/{num_matches} | {elapsed}s ({mn[:20]})")
                         return ai_name, results, mn
-                    else: break
+                    else: 
+                        break
             except Exception as e:
-                if connected: return ai_name, {}, "error"
+                if connected: 
+                    return ai_name, {}, "error"
                 continue
             await asyncio.sleep(0.2)
     return ai_name, {}, "failed"
@@ -524,7 +567,8 @@ async def run_ai_matrix_two_phase(match_analyses):
         tasks = [async_call_one_ai_batch(session,p1_prompt,u,k,m,num,n) for n,u,k,m in p1_configs]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         for res in results:
-            if isinstance(res,tuple): p1_results[res[0]] = res[1]
+            if isinstance(res,tuple): 
+                p1_results[res[0]] = res[1]
 
         p2_prompt = build_phase2_prompt(match_analyses, p1_results)
         claude_r = {}
@@ -532,7 +576,8 @@ async def run_ai_matrix_two_phase(match_analyses):
             session, p2_prompt, "CLAUDE_API_URL","CLAUDE_API_KEY",
             ["claude-opus-4.6-thinking", "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking"], num, "claude"
         )
-    all_r = p1_results.copy(); all_r["claude"] = claude_r
+    all_r = p1_results.copy()
+    all_r["claude"] = claude_r
     return all_r
 
 
@@ -546,8 +591,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     sp_d = float(match_obj.get("sp_draw", match_obj.get("same", 0)) or 0)
     sp_a = float(match_obj.get("sp_away", match_obj.get("lose", 0)) or 0)
     
-    try: handicap = float(str(match_obj.get("give_ball", "0")).replace("+", ""))
-    except: handicap = 0.0
+    try: 
+        handicap = float(str(match_obj.get("give_ball", "0")).replace("+", ""))
+    except: 
+        handicap = 0.0
 
     engine_conf = engine_result.get("confidence", 50)
     p1_ai = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r}
@@ -565,14 +612,19 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     sharp_detected = "Sharp" in smart_str or "sharp" in smart_str
 
     if sharp_detected:
-        if "客胜" in smart_str: direction_scores["away"] += 25
-        elif "主胜" in smart_str: direction_scores["home"] += 25
-        elif "平局" in smart_str: direction_scores["draw"] += 25
+        if "客胜" in smart_str: 
+            direction_scores["away"] += 25
+        elif "主胜" in smart_str: 
+            direction_scores["home"] += 25
+        elif "平局" in smart_str: 
+            direction_scores["draw"] += 25
             
     if "凯利异常" in smart_str or "双极分布" in smart_str or ("分胜负" in smart_str):
         direction_scores["draw"] *= 0.6  
-        if direction_scores["home"] > direction_scores["away"]: direction_scores["home"] *= 1.2
-        else: direction_scores["away"] *= 1.2
+        if direction_scores["home"] > direction_scores["away"]: 
+            direction_scores["home"] *= 1.2
+        else: 
+            direction_scores["away"] *= 1.2
 
     total_dir = sum(max(0.1, v) for v in direction_scores.values())
     dir_probs = {d: max(0.1, direction_scores[d]) / total_dir * 100 for d in direction_scores}
@@ -591,16 +643,19 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             gp = []
             for gi, field in enumerate(["a0","a1","a2","a3","a4","a5","a6","a7"]):
                 v_raw = match_obj.get(field, 0)
-                if not v_raw or str(v_raw).strip() == "": continue
+                if not v_raw or str(v_raw).strip() == "": 
+                    continue
                 v = float(v_raw)
-                if v > 1: gp.append((gi, 1/v))
+                if v > 1: 
+                    gp.append((gi, 1/v))
             if gp:
                 tp = sum(p for _,p in gp)
                 exp_goals = sum(g*(p/tp) for g,p in gp)
         except:
             exp_goals = 2.5
             
-    if exp_goals < 1.0: exp_goals = 2.5
+    if exp_goals < 1.0: 
+        exp_goals = 2.5
 
     home_xg = float(engine_result.get("bookmaker_implied_home_xg", 1.3))
     away_xg = float(engine_result.get("bookmaker_implied_away_xg", 0.9))
@@ -609,11 +664,15 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if cold_door_info["is_cold_door"] and not sharp_detected:
         market_hot_side = "home" if sp_h < sp_a else "away"
         if market_hot_side == "home": 
-            home_xg *= 0.60; away_xg *= 1.40
-            dir_probs["home"] *= 0.4; dir_probs["away"] *= 2.0
+            home_xg *= 0.60
+            away_xg *= 1.40
+            dir_probs["home"] *= 0.4
+            dir_probs["away"] *= 2.0
         else: 
-            away_xg *= 0.60; home_xg *= 1.40
-            dir_probs["away"] *= 0.4; dir_probs["home"] *= 2.0
+            away_xg *= 0.60
+            home_xg *= 1.40
+            dir_probs["away"] *= 0.4
+            dir_probs["home"] *= 2.0
             
     # 【核心修复】强制 xG 重归一化
     current_sum = home_xg + away_xg
@@ -639,8 +698,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     rho = calculate_dynamic_rho(league, exp_goals)
     
     def dixon_coles_correction(hg, ag, score_str):
-        if score_str in ["0-0", "1-0", "0-1", "1-1"]: return 1.05 
-        elif score_str in ["2-2", "3-1", "1-3", "3-2", "3-3"]: return 0.95
+        if score_str in ["0-0", "1-0", "0-1", "1-1"]: 
+            return 1.05 
+        elif score_str in ["2-2", "3-1", "1-3", "3-2", "3-3"]: 
+            return 0.95
         return 1.0
 
     poisson_scores = {}
@@ -657,16 +718,20 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     weights = {"claude": 1.2, "grok": 1.5, "gpt": 1.0, "gemini": 1.4}
     ai_voted_scores = {}
     for name, r in {**p1_ai, "claude": claude_r}.items():
-        if not isinstance(r, dict): continue
+        if not isinstance(r, dict): 
+            continue
         sc = parse_score(r.get("ai_score", ""))
-        if sc and sc[0] is not None: ai_voted_scores[f"{sc[0]}-{sc[1]}"] = ai_voted_scores.get(f"{sc[0]}-{sc[1]}", 0) + weights.get(name, 1.0) * 4.0
+        if sc and sc[0] is not None: 
+            ai_voted_scores[f"{sc[0]}-{sc[1]}"] = ai_voted_scores.get(f"{sc[0]}-{sc[1]}", 0) + weights.get(name, 1.0) * 4.0
 
     score_ratings = {}
     is_do_or_die = any(kw in smart_str for kw in ["保级", "死拼", "争冠", "生死", "淘汰", "决"])
 
     for score_str, poisson_prob in poisson_scores.items():
-        try: h_g, a_g = map(int, score_str.split("-"))
-        except: continue
+        try: 
+            h_g, a_g = map(int, score_str.split("-"))
+        except: 
+            continue
         total_g = h_g + a_g
         goal_margin = h_g - a_g
         
@@ -677,24 +742,36 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         s += 25 * math.exp(-(goal_diff ** 2) / 1.5)
         s += ai_voted_scores.get(score_str, 0)
         
-        if final_direction == "home" and h_g > a_g: s += 8.0 * (dir_probs["home"] / 100)
-        elif final_direction == "away" and h_g < a_g: s += 8.0 * (dir_probs["away"] / 100)
-        elif final_direction == "draw" and h_g == a_g: s += 8.0 * (dir_probs["draw"] / 100)
+        if final_direction == "home" and h_g > a_g: 
+            s += 8.0 * (dir_probs["home"] / 100)
+        elif final_direction == "away" and h_g < a_g: 
+            s += 8.0 * (dir_probs["away"] / 100)
+        elif final_direction == "draw" and h_g == a_g: 
+            s += 8.0 * (dir_probs["draw"] / 100)
 
         if handicap <= -1.0:
-            if goal_margin == 1 and not cold_door_info["is_cold_door"]: s -= 10
-            elif goal_margin >= 2: s += 12
+            if goal_margin == 1 and not cold_door_info["is_cold_door"]: 
+                s -= 10
+            elif goal_margin >= 2: 
+                s += 12
         elif handicap >= 1.0:
-            if goal_margin == -1 and not cold_door_info["is_cold_door"]: s -= 10
-            elif goal_margin <= -2: s += 12
+            if goal_margin == -1 and not cold_door_info["is_cold_door"]: 
+                s -= 10
+            elif goal_margin <= -2: 
+                s += 12
 
-        if is_do_or_die and h_g == a_g: s -= 15
-        if exp_goals >= 3.0 and (h_g == 0 or a_g == 0): s -= 15
+        if is_do_or_die and h_g == a_g: 
+            s -= 15
+        if exp_goals >= 3.0 and (h_g == 0 or a_g == 0): 
+            s -= 15
         
-        if xg_gap > 0.4 and total_g >= 3 and h_g > 0 and a_g > 0: s += 15
-        elif xg_gap < -0.4 and total_g <= 1: s += 15
+        if xg_gap > 0.4 and total_g >= 3 and h_g > 0 and a_g > 0: 
+            s += 15
+        elif xg_gap < -0.4 and total_g <= 1: 
+            s += 15
         
-        if s > 0: score_ratings[score_str] = round(s, 2)
+        if s > 0: 
+            score_ratings[score_str] = round(s, 2)
 
     ranked = sorted(score_ratings.items(), key=lambda x: x[1], reverse=True)
     final_score = ranked[0][0] if ranked else "1-1"
@@ -712,16 +789,22 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     ai_conf_count = 0
     value_kills = 0
     for name, r in {**p1_ai, "claude": claude_r}.items():
-        if not isinstance(r, dict): continue
+        if not isinstance(r, dict): 
+            continue
         conf = r.get("ai_confidence", 60)
         ai_conf_sum += conf * weights.get(name, 1.0)
         ai_conf_count += weights.get(name, 1.0)
-        if r.get("value_kill"): value_kills += 1
+        if r.get("value_kill"): 
+            value_kills += 1
 
     avg_ai_conf = sum(r.get("ai_confidence", 60) for r in p1_ai.values() if isinstance(r, dict)) / max(1, len([r for r in p1_ai.values() if isinstance(r, dict)]))
     cf = min(95, engine_conf + int((avg_ai_conf - 60) * 0.4)) + value_kills * 6
-    if not dir_confident: cf = max(40, cf - 10)
-    if any("🚨" in str(s) for s in smart_signals): cf = max(35, cf - 12)
+    
+    if not dir_confident: 
+        cf = max(40, cf - 10)
+    if any("🚨" in str(s) for s in smart_signals): 
+        cf = max(35, cf - 12)
+        
     risk = "低" if cf >= 75 else ("中" if cf >= 55 else "高")
 
     sigs = list(smart_signals)
@@ -811,17 +894,24 @@ def select_top4(preds):
         s = pr.get("confidence", 0) * 0.4
         mx = max(pr.get("home_win_pct", 33), pr.get("away_win_pct", 33), pr.get("draw_pct", 33))
         s += (mx - 33) * 0.2 + pr.get("model_consensus", 0) * 2
-        if pr.get("risk_level") == "低": s += 12
-        elif pr.get("risk_level") == "高": s -= 5
+        
+        if pr.get("risk_level") == "低": 
+            s += 12
+        elif pr.get("risk_level") == "高": 
+            s -= 5
             
-        if pr.get("model_agreement"): s += 10
+        if pr.get("model_agreement"): 
+            s += 10
             
         exp_info = pr.get("experience_analysis", {})
         exp_score = exp_info.get("total_score", 0)
-        if exp_score >= 15 and pr.get("result") == "平局" and exp_info.get("draw_rules", 0) >= 3: s += 12
-        elif exp_score >= 10: s += 5
+        if exp_score >= 15 and pr.get("result") == "平局" and exp_info.get("draw_rules", 0) >= 3: 
+            s += 12
+        elif exp_score >= 10: 
+            s += 5
             
-        if exp_info.get("recommendation", "").startswith("⚠️"): s -= 3
+        if exp_info.get("recommendation", "").startswith("⚠️"): 
+            s -= 3
             
         smart_money = str(pr.get("smart_money_signal", ""))
         direction = pr.get("result", "")
@@ -830,7 +920,8 @@ def select_top4(preds):
                 s -= 30
                 
         cold = pr.get("cold_door", {})
-        if cold.get("is_cold_door"): s -= 8
+        if cold.get("is_cold_door"): 
+            s -= 8
             
         p["recommend_score"] = round(s, 2)
         
@@ -902,9 +993,12 @@ def run_predictions(raw, use_ai=True):
         score_str = mg.get("predicted_score", "1-1")
         try:
             sh, sa = map(int, score_str.split("-"))
-            if sh > sa: mg["result"] = "主胜"
-            elif sh < sa: mg["result"] = "客胜"
-            else: mg["result"] = "平局"
+            if sh > sa: 
+                mg["result"] = "主胜"
+            elif sh < sa: 
+                mg["result"] = "客胜"
+            else: 
+                mg["result"] = "平局"
         except:
             pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
             mg["result"] = max(pcts, key=pcts.get)
@@ -934,3 +1028,4 @@ def run_predictions(raw, use_ai=True):
 if __name__ == "__main__":
     logger.info("vMAX 14.2 Boot Sequence Initiated")
     print("✅ vMAX 14.2 终极防弹版（无删减/极强JSON提取）启动成功！")
+
