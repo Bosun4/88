@@ -299,7 +299,7 @@ def build_phase2_prompt(match_analyses, phase1_results):
     return p
 
 # ====================================================================
-# AI调用引擎
+# AI调用引擎 (防暴毙，无删减版)
 # ====================================================================
 FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://www.api522.pro/v1"]
 
@@ -543,7 +543,7 @@ async def run_ai_matrix_two_phase(match_analyses):
 
 
 # ====================================================================
-# 🌟 vMAX 12.4 终极整合：动态强对齐 + 冷门解耦 + 凯利防零封 + 威廉波胆群降
+# 🌟 vMAX 13.0 终极上帝视角：亚盘引力锚 + 生死战降维 + 裂角侦测器
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     import math
@@ -551,12 +551,19 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     sp_h = float(match_obj.get("sp_home", match_obj.get("win", 0)) or 0)
     sp_d = float(match_obj.get("sp_draw", match_obj.get("same", 0)) or 0)
     sp_a = float(match_obj.get("sp_away", match_obj.get("lose", 0)) or 0)
-    engine_conf = engine_result.get("confidence", 50)
     
+    # 提取亚盘让球 (v13.0 亚盘引力锚点)
+    try:
+        hc_str = str(match_obj.get("give_ball", "0")).replace("+", "")
+        handicap = float(hc_str)
+    except:
+        handicap = 0.0
+
+    engine_conf = engine_result.get("confidence", 50)
     p1_ai = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r}
 
     # ================================================================
-    # 第一层：方向决策
+    # 第一层：方向决策 (保留完整加权逻辑)
     # ================================================================
     direction_scores = {"home": 0.0, "draw": 0.0, "away": 0.0}
 
@@ -618,7 +625,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             if cl > 0.05: direction_scores["away"] -= 3
         except: pass
 
-    # ================== v12.1 凯利双爆·斩杀平局 ==================
+    # 凯利双爆·斩杀平局
     is_chaos_game = False
     if "凯利异常" in smart_str or "双极分布" in smart_str or ("分胜负" in smart_str):
         print(f"    ⚔️ 凯利剪刀差触发！大幅削减平局...")
@@ -628,6 +635,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
     total_dir = sum(max(0.1, v) for v in direction_scores.values())
     dir_probs = {d: max(0.1, direction_scores[d]) / total_dir * 100 for d in direction_scores}
+
 
     # ================================================================
     # 第二层：前置冷门探测与基础 xG 抓取
@@ -655,10 +663,18 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         except: 
             exp_goals = 2.5
 
-    home_xg = float(engine_result.get("bookmaker_implied_home_xg", 1.3))
-    away_xg = float(engine_result.get("bookmaker_implied_away_xg", 0.9))
+    # 提取隐含xG (v13.0 裂角侦测器锚点)
+    home_xg_implied = float(engine_result.get("bookmaker_implied_home_xg", 1.3))
+    away_xg_implied = float(engine_result.get("bookmaker_implied_away_xg", 0.9))
+    
+    # 【v13.0 核心武器】：大盘与欧赔的裂角侦测 (Gap Detection)
+    xg_gap = exp_goals - (home_xg_implied + away_xg_implied)
+    
+    # 赋值给主力计算变量
+    home_xg = home_xg_implied
+    away_xg = away_xg_implied
 
-    # ================== v12.1 动态进球引力波(熔断机制) ==================
+    # 动态进球引力波(熔断机制)
     a1_odds = float(match_obj.get("a1", 99) or 99)
     a3_odds = float(match_obj.get("a3", 99) or 99)
     
@@ -687,19 +703,9 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if current_sum > 0 and exp_goals > 0:
         home_xg = (home_xg / current_sum) * exp_goals
         away_xg = (away_xg / current_sum) * exp_goals
-        print(f"    ⚽ xG修正: 引擎λ={exp_goals:.2f} | 联赛系数x{multi:.2f} → 主{home_xg:.2f}, 客{away_xg:.2f}")
+        print(f"    ⚽ xG修正: 引擎λ={exp_goals:.2f} | 裂角Gap={xg_gap:.2f} | 系数x{multi:.2f} → 主{home_xg:.2f}, 客{away_xg:.2f}")
 
-    # ================== v12.1 波胆群降核弹干预 ==================
-    if "大比分降水" in smart_str or "波胆群降" in smart_str:
-        print(f"    🚀 侦测到极端长尾波胆群降！强行拉升优势方 xG 摧毁保守比分！")
-        if dir_probs["home"] > dir_probs["away"]:
-            home_xg *= 1.35
-            dir_probs["home"] = min(85.0, dir_probs["home"] * 1.3)
-        else:
-            away_xg *= 1.35
-            dir_probs["away"] = min(85.0, dir_probs["away"] * 1.3)
-
-    # ================== v12.3 解耦“聪明钱”与“散户大热” ==================
+    # 解耦“聪明钱”与“散户大热”
     if cold_door_info["is_cold_door"]:
         print(f"    🚨 触发冷门拦截！正在核实真实大热方...")
         market_hot_side = "home" if sp_h < sp_a else "away"
@@ -758,7 +764,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             poisson_scores[score_str] = round(prob, 2)
 
     # ================================================================
-    # 第四层：打分系统与实战干预
+    # 第四层：vMAX 13.0 上帝视角打分系统 (融入三大高维规则)
     # ================================================================
     weights = {"claude": 0.85, "grok": 1.45, "gpt": 0.95, "gemini": 1.35}
     ai_voted_scores = {}
@@ -777,7 +783,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 w2 = weights.get(name, 1.0) * 0.5
                 ai_voted_scores[f"{s2[0]}-{s2[1]}"] = ai_voted_scores.get(f"{s2[0]}-{s2[1]}", 0) + w2
 
-    # ================== v12.4 动态得分矩阵核心重构 ==================
     score_ratings = {}
     
     historical_penalty = {
@@ -789,16 +794,22 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
     if max(dir_probs.values()) < 42.0:
         is_chaos_game = True
-        print(f"    ⚔️ 侦测到混沌局特征(双边无明确碾压)！比赛极大概率演变为互捅！")
+        print(f"    ⚔️ 侦测到混沌局特征！")
 
     is_away_favorite_trap = False
     if sp_a < 1.90 and sp_d < 4.0: 
         is_away_favorite_trap = True
 
+    # 【v13.0 战意侦测】
+    is_do_or_die = any(kw in smart_str for kw in ["保级", "死拼", "争冠", "生死", "淘汰", "晋级", "决", "杯"])
+    if is_do_or_die:
+        print(f"    ⚔️ 生死战意降维打击启动！强行镇压平局逻辑...")
+
     for score_str, poisson_prob in poisson_scores.items():
         try: h_g, a_g = map(int, score_str.split("-"))
         except: continue
         total_g = h_g + a_g
+        goal_margin = h_g - a_g
         s = 0.0
         
         s += poisson_prob * 8.0 
@@ -827,30 +838,56 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             
         # 规则C：混沌局强制互捅
         if is_chaos_game:
-            if h_g == 0 or a_g == 0: 
-                s -= 10 
-            elif total_g >= 3 and h_g > 0 and a_g > 0:
-                s += 12 
+            if h_g == 0 or a_g == 0: s -= 10 
+            elif total_g >= 3 and h_g > 0 and a_g > 0: s += 12 
 
-        # 规则D：大球联赛叠加奖励
-        if multi > 1.10 and total_g >= 3: 
-            s += 8
+        # ======================================================
+        # 🔥 vMAX 13.0 三大高维打击规则开始
+        # ======================================================
+        
+        # 【规则1：亚盘引力约束 (防 赢一球走水)】
+        if handicap <= -1.0: # 主让一球或更深
+            if goal_margin == 1 and not cold_door_info["is_cold_door"]:
+                s -= 10 # 惩罚 1-0, 2-1
+            elif goal_margin >= 2:
+                s += 12 # 奖励 2-0, 3-1, 3-0
+        elif handicap >= 1.0: # 客让一球或更深
+            if goal_margin == -1 and not cold_door_info["is_cold_door"]:
+                s -= 10 # 惩罚 0-1, 1-2
+            elif goal_margin <= -2:
+                s += 12 # 奖励 0-2, 1-3, 0-3
 
-        # 规则E：“客场龙陷阱”强行防平补刀
+        # 【规则2：生死战非对称抹平】
+        if is_do_or_die and h_g == a_g:
+            s -= 15 # 生死战无平局，强力砍杀所有平局比分
+
+        # 【规则3：大盘与欧赔裂角侦测器】
+        if xg_gap > 0.4: # 总进球看多，但欧赔保守 (诱下盘)
+            if total_g >= 3 and h_g > 0 and a_g > 0: 
+                s += 15 # 强拉互捅大球 2-1, 3-1, 3-2
+        elif xg_gap < -0.4: # 总进球看空，欧赔看多 (诱上盘)
+            if total_g <= 1: 
+                s += 15 # 强锁 0-0, 1-0, 0-1 闷战
+
+        # ======================================================
+
+        # 其他基础微调
+        if multi > 1.10 and total_g >= 3: s += 8
         if is_away_favorite_trap:
             if score_str == "1-1": s += 12 
             elif score_str == "1-0": s += 8  
-
-        # 规则F：“零封大胜”强化
-        if exp_goals > 2.8 and abs(h_g - a_g) >= 3:
-            s += 5 
+        if exp_goals > 2.8 and abs(h_g - a_g) >= 3: s += 5 
 
         if s > 0: 
             score_ratings[score_str] = round(s, 2)
 
     ranked = sorted(score_ratings.items(), key=lambda x: x[1], reverse=True)
     final_score = ranked[0][0] if ranked else "1-1"
-    print(f"    📊 最终比分评级: {' > '.join(f'{sc}({pts:.0f}|P{poisson_scores.get(sc,0):.1f}%)' for sc, pts in ranked[:6])}")
+    
+    if is_do_or_die or xg_gap > 0.4 or handicap != 0.0:
+        print(f"    🎯 高维干预打分: {' > '.join(f'{sc}({pts:.0f})' for sc, pts in ranked[:6])}")
+    else:
+        print(f"    📊 最终比分评级: {' > '.join(f'{sc}({pts:.0f})' for sc, pts in ranked[:6])}")
 
 
     # ================================================================
@@ -1021,12 +1058,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# run_predictions vMAX 12.4
+# run_predictions vMAX 13.0 终极上帝视角
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 12.4] 终极满血修复 | 全微操干预引擎挂载 | {len(ms)} 场比赛")
+    print(f"  [QUANT ENGINE vMAX 13.0] 终极满血收割机 | 亚盘引力+裂角+战意抹平 | {len(ms)} 场比赛")
     print("=" * 80)
     
     match_analyses = []
@@ -1110,10 +1147,10 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     cold_count = len([r for r in res if r.get("prediction",{}).get("cold_door",{}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence']>70])}/{max(1,len(res))}"
-    diary["reflection"] = f"vMAX12.4 | {cold_count}冷门 | 动态1-1惩罚+高xG防零封+全红凯利混沌局"
+    diary["reflection"] = f"vMAX13.0 | {cold_count}冷门 | 亚盘约束+生死战降维+裂角侦测"
     save_ai_diary(diary)
     
     return res, t4
 
 if __name__ == "__main__":
-    print("✅ vMAX 12.4 终极满血修复版启动成功！绝无删减！")
+    print("✅ vMAX 13.0 终极收割机启动成功！三大高维法则已就绪！")
