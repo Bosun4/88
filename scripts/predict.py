@@ -516,7 +516,7 @@ async def run_ai_matrix_two_phase(match_analyses):
 
     p1_configs = [
         ("grok","GROK_API_URL","GROK_API_KEY",["熊猫-A-6-grok-4.2-thinking"]),
-        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-按量-gpt-5.4"]),
+        ("gpt","GPT_API_URL","GPT_API_KEY",["熊猫-A-10-gpt-5.4"]),
         ("gemini","GEMINI_API_URL","GEMINI_API_KEY",["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
     ]
     p1_results = {"gpt":{},"grok":{},"gemini":{}}
