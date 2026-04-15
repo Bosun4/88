@@ -52,7 +52,7 @@ ensemble = EnsemblePredictor()
 exp_engine = ExperienceEngine()
 
 # ====================================================================
-# ☢️ v14.1 核心量化引擎：动态Dixon-Coles + 工具函数
+# ☢️ v14.2 核心量化引擎：动态Dixon-Coles + 工具函数
 # ====================================================================
 def dixon_coles_tau(hg: int, ag: int, lambda_h: float, lambda_a: float, rho: float) -> float:
     if hg == 0 and ag == 0: return 1 - (lambda_h * lambda_a * rho)
@@ -95,7 +95,7 @@ def parse_score(s):
         return None, None
 
 # ====================================================================
-# 🧊 冷门猎手引擎 v14.1 
+# 🧊 冷门猎手引擎 v14.2
 # ====================================================================
 class ColdDoorDetector:
     @staticmethod
@@ -173,7 +173,7 @@ class ColdDoorDetector:
         }
 
 # ====================================================================
-# AI日记 v14.1
+# AI日记 v14.2
 # ====================================================================
 def load_ai_diary():
     diary_file = "data/ai_diary.json"
@@ -190,7 +190,7 @@ def save_ai_diary(diary):
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
 # ====================================================================
-# 🧠 两阶段AI架构
+# 🧠 两阶段AI架构 v14.2
 # ====================================================================
 def build_phase1_prompt(match_analyses):
     diary = load_ai_diary()
@@ -277,6 +277,7 @@ def build_phase2_prompt(match_analyses, phase1_results):
     p = "【你是最终裁判】三个独立AI已各自给出TOP3候选比分。你综合分析选出最终比分，必须结合Monte Carlo稳定分布。\n\n"
     p += "【强引导原则】\n"
     p += "① 若其他AI给出 3-1/2-3/1-3 等高赔比分，且λ支持大球，你必须跟随或者放大，不要保守拉回 1-1/2-1！\n"
+    p += "② 不要惧怕高赔。体彩经常爆出赔率20+的比分。\n\n"
     p += "【输出格式】JSON数组：match(整数), score(最终比分), reason(80-120字含逻辑), ai_confidence(0-100)\n\n"
 
     for i, ma in enumerate(match_analyses):
@@ -314,7 +315,7 @@ def build_phase2_prompt(match_analyses, phase1_results):
     return p
 
 # ====================================================================
-# 防暴毙 AI 调用引擎
+# 防暴毙 AI 调用引擎：附带强效 JSON 提取器 (防大模型小作文)
 # ====================================================================
 FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://www.api522.pro/v1"]
 
@@ -338,10 +339,10 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     READ_TIMEOUT = 400
 
     AI_PROFILES = {
-        "claude": {"sys": "你是最终裁判。禁止无脑跟风 1-1。你必须强制对齐进球期望值与MonteCarlo。只输出JSON数组。", "temp": 0.18, "model": "claude-opus-4.6-thinking"},
-        "grok": {"sys": "你是Grok，具备实时联网能力。遇到大球联赛必须大胆给高比分(1-3/3-1/2-2)。只输出JSON数组。", "temp": 0.25, "model": "grok-4.2-thinking"},
-        "gpt": {"sys": "你是激进派量化分析师。纯数学计算TOP3。该1-3就1-3。只输出JSON数组。", "temp": 0.22, "model": "gpt-5.4"},
-        "gemini": {"sys": "你是概率引擎。严格执行数学计算，输出每场TOP3比分。不要人为压向0-2/1-1。只输出JSON数组。", "temp": 0.20, "model": "gemini-3.1-pro-preview-thinking"},
+        "claude": {"sys": "你是最终裁判。禁止无脑跟风 1-1。必须强制对齐进球期望值与MonteCarlo。直接输出JSON数组。", "temp": 0.18},
+        "grok": {"sys": "你是Grok，具备实时联网能力。大胆给高比分(1-3/3-1/2-2)。直接输出JSON数组，不要任何废话。", "temp": 0.25},
+        "gpt": {"sys": "你是激进派量化分析师。纯数学计算TOP3。直接输出JSON数组，不要任何前缀说明。", "temp": 0.22},
+        "gemini": {"sys": "你是概率引擎。严格执行数学计算。直接输出JSON数组，不要Markdown标记。", "temp": 0.20},
     }
 
     profile = AI_PROFILES.get(ai_name, AI_PROFILES["gpt"])
@@ -441,17 +442,35 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 
                     if not raw_text or len(raw_text) < 10: break
 
+                    # ====================================================================
+                    # 🔥 v14.2 终极智能 JSON 提取器 (防大模型小作文)
+                    # ====================================================================
                     clean = raw_text
                     clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", clean, flags=re.DOTALL|re.IGNORECASE)
                     clean = re.sub(r"<\|begin_of_thought\|>.*?<\|end_of_thought\|>", "", clean, flags=re.DOTALL)
-                    clean = re.sub(r"```[\w]*","",clean).strip()
-                    start, end = clean.find("["), clean.rfind("]")+1
-                    if start == -1 or end == 0:
-                        clean = re.sub(r"[^\[\]{}:,\"'0-9a-zA-Z\u4e00-\u9fa5\s\.\-\+\(\)]","",clean)
-                        start, end = clean.find("["), clean.rfind("]")+1
+                    
+                    json_str = ""
+                    md_match = re.search(r"
+                    if md_match:
+                        json_str = md_match.group(1)
+                    else:
+                        clean = re.sub(r"```[\w]*","",clean).strip()
+                        # 精准寻找对象数组开头，防止独立括号被误捕获
+                        start = clean.find("[{")
+                        if start == -1: start = clean.find("[\n{")
+                        if start == -1: start = clean.find("[\r\n{")
+                        if start == -1: start = clean.find("[") 
+                        end = clean.rfind("]")+1
+                        if start != -1 and end > start:
+                            json_str = clean[start:end]
 
                     results = {}
-                    if start != -1 and end > start:
+                    if json_str:
+                        start = 0
+                        end = len(json_str)
+                        clean = json_str
+                        # ====================================================================
+
                         try:
                             arr = json.loads(clean[start:end])
                             for item in arr:
@@ -518,7 +537,7 @@ async def run_ai_matrix_two_phase(match_analyses):
 
 
 # ====================================================================
-# 🌟 修复版 merge_result v14.1：彻底修复算法黑洞
+# 🌟 修复版 merge_result v14.2：彻底修复算法黑洞
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     import math
@@ -825,12 +844,12 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 # ====================================================================
-# run_predictions vMAX 14.1 终极上帝视角
+# run_predictions vMAX 14.2 终极上帝视角
 # ====================================================================
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [QUANT ENGINE vMAX 14.1] 动态泊松 + 蒙特卡洛矩阵 + 漏洞热修复 | {len(ms)} 场比赛")
+    print(f"  [QUANT ENGINE vMAX 14.2] 动态泊松 + 蒙特卡洛矩阵 + 漏洞热修复 | {len(ms)} 场比赛")
     print("=" * 80)
     
     match_analyses = []
@@ -907,11 +926,11 @@ def run_predictions(raw, use_ai=True):
     diary = load_ai_diary()
     cold_count = len([r for r in res if r.get("prediction",{}).get("cold_door",{}).get("is_cold_door")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence']>70])}/{max(1,len(res))}"
-    diary["reflection"] = f"vMAX14.1 | {cold_count}冷门 | 黑洞修复+高维意志释放"
+    diary["reflection"] = f"vMAX14.2 | {cold_count}冷门 | 强力防弹JSON解析+高维意志释放"
     save_ai_diary(diary)
     
     return res, t4
 
 if __name__ == "__main__":
-    logger.info("vMAX 14.1 Boot Sequence Initiated")
-    print("✅ vMAX 14.1 终极修复版（无删减/防报错）启动成功！")
+    logger.info("vMAX 14.2 Boot Sequence Initiated")
+    print("✅ vMAX 14.2 终极防弹版（无删减/极强JSON提取）启动成功！")
