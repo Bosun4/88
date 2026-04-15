@@ -329,9 +329,9 @@ def build_phase2_prompt(match_analyses, phase1_results):
     return p
 
 # ====================================================================
-# 防暴毙 AI 调用引擎：附带强效 JSON 提取器 (防大模型小作文)
+# 防暴毙 AI 调用引擎：防弹级 JSON 提取器 (避开前端渲染 Bug)
 # ====================================================================
-FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1", "https://api522.pro/v1", "https://www.api522.pro/v1"]
+FALLBACK_URLS = [None, "[https://api520.pro/v1](https://api520.pro/v1)", "[https://api521.pro/v1](https://api521.pro/v1)", "[https://api522.pro/v1](https://api522.pro/v1)", "[https://www.api522.pro/v1](https://www.api522.pro/v1)"]
 
 def get_clean_env_url(name, default=""):
     v = str(os.environ.get(name, globals().get(name, default))).strip(" \t\n\r\"'")
@@ -472,20 +472,22 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         break
 
                     # ====================================================================
-                    # 🔥 v14.2 终极智能 JSON 提取器 (防大模型小作文)
+                    # 🔥 v14.2 终极智能 JSON 提取器 (彻底规避 Markdown 渲染断层 Bug)
                     # ====================================================================
                     clean = raw_text
                     clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", clean, flags=re.DOTALL|re.IGNORECASE)
                     clean = re.sub(r"<\|begin_of_thought\|>.*?<\|end_of_thought\|>", "", clean, flags=re.DOTALL)
                     
                     json_str = ""
-                    md_match = re.search(r"
-
-
+                    # 使用 chr(96) 生成反引号，防止在此处直接打断整个代码块输出
+                    b_ticks = chr(96) * 3
+                    md_pattern = b_ticks + r"(?:json)?\s*(\[\s*\{.*?\}\s*\])\s*" + b_ticks
+                    md_match = re.search(md_pattern, clean, re.DOTALL | re.IGNORECASE)
+                    
                     if md_match:
                         json_str = md_match.group(1)
                     else:
-                        clean = re.sub(r"```[\w]*","",clean).strip()
+                        clean = re.sub(b_ticks + r"[\w]*", "", clean).strip()
                         # 精准寻找对象数组开头，防止独立括号被误捕获
                         start = clean.find("[{")
                         if start == -1: 
