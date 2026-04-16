@@ -575,7 +575,7 @@ async def run_ai_matrix_two_phase(match_analyses):
         claude_r = {}
         _, claude_r, _ = await async_call_one_ai_batch(
             session, p2_prompt, "CLAUDE_API_URL","CLAUDE_API_KEY",
-            ["claude-opus-4.6-thinking", "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking"], num, "claude"
+            ["熊猫-按量-顶级特供-官max-claude-opus-4.7-thinking", "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking"], num, "claude"
         )
     all_r = p1_results.copy()
     all_r["claude"] = claude_r
