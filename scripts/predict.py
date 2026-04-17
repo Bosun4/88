@@ -1459,7 +1459,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             home_xg *= 1.15; away_xg *= 0.85
             xg_adj_log.append("Sharp主")
     if cold_door["is_cold_door"] and not sharp_detected:
-        if hot_side == "home":
+        hp_eng = engine_result.get("home_prob", shin_h)
+        ap_eng = engine_result.get("away_prob", shin_a)
+        current_hot_side = "home" if hp_eng > ap_eng else "away"
+        if current_hot_side == "home":
             home_xg *= 0.75; away_xg *= 1.25
             xg_adj_log.append("冷主")
         else:
