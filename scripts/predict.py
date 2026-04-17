@@ -415,9 +415,9 @@ def build_phase1_prompt(match_analyses):
     p += "体彩进球数标准赔率基准:\n"
     p += "  0球~9.5倍 1球~5.5倍 2球~3.5倍 3球~4倍 4球~7倍 5球~14倍 6球~30倍 7+球~70倍\n"
     p += "如果实际赔率 < 标准 × 0.7，说明庄家强烈预期该进球数:\n"
-    p += "  - 4球开<5.25倍 → 庄家预期4球\n"
-    p += "  - 5球开<7.8倍 → 庄家预期猛攻\n"
-    p += "  - 7+球开<13倍 → 互射局信号，必须考虑【胜其他】比分\n\n"
+    p += "  - 4球开<5倍 → 庄家预期4球\n"
+    p += "  - 5球开<10倍 → 庄家预期猛攻\n"
+    p += "  - 7+球开<18倍 → 互射局信号，必须考虑【胜其他】比分\n\n"
 
     p += "【Sharp资金与散户反指】\n"
     p += "- Sharp信号显示(主胜/客胜/平) → 优先相信这个方向\n"
@@ -426,7 +426,7 @@ def build_phase1_prompt(match_analyses):
     p += "- Sharp走客 + 散户>58%主 → 大热必死，考虑客胜(0-1/0-2/1-2)\n\n"
 
     p += "【胜其他识别】(满足2条触发)\n"
-    p += "1) 7+球赔率 ≤ 14倍  2) 5球赔率 ≤ 7倍  3) 期望λ ≥ 3.2\n"
+    p += "1) 7+球赔率 ≤ 18倍  2) 5球赔率 ≤ 10倍  3) 期望λ ≥ 3.2\n"
     p += "4) 双方场均≥3.5球  5) 胜其他赔率(crs_win)<平其他(crs_same)×0.4  6) 杯赛/淘汰赛\n"
     p += "触发后 top3必须包含至少1个胜其他比分(4-3/5-2/4-2/6-1)\n\n"
 
@@ -729,18 +729,53 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             if data.get("choices") and data["choices"]:
                                 msg = data["choices"][0].get("message", {})
                                 if isinstance(msg, dict):
-                                    best = ""
-                                    for k in msg:
-                                        v = msg[k]
-                                        if isinstance(v, str) and v.strip():
-                                            if "[" in v and "{" in v and len(v) > len(best):
-                                                best = v.strip()
-                                    if not best:
+                                    # 🔥 v17.1 修复: thinking model响应处理
+                                    # 优先级1: 标准 OpenAI message.content 字段
+                                    content_val = msg.get("content", "")
+                                    if content_val:
+                                        if isinstance(content_val, str) and content_val.strip():
+                                            raw_text = content_val.strip()
+                                        elif isinstance(content_val, list):
+                                            # content可能是数组形式 (Anthropic风格)
+                                            for item in content_val:
+                                                if isinstance(item, dict) and item.get("type") == "text":
+                                                    t = item.get("text", "").strip()
+                                                    if t and len(t) > len(raw_text):
+                                                        raw_text = t
+
+                                    # 优先级2: 其他常见的"答案"字段名
+                                    if not raw_text:
+                                        for field in ["text", "answer", "response", "output_text", "final_answer"]:
+                                            v = msg.get(field, "")
+                                            if v and isinstance(v, str) and v.strip():
+                                                raw_text = v.strip()
+                                                break
+
+                                    # 优先级3: 兜底 — 找含 "match" 关键字的字段
+                                    # ⚠️ 关键: 必须含"match"才认为是真正的JSON, 避免选reasoning_content
+                                    if not raw_text:
+                                        best_with_match = ""
+                                        best_any = ""
+                                        for k in msg:
+                                            if k in ("reasoning_content", "thinking", "reasoning"):
+                                                continue  # 跳过thinking字段
+                                            v = msg[k]
+                                            if isinstance(v, str) and v.strip():
+                                                v_strip = v.strip()
+                                                if '"match"' in v_strip and "[" in v_strip:
+                                                    if len(v_strip) > len(best_with_match):
+                                                        best_with_match = v_strip
+                                                elif len(v_strip) > len(best_any):
+                                                    best_any = v_strip
+                                        raw_text = best_with_match or best_any
+
+                                    # 优先级4: 最后手段 - 包括reasoning_content
+                                    if not raw_text:
                                         for k in msg:
                                             v = msg[k]
-                                            if isinstance(v, str) and len(v.strip()) > len(best):
-                                                best = v.strip()
-                                    raw_text = best
+                                            if isinstance(v, str) and '"match"' in v and "[" in v:
+                                                raw_text = v.strip()
+                                                break
 
                             if not raw_text and data.get("output") and isinstance(data["output"], list):
                                 for out_item in data["output"]:
@@ -753,7 +788,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 
                             if not raw_text:
                                 full_str = json.dumps(data, ensure_ascii=False)
-                                m_match = re.search(r'\[\s*\{\s*"match"', full_str)
+                                m_match = re.search(r'\[\s*\{\s*\\?"match\\?"', full_str)
                                 if m_match:
                                     start_pos = m_match.start()
                                     depth = 0
@@ -776,20 +811,47 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         print(f"    ⚠️ 空数据 → 换模型")
                         break
 
+                    # 🔥 v17.1 修复: JSON提取更精确 - 找 [{"match" 模式
                     clean = raw_text
                     clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", clean, flags=re.DOTALL | re.IGNORECASE)
                     clean = re.sub(r"```[\w]*", "", clean).strip()
-                    start = clean.find("[")
-                    end = clean.rfind("]") + 1
+
+                    # 优先用正则找 [{"match" 这种特征模式 (避免被thinking里的[35%]之类干扰)
+                    json_str = ""
+                    m_re = re.search(r'\[\s*\{\s*"match"', clean)
+                    if m_re:
+                        start_idx = m_re.start()
+                        depth = 0
+                        end_idx = start_idx
+                        for i in range(start_idx, len(clean)):
+                            if clean[i] == '[': depth += 1
+                            elif clean[i] == ']':
+                                depth -= 1
+                                if depth == 0:
+                                    end_idx = i + 1
+                                    break
+                        if end_idx > start_idx:
+                            json_str = clean[start_idx:end_idx]
+                            print(f"    🎯 精确匹配JSON: {len(json_str)}字")
+
+                    # fallback: 老逻辑
+                    if not json_str:
+                        start = clean.find("[")
+                        end = clean.rfind("]") + 1
+                        if start != -1 and end > start:
+                            json_str = clean[start:end]
+                            print(f"    🔍 兜底匹配JSON: {len(json_str)}字")
 
                     results = {}
-                    if start != -1 and end > start:
+                    if json_str:
                         try:
-                            arr = json.loads(clean[start:end])
+                            arr = json.loads(json_str)
                         except json.JSONDecodeError:
                             try:
-                                last_brace = clean[start:end].rfind('}')
-                                arr = json.loads(clean[start:end][:last_brace+1] + "]") if last_brace != -1 else []
+                                last_brace = json_str.rfind('}')
+                                arr = json.loads(json_str[:last_brace+1] + "]") if last_brace != -1 else []
+                                if arr:
+                                    print(f"    🩹 断肢重生: {len(arr)}条")
                             except:
                                 arr = []
 
