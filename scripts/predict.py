@@ -851,6 +851,14 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             # 如果有usage显示出来
                             if data.get("usage"):
                                 print(f"    🔍 [调试] usage: {data['usage']}")
+                        # 🆘 v17.3: 把失败的响应dump到文件供人工排查
+                        try:
+                            os.makedirs("data/debug", exist_ok=True)
+                            dump_file = f"data/debug/{ai_name}_fail_{int(time.time())}.json"
+                            with open(dump_file, "w", encoding="utf-8") as df:
+                                json.dump(data, df, ensure_ascii=False, indent=2)
+                            print(f"    📁 失败响应已保存: {dump_file}")
+                        except: pass
                         break
 
                     # 🔥 v17.1 修复: JSON提取更精确 - 找 [{"match" 模式
@@ -939,6 +947,14 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 print(f"    🔍 [调试] json_str前150字: {json_str[:150]}")
                         if debug_msg_keys:
                             print(f"    🔍 [调试] msg字段: {', '.join(debug_msg_keys[:8])}")
+                        # 🆘 v17.3: dump失败响应
+                        try:
+                            os.makedirs("data/debug", exist_ok=True)
+                            dump_file = f"data/debug/{ai_name}_parse0_{int(time.time())}.json"
+                            with open(dump_file, "w", encoding="utf-8") as df:
+                                json.dump(data, df, ensure_ascii=False, indent=2)
+                            print(f"    📁 失败响应已保存: {dump_file}")
+                        except: pass
                         break
 
             except aiohttp.ClientConnectorError:
@@ -1160,8 +1176,34 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     }
     cold_door = ColdDoorDetector.detect(match_obj, pre_pred)
 
-    # ============ 第二层: 期望进球 ============
-    exp_goals = float(engine_result.get("expected_total_goals", stats.get("expected_total_goals", 0)) or 0)
+    # ============ 第二层: 期望进球 (v17.3 多层兜底) ============
+    exp_goals = 0.0
+    # 层1: 直接字段
+    for src, src_name in [(engine_result, "engine"), (stats, "stats")]:
+        if not src: continue
+        for k in ["expected_total_goals", "exp_goals", "total_goals",
+                  "expected_goals", "lambda_total", "total_xg"]:
+            v = src.get(k)
+            if v is not None:
+                try:
+                    fv = float(v)
+                    if fv > 0.5:
+                        exp_goals = fv
+                        break
+                except: pass
+        if exp_goals > 0: break
+
+    # 层2: 用 xG 总和兜底 (最可靠)
+    if exp_goals <= 0:
+        try:
+            hxg = float(engine_result.get("bookmaker_implied_home_xg", 0) or 0)
+            axg = float(engine_result.get("bookmaker_implied_away_xg", 0) or 0)
+            if hxg > 0 and axg > 0:
+                exp_goals = hxg + axg
+                print(f"    📐 期望进球用xG总和: {hxg:.2f}+{axg:.2f}={exp_goals:.2f}")
+        except: pass
+
+    # 层3: 用 a0-a7 赔率反推
     if exp_goals <= 0:
         try:
             gp = []
@@ -1171,9 +1213,21 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             if gp:
                 tp = sum(p for _, p in gp)
                 exp_goals = sum(g*(p/tp) for g, p in gp)
-        except:
-            exp_goals = 2.5
-    if exp_goals < 1.0:
+                print(f"    📐 期望进球用a0-a7反推: {exp_goals:.2f}")
+        except: pass
+
+    # 层4: 用欧赔大小球倾向(大2.5 over_25)估算
+    if exp_goals <= 0:
+        try:
+            over25 = float(engine_result.get("over_25", 50) or 50)
+            # over25>60%→λ约2.9; 50%→λ约2.5; 40%→λ约2.2
+            exp_goals = 2.0 + (over25 - 40) * 0.015
+            print(f"    📐 期望进球用over25估算: {exp_goals:.2f}")
+        except: pass
+
+    # 最后兜底
+    if exp_goals < 1.0 or exp_goals > 6.0:
+        print(f"    ⚠️ 期望进球异常({exp_goals:.2f}),使用默认2.5")
         exp_goals = 2.5
 
     # ============ 第三层: 进球数信号 ============
