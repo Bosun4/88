@@ -722,6 +722,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         print(f"    📊 {req_tokens:,} token | {elapsed}s")
 
                     raw_text = ""
+                    debug_msg_keys = []  # 调试用: 记录msg所有字段
                     try:
                         if is_gem:
                             raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
@@ -729,7 +730,13 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             if data.get("choices") and data["choices"]:
                                 msg = data["choices"][0].get("message", {})
                                 if isinstance(msg, dict):
-                                    # 🔥 v17.1 修复: thinking model响应处理
+                                    # 🔍 v17.2 调试: 记录所有字段名和长度, 帮助诊断未知格式
+                                    debug_msg_keys = [
+                                        f"{k}({type(v).__name__}:{len(v) if isinstance(v, (str, list)) else '?'})"
+                                        for k, v in msg.items()
+                                    ]
+
+                                    # 🔥 v17.2 修复: thinking model响应处理
                                     # 优先级1: 标准 OpenAI message.content 字段
                                     content_val = msg.get("content", "")
                                     if content_val:
@@ -743,39 +750,61 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                                     if t and len(t) > len(raw_text):
                                                         raw_text = t
 
-                                    # 优先级2: 其他常见的"答案"字段名
+                                    # 优先级2: 其他常见的"答案"字段名 (扩大列表)
                                     if not raw_text:
-                                        for field in ["text", "answer", "response", "output_text", "final_answer"]:
+                                        for field in [
+                                            "text", "answer", "response", "output_text", "final_answer",
+                                            "output", "result", "completion", "message_content",
+                                            "assistant_content", "model_response"
+                                        ]:
                                             v = msg.get(field, "")
                                             if v and isinstance(v, str) and v.strip():
                                                 raw_text = v.strip()
                                                 break
 
-                                    # 优先级3: 兜底 — 找含 "match" 关键字的字段
-                                    # ⚠️ 关键: 必须含"match"才认为是真正的JSON, 避免选reasoning_content
+                                    # 优先级3: 找含 "match" 关键字的字段(跳过thinking)
+                                    # 这才是真正的JSON, 不能选垃圾字段
                                     if not raw_text:
+                                        skip_keys = (
+                                            "reasoning_content", "thinking", "reasoning",
+                                            "reasoning_text", "thoughts", "thought_process",
+                                            "internal_thinking", "chain_of_thought", "cot",
+                                            "deliberation", "analysis_process"
+                                        )
                                         best_with_match = ""
-                                        best_any = ""
                                         for k in msg:
-                                            if k in ("reasoning_content", "thinking", "reasoning"):
-                                                continue  # 跳过thinking字段
+                                            if k in skip_keys: continue
                                             v = msg[k]
-                                            if isinstance(v, str) and v.strip():
-                                                v_strip = v.strip()
-                                                if '"match"' in v_strip and "[" in v_strip:
-                                                    if len(v_strip) > len(best_with_match):
-                                                        best_with_match = v_strip
-                                                elif len(v_strip) > len(best_any):
-                                                    best_any = v_strip
-                                        raw_text = best_with_match or best_any
+                                            if isinstance(v, str) and '"match"' in v and "[" in v:
+                                                if len(v) > len(best_with_match):
+                                                    best_with_match = v.strip()
+                                        if best_with_match:
+                                            raw_text = best_with_match
 
-                                    # 优先级4: 最后手段 - 包括reasoning_content
+                                    # 优先级4: 仍找不到? 在所有字段(包括thinking)里找含match的JSON
                                     if not raw_text:
                                         for k in msg:
                                             v = msg[k]
                                             if isinstance(v, str) and '"match"' in v and "[" in v:
                                                 raw_text = v.strip()
+                                                print(f"    🆘 兜底命中字段: {k}")
                                                 break
+
+                                    # 优先级5: 实在没有, 取最长非thinking字段(可能proxy没用标准字段名)
+                                    if not raw_text:
+                                        skip_keys2 = (
+                                            "reasoning_content", "thinking", "reasoning",
+                                            "reasoning_text", "thoughts", "thought_process",
+                                        )
+                                        longest_clean = ""
+                                        for k in msg:
+                                            if k in skip_keys2: continue
+                                            v = msg[k]
+                                            if isinstance(v, str) and len(v.strip()) > len(longest_clean):
+                                                longest_clean = v.strip()
+                                        if longest_clean and len(longest_clean) > 20:
+                                            raw_text = longest_clean
+                                            print(f"    🆘 优先级5: 取最长非thinking字段")
 
                             if not raw_text and data.get("output") and isinstance(data["output"], list):
                                 for out_item in data["output"]:
@@ -787,6 +816,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                                     raw_text = t
 
                             if not raw_text:
+                                # 🆘 终极兜底: 整个data转字符串后regex找
                                 full_str = json.dumps(data, ensure_ascii=False)
                                 m_match = re.search(r'\[\s*\{\s*\\?"match\\?"', full_str)
                                 if m_match:
@@ -805,10 +835,22 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                             try: extracted = json.loads('"' + extracted + '"')
                                             except: extracted = extracted.replace('\\"', '"')
                                         raw_text = extracted
-                    except: pass
+                                        print(f"    🆘 终极兜底: 从response dump中提取JSON")
+                    except Exception as ex:
+                        print(f"    ⚠️ 解析异常: {str(ex)[:80]}")
 
                     if not raw_text or len(raw_text) < 10:
+                        # 🔍 失败时打印调试信息
                         print(f"    ⚠️ 空数据 → 换模型")
+                        if debug_msg_keys:
+                            print(f"    🔍 [调试] msg字段: {', '.join(debug_msg_keys[:8])}")
+                        # 打印data顶层字段
+                        if isinstance(data, dict):
+                            top_keys = [f"{k}({type(v).__name__})" for k, v in data.items()]
+                            print(f"    🔍 [调试] data字段: {', '.join(top_keys[:6])}")
+                            # 如果有usage显示出来
+                            if data.get("usage"):
+                                print(f"    🔍 [调试] usage: {data['usage']}")
                         break
 
                     # 🔥 v17.1 修复: JSON提取更精确 - 找 [{"match" 模式
@@ -887,6 +929,16 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         return ai_name, results, mn
                     else:
                         print(f"    ⚠️ 解析0条 → 换模型")
+                        # 🔍 调试: 解析0条时打印关键信息
+                        if raw_text:
+                            print(f"    🔍 [调试] raw_text长度: {len(raw_text)}")
+                            print(f"    🔍 [调试] raw_text前150字: {raw_text[:150]}")
+                            print(f"    🔍 [调试] raw_text末80字: ...{raw_text[-80:]}")
+                            if json_str:
+                                print(f"    🔍 [调试] 提取的json_str长度: {len(json_str)}")
+                                print(f"    🔍 [调试] json_str前150字: {json_str[:150]}")
+                        if debug_msg_keys:
+                            print(f"    🔍 [调试] msg字段: {', '.join(debug_msg_keys[:8])}")
                         break
 
             except aiohttp.ClientConnectorError:
@@ -918,11 +970,11 @@ async def run_ai_matrix_two_phase(match_analyses):
 
     ai_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
-        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["熊猫-A-10-gpt-5.4"]),
+        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["熊猫-按量-gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
-            "熊猫-按量-顶级特供-官max-claude-opus-4.7-thinking",
-            "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking"
+            "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking",
+            "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"
         ]),
     ]
     all_results = {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
