@@ -617,7 +617,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     urls = [primary_url] + backup
 
     CONNECT_TIMEOUT = 20
-    READ_TIMEOUT_MAP = {"claude": 500, "grok": 350, "gpt": 650, "gemini": 300}
+    READ_TIMEOUT_MAP = {"claude": 600, "grok": 350, "gpt": 600, "gemini": 300}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     # v17升级: 教AI如何综合多信号判断
