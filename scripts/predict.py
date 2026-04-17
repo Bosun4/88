@@ -425,6 +425,21 @@ def build_phase1_prompt(match_analyses):
     p += "- Sharp走主 + 散户也>58%主 → 双重确认，放胆选主胜大比分(2-1/3-1)\n"
     p += "- Sharp走客 + 散户>58%主 → 大热必死，考虑客胜(0-1/0-2/1-2)\n\n"
 
+    # 🆕 v17.6 体彩诱盘特殊规则
+    p += "【⚠️体彩场次诱盘识别 - 绝对优先级】\n"
+    p += "你预测的是中国体彩精选场次,诱盘率远高于大盘,必须警惕Shin欺骗!\n\n"
+    p += "决策优先级(从高到低):\n"
+    p += "1) Sharp方向 ≠ Shin高概率方向 + 散户大热Shin方向(反指) + Steam同Sharp方向\n"
+    p += "   → 100%诱盘! 必须按Sharp方向选比分,不要选Shin方向\n"
+    p += "   示例: Shin客48% 看似客胜,但Sharp走主+散户热客62%+主胜Steam\n"
+    p += "   → 答案必须是主胜(2-1/2-0),不是客胜!\n\n"
+    p += "2) Sharp=Shin同方向 + 散户也同方向:\n"
+    p += "   → 不是诱盘,方向极其明确,放胆选2+球差比分\n\n"
+    p += "3) 反向Steam(钱进+降水但散户没跟): 该方向历史命中72%,极强信号\n"
+    p += "4) 散户>68%任何方向: 死亡级热度,必须反指\n"
+    p += "5) 散户60-68%: 大热必死区间,显著反指\n\n"
+    p += "严禁: 看到'Shin主68%'就无脑选主胜!必须交叉验证Sharp/散户/Steam\n\n"
+
     p += "【胜其他识别】(满足2条触发)\n"
     p += "1) 7+球赔率 ≤ 18倍  2) 5球赔率 ≤ 10倍  3) 期望λ ≥ 3.2\n"
     p += "4) 双方场均≥3.5球  5) 胜其他赔率(crs_win)<平其他(crs_same)×0.4  6) 杯赛/淘汰赛\n"
@@ -994,10 +1009,7 @@ async def run_ai_matrix_two_phase(match_analyses):
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
             "熊猫-按量-gpt-5.4",          # 当前主力 (有proxy bug风险)
-            "gpt-5.4",                    # 不带前缀试一次
-            "gpt-5",                      # 备用: GPT-5
-            "gpt-4.1",                    # 备用: GPT-4.1
-            "gpt-4o",                     # 最后兜底: GPT-4o
+            "熊猫-A-10-gpt-5.4"               
         ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
@@ -1080,97 +1092,230 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if ai_valid["claude"]:
         all_ai["claude"] = claude_r
 
-    # ============ 第一层: 方向决策 (恢复v14.3完整信号) ============
+    # ============ 第一层: 方向决策 (v17.6 体彩诱盘识别核心引擎) ============
     direction_scores = {"home": 0.0, "draw": 0.0, "away": 0.0}
 
-    # 信号1: Shin概率 [30]
+    # -------- 先采集所有信号,为"诱盘判定"做准备 --------
+    # 信号采集: Shin概率
     if sp_h > 1 and sp_d > 1 and sp_a > 1:
         margin = 1/sp_h + 1/sp_d + 1/sp_a
         shin_h = (1/sp_h)/margin*100
         shin_d = (1/sp_d)/margin*100
         shin_a = (1/sp_a)/margin*100
-        direction_scores["home"] += shin_h/100*30
-        direction_scores["draw"] += shin_d/100*30
-        direction_scores["away"] += shin_a/100*30
     else:
         shin_h = shin_d = shin_a = 33.3
-        direction_scores["home"] += 10
-        direction_scores["draw"] += 10
-        direction_scores["away"] += 10
+    shin_dir = max([("home", shin_h), ("draw", shin_d), ("away", shin_a)], key=lambda x: x[1])[0]
 
+    # 信号采集: Sharp
     smart_signals = stats.get("smart_signals", [])
     smart_str = " ".join(str(s) for s in smart_signals)
     sharp_detected = "Sharp" in smart_str or "sharp" in smart_str
-
-    # 信号2: Sharp资金 [12]
+    sharp_dir = None
     if sharp_detected:
-        if "客胜" in smart_str or "客队" in smart_str:
-            direction_scores["away"] += 12
-            print(f"    💰 Sharp→客胜 +12")
-        elif "主胜" in smart_str or "主队" in smart_str:
-            direction_scores["home"] += 12
-            print(f"    💰 Sharp→主胜 +12")
-        elif "平局" in smart_str or "平赔" in smart_str:
-            direction_scores["draw"] += 12
-            print(f"    💰 Sharp→平局 +12")
+        import re as _re_sharp
+        # 🔧 v17.6 bugfix: 只取Sharp关键词附近的方向词,避免"客队坏消息"等污染
+        # 扫描每条信号,找含"Sharp"的那一条,从中提取方向
+        for s in smart_signals:
+            s_str = str(s)
+            if "Sharp" in s_str or "sharp" in s_str:
+                # 排除"Sharp Money确认"这种无方向的
+                if "确认" in s_str and "→" not in s_str and "流向" not in s_str:
+                    continue
+                # 在该条内匹配方向(优先主胜/客胜/平局精确词,其次主队/客队)
+                if _re_sharp.search(r"(主胜|主队|走主|→\s*主|流向\s*主|资金\s*主)", s_str):
+                    sharp_dir = "home"; break
+                elif _re_sharp.search(r"(客胜|客队|走客|→\s*客|流向\s*客|资金\s*客)", s_str):
+                    sharp_dir = "away"; break
+                elif _re_sharp.search(r"(平局|平赔|走平|→\s*平|流向\s*平|资金\s*平)", s_str):
+                    sharp_dir = "draw"; break
 
-    # 信号3: Steam反向 [8]  ← v16丢失，v17恢复
+    # 信号采集: Steam (分三类)
+    steam_dir = None
+    steam_type = None  # normal/reverse/induced
     if "Steam" in smart_str:
-        if "客胜Steam" in smart_str or "客胜反向" in smart_str:
-            direction_scores["away"] += 8
-            print(f"    🚀 Steam→客胜 +8")
-        elif "主胜Steam" in smart_str or "主胜反向" in smart_str:
-            direction_scores["home"] += 8
-            print(f"    🚀 Steam→主胜 +8")
-        elif "平局Steam" in smart_str:
-            direction_scores["draw"] += 8
-            print(f"    🚀 Steam→平局 +8")
+        import re as _re_steam
+        # 🔧 v17.6 bugfix: 只在含"Steam"的那条信号里提取方向
+        for s in smart_signals:
+            s_str = str(s)
+            if "Steam" not in s_str: continue
+            is_reverse = "反向" in s_str or "未跟" in s_str or "不跟" in s_str
+            if _re_steam.search(r"(主胜\s*Steam|Steam.*主胜|主胜.*降水|主.*Steam)", s_str):
+                steam_dir = "home"
+                steam_type = "reverse" if is_reverse else "normal"
+                break
+            elif _re_steam.search(r"(客胜\s*Steam|Steam.*客胜|客胜.*降水|客.*Steam)", s_str):
+                steam_dir = "away"
+                steam_type = "reverse" if is_reverse else "normal"
+                break
+            elif _re_steam.search(r"(平局\s*Steam|Steam.*平局|平.*Steam)", s_str):
+                steam_dir = "draw"
+                steam_type = "reverse" if is_reverse else "normal"
+                break
 
-    # 信号4: 散户反指 [10]  ← v16丢失，v17恢复
+    # 信号采集: 散户
     vote = match_obj.get("vote", {})
-    contrarian_away_score = 0
-    contrarian_home_score = 0
+    vh = vd = va = 33
+    vote_hot_dir = None
+    vote_hot_pct = 0
     try:
         vh = int(vote.get("win", 33) or 33)
         vd = int(vote.get("same", 33) or 33)
         va = int(vote.get("lose", 33) or 33)
         max_vote = max(vh, vd, va)
-        if max_vote >= 58:
-            if vh == max_vote:
-                # 主胜热 → 反指
-                contrarian_weight = min(10, (vh - 50) * 0.6)
-                direction_scores["away"] += contrarian_weight * 0.6
-                direction_scores["draw"] += contrarian_weight * 0.4
-                contrarian_away_score = contrarian_weight  # 用于比分层小比分降权
-                print(f"    🎭 散户热主{vh}% → 反指 +{contrarian_weight:.1f}")
-            elif va == max_vote:
-                contrarian_weight = min(10, (va - 50) * 0.6)
-                direction_scores["home"] += contrarian_weight * 0.6
-                direction_scores["draw"] += contrarian_weight * 0.4
-                contrarian_home_score = contrarian_weight
-                print(f"    🎭 散户热客{va}% → 反指 +{contrarian_weight:.1f}")
+        if max_vote >= 55:
+            vote_hot_pct = max_vote
+            if vh == max_vote: vote_hot_dir = "home"
+            elif vd == max_vote: vote_hot_dir = "draw"
+            else: vote_hot_dir = "away"
     except: pass
 
-    # 信号5: 冷门预警 [8]  ← v16只在xG层，v17也加到direction层
-    cold_signals_raw = [s for s in smart_signals if "❄️" in str(s) or "冷门" in str(s) or "大热" in str(s) or "造热" in str(s)]
-    hp_eng = engine_result.get("home_prob", shin_h)
-    ap_eng = engine_result.get("away_prob", shin_a)
-    hot_side = "home" if hp_eng > ap_eng else "away"
-    if cold_signals_raw:
-        cold_weight = min(8, len(cold_signals_raw) * 2.5)
-        if hot_side == "home":
-            direction_scores["home"] -= cold_weight
-            direction_scores["away"] += cold_weight * 0.5
-            direction_scores["draw"] += cold_weight * 0.5
-            print(f"    ❄️ 冷门信号{len(cold_signals_raw)}条: 降主热-{cold_weight:.1f}")
-        else:
-            direction_scores["away"] -= cold_weight
-            direction_scores["home"] += cold_weight * 0.5
-            direction_scores["draw"] += cold_weight * 0.5
-            print(f"    ❄️ 冷门信号{len(cold_signals_raw)}条: 降客热-{cold_weight:.1f}")
-
-    # 信号6: 赔率变动 [7]  ← v16丢失，v17恢复
+    # 信号采集: 赔率变动
     change = match_obj.get("change", {})
+    change_down_dir = None  # 哪个方向在降水
+    try:
+        cw = float(str(change.get("win", 0)).replace("+", "") or 0)
+        cs = float(str(change.get("same", 0)).replace("+", "") or 0)
+        cl = float(str(change.get("lose", 0)).replace("+", "") or 0)
+        if cw < -0.05 and cw <= cs and cw <= cl: change_down_dir = "home"
+        elif cl < -0.05 and cl <= cs and cl <= cw: change_down_dir = "away"
+        elif cs < -0.05 and cs <= cw and cs <= cl: change_down_dir = "draw"
+    except: pass
+
+    # 信号采集: 冷门信号
+    cold_signals_raw = [s for s in smart_signals if "❄️" in str(s) or "冷门" in str(s) or "大热" in str(s) or "造热" in str(s)]
+
+    # ========== 🎯 体彩诱盘识别核心(v17.6) ==========
+    # 规则: Sharp是真相, 当Sharp与Shin冲突且有辅助证据时, Shin应该降权
+    dupan_detected = False   # 是否识别到诱盘
+    dupan_true_dir = None    # 真实方向(Sharp方向)
+    dupan_confirm = 0        # 诱盘证据分
+
+    if sharp_detected and sharp_dir and sharp_dir != shin_dir:
+        # Sharp和Shin方向冲突 - 这是诱盘第一信号
+        dupan_confirm = 0
+        # 散户反指支持Sharp (散户热Shin方向 = 反指 = 支持Sharp)
+        if vote_hot_dir == shin_dir and vote_hot_pct >= 55:
+            if vote_hot_pct >= 68: dupan_confirm += 4    # 死亡级反指
+            elif vote_hot_pct >= 60: dupan_confirm += 3  # 大热必死
+            else: dupan_confirm += 2
+        # 或散户直接押Sharp方向以外的方向(间接支持Sharp)
+        if vote_hot_dir and vote_hot_dir != sharp_dir and vote_hot_pct >= 58:
+            dupan_confirm += 2
+
+        # Steam方向支持Sharp
+        if steam_dir == sharp_dir:
+            if steam_type == "reverse": dupan_confirm += 3   # 反向Steam黄金
+            else: dupan_confirm += 2
+
+        # 赔率变动支持Sharp
+        if change_down_dir == sharp_dir:
+            dupan_confirm += 2
+
+        # 冷门信号
+        if cold_signals_raw:
+            dupan_confirm += min(3, len(cold_signals_raw))
+
+        # 判定诱盘(阈值3分)
+        if dupan_confirm >= 3:
+            dupan_detected = True
+            dupan_true_dir = sharp_dir
+            print(f"    🚨 [诱盘识别] Sharp({sharp_dir}) ≠ Shin({shin_dir}) | 证据{dupan_confirm}分 → 真实方向={sharp_dir}")
+
+    # -------- 信号应用 --------
+    # 信号1: Shin概率 [诱盘时降权50%, 否则30分]
+    shin_weight = 15 if dupan_detected else 30
+    direction_scores["home"] += shin_h/100 * shin_weight
+    direction_scores["draw"] += shin_d/100 * shin_weight
+    direction_scores["away"] += shin_a/100 * shin_weight
+    if dupan_detected:
+        print(f"    📉 诱盘模式: Shin权重30→15 (庄家骗局打5折)")
+
+    # 信号2: Sharp资金 [基础25分, 诱盘覆盖时再+10]
+    if sharp_detected and sharp_dir:
+        sharp_base = 35 if dupan_detected else 25
+        direction_scores[sharp_dir] += sharp_base
+        dir_cn = {"home": "主胜", "away": "客胜", "draw": "平局"}[sharp_dir]
+        print(f"    💰 Sharp→{dir_cn} +{sharp_base}")
+
+    # 信号3: Steam [拆三类]
+    if steam_dir:
+        if steam_type == "reverse":
+            # 反向Steam=钱进但散户不跟=黄金信号
+            direction_scores[steam_dir] += 20
+            dir_cn = {"home": "主胜", "away": "客胜", "draw": "平局"}[steam_dir]
+            print(f"    🚀🚀 反向Steam→{dir_cn} +20 (钱进散户不跟-黄金信号)")
+        else:
+            direction_scores[steam_dir] += 10
+            dir_cn = {"home": "主胜", "away": "客胜", "draw": "平局"}[steam_dir]
+            print(f"    🚀 Steam→{dir_cn} +10")
+
+    # 信号4: 散户反指 [分3档:55/60/68]
+    contrarian_away_score = 0  # 给比分层使用
+    contrarian_home_score = 0
+    if vote_hot_dir and vote_hot_pct >= 55:
+        if vote_hot_pct >= 68:
+            contra_weight = 22  # 死亡级
+            level = "死亡级"
+        elif vote_hot_pct >= 60:
+            contra_weight = 14  # 大热必死
+            level = "大热必死"
+        else:
+            contra_weight = 6   # 轻度
+            level = "轻度"
+
+        # 反指: 给 "除了vote_hot_dir外的方向"加分
+        for d in ["home", "draw", "away"]:
+            if d != vote_hot_dir:
+                direction_scores[d] += contra_weight * 0.5
+        # 该方向减分
+        direction_scores[vote_hot_dir] -= contra_weight * 0.3
+
+        dir_cn = {"home": "主胜", "away": "客胜", "draw": "平局"}[vote_hot_dir]
+        print(f"    🎭 散户热{dir_cn}{vote_hot_pct}% [{level}] → 反指 权重{contra_weight}")
+
+        # 同步给比分层(压制被散户热的小比分)
+        if vote_hot_dir == "home":
+            contrarian_away_score = contra_weight
+        elif vote_hot_dir == "away":
+            contrarian_home_score = contra_weight
+
+    # 信号5: 冷门分数化 (v17.6新)
+    if cold_signals_raw or sharp_detected or vote_hot_pct >= 60:
+        cold_score = 0
+        if sharp_detected and sharp_dir and sharp_dir != shin_dir: cold_score += 6
+        if steam_type == "reverse": cold_score += 5
+        if vote_hot_pct >= 68: cold_score += 7
+        elif vote_hot_pct >= 60: cold_score += 5
+        for s in smart_signals:
+            s_str = str(s)
+            if "盘口太便宜" in s_str: cold_score += 4
+            if "坏消息" in s_str or "崩盘" in s_str: cold_score += 5
+            if "背离" in s_str: cold_score += 4
+            if "造热" in s_str: cold_score += 3
+
+        if cold_score >= 25:
+            cold_level = "死亡级"; cold_power = 18
+        elif cold_score >= 18:
+            cold_level = "顶级"; cold_power = 12
+        elif cold_score >= 12:
+            cold_level = "高危"; cold_power = 8
+        elif cold_score >= 6:
+            cold_level = "中等"; cold_power = 4
+        else:
+            cold_level = None; cold_power = 0
+
+        if cold_level:
+            # 给"非热门方向"加分, 减"热门方向"
+            hp_eng = engine_result.get("home_prob", shin_h)
+            ap_eng = engine_result.get("away_prob", shin_a)
+            hot_side = "home" if hp_eng > ap_eng else "away"
+            direction_scores[hot_side] -= cold_power
+            other = "away" if hot_side == "home" else "home"
+            direction_scores[other] += cold_power * 0.6
+            direction_scores["draw"] += cold_power * 0.4
+            print(f"    ❄️ 冷门[{cold_level}] 分数{cold_score} → 降{hot_side} -{cold_power}")
+
+    # 信号6: 赔率变动 [7分,保留]
     if change and isinstance(change, dict):
         try:
             cw = float(str(change.get("win", 0)).replace("+", "") or 0)
@@ -1187,7 +1332,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 print(f"    📊 赔率变动: {' '.join(move_log)}")
         except: pass
 
-    # 信号7: AI方向共识 [25]
+    # 信号7: AI方向共识 [诱盘时降权至15,否则25]
+    ai_weight_total = 15 if dupan_detected else 25  # 诱盘场AI不可信
     ai_directions = {"home": 0, "draw": 0, "away": 0}
     for name, r in all_ai.items():
         if not isinstance(r, dict): continue
@@ -1205,7 +1351,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     total_ai_dir = sum(ai_directions.values())
     if total_ai_dir > 0:
         for d in ["home", "draw", "away"]:
-            direction_scores[d] += (ai_directions[d] / total_ai_dir) * 25
+            direction_scores[d] += (ai_directions[d] / total_ai_dir) * ai_weight_total
 
     # 归一化
     total_dir = sum(max(0.1, v) for v in direction_scores.values())
@@ -1387,18 +1533,112 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         total_vote = sum(ai_voted.values())
         ai_consensus_strength = max_vote / total_vote if total_vote > 0 else 0
 
+    # 🎯 v17.6 新增: 诱盘场Sharp强加反向比分
+    if dupan_detected and dupan_true_dir:
+        if dupan_true_dir == "home":
+            for sc in ["2-1", "2-0", "3-1"]:
+                ai_voted[sc] = ai_voted.get(sc, 0) + 3.0
+            print(f"    🎯 诱盘覆盖: 强加主胜2球差比分 (2-1/2-0/3-1 +3票)")
+        elif dupan_true_dir == "away":
+            for sc in ["1-2", "0-2", "1-3"]:
+                ai_voted[sc] = ai_voted.get(sc, 0) + 3.0
+            print(f"    🎯 诱盘覆盖: 强加客胜2球差比分 (1-2/0-2/1-3 +3票)")
+        elif dupan_true_dir == "draw":
+            for sc in ["1-1", "2-2", "0-0"]:
+                ai_voted[sc] = ai_voted.get(sc, 0) + 2.5
+            print(f"    🎯 诱盘覆盖: 强加平局比分 (1-1/2-2/0-0 +2.5票)")
+
+    # 🎯 v17.6 新增: 客队零封识别
+    away_zero_prob = 50  # 基础分
+    away_xg_for_zero = float(engine_result.get("bookmaker_implied_away_xg", 1.2) or 1.2)
+    if away_xg_for_zero <= 0.8: away_zero_prob += 25
+    elif away_xg_for_zero <= 1.0: away_zero_prob += 15
+    elif away_xg_for_zero <= 1.2: away_zero_prob += 8
+
+    away_stats_obj = match_obj.get("away_stats", {})
+    if isinstance(away_stats_obj, dict):
+        form = str(away_stats_obj.get("form", ""))
+        recent5 = form[:5] if form else ""
+        recent_L = recent5.count("L")
+        if recent_L >= 4: away_zero_prob += 15
+        elif recent_L >= 3: away_zero_prob += 8
+
+        try:
+            avg_for = float(away_stats_obj.get("avg_goals_for", 2) or 2)
+            if avg_for < 0.8: away_zero_prob += 15
+            elif avg_for < 1.2: away_zero_prob += 8
+        except: pass
+
+    # 主队强势
+    if shin_h > 65: away_zero_prob += 10
+    elif shin_h > 55: away_zero_prob += 5
+
+    # Sharp方向修正 - 如果Sharp走客胜,客队必有攻击力
+    if sharp_detected and sharp_dir == "away":
+        away_zero_prob -= 30
+
+    # 主队零封(对客情况)
+    home_zero_prob = 50
+    home_xg_for_zero = float(engine_result.get("bookmaker_implied_home_xg", 1.2) or 1.2)
+    if home_xg_for_zero <= 0.8: home_zero_prob += 25
+    elif home_xg_for_zero <= 1.0: home_zero_prob += 15
+    elif home_xg_for_zero <= 1.2: home_zero_prob += 8
+
+    home_stats_obj = match_obj.get("home_stats", {})
+    if isinstance(home_stats_obj, dict):
+        form = str(home_stats_obj.get("form", ""))
+        recent5 = form[:5] if form else ""
+        recent_L = recent5.count("L")
+        if recent_L >= 4: home_zero_prob += 15
+        elif recent_L >= 3: home_zero_prob += 8
+        try:
+            avg_for = float(home_stats_obj.get("avg_goals_for", 2) or 2)
+            if avg_for < 0.8: home_zero_prob += 15
+            elif avg_for < 1.2: home_zero_prob += 8
+        except: pass
+
+    if shin_a > 65: home_zero_prob += 10
+    elif shin_a > 55: home_zero_prob += 5
+    if sharp_detected and sharp_dir == "home":
+        home_zero_prob -= 30
+
+    # 应用零封加成到比分层
+    zero_boost_applied = False
+    if away_zero_prob >= 70 and shin_h > shin_a:
+        # 客队大概率零封,主胜场景
+        for sc in ["1-0", "2-0", "3-0"]:
+            ai_voted[sc] = ai_voted.get(sc, 0) + 2.0
+        # 压制客队进球比分
+        for sc in ["1-1", "2-1", "1-2", "3-1", "2-2"]:
+            if sc in ai_voted:
+                ai_voted[sc] *= 0.65
+        print(f"    🧱 客队零封识别({away_zero_prob}分): 强加1-0/2-0/3-0")
+        zero_boost_applied = True
+
+    if home_zero_prob >= 70 and shin_a > shin_h:
+        for sc in ["0-1", "0-2", "0-3"]:
+            ai_voted[sc] = ai_voted.get(sc, 0) + 2.0
+        for sc in ["1-1", "1-2", "2-1", "1-3", "2-2"]:
+            if sc in ai_voted:
+                ai_voted[sc] *= 0.65
+        print(f"    🧱 主队零封识别({home_zero_prob}分): 强加0-1/0-2/0-3")
+        zero_boost_applied = True
+
     # ============ 🎯 第七层: 综合评分 (方案B核心) ============
     # 🆕 v17.5: 场景检测 - 基于λ/BTTS/大2.5判断比赛类型, 硬约束候选池
     btts_pct = float(engine_result.get("btts", 50) or 50)
     over25_pct = float(engine_result.get("over_25", engine_result.get("over_2_5", 50)) or 50)
 
     scenario = "normal"
-    if exp_goals >= 3.5:
-        scenario = "shootout"  # 互射局
+    # 🆕 v17.6: 诱盘场景优先识别(覆盖其他场景)
+    if dupan_detected:
+        scenario = "sharp_reversal"
+    elif exp_goals >= 3.5:
+        scenario = "shootout"
     elif exp_goals >= 3.0 and (btts_pct >= 60 or over25_pct >= 60):
-        scenario = "high_goals"  # 高进球
+        scenario = "high_goals"
     elif exp_goals <= 2.0 and btts_pct <= 40:
-        scenario = "low_goals"  # 闷场
+        scenario = "low_goals"
     elif btts_pct >= 65:
         scenario = "btts_strong"  # 双方必进
     elif btts_pct <= 30:
@@ -1414,6 +1654,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     BTTS_STRONG_EXCLUDE = {"1-0", "2-0", "3-0", "0-1", "0-2", "0-3", "0-0"}  # 双方必进禁选
     SINGLE_SIDE_BOOST = {"1-0", "2-0", "0-1", "0-2", "3-0", "0-3"}       # 单边场优选
     SINGLE_SIDE_EXCLUDE = {"1-1", "2-2"}                                  # 单边场禁选
+    # v17.6 Sharp反向场景(禁Shin方向比分,强加Sharp方向比分)
+    SHARP_REV_HOME_BOOST = {"2-1", "2-0", "3-1", "3-0"}
+    SHARP_REV_AWAY_BOOST = {"1-2", "0-2", "1-3", "0-3"}
+    SHARP_REV_DRAW_BOOST = {"1-1", "2-2", "0-0"}
 
     if scenario != "normal":
         scenario_desc = {
@@ -1422,8 +1666,9 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             "low_goals": f"闷场(λ={exp_goals:.2f},BTTS{btts_pct:.0f}%)",
             "btts_strong": f"双方必进(BTTS{btts_pct:.0f}%)",
             "single_side": f"单边场(BTTS{btts_pct:.0f}%)",
+            "sharp_reversal": f"诱盘反转(Shin骗局→Sharp真相={dupan_true_dir})",
         }
-        print(f"    🎬 场景: {scenario_desc[scenario]}")
+        print(f"    🎬 场景: {scenario_desc.get(scenario, scenario)}")
 
     # 候选池 = CRS所有比分 + AI选的比分 + 胜其他
     all_candidates = set()
@@ -1458,18 +1703,27 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         # ③ 进球数信号 [15]
         if total_g in goal_signals:
             ratio = goal_signals[total_g]
-            s += min(15, (ratio - 1) * 12)
+            # 🎯 v17.6: 零封场景下,5+球进球信号压制(因为零封说明单边,不会是7+球互射)
+            if zero_boost_applied and total_g >= 5:
+                s += min(5, (ratio - 1) * 4)  # 削弱到5分上限
+            else:
+                s += min(15, (ratio - 1) * 12)
 
         # ④ 胜其他加成 [5]
         if others_info["is_others"]:
+            # 🎯 v17.6: 零封识别触发时,压制胜其他(因为零封意味着3-0/4-0不是6+球互射)
+            if zero_boost_applied:
+                others_boost = 5  # 削弱到5分(原15)
+            else:
+                others_boost = 15
             if score_str in SCORE_OTHERS_HOME and others_info["direction"] == "home":
-                s += 15  # 胜其他+方向匹配重奖
+                s += others_boost
             elif score_str in SCORE_OTHERS_AWAY and others_info["direction"] == "away":
-                s += 15
+                s += others_boost
             elif score_str in SCORE_OTHERS_DRAW and others_info["direction"] == "draw":
-                s += 15
+                s += others_boost
             elif score_str in ALL_SCORE_OTHERS:
-                s += 5
+                s += 2 if zero_boost_applied else 5
 
         # ⑤ 方向一致性 [±10]
         goal_margin = h_g - a_g
@@ -1505,12 +1759,24 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             s += 10
 
         # 🆕 v17.5 ⑩ 场景硬约束: 基于λ/BTTS/大2.5的比分集合过滤
-        if scenario == "shootout":
+        # 🎯 v17.6 sharp_reversal 场景优先级最高(诱盘反转)
+        if scenario == "sharp_reversal":
+            if dupan_true_dir == "home":
+                if score_str in SHARP_REV_HOME_BOOST: s *= 1.70  # Sharp主胜强加
+                elif goal_margin <= 0: s *= 0.20  # 非主胜大幅降权(Shin骗局)
+            elif dupan_true_dir == "away":
+                if score_str in SHARP_REV_AWAY_BOOST: s *= 1.70
+                elif goal_margin >= 0: s *= 0.20
+            elif dupan_true_dir == "draw":
+                if score_str in SHARP_REV_DRAW_BOOST: s *= 1.50
+                elif goal_margin != 0: s *= 0.40
+
+        elif scenario == "shootout":
             if score_str in BOOST_SHOOTOUT: s *= 1.50
-            elif score_str in EXCLUDE_HIGH: s *= 0.10  # 互射场禁0-0/1-0/0-1
+            elif score_str in EXCLUDE_HIGH: s *= 0.10
             elif total_g <= 2: s *= 0.40
         elif scenario == "high_goals":
-            if score_str in EXCLUDE_HIGH: s *= 0.10  # 高进球场禁0-0/1-0/0-1
+            if score_str in EXCLUDE_HIGH: s *= 0.10
             elif score_str in BOOST_HIGH: s *= 1.30
         elif scenario == "low_goals":
             if score_str in EXCLUDE_LOW: s *= 0.10
@@ -1521,6 +1787,17 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         elif scenario == "single_side":
             if score_str in SINGLE_SIDE_EXCLUDE: s *= 0.30
             elif score_str in SINGLE_SIDE_BOOST: s *= 1.25
+
+        # 🎯 v17.6 渐进式λ修正 (覆盖normal场景的边界值如λ=2.9)
+        # 只在normal场景下应用(其他场景已有硬约束)
+        if scenario == "normal":
+            if exp_goals >= 2.7 and score_str in EXCLUDE_HIGH:
+                # λ=2.7~3.0之间的"半强约束"
+                strength = min(1.0, (exp_goals - 2.4) / 1.1)  # 2.4→0, 3.5→1.0
+                s *= max(0.3, 1.0 - strength * 0.5)
+            elif exp_goals <= 2.3 and score_str in {"3-1", "1-3", "3-2", "2-3", "3-3"}:
+                # 低λ时的高比分降权
+                s *= 0.5
 
         if s > 0:
             score_ratings[score_str] = round(s, 2)
@@ -1622,6 +1899,17 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "scenario": scenario,  # v17.5 新增: 场景识别
         "btts_pct_used": round(btts_pct, 1),
         "over25_pct_used": round(over25_pct, 1),
+        # v17.6 新增: 诱盘识别 + 零封
+        "dupan_detected": dupan_detected,
+        "dupan_true_dir": dupan_true_dir,
+        "dupan_confirm_score": dupan_confirm,
+        "shin_dir": shin_dir,
+        "sharp_dir": sharp_dir,
+        "away_zero_prob": away_zero_prob,
+        "home_zero_prob": home_zero_prob,
+        "vote_hot_dir": vote_hot_dir,
+        "vote_hot_pct": vote_hot_pct,
+        "steam_type": steam_type,
 
         # 进球数信号
         "goal_signals": {str(k): round(v, 2) for k, v in goal_signals.items()},
