@@ -602,7 +602,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     urls = [primary_url] + backup
 
     CONNECT_TIMEOUT = 20
-    READ_TIMEOUT_MAP = {"claude": 350, "grok": 200, "gpt": 200, "gemini": 250}
+    READ_TIMEOUT_MAP = {"claude": 500, "grok": 240, "gpt": 500, "gemini": 250}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     # v17升级: 教AI如何综合多信号判断
@@ -986,7 +986,7 @@ async def run_ai_matrix_two_phase(match_analyses):
 
     ai_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
-        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["熊猫-按量-gpt-5.4"]),
+        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["熊猫-A-10-gpt-5.4","熊猫-按量-gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
             "熊猫-按量-顶级特供-官max-claude-opus-4.7",
