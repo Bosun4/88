@@ -602,7 +602,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     urls = [primary_url] + backup
 
     CONNECT_TIMEOUT = 20
-    READ_TIMEOUT_MAP = {"claude": 500, "grok": 240, "gpt": 500, "gemini": 250}
+    READ_TIMEOUT_MAP = {"claude": 350, "grok": 200, "gpt": 200, "gemini": 250}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     # v17升级: 教AI如何综合多信号判断
@@ -735,6 +735,12 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                         f"{k}({type(v).__name__}:{len(v) if isinstance(v, (str, list)) else '?'})"
                                         for k, v in msg.items()
                                     ]
+
+                                    # 🚨 v17.4: 检测 proxy bug — content=null 但有token消耗
+                                    if msg.get("content") is None and data.get("usage", {}).get("completion_tokens", 0) > 100:
+                                        print(f"    🚨 [proxy bug] {ai_name.upper()} content=null 但消耗了 {data['usage']['completion_tokens']} token")
+                                        print(f"        → proxy没传回内容, 钱白花。建议换模型/反馈客服")
+                                        # 继续尝试其他字段, 但大概率没救
 
                                     # 🔥 v17.2 修复: thinking model响应处理
                                     # 优先级1: 标准 OpenAI message.content 字段
@@ -986,10 +992,16 @@ async def run_ai_matrix_two_phase(match_analyses):
 
     ai_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
-        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["熊猫-按量-gpt-5.4"]),
+        ("gpt", "GPT_API_URL", "GPT_API_KEY", [
+            "熊猫-按量-gpt-5.4",          # 当前主力 (有proxy bug风险)
+            "gpt-5.4",                    # 不带前缀试一次
+            "gpt-5",                      # 备用: GPT-5
+            "gpt-4.1",                    # 备用: GPT-4.1
+            "gpt-4o",                     # 最后兜底: GPT-4o
+        ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
-            "熊猫-按量-顶级特供-官max-claude-opus-4.7",
+            "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking",
             "熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"
         ]),
     ]
@@ -1025,13 +1037,48 @@ async def run_ai_matrix_two_phase(match_analyses):
 #   + 冷门预警 [8] + 赔率变动 [7] + AI共识 [25]
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
+    # 🔧 v17.5 修复: 字段位置兼容 - v2_odds_dict内的CRS/进球数/半全场字段提升到顶层
+    # 真实数据结构: match_obj.v2_odds_dict.{w10, a0, ss, ...}
+    if isinstance(match_obj.get("v2_odds_dict"), dict):
+        v2 = match_obj["v2_odds_dict"]
+        match_obj = {**match_obj, **v2}  # 不破坏原始, 创建新dict合并
+        print(f"    🔧 [字段兼容] v2_odds_dict→顶层 ({len(v2)}个字段)")
+
     league = str(match_obj.get("league", match_obj.get("cup", "")))
     sp_h = float(match_obj.get("sp_home", match_obj.get("win", 0)) or 0)
     sp_d = float(match_obj.get("sp_draw", match_obj.get("same", 0)) or 0)
     sp_a = float(match_obj.get("sp_away", match_obj.get("lose", 0)) or 0)
     engine_conf = engine_result.get("confidence", 50)
-    p1_ai = {"gpt": gpt_r, "grok": grok_r, "gemini": gemini_r}
-    all_ai = {**p1_ai, "claude": claude_r}
+
+    # 🛡️ v17.4: AI有效性检测 - 失败的AI完全弃权,不参与任何加权计算
+    def _is_valid_ai(r):
+        if not isinstance(r, dict): return False
+        score = r.get("ai_score", "")
+        if not score or score in ("-", "N/A", ""): return False
+        # 验证比分格式
+        try:
+            parts = str(score).strip().replace(" ", "").split("-")
+            if len(parts) != 2: return False
+            int(parts[0]); int(parts[1])
+        except: return False
+        return True
+
+    ai_valid = {
+        "gpt": _is_valid_ai(gpt_r),
+        "grok": _is_valid_ai(grok_r),
+        "gemini": _is_valid_ai(gemini_r),
+        "claude": _is_valid_ai(claude_r),
+    }
+
+    abstained = [n.upper() for n, v in ai_valid.items() if not v]
+    if abstained:
+        print(f"    🚫 弃权AI: {', '.join(abstained)} (失效,不参与加权)")
+
+    # 只把有效的AI放入all_ai (无效的AI完全跳过)
+    p1_ai = {n: r for n, r in [("gpt", gpt_r), ("grok", grok_r), ("gemini", gemini_r)] if ai_valid[n]}
+    all_ai = {**p1_ai}
+    if ai_valid["claude"]:
+        all_ai["claude"] = claude_r
 
     # ============ 第一层: 方向决策 (恢复v14.3完整信号) ============
     direction_scores = {"home": 0.0, "draw": 0.0, "away": 0.0}
@@ -1150,7 +1197,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             if t3 and len(t3) > 0:
                 sc = parse_score(t3[0].get("score", ""))
         if sc and sc[0] is not None:
-            w = 1.5 if name == "claude" else 1.0
+            # v17.4 权重: Claude裁决>Gemini>Grok>GPT
+            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
             if sc[0] > sc[1]: ai_directions["home"] += w
             elif sc[0] < sc[1]: ai_directions["away"] += w
             else: ai_directions["draw"] += w
@@ -1296,7 +1344,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 sc = parse_score(t3[0].get("score", ""))
         if sc and sc[0] is not None:
             key = f"{sc[0]}-{sc[1]}"
-            w = 1.5 if name == "claude" else (1.3 if name == "grok" else 1.0)
+            # v17.4 比分投票权重: Claude裁决>Gemini>Grok>GPT
+            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
             ai_voted[key] = ai_voted.get(key, 0) + w
         t3 = r.get("top3", [])
         if isinstance(t3, list):
@@ -1308,25 +1357,29 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                     ai_voted[key2] = ai_voted.get(key2, 0) + w2
 
     # Claude否决权: 信心高且独立反对时权重翻倍
-    if isinstance(claude_r, dict) and claude_r.get("ai_confidence", 0) >= 70:
+    if ai_valid["claude"] and claude_r.get("ai_confidence", 0) >= 70:
         cl_score = claude_r.get("ai_score", "")
         if cl_score:
-            # 统计其他AI共识
+            # 统计其他有效AI共识 (跳过弃权的)
             other_ai_scores = {}
+            valid_others = 0
             for name in ["gpt", "grok", "gemini"]:
+                if not ai_valid[name]: continue
+                valid_others += 1
                 r = all_ai.get(name, {})
                 if isinstance(r, dict):
                     sc = r.get("ai_score", "")
                     if sc:
                         other_ai_scores[sc] = other_ai_scores.get(sc, 0) + 1
-            if other_ai_scores:
+            if other_ai_scores and valid_others >= 2:
+                # 动态阈值: 至少要超过半数有效AI同意才算"多数"
+                majority_threshold = max(2, (valid_others + 1) // 2)
                 majority_score, majority_count = max(other_ai_scores.items(), key=lambda x: x[1])
-                if cl_score != majority_score and majority_count >= 2:
-                    # Claude独立反对多数
+                if cl_score != majority_score and majority_count >= majority_threshold:
                     cl_clean = cl_score.replace(" ", "").strip()
                     if cl_clean in ai_voted:
                         ai_voted[cl_clean] *= 2.0
-                        print(f"    👑 Claude独立裁决{cl_score} vs 多数{majority_score} → 权重×2")
+                        print(f"    👑 Claude独立裁决{cl_score} vs 多数{majority_score}({majority_count}/{valid_others}) → 权重×2")
 
     ai_consensus_strength = 0
     if ai_voted:
@@ -1335,6 +1388,43 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         ai_consensus_strength = max_vote / total_vote if total_vote > 0 else 0
 
     # ============ 🎯 第七层: 综合评分 (方案B核心) ============
+    # 🆕 v17.5: 场景检测 - 基于λ/BTTS/大2.5判断比赛类型, 硬约束候选池
+    btts_pct = float(engine_result.get("btts", 50) or 50)
+    over25_pct = float(engine_result.get("over_25", engine_result.get("over_2_5", 50)) or 50)
+
+    scenario = "normal"
+    if exp_goals >= 3.5:
+        scenario = "shootout"  # 互射局
+    elif exp_goals >= 3.0 and (btts_pct >= 60 or over25_pct >= 60):
+        scenario = "high_goals"  # 高进球
+    elif exp_goals <= 2.0 and btts_pct <= 40:
+        scenario = "low_goals"  # 闷场
+    elif btts_pct >= 65:
+        scenario = "btts_strong"  # 双方必进
+    elif btts_pct <= 30:
+        scenario = "single_side"  # 单边干净
+
+    # 场景比分集合定义
+    EXCLUDE_HIGH = {"0-0", "1-0", "0-1"}                                # 高进球场禁选
+    BOOST_HIGH = {"2-1", "1-2", "2-2", "3-1", "1-3"}                    # 高进球场优选
+    BOOST_SHOOTOUT = {"3-2", "2-3", "3-3", "4-2", "2-4", "4-3", "3-4"}  # 互射局优选
+    EXCLUDE_LOW = {"3-1", "1-3", "2-2", "3-2", "2-3", "3-3", "4-2", "2-4"}  # 闷场禁选
+    BOOST_LOW = {"0-0", "1-0", "0-1", "1-1"}                            # 闷场优选
+    BTTS_STRONG_BOOST = {"1-1", "2-1", "1-2", "2-2"}                    # 双方必进优选
+    BTTS_STRONG_EXCLUDE = {"1-0", "2-0", "3-0", "0-1", "0-2", "0-3", "0-0"}  # 双方必进禁选
+    SINGLE_SIDE_BOOST = {"1-0", "2-0", "0-1", "0-2", "3-0", "0-3"}       # 单边场优选
+    SINGLE_SIDE_EXCLUDE = {"1-1", "2-2"}                                  # 单边场禁选
+
+    if scenario != "normal":
+        scenario_desc = {
+            "shootout": f"互射局(λ={exp_goals:.2f})",
+            "high_goals": f"高进球场(λ={exp_goals:.2f},BTTS{btts_pct:.0f}%)",
+            "low_goals": f"闷场(λ={exp_goals:.2f},BTTS{btts_pct:.0f}%)",
+            "btts_strong": f"双方必进(BTTS{btts_pct:.0f}%)",
+            "single_side": f"单边场(BTTS{btts_pct:.0f}%)",
+        }
+        print(f"    🎬 场景: {scenario_desc[scenario]}")
+
     # 候选池 = CRS所有比分 + AI选的比分 + 胜其他
     all_candidates = set()
     if crs_probs:
@@ -1414,6 +1504,24 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         if shin_h > 60 and (home_xg - away_xg) > 1.0 and goal_margin >= 1 and h_g >= 2:
             s += 10
 
+        # 🆕 v17.5 ⑩ 场景硬约束: 基于λ/BTTS/大2.5的比分集合过滤
+        if scenario == "shootout":
+            if score_str in BOOST_SHOOTOUT: s *= 1.50
+            elif score_str in EXCLUDE_HIGH: s *= 0.10  # 互射场禁0-0/1-0/0-1
+            elif total_g <= 2: s *= 0.40
+        elif scenario == "high_goals":
+            if score_str in EXCLUDE_HIGH: s *= 0.10  # 高进球场禁0-0/1-0/0-1
+            elif score_str in BOOST_HIGH: s *= 1.30
+        elif scenario == "low_goals":
+            if score_str in EXCLUDE_LOW: s *= 0.10
+            elif score_str in BOOST_LOW: s *= 1.40
+        elif scenario == "btts_strong":
+            if score_str in BTTS_STRONG_EXCLUDE: s *= 0.20
+            elif score_str in BTTS_STRONG_BOOST: s *= 1.30
+        elif scenario == "single_side":
+            if score_str in SINGLE_SIDE_EXCLUDE: s *= 0.30
+            elif score_str in SINGLE_SIDE_BOOST: s *= 1.25
+
         if s > 0:
             score_ratings[score_str] = round(s, 2)
 
@@ -1451,7 +1559,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     final_prob = crs_probs.get(final_score, backup_probs.get(final_score, 5))
     ev_data = calculate_value_bet(final_prob, final_odds)
 
-    weights = {"claude": 1.4, "grok": 1.3, "gpt": 1.1, "gemini": 1.0}
+    # v17.4 信心加权: Claude裁决>Gemini>Grok>GPT
+    weights = {"claude": 1.4, "gemini": 1.35, "grok": 1.30, "gpt": 1.1}
     ai_conf_sum = 0
     ai_conf_count = 0
     value_kills = 0
@@ -1490,14 +1599,15 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "risk_level": risk,
         "over_under_2_5": "大" if engine_result.get("over_25", 50) > 55 else "小",
         "both_score": "是" if engine_result.get("btts", 45) > 50 else "否",
-        "gpt_score": gpt_r.get("ai_score", "-") if isinstance(gpt_r, dict) else "-",
-        "gpt_analysis": gpt_r.get("reason", gpt_r.get("analysis", "N/A")) if isinstance(gpt_r, dict) else "N/A",
-        "grok_score": grok_r.get("ai_score", "-") if isinstance(grok_r, dict) else "-",
-        "grok_analysis": grok_r.get("reason", grok_r.get("analysis", "N/A")) if isinstance(grok_r, dict) else "N/A",
-        "gemini_score": gemini_r.get("ai_score", "-") if isinstance(gemini_r, dict) else "-",
-        "gemini_analysis": gemini_r.get("reason", gemini_r.get("analysis", "N/A")) if isinstance(gemini_r, dict) else "N/A",
-        "claude_score": cl_sc,
-        "claude_analysis": claude_r.get("reason", claude_r.get("analysis", "N/A")) if isinstance(claude_r, dict) else "N/A",
+        "gpt_score": gpt_r.get("ai_score", "弃权") if ai_valid["gpt"] else "弃权",
+        "gpt_analysis": gpt_r.get("reason", gpt_r.get("analysis", "弃权")) if ai_valid["gpt"] else "弃权 (AI失效,本场不参与决策)",
+        "grok_score": grok_r.get("ai_score", "弃权") if ai_valid["grok"] else "弃权",
+        "grok_analysis": grok_r.get("reason", grok_r.get("analysis", "弃权")) if ai_valid["grok"] else "弃权 (AI失效,本场不参与决策)",
+        "gemini_score": gemini_r.get("ai_score", "弃权") if ai_valid["gemini"] else "弃权",
+        "gemini_analysis": gemini_r.get("reason", gemini_r.get("analysis", "弃权")) if ai_valid["gemini"] else "弃权 (AI失效,本场不参与决策)",
+        "claude_score": cl_sc if ai_valid["claude"] else "弃权",
+        "claude_analysis": claude_r.get("reason", claude_r.get("analysis", "弃权")) if ai_valid["claude"] else "弃权 (AI失效,本场不参与决策)",
+        "ai_abstained": [n.upper() for n, v in ai_valid.items() if not v],  # 新增字段供前端显示
         "ai_avg_confidence": round(avg_ai_conf, 1),
         "value_kill_count": value_kills,
         "ai_consensus_strength": round(ai_consensus_strength, 2),
@@ -1509,6 +1619,9 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "crs_implied_probs": {k: round(v, 2) for k, v in crs_probs.items()} if crs_probs else {},
         "crs_coverage": crs_coverage,
         "crs_margin": crs_margin,
+        "scenario": scenario,  # v17.5 新增: 场景识别
+        "btts_pct_used": round(btts_pct, 1),
+        "over25_pct_used": round(over25_pct, 1),
 
         # 进球数信号
         "goal_signals": {str(k): round(v, 2) for k, v in goal_signals.items()},
