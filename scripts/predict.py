@@ -2087,8 +2087,3 @@ def run_predictions(raw, use_ai=True):
     save_ai_diary(diary)
 
     return res, t4
-
-
-if __name__ == "__main__":
-    logger.info("vMAX 17.0 启动")
-    print("✅ vMAX 17.0 方案B已加载 — 删泊松·CRS直接概率·恢复v14.3全部信号")
