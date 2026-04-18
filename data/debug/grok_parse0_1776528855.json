@@ -1,0 +1,21 @@
+{
+  "id": "chatcmpl-22b8918a-4146-4146-b022-ced564392921",
+  "object": "chat.completion",
+  "created": 1776528794,
+  "model": "grok-420-thinking",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "<think>**Thinking about your request**\n\n**搜索赔率**\n\n- 正在查找Pinnacle和Betfair实时赔率以确认Sharp资金流向\n"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 14049,
+    "completion_tokens": 34,
+    "total_tokens": 14083
+  }
+}
