@@ -1024,9 +1024,9 @@ async def run_ai_matrix_two_phase(match_analyses):
     ai_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
-            "gpt-5.4"  # v17.7 主力 (poloai通道)
-    
-                    
+            "gpt-5.4-pro",                # v17.7 主力 (poloai通道)
+            "gpt-5.4",                    # 备用
+            "gpt-5",                      # 备用: GPT-5
             # 不降级到gpt-4.1/gpt-4o (用户要求最低5.4级)
         ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
@@ -1364,7 +1364,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 sc = parse_score(t3[0].get("score", ""))
         if sc and sc[0] is not None:
             # v17.4 权重: Claude裁决>Gemini>Grok>GPT
-            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.25))
+            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
             if sc[0] > sc[1]: ai_directions["home"] += w
             elif sc[0] < sc[1]: ai_directions["away"] += w
             else: ai_directions["draw"] += w
@@ -1511,7 +1511,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         if sc and sc[0] is not None:
             key = f"{sc[0]}-{sc[1]}"
             # v17.4 比分投票权重: Claude裁决>Gemini>Grok>GPT
-            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.20))
+            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
             ai_voted[key] = ai_voted.get(key, 0) + w
         t3 = r.get("top3", [])
         if isinstance(t3, list):
@@ -1857,7 +1857,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     ev_data = calculate_value_bet(final_prob, final_odds)
 
     # v17.4 信心加权: Claude裁决>Gemini>Grok>GPT
-    weights = {"claude": 1.4, "gemini": 1.35, "grok": 1.30, "gpt": 1.30}
+    weights = {"claude": 1.4, "gemini": 1.35, "grok": 1.30, "gpt": 1.1}
     ai_conf_sum = 0
     ai_conf_count = 0
     value_kills = 0
