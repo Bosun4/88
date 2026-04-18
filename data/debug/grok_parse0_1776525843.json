@@ -1,0 +1,21 @@
+{
+  "id": "chatcmpl-cb3e4c9a-6784-4f36-a290-9b239715362c",
+  "object": "chat.completion",
+  "created": 1776525769,
+  "model": "grok-420-thinking",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "<think>**Thinking about your request**\n\n**Analyzing match data**\n\n- 搜索Pinnacle/Betfair实时赔率确认Sharp资金方向\n- 读进球数压低信号\n- 散户反指需>58%才触发\n- 参考Shin概率与赔率变动判断庄家意图\n- 结合伤停与赛事属性调整庄家意图\n"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 14417,
+    "completion_tokens": 81,
+    "total_tokens": 14498
+  }
+}

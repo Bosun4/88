@@ -1,0 +1,21 @@
+{
+  "id": "chatcmpl-f56166bc-7f82-482d-95eb-d9ebfcc438e1",
+  "object": "chat.completion",
+  "created": 1776525551,
+  "model": "grok-420-thinking",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "<think>**Thinking about your request**\n\n**Checking Sharp funds**\n\n- Sharp资金流向显示客队支持力度更大\n**Analyzing goal suppression**\n\n- 进球数赔率偏向2球区间，暗示庄家压低总进球预期\n- 散户投注负39%，未达反指阈值\n"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 14417,
+    "completion_tokens": 72,
+    "total_tokens": 14489
+  }
+}
