@@ -1025,8 +1025,8 @@ async def run_ai_matrix_two_phase(match_analyses):
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
             "gpt-5.4-pro",                # v17.7 主力 (poloai通道)
-            "gpt-5.4",                    # 备用
-            "gpt-5",                      # 备用: GPT-5
+            "gpt-5.4"    # 备用
+                    
             # 不降级到gpt-4.1/gpt-4o (用户要求最低5.4级)
         ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
