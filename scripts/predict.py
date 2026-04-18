@@ -596,6 +596,11 @@ def build_phase1_prompt(match_analyses):
 FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1",
                  "https://api522.pro/v1", "https://www.api522.pro/v1"]
 
+# v17.7 GPT专用默认配置 (poloai通道, 绕过熊猫proxy bug)
+# 这些是"内置默认值",可被环境变量覆盖
+GPT_DEFAULT_URL = "https://poloai.top/v1"
+GPT_DEFAULT_KEY = ""  # 不硬编码key (安全) - 从环境变量GPT_API_KEY读取
+
 
 def get_clean_env_url(name, default=""):
     v = str(os.environ.get(name, globals().get(name, default))).strip(" \t\n\r\"'")
@@ -609,15 +614,26 @@ def get_clean_env_key(name):
 
 async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
     key = get_clean_env_key(key_env)
+    # v17.7 GPT如果没配环境变量key,尝试默认key
+    if not key and ai_name == "gpt":
+        key = GPT_DEFAULT_KEY
     if not key:
         return ai_name, {}, "no_key"
 
-    primary_url = get_clean_env_url(url_env)
-    backup = [u for u in FALLBACK_URLS if u and u != primary_url][:1]
-    urls = [primary_url] + backup
+    # v17.7 GPT使用poloai专属URL,不和熊猫共用
+    if ai_name == "gpt":
+        primary_url = get_clean_env_url(url_env, GPT_DEFAULT_URL)
+        if not primary_url or "poloai" not in primary_url:
+            primary_url = GPT_DEFAULT_URL
+        urls = [primary_url]  # GPT不回退到熊猫(有proxy bug)
+        print(f"    🔌 [GPT] 使用poloai通道: {primary_url}")
+    else:
+        primary_url = get_clean_env_url(url_env)
+        backup = [u for u in FALLBACK_URLS if u and u != primary_url][:1]
+        urls = [primary_url] + backup
 
     CONNECT_TIMEOUT = 20
-    READ_TIMEOUT_MAP = {"claude": 600, "grok": 350, "gpt": 600, "gemini": 300}
+    READ_TIMEOUT_MAP = {"claude": 350, "grok": 200, "gpt": 200, "gemini": 250}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     # v17升级: 教AI如何综合多信号判断
@@ -1008,8 +1024,8 @@ async def run_ai_matrix_two_phase(match_analyses):
     ai_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
-            "熊猫-按量-gpt-5.4",          # 当前主力 (有proxy bug风险)
-            "熊猫-A-10-gpt-5.4"               
+            "gpt-5.4-pro",                # v17.7 主力 (poloai通道)
+            "gpt-5.4",                    
         ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
@@ -1459,10 +1475,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             home_xg *= 1.15; away_xg *= 0.85
             xg_adj_log.append("Sharp主")
     if cold_door["is_cold_door"] and not sharp_detected:
-        hp_eng = engine_result.get("home_prob", shin_h)
-        ap_eng = engine_result.get("away_prob", shin_a)
-        current_hot_side = "home" if hp_eng > ap_eng else "away"
-        if current_hot_side == "home":
+        if hot_side == "home":
             home_xg *= 0.75; away_xg *= 1.25
             xg_adj_log.append("冷主")
         else:
@@ -2090,3 +2103,8 @@ def run_predictions(raw, use_ai=True):
     save_ai_diary(diary)
 
     return res, t4
+
+
+if __name__ == "__main__":
+    logger.info("vMAX 17.0 启动")
+    print("✅ vMAX 17.0 方案B已加载 — 删泊松·CRS直接概率·恢复v14.3全部信号")
