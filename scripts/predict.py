@@ -1025,7 +1025,9 @@ async def run_ai_matrix_two_phase(match_analyses):
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
             "gpt-5.4-pro",                # v17.7 主力 (poloai通道)
-            "gpt-5.4",                    
+            "gpt-5.4",                    # 备用
+            "gpt-5",                      # 备用: GPT-5
+            # 不降级到gpt-4.1/gpt-4o (用户要求最低5.4级)
         ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
@@ -1200,6 +1202,11 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     # 信号采集: 冷门信号
     cold_signals_raw = [s for s in smart_signals if "❄️" in str(s) or "冷门" in str(s) or "大热" in str(s) or "造热" in str(s)]
 
+    # v17.7 bugfix: hot_side 提前定义 (修复 UnboundLocalError)
+    hp_eng = engine_result.get("home_prob", shin_h)
+    ap_eng = engine_result.get("away_prob", shin_a)
+    hot_side = "home" if hp_eng > ap_eng else "away"
+
     # ========== 🎯 体彩诱盘识别核心(v17.6) ==========
     # 规则: Sharp是真相, 当Sharp与Shin冲突且有辅助证据时, Shin应该降权
     dupan_detected = False   # 是否识别到诱盘
@@ -1322,9 +1329,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
         if cold_level:
             # 给"非热门方向"加分, 减"热门方向"
-            hp_eng = engine_result.get("home_prob", shin_h)
-            ap_eng = engine_result.get("away_prob", shin_a)
-            hot_side = "home" if hp_eng > ap_eng else "away"
             direction_scores[hot_side] -= cold_power
             other = "away" if hot_side == "home" else "home"
             direction_scores[other] += cold_power * 0.6
@@ -1360,7 +1364,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 sc = parse_score(t3[0].get("score", ""))
         if sc and sc[0] is not None:
             # v17.4 权重: Claude裁决>Gemini>Grok>GPT
-            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
+            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.25))
             if sc[0] > sc[1]: ai_directions["home"] += w
             elif sc[0] < sc[1]: ai_directions["away"] += w
             else: ai_directions["draw"] += w
@@ -1507,7 +1511,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         if sc and sc[0] is not None:
             key = f"{sc[0]}-{sc[1]}"
             # v17.4 比分投票权重: Claude裁决>Gemini>Grok>GPT
-            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
+            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.20))
             ai_voted[key] = ai_voted.get(key, 0) + w
         t3 = r.get("top3", [])
         if isinstance(t3, list):
@@ -1853,7 +1857,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     ev_data = calculate_value_bet(final_prob, final_odds)
 
     # v17.4 信心加权: Claude裁决>Gemini>Grok>GPT
-    weights = {"claude": 1.4, "gemini": 1.35, "grok": 1.30, "gpt": 1.1}
+    weights = {"claude": 1.4, "gemini": 1.35, "grok": 1.30, "gpt": 1.30}
     ai_conf_sum = 0
     ai_conf_count = 0
     value_kills = 0
