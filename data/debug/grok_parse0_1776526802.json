@@ -1,0 +1,21 @@
+{
+  "id": "chatcmpl-7f457159-6d5f-48ad-aa2c-267a6576a2ac",
+  "object": "chat.completion",
+  "created": 1776526735,
+  "model": "grok-420-thinking",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "<think>**Thinking about your request**\n\n**搜索赔率**\n\n- 实时查阅Pinnacle和Betfair赔率以确认Sharp资金流向\n- 结合散户投注比例判断反向信号\n"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 14417,
+    "completion_tokens": 46,
+    "total_tokens": 14463
+  }
+}
