@@ -74,10 +74,10 @@ STANDARD_GOAL_ODDS = {
     4: 7.0, 5: 14.0, 6: 30.0, 7: 70.0,
 }
 
-# 胜其他/平其他/负其他比分集合
-SCORE_OTHERS_HOME = ["4-3", "5-3", "5-4", "6-0", "6-1", "6-2", "6-3", "6-4", "7-0", "7-1", "7-2"]
-SCORE_OTHERS_DRAW = ["4-4", "5-5", "6-6"]
-SCORE_OTHERS_AWAY = ["3-4", "0-6", "1-6", "2-6", "3-6", "0-7", "1-7", "2-7"]
+# 胜其他/平其他/负其他比分集合 (加入虚拟比分支持AI输出)
+SCORE_OTHERS_HOME = ["4-3", "5-3", "5-4", "6-0", "6-1", "6-2", "6-3", "6-4", "7-0", "7-1", "7-2", "胜其他", "9-0"]
+SCORE_OTHERS_DRAW = ["4-4", "5-5", "6-6", "平其他", "9-9"]
+SCORE_OTHERS_AWAY = ["3-4", "0-6", "1-6", "2-6", "3-6", "0-7", "1-7", "2-7", "负其他", "0-9"]
 ALL_SCORE_OTHERS = SCORE_OTHERS_HOME + SCORE_OTHERS_DRAW + SCORE_OTHERS_AWAY
 
 # CRS完整字段映射
@@ -111,8 +111,11 @@ def calculate_value_bet(prob_pct, odds):
 
 def parse_score(s):
     try:
-        s = str(s).strip().replace(" ", "").replace("：", "-").replace(":", "-").replace("\u2013", "-").replace("\u2014", "-")
-        p = s.split("-")
+        s_str = str(s).strip().replace(" ", "").replace("：", "-").replace(":", "-").replace("\u2013", "-").replace("\u2014", "-")
+        if "胜" in s_str and "其他" in s_str: return 9, 0
+        if "平" in s_str and "其他" in s_str: return 9, 9
+        if "负" in s_str and "其他" in s_str: return 0, 9
+        p = s_str.split("-")
         return int(p[0]), int(p[1])
     except:
         return None, None
@@ -208,22 +211,45 @@ def detect_goal_signals(match_obj):
 
 
 # ====================================================================
-# 🎯 核心算法3: 胜其他场识别器
+# 🎯 核心算法3: 胜其他场识别器 (接入极端大球高敏探针)
 # ====================================================================
 def detect_score_others(match_obj, exp_goals, ai_responses=None):
     triggers = []
     score = 0
+    is_extreme_blowout = False
 
     try:
         a7 = float(match_obj.get("a7", 999) or 999)
-        if 0 < a7 <= 18:
+        if 0 < a7 <= 23.0:
+            score += 2
+            triggers.append(f"7+球极低{a7:.1f}≤23")
+            is_extreme_blowout = True
+        elif 0 < a7 <= 30.0:
+            score += 1
+            triggers.append(f"7+球{a7:.1f}≤30")
+        elif 0 < a7 <= 18:
             score += 1
             triggers.append(f"7+球{a7:.1f}≤18")
     except: pass
 
     try:
+        a6 = float(match_obj.get("a6", 999) or 999)
+        if 0 < a6 <= 13.0:
+            score += 2
+            triggers.append(f"6球极低{a6:.1f}≤13")
+            is_extreme_blowout = True
+        elif 0 < a6 <= 16.0:
+            score += 1
+            triggers.append(f"6球{a6:.1f}≤16")
+    except: pass
+
+    try:
         a5 = float(match_obj.get("a5", 999) or 999)
-        if 0 < a5 <= 10:
+        if 0 < a5 <= 8.0:
+            score += 2
+            triggers.append(f"5球极低{a5:.1f}≤8")
+            is_extreme_blowout = True
+        elif 0 < a5 <= 10.0:
             score += 1
             triggers.append(f"5球{a5:.1f}≤10")
     except: pass
@@ -290,6 +316,7 @@ def detect_score_others(match_obj, exp_goals, ai_responses=None):
 
     return {
         "is_others": is_others,
+        "is_extreme_blowout": is_extreme_blowout,
         "trigger_count": score,
         "direction": direction,
         "triggers": triggers,
@@ -425,6 +452,11 @@ def build_phase1_prompt(match_analyses):
     p += "- Sharp走主 + 散户也>58%主 → 双重确认，放胆选主胜大比分(2-1/3-1)\n"
     p += "- Sharp走客 + 散户>58%主 → 大热必死，必须选择客胜。具体比分请严格参考进球数赔率（若7+球<18倍，放胆选1-3/2-3/客胜其他）。\n\n"
 
+    p += "【🔥极端大球/胜其他 强制规则（最高优先级）】\n"
+    p += "注意：如果赔率显示 5球<8倍 或 6球<13倍 或 7+球<23倍，说明庄家极度防范惨案屠杀！\n"
+    p += "此时**绝对禁止**被“散户大热”或“反指”误导而去选择 1-1/1-2/2-2 这种小比分（AI常犯错误）。\n"
+    p += "必须顺应庄家真实的进球防范，直接输出大比分（如 4-1, 5-0, 5-1）或直接输出文本【胜其他】/【负其他】！\n\n"
+
     # 🆕 v17.6 体彩诱盘特殊规则
     p += "【⚠️体彩场次诱盘识别 - 绝对优先级】\n"
     p += "你预测的是中国体彩精选场次,诱盘率远高于大盘,必须警惕Shin欺骗!\n\n"
@@ -432,7 +464,7 @@ def build_phase1_prompt(match_analyses):
     p += "1) Sharp方向 ≠ Shin高概率方向 + 散户大热Shin方向(反指) + Steam同Sharp方向\n"
     p += "   → 100%诱盘! 必须按Sharp方向选比分,不要选Shin方向\n"
     p += "   示例: Shin客48% 看似客胜,但Sharp走主+散户热客62%+主胜Steam\n"
-    p += "   → 答案必须是主胜(2-1/2-0),不是客胜!\n\n"
+    p += "   → 答案必须是主胜 比如(2-1/2-0)符合的条件的比分,不是客胜!\n\n"
     p += "2) Sharp=Shin同方向 + 散户也同方向:\n"
     p += "   → 不是诱盘,方向极其明确,放胆选2+球差比分\n\n"
     p += "3) 反向Steam(钱进+降水但散户没跟): 该方向历史命中72%,极强信号\n"
@@ -1024,7 +1056,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     ai_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
-            "gpt-5.4",                # 严格保留唯一主力
+            "gpt-5.4",
         ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
@@ -1694,8 +1726,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     over25_pct = float(engine_result.get("over_25", engine_result.get("over_2_5", 50)) or 50)
 
     scenario = "normal"
-    # 🆕 v17.6: 诱盘场景优先识别(覆盖其他场景)
-    if dupan_detected:
+    # 🆕 极端大球场景优先识别(覆盖诱盘)
+    if others_info.get("is_extreme_blowout"):
+        scenario = "extreme_blowout"
+    elif dupan_detected:
         scenario = "sharp_reversal"
     elif exp_goals >= 3.5:
         scenario = "shootout"
@@ -1731,6 +1765,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             "btts_strong": f"双方必进(BTTS{btts_pct:.0f}%)",
             "single_side": f"单边场(BTTS{btts_pct:.0f}%)",
             "sharp_reversal": f"诱盘反转(Shin骗局→Sharp真相={dupan_true_dir})",
+            "extreme_blowout": f"极端惨案防范(庄家强压大球赔率)",
         }
         print(f"    🎬 场景: {scenario_desc.get(scenario, scenario)}")
 
@@ -1745,10 +1780,14 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
     score_ratings = {}
     for score_str in all_candidates:
-        try:
-            h_g, a_g = map(int, score_str.split("-"))
-        except:
-            continue
+        if score_str in ["胜其他", "9-0"]: h_g, a_g = 9, 0
+        elif score_str in ["平其他", "9-9"]: h_g, a_g = 9, 9
+        elif score_str in ["负其他", "0-9"]: h_g, a_g = 0, 9
+        else:
+            try:
+                h_g, a_g = map(int, score_str.split("-"))
+            except:
+                continue
         total_g = h_g + a_g
         s = 0.0
 
@@ -1823,17 +1862,28 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             s += 10
 
         # 🆕 v17.5 ⑩ 场景硬约束: 基于λ/BTTS/大2.5的比分集合过滤
+        # 🎯 极端大球霸权
+        if scenario == "extreme_blowout":
+            if total_g <= 3:
+                s *= 0.10  # 无情抹杀3球及以下比分
+            if score_str in ALL_SCORE_OTHERS or total_g >= 5:
+                s *= 3.00  # 大比分权重翻3倍
+                # 方向吻合强塞40分
+                if others_info["direction"] == "home" and score_str in SCORE_OTHERS_HOME: s += 40
+                elif others_info["direction"] == "away" and score_str in SCORE_OTHERS_AWAY: s += 40
+                elif others_info["direction"] == "draw" and score_str in SCORE_OTHERS_DRAW: s += 40
+
         # 🎯 v17.6 sharp_reversal 场景优先级最高(诱盘反转)
-        if scenario == "sharp_reversal":
+        elif scenario == "sharp_reversal":
             if dupan_true_dir == "home":
                 if score_str in SHARP_REV_HOME_BOOST: s *= 1.70  # Sharp主胜强加
                 elif goal_margin <= 0:
-                    if score_str in ALL_SCORE_OTHERS and others_info["is_others"]: s *= 0.60
+                    if score_str in ALL_SCORE_OTHERS and others_info.get("is_extreme_blowout"): s *= 0.60
                     else: s *= 0.20  # 非主胜大幅降权(Shin骗局)
             elif dupan_true_dir == "away":
                 if score_str in SHARP_REV_AWAY_BOOST: s *= 1.70
                 elif goal_margin >= 0:
-                    if score_str in ALL_SCORE_OTHERS and others_info["is_others"]: s *= 0.60
+                    if score_str in ALL_SCORE_OTHERS and others_info.get("is_extreme_blowout"): s *= 0.60
                     else: s *= 0.20
             elif dupan_true_dir == "draw":
                 if score_str in SHARP_REV_DRAW_BOOST: s *= 1.50
@@ -1874,10 +1924,18 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     ranked = sorted(score_ratings.items(), key=lambda x: x[1], reverse=True)
     final_score = ranked[0][0] if ranked else "1-1"
 
+    # 规范化输出
+    if final_score == "9-0": final_score = "胜其他"
+    if final_score == "9-9": final_score = "平其他"
+    if final_score == "0-9": final_score = "负其他"
+
     # 🛡️ v17.8 Bug C修复: 方向-比分一致性护栏
     # 如果比分层top1的方向与方向层final_direction不一致,找方向一致的最高分比分
     def _dir_of_score(sc_str):
         try:
+            if "胜其他" in sc_str: return "home"
+            if "平其他" in sc_str: return "draw"
+            if "负其他" in sc_str: return "away"
             h, a = map(int, sc_str.split("-"))
             return "home" if h > a else ("away" if h < a else "draw")
         except: return None
@@ -1901,11 +1959,11 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 final_score = aligned_score
 
     # 显示标签
-    is_score_others_final = final_score in ALL_SCORE_OTHERS
+    is_score_others_final = final_score in ALL_SCORE_OTHERS or "其他" in final_score
     if is_score_others_final:
-        if final_score in SCORE_OTHERS_HOME:
+        if final_score in SCORE_OTHERS_HOME or final_score == "胜其他":
             display_label = "胜其他"
-        elif final_score in SCORE_OTHERS_DRAW:
+        elif final_score in SCORE_OTHERS_DRAW or final_score == "平其他":
             display_label = "平其他"
         else:
             display_label = "负其他"
@@ -1920,9 +1978,9 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     target_crs = CRS_FULL_MAP.get(final_score, "")
     final_odds = float(match_obj.get(target_crs, 0) or 0)
     if not final_odds and is_score_others_final:
-        if final_score in SCORE_OTHERS_HOME:
+        if final_score in SCORE_OTHERS_HOME or final_score == "胜其他":
             final_odds = float(match_obj.get("crs_win", 0) or 0)
-        elif final_score in SCORE_OTHERS_DRAW:
+        elif final_score in SCORE_OTHERS_DRAW or final_score == "平其他":
             final_odds = float(match_obj.get("crs_same", 0) or 0)
         else:
             final_odds = float(match_obj.get("crs_lose", 0) or 0)
@@ -2150,23 +2208,31 @@ def run_predictions(raw, use_ai=True):
 
         score_str = mg.get("predicted_score", "1-1")
         try:
-            sh, sa = map(int, score_str.split("-"))
-            if sh > sa: mg["result"] = "主胜"
-            elif sh < sa: mg["result"] = "客胜"
-            else: mg["result"] = "平局"
+            if "胜其他" in score_str: mg["result"] = "主胜"
+            elif "负其他" in score_str: mg["result"] = "客胜"
+            elif "平其他" in score_str: mg["result"] = "平局"
+            else:
+                sh, sa = map(int, score_str.split("-"))
+                if sh > sa: mg["result"] = "主胜"
+                elif sh < sa: mg["result"] = "客胜"
+                else: mg["result"] = "平局"
         except:
             pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
             mg["result"] = max(pcts, key=pcts.get)
 
         # v17.8 🛡️ 强一致性护栏: predicted_label/result/predicted_score 必须方向一致
-        # 修复bug: 0-1却显示"平局", 0-0却显示"主胜"等下游模块污染
         try:
-            sh, sa = map(int, score_str.split("-"))
-            expected_dir = "主胜" if sh > sa else ("客胜" if sh < sa else "平局")
+            if "胜其他" in score_str: expected_dir = "主胜"
+            elif "负其他" in score_str: expected_dir = "客胜"
+            elif "平其他" in score_str: expected_dir = "平局"
+            else:
+                sh, sa = map(int, score_str.split("-"))
+                expected_dir = "主胜" if sh > sa else ("客胜" if sh < sa else "平局")
+            
             if mg.get("result") != expected_dir:
                 print(f"    ⚠️ [一致性修复] {score_str}方向应为{expected_dir},覆盖旧result={mg.get('result')}")
                 mg["result"] = expected_dir
-            # predicted_label应该是比分本身或"胜其他/平其他/负其他"
+            
             pl = mg.get("predicted_label", "")
             if pl and pl not in (score_str, "胜其他", "平其他", "负其他"):
                 print(f"    ⚠️ [一致性修复] predicted_label={pl}与比分{score_str}不匹配,覆盖")
