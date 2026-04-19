@@ -1421,6 +1421,24 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
     # ============ 第二层: 期望进球 (v17.3 多层兜底) ============
     exp_goals = 0.0
+    # 🆕 v17.9 优先使用 a0-a7 赔率反推 (最高权重，最准的进球数信号)
+    try:
+        gp = []
+        for gi in range(8):
+            v = float(match_obj.get(f"a{gi}", 0) or 0)
+            if v > 1:
+                gp.append((gi, 1/v))
+        if gp and len(gp) >= 3:
+            tp = sum(p for _, p in gp)
+            exp_from_odds = sum(g * (p / tp) for g, p in gp)
+            # 给 a0-a7 70%权重，xG 30%权重
+            hxg = float(engine_result.get("bookmaker_implied_home_xg", 1.3) or 1.3)
+            axg = float(engine_result.get("bookmaker_implied_away_xg", 0.9) or 0.9)
+            exp_goals = exp_from_odds * 0.7 + (hxg + axg) * 0.3
+            print(f"    📐 期望进球优先a0-a7反推(70%权重): {exp_goals:.2f}")
+    except:
+        pass
+
     # 层1: 直接字段
     for src, src_name in [(engine_result, "engine"), (stats, "stats")]:
         if not src: continue
@@ -1430,7 +1448,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             if v is not None:
                 try:
                     fv = float(v)
-                    if fv > 0.5:
+                    if fv > 0.5 and exp_goals == 0.0:
                         exp_goals = fv
                         break
                 except: pass
@@ -1446,7 +1464,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 print(f"    📐 期望进球用xG总和: {hxg:.2f}+{axg:.2f}={exp_goals:.2f}")
         except: pass
 
-    # 层3: 用 a0-a7 赔率反推
+    # 层3: 用 a0-a7 赔率反推 (已提前处理，此处保留兼容)
     if exp_goals <= 0:
         try:
             gp = []
@@ -1848,8 +1866,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             if goal_margin == -1 and a_g <= 2:
                 s -= contrarian_home_score
 
-        # ⑦ 强信号否决
-        if strongest_ratio > 2.0 and strongest_goal >= 0:
+        # ⑦ 强信号否决 (v17.9 阈值降低至1.45，让进球数信号更敏感)
+        if strongest_ratio > 1.45 and strongest_goal >= 0:
             if abs(total_g - strongest_goal) > 1:
                 s -= 25
 
@@ -1862,10 +1880,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             s += 10
 
         # 🆕 v17.5 ⑩ 场景硬约束: 基于λ/BTTS/大2.5的比分集合过滤
-        # 🎯 极端大球霸权
+        # 🎯 极端大球霸权 (v17.9 软化约束，从0.10→0.40)
         if scenario == "extreme_blowout":
             if total_g <= 3:
-                s *= 0.10  # 无情抹杀3球及以下比分
+                s *= 0.40  # 软化，不再直接清零
             if score_str in ALL_SCORE_OTHERS or total_g >= 5:
                 s *= 3.00  # 大比分权重翻3倍
                 # 方向吻合强塞40分
@@ -1891,13 +1909,13 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
         elif scenario == "shootout":
             if score_str in BOOST_SHOOTOUT: s *= 1.50
-            elif score_str in EXCLUDE_HIGH: s *= 0.10
-            elif total_g <= 2: s *= 0.40
+            elif score_str in EXCLUDE_HIGH: s *= 0.40   # v17.9 软化
+            elif total_g <= 2: s *= 0.55                # v17.9 软化
         elif scenario == "high_goals":
-            if score_str in EXCLUDE_HIGH: s *= 0.10
+            if score_str in EXCLUDE_HIGH: s *= 0.40     # v17.9 软化
             elif score_str in BOOST_HIGH: s *= 1.30
         elif scenario == "low_goals":
-            if score_str in EXCLUDE_LOW: s *= 0.10
+            if score_str in EXCLUDE_LOW: s *= 0.40      # v17.9 软化
             elif score_str in BOOST_LOW: s *= 1.40
         elif scenario == "btts_strong":
             if score_str in BTTS_STRONG_EXCLUDE: s *= 0.20
@@ -1929,9 +1947,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if final_score == "9-9": final_score = "平其他"
     if final_score == "0-9": final_score = "负其他"
 
-    # 🛡️ v17.8 Bug C修复: 方向-比分一致性护栏
+    # 🛡️ v17.8 Bug C修复: 方向-比分一致性护栏 (v17.9 放宽阈值)
     # 如果比分层top1的方向与方向层final_direction不一致,找方向一致的最高分比分
     def _dir_of_score(sc_str):
+        """比分字符串 → 方向 (home/draw/away)"""
         try:
             if "胜其他" in sc_str: return "home"
             if "平其他" in sc_str: return "draw"
@@ -1943,7 +1962,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     top_score_dir = _dir_of_score(final_score)
     # 仅在"方向差距足够大"且"方向一致票数充足"时才强制覆盖
     # 避免方向概率接近(<5%)时过度干预
-    if top_score_dir != final_direction and dir_gap > 8:
+    if top_score_dir != final_direction and dir_gap > 15:   # v17.9 阈值从8→15
         # 在候选池中找第一个与final_direction一致的比分
         aligned_score = None
         for sc, pts in ranked:
@@ -1951,10 +1970,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 aligned_score = sc
                 break
         if aligned_score:
-            # 仅当aligned_score的得分 >= top的70%时才替换(保证合理性)
+            # 仅当aligned_score的得分 >= top的85%时才替换(保证合理性)
             top_pts = ranked[0][1]
             aligned_pts = score_ratings.get(aligned_score, 0)
-            if aligned_pts >= top_pts * 0.70:
+            if aligned_pts >= top_pts * 0.85:   # v17.9 阈值从0.70→0.85
                 print(f"    🛡️ [方向一致性] 方向({final_direction})与比分top1({final_score}->{top_score_dir})不符 → 改用{aligned_score}({aligned_pts:.0f})")
                 final_score = aligned_score
 
