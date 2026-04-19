@@ -11,8 +11,4 @@ python scripts/main.py
 
 ## Required Environment Variables
 
-- API_FOOTBALL_KEY
-- FOOTBALL_DATA_KEY
-- ODDS_API_KEY
-- GEMINI_API_KEY
-- GPT_API_KEY
+
