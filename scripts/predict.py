@@ -423,7 +423,7 @@ def build_phase1_prompt(match_analyses):
     p += "- Sharp信号显示(主胜/客胜/平) → 优先相信这个方向\n"
     p += "- 散户>58% 押某方向 → 反指！该方向小比分降权(1-0/2-1可能被破)\n"
     p += "- Sharp走主 + 散户也>58%主 → 双重确认，放胆选主胜大比分(2-1/3-1)\n"
-    p += "- Sharp走客 + 散户>58%主 → 大热必死，考虑客胜(0-1/0-2/1-2)\n\n"
+    p += "- Sharp走客 + 散户>58%主 → 大热必死，必须选择客胜。具体比分请严格参考进球数赔率（若7+球<18倍，放胆选1-3/2-3/客胜其他）。\n\n"
 
     # 🆕 v17.6 体彩诱盘特殊规则
     p += "【⚠️体彩场次诱盘识别 - 绝对优先级】\n"
@@ -1024,10 +1024,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     ai_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
-            "gpt-5.4",                # v17.7 主力 (poloai通道)
-            "gpt-5.4",                    # 备用
-            "gpt-5",                      # 备用: GPT-5
-            # 不降级到gpt-4.1/gpt-4o (用户要求最低5.4级)
+            "gpt-5.4",                # 严格保留唯一主力
         ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
@@ -1663,6 +1660,12 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if sharp_detected and sharp_dir == "home":
         home_zero_prob -= 30
 
+    # 🚨 新增拦截：如果预期进球极大，强制解除零封机制
+    if exp_goals >= 3.0 or strongest_goal >= 3:
+        away_zero_prob = min(away_zero_prob, 50)
+        home_zero_prob = min(home_zero_prob, 50)
+        print(f"    ⚠️ 大球信号(λ={exp_goals:.2f}, 最强进球={strongest_goal})拦截零封机制")
+
     # 应用零封加成到比分层
     zero_boost_applied = False
     if away_zero_prob >= 70 and shin_h > shin_a:
@@ -1716,8 +1719,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     SINGLE_SIDE_BOOST = {"1-0", "2-0", "0-1", "0-2", "3-0", "0-3"}       # 单边场优选
     SINGLE_SIDE_EXCLUDE = {"1-1", "2-2"}                                  # 单边场禁选
     # v17.6 Sharp反向场景(禁Shin方向比分,强加Sharp方向比分)
-    SHARP_REV_HOME_BOOST = {"2-1", "2-0", "3-1", "3-0"}
-    SHARP_REV_AWAY_BOOST = {"1-2", "0-2", "1-3", "0-3"}
+    SHARP_REV_HOME_BOOST = {"2-1", "2-0", "3-1", "3-0", "3-2", "4-1", "4-2"}
+    SHARP_REV_AWAY_BOOST = {"1-2", "0-2", "1-3", "0-3", "2-3", "1-4", "2-4"}
     SHARP_REV_DRAW_BOOST = {"1-1", "2-2", "0-0"}
 
     if scenario != "normal":
@@ -1824,10 +1827,14 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         if scenario == "sharp_reversal":
             if dupan_true_dir == "home":
                 if score_str in SHARP_REV_HOME_BOOST: s *= 1.70  # Sharp主胜强加
-                elif goal_margin <= 0: s *= 0.20  # 非主胜大幅降权(Shin骗局)
+                elif goal_margin <= 0:
+                    if score_str in ALL_SCORE_OTHERS and others_info["is_others"]: s *= 0.60
+                    else: s *= 0.20  # 非主胜大幅降权(Shin骗局)
             elif dupan_true_dir == "away":
                 if score_str in SHARP_REV_AWAY_BOOST: s *= 1.70
-                elif goal_margin >= 0: s *= 0.20
+                elif goal_margin >= 0:
+                    if score_str in ALL_SCORE_OTHERS and others_info["is_others"]: s *= 0.60
+                    else: s *= 0.20
             elif dupan_true_dir == "draw":
                 if score_str in SHARP_REV_DRAW_BOOST: s *= 1.50
                 elif goal_margin != 0: s *= 0.40
