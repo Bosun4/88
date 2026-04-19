@@ -12,17 +12,16 @@ from typing import Dict, List, Any, Tuple, Optional
 
 # ====================================================================
 # 🛡️ vMAX 17.0 方案B — 删泊松·全靠数据+AI
-# 
+#
 # 核心变革 (vs v16):
-# ❌ 删除泊松双变量分布
-# ❌ 删除Dixon-Coles
-# ❌ 删除蒙特卡洛
-# ✅ 新增 CRS赔率直接反推概率 (代替泊松)
-# ✅ 恢复v14.3全部盘口信号 (Steam/散户反指/赔率变动/冷门预警)
-# ✅ Sharp在direction+xG两层都生效 (不只xG层)
-# ✅ 新增 散户反指对比分层直接降权
+#   ❌ 删除泊松双变量分布
+#   ❌ 删除Dixon-Coles
+#   ❌ 删除蒙特卡洛
+#   ✅ 新增 CRS赔率直接反推概率 (代替泊松)
+#   ✅ 恢复v14.3全部盘口信号 (Steam/散户反指/赔率变动/冷门预警)
+#   ✅ Sharp在direction+xG两层都生效 (不只xG层)
+#   ✅ 新增 散户反指对比分层直接降权
 # ====================================================================
-
 try:
     import structlog
     logger = structlog.get_logger()
@@ -64,6 +63,7 @@ try:
 except:
     pass
 
+
 # ====================================================================
 # 常量 & 工具函数
 # ====================================================================
@@ -91,6 +91,7 @@ CRS_FULL_MAP = {
     "1-5": "l15", "2-5": "l25",
 }
 
+
 def calculate_value_bet(prob_pct, odds):
     if not odds or odds <= 1.05:
         return {"ev": 0.0, "kelly": 0.0, "is_value": False}
@@ -107,6 +108,7 @@ def calculate_value_bet(prob_pct, odds):
         "is_value": ev > 0.05
     }
 
+
 def parse_score(s):
     try:
         s = str(s).strip().replace(" ", "").replace("：", "-").replace(":", "-").replace("\u2013", "-").replace("\u2014", "-")
@@ -115,10 +117,10 @@ def parse_score(s):
     except:
         return None, None
 
+
 # ====================================================================
 # 🎯 核心算法1: CRS赔率直接反推概率 (替代泊松)
 # ====================================================================
-
 def crs_implied_probabilities(match_obj):
     """
     从CRS赔率反推庄家真实比分概率分布
@@ -185,10 +187,10 @@ def crs_implied_probabilities(match_obj):
     coverage = len(raw_odds) / len(CRS_FULL_MAP)
     return probs, round(margin, 3), round(coverage, 2)
 
+
 # ====================================================================
 # 🎯 核心算法2: 进球数赔率信号检测
 # ====================================================================
-
 def detect_goal_signals(match_obj):
     """返回每个进球数的压低系数 ratio=标准/实际 > 1.2 即算信号"""
     signals = {}
@@ -204,10 +206,10 @@ def detect_goal_signals(match_obj):
             pass
     return signals
 
+
 # ====================================================================
 # 🎯 核心算法3: 胜其他场识别器
 # ====================================================================
-
 def detect_score_others(match_obj, exp_goals, ai_responses=None):
     triggers = []
     score = 0
@@ -294,10 +296,10 @@ def detect_score_others(match_obj, exp_goals, ai_responses=None):
         "ai_others_count": ai_others_count,
     }
 
+
 # ====================================================================
 # 🧊 冷门猎手引擎 (保留)
 # ====================================================================
-
 class ColdDoorDetector:
     @staticmethod
     def detect(match, prediction):
@@ -376,10 +378,10 @@ class ColdDoorDetector:
             "dark_verdict": f"❄️ {level}冷门！{len(signals)}条触发" if is_cold else ""
         }
 
+
 # ====================================================================
 # AI日记
 # ====================================================================
-
 def load_ai_diary():
     diary_file = "data/ai_diary.json"
     if os.path.exists(diary_file):
@@ -389,15 +391,16 @@ def load_ai_diary():
         except: pass
     return {"yesterday_win_rate": "N/A", "reflection": "持续进化中", "kill_history": []}
 
+
 def save_ai_diary(diary):
     os.makedirs("data", exist_ok=True)
     with open("data/ai_diary.json", "w", encoding="utf-8") as f:
         json.dump(diary, f, ensure_ascii=False, indent=2)
 
+
 # ====================================================================
 # 🧠 vMAX 17.0 Prompt — 教AI读CRS+进球信号
 # ====================================================================
-
 def build_phase1_prompt(match_analyses):
     diary = load_ai_diary()
     p = "你是顶尖足球量化分析师。根据原始数据，独立分析每场比赛，识别庄家意图，给出top3候选比分。\n\n"
@@ -586,34 +589,36 @@ def build_phase1_prompt(match_analyses):
     p += f"【输出{len(match_analyses)}场JSON数组，只输出数组！】\n"
     return p
 
+
 # ====================================================================
 # AI调用引擎
 # ====================================================================
-
-FALLBACK_URLS = [None, "[https://api520.pro/v1](https://api520.pro/v1)", "[https://api521.pro/v1](https://api521.pro/v1)",
-"[https://api522.pro/v1](https://api522.pro/v1)", "[https://www.api522.pro/v1](https://www.api522.pro/v1)"]
+FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1",
+                 "https://api522.pro/v1", "https://www.api522.pro/v1"]
 
 # v17.7 GPT专用默认配置 (poloai通道, 绕过熊猫proxy bug)
 # 这些是"内置默认值",可被环境变量覆盖
-
-GPT_DEFAULT_URL = "[https://poloai.top/v1](https://poloai.top/v1)"
+GPT_DEFAULT_URL = "https://poloai.top/v1"
 GPT_DEFAULT_KEY = ""  # 不硬编码key (安全) - 从环境变量GPT_API_KEY读取
+
 
 def get_clean_env_url(name, default=""):
     v = str(os.environ.get(name, globals().get(name, default))).strip(" \t\n\r\"'")
     match = re.search(r"(https?://[a-zA-Z0-9._:/-]+)", v)
     return match.group(1) if match else v
 
+
 def get_clean_env_key(name):
     return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
+
 
 async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
     key = get_clean_env_key(key_env)
     # v17.7 GPT如果没配环境变量key,尝试默认key
     if not key and ai_name == "gpt":
         key = GPT_DEFAULT_KEY
-        if not key:
-            return ai_name, {}, "no_key"
+    if not key:
+        return ai_name, {}, "no_key"
 
     # v17.7 GPT使用poloai专属URL,不和熊猫共用
     if ai_name == "gpt":
@@ -1010,6 +1015,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 
     return ai_name, {}, "all_failed"
 
+
 async def run_ai_matrix_two_phase(match_analyses):
     num = len(match_analyses)
     prompt = build_phase1_prompt(match_analyses)
@@ -1017,7 +1023,12 @@ async def run_ai_matrix_two_phase(match_analyses):
 
     ai_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
-        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.4"]),
+        ("gpt", "GPT_API_URL", "GPT_API_KEY", [
+            "gpt-5.4-pro",                # v17.7 主力 (poloai通道)
+            "gpt-5.4",                    # 备用
+            "gpt-5",                      # 备用: GPT-5
+            # 不降级到gpt-4.1/gpt-4o (用户要求最低5.4级)
+        ]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", [
             "熊猫特供-超纯满血-99额度-claude-opus-4.6-thinking",
@@ -1040,24 +1051,24 @@ async def run_ai_matrix_two_phase(match_analyses):
     print(f"  [完成] {ok}/4 AI有数据")
     return all_results
 
+
 # ====================================================================
 # 🌟 Merge v17.0 — 方案B: 删泊松, CRS+AI+信号驱动
-# 
+#
 # 评分公式 (总100分):
-# CRS直接概率 [35]    ← 替代泊松, 庄家真实概率
-# AI加权共识 [40]     ← 4家独立判断
-# 进球数信号 [15]     ← 庄家压低进球数
-# 胜其他加成 [5]      ← 识别到胜其他场
-# 方向/反指调整 [±15] ← Sharp/散户/冷门
-# 
+#   CRS直接概率 [35]    ← 替代泊松, 庄家真实概率
+#   AI加权共识 [40]     ← 4家独立判断
+#   进球数信号 [15]     ← 庄家压低进球数
+#   胜其他加成 [5]      ← 识别到胜其他场
+#   方向/反指调整 [±15] ← Sharp/散户/冷门
+#
 # 信号层 (恢复v14.3全部):
-# Shin [30] + Sharp [12] + Steam [8] + 散户反指 [10]
-# + 冷门预警 [8] + 赔率变动 [7] + AI共识 [25]
+#   Shin [30] + Sharp [12] + Steam [8] + 散户反指 [10]
+#   + 冷门预警 [8] + 赔率变动 [7] + AI共识 [25]
 # ====================================================================
-
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     # 🔧 v17.5 修复: 字段位置兼容 - v2_odds_dict内的CRS/进球数/半全场字段提升到顶层
-    # 真实数据结构: match_obj.v2_odds_dict.{w10, a0, ss, …}
+    # 真实数据结构: match_obj.v2_odds_dict.{w10, a0, ss, ...}
     if isinstance(match_obj.get("v2_odds_dict"), dict):
         v2 = match_obj["v2_odds_dict"]
         match_obj = {**match_obj, **v2}  # 不破坏原始, 创建新dict合并
@@ -2043,6 +2054,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "cold_door": cold_door,
     }
 
+
 def select_top4(preds):
     for p in preds:
         pr = p.get("prediction", {})
@@ -2069,11 +2081,13 @@ def select_top4(preds):
     preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
     return preds[:4]
 
+
 def extract_num(ms):
     wm = {"一":1000, "二":2000, "三":3000, "四":4000, "五":5000, "六":6000, "日":7000, "天":7000}
     base = next((v for k, v in wm.items() if k in str(ms)), 0)
     nums = re.findall(r"\d+", str(ms))
     return base + int(nums[0]) if nums else 9999
+
 
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
@@ -2175,6 +2189,7 @@ def run_predictions(raw, use_ai=True):
     save_ai_diary(diary)
 
     return res, t4
+
 
 if __name__ == "__main__":
     logger.info("vMAX 17.0 启动")
