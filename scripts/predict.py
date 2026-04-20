@@ -483,7 +483,7 @@ def build_phase1_prompt(match_analyses):
     p += "- 客队盘口太便宜+排名悬殊 → 考虑冷门负(1-2/0-1)\n\n"
 
     p += "【输出格式】只输出JSON数组。每场必须包含:\n"
-    p += "  match(整数), top3([{score,prob}],...), reason(80字含具体信号), \n"
+    p += "  match(整数), top3([{score,prob}],...), reason(150字含具体信号), \n"
     p += "  ai_confidence(0-100), is_score_others(true/false), \n"
     p += "  detected_signals([\"7球13倍\",\"杯赛\"] 识别到的信号)\n\n"
     p += '示例: {"match":1,"top3":[{"score":"4-3","prob":12},{"score":"3-2","prob":10},{"score":"4-2","prob":8}],"reason":"7球13倍庄家承认互射局+Sharp走主","ai_confidence":75,"is_score_others":true,"detected_signals":["7球13倍","Sharp主"]}\n\n'
@@ -595,13 +595,13 @@ def build_phase1_prompt(match_analyses):
             for k, label in [("home_injury", "主伤停"), ("guest_injury", "客伤停"),
                              ("home_bad_news", "主利空"), ("guest_bad_news", "客利空")]:
                 if info.get(k):
-                    p += f"{label}: {str(info[k])[:200].replace(chr(10), ' ')}\n"
+                    p += f"{label}: {str(info[k])[:600].replace(chr(10), ' ')}\n"
 
         # 积分/状态文本
         points = m.get("points", {})
         if isinstance(points, dict):
             for k in ["home_strength", "guest_strength", "match_points"]:
-                txt = str(points.get(k, ""))[:200].replace("\n", " ")
+                txt = str(points.get(k, ""))[:600].replace("\n", " ")
                 if "场均" in txt:
                     p += f"情报: {txt}\n"
                     break
@@ -987,7 +987,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                     results[mid] = {
                                         "top3": item["top3"],
                                         "ai_score": t1,
-                                        "reason": str(item.get("reason", ""))[:200],
+                                        "reason": str(item.get("reason", ""))[:800],
                                         "ai_confidence": int(item.get("ai_confidence", 60)),
                                         "is_score_others": bool(item.get("is_score_others", False)),
                                         "detected_signals": item.get("detected_signals", []),
@@ -995,7 +995,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 elif item.get("score"):
                                     results[mid] = {
                                         "ai_score": item["score"].replace(" ", "").strip(),
-                                        "reason": str(item.get("reason", ""))[:200],
+                                        "reason": str(item.get("reason", ""))[:800],
                                         "ai_confidence": int(item.get("ai_confidence", 60)),
                                         "is_score_others": bool(item.get("is_score_others", False)),
                                         "detected_signals": item.get("detected_signals", []),
