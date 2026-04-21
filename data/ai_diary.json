@@ -1,5 +1,5 @@
 {
-  "yesterday_win_rate": "10/22",
-  "reflection": "vMAX17.0 重构版 | 4冷门 0胜其他 9Sharp | 引入贝叶斯漂移 (严格向下兼容版)",
+  "yesterday_win_rate": "4/22",
+  "reflection": "vMAX17.0 | 11冷门 10胜其他 9Sharp | 方案B·修复一致性错位BUG",
   "kill_history": []
 }
