@@ -22,6 +22,7 @@ from typing import Dict, List, Any, Tuple, Optional
 #   ✅ Sharp在direction+xG两层都生效 (不只xG层)
 #   ✅ 新增 贝叶斯质心漂移 + Softmax 连续概率面打分机制
 #   ✅ Multi-Agent AI 角色化并发编排
+#   🚨 新增 【绝对一致性护栏】：彻底修复 UI 0-1配主胜/平局 的逻辑错位
 # ====================================================================
 try:
     import structlog
@@ -638,7 +639,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     }
     all_ai = {n: r for n, r in [("gpt", gpt_r), ("grok", grok_r), ("gemini", gemini_r), ("claude", claude_r)] if ai_valid[n]}
 
-    # ============ 原始探针及信号收集区 (原样保留不删减) ============
+    # ============ 原始探针及信号收集区 ============
     if sp_h > 1 and sp_d > 1 and sp_a > 1:
         margin = 1/sp_h + 1/sp_d + 1/sp_a
         shin_h = (1/sp_h)/margin*100; shin_d = (1/sp_d)/margin*100; shin_a = (1/sp_a)/margin*100
@@ -727,159 +728,523 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             dupan_detected = True
             dupan_true_dir = sharp_dir
 
-    # ============ 🎯 数学重构：贝叶斯质心漂移 (替代硬积分) ============
-    mu_home = float(engine_result.get("bookmaker_implied_home_xg", 1.3) or 1.3)
-    mu_away = float(engine_result.get("bookmaker_implied_away_xg", 1.0) or 1.0)
-    drift_h, drift_a = 0.0, 0.0
-
-    def sigmoid(x): return 1.0 / (1.0 + math.exp(-x))
-
-    if vote_hot_pct >= 55:
-        heat_force = 0.6 * sigmoid(0.2 * (vote_hot_pct - 65))
-        if vote_hot_dir == "home": drift_h -= heat_force; drift_a += heat_force * 0.5
-        elif vote_hot_dir == "away": drift_a -= heat_force; drift_h += heat_force * 0.5
-
-    if dupan_detected:
-        if dupan_true_dir == "home": drift_h += 0.8; drift_a -= 0.4
-        elif dupan_true_dir == "away": drift_a += 0.8; drift_h -= 0.4
+    # ============ 🎯 基础方向概率打分 (复用原始逻辑，提供大盘概率面基准) ============
+    direction_scores = {"home": 0.0, "draw": 0.0, "away": 0.0}
+    shin_weight = 15 if dupan_detected else 30
+    direction_scores["home"] += shin_h/100 * shin_weight
+    direction_scores["draw"] += shin_d/100 * shin_weight
+    direction_scores["away"] += shin_a/100 * shin_weight
 
     if sharp_detected and sharp_dir:
-        if sharp_dir == "home": drift_h += 0.4; drift_a -= 0.2
-        elif sharp_dir == "away": drift_a += 0.4; drift_h -= 0.2
+        sharp_base = 35 if dupan_detected else 25
+        direction_scores[sharp_dir] += sharp_base
 
-    # 冷门检测对象供后端兼容
+    if steam_dir:
+        direction_scores[steam_dir] += 20 if steam_type == "reverse" else 10
+
+    contrarian_away_score = 0  
+    contrarian_home_score = 0
+    if vote_hot_dir and vote_hot_pct >= 55:
+        contra_weight = 22 if vote_hot_pct >= 68 else (14 if vote_hot_pct >= 60 else 6)
+        for d in ["home", "draw", "away"]:
+            if d != vote_hot_dir:
+                direction_scores[d] += contra_weight * 0.5
+        direction_scores[vote_hot_dir] -= contra_weight * 0.3
+        if vote_hot_dir == "home": contrarian_away_score = contra_weight
+        elif vote_hot_dir == "away": contrarian_home_score = contra_weight
+
+    if cold_signals_raw or sharp_detected or vote_hot_pct >= 60:
+        cold_score = 0
+        if sharp_detected and sharp_dir and sharp_dir != shin_dir: cold_score += 6
+        if steam_type == "reverse": cold_score += 5
+        if vote_hot_pct >= 68: cold_score += 7
+        elif vote_hot_pct >= 60: cold_score += 5
+        for s in smart_signals:
+            s_str = str(s)
+            if "盘口太便宜" in s_str: cold_score += 4
+            if "坏消息" in s_str or "崩盘" in s_str: cold_score += 5
+            if "背离" in s_str: cold_score += 4
+            if "造热" in s_str: cold_score += 3
+        if cold_score >= 6:
+            cold_power = 18 if cold_score >= 25 else (12 if cold_score >= 18 else (8 if cold_score >= 12 else 4))
+            direction_scores[hot_side] -= cold_power
+            other = "away" if hot_side == "home" else "home"
+            direction_scores[other] += cold_power * 0.6
+            direction_scores["draw"] += cold_power * 0.4
+
+    if change and isinstance(change, dict):
+        try:
+            cw = float(str(change.get("win", 0)).replace("+", "") or 0)
+            cs = float(str(change.get("same", 0)).replace("+", "") or 0)
+            cl = float(str(change.get("lose", 0)).replace("+", "") or 0)
+            if cw < -0.05: direction_scores["home"] += 4
+            if cs < -0.05: direction_scores["draw"] += 4
+            if cl < -0.05: direction_scores["away"] += 4
+            if cw > 0.05: direction_scores["home"] -= 2
+            if cs > 0.05: direction_scores["draw"] -= 2
+            if cl > 0.05: direction_scores["away"] -= 2
+        except: pass
+
+    ai_weight_total = 15 if dupan_detected else 25  
+    ai_directions = {"home": 0, "draw": 0, "away": 0}
+    for name, r in all_ai.items():
+        if not isinstance(r, dict): continue
+        sc = parse_score(r.get("ai_score", ""))
+        if not (sc and sc[0] is not None):
+            t3 = r.get("top3", [])
+            if t3 and len(t3) > 0:
+                sc = parse_score(t3[0].get("score", ""))
+        if sc and sc[0] is not None:
+            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
+            if sc[0] > sc[1]: ai_directions["home"] += w
+            elif sc[0] < sc[1]: ai_directions["away"] += w
+            else: ai_directions["draw"] += w
+    total_ai_dir = sum(ai_directions.values())
+    if total_ai_dir > 0:
+        for d in ["home", "draw", "away"]:
+            direction_scores[d] += (ai_directions[d] / total_ai_dir) * ai_weight_total
+
+    total_dir = sum(max(0.1, v) for v in direction_scores.values())
+    dir_probs = {d: max(0.1, direction_scores[d]) / total_dir * 100 for d in direction_scores}
+    final_direction = max(dir_probs, key=dir_probs.get)
+    dir_gap = dir_probs[final_direction] - sorted(dir_probs.values(), reverse=True)[1]
+    dir_confident = dir_gap > 5
+
     pre_pred = {
-        "home_win_pct": shin_h, "draw_pct": shin_d, "away_win_pct": shin_a,
+        "home_win_pct": dir_probs["home"], "draw_pct": dir_probs["draw"], "away_win_pct": dir_probs["away"],
         "steam_move": stats.get("steam_move", {}), "smart_signals": smart_signals,
         "line_movement_anomaly": stats.get("line_movement_anomaly", {})
     }
     cold_door = ColdDoorDetector.detect(match_obj, pre_pred)
 
-    if cold_door["is_cold_door"] and not dupan_detected:
-        cold_pwr = min(0.8, cold_door["strength"] * 0.05)
-        if hot_side == "home": drift_h -= cold_pwr; drift_a += cold_pwr * 0.6
-        else: drift_a -= cold_pwr; drift_h += cold_pwr * 0.6
+    # ============ 🎯 期望进球 (保留原样) ============
+    exp_goals = 0.0
+    for src, src_name in [(engine_result, "engine"), (stats, "stats")]:
+        if not src: continue
+        for k in ["expected_total_goals", "exp_goals", "total_goals",
+                  "expected_goals", "lambda_total", "total_xg"]:
+            v = src.get(k)
+            if v is not None:
+                try:
+                    fv = float(v)
+                    if fv > 0.5:
+                        exp_goals = fv
+                        break
+                except: pass
+        if exp_goals > 0: break
 
-    final_mu_h = max(0.1, min(4.5, mu_home + drift_h))
-    final_mu_a = max(0.1, min(4.5, mu_away + drift_a))
+    if exp_goals <= 0:
+        try:
+            hxg = float(engine_result.get("bookmaker_implied_home_xg", 0) or 0)
+            axg = float(engine_result.get("bookmaker_implied_away_xg", 0) or 0)
+            if hxg > 0 and axg > 0: exp_goals = hxg + axg
+        except: pass
 
-    # 生成漂移面
-    drifted_probs = {}
-    for h in range(9):
-        for a in range(9):
-            ph = math.exp(-final_mu_h) * (final_mu_h**h) / math.factorial(h)
-            pa = math.exp(-final_mu_a) * (final_mu_a**a) / math.factorial(a)
-            sc = f"{h}-{a}"
-            if h > 5 or a > 5:
-                sc = "胜其他" if h > a else ("负其他" if a > h else "平其他")
-            drifted_probs[sc] = drifted_probs.get(sc, 0.0) + (ph * pa * 100)
+    if exp_goals <= 0:
+        try:
+            gp = []
+            for gi in range(8):
+                v = float(match_obj.get(f"a{gi}", 0) or 0)
+                if v > 1: gp.append((gi, 1/v))
+            if gp:
+                tp = sum(p for _, p in gp)
+                exp_goals = sum(g*(p/tp) for g, p in gp)
+        except: pass
 
-    # ============ 🎯 数学重构：AI特征向量 (替代字符串比对) ============
-    ai_features = {"dir": {"home": 0, "draw": 0, "away": 0}, "diff": {}, "tot": {}}
-    for name, r in all_ai.items():
-        sc = parse_score(r.get("ai_score", ""))
-        if sc and sc[0] is not None:
-            w = 1.5 if name == "claude" else (1.4 if name in ["gemini", "grok"] else 1.0)
-            h_g, a_g = sc[0], sc[1]
-            diff = h_g - a_g
-            tot = h_g + a_g
-            dir_key = "home" if diff > 0 else ("away" if diff < 0 else "draw")
-            ai_features["dir"][dir_key] += w
-            ai_features["diff"][diff] = ai_features["diff"].get(diff, 0) + w
-            ai_features["tot"][tot] = ai_features["tot"].get(tot, 0) + w
+    if exp_goals <= 0:
+        try:
+            over25 = float(engine_result.get("over_25", 50) or 50)
+            exp_goals = 2.0 + (over25 - 40) * 0.015
+        except: pass
 
-    # ============ 候选池与评分 (Softmax前置) ============
-    crs_probs, crs_margin, crs_coverage = crs_implied_probabilities(match_obj)
+    if exp_goals < 1.0 or exp_goals > 6.0: exp_goals = 2.5
+
+    # ============ 🎯 第三/四/五/六层 (保留原始打分机制) ============
     goal_signals = detect_goal_signals(match_obj)
-    exp_goals = final_mu_h + final_mu_a
+    strongest_goal = -1
+    strongest_ratio = 1.0
+    if goal_signals:
+        strongest_goal = max(goal_signals, key=goal_signals.get)
+        strongest_ratio = goal_signals[strongest_goal]
+
     others_info = detect_score_others(match_obj, exp_goals, all_ai)
+    crs_probs, crs_margin, crs_coverage = crs_implied_probabilities(match_obj)
 
-    all_candidates = set(crs_probs.keys()) | set(drifted_probs.keys()) | set(ALL_SCORE_OTHERS)
+    home_xg = float(engine_result.get("bookmaker_implied_home_xg", 1.3) or 1.3)
+    away_xg = float(engine_result.get("bookmaker_implied_away_xg", 0.9) or 0.9)
+    if sharp_detected:
+        if "客胜" in smart_str or "客队" in smart_str:
+            home_xg *= 0.85; away_xg *= 1.20
+        elif "主胜" in smart_str or "主队" in smart_str:
+            home_xg *= 1.15; away_xg *= 0.85
+    if cold_door["is_cold_door"] and not sharp_detected:
+        if hot_side == "home":
+            home_xg *= 0.75; away_xg *= 1.25
+        else:
+            away_xg *= 0.75; home_xg *= 1.25
+    home_xg = max(0.3, min(4.0, home_xg))
+    away_xg = max(0.2, min(3.5, away_xg))
+
+    backup_probs = {}
+    if not crs_probs or crs_coverage < 0.5:
+        for h_g in range(6):
+            for a_g in range(6):
+                p_h = math.exp(-home_xg) * (home_xg ** h_g) / math.factorial(h_g)
+                p_a = math.exp(-away_xg) * (away_xg ** a_g) / math.factorial(a_g)
+                backup_probs[f"{h_g}-{a_g}"] = round(p_h * p_a * 100, 2)
+
+    ai_voted = {}
+    for name, r in all_ai.items():
+        if not isinstance(r, dict): continue
+        sc = parse_score(r.get("ai_score", ""))
+        if not (sc and sc[0] is not None):
+            t3 = r.get("top3", [])
+            if t3 and len(t3) > 0:
+                sc = parse_score(t3[0].get("score", ""))
+        if sc and sc[0] is not None:
+            key = f"{sc[0]}-{sc[1]}"
+            w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
+            ai_voted[key] = ai_voted.get(key, 0) + w
+        t3 = r.get("top3", [])
+        if isinstance(t3, list):
+            for rank, t in enumerate(t3[1:3], 2):
+                s2 = parse_score(t.get("score", ""))
+                if s2 and s2[0] is not None:
+                    key2 = f"{s2[0]}-{s2[1]}"
+                    w2 = 0.4 if rank == 2 else 0.2
+                    ai_voted[key2] = ai_voted.get(key2, 0) + w2
+
+    def _score_to_dir(score_str):
+        try:
+            parts = str(score_str).strip().replace(" ", "").split("-")
+            h, a = int(parts[0]), int(parts[1])
+            if h > a: return "home"
+            elif h < a: return "away"
+            else: return "draw"
+        except: return None
+
+    if ai_valid["claude"] and claude_r.get("ai_confidence", 0) >= 75:  
+        cl_score = claude_r.get("ai_score", "")
+        cl_dir = _score_to_dir(cl_score)
+        if cl_score and cl_dir:
+            other_ai_dirs = {}
+            valid_others = 0
+            other_confidences = []  
+            for name in ["gpt", "grok", "gemini"]:
+                if not ai_valid[name]: continue
+                valid_others += 1
+                r = all_ai.get(name, {})
+                if isinstance(r, dict):
+                    sc = r.get("ai_score", "")
+                    d = _score_to_dir(sc)
+                    if d:
+                        other_ai_dirs[d] = other_ai_dirs.get(d, 0) + 1
+                        other_confidences.append(r.get("ai_confidence", 60))
+
+            if other_ai_dirs and valid_others >= 2:
+                majority_dir, majority_count = max(other_ai_dirs.items(), key=lambda x: x[1])
+                is_hard_majority = majority_count >= 3  
+                avg_other_conf = sum(other_confidences) / len(other_confidences) if other_confidences else 60
+                claude_conf = claude_r.get("ai_confidence", 60)
+
+                direction_independent = cl_dir != majority_dir
+                confidence_dominant = claude_conf > avg_other_conf
+
+                if direction_independent and is_hard_majority and confidence_dominant:
+                    cl_clean = cl_score.replace(" ", "").strip()
+                    if cl_clean in ai_voted:
+                        ai_voted[cl_clean] *= 2.0
+                elif direction_independent and is_hard_majority and not confidence_dominant:
+                    cl_clean = cl_score.replace(" ", "").strip()
+                    if cl_clean in ai_voted:
+                        ai_voted[cl_clean] *= 1.3
+                elif not direction_independent:
+                    cl_clean = cl_score.replace(" ", "").strip()
+                    if cl_clean in ai_voted:
+                        ai_voted[cl_clean] *= 1.3
+
+    ai_consensus_strength = 0
+    if ai_voted:
+        max_vote = max(ai_voted.values())
+        total_vote = sum(ai_voted.values())
+        ai_consensus_strength = max_vote / total_vote if total_vote > 0 else 0
+
+    if dupan_detected and dupan_true_dir:
+        if dupan_true_dir == "home":
+            for sc in ["2-1", "2-0", "3-1"]: ai_voted[sc] = ai_voted.get(sc, 0) + 3.0
+        elif dupan_true_dir == "away":
+            for sc in ["1-2", "0-2", "1-3"]: ai_voted[sc] = ai_voted.get(sc, 0) + 3.0
+        elif dupan_true_dir == "draw":
+            for sc in ["1-1", "2-2", "0-0"]: ai_voted[sc] = ai_voted.get(sc, 0) + 2.5
+
+    away_zero_prob = 50  
+    away_xg_for_zero = float(engine_result.get("bookmaker_implied_away_xg", 1.2) or 1.2)
+    if away_xg_for_zero <= 0.8: away_zero_prob += 25
+    elif away_xg_for_zero <= 1.0: away_zero_prob += 15
+    elif away_xg_for_zero <= 1.2: away_zero_prob += 8
+
+    away_stats_obj = match_obj.get("away_stats", {})
+    if isinstance(away_stats_obj, dict):
+        form = str(away_stats_obj.get("form", ""))
+        recent5 = form[:5] if form else ""
+        recent_L = recent5.count("L")
+        if recent_L >= 4: away_zero_prob += 15
+        elif recent_L >= 3: away_zero_prob += 8
+        try:
+            avg_for = float(away_stats_obj.get("avg_goals_for", 2) or 2)
+            if avg_for < 0.8: away_zero_prob += 15
+            elif avg_for < 1.2: away_zero_prob += 8
+        except: pass
+
+    if shin_h > 65: away_zero_prob += 10
+    elif shin_h > 55: away_zero_prob += 5
+
+    if sharp_detected and sharp_dir == "away":
+        away_zero_prob -= 30
+
+    home_zero_prob = 50
+    home_xg_for_zero = float(engine_result.get("bookmaker_implied_home_xg", 1.2) or 1.2)
+    if home_xg_for_zero <= 0.8: home_zero_prob += 25
+    elif home_xg_for_zero <= 1.0: home_zero_prob += 15
+    elif home_xg_for_zero <= 1.2: home_zero_prob += 8
+
+    home_stats_obj = match_obj.get("home_stats", {})
+    if isinstance(home_stats_obj, dict):
+        form = str(home_stats_obj.get("form", ""))
+        recent5 = form[:5] if form else ""
+        recent_L = recent5.count("L")
+        if recent_L >= 4: home_zero_prob += 15
+        elif recent_L >= 3: home_zero_prob += 8
+        try:
+            avg_for = float(home_stats_obj.get("avg_goals_for", 2) or 2)
+            if avg_for < 0.8: home_zero_prob += 15
+            elif avg_for < 1.2: home_zero_prob += 8
+        except: pass
+
+    if shin_a > 65: home_zero_prob += 10
+    elif shin_a > 55: home_zero_prob += 5
+    if sharp_detected and sharp_dir == "home":
+        home_zero_prob -= 30
+
+    if exp_goals >= 3.0 or strongest_goal >= 3:
+        away_zero_prob = min(away_zero_prob, 50)
+        home_zero_prob = min(home_zero_prob, 50)
+
+    zero_boost_applied = False
+    if away_zero_prob >= 70 and shin_h > shin_a:
+        for sc in ["1-0", "2-0", "3-0"]: ai_voted[sc] = ai_voted.get(sc, 0) + 2.0
+        for sc in ["1-1", "2-1", "1-2", "3-1", "2-2"]:
+            if sc in ai_voted: ai_voted[sc] *= 0.65
+        zero_boost_applied = True
+
+    if home_zero_prob >= 70 and shin_a > shin_h:
+        for sc in ["0-1", "0-2", "0-3"]: ai_voted[sc] = ai_voted.get(sc, 0) + 2.0
+        for sc in ["1-1", "1-2", "2-1", "1-3", "2-2"]:
+            if sc in ai_voted: ai_voted[sc] *= 0.65
+        zero_boost_applied = True
+
+    # ============ 第七层: 综合评分 ============
+    btts_pct = float(engine_result.get("btts", 50) or 50)
+    over25_pct = float(engine_result.get("over_25", engine_result.get("over_2_5", 50)) or 50)
+
+    scenario = "normal"
+    if others_info.get("is_extreme_blowout"): scenario = "extreme_blowout"
+    elif dupan_detected: scenario = "sharp_reversal"
+    elif exp_goals >= 3.5: scenario = "shootout"
+    elif exp_goals >= 3.0 and (btts_pct >= 60 or over25_pct >= 60): scenario = "high_goals"
+    elif exp_goals <= 2.0 and btts_pct <= 40: scenario = "low_goals"
+    elif btts_pct >= 65: scenario = "btts_strong"  
+    elif btts_pct <= 30: scenario = "single_side"  
+
+    EXCLUDE_HIGH = {"0-0", "1-0", "0-1"}                                
+    BOOST_HIGH = {"2-1", "1-2", "2-2", "3-1", "1-3"}                    
+    BOOST_SHOOTOUT = {"3-2", "2-3", "3-3", "4-2", "2-4", "4-3", "3-4"}  
+    EXCLUDE_LOW = {"3-1", "1-3", "2-2", "3-2", "2-3", "3-3", "4-2", "2-4"}  
+    BOOST_LOW = {"0-0", "1-0", "0-1", "1-1"}                            
+    BTTS_STRONG_BOOST = {"1-1", "2-1", "1-2", "2-2"}                    
+    BTTS_STRONG_EXCLUDE = {"1-0", "2-0", "3-0", "0-1", "0-2", "0-3", "0-0"}  
+    SINGLE_SIDE_BOOST = {"1-0", "2-0", "0-1", "0-2", "3-0", "0-3"}       
+    SINGLE_SIDE_EXCLUDE = {"1-1", "2-2"}                                  
+    SHARP_REV_HOME_BOOST = {"2-1", "2-0", "3-1", "3-0", "3-2", "4-1", "4-2"}
+    SHARP_REV_AWAY_BOOST = {"1-2", "0-2", "1-3", "0-3", "2-3", "1-4", "2-4"}
+    SHARP_REV_DRAW_BOOST = {"1-1", "2-2", "0-0"}
+
+    all_candidates = set()
+    if crs_probs: all_candidates.update(crs_probs.keys())
+    if backup_probs: all_candidates.update(backup_probs.keys())
+    all_candidates.update(ai_voted.keys())
+    all_candidates.update(ALL_SCORE_OTHERS)
+
     score_ratings = {}
+    for score_str in all_candidates:
+        if score_str in ["胜其他", "9-0"]: h_g, a_g = 9, 0
+        elif score_str in ["平其他", "9-9"]: h_g, a_g = 9, 9
+        elif score_str in ["负其他", "0-9"]: h_g, a_g = 0, 9
+        else:
+            try: h_g, a_g = map(int, score_str.split("-"))
+            except: continue
+        total_g = h_g + a_g
+        s = 0.0
 
-    for sc in all_candidates:
-        h_g, a_g = parse_score(sc)
-        if h_g is None: continue
-        diff = h_g - a_g
-        tot = h_g + a_g
-        base_s = 0.0
+        if crs_probs and score_str in crs_probs: s += min(35, crs_probs[score_str] * 2.0)
+        elif score_str in backup_probs: s += min(15, backup_probs[score_str] * 1.2)
 
-        if sc in crs_probs: base_s += min(35, crs_probs[sc] * 1.5)
-        if sc in drifted_probs: base_s += min(30, drifted_probs[sc] * 1.5)
+        if score_str in ai_voted: s += min(40, ai_voted[score_str] * 8)
 
-        dir_key = "home" if diff > 0 else ("away" if diff < 0 else "draw")
-        base_s += ai_features["dir"].get(dir_key, 0) * 4.0
-        base_s += ai_features["diff"].get(diff, 0) * 3.0
-        base_s += ai_features["tot"].get(tot, 0) * 2.0
+        if total_g in goal_signals:
+            ratio = goal_signals[total_g]
+            if zero_boost_applied and total_g >= 5: s += min(5, (ratio - 1) * 4)  
+            else: s += min(15, (ratio - 1) * 12)
 
-        modifier = 1.0
-        if others_info.get("is_extreme_blowout"):
-            if tot <= 3: modifier *= 0.4
-            if tot >= 5 or sc in ALL_SCORE_OTHERS: modifier *= 1.8
-        
-        final_s = base_s * modifier
-        if final_s > 0: score_ratings[sc] = final_s
+        if others_info["is_others"]:
+            others_boost = 5 if zero_boost_applied else 15
+            if score_str in SCORE_OTHERS_HOME and others_info["direction"] == "home": s += others_boost
+            elif score_str in SCORE_OTHERS_AWAY and others_info["direction"] == "away": s += others_boost
+            elif score_str in SCORE_OTHERS_DRAW and others_info["direction"] == "draw": s += others_boost
+            elif score_str in ALL_SCORE_OTHERS: s += 2 if zero_boost_applied else 5
 
-    # ============ 🎯 终局：Softmax 输出绝对概率 ============
-    T = 1.6 if (dupan_detected or others_info.get("is_extreme_blowout")) else 1.1
-    max_score = max(score_ratings.values()) if score_ratings else 1.0
-    exp_scores = {sc: math.exp((score - max_score) / T) for sc, score in score_ratings.items()}
-    sum_exp = sum(exp_scores.values())
-    normalized_probs = {sc: (val / sum_exp) * 100.0 for sc, val in exp_scores.items()}
-    
-    ranked = sorted(normalized_probs.items(), key=lambda x: x[1], reverse=True)
+        goal_margin = h_g - a_g
+        if final_direction == "home" and goal_margin > 0: s += 10 * (dir_probs["home"] / 100)
+        elif final_direction == "away" and goal_margin < 0: s += 10 * (dir_probs["away"] / 100)
+        elif final_direction == "draw" and goal_margin == 0: s += 10 * (dir_probs["draw"] / 100)
+        else: s -= 5  
+
+        if contrarian_away_score > 3 and goal_margin == 1 and h_g <= 2: s -= contrarian_away_score
+        if contrarian_home_score > 3 and goal_margin == -1 and a_g <= 2: s -= contrarian_home_score
+
+        if strongest_ratio > 2.0 and strongest_goal >= 0 and abs(total_g - strongest_goal) > 1: s -= 25
+        if others_info["ai_others_count"] >= 2 and total_g <= 3: s -= 10
+        if shin_h > 60 and (home_xg - away_xg) > 1.0 and goal_margin >= 1 and h_g >= 2: s += 10
+
+        if scenario == "extreme_blowout":
+            if total_g <= 3: s *= 0.10  
+            if score_str in ALL_SCORE_OTHERS or total_g >= 5:
+                s *= 3.00  
+                if others_info["direction"] == "home" and score_str in SCORE_OTHERS_HOME: s += 40
+                elif others_info["direction"] == "away" and score_str in SCORE_OTHERS_AWAY: s += 40
+                elif others_info["direction"] == "draw" and score_str in SCORE_OTHERS_DRAW: s += 40
+
+        elif scenario == "sharp_reversal":
+            if dupan_true_dir == "home":
+                if score_str in SHARP_REV_HOME_BOOST: s *= 1.70  
+                elif goal_margin <= 0:
+                    if score_str in ALL_SCORE_OTHERS and others_info.get("is_extreme_blowout"): s *= 0.60
+                    else: s *= 0.20  
+            elif dupan_true_dir == "away":
+                if score_str in SHARP_REV_AWAY_BOOST: s *= 1.70
+                elif goal_margin >= 0:
+                    if score_str in ALL_SCORE_OTHERS and others_info.get("is_extreme_blowout"): s *= 0.60
+                    else: s *= 0.20
+            elif dupan_true_dir == "draw":
+                if score_str in SHARP_REV_DRAW_BOOST: s *= 1.50
+                elif goal_margin != 0: s *= 0.40
+
+        elif scenario == "shootout":
+            if score_str in BOOST_SHOOTOUT: s *= 1.50
+            elif score_str in EXCLUDE_HIGH: s *= 0.10
+            elif total_g <= 2: s *= 0.40
+        elif scenario == "high_goals":
+            if score_str in EXCLUDE_HIGH: s *= 0.10
+            elif score_str in BOOST_HIGH: s *= 1.30
+        elif scenario == "low_goals":
+            if score_str in EXCLUDE_LOW: s *= 0.10
+            elif score_str in BOOST_LOW: s *= 1.40
+        elif scenario == "btts_strong":
+            if score_str in BTTS_STRONG_EXCLUDE: s *= 0.20
+            elif score_str in BTTS_STRONG_BOOST: s *= 1.30
+        elif scenario == "single_side":
+            if score_str in SINGLE_SIDE_EXCLUDE: s *= 0.30
+            elif score_str in SINGLE_SIDE_BOOST: s *= 1.25
+
+        if scenario == "normal":
+            if exp_goals >= 2.7 and score_str in EXCLUDE_HIGH:
+                strength = min(1.0, (exp_goals - 2.4) / 1.1)  
+                s *= max(0.3, 1.0 - strength * 0.5)
+            elif exp_goals <= 2.3 and score_str in {"3-1", "1-3", "3-2", "2-3", "3-3"}: s *= 0.5
+
+        if s > 0: score_ratings[score_str] = round(s, 2)
+
+    ranked = sorted(score_ratings.items(), key=lambda x: x[1], reverse=True)
     final_score = ranked[0][0] if ranked else "1-1"
+
+    # ====================================================================
+    # 🚨 绝对核心修复：【方向-比分一致性护栏】升级为强制模式 🚨
+    # 彻底解决截图中的“0-1配主胜”、“2-1配平局”的UI逻辑错位BUG！
+    # ====================================================================
+    def _dir_of_score_strict(sc_str):
+        try:
+            if "胜其他" in sc_str or "9-0" in sc_str: return "home"
+            if "平其他" in sc_str or "9-9" in sc_str: return "draw"
+            if "负其他" in sc_str or "0-9" in sc_str: return "away"
+            h, a = map(int, sc_str.split("-"))
+            return "home" if h > a else ("away" if h < a else "draw")
+        except: return None
+
+    top_score_dir = _dir_of_score_strict(final_score)
     
-    dir_probs = {"home": 0.0, "draw": 0.0, "away": 0.0}
-    for sc, prob in normalized_probs.items():
-        h, a = parse_score(sc)
-        if h is not None:
-            if h > a: dir_probs["home"] += prob
-            elif h < a: dir_probs["away"] += prob
-            else: dir_probs["draw"] += prob
-            
-    final_direction = max(dir_probs, key=dir_probs.get)
+    # 只要最终比分方向(top_score_dir)与大盘基础概率面(final_direction)不一致，
+    # 绝对无视分数高低，强制向下顺延，寻找第一个顺应大盘方向的比分！
+    if top_score_dir and top_score_dir != final_direction:
+        aligned_score = None
+        for sc, pts in ranked:
+            if _dir_of_score_strict(sc) == final_direction:
+                aligned_score = sc
+                break
+        if aligned_score:
+            print(f"    🚨 [绝对护栏触发] 大盘概率面({final_direction})与得分最高比分({final_score}->{top_score_dir})严重冲突！")
+            print(f"    🚨 强制废除错位比分，采用顺应大盘概率的最高分: {aligned_score}")
+            final_score = aligned_score
+
+    if final_score == "9-0": final_score = "胜其他"
+    if final_score == "9-9": final_score = "平其他"
+    if final_score == "0-9": final_score = "负其他"
 
     is_score_others_final = final_score in ALL_SCORE_OTHERS or "其他" in final_score
-    display_label = final_score
     if is_score_others_final:
         if final_score in SCORE_OTHERS_HOME or final_score == "胜其他": display_label = "胜其他"
         elif final_score in SCORE_OTHERS_DRAW or final_score == "平其他": display_label = "平其他"
         else: display_label = "负其他"
+    else:
+        display_label = final_score
 
-    model_true_prob = normalized_probs.get(final_score, 5.0)
+    # ============ 第八层: 输出 ============
     target_crs = CRS_FULL_MAP.get(final_score, "")
     final_odds = float(match_obj.get(target_crs, 0) or 0)
     if not final_odds and is_score_others_final:
-        if "胜" in display_label: final_odds = float(match_obj.get("crs_win", 0) or 0)
-        elif "平" in display_label: final_odds = float(match_obj.get("crs_same", 0) or 0)
+        if final_score in SCORE_OTHERS_HOME or final_score == "胜其他": final_odds = float(match_obj.get("crs_win", 0) or 0)
+        elif final_score in SCORE_OTHERS_DRAW or final_score == "平其他": final_odds = float(match_obj.get("crs_same", 0) or 0)
         else: final_odds = float(match_obj.get("crs_lose", 0) or 0)
 
-    ev_data = calculate_value_bet(model_true_prob, final_odds)
+    final_prob = crs_probs.get(final_score, backup_probs.get(final_score, 5))
+    ev_data = calculate_value_bet(final_prob, final_odds)
 
-    # ============ 🎯 客观置信度计算 ============
-    valid_ai_count = len(all_ai)
-    if valid_ai_count == 0: avg_ai_conf = 50.0
-    else:
-        dirs = ["home" if parse_score(r.get("ai_score",""))[0] > parse_score(r.get("ai_score",""))[1] else ("away" if parse_score(r.get("ai_score",""))[0] < parse_score(r.get("ai_score",""))[1] else "draw") for r in all_ai.values() if parse_score(r.get("ai_score",""))[0] is not None]
-        max_dir_c = max([dirs.count(d) for d in set(dirs)]) if dirs else 0
-        avg_ai_conf = 55.0 + ((max_dir_c / valid_ai_count) - 0.25) * 40.0
+    weights = {"claude": 1.4, "gemini": 1.35, "grok": 1.30, "gpt": 1.1}
+    ai_conf_sum = 0
+    ai_conf_count = 0
+    value_kills = 0
+    for name, r in all_ai.items():
+        if not isinstance(r, dict): continue
+        conf = r.get("ai_confidence", 60)
+        ai_conf_sum += conf * weights.get(name, 1.0)
+        ai_conf_count += weights.get(name, 1.0)
+        if r.get("value_kill"): value_kills += 1
 
-    cf = min(95, engine_conf + int((avg_ai_conf - 60) * 0.4))
+    avg_ai_conf = (ai_conf_sum / ai_conf_count) if ai_conf_count > 0 else 60
+    cf = min(95, engine_conf + int((avg_ai_conf - 60) * 0.4)) + value_kills * 6
+    if not dir_confident: cf = max(40, cf - 10)
     if any("🚨" in str(s) for s in smart_signals): cf = max(35, cf - 12)
     risk = "低" if cf >= 75 else ("中" if cf >= 55 else "高")
 
     sigs = list(smart_signals)
-    if cold_door["is_cold_door"]: sigs.extend(cold_door["signals"]); cf = max(30, cf - 5)
+    if cold_door["is_cold_door"]:
+        sigs.extend(cold_door["signals"]); cf = max(30, cf - 5)
     if others_info["is_others"]: sigs.append(f"🔥 胜其他场({others_info['trigger_count']:.1f}条)")
 
     cl_raw = claude_r.get("ai_score", "") if isinstance(claude_r, dict) else ""
     cl_parsed = parse_score(cl_raw)
     cl_sc = cl_raw if cl_parsed[0] is not None else final_score
 
-    # ====================================================================
-    # 🌟 无损原样抛出原始字典字段 (保障前端与回测兼容性)
-    # ====================================================================
+    # 无损抛出所有原始字典字段，完美向后兼容前端 UI
     return {
         "predicted_score": final_score,
         "predicted_label": display_label,
@@ -892,42 +1257,56 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "over_under_2_5": "大" if engine_result.get("over_25", 50) > 55 else "小",
         "both_score": "是" if engine_result.get("btts", 45) > 50 else "否",
         "gpt_score": gpt_r.get("ai_score", "弃权") if ai_valid.get("gpt") else "弃权",
-        "gpt_analysis": gpt_r.get("reason", "弃权") if ai_valid.get("gpt") else "弃权",
+        "gpt_analysis": gpt_r.get("reason", "弃权") if ai_valid.get("gpt") else "弃权 (AI失效)",
         "grok_score": grok_r.get("ai_score", "弃权") if ai_valid.get("grok") else "弃权",
-        "grok_analysis": grok_r.get("reason", "弃权") if ai_valid.get("grok") else "弃权",
+        "grok_analysis": grok_r.get("reason", "弃权") if ai_valid.get("grok") else "弃权 (AI失效)",
         "gemini_score": gemini_r.get("ai_score", "弃权") if ai_valid.get("gemini") else "弃权",
-        "gemini_analysis": gemini_r.get("reason", "弃权") if ai_valid.get("gemini") else "弃权",
+        "gemini_analysis": gemini_r.get("reason", "弃权") if ai_valid.get("gemini") else "弃权 (AI失效)",
         "claude_score": cl_sc if ai_valid.get("claude") else "弃权",
-        "claude_analysis": claude_r.get("reason", "弃权") if ai_valid.get("claude") else "弃权",
+        "claude_analysis": claude_r.get("reason", "弃权") if ai_valid.get("claude") else "弃权 (AI失效)",
         "ai_abstained": [n.upper() for n, v in ai_valid.items() if not v],
         "ai_avg_confidence": round(avg_ai_conf, 1),
-        "xG_home": round(final_mu_h, 2),
-        "xG_away": round(final_mu_a, 2),
+        "value_kill_count": value_kills,
+        "ai_consensus_strength": round(ai_consensus_strength, 2),
+        "model_agreement": ai_consensus_strength > 0.5,
+        "xG_home": round(home_xg, 2),
+        "xG_away": round(away_xg, 2),
         "crs_implied_probs": {k: round(v, 2) for k, v in crs_probs.items()} if crs_probs else {},
         "crs_coverage": crs_coverage,
         "crs_margin": crs_margin,
+        "scenario": scenario,
+        "btts_pct_used": round(btts_pct, 1),
+        "over25_pct_used": round(over25_pct, 1),
         "dupan_detected": dupan_detected,
         "dupan_true_dir": dupan_true_dir,
+        "dupan_confirm_score": dupan_confirm,
+        "shin_dir": shin_dir,
+        "sharp_dir": sharp_dir,
+        "away_zero_prob": away_zero_prob,
+        "home_zero_prob": home_zero_prob,
         "vote_hot_dir": vote_hot_dir,
         "vote_hot_pct": vote_hot_pct,
+        "steam_type": steam_type,
         "goal_signals": {str(k): round(v, 2) for k, v in goal_signals.items()},
+        "strongest_goal_count": strongest_goal,
+        "strongest_goal_ratio": round(strongest_ratio, 2),
         "score_others_info": others_info,
         "sharp_detected": sharp_detected,
+        "cold_signals_count": len(cold_signals_raw),
+        "contrarian_vote_away": round(contrarian_away_score, 1),
+        "contrarian_vote_home": round(contrarian_home_score, 1),
         "suggested_kelly": ev_data["kelly"],
         "edge_vs_market": ev_data["ev"],
-        "poisson": drifted_probs, 
+        "refined_poisson": stats.get("refined_poisson", {}),
+        "poisson": backup_probs,
+        "extreme_warning": engine_result.get("scissors_gap_signal", ""),
         "smart_money_signal": " | ".join(sigs),
         "smart_signals": sigs,
+        "model_consensus": stats.get("model_consensus", 0),
+        "total_models": stats.get("total_models", 11),
         "expected_total_goals": round(exp_goals, 2),
         "over_2_5": engine_result.get("over_25", 50),
         "btts": engine_result.get("btts", 45),
-        "cold_door": cold_door,
-        
-        # ⚠️ 以下全部是为你向下兼容后端与前端而无损保留的原有字段 ⚠️
-        "refined_poisson": stats.get("refined_poisson", {}),
-        "extreme_warning": engine_result.get("scissors_gap_signal", ""),
-        "model_consensus": stats.get("model_consensus", 0),
-        "total_models": stats.get("total_models", 11),
         "top_scores": stats.get("refined_poisson", {}).get("top_scores", []),
         "elo": stats.get("elo", {}),
         "random_forest": stats.get("random_forest", {}),
@@ -955,8 +1334,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "pro_odds": stats.get("pro_odds", {}),
         "asian_handicap_probs": stats.get("asian_handicap_probs", {}),
         "bookmaker_implied_home_xg": engine_result.get("bookmaker_implied_home_xg", "?"),
-        "bookmaker_implied_away_xg": engine_result.get("bookmaker_implied_away_xg", "?")
+        "bookmaker_implied_away_xg": engine_result.get("bookmaker_implied_away_xg", "?"),
+        "cold_door": cold_door,
     }
+
 
 def select_top4(preds):
     for p in preds:
@@ -966,8 +1347,8 @@ def select_top4(preds):
         s += (mx - 33) * 0.2 + pr.get("model_consensus", 0) * 2
         if pr.get("risk_level") == "低": s += 12
         elif pr.get("risk_level") == "高": s -= 5
+        if pr.get("model_agreement"): s += 10
         
-        # 兼容保留原有的经验惩罚
         exp_info = pr.get("experience_analysis", {})
         exp_score = exp_info.get("total_score", 0)
         if exp_score >= 15 and pr.get("result") == "平局" and exp_info.get("draw_rules", 0) >= 3: s += 12
@@ -979,12 +1360,12 @@ def select_top4(preds):
         if "Sharp" in smart_money:
             if ("客胜" in smart_money and direction == "主胜") or ("主胜" in smart_money and direction == "客胜"):
                 s -= 30
-        cold = pr.get("cold_door", {})
-        if cold.get("is_cold_door"): s -= 8
+        if pr.get("cold_door", {}).get("is_cold_door"): s -= 8
         if pr.get("is_score_others"): s += 8
         p["recommend_score"] = round(s, 2)
     preds.sort(key=lambda x: x.get("recommend_score", 0), reverse=True)
     return preds[:4]
+
 
 def extract_num(ms):
     wm = {"一":1000, "二":2000, "三":3000, "四":4000, "五":5000, "六":6000, "日":7000, "天":7000}
@@ -992,10 +1373,11 @@ def extract_num(ms):
     nums = re.findall(r"\d+", str(ms))
     return base + int(nums[0]) if nums else 9999
 
+
 def run_predictions(raw, use_ai=True):
     ms = raw.get("matches", [])
     print("\n" + "=" * 80)
-    print(f"  [vMAX 17.0 重构版] 贝叶斯漂移·多智能体编排·严格保留所有字段接口 | {len(ms)} 场")
+    print(f"  [vMAX 17.0 防崩盘版] 全量保留原架构 + 强化绝对一致性护栏 | {len(ms)} 场")
     print("=" * 80)
 
     match_analyses = []
@@ -1011,7 +1393,7 @@ def run_predictions(raw, use_ai=True):
 
     all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
     if use_ai and match_analyses:
-        print(f"  [多智能体编排] 启动角色化 4AI 并行推理...")
+        print(f"  [单阶段] 启动4AI并行...")
         start_t = time.time()
         all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
         print(f"  [完成] 耗时 {time.time()-start_t:.1f}s")
@@ -1036,14 +1418,22 @@ def run_predictions(raw, use_ai=True):
         except: pass
 
         score_str = mg.get("predicted_score", "1-1")
+        
+        # UI 终极同步保险：让前端的标签完全听命于严格护栏审查后的最终比分！
         try:
-            if "胜其他" in score_str: mg["result"] = "主胜"
-            elif "负其他" in score_str: mg["result"] = "客胜"
-            elif "平其他" in score_str: mg["result"] = "平局"
+            if "胜其他" in score_str: expected_dir = "主胜"
+            elif "负其他" in score_str: expected_dir = "客胜"
+            elif "平其他" in score_str: expected_dir = "平局"
             else:
                 sh, sa = map(int, score_str.split("-"))
-                mg["result"] = "主胜" if sh > sa else ("客胜" if sh < sa else "平局")
-        except:
+                expected_dir = "主胜" if sh > sa else ("客胜" if sh < sa else "平局")
+            
+            mg["result"] = expected_dir
+            
+            pl = mg.get("predicted_label", "")
+            if pl and pl not in (score_str, "胜其他", "平其他", "负其他"):
+                mg["predicted_label"] = score_str
+        except: 
             pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
             mg["result"] = max(pcts, key=pcts.get)
 
@@ -1065,11 +1455,11 @@ def run_predictions(raw, use_ai=True):
     others_count = len([r for r in res if r.get("prediction", {}).get("is_score_others")])
     sharp_count = len([r for r in res if r.get("prediction", {}).get("sharp_detected")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence']>70])}/{max(1,len(res))}"
-    diary["reflection"] = f"vMAX17.0 重构版 | {cold_count}冷门 {others_count}胜其他 {sharp_count}Sharp | 引入贝叶斯漂移 (严格向下兼容版)"
+    diary["reflection"] = f"vMAX17.0 护栏重构版 | {cold_count}冷门 {others_count}胜其他 {sharp_count}Sharp | 强制UI逻辑一致性"
     save_ai_diary(diary)
 
     return res, t4
 
 if __name__ == "__main__":
-    logger.info("vMAX 17.0 重构版启动")
-    print("✅ vMAX 17.0 重构版已加载 — 贝叶斯质心漂移·角色化AI协同·Softmax连续概率面 (严格向下兼容版)")
+    logger.info("vMAX 17.0 防崩盘重构版启动")
+    print("✅ vMAX 17.0 防崩盘重构版已加载 — 幂法数学修正 + 强化一致性绝对拦截")
