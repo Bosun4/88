@@ -483,7 +483,7 @@ def build_phase1_prompt(match_analyses):
     p += "- 客队盘口太便宜+排名悬殊 → 考虑冷门负(1-2/0-1)具体根据联赛风格球队风格去预测选择\n\n"
 
     p += "【输出格式】只输出JSON数组。每场必须包含:\n"
-    p += "  match(整数), top3([{score,prob}],...), reason(200字含具体信号), \n"
+    p += "  match(整数), top3([{score,prob}],...), reason(350字含具体信号), \n"
     p += "  ai_confidence(0-100), is_score_others(true/false), \n"
     p += "  detected_signals([\"7球13倍\",\"杯赛\"] 识别到的信号)\n\n"
     p += '示例: {"match":1,"top3":[{"score":"4-3","prob":12},{"score":"3-2","prob":10},{"score":"4-2","prob":8}],"reason":"7球13倍庄家承认互射局+Sharp走主","ai_confidence":75,"is_score_others":true,"detected_signals":["7球13倍","Sharp主"]}\n\n'
@@ -665,7 +665,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
         urls = [primary_url] + backup
 
     CONNECT_TIMEOUT = 20
-    READ_TIMEOUT_MAP = {"claude": 350, "grok": 200, "gpt": 200, "gemini": 250}
+    READ_TIMEOUT_MAP = {"claude": 480, "grok": 250, "gpt": 250, "gemini": 250}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     # v17升级: 教AI如何综合多信号判断
