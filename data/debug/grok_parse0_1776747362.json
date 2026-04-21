@@ -1,0 +1,21 @@
+{
+  "id": "chatcmpl-68bc9f05-a6b3-468b-95d8-f5a5b8b730be",
+  "object": "chat.completion",
+  "created": 1776747277,
+  "model": "grok-420-thinking",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "<think>**Thinking about your request**\n\n**Analyzing odds**\n\n- Sharp资金流向主胜，赔率显示主队热度过高\n**Checking goal suppression**\n\n- 西甲风格下主队火热状态或压低进球数\n**Fetching real-time odds**\n\n- 搜索Pinnacle/Betfair确认Sharp方向与总进球赔率\n- 结合散户反指与进球数压低信号，判断庄家意图\n- 总进球赔率缺失，需联网查询体彩或博彩网站\n- 杯赛属性或触发高比分候选\n- 淘汰赛属性提升高比分候选概率\n"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 8898,
+    "completion_tokens": 139,
+    "total_tokens": 9037
+  }
+}
