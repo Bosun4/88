@@ -501,19 +501,19 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     AI_PROFILES = {
         "claude": {
             "sys": ("你是红军风控长(诱盘审查官)。进行【红蓝对抗推理】：如果赔率和散户全指向某一方，"
-                    "强制扮演庄家做空者。找出隐蔽的爆冷逻辑。若找不出，才允许预测正路。具体需要根据联赛风格球队风格进行判断。 只输出JSON数组。"),
+                    "强制扮演庄家做空者。找出隐蔽的爆冷逻辑。若找不出，才允许预测正路。根据联赛风格球队风格进行判断。 只输出JSON数组。"),
             "temp": 0.25
         },
         "grok": {
-            "sys": ("你是情报搜集官。专注球队的场外因素、战意陷阱、大热必死情绪。不用算数学，专注心理战。具体需要根据联赛风格球队风格进行判断。只输出JSON数组。"),
+            "sys": ("你是情报搜集官。联网查询相关信息比如盘口交易量等等数据，专注球队的场外因素、战意陷阱、大热必死情绪。不用算数学，专注心理战。根据联赛风格球队风格进行判断。只输出JSON数组。"),
             "temp": 0.3
         },
         "gpt": {
-            "sys": ("你是蓝军数据分析师。专注 xG 偏差和进球数被压低的奇异点。严谨执行庄家的真实进球预期。具体需要根据联赛风格球队风格进行判断。只输出JSON数组。"),
+            "sys": ("你是蓝军数据分析师。敏感专注 xG 偏差和进球数被压低的奇异点。严谨执行庄家的真实进球预期。根据联赛风格球队风格进行判断。只输出JSON数组。"),
             "temp": 0.15
         },
         "gemini": {
-            "sys": ("你是模式识别引擎。结合红军和蓝军的视角，对剧本进行综合评估，输出最终比分预测。具体需要根据联赛风格球队风格进行判断。只输出JSON数组。"),
+            "sys": ("你是模式识别引擎。结合红军和蓝军的视角，对剧本进行综合评估，根据联赛风格球队风格进行判断，输出最终比分预测。只输出JSON数组。"),
             "temp": 0.15
         },
     }
@@ -589,7 +589,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 async def run_ai_matrix_two_phase(match_analyses):
     prompt = build_phase1_prompt(match_analyses)
     ai_configs = [
-        ("grok", "https://www.api522.pro/v1", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
+        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", ["熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"]),
