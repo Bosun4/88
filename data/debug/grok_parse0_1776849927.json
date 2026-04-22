@@ -1,0 +1,21 @@
+{
+  "id": "chatcmpl-cccfce8b-47f5-4f48-932c-33fd451ff002",
+  "object": "chat.completion",
+  "created": 1776849866,
+  "model": "grok-420-thinking",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "<think>**Thinking about your request**\n\n"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10402,
+    "completion_tokens": 10,
+    "total_tokens": 10412
+  }
+}

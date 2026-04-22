@@ -1,5 +1,5 @@
 {
-  "yesterday_win_rate": "8/26",
-  "reflection": "vMAX17.0 重构版 | 5冷门 0胜其他 10Sharp | 引入贝叶斯漂移 (严格向下兼容版)",
+  "yesterday_win_rate": "1/26",
+  "reflection": "vMAX17.0 | 15冷门 18胜其他 13Sharp | 方案B·删泊松·全信号",
   "kill_history": []
 }
