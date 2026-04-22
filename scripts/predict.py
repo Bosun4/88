@@ -589,7 +589,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
 async def run_ai_matrix_two_phase(match_analyses):
     prompt = build_phase1_prompt(match_analyses)
     ai_configs = [
-        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
+        ("grok", "https://www.api522.pro/v1", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", ["熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"]),
