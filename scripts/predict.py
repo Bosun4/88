@@ -1054,7 +1054,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     print(f"  [单阶段] {len(prompt):,} 字符 → 4个AI并行...")
 
     ai_configs = [
-        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
+        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking","熊猫-A-6-grok-4.2-thinking-200w上下文","熊猫-A-7-grok-4.2-多智能体讨论"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", [
             "gpt-5.4",
         ]),
