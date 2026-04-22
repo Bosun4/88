@@ -1,125 +1,98 @@
 {
   "1": {
-    "hash": "8f8021f8fb29d2a07588353fd5ef9387",
-    "timestamp": 1776860992.7239695,
+    "hash": "5fb005c99ad29536e05bd4d8d0417b11",
+    "timestamp": 1776893916.117256,
     "results": {
       "gpt": {
         "top3": [
           {
-            "score": "1-1",
+            "score": "2-1",
             "prob": 12
+          },
+          {
+            "score": "1-1",
+            "prob": 11
           },
           {
             "score": "1-2",
             "prob": 10
-          },
-          {
-            "score": "2-1",
-            "prob": 10
           }
         ],
-        "ai_score": "1-1",
-        "reason": "这是主胜定价过满的错位盘，比分应规避主队顺畅穿盘。",
-        "analysis_process": "🕵️ 庄家意图: 主胜表面占优但xG仅1.55比1.11，-1偏深，真实优势未拉开。\n💸 资金博弈: Sharp直指客胜且客赔降水，Shin主倾未获资金确认，属主热错位。\n🎯 破局逻辑: 总xG 2.65偏中位，最优落点在2-3球，优先防平局与客队偷胜。",
-        "ai_confidence": 72,
+        "ai_score": "2-1",
+        "reason": "这是典型美职对攻盘，主队略优但客队偷分概率高，比分集中在2-1/1-1/1-2。",
+        "analysis_process": "🕵️ 庄家意图: Shin偏主但客赔降水，1X2与资金方向错位，庄家防主不放客。\n💸 资金博弈: Sharp去主胜，盘口却给客降水，属对敲格局，市场分歧极大。\n🎯 破局逻辑: 总xG3.15偏开放，美职高波动，首选单边险胜与对攻平局区间。",
+        "ai_confidence": 68,
         "is_score_others": false,
         "detected_signals": [
-          "Sharp客胜",
-          "Shin主倾斜",
-          "主让偏深"
+          "Sharp主胜",
+          "客方向降水",
+          "Shin与资金背离"
         ]
       },
       "grok": {
         "top3": [
           {
-            "score": "1-2",
-            "prob": 18
-          },
-          {
-            "score": "0-1",
-            "prob": 15
+            "score": "2-1",
+            "prob": 16
           },
           {
             "score": "1-1",
+            "prob": 14
+          },
+          {
+            "score": "2-0",
             "prob": 13
           }
         ],
-        "ai_score": "1-2",
-        "reason": "Sharp反向流入+散户热主，庄家诱盘，硬核客胜",
-        "analysis_process": "🕵️ 庄家意图: Shin主48.2%与-1.0让球错位，庄家表面挺主胜，实则恐惧客队状态爆冷反击。\n💸 资金博弈: Sharp资金客胜+客赔-1降水，散户主胜48%大热，形成典型反指诱盘共振。\n🎯 破局逻辑: 芬超进攻开放，双方近况火热，Sharp信号硬核主导，客队反击能力更强，锁定客胜。",
-        "ai_confidence": 82,
+        "ai_score": "2-1",
+        "reason": "Sharp+主场状态火热，预计主队2-1获胜。",
+        "analysis_process": "🕵️ 庄家意图: Shin主44.8%匹配让-1.0，庄家主要怕平局爆冷。\n💸 资金博弈: Sharp主胜主导，客赔降水但散户主45%无反指矛盾。\n🎯 破局逻辑: 主队近6轮5胜1平主场火热，xG1.71-1.44支持主胜小比分。",
+        "ai_confidence": 80,
         "is_score_others": false,
         "detected_signals": [
-          "Sharp资金流向客胜",
-          "散户大热48%反指"
+          "Sharp资金流向主胜"
         ]
       },
       "gemini": {
         "top3": [
           {
-            "score": "1-1",
+            "score": "2-1",
             "prob": 35
           },
           {
-            "score": "0-1",
-            "prob": 25
+            "score": "2-0",
+            "prob": 30
           },
           {
-            "score": "1-2",
+            "score": "3-1",
             "prob": 20
           }
         ],
-        "ai_score": "1-1",
-        "reason": "盘赔错位且聪明资金介入，客队受让深盘极具投资价值。",
-        "analysis_process": "🕵️ 庄家意图: 让球-1.0与Shin主胜48.2%严重错位，庄家利用深盘造热主队。\n💸 资金博弈: Sharp资金与降水共振指向客队，散户主胜筹码被套牢。\n🎯 破局逻辑: 客队状态更佳且受让深盘，结合进球数压制看好客队不败。",
-        "ai_confidence": 88,
+        "ai_score": "2-1",
+        "reason": "Sharp资金力挺主队，反向Steam诱导客队，主胜可期。",
+        "analysis_process": "🕵️ 庄家意图: Shin概率与散户分布高度一致，但让球盘口存在诱导，庄家实则忌惮主队打出。\n💸 资金博弈: 客队降水形成Steam，但Sharp资金坚决流入主胜，典型的反向诱导资金流。\n🎯 破局逻辑: 美职主场优势明显，Sharp资金与主队近期火热状态共振，看好主队取胜。",
+        "ai_confidence": 85,
         "is_score_others": false,
         "detected_signals": [
-          "Sharp资金流向客胜",
+          "Sharp资金主胜",
           "反向Steam"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 16
-          },
-          {
-            "score": "0-1",
-            "prob": 13
-          },
-          {
-            "score": "1-1",
-            "prob": 11
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "Sharp明确流向客队，客队积分领先且状态更优，逆让盘选客队小胜。",
-        "analysis_process": "🕵️ 庄家意图: Shin主队48.2%但让球-1.0，庄家表面挺主实则高估主队，掩盖客队真实竞争力。\n💸 资金博弈: Sharp资金明确流向客胜，负赔降水，与散户分布高度一致但庄家让盘暗示陷阱。\n🎯 破局逻辑: 客队积分第1、状态优，Sharp押客，逆Shin选客胜低比分，1-2/0-1为首选。",
-        "ai_confidence": 72,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp流向客胜",
-          "负降水",
-          "让盘错位"
         ]
       }
     }
   },
   "2": {
-    "hash": "3608cd17beae5e32d70b061568784ed6",
-    "timestamp": 1776860992.7239914,
+    "hash": "7088c40358368919225404f32af62459",
+    "timestamp": 1776893916.1172776,
     "results": {
       "gpt": {
         "top3": [
           {
             "score": "1-1",
-            "prob": 13
+            "prob": 14
           },
           {
-            "score": "2-1",
-            "prob": 10
+            "score": "0-1",
+            "prob": 13
           },
           {
             "score": "1-2",
@@ -127,38 +100,38 @@
           }
         ],
         "ai_score": "1-1",
-        "reason": "马竞名气大于盘面优势，最该防的是保级主队把比赛拖进胶着。",
-        "analysis_process": "🕵️ 庄家意图: Shin几乎五五开，隐含xG1.38对1.36，庄家拒绝给马竞真实优势。\n💸 资金博弈: 客降水但伴随长客陷阱标签，资金去客未形成安全溢价。\n🎯 破局逻辑: 保级死拼叠加均衡xG，低差局最稳，1球内波动最大。",
-        "ai_confidence": 71,
+        "reason": "客强但热度过满，保级战更适合防平与客队一球小胜，规避顺畅0-2。",
+        "analysis_process": "🕵️ 庄家意图: 客胜59%不算极深，却给1.50低赔，庄家在卖强客叙事。\n💸 资金博弈: 散户客胜大热接近反指阈值，且主队保级死拼，需防客不顺穿。\n🎯 破局逻辑: 总xG2.78不支持大屠杀，沙职强弱盘常见僵局，优先小比分抗热。",
+        "ai_confidence": 73,
         "is_score_others": false,
         "detected_signals": [
-          "长客陷阱",
+          "客胜超热59%",
           "保级死拼",
-          "客胜降水"
+          "强客低赔诱盘嫌疑"
         ]
       },
       "grok": {
         "top3": [
           {
             "score": "1-1",
-            "prob": 22
+            "prob": 15
           },
           {
-            "score": "2-1",
-            "prob": 18
-          },
-          {
-            "score": "1-0",
+            "score": "0-1",
             "prob": 14
+          },
+          {
+            "score": "1-2",
+            "prob": 13
           }
         ],
         "ai_score": "1-1",
-        "reason": "保级死拼+长客陷阱，庄家诱客胜，真实主场不败",
-        "analysis_process": "🕵️ 庄家意图: Shin主客接近，实际客赔2.40略低，庄家利用长客陷阱诱散户追马竞。\n💸 资金博弈: 客赔-1降水但散户主38%略热，保级死拼下主队资金反向Steam明显。\n🎯 破局逻辑: 西甲保级战主队战意爆棚，客队客场疲软，风格偏防守，硬核主场不败。",
-        "ai_confidence": 79,
+        "reason": "大热反指+保级战意，客胜难顺利，平局概率高。",
+        "analysis_process": "🕵️ 庄家意图: Shin客59%匹配但散户大热反指，庄家诱导客胜。\n💸 资金博弈: 客胜超热59%反指，保级死拼形成极端情绪。\n🎯 破局逻辑: 主保级死拼+客状态一般，规避客顺利打出，预计平局。",
+        "ai_confidence": 70,
         "is_score_others": false,
         "detected_signals": [
-          "长客陷阱",
+          "客胜超热59%反指",
           "保级死拼"
         ]
       },
@@ -166,7 +139,7 @@
         "top3": [
           {
             "score": "1-1",
-            "prob": 30
+            "prob": 35
           },
           {
             "score": "2-1",
@@ -178,520 +151,388 @@
           }
         ],
         "ai_score": "1-1",
-        "reason": "保级球队主场死拼强敌，长客陷阱下客队难有作为。",
-        "analysis_process": "🕵️ 庄家意图: 主受让1.0但欧赔接近平手盘，庄家极度忌惮主队保级战意。\n💸 资金博弈: 客队降水但触发长客陷阱，散户资金被诱导至客胜。\n🎯 破局逻辑: 保级死拼叠加长客陷阱，主队主场战绩稳定，看好主队拿分。",
-        "ai_confidence": 85,
+        "reason": "客队大热触发反指，主队保级死拼有望爆冷。",
+        "analysis_process": "🕵️ 庄家意图: 客胜Shin概率高达59%，配合深盘让步，庄家刻意造热客队，掩盖主队保级战意。\n💸 资金博弈: 散户60%重注客队形成大热必死格局，缺乏Sharp资金支持的客胜极度危险。\n🎯 破局逻辑: 保级死拼题材下，主队具备极强抵抗力，结合散户反指，坚决走主队不败比分。",
+        "ai_confidence": 80,
         "is_score_others": false,
         "detected_signals": [
-          "长客陷阱",
+          "散户大热59%反指",
           "保级死拼"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 18
-          },
-          {
-            "score": "1-2",
-            "prob": 14
-          },
-          {
-            "score": "0-1",
-            "prob": 12
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "马竞客场状态低迷叠加保级死拼，埃尔切顽强抵抗，平局或险负可能性大。",
-        "analysis_process": "🕵️ 庄家意图: 让球+1.0但Shin主客几乎均等，庄家暗示马竞客场表现难以发挥真实实力。\n💸 资金博弈: 负赔降水，钱流入客胜，长客陷阱信号触发，马竞近5客场仅1胜需警惕。\n🎯 破局逻辑: 保级死拼+马竞客场差，主队有求生欲，平局或马竞小胜概率均衡，选1-1/1-2。",
-        "ai_confidence": 68,
-        "is_score_others": false,
-        "detected_signals": [
-          "长客陷阱",
-          "保级死拼",
-          "负降水"
         ]
       }
     }
   },
   "3": {
-    "hash": "9a0b8ce532f29071f14366de718a7d01",
-    "timestamp": 1776860992.7240064,
+    "hash": "f1f81cb6d444e77730c7201ef1da55a6",
+    "timestamp": 1776893916.1172924,
     "results": {
       "gpt": {
         "top3": [
           {
-            "score": "2-1",
-            "prob": 11
+            "score": "1-2",
+            "prob": 13
           },
           {
             "score": "1-1",
-            "prob": 10
+            "prob": 11
           },
           {
-            "score": "3-1",
+            "score": "2-2",
             "prob": 9
           }
         ],
-        "ai_score": "2-1",
-        "reason": "巴黎大概率赢，但盘口不像稳定4球线，防有失球的常规胜。",
-        "analysis_process": "🕵️ 庄家意图: -2让步与给出的xG样本严重不匹配，机构显性强主但实值未爆表。\n💸 资金博弈: 重诱下盘说明庄家不愿轻放大胜预期，真实更像赢球但未必屠杀。\n🎯 破局逻辑: 缺少总球压低细节时，按保守融合处理，主胜+失球路径更优。",
-        "ai_confidence": 64,
+        "ai_score": "1-2",
+        "reason": "荷甲环境下客队赢面最大，但平局与互射不能删，1-2是赔率效率最高点。",
+        "analysis_process": "🕵️ 庄家意图: 客胜1.93配45.9% Shin，优势明确但未深开，防平权重仍高。\n💸 资金博弈: 无明显Sharp扰动，市场与Shin基本一致，靠联赛进球特征修正。\n🎯 破局逻辑: 荷甲总xG2.84天然偏开放，阿尔克马压制力更强，防双方进球模型。",
+        "ai_confidence": 72,
         "is_score_others": false,
         "detected_signals": [
-          "机构重诱下盘",
-          "让步过深",
-          "名气主队"
+          "荷甲开放性",
+          "客胜主导",
+          "平局残留较高"
         ]
       },
       "grok": {
         "top3": [
           {
-            "score": "3-0",
-            "prob": 21
-          },
-          {
-            "score": "2-0",
-            "prob": 19
-          },
-          {
-            "score": "2-1",
+            "score": "1-2",
             "prob": 15
+          },
+          {
+            "score": "0-1",
+            "prob": 13
+          },
+          {
+            "score": "1-1",
+            "prob": 12
           }
         ],
-        "ai_score": "3-0",
-        "reason": "机构重诱下盘，巴黎极强进攻，硬核大胜",
-        "analysis_process": "🕵️ 庄家意图: 机构重诱下盘+让-2.0，庄家表面高让实则对冲大胜风险，怕南特0-0顽抗。\n💸 资金博弈: 散户数据缺失但下盘诱导明显，巴黎主胜大热下Steam反向流入下盘。\n🎯 破局逻辑: 法甲顶级进攻 vs 保级低迷，巴黎主场火热，机构诱下盘实为3球以上大胜。",
-        "ai_confidence": 85,
+        "ai_score": "1-2",
+        "reason": "实力+xG支持客胜，双方状态一般预计客小胜。",
+        "analysis_process": "🕵️ 庄家意图: Shin客45.9%与让1.0匹配，庄家看好客胜。\n💸 资金博弈: 散户客46%跟随Shin，无明显Steam矛盾。\n🎯 破局逻辑: 客队实力稍强，xG支持客胜，选1-2/0-1/1-1。",
+        "ai_confidence": 75,
         "is_score_others": false,
-        "detected_signals": [
-          "机构重诱下盘"
-        ]
+        "detected_signals": []
       },
       "gemini": {
         "top3": [
           {
-            "score": "3-0",
+            "score": "1-1",
+            "prob": 35
+          },
+          {
+            "score": "1-2",
             "prob": 30
           },
           {
-            "score": "4-0",
-            "prob": 25
-          },
-          {
-            "score": "3-1",
+            "score": "2-2",
             "prob": 20
           }
         ],
-        "ai_score": "3-0",
-        "reason": "庄家利用低xG数据重诱下盘，主队大胜格局已定。",
-        "analysis_process": "🕵️ 庄家意图: 让步-2.0但隐含xG极低，庄家刻意做弱主队大胜预期诱下。\n💸 资金博弈: 机构重诱下盘，散户资金大概率流向客队受让。\n🎯 破局逻辑: 实力绝对碾压，庄家诱下实则掩护主队大胜打出。",
-        "ai_confidence": 92,
-        "is_score_others": true,
-        "detected_signals": [
-          "机构重诱下盘"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "3-0",
-            "prob": 18
-          },
-          {
-            "score": "2-0",
-            "prob": 15
-          },
-          {
-            "score": "3-1",
-            "prob": 12
-          }
-        ],
-        "ai_score": "3-0",
-        "reason": "PSG实力碾压，南特客场低迷，大比分主胜为大概率，机构诱盘方向疑为下盘。",
-        "analysis_process": "🕵️ 庄家意图: 无欧赔数据，让球-2.0说明庄家认定PSG大胜，机构重诱下盘信号需警惕下盘被压。\n💸 资金博弈: 散户数据缺失，机构重诱下盘信号触发，真实资金方向不明，需依赖基本面判断。\n🎯 破局逻辑: PSG积分碾压，南特近6轮3平3负，客场0胜，PSG大胜概率高，3-0/2-0为核心选项。",
-        "ai_confidence": 70,
+        "ai_score": "1-1",
+        "reason": "盘口中庸资金均衡，客队实力占优但难言稳胜，首看平局。",
+        "analysis_process": "🕵️ 庄家意图: 赔率结构中庸，庄家对客队让步信心不足，xG差距未能有效转化为盘口优势。\n💸 资金博弈: 资金分布均匀，未见明显异常流入，市场对双方均持观望态度。\n🎯 破局逻辑: 荷甲大开大合，但本场数据偏向保守，客队客战不稳，倾向平局或客队小胜。",
+        "ai_confidence": 75,
         "is_score_others": false,
         "detected_signals": [
-          "机构重诱下盘",
-          "让球-2.0",
-          "无欧赔"
+          "资金均衡",
+          "xG客优"
         ]
       }
     }
   },
   "4": {
-    "hash": "49ada4e02b191801435889ff2ab81cf8",
-    "timestamp": 1776860992.724021,
+    "hash": "7a0adad9f7b14914ebfb94008084e537",
+    "timestamp": 1776893916.1173046,
     "results": {
       "gpt": {
         "top3": [
           {
             "score": "1-1",
-            "prob": 13
+            "prob": 15
           },
           {
-            "score": "2-1",
-            "prob": 10
+            "score": "1-0",
+            "prob": 11
           },
           {
-            "score": "1-2",
+            "score": "0-1",
             "prob": 10
           }
         ],
         "ai_score": "1-1",
-        "reason": "市场表面看客，真钱却在主，最佳区间是主不败的1球差比分。",
-        "analysis_process": "🕵️ 庄家意图: Shin客优39.3但xG只小优，客队被轻微高挂，胜负差未拉开。\n💸 资金博弈: Sharp流向主胜，且主赔降水，和Shin客倾背离，典型逆向价值点。\n🎯 破局逻辑: 瑞超两队状态同强，最易形成对攻拉锯，平局与主队小胜EV更高。",
-        "ai_confidence": 76,
+        "reason": "这是典型保级绞杀盘，最真实的结局是低比分僵持，1-1优先级最高。",
+        "analysis_process": "🕵️ 庄家意图: Shin主36.9客34.5极度接近，实为五五盘，庄家最怕平局兑现。\n💸 资金博弈: 散户分布均衡，无大热，说明盘口真实，需回归低比分母体。\n🎯 破局逻辑: 总xG仅2.24，西甲保级战节奏收缩，首选1球差与平局的冷硬区间。",
+        "ai_confidence": 78,
         "is_score_others": false,
         "detected_signals": [
-          "Sharp主胜",
-          "Shin客倾斜",
-          "逆向错位"
+          "保级战",
+          "低总xG",
+          "平局高敏感"
         ]
       },
       "grok": {
         "top3": [
           {
-            "score": "2-1",
-            "prob": 19
-          },
-          {
             "score": "1-0",
-            "prob": 16
+            "prob": 15
           },
           {
             "score": "1-1",
             "prob": 14
+          },
+          {
+            "score": "2-1",
+            "prob": 13
           }
         ],
-        "ai_score": "2-1",
-        "reason": "Sharp资金主胜+主场火热，庄家错位恐惧主胜",
-        "analysis_process": "🕵️ 庄家意图: Shin客39.3%略高但主赔2.72偏高，庄家恐惧主队主场全胜火热状态。\n💸 资金博弈: Sharp资金主胜+主赔-1降水，散户客39%跟随，Sharp领先反指成立。\n🎯 破局逻辑: 瑞超第4轮双方状态爆炸，主场全胜+近6轮5胜1平，硬核主胜。",
-        "ai_confidence": 81,
+        "ai_score": "1-0",
+        "reason": "主队主场优势+状态佳，预计1-0或2-1。",
+        "analysis_process": "🕵️ 庄家意图: Shin主36.9%略高但接近，庄家怕客反击。\n💸 资金博弈: 散户主37%跟随，无大热无Sharp信号。\n🎯 破局逻辑: 主队状态好客队客场差，xG支持主胜小比分。",
+        "ai_confidence": 72,
         "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜"
-        ]
+        "detected_signals": []
       },
       "gemini": {
         "top3": [
           {
-            "score": "2-1",
-            "prob": 30
+            "score": "1-0",
+            "prob": 35
           },
           {
             "score": "1-1",
-            "prob": 25
+            "prob": 30
           },
           {
-            "score": "1-0",
+            "score": "0-0",
             "prob": 20
           }
         ],
-        "ai_score": "2-1",
-        "reason": "反向Steam黄金信号出现，主队主场强势不败。",
-        "analysis_process": "🕵️ 庄家意图: 主受让1.0但Shin概率主胜达32.5%，庄家暗挺主队。\n💸 资金博弈: Sharp资金与降水均指向主胜，反向Steam信号强烈。\n🎯 破局逻辑: 主队主场全胜状态火热，资金面完全支持主队打出。",
-        "ai_confidence": 89,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜",
-          "反向Steam"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 17
-          },
-          {
-            "score": "1-0",
-            "prob": 14
-          },
-          {
-            "score": "2-0",
-            "prob": 12
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "Sharp资金逆Shin流向主队，主队主场全胜状态，诱盘结构明确，选主队小胜比分。",
-        "analysis_process": "🕵️ 庄家意图: Shin客队39.3%更高但Sharp资金流向主胜，Shin与Sharp明显背离，庄家诱散户押客。\n💸 资金博弈: 主胜赔降水，Sharp买主，散户跟客，100%诱盘结构，必须按Sharp方向选主队比分。\n🎯 破局逻辑: 主队近6轮5胜1平、近4主场全胜，状态远强于Shin暗示，Sharp+状态双确认选主胜。",
+        "ai_score": "1-0",
+        "reason": "保级大战双方谨慎，xG偏低预示进球稀少，主队微弱优势。",
+        "analysis_process": "🕵️ 庄家意图: 主队排名靠后却能让球，庄家利用主队近期回暖状态强行拉升主队预期。\n💸 资金博弈: 散户资金在主胜方向略显拥挤，但整体博弈处于均势，缺乏明确主力资金介入。\n🎯 破局逻辑: 保级大战双方均输不起，xG双双偏低预示进球数不多，看好沉闷战平或主队小胜。",
         "ai_confidence": 78,
         "is_score_others": false,
         "detected_signals": [
-          "Sharp流向主胜",
-          "反向Steam",
-          "Shin背离"
+          "低xG模型",
+          "保级大战"
         ]
       }
     }
   },
   "5": {
-    "hash": "ad18d0e5528a52e5bc34ee3600ee5a04",
-    "timestamp": 1776860992.7240345,
+    "hash": "b0daaa2c9057ca04dac07a458a094202",
+    "timestamp": 1776893916.117317,
     "results": {
       "gpt": {
         "top3": [
           {
-            "score": "1-0",
-            "prob": 15
+            "score": "2-1",
+            "prob": 14
           },
           {
             "score": "1-1",
-            "prob": 13
+            "prob": 11
           },
           {
             "score": "2-0",
             "prob": 10
           }
         ],
-        "ai_score": "1-0",
-        "reason": "这是典型低总球盘，比分价值集中在一球决胜或闷平。",
-        "analysis_process": "🕵️ 庄家意图: 主44.7平30.3且客xG仅0.8，庄家明显压低低比分主不败结构。\n💸 资金博弈: 平赔降水而主赔抬升，资金更防平而非主穿，市场对主胜不够坚决。\n🎯 破局逻辑: 总xG 1.96极低，西甲慢节奏下0-2球最优，首取1-0/1-1。",
-        "ai_confidence": 79,
+        "ai_score": "2-1",
+        "reason": "主队更像小优盘而非碾压盘，2-1最贴合主胜兑现且客队能还手的路径。",
+        "analysis_process": "🕵️ 庄家意图: 主胜47.9%但赔率1.85不算强压，庄家对主胜留有回撤空间。\n💸 资金博弈: 散户分布自然，无明显诱盘峰值，市场对主队仅是温热非过热。\n🎯 破局逻辑: 总xG2.60中位偏上，马尔默主场加成明显，但天狼星榜首不易崩盘。",
+        "ai_confidence": 70,
         "is_score_others": false,
         "detected_signals": [
-          "低总xG",
-          "平局降水",
-          "主不败压制"
+          "主队温热",
+          "榜首客队抗性",
+          "中位总进球"
         ]
       },
       "grok": {
         "top3": [
           {
-            "score": "1-0",
-            "prob": 20
+            "score": "2-1",
+            "prob": 16
           },
           {
-            "score": "2-1",
-            "prob": 17
+            "score": "2-0",
+            "prob": 14
           },
           {
             "score": "1-1",
-            "prob": 15
+            "prob": 13
           }
         ],
-        "ai_score": "1-0",
-        "reason": "实力接近+主场优势，庄家真实看好主胜",
-        "analysis_process": "🕵️ 庄家意图: Shin主44.7%与-1.0让球匹配，庄家表面主胜，实则对冲中游闷平风险。\n💸 资金博弈: 胜赔1升+客赔0，散户主45%热，资金流向中性无明显Steam。\n🎯 破局逻辑: 西甲中游对决，主场状态上佳+近5主3胜2平，硬核主胜小比分。",
-        "ai_confidence": 73,
+        "ai_score": "2-1",
+        "reason": "主队状态+主场支持，预计2-1获胜。",
+        "analysis_process": "🕵️ 庄家意图: Shin主47.9%匹配让-1，庄家看好主胜。\n💸 资金博弈: 散户主48%跟随Shin，无特殊流向。\n🎯 破局逻辑: 主队主场佳+xG优势，选主胜比分。",
+        "ai_confidence": 78,
         "is_score_others": false,
         "detected_signals": []
       },
       "gemini": {
         "top3": [
           {
-            "score": "1-1",
+            "score": "2-0",
             "prob": 35
           },
           {
-            "score": "0-0",
-            "prob": 25
+            "score": "2-1",
+            "prob": 30
           },
           {
-            "score": "1-0",
+            "score": "3-1",
             "prob": 20
           }
         ],
-        "ai_score": "1-1",
-        "reason": "盘口托大且平局受热，双方闷战成和概率极高。",
-        "analysis_process": "🕵️ 庄家意图: 让球-1.0但Shin主胜仅44.7%，庄家对主队净胜两球信心不足。\n💸 资金博弈: 平局降水且双方实力接近，资金向平局倾斜。\n🎯 破局逻辑: 双方近期状态稳定且防守较好，平局打出概率极大。",
+        "ai_score": "2-0",
+        "reason": "主队底蕴深厚且主场强势，盘口保护下有望击退榜首客队。",
+        "analysis_process": "🕵️ 庄家意图: 主队作为传统强队让步偏浅，庄家利用客队榜首身份制造下盘拉力。\n💸 资金博弈: 散户资金并未过度集中于主队，市场对客队存在忌惮，反而保护了主胜打出。\n🎯 破局逻辑: 主队底蕴深厚且主场强势，xG模型主队占优，看好主队打破客队不败金身。",
         "ai_confidence": 82,
         "is_score_others": false,
         "detected_signals": [
-          "平局降水"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 16
-          },
-          {
-            "score": "2-1",
-            "prob": 14
-          },
-          {
-            "score": "1-0",
-            "prob": 12
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "平赔降水暗示资金押平，赫塔费状态强悍，主队让盘-1风险偏大，平局概率被低估。",
-        "analysis_process": "🕵️ 庄家意图: Shin主44.7%、让球-1.0，平赔降水吸钱，庄家可能在诱主盘散户，平局暗流涌动。\n💸 资金博弈: 平赔降水但主赔升，资金悄然流向平局，赫塔费近6轮4胜状态强，客场3胜2负。\n🎯 破局逻辑: 双方实力接近，赫塔费客场状态不差，平赔降水有资金支撑，1-1/2-1为均衡选择。",
-        "ai_confidence": 65,
-        "is_score_others": false,
-        "detected_signals": [
-          "平赔降水",
-          "让盘错位",
-          "客队状态强"
+          "xG主优",
+          "盘口保护"
         ]
       }
     }
   },
   "6": {
-    "hash": "136c6fb7bab199a3629532f5bde828d7",
-    "timestamp": 1776860992.724048,
+    "hash": "3d8608a93a7c08484bcf232190505a25",
+    "timestamp": 1776893916.1173296,
     "results": {
       "gpt": {
         "top3": [
-          {
-            "score": "2-1",
-            "prob": 12
-          },
-          {
-            "score": "1-1",
-            "prob": 11
-          },
-          {
-            "score": "2-2",
-            "prob": 9
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "主胜方向对，但更像险胜或互有进球的开放主场局。",
-        "analysis_process": "🕵️ 庄家意图: 主42.2对31.9且xG主1.41客1.20，主队仅中等优势，不像稳穿盘。\n💸 资金博弈: Sharp流向主胜且主赔降水，资金与Shin同向，但强度不足以支撑大胜。\n🎯 破局逻辑: 荷甲环境放大进球，2-3球为核心，开放尾部需补2-2。",
-        "ai_confidence": 74,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp主胜",
-          "荷甲开放性",
-          "主胜非碾压"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 18
-          },
-          {
-            "score": "1-0",
-            "prob": 16
-          },
-          {
-            "score": "2-0",
-            "prob": 14
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "Sharp主胜+客场低迷，庄家真实支持主队",
-        "analysis_process": "🕵️ 庄家意图: Shin主42.2%与-1.0匹配，庄家挺主但客队客场低迷，怕主队不进球。\n💸 资金博弈: Sharp资金主胜+胜赔-1降水，散户主42%跟随，Steam主胜强化。\n🎯 破局逻辑: 荷甲主队保级压力大+客队客场3负，防守反击风格，硬核主胜。",
-        "ai_confidence": 77,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 30
-          },
-          {
-            "score": "2-0",
-            "prob": 25
-          },
-          {
-            "score": "3-1",
-            "prob": 20
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "聪明资金精准打击主胜，客队客场虫属性暴露无遗。",
-        "analysis_process": "🕵️ 庄家意图: 主让-1.0且Shin主胜42.2%，庄家利用客队名气做局。\n💸 资金博弈: Sharp资金流入主胜，客队降水实为诱导散户。\n🎯 破局逻辑: 客队客场低迷，主队得到聪明资金支持，看好主胜。",
-        "ai_confidence": 86,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 18
-          },
           {
             "score": "1-0",
             "prob": 15
           },
           {
+            "score": "1-1",
+            "prob": 13
+          },
+          {
             "score": "2-0",
-            "prob": 12
+            "prob": 10
           }
         ],
-        "ai_score": "2-1",
-        "reason": "Sharp逆Shin押主队，客队客场低迷，主场博弈下特尔斯达小胜概率被系统性低估。",
-        "analysis_process": "🕵️ 庄家意图: Shin主42.2%但Sharp资金流向主胜，主赔降水，庄家表面让-1暗压主队，实为诱客陷阱。\n💸 资金博弈: Sharp明确买主，主赔降，客赔升，与Shin指向相反，诱盘结构清晰。\n🎯 破局逻辑: 客队近6轮1胜3负、近5客场2平3负，状态低迷；主队虽排名靠后但Sharp力挺，选主胜。",
-        "ai_confidence": 74,
+        "ai_score": "1-0",
+        "reason": "低xG下主队优势主要体现在控制与零封，1-0是最具性价比的核心比分。",
+        "analysis_process": "🕵️ 庄家意图: Shin主45%配1.97，庄家给主胜但不愿深压，防平思路明显。\n💸 资金博弈: 散户未过热，资金面平稳，说明结果更受总进球分布主导。\n🎯 破局逻辑: 总xG2.16偏低，西甲风格收紧，客队进攻弱，主胜更像一球小胜。",
+        "ai_confidence": 80,
         "is_score_others": false,
         "detected_signals": [
-          "Sharp流向主胜",
-          "反向Steam",
-          "客队客场低迷"
+          "低总xG",
+          "主胜不深",
+          "小比分优先"
+        ]
+      },
+      "grok": {
+        "top3": [
+          {
+            "score": "1-0",
+            "prob": 16
+          },
+          {
+            "score": "2-1",
+            "prob": 14
+          },
+          {
+            "score": "1-1",
+            "prob": 13
+          }
+        ],
+        "ai_score": "1-0",
+        "reason": "主场+xG优势，预计主队小胜。",
+        "analysis_process": "🕵️ 庄家意图: Shin主45%匹配，庄家不惧客队。\n💸 资金博弈: 散户主45%跟随，无矛盾。\n🎯 破局逻辑: 主队主场佳客队客场低迷，xG支持主胜。",
+        "ai_confidence": 76,
+        "is_score_others": false,
+        "detected_signals": []
+      },
+      "gemini": {
+        "top3": [
+          {
+            "score": "1-0",
+            "prob": 40
+          },
+          {
+            "score": "2-0",
+            "prob": 30
+          },
+          {
+            "score": "2-1",
+            "prob": 20
+          }
+        ],
+        "ai_score": "1-0",
+        "reason": "客队客场虫属性明显且xG极低，主队主场战绩出色值得信赖。",
+        "analysis_process": "🕵️ 庄家意图: 主队让步坚挺，庄家对客队极低的xG（0.906）极度不信任，防范主胜风险。\n💸 资金博弈: 资金分布健康，主胜方向未形成大热，属于良性博弈格局。\n🎯 破局逻辑: 客队客场虫属性明显，主队主场战绩出色，顺应盘口支持看好主队全取三分。",
+        "ai_confidence": 85,
+        "is_score_others": false,
+        "detected_signals": [
+          "客队低xG",
+          "主场强势"
         ]
       }
     }
   },
   "7": {
-    "hash": "9625456b1ca733fbd5c80b8e4320bc6b",
-    "timestamp": 1776860992.7240622,
+    "hash": "fe12d78506bd2ca0ffcdd5264d02ab92",
+    "timestamp": 1776893916.1173718,
     "results": {
       "gpt": {
         "top3": [
           {
             "score": "1-1",
+            "prob": 13
+          },
+          {
+            "score": "1-0",
             "prob": 11
           },
           {
             "score": "0-1",
-            "prob": 11
-          },
-          {
-            "score": "1-2",
             "prob": 10
           }
         ],
         "ai_score": "1-1",
-        "reason": "客队赢面仍在，但过热削弱赔率价值，比分应防主队强行咬住。",
-        "analysis_process": "🕵️ 庄家意图: Shin客胜60.6很高，但让步与xG并未到绝对碾压，客热偏满。\n💸 资金博弈: Sharp与降水都在客胜，但散户61%同向大热，长客陷阱成立需防失真。\n🎯 破局逻辑: 保级死拼压缩客胜兑现质量，优先1球差和被拖平路径。",
-        "ai_confidence": 68,
+        "reason": "这是最标准的诱客盘之一，比分必须逆热门，1-1与1-0优于任何客队顺胜。",
+        "analysis_process": "🕵️ 庄家意图: Shin强挺客胜，但Sharp反向去主且客赔降水，典型长客诱盘结构。\n💸 资金博弈: 客胜62%大热触发反指，主队保级标签叠加，必须逆大众避客顺赢。\n🎯 破局逻辑: 总xG2.39不支持强队轻松打穿，葡超补赛多收缩，首防平与主偷鸡。",
+        "ai_confidence": 84,
         "is_score_others": false,
         "detected_signals": [
-          "Sharp客胜",
-          "客胜超热61%反指",
+          "Sharp主胜",
+          "客胜超热62%反指",
           "长客陷阱",
-          "保级死拼"
+          "保级死拼",
+          "Shin与Sharp背离"
         ]
       },
       "grok": {
         "top3": [
           {
-            "score": "1-2",
-            "prob": 17
-          },
-          {
-            "score": "0-2",
-            "prob": 15
-          },
-          {
             "score": "1-1",
+            "prob": 14
+          },
+          {
+            "score": "1-0",
             "prob": 13
+          },
+          {
+            "score": "2-1",
+            "prob": 12
           }
         ],
-        "ai_score": "1-2",
-        "reason": "客胜超热61%+长客陷阱，Sharp虽同向但大热必死，客胜",
-        "analysis_process": "🕵️ 庄家意图: Shin客60.6%与客胜大热一致，庄家利用长客陷阱+保级死拼放大客胜风险。\n💸 资金博弈: Sharp客胜+客赔-1，散户客61%超热，典型大热必死反指。\n🎯 破局逻辑: 英冠保级主队主场差+客队争冠战意，客队客场稳，硬核客胜但防大热陷阱。",
-        "ai_confidence": 76,
+        "ai_score": "1-1",
+        "reason": "Sharp vs Shin背离+大热反指，100%诱盘，主队保级战意爆棚。",
+        "analysis_process": "🕵️ 庄家意图: Shin客62.4%但Sharp主胜错位，庄家诱长客。\n💸 资金博弈: Sharp主胜+客热62%反指+赔率客降水，矛盾共振诱盘。\n🎯 破局逻辑: 主保级死拼+长客陷阱，Sharp信号硬核，选主不败比分。",
+        "ai_confidence": 88,
         "is_score_others": false,
         "detected_signals": [
-          "Sharp资金流向客胜",
-          "客胜超热61%反指",
+          "Sharp资金流向主胜",
+          "客胜超热62%反指",
           "长客陷阱",
           "保级死拼"
         ]
@@ -700,1595 +541,79 @@
         "top3": [
           {
             "score": "1-1",
-            "prob": 30
+            "prob": 35
           },
           {
             "score": "2-1",
-            "prob": 20
+            "prob": 25
           },
           {
             "score": "1-0",
-            "prob": 15
+            "prob": 20
           }
         ],
         "ai_score": "1-1",
-        "reason": "客胜极度拥挤触发大热必死，保级主队有望爆冷拿分。",
-        "analysis_process": "🕵️ 庄家意图: 客让1.0且Shin客胜60.6%，庄家顺势造热客队。\n💸 资金博弈: 客胜大热61%触发反指，Sharp资金虽在客但为诱导。\n🎯 破局逻辑: 主队保级死拼叠加客胜大热必死，坚决走主队不败。",
-        "ai_confidence": 87,
+        "reason": "客队大热且遇长客陷阱，Sharp资金逆势买入主队，坚决防冷。",
+        "analysis_process": "🕵️ 庄家意图: 客胜赔率极低且Shin概率高达62%，庄家利用客队强队形象疯狂吸筹。\n💸 资金博弈: 客队降水且散户大热，但Sharp资金逆势买入主胜，典型的反向Steam诱盘。\n🎯 破局逻辑: 保级死拼叠加长客陷阱，Sharp资金指路，坚决规避客胜，博取主队爆冷。",
+        "ai_confidence": 88,
         "is_score_others": false,
         "detected_signals": [
-          "客胜超热61%",
-          "长客陷阱",
-          "保级死拼"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "0-2",
-            "prob": 16
-          },
-          {
-            "score": "1-2",
-            "prob": 14
-          },
-          {
-            "score": "胜其他",
-            "prob": 12
-          }
-        ],
-        "ai_score": "0-2",
-        "reason": "Sharp与基本面共指客胜，但保级死拼下主队顽抗，选客队小胜比分规避大热陷阱。",
-        "analysis_process": "🕵️ 庄家意图: Shin客61%，Sharp也流向客，散户61%热押客，长客陷阱信号触发，需警惕大比分客胜。\n💸 资金博弈: 客赔降水，Sharp+散户共振押客，但长客陷阱信号提示庄家可能在某分支设套。\n🎯 破局逻辑: 保级死拼主队有求生欲，但客队实力差距巨大，选客胜但警惕大比分，0-2/1-2为主。",
-        "ai_confidence": 70,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp流向客胜",
-          "散户大热61%反指",
-          "长客陷阱",
-          "保级死拼"
+          "Sharp资金主胜",
+          "散户大热62%反指",
+          "长客陷阱"
         ]
       }
     }
   },
   "8": {
-    "hash": "e49dffc155bc115cb38b4c267d877f03",
-    "timestamp": 1776860992.7241085,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 11
-          },
-          {
-            "score": "1-3",
-            "prob": 10
-          },
-          {
-            "score": "2-2",
-            "prob": 9
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "拜仁更强但过热，最佳EV不是纯零封，而是有失球的大比分客向。",
-        "analysis_process": "🕵️ 庄家意图: 客xG 2.24显著高，杯赛下庄家默认拜仁进攻兑现，但主队也有进球权。\n💸 资金博弈: Sharp和散户都在客胜，客热62%过载，单边顺打性价比下降。\n🎯 破局逻辑: 德国杯淘汰赛不守旧，总xG 3.45偏大，优先客胜大球并补平局对攻。",
-        "ai_confidence": 77,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp客胜",
-          "客胜超热62%",
-          "杯赛大球结构"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 19
-          },
-          {
-            "score": "0-2",
-            "prob": 16
-          },
-          {
-            "score": "1-3",
-            "prob": 12
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "客胜超热62%+Sharp同向，杯赛庄家诱盘仍客胜",
-        "analysis_process": "🕵️ 庄家意图: Shin客61.9%与1.43客赔匹配，庄家表面客胜，实则对冲杯赛大冷门。\n💸 资金博弈: Sharp客胜+客赔-1，散户客62%超热，长客陷阱信号极强。\n🎯 破局逻辑: 德国杯淘汰赛+拜仁状态火热，勒沃主场一般，硬核客胜。",
-        "ai_confidence": 80,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向客胜",
-          "客胜超热62%"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "2-2",
-            "prob": 25
-          },
-          {
-            "score": "3-2",
-            "prob": 15
-          },
-          {
-            "score": "1-3",
-            "prob": 20
-          }
-        ],
-        "ai_score": "2-2",
-        "reason": "杯赛属性叠加客胜大热，防守形同虚设直奔大比分。",
-        "analysis_process": "🕵️ 庄家意图: 杯赛客让1.0，庄家利用拜仁火热状态无限放大客胜预期。\n💸 资金博弈: 客胜大热62%触发反指，散户资金极度集中。\n🎯 破局逻辑: 杯赛大热必死，结合进球数赔率防守放弃，看好大比分冷门。",
-        "ai_confidence": 84,
-        "is_score_others": true,
-        "detected_signals": [
-          "客胜超热62%",
-          "杯赛大热必死"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "胜其他",
-            "prob": 20
-          },
-          {
-            "score": "0-2",
-            "prob": 14
-          },
-          {
-            "score": "1-3",
-            "prob": 12
-          }
-        ],
-        "ai_score": "胜其他",
-        "reason": "德国杯淘汰赛+拜仁全胜状态，Sharp+散户共振，杯赛大球逻辑首选胜其他或大比分客胜。",
-        "analysis_process": "🕵️ 庄家意图: Shin客62%，Sharp流向客，德国杯淘汰赛+拜仁近6场全胜，庄家恐惧大球局出现。\n💸 资金博弈: Sharp+散户62%共振押拜仁客胜，客赔持续降水，资金高度共识拜仁，杯赛须含大球。\n🎯 破局逻辑: 德国杯淘汰赛规则+拜仁碾压实力，杯赛大球逻辑强，选胜其他含3球以上比分。",
-        "ai_confidence": 78,
-        "is_score_others": true,
-        "detected_signals": [
-          "Sharp流向客胜",
-          "散户大热62%反指",
-          "杯赛淘汰赛",
-          "客赔降水"
-        ]
-      }
-    }
-  },
-  "9": {
-    "hash": "9fdebf8e77c6b6b37ca9daf0b5d252ad",
-    "timestamp": 1776860992.7241216,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 11
-          },
-          {
-            "score": "1-1",
-            "prob": 10
-          },
-          {
-            "score": "0-2",
-            "prob": 10
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "深盘不宜追惨案，最优是曼城小胜或被顽抗拖慢节奏。",
-        "analysis_process": "🕵️ 庄家意图: 名义让2球，但给出的xG样本并未体现曼城屠杀，深盘有诱强嫌疑。\n💸 资金博弈: 长客陷阱配保级死拼，机构更像借曼城品牌承接客胜筹码。\n🎯 破局逻辑: 伯恩利求分意志强，若曼城赢也更可能是控制型2球内区间。",
-        "ai_confidence": 66,
-        "is_score_others": false,
-        "detected_signals": [
-          "长客陷阱",
-          "保级死拼",
-          "深让诱强"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "0-3",
-            "prob": 22
-          },
-          {
-            "score": "1-3",
-            "prob": 18
-          },
-          {
-            "score": "0-2",
-            "prob": 15
-          }
-        ],
-        "ai_score": "0-3",
-        "reason": "保级死拼+长客陷阱，曼城碾压，硬核客胜大比分",
-        "analysis_process": "🕵️ 庄家意图: 让2.0+长客陷阱，庄家诱散户追大球，实则恐惧曼城客场碾压。\n💸 资金博弈: 保级死拼信号，主队低迷，资金反向Steam流入客胜大胜。\n🎯 破局逻辑: 英超保级主队主场差+曼城争冠，极强进攻，硬核大胜。",
-        "ai_confidence": 88,
-        "is_score_others": false,
-        "detected_signals": [
-          "长客陷阱",
-          "保级死拼"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 30
-          },
-          {
-            "score": "1-0",
-            "prob": 20
-          },
-          {
-            "score": "0-0",
-            "prob": 15
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "强行深盘掩盖不了xG的接近，保级狂魔主场阻击豪门。",
-        "analysis_process": "🕵️ 庄家意图: 客让2.0但xG差距极小，庄家利用曼城名气强行深盘。\n💸 资金博弈: 长客陷阱叠加保级死拼，客队筹码极度拥挤。\n🎯 破局逻辑: 主队保级爆发出极强战斗力，曼城客场恐遭阻击。",
-        "ai_confidence": 85,
-        "is_score_others": false,
-        "detected_signals": [
-          "长客陷阱",
-          "保级死拼"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "0-3",
-            "prob": 18
-          },
-          {
-            "score": "0-2",
-            "prob": 16
-          },
-          {
-            "score": "1-3",
-            "prob": 12
-          }
-        ],
-        "ai_score": "0-3",
-        "reason": "曼城实力碾压且让球+2.0，伯恩利主场极差，大比分客胜为最大概率方向。",
-        "analysis_process": "🕵️ 庄家意图: 无欧赔，让球+2.0说明庄家认定曼城大胜，长客陷阱+保级死拼信号双触发。\n💸 资金博弈: 散户数据缺失，保级死拼下伯恩利有拼劲，但曼城近6联赛4胜2平碾压级。\n🎯 破局逻辑: 伯恩利近5主场2平3负极度低迷，曼城客场强势，大比分客胜为核心逻辑，选0-3/0-2。",
-        "ai_confidence": 72,
-        "is_score_others": false,
-        "detected_signals": [
-          "长客陷阱",
-          "保级死拼",
-          "让球+2.0",
-          "无欧赔"
-        ]
-      }
-    }
-  },
-  "10": {
-    "hash": "823726f67145e74385c87cea74921469",
-    "timestamp": 1776860992.7241344,
+    "hash": "eaf6e24bcec787fb80e7d564007028be",
+    "timestamp": 1776893916.1173897,
     "results": {
       "gpt": {
         "top3": [
           {
             "score": "2-1",
-            "prob": 12
-          },
-          {
-            "score": "1-0",
-            "prob": 11
+            "prob": 13
           },
           {
             "score": "1-1",
             "prob": 10
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "主胜是正解，但不是轻松大胜，2-1和1-0最贴近真实定价。",
-        "analysis_process": "🕵️ 庄家意图: 主51.2且xG 1.60对1.05，庄家认可主场优势，但未到穿盘强度。\n💸 资金博弈: Sharp主胜与主赔降水共振，资金支持主队，但散户并未过热。\n🎯 破局逻辑: 总xG 2.65，中位主胜最稳，主场端更像1球小胜模型。",
-        "ai_confidence": 80,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp主胜",
-          "主赔降水",
-          "主胜中强"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 19
-          },
-          {
-            "score": "2-0",
-            "prob": 16
-          },
-          {
-            "score": "1-0",
-            "prob": 14
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "Sharp主胜+主队优势，庄家真实看好主胜",
-        "analysis_process": "🕵️ 庄家意图: Shin主51.2%与-1.0匹配，庄家挺主但客队中游，怕主场闷平。\n💸 资金博弈: Sharp资金主胜+胜赔-1降水，散户主51%跟随，Steam主胜强化。\n🎯 破局逻辑: 英超主队稍优+客场一般，硬核主胜。",
-        "ai_confidence": 74,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "2-0",
-            "prob": 30
-          },
-          {
-            "score": "2-1",
-            "prob": 25
           },
           {
             "score": "3-1",
-            "prob": 20
-          }
-        ],
-        "ai_score": "2-0",
-        "reason": "聪明资金与庄家意图高度吻合，主队主场全取三分。",
-        "analysis_process": "🕵️ 庄家意图: 主让-1.0且Shin主胜51.2%，庄家真实看好主队。\n💸 资金博弈: Sharp资金流入主胜，客队降水为虚假诱导。\n🎯 破局逻辑: 主队状态回暖且主场作战，聪明资金支持下看好主胜。",
-        "ai_confidence": 88,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 17
-          },
-          {
-            "score": "2-0",
-            "prob": 14
-          },
-          {
-            "score": "1-0",
-            "prob": 12
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "Sharp资金与基本面共同确认主队优势，xG差距明显，伯恩茅斯小胜概率最高。",
-        "analysis_process": "🕵️ 庄家意图: Shin主51.2%，主赔降水Sharp买主，让球-1.0庄家与Sharp一致，无明显错位。\n💸 资金博弈: Sharp明确流向主胜，主赔持续降水，散户51%与Sharp同向，资金共振确认主队。\n🎯 破局逻辑: 主队xG1.604 vs 客1.048，进攻效率差距显著，近6轮2胜4平稳健，选主队小胜。",
-        "ai_confidence": 73,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp流向主胜",
-          "主赔降水",
-          "xG优势"
-        ]
-      }
-    }
-  },
-  "11": {
-    "hash": "822d9a2e4a0fbcea562c2db183de48d7",
-    "timestamp": 1776860992.724147,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 12
-          },
-          {
-            "score": "1-0",
-            "prob": 11
-          },
-          {
-            "score": "0-1",
             "prob": 9
           }
         ],
-        "ai_score": "1-1",
-        "reason": "这是主胜表象下的冷门窗口，首防被拖平，次防客队爆点。",
-        "analysis_process": "🕵️ 庄家意图: Shin主强53.8但客xG被压到0.81，典型低比分杯赛主让模型。\n💸 资金博弈: Sharp资金流向客胜，且客赔降水，和主胜Shin形成明显背离。\n🎯 破局逻辑: 意杯淘汰赛保守度高，低总球下平局与客偷一个的赔率价值更好。",
-        "ai_confidence": 78,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp客胜",
-          "Shin主倾斜",
-          "杯赛低比分"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 20
-          },
-          {
-            "score": "2-1",
-            "prob": 17
-          },
-          {
-            "score": "2-2",
-            "prob": 13
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "Sharp客胜+散户主热54%，庄家诱主胜，真实客不败",
-        "analysis_process": "🕵️ 庄家意图: Shin主53.8%但Sharp客胜，庄家利用主胜大热诱盘，怕客队杯赛冷门。\n💸 资金博弈: Sharp资金客胜+胜赔1升，散户主54%超热，典型反指。\n🎯 破局逻辑: 意大利杯+双方状态一般，Sharp反向+客队近况佳，硬核客胜或平。",
-        "ai_confidence": 78,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向客胜",
-          "主胜超热54%反指"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 30
-          },
-          {
-            "score": "1-2",
-            "prob": 25
-          },
-          {
-            "score": "0-1",
-            "prob": 20
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "杯赛深盘造热主队，聪明资金反向布局客队不败。",
-        "analysis_process": "🕵️ 庄家意图: 杯赛主让-1.0，庄家利用亚特兰大主场优势造热。\n💸 资金博弈: Sharp资金与降水共振指向客队，散户主胜筹码危险。\n🎯 破局逻辑: 杯赛属性且客队状态上佳，聪明资金介入看好客队不败。",
-        "ai_confidence": 86,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向客胜"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 16
-          },
-          {
-            "score": "0-1",
-            "prob": 14
-          },
-          {
-            "score": "1-1",
-            "prob": 12
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "Sharp逆Shin押拉齐奥，意大利杯淘汰赛拉齐奥状态更优，客队冷门胜出可能性被低估。",
-        "analysis_process": "🕵️ 庄家意图: Shin主53.8%，但Sharp资金流向客胜，平赔和负赔均降水，庄家Shin与Sharp严重背离。\n💸 资金博弈: Sharp买拉齐奥，平负双降水，意大利杯淘汰赛拉齐奥近6场4胜1平1负，状态强势。\n🎯 破局逻辑: 100%诱盘结构：Shin挺亚特兰大但Sharp押拉齐奥；杯赛须含大球或客胜比分。",
-        "ai_confidence": 75,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp流向客胜",
-          "Shin背离",
-          "平负双降水",
-          "杯赛淘汰赛"
-        ]
-      }
-    }
-  },
-  "12": {
-    "hash": "d533b8948b5b9b515fca506bcc4891d7",
-    "timestamp": 1776860992.7241604,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "2-0",
-            "prob": 13
-          },
-          {
-            "score": "2-1",
-            "prob": 10
-          },
-          {
-            "score": "1-0",
-            "prob": 10
-          }
-        ],
-        "ai_score": "2-0",
-        "reason": "方向仍是主胜，但热度过高，比分应收敛在1-2球优势区间。",
-        "analysis_process": "🕵️ 庄家意图: 主58.3配xG 1.70对0.87，主队优势真实存在，庄家压主不败。\n💸 资金博弈: Sharp主胜与主赔降水同向，但散户59%接近过热，需降级大胜预期。\n🎯 破局逻辑: 法国杯常见主队控场晋级，最优是2球内主胜，不追极端惨案。",
-        "ai_confidence": 75,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp主胜",
-          "主胜超热59%",
-          "杯赛主控场"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "2-0",
-            "prob": 18
-          },
-          {
-            "score": "1-0",
-            "prob": 16
-          },
-          {
-            "score": "2-1",
-            "prob": 14
-          }
-        ],
-        "ai_score": "2-0",
-        "reason": "主胜超热59%+Sharp同向，杯赛大热必死仍主胜",
-        "analysis_process": "🕵️ 庄家意图: Shin主58.3%与散户59%大热一致，庄家利用主胜热+杯赛诱盘。\n💸 资金博弈: Sharp资金主胜但主胜超热59%，形成大热必死反指。\n🎯 破局逻辑: 法国杯主队优势+客队低迷，硬核主胜。",
+        "ai_score": "2-1",
+        "reason": "主队晋级面大，但过热下更像艰难赢球或拉锯战，2-1比2-0更优。",
+        "analysis_process": "🕵️ 庄家意图: 主胜59.9%叠加杯赛1.48，庄家强造主胜预期，但未给绝对碾压感。\n💸 资金博弈: 散户主胜60%已过热，杯赛更易出现资金对倒，需防主队赢得不轻松。\n🎯 破局逻辑: 总xG2.75中高位，德国杯淘汰赛不宜死守1-0，需纳入2-1和3-1。",
         "ai_confidence": 71,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜",
-          "主胜超热59%"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 35
-          },
-          {
-            "score": "0-1",
-            "prob": 20
-          },
-          {
-            "score": "1-2",
-            "prob": 15
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "主胜筹码极度拥挤触发大热必死，杯赛冷门温床。",
-        "analysis_process": "🕵️ 庄家意图: 主让-1.0且Shin主胜58.3%，庄家刻意压低主胜赔率造热。\n💸 资金博弈: 主胜大热59%触发反指，Sharp资金在主实为诱盘。\n🎯 破局逻辑: 杯赛大热必死，客队虽状态不佳但具备爆冷潜力。",
-        "ai_confidence": 83,
-        "is_score_others": false,
-        "detected_signals": [
-          "主胜超热59%",
-          "杯赛大热必死"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "胜其他",
-            "prob": 18
-          },
-          {
-            "score": "2-1",
-            "prob": 14
-          },
-          {
-            "score": "3-1",
-            "prob": 12
-          }
-        ],
-        "ai_score": "胜其他",
-        "reason": "法国杯淘汰赛+主客实力差明显，Sharp买主但超热需警惕，胜其他含大比分为最优解。",
-        "analysis_process": "🕵️ 庄家意图: Shin主58.3%，散户59%热押主，但主赔降水Sharp也流向主，法国杯淘汰赛大球逻辑强。\n💸 资金博弈: Sharp+散户共振押主，但59%超热触发大热警戒，杯赛逻辑下需包含多球比分。\n🎯 破局逻辑: 法国杯淘汰赛+主队xG1.7占优+客队近6场1胜3负，大球主胜为核心，选胜其他或3-1。",
-        "ai_confidence": 72,
-        "is_score_others": true,
-        "detected_signals": [
-          "Sharp流向主胜",
-          "散户大热59%",
-          "杯赛淘汰赛",
-          "主赔降水"
-        ]
-      }
-    }
-  },
-  "13": {
-    "hash": "6a3c75c4efc1ecdab83f4e9d642923e8",
-    "timestamp": 1776860992.7241738,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "3-0",
-            "prob": 13
-          },
-          {
-            "score": "2-0",
-            "prob": 11
-          },
-          {
-            "score": "3-1",
-            "prob": 10
-          }
-        ],
-        "ai_score": "3-0",
-        "reason": "巴萨胜面极大，但过热使极端大胜性价比下降，优先常规强胜。",
-        "analysis_process": "🕵️ 庄家意图: 主77%且xG 2.74对0.92，庄家明确给出强碾压模板，但热度极高。\n💸 资金博弈: 散户主胜77%严重拥挤，无Sharp反向信息时只能回避最顺的4球穿法。\n🎯 破局逻辑: 巴萨高压主场仍应赢，但塞尔塔客场有韧性，3球附近更合理。",
-        "ai_confidence": 81,
-        "is_score_others": false,
-        "detected_signals": [
-          "主胜超热77%",
-          "强主xG碾压",
-          "深盘降级处理"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "3-1",
-            "prob": 20
-          },
-          {
-            "score": "4-0",
-            "prob": 17
-          },
-          {
-            "score": "2-0",
-            "prob": 15
-          }
-        ],
-        "ai_score": "3-1",
-        "reason": "主胜超热77%+巴萨碾压，庄家诱盘仍大胜",
-        "analysis_process": "🕵️ 庄家意图: Shin主77%与主胜超热77%一致，庄家利用大热诱散户，实则对冲大胜风险。\n💸 资金博弈: 主胜大热77%+无Sharp信号，典型散户反指+大热必死。\n🎯 破局逻辑: 西甲主队全胜火热+极强进攻，硬核大胜。",
-        "ai_confidence": 83,
-        "is_score_others": false,
-        "detected_signals": [
-          "主胜超热77%"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 30
-          },
-          {
-            "score": "1-1",
-            "prob": 25
-          },
-          {
-            "score": "1-0",
-            "prob": 20
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "主胜热度爆表，深盘之下主队赢球输盘概率极大。",
-        "analysis_process": "🕵️ 庄家意图: 主让-2.0且Shin主胜77%，庄家毫无掩饰主队优势。\n💸 资金博弈: 主胜大热77%触发反指，散户资金极度集中于主队大胜。\n🎯 破局逻辑: 大热必死逻辑下，主队难以打穿深盘，防范小胜或平局。",
-        "ai_confidence": 85,
-        "is_score_others": false,
-        "detected_signals": [
-          "主胜超热77%"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "3-0",
-            "prob": 20
-          },
-          {
-            "score": "3-1",
-            "prob": 16
-          },
-          {
-            "score": "4-0",
-            "prob": 12
-          }
-        ],
-        "ai_score": "3-0",
-        "reason": "巴萨实力完全碾压，无Sharp反向信号，基本面支撑大胜，但选多球比分规避77%大热诱盘。",
-        "analysis_process": "🕵️ 庄家意图: Shin主77%，散户77%大热，让球-2.0，无Sharp信号，庄家xG主2.744 vs 客0.924差距悬殊。\n💸 资金博弈: 无明显Sharp或Steam异常信号，散户77%极度大热触发反指预警，但基本面支撑主队。\n🎯 破局逻辑: 巴萨近6联赛+主场全胜、xG碾压，塞尔塔近6两胜三负，大比分主胜为核心，选3-0/3-1。",
-        "ai_confidence": 74,
-        "is_score_others": false,
-        "detected_signals": [
-          "散户大热77%",
-          "让球-2.0",
-          "xG悬殊"
-        ]
-      }
-    }
-  },
-  "14": {
-    "hash": "9f91fb30312daa6bf720551ed23a131d",
-    "timestamp": 1776860992.7241898,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 11
-          },
-          {
-            "score": "2-2",
-            "prob": 10
-          },
-          {
-            "score": "1-1",
-            "prob": 9
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "这是开放比赛模板，主队略优但必须纳入高比分平局。",
-        "analysis_process": "🕵️ 庄家意图: 主44.8但双方xG合计3.15，庄家更怕大球对攻而非单边压制。\n💸 资金博弈: Sharp主胜配主赔降水，主队受捧，但客队客场稳定使主胜难穿深。\n🎯 破局逻辑: 美职节奏快、防线波动大，2-4球集中，优先主场小优和对攻平。",
-        "ai_confidence": 77,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp主胜",
-          "高总xG",
-          "美职对攻"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 19
-          },
-          {
-            "score": "3-2",
-            "prob": 15
-          },
-          {
-            "score": "2-0",
-            "prob": 14
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "Sharp主胜+主场火热，庄家真实支持主队",
-        "analysis_process": "🕵️ 庄家意图: Shin主44.8%与-1.0匹配，庄家挺主但客队客场佳，怕高进球。\n💸 资金博弈: Sharp资金主胜+胜赔-1降水，散户主45%跟随，Steam主胜。\n🎯 破局逻辑: 美职主场全胜+进攻火热，硬核主胜。",
-        "ai_confidence": 76,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 30
-          },
-          {
-            "score": "3-1",
-            "prob": 25
-          },
-          {
-            "score": "2-0",
-            "prob": 20
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "主场龙对阵客场龙，聪明资金果断站队主队。",
-        "analysis_process": "🕵️ 庄家意图: 主让-1.0且Shin主胜44.8%，庄家对主队支持力度充足。\n💸 资金博弈: Sharp资金流入主胜，客队降水实为诱导散户。\n🎯 破局逻辑: 主队主场全胜状态火热，聪明资金支持下看好主胜。",
-        "ai_confidence": 87,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 17
-          },
-          {
-            "score": "2-0",
-            "prob": 14
-          },
-          {
-            "score": "3-1",
-            "prob": 11
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "主队主场全胜+Sharp买主，美职主场优势显著，盐湖城小胜可能性最大。",
-        "analysis_process": "🕵️ 庄家意图: Shin主44.8%，主赔降水Sharp买主，让球-1.0与Sharp方向一致，无明显错位诱盘。\n💸 资金博弈: Sharp明确流向主胜，主赔持续降水，迈国际近5客场4胜1平看似强但主队主场全胜。\n🎯 破局逻辑: 主队近4主场全胜+近6联赛5胜1平，xG优势明显，Sharp确认，选主队小胜比分。",
-        "ai_confidence": 74,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp流向主胜",
-          "主赔降水",
-          "主场全胜"
-        ]
-      }
-    }
-  },
-  "15": {
-    "hash": "30b7c24b990727c424cc3bdce0cd7a30",
-    "timestamp": 1776860992.7242017,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "3-1",
-            "prob": 11
-          },
-          {
-            "score": "2-1",
-            "prob": 10
-          },
-          {
-            "score": "4-1",
-            "prob": 8
-          }
-        ],
-        "ai_score": "3-1",
-        "reason": "主队赢面巨大，最有价值的是大球主胜而非保守零封。",
-        "analysis_process": "🕵️ 庄家意图: -2深让配重诱下盘，机构并非单纯防小胜，而是防主胜伴随失球的大开局。\n💸 资金博弈: 无细分资金但诱下盘已说明受让面便宜，庄家更担心主队持续进攻兑现。\n🎯 破局逻辑: 洲际杯赛强弱明显，放弃纯防守逻辑，直接纳入3球以上主胜区间。",
-        "ai_confidence": 73,
-        "is_score_others": false,
-        "detected_signals": [
-          "机构重诱下盘",
-          "杯赛深让",
-          "主胜大球倾向"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "3-0",
-            "prob": 23
-          },
-          {
-            "score": "2-0",
-            "prob": 19
-          },
-          {
-            "score": "3-1",
-            "prob": 14
-          }
-        ],
-        "ai_score": "3-0",
-        "reason": "机构重诱下盘+主队碾压，硬核主胜大比分",
-        "analysis_process": "🕵️ 庄家意图: 让-2.0+机构重诱下盘，庄家表面高让实则恐惧大胜对冲。\n💸 资金博弈: 散户数据缺失但下盘诱导明显，利雅得主胜大热Steam反向。\n🎯 破局逻辑: 亚冠乙主队全胜火热+客队低迷，极强进攻，硬核大胜。",
-        "ai_confidence": 84,
-        "is_score_others": false,
-        "detected_signals": [
-          "机构重诱下盘"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "3-0",
-            "prob": 30
-          },
-          {
-            "score": "4-0",
-            "prob": 25
-          },
-          {
-            "score": "4-1",
-            "prob": 20
-          }
-        ],
-        "ai_score": "3-0",
-        "reason": "亚冠赛场实力悬殊，庄家诱下掩护主队狂胜。",
-        "analysis_process": "🕵️ 庄家意图: 主让-2.0但隐含xG极低，庄家刻意做弱主队大胜预期诱下。\n💸 资金博弈: 机构重诱下盘，散户资金大概率流向客队受让。\n🎯 破局逻辑: 主队实力绝对碾压且状态火热，庄家诱下实则掩护大胜。",
-        "ai_confidence": 91,
-        "is_score_others": true,
-        "detected_signals": [
-          "机构重诱下盘"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "3-0",
-            "prob": 18
-          },
-          {
-            "score": "2-0",
-            "prob": 15
-          },
-          {
-            "score": "3-1",
-            "prob": 12
-          }
-        ],
-        "ai_score": "3-0",
-        "reason": "主队沙特联第1全胜状态，客队卡塔尔联第9实力差，亚冠主场碾压为大概率。",
-        "analysis_process": "🕵️ 庄家意图: 无欧赔，让球-2.0，机构重诱下盘信号，沙特联第1 vs 卡塔尔联第9，实力天壤之别。\n💸 资金博弈: 无散户数据，机构重诱下盘信号暗示大球可能被压制，但基本面支撑主队大胜。\n🎯 破局逻辑: 主队近6场全胜+近5主场全胜，客队客场1胜2平2负，主场大胜为核心，选3-0/2-0。",
-        "ai_confidence": 70,
-        "is_score_others": false,
-        "detected_signals": [
-          "机构重诱下盘",
-          "让球-2.0",
-          "无欧赔"
-        ]
-      }
-    }
-  },
-  "16": {
-    "hash": "ef77ad176b5e3c9142e0fbe1e25b34fc",
-    "timestamp": 1776860992.7242146,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "0-1",
-            "prob": 12
-          },
-          {
-            "score": "1-1",
-            "prob": 11
-          },
-          {
-            "score": "0-2",
-            "prob": 10
-          }
-        ],
-        "ai_score": "0-1",
-        "reason": "客队方向没错，但过热降低胜率兑现质量，首选小胜次选平。",
-        "analysis_process": "🕵️ 庄家意图: 客59%且xG 1.82对0.96，庄家承认客强，但并未到无脑穿盘级别。\n💸 资金博弈: 客胜超热59%叠加保级死拼，热度挤压客向赔率价值，需防拖平。\n🎯 破局逻辑: 沙职节奏中高，但主队攻击端弱，低比分客不败是数学最优。",
-        "ai_confidence": 74,
-        "is_score_others": false,
-        "detected_signals": [
-          "客胜超热59%反指",
-          "保级死拼",
-          "客强非碾压"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 18
-          },
-          {
-            "score": "0-2",
-            "prob": 16
-          },
-          {
-            "score": "1-1",
-            "prob": 13
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "客胜超热59%+保级死拼，庄家诱盘仍客胜",
-        "analysis_process": "🕵️ 庄家意图: Shin客59.0%与客胜大热一致，庄家利用保级死拼放大陷阱。\n💸 资金博弈: 客胜超热59%+Sharp未明，但保级主队战意+客赔降水反向Steam。\n🎯 破局逻辑: 沙职保级主队低迷+客队实力强，硬核客胜。",
-        "ai_confidence": 75,
-        "is_score_others": false,
-        "detected_signals": [
-          "客胜超热59%",
-          "保级死拼"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 30
-          },
-          {
-            "score": "2-1",
-            "prob": 20
-          },
-          {
-            "score": "1-0",
-            "prob": 15
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "客胜大热必死，保级主队绝境反击有望拿分。",
-        "analysis_process": "🕵️ 庄家意图: 客让1.0且Shin客胜59%，庄家利用客队排名优势造热。\n💸 资金博弈: 客胜大热59%触发反指，散户资金极度集中。\n🎯 破局逻辑: 主队保级死拼叠加客胜大热必死，坚决走主队不败。",
-        "ai_confidence": 86,
-        "is_score_others": false,
-        "detected_signals": [
-          "客胜超热59%",
-          "保级死拼"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "0-1",
-            "prob": 16
-          },
-          {
-            "score": "0-2",
-            "prob": 14
-          },
-          {
-            "score": "1-2",
-            "prob": 12
-          }
-        ],
-        "ai_score": "0-1",
-        "reason": "主队垫底状态极差，但散户59%超热+布赖合作客场差，选客胜小比分规避大热诱盘。",
-        "analysis_process": "🕵️ 庄家意图: Shin客59%，散户59%大热押客，无Sharp信号，保级死拼主队可能顽抗，但实力差距大。\n💸 资金博弈: 无明显Sharp或降水信号，散户59%超热触发反指，但布赖合作客场近5场3平2负需警惕。\n🎯 破局逻辑: 主队积11分垫底+近6轮1胜5负，布赖合作近5客场无胜，选客胜但压低比分规避超热陷阱。",
-        "ai_confidence": 65,
-        "is_score_others": false,
-        "detected_signals": [
-          "散户大热59%反指",
-          "保级死拼",
-          "客队客场差"
-        ]
-      }
-    }
-  },
-  "17": {
-    "hash": "8672c581df8e8f96472d96379e1f4666",
-    "timestamp": 1776860992.7242267,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 12
-          },
-          {
-            "score": "1-1",
-            "prob": 10
-          },
-          {
-            "score": "2-2",
-            "prob": 9
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "最优不是客队零封，而是荷甲典型的客向对攻比分。",
-        "analysis_process": "🕵️ 庄家意图: 客45.9且xG 1.59对1.25，客队实优但主场端仍保留进球概率。\n💸 资金博弈: 无明显Sharp背离，市场基本顺价，需从联赛结构里找高球边际。\n🎯 破局逻辑: 荷甲天然放大互射，双方xG合计2.84，客胜大概率伴随失球。",
-        "ai_confidence": 76,
-        "is_score_others": false,
-        "detected_signals": [
-          "荷甲开放性",
-          "客队小优",
-          "对攻结构"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 17
-          },
-          {
-            "score": "1-1",
-            "prob": 16
-          },
-          {
-            "score": "0-1",
-            "prob": 14
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "实力接近+主场优势，庄家真实看好客不败",
-        "analysis_process": "🕵️ 庄家意图: Shin客45.9%略高，庄家表面客胜，实则对冲主场不败风险。\n💸 资金博弈: 散户客46%跟随，无Sharp信号，资金流向平衡。\n🎯 破局逻辑: 荷甲差距不大+主队主场佳，硬核客不败。",
-        "ai_confidence": 70,
-        "is_score_others": false,
-        "detected_signals": []
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 35
-          },
-          {
-            "score": "2-1",
-            "prob": 25
-          },
-          {
-            "score": "2-2",
-            "prob": 20
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "盘口对客队支持有限，主队主场战力不容小觑。",
-        "analysis_process": "🕵️ 庄家意图: 客让1.0但Shin客胜仅45.9%，庄家对客队打穿信心不足。\n💸 资金博弈: 双方资金分布较为均衡，无明显大热方向。\n🎯 破局逻辑: 主队主场战绩不错，客队客场状态一般，看好主队拿分。",
-        "ai_confidence": 81,
-        "is_score_others": false,
-        "detected_signals": []
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 16
-          },
-          {
-            "score": "0-1",
-            "prob": 14
-          },
-          {
-            "score": "1-1",
-            "prob": 12
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "阿尔克马xG占优且积分更高，客队让+1.0情况下小胜或平局均衡，选1-2/0-1为主。",
-        "analysis_process": "🕵️ 庄家意图: Shin客45.9%，让球+1.0，无Sharp或降水信号，庄家隐含xG客1.592 vs 主1.252，客队小幅优势。\n💸 资金博弈: 无Sharp或Steam信号，散户分布均衡，依赖基本面和xG推演，客队进攻更有效率。\n🎯 破局逻辑: 阿尔克马近6联赛3胜积分占优，主场前进之鹰近6轮3胜3负中等，客小胜为核心选项。",
-        "ai_confidence": 63,
-        "is_score_others": false,
-        "detected_signals": [
-          "xG客队优势",
-          "无Sharp信号"
-        ]
-      }
-    }
-  },
-  "18": {
-    "hash": "962ac79b2a43a9d6687a68f71460da99",
-    "timestamp": 1776860992.7242389,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 14
-          },
-          {
-            "score": "1-0",
-            "prob": 11
-          },
-          {
-            "score": "0-1",
-            "prob": 10
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "这是标准均势保级盘，平局是最核心落点。",
-        "analysis_process": "🕵️ 庄家意图: Shin主36.9客34.5近乎均势，xG也只微弱主优，庄家极防平。\n💸 资金博弈: 无Sharp偏移，市场中性，说明赔率已充分反映双方真实接近度。\n🎯 破局逻辑: 保级碰撞通常先求不败，低总球均衡局最符合数学分布。",
-        "ai_confidence": 80,
-        "is_score_others": false,
-        "detected_signals": [
-          "均势Shin",
-          "保级对撞",
-          "平局高权重"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 19
-          },
-          {
-            "score": "1-0",
-            "prob": 17
-          },
-          {
-            "score": "1-1",
-            "prob": 14
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "保级战意+主场优势，庄家真实支持主胜",
-        "analysis_process": "🕵️ 庄家意图: Shin主36.9%略高但让-1.0，庄家利用保级战诱散户追主胜。\n💸 资金博弈: 散户主37%略热，主队保级战意强，资金反向Steam主胜。\n🎯 破局逻辑: 西甲保级主队状态好+客队客场差，硬核主胜。",
-        "ai_confidence": 74,
-        "is_score_others": false,
-        "detected_signals": []
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 30
-          },
-          {
-            "score": "1-0",
-            "prob": 25
-          },
-          {
-            "score": "2-1",
-            "prob": 20
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "高赔阻挡主胜资金流入，主队保级战意值得信赖。",
-        "analysis_process": "🕵️ 庄家意图: 主让-1.0但欧赔主胜高达2.40，庄家利用高赔阻挡主胜资金。\n💸 资金博弈: 资金流向平局和客队，主队高赔形成有效保护。\n🎯 破局逻辑: 主队近期状态不错且有保级题材，看好主队顺利打出。",
-        "ai_confidence": 84,
-        "is_score_others": false,
-        "detected_signals": [
-          "保级死拼"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 18
-          },
-          {
-            "score": "2-1",
-            "prob": 14
-          },
-          {
-            "score": "1-0",
-            "prob": 12
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "莱万特状态强于塞维利亚，客场塞维利亚低迷，主队小胜或平局为最大概率结果。",
-        "analysis_process": "🕵️ 庄家意图: Shin主36.9%但让球-1.0，主队Shin偏低却让-1，暗示庄家认为主场强于数字表现。\n💸 资金博弈: 无Sharp或降水信号，莱万特近6轮3胜2平1负状态明显优于塞维利亚1胜3负。\n🎯 破局逻辑: 塞维利亚近5客场1胜1平3负，莱万特主场3胜1平1负，主队状态明显更强，选主胜或平。",
-        "ai_confidence": 67,
-        "is_score_others": false,
-        "detected_signals": [
-          "主队状态优势",
-          "客队客场差",
-          "让盘错位"
-        ]
-      }
-    }
-  },
-  "19": {
-    "hash": "7d022050be16cc7a89ffce7011f46936",
-    "timestamp": 1776860992.7242503,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 12
-          },
-          {
-            "score": "1-1",
-            "prob": 11
-          },
-          {
-            "score": "1-0",
-            "prob": 10
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "主队赢面略高，但领跑客队韧性足，防平是必要对冲。",
-        "analysis_process": "🕵️ 庄家意图: 主47.9且xG 1.51对1.09，主队实优但不是暴力穿盘模型。\n💸 资金博弈: 缺少Sharp信号时以Shin和xG为主，主胜略正但需保留平局权重。\n🎯 破局逻辑: 瑞超节奏中性偏快，2-3球区最密，主胜首选带失球的2-1。",
-        "ai_confidence": 73,
-        "is_score_others": false,
-        "detected_signals": [
-          "主队xG优势",
-          "非碾压主场",
-          "平局需防"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 18
-          },
-          {
-            "score": "1-0",
-            "prob": 15
-          },
-          {
-            "score": "2-0",
-            "prob": 13
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "主场优势+实力接近，庄家真实看好主胜",
-        "analysis_process": "🕵️ 庄家意图: Shin主47.9%与-1.0匹配，庄家挺主但客队领头羊，怕客场冷门。\n💸 资金博弈: 散户主48%跟随，无明显Sharp，资金中性。\n🎯 破局逻辑: 瑞超主队主场佳+近况不错，硬核主胜。",
-        "ai_confidence": 72,
-        "is_score_others": false,
-        "detected_signals": []
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "2-0",
-            "prob": 30
-          },
-          {
-            "score": "2-1",
-            "prob": 25
-          },
-          {
-            "score": "1-1",
-            "prob": 20
-          }
-        ],
-        "ai_score": "2-0",
-        "reason": "实力盘口正常体现，主队主场稳扎稳打拿下比赛。",
-        "analysis_process": "🕵️ 庄家意图: 主让-1.0且Shin主胜47.9%，庄家对主队支持力度合理。\n💸 资金博弈: 资金分布正常，主队凭借实力和主场优势吸引资金。\n🎯 破局逻辑: 主队实力占优且主场战绩出色，看好主队全取三分。",
-        "ai_confidence": 85,
-        "is_score_others": false,
-        "detected_signals": []
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 16
-          },
-          {
-            "score": "1-0",
-            "prob": 14
-          },
-          {
-            "score": "2-0",
-            "prob": 12
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "马尔默主场强势+xG优势，无反向信号，顺势选主队小胜，2-1/1-0为最优解。",
-        "analysis_process": "🕵️ 庄家意图: Shin主47.9%，让球-1.0，无Sharp或降水信号，马尔默xG1.514 vs 天狼星1.085，主队进攻明确占优。\n💸 资金博弈: 无Sharp或Steam信号，依赖基本面，马尔默近3主场2胜1平，天狼星客场数据缺失。\n🎯 破局逻辑: 马尔默主场状态上佳，xG明确优势，近6次对阵3胜1平，选主队小胜比分为核心。",
-        "ai_confidence": 68,
-        "is_score_others": false,
-        "detected_signals": [
-          "xG主队优势",
-          "主场状态上佳"
-        ]
-      }
-    }
-  },
-  "20": {
-    "hash": "2f0e2d32a170e1196dbed501f195642d",
-    "timestamp": 1776860992.7242622,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "1-0",
-            "prob": 13
-          },
-          {
-            "score": "1-1",
-            "prob": 12
-          },
-          {
-            "score": "2-0",
-            "prob": 10
-          }
-        ],
-        "ai_score": "1-0",
-        "reason": "这是低比分主场盘，1-0/2-0的EV优于花哨大胜。",
-        "analysis_process": "🕵️ 庄家意图: 主45对客26.4且客xG仅0.91，庄家在压低客队得分上限。\n💸 资金博弈: 无明显Sharp，散户分布正常，说明主队优势已被相对真实计价。\n🎯 破局逻辑: 总xG 2.16偏低，西甲弱攻客场更利于主队低比分拿下。",
-        "ai_confidence": 81,
-        "is_score_others": false,
-        "detected_signals": [
-          "低总xG",
-          "主队稳态优势",
-          "客队进球压制"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "1-0",
-            "prob": 20
-          },
-          {
-            "score": "2-1",
-            "prob": 17
-          },
-          {
-            "score": "1-1",
-            "prob": 14
-          }
-        ],
-        "ai_score": "1-0",
-        "reason": "主场优势+客队疲软，庄家真实支持主胜",
-        "analysis_process": "🕵️ 庄家意图: Shin主45.0%与-1.0匹配，庄家表面主胜，实则对冲客队客场低迷。\n💸 资金博弈: 散户主45%跟随，无Sharp信号，资金平衡。\n🎯 破局逻辑: 西甲主队主场佳+客队客场低迷，硬核主胜。",
-        "ai_confidence": 73,
-        "is_score_others": false,
-        "detected_signals": []
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "1-0",
-            "prob": 30
-          },
-          {
-            "score": "2-0",
-            "prob": 25
-          },
-          {
-            "score": "1-1",
-            "prob": 20
-          }
-        ],
-        "ai_score": "1-0",
-        "reason": "主场龙对阵客场虫，主队全取三分毫无悬念。",
-        "analysis_process": "🕵️ 庄家意图: 主让-1.0且Shin主胜45%，庄家对主队支持力度合理。\n💸 资金博弈: 资金分布正常，主队凭借主场优势吸引资金。\n🎯 破局逻辑: 主队主场状态上佳，客队客场低迷，看好主队获胜。",
-        "ai_confidence": 86,
-        "is_score_others": false,
-        "detected_signals": []
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "2-0",
-            "prob": 16
-          },
-          {
-            "score": "1-0",
-            "prob": 14
-          },
-          {
-            "score": "2-1",
-            "prob": 13
-          }
-        ],
-        "ai_score": "2-0",
-        "reason": "西班牙人客场积弱，巴列卡诺主场状态稳，无反向信号，顺势选主队小胜比分。",
-        "analysis_process": "🕵️ 庄家意图: Shin主45%，让球-1.0，无Sharp信号，xG主1.256 vs 客0.906，主队进攻略优。\n💸 资金博弈: 无Sharp或降水信号，西班牙人近6轮3平3负客场2平3负，防守软且进攻不稳。\n🎯 破局逻辑: 巴列卡诺主场3胜2平状态佳，西班牙人客场2平3负，主队稳定压制客队，选主小胜。",
-        "ai_confidence": 67,
-        "is_score_others": false,
-        "detected_signals": [
-          "客队客场差",
-          "主队主场稳定"
-        ]
-      }
-    }
-  },
-  "21": {
-    "hash": "78ce3e71682edb87df4199a3024fc69f",
-    "timestamp": 1776860992.7242808,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 11
-          },
-          {
-            "score": "0-1",
-            "prob": 11
-          },
-          {
-            "score": "1-0",
-            "prob": 9
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "这是全样本里最标准的客热诱盘，必须反打主不败。",
-        "analysis_process": "🕵️ 庄家意图: Shin客62.4极高，但主队主场抗性与保级属性被盘口低估。\n💸 资金博弈: Sharp主胜，且散户62%大热客胜，形成最强级别诱盘背离结构。\n🎯 破局逻辑: 长客陷阱+保级死拼必须逆人群，比分取主不败及低比分冷门路径。",
-        "ai_confidence": 86,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp主胜",
-          "客胜超热62%反指",
-          "长客陷阱",
-          "保级死拼"
-        ]
-      },
-      "grok": {
-        "top3": [
-          {
-            "score": "1-2",
-            "prob": 18
-          },
-          {
-            "score": "0-2",
-            "prob": 16
-          },
-          {
-            "score": "1-1",
-            "prob": 13
-          }
-        ],
-        "ai_score": "1-2",
-        "reason": "Sharp主胜反向+客胜超热62%+保级死拼，100%诱盘主胜",
-        "analysis_process": "🕵️ 庄家意图: Shin客62.4%与客胜大热一致，庄家利用保级死拼+长客陷阱诱盘。\n💸 资金博弈: 客胜超热62%+Sharp主胜信号，Sharp≠Shin+散户大热，100%诱盘。\n🎯 破局逻辑: 葡超保级主队战意+客队争4，Sharp反向，硬核主胜。",
-        "ai_confidence": 87,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜",
-          "客胜超热62%反指",
-          "长客陷阱",
-          "保级死拼"
-        ]
-      },
-      "gemini": {
-        "top3": [
-          {
-            "score": "1-1",
-            "prob": 30
-          },
-          {
-            "score": "1-0",
-            "prob": 20
-          },
-          {
-            "score": "2-1",
-            "prob": 15
-          }
-        ],
-        "ai_score": "1-1",
-        "reason": "反向Steam叠加客胜大热必死，保级主队迎来爆冷良机。",
-        "analysis_process": "🕵️ 庄家意图: 客让1.0且Shin客胜62.4%，庄家极度造热客队。\n💸 资金博弈: 客胜大热62%触发反指，Sharp资金流入主胜形成反向Steam。\n🎯 破局逻辑: 主队保级死拼叠加反向Steam黄金信号，坚决看好主队爆冷。",
-        "ai_confidence": 89,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp资金流向主胜",
-          "客胜超热62%",
-          "长客陷阱",
-          "保级死拼"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "1-0",
-            "prob": 18
-          },
-          {
-            "score": "0-0",
-            "prob": 14
-          },
-          {
-            "score": "1-1",
-            "prob": 13
-          }
-        ],
-        "ai_score": "1-0",
-        "reason": "Sharp强力逆Shin押主队，完美诱盘结构，保级死拼主场韧性强，卡萨皮亚爆冷小胜或平。",
-        "analysis_process": "🕵️ 庄家意图: Shin客62.4%，但Sharp资金流向主胜，主赔和平赔均降水，庄家制造长客陷阱诱散户。\n💸 资金博弈: 100%诱盘结构：Sharp逆Shin押主队，主平双降水，散户62%押客，完美陷阱形态。\n🎯 破局逻辑: 主队近5主场2胜3平，保级死拼拼死主场，Sharp买主必须按Sharp方向选低比分主胜或平。",
-        "ai_confidence": 78,
-        "is_score_others": false,
-        "detected_signals": [
-          "Sharp流向主胜",
-          "长客陷阱",
-          "散户大热62%反指",
-          "保级死拼",
-          "主平双降水"
-        ]
-      }
-    }
-  },
-  "22": {
-    "hash": "e65417748822c8af054a4f60d5f75c9f",
-    "timestamp": 1776860992.7242942,
-    "results": {
-      "gpt": {
-        "top3": [
-          {
-            "score": "2-1",
-            "prob": 11
-          },
-          {
-            "score": "1-1",
-            "prob": 10
-          },
-          {
-            "score": "2-0",
-            "prob": 10
-          }
-        ],
-        "ai_score": "2-1",
-        "reason": "主队更可能晋级，但市场已把顺畅主胜买贵，防胶着更有价值。",
-        "analysis_process": "🕵️ 庄家意图: 主59.9配xG 1.82对0.92，主队被定价为优势方，但热度已挤满。\n💸 资金博弈: 散户60%主热，无Sharp反向佐证，杯赛里主胜顺打EV被压缩。\n🎯 破局逻辑: 德国杯单场波动大，仍以主胜为主，但必须纳入受迫失球和平局尾部。",
-        "ai_confidence": 72,
         "is_score_others": false,
         "detected_signals": [
           "主胜超热60%",
           "杯赛波动",
-          "主胜被买贵"
+          "中高总进球"
         ]
       },
       "grok": {
         "top3": [
           {
-            "score": "2-1",
-            "prob": 19
+            "score": "1-2",
+            "prob": 15
           },
           {
-            "score": "2-0",
-            "prob": 16
+            "score": "2-2",
+            "prob": 13
           },
           {
-            "score": "1-0",
-            "prob": 14
+            "score": "1-1",
+            "prob": 12
           }
         ],
-        "ai_score": "2-1",
-        "reason": "主胜超热60%+杯赛，庄家诱盘仍主胜",
-        "analysis_process": "🕵️ 庄家意图: Shin主59.9%与散户60%大热一致，庄家利用主胜热+杯赛诱盘。\n💸 资金博弈: 主胜超热60%+无Sharp，典型大热必死反指。\n🎯 破局逻辑: 德国杯主队稍优+客队状态佳，硬核主胜。",
-        "ai_confidence": 75,
+        "ai_score": "1-2",
+        "reason": "主胜大热+杯赛，客队状态上佳，预计客胜或平局。",
+        "analysis_process": "🕵️ 庄家意图: Shin主59.9%但主胜超热60%，庄家诱主胜。\n💸 资金博弈: 主胜大热60%反指，无Sharp但杯赛情绪。\n🎯 破局逻辑: 杯赛淘汰+客队状态佳，规避主胜顺利，选客或平大比分。",
+        "ai_confidence": 68,
         "is_score_others": false,
         "detected_signals": [
           "主胜超热60%"
@@ -2297,105 +622,79 @@
       "gemini": {
         "top3": [
           {
-            "score": "1-1",
+            "score": "1-2",
             "prob": 30
           },
           {
-            "score": "1-2",
+            "score": "2-2",
             "prob": 25
           },
           {
-            "score": "2-2",
+            "score": "1-3",
             "prob": 20
           }
         ],
-        "ai_score": "1-1",
-        "reason": "杯赛主胜大热必死，客队状态出色有望反客为主。",
-        "analysis_process": "🕵️ 庄家意图: 杯赛主让-1.0且Shin主胜59.9%，庄家利用主队排名造热。\n💸 资金博弈: 主胜大热60%触发反指，散户资金极度集中。\n🎯 破局逻辑: 杯赛大热必死，客队状态上佳具备极强爆冷能力。",
-        "ai_confidence": 85,
-        "is_score_others": false,
-        "detected_signals": [
-          "主胜超热60%",
-          "杯赛大热必死"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "胜其他",
-            "prob": 18
-          },
-          {
-            "score": "1-2",
-            "prob": 14
-          },
-          {
-            "score": "0-1",
-            "prob": 12
-          }
-        ],
-        "ai_score": "胜其他",
-        "reason": "散户60%超热押主+弗赖堡实际状态更强，德国杯淘汰赛冷门率高，选弗赖堡客胜或胜其他。",
-        "analysis_process": "🕵️ 庄家意图: Shin主59.9%，散户60%大热押主，无Sharp信号，德国杯淘汰赛弗赖堡近6场5胜1负更强。\n💸 资金博弈: 无Sharp或降水信号，散户60%超热触发大热必死警戒，弗赖堡近5客场3胜2负状态更佳。\n🎯 破局逻辑: 德国杯淘汰赛+弗赖堡近6场5胜1负 vs 斯图加特3胜3负，杯赛逆势冷门概率高，选胜其他。",
-        "ai_confidence": 73,
+        "ai_score": "1-2",
+        "reason": "杯赛主队大热必死，客队状态极佳具备极强爆冷能力。",
+        "analysis_process": "🕵️ 庄家意图: 杯赛主队让步过深，Shin概率近60%，庄家利用主队近期名气强行造热。\n💸 资金博弈: 散户60%重注主胜触发大热反指，客队近期状态极佳却被市场忽视。\n🎯 破局逻辑: 德国杯具备冷门温床属性，客队反击犀利，结合大热必死逻辑，看好客队不败。",
+        "ai_confidence": 80,
         "is_score_others": true,
         "detected_signals": [
           "散户大热60%反指",
-          "杯赛淘汰赛",
-          "客队状态更强"
+          "杯赛冷门"
         ]
       }
     }
   },
-  "23": {
-    "hash": "531acede848fd4b2a04a24e7debf3949",
-    "timestamp": 1776860992.7243066,
+  "9": {
+    "hash": "a3e61aa66b49d101cf9b237683e1d51a",
+    "timestamp": 1776893916.117403,
     "results": {
       "gpt": {
         "top3": [
           {
             "score": "3-1",
+            "prob": 14
+          },
+          {
+            "score": "2-1",
             "prob": 12
           },
           {
             "score": "4-1",
-            "prob": 10
-          },
-          {
-            "score": "3-0",
-            "prob": 10
+            "prob": 9
           }
         ],
         "ai_score": "3-1",
-        "reason": "埃因霍温大胜概率高，最佳EV在3球以上主胜，不必执着零封。",
-        "analysis_process": "🕵️ 庄家意图: -2深让配重诱下盘，强主大胜框架成立，但庄家更怕主队持续输出。\n💸 资金博弈: 无细分资金下，诱下盘本身就是对上盘多球路径的保护性定价。\n🎯 破局逻辑: 荷甲强弱战放大进球，直接取3-4球主胜区间，兼顾主队偶发失球。",
-        "ai_confidence": 78,
+        "reason": "机构在诱导市场去受让，但高强度联赛环境下更应防埃因霍温打出3球以上胜势。",
+        "analysis_process": "🕵️ 庄家意图: 让2球却给出异常低主客xG差，机构明显在制造下盘安全错觉。\n💸 资金博弈: 已明示重诱下盘，说明真实担忧是主队净胜穿透，非僵持小胜。\n🎯 破局逻辑: 荷甲高节奏且强弱悬殊，需放弃保守模板，优先主胜大球穿盘路径。",
+        "ai_confidence": 76,
         "is_score_others": false,
         "detected_signals": [
           "机构重诱下盘",
-          "荷甲大球环境",
-          "深让主胜"
+          "让2球",
+          "荷甲大球基因"
         ]
       },
       "grok": {
         "top3": [
           {
             "score": "3-0",
-            "prob": 21
-          },
-          {
-            "score": "2-0",
             "prob": 18
           },
           {
-            "score": "4-1",
-            "prob": 13
+            "score": "2-0",
+            "prob": 15
+          },
+          {
+            "score": "3-1",
+            "prob": 14
           }
         ],
         "ai_score": "3-0",
-        "reason": "机构重诱下盘+主队碾压，硬核主胜大比分",
-        "analysis_process": "🕵️ 庄家意图: 让-2.0+机构重诱下盘，庄家表面高让实则对冲大胜风险。\n💸 资金博弈: 散户数据缺失但下盘诱导极强，埃因霍温主胜大热Steam反向。\n🎯 破局逻辑: 荷甲榜首主场火热+客队低迷，极强进攻，硬核大胜。",
-        "ai_confidence": 86,
+        "reason": "机构重诱下盘，真实为高进球，主队大胜。",
+        "analysis_process": "🕵️ 庄家意图: 让-2.0但机构重诱下盘，庄家怕大胜高球。\n💸 资金博弈: 无散户数据，机构诱下盘形成信号。\n🎯 破局逻辑: 主队实力碾压+诱下盘反指，选大球主胜比分。",
+        "ai_confidence": 75,
         "is_score_others": false,
         "detected_signals": [
           "机构重诱下盘"
@@ -2405,103 +704,79 @@
         "top3": [
           {
             "score": "3-0",
-            "prob": 30
+            "prob": 35
           },
           {
             "score": "4-0",
             "prob": 25
           },
           {
-            "score": "4-1",
+            "score": "3-1",
             "prob": 20
           }
         ],
         "ai_score": "3-0",
-        "reason": "庄家故技重施诱导下盘，领头羊主场大开杀戒。",
-        "analysis_process": "🕵️ 庄家意图: 主让-2.0但隐含xG极低，庄家刻意做弱主队大胜预期诱下。\n💸 资金博弈: 机构重诱下盘，散户资金大概率流向客队受让。\n🎯 破局逻辑: 主队实力绝对碾压且主场强势，庄家诱下实则掩护大胜。",
+        "reason": "机构刻意诱导下盘，主队实力碾压且战意未减，大胜穿盘在望。",
+        "analysis_process": "🕵️ 庄家意图: 机构重诱下盘，利用客队保级题材和主队已夺冠/领先优势制造主队放水假象。\n💸 资金博弈: 盘口信号明确指向诱导下盘，主力资金实则在暗中吸纳主队大胜筹码。\n🎯 破局逻辑: 荷甲豪门主场火力凶猛，机构反向诱导说明主队战意未减，看好主队大胜穿盘。",
         "ai_confidence": 90,
         "is_score_others": true,
         "detected_signals": [
-          "机构重诱下盘"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "3-0",
-            "prob": 20
-          },
-          {
-            "score": "2-0",
-            "prob": 16
-          },
-          {
-            "score": "3-1",
-            "prob": 12
-          }
-        ],
-        "ai_score": "3-0",
-        "reason": "埃因霍温碾压级实力+主场强势，兹沃勒客场极差，大比分主胜为最大概率结果。",
-        "analysis_process": "🕵️ 庄家意图: 无欧赔，让球-2.0，机构重诱下盘信号，埃因霍温积74分荷甲第1 vs 兹沃勒积34分第13。\n💸 资金博弈: 无散户数据，机构重诱下盘暗示大球风险被压制，但埃因霍温近5主场4胜1负主场强势。\n🎯 破局逻辑: 埃因霍温荷甲霸主状态，兹沃勒客场2平3负极差，大比分主胜为核心，选3-0/2-0。",
-        "ai_confidence": 73,
-        "is_score_others": false,
-        "detected_signals": [
           "机构重诱下盘",
-          "让球-2.0",
-          "无欧赔"
+          "实力碾压"
         ]
       }
     }
   },
-  "24": {
-    "hash": "69dada3e443a97d3384efe8dbc82ee9f",
-    "timestamp": 1776860992.7243187,
+  "10": {
+    "hash": "37104d21e5203cbf8c9c99c652034eb2",
+    "timestamp": 1776893916.1174166,
     "results": {
       "gpt": {
         "top3": [
           {
-            "score": "1-1",
-            "prob": 11
-          },
-          {
             "score": "0-1",
-            "prob": 11
+            "prob": 14
           },
           {
-            "score": "1-2",
+            "score": "1-1",
+            "prob": 12
+          },
+          {
+            "score": "0-2",
             "prob": 10
           }
         ],
-        "ai_score": "1-1",
-        "reason": "客队实力优势有限且遇保级韧性，比分应锁在一球差和1-1区间。",
-        "analysis_process": "🕵️ 庄家意图: 客48.5并不算极强，xG 1.39对0.93只是中等优势，长客定价偏贵。\n💸 资金博弈: 长客陷阱+保级死拼使客胜兑现风险上升，需降级处理热门客向。\n🎯 破局逻辑: 西甲慢节奏下总球不高，最合理是客小胜或被主队逼平。",
+        "ai_score": "0-1",
+        "reason": "客队实力优势真实存在，但比赛脚本更接近低消耗推进，0-1最稳，1-1必防。",
+        "analysis_process": "🕵️ 庄家意图: 客胜48.5%配1.83偏便宜，庄家持续售卖强客逻辑但防守平局。\n💸 资金博弈: 长客陷阱与保级死拼并存，说明市场会高估实力差，需防客队不畅。\n🎯 破局逻辑: 总xG2.32偏低，西甲保级盘更少大开大合，客胜也多为一球模式。",
         "ai_confidence": 75,
         "is_score_others": false,
         "detected_signals": [
           "长客陷阱",
           "保级死拼",
-          "客胜偏贵"
+          "低总xG",
+          "客胜便宜"
         ]
       },
       "grok": {
         "top3": [
           {
-            "score": "1-2",
-            "prob": 18
-          },
-          {
-            "score": "0-2",
+            "score": "1-1",
             "prob": 16
           },
           {
-            "score": "1-1",
-            "prob": 14
+            "score": "1-0",
+            "prob": 13
+          },
+          {
+            "score": "0-1",
+            "prob": 12
           }
         ],
-        "ai_score": "1-2",
-        "reason": "长客陷阱+保级死拼，庄家诱客胜，真实主不败",
-        "analysis_process": "🕵️ 庄家意图: Shin客48.5%略高+长客陷阱，庄家诱散户追客胜，实则保级主队战意。\n💸 资金博弈: 客胜48%+保级死拼信号，主队资金反向Steam。\n🎯 破局逻辑: 西甲保级主队主场佳+客队客场一般，硬核主场不败。",
-        "ai_confidence": 80,
+        "ai_score": "1-1",
+        "reason": "长客陷阱+保级战意，客胜难打出，预计平局。",
+        "analysis_process": "🕵️ 庄家意图: Shin客48.5%但长客陷阱，庄家诱客胜。\n💸 资金博弈: 客48%跟随但保级死拼形成反指。\n🎯 破局逻辑: 主队保级死拼+长客疲劳，规避客顺利，选主不败。",
+        "ai_confidence": 72,
         "is_score_others": false,
         "detected_signals": [
           "长客陷阱",
@@ -2524,39 +799,13 @@
           }
         ],
         "ai_score": "1-1",
-        "reason": "长客陷阱下客队难有作为，保级主队主场死拼拿分。",
-        "analysis_process": "🕵️ 庄家意图: 客让1.0且Shin客胜48.5%，庄家利用客队排名优势造热。\n💸 资金博弈: 长客陷阱叠加保级死拼，客队筹码极度拥挤。\n🎯 破局逻辑: 主队保级爆发出极强战斗力，客队客场恐遭阻击。",
-        "ai_confidence": 86,
+        "reason": "长客陷阱叠加保级死拼，客队让步无力，主队有望捍卫主场。",
+        "analysis_process": "🕵️ 庄家意图: 客队排名高居第3却只能让出浅盘，庄家对客队赢球信心严重不足。\n💸 资金博弈: 散户资金近半数涌入客队，长客陷阱下客队筹码过于便宜，形成诱导。\n🎯 破局逻辑: 主队保级死拼战意爆棚，客队长途跋涉体能受限，看好主队捍卫主场。",
+        "ai_confidence": 82,
         "is_score_others": false,
         "detected_signals": [
           "长客陷阱",
           "保级死拼"
-        ]
-      },
-      "claude": {
-        "top3": [
-          {
-            "score": "0-1",
-            "prob": 16
-          },
-          {
-            "score": "1-2",
-            "prob": 14
-          },
-          {
-            "score": "0-2",
-            "prob": 12
-          }
-        ],
-        "ai_score": "0-1",
-        "reason": "长客陷阱触发，保级死拼主队有拼劲，选比利亚雷小胜规避大热诱盘，0-1/1-2为主。",
-        "analysis_process": "🕵️ 庄家意图: Shin客48.5%，让球+1.0，长客陷阱+保级死拼双触发，比利亚雷客场2胜1平2负并非稳胜。\n💸 资金博弈: 无Sharp或降水信号，奥维耶多近5主场3胜2负有一定主场实力，保级死拼激励主队。\n🎯 破局逻辑: 奥维耶多保级压力下拼死主场，比利亚雷客场一般，选客胜但压低比分规避大热长客陷阱。",
-        "ai_confidence": 64,
-        "is_score_others": false,
-        "detected_signals": [
-          "长客陷阱",
-          "保级死拼",
-          "客队客场一般"
         ]
       }
     }
