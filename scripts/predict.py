@@ -1038,7 +1038,7 @@ async def run_ai_matrix_two_phase(match_analyses):
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-5-grok-4.2-fast-200w上下文"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
-        ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", ["熊猫-69-满血openrouter-claude-opus-4.6-thinking-上下文200k"]),
+        ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", ["熊猫特供-超纯满血-99额度-claude-opus-4.7"]),
     ]
 
     connector = aiohttp.TCPConnector(limit=10, ttl_dns_cache=300)
