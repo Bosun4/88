@@ -1035,7 +1035,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     print(f"  [深度计算] {num} 场进入大模型推理队列 ({len(prompt):,} 字符)...")
 
     ai_configs = [
-        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking","熊猫-A-6-grok-4.2-thinking-200w上下文"]),
+        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", ["熊猫-按量-特供顶级-官方正向满血-claude-opus-4.6-thinking"]),
