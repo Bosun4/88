@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-04-23 16:45:09",
+  "update_time": "2026-04-23 17:07:31",
   "version": "MAX-v1.1",
   "top4": [
     {
@@ -104,29 +104,29 @@
       "h2h": [],
       "information": {},
       "prediction": {
-        "predicted_score": "6-1",
+        "predicted_score": "7-0",
         "predicted_label": "胜其他",
         "is_score_others": true,
         "home_win_pct": 26.2,
         "draw_pct": 54.1,
         "away_win_pct": 19.7,
-        "confidence": 75.0,
-        "risk_level": "低",
+        "confidence": 74.0,
+        "risk_level": "中",
         "over_under_2_5": "小",
         "both_score": "否",
         "gpt_score": "1-1",
-        "gpt_analysis": "🕵️ 庄家意图: 主胜仍被放在前面，更多是主场壳价，实际优势很薄。\n💸 资金博弈: 散户未明显失衡，但基本面与盘面主导相反，存在主队虚热嫌疑。\n🎯 破局逻辑: 主队近况差，客队对赛占优，xG合计2.47，平负比分的EV更高。\n总结: 这是基本面逆盘，主队不宜高看，客队至少拿分更顺逻辑。",
+        "gpt_analysis": "🕵️ 庄家意图: Shin略偏主，但主队近期崩盘且交锋劣势，1.32比1.15的xG差不足支撑主让姿态。\n💸 资金博弈: 资金面平静时更要信基本面，主队名义主场被高估，客队方向性价比更高。\n🎯 破局逻辑: 德乙保级压力下比赛更谨慎，首选低比分平或客队效率胜，不追主队反弹神话。\n总结: 盘口给了主队过多尊重，真实更接近客不败。",
         "grok_score": "弃权",
         "grok_analysis": "弃权 (AI失效,本场不参与决策)",
         "gemini_score": "1-1",
-        "gemini_analysis": "🕵️ 庄家意图: 主队近期状态极度低迷，但Shin概率仍给到41%，庄家明显在利用主场优势强行拉升主队预期诱盘。\n💸 资金博弈: 散户41%支持主队，与Shin概率高度重合，说明散户被庄家模型成功诱导，客队方向阻力被抽空。\n🎯 破局逻辑: 主队状态烂且交锋全败，庄家强开高概率实为诱导，客队状态更佳且交锋碾压，看好客队不败。\n总结: 庄家强拉主队预期诱盘，客队交锋碾压有望拿分。",
+        "gemini_analysis": "🕵️ 庄家意图: 主队近期状态极度低迷，但庄家依然给出了41%的Shin概率和较高的xG，明显在防范主队触底反弹。\n💸 资金博弈: 散户资金并未因主队状态差而抛弃主队，说明市场对主队反弹有一定预期，资金面处于博弈状态。\n🎯 破局逻辑: 主队保级压力巨大，庄家数据逆势挺主，结合德乙保级队的爆发力，看好主队主场不败甚至取胜。\n总结: 庄家逆势防范主队，保级狂魔有望触底反弹。",
         "claude_score": "弃权",
         "claude_analysis": "弃权 (AI失效,本场不参与决策)",
         "ai_abstained": [
           "GROK",
           "CLAUDE"
         ],
-        "ai_avg_confidence": 78.7,
+        "ai_avg_confidence": 75.9,
         "value_kill_count": 0,
         "ai_consensus_strength": 0.67,
         "model_agreement": true,
@@ -516,531 +516,12 @@
           "model": 0.33
         }
       },
-      "recommend_score": 91.22,
+      "recommend_score": 78.82,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     },
     {
       "rank": 2,
-      "home_team": "麦克阿瑟",
-      "away_team": "惠灵顿",
-      "league": "澳超",
-      "match_num": "周五001",
-      "sp_home": 1.76,
-      "sp_draw": 3.92,
-      "sp_away": 3.27,
-      "give_ball": -1.0,
-      "change": {},
-      "vote": {
-        "win": "51",
-        "same": "23",
-        "lose": "26",
-        "hhad_win": "28",
-        "hhad_same": "23",
-        "hhad_lose": "49"
-      },
-      "odds_movement": "主胜平稳，客胜平稳",
-      "intelligence": {
-        "h_inj": "克里斯蒂安·波波维奇 停赛 轮休 池东沅 受伤 踝关节扭伤 哈里·波利蒂迪斯 停赛 轮休",
-        "g_inj": "内森·沃克 停赛 轮休 萨普里特·辛格 停赛 轮休 阿莱克斯·鲁弗 停赛 累计黄牌停赛",
-        "home_bad_news": "1.麦克阿瑟FC近10场正赛2胜1平7负，状态低迷。 2.麦克阿瑟FC本赛季联赛25场失44球，是联赛失球数第1多的球队。 3.麦克阿瑟FC近5年面对惠灵顿凤凰主场输球率达到71%。 4.麦克阿瑟FC本赛季联赛25场比赛，在落后的情况下最终输球的场次占总负场的90%。 5.本赛季联赛25场比赛，布拉",
-        "guest_bad_news": "1.惠灵顿凤凰本赛季联赛25场失44球，是联赛失球数第1多的球队。 2.惠灵顿凤凰本赛季联赛25场比赛，在落后的情况下最终输球的场次占总负场的100%。 3.惠灵顿凤凰本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 4.惠灵顿凤凰将客场对阵麦克阿瑟FC。赛前主帅格林纳克谈及队内合同"
-      },
-      "expert_intro": "麦克阿瑟FC目前联赛遭遇连败打击，此番面对来势汹汹的威灵顿凤凰，麦克阿瑟FC打定输数。",
-      "baseface": "本场为澳洲甲第26轮的比赛。目前主队积31分，排在第9位。客队积33分，排在第7位。双方实力接近。\n主队近6轮联赛2胜4负，近5个主场2胜1平2负，状态一般。客队近6轮联赛4胜1平1负，状态上佳;近5个客场2胜2平1负，客场状态不错。\n综合来看，客队稍占优势。\n双方近6次交锋，麦克阿瑟FC取得2胜4负，略处下风;在麦克阿瑟FC的主场，近3次交锋，麦克阿瑟FC全败，完全处于下风。\n本场半全场分析\n主队上半场落后的可能性为35%\n主队近6场联赛主场的上半场:\n领先1，打平1，落后4/2场有进球，6场有失球\n客队近6场联赛客场的上半场:\n落后3，打平2，领先1/4场有失球，2场有进球",
-      "had_analyse": [
-        "lose"
-      ],
-      "home_rank": 9,
-      "away_rank": 7,
-      "v2_odds_dict": {
-        "a0": 25.0,
-        "a1": 8.0,
-        "a2": 4.6,
-        "a3": 3.65,
-        "a4": 4.25,
-        "a5": 6.0,
-        "a6": 9.5,
-        "a7": 11.0,
-        "s00": 25.0,
-        "s11": 8.25,
-        "s22": 10.0,
-        "s33": 29.0,
-        "w10": 12.0,
-        "w20": 12.0,
-        "w21": 7.6,
-        "w30": 17.0,
-        "w31": 12.0,
-        "w32": 15.0,
-        "w40": 32.0,
-        "w41": 23.0,
-        "w42": 30.0,
-        "l01": 18.0,
-        "l02": 25.0,
-        "l12": 11.0,
-        "l03": 50.0,
-        "l13": 21.0,
-        "l23": 20.0,
-        "ss": 2.8,
-        "sp": 12.5,
-        "sf": 25.0,
-        "ps": 5.15,
-        "pp": 7.25,
-        "pf": 8.5,
-        "fs": 16.0,
-        "fp": 12.5,
-        "ff": 5.4
-      },
-      "id": 10,
-      "date": "2026-04-23",
-      "home_id": 0,
-      "away_id": 0,
-      "home_stats": {
-        "played": 25,
-        "wins": 12,
-        "draws": 6,
-        "losses": 7,
-        "goals_for": 35,
-        "goals_against": 24,
-        "avg_goals_for": "1.41",
-        "avg_goals_against": "0.96",
-        "clean_sheets": 4,
-        "form": "WWDWW"
-      },
-      "away_stats": {
-        "played": 25,
-        "wins": 10,
-        "draws": 6,
-        "losses": 9,
-        "goals_for": 28,
-        "goals_against": 31,
-        "avg_goals_for": "1.12",
-        "avg_goals_against": "1.22",
-        "clean_sheets": 3,
-        "form": "WDLWD"
-      },
-      "h2h": [],
-      "information": {},
-      "prediction": {
-        "predicted_score": "6-1",
-        "predicted_label": "胜其他",
-        "is_score_others": true,
-        "home_win_pct": 67.0,
-        "draw_pct": 16.4,
-        "away_win_pct": 16.6,
-        "confidence": 70.0,
-        "risk_level": "低",
-        "over_under_2_5": "大",
-        "both_score": "是",
-        "gpt_score": "2-1",
-        "gpt_analysis": "🕵️ 庄家意图: 主胜占优但客队进球期望1.29不低，庄家没有把客队防线脆化到底。\n💸 资金博弈: 散户略偏主，无明显Sharp修正，市场定价相对中性。\n🎯 破局逻辑: 澳超高波动高进球，xG合计3.10，最优解在双方都进球的3-4球区间。\n总结: 这是明显的对攻盘，单防主胜不够，必须带平负型大比分。",
-        "grok_score": "弃权",
-        "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-        "gemini_score": "2-1",
-        "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率50.3%占据优势，庄家隐含xG主队1.804远超客队，庄家模型对主队进攻端极度看好。\n💸 资金博弈: 散户51%支持主队，热度处于临界点但未形成绝对反指，资金分布相对合理，无明显诱盘迹象。\n🎯 破局逻辑: 澳超大球属性强，主队xG极高但防守不稳，客队状态不错，看好双方互捅，主队凭借火力微弱胜出或平局。\n总结: 庄家模型力挺主队进攻，澳超对攻战看好主队不败。",
-        "claude_score": "弃权",
-        "claude_analysis": "弃权 (AI失效,本场不参与决策)",
-        "ai_abstained": [
-          "GROK",
-          "CLAUDE"
-        ],
-        "ai_avg_confidence": 76.2,
-        "value_kill_count": 0,
-        "ai_consensus_strength": 0.67,
-        "model_agreement": true,
-        "xG_home": 1.35,
-        "xG_away": 1.61,
-        "crs_implied_probs": {
-          "1-0": 6.86,
-          "2-0": 6.86,
-          "2-1": 10.83,
-          "3-0": 4.84,
-          "3-1": 6.86,
-          "3-2": 5.49,
-          "4-0": 2.57,
-          "4-1": 3.58,
-          "4-2": 2.74,
-          "0-0": 3.29,
-          "1-1": 9.98,
-          "2-2": 8.23,
-          "3-3": 2.84,
-          "0-1": 4.57,
-          "0-2": 3.29,
-          "1-2": 7.48,
-          "0-3": 1.65,
-          "1-3": 3.92,
-          "2-3": 4.12
-        },
-        "crs_coverage": 0.68,
-        "crs_margin": 0.215,
-        "scenario": "extreme_blowout",
-        "btts_pct_used": 60.6,
-        "over25_pct_used": 59.8,
-        "dupan_detected": false,
-        "dupan_true_dir": null,
-        "dupan_confirm_score": 0,
-        "shin_dir": "home",
-        "sharp_dir": null,
-        "away_zero_prob": 50,
-        "home_zero_prob": 50,
-        "vote_hot_dir": null,
-        "vote_hot_pct": 0,
-        "steam_type": null,
-        "goal_signals": {
-          "4": 1.65,
-          "5": 2.33,
-          "6": 3.16,
-          "7": 6.36
-        },
-        "strongest_goal_count": 7,
-        "strongest_goal_ratio": 6.36,
-        "score_others_info": {
-          "is_others": true,
-          "is_extreme_blowout": true,
-          "trigger_count": 6,
-          "direction": "home",
-          "triggers": [
-            "7+球极低11.0≤23",
-            "6球极低9.5≤13",
-            "5球极低6.0≤8"
-          ],
-          "ai_others_count": 0
-        },
-        "sharp_detected": false,
-        "cold_signals_count": 0,
-        "contrarian_vote_away": 0,
-        "contrarian_vote_home": 0,
-        "suggested_kelly": 0.0,
-        "edge_vs_market": 0.0,
-        "refined_poisson": {
-          "home_win": 52.2,
-          "draw": 24.2,
-          "away_win": 23.6,
-          "predicted_score": "1-1",
-          "top_scores": [
-            {
-              "score": "1-1",
-              "prob": 11.7
-            },
-            {
-              "score": "2-1",
-              "prob": 10.7
-            },
-            {
-              "score": "1-0",
-              "prob": 8.8
-            },
-            {
-              "score": "2-0",
-              "prob": 8.1
-            },
-            {
-              "score": "1-2",
-              "prob": 6.8
-            },
-            {
-              "score": "2-2",
-              "prob": 6.2
-            }
-          ]
-        },
-        "poisson": {},
-        "extreme_warning": "",
-        "smart_money_signal": "❄️ 主队坏消息爆炸+散户狂热 | ❄️ 赔率vs模型背离21% | 🔥 胜其他场(6.0条)",
-        "smart_signals": [
-          "❄️ 主队坏消息爆炸+散户狂热",
-          "❄️ 赔率vs模型背离21%",
-          "🔥 胜其他场(6.0条)",
-          "💎 主胜价值注! EV+23.9% Kelly7.9% @1.76",
-          "⚡ 主队攻防效率碾压(差值0.52)",
-          "🔥 CLV+21.6% Edge+17.9% [主胜]",
-          "⚠️ 负CLV-33.7% [平局]",
-          "⚠️ 负CLV-44.0% [客胜]"
-        ],
-        "model_consensus": 9,
-        "total_models": 15,
-        "expected_total_goals": 3.1,
-        "over_2_5": 59.4,
-        "btts": 60.6,
-        "top_scores": [
-          {
-            "score": "1-1",
-            "prob": 11.7
-          },
-          {
-            "score": "2-1",
-            "prob": 10.7
-          },
-          {
-            "score": "1-0",
-            "prob": 8.8
-          },
-          {
-            "score": "2-0",
-            "prob": 8.1
-          },
-          {
-            "score": "1-2",
-            "prob": 6.8
-          },
-          {
-            "score": "2-2",
-            "prob": 6.2
-          }
-        ],
-        "elo": {
-          "home_win": 44.8,
-          "draw": 26.0,
-          "away_win": 42.2,
-          "elo_diff": 10
-        },
-        "random_forest": {
-          "home_win": 52.1,
-          "draw": 21.9,
-          "away_win": 26.0
-        },
-        "gradient_boost": {
-          "home_win": 50.9,
-          "draw": 23.3,
-          "away_win": 25.7
-        },
-        "neural_net": {
-          "home_win": 50.1,
-          "draw": 22.4,
-          "away_win": 27.5
-        },
-        "logistic": {
-          "home_win": 50.9,
-          "draw": 23.3,
-          "away_win": 25.8
-        },
-        "svm": {
-          "home_win": 51.2,
-          "draw": 21.6,
-          "away_win": 27.2
-        },
-        "knn": {
-          "home_win": 50.4,
-          "draw": 23.0,
-          "away_win": 26.7
-        },
-        "dixon_coles": {
-          "home_win": 55.2,
-          "draw": 23.5,
-          "away_win": 21.2
-        },
-        "bradley_terry": {
-          "home_win": 43.7,
-          "draw": 24.0,
-          "away_win": 32.3
-        },
-        "home_form": {
-          "score": 86.7,
-          "trend": "上升",
-          "momentum": 86.7,
-          "streak": 2,
-          "streak_type": "W"
-        },
-        "away_form": {
-          "score": 51.5,
-          "trend": "一般",
-          "momentum": 51.5,
-          "streak": 1,
-          "streak_type": "D"
-        },
-        "handicap_signal": "⚠️ 盘口偏离",
-        "odds_movement": {
-          "signal": "无变动",
-          "h_adj": 0,
-          "a_adj": 0,
-          "d_adj": 0
-        },
-        "vote_analysis": {
-          "signal": "均衡",
-          "adj_h": 0,
-          "adj_a": 0
-        },
-        "h2h_blood": {
-          "h_adj": 0.0,
-          "a_adj": 0.0,
-          "signal": "无交锋",
-          "avg_goals": 2.5
-        },
-        "crs_analysis": {
-          "top_scores": [],
-          "signals": []
-        },
-        "ttg_analysis": {
-          "expected_goals": 2.5,
-          "over_2_5": 50,
-          "probs": {}
-        },
-        "halftime": {
-          "top": [],
-          "halftime_draw_prob": 0
-        },
-        "pace_rating": "中等",
-        "kelly_home": {
-          "kelly": 1.09,
-          "value": "True",
-          "edge": 3.3
-        },
-        "kelly_away": {
-          "kelly": 0.0,
-          "value": "False",
-          "edge": -40.8
-        },
-        "odds": {
-          "implied_home": 50.2,
-          "implied_draw": 22.7,
-          "implied_away": 27.2
-        },
-        "experience_analysis": {
-          "triggered_count": 2,
-          "total_score": 15,
-          "draw_rules": 2,
-          "recommendation": "🔶 经验信号较强，建议重点关注",
-          "over_adj": 0.0,
-          "zero_zero_boost": 0.0,
-          "rules": [
-            {
-              "id": "D06",
-              "name": "德比/克星效应",
-              "weight": 8
-            },
-            {
-              "id": "D13",
-              "name": "攻防数据接近必防平",
-              "weight": 7
-            }
-          ]
-        },
-        "pro_odds": {
-          "true_home": 50.1,
-          "true_draw": 22.7,
-          "true_away": 27.2
-        },
-        "asian_handicap_probs": {
-          "ah_0": [
-            0.4946,
-            0.2307,
-            0.2747
-          ],
-          "ah_0.5": [
-            0.4946,
-            0.0,
-            0.5054
-          ],
-          "ah_1.0": [
-            0.2727,
-            0.2219,
-            0.5054
-          ],
-          "ou_1.5": [
-            0.8145,
-            0.0,
-            0.1855
-          ],
-          "ou_2.5": [
-            0.5975,
-            0.0,
-            0.4025
-          ],
-          "ou_3.5": [
-            0.3736,
-            0.0,
-            0.6264
-          ],
-          "btts": 0.6056
-        },
-        "bookmaker_implied_home_xg": 1.804,
-        "bookmaker_implied_away_xg": 1.291,
-        "cold_door": {
-          "is_cold_door": true,
-          "strength": 9,
-          "level": "高危",
-          "signals": [
-            "❄️ 主队坏消息爆炸+散户狂热",
-            "❄️ 赔率vs模型背离21%"
-          ],
-          "sharp_confirmed": false,
-          "dark_verdict": "❄️ 高危冷门！2条触发"
-        },
-        "odds_pattern": "正常",
-        "result": "主胜",
-        "value_bets": [
-          {
-            "direction": "主胜",
-            "prob": 70.4,
-            "odds": 1.76,
-            "ev": 23.9,
-            "kelly_pct": 7.86,
-            "signal": "💎 主胜价值注! EV+23.9% Kelly7.9% @1.76",
-            "grade": "A"
-          }
-        ],
-        "odds_range_analysis": {
-          "home": {
-            "hist_rate": 55.0,
-            "desc": "中等主队:需精选"
-          },
-          "draw": {
-            "hist_rate": 24.0,
-            "desc": "平局偏少"
-          },
-          "away": {
-            "hist_rate": 30.0,
-            "desc": "正常客队"
-          }
-        },
-        "bivariate_poisson": {
-          "home_win": 48.4,
-          "draw": 25.6,
-          "away_win": 26.0,
-          "predicted_score": "1-1",
-          "btts": 60.8,
-          "over_2_5": 58.4,
-          "correlation": 0.1,
-          "p0_inflate": 0.01,
-          "top_scores": [
-            {
-              "score": "1-1",
-              "prob": 10.97
-            },
-            {
-              "score": "2-1",
-              "prob": 9.41
-            },
-            {
-              "score": "1-0",
-              "prob": 8.04
-            },
-            {
-              "score": "2-0",
-              "prob": 7.19
-            },
-            {
-              "score": "1-2",
-              "prob": 6.57
-            },
-            {
-              "score": "0-0",
-              "prob": 6.42
-            }
-          ]
-        },
-        "predictability_score": 92,
-        "fusion_weights": {
-          "market": 0.82,
-          "model": 0.18
-        }
-      },
-      "recommend_score": 79.8,
-      "is_recommended": true,
-      "fusion_summary": "vMAX-Dynamic-Hybrid"
-    },
-    {
-      "rank": 3,
       "home_team": "贝蒂斯",
       "away_team": "皇马",
       "league": "西甲",
@@ -1146,29 +627,29 @@
       "h2h": [],
       "information": {},
       "prediction": {
-        "predicted_score": "6-1",
+        "predicted_score": "7-0",
         "predicted_label": "胜其他",
         "is_score_others": true,
         "home_win_pct": 39.8,
         "draw_pct": 38.5,
         "away_win_pct": 21.7,
-        "confidence": 80.0,
+        "confidence": 79.0,
         "risk_level": "低",
         "over_under_2_5": "大",
         "both_score": "是",
         "gpt_score": "1-1",
-        "gpt_analysis": "🕵️ 庄家意图: 皇马Shin领先，但并未拉到绝对统治，庄家对贝蒂斯主场有防守。\n💸 资金博弈: Sharp流向主胜，与表面客强背离，说明皇马热度面临真实阻击。\n🎯 破局逻辑: 西甲强强对话更重节奏控制，xG合计2.94但主队主场平局属性强，防主拿分。\n总结: 皇马名气在前，真实结构却提示贝蒂斯具备阻击能力。",
+        "gpt_analysis": "🕵️ 庄家意图: Shin偏皇马且客1.79xG占优，但庄家未把客胜压到极限，明显顾忌主场阻击。\n💸 资金博弈: Sharp流向主胜，与表面客强叙事背离，说明机构在防贝蒂斯主场抢分。\n🎯 破局逻辑: 西甲强强对话不宜线性看名气，主队主场韧性高，首选平局再防主队爆冷。\n总结: 皇马面子盘偏热，真正高EV在贝蒂斯不败比分。",
         "grok_score": "弃权",
         "grok_analysis": "弃权 (AI失效,本场不参与决策)",
         "gemini_score": "1-1",
-        "gemini_analysis": "🕵️ 庄家意图: 客队作为豪门Shin概率仅53.4%，庄家隐含xG客队占优但未形成碾压，庄家对客队客场大胜存疑。\n💸 资金博弈: 赔率变动显示客胜降水，但Sharp资金却逆向流入主胜，形成反向Steam信号，聪明钱在狙击豪门。\n🎯 破局逻辑: 豪门客场作战自带热度，Sharp资金逆向流入主队说明有内幕或深度逻辑支撑，坚决跟进主队不败。\n总结: Sharp资金逆向狙击豪门，主队有望爆冷抢分。",
+        "gemini_analysis": "🕵️ 庄家意图: 客队名气极大且xG占优，但庄家赔率变动却出现客队降水假象，实则在掩护主队打出。\n💸 资金博弈: 客队降水吸引散户，但Sharp资金明确流向主胜，形成反向Steam，聪明钱在暗中布局主队。\n🎯 破局逻辑: 西甲强强对话，Sharp资金力挺主队是核心信号，主队主场战力不俗，看好主队阻击皇马。\n总结: Sharp资金暗挺主队，皇马客场恐遭阻击。",
         "claude_score": "弃权",
         "claude_analysis": "弃权 (AI失效,本场不参与决策)",
         "ai_abstained": [
           "GROK",
           "CLAUDE"
         ],
-        "ai_avg_confidence": 86.6,
+        "ai_avg_confidence": 82.8,
         "value_kill_count": 0,
         "ai_consensus_strength": 0.67,
         "model_agreement": true,
@@ -1592,7 +1073,523 @@
           "model": 0.31
         }
       },
-      "recommend_score": 75.36,
+      "recommend_score": 74.96,
+      "is_recommended": true,
+      "fusion_summary": "vMAX-Dynamic-Hybrid"
+    },
+    {
+      "rank": 3,
+      "home_team": "TPS图尔",
+      "away_team": "赫尔火花",
+      "league": "芬超",
+      "match_num": "周五003",
+      "sp_home": 2.26,
+      "sp_draw": 3.3,
+      "sp_away": 2.62,
+      "give_ball": -1.0,
+      "change": {},
+      "vote": {
+        "win": "39",
+        "same": "27",
+        "lose": "34",
+        "hhad_win": "19",
+        "hhad_same": "22",
+        "hhad_lose": "59"
+      },
+      "odds_movement": "主胜平稳，客胜平稳",
+      "intelligence": {
+        "h_inj": "无",
+        "g_inj": "阿尼塞特·奥拉 停赛 轮休 卢卡斯·冯海伦斯 停赛 轮休 伊格内·巴什基罗夫 停赛 轮休 劳尼亚拉 停赛 轮休 奥斯卡·莱伯罗普洛斯 停赛 轮休",
+        "home_bad_news": "",
+        "guest_bad_news": ""
+      },
+      "expert_intro": "TPS图尔今季联赛开局录得2胜1和保持不败，此番迎战积分榜垫底份子赫尔火花，TPS图尔主场称雄在望。",
+      "baseface": "本场为芬超第4轮的一场补赛。目前主队3场积7分，高居第3位。客队3场积0分，排在第12位。主队实力更强。\n主队近6轮联赛4胜1平1负，近5个主场4胜1负，状态上佳。客队近6轮联赛2胜1平3负，状态一般;近5个客场1胜1平3负，客场状态较差。\n综合来看，主队优势较大。\n双方近6次交锋，TPS土尔库取得3胜3负;在TPS土尔库的主场，近4次交锋，TPS土尔库取得2胜2负。",
+      "had_analyse": [
+        "win"
+      ],
+      "home_rank": 3,
+      "away_rank": 12,
+      "v2_odds_dict": {
+        "a0": 14.0,
+        "a1": 5.3,
+        "a2": 3.65,
+        "a3": 3.45,
+        "a4": 5.1,
+        "a5": 8.2,
+        "a6": 15.0,
+        "a7": 22.0,
+        "s00": 14.0,
+        "s11": 6.3,
+        "s22": 12.0,
+        "s33": 45.0,
+        "w10": 9.0,
+        "w20": 12.0,
+        "w21": 7.7,
+        "w30": 22.0,
+        "w31": 18.0,
+        "w32": 22.0,
+        "w40": 50.0,
+        "w41": 45.0,
+        "w42": 55.0,
+        "l01": 10.0,
+        "l02": 13.0,
+        "l12": 8.5,
+        "l03": 28.0,
+        "l13": 21.0,
+        "l23": 23.0,
+        "ss": 3.65,
+        "sp": 14.0,
+        "sf": 29.0,
+        "ps": 5.5,
+        "pp": 6.0,
+        "pf": 5.8,
+        "fs": 26.0,
+        "fp": 14.0,
+        "ff": 4.1
+      },
+      "id": 12,
+      "date": "2026-04-23",
+      "home_id": 0,
+      "away_id": 0,
+      "home_stats": {
+        "played": 25,
+        "wins": 13,
+        "draws": 6,
+        "losses": 6,
+        "goals_for": 36,
+        "goals_against": 23,
+        "avg_goals_for": "1.43",
+        "avg_goals_against": "0.93",
+        "clean_sheets": 4,
+        "form": "WWDWW"
+      },
+      "away_stats": {
+        "played": 25,
+        "wins": 10,
+        "draws": 6,
+        "losses": 9,
+        "goals_for": 28,
+        "goals_against": 31,
+        "avg_goals_for": "1.12",
+        "avg_goals_against": "1.22",
+        "clean_sheets": 3,
+        "form": "WDLWD"
+      },
+      "h2h": [],
+      "information": {},
+      "prediction": {
+        "predicted_score": "7-0",
+        "predicted_label": "胜其他",
+        "is_score_others": true,
+        "home_win_pct": 58.5,
+        "draw_pct": 21.0,
+        "away_win_pct": 20.5,
+        "confidence": 72.0,
+        "risk_level": "中",
+        "over_under_2_5": "小",
+        "both_score": "是",
+        "gpt_score": "1-0",
+        "gpt_analysis": "🕵️ 庄家意图: 主胜略高且xG优势不大，庄家把比赛压在主队可控优势区，而非大胜模板。\n💸 资金博弈: 市场无明显偏斜，主队题材面更好但赔率未极端，说明平局仍被认真防守。\n🎯 破局逻辑: 芬超节奏中性，主1.29客1.18意味着双方都有球，主场面值更适合1球差。\n总结: 主队稍优但难碾压，主小胜或被逼平的路径最真实。",
+        "grok_score": "弃权",
+        "grok_analysis": "弃权 (AI失效,本场不参与决策)",
+        "gemini_score": "1-0",
+        "gemini_analysis": "🕵️ 庄家意图: 主队排名和状态均占优，庄家给出的Shin概率和xG也合理反映了这一优势，未见明显诱盘动作。\n💸 资金博弈: 散户资金分布均匀，主队未形成大热，资金流向健康，属于正常的实力体现。\n🎯 破局逻辑: 主队主场状态上佳，客队客场低迷，实力差距明显，正路看好主队顺利拿下比赛。\n总结: 实力盘正常体现，主场龙稳吃客场虫。",
+        "claude_score": "弃权",
+        "claude_analysis": "弃权 (AI失效,本场不参与决策)",
+        "ai_abstained": [
+          "GROK",
+          "CLAUDE"
+        ],
+        "ai_avg_confidence": 74.6,
+        "value_kill_count": 0,
+        "ai_consensus_strength": 0.67,
+        "model_agreement": true,
+        "xG_home": 1.29,
+        "xG_away": 1.18,
+        "crs_implied_probs": {
+          "1-0": 8.62,
+          "2-0": 6.47,
+          "2-1": 10.08,
+          "3-0": 3.53,
+          "3-1": 4.31,
+          "3-2": 3.53,
+          "4-0": 1.55,
+          "4-1": 1.72,
+          "4-2": 1.41,
+          "0-0": 5.54,
+          "1-1": 12.32,
+          "2-2": 6.47,
+          "3-3": 1.72,
+          "0-1": 7.76,
+          "0-2": 5.97,
+          "1-2": 9.13,
+          "0-3": 2.77,
+          "1-3": 3.7,
+          "2-3": 3.37
+        },
+        "crs_coverage": 0.68,
+        "crs_margin": 0.288,
+        "scenario": "extreme_blowout",
+        "btts_pct_used": 50.2,
+        "over25_pct_used": 44.9,
+        "dupan_detected": false,
+        "dupan_true_dir": null,
+        "dupan_confirm_score": 0,
+        "shin_dir": "home",
+        "sharp_dir": null,
+        "away_zero_prob": 50,
+        "home_zero_prob": 50,
+        "vote_hot_dir": null,
+        "vote_hot_pct": 0,
+        "steam_type": null,
+        "goal_signals": {
+          "4": 1.37,
+          "5": 1.71,
+          "6": 2.0,
+          "7": 3.18
+        },
+        "strongest_goal_count": 7,
+        "strongest_goal_ratio": 3.18,
+        "score_others_info": {
+          "is_others": true,
+          "is_extreme_blowout": true,
+          "trigger_count": 4,
+          "direction": "home",
+          "triggers": [
+            "7+球极低22.0≤23",
+            "6球15.0≤16",
+            "5球8.2≤10"
+          ],
+          "ai_others_count": 0
+        },
+        "sharp_detected": false,
+        "cold_signals_count": 0,
+        "contrarian_vote_away": 0,
+        "contrarian_vote_home": 0,
+        "suggested_kelly": 0.0,
+        "edge_vs_market": 0.0,
+        "refined_poisson": {
+          "home_win": 52.6,
+          "draw": 24.0,
+          "away_win": 23.4,
+          "predicted_score": "1-1",
+          "top_scores": [
+            {
+              "score": "1-1",
+              "prob": 12.7
+            },
+            {
+              "score": "2-1",
+              "prob": 10.5
+            },
+            {
+              "score": "1-0",
+              "prob": 9.8
+            },
+            {
+              "score": "2-0",
+              "prob": 7.9
+            },
+            {
+              "score": "1-2",
+              "prob": 6.5
+            },
+            {
+              "score": "0-1",
+              "prob": 6.1
+            }
+          ]
+        },
+        "poisson": {},
+        "extreme_warning": "",
+        "smart_money_signal": "🔥 胜其他场(4.0条)",
+        "smart_signals": [
+          "🔥 胜其他场(4.0条)",
+          "💎 主胜价值注! EV+45.8% Kelly9.1% @2.26",
+          "⚡ 主队攻防效率碾压(差值0.57)",
+          "🔥 CLV+36.3% Edge+32.2% [主胜]",
+          "⚠️ 负CLV-28.6% [平局]",
+          "⚠️ 负CLV-44.6% [客胜]"
+        ],
+        "model_consensus": 9,
+        "total_models": 15,
+        "expected_total_goals": 2.47,
+        "over_2_5": 44.4,
+        "btts": 50.3,
+        "top_scores": [
+          {
+            "score": "1-1",
+            "prob": 12.7
+          },
+          {
+            "score": "2-1",
+            "prob": 10.5
+          },
+          {
+            "score": "1-0",
+            "prob": 9.8
+          },
+          {
+            "score": "2-0",
+            "prob": 7.9
+          },
+          {
+            "score": "1-2",
+            "prob": 6.5
+          },
+          {
+            "score": "0-1",
+            "prob": 6.1
+          }
+        ],
+        "elo": {
+          "home_win": 65.9,
+          "draw": 20.0,
+          "away_win": 24.1,
+          "elo_diff": 175
+        },
+        "random_forest": {
+          "home_win": 42.8,
+          "draw": 26.1,
+          "away_win": 31.1
+        },
+        "gradient_boost": {
+          "home_win": 41.6,
+          "draw": 27.6,
+          "away_win": 30.8
+        },
+        "neural_net": {
+          "home_win": 40.8,
+          "draw": 26.6,
+          "away_win": 32.6
+        },
+        "logistic": {
+          "home_win": 41.7,
+          "draw": 27.5,
+          "away_win": 30.8
+        },
+        "svm": {
+          "home_win": 41.8,
+          "draw": 25.9,
+          "away_win": 32.3
+        },
+        "knn": {
+          "home_win": 41.0,
+          "draw": 27.2,
+          "away_win": 31.8
+        },
+        "dixon_coles": {
+          "home_win": 55.8,
+          "draw": 23.3,
+          "away_win": 20.9
+        },
+        "bradley_terry": {
+          "home_win": 45.2,
+          "draw": 24.0,
+          "away_win": 30.8
+        },
+        "home_form": {
+          "score": 86.7,
+          "trend": "上升",
+          "momentum": 86.7,
+          "streak": 2,
+          "streak_type": "W"
+        },
+        "away_form": {
+          "score": 51.5,
+          "trend": "一般",
+          "momentum": 51.5,
+          "streak": 1,
+          "streak_type": "D"
+        },
+        "handicap_signal": "盘口正常",
+        "odds_movement": {
+          "signal": "无变动",
+          "h_adj": 0,
+          "a_adj": 0,
+          "d_adj": 0
+        },
+        "vote_analysis": {
+          "signal": "均衡",
+          "adj_h": 0,
+          "adj_a": 0
+        },
+        "h2h_blood": {
+          "h_adj": 0.0,
+          "a_adj": 0.0,
+          "signal": "无交锋",
+          "avg_goals": 2.5
+        },
+        "crs_analysis": {
+          "top_scores": [],
+          "signals": []
+        },
+        "ttg_analysis": {
+          "expected_goals": 2.5,
+          "over_2_5": 50,
+          "probs": {}
+        },
+        "halftime": {
+          "top": [],
+          "halftime_draw_prob": 0
+        },
+        "pace_rating": "中等",
+        "kelly_home": {
+          "kelly": 2.76,
+          "value": "True",
+          "edge": 13.9
+        },
+        "kelly_away": {
+          "kelly": 0.0,
+          "value": "False",
+          "edge": -34.2
+        },
+        "odds": {
+          "implied_home": 39.2,
+          "implied_draw": 26.9,
+          "implied_away": 33.9
+        },
+        "experience_analysis": {
+          "triggered_count": 2,
+          "total_score": 15,
+          "draw_rules": 2,
+          "recommendation": "🔶 经验信号较强，建议重点关注",
+          "over_adj": 0.0,
+          "zero_zero_boost": 0.0,
+          "rules": [
+            {
+              "id": "D06",
+              "name": "德比/克星效应",
+              "weight": 8
+            },
+            {
+              "id": "D13",
+              "name": "攻防数据接近必防平",
+              "weight": 7
+            }
+          ]
+        },
+        "pro_odds": {
+          "true_home": 39.2,
+          "true_draw": 26.9,
+          "true_away": 33.9
+        },
+        "asian_handicap_probs": {
+          "ah_0": [
+            0.3899,
+            0.2715,
+            0.3387
+          ],
+          "ah_0.5": [
+            0.3899,
+            0.0,
+            0.6101
+          ],
+          "ah_1.0": [
+            0.174,
+            0.2159,
+            0.6101
+          ],
+          "ou_1.5": [
+            0.7067,
+            0.0,
+            0.2933
+          ],
+          "ou_2.5": [
+            0.4487,
+            0.0,
+            0.5513
+          ],
+          "ou_3.5": [
+            0.2362,
+            0.0,
+            0.7638
+          ],
+          "btts": 0.5023
+        },
+        "bookmaker_implied_home_xg": 1.289,
+        "bookmaker_implied_away_xg": 1.182,
+        "cold_door": {
+          "is_cold_door": false,
+          "strength": 4,
+          "level": "普通",
+          "signals": [
+            "❄️ 赔率vs模型背离26%"
+          ],
+          "sharp_confirmed": false,
+          "dark_verdict": ""
+        },
+        "odds_pattern": "正常",
+        "result": "主胜",
+        "value_bets": [
+          {
+            "direction": "主胜",
+            "prob": 64.5,
+            "odds": 2.26,
+            "ev": 45.8,
+            "kelly_pct": 9.08,
+            "signal": "💎 主胜价值注! EV+45.8% Kelly9.1% @2.26",
+            "grade": "A"
+          }
+        ],
+        "odds_range_analysis": {
+          "home": {
+            "hist_rate": 42.0,
+            "desc": "均势偏主:平局风险高"
+          },
+          "draw": {
+            "hist_rate": 28.0,
+            "desc": "标准平局区间"
+          },
+          "away": {
+            "hist_rate": 30.0,
+            "desc": "正常客队"
+          }
+        },
+        "bivariate_poisson": {
+          "home_win": 36.2,
+          "draw": 32.7,
+          "away_win": 31.1,
+          "predicted_score": "1-1",
+          "btts": 50.4,
+          "over_2_5": 43.0,
+          "correlation": 0.1,
+          "p0_inflate": 0.03,
+          "top_scores": [
+            {
+              "score": "1-1",
+              "prob": 13.53
+            },
+            {
+              "score": "0-0",
+              "prob": 13.16
+            },
+            {
+              "score": "1-0",
+              "prob": 9.81
+            },
+            {
+              "score": "0-1",
+              "prob": 8.84
+            },
+            {
+              "score": "2-1",
+              "prob": 7.98
+            },
+            {
+              "score": "1-2",
+              "prob": 7.27
+            }
+          ]
+        },
+        "predictability_score": 85,
+        "fusion_weights": {
+          "market": 0.75,
+          "model": 0.25
+        }
+      },
+      "recommend_score": 74.9,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     },
@@ -1698,29 +1695,29 @@
       "h2h": [],
       "information": {},
       "prediction": {
-        "predicted_score": "0-7",
+        "predicted_score": "3-4",
         "predicted_label": "负其他",
         "is_score_others": true,
         "home_win_pct": 16.5,
         "draw_pct": 19.1,
         "away_win_pct": 64.4,
-        "confidence": 78.0,
+        "confidence": 77.0,
         "risk_level": "低",
         "over_under_2_5": "小",
         "both_score": "否",
         "gpt_score": "0-1",
-        "gpt_analysis": "🕵️ 庄家意图: 客胜接近五成且主队xG仅1.02，庄家明显更防主队哑火。\n💸 资金博弈: 散户与Shin同向但未过热，客胜属于健康热度。\n🎯 破局逻辑: 主队持续低迷，客队稳定，法乙节奏偏慢，优先客队低比分带走。\n总结: 客队赢面较实，最常见兑现是控制型小胜。",
+        "gpt_analysis": "🕵️ 庄家意图: 客胜接近五成且xG优势明显，庄家对客队赢球路径定价清晰，主队进攻被明显压制。\n💸 资金博弈: 散户与Shin同向但未过热，说明客胜是真实强势而非纯市场跟风产物。\n🎯 破局逻辑: 法乙节奏偏慢，主1.02客1.52适合客队低比分取胜，0-1与0-2优先。\n总结: 客队面、势、模都占优，最像法系低比分客胜。",
         "grok_score": "弃权",
         "grok_analysis": "弃权 (AI失效,本场不参与决策)",
         "gemini_score": "0-1",
-        "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率近50%，庄家隐含xG客队1.524大幅领先，庄家对客队实力碾压态势毫不掩饰。\n💸 资金博弈: 散户50%支持客队，虽有一定热度但未超60%警戒线，资金流向与硬实力差距匹配，无明显诱盘。\n🎯 破局逻辑: 主队状态极差且主场虫，客队实力与状态双重碾压，xG数据支持客队进球，看好客队客场全取三分。\n总结: 实力与状态双重碾压，客队正路打出概率极高。",
+        "gemini_analysis": "🕵️ 庄家意图: 客队xG和Shin概率均占据绝对优势，庄家对客队的实力给予了充分认可，主队状态低迷难以被信任。\n💸 资金博弈: 散户资金50%流向客队，属于正常的实力体现，并未达到极度大热的警戒线，资金面相对安全。\n🎯 破局逻辑: 法乙主队状态极差，客队实力碾压且状态稳定，正路看好客队客场带走胜利，比分偏小。\n总结: 实力差距悬殊，客队正路打出无悬念。",
         "claude_score": "弃权",
         "claude_analysis": "弃权 (AI失效,本场不参与决策)",
         "ai_abstained": [
           "GROK",
           "CLAUDE"
         ],
-        "ai_avg_confidence": 83.5,
+        "ai_avg_confidence": 80.2,
         "value_kill_count": 0,
         "ai_consensus_strength": 0.67,
         "model_agreement": true,
@@ -2112,7 +2109,7 @@
           "model": 0.33
         }
       },
-      "recommend_score": 74.48,
+      "recommend_score": 74.08,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     }
@@ -2221,7 +2218,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 24.2,
@@ -2748,7 +2745,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 28.7,
@@ -3806,7 +3803,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 17.8,
@@ -5443,7 +5440,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "0-7",
+          "predicted_score": "3-4",
           "predicted_label": "负其他",
           "is_score_others": true,
           "home_win_pct": 16.5,
@@ -5985,7 +5982,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 33.5,
@@ -6478,7 +6475,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "0-7",
+          "predicted_score": "3-4",
           "predicted_label": "负其他",
           "is_score_others": true,
           "home_win_pct": 14.5,
@@ -7021,7 +7018,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 50.1,
@@ -8016,7 +8013,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 38.2,
@@ -8517,7 +8514,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 33.1,
@@ -9020,7 +9017,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 41.6,
@@ -9521,7 +9518,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 40.1,
@@ -10026,7 +10023,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 24.8,
@@ -10533,7 +10530,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 35.4,
@@ -11044,7 +11041,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 31.9,
@@ -11540,7 +11537,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 34.0,
@@ -12081,7 +12078,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 34.0,
@@ -12630,7 +12627,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 23.2,
@@ -13663,7 +13660,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 54.9,
@@ -14208,7 +14205,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 38.8,
@@ -14714,7 +14711,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 16.5,
@@ -14725,18 +14722,18 @@
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "0-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜面强但未深开到碾压，庄家更防客队赢球不稳而非主队爆发。\n💸 资金博弈: 散户客胜59%偏热，无Sharp对冲，资金结构偏单边，需防客胜小胜走险。\n🎯 破局逻辑: xG总和2.78偏中上，保级题材抬高主队韧性，优先客胜但规避穿盘顺打。\n总结: 客强主弱属实，但热度过满，最优是客队一球到两球优势区间。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜Shin近六成，但客队xG仅1.82，优势明确却未到碾压，庄家更防一球客胜。\n💸 资金博弈: 散户与Shin同向压客，未见反向Sharp，只能防热门穿不深，避开大胜叙事。\n🎯 破局逻辑: 主0.96客1.82对应2-3球核心区，沙职保级战主队有搏命属性，客胜但易失球。\n总结: 客强主弱属真优势，但热门过热更像小胜或险胜结构。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队实力占优且Shin概率高达59%，但庄家并未在盘口上给予足够深度，明显在利用客队名气诱导筹码。\n💸 资金博弈: 散户59%重注客队形成大热反指，结合保级死拼题材，聪明资金大概率在暗中布局主队不败。\n🎯 破局逻辑: 大热必死逻辑触发，主队保级战意加持下防守反击，比分需规避客胜顺利打出，首选平局与主胜。\n总结: 客胜大热造势，主队保级死拼有望爆冷不败。",
+          "gemini_analysis": "🕵️ 庄家意图: 客胜Shin概率高达59%且散户极度追捧，庄家利用客队排名优势强行造热客队，实则掩护主队保级抢分意图。\n💸 资金博弈: 散户59%的资金涌入客胜形成大热必死格局，聪明资金在暗中布局主队不败方向，形成典型的散户反指。\n🎯 破局逻辑: 保级死拼题材下，主队战意远超客队，结合客胜超热的盘口微观结构，坚决走主队不败，首选平局与主胜小比分。\n总结: 客胜大热触发反指，保级主队借势抢分。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 80.8,
+          "ai_avg_confidence": 80.4,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.39,
           "model_agreement": false,
@@ -15229,31 +15226,31 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 18.6,
           "draw_pct": 36.2,
           "away_win_pct": 45.2,
-          "confidence": 64.0,
+          "confidence": 63.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-2",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜优势有限，平局概率仍高，庄家并未把AZ定成绝对强势方。\n💸 资金博弈: 散户分布均衡，无明显诱盘，资金未形成极端单侧挤压。\n🎯 破局逻辑: 荷甲节奏快，xG合计2.84支持对攻，中枢落在3球附近，客不败优先。\n总结: 这是典型荷甲开放盘，比分宜走客队占优的对攻型区间。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜占优但不足五成，xG合计2.84，庄家开法更像开放对攻而非单边客控。\n💸 资金博弈: 散户分布均衡，无极端热度，市场未形成一致，赔率对平局与客不败均留口。\n🎯 破局逻辑: 荷甲节奏快，主1.25客1.59天然利于双方进球，优先2-3球向4球扩散。\n总结: 这是典型荷甲互有进球盘，客队略优但平局与对攻比分价值更高。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: Shin概率客队占优，但主场龙属性让庄家在让球盘上保持平衡，防范主队主场抢分能力。\n💸 资金博弈: 散户资金分布相对均衡，未出现明显单边热度，资金流向符合基本面预期，无明显诱盘信号。\n🎯 破局逻辑: 荷甲风格开放，双方xG均超1.2，进球数不会太少，客队实力稍强但主队主场稳固，看好带球平局或客队险胜。\n总结: 实力均衡且无明显异常资金，看好开放式对攻分胜负或平局。",
+          "gemini_analysis": "🕵️ 庄家意图: 庄家给出的隐含xG差距不大，客队稍占优势，盘口让步合理，未见明显诱导，真实反映双方实力对比。\n💸 资金博弈: 散户资金分布较为均匀，未形成单边大热，资金流向与Shin概率基本吻合，属于正常的市场博弈。\n🎯 破局逻辑: 荷甲自带大球属性，双方近期状态均有起伏，客队实力略强但主队主场不弱，看好双方互有攻守，客队坐和望赢。\n总结: 实力盘正常博弈，客队稍占优势看好不败。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 73.2,
+          "ai_avg_confidence": 72.3,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.5,
+          "ai_consensus_strength": 0.44,
           "model_agreement": false,
           "xG_home": 1.25,
           "xG_away": 1.59,
@@ -15637,7 +15634,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 41.04,
+        "recommend_score": 40.64,
         "is_recommended": false
       },
       {
@@ -15751,26 +15748,26 @@
           "home_win_pct": 68.0,
           "draw_pct": 18.1,
           "away_win_pct": 13.9,
-          "confidence": 72.0,
+          "confidence": 70.0,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜Shin领先且xG略优，庄家对主队保级战意已有实质定价。\n💸 资金博弈: Sharp流向主胜与赔率结构一致，资金与庄家同向，不像诱主。\n🎯 破局逻辑: 西甲保级战偏谨慎，xG仅2.24，低比分主导，主队小胜或僵平最合逻辑。\n总结: 主队方向真实度较高，低总进球下优先1球胜和平局保护。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin主胜略高，主客xG接近，庄家并未把主队做成强势碾压，更像低比分分胜负。\n💸 资金博弈: Sharp流向主胜且与基本面同振，客侧降水信息弱化，主队真实受捧。\n🎯 破局逻辑: 西甲保级战通常收缩，主1.17客1.07总量偏低，1球差和小比分最稳健。\n总结: 主队真实优势有限但更扎实，低比分主不败格局最符合盘口。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "1-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队排名靠后但Shin概率却高于客队，庄家模型明显更认可主队近期主场强势状态，有意压低主胜赔付。\n💸 资金博弈: 赔率变动显示客胜降水吸引资金，但Sharp资金却逆向流入主胜，形成典型的反向Steam信号。\n🎯 破局逻辑: 聪明钱与庄家意图共振指向主队，客队客场虫属性暴露无遗，结合xG数据，主队小胜概率极高。\n总结: Sharp资金逆向流入主胜，主场龙对阵客场虫顺势打出。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "🕵️ 庄家意图: 主队排名靠后却在xG上压制客队，庄家通过赔率变动制造客队降水假象，实则在掩护主队打出。\n💸 资金博弈: 盘面显示客队降水吸引散户，但Sharp资金明确流向主胜，形成典型的反向Steam，庄家真实意图在主队。\n🎯 破局逻辑: 主队近期主场状态出色，Sharp资金的介入是决定性信号，结合庄家隐含xG的主队优势，坚决支持主胜打出。\n总结: 反向Steam显现，Sharp资金力挺主胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 85.7,
+          "ai_avg_confidence": 80.5,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.67,
-          "model_agreement": true,
+          "ai_consensus_strength": 0.5,
+          "model_agreement": false,
           "xG_home": 1.35,
           "xG_away": 0.91,
           "crs_implied_probs": {
@@ -16187,7 +16184,7 @@
             "model": 0.38
           }
         },
-        "recommend_score": 73.8,
+        "recommend_score": 63.0,
         "is_recommended": false
       },
       {
@@ -16296,7 +16293,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 15.2,
@@ -16307,18 +16304,18 @@
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜表面占优，但优势不深，庄家对主场名气给了溢价。\n💸 资金博弈: Sharp资金流向客胜，且与Shin主胜背离，属于典型反向真实信号。\n🎯 破局逻辑: 瑞超早期波动大，xG合计2.55不低，客队状态更稳，做客不败并防互射。\n总结: 名气盘偏向主队，但资金指纹更像客队拿分局。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin偏主但xG差仅0.28，庄家对主胜保护不足，明显不给马尔默强势定价。\n💸 资金博弈: Sharp指向客胜，且客侧降水，和表面主让形成背离，典型诱主盘形态。\n🎯 破局逻辑: 瑞超开季波动大，双方都有进球能力，优先客不败与对攻边缘比分。\n总结: 这是主让诱盘，真实更接近平局或客队偷走比赛。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队名气较大且Shin概率占优，但让球盘口偏浅，庄家有利用主队历史交锋优势诱导主胜的嫌疑。\n💸 资金博弈: 赔率变动显示主胜升水，Sharp资金明确流向客胜，散户44%支持主队形成一定热度，资金面背离。\n🎯 破局逻辑: 聪明钱看衰主队，客队目前排名第一状态正佳，结合资金流向，需防范主队翻车，首选平局与客胜。\n总结: Sharp资金力挺客队，主队让步不足恐难全取三分。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队xG占优且Shin概率较高，但盘口赔率变动却向客队倾斜，庄家在利用主队名气诱导主胜。\n💸 资金博弈: 客队降水且Sharp资金明确流向客胜，散户资金多停留在主队，形成资金错配，聪明钱看好客队。\n🎯 破局逻辑: 客队目前排名榜首状态正佳，Sharp资金的流入与盘口降水共振，主队虽有主场之利但难以全取三分。\n总结: Sharp资金流入客队，榜首球队客场抢分。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 82.3,
+          "ai_avg_confidence": 80.2,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -16860,23 +16857,23 @@
           "home_win_pct": 60.8,
           "draw_pct": 26.8,
           "away_win_pct": 12.4,
-          "confidence": 70.0,
-          "risk_level": "低",
+          "confidence": 69.0,
+          "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜为第一选项，但客队进球预期被压到0.84，庄家明显偏小比分。\n💸 资金博弈: 负向降水但散户未大热，客队有少量资金承接，主胜并非无脑顺打。\n🎯 破局逻辑: 西甲低节奏，xG总和2.05偏低，最佳EV在1-0/1-1这一压缩区。\n总结: 主队更像低比分险胜盘，防平价值不能丢。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜45%配主1.20客0.84，庄家明确压低总量，主队赢面主要来自零封路径。\n💸 资金博弈: 资金分布平稳，客侧虽有轻微流入但不足逆转结构，市场对平局仍有保留。\n🎯 破局逻辑: 西甲小球环境明显，合计xG仅2.05，1-0与2-0是最顺滑兑现区间。\n总结: 主队更像靠控制和主场拿下，低比分最贴近真实模型。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率高达45%，庄家隐含xG主队明显占优，对客队低迷的客场状态极度不信任。\n💸 资金博弈: 客胜降水伴随资金流入，但散户主胜热度适中，庄家可能在利用降水掩护主胜顺利打出。\n🎯 破局逻辑: 主队主场强势且xG压制，客队客场虫属性难改，资金面未见明显异常，正路看好主队取胜。\n总结: 基本面与庄家模型高度吻合，主场龙稳吃客场虫。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队xG明显占优，Shin概率高达45%，庄家对主队主场战力给予充分肯定，客队客场低迷被真实反映。\n💸 资金博弈: 客队降水有诱导嫌疑，但散户资金并未盲目跟风，主队支持率保持在合理区间，资金面相对健康。\n🎯 破局逻辑: 主队主场状态上佳，客队客场低迷且xG处于劣势，结合西甲主场优势特点，看好主队小比分取胜。\n总结: 主场龙对阵客场虫，主队实力碾压取胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 77.8,
+          "ai_avg_confidence": 75.8,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -17284,7 +17281,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 71.56,
+        "recommend_score": 59.16,
         "is_recommended": false
       },
       {
@@ -17403,11 +17400,11 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜62.4%过热，但客队xG仅1.69，庄家并未给出大胜模型。\n💸 资金博弈: Sharp流向主胜且散户客胜62%大热，标准诱客盘，必须逆热处理。\n🎯 破局逻辑: 葡超保级主场韧性强，低总进球环境下最值钱的是主队抢分型比分。\n总结: 这是最典型长客陷阱，比分要站在主队拿分一侧。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin强压客胜62%，但主客xG仅0.70比1.69，客强不足支撑如此一边倒，庄家在诱客。\n💸 资金博弈: Sharp流向主胜且散户62%热捧客，形成标准Sharp逆Shin结构，长客陷阱成立。\n🎯 破局逻辑: 葡超保级主场韧性强，主队虽弱但客队客场拉力过大，比分应规避顺畅客胜。\n总结: 这是最典型的客胜诱盘场，主队至少有很高概率抢分。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率62.4%极高，但结合长客陷阱与保级死拼题材，庄家在利用客队强势掩护主队抢分意图。\n💸 资金博弈: 散户62%重注客队形成绝对大热，而Sharp资金逆向流入主胜，触发100%诱盘绝对优先级逻辑。\n🎯 破局逻辑: 大热必死+Sharp资金背离，必须按聪明钱方向规避客胜，主队保级战意下防守反击，看好主队不败。\n总结: 触发绝对诱盘逻辑，客胜大热必死，主队保级爆冷。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率高达62%，庄家利用客队强队形象疯狂造热，实则布下长客陷阱，掩护主队保级抢分。\n💸 资金博弈: 散户62%资金涌入客胜形成绝对大热，而Sharp资金却逆势流向主胜，典型的诱盘与反指共振。\n🎯 破局逻辑: 保级死拼题材+客胜超热+Sharp资金主胜，三大信号齐聚，100%诱盘格局，必须按Sharp方向走主队不败。\n总结: 客胜极度大热触发反指，Sharp资金暗保主队。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
@@ -17954,22 +17951,22 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "0-7",
-          "predicted_label": "负其他",
+          "predicted_score": "7-0",
+          "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 16.5,
-          "draw_pct": 25.2,
-          "away_win_pct": 58.3,
+          "draw_pct": 33.6,
+          "away_win_pct": 49.9,
           "confidence": 64.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜高开配合杯赛名气，庄家把斯图加特摆在过热舒适区。\n💸 资金博弈: Sharp流向客胜且散户主胜59%大热，强烈背离，主胜顺打风险极高。\n🎯 破局逻辑: 杯赛淘汰制不宜线性看强弱，xG合计2.79，客队状态热，优先防拖入拉锯战。\n总结: 主队名气热度过头，真实博弈更像胶着甚至客队偷袭。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜近六成但客xG仍接近1.0，杯赛下庄家并未彻底封死客队进球与爆冷路线。\n💸 资金博弈: Sharp去客胜而散户59%压主，Shin与资金显著背离，主热是明显风险点。\n🎯 破局逻辑: 德国杯淘汰赛容错低，双方德甲属性决定节奏不慢，优先客不败及双方进球。\n总结: 热门主胜不宜顺跟，杯赛更应拥抱冷平或客队爆点比分。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "1-2",
-          "gemini_analysis": "🕵️ 庄家意图: 杯赛性质下主队Shin概率58.2%偏高，庄家隐含xG主队占优，但杯赛冷门属性需警惕庄家诱导主胜。\n💸 资金博弈: 散户59%重注主队形成大热，而Sharp资金明确流向客胜，资金面与散户情绪形成强烈对抗。\n🎯 破局逻辑: 杯赛+主胜大热+Sharp资金反向，典型的主队诱盘格局，客队近期状态极佳，看好客队常规时间不败。\n总结: 杯赛主胜大热遭聪明钱狙击，客队状态火热有望不败。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "🕵️ 庄家意图: 杯赛性质下，庄家给出主队58.2%的Shin概率，利用主队近期交锋优势强行造热主队，实则忌惮客队状态。\n💸 资金博弈: 主胜散户热度高达59%，而Sharp资金明确流向客胜，客队降水形成反向Steam，庄家真实意图在客队。\n🎯 破局逻辑: 杯赛容易出冷，主胜超热且Sharp资金反向流入客队，客队近期状态极佳，看好客队常规时间不败。\n总结: 杯赛主胜大热必死，Sharp资金力挺客队。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
@@ -17978,8 +17975,8 @@
           ],
           "ai_avg_confidence": 85.3,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.44,
-          "model_agreement": false,
+          "ai_consensus_strength": 0.67,
+          "model_agreement": true,
           "xG_home": 1.54,
           "xG_away": 1.17,
           "crs_implied_probs": {
@@ -18090,11 +18087,12 @@
             "🔥 客胜Steam! 降水-1.00但散户未跟(19%)",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅19%)",
-            "💎 客胜价值注! EV+223.0% Kelly15.7% @4.55",
+            "💎 客胜价值注! EV+173.0% Kelly12.2% @4.55",
+            "💎 平局价值注! EV+47.3% Kelly4.0% @3.97",
             "⚡ 主队攻防效率碾压(差值1.06)",
             "⚠️ 负CLV-74.1% [主胜]",
-            "📈 CLV+3.1% [平局]",
-            "🔥 CLV+173.5% Edge+165.3% [客胜]"
+            "🔥 CLV+37.5% Edge+33.4% [平局]",
+            "🔥 CLV+134.1% Edge+127.0% [客胜]"
           ],
           "model_consensus": 8,
           "total_models": 15,
@@ -18321,7 +18319,7 @@
             "direction": "volatile"
           },
           "odds_pattern": "正常",
-          "result": "客胜",
+          "result": "主胜",
           "steam_move": {
             "steam": true,
             "signal": "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅19%)",
@@ -18331,11 +18329,20 @@
           "value_bets": [
             {
               "direction": "客胜",
-              "prob": 71.0,
+              "prob": 60.0,
               "odds": 4.55,
-              "ev": 223.0,
-              "kelly_pct": 15.71,
-              "signal": "💎 客胜价值注! EV+223.0% Kelly15.7% @4.55",
+              "ev": 173.0,
+              "kelly_pct": 12.18,
+              "signal": "💎 客胜价值注! EV+173.0% Kelly12.2% @4.55",
+              "grade": "A"
+            },
+            {
+              "direction": "平局",
+              "prob": 37.1,
+              "odds": 3.97,
+              "ev": 47.3,
+              "kelly_pct": 3.98,
+              "signal": "💎 平局价值注! EV+47.3% Kelly4.0% @3.97",
               "grade": "A"
             }
           ],
@@ -18389,13 +18396,13 @@
               }
             ]
           },
-          "predictability_score": 67,
+          "predictability_score": 57,
           "fusion_weights": {
             "market": 0.69,
             "model": 0.31
           }
         },
-        "recommend_score": 18.66,
+        "recommend_score": 26.98,
         "is_recommended": false
       },
       {
@@ -18494,29 +18501,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 58.5,
           "draw_pct": 22.5,
           "away_win_pct": 19.0,
-          "confidence": 61.0,
+          "confidence": 65.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "2-1",
-          "gpt_analysis": "🕵️ 庄家意图: 让两球却给出接近均衡xG，模型明显失真，庄家可能在重诱下盘。\n💸 资金博弈: 缺乏Shin与散户细节，但机构重诱下盘说明市场对强队大胜存分歧。\n🎯 破局逻辑: 荷甲环境天然偏开放，若让两球成立则需强队高产，优先主胜但不盲信穿深盘。\n总结: 盘口与xG错位很大，更像主胜但未必轻松穿两球的剧本。",
+          "gpt_analysis": "🕵️ 庄家意图: 让到两球但给出的xG仅1.25比1.09极不匹配，名气盘远大于真实进球差，庄家在诱深盘。\n💸 资金博弈: 已明示重诱下盘，说明市场会自然追主大胜，机构反而更怕赢球不穿。\n🎯 破局逻辑: 荷甲环境支持进球，但不支持如此失真让幅，主胜可有，净胜受限更合理。\n总结: 埃因霍温名气虽大，但模型不支持轻松穿两球，防赢球输盘比分。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "2-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队实力碾压，庄家隐含xG差距不大可能是模型偏差，盘口信号提示机构重诱下盘，庄家实则看好主队大胜。\n💸 资金博弈: 机构重诱下盘说明资金被刻意引导至客队，主队方向阻力被扫清，聪明资金大概率顺势介入主队。\n🎯 破局逻辑: 榜首打保级队，实力悬殊且机构刻意造冷下盘，主队主场火力全开，看好主队轻松击穿盘口。\n总结: 机构重诱下盘掩护主队，实力碾压下主队大胜可期。",
+          "gemini_score": "3-0",
+          "gemini_analysis": "🕵️ 庄家意图: 机构重诱下盘信号极其罕见，说明庄家在利用客队保级题材或某种假象疯狂诱导散户去下盘，实则主队将大胜。\n💸 资金博弈: 重诱下盘意味着散户资金被大量引导至客队方向，主队大胜的赔付压力被完美对冲，庄家有恃无恐。\n🎯 破局逻辑: 荷甲领头羊实力碾压，机构重诱下盘是极强的反向信号，主队必将迎来一场酣畅淋漓的大胜，直奔大比分。\n总结: 机构罕见重诱下盘，领头羊必将迎来大胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 76.5,
+          "ai_avg_confidence": 86.6,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.39,
           "model_agreement": false,
@@ -18576,7 +18583,7 @@
               "6球极低6.5≤13",
               "5球极低4.7≤8"
             ],
-            "ai_others_count": 0
+            "ai_others_count": 1
           },
           "sharp_detected": false,
           "cold_signals_count": 0,
@@ -18877,7 +18884,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 48.5,
+        "recommend_score": 50.1,
         "is_recommended": false
       },
       {
@@ -18991,23 +18998,23 @@
           "home_win_pct": 12.3,
           "draw_pct": 16.1,
           "away_win_pct": 71.6,
-          "confidence": 59.0,
+          "confidence": 60.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "0-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜为主导但并未开到极深，庄家防范的是客队效率不足。\n💸 资金博弈: Sharp流向客胜，与Shin同向；虽有长客陷阱标签，但资金未逆转客方。\n🎯 破局逻辑: 西甲保级主场会拖节奏，xG合计2.35，中低比分下客胜小胜仍是主分布。\n总结: 客队方向仍真，但更像克制式赢球，不是轻松屠杀。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜47.6%配客1.39xG，强队优势真实存在，但并未开到绝对碾压，仍防保级主队缠斗。\n💸 资金博弈: Sharp同向客胜且客侧降水，虽有长客陷阱标签，但资金未出现明显反转信号。\n🎯 破局逻辑: 西甲保级主队会压强度，故更倾向客队小胜而非大捷，0-1和1-2最合逻辑。\n总结: 客强是真，但保级战抬高主队抵抗，穿深不易。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "0-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队实力远超主队，Shin概率47.6%合理，庄家并未过度造热客队，长客陷阱可能是虚晃一枪。\n💸 资金博弈: Sharp资金明确流向客胜，且客胜降水，散户热度未超50%，资金面健康，聪明钱顺势而为。\n🎯 破局逻辑: 虽有保级死拼题材，但硬实力差距过大，Sharp资金力挺客队，xG数据客队占优，看好客队实力碾压。\n总结: 硬实力差距悬殊，Sharp资金顺势介入客队取胜。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队保级死拼，庄家利用此题材制造主队拉力，但客队xG优势明显，庄家实则在掩护客队顺利打出。\n💸 资金博弈: Sharp资金明确流向客胜，且客队赔率降水，聪明钱无视主队保级题材，坚定看好实力更强的客队。\n🎯 破局逻辑: 虽然有长客陷阱和保级死拼题材，但Sharp资金的流入是决定性的，客队实力碾压，看好客队反客为主。\n总结: Sharp资金无视保级题材，实力客队带走三分。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 79.3,
+          "ai_avg_confidence": 80.1,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -19422,7 +19429,7 @@
             "model": 0.38
           }
         },
-        "recommend_score": 35.32,
+        "recommend_score": 35.72,
         "is_recommended": false
       },
       {
@@ -19526,29 +19533,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 67.0,
           "draw_pct": 16.4,
           "away_win_pct": 16.6,
-          "confidence": 70.0,
-          "risk_level": "低",
+          "confidence": 69.0,
+          "risk_level": "中",
           "over_under_2_5": "大",
           "both_score": "是",
           "gpt_score": "2-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜占优但客队进球期望1.29不低，庄家没有把客队防线脆化到底。\n💸 资金博弈: 散户略偏主，无明显Sharp修正，市场定价相对中性。\n🎯 破局逻辑: 澳超高波动高进球，xG合计3.10，最优解在双方都进球的3-4球区间。\n总结: 这是明显的对攻盘，单防主胜不够，必须带平负型大比分。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜五成但客xG达1.29，庄家并不担心客队哑火，更像开放比赛中的主队略优盘。\n💸 资金博弈: 无明显Sharp单边，市场分布平稳，需回归联赛属性与xG做比分中枢。\n🎯 破局逻辑: 澳超向来高波动，主1.80客1.29合计超3球，优先双方进球和3-4球区间。\n总结: 澳超不宜死守小球，最优是双方进球下的主小优或平局。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "2-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率50.3%占据优势，庄家隐含xG主队1.804远超客队，庄家模型对主队进攻端极度看好。\n💸 资金博弈: 散户51%支持主队，热度处于临界点但未形成绝对反指，资金分布相对合理，无明显诱盘迹象。\n🎯 破局逻辑: 澳超大球属性强，主队xG极高但防守不稳，客队状态不错，看好双方互捅，主队凭借火力微弱胜出或平局。\n总结: 庄家模型力挺主队进攻，澳超对攻战看好主队不败。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率达到50.3%，xG也占据绝对优势，庄家对主队主场反弹给予了较高的防范和预期。\n💸 资金博弈: 散户资金分布与Shin概率基本一致，未见明显异常，属于正常的实力盘博弈，主队受到一定支持。\n🎯 破局逻辑: 澳超自带大球属性，主队xG优势明显但近期状态一般，客队状态较好，看好主队主场不败，比分偏大。\n总结: 主队xG占优且获庄家支持，主场有望坐和望赢。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 76.2,
+          "ai_avg_confidence": 72.8,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -19939,8 +19946,8 @@
             "model": 0.18
           }
         },
-        "recommend_score": 79.8,
-        "is_recommended": true
+        "recommend_score": 67.4,
+        "is_recommended": false
       },
       {
         "home_team": "柏太阳神",
@@ -20054,18 +20061,18 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜名义领先，但优势很薄，庄家没有完全买入鹿岛近况强势。\n💸 资金博弈: 散户分布接近Shin，无明显过热，资金层面更像均衡博弈。\n🎯 破局逻辑: 日职普遍压节奏，xG合计2.28，历史交锋偏客但盘口未放大，平局EV最高。\n总结: 基本面偏客但盘口偏主，最合理落点是低比分胶着。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin偏主，但客队近期状态与交锋都占优，主1.24客1.04仅是微弱差距，定价偏主。\n💸 资金博弈: 散户无极热，但基本面与赔率方向轻度背离，庄家对主场面子给得过多。\n🎯 破局逻辑: 日职整体低比分，合计xG约2.28，首选平局，再防客队效率制胜的0-1。\n总结: 盘口偏主但真实更均衡，鹿岛至少不败的比分更有性价比。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率41.4%占优，但交锋记录完全处于下风，庄家有利用主场优势强行拉高主队预期的嫌疑。\n💸 资金博弈: 散户42%支持主队，客队近期状态极佳却未受资金追捧，资金面存在错位，客队方向阻力较小。\n🎯 破局逻辑: 客队状态与交锋双重碾压，庄家模型却偏向主队，典型的数据与基本面背离，看好客队延续克星本色。\n总结: 交锋克星且状态占优，客队被庄家低估值得追捧。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队近期状态极佳且交锋占优，但庄家却给出主队41.4%的Shin概率和更高的xG，明显在防范主队。\n💸 资金博弈: 散户资金并未过度追捧状态更好的客队，资金面相对平衡，庄家的真实意图可能在于保护主队不败。\n🎯 破局逻辑: 日职联经常出现强队客场翻车，庄家数据力挺主队，结合主队半场领先概率较高，看好主队主场拿分。\n总结: 庄家数据逆势挺主队，防范客队大热不胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 76.9,
+          "ai_avg_confidence": 77.1,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -20548,32 +20555,32 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 58.5,
           "draw_pct": 21.0,
           "away_win_pct": 20.5,
-          "confidence": 74.0,
+          "confidence": 72.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜略强且主队xG占优，庄家支持主队但未给绝对碾压。\n💸 资金博弈: 散户与Shin接近，暂无明显诱导式单边结构。\n🎯 破局逻辑: 芬超样本小波动大，但客队开局差，主队主场强，优先主队小胜区间。\n总结: 主队方向成立，但总进球不宜抬太高，1球主导最稳。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜略高且xG优势不大，庄家把比赛压在主队可控优势区，而非大胜模板。\n💸 资金博弈: 市场无明显偏斜，主队题材面更好但赔率未极端，说明平局仍被认真防守。\n🎯 破局逻辑: 芬超节奏中性，主1.29客1.18意味着双方都有球，主场面值更适合1球差。\n总结: 主队稍优但难碾压，主小胜或被逼平的路径最真实。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "2-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队状态极佳且Shin概率占优，庄家隐含xG也支持主队，盘口设置合理，未见明显诱盘意图。\n💸 资金博弈: 散户资金分布均匀，主队39%的支持率并未形成大热，资金流向健康，正路打出概率高。\n🎯 破局逻辑: 主场龙对阵客场虫，基本面与庄家模型高度一致，主队攻防两端均占优，看好主队顺利拿下比赛。\n总结: 基本面与数据共振，主队状态火热稳拿三分。",
+          "gemini_score": "1-0",
+          "gemini_analysis": "🕵️ 庄家意图: 主队排名和状态均占优，庄家给出的Shin概率和xG也合理反映了这一优势，未见明显诱盘动作。\n💸 资金博弈: 散户资金分布均匀，主队未形成大热，资金流向健康，属于正常的实力体现。\n🎯 破局逻辑: 主队主场状态上佳，客队客场低迷，实力差距明显，正路看好主队顺利拿下比赛。\n总结: 实力盘正常体现，主场龙稳吃客场虫。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 79.2,
+          "ai_avg_confidence": 74.6,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.39,
-          "model_agreement": false,
+          "ai_consensus_strength": 0.67,
+          "model_agreement": true,
           "xG_home": 1.29,
           "xG_away": 1.18,
           "crs_implied_probs": {
@@ -20958,8 +20965,8 @@
             "model": 0.25
           }
         },
-        "recommend_score": 65.7,
-        "is_recommended": false
+        "recommend_score": 74.9,
+        "is_recommended": true
       },
       {
         "home_team": "拉斯决心",
@@ -21068,23 +21075,23 @@
           "home_win_pct": 21.3,
           "draw_pct": 54.1,
           "away_win_pct": 24.6,
-          "confidence": 51.0,
+          "confidence": 50.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客队Shin略优但只是一线之差，庄家对两边都保留较大防守。\n💸 资金博弈: 散户分布均衡，无极端热度，市场尚未形成单边共识。\n🎯 破局逻辑: 沙职xG合计2.48，中枢在2-3球，实力接近且主强客弱特征明显，平局优先。\n总结: 赔率没有给出明确方向，最值钱的是对称结构下的平局核心位。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin略偏客，但主队积分与主场表现更好，庄家用客方名气制造均衡盘面。\n💸 资金博弈: 散户较均匀，没有极热引导，说明机构对三项结果都留有相当对冲空间。\n🎯 破局逻辑: 沙职中段对碰，主1.20客1.28接近对等，最佳区间是双方进球后一球差或平局。\n总结: 这是标准五五开结构，首选平，次选主场小胜。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率略高，但主队主场状态极佳，庄家在利用客队微弱的数据优势平衡盘口资金。\n💸 资金博弈: 散户资金分布极为均衡，无任何一方形成热度，属于典型的实力胶着战，资金面无异常信号。\n🎯 破局逻辑: 主队主场战绩出色且交锋占优，客队客场表现平庸，在无明显资金干扰下，主队主场不败是首选。\n总结: 主场龙属性加持，资金均衡下看好主队坐和望赢。",
+          "gemini_analysis": "🕵️ 庄家意图: 双方xG极为接近，客队Shin概率略高，庄家对这场中下游球队的较量态度暧昧，倾向于势均力敌。\n💸 资金博弈: 散户资金分布均匀，未见明显倾斜，市场对本场比赛的分歧较大，缺乏明确的资金主导方向。\n🎯 破局逻辑: 主队主场战绩不错，客队客场一般，但双方实力接近，平局是双方都能接受的结果，首选平局。\n总结: 实力接近且资金分散，平局为最可能落点。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 71.9,
+          "ai_avg_confidence": 69.3,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -21476,7 +21483,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 49.62,
+        "recommend_score": 49.22,
         "is_recommended": false
       },
       {
@@ -21578,32 +21585,32 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 60.9,
           "draw_pct": 19.1,
           "away_win_pct": 20.0,
-          "confidence": 70.0,
-          "risk_level": "低",
+          "confidence": 69.0,
+          "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "2-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜优势明确，主队xG达到1.40，庄家更防主队输出而非失守。\n💸 资金博弈: 散户结构平稳，没有形成危险的大热挤压。\n🎯 破局逻辑: 德乙保级客场脆弱，客队客战很差，但主队稳定性一般，故以小胜优先。\n总结: 主队占优真实存在，但最合理兑现方式仍是险胜而非大穿。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜42.6%配1.40比1.17，主队优势存在但并不深，庄家主要防主场一球拿下。\n💸 资金博弈: 散户与Shin一致但热度不高，未形成诱盘阈值，市场仍认可主队基本盘。\n🎯 破局逻辑: 德乙比赛波动偏大，但客队客场弱势明显，主队赢球路径集中在2-1与1-0。\n总结: 主队赢面更实，但穿深有限，一球小胜为核心。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "2-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率42.6%占据主导，庄家隐含xG主队1.4压制客队，庄家对主队主场取胜抱有较强信心。\n💸 资金博弈: 散户43%支持主队，热度适中未触发反指，客队客场低迷难以吸引筹码，资金流向符合基本面。\n🎯 破局逻辑: 主队实力与主场优势明显，客队客场虫属性严重，庄家模型与基本面契合，看好主队正路打出。\n总结: 主场优势明显且数据支持，主队正路取胜无悬念。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "🕵️ 庄家意图: 主队xG和Shin概率均占据优势，庄家对主队的主场战力给予了肯定，符合双方排名和实力的差距。\n💸 资金博弈: 散户资金分布合理，主队43%的支持率并未形成大热，资金面健康，有利于主队顺利打出。\n🎯 破局逻辑: 德乙主场优势明显，主队主场状态不错，客队客场低迷，正路看好主队全取三分。\n总结: 主队实力占优且未大热，主场称雄在望。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 78.4,
+          "ai_avg_confidence": 76.4,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.39,
-          "model_agreement": false,
+          "ai_consensus_strength": 0.67,
+          "model_agreement": true,
           "xG_home": 1.05,
           "xG_away": 1.47,
           "crs_implied_probs": {
@@ -21991,7 +21998,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 56.58,
+        "recommend_score": 54.18,
         "is_recommended": false
       },
       {
@@ -22095,29 +22102,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 26.2,
           "draw_pct": 54.1,
           "away_win_pct": 19.7,
-          "confidence": 75.0,
-          "risk_level": "低",
+          "confidence": 74.0,
+          "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜仍被放在前面，更多是主场壳价，实际优势很薄。\n💸 资金博弈: 散户未明显失衡，但基本面与盘面主导相反，存在主队虚热嫌疑。\n🎯 破局逻辑: 主队近况差，客队对赛占优，xG合计2.47，平负比分的EV更高。\n总结: 这是基本面逆盘，主队不宜高看，客队至少拿分更顺逻辑。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin略偏主，但主队近期崩盘且交锋劣势，1.32比1.15的xG差不足支撑主让姿态。\n💸 资金博弈: 资金面平静时更要信基本面，主队名义主场被高估，客队方向性价比更高。\n🎯 破局逻辑: 德乙保级压力下比赛更谨慎，首选低比分平或客队效率胜，不追主队反弹神话。\n总结: 盘口给了主队过多尊重，真实更接近客不败。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队近期状态极度低迷，但Shin概率仍给到41%，庄家明显在利用主场优势强行拉升主队预期诱盘。\n💸 资金博弈: 散户41%支持主队，与Shin概率高度重合，说明散户被庄家模型成功诱导，客队方向阻力被抽空。\n🎯 破局逻辑: 主队状态烂且交锋全败，庄家强开高概率实为诱导，客队状态更佳且交锋碾压，看好客队不败。\n总结: 庄家强拉主队预期诱盘，客队交锋碾压有望拿分。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队近期状态极度低迷，但庄家依然给出了41%的Shin概率和较高的xG，明显在防范主队触底反弹。\n💸 资金博弈: 散户资金并未因主队状态差而抛弃主队，说明市场对主队反弹有一定预期，资金面处于博弈状态。\n🎯 破局逻辑: 主队保级压力巨大，庄家数据逆势挺主，结合德乙保级队的爆发力，看好主队主场不败甚至取胜。\n总结: 庄家逆势防范主队，保级狂魔有望触底反弹。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 78.7,
+          "ai_avg_confidence": 75.9,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -22507,7 +22514,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 91.22,
+        "recommend_score": 78.82,
         "is_recommended": true
       },
       {
@@ -22611,29 +22618,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "0-7",
+          "predicted_score": "3-4",
           "predicted_label": "负其他",
           "is_score_others": true,
           "home_win_pct": 16.5,
           "draw_pct": 19.1,
           "away_win_pct": 64.4,
-          "confidence": 78.0,
+          "confidence": 77.0,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "0-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜接近五成且主队xG仅1.02，庄家明显更防主队哑火。\n💸 资金博弈: 散户与Shin同向但未过热，客胜属于健康热度。\n🎯 破局逻辑: 主队持续低迷，客队稳定，法乙节奏偏慢，优先客队低比分带走。\n总结: 客队赢面较实，最常见兑现是控制型小胜。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜接近五成且xG优势明显，庄家对客队赢球路径定价清晰，主队进攻被明显压制。\n💸 资金博弈: 散户与Shin同向但未过热，说明客胜是真实强势而非纯市场跟风产物。\n🎯 破局逻辑: 法乙节奏偏慢，主1.02客1.52适合客队低比分取胜，0-1与0-2优先。\n总结: 客队面、势、模都占优，最像法系低比分客胜。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "0-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率近50%，庄家隐含xG客队1.524大幅领先，庄家对客队实力碾压态势毫不掩饰。\n💸 资金博弈: 散户50%支持客队，虽有一定热度但未超60%警戒线，资金流向与硬实力差距匹配，无明显诱盘。\n🎯 破局逻辑: 主队状态极差且主场虫，客队实力与状态双重碾压，xG数据支持客队进球，看好客队客场全取三分。\n总结: 实力与状态双重碾压，客队正路打出概率极高。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队xG和Shin概率均占据绝对优势，庄家对客队的实力给予了充分认可，主队状态低迷难以被信任。\n💸 资金博弈: 散户资金50%流向客队，属于正常的实力体现，并未达到极度大热的警戒线，资金面相对安全。\n🎯 破局逻辑: 法乙主队状态极差，客队实力碾压且状态稳定，正路看好客队客场带走胜利，比分偏小。\n总结: 实力差距悬殊，客队正路打出无悬念。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 83.5,
+          "ai_avg_confidence": 80.2,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -23025,7 +23032,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 74.48,
+        "recommend_score": 74.08,
         "is_recommended": true
       },
       {
@@ -23140,18 +23147,18 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客队Shin略优但没有形成明显强侧，庄家对主队主场韧性有顾忌。\n💸 资金博弈: 散户分布自然，资金未将客胜推到危险高热。\n🎯 破局逻辑: 法乙总进球常压缩，xG合计2.42，客队状态更佳但主队交锋占优，先平后客。\n总结: 客队更像不败盘，平局是最高性价比落点。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜略高但xG差仅0.06，庄家不愿把客队做深，明显尊重主队主场抗性。\n💸 资金博弈: 散户分散，市场无单边倾向，平局是庄家最自然的缓冲结果。\n🎯 破局逻辑: 法乙常见胶着，客队状态更强但主队不易被打穿，平与客小胜最有EV。\n总结: 客队状态更热，却仍难彻底摆脱法乙平局磁场。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队排名远超主队，但Shin概率仅37.9%，庄家对客队客场取胜信心不足，有意防范主队交锋优势。\n💸 资金博弈: 散户资金分布均衡，未出现单边热度，主队交锋占优题材抵消了客队排名优势带来的资金压力。\n🎯 破局逻辑: 主队交锋克星且近期状态不错，客队虽排名高但客场作战，庄家模型偏向保守，首选平局防客胜。\n总结: 交锋克星属性发威，庄家保守态度下看好平局。",
+          "gemini_analysis": "🕵️ 庄家意图: 双方xG极为接近，庄家给出的Shin概率也相差无几，这是一场势均力敌的较量，庄家态度中立。\n💸 资金博弈: 散户资金分布均匀，未见明显倾斜，市场对本场比赛的分歧较大，缺乏明确的资金主导方向。\n🎯 破局逻辑: 主队交锋占优但客队近期状态极佳，双方互有顾忌，平局是大概率事件，客队稍占优势。\n总结: 势均力敌且资金分散，平局为首选落点。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 74.1,
+          "ai_avg_confidence": 74.6,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -23652,29 +23659,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "0-7",
+          "predicted_score": "3-4",
           "predicted_label": "负其他",
           "is_score_others": true,
           "home_win_pct": 20.4,
           "draw_pct": 16.8,
           "away_win_pct": 62.8,
-          "confidence": 75.0,
-          "risk_level": "低",
+          "confidence": 74.0,
+          "risk_level": "中",
           "over_under_2_5": "大",
           "both_score": "是",
           "gpt_score": "1-2",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜略占优且双方xG都不低，庄家明显防守的是开放式比赛。\n💸 资金博弈: 散户对客胜支持有限，热度不算危险，市场较理性。\n🎯 破局逻辑: 荷乙天然大球联赛，xG合计3.02，双方都有失球和进球惯性，优先BTTS。\n总结: 这是典型荷乙互射局，客队稍优但不宜脱离大球框架。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜43.5%且客1.63xG，庄家对客队进球能力评估较高，但也保留主队进球弹性。\n💸 资金博弈: 无明显Sharp对冲，赔率更多反映联赛大球特征与客队实力小优的常规定价。\n🎯 破局逻辑: 荷乙总量高，主1.40客1.63天然落在3球以上，优先1-2与2-2等互射比分。\n总结: 荷乙重攻轻守，客优但最怕演成对攻拉锯。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-2",
-          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率43.5%占优，庄家隐含xG客队1.627火力强劲，庄家模型真实反映了双方实力差距。\n💸 资金博弈: 散户43%支持客队，热度合理，主队近期状态一般难以吸引筹码，资金面平稳支持客队打出。\n🎯 破局逻辑: 荷乙大球属性，客队进攻火力猛且客场状态不错，主队防守存在隐患，看好客队反客为主拿下比赛。\n总结: 进攻火力压制，客队实力占优顺势打出。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队xG和Shin概率均占优，庄家对客队的实力给予了认可，符合双方排名差距。\n💸 资金博弈: 散户资金43%流向客队，属于正常的实力体现，未形成大热，资金面健康。\n🎯 破局逻辑: 荷乙大球属性强，客队实力更强且需要巩固排名，看好客队客场不败，比分偏大。\n总结: 客队实力占优且战意充足，客场坐和望赢。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 79.3,
+          "ai_avg_confidence": 75.8,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -24055,7 +24062,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 71.96,
+        "recommend_score": 59.56,
         "is_recommended": false
       },
       {
@@ -24159,29 +24166,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 39.2,
           "draw_pct": 41.3,
           "away_win_pct": 19.5,
-          "confidence": 51.0,
+          "confidence": 50.0,
           "risk_level": "中",
           "over_under_2_5": "大",
           "both_score": "否",
           "gpt_score": "2-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜72%虽热，但主队xG达2.22且客队仅0.77，庄家模型支持压制局。\n💸 资金博弈: 散户主胜过热，顺主存在赔率价值损耗，但无Sharp逆向证据。\n🎯 破局逻辑: 德甲强弱分层明显，主队欧战席位压力足，主导型赢球最符合数学中枢。\n总结: 主胜热但底层xG足够硬，比分上以主队零封或半零封为主。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜72%属强压，但客xG仅0.77，庄家最担心的是主队顺利赢球，不一定是惨案。\n💸 资金博弈: 散户72%大热主胜，热门方向赔率已极便宜，比分上需规避过度追捧的4球以上。\n🎯 破局逻辑: 德甲强弱分明但客队进攻弱，主胜大概率成立，2-0和3-0是赔率与模型交汇点。\n总结: 主胜可信，但极热下更适合中等幅度赢球而非无限放大。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率高达72%，庄家隐含xG主队2.217极度夸张，庄家在利用主队强势疯狂造热主胜。\n💸 资金博弈: 散户72%重注主队形成绝对大热反指，主胜超热信号触发，聪明资金必然在暗中布局防冷。\n🎯 破局逻辑: 大热必死逻辑触发，主队虽强但筹码过于拥挤，必须在比分上规避主队大胜，防范平局或一球小胜。\n总结: 主胜极度大热触发反指，防范主队赢球输盘或爆冷平局。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率高达72%，庄家利用主队强队形象和近期好状态疯狂造热主队，实则暗藏杀机。\n💸 资金博弈: 散户72%的资金涌入主胜，形成绝对的单边大热，触发大热必死逻辑，庄家面临巨大的赔付风险。\n🎯 破局逻辑: 主胜超热是致命毒药，必须在比分上规避主队大胜顺利打出，防范平局甚至客胜冷门，比分不宜过大。\n总结: 主胜极度大热触发反指，防范冷门平局。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 82.8,
+          "ai_avg_confidence": 82.3,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.39,
           "model_agreement": false,
@@ -24594,7 +24601,7 @@
             "model": 0.26
           }
         },
-        "recommend_score": 38.06,
+        "recommend_score": 37.66,
         "is_recommended": false
       },
       {
@@ -24698,7 +24705,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 38.5,
@@ -24709,11 +24716,11 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "2-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜73.2%极强且客队xG仅0.58，庄家核心防线是客队难进球。\n💸 资金博弈: 散户主胜74%过热，赔率便宜但缺少逆向资金信号，热度更多影响EV非方向。\n🎯 破局逻辑: 意甲强弱战常见控场赢球，xG合计2.61，主队两到三球输出最集中。\n总结: 虽然主胜很热，但客队进攻期望太低，主队零封赢球仍是主剧本。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜73.2%配2.03比0.58，庄家明确看主队控制局面，客队进球空间被严重压缩。\n💸 资金博弈: 散户74%压主极热，但客胜太高且无逆向Sharp，主胜真实仍强，只防赢法保守。\n🎯 破局逻辑: 意甲强队主场更偏管理型赢球，2-0比4-0更符合大热环境下的兑现效率。\n总结: 主胜无疑，关键是防热度过高导致赢而不疯。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率73.2%极高，庄家隐含xG主队2.033，盘口深度看似合理实则在掩护主队大热的风险。\n💸 资金博弈: 散户74%重注主队形成史诗级大热反指，筹码极度失衡，庄家面临巨大赔付压力，必然干预赛果。\n🎯 破局逻辑: 绝对大热必死，主队实力虽强但已被筹码绑架，必须规避主队顺利大胜，博取平局或主队艰难小胜。\n总结: 史诗级大热反指，庄家控盘下主队难获大胜。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率高达73.2%，庄家利用主队榜首光环疯狂造热，实则在掩护客队赢下盘口。\n💸 资金博弈: 散户74%的资金涌入主胜，形成绝对大热，大热必死定律下，主队极难打穿盘口，甚至有爆冷风险。\n🎯 破局逻辑: 意甲末期强队经常放水，主胜超热必须防范，结合客队保级战意，看好主队最多赢一球，甚至平局。\n总结: 主胜极度大热，防范强队放水赢球输盘。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
@@ -25247,29 +25254,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 15.4,
           "draw_pct": 37.6,
           "away_win_pct": 47.0,
-          "confidence": 58.0,
+          "confidence": 57.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "0-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜接近六成，但客场近况一般，庄家不敢把盘做得更狠。\n💸 资金博弈: 散户客胜58%略热，无Sharp分流，资金结构偏向客队但不够极端。\n🎯 破局逻辑: 法甲中上游客战常见低效赢球，xG合计2.70，客队优势在组织质量而非屠杀。\n总结: 客队仍是首选，但比分不宜夸张，最像一球胜负盘。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜59.1%偏高，但客队客场近况一般，庄家更像借排名继续强化客胜叙事。\n💸 资金博弈: 散户58%跟客，超热但无Sharp支撑，热门方向风险抬升，平局不可不防。\n🎯 破局逻辑: 法甲总量不高，主0.92客1.79更接近客小胜或被主队拖平，不追开放大比分。\n总结: 客队纸面占优，但热度过高，最优是客小胜兼防平。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队排名高且Shin概率59.1%，但庄家让球盘口偏浅，明显在利用客队名气诱导散户资金流入客胜。\n💸 资金博弈: 散户58%重注客队形成大热反指，客胜超热信号触发，聪明资金大概率已提前埋伏主队不败。\n🎯 破局逻辑: 客胜大热且盘口支撑不足，主队主场具备一定抗衡能力，大热必死逻辑下坚决看好主队捍卫主场。\n总结: 客胜大热且盘口偏浅，主队主场有望阻击强敌。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率高达59.1%，庄家利用客队排名第二的优势强行造热客队，实则在掩护主队主场拿分。\n💸 资金博弈: 散户58%的资金涌入客胜形成大热，触发反指逻辑，庄家在暗中保护主队不败方向。\n🎯 破局逻辑: 法甲主场优势不可忽视，客胜超热是明确的诱盘信号，坚决走主队不败，首选平局。\n总结: 客胜大热触发反指，主队主场借势阻击。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 82.8,
+          "ai_avg_confidence": 81.0,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.5,
           "model_agreement": false,
@@ -25652,7 +25659,7 @@
             "model": 0.18
           }
         },
-        "recommend_score": 38.0,
+        "recommend_score": 37.6,
         "is_recommended": false
       },
       {
@@ -25763,23 +25770,23 @@
           "home_win_pct": 20.3,
           "draw_pct": 56.0,
           "away_win_pct": 23.7,
-          "confidence": 53.0,
+          "confidence": 52.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 双方Shin接近，平局29.5%偏高，庄家明示这是均衡盘。\n💸 资金博弈: 散户分布平稳，无明显资金偏斜，盘口可信度较高。\n🎯 破局逻辑: 英超中下游碰撞常先求不败，xG仅2.13，低比分尤其1-1最有EV。\n总结: 没有必要强行分胜负，平局是最贴近盘口微观结构的答案。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin主客接近，xG也几乎持平，庄家没有真实倾向，平局是核心对冲点。\n💸 资金博弈: 散户分布均衡且无Steam异动，资金面无法打破均衡结构，应重回数学中枢。\n🎯 破局逻辑: 英超中下游对碰但总量仅2.13，首选1-1，其次是单方偷一球的0-1或1-0。\n总结: 这场没有明显庄家立场，平局是最高性价比答案。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 双方Shin概率接近，庄家隐含xG也几乎持平，庄家模型认为这是一场势均力敌的较量，无明显倾向。\n💸 资金博弈: 散户资金分布极为均匀，无任何一方形成热度，资金面完全反映了基本面的胶着状态。\n🎯 破局逻辑: 英超中下游球队交锋，实力接近且资金平稳，客队近期状态略好，首选平局，次防客队偷袭得手。\n总结: 实力胶着且资金平稳，平局是双方最易接受的结果。",
+          "gemini_analysis": "🕵️ 庄家意图: 双方xG和Shin概率极为接近，庄家对这场英超中下游球队的较量态度中立，未见明显倾向。\n💸 资金博弈: 散户资金分布均匀，未形成单边热度，市场博弈处于平衡状态，符合双方实力接近的现状。\n🎯 破局逻辑: 双方近期状态均一般，缺乏必胜把握，平局是双方最容易接受的结果，比分偏小。\n总结: 实力接近且资金平衡，闷平为最可能结果。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 75.0,
+          "ai_avg_confidence": 73.2,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -26170,7 +26177,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 43.8,
+        "recommend_score": 43.4,
         "is_recommended": false
       },
       {
@@ -26279,29 +26286,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 39.8,
           "draw_pct": 38.5,
           "away_win_pct": 21.7,
-          "confidence": 80.0,
+          "confidence": 79.0,
           "risk_level": "低",
           "over_under_2_5": "大",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 皇马Shin领先，但并未拉到绝对统治，庄家对贝蒂斯主场有防守。\n💸 资金博弈: Sharp流向主胜，与表面客强背离，说明皇马热度面临真实阻击。\n🎯 破局逻辑: 西甲强强对话更重节奏控制，xG合计2.94但主队主场平局属性强，防主拿分。\n总结: 皇马名气在前，真实结构却提示贝蒂斯具备阻击能力。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin偏皇马且客1.79xG占优，但庄家未把客胜压到极限，明显顾忌主场阻击。\n💸 资金博弈: Sharp流向主胜，与表面客强叙事背离，说明机构在防贝蒂斯主场抢分。\n🎯 破局逻辑: 西甲强强对话不宜线性看名气，主队主场韧性高，首选平局再防主队爆冷。\n总结: 皇马面子盘偏热，真正高EV在贝蒂斯不败比分。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队作为豪门Shin概率仅53.4%，庄家隐含xG客队占优但未形成碾压，庄家对客队客场大胜存疑。\n💸 资金博弈: 赔率变动显示客胜降水，但Sharp资金却逆向流入主胜，形成反向Steam信号，聪明钱在狙击豪门。\n🎯 破局逻辑: 豪门客场作战自带热度，Sharp资金逆向流入主队说明有内幕或深度逻辑支撑，坚决跟进主队不败。\n总结: Sharp资金逆向狙击豪门，主队有望爆冷抢分。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队名气极大且xG占优，但庄家赔率变动却出现客队降水假象，实则在掩护主队打出。\n💸 资金博弈: 客队降水吸引散户，但Sharp资金明确流向主胜，形成反向Steam，聪明钱在暗中布局主队。\n🎯 破局逻辑: 西甲强强对话，Sharp资金力挺主队是核心信号，主队主场战力不俗，看好主队阻击皇马。\n总结: Sharp资金暗挺主队，皇马客场恐遭阻击。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 86.6,
+          "ai_avg_confidence": 82.8,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -26725,7 +26732,7 @@
             "model": 0.31
           }
         },
-        "recommend_score": 75.36,
+        "recommend_score": 74.96,
         "is_recommended": true
       },
       {
@@ -26827,32 +26834,32 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "1-0",
-          "predicted_label": "1-0",
+          "predicted_score": "1-1",
+          "predicted_label": "1-1",
           "is_score_others": false,
-          "home_win_pct": 58.2,
-          "draw_pct": 22.6,
-          "away_win_pct": 19.2,
-          "confidence": 74.0,
+          "home_win_pct": 39.1,
+          "draw_pct": 41.6,
+          "away_win_pct": 19.3,
+          "confidence": 63.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜略优但幅度有限，庄家对主场端给出微弱加成。\n💸 资金博弈: 散户与Shin基本一致，暂无明显诱导资金痕迹。\n🎯 破局逻辑: 葡超中游对碰，xG合计2.31，客队客场差是关键，主队小胜和平局最聚集。\n总结: 主队微弱优势真实存在，但比赛大概率落在一球以内分差。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜40.7%仅微优，xG 1.25比1.07说明主队优势主要来自主场与细节，不是压倒性。\n💸 资金博弈: 散户均衡，无异常热度，赔率表达较真实，平局与主小胜是机构主要防线。\n🎯 破局逻辑: 葡超节奏偏稳，双方实力接近但客场弱点明显，主队1球小胜最顺势。\n总结: 这是典型主场细微优势盘，最像1-0或2-1的小刀切法。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "1-0",
-          "gemini_analysis": "🕵️ 庄家意图: 双方同分但主队Shin概率40.7%占优，庄家隐含xG主队1.246领先，庄家模型更认可主队的主场优势。\n💸 资金博弈: 散户资金分布合理，主队41%支持率与Shin概率吻合，未形成大热，资金流向健康无诱盘。\n🎯 破局逻辑: 实力相当的较量中主场优势被庄家放大，客队客场状态极差，顺应庄家模型看好主队坐和望赢。\n总结: 同分卡位战主场优势显现，庄家模型力挺主队不败。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "🕵️ 庄家意图: 双方同分，但主队xG和Shin概率均占优，庄家对主队的主场优势给予了适度的倾斜和认可。\n💸 资金博弈: 散户资金分布合理，主队未形成大热，资金面健康，属于正常的实力盘博弈。\n🎯 破局逻辑: 葡超中游球队交锋，主场优势是关键，主队状态稍好，看好主队坐和望赢，首选平局。\n总结: 同分球队交锋，主场优势助主队不败。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 76.4,
+          "ai_avg_confidence": 74.0,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.67,
-          "model_agreement": true,
+          "ai_consensus_strength": 0.5,
+          "model_agreement": false,
           "xG_home": 1.25,
           "xG_away": 1.07,
           "crs_implied_probs": {
@@ -26951,10 +26958,10 @@
           "extreme_warning": "",
           "smart_money_signal": "",
           "smart_signals": [
-            "💎 主胜价值注! EV+40.4% Kelly8.6% @2.18",
-            "🔥 CLV+30.8% Edge+26.9% [主胜]",
-            "⚠️ 负CLV-25.9% [平局]",
-            "⚠️ 负CLV-44.2% [客胜]"
+            "💎 平局价值注! EV+41.2% Kelly4.7% @3.18",
+            "⚠️ 负CLV-12.1% [主胜]",
+            "🔥 CLV+36.4% Edge+32.3% [平局]",
+            "⚠️ 负CLV-43.9% [客胜]"
           ],
           "model_consensus": 11,
           "total_models": 15,
@@ -27161,24 +27168,22 @@
           "bookmaker_implied_away_xg": 1.068,
           "cold_door": {
             "is_cold_door": false,
-            "strength": 4,
+            "strength": 0,
             "level": "普通",
-            "signals": [
-              "❄️ 赔率vs模型背离25%"
-            ],
+            "signals": [],
             "sharp_confirmed": false,
             "dark_verdict": ""
           },
           "odds_pattern": "正常",
-          "result": "主胜",
+          "result": "平局",
           "value_bets": [
             {
-              "direction": "主胜",
-              "prob": 64.4,
-              "odds": 2.18,
-              "ev": 40.4,
-              "kelly_pct": 8.56,
-              "signal": "💎 主胜价值注! EV+40.4% Kelly8.6% @2.18",
+              "direction": "平局",
+              "prob": 44.4,
+              "odds": 3.18,
+              "ev": 41.2,
+              "kelly_pct": 4.72,
+              "signal": "💎 平局价值注! EV+41.2% Kelly4.7% @3.18",
               "grade": "A"
             }
           ],
@@ -27232,13 +27237,13 @@
               }
             ]
           },
-          "predictability_score": 91,
+          "predictability_score": 59,
           "fusion_weights": {
             "market": 0.67,
             "model": 0.33
           }
         },
-        "recommend_score": 71.64,
+        "recommend_score": 60.92,
         "is_recommended": false
       }
     ],
@@ -27345,7 +27350,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 16.5,
@@ -27356,18 +27361,18 @@
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "0-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜面强但未深开到碾压，庄家更防客队赢球不稳而非主队爆发。\n💸 资金博弈: 散户客胜59%偏热，无Sharp对冲，资金结构偏单边，需防客胜小胜走险。\n🎯 破局逻辑: xG总和2.78偏中上，保级题材抬高主队韧性，优先客胜但规避穿盘顺打。\n总结: 客强主弱属实，但热度过满，最优是客队一球到两球优势区间。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜Shin近六成，但客队xG仅1.82，优势明确却未到碾压，庄家更防一球客胜。\n💸 资金博弈: 散户与Shin同向压客，未见反向Sharp，只能防热门穿不深，避开大胜叙事。\n🎯 破局逻辑: 主0.96客1.82对应2-3球核心区，沙职保级战主队有搏命属性，客胜但易失球。\n总结: 客强主弱属真优势，但热门过热更像小胜或险胜结构。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队实力占优且Shin概率高达59%，但庄家并未在盘口上给予足够深度，明显在利用客队名气诱导筹码。\n💸 资金博弈: 散户59%重注客队形成大热反指，结合保级死拼题材，聪明资金大概率在暗中布局主队不败。\n🎯 破局逻辑: 大热必死逻辑触发，主队保级战意加持下防守反击，比分需规避客胜顺利打出，首选平局与主胜。\n总结: 客胜大热造势，主队保级死拼有望爆冷不败。",
+          "gemini_analysis": "🕵️ 庄家意图: 客胜Shin概率高达59%且散户极度追捧，庄家利用客队排名优势强行造热客队，实则掩护主队保级抢分意图。\n💸 资金博弈: 散户59%的资金涌入客胜形成大热必死格局，聪明资金在暗中布局主队不败方向，形成典型的散户反指。\n🎯 破局逻辑: 保级死拼题材下，主队战意远超客队，结合客胜超热的盘口微观结构，坚决走主队不败，首选平局与主胜小比分。\n总结: 客胜大热触发反指，保级主队借势抢分。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 80.8,
+          "ai_avg_confidence": 80.4,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.39,
           "model_agreement": false,
@@ -27860,31 +27865,31 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 18.6,
           "draw_pct": 36.2,
           "away_win_pct": 45.2,
-          "confidence": 64.0,
+          "confidence": 63.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-2",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜优势有限，平局概率仍高，庄家并未把AZ定成绝对强势方。\n💸 资金博弈: 散户分布均衡，无明显诱盘，资金未形成极端单侧挤压。\n🎯 破局逻辑: 荷甲节奏快，xG合计2.84支持对攻，中枢落在3球附近，客不败优先。\n总结: 这是典型荷甲开放盘，比分宜走客队占优的对攻型区间。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜占优但不足五成，xG合计2.84，庄家开法更像开放对攻而非单边客控。\n💸 资金博弈: 散户分布均衡，无极端热度，市场未形成一致，赔率对平局与客不败均留口。\n🎯 破局逻辑: 荷甲节奏快，主1.25客1.59天然利于双方进球，优先2-3球向4球扩散。\n总结: 这是典型荷甲互有进球盘，客队略优但平局与对攻比分价值更高。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: Shin概率客队占优，但主场龙属性让庄家在让球盘上保持平衡，防范主队主场抢分能力。\n💸 资金博弈: 散户资金分布相对均衡，未出现明显单边热度，资金流向符合基本面预期，无明显诱盘信号。\n🎯 破局逻辑: 荷甲风格开放，双方xG均超1.2，进球数不会太少，客队实力稍强但主队主场稳固，看好带球平局或客队险胜。\n总结: 实力均衡且无明显异常资金，看好开放式对攻分胜负或平局。",
+          "gemini_analysis": "🕵️ 庄家意图: 庄家给出的隐含xG差距不大，客队稍占优势，盘口让步合理，未见明显诱导，真实反映双方实力对比。\n💸 资金博弈: 散户资金分布较为均匀，未形成单边大热，资金流向与Shin概率基本吻合，属于正常的市场博弈。\n🎯 破局逻辑: 荷甲自带大球属性，双方近期状态均有起伏，客队实力略强但主队主场不弱，看好双方互有攻守，客队坐和望赢。\n总结: 实力盘正常博弈，客队稍占优势看好不败。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 73.2,
+          "ai_avg_confidence": 72.3,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.5,
+          "ai_consensus_strength": 0.44,
           "model_agreement": false,
           "xG_home": 1.25,
           "xG_away": 1.59,
@@ -28268,7 +28273,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 41.04,
+        "recommend_score": 40.64,
         "is_recommended": false
       },
       {
@@ -28382,26 +28387,26 @@
           "home_win_pct": 68.0,
           "draw_pct": 18.1,
           "away_win_pct": 13.9,
-          "confidence": 72.0,
+          "confidence": 70.0,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜Shin领先且xG略优，庄家对主队保级战意已有实质定价。\n💸 资金博弈: Sharp流向主胜与赔率结构一致，资金与庄家同向，不像诱主。\n🎯 破局逻辑: 西甲保级战偏谨慎，xG仅2.24，低比分主导，主队小胜或僵平最合逻辑。\n总结: 主队方向真实度较高，低总进球下优先1球胜和平局保护。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin主胜略高，主客xG接近，庄家并未把主队做成强势碾压，更像低比分分胜负。\n💸 资金博弈: Sharp流向主胜且与基本面同振，客侧降水信息弱化，主队真实受捧。\n🎯 破局逻辑: 西甲保级战通常收缩，主1.17客1.07总量偏低，1球差和小比分最稳健。\n总结: 主队真实优势有限但更扎实，低比分主不败格局最符合盘口。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "1-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队排名靠后但Shin概率却高于客队，庄家模型明显更认可主队近期主场强势状态，有意压低主胜赔付。\n💸 资金博弈: 赔率变动显示客胜降水吸引资金，但Sharp资金却逆向流入主胜，形成典型的反向Steam信号。\n🎯 破局逻辑: 聪明钱与庄家意图共振指向主队，客队客场虫属性暴露无遗，结合xG数据，主队小胜概率极高。\n总结: Sharp资金逆向流入主胜，主场龙对阵客场虫顺势打出。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "🕵️ 庄家意图: 主队排名靠后却在xG上压制客队，庄家通过赔率变动制造客队降水假象，实则在掩护主队打出。\n💸 资金博弈: 盘面显示客队降水吸引散户，但Sharp资金明确流向主胜，形成典型的反向Steam，庄家真实意图在主队。\n🎯 破局逻辑: 主队近期主场状态出色，Sharp资金的介入是决定性信号，结合庄家隐含xG的主队优势，坚决支持主胜打出。\n总结: 反向Steam显现，Sharp资金力挺主胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 85.7,
+          "ai_avg_confidence": 80.5,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.67,
-          "model_agreement": true,
+          "ai_consensus_strength": 0.5,
+          "model_agreement": false,
           "xG_home": 1.35,
           "xG_away": 0.91,
           "crs_implied_probs": {
@@ -28818,7 +28823,7 @@
             "model": 0.38
           }
         },
-        "recommend_score": 73.8,
+        "recommend_score": 63.0,
         "is_recommended": false
       },
       {
@@ -28927,7 +28932,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 15.2,
@@ -28938,18 +28943,18 @@
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜表面占优，但优势不深，庄家对主场名气给了溢价。\n💸 资金博弈: Sharp资金流向客胜，且与Shin主胜背离，属于典型反向真实信号。\n🎯 破局逻辑: 瑞超早期波动大，xG合计2.55不低，客队状态更稳，做客不败并防互射。\n总结: 名气盘偏向主队，但资金指纹更像客队拿分局。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin偏主但xG差仅0.28，庄家对主胜保护不足，明显不给马尔默强势定价。\n💸 资金博弈: Sharp指向客胜，且客侧降水，和表面主让形成背离，典型诱主盘形态。\n🎯 破局逻辑: 瑞超开季波动大，双方都有进球能力，优先客不败与对攻边缘比分。\n总结: 这是主让诱盘，真实更接近平局或客队偷走比赛。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队名气较大且Shin概率占优，但让球盘口偏浅，庄家有利用主队历史交锋优势诱导主胜的嫌疑。\n💸 资金博弈: 赔率变动显示主胜升水，Sharp资金明确流向客胜，散户44%支持主队形成一定热度，资金面背离。\n🎯 破局逻辑: 聪明钱看衰主队，客队目前排名第一状态正佳，结合资金流向，需防范主队翻车，首选平局与客胜。\n总结: Sharp资金力挺客队，主队让步不足恐难全取三分。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队xG占优且Shin概率较高，但盘口赔率变动却向客队倾斜，庄家在利用主队名气诱导主胜。\n💸 资金博弈: 客队降水且Sharp资金明确流向客胜，散户资金多停留在主队，形成资金错配，聪明钱看好客队。\n🎯 破局逻辑: 客队目前排名榜首状态正佳，Sharp资金的流入与盘口降水共振，主队虽有主场之利但难以全取三分。\n总结: Sharp资金流入客队，榜首球队客场抢分。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 82.3,
+          "ai_avg_confidence": 80.2,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -29491,23 +29496,23 @@
           "home_win_pct": 60.8,
           "draw_pct": 26.8,
           "away_win_pct": 12.4,
-          "confidence": 70.0,
-          "risk_level": "低",
+          "confidence": 69.0,
+          "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜为第一选项，但客队进球预期被压到0.84，庄家明显偏小比分。\n💸 资金博弈: 负向降水但散户未大热，客队有少量资金承接，主胜并非无脑顺打。\n🎯 破局逻辑: 西甲低节奏，xG总和2.05偏低，最佳EV在1-0/1-1这一压缩区。\n总结: 主队更像低比分险胜盘，防平价值不能丢。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜45%配主1.20客0.84，庄家明确压低总量，主队赢面主要来自零封路径。\n💸 资金博弈: 资金分布平稳，客侧虽有轻微流入但不足逆转结构，市场对平局仍有保留。\n🎯 破局逻辑: 西甲小球环境明显，合计xG仅2.05，1-0与2-0是最顺滑兑现区间。\n总结: 主队更像靠控制和主场拿下，低比分最贴近真实模型。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率高达45%，庄家隐含xG主队明显占优，对客队低迷的客场状态极度不信任。\n💸 资金博弈: 客胜降水伴随资金流入，但散户主胜热度适中，庄家可能在利用降水掩护主胜顺利打出。\n🎯 破局逻辑: 主队主场强势且xG压制，客队客场虫属性难改，资金面未见明显异常，正路看好主队取胜。\n总结: 基本面与庄家模型高度吻合，主场龙稳吃客场虫。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队xG明显占优，Shin概率高达45%，庄家对主队主场战力给予充分肯定，客队客场低迷被真实反映。\n💸 资金博弈: 客队降水有诱导嫌疑，但散户资金并未盲目跟风，主队支持率保持在合理区间，资金面相对健康。\n🎯 破局逻辑: 主队主场状态上佳，客队客场低迷且xG处于劣势，结合西甲主场优势特点，看好主队小比分取胜。\n总结: 主场龙对阵客场虫，主队实力碾压取胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 77.8,
+          "ai_avg_confidence": 75.8,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -29915,7 +29920,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 71.56,
+        "recommend_score": 59.16,
         "is_recommended": false
       },
       {
@@ -30034,11 +30039,11 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜62.4%过热，但客队xG仅1.69，庄家并未给出大胜模型。\n💸 资金博弈: Sharp流向主胜且散户客胜62%大热，标准诱客盘，必须逆热处理。\n🎯 破局逻辑: 葡超保级主场韧性强，低总进球环境下最值钱的是主队抢分型比分。\n总结: 这是最典型长客陷阱，比分要站在主队拿分一侧。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin强压客胜62%，但主客xG仅0.70比1.69，客强不足支撑如此一边倒，庄家在诱客。\n💸 资金博弈: Sharp流向主胜且散户62%热捧客，形成标准Sharp逆Shin结构，长客陷阱成立。\n🎯 破局逻辑: 葡超保级主场韧性强，主队虽弱但客队客场拉力过大，比分应规避顺畅客胜。\n总结: 这是最典型的客胜诱盘场，主队至少有很高概率抢分。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率62.4%极高，但结合长客陷阱与保级死拼题材，庄家在利用客队强势掩护主队抢分意图。\n💸 资金博弈: 散户62%重注客队形成绝对大热，而Sharp资金逆向流入主胜，触发100%诱盘绝对优先级逻辑。\n🎯 破局逻辑: 大热必死+Sharp资金背离，必须按聪明钱方向规避客胜，主队保级战意下防守反击，看好主队不败。\n总结: 触发绝对诱盘逻辑，客胜大热必死，主队保级爆冷。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率高达62%，庄家利用客队强队形象疯狂造热，实则布下长客陷阱，掩护主队保级抢分。\n💸 资金博弈: 散户62%资金涌入客胜形成绝对大热，而Sharp资金却逆势流向主胜，典型的诱盘与反指共振。\n🎯 破局逻辑: 保级死拼题材+客胜超热+Sharp资金主胜，三大信号齐聚，100%诱盘格局，必须按Sharp方向走主队不败。\n总结: 客胜极度大热触发反指，Sharp资金暗保主队。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
@@ -30585,22 +30590,22 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "0-7",
-          "predicted_label": "负其他",
+          "predicted_score": "7-0",
+          "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 16.5,
-          "draw_pct": 25.2,
-          "away_win_pct": 58.3,
+          "draw_pct": 33.6,
+          "away_win_pct": 49.9,
           "confidence": 64.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜高开配合杯赛名气，庄家把斯图加特摆在过热舒适区。\n💸 资金博弈: Sharp流向客胜且散户主胜59%大热，强烈背离，主胜顺打风险极高。\n🎯 破局逻辑: 杯赛淘汰制不宜线性看强弱，xG合计2.79，客队状态热，优先防拖入拉锯战。\n总结: 主队名气热度过头，真实博弈更像胶着甚至客队偷袭。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜近六成但客xG仍接近1.0，杯赛下庄家并未彻底封死客队进球与爆冷路线。\n💸 资金博弈: Sharp去客胜而散户59%压主，Shin与资金显著背离，主热是明显风险点。\n🎯 破局逻辑: 德国杯淘汰赛容错低，双方德甲属性决定节奏不慢，优先客不败及双方进球。\n总结: 热门主胜不宜顺跟，杯赛更应拥抱冷平或客队爆点比分。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "1-2",
-          "gemini_analysis": "🕵️ 庄家意图: 杯赛性质下主队Shin概率58.2%偏高，庄家隐含xG主队占优，但杯赛冷门属性需警惕庄家诱导主胜。\n💸 资金博弈: 散户59%重注主队形成大热，而Sharp资金明确流向客胜，资金面与散户情绪形成强烈对抗。\n🎯 破局逻辑: 杯赛+主胜大热+Sharp资金反向，典型的主队诱盘格局，客队近期状态极佳，看好客队常规时间不败。\n总结: 杯赛主胜大热遭聪明钱狙击，客队状态火热有望不败。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "🕵️ 庄家意图: 杯赛性质下，庄家给出主队58.2%的Shin概率，利用主队近期交锋优势强行造热主队，实则忌惮客队状态。\n💸 资金博弈: 主胜散户热度高达59%，而Sharp资金明确流向客胜，客队降水形成反向Steam，庄家真实意图在客队。\n🎯 破局逻辑: 杯赛容易出冷，主胜超热且Sharp资金反向流入客队，客队近期状态极佳，看好客队常规时间不败。\n总结: 杯赛主胜大热必死，Sharp资金力挺客队。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
@@ -30609,8 +30614,8 @@
           ],
           "ai_avg_confidence": 85.3,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.44,
-          "model_agreement": false,
+          "ai_consensus_strength": 0.67,
+          "model_agreement": true,
           "xG_home": 1.54,
           "xG_away": 1.17,
           "crs_implied_probs": {
@@ -30721,11 +30726,12 @@
             "🔥 客胜Steam! 降水-1.00但散户未跟(19%)",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅19%)",
-            "💎 客胜价值注! EV+223.0% Kelly15.7% @4.55",
+            "💎 客胜价值注! EV+173.0% Kelly12.2% @4.55",
+            "💎 平局价值注! EV+47.3% Kelly4.0% @3.97",
             "⚡ 主队攻防效率碾压(差值1.06)",
             "⚠️ 负CLV-74.1% [主胜]",
-            "📈 CLV+3.1% [平局]",
-            "🔥 CLV+173.5% Edge+165.3% [客胜]"
+            "🔥 CLV+37.5% Edge+33.4% [平局]",
+            "🔥 CLV+134.1% Edge+127.0% [客胜]"
           ],
           "model_consensus": 8,
           "total_models": 15,
@@ -30952,7 +30958,7 @@
             "direction": "volatile"
           },
           "odds_pattern": "正常",
-          "result": "客胜",
+          "result": "主胜",
           "steam_move": {
             "steam": true,
             "signal": "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅19%)",
@@ -30962,11 +30968,20 @@
           "value_bets": [
             {
               "direction": "客胜",
-              "prob": 71.0,
+              "prob": 60.0,
               "odds": 4.55,
-              "ev": 223.0,
-              "kelly_pct": 15.71,
-              "signal": "💎 客胜价值注! EV+223.0% Kelly15.7% @4.55",
+              "ev": 173.0,
+              "kelly_pct": 12.18,
+              "signal": "💎 客胜价值注! EV+173.0% Kelly12.2% @4.55",
+              "grade": "A"
+            },
+            {
+              "direction": "平局",
+              "prob": 37.1,
+              "odds": 3.97,
+              "ev": 47.3,
+              "kelly_pct": 3.98,
+              "signal": "💎 平局价值注! EV+47.3% Kelly4.0% @3.97",
               "grade": "A"
             }
           ],
@@ -31020,13 +31035,13 @@
               }
             ]
           },
-          "predictability_score": 67,
+          "predictability_score": 57,
           "fusion_weights": {
             "market": 0.69,
             "model": 0.31
           }
         },
-        "recommend_score": 18.66,
+        "recommend_score": 26.98,
         "is_recommended": false
       },
       {
@@ -31125,29 +31140,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 58.5,
           "draw_pct": 22.5,
           "away_win_pct": 19.0,
-          "confidence": 61.0,
+          "confidence": 65.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "2-1",
-          "gpt_analysis": "🕵️ 庄家意图: 让两球却给出接近均衡xG，模型明显失真，庄家可能在重诱下盘。\n💸 资金博弈: 缺乏Shin与散户细节，但机构重诱下盘说明市场对强队大胜存分歧。\n🎯 破局逻辑: 荷甲环境天然偏开放，若让两球成立则需强队高产，优先主胜但不盲信穿深盘。\n总结: 盘口与xG错位很大，更像主胜但未必轻松穿两球的剧本。",
+          "gpt_analysis": "🕵️ 庄家意图: 让到两球但给出的xG仅1.25比1.09极不匹配，名气盘远大于真实进球差，庄家在诱深盘。\n💸 资金博弈: 已明示重诱下盘，说明市场会自然追主大胜，机构反而更怕赢球不穿。\n🎯 破局逻辑: 荷甲环境支持进球，但不支持如此失真让幅，主胜可有，净胜受限更合理。\n总结: 埃因霍温名气虽大，但模型不支持轻松穿两球，防赢球输盘比分。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "2-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队实力碾压，庄家隐含xG差距不大可能是模型偏差，盘口信号提示机构重诱下盘，庄家实则看好主队大胜。\n💸 资金博弈: 机构重诱下盘说明资金被刻意引导至客队，主队方向阻力被扫清，聪明资金大概率顺势介入主队。\n🎯 破局逻辑: 榜首打保级队，实力悬殊且机构刻意造冷下盘，主队主场火力全开，看好主队轻松击穿盘口。\n总结: 机构重诱下盘掩护主队，实力碾压下主队大胜可期。",
+          "gemini_score": "3-0",
+          "gemini_analysis": "🕵️ 庄家意图: 机构重诱下盘信号极其罕见，说明庄家在利用客队保级题材或某种假象疯狂诱导散户去下盘，实则主队将大胜。\n💸 资金博弈: 重诱下盘意味着散户资金被大量引导至客队方向，主队大胜的赔付压力被完美对冲，庄家有恃无恐。\n🎯 破局逻辑: 荷甲领头羊实力碾压，机构重诱下盘是极强的反向信号，主队必将迎来一场酣畅淋漓的大胜，直奔大比分。\n总结: 机构罕见重诱下盘，领头羊必将迎来大胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 76.5,
+          "ai_avg_confidence": 86.6,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.39,
           "model_agreement": false,
@@ -31207,7 +31222,7 @@
               "6球极低6.5≤13",
               "5球极低4.7≤8"
             ],
-            "ai_others_count": 0
+            "ai_others_count": 1
           },
           "sharp_detected": false,
           "cold_signals_count": 0,
@@ -31508,7 +31523,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 48.5,
+        "recommend_score": 50.1,
         "is_recommended": false
       },
       {
@@ -31622,23 +31637,23 @@
           "home_win_pct": 12.3,
           "draw_pct": 16.1,
           "away_win_pct": 71.6,
-          "confidence": 59.0,
+          "confidence": 60.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "0-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜为主导但并未开到极深，庄家防范的是客队效率不足。\n💸 资金博弈: Sharp流向客胜，与Shin同向；虽有长客陷阱标签，但资金未逆转客方。\n🎯 破局逻辑: 西甲保级主场会拖节奏，xG合计2.35，中低比分下客胜小胜仍是主分布。\n总结: 客队方向仍真，但更像克制式赢球，不是轻松屠杀。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜47.6%配客1.39xG，强队优势真实存在，但并未开到绝对碾压，仍防保级主队缠斗。\n💸 资金博弈: Sharp同向客胜且客侧降水，虽有长客陷阱标签，但资金未出现明显反转信号。\n🎯 破局逻辑: 西甲保级主队会压强度，故更倾向客队小胜而非大捷，0-1和1-2最合逻辑。\n总结: 客强是真，但保级战抬高主队抵抗，穿深不易。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "0-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队实力远超主队，Shin概率47.6%合理，庄家并未过度造热客队，长客陷阱可能是虚晃一枪。\n💸 资金博弈: Sharp资金明确流向客胜，且客胜降水，散户热度未超50%，资金面健康，聪明钱顺势而为。\n🎯 破局逻辑: 虽有保级死拼题材，但硬实力差距过大，Sharp资金力挺客队，xG数据客队占优，看好客队实力碾压。\n总结: 硬实力差距悬殊，Sharp资金顺势介入客队取胜。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队保级死拼，庄家利用此题材制造主队拉力，但客队xG优势明显，庄家实则在掩护客队顺利打出。\n💸 资金博弈: Sharp资金明确流向客胜，且客队赔率降水，聪明钱无视主队保级题材，坚定看好实力更强的客队。\n🎯 破局逻辑: 虽然有长客陷阱和保级死拼题材，但Sharp资金的流入是决定性的，客队实力碾压，看好客队反客为主。\n总结: Sharp资金无视保级题材，实力客队带走三分。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 79.3,
+          "ai_avg_confidence": 80.1,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -32053,7 +32068,7 @@
             "model": 0.38
           }
         },
-        "recommend_score": 35.32,
+        "recommend_score": 35.72,
         "is_recommended": false
       },
       {
@@ -32157,29 +32172,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 67.0,
           "draw_pct": 16.4,
           "away_win_pct": 16.6,
-          "confidence": 70.0,
-          "risk_level": "低",
+          "confidence": 69.0,
+          "risk_level": "中",
           "over_under_2_5": "大",
           "both_score": "是",
           "gpt_score": "2-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜占优但客队进球期望1.29不低，庄家没有把客队防线脆化到底。\n💸 资金博弈: 散户略偏主，无明显Sharp修正，市场定价相对中性。\n🎯 破局逻辑: 澳超高波动高进球，xG合计3.10，最优解在双方都进球的3-4球区间。\n总结: 这是明显的对攻盘，单防主胜不够，必须带平负型大比分。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜五成但客xG达1.29，庄家并不担心客队哑火，更像开放比赛中的主队略优盘。\n💸 资金博弈: 无明显Sharp单边，市场分布平稳，需回归联赛属性与xG做比分中枢。\n🎯 破局逻辑: 澳超向来高波动，主1.80客1.29合计超3球，优先双方进球和3-4球区间。\n总结: 澳超不宜死守小球，最优是双方进球下的主小优或平局。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "2-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率50.3%占据优势，庄家隐含xG主队1.804远超客队，庄家模型对主队进攻端极度看好。\n💸 资金博弈: 散户51%支持主队，热度处于临界点但未形成绝对反指，资金分布相对合理，无明显诱盘迹象。\n🎯 破局逻辑: 澳超大球属性强，主队xG极高但防守不稳，客队状态不错，看好双方互捅，主队凭借火力微弱胜出或平局。\n总结: 庄家模型力挺主队进攻，澳超对攻战看好主队不败。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率达到50.3%，xG也占据绝对优势，庄家对主队主场反弹给予了较高的防范和预期。\n💸 资金博弈: 散户资金分布与Shin概率基本一致，未见明显异常，属于正常的实力盘博弈，主队受到一定支持。\n🎯 破局逻辑: 澳超自带大球属性，主队xG优势明显但近期状态一般，客队状态较好，看好主队主场不败，比分偏大。\n总结: 主队xG占优且获庄家支持，主场有望坐和望赢。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 76.2,
+          "ai_avg_confidence": 72.8,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -32570,8 +32585,8 @@
             "model": 0.18
           }
         },
-        "recommend_score": 79.8,
-        "is_recommended": true
+        "recommend_score": 67.4,
+        "is_recommended": false
       },
       {
         "home_team": "柏太阳神",
@@ -32685,18 +32700,18 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜名义领先，但优势很薄，庄家没有完全买入鹿岛近况强势。\n💸 资金博弈: 散户分布接近Shin，无明显过热，资金层面更像均衡博弈。\n🎯 破局逻辑: 日职普遍压节奏，xG合计2.28，历史交锋偏客但盘口未放大，平局EV最高。\n总结: 基本面偏客但盘口偏主，最合理落点是低比分胶着。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin偏主，但客队近期状态与交锋都占优，主1.24客1.04仅是微弱差距，定价偏主。\n💸 资金博弈: 散户无极热，但基本面与赔率方向轻度背离，庄家对主场面子给得过多。\n🎯 破局逻辑: 日职整体低比分，合计xG约2.28，首选平局，再防客队效率制胜的0-1。\n总结: 盘口偏主但真实更均衡，鹿岛至少不败的比分更有性价比。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率41.4%占优，但交锋记录完全处于下风，庄家有利用主场优势强行拉高主队预期的嫌疑。\n💸 资金博弈: 散户42%支持主队，客队近期状态极佳却未受资金追捧，资金面存在错位，客队方向阻力较小。\n🎯 破局逻辑: 客队状态与交锋双重碾压，庄家模型却偏向主队，典型的数据与基本面背离，看好客队延续克星本色。\n总结: 交锋克星且状态占优，客队被庄家低估值得追捧。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队近期状态极佳且交锋占优，但庄家却给出主队41.4%的Shin概率和更高的xG，明显在防范主队。\n💸 资金博弈: 散户资金并未过度追捧状态更好的客队，资金面相对平衡，庄家的真实意图可能在于保护主队不败。\n🎯 破局逻辑: 日职联经常出现强队客场翻车，庄家数据力挺主队，结合主队半场领先概率较高，看好主队主场拿分。\n总结: 庄家数据逆势挺主队，防范客队大热不胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 76.9,
+          "ai_avg_confidence": 77.1,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -33179,32 +33194,32 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 58.5,
           "draw_pct": 21.0,
           "away_win_pct": 20.5,
-          "confidence": 74.0,
+          "confidence": 72.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜略强且主队xG占优，庄家支持主队但未给绝对碾压。\n💸 资金博弈: 散户与Shin接近，暂无明显诱导式单边结构。\n🎯 破局逻辑: 芬超样本小波动大，但客队开局差，主队主场强，优先主队小胜区间。\n总结: 主队方向成立，但总进球不宜抬太高，1球主导最稳。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜略高且xG优势不大，庄家把比赛压在主队可控优势区，而非大胜模板。\n💸 资金博弈: 市场无明显偏斜，主队题材面更好但赔率未极端，说明平局仍被认真防守。\n🎯 破局逻辑: 芬超节奏中性，主1.29客1.18意味着双方都有球，主场面值更适合1球差。\n总结: 主队稍优但难碾压，主小胜或被逼平的路径最真实。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "2-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队状态极佳且Shin概率占优，庄家隐含xG也支持主队，盘口设置合理，未见明显诱盘意图。\n💸 资金博弈: 散户资金分布均匀，主队39%的支持率并未形成大热，资金流向健康，正路打出概率高。\n🎯 破局逻辑: 主场龙对阵客场虫，基本面与庄家模型高度一致，主队攻防两端均占优，看好主队顺利拿下比赛。\n总结: 基本面与数据共振，主队状态火热稳拿三分。",
+          "gemini_score": "1-0",
+          "gemini_analysis": "🕵️ 庄家意图: 主队排名和状态均占优，庄家给出的Shin概率和xG也合理反映了这一优势，未见明显诱盘动作。\n💸 资金博弈: 散户资金分布均匀，主队未形成大热，资金流向健康，属于正常的实力体现。\n🎯 破局逻辑: 主队主场状态上佳，客队客场低迷，实力差距明显，正路看好主队顺利拿下比赛。\n总结: 实力盘正常体现，主场龙稳吃客场虫。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 79.2,
+          "ai_avg_confidence": 74.6,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.39,
-          "model_agreement": false,
+          "ai_consensus_strength": 0.67,
+          "model_agreement": true,
           "xG_home": 1.29,
           "xG_away": 1.18,
           "crs_implied_probs": {
@@ -33589,8 +33604,8 @@
             "model": 0.25
           }
         },
-        "recommend_score": 65.7,
-        "is_recommended": false
+        "recommend_score": 74.9,
+        "is_recommended": true
       },
       {
         "home_team": "拉斯决心",
@@ -33699,23 +33714,23 @@
           "home_win_pct": 21.3,
           "draw_pct": 54.1,
           "away_win_pct": 24.6,
-          "confidence": 51.0,
+          "confidence": 50.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客队Shin略优但只是一线之差，庄家对两边都保留较大防守。\n💸 资金博弈: 散户分布均衡，无极端热度，市场尚未形成单边共识。\n🎯 破局逻辑: 沙职xG合计2.48，中枢在2-3球，实力接近且主强客弱特征明显，平局优先。\n总结: 赔率没有给出明确方向，最值钱的是对称结构下的平局核心位。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin略偏客，但主队积分与主场表现更好，庄家用客方名气制造均衡盘面。\n💸 资金博弈: 散户较均匀，没有极热引导，说明机构对三项结果都留有相当对冲空间。\n🎯 破局逻辑: 沙职中段对碰，主1.20客1.28接近对等，最佳区间是双方进球后一球差或平局。\n总结: 这是标准五五开结构，首选平，次选主场小胜。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率略高，但主队主场状态极佳，庄家在利用客队微弱的数据优势平衡盘口资金。\n💸 资金博弈: 散户资金分布极为均衡，无任何一方形成热度，属于典型的实力胶着战，资金面无异常信号。\n🎯 破局逻辑: 主队主场战绩出色且交锋占优，客队客场表现平庸，在无明显资金干扰下，主队主场不败是首选。\n总结: 主场龙属性加持，资金均衡下看好主队坐和望赢。",
+          "gemini_analysis": "🕵️ 庄家意图: 双方xG极为接近，客队Shin概率略高，庄家对这场中下游球队的较量态度暧昧，倾向于势均力敌。\n💸 资金博弈: 散户资金分布均匀，未见明显倾斜，市场对本场比赛的分歧较大，缺乏明确的资金主导方向。\n🎯 破局逻辑: 主队主场战绩不错，客队客场一般，但双方实力接近，平局是双方都能接受的结果，首选平局。\n总结: 实力接近且资金分散，平局为最可能落点。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 71.9,
+          "ai_avg_confidence": 69.3,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -34107,7 +34122,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 49.62,
+        "recommend_score": 49.22,
         "is_recommended": false
       },
       {
@@ -34209,32 +34224,32 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 60.9,
           "draw_pct": 19.1,
           "away_win_pct": 20.0,
-          "confidence": 70.0,
-          "risk_level": "低",
+          "confidence": 69.0,
+          "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "是",
           "gpt_score": "2-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜优势明确，主队xG达到1.40，庄家更防主队输出而非失守。\n💸 资金博弈: 散户结构平稳，没有形成危险的大热挤压。\n🎯 破局逻辑: 德乙保级客场脆弱，客队客战很差，但主队稳定性一般，故以小胜优先。\n总结: 主队占优真实存在，但最合理兑现方式仍是险胜而非大穿。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜42.6%配1.40比1.17，主队优势存在但并不深，庄家主要防主场一球拿下。\n💸 资金博弈: 散户与Shin一致但热度不高，未形成诱盘阈值，市场仍认可主队基本盘。\n🎯 破局逻辑: 德乙比赛波动偏大，但客队客场弱势明显，主队赢球路径集中在2-1与1-0。\n总结: 主队赢面更实，但穿深有限，一球小胜为核心。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "2-0",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率42.6%占据主导，庄家隐含xG主队1.4压制客队，庄家对主队主场取胜抱有较强信心。\n💸 资金博弈: 散户43%支持主队，热度适中未触发反指，客队客场低迷难以吸引筹码，资金流向符合基本面。\n🎯 破局逻辑: 主队实力与主场优势明显，客队客场虫属性严重，庄家模型与基本面契合，看好主队正路打出。\n总结: 主场优势明显且数据支持，主队正路取胜无悬念。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "🕵️ 庄家意图: 主队xG和Shin概率均占据优势，庄家对主队的主场战力给予了肯定，符合双方排名和实力的差距。\n💸 资金博弈: 散户资金分布合理，主队43%的支持率并未形成大热，资金面健康，有利于主队顺利打出。\n🎯 破局逻辑: 德乙主场优势明显，主队主场状态不错，客队客场低迷，正路看好主队全取三分。\n总结: 主队实力占优且未大热，主场称雄在望。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 78.4,
+          "ai_avg_confidence": 76.4,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.39,
-          "model_agreement": false,
+          "ai_consensus_strength": 0.67,
+          "model_agreement": true,
           "xG_home": 1.05,
           "xG_away": 1.47,
           "crs_implied_probs": {
@@ -34622,7 +34637,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 56.58,
+        "recommend_score": 54.18,
         "is_recommended": false
       },
       {
@@ -34726,29 +34741,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 26.2,
           "draw_pct": 54.1,
           "away_win_pct": 19.7,
-          "confidence": 75.0,
-          "risk_level": "低",
+          "confidence": 74.0,
+          "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜仍被放在前面，更多是主场壳价，实际优势很薄。\n💸 资金博弈: 散户未明显失衡，但基本面与盘面主导相反，存在主队虚热嫌疑。\n🎯 破局逻辑: 主队近况差，客队对赛占优，xG合计2.47，平负比分的EV更高。\n总结: 这是基本面逆盘，主队不宜高看，客队至少拿分更顺逻辑。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin略偏主，但主队近期崩盘且交锋劣势，1.32比1.15的xG差不足支撑主让姿态。\n💸 资金博弈: 资金面平静时更要信基本面，主队名义主场被高估，客队方向性价比更高。\n🎯 破局逻辑: 德乙保级压力下比赛更谨慎，首选低比分平或客队效率胜，不追主队反弹神话。\n总结: 盘口给了主队过多尊重，真实更接近客不败。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队近期状态极度低迷，但Shin概率仍给到41%，庄家明显在利用主场优势强行拉升主队预期诱盘。\n💸 资金博弈: 散户41%支持主队，与Shin概率高度重合，说明散户被庄家模型成功诱导，客队方向阻力被抽空。\n🎯 破局逻辑: 主队状态烂且交锋全败，庄家强开高概率实为诱导，客队状态更佳且交锋碾压，看好客队不败。\n总结: 庄家强拉主队预期诱盘，客队交锋碾压有望拿分。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队近期状态极度低迷，但庄家依然给出了41%的Shin概率和较高的xG，明显在防范主队触底反弹。\n💸 资金博弈: 散户资金并未因主队状态差而抛弃主队，说明市场对主队反弹有一定预期，资金面处于博弈状态。\n🎯 破局逻辑: 主队保级压力巨大，庄家数据逆势挺主，结合德乙保级队的爆发力，看好主队主场不败甚至取胜。\n总结: 庄家逆势防范主队，保级狂魔有望触底反弹。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 78.7,
+          "ai_avg_confidence": 75.9,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -35138,7 +35153,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 91.22,
+        "recommend_score": 78.82,
         "is_recommended": true
       },
       {
@@ -35242,29 +35257,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "0-7",
+          "predicted_score": "3-4",
           "predicted_label": "负其他",
           "is_score_others": true,
           "home_win_pct": 16.5,
           "draw_pct": 19.1,
           "away_win_pct": 64.4,
-          "confidence": 78.0,
+          "confidence": 77.0,
           "risk_level": "低",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "0-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜接近五成且主队xG仅1.02，庄家明显更防主队哑火。\n💸 资金博弈: 散户与Shin同向但未过热，客胜属于健康热度。\n🎯 破局逻辑: 主队持续低迷，客队稳定，法乙节奏偏慢，优先客队低比分带走。\n总结: 客队赢面较实，最常见兑现是控制型小胜。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜接近五成且xG优势明显，庄家对客队赢球路径定价清晰，主队进攻被明显压制。\n💸 资金博弈: 散户与Shin同向但未过热，说明客胜是真实强势而非纯市场跟风产物。\n🎯 破局逻辑: 法乙节奏偏慢，主1.02客1.52适合客队低比分取胜，0-1与0-2优先。\n总结: 客队面、势、模都占优，最像法系低比分客胜。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "0-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率近50%，庄家隐含xG客队1.524大幅领先，庄家对客队实力碾压态势毫不掩饰。\n💸 资金博弈: 散户50%支持客队，虽有一定热度但未超60%警戒线，资金流向与硬实力差距匹配，无明显诱盘。\n🎯 破局逻辑: 主队状态极差且主场虫，客队实力与状态双重碾压，xG数据支持客队进球，看好客队客场全取三分。\n总结: 实力与状态双重碾压，客队正路打出概率极高。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队xG和Shin概率均占据绝对优势，庄家对客队的实力给予了充分认可，主队状态低迷难以被信任。\n💸 资金博弈: 散户资金50%流向客队，属于正常的实力体现，并未达到极度大热的警戒线，资金面相对安全。\n🎯 破局逻辑: 法乙主队状态极差，客队实力碾压且状态稳定，正路看好客队客场带走胜利，比分偏小。\n总结: 实力差距悬殊，客队正路打出无悬念。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 83.5,
+          "ai_avg_confidence": 80.2,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -35656,7 +35671,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 74.48,
+        "recommend_score": 74.08,
         "is_recommended": true
       },
       {
@@ -35771,18 +35786,18 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客队Shin略优但没有形成明显强侧，庄家对主队主场韧性有顾忌。\n💸 资金博弈: 散户分布自然，资金未将客胜推到危险高热。\n🎯 破局逻辑: 法乙总进球常压缩，xG合计2.42，客队状态更佳但主队交锋占优，先平后客。\n总结: 客队更像不败盘，平局是最高性价比落点。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜略高但xG差仅0.06，庄家不愿把客队做深，明显尊重主队主场抗性。\n💸 资金博弈: 散户分散，市场无单边倾向，平局是庄家最自然的缓冲结果。\n🎯 破局逻辑: 法乙常见胶着，客队状态更强但主队不易被打穿，平与客小胜最有EV。\n总结: 客队状态更热，却仍难彻底摆脱法乙平局磁场。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队排名远超主队，但Shin概率仅37.9%，庄家对客队客场取胜信心不足，有意防范主队交锋优势。\n💸 资金博弈: 散户资金分布均衡，未出现单边热度，主队交锋占优题材抵消了客队排名优势带来的资金压力。\n🎯 破局逻辑: 主队交锋克星且近期状态不错，客队虽排名高但客场作战，庄家模型偏向保守，首选平局防客胜。\n总结: 交锋克星属性发威，庄家保守态度下看好平局。",
+          "gemini_analysis": "🕵️ 庄家意图: 双方xG极为接近，庄家给出的Shin概率也相差无几，这是一场势均力敌的较量，庄家态度中立。\n💸 资金博弈: 散户资金分布均匀，未见明显倾斜，市场对本场比赛的分歧较大，缺乏明确的资金主导方向。\n🎯 破局逻辑: 主队交锋占优但客队近期状态极佳，双方互有顾忌，平局是大概率事件，客队稍占优势。\n总结: 势均力敌且资金分散，平局为首选落点。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 74.1,
+          "ai_avg_confidence": 74.6,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -36283,29 +36298,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "0-7",
+          "predicted_score": "3-4",
           "predicted_label": "负其他",
           "is_score_others": true,
           "home_win_pct": 20.4,
           "draw_pct": 16.8,
           "away_win_pct": 62.8,
-          "confidence": 75.0,
-          "risk_level": "低",
+          "confidence": 74.0,
+          "risk_level": "中",
           "over_under_2_5": "大",
           "both_score": "是",
           "gpt_score": "1-2",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜略占优且双方xG都不低，庄家明显防守的是开放式比赛。\n💸 资金博弈: 散户对客胜支持有限，热度不算危险，市场较理性。\n🎯 破局逻辑: 荷乙天然大球联赛，xG合计3.02，双方都有失球和进球惯性，优先BTTS。\n总结: 这是典型荷乙互射局，客队稍优但不宜脱离大球框架。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜43.5%且客1.63xG，庄家对客队进球能力评估较高，但也保留主队进球弹性。\n💸 资金博弈: 无明显Sharp对冲，赔率更多反映联赛大球特征与客队实力小优的常规定价。\n🎯 破局逻辑: 荷乙总量高，主1.40客1.63天然落在3球以上，优先1-2与2-2等互射比分。\n总结: 荷乙重攻轻守，客优但最怕演成对攻拉锯。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-2",
-          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率43.5%占优，庄家隐含xG客队1.627火力强劲，庄家模型真实反映了双方实力差距。\n💸 资金博弈: 散户43%支持客队，热度合理，主队近期状态一般难以吸引筹码，资金面平稳支持客队打出。\n🎯 破局逻辑: 荷乙大球属性，客队进攻火力猛且客场状态不错，主队防守存在隐患，看好客队反客为主拿下比赛。\n总结: 进攻火力压制，客队实力占优顺势打出。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队xG和Shin概率均占优，庄家对客队的实力给予了认可，符合双方排名差距。\n💸 资金博弈: 散户资金43%流向客队，属于正常的实力体现，未形成大热，资金面健康。\n🎯 破局逻辑: 荷乙大球属性强，客队实力更强且需要巩固排名，看好客队客场不败，比分偏大。\n总结: 客队实力占优且战意充足，客场坐和望赢。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 79.3,
+          "ai_avg_confidence": 75.8,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -36686,7 +36701,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 71.96,
+        "recommend_score": 59.56,
         "is_recommended": false
       },
       {
@@ -36790,29 +36805,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 39.2,
           "draw_pct": 41.3,
           "away_win_pct": 19.5,
-          "confidence": 51.0,
+          "confidence": 50.0,
           "risk_level": "中",
           "over_under_2_5": "大",
           "both_score": "否",
           "gpt_score": "2-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜72%虽热，但主队xG达2.22且客队仅0.77，庄家模型支持压制局。\n💸 资金博弈: 散户主胜过热，顺主存在赔率价值损耗，但无Sharp逆向证据。\n🎯 破局逻辑: 德甲强弱分层明显，主队欧战席位压力足，主导型赢球最符合数学中枢。\n总结: 主胜热但底层xG足够硬，比分上以主队零封或半零封为主。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜72%属强压，但客xG仅0.77，庄家最担心的是主队顺利赢球，不一定是惨案。\n💸 资金博弈: 散户72%大热主胜，热门方向赔率已极便宜，比分上需规避过度追捧的4球以上。\n🎯 破局逻辑: 德甲强弱分明但客队进攻弱，主胜大概率成立，2-0和3-0是赔率与模型交汇点。\n总结: 主胜可信，但极热下更适合中等幅度赢球而非无限放大。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率高达72%，庄家隐含xG主队2.217极度夸张，庄家在利用主队强势疯狂造热主胜。\n💸 资金博弈: 散户72%重注主队形成绝对大热反指，主胜超热信号触发，聪明资金必然在暗中布局防冷。\n🎯 破局逻辑: 大热必死逻辑触发，主队虽强但筹码过于拥挤，必须在比分上规避主队大胜，防范平局或一球小胜。\n总结: 主胜极度大热触发反指，防范主队赢球输盘或爆冷平局。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率高达72%，庄家利用主队强队形象和近期好状态疯狂造热主队，实则暗藏杀机。\n💸 资金博弈: 散户72%的资金涌入主胜，形成绝对的单边大热，触发大热必死逻辑，庄家面临巨大的赔付风险。\n🎯 破局逻辑: 主胜超热是致命毒药，必须在比分上规避主队大胜顺利打出，防范平局甚至客胜冷门，比分不宜过大。\n总结: 主胜极度大热触发反指，防范冷门平局。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 82.8,
+          "ai_avg_confidence": 82.3,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.39,
           "model_agreement": false,
@@ -37225,7 +37240,7 @@
             "model": 0.26
           }
         },
-        "recommend_score": 38.06,
+        "recommend_score": 37.66,
         "is_recommended": false
       },
       {
@@ -37329,7 +37344,7 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 38.5,
@@ -37340,11 +37355,11 @@
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "2-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜73.2%极强且客队xG仅0.58，庄家核心防线是客队难进球。\n💸 资金博弈: 散户主胜74%过热，赔率便宜但缺少逆向资金信号，热度更多影响EV非方向。\n🎯 破局逻辑: 意甲强弱战常见控场赢球，xG合计2.61，主队两到三球输出最集中。\n总结: 虽然主胜很热，但客队进攻期望太低，主队零封赢球仍是主剧本。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜73.2%配2.03比0.58，庄家明确看主队控制局面，客队进球空间被严重压缩。\n💸 资金博弈: 散户74%压主极热，但客胜太高且无逆向Sharp，主胜真实仍强，只防赢法保守。\n🎯 破局逻辑: 意甲强队主场更偏管理型赢球，2-0比4-0更符合大热环境下的兑现效率。\n总结: 主胜无疑，关键是防热度过高导致赢而不疯。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率73.2%极高，庄家隐含xG主队2.033，盘口深度看似合理实则在掩护主队大热的风险。\n💸 资金博弈: 散户74%重注主队形成史诗级大热反指，筹码极度失衡，庄家面临巨大赔付压力，必然干预赛果。\n🎯 破局逻辑: 绝对大热必死，主队实力虽强但已被筹码绑架，必须规避主队顺利大胜，博取平局或主队艰难小胜。\n总结: 史诗级大热反指，庄家控盘下主队难获大胜。",
+          "gemini_analysis": "🕵️ 庄家意图: 主队Shin概率高达73.2%，庄家利用主队榜首光环疯狂造热，实则在掩护客队赢下盘口。\n💸 资金博弈: 散户74%的资金涌入主胜，形成绝对大热，大热必死定律下，主队极难打穿盘口，甚至有爆冷风险。\n🎯 破局逻辑: 意甲末期强队经常放水，主胜超热必须防范，结合客队保级战意，看好主队最多赢一球，甚至平局。\n总结: 主胜极度大热，防范强队放水赢球输盘。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
@@ -37878,29 +37893,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 15.4,
           "draw_pct": 37.6,
           "away_win_pct": 47.0,
-          "confidence": 58.0,
+          "confidence": 57.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "0-1",
-          "gpt_analysis": "🕵️ 庄家意图: 客胜接近六成，但客场近况一般，庄家不敢把盘做得更狠。\n💸 资金博弈: 散户客胜58%略热，无Sharp分流，资金结构偏向客队但不够极端。\n🎯 破局逻辑: 法甲中上游客战常见低效赢球，xG合计2.70，客队优势在组织质量而非屠杀。\n总结: 客队仍是首选，但比分不宜夸张，最像一球胜负盘。",
+          "gpt_analysis": "🕵️ 庄家意图: 客胜59.1%偏高，但客队客场近况一般，庄家更像借排名继续强化客胜叙事。\n💸 资金博弈: 散户58%跟客，超热但无Sharp支撑，热门方向风险抬升，平局不可不防。\n🎯 破局逻辑: 法甲总量不高，主0.92客1.79更接近客小胜或被主队拖平，不追开放大比分。\n总结: 客队纸面占优，但热度过高，最优是客小胜兼防平。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队排名高且Shin概率59.1%，但庄家让球盘口偏浅，明显在利用客队名气诱导散户资金流入客胜。\n💸 资金博弈: 散户58%重注客队形成大热反指，客胜超热信号触发，聪明资金大概率已提前埋伏主队不败。\n🎯 破局逻辑: 客胜大热且盘口支撑不足，主队主场具备一定抗衡能力，大热必死逻辑下坚决看好主队捍卫主场。\n总结: 客胜大热且盘口偏浅，主队主场有望阻击强敌。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队Shin概率高达59.1%，庄家利用客队排名第二的优势强行造热客队，实则在掩护主队主场拿分。\n💸 资金博弈: 散户58%的资金涌入客胜形成大热，触发反指逻辑，庄家在暗中保护主队不败方向。\n🎯 破局逻辑: 法甲主场优势不可忽视，客胜超热是明确的诱盘信号，坚决走主队不败，首选平局。\n总结: 客胜大热触发反指，主队主场借势阻击。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 82.8,
+          "ai_avg_confidence": 81.0,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.5,
           "model_agreement": false,
@@ -38283,7 +38298,7 @@
             "model": 0.18
           }
         },
-        "recommend_score": 38.0,
+        "recommend_score": 37.6,
         "is_recommended": false
       },
       {
@@ -38394,23 +38409,23 @@
           "home_win_pct": 20.3,
           "draw_pct": 56.0,
           "away_win_pct": 23.7,
-          "confidence": 53.0,
+          "confidence": 52.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 双方Shin接近，平局29.5%偏高，庄家明示这是均衡盘。\n💸 资金博弈: 散户分布平稳，无明显资金偏斜，盘口可信度较高。\n🎯 破局逻辑: 英超中下游碰撞常先求不败，xG仅2.13，低比分尤其1-1最有EV。\n总结: 没有必要强行分胜负，平局是最贴近盘口微观结构的答案。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin主客接近，xG也几乎持平，庄家没有真实倾向，平局是核心对冲点。\n💸 资金博弈: 散户分布均衡且无Steam异动，资金面无法打破均衡结构，应重回数学中枢。\n🎯 破局逻辑: 英超中下游对碰但总量仅2.13，首选1-1，其次是单方偷一球的0-1或1-0。\n总结: 这场没有明显庄家立场，平局是最高性价比答案。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 双方Shin概率接近，庄家隐含xG也几乎持平，庄家模型认为这是一场势均力敌的较量，无明显倾向。\n💸 资金博弈: 散户资金分布极为均匀，无任何一方形成热度，资金面完全反映了基本面的胶着状态。\n🎯 破局逻辑: 英超中下游球队交锋，实力接近且资金平稳，客队近期状态略好，首选平局，次防客队偷袭得手。\n总结: 实力胶着且资金平稳，平局是双方最易接受的结果。",
+          "gemini_analysis": "🕵️ 庄家意图: 双方xG和Shin概率极为接近，庄家对这场英超中下游球队的较量态度中立，未见明显倾向。\n💸 资金博弈: 散户资金分布均匀，未形成单边热度，市场博弈处于平衡状态，符合双方实力接近的现状。\n🎯 破局逻辑: 双方近期状态均一般，缺乏必胜把握，平局是双方最容易接受的结果，比分偏小。\n总结: 实力接近且资金平衡，闷平为最可能结果。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 75.0,
+          "ai_avg_confidence": 73.2,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -38801,7 +38816,7 @@
             "model": 0.33
           }
         },
-        "recommend_score": 43.8,
+        "recommend_score": 43.4,
         "is_recommended": false
       },
       {
@@ -38910,29 +38925,29 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "6-1",
+          "predicted_score": "7-0",
           "predicted_label": "胜其他",
           "is_score_others": true,
           "home_win_pct": 39.8,
           "draw_pct": 38.5,
           "away_win_pct": 21.7,
-          "confidence": 80.0,
+          "confidence": 79.0,
           "risk_level": "低",
           "over_under_2_5": "大",
           "both_score": "是",
           "gpt_score": "1-1",
-          "gpt_analysis": "🕵️ 庄家意图: 皇马Shin领先，但并未拉到绝对统治，庄家对贝蒂斯主场有防守。\n💸 资金博弈: Sharp流向主胜，与表面客强背离，说明皇马热度面临真实阻击。\n🎯 破局逻辑: 西甲强强对话更重节奏控制，xG合计2.94但主队主场平局属性强，防主拿分。\n总结: 皇马名气在前，真实结构却提示贝蒂斯具备阻击能力。",
+          "gpt_analysis": "🕵️ 庄家意图: Shin偏皇马且客1.79xG占优，但庄家未把客胜压到极限，明显顾忌主场阻击。\n💸 资金博弈: Sharp流向主胜，与表面客强叙事背离，说明机构在防贝蒂斯主场抢分。\n🎯 破局逻辑: 西甲强强对话不宜线性看名气，主队主场韧性高，首选平局再防主队爆冷。\n总结: 皇马面子盘偏热，真正高EV在贝蒂斯不败比分。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
           "gemini_score": "1-1",
-          "gemini_analysis": "🕵️ 庄家意图: 客队作为豪门Shin概率仅53.4%，庄家隐含xG客队占优但未形成碾压，庄家对客队客场大胜存疑。\n💸 资金博弈: 赔率变动显示客胜降水，但Sharp资金却逆向流入主胜，形成反向Steam信号，聪明钱在狙击豪门。\n🎯 破局逻辑: 豪门客场作战自带热度，Sharp资金逆向流入主队说明有内幕或深度逻辑支撑，坚决跟进主队不败。\n总结: Sharp资金逆向狙击豪门，主队有望爆冷抢分。",
+          "gemini_analysis": "🕵️ 庄家意图: 客队名气极大且xG占优，但庄家赔率变动却出现客队降水假象，实则在掩护主队打出。\n💸 资金博弈: 客队降水吸引散户，但Sharp资金明确流向主胜，形成反向Steam，聪明钱在暗中布局主队。\n🎯 破局逻辑: 西甲强强对话，Sharp资金力挺主队是核心信号，主队主场战力不俗，看好主队阻击皇马。\n总结: Sharp资金暗挺主队，皇马客场恐遭阻击。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 86.6,
+          "ai_avg_confidence": 82.8,
           "value_kill_count": 0,
           "ai_consensus_strength": 0.67,
           "model_agreement": true,
@@ -39356,7 +39371,7 @@
             "model": 0.31
           }
         },
-        "recommend_score": 75.36,
+        "recommend_score": 74.96,
         "is_recommended": true
       },
       {
@@ -39458,32 +39473,32 @@
         "h2h": [],
         "information": {},
         "prediction": {
-          "predicted_score": "1-0",
-          "predicted_label": "1-0",
+          "predicted_score": "1-1",
+          "predicted_label": "1-1",
           "is_score_others": false,
-          "home_win_pct": 58.2,
-          "draw_pct": 22.6,
-          "away_win_pct": 19.2,
-          "confidence": 74.0,
+          "home_win_pct": 39.1,
+          "draw_pct": 41.6,
+          "away_win_pct": 19.3,
+          "confidence": 63.0,
           "risk_level": "中",
           "over_under_2_5": "小",
           "both_score": "否",
           "gpt_score": "1-0",
-          "gpt_analysis": "🕵️ 庄家意图: 主胜略优但幅度有限，庄家对主场端给出微弱加成。\n💸 资金博弈: 散户与Shin基本一致，暂无明显诱导资金痕迹。\n🎯 破局逻辑: 葡超中游对碰，xG合计2.31，客队客场差是关键，主队小胜和平局最聚集。\n总结: 主队微弱优势真实存在，但比赛大概率落在一球以内分差。",
+          "gpt_analysis": "🕵️ 庄家意图: 主胜40.7%仅微优，xG 1.25比1.07说明主队优势主要来自主场与细节，不是压倒性。\n💸 资金博弈: 散户均衡，无异常热度，赔率表达较真实，平局与主小胜是机构主要防线。\n🎯 破局逻辑: 葡超节奏偏稳，双方实力接近但客场弱点明显，主队1球小胜最顺势。\n总结: 这是典型主场细微优势盘，最像1-0或2-1的小刀切法。",
           "grok_score": "弃权",
           "grok_analysis": "弃权 (AI失效,本场不参与决策)",
-          "gemini_score": "1-0",
-          "gemini_analysis": "🕵️ 庄家意图: 双方同分但主队Shin概率40.7%占优，庄家隐含xG主队1.246领先，庄家模型更认可主队的主场优势。\n💸 资金博弈: 散户资金分布合理，主队41%支持率与Shin概率吻合，未形成大热，资金流向健康无诱盘。\n🎯 破局逻辑: 实力相当的较量中主场优势被庄家放大，客队客场状态极差，顺应庄家模型看好主队坐和望赢。\n总结: 同分卡位战主场优势显现，庄家模型力挺主队不败。",
+          "gemini_score": "1-1",
+          "gemini_analysis": "🕵️ 庄家意图: 双方同分，但主队xG和Shin概率均占优，庄家对主队的主场优势给予了适度的倾斜和认可。\n💸 资金博弈: 散户资金分布合理，主队未形成大热，资金面健康，属于正常的实力盘博弈。\n🎯 破局逻辑: 葡超中游球队交锋，主场优势是关键，主队状态稍好，看好主队坐和望赢，首选平局。\n总结: 同分球队交锋，主场优势助主队不败。",
           "claude_score": "弃权",
           "claude_analysis": "弃权 (AI失效,本场不参与决策)",
           "ai_abstained": [
             "GROK",
             "CLAUDE"
           ],
-          "ai_avg_confidence": 76.4,
+          "ai_avg_confidence": 74.0,
           "value_kill_count": 0,
-          "ai_consensus_strength": 0.67,
-          "model_agreement": true,
+          "ai_consensus_strength": 0.5,
+          "model_agreement": false,
           "xG_home": 1.25,
           "xG_away": 1.07,
           "crs_implied_probs": {
@@ -39582,10 +39597,10 @@
           "extreme_warning": "",
           "smart_money_signal": "",
           "smart_signals": [
-            "💎 主胜价值注! EV+40.4% Kelly8.6% @2.18",
-            "🔥 CLV+30.8% Edge+26.9% [主胜]",
-            "⚠️ 负CLV-25.9% [平局]",
-            "⚠️ 负CLV-44.2% [客胜]"
+            "💎 平局价值注! EV+41.2% Kelly4.7% @3.18",
+            "⚠️ 负CLV-12.1% [主胜]",
+            "🔥 CLV+36.4% Edge+32.3% [平局]",
+            "⚠️ 负CLV-43.9% [客胜]"
           ],
           "model_consensus": 11,
           "total_models": 15,
@@ -39792,24 +39807,22 @@
           "bookmaker_implied_away_xg": 1.068,
           "cold_door": {
             "is_cold_door": false,
-            "strength": 4,
+            "strength": 0,
             "level": "普通",
-            "signals": [
-              "❄️ 赔率vs模型背离25%"
-            ],
+            "signals": [],
             "sharp_confirmed": false,
             "dark_verdict": ""
           },
           "odds_pattern": "正常",
-          "result": "主胜",
+          "result": "平局",
           "value_bets": [
             {
-              "direction": "主胜",
-              "prob": 64.4,
-              "odds": 2.18,
-              "ev": 40.4,
-              "kelly_pct": 8.56,
-              "signal": "💎 主胜价值注! EV+40.4% Kelly8.6% @2.18",
+              "direction": "平局",
+              "prob": 44.4,
+              "odds": 3.18,
+              "ev": 41.2,
+              "kelly_pct": 4.72,
+              "signal": "💎 平局价值注! EV+41.2% Kelly4.7% @3.18",
               "grade": "A"
             }
           ],
@@ -39863,13 +39876,13 @@
               }
             ]
           },
-          "predictability_score": 91,
+          "predictability_score": 59,
           "fusion_weights": {
             "market": 0.67,
             "model": 0.33
           }
         },
-        "recommend_score": 71.64,
+        "recommend_score": 60.92,
         "is_recommended": false
       }
     ]
