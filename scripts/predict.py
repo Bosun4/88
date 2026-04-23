@@ -991,7 +991,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 if not connected:
                     print(f"    ⚠️ {str(e)[:40]} → 换URL")
                     continue
-                else:er                   return ai_name, {}, "error"
+                else:                  return ai_name, {}, "error"
 
             await asyncio.sleep(0.2)
 
