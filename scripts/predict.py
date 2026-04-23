@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, List, Any, Tuple, Optional
 
 # ====================================================================
-# 🛡️ vMAX 17.0 方案B — 删泊松·全靠数据+AI
+# 🛡️ vMAX 17.0 方案B — 删泊松·全靠数据+AI (指令架构进阶版)
 #
 # 核心变革 (vs v16):
 #   ❌ 删除泊松双变量分布
@@ -21,6 +21,7 @@ from typing import Dict, List, Any, Tuple, Optional
 #   ✅ 恢复v14.3全部盘口信号 (Steam/散户反指/赔率变动/冷门预警)
 #   ✅ Sharp在direction+xG两层都生效 (不只xG层)
 #   ✅ 新增 散户反指对比分层直接降权
+#   🚀 升级 Prompt架构: 引入对冲基金量化分析XML框架与多模型异构人设
 # ====================================================================
 try:
     import structlog
@@ -125,15 +126,6 @@ def parse_score(s):
 # 🎯 核心算法1: CRS赔率直接反推概率 (替代泊松)
 # ====================================================================
 def crs_implied_probabilities(match_obj):
-    """
-    从CRS赔率反推庄家真实比分概率分布
-    这是替代泊松的核心 - 庄家的赔率本身就是最准的概率模型
-
-    返回:
-        probs: {score_str: implied_prob_pct}
-        margin: 庄家margin (用于反利)
-        coverage: CRS覆盖率 (0-1)
-    """
     raw_odds = {}
     for score, key in CRS_FULL_MAP.items():
         try:
@@ -158,24 +150,18 @@ def crs_implied_probabilities(match_obj):
             pass
 
     if len(raw_odds) < 8:
-        # CRS覆盖不够，返回空
         return {}, 0.0, 0.0
 
-    # 计算margin (1/odds总和通常>1，代表庄家赚的点)
     raw_sum = sum(1/o for o in raw_odds.values())
     for extra_data in extras.values():
         raw_sum += 1 / extra_data["odds"]
 
     margin = raw_sum - 1.0
 
-    # 反利后的真实概率
     probs = {}
     for score, odds in raw_odds.items():
-        # 1/odds = 含margin的隐含概率
-        # 除以raw_sum做归一化 = 真实概率
         probs[score] = (1 / odds) / raw_sum * 100
 
-    # 胜其他/平其他/负其他平均分给该集合内所有比分
     for key, extra_data in extras.items():
         total_prob = (1 / extra_data["odds"]) / raw_sum * 100
         num_scores = len(extra_data["scores"])
@@ -185,7 +171,7 @@ def crs_implied_probabilities(match_obj):
                 if sc not in probs:
                     probs[sc] = per_score
                 else:
-                    probs[sc] += per_score  # 有些比分可能同时出现在常规和extras
+                    probs[sc] += per_score
 
     coverage = len(raw_odds) / len(CRS_FULL_MAP)
     return probs, round(margin, 3), round(coverage, 2)
@@ -195,7 +181,6 @@ def crs_implied_probabilities(match_obj):
 # 🎯 核心算法2: 进球数赔率信号检测
 # ====================================================================
 def detect_goal_signals(match_obj):
-    """返回每个进球数的压低系数 ratio=标准/实际 > 1.2 即算信号"""
     signals = {}
     for g in range(8):
         try:
@@ -302,7 +287,6 @@ def detect_score_others(match_obj, exp_goals, ai_responses=None):
 
     is_others = score >= 2
 
-    # 方向
     direction = "home"
     try:
         crs_win = float(match_obj.get("crs_win", 999) or 999)
@@ -325,7 +309,7 @@ def detect_score_others(match_obj, exp_goals, ai_responses=None):
 
 
 # ====================================================================
-# 🧊 冷门猎手引擎 (保留)
+# 🧊 冷门猎手引擎
 # ====================================================================
 class ColdDoorDetector:
     @staticmethod
@@ -426,69 +410,39 @@ def save_ai_diary(diary):
 
 
 # ====================================================================
-# 🧠 vMAX 17.0 Prompt — 教AI读CRS+进球信号
+# 🧠 vMAX 17.0 Prompt — XML结构化对冲基金量化指令重构
 # ====================================================================
 def build_phase1_prompt(match_analyses):
     diary = load_ai_diary()
-    p = "你是一个敏感高情商高智商的顶尖足球量化分析师。根据原始数据，独立分析每场比赛，联网查询相关资料信息以及盘口，敏锐的洞察力识别庄家意图，根据联赛风格给出top3候选比分，逆向思维推理符合逻辑思维，敏感计算每一个细节背后隐藏的真实想法。\n\n"
+    p = "<context>\n"
+    p += "你正在执行中国体彩级别的高难度足球盘口分析。这片市场充斥着诱盘与信息不对称，你的任务是穿透迷雾，找到真实的概率分布。\n"
     if diary.get("reflection"):
-        p += f"【进化】胜率:{diary.get('yesterday_win_rate','N/A')} | {diary['reflection']}\n\n"
+        p += f"[系统进化记忆] 昨日胜率: {diary.get('yesterday_win_rate','N/A')} | 经验反思: {diary['reflection']}\n"
+    p += "</context>\n\n"
 
-    p += "【关键指导原则】\n"
-    p += "你必须同时参考: Sharp资金方向 + 散户反指 + 进球数压低信号 + CRS赔率矩阵\n"
-    p += "不要因为保守就选1-0/1-1/2-0，真实比赛的进球分布比泊松预测更丰富具体根据联赛风格球队风格去预测\n\n"
+    p += "<analytical_framework>\n"
+    p += "不要执行简单的正则匹配，请运用以下思维框架进行动态评估：\n"
+    p += "1. 【真实意图剥离】Shin隐含概率反映了庄家的表面立场，但当 Sharp资金(聪明钱) 或 赔率急速降水(Steam) 与其产生分歧时，后者往往代表真实赛果。\n"
+    p += "2. 【诱盘与反指陷阱】如果某方向散户热度极高（>58%），但主导资金(Sharp)未跟进，或赔率依然诱人，这大概率是庄家造热收割（诱盘）。此时必须果断反指，压制大热方向的比分（如 1-0, 2-1）。\n"
+    p += "3. 【尾部分布探测】进球数赔率是庄家防线的底牌：\n"
+    p += "   - 常规防线：0球(~11.5), 1球(~5.5), 2球(~3.4), 3球(~3.75), 4球(~6.0)\n"
+    p += "   - 极端防线：5球(~8.0), 6球(~13.0), 7+球(~22.0)\n"
+    p += "   - 核心洞察：如果实际赔率显著低于常规防线（如 7+球 < 18倍，或 5球 < 7倍），说明庄家真实预期这是一场互射局或单边惨案。此时绝对禁止被大热倾向误导选小比分，必须顺应防备选择大比分或【胜其他/负其他】。\n"
+    p += "4. 【场景共鸣】结合双方球队风格、场均得失球（>=3.5即高波）、杯赛/淘汰赛属性，动态调整期望进球（λ）。\n"
+    p += "</analytical_framework>\n\n"
 
-    p += "【进球数赔率解码】\n"
-    p += "体彩进球数标准赔率基准:\n"
-    p += "  0球~11.5倍 1球~5.5倍 2球~3.4倍 3球~3.75倍 4球~6倍 5球~8倍 6球~13倍 7+球~22倍\n"
-    p += "如果实际赔率 < 标准 ，说明庄家强烈预期该进球数的可能:\n"
-    p += "  - 4球开<5.5倍 → 庄家预期4球几率大\n"
-    p += "  - 5球开<8倍 → 庄家预期猛攻\n"
-    p += "  - 7+球开<18倍 → 互射局信号，必须考虑大球比分 或者【胜其他】比分\n\n"
+    p += "<output_format>\n"
+    p += "请严格以 JSON 数组格式输出预测结果，包含以下字段：\n"
+    p += "- match: 比赛序号 (整数)\n"
+    p += "- top3: 候选比分数组，如 [{\"score\":\"2-1\",\"prob\":15}, ...]\n"
+    p += "- reason: 高级量化推理过程（300字左右，必须包含资金流向、进球压低信号和散户情绪的综合分析）\n"
+    p += "- ai_confidence: 模型综合信心指数 (0-100)\n"
+    p += "- is_score_others: 是否触发极端大球/胜其他场景 (true/false)\n"
+    p += "- detected_signals: 识别出的关键异动信号数组，如 [\"Sharp资金流主\", \"5球赔率极端压低(6.5)\", \"散户热客(62%)\"]\n"
+    p += "</output_format>\n\n"
 
-    p += "【Sharp资金与散户反指】\n"
-    p += "- Sharp信号显示(主胜/客胜/平) → 优先相信这个方向\n"
-    p += "- 散户>58% 押某方向 → 反指！该方向小比分降权(1-0/2-1可能被破)\n"
-    p += "- Sharp走主 + 散户也>58%主 → 双重确认，放胆选主胜大比分比如(2-1/3-1)具体根据联赛风格球队风格去预测\n"
-    p += "- Sharp走客 + 散户>58%主 → 大热必死，必须选择客胜。具体比分请严格参考进球数赔率（若7+球<18倍，放胆选1-3/2-3/客胜其他）具体根据联赛风格球队风格去预测。\n\n"
+    p += "<match_data>\n"
 
-    p += "【🔥极端大球/胜其他 强制规则（最高优先级）】\n"
-    p += "注意：如果赔率显示 5球<7.8倍 或 6球<13倍 ，说明庄家极度防范惨案屠杀大球比分！\n"
-    p += "此时**绝对禁止**被“散户大热”或“反指”误导而去选择 1-1/1-2/2-2 这种小比分（AI常犯错误）。具体根据联赛风格球队风格去预测选择\n"
-    p += "必须顺应庄家真实的进球防范，根据联赛风格球队风格去预测直接输出大比分（如 4-1, 5-0, 5-1）或直接输出文本【胜其他】/【负其他】！\n\n"
-
-    # 🆕 v17.6 体彩诱盘特殊规则
-    p += "【⚠️体彩场次诱盘识别 - 绝对优先级】\n"
-    p += "你预测的是中国体彩精选场次,诱盘率远高于大盘,必须敏感警惕Shin欺骗!\n\n"
-    p += "决策优先级(从高到低):\n"
-    p += "1) Sharp方向 ≠ Shin高概率方向 + 散户大热Shin方向(反指) + Steam同Sharp方向\n"
-    p += "   → 100%诱盘! 必须按Sharp方向选比分,不要选Shin方向 具体根据联赛风格球队风格去选择\n"
-    p += "   示例: Shin客48% 看似客胜,但Sharp走主+散户热客62%+主胜Steam\n"
-    p += "   → 答案必须是主胜 比如(2-1/2-0)符合条件的比分具体根据联赛风格球队风格选择,不是客胜!\n\n"
-    p += "2) Sharp=Shin同方向 + 散户也同方向:\n"
-    p += "   → 不是诱盘,方向极其明确,放胆选2+球差比分\n\n"
-    p += "3) 反向Steam(钱进+降水但散户没跟): 该方向历史命中72%,极强信号\n"
-    p += "4) 散户>68%任何方向: 死亡级热度,必须反指\n"
-    p += "5) 散户60-68%: 大热必死区间,显著反指\n\n"
-    p += "严禁: 看到'Shin主68%'就无脑选主胜!必须交叉验证Sharp/散户/Steam 并且有逆向思维判断\n\n"
-
-    p += "【胜其他识别】(满足2条触发)\n"
-    p += "1) 7+球赔率 ≤ 15倍  2) 5球赔率 ≤ 7倍  3) 期望λ ≥ 3.2\n"
-    p += "4) 双方场均≥3.5球  5) 胜其他赔率(crs_win)<平其他(crs_same)×0.4  6) 杯赛/淘汰赛\n"
-    p += "触发后 top3必须包含至少1个胜其他比分(4-3/5-2/4-2/6-1)具体根据联赛风格球队风格去预测\n\n"
-
-    p += "【强主胜 vs 平局识别】\n"
-    p += "- Shin主胜>60% + xG差>1.0 + 无冷门信号 → 考虑2-1/3-1/2-0 (而非1-0)具体根据联赛风格球队风格去预测选择\n"
-    p += "- Shin平局>40% + 双方xG接近 + 保级死拼/长客陷阱 → 优选考虑1-1/0-0 具体根据联赛风格球队风格去预测选择\n"
-    p += "- 客队盘口太便宜+排名悬殊 → 考虑冷门负(1-2/0-1)具体根据联赛风格球队风格去预测选择\n\n"
-
-    p += "【输出格式】只输出JSON数组。每场必须包含:\n"
-    p += "  match(整数), top3([{score,prob}],...), reason(350字含具体信号), \n"
-    p += "  ai_confidence(0-100), is_score_others(true/false), \n"
-    p += "  detected_signals([\"7球13倍\",\"杯赛\"] 识别到的信号)\n\n"
-    p += '示例: {"match":1,"top3":[{"score":"4-3","prob":12},{"score":"3-2","prob":10},{"score":"4-2","prob":8}],"reason":"7球13倍庄家承认互射局+Sharp走主","ai_confidence":75,"is_score_others":true,"detected_signals":["7球13倍","Sharp主"]}\n\n'
-
-    p += "【原始数据】\n"
     for i, ma in enumerate(match_analyses):
         m = ma["match"]
         eng = ma.get("engine", {})
@@ -501,7 +455,8 @@ def build_phase1_prompt(match_analyses):
         sp_d = float(m.get("sp_draw", m.get("same", 0)) or 0)
         sp_a = float(m.get("sp_away", m.get("lose", 0)) or 0)
 
-        p += f"{'='*50}\n[{i+1}] {h} vs {a} | {league}\n"
+        p += f"<match index=\"{i+1}\">\n"
+        p += f"[{i+1}] {h} vs {a} | {league}\n"
         p += f"欧赔: {sp_h:.2f}/{sp_d:.2f}/{sp_a:.2f} | 让球: {hc}\n"
 
         if sp_h > 1 and sp_d > 1 and sp_a > 1:
@@ -616,9 +571,9 @@ def build_phase1_prompt(match_analyses):
             if len(txt) > 10:
                 p += f"分析: {txt}\n"
                 break
-        p += "\n"
+        p += "</match>\n\n"
 
-    p += f"【输出{len(match_analyses)}场JSON数组，只输出数组！】\n"
+    p += "</match_data>\n"
     return p
 
 
@@ -628,10 +583,8 @@ def build_phase1_prompt(match_analyses):
 FALLBACK_URLS = [None, "https://www.api522.pro/v1", "https://api522.pro/v1",
                  "https://api521.pro/v1", "http://69.63.213.33:666/v1"]
 
-# v17.7 GPT专用默认配置 (poloai通道, 绕过熊猫proxy bug)
-# 这些是"内置默认值",可被环境变量覆盖
 GPT_DEFAULT_URL = "https://poloai.top/v1"
-GPT_DEFAULT_KEY = ""  # 不硬编码key (安全) - 从环境变量GPT_API_KEY读取
+GPT_DEFAULT_KEY = ""
 
 
 def get_clean_env_url(name, default=""):
@@ -646,18 +599,16 @@ def get_clean_env_key(name):
 
 async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list, num_matches, ai_name):
     key = get_clean_env_key(key_env)
-    # v17.7 GPT如果没配环境变量key,尝试默认key
     if not key and ai_name == "gpt":
         key = GPT_DEFAULT_KEY
     if not key:
         return ai_name, {}, "no_key"
 
-    # v17.7 GPT使用poloai专属URL,不和熊猫共用
     if ai_name == "gpt":
         primary_url = get_clean_env_url(url_env, GPT_DEFAULT_URL)
         if not primary_url or "poloai" not in primary_url:
             primary_url = GPT_DEFAULT_URL
-        urls = [primary_url]  # GPT不回退到熊猫(有proxy bug)
+        urls = [primary_url]
         print(f"    🔌 [GPT] 使用poloai通道: {primary_url}")
     else:
         primary_url = get_clean_env_url(url_env)
@@ -668,45 +619,42 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     READ_TIMEOUT_MAP = {"claude": 350, "grok": 250, "gpt": 250, "gemini": 250}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
-    # v17升级: 教AI如何综合多信号判断
+    # 🔥 v17 升级：对冲基金级量化分析异构人设矩阵
     AI_PROFILES = {
         "claude": {
-            "sys": ("你是足球量化分析师。思维链:\n"
-                    "1) 读Sharp资金+Shin概率必需精准确认真实方向\n"
-                    "2) 读进球数a0-a7找压低信号(实际<标准)精准计算每一个细节，敏锐洞察每一个进球数信号\n"
-                    "3) 读散户投票 >58%=反指信号\n"
-                    "4) CRS赔率矩阵交叉验证+逆向思维验证\n"
-                    "5) 方向+进球数+反指→候选比分\n"
-                    "不要死守1-0/1-1/2-0, 根据球队风格以及联赛风格信号大胆选择 判断方向也要判断是否平局 如果是平局也要根据球队历史以及球队风格去判断是闷平还是大平 也要根据联赛判断比赛重要性比如保级战争冠战 多用逆向思维方式思考验证带着庄家视角思考问题 \n"
-                    "只输出JSON数组。"),
-            "temp": 0.18
-        },
-        "grok": {
-            "sys": ("你是Grok, 有联网搜索能力。思维链:\n"
-                    "1) 联网搜索Pinnacle/Betfair实时赔率以及盘口信息确认Sharp方向\n"
-                    "2) 搜索球队最新伤停/赛事属性(争冠/淘汰/互射局)\n"
-                    "3) 敏锐读进球数压低信号 根据球队风格敏锐判断 可以根据进球数0球4球7球作为锚点判断 具体根据实际情况进行调整  \n"
-                    "4) 散户>58%=反指\n"
-                    "5) 输出top3, 必要时包含胜其他(4-3/5-2/4-2)具体根据联赛风格球队风格去预测\n"
-                    "只输出JSON数组。"),
-            "temp": 0.22
+            "sys": ("<role>你是一位顶级对冲基金的博弈论与市场微观结构分析师。</role>\n"
+                    "<framework>你的核心任务是识破庄家(Bookmaker)的定价陷阱。\n"
+                    "1. 交叉验证：Shin隐含概率 vs 散户投票(>55%即视为大热倾向)。寻找‘散户狂热但赔率未合理下调’的诱盘异常。\n"
+                    "2. 资金流向：Sharp资金(聪明钱)与Steam(急速降水)是真实意图，当它们与表面Shin概率冲突时，坚定追随资金。\n"
+                    "3. 尾部风险：通过进球数(a0-a7)的极值赔率，反推庄家是否在秘密防范极端惨案(大胜/互射)。</framework>\n"
+                    "<instruction>运用逆向思维，不要被热门表象迷惑。强制在输出JSON前进行核心逻辑推演。只输出JSON数组。</instruction>"),
+            "temp": 0.25
         },
         "gpt": {
-            "sys": ("你是量化分析师。思维链:\n"
-                    "1) CRS赔率矩阵→概率分布, 找TOP差<2%的=庄家压低\n"
-                    "2) 进球赔率→期望λ, 极端进球(0/7+)异常低=陷阱 敏锐察觉计算每一个动机 举例：0球4球7球可以作为一个锚点0球赔率低于11倍说明4球一下几率大一些 如果4球低于5倍以下那么4球以上的概率就大了 如果7球被压的很低比如20倍以下5球6球7球就好敏锐的去判断了 \n"
-                    "3) 亚盘×欧赔×Sharp交叉验证以及逆向思维 具体根据联赛风格球队风格去判断\n"
-                    "4) 综合输出top3\n"
-                    "只输出JSON数组。"),
-            "temp": 0.18
+            "sys": ("<role>你是专精于衍生品定价与概率分布偏差的量化策略师。</role>\n"
+                    "<framework>你的任务是发现结构性错误定价(Mispricing)：\n"
+                    "1. 期望验证：从进球数赔率反推比赛的真实期望进球数(λ)，并以此重塑精确比分(CRS)的合理分布。\n"
+                    "2. 信号融合：将盘口异常(如反向Steam、让球深度不足)视为庄家隐蔽的降险行为。\n"
+                    "3. 剥离噪音：无视散户的狂热情感，纯粹基于赔率矩阵的偏差寻找期望值(EV)最大的比分。</framework>\n"
+                    "<instruction>基于数据进行严密推理，重视进球数压低信号对分布的影响。只输出JSON数组。</instruction>"),
+            "temp": 0.20
+        },
+        "grok": {
+            "sys": ("<role>你是一位拥有全网实时数据嗅觉的另类数据(Alternative Data)分析师。</role>\n"
+                    "<framework>结合数据面板与潜在基本面：\n"
+                    "1. 情绪反指：当散户投票占比>60%且赔率走势不支持时，果断执行反指策略，压制大热比分。\n"
+                    "2. 战意与剧本：根据联赛特性、杯赛淘汰属性、保级战意，评估比赛是否容易走向极端(如沉闷的0-0或互捅的大比分)。\n"
+                    "3. 极端捕捉：重点监控7+球赔率和5球赔率，一旦发现庄家过度防备，立即将【胜其他/负其他】纳入Top 3。</framework>\n"
+                    "<instruction>敏锐捕捉冷门信号与情绪背离。只输出JSON数组。</instruction>"),
+            "temp": 0.30
         },
         "gemini": {
-            "sys": ("你是模式敏感识别引擎。思维链:\n"
-                    "1) Shin vs 散户偏差>15%=错误定价\n"
-                    "2) 赔率变动方向(负=降水钱流入)\n"
-                    "3) 进球数隐含分布vs CRS偏差\n"
-                    "4) 输出top3\n"
-                    "只输出JSON数组。"),
+            "sys": ("<role>你是精通非线性特征捕捉的深度学习模式识别引擎。</role>\n"
+                    "<framework>寻找多维数据间的非自然共振：\n"
+                    "1. 偏差热力：比较欧赔隐含分布、亚盘深度、与CRS矩阵，寻找三者之间的定价裂痕(例如：亚盘深但CRS大比分赔率高耸，说明是虚盘)。\n"
+                    "2. 动量追踪：赔率变动(Odds Movement)方向与Sharp资金方向的共振是最高级别确认。\n"
+                    "3. 进球锚点：以0球(闷平)、4球、7球赔率为三个锚点，快速判断比赛的波动率曲线形状。</framework>\n"
+                    "<instruction>综合多源矛盾信号，输出最稳健的预测。只输出JSON数组。</instruction>"),
             "temp": 0.15
         },
     }
@@ -785,7 +733,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         print(f"    📊 {req_tokens:,} token | {elapsed}s")
 
                     raw_text = ""
-                    debug_msg_keys = []  # 调试用: 记录msg所有字段
+                    debug_msg_keys = []
                     try:
                         if is_gem:
                             raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
@@ -793,33 +741,26 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             if data.get("choices") and data["choices"]:
                                 msg = data["choices"][0].get("message", {})
                                 if isinstance(msg, dict):
-                                    # 🔍 v17.2 调试: 记录所有字段名和长度, 帮助诊断未知格式
                                     debug_msg_keys = [
                                         f"{k}({type(v).__name__}:{len(v) if isinstance(v, (str, list)) else '?'})"
                                         for k, v in msg.items()
                                     ]
 
-                                    # 🚨 v17.4: 检测 proxy bug — content=null 但有token消耗
                                     if msg.get("content") is None and data.get("usage", {}).get("completion_tokens", 0) > 100:
                                         print(f"    🚨 [proxy bug] {ai_name.upper()} content=null 但消耗了 {data['usage']['completion_tokens']} token")
                                         print(f"        → proxy没传回内容, 钱白花。建议换模型/反馈客服")
-                                        # 继续尝试其他字段, 但大概率没救
 
-                                    # 🔥 v17.2 修复: thinking model响应处理
-                                    # 优先级1: 标准 OpenAI message.content 字段
                                     content_val = msg.get("content", "")
                                     if content_val:
                                         if isinstance(content_val, str) and content_val.strip():
                                             raw_text = content_val.strip()
                                         elif isinstance(content_val, list):
-                                            # content可能是数组形式 (Anthropic风格)
                                             for item in content_val:
                                                 if isinstance(item, dict) and item.get("type") == "text":
                                                     t = item.get("text", "").strip()
                                                     if t and len(t) > len(raw_text):
                                                         raw_text = t
 
-                                    # 优先级2: 其他常见的"答案"字段名 (扩大列表)
                                     if not raw_text:
                                         for field in [
                                             "text", "answer", "response", "output_text", "final_answer",
@@ -831,8 +772,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                                 raw_text = v.strip()
                                                 break
 
-                                    # 优先级3: 找含 "match" 关键字的字段(跳过thinking)
-                                    # 这才是真正的JSON, 不能选垃圾字段
                                     if not raw_text:
                                         skip_keys = (
                                             "reasoning_content", "thinking", "reasoning",
@@ -850,7 +789,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                         if best_with_match:
                                             raw_text = best_with_match
 
-                                    # 优先级4: 仍找不到? 在所有字段(包括thinking)里找含match的JSON
                                     if not raw_text:
                                         for k in msg:
                                             v = msg[k]
@@ -859,7 +797,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                                 print(f"    🆘 兜底命中字段: {k}")
                                                 break
 
-                                    # 优先级5: 实在没有, 取最长非thinking字段(可能proxy没用标准字段名)
                                     if not raw_text:
                                         skip_keys2 = (
                                             "reasoning_content", "thinking", "reasoning",
@@ -885,7 +822,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                                     raw_text = t
 
                             if not raw_text:
-                                # 🆘 终极兜底: 整个data转字符串后regex找
                                 full_str = json.dumps(data, ensure_ascii=False)
                                 m_match = re.search(r'\[\s*\{\s*\\?"match\\?"', full_str)
                                 if m_match:
@@ -909,18 +845,14 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         print(f"    ⚠️ 解析异常: {str(ex)[:80]}")
 
                     if not raw_text or len(raw_text) < 10:
-                        # 🔍 失败时打印调试信息
                         print(f"    ⚠️ 空数据 → 换模型")
                         if debug_msg_keys:
                             print(f"    🔍 [调试] msg字段: {', '.join(debug_msg_keys[:8])}")
-                        # 打印data顶层字段
                         if isinstance(data, dict):
                             top_keys = [f"{k}({type(v).__name__})" for k, v in data.items()]
                             print(f"    🔍 [调试] data字段: {', '.join(top_keys[:6])}")
-                            # 如果有usage显示出来
                             if data.get("usage"):
                                 print(f"    🔍 [调试] usage: {data['usage']}")
-                        # 🆘 v17.3: 把失败的响应dump到文件供人工排查
                         try:
                             os.makedirs("data/debug", exist_ok=True)
                             dump_file = f"data/debug/{ai_name}_fail_{int(time.time())}.json"
@@ -930,12 +862,10 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         except: pass
                         break
 
-                    # 🔥 v17.1 修复: JSON提取更精确 - 找 [{"match" 模式
                     clean = raw_text
                     clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", clean, flags=re.DOTALL | re.IGNORECASE)
                     clean = re.sub(r"```[\w]*", "", clean).strip()
 
-                    # 优先用正则找 [{"match" 这种特征模式 (避免被thinking里的[35%]之类干扰)
                     json_str = ""
                     m_re = re.search(r'\[\s*\{\s*"match"', clean)
                     if m_re:
@@ -953,7 +883,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                             json_str = clean[start_idx:end_idx]
                             print(f"    🎯 精确匹配JSON: {len(json_str)}字")
 
-                    # fallback: 老逻辑
                     if not json_str:
                         start = clean.find("[")
                         end = clean.rfind("]") + 1
@@ -1006,7 +935,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         return ai_name, results, mn
                     else:
                         print(f"    ⚠️ 解析0条 → 换模型")
-                        # 🔍 调试: 解析0条时打印关键信息
                         if raw_text:
                             print(f"    🔍 [调试] raw_text长度: {len(raw_text)}")
                             print(f"    🔍 [调试] raw_text前150字: {raw_text[:150]}")
@@ -1016,7 +944,6 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                 print(f"    🔍 [调试] json_str前150字: {json_str[:150]}")
                         if debug_msg_keys:
                             print(f"    🔍 [调试] msg字段: {', '.join(debug_msg_keys[:8])}")
-                        # 🆘 v17.3: dump失败响应
                         try:
                             os.makedirs("data/debug", exist_ok=True)
                             dump_file = f"data/debug/{ai_name}_parse0_{int(time.time())}.json"
@@ -1082,24 +1009,11 @@ async def run_ai_matrix_two_phase(match_analyses):
 
 # ====================================================================
 # 🌟 Merge v17.0 — 方案B: 删泊松, CRS+AI+信号驱动
-#
-# 评分公式 (总100分):
-#   CRS直接概率 [35]    ← 替代泊松, 庄家真实概率
-#   AI加权共识 [40]     ← 4家独立判断
-#   进球数信号 [15]     ← 庄家压低进球数
-#   胜其他加成 [5]      ← 识别到胜其他场
-#   方向/反指调整 [±15] ← Sharp/散户/冷门
-#
-# 信号层 (恢复v14.3全部):
-#   Shin [30] + Sharp [12] + Steam [8] + 散户反指 [10]
-#   + 冷门预警 [8] + 赔率变动 [7] + AI共识 [25]
 # ====================================================================
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
-    # 🔧 v17.5 修复: 字段位置兼容 - v2_odds_dict内的CRS/进球数/半全场字段提升到顶层
-    # 真实数据结构: match_obj.v2_odds_dict.{w10, a0, ss, ...}
     if isinstance(match_obj.get("v2_odds_dict"), dict):
         v2 = match_obj["v2_odds_dict"]
-        match_obj = {**match_obj, **v2}  # 不破坏原始, 创建新dict合并
+        match_obj = {**match_obj, **v2}
         print(f"    🔧 [字段兼容] v2_odds_dict→顶层 ({len(v2)}个字段)")
 
     league = str(match_obj.get("league", match_obj.get("cup", "")))
@@ -1108,12 +1022,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     sp_a = float(match_obj.get("sp_away", match_obj.get("lose", 0)) or 0)
     engine_conf = engine_result.get("confidence", 50)
 
-    # 🛡️ v17.4: AI有效性检测 - 失败的AI完全弃权,不参与任何加权计算
     def _is_valid_ai(r):
         if not isinstance(r, dict): return False
         score = r.get("ai_score", "")
         if not score or score in ("-", "N/A", ""): return False
-        # 验证比分格式
         try:
             parts = str(score).strip().replace(" ", "").split("-")
             if len(parts) != 2: return False
@@ -1132,17 +1044,13 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if abstained:
         print(f"    🚫 弃权AI: {', '.join(abstained)} (失效,不参与加权)")
 
-    # 只把有效的AI放入all_ai (无效的AI完全跳过)
     p1_ai = {n: r for n, r in [("gpt", gpt_r), ("grok", grok_r), ("gemini", gemini_r)] if ai_valid[n]}
     all_ai = {**p1_ai}
     if ai_valid["claude"]:
         all_ai["claude"] = claude_r
 
-    # ============ 第一层: 方向决策 (v17.6 体彩诱盘识别核心引擎) ============
     direction_scores = {"home": 0.0, "draw": 0.0, "away": 0.0}
 
-    # -------- 先采集所有信号,为"诱盘判定"做准备 --------
-    # 信号采集: Shin概率
     if sp_h > 1 and sp_d > 1 and sp_a > 1:
         margin = 1/sp_h + 1/sp_d + 1/sp_a
         shin_h = (1/sp_h)/margin*100
@@ -1152,22 +1060,17 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         shin_h = shin_d = shin_a = 33.3
     shin_dir = max([("home", shin_h), ("draw", shin_d), ("away", shin_a)], key=lambda x: x[1])[0]
 
-    # 信号采集: Sharp
     smart_signals = stats.get("smart_signals", [])
     smart_str = " ".join(str(s) for s in smart_signals)
     sharp_detected = "Sharp" in smart_str or "sharp" in smart_str
     sharp_dir = None
     if sharp_detected:
         import re as _re_sharp
-        # 🔧 v17.6 bugfix: 只取Sharp关键词附近的方向词,避免"客队坏消息"等污染
-        # 扫描每条信号,找含"Sharp"的那一条,从中提取方向
         for s in smart_signals:
             s_str = str(s)
             if "Sharp" in s_str or "sharp" in s_str:
-                # 排除"Sharp Money确认"这种无方向的
                 if "确认" in s_str and "→" not in s_str and "流向" not in s_str:
                     continue
-                # 在该条内匹配方向(优先主胜/客胜/平局精确词,其次主队/客队)
                 if _re_sharp.search(r"(主胜|主队|走主|→\s*主|流向\s*主|资金\s*主)", s_str):
                     sharp_dir = "home"; break
                 elif _re_sharp.search(r"(客胜|客队|走客|→\s*客|流向\s*客|资金\s*客)", s_str):
@@ -1175,12 +1078,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 elif _re_sharp.search(r"(平局|平赔|走平|→\s*平|流向\s*平|资金\s*平)", s_str):
                     sharp_dir = "draw"; break
 
-    # 信号采集: Steam (分三类)
     steam_dir = None
-    steam_type = None  # normal/reverse/induced
+    steam_type = None
     if "Steam" in smart_str:
         import re as _re_steam
-        # 🔧 v17.6 bugfix: 只在含"Steam"的那条信号里提取方向
         for s in smart_signals:
             s_str = str(s)
             if "Steam" not in s_str: continue
@@ -1198,7 +1099,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 steam_type = "reverse" if is_reverse else "normal"
                 break
 
-    # 信号采集: 散户
     vote = match_obj.get("vote", {})
     vh = vd = va = 33
     vote_hot_dir = None
@@ -1215,9 +1115,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             else: vote_hot_dir = "away"
     except: pass
 
-    # 信号采集: 赔率变动
     change = match_obj.get("change", {})
-    change_down_dir = None  # 哪个方向在降水
+    change_down_dir = None
     try:
         cw = float(str(change.get("win", 0)).replace("+", "") or 0)
         cs = float(str(change.get("same", 0)).replace("+", "") or 0)
@@ -1227,53 +1126,36 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         elif cs < -0.05 and cs <= cw and cs <= cl: change_down_dir = "draw"
     except: pass
 
-    # 信号采集: 冷门信号
     cold_signals_raw = [s for s in smart_signals if "❄️" in str(s) or "冷门" in str(s) or "大热" in str(s) or "造热" in str(s)]
 
-    # v17.7 bugfix: hot_side 提前定义 (修复 UnboundLocalError)
     hp_eng = engine_result.get("home_prob", shin_h)
     ap_eng = engine_result.get("away_prob", shin_a)
     hot_side = "home" if hp_eng > ap_eng else "away"
 
-    # ========== 🎯 体彩诱盘识别核心(v17.6) ==========
-    # 规则: Sharp是真相, 当Sharp与Shin冲突且有辅助证据时, Shin应该降权
-    dupan_detected = False   # 是否识别到诱盘
-    dupan_true_dir = None    # 真实方向(Sharp方向)
-    dupan_confirm = 0        # 诱盘证据分
+    dupan_detected = False
+    dupan_true_dir = None
+    dupan_confirm = 0
 
     if sharp_detected and sharp_dir and sharp_dir != shin_dir:
-        # Sharp和Shin方向冲突 - 这是诱盘第一信号
         dupan_confirm = 0
-        # 散户反指支持Sharp (散户热Shin方向 = 反指 = 支持Sharp)
         if vote_hot_dir == shin_dir and vote_hot_pct >= 55:
-            if vote_hot_pct >= 68: dupan_confirm += 4    # 死亡级反指
-            elif vote_hot_pct >= 60: dupan_confirm += 3  # 大热必死
+            if vote_hot_pct >= 68: dupan_confirm += 4
+            elif vote_hot_pct >= 60: dupan_confirm += 3
             else: dupan_confirm += 2
-        # 或散户直接押Sharp方向以外的方向(间接支持Sharp)
         if vote_hot_dir and vote_hot_dir != sharp_dir and vote_hot_pct >= 58:
             dupan_confirm += 2
-
-        # Steam方向支持Sharp
         if steam_dir == sharp_dir:
-            if steam_type == "reverse": dupan_confirm += 3   # 反向Steam黄金
+            if steam_type == "reverse": dupan_confirm += 3
             else: dupan_confirm += 2
-
-        # 赔率变动支持Sharp
         if change_down_dir == sharp_dir:
             dupan_confirm += 2
-
-        # 冷门信号
         if cold_signals_raw:
             dupan_confirm += min(3, len(cold_signals_raw))
-
-        # 判定诱盘(阈值3分)
         if dupan_confirm >= 3:
             dupan_detected = True
             dupan_true_dir = sharp_dir
             print(f"    🚨 [诱盘识别] Sharp({sharp_dir}) ≠ Shin({shin_dir}) | 证据{dupan_confirm}分 → 真实方向={sharp_dir}")
 
-    # -------- 信号应用 --------
-    # 信号1: Shin概率 [诱盘时降权50%, 否则30分]
     shin_weight = 15 if dupan_detected else 30
     direction_scores["home"] += shin_h/100 * shin_weight
     direction_scores["draw"] += shin_d/100 * shin_weight
@@ -1281,17 +1163,14 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if dupan_detected:
         print(f"    📉 诱盘模式: Shin权重30→15 (庄家骗局打5折)")
 
-    # 信号2: Sharp资金 [基础25分, 诱盘覆盖时再+10]
     if sharp_detected and sharp_dir:
         sharp_base = 35 if dupan_detected else 25
         direction_scores[sharp_dir] += sharp_base
         dir_cn = {"home": "主胜", "away": "客胜", "draw": "平局"}[sharp_dir]
         print(f"    💰 Sharp→{dir_cn} +{sharp_base}")
 
-    # 信号3: Steam [拆三类]
     if steam_dir:
         if steam_type == "reverse":
-            # 反向Steam=钱进但散户不跟=黄金信号
             direction_scores[steam_dir] += 20
             dir_cn = {"home": "主胜", "away": "客胜", "draw": "平局"}[steam_dir]
             print(f"    🚀🚀 反向Steam→{dir_cn} +20 (钱进散户不跟-黄金信号)")
@@ -1300,37 +1179,29 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             dir_cn = {"home": "主胜", "away": "客胜", "draw": "平局"}[steam_dir]
             print(f"    🚀 Steam→{dir_cn} +10")
 
-    # 信号4: 散户反指 [分3档:55/60/68]
-    contrarian_away_score = 0  # 给比分层使用
+    contrarian_away_score = 0
     contrarian_home_score = 0
     if vote_hot_dir and vote_hot_pct >= 55:
         if vote_hot_pct >= 68:
-            contra_weight = 22  # 死亡级
-            level = "死亡级"
+            contra_weight = 22; level = "死亡级"
         elif vote_hot_pct >= 60:
-            contra_weight = 14  # 大热必死
-            level = "大热必死"
+            contra_weight = 14; level = "大热必死"
         else:
-            contra_weight = 6   # 轻度
-            level = "轻度"
+            contra_weight = 6; level = "轻度"
 
-        # 反指: 给 "除了vote_hot_dir外的方向"加分
         for d in ["home", "draw", "away"]:
             if d != vote_hot_dir:
                 direction_scores[d] += contra_weight * 0.5
-        # 该方向减分
         direction_scores[vote_hot_dir] -= contra_weight * 0.3
 
         dir_cn = {"home": "主胜", "away": "客胜", "draw": "平局"}[vote_hot_dir]
         print(f"    🎭 散户热{dir_cn}{vote_hot_pct}% [{level}] → 反指 权重{contra_weight}")
 
-        # 同步给比分层(压制被散户热的小比分)
         if vote_hot_dir == "home":
             contrarian_away_score = contra_weight
         elif vote_hot_dir == "away":
             contrarian_home_score = contra_weight
 
-    # 信号5: 冷门分数化 (v17.6新)
     if cold_signals_raw or sharp_detected or vote_hot_pct >= 60:
         cold_score = 0
         if sharp_detected and sharp_dir and sharp_dir != shin_dir: cold_score += 6
@@ -1356,14 +1227,12 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             cold_level = None; cold_power = 0
 
         if cold_level:
-            # 给"非热门方向"加分, 减"热门方向"
             direction_scores[hot_side] -= cold_power
             other = "away" if hot_side == "home" else "home"
             direction_scores[other] += cold_power * 0.6
             direction_scores["draw"] += cold_power * 0.4
             print(f"    ❄️ 冷门[{cold_level}] 分数{cold_score} → 降{hot_side} -{cold_power}")
 
-    # 信号6: 赔率变动 [7分,保留]
     if change and isinstance(change, dict):
         try:
             cw = float(str(change.get("win", 0)).replace("+", "") or 0)
@@ -1380,8 +1249,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 print(f"    📊 赔率变动: {' '.join(move_log)}")
         except: pass
 
-    # 信号7: AI方向共识 [诱盘时降权至15,否则25]
-    ai_weight_total = 15 if dupan_detected else 25  # 诱盘场AI不可信
+    ai_weight_total = 15 if dupan_detected else 25
     ai_directions = {"home": 0, "draw": 0, "away": 0}
     for name, r in all_ai.items():
         if not isinstance(r, dict): continue
@@ -1391,7 +1259,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             if t3 and len(t3) > 0:
                 sc = parse_score(t3[0].get("score", ""))
         if sc and sc[0] is not None:
-            # v17.4 权重: Claude裁决>Gemini>Grok>GPT
             w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
             if sc[0] > sc[1]: ai_directions["home"] += w
             elif sc[0] < sc[1]: ai_directions["away"] += w
@@ -1401,7 +1268,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         for d in ["home", "draw", "away"]:
             direction_scores[d] += (ai_directions[d] / total_ai_dir) * ai_weight_total
 
-    # 归一化
     total_dir = sum(max(0.1, v) for v in direction_scores.values())
     dir_probs = {d: max(0.1, direction_scores[d]) / total_dir * 100 for d in direction_scores}
     final_direction = max(dir_probs, key=dir_probs.get)
@@ -1410,7 +1276,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
     print(f"    🎯 方向: 主{dir_probs['home']:.0f}% 平{dir_probs['draw']:.0f}% 客{dir_probs['away']:.0f}%")
 
-    # 冷门检测
     pre_pred = {
         "home_win_pct": dir_probs["home"], "draw_pct": dir_probs["draw"], "away_win_pct": dir_probs["away"],
         "steam_move": stats.get("steam_move", {}), "smart_signals": smart_signals,
@@ -1418,13 +1283,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     }
     cold_door = ColdDoorDetector.detect(match_obj, pre_pred)
 
-    # ============ 第二层: 期望进球 (v17.3 多层兜底) ============
     exp_goals = 0.0
-    # 层1: 直接字段
     for src, src_name in [(engine_result, "engine"), (stats, "stats")]:
         if not src: continue
-        for k in ["expected_total_goals", "exp_goals", "total_goals",
-                  "expected_goals", "lambda_total", "total_xg"]:
+        for k in ["expected_total_goals", "exp_goals", "total_goals", "expected_goals", "lambda_total", "total_xg"]:
             v = src.get(k)
             if v is not None:
                 try:
@@ -1435,7 +1297,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 except: pass
         if exp_goals > 0: break
 
-    # 层2: 用 xG 总和兜底 (最可靠)
     if exp_goals <= 0:
         try:
             hxg = float(engine_result.get("bookmaker_implied_home_xg", 0) or 0)
@@ -1445,7 +1306,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 print(f"    📐 期望进球用xG总和: {hxg:.2f}+{axg:.2f}={exp_goals:.2f}")
         except: pass
 
-    # 层3: 用 a0-a7 赔率反推
     if exp_goals <= 0:
         try:
             gp = []
@@ -1458,21 +1318,17 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 print(f"    📐 期望进球用a0-a7反推: {exp_goals:.2f}")
         except: pass
 
-    # 层4: 用欧赔大小球倾向(大2.5 over_25)估算
     if exp_goals <= 0:
         try:
             over25 = float(engine_result.get("over_25", 50) or 50)
-            # over25>60%→λ约2.9; 50%→λ约2.5; 40%→λ约2.2
             exp_goals = 2.0 + (over25 - 40) * 0.015
             print(f"    📐 期望进球用over25估算: {exp_goals:.2f}")
         except: pass
 
-    # 最后兜底
     if exp_goals < 1.0 or exp_goals > 6.0:
         print(f"    ⚠️ 期望进球异常({exp_goals:.2f}),使用默认2.5")
         exp_goals = 2.5
 
-    # ============ 第三层: 进球数信号 ============
     goal_signals = detect_goal_signals(match_obj)
     strongest_goal = -1
     strongest_ratio = 1.0
@@ -1482,22 +1338,18 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         sig_str = ", ".join(f"{g}球(x{r:.1f})" for g, r in sorted(goal_signals.items(), key=lambda x: -x[1])[:3])
         print(f"    📈 进球信号: {sig_str}")
 
-    # ============ 第四层: 胜其他识别 ============
     others_info = detect_score_others(match_obj, exp_goals, all_ai)
     if others_info["is_others"]:
         print(f"    🔥 胜其他({others_info['trigger_count']:.1f}条): {' | '.join(others_info['triggers'][:3])}")
 
-    # ============ 🎯 第五层: CRS直接概率 (替代泊松) ============
     crs_probs, crs_margin, crs_coverage = crs_implied_probabilities(match_obj)
     if crs_probs:
         print(f"    📋 CRS概率: 覆盖{crs_coverage*100:.0f}% margin{crs_margin:.3f}")
     else:
         print(f"    ⚠️ CRS数据不足, 将使用简化backup")
 
-    # Backup: CRS不够时用xG做简化分布(不走完整泊松)
     home_xg = float(engine_result.get("bookmaker_implied_home_xg", 1.3) or 1.3)
     away_xg = float(engine_result.get("bookmaker_implied_away_xg", 0.9) or 0.9)
-    # Sharp/冷门对xG的调整
     xg_adj_log = []
     if sharp_detected:
         if "客胜" in smart_str or "客队" in smart_str:
@@ -1518,7 +1370,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if xg_adj_log:
         print(f"    ⚽ xG调整: 主{home_xg:.2f}/客{away_xg:.2f} ({' | '.join(xg_adj_log)})")
 
-    # CRS不足时用简化泊松兜底(仅作backup,权重降到5)
     backup_probs = {}
     if not crs_probs or crs_coverage < 0.5:
         for h_g in range(6):
@@ -1527,7 +1378,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 p_a = math.exp(-away_xg) * (away_xg ** a_g) / math.factorial(a_g)
                 backup_probs[f"{h_g}-{a_g}"] = round(p_h * p_a * 100, 2)
 
-    # ============ 第六层: AI投票 ============
     ai_voted = {}
     for name, r in all_ai.items():
         if not isinstance(r, dict): continue
@@ -1538,7 +1388,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 sc = parse_score(t3[0].get("score", ""))
         if sc and sc[0] is not None:
             key = f"{sc[0]}-{sc[1]}"
-            # v17.4 比分投票权重: Claude裁决>Gemini>Grok>GPT
             w = 1.5 if name == "claude" else (1.40 if name == "gemini" else (1.35 if name == "grok" else 1.0))
             ai_voted[key] = ai_voted.get(key, 0) + w
         t3 = r.get("top3", [])
@@ -1550,10 +1399,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                     w2 = 0.4 if rank == 2 else 0.2
                     ai_voted[key2] = ai_voted.get(key2, 0) + w2
 
-    # v17.8 Claude否决权: 改为方向层判断,不再看比分字符串
-    # 修复bug: 旧代码 Claude(0-1)+Grok(1-2)都是客胜,但比分不同被误判为"Claude独立"
     def _score_to_dir(score_str):
-        """比分字符串 → 方向 (home/draw/away)"""
         try:
             parts = str(score_str).strip().replace(" ", "").split("-")
             h, a = int(parts[0]), int(parts[1])
@@ -1562,14 +1408,13 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             else: return "draw"
         except: return None
 
-    if ai_valid["claude"] and claude_r.get("ai_confidence", 0) >= 75:  # 阈值75(研究建议)
+    if ai_valid["claude"] and claude_r.get("ai_confidence", 0) >= 75:
         cl_score = claude_r.get("ai_score", "")
         cl_dir = _score_to_dir(cl_score)
         if cl_score and cl_dir:
-            # 统计其他有效AI的"方向"(不是比分!)
             other_ai_dirs = {}
             valid_others = 0
-            other_confidences = []  # 其他AI对各自选择的信心
+            other_confidences = []
             for name in ["gpt", "grok", "gemini"]:
                 if not ai_valid[name]: continue
                 valid_others += 1
@@ -1582,15 +1427,8 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                         other_confidences.append(r.get("ai_confidence", 60))
 
             if other_ai_dirs and valid_others >= 2:
-                # 严格多数: 3/4 → 只要3家同方向(研究建议hard majority)
                 majority_dir, majority_count = max(other_ai_dirs.items(), key=lambda x: x[1])
-                is_hard_majority = majority_count >= 3  # 必须至少3家同方向
-
-                # 触发否决4条件(研究建议AND):
-                # 1) Claude方向与多数方向不同(真正独立)
-                # 2) 严格多数存在(至少3家同方向)
-                # 3) Claude信心足够高(已在外层判断≥75)
-                # 4) Claude信心大于多数派平均信心(Claude真的更有把握)
+                is_hard_majority = majority_count >= 3
                 avg_other_conf = sum(other_confidences) / len(other_confidences) if other_confidences else 60
                 claude_conf = claude_r.get("ai_confidence", 60)
 
@@ -1598,19 +1436,16 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
                 confidence_dominant = claude_conf > avg_other_conf
 
                 if direction_independent and is_hard_majority and confidence_dominant:
-                    # 真正独立: 方向都不同 + 3家同方向 + Claude信心更高 → 否决翻倍
                     cl_clean = cl_score.replace(" ", "").strip()
                     if cl_clean in ai_voted:
                         ai_voted[cl_clean] *= 2.0
                         print(f"    👑 Claude真正独立裁决({cl_dir}信心{claude_conf}) vs 多数{majority_dir}({majority_count}/{valid_others}) → 权重×2")
                 elif direction_independent and is_hard_majority and not confidence_dominant:
-                    # 方向独立但信心不够主导 → 只给小幅加权
                     cl_clean = cl_score.replace(" ", "").strip()
                     if cl_clean in ai_voted:
                         ai_voted[cl_clean] *= 1.3
                         print(f"    ✋ Claude方向独立但信心非主导 → 权重×1.3(非否决)")
                 elif not direction_independent:
-                    # Claude方向与多数同向(只是比分不同) → 视为内部协同,轻度加权
                     cl_clean = cl_score.replace(" ", "").strip()
                     if cl_clean in ai_voted:
                         ai_voted[cl_clean] *= 1.3
@@ -1622,23 +1457,18 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         total_vote = sum(ai_voted.values())
         ai_consensus_strength = max_vote / total_vote if total_vote > 0 else 0
 
-    # 🎯 v17.6 新增: 诱盘场Sharp强加反向比分
     if dupan_detected and dupan_true_dir:
         if dupan_true_dir == "home":
-            for sc in ["2-1", "2-0", "3-1"]:
-                ai_voted[sc] = ai_voted.get(sc, 0) + 3.0
+            for sc in ["2-1", "2-0", "3-1"]: ai_voted[sc] = ai_voted.get(sc, 0) + 3.0
             print(f"    🎯 诱盘覆盖: 强加主胜2球差比分 (2-1/2-0/3-1 +3票)")
         elif dupan_true_dir == "away":
-            for sc in ["1-2", "0-2", "1-3"]:
-                ai_voted[sc] = ai_voted.get(sc, 0) + 3.0
+            for sc in ["1-2", "0-2", "1-3"]: ai_voted[sc] = ai_voted.get(sc, 0) + 3.0
             print(f"    🎯 诱盘覆盖: 强加客胜2球差比分 (1-2/0-2/1-3 +3票)")
         elif dupan_true_dir == "draw":
-            for sc in ["1-1", "2-2", "0-0"]:
-                ai_voted[sc] = ai_voted.get(sc, 0) + 2.5
+            for sc in ["1-1", "2-2", "0-0"]: ai_voted[sc] = ai_voted.get(sc, 0) + 2.5
             print(f"    🎯 诱盘覆盖: 强加平局比分 (1-1/2-2/0-0 +2.5票)")
 
-    # 🎯 v17.6 新增: 客队零封识别
-    away_zero_prob = 50  # 基础分
+    away_zero_prob = 50
     away_xg_for_zero = float(engine_result.get("bookmaker_implied_away_xg", 1.2) or 1.2)
     if away_xg_for_zero <= 0.8: away_zero_prob += 25
     elif away_xg_for_zero <= 1.0: away_zero_prob += 15
@@ -1647,8 +1477,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     away_stats_obj = match_obj.get("away_stats", {})
     if isinstance(away_stats_obj, dict):
         form = str(away_stats_obj.get("form", ""))
-        recent5 = form[:5] if form else ""
-        recent_L = recent5.count("L")
+        recent_L = form[:5].count("L") if form else 0
         if recent_L >= 4: away_zero_prob += 15
         elif recent_L >= 3: away_zero_prob += 8
 
@@ -1658,15 +1487,10 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             elif avg_for < 1.2: away_zero_prob += 8
         except: pass
 
-    # 主队强势
     if shin_h > 65: away_zero_prob += 10
     elif shin_h > 55: away_zero_prob += 5
+    if sharp_detected and sharp_dir == "away": away_zero_prob -= 30
 
-    # Sharp方向修正 - 如果Sharp走客胜,客队必有攻击力
-    if sharp_detected and sharp_dir == "away":
-        away_zero_prob -= 30
-
-    # 主队零封(对客情况)
     home_zero_prob = 50
     home_xg_for_zero = float(engine_result.get("bookmaker_implied_home_xg", 1.2) or 1.2)
     if home_xg_for_zero <= 0.8: home_zero_prob += 25
@@ -1676,8 +1500,7 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     home_stats_obj = match_obj.get("home_stats", {})
     if isinstance(home_stats_obj, dict):
         form = str(home_stats_obj.get("form", ""))
-        recent5 = form[:5] if form else ""
-        recent_L = recent5.count("L")
+        recent_L = form[:5].count("L") if form else 0
         if recent_L >= 4: home_zero_prob += 15
         elif recent_L >= 3: home_zero_prob += 8
         try:
@@ -1688,70 +1511,49 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
 
     if shin_a > 65: home_zero_prob += 10
     elif shin_a > 55: home_zero_prob += 5
-    if sharp_detected and sharp_dir == "home":
-        home_zero_prob -= 30
+    if sharp_detected and sharp_dir == "home": home_zero_prob -= 30
 
-    # 🚨 新增拦截：如果预期进球极大，强制解除零封机制
     if exp_goals >= 3.0 or strongest_goal >= 3:
         away_zero_prob = min(away_zero_prob, 50)
         home_zero_prob = min(home_zero_prob, 50)
         print(f"    ⚠️ 大球信号(λ={exp_goals:.2f}, 最强进球={strongest_goal})拦截零封机制")
 
-    # 应用零封加成到比分层
     zero_boost_applied = False
     if away_zero_prob >= 70 and shin_h > shin_a:
-        # 客队大概率零封,主胜场景
-        for sc in ["1-0", "2-0", "3-0"]:
-            ai_voted[sc] = ai_voted.get(sc, 0) + 2.0
-        # 压制客队进球比分
+        for sc in ["1-0", "2-0", "3-0"]: ai_voted[sc] = ai_voted.get(sc, 0) + 2.0
         for sc in ["1-1", "2-1", "1-2", "3-1", "2-2"]:
-            if sc in ai_voted:
-                ai_voted[sc] *= 0.65
+            if sc in ai_voted: ai_voted[sc] *= 0.65
         print(f"    🧱 客队零封识别({away_zero_prob}分): 强加1-0/2-0/3-0")
         zero_boost_applied = True
 
     if home_zero_prob >= 70 and shin_a > shin_h:
-        for sc in ["0-1", "0-2", "0-3"]:
-            ai_voted[sc] = ai_voted.get(sc, 0) + 2.0
+        for sc in ["0-1", "0-2", "0-3"]: ai_voted[sc] = ai_voted.get(sc, 0) + 2.0
         for sc in ["1-1", "1-2", "2-1", "1-3", "2-2"]:
-            if sc in ai_voted:
-                ai_voted[sc] *= 0.65
+            if sc in ai_voted: ai_voted[sc] *= 0.65
         print(f"    🧱 主队零封识别({home_zero_prob}分): 强加0-1/0-2/0-3")
         zero_boost_applied = True
 
-    # ============ 🎯 第七层: 综合评分 (方案B核心) ============
-    # 🆕 v17.5: 场景检测 - 基于λ/BTTS/大2.5判断比赛类型, 硬约束候选池
     btts_pct = float(engine_result.get("btts", 50) or 50)
     over25_pct = float(engine_result.get("over_25", engine_result.get("over_2_5", 50)) or 50)
 
     scenario = "normal"
-    # 🆕 极端大球场景优先识别(覆盖诱盘)
-    if others_info.get("is_extreme_blowout"):
-        scenario = "extreme_blowout"
-    elif dupan_detected:
-        scenario = "sharp_reversal"
-    elif exp_goals >= 3.5:
-        scenario = "shootout"
-    elif exp_goals >= 3.0 and (btts_pct >= 60 or over25_pct >= 60):
-        scenario = "high_goals"
-    elif exp_goals <= 2.0 and btts_pct <= 40:
-        scenario = "low_goals"
-    elif btts_pct >= 65:
-        scenario = "btts_strong"  # 双方必进
-    elif btts_pct <= 30:
-        scenario = "single_side"  # 单边干净
+    if others_info.get("is_extreme_blowout"): scenario = "extreme_blowout"
+    elif dupan_detected: scenario = "sharp_reversal"
+    elif exp_goals >= 3.5: scenario = "shootout"
+    elif exp_goals >= 3.0 and (btts_pct >= 60 or over25_pct >= 60): scenario = "high_goals"
+    elif exp_goals <= 2.0 and btts_pct <= 40: scenario = "low_goals"
+    elif btts_pct >= 65: scenario = "btts_strong"
+    elif btts_pct <= 30: scenario = "single_side"
 
-    # 场景比分集合定义
-    EXCLUDE_HIGH = {"0-0", "1-0", "0-1"}                                # 高进球场禁选
-    BOOST_HIGH = {"2-1", "1-2", "2-2", "3-1", "1-3"}                    # 高进球场优选
-    BOOST_SHOOTOUT = {"3-2", "2-3", "3-3", "4-2", "2-4", "4-3", "3-4"}  # 互射局优选
-    EXCLUDE_LOW = {"3-1", "1-3", "2-2", "3-2", "2-3", "3-3", "4-2", "2-4"}  # 闷场禁选
-    BOOST_LOW = {"0-0", "1-0", "0-1", "1-1"}                            # 闷场优选
-    BTTS_STRONG_BOOST = {"1-1", "2-1", "1-2", "2-2"}                    # 双方必进优选
-    BTTS_STRONG_EXCLUDE = {"1-0", "2-0", "3-0", "0-1", "0-2", "0-3", "0-0"}  # 双方必进禁选
-    SINGLE_SIDE_BOOST = {"1-0", "2-0", "0-1", "0-2", "3-0", "0-3"}       # 单边场优选
-    SINGLE_SIDE_EXCLUDE = {"1-1", "2-2"}                                  # 单边场禁选
-    # v17.6 Sharp反向场景(禁Shin方向比分,强加Sharp方向比分)
+    EXCLUDE_HIGH = {"0-0", "1-0", "0-1"}
+    BOOST_HIGH = {"2-1", "1-2", "2-2", "3-1", "1-3"}
+    BOOST_SHOOTOUT = {"3-2", "2-3", "3-3", "4-2", "2-4", "4-3", "3-4"}
+    EXCLUDE_LOW = {"3-1", "1-3", "2-2", "3-2", "2-3", "3-3", "4-2", "2-4"}
+    BOOST_LOW = {"0-0", "1-0", "0-1", "1-1"}
+    BTTS_STRONG_BOOST = {"1-1", "2-1", "1-2", "2-2"}
+    BTTS_STRONG_EXCLUDE = {"1-0", "2-0", "3-0", "0-1", "0-2", "0-3", "0-0"}
+    SINGLE_SIDE_BOOST = {"1-0", "2-0", "0-1", "0-2", "3-0", "0-3"}
+    SINGLE_SIDE_EXCLUDE = {"1-1", "2-2"}
     SHARP_REV_HOME_BOOST = {"2-1", "2-0", "3-1", "3-0", "3-2", "4-1", "4-2"}
     SHARP_REV_AWAY_BOOST = {"1-2", "0-2", "1-3", "0-3", "2-3", "1-4", "2-4"}
     SHARP_REV_DRAW_BOOST = {"1-1", "2-2", "0-0"}
@@ -1768,12 +1570,9 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         }
         print(f"    🎬 场景: {scenario_desc.get(scenario, scenario)}")
 
-    # 候选池 = CRS所有比分 + AI选的比分 + 胜其他
     all_candidates = set()
-    if crs_probs:
-        all_candidates.update(crs_probs.keys())
-    if backup_probs:
-        all_candidates.update(backup_probs.keys())
+    if crs_probs: all_candidates.update(crs_probs.keys())
+    if backup_probs: all_candidates.update(backup_probs.keys())
     all_candidates.update(ai_voted.keys())
     all_candidates.update(ALL_SCORE_OTHERS)
 
@@ -1790,34 +1589,23 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         total_g = h_g + a_g
         s = 0.0
 
-        # ① CRS直接概率 [35] ← 替代泊松
         if crs_probs and score_str in crs_probs:
-            # 最高概率约15-20% → 封顶35
             s += min(35, crs_probs[score_str] * 2.0)
         elif score_str in backup_probs:
-            # CRS缺失时用backup (权重降低)
             s += min(15, backup_probs[score_str] * 1.2)
 
-        # ② AI投票 [40]
         if score_str in ai_voted:
             s += min(40, ai_voted[score_str] * 8)
 
-        # ③ 进球数信号 [15]
         if total_g in goal_signals:
             ratio = goal_signals[total_g]
-            # 🎯 v17.6: 零封场景下,5+球进球信号压制(因为零封说明单边,不会是7+球互射)
             if zero_boost_applied and total_g >= 5:
-                s += min(5, (ratio - 1) * 4)  # 削弱到5分上限
+                s += min(5, (ratio - 1) * 4)
             else:
                 s += min(15, (ratio - 1) * 12)
 
-        # ④ 胜其他加成 [5]
         if others_info["is_others"]:
-            # 🎯 v17.6: 零封识别触发时,压制胜其他(因为零封意味着3-0/4-0不是6+球互射)
-            if zero_boost_applied:
-                others_boost = 5  # 削弱到5分(原15)
-            else:
-                others_boost = 15
+            others_boost = 5 if zero_boost_applied else 15
             if score_str in SCORE_OTHERS_HOME and others_info["direction"] == "home":
                 s += others_boost
             elif score_str in SCORE_OTHERS_AWAY and others_info["direction"] == "away":
@@ -1827,58 +1615,36 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             elif score_str in ALL_SCORE_OTHERS:
                 s += 2 if zero_boost_applied else 5
 
-        # ⑤ 方向一致性 [±10]
         goal_margin = h_g - a_g
-        if final_direction == "home" and goal_margin > 0:
-            s += 10 * (dir_probs["home"] / 100)
-        elif final_direction == "away" and goal_margin < 0:
-            s += 10 * (dir_probs["away"] / 100)
-        elif final_direction == "draw" and goal_margin == 0:
-            s += 10 * (dir_probs["draw"] / 100)
-        else:
-            s -= 5  # 方向不一致扣分
+        if final_direction == "home" and goal_margin > 0: s += 10 * (dir_probs["home"] / 100)
+        elif final_direction == "away" and goal_margin < 0: s += 10 * (dir_probs["away"] / 100)
+        elif final_direction == "draw" and goal_margin == 0: s += 10 * (dir_probs["draw"] / 100)
+        else: s -= 5
 
-        # ⑥ 散户反指: 大热方向的小比分降权
-        if contrarian_away_score > 3:
-            # 散户热主, 降主胜小比分(1-0/2-1)
-            if goal_margin == 1 and h_g <= 2:
-                s -= contrarian_away_score
-        if contrarian_home_score > 3:
-            if goal_margin == -1 and a_g <= 2:
-                s -= contrarian_home_score
+        if contrarian_away_score > 3 and goal_margin == 1 and h_g <= 2: s -= contrarian_away_score
+        if contrarian_home_score > 3 and goal_margin == -1 and a_g <= 2: s -= contrarian_home_score
 
-        # ⑦ 强信号否决
         if strongest_ratio > 2.0 and strongest_goal >= 0:
-            if abs(total_g - strongest_goal) > 1:
-                s -= 25
+            if abs(total_g - strongest_goal) > 1: s -= 25
 
-        # ⑧ AI集体识别胜其他时, 常规小比分扣分
-        if others_info["ai_others_count"] >= 2 and total_g <= 3:
-            s -= 10
+        if others_info["ai_others_count"] >= 2 and total_g <= 3: s -= 10
 
-        # ⑨ 强主胜识别: Shin>60% + xG差>1.0, 给2+球主胜加分
         if shin_h > 60 and (home_xg - away_xg) > 1.0 and goal_margin >= 1 and h_g >= 2:
             s += 10
 
-        # 🆕 v17.5 ⑩ 场景硬约束: 基于λ/BTTS/大2.5的比分集合过滤
-        # 🎯 极端大球霸权
         if scenario == "extreme_blowout":
-            if total_g <= 3:
-                s *= 0.10  # 无情抹杀3球及以下比分
+            if total_g <= 3: s *= 0.10
             if score_str in ALL_SCORE_OTHERS or total_g >= 5:
-                s *= 3.00  # 大比分权重翻3倍
-                # 方向吻合强塞40分
+                s *= 3.00
                 if others_info["direction"] == "home" and score_str in SCORE_OTHERS_HOME: s += 40
                 elif others_info["direction"] == "away" and score_str in SCORE_OTHERS_AWAY: s += 40
                 elif others_info["direction"] == "draw" and score_str in SCORE_OTHERS_DRAW: s += 40
-
-        # 🎯 v17.6 sharp_reversal 场景优先级最高(诱盘反转)
         elif scenario == "sharp_reversal":
             if dupan_true_dir == "home":
-                if score_str in SHARP_REV_HOME_BOOST: s *= 1.70  # Sharp主胜强加
+                if score_str in SHARP_REV_HOME_BOOST: s *= 1.70
                 elif goal_margin <= 0:
                     if score_str in ALL_SCORE_OTHERS and others_info.get("is_extreme_blowout"): s *= 0.60
-                    else: s *= 0.20  # 非主胜大幅降权(Shin骗局)
+                    else: s *= 0.20
             elif dupan_true_dir == "away":
                 if score_str in SHARP_REV_AWAY_BOOST: s *= 1.70
                 elif goal_margin >= 0:
@@ -1887,7 +1653,6 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             elif dupan_true_dir == "draw":
                 if score_str in SHARP_REV_DRAW_BOOST: s *= 1.50
                 elif goal_margin != 0: s *= 0.40
-
         elif scenario == "shootout":
             if score_str in BOOST_SHOOTOUT: s *= 1.50
             elif score_str in EXCLUDE_HIGH: s *= 0.10
@@ -1905,31 +1670,23 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
             if score_str in SINGLE_SIDE_EXCLUDE: s *= 0.30
             elif score_str in SINGLE_SIDE_BOOST: s *= 1.25
 
-        # 🎯 v17.6 渐进式λ修正 (覆盖normal场景的边界值如λ=2.9)
-        # 只在normal场景下应用(其他场景已有硬约束)
         if scenario == "normal":
             if exp_goals >= 2.7 and score_str in EXCLUDE_HIGH:
-                # λ=2.7~3.0之间的"半强约束"
-                strength = min(1.0, (exp_goals - 2.4) / 1.1)  # 2.4→0, 3.5→1.0
+                strength = min(1.0, (exp_goals - 2.4) / 1.1)
                 s *= max(0.3, 1.0 - strength * 0.5)
             elif exp_goals <= 2.3 and score_str in {"3-1", "1-3", "3-2", "2-3", "3-3"}:
-                # 低λ时的高比分降权
                 s *= 0.5
 
         if s > 0:
             score_ratings[score_str] = round(s, 2)
 
-    # 选出最终比分
     ranked = sorted(score_ratings.items(), key=lambda x: x[1], reverse=True)
     final_score = ranked[0][0] if ranked else "1-1"
 
-    # 规范化输出
     if final_score == "9-0": final_score = "胜其他"
     if final_score == "9-9": final_score = "平其他"
     if final_score == "0-9": final_score = "负其他"
 
-    # 🛡️ v17.8 Bug C修复: 方向-比分一致性护栏
-    # 如果比分层top1的方向与方向层final_direction不一致,找方向一致的最高分比分
     def _dir_of_score(sc_str):
         try:
             if "胜其他" in sc_str: return "home"
@@ -1940,32 +1697,24 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         except: return None
 
     top_score_dir = _dir_of_score(final_score)
-    # 仅在"方向差距足够大"且"方向一致票数充足"时才强制覆盖
-    # 避免方向概率接近(<5%)时过度干预
     if top_score_dir != final_direction and dir_gap > 8:
-        # 在候选池中找第一个与final_direction一致的比分
         aligned_score = None
         for sc, pts in ranked:
             if _dir_of_score(sc) == final_direction:
                 aligned_score = sc
                 break
         if aligned_score:
-            # 仅当aligned_score的得分 >= top的70%时才替换(保证合理性)
             top_pts = ranked[0][1]
             aligned_pts = score_ratings.get(aligned_score, 0)
             if aligned_pts >= top_pts * 0.70:
                 print(f"    🛡️ [方向一致性] 方向({final_direction})与比分top1({final_score}->{top_score_dir})不符 → 改用{aligned_score}({aligned_pts:.0f})")
                 final_score = aligned_score
 
-    # 显示标签
     is_score_others_final = final_score in ALL_SCORE_OTHERS or "其他" in final_score
     if is_score_others_final:
-        if final_score in SCORE_OTHERS_HOME or final_score == "胜其他":
-            display_label = "胜其他"
-        elif final_score in SCORE_OTHERS_DRAW or final_score == "平其他":
-            display_label = "平其他"
-        else:
-            display_label = "负其他"
+        if final_score in SCORE_OTHERS_HOME or final_score == "胜其他": display_label = "胜其他"
+        elif final_score in SCORE_OTHERS_DRAW or final_score == "平其他": display_label = "平其他"
+        else: display_label = "负其他"
     else:
         display_label = final_score
 
@@ -1973,21 +1722,16 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
     if is_score_others_final:
         print(f"    🏆 {final_score} → 「{display_label}」")
 
-    # ============ 第八层: 输出 ============
     target_crs = CRS_FULL_MAP.get(final_score, "")
     final_odds = float(match_obj.get(target_crs, 0) or 0)
     if not final_odds and is_score_others_final:
-        if final_score in SCORE_OTHERS_HOME or final_score == "胜其他":
-            final_odds = float(match_obj.get("crs_win", 0) or 0)
-        elif final_score in SCORE_OTHERS_DRAW or final_score == "平其他":
-            final_odds = float(match_obj.get("crs_same", 0) or 0)
-        else:
-            final_odds = float(match_obj.get("crs_lose", 0) or 0)
+        if final_score in SCORE_OTHERS_HOME or final_score == "胜其他": final_odds = float(match_obj.get("crs_win", 0) or 0)
+        elif final_score in SCORE_OTHERS_DRAW or final_score == "平其他": final_odds = float(match_obj.get("crs_same", 0) or 0)
+        else: final_odds = float(match_obj.get("crs_lose", 0) or 0)
 
     final_prob = crs_probs.get(final_score, backup_probs.get(final_score, 5))
     ev_data = calculate_value_bet(final_prob, final_odds)
 
-    # v17.4 信心加权: Claude裁决>Gemini>Grok>GPT
     weights = {"claude": 1.4, "gemini": 1.35, "grok": 1.30, "gpt": 1.1}
     ai_conf_sum = 0
     ai_conf_count = 0
@@ -2035,22 +1779,19 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "gemini_analysis": gemini_r.get("reason", gemini_r.get("analysis", "弃权")) if ai_valid["gemini"] else "弃权 (AI失效,本场不参与决策)",
         "claude_score": cl_sc if ai_valid["claude"] else "弃权",
         "claude_analysis": claude_r.get("reason", claude_r.get("analysis", "弃权")) if ai_valid["claude"] else "弃权 (AI失效,本场不参与决策)",
-        "ai_abstained": [n.upper() for n, v in ai_valid.items() if not v],  # 新增字段供前端显示
+        "ai_abstained": [n.upper() for n, v in ai_valid.items() if not v],
         "ai_avg_confidence": round(avg_ai_conf, 1),
         "value_kill_count": value_kills,
         "ai_consensus_strength": round(ai_consensus_strength, 2),
         "model_agreement": ai_consensus_strength > 0.5,
         "xG_home": round(home_xg, 2),
         "xG_away": round(away_xg, 2),
-
-        # v17新增: CRS直接概率 (替代泊松)
         "crs_implied_probs": {k: round(v, 2) for k, v in crs_probs.items()} if crs_probs else {},
         "crs_coverage": crs_coverage,
         "crs_margin": crs_margin,
-        "scenario": scenario,  # v17.5 新增: 场景识别
+        "scenario": scenario,
         "btts_pct_used": round(btts_pct, 1),
         "over25_pct_used": round(over25_pct, 1),
-        # v17.6 新增: 诱盘识别 + 零封
         "dupan_detected": dupan_detected,
         "dupan_true_dir": dupan_true_dir,
         "dupan_confirm_score": dupan_confirm,
@@ -2061,24 +1802,18 @@ def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_
         "vote_hot_dir": vote_hot_dir,
         "vote_hot_pct": vote_hot_pct,
         "steam_type": steam_type,
-
-        # 进球数信号
         "goal_signals": {str(k): round(v, 2) for k, v in goal_signals.items()},
         "strongest_goal_count": strongest_goal,
         "strongest_goal_ratio": round(strongest_ratio, 2),
         "score_others_info": others_info,
-
-        # 信号记录 (v14.3风格全部恢复)
         "sharp_detected": sharp_detected,
         "cold_signals_count": len(cold_signals_raw),
         "contrarian_vote_away": round(contrarian_away_score, 1),
         "contrarian_vote_home": round(contrarian_home_score, 1),
-
         "suggested_kelly": ev_data["kelly"],
         "edge_vs_market": ev_data["ev"],
-
-        "refined_poisson": stats.get("refined_poisson", {}),  # 旧字段保留兼容前端
-        "poisson": backup_probs,  # backup, 前端可忽略
+        "refined_poisson": stats.get("refined_poisson", {}),
+        "poisson": backup_probs,
         "extreme_warning": engine_result.get("scissors_gap_signal", ""),
         "smart_money_signal": " | ".join(sigs),
         "smart_signals": sigs,
@@ -2219,7 +1954,6 @@ def run_predictions(raw, use_ai=True):
             pcts = {"主胜": mg["home_win_pct"], "平局": mg["draw_pct"], "客胜": mg["away_win_pct"]}
             mg["result"] = max(pcts, key=pcts.get)
 
-        # v17.8 🛡️ 强一致性护栏: predicted_label/result/predicted_score 必须方向一致
         try:
             if "胜其他" in score_str: expected_dir = "主胜"
             elif "负其他" in score_str: expected_dir = "客胜"
@@ -2257,7 +1991,7 @@ def run_predictions(raw, use_ai=True):
     others_count = len([r for r in res if r.get("prediction", {}).get("is_score_others")])
     sharp_count = len([r for r in res if r.get("prediction", {}).get("sharp_detected")])
     diary["yesterday_win_rate"] = f"{len([r for r in res if r['prediction']['confidence']>70])}/{max(1,len(res))}"
-    diary["reflection"] = f"vMAX17.0 | {cold_count}冷门 {others_count}胜其他 {sharp_count}Sharp | 方案B·删泊松·全信号"
+    diary["reflection"] = f"vMAX17.0 | {cold_count}冷门 {others_count}胜其他 {sharp_count}Sharp | 方案B·删泊松·全信号 (指令重构版)"
     save_ai_diary(diary)
 
     return res, t4
@@ -2265,4 +1999,4 @@ def run_predictions(raw, use_ai=True):
 
 if __name__ == "__main__":
     logger.info("vMAX 17.0 启动")
-    print("✅ vMAX 17.0 方案B已加载 — 删泊松·CRS直接概率·恢复v14.3全部信号")
+    print("✅ vMAX 17.0 方案B已加载 — 删泊松·CRS直接概率·恢复v14.3全部信号 (指令架构进阶版)")
