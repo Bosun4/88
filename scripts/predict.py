@@ -603,8 +603,8 @@ def build_phase1_prompt(match_analyses):
 # ====================================================================
 # AI调用引擎 (绝对保留原始 API 连接架构与降级逻辑)
 # ====================================================================
-FALLBACK_URLS = [None, "https://www.api520.pro/v1", "https://api521.pro/v1",
-                 "https://poloai.top/v1", "https://www.api522.pro/v1"]
+FALLBACK_URLS = [None, "https://api520.pro/v1", "https://api521.pro/v1",
+                 "https://api522.pro/v1", "https://www.api522.pro/v1"]
 
 GPT_DEFAULT_URL = "https://poloai.top/v1"
 GPT_DEFAULT_KEY = ""  # 不硬编码key (安全) - 从环境变量GPT_API_KEY读取
@@ -991,7 +991,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 if not connected:
                     print(f"    ⚠️ {str(e)[:40]} → 换URL")
                     continue
-                else:                  return ai_name, {}, "error"
+                else:
+                    return ai_name, {}, "error"
 
             await asyncio.sleep(0.2)
 
@@ -1034,10 +1035,10 @@ async def run_ai_matrix_two_phase(match_analyses):
     print(f"  [深度计算] {num} 场进入大模型推理队列 ({len(prompt):,} 字符)...")
 
     ai_configs = [
-        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
+        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-5-grok-4.2-fast-200w上下文"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
-        ("claude", "https://poloai.top/v1", "API_KEY", ["claude-opus-4-6-thinking"]),
+        ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY", ["熊猫-按量-顶级特供-官max-claude-opus-4.6-thinking"]),
     ]
 
     connector = aiohttp.TCPConnector(limit=10, ttl_dns_cache=300)
