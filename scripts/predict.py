@@ -2560,7 +2560,7 @@ def build_v18_prompt(match_analyses):
 FALLBACK_URLS = [None, "https://www.api522.pro/v1", "https://api522.pro/v1",
                  "https://api521.pro/v1", "http://69.63.213.33:666/v1"]
 
-GPT_DEFAULT_URL = "https://poloapi.top/v1"
+GPT_DEFAULT_URL = "https://poloai.top/v1"
 GPT_DEFAULT_KEY = ""
 
 
@@ -2945,7 +2945,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     ]
     all_results = {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
 
-    connector = aiohttp.TCPConnector(limit=10, ttl_dns_cache=300)
+    connector = aiohttp.TCPConnector(limit=10, use_dns_cache=False)
     async with aiohttp.ClientSession(connector=connector) as session:
         tasks = [async_call_one_ai_batch(session, prompt, u, k, m, num, n)
                 for n, u, k, m in ai_configs]
