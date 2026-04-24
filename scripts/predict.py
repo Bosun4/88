@@ -2616,7 +2616,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
         urls = [primary_url] + backup
 
     CONNECT_TIMEOUT = 20
-    READ_TIMEOUT_MAP = {"claude": 380, "grok": 280, "gpt": 280, "gemini": 280}
+    READ_TIMEOUT_MAP = {"claude": 380, "grok": 300, "gpt": 300, "gemini": 250}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     # 🔥 v18 升级的对冲基金异构人设 + 铁律
