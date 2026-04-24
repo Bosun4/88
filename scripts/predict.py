@@ -1678,10 +1678,3 @@ def run_predictions(raw, use_ai=True):
     save_ai_diary(diary)
     
     return res, t4
-
-
-if __name__ == "__main__":
-    logger.info("vMAX 18.0 启动")
-    print("✅ vMAX 18.0 贝叶斯后验+16维陷阱矩阵+决策锁定链 加载完成")
-    print("   架构: trap_detector + crs_analyzer + bayesian_engine + predict")
-    print("   一致性: predicted_score ↔ result ↔ display_direction ↔ 概率argmax")
