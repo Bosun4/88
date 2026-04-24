@@ -2645,7 +2645,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
             if is_gem:
                 headers["x-goog-api-key"] = key
                 payload = {
-                    "contents": [{"parts": [{"text": prompt}]}],
+                    "contents": [{"role": "user", "parts": [{"text": prompt}]}],
                     "generationConfig": {"temperature": profile["temp"]},
                     "systemInstruction": {"parts": [{"text": profile["sys"]}]}
                 }
@@ -2655,8 +2655,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     {"role": "system", "content": profile["sys"]},
                     {"role": "user", "content": prompt}
                 ]}
-                if ai_name != "claude":
-                    bp["temperature"] = profile["temp"]
+                bp["temperature"] = profile["temp"]
                 payload = bp
 
             gw = url.split("/v1")[0][:35]
@@ -2671,14 +2670,15 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
                     elapsed_connect = round(time.time()-t0, 1)
                     if r.status in (502, 504):
-                        print(f"    💀 HTTP {r.status} | {elapsed_connect}s → 换模型")
-                        break
+                        print(f"    💀 HTTP {r.status} | {elapsed_connect}s → 换URL")
+                        continue
                     if r.status == 400:
                         print(f"    💀 400 | {elapsed_connect}s → 换模型")
                         break
                     if r.status == 429:
-                        print(f"    🔥 429 | {elapsed_connect}s → 换模型")
-                        break
+                        print(f"    🔥 429 | {elapsed_connect}s → 换URL(延迟重试)")
+                        await asyncio.sleep(1)
+                        continue
                     if r.status != 200:
                         print(f"    ⚠️ HTTP {r.status} | {elapsed_connect}s → 换URL")
                         continue
@@ -3507,7 +3507,11 @@ def run_predictions(raw, use_ai=True):
                     
             with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
                 future = pool.submit(_run_in_thread, run_ai_matrix_two_phase(match_analyses))
-                all_ai = future.result()
+                try:
+                    all_ai = future.result()
+                except Exception as e:
+                    logger.error(f"AI 矩阵并发执行崩溃: {e}")
+                    all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
         else:
             all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
             
