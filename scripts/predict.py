@@ -2560,7 +2560,7 @@ def build_v18_prompt(match_analyses):
 FALLBACK_URLS = [None, "https://www.api522.pro/v1", "https://api522.pro/v1",
                  "https://api521.pro/v1", "http://69.63.213.33:666/v1"]
 
-GPT_DEFAULT_URL = "https://poloai.top/v1"
+GPT_DEFAULT_URL = "https://poloapi.top/v1"
 GPT_DEFAULT_KEY = ""
 
 
