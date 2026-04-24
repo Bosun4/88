@@ -43,23 +43,23 @@ except ImportError as e:
 
 try:
     from odds_history import apply_odds_history
-except Exception:
+except ImportError:
     def apply_odds_history(m, mg): return mg
 
 try:
     from quant_edge import apply_quant_edge
-except Exception:
+except ImportError:
     def apply_quant_edge(m, mg): return mg
 
 try:
     from wencai_intel import apply_wencai_intel
-except:
+except ImportError:
     def apply_wencai_intel(m, mg): return mg
 
 try:
     ensemble = EnsemblePredictor()
     exp_engine = ExperienceEngine()
-except:
+except ImportError:
     ensemble = None
     exp_engine = None
 
@@ -103,26 +103,6 @@ def calculate_value_bet(prob_pct, odds):
 # ============================================================================
 # 🎭 16维庄家陷阱识别引擎
 # ============================================================================
-
-import re
-import math
-from typing import Dict, List, Any, Optional, Tuple
-
-
-# 进球数标准赔率基准
-STANDARD_GOAL_ODDS = {
-    0: 9.5, 1: 5.5, 2: 3.5, 3: 4.0,
-    4: 7.0, 5: 14.0, 6: 30.0, 7: 70.0,
-}
-
-
-def _f(v, default=0.0):
-    """安全float转换"""
-    try:
-        return float(v) if v is not None and str(v).strip() != "" else default
-    except:
-        return default
-
 
 def _extract_form_record(text: str) -> Tuple[int, int, int]:
     """从文本里抽取 '近5主场3胜1平1负' 这种信息,返回 (胜, 平, 负)"""
@@ -1114,6 +1094,7 @@ def detect_all_traps(match_obj: Dict, engine_result: Dict,
         "xg_override": xg_override,
         "confidence_penalty": confidence_penalty,
         "sharp_trust_override": sharp_trust_override,
+        "steam_trust_override": sharp_trust_override,
         "shin": shin,
         "sharp_detected": sharp_detected,
         "sharp_dir": sharp_dir,
@@ -1165,10 +1146,6 @@ def detect_steam_direction(smart_signals: List) -> Dict[str, Any]:
 # ============================================================================
 # 📊 CRS 矩阵几何形状分析器
 # ============================================================================
-
-import math
-from typing import Dict, List, Any, Tuple
-
 
 # CRS 完整字段映射
 CRS_FULL_MAP = {
@@ -1530,13 +1507,6 @@ def select_scores_in_direction_and_range(
 # 🧠 贝叶斯决策引擎 + 决策锁定链
 # ============================================================================
 
-import math
-import re
-from typing import Dict, List, Any, Tuple, Optional
-
-
-
-
 def _parse_score(s: str) -> Tuple[Optional[int], Optional[int]]:
     """安全比分解析,支持虚拟比分"""
     try:
@@ -1633,7 +1603,7 @@ def compute_direction_posterior(
     # ---------- 可信度降权预计算 ----------
     # 当陷阱识别表明资金流可能是诱饵时,Sharp/Steam 需要降权
     sharp_trust = trap_report.get("sharp_trust_override", 1.0)
-    steam_trust = trap_report.get("sharp_trust_override", 1.0)
+    steam_trust = trap_report.get("steam_trust_override", 1.0)
     
     # T1 诱平陷阱 → 压制平局方向的 Sharp/Steam
     suppress_draw_signals = False
@@ -2144,7 +2114,10 @@ def decision_lock_chain(
         sc = sc_raw
         if not _parse_score(sc)[0]:
             if top3:
-                sc = top3[0].get("score", "")
+                if isinstance(top3[0], dict):
+                    sc = top3[0].get("score", "")
+                elif isinstance(top3[0], str):
+                    sc = top3[0]
         
         h, a = _parse_score(sc)
         if h is None:
@@ -2167,7 +2140,12 @@ def decision_lock_chain(
         
         # top2/top3 小权重
         for rank, t in enumerate(top3[1:3], 2):
-            sc2 = t.get("score", "").replace(" ", "").strip()
+            if isinstance(t, dict):
+                sc2 = t.get("score", "").replace(" ", "").strip()
+            elif isinstance(t, str):
+                sc2 = t.replace(" ", "").strip()
+            else:
+                continue
             if _parse_score(sc2)[0] is not None:
                 w2 = 0.4 if rank == 2 else 0.2
                 ai_votes[sc2] = ai_votes.get(sc2, 0) + weight * w2
@@ -2959,7 +2937,7 @@ async def run_ai_matrix_two_phase(match_analyses):
 
     ai_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-5-grok-4.2-fast-200w上下文"]),
-        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.5"]),
+        ("gpt", "GPT_API_URL", "API_KEY", ["gpt-5.5"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY",
          ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY",
@@ -3510,7 +3488,29 @@ def run_predictions(raw, use_ai=True):
     if use_ai and match_analyses:
         print(f"  [v18 AI] 启动4AI并行...")
         start_t = time.time()
-        all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
+        
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+
+        if loop and loop.is_running():
+            import concurrent.futures
+            
+            def _run_in_thread(coro):
+                new_loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(new_loop)
+                try:
+                    return new_loop.run_until_complete(coro)
+                finally:
+                    new_loop.close()
+                    
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                future = pool.submit(_run_in_thread, run_ai_matrix_two_phase(match_analyses))
+                all_ai = future.result()
+        else:
+            all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
+            
         print(f"  [完成] 耗时 {time.time()-start_t:.1f}s")
 
     # ---- Phase 3: 合并决策 ----
