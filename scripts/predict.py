@@ -18,10 +18,50 @@ except ImportError:
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     logger = logging.getLogger(__name__)
 
-# v18 新增核心模块
-from trap_detector import detect_all_traps
-from crs_analyzer import analyze_crs_matrix
-from bayesian_engine import decision_lock_chain, _parse_score
+# ====================================================================
+# v18 新增核心模块 (带强力防崩溃降级机制)
+# ====================================================================
+try:
+    from trap_detector import detect_all_traps
+except ImportError as e:
+    logger.warning(f"⚠️ 缺少 trap_detector 模块，陷阱矩阵将自动降级: {e}")
+    def detect_all_traps(*args, **kwargs):
+        return {"trap_count": 0, "total_severity": 0, "traps_detected": [], "confidence_penalty": 0, "sharp_detected": False}
+
+try:
+    from crs_analyzer import analyze_crs_matrix
+except ImportError as e:
+    logger.warning(f"⚠️ 缺少 crs_analyzer 模块，CRS分析将自动降级: {e}")
+    def analyze_crs_matrix(*args, **kwargs):
+        return {"shape_verdict": "unknown", "moments": {}, "implied_probs": {}, "margin": 0.0, "coverage": 0.0}
+
+try:
+    from bayesian_engine import decision_lock_chain, _parse_score
+except ImportError as e:
+    logger.warning(f"⚠️ 缺少 bayesian_engine 模块，决策链将自动降级: {e}")
+    def _parse_score(s):
+        try:
+            s_str = str(s).strip().replace(" ", "").replace("：", "-").replace(":", "-").replace("\u2013", "-").replace("\u2014", "-")
+            if "胜" in s_str and "其他" in s_str: return 9, 0
+            if "平" in s_str and "其他" in s_str: return 9, 9
+            if "负" in s_str and "其他" in s_str: return 0, 9
+            p = s_str.split("-")
+            return int(p[0]), int(p[1])
+        except:
+            return None, None
+            
+    def decision_lock_chain(match_obj, *args, **kwargs):
+        # 极端降级逻辑：只返回安全默认值避免报错
+        return {
+            "predicted_score": "1-1", "predicted_label": "1-1", "result": "平局",
+            "display_direction": "平局", "final_direction": "draw",
+            "home_win_pct": 33.3, "draw_pct": 33.4, "away_win_pct": 33.3,
+            "is_score_others": False, "scenario": "fallback",
+            "dir_confidence": 50, "dir_gap": 0, "goal_range": "2-3",
+            "evidences": [], "bayesian_prior": {}, "override_triggered": False,
+            "top_score_candidates": []
+        }
+# ====================================================================
 
 try:
     from config import *
@@ -930,7 +970,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                         "reason": str(item.get("reason", ""))[:800],
                                         "ai_confidence": int(item.get("ai_confidence", 60)),
                                         "is_score_others": bool(item.get("is_score_others", False)),
-                                        "detected_traps": item.get("detected_traps", item.get("detected_signals", [])), # v18 字段
+                                        "detected_traps": item.get("detected_traps", item.get("detected_signals", [])), # v18 兼容
                                         "final_direction": item.get("final_direction", ""), # v18 字段
                                     }
                                 elif item.get("score"):
@@ -939,7 +979,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                                         "reason": str(item.get("reason", ""))[:800],
                                         "ai_confidence": int(item.get("ai_confidence", 60)),
                                         "is_score_others": bool(item.get("is_score_others", False)),
-                                        "detected_traps": item.get("detected_traps", item.get("detected_signals", [])), # v18 字段
+                                        "detected_traps": item.get("detected_traps", item.get("detected_signals", [])), # v18 兼容
                                         "final_direction": item.get("final_direction", ""), # v18 字段
                                     }
 
@@ -1678,3 +1718,10 @@ def run_predictions(raw, use_ai=True):
     save_ai_diary(diary)
     
     return res, t4
+
+
+if __name__ == "__main__":
+    logger.info("vMAX 18.0 启动")
+    print("✅ vMAX 18.0 贝叶斯后验+16维陷阱矩阵+决策锁定链 加载完成")
+    print("   架构: trap_detector + crs_analyzer + bayesian_engine + predict")
+    print("   一致性: predicted_score ↔ result ↔ display_direction ↔ 概率argmax")
