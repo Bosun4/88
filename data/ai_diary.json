@@ -1,5 +1,5 @@
 {
-  "yesterday_win_rate": "43/59",
-  "reflection": "vMAX18.0 | 53陷阱 0胜其他 23Sharp | 贝叶斯+16维+决策锁定",
+  "yesterday_win_rate": "29/51",
+  "reflection": "vMAX 18.6-original-preserve-index-web | 51陷阱 0胜其他 16Sharp | 索引算法+贝叶斯锁定+EV修复",
   "kill_history": []
 }
