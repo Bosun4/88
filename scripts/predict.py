@@ -6041,3 +6041,763 @@ def _enforce_consistency(mg):
 
 
 print("✅ vMAX 18.6.1 热修复已加载：盘口符号 + 进球区间 + extreme_blowout + EV/Kelly 校准")
+# ====================================================================
+# 🔧 vMAX 18.6.2 复盘热修复层
+# --------------------------------------------------------------------
+# 基于 2026-04-26 结果复盘：
+# - 博洛尼亚 0-2 罗马：方向对，比分应允许 0-2 上浮
+# - 吉达国民 0-0 町田泽维亚：T1 诱平过杀，需低比分死局保护
+# - 曼城 2-1 南安普敦：杯赛强队丢球概率低估
+# - 阿森纳 1-0 纽卡：控场强队小胜被 2-0/2-1 挤压
+# - 汉堡 1-2 霍芬海姆：当前逻辑正确，不大改客胜开放场
+# ====================================================================
+
+ENGINE_VERSION = "vMAX 18.6.2-review-hotfix-deadlock-cup-control"
+
+
+try:
+    _v1862_base_detect_all_traps = detect_all_traps
+except Exception:
+    _v1862_base_detect_all_traps = None
+
+try:
+    _v1862_base_merge_result = merge_result
+except Exception:
+    _v1862_base_merge_result = None
+
+
+def _has_trap(report: Dict[str, Any], trap_name: str) -> bool:
+    return any(t.get("trap") == trap_name for t in report.get("traps_detected", []))
+
+
+def _get_crs_dir_probs_safe(match_obj: Dict[str, Any]) -> Dict[str, float]:
+    try:
+        return analyze_crs_matrix(match_obj).get(
+            "direction_probs",
+            {"home": 33.3, "draw": 33.3, "away": 33.3}
+        )
+    except Exception:
+        return {"home": 33.3, "draw": 33.3, "away": 33.3}
+
+
+def _get_crs_moments_safe(match_obj: Dict[str, Any]) -> Dict[str, float]:
+    try:
+        return analyze_crs_matrix(match_obj).get("moments", {})
+    except Exception:
+        return {}
+
+
+def _xg_pair(engine_result: Dict[str, Any]) -> Tuple[float, float, float, float]:
+    hxg = _f(engine_result.get("bookmaker_implied_home_xg", 0))
+    axg = _f(engine_result.get("bookmaker_implied_away_xg", 0))
+    total = hxg + axg if hxg > 0 and axg > 0 else 0.0
+    diff = hxg - axg if hxg > 0 and axg > 0 else 0.0
+    return hxg, axg, total, diff
+
+
+def _match_league_text(match_obj: Dict[str, Any]) -> str:
+    return str(match_obj.get("league", match_obj.get("cup", "")))
+
+
+def _is_cup_like(match_obj: Dict[str, Any]) -> bool:
+    league = _match_league_text(match_obj)
+    kws = [
+        "杯", "足总杯", "联赛杯", "国王杯", "德国杯", "意杯",
+        "淘汰", "决赛", "半决赛", "欧冠", "欧联", "亚冠",
+        "Cup", "FA Cup", "EFL", "Copa"
+    ]
+    return any(k in league for k in kws)
+
+
+def _trap_max_positive_dir(report: Dict[str, Any]) -> Optional[str]:
+    adj = report.get("direction_adjust", {}) or {}
+    vals = {k: _f(v, 0.0) for k, v in adj.items() if k in ["home", "draw", "away"]}
+    if not vals:
+        return None
+    best = max(vals, key=vals.get)
+    return best if vals.get(best, 0) > 0 else None
+
+
+def detect_T17_low_total_deadlock(
+    match_obj: Dict[str, Any],
+    engine_result: Dict[str, Any],
+    base_report: Dict[str, Any],
+    exp_goals: float,
+) -> Optional[Dict[str, Any]]:
+    """
+    T17：低比分死局保护。
+
+    触发意图：
+    - 防止 T1 诱平陷阱把真实 0-0 / 1-1 过度压死。
+    - 典型样本：吉达国民 0-0 町田泽维亚。
+
+    核心条件：
+    1. 总进球预期偏低或 CRS 总 lambda 偏低
+    2. 平局市场仍有存在感
+    3. T1 已触发，且 Sharp/资金方向与陷阱方向冲突，说明市场不是单边真强
+    """
+    crs_dir = _get_crs_dir_probs_safe(match_obj)
+    moments = _get_crs_moments_safe(match_obj)
+
+    hxg, axg, xg_total, xg_diff = _xg_pair(engine_result)
+    lambda_total = _f(moments.get("lambda_total", 0), 0.0)
+    lambda_h = _f(moments.get("lambda_h", 0), 0.0)
+    lambda_a = _f(moments.get("lambda_a", 0), 0.0)
+
+    market_total = lambda_total if lambda_total > 0 else (xg_total if xg_total > 0 else exp_goals)
+    draw_market = max(
+        _f(crs_dir.get("draw", 0), 0.0),
+        _f(base_report.get("shin", {}).get("draw", 0), 0.0),
+    )
+
+    change = match_obj.get("change", {}) or {}
+    draw_drop = _f(change.get("same", 0), 0.0)
+
+    has_t1 = _has_trap(base_report, "T1_DRAW_TRAP")
+    sharp_dir = base_report.get("sharp_dir")
+    trap_dir = _trap_max_positive_dir(base_report)
+    sharp_conflict = bool(sharp_dir and trap_dir and sharp_dir != trap_dir)
+
+    low_total = market_total <= 2.55 or exp_goals <= 2.25 or xg_total <= 2.45
+    draw_alive = draw_market >= 22.0 or draw_drop <= -0.20
+    not_heavy_shootout = market_total <= 2.70 and abs(lambda_h - lambda_a) <= 1.05
+
+    if not (low_total and draw_alive and not_heavy_shootout):
+        return None
+
+    # 必须存在 T1 过杀风险或 Sharp 与陷阱方向冲突，否则不随便拉平局
+    if not (has_t1 or sharp_conflict):
+        return None
+
+    severity = 3
+    if has_t1 and sharp_conflict:
+        severity = 4
+
+    return {
+        "trap": "T17_LOW_TOTAL_DEADLOCK",
+        "description": (
+            f"低比分死局保护: λ总{market_total:.2f}, 平局市场{draw_market:.1f}%, "
+            f"T1={has_t1}, Sharp冲突={sharp_conflict} → 防0-0/1-1"
+        ),
+        "severity": severity,
+        "direction_adjust": {
+            "draw": 4.2 if severity >= 4 else 3.2,
+            "home": -1.1,
+            "away": -0.6,
+        },
+        "score_multipliers": {
+            "2-1": 0.45,
+            "1-2": 0.55,
+            "2-0": 0.55,
+            "0-2": 0.70,
+            "3-0": 0.35,
+            "0-3": 0.35,
+        },
+        "boost_scores": ["0-0", "1-1", "1-0", "0-1"],
+        "confidence_penalty": 4,
+    }
+
+
+def detect_T18_cup_favorite_concedes(
+    match_obj: Dict[str, Any],
+    engine_result: Dict[str, Any],
+    base_report: Dict[str, Any],
+    exp_goals: float,
+) -> Optional[Dict[str, Any]]:
+    """
+    T18：杯赛强队丢球保护。
+
+    触发意图：
+    - 杯赛/足总杯强队方向正确，但 3-0 被 2-1 / 3-1 替代的场景。
+    - 典型样本：曼城 2-1 南安普敦。
+    """
+    if not _is_cup_like(match_obj):
+        return None
+
+    shin = base_report.get("shin", {})
+    crs_dir = _get_crs_dir_probs_safe(match_obj)
+    moments = _get_crs_moments_safe(match_obj)
+
+    hxg, axg, xg_total, xg_diff = _xg_pair(engine_result)
+
+    favorite_dir = None
+    if shin.get("home", 0) >= 52 or crs_dir.get("home", 0) >= 58:
+        favorite_dir = "home"
+    elif shin.get("away", 0) >= 52 or crs_dir.get("away", 0) >= 58:
+        favorite_dir = "away"
+
+    if favorite_dir is None:
+        return None
+
+    if favorite_dir == "home":
+        underdog_lambda = axg if axg > 0 else _f(moments.get("lambda_a", 0), 0.0)
+        favorite_lambda = hxg if hxg > 0 else _f(moments.get("lambda_h", 0), 0.0)
+    else:
+        underdog_lambda = hxg if hxg > 0 else _f(moments.get("lambda_h", 0), 0.0)
+        favorite_lambda = axg if axg > 0 else _f(moments.get("lambda_a", 0), 0.0)
+
+    btts = _f(engine_result.get("btts", 0), 0.0)
+    over25 = _f(engine_result.get("over_25", 0), 0.0)
+
+    # 弱方有 0.55+ 进球期望，杯赛就不能默认零封
+    underdog_can_score = underdog_lambda >= 0.55 or btts >= 38
+
+    # 强队必须确实占优，但不是极端惨案
+    favorite_clear = favorite_lambda >= 1.55 or abs(xg_diff) >= 1.0
+    not_extreme = max(exp_goals, xg_total) <= 3.25 and over25 <= 60
+
+    if not (underdog_can_score and favorite_clear and not_extreme):
+        return None
+
+    if favorite_dir == "home":
+        boost_scores = ["2-1", "3-1"]
+        mults = {
+            "3-0": 0.58,
+            "4-0": 0.35,
+            "2-0": 0.78,
+            "2-1": 1.55,
+            "3-1": 1.35,
+        }
+    else:
+        boost_scores = ["1-2", "1-3"]
+        mults = {
+            "0-3": 0.58,
+            "0-4": 0.35,
+            "0-2": 0.78,
+            "1-2": 1.55,
+            "1-3": 1.35,
+        }
+
+    return {
+        "trap": "T18_CUP_FAVORITE_CONCEDES",
+        "description": (
+            f"杯赛强队丢球保护:{favorite_dir}强但弱方λ{underdog_lambda:.2f}, "
+            f"BTTS{btts:.1f} → 降零封,升2-1/3-1"
+        ),
+        "severity": 2,
+        "direction_adjust": {favorite_dir: 0.3},
+        "score_multipliers": mults,
+        "boost_scores": boost_scores,
+        "confidence_penalty": 2,
+    }
+
+
+def detect_T19_controlled_favorite(
+    match_obj: Dict[str, Any],
+    engine_result: Dict[str, Any],
+    base_report: Dict[str, Any],
+    exp_goals: float,
+) -> Optional[Dict[str, Any]]:
+    """
+    T19：控场强队小胜保护。
+
+    触发意图：
+    - 联赛强队方向正确，但真实比分更容易 1-0 / 2-0。
+    - 典型样本：阿森纳 1-0 纽卡。
+    """
+    if _is_cup_like(match_obj):
+        return None
+
+    shin = base_report.get("shin", {})
+    crs_dir = _get_crs_dir_probs_safe(match_obj)
+    moments = _get_crs_moments_safe(match_obj)
+
+    hxg, axg, xg_total, xg_diff = _xg_pair(engine_result)
+
+    over25 = _f(engine_result.get("over_25", 0), 0.0)
+    btts = _f(engine_result.get("btts", 0), 0.0)
+
+    favorite_dir = None
+    if shin.get("home", 0) >= 54 or crs_dir.get("home", 0) >= 60:
+        favorite_dir = "home"
+    elif shin.get("away", 0) >= 54 or crs_dir.get("away", 0) >= 60:
+        favorite_dir = "away"
+
+    if favorite_dir is None:
+        return None
+
+    lambda_total = _f(moments.get("lambda_total", 0), 0.0)
+    market_total = lambda_total if lambda_total > 0 else (xg_total if xg_total > 0 else exp_goals)
+
+    # 不是大开大合，且弱方进球预期低
+    if favorite_dir == "home":
+        dog_lambda = axg if axg > 0 else _f(moments.get("lambda_a", 0), 0.0)
+        fav_lambda = hxg if hxg > 0 else _f(moments.get("lambda_h", 0), 0.0)
+    else:
+        dog_lambda = hxg if hxg > 0 else _f(moments.get("lambda_h", 0), 0.0)
+        fav_lambda = axg if axg > 0 else _f(moments.get("lambda_a", 0), 0.0)
+
+    low_margin_profile = (
+        market_total <= 3.05
+        and over25 <= 58
+        and btts <= 52
+        and dog_lambda <= 0.95
+        and fav_lambda >= 1.45
+    )
+
+    if not low_margin_profile:
+        return None
+
+    if favorite_dir == "home":
+        boost_scores = ["1-0", "2-0", "2-1"]
+        mults = {
+            "1-0": 1.55,
+            "2-0": 1.15,
+            "2-1": 1.05,
+            "3-0": 0.72,
+            "3-1": 0.68,
+            "4-0": 0.35,
+        }
+    else:
+        boost_scores = ["0-1", "0-2", "1-2"]
+        mults = {
+            "0-1": 1.55,
+            "0-2": 1.15,
+            "1-2": 1.05,
+            "0-3": 0.72,
+            "1-3": 0.68,
+            "0-4": 0.35,
+        }
+
+    return {
+        "trap": "T19_CONTROLLED_FAVORITE",
+        "description": (
+            f"控场强队小胜保护:{favorite_dir}强, 总λ{market_total:.2f}, "
+            f"弱方λ{dog_lambda:.2f}, BTTS{btts:.1f} → 升1-0/2-0"
+        ),
+        "severity": 2,
+        "direction_adjust": {favorite_dir: 0.2},
+        "score_multipliers": mults,
+        "boost_scores": boost_scores,
+        "confidence_penalty": 1,
+    }
+
+
+def _append_extra_trap(report: Dict[str, Any], trap: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    if not trap:
+        return report
+
+    if any(t.get("trap") == trap.get("trap") for t in report.get("traps_detected", [])):
+        return report
+
+    report.setdefault("traps_detected", []).append(trap)
+    report["trap_count"] = len(report["traps_detected"])
+    report["total_severity"] = report.get("total_severity", 0) + trap.get("severity", 1)
+
+    report.setdefault("direction_adjust", {"home": 0.0, "draw": 0.0, "away": 0.0})
+    for k, v in trap.get("direction_adjust", {}).items():
+        if k in report["direction_adjust"]:
+            report["direction_adjust"][k] += _f(v, 0.0)
+
+    report.setdefault("score_multipliers", {})
+    for sc, mult in trap.get("score_multipliers", {}).items():
+        old = report["score_multipliers"].get(sc)
+        if old is None:
+            report["score_multipliers"][sc] = mult
+        else:
+            # 抑制与提升都允许叠加，避免只取 min 导致 boost 失效
+            report["score_multipliers"][sc] = _f(old, 1.0) * _f(mult, 1.0)
+
+    report.setdefault("boost_scores", [])
+    for sc in trap.get("boost_scores", []):
+        if sc not in report["boost_scores"]:
+            report["boost_scores"].append(sc)
+
+    report["confidence_penalty"] = report.get("confidence_penalty", 0) + trap.get("confidence_penalty", 0)
+
+    return report
+
+
+def detect_all_traps(
+    match_obj: Dict,
+    engine_result: Dict,
+    ai_responses: Dict,
+    smart_signals: List,
+    exp_goals: float,
+) -> Dict[str, Any]:
+    """
+    v18.6.2 覆盖版：
+    在原 T1-T16 基础上追加 T17/T18/T19。
+    """
+    if _v1862_base_detect_all_traps:
+        report = _v1862_base_detect_all_traps(
+            match_obj,
+            engine_result,
+            ai_responses,
+            smart_signals,
+            exp_goals,
+        )
+    else:
+        report = {
+            "traps_detected": [],
+            "trap_count": 0,
+            "total_severity": 0,
+            "direction_adjust": {"home": 0.0, "draw": 0.0, "away": 0.0},
+            "score_multipliers": {},
+            "boost_scores": [],
+            "suppress_contrarian": False,
+            "xg_override": None,
+            "confidence_penalty": 0,
+            "sharp_trust_override": 1.0,
+            "steam_trust_override": 1.0,
+            "shin": {"home": 33.3, "draw": 33.3, "away": 33.3},
+            "sharp_detected": False,
+            "sharp_dir": None,
+            "steam_dir": None,
+            "steam_type": None,
+        }
+
+    t17 = detect_T17_low_total_deadlock(match_obj, engine_result or {}, report, exp_goals)
+    report = _append_extra_trap(report, t17)
+
+    # T17 若触发，优先保护死局，不再追加杯赛强队丢球和控场小胜
+    if t17:
+        return report
+
+    t18 = detect_T18_cup_favorite_concedes(match_obj, engine_result or {}, report, exp_goals)
+    report = _append_extra_trap(report, t18)
+
+    t19 = detect_T19_controlled_favorite(match_obj, engine_result or {}, report, exp_goals)
+    report = _append_extra_trap(report, t19)
+
+    return report
+
+
+def determine_goal_range(
+    direction: str,
+    moments: Dict[str, float],
+    exp_goals: float,
+    trap_report: Dict[str, Any],
+    match_obj: Dict[str, Any],
+    engine_result: Dict[str, Any],
+) -> Tuple[int, int, str]:
+    """
+    v18.6.2 覆盖版：
+    - T17：直接允许 0-2 球
+    - T18：杯赛强队丢球，优先 2-4 球
+    - T19：控场强队小胜，优先 1-3 球
+    """
+    if _has_trap(trap_report, "T17_LOW_TOTAL_DEADLOCK"):
+        return 0, 2, "deadlock_low"
+
+    if _has_trap(trap_report, "T18_CUP_FAVORITE_CONCEDES"):
+        return 2, 4, "cup_favorite_concedes"
+
+    if _has_trap(trap_report, "T19_CONTROLLED_FAVORITE"):
+        return 1, 3, "controlled_favorite"
+
+    actual_hc = _parse_actual_handicap(match_obj)
+
+    lh = moments.get("lambda_h", 0) if moments else 0
+    la = moments.get("lambda_a", 0) if moments else 0
+    lt = moments.get("lambda_total", exp_goals) if moments else exp_goals
+    shape = classify_shape(moments)[0] if moments else "unknown"
+
+    hxg, axg, xg_total, xg_diff = _xg_pair(engine_result)
+    if xg_total <= 0:
+        xg_total = exp_goals
+        xg_diff = lh - la
+
+    a5 = _f(match_obj.get("a5", 999), 999)
+    a6 = _f(match_obj.get("a6", 999), 999)
+    a7 = _f(match_obj.get("a7", 999), 999)
+
+    tail_pressure = 0
+    if 0 < a5 <= 8:
+        tail_pressure += 2
+    elif 0 < a5 <= 12:
+        tail_pressure += 1
+
+    if 0 < a6 <= 15:
+        tail_pressure += 2
+    elif 0 < a6 <= 22:
+        tail_pressure += 1
+
+    if 0 < a7 <= 28:
+        tail_pressure += 2
+    elif 0 < a7 <= 40:
+        tail_pressure += 1
+
+    if direction == "home":
+        handicap_support = actual_hc >= 1.75
+        xg_support = xg_diff >= 1.35
+        lambda_support = lh - la >= 1.35
+    elif direction == "away":
+        handicap_support = actual_hc <= -1.75
+        xg_support = xg_diff <= -1.35
+        lambda_support = la - lh >= 1.35
+    else:
+        handicap_support = False
+        xg_support = False
+        lambda_support = False
+
+    extreme_score = 0
+    if handicap_support:
+        extreme_score += 2
+    if xg_support:
+        extreme_score += 2
+    if lambda_support:
+        extreme_score += 1
+    if tail_pressure >= 4:
+        extreme_score += 2
+    elif tail_pressure >= 2:
+        extreme_score += 1
+    if max(exp_goals, xg_total, lt) >= 3.3:
+        extreme_score += 1
+    if shape in ["lopsided_h", "lopsided_a"]:
+        extreme_score += 1
+
+    if (
+        direction in ["home", "away"]
+        and extreme_score >= 5
+        and (handicap_support or xg_support)
+        and max(exp_goals, xg_total, lt) >= 3.0
+    ):
+        return 5, 12, "extreme_blowout"
+
+    lt_avg = lt * 0.5 + exp_goals * 0.3 + xg_total * 0.2
+
+    # 低比分平局保护：即使不是 T17，只要 draw 有存在感，允许 0球入口
+    crs_dir = _get_crs_dir_probs_safe(match_obj)
+    if lt_avg <= 2.45 and crs_dir.get("draw", 0) >= 24 and direction == "draw":
+        return 0, 2, "deadlock_low"
+
+    if lt_avg >= 3.45:
+        return 3, 6, "shootout"
+
+    if lt_avg >= 2.85:
+        return 2, 5, "high_goals"
+
+    if lt_avg >= 2.25:
+        return 2, 4, "normal"
+
+    if lt_avg >= 1.75:
+        # 原来是 1-3，这里若平局/弱势方低比分，有必要允许 0-2
+        if direction == "draw":
+            return 0, 2, "low_draw"
+        return 1, 3, "low_goals"
+
+    return 0, 2, "grinder"
+
+
+def select_score(
+    direction: str,
+    goal_range: Tuple[int, int],
+    scenario: str,
+    crs_probs: Dict[str, float],
+    ai_votes: Dict[str, float],
+    trap_report: Dict[str, Any],
+    shin: Dict[str, float],
+    moments: Dict[str, float],
+    match_obj: Dict[str, Any],
+) -> Tuple[str, List[Tuple[str, float]]]:
+    """
+    v18.6.2 覆盖版：
+    增加 deadlock_low / cup_favorite_concedes / controlled_favorite 场景权重。
+    """
+    g_min, g_max = goal_range
+    candidates = {}
+
+    if scenario == "extreme_blowout":
+        label = {"home": "胜其他", "draw": "平其他", "away": "负其他"}[direction]
+        others_key = {"home": "crs_win", "draw": "crs_same", "away": "crs_lose"}[direction]
+        others_odds = _f(match_obj.get(others_key, 0))
+
+        if 1.5 < others_odds < 80:
+            return label, [(label, 100.0)]
+
+    for sc, p in crs_probs.items():
+        sc_dir = _score_direction(sc)
+        if sc_dir != direction:
+            continue
+
+        total_g = _score_total_goals(sc)
+        if total_g is None:
+            continue
+
+        is_other = "其他" in str(sc) or sc in {"9-0", "0-9", "9-9"}
+
+        if is_other:
+            candidates[sc] = candidates.get(sc, 0.0) + (p * 1.5 if scenario == "extreme_blowout" else p * 0.20)
+            continue
+
+        if not (g_min <= total_g <= g_max):
+            continue
+
+        candidates[sc] = candidates.get(sc, 0.0) + p
+
+    for sc, vote_pts in ai_votes.items():
+        sc_clean = str(sc).replace(" ", "").strip()
+        sc_dir = _score_direction(sc_clean)
+
+        if sc_dir != direction:
+            continue
+
+        total_g = _score_total_goals(sc_clean)
+        if total_g is None:
+            continue
+
+        is_other = "其他" in sc_clean
+
+        if not is_other and not (g_min <= total_g <= g_max):
+            continue
+
+        candidates[sc_clean] = candidates.get(sc_clean, 0.0) + _f(vote_pts, 0.0) * 1.8
+
+    # 陷阱乘数
+    for sc, mult in trap_report.get("score_multipliers", {}).items():
+        if sc in candidates:
+            candidates[sc] *= _f(mult, 1.0)
+
+    # boost
+    for sc in trap_report.get("boost_scores", []):
+        if sc in candidates:
+            candidates[sc] *= 1.5
+
+    # 场景专用校准
+    if scenario == "deadlock_low":
+        for sc in ["0-0", "1-1"]:
+            if sc in candidates:
+                candidates[sc] *= 2.0
+
+        for sc in ["1-0", "0-1"]:
+            if sc in candidates:
+                candidates[sc] *= 1.25
+
+        for sc in ["2-0", "0-2", "2-1", "1-2"]:
+            if sc in candidates:
+                candidates[sc] *= 0.45
+
+    elif scenario == "cup_favorite_concedes":
+        if direction == "home":
+            for sc in ["2-1", "3-1"]:
+                if sc in candidates:
+                    candidates[sc] *= 1.45
+            for sc in ["3-0", "4-0"]:
+                if sc in candidates:
+                    candidates[sc] *= 0.55
+        elif direction == "away":
+            for sc in ["1-2", "1-3"]:
+                if sc in candidates:
+                    candidates[sc] *= 1.45
+            for sc in ["0-3", "0-4"]:
+                if sc in candidates:
+                    candidates[sc] *= 0.55
+
+    elif scenario == "controlled_favorite":
+        if direction == "home":
+            for sc in ["1-0", "2-0"]:
+                if sc in candidates:
+                    candidates[sc] *= 1.45
+            for sc in ["3-0", "3-1", "4-0"]:
+                if sc in candidates:
+                    candidates[sc] *= 0.65
+        elif direction == "away":
+            for sc in ["0-1", "0-2"]:
+                if sc in candidates:
+                    candidates[sc] *= 1.45
+            for sc in ["0-3", "1-3", "0-4"]:
+                if sc in candidates:
+                    candidates[sc] *= 0.65
+
+    elif scenario == "shootout":
+        for sc in ["0-0", "1-0", "0-1"]:
+            if sc in candidates:
+                candidates[sc] *= 0.2
+        for sc in ["2-2", "3-2", "2-3", "3-3", "3-1", "1-3", "4-2", "2-4"]:
+            if sc in candidates:
+                candidates[sc] *= 1.4
+
+    elif scenario == "grinder":
+        for sc in ["2-2", "3-1", "1-3", "3-2", "2-3"]:
+            if sc in candidates:
+                candidates[sc] *= 0.3
+        for sc in ["1-0", "0-1", "0-0", "1-1"]:
+            if sc in candidates:
+                candidates[sc] *= 1.3
+
+    elif scenario in ["low_goals", "low_draw"]:
+        for sc in ["3-2", "2-3", "3-3", "4-2"]:
+            if sc in candidates:
+                candidates[sc] *= 0.3
+        for sc in ["1-0", "0-1", "2-1", "1-2", "1-1", "0-0"]:
+            if sc in candidates:
+                candidates[sc] *= 1.2
+
+    elif scenario == "high_goals":
+        for sc in ["0-0", "1-0", "0-1"]:
+            if sc in candidates:
+                candidates[sc] *= 0.4
+
+    # Shin 强势加成保留，但降低幅度，避免把 1-0 挤掉
+    if direction == "home" and shin.get("home", 33) > 55:
+        for sc in ["2-0", "2-1", "3-1"]:
+            if sc in candidates:
+                candidates[sc] *= 1.08
+
+    if direction == "away" and shin.get("away", 33) > 55:
+        for sc in ["0-2", "1-2", "1-3"]:
+            if sc in candidates:
+                candidates[sc] *= 1.08
+
+    if not candidates:
+        fallback_map = {
+            "home": "1-0" if scenario in ["grinder", "low_goals", "controlled_favorite"] else "2-1",
+            "away": "0-1" if scenario in ["grinder", "low_goals", "controlled_favorite"] else "1-2",
+            "draw": "0-0" if scenario in ["grinder", "deadlock_low", "low_draw"] else "1-1",
+        }
+        fb = fallback_map[direction]
+        return fb, [(fb, 1.0)]
+
+    sorted_scores = sorted(candidates.items(), key=lambda x: x[1], reverse=True)
+    best = sorted_scores[0][0]
+
+    return best, [(sc, round(p, 2)) for sc, p in sorted_scores[:10]]
+
+
+def _normalize_value_signals(mg: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    UI 里还有旧 value 信号，容易出现紫色 EV 和绿色 EV 不一致。
+    这里不删旧信号，只追加一个校准标记，避免误读。
+    """
+    edge = _f(mg.get("edge_vs_market", 0), 0.0)
+    kelly = _f(mg.get("suggested_kelly", 0), 0.0)
+
+    calibrated = f"🧮 校准EV:{edge:+.1f}% Kelly:{kelly:.2f}%"
+
+    sigs = list(mg.get("smart_signals", []) or [])
+    if calibrated not in sigs:
+        sigs.insert(0, calibrated)
+
+    mg["smart_signals"] = sigs
+    mg["smart_money_signal"] = " | ".join(sigs[:10])
+    return mg
+
+
+def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
+    """
+    v18.6.2 包装 merge_result：
+    让原 merge_result 使用新 detect_all_traps / determine_goal_range / select_score。
+    """
+    if _v1862_base_merge_result is None:
+        raise RuntimeError("v18.6.2 找不到基础 merge_result，请确认补丁粘贴顺序")
+
+    mg = _v1862_base_merge_result(
+        engine_result,
+        gpt_r,
+        grok_r,
+        gemini_r,
+        claude_r,
+        stats,
+        match_obj,
+    )
+
+    mg["engine_version"] = ENGINE_VERSION
+    mg["engine_architecture"] = "复盘热修复: T17低比分死局 + T18杯赛强队丢球 + T19控场小胜 + 比分层校准"
+
+    mg = _normalize_value_signals(mg)
+    mg = _enforce_consistency(mg)
+    return mg
+
+
+print("✅ vMAX 18.6.2 复盘热修复已加载：T17低比分死局 + T18杯赛强队丢球 + T19控场小胜")
