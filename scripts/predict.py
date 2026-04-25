@@ -2560,7 +2560,7 @@ def build_v18_prompt(match_analyses):
 FALLBACK_URLS = [None, "https://www.api522.pro/v1", "https://api522.pro/v1",
                  "https://api521.pro/v1", "http://69.63.213.33:666/v1"]
 
-GPT_DEFAULT_URL = "https://poloai.top/v1"
+GPT_DEFAULT_URL = "https://api.newapi.life/v1"
 GPT_DEFAULT_KEY = ""
 
 
@@ -2936,8 +2936,8 @@ async def run_ai_matrix_two_phase(match_analyses):
     print(f"  [v18 Prompt] {len(prompt):,} 字符 → 4AI并行...")
 
     ai_configs = [
-        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-5-grok-4.2-fast-200w上下文"]),
-        ("gpt", "GPT_API_URL", "API_KEY", ["gpt-5.5"]),
+        ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-6-grok-4.2-thinking"]),
+        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY",
          ["熊猫-特供-X-12-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY",
