@@ -2594,7 +2594,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
         urls = [primary_url] + backup
 
     CONNECT_TIMEOUT = 20
-    READ_TIMEOUT_MAP = {"claude": 380, "grok": 300, "gpt": 300, "gemini": 250}
+    READ_TIMEOUT_MAP = {"claude": 400, "grok": 300, "gpt": 300, "gemini": 300}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     # 🔥 v18 升级的对冲基金异构人设 + 铁律
@@ -2941,7 +2941,7 @@ async def run_ai_matrix_two_phase(match_analyses):
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY",
          ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY",
-         ["熊猫-69-满血openrouter-claude-opus-4.7-上下文1000k"]),
+         ["熊猫特供-超纯满血-99额度-claude-opus-4.7"]),
     ]
     all_results = {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
 
