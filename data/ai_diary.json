@@ -1,5 +1,5 @@
 {
-  "yesterday_win_rate": "30/65",
-  "reflection": "vMAX18.2 | 54陷阱 0胜其他 24Sharp | 防幻觉AI+联赛弱先验+贝叶斯+16维+决策锁定",
+  "yesterday_win_rate": "26/64",
+  "reflection": "vMAX18.2 | 59陷阱 0胜其他 27Sharp | 贝叶斯+16维+固定模型+防幻觉",
   "kill_history": []
 }
