@@ -67,7 +67,7 @@ def main():
     print("=" * 80)
     print("⚽ 量化足球投研终端 vMAX 终极版（动态寻优 + 庄家底牌穿透）")
     print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
-    print("🔧 核心升级：绝密情报网接入 + 强力兜底落盘防崩溃机制")
+    print("🔧 核心升级：强力兜底落盘防崩溃机制 + Koudai 情报源已移除")
     print("=" * 80)
 
     try:
@@ -94,31 +94,36 @@ def main():
         }
     }
 
-    # 【终极修复点】：强制兜底落盘！
-    # 无论今天有没有抓到数据，先写一个带格式的空骨架文件进去。
-    # 这样 GitHub Actions 的 cp 命令就绝对不会报 "No such file" 的错误！
+    # ============================================================
+    #  强制兜底落盘
+    # ============================================================
+    # 无论后续是否抓到数据，先写入空骨架文件。
+    # 这样 GitHub Actions 后续 cp / 上传步骤不会因为文件不存在而失败。
     with open(target_path, "w", encoding="utf-8") as f:
         json.dump(final_output, f, ensure_ascii=False, indent=2)
 
-    days_map = {"yesterday": -1, "today": 0, "tomorrow": 1}
+    days_map = {
+        "yesterday": -1,
+        "today": 0,
+        "tomorrow": 1
+    }
 
     try:
         from fetch_data import async_collect_all
         from predict import run_predictions
-        
+
         # ============================================================
-        # 🔥 核心升级：在此处启动口袋绝密情报网，截获今日伤停底牌
+        #  Koudai 情报源已彻底禁用
         # ============================================================
+        # 原逻辑会导入 koudai_intel.KoudaiSpider，并请求 91bixin 接口。
+        # 该接口容易返回 403，且不应作为主流程必要条件。
+        # 当前版本不再导入、不再请求、不再合并 Koudai 数据。
+        # 每场比赛 information 字段统一保留为空字典，保证下游兼容。
         all_intel_map = {}
-        try:
-            from koudai_intel import KoudaiSpider
-            print("\n" + "=" * 80)
-            print("🕵️‍♂️ [INTEL NETWORK] 正在启动独立情报网，截获绝密伤停与资金动向...")
-            spider = KoudaiSpider()
-            all_intel_map = spider.run_all_intel()
-        except Exception as e:
-            print(f"  [WARN] ⚠️ 绝密情报引擎启动失败或未找到 koudai_intel.py: {e}")
-        # ============================================================
+        print("\n" + "=" * 80)
+        print("🕵️‍♂️ [INTEL NETWORK] Koudai 情报源已移除，跳过 91bixin 接口。")
+        print("ℹ️ 当前仅使用主数据源、赔率数据、模型特征与 AI 融合逻辑。")
+        print("=" * 80)
 
         for day_key, offset in days_map.items():
             target_date = get_target_date(offset)
@@ -128,56 +133,54 @@ def main():
             
             if not raw_data or not raw_data.get("matches"):
                 print(f"  [SKIP] {target_date} 暂无比赛数据，跳过 AI 推理。")
+
+                # 即使当天没有数据，也立即落盘，保持 predictions.json 可用
+                with open(target_path, "w", encoding="utf-8") as f:
+                    json.dump(final_output, f, ensure_ascii=False, indent=2)
+                with open(history_path, "w", encoding="utf-8") as f:
+                    json.dump(final_output, f, ensure_ascii=False, indent=2)
+
                 continue
 
             # ============================================================
-            # 🔥 核心对接：将截获的绝密情报，精确注射进每一场比赛数据中
+            #  保留下游兼容字段 information
             # ============================================================
-            if all_intel_map and "matches" in raw_data:
-                for match in raw_data["matches"]:
-                    h_team = match.get("home_team", "").strip()
-                    a_team = match.get("away_team", "").strip()
-                    match_key = f"{h_team}_{a_team}"
-                    
-                    if match_key in all_intel_map:
-                        match["information"] = all_intel_map[match_key]
-                    else:
-                        # 尝试模糊匹配 (比如有些带了 FC 或者联队)
-                        matched = False
-                        for k_key, v_val in all_intel_map.items():
-                            if (h_team in k_key or k_key.split('_')[0] in h_team) and \
-                               (a_team in k_key or k_key.split('_')[1] in a_team):
-                                match["information"] = v_val
-                                matched = True
-                                break
-                        if not matched:
-                            match["information"] = {}
-            else:
-                for match in raw_data.get("matches", []):
-                    match["information"] = {}
-            # ============================================================
+            # Koudai 已移除，因此不做任何情报匹配。
+            # 但为了避免 predict.py 或其他模块读取 match["information"] 报错，
+            # 这里给每场比赛补一个空 information。
+            for match in raw_data.get("matches", []):
+                match["information"] = {}
 
-            use_ai = (day_key in ["today", "tomorrow"])
+            use_ai = day_key in ["today", "tomorrow"]
             results, top4 = run_predictions(raw_data, use_ai=use_ai)
             
-            final_output["matches"][day_key] = json.loads(json.dumps(results, ensure_ascii=False, default=str))
+            final_output["matches"][day_key] = json.loads(
+                json.dumps(results, ensure_ascii=False, default=str)
+            )
             
             if day_key == "today" and top4:
                 final_output["top4"] = [
-                    {"rank": i + 1, **t, "fusion_summary": "vMAX-Dynamic-Hybrid"}
-                    for i, t in enumerate(json.loads(json.dumps(top4, ensure_ascii=False, default=str)))
+                    {
+                        "rank": i + 1,
+                        **t,
+                        "fusion_summary": "vMAX-Dynamic-Hybrid"
+                    }
+                    for i, t in enumerate(
+                        json.loads(json.dumps(top4, ensure_ascii=False, default=str))
+                    )
                 ]
 
             # 抓到数据后，覆盖骨架文件
             with open(target_path, "w", encoding="utf-8") as f:
                 json.dump(final_output, f, ensure_ascii=False, indent=2)
+
             with open(history_path, "w", encoding="utf-8") as f:
                 json.dump(final_output, f, ensure_ascii=False, indent=2)
                 
             print(f"  ✅ {day_key} 任务完成，数据已同步至 predictions.json")
 
         print(f"\n{'='*80}")
-        print("✅ 全链路执行成功！终极融合引擎已完成所有预测任务。")
+        print("✅ 全链路执行成功！融合引擎已完成所有预测任务。")
         print(f"{'='*80}")
 
     except Exception as e:
@@ -188,4 +191,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
