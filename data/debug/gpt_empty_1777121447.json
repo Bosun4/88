@@ -1,0 +1,24 @@
+{
+  "id": "chatcmpl-resp_0039af139e8aa9850169ecb8443bc881918d354193dbc09ead",
+  "object": "chat.completion",
+  "created": 1777121447,
+  "model": "gpt-5.5",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": null
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 14755,
+    "completion_tokens": 12959,
+    "total_tokens": 27714,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  }
+}
