@@ -1,0 +1,3 @@
+{
+  "text": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 0739b0eeb895a918fea8bd08c1939e9f） (request id: 20260425112200976752817snkEVpZD)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+}
