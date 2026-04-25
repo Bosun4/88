@@ -5628,3 +5628,416 @@ def run_predictions(raw, use_ai=True, use_web=False):
 
 print("✅ vMAX 18.6 原文件保留升级层已加载")
 print("   升级: 索引算法 + CRS统计矩修复 + 0球比分修复 + EV修复 + use_web联网情报 + 一致性锁")
+# ====================================================================
+# 🔧 vMAX 18.6.1 热修复层
+# --------------------------------------------------------------------
+# 修复：
+# 1. 无符号 give_ball 根据欧赔强弱方自动判定主让/主受让
+# 2. determine_goal_range 不再用原始 give_ball，统一用内部盘口符号
+# 3. extreme_blowout 触发收紧
+# 4. 一致性锁增加“比分必须落在 goal_range 内”
+# 5. 正确比分 EV 概率加硬上限，防止 EV/Kelly 虚高
+# ====================================================================
+
+ENGINE_VERSION = "vMAX 18.6.1-handicap-range-ev-hotfix"
+
+
+def _odds_strong_side(match_obj: Dict[str, Any]) -> Optional[str]:
+    sp_h = _f(match_obj.get("sp_home", match_obj.get("win", 0)))
+    sp_a = _f(match_obj.get("sp_away", match_obj.get("lose", 0)))
+
+    if sp_h <= 1.01 or sp_a <= 1.01:
+        return None
+
+    if sp_h < sp_a:
+        return "home"
+    if sp_a < sp_h:
+        return "away"
+
+    return None
+
+
+def _parse_actual_handicap(match_obj: Dict) -> float:
+    """
+    v18.6.1 修复版。
+    内部约定：主让为正，客让为负。
+
+    关键修复：
+    - raw="-1"  -> 竞彩主让1    -> +1
+    - raw="+1"  -> 竞彩主受让1  -> -1
+    - raw="1" 且主队欧赔更低 -> 主让1 -> +1
+    - raw="1" 且客队欧赔更低 -> 主受让1/客让1 -> -1
+    """
+    raw = match_obj.get("give_ball", match_obj.get("handicap", match_obj.get("AHh", "0")))
+    s = str(raw).strip().replace(" ", "")
+
+    if not s or s.lower() in {"nan", "none", "null", "n/a", "-"}:
+        return 0.0
+
+    side = None
+    if "主" in s:
+        side = "home"
+    elif "客" in s:
+        side = "away"
+
+    is_shou = "受" in s
+
+    val = None
+
+    for word, word_val in sorted(_HANDICAP_WORDS.items(), key=lambda kv: len(kv[0]), reverse=True):
+        if word in s:
+            val = word_val
+            break
+
+    if val is None:
+        frac = re.search(r"([+-]?\d+(?:\.\d+)?)\s*/\s*([+-]?\d+(?:\.\d+)?)", s)
+        if frac:
+            val = (abs(_f(frac.group(1))) + abs(_f(frac.group(2)))) / 2.0
+        else:
+            num = re.search(r"[+-]?\d+(?:\.\d+)?", s)
+            val = abs(_f(num.group(0), 0.0)) if num else 0.0
+
+    val = float(val or 0.0)
+
+    # 明确写了主/客
+    if side == "home":
+        return -val if is_shou else val
+
+    if side == "away":
+        return val if is_shou else -val
+
+    # 明确带 + / - 的竞彩 give_ball
+    # 竞彩：负数=主让，正数=主受让
+    if re.match(r"^[+-]", s):
+        signed_val = _f(s, 0.0)
+        return -signed_val
+
+    # 无符号数字：根据欧赔强弱方判定
+    # 主强：1 = 主让1 -> +1
+    # 客强：1 = 主受让1 / 客让1 -> -1
+    strong_side = _odds_strong_side(match_obj)
+
+    if strong_side == "home":
+        return val
+
+    if strong_side == "away":
+        return -val
+
+    return 0.0
+
+
+def determine_goal_range(
+    direction: str,
+    moments: Dict[str, float],
+    exp_goals: float,
+    trap_report: Dict[str, Any],
+    match_obj: Dict[str, Any],
+    engine_result: Dict[str, Any],
+) -> Tuple[int, int, str]:
+    """
+    v18.6.1 修复版。
+    收紧 extreme_blowout，不再轻易给 5-12 球。
+    """
+    actual_hc = _parse_actual_handicap(match_obj)
+
+    lh = moments.get("lambda_h", 0) if moments else 0
+    la = moments.get("lambda_a", 0) if moments else 0
+    lt = moments.get("lambda_total", exp_goals) if moments else exp_goals
+    shape = classify_shape(moments)[0] if moments else "unknown"
+
+    hxg = _f(engine_result.get("bookmaker_implied_home_xg", 0))
+    axg = _f(engine_result.get("bookmaker_implied_away_xg", 0))
+
+    if hxg > 0 and axg > 0:
+        xg_total = hxg + axg
+        xg_diff = hxg - axg
+    else:
+        xg_total = exp_goals
+        xg_diff = lh - la
+
+    # 总进球赔率压低强度
+    a5 = _f(match_obj.get("a5", 999), 999)
+    a6 = _f(match_obj.get("a6", 999), 999)
+    a7 = _f(match_obj.get("a7", 999), 999)
+
+    tail_pressure = 0
+    if 0 < a5 <= 8:
+        tail_pressure += 2
+    elif 0 < a5 <= 12:
+        tail_pressure += 1
+
+    if 0 < a6 <= 15:
+        tail_pressure += 2
+    elif 0 < a6 <= 22:
+        tail_pressure += 1
+
+    if 0 < a7 <= 28:
+        tail_pressure += 2
+    elif 0 < a7 <= 40:
+        tail_pressure += 1
+
+    # 方向对应的真实让球强度
+    if direction == "home":
+        handicap_support = actual_hc >= 1.75
+        xg_support = xg_diff >= 1.35
+        lambda_support = lh - la >= 1.35
+    elif direction == "away":
+        handicap_support = actual_hc <= -1.75
+        xg_support = xg_diff <= -1.35
+        lambda_support = la - lh >= 1.35
+    else:
+        handicap_support = False
+        xg_support = False
+        lambda_support = False
+
+    extreme_score = 0
+    if handicap_support:
+        extreme_score += 2
+    if xg_support:
+        extreme_score += 2
+    if lambda_support:
+        extreme_score += 1
+    if tail_pressure >= 4:
+        extreme_score += 2
+    elif tail_pressure >= 2:
+        extreme_score += 1
+    if exp_goals >= 3.3 or xg_total >= 3.3 or lt >= 3.3:
+        extreme_score += 1
+    if shape in ["lopsided_h", "lopsided_a"]:
+        extreme_score += 1
+
+    # 极端惨案必须满足：
+    # 1. 方向让球或 xG 至少一个强支持
+    # 2. 总进球预期不低
+    # 3. 尾部赔率有明显压力
+    if (
+        direction in ["home", "away"]
+        and extreme_score >= 5
+        and (handicap_support or xg_support)
+        and max(exp_goals, xg_total, lt) >= 3.0
+    ):
+        return 5, 12, "extreme_blowout"
+
+    # 非极端时，用混合 lambda 判定
+    lt_avg = lt * 0.5 + exp_goals * 0.3 + xg_total * 0.2
+
+    if lt_avg >= 3.45:
+        return 3, 6, "shootout"
+
+    if lt_avg >= 2.85:
+        return 2, 5, "high_goals"
+
+    if lt_avg >= 2.25:
+        return 2, 4, "normal"
+
+    if lt_avg >= 1.75:
+        return 1, 3, "low_goals"
+
+    return 0, 2, "grinder"
+
+
+def _score_inside_goal_range(score_str: Any, goal_range: Any) -> bool:
+    try:
+        if not goal_range or len(goal_range) != 2:
+            return True
+
+        gmin, gmax = int(goal_range[0]), int(goal_range[1])
+
+        if "其他" in str(score_str):
+            return gmin <= 9 <= gmax
+
+        tg = _score_total_goals(score_str)
+        if tg is None:
+            return True
+
+        return gmin <= tg <= gmax
+    except Exception:
+        return True
+
+
+def _pick_candidate_inside_range(
+    final_direction: str,
+    goal_range: Any,
+    top_candidates: List[Tuple[str, float]],
+) -> Optional[str]:
+    if not top_candidates:
+        return None
+
+    for sc, pts in top_candidates:
+        if _score_direction(sc) != final_direction:
+            continue
+
+        if _score_inside_goal_range(sc, goal_range):
+            return sc
+
+    return None
+
+
+def _estimate_score_model_prob(
+    predicted_score: str,
+    final_direction: str,
+    posterior_pct: Dict[str, float],
+    top_candidates: List[Tuple[str, float]],
+    crs_probs: Dict[str, float],
+) -> float:
+    """
+    v18.6.1 修复版。
+    给正确比分概率加硬上限，防止 EV/Kelly 虚高。
+    """
+    dir_prob = max(0.01, min(0.99, posterior_pct.get(final_direction, 33.3) / 100.0))
+
+    same_dir_candidates = []
+    for sc, pts in top_candidates or []:
+        if _score_direction(sc) == final_direction:
+            same_dir_candidates.append((sc, max(0.01, _f(pts, 0.01))))
+
+    if same_dir_candidates:
+        total_pts = sum(p for _, p in same_dir_candidates)
+        target_pts = next((p for sc, p in same_dir_candidates if sc == predicted_score), None)
+
+        if target_pts is None:
+            target_pts = min(p for _, p in same_dir_candidates) * 0.5
+
+        cond = target_pts / total_pts if total_pts > 0 else 0.10
+    else:
+        same_dir_market = {
+            sc: p for sc, p in crs_probs.items()
+            if _score_direction(sc) == final_direction
+        }
+
+        if same_dir_market:
+            total_market = sum(same_dir_market.values())
+            target_market = same_dir_market.get(predicted_score, min(same_dir_market.values()) * 0.5)
+            cond = target_market / total_market if total_market > 0 else 0.10
+        else:
+            cond = 0.10
+
+    raw_prob = dir_prob * cond * 100
+
+    # 正确比分硬上限
+    # 单一常规比分一般不应超过 18%，极端场也不应随便超过 12%
+    if "其他" in str(predicted_score):
+        cap = 8.0
+    else:
+        tg = _score_total_goals(predicted_score)
+        if tg is not None and tg >= 5:
+            cap = 10.0
+        else:
+            cap = 18.0
+
+    # 下限避免全归零，但不制造虚假价值
+    floor = 0.4
+
+    return round(max(floor, min(cap, raw_prob)), 2)
+
+
+def _enforce_consistency(mg):
+    """
+    v18.6.1 修复版：
+    1. 方向一致
+    2. 概率 argmax 一致
+    3. 比分必须落在 goal_range 内
+    """
+    score_str = str(mg.get("predicted_score", "1-1")).strip()
+    goal_range = mg.get("goal_range")
+    top_candidates = mg.get("top_score_candidates", [])
+
+    # 先按当前比分确定方向
+    if "胜其他" in score_str or score_str == "9-0":
+        expected_dir = "主胜"
+        expected_code = "home"
+        mg["predicted_score"] = "胜其他"
+        mg["predicted_label"] = "胜其他"
+
+    elif "平其他" in score_str or score_str == "9-9":
+        expected_dir = "平局"
+        expected_code = "draw"
+        mg["predicted_score"] = "平其他"
+        mg["predicted_label"] = "平其他"
+
+    elif "负其他" in score_str or score_str == "0-9":
+        expected_dir = "客胜"
+        expected_code = "away"
+        mg["predicted_score"] = "负其他"
+        mg["predicted_label"] = "负其他"
+
+    else:
+        h, a = _parse_score(score_str)
+
+        if h is None:
+            expected_dir = mg.get("result", "平局")
+            expected_code = CN_DIRECTION.get(expected_dir, "draw")
+        elif h > a:
+            expected_dir = "主胜"
+            expected_code = "home"
+        elif h < a:
+            expected_dir = "客胜"
+            expected_code = "away"
+        else:
+            expected_dir = "平局"
+            expected_code = "draw"
+
+        mg["predicted_label"] = score_str
+
+    # 如果已有 final_direction，以 final_direction 为主，避免 post-process 改坏方向
+    final_code = mg.get("final_direction") or expected_code
+    if final_code not in ["home", "draw", "away"]:
+        final_code = expected_code
+
+    # 检查比分是否落在进球区间
+    current_score = mg.get("predicted_score", score_str)
+
+    if not _score_inside_goal_range(current_score, goal_range):
+        replacement = _pick_candidate_inside_range(final_code, goal_range, top_candidates)
+
+        if replacement:
+            mg["predicted_score"] = replacement
+            mg["predicted_label"] = replacement
+
+            final_code = _score_direction(replacement) or final_code
+            expected_dir = DIRECTION_CN[final_code]
+
+            if "其他" in replacement:
+                label = {"home": "胜其他", "draw": "平其他", "away": "负其他"}[final_code]
+                mg["predicted_score"] = label
+                mg["predicted_label"] = label
+
+        else:
+            # 找不到区间内候选时，不强行保留 extreme_blowout
+            if mg.get("scenario") == "extreme_blowout":
+                tg = _score_total_goals(current_score)
+                if tg is not None:
+                    if tg >= 3:
+                        mg["scenario"] = "high_goals"
+                        mg["goal_range"] = (2, 5)
+                    else:
+                        mg["scenario"] = "normal"
+                        mg["goal_range"] = (1, 4)
+
+    expected_dir = DIRECTION_CN.get(final_code, expected_dir)
+    mg["result"] = expected_dir
+    mg["display_direction"] = expected_dir
+    mg["final_direction"] = final_code
+
+    pcts = {
+        "home": _f(mg.get("home_win_pct", 33.3), 33.3),
+        "draw": _f(mg.get("draw_pct", 33.3), 33.3),
+        "away": _f(mg.get("away_win_pct", 33.3), 33.3),
+    }
+
+    pct_argmax = max(pcts, key=pcts.get)
+
+    if pct_argmax != final_code:
+        cur_max = pcts[pct_argmax]
+        pcts[final_code] = cur_max + 5
+        total = sum(pcts.values())
+
+        if total > 0:
+            mg["home_win_pct"] = round(pcts["home"] / total * 100, 1)
+            mg["draw_pct"] = round(pcts["draw"] / total * 100, 1)
+            mg["away_win_pct"] = round(pcts["away"] / total * 100, 1)
+
+    return mg
+
+
+print("✅ vMAX 18.6.1 热修复已加载：盘口符号 + 进球区间 + extreme_blowout + EV/Kelly 校准")
