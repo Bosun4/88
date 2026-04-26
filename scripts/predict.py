@@ -73,6 +73,17 @@ STANDARD_GOAL_ODDS = {
     4: 7.0, 5: 14.0, 6: 30.0, 7: 70.0,
 }
 
+# 联赛风格映射: 根据联赛特点调整进球区间选择。
+# 例如意甲、西甲倾向于小球/平局，德甲倾向于大球/大比分，英超可能冷门多。
+# 若联赛字符串包含下面关键字，则在 determine_goal_range 中优先使用对应区间。
+LEAGUE_LOW_GOALS = ["意甲", "西甲", "法甲"]
+LEAGUE_HIGH_GOALS = ["德甲", "荷甲"]
+LEAGUE_UPSET = ["英超"]
+
+# 一些联赛偏好平局，例如意甲，虽然整体属于小球风格，但平局比例更高。
+# 在比分选择阶段会对这类联赛进行平局加权。
+LEAGUE_DRAW_PREFERRED = ["意甲"]
+
 
 def _f(v, default=0.0):
     """安全 float 转换"""
@@ -1783,6 +1794,52 @@ def compute_direction_posterior(
         if shin.get("draw", 0) >= 20:
             log_odds["draw"] += 0.4
             evidences.append("杯赛平局加成+0.4")
+
+    # ---------- 11. 联赛方向风格调整 ----------
+    # 某些联赛偏好平局或爆冷,在方向上作适度调整。
+    if league_str:
+        # 意甲等平局多的联赛:提升平局方向,削弱主客。
+        if any(kw in league_str for kw in LEAGUE_DRAW_PREFERRED):
+            # 增强 draw,削减 home/away
+            log_odds["draw"] += 0.5
+            log_odds["home"] -= 0.25
+            log_odds["away"] -= 0.25
+            evidences.append(f"联赛方向加成:{league_str}偏平局")
+        # 爆冷联赛(英超):提升客胜、适度提升平局,削弱主胜
+        elif any(kw in league_str for kw in LEAGUE_UPSET):
+            log_odds["away"] += 0.4
+            log_odds["home"] -= 0.35
+            log_odds["draw"] += 0.15
+            evidences.append(f"联赛方向加成:{league_str}爆冷倾向")
+
+    # ---------- 12. 总进球(TTG)方向调整 ----------
+    # 根据总进球赔率的模式调整方向倾向:低总进球偏向平局。
+    try:
+        ttg_probs = {}
+        for gi in range(8):
+            a_val = _f(match_obj.get(f"a{gi}", 0))
+            if a_val > 1:
+                ttg_probs[gi] = 1.0 / a_val
+        if ttg_probs:
+            tot_mode = max(ttg_probs, key=ttg_probs.get)
+            # 若最可能总进球<=2,可能是1-0/0-0/1-1等小比分,倾向平局
+            if tot_mode <= 2:
+                log_odds["draw"] += 0.5
+                log_odds["home"] -= 0.25
+                log_odds["away"] -= 0.25
+                evidences.append(f"总进球模式{tot_mode}球→平局倾向增强")
+            # 若最可能总进球>=5,多进球爆冷可能增大,小幅提高弱方或客方
+            elif tot_mode >= 5:
+                # 选择 shin 较小的一方作为弱方
+                weak_side = "home" if shin.get("home", 33) < shin.get("away", 33) else "away"
+                log_odds[weak_side] += 0.3
+                log_odds["draw"] += 0.1
+                # 相应削减强方
+                strong_side = "away" if weak_side == "home" else "home"
+                log_odds[strong_side] -= 0.3
+                evidences.append(f"总进球模式{tot_mode}球→爆冷偏向{weak_side}")
+    except Exception:
+        pass
     
     # ---------- 11. Softmax 归一化 (带温度系数避免过极端) ----------
     temperature = 1.8  # 温度越高分布越平滑
@@ -1932,6 +1989,15 @@ def determine_goal_range(
     # 混合 exp_goals 和 matrix-derived lambda
     lt_avg = (lt * 0.6 + exp_goals * 0.4)
     
+    # 联赛风格覆盖: 在判断 λ 区间前，先根据联赛特点覆盖进球区间
+    league_str = str(match_obj.get("league", match_obj.get("cup", "")))
+    if any(kw in league_str for kw in LEAGUE_LOW_GOALS):
+        # 小球联赛倾向于磨局
+        return 0, 2, "grinder"
+    if any(kw in league_str for kw in LEAGUE_HIGH_GOALS):
+        # 大球联赛倾向于高进球
+        return 2, 5, "high_goals"
+    # 常规 λ 总值判断
     if lt_avg >= 3.5:
         return 3, 6, "shootout"
     if lt_avg >= 2.9:
@@ -1940,6 +2006,7 @@ def determine_goal_range(
         return 2, 4, "normal"
     if lt_avg >= 1.8:
         return 1, 3, "low_goals"
+    # 默认磨局
     return 0, 2, "grinder"
 
 
@@ -2070,6 +2137,110 @@ def select_score(
         if shin.get("away", 33) > 55:
             for sc in ["0-2", "0-3", "1-2", "1-3"]:
                 if sc in candidates: candidates[sc] *= 1.15
+
+    # ---- 7. 联赛风格加权 ----
+    # 根据联赛的传统风格调整候选比分权重。
+    # 小球联赛倾向低比分+平局；大球联赛倾向高比分；爆冷联赛倾向客胜/冷门；
+    # 平局联赛(如意甲)则针对平局方向加成。
+    league_str = str(match_obj.get("league", match_obj.get("cup", "")))
+    if league_str:
+        # 小球联赛注重小比分、偏向平局
+        if any(kw in league_str for kw in LEAGUE_LOW_GOALS):
+            for sc in list(candidates.keys()):
+                h, a = _parse_score(sc)
+                total_goals = 9 if h is None else (h + a)
+                direction_sc = _score_direction(sc)
+                # 对小球联赛，极端偏好小比分: ≤2球加成, >2球降权
+                base_mult = 1.4 if total_goals <= 2 else 0.6
+                # 对偏好平局的联赛，进一步加成平局并轻度压制非平局
+                if any(kw in league_str for kw in LEAGUE_DRAW_PREFERRED):
+                    if direction_sc == "draw":
+                        base_mult *= 1.5  # 强化平局
+                    else:
+                        base_mult *= 0.8  # 压制主/客
+                candidates[sc] *= base_mult
+        # 大球联赛注重大比分
+        elif any(kw in league_str for kw in LEAGUE_HIGH_GOALS):
+            for sc in list(candidates.keys()):
+                h, a = _parse_score(sc)
+                total_goals = 9 if h is None else (h + a)
+                direction_sc = _score_direction(sc)
+                # 对大球联赛，强烈鼓励高进球，并鼓励大胜差
+                base_mult = 1.4 if total_goals >= 3 else 0.6
+                # 若进球差距>=2球，加成；否则轻度压制
+                if h is not None:
+                    diff = abs(h - a)
+                    if diff >= 2:
+                        base_mult *= 1.3
+                    else:
+                        base_mult *= 0.85
+                candidates[sc] *= base_mult
+        # 爆冷联赛: 如英超，客胜和部分平局更容易发生
+        elif any(kw in league_str for kw in LEAGUE_UPSET):
+            for sc in list(candidates.keys()):
+                direction_sc = _score_direction(sc)
+                # 增强客胜方向，适度增强平局，压制主胜
+                # 同时鼓励小比分客胜(爆冷往往为0-1或1-2)
+                h, a = _parse_score(sc)
+                total_goals = 9 if h is None else (h + a)
+                base_mult = 1.0
+                if direction_sc == "away":
+                    base_mult *= 1.4
+                    if total_goals <= 2:
+                        base_mult *= 1.2
+                elif direction_sc == "draw":
+                    base_mult *= 1.1
+                elif direction_sc == "home":
+                    base_mult *= 0.7
+                candidates[sc] *= base_mult
+
+    # ---- 8. 总进球赔率(TTG)加权 ----
+    # 利用足彩竞猜的总进球赔率(a0-a7)推断最可能的进球总数,对比分候选再加权。
+    # 根据用户经验,不同总进球数对应典型比分模式,例如2球→1-1/2-0,3球→2-1,4球→3-1/2-2等。
+    try:
+        # 收集各总进球赔率的反赔率作为隐含概率
+        ttg_probs = {}
+        for gi in range(8):
+            a_val = _f(match_obj.get(f"a{gi}", 0))
+            if a_val > 1:
+                ttg_probs[gi] = 1.0 / a_val
+        if ttg_probs:
+            # 计算概率最高的总进球数模式
+            tot_mode = max(ttg_probs, key=ttg_probs.get)
+            # 典型比分映射
+            typical_scores = {
+                0: ["0-0"],
+                1: ["1-0", "0-1"],
+                2: ["1-1", "2-0", "0-2"],
+                3: ["2-1", "1-2", "3-0", "0-3"],
+                4: ["3-1", "1-3", "2-2"],
+                5: ["3-2", "2-3", "4-1", "1-4"],
+                6: ["4-2", "2-4", "3-3"],
+                7: ["4-3", "3-4", "5-2", "2-5", "5-1", "1-5"],
+            }
+            for sc in list(candidates.keys()):
+                h, a = _parse_score(sc)
+                total_g = 9 if h is None else (h + a)
+                # 特殊比分(9表示胜/负/平其他)给予较低权重
+                if total_g >= 9:
+                    candidates[sc] *= 0.3
+                    continue
+                # 差值权重:进球总数与模式差距越大,权重越低
+                diff = abs(total_g - tot_mode)
+                if diff == 0:
+                    weight = 1.0
+                elif diff == 1:
+                    weight = 0.5
+                elif diff == 2:
+                    weight = 0.3
+                else:
+                    weight = 0.15
+                # 若该比分属于典型模式,再加成(更强)
+                if sc in typical_scores.get(tot_mode, []):
+                    weight *= 1.5
+                candidates[sc] *= weight
+    except Exception:
+        pass
     
     # ---- 7. 排序选 top1 ----
     if not candidates:
@@ -2566,7 +2737,7 @@ def build_v18_prompt(match_analyses):
 FALLBACK_URLS = [None, "https://www.api522.pro/v1", "https://api522.pro/v1",
                  "https://api521.pro/v1", "http://69.63.213.33:666/v1"]
 
-GPT_DEFAULT_URL = "https://ai.newapi.life/v1"
+GPT_DEFAULT_URL = "https://api.newapi.life/v1"
 GPT_DEFAULT_KEY = ""
 
 
