@@ -43,23 +43,23 @@ except ImportError as e:
 
 try:
     from odds_history import apply_odds_history
-except Exception:
+except ImportError:
     def apply_odds_history(m, mg): return mg
 
 try:
     from quant_edge import apply_quant_edge
-except Exception:
+except ImportError:
     def apply_quant_edge(m, mg): return mg
 
 try:
     from wencai_intel import apply_wencai_intel
-except:
+except ImportError:
     def apply_wencai_intel(m, mg): return mg
 
 try:
     ensemble = EnsemblePredictor()
     exp_engine = ExperienceEngine()
-except:
+except ImportError:
     ensemble = None
     exp_engine = None
 
@@ -103,26 +103,6 @@ def calculate_value_bet(prob_pct, odds):
 # ============================================================================
 # 🎭 16维庄家陷阱识别引擎
 # ============================================================================
-
-import re
-import math
-from typing import Dict, List, Any, Optional, Tuple
-
-
-# 进球数标准赔率基准
-STANDARD_GOAL_ODDS = {
-    0: 9.5, 1: 5.5, 2: 3.5, 3: 4.0,
-    4: 7.0, 5: 14.0, 6: 30.0, 7: 70.0,
-}
-
-
-def _f(v, default=0.0):
-    """安全float转换"""
-    try:
-        return float(v) if v is not None and str(v).strip() != "" else default
-    except:
-        return default
-
 
 def _extract_form_record(text: str) -> Tuple[int, int, int]:
     """从文本里抽取 '近5主场3胜1平1负' 这种信息,返回 (胜, 平, 负)"""
@@ -1114,6 +1094,7 @@ def detect_all_traps(match_obj: Dict, engine_result: Dict,
         "xg_override": xg_override,
         "confidence_penalty": confidence_penalty,
         "sharp_trust_override": sharp_trust_override,
+        "steam_trust_override": sharp_trust_override,
         "shin": shin,
         "sharp_detected": sharp_detected,
         "sharp_dir": sharp_dir,
@@ -1165,10 +1146,6 @@ def detect_steam_direction(smart_signals: List) -> Dict[str, Any]:
 # ============================================================================
 # 📊 CRS 矩阵几何形状分析器
 # ============================================================================
-
-import math
-from typing import Dict, List, Any, Tuple
-
 
 # CRS 完整字段映射
 CRS_FULL_MAP = {
@@ -1530,13 +1507,6 @@ def select_scores_in_direction_and_range(
 # 🧠 贝叶斯决策引擎 + 决策锁定链
 # ============================================================================
 
-import math
-import re
-from typing import Dict, List, Any, Tuple, Optional
-
-
-
-
 def _parse_score(s: str) -> Tuple[Optional[int], Optional[int]]:
     """安全比分解析,支持虚拟比分"""
     try:
@@ -1633,7 +1603,7 @@ def compute_direction_posterior(
     # ---------- 可信度降权预计算 ----------
     # 当陷阱识别表明资金流可能是诱饵时,Sharp/Steam 需要降权
     sharp_trust = trap_report.get("sharp_trust_override", 1.0)
-    steam_trust = trap_report.get("sharp_trust_override", 1.0)
+    steam_trust = trap_report.get("steam_trust_override", 1.0)
     
     # T1 诱平陷阱 → 压制平局方向的 Sharp/Steam
     suppress_draw_signals = False
@@ -2144,7 +2114,10 @@ def decision_lock_chain(
         sc = sc_raw
         if not _parse_score(sc)[0]:
             if top3:
-                sc = top3[0].get("score", "")
+                if isinstance(top3[0], dict):
+                    sc = top3[0].get("score", "")
+                elif isinstance(top3[0], str):
+                    sc = top3[0]
         
         h, a = _parse_score(sc)
         if h is None:
@@ -2167,7 +2140,12 @@ def decision_lock_chain(
         
         # top2/top3 小权重
         for rank, t in enumerate(top3[1:3], 2):
-            sc2 = t.get("score", "").replace(" ", "").strip()
+            if isinstance(t, dict):
+                sc2 = t.get("score", "").replace(" ", "").strip()
+            elif isinstance(t, str):
+                sc2 = t.replace(" ", "").strip()
+            else:
+                continue
             if _parse_score(sc2)[0] is not None:
                 w2 = 0.4 if rank == 2 else 0.2
                 ai_votes[sc2] = ai_votes.get(sc2, 0) + weight * w2
@@ -2582,7 +2560,7 @@ def build_v18_prompt(match_analyses):
 FALLBACK_URLS = [None, "https://www.api522.pro/v1", "https://api522.pro/v1",
                  "https://api521.pro/v1", "http://69.63.213.33:666/v1"]
 
-GPT_DEFAULT_URL = "https://poloai.top/v1"
+GPT_DEFAULT_URL = "https://api.newapi.life/v1"
 GPT_DEFAULT_KEY = ""
 
 
@@ -2616,7 +2594,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
         urls = [primary_url] + backup
 
     CONNECT_TIMEOUT = 20
-    READ_TIMEOUT_MAP = {"claude": 380, "grok": 280, "gpt": 280, "gemini": 280}
+    READ_TIMEOUT_MAP = {"claude": 380, "grok": 300, "gpt": 300, "gemini": 250}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     # 🔥 v18 升级的对冲基金异构人设 + 铁律
@@ -2667,7 +2645,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
             if is_gem:
                 headers["x-goog-api-key"] = key
                 payload = {
-                    "contents": [{"parts": [{"text": prompt}]}],
+                    "contents": [{"role": "user", "parts": [{"text": prompt}]}],
                     "generationConfig": {"temperature": profile["temp"]},
                     "systemInstruction": {"parts": [{"text": profile["sys"]}]}
                 }
@@ -2677,8 +2655,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                     {"role": "system", "content": profile["sys"]},
                     {"role": "user", "content": prompt}
                 ]}
-                if ai_name != "claude":
-                    bp["temperature"] = profile["temp"]
+                bp["temperature"] = profile["temp"]
                 payload = bp
 
             gw = url.split("/v1")[0][:35]
@@ -2693,14 +2670,15 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
                     elapsed_connect = round(time.time()-t0, 1)
                     if r.status in (502, 504):
-                        print(f"    💀 HTTP {r.status} | {elapsed_connect}s → 换模型")
-                        break
+                        print(f"    💀 HTTP {r.status} | {elapsed_connect}s → 换URL")
+                        continue
                     if r.status == 400:
                         print(f"    💀 400 | {elapsed_connect}s → 换模型")
                         break
                     if r.status == 429:
-                        print(f"    🔥 429 | {elapsed_connect}s → 换模型")
-                        break
+                        print(f"    🔥 429 | {elapsed_connect}s → 换URL(延迟重试)")
+                        await asyncio.sleep(1)
+                        continue
                     if r.status != 200:
                         print(f"    ⚠️ HTTP {r.status} | {elapsed_connect}s → 换URL")
                         continue
@@ -2967,7 +2945,7 @@ async def run_ai_matrix_two_phase(match_analyses):
     ]
     all_results = {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
 
-    connector = aiohttp.TCPConnector(limit=10, ttl_dns_cache=300)
+    connector = aiohttp.TCPConnector(limit=10, use_dns_cache=False)
     async with aiohttp.ClientSession(connector=connector) as session:
         tasks = [async_call_one_ai_batch(session, prompt, u, k, m, num, n)
                 for n, u, k, m in ai_configs]
@@ -3510,7 +3488,33 @@ def run_predictions(raw, use_ai=True):
     if use_ai and match_analyses:
         print(f"  [v18 AI] 启动4AI并行...")
         start_t = time.time()
-        all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
+        
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+
+        if loop and loop.is_running():
+            import concurrent.futures
+            
+            def _run_in_thread(coro):
+                new_loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(new_loop)
+                try:
+                    return new_loop.run_until_complete(coro)
+                finally:
+                    new_loop.close()
+                    
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                future = pool.submit(_run_in_thread, run_ai_matrix_two_phase(match_analyses))
+                try:
+                    all_ai = future.result()
+                except Exception as e:
+                    logger.error(f"AI 矩阵并发执行崩溃: {e}")
+                    all_ai = {"claude": {}, "gemini": {}, "gpt": {}, "grok": {}}
+        else:
+            all_ai = asyncio.run(run_ai_matrix_two_phase(match_analyses))
+            
         print(f"  [完成] 耗时 {time.time()-start_t:.1f}s")
 
     # ---- Phase 3: 合并决策 ----
