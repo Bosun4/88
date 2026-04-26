@@ -187,8 +187,14 @@ def _infer_theoretical_handicap(sp_h: float, sp_a: float) -> float:
     if ratio >= 3.0: return 1.25
     if ratio >= 2.2: return 0.75
     if ratio >= 1.6: return 0.25
-    if ratio >= 1.15: return 0.0
-    if ratio >= 0.85: return 0.0
+    # NOTE: 当欧赔比值介于 0.85 和 1.15 之间时，原实现返回 0，导致与更高区间重叠
+    # 为区分平手盘与受让平/半盘，调整阈值映射：
+    if ratio >= 1.15:
+        # 主队赔率明显低于客队时，让0.25球
+        return 0.25
+    if ratio >= 0.85:
+        # 均衡区间视为平手盘
+        return 0.0
     if ratio >= 0.63: return -0.25
     if ratio >= 0.46: return -0.75
     if ratio >= 0.33: return -1.25
