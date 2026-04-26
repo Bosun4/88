@@ -1813,7 +1813,7 @@ def compute_direction_posterior(
             evidences.append(f"联赛方向加成:{league_str}爆冷倾向")
 
     # ---------- 12. 总进球(TTG)方向调整 ----------
-    # 根据总进球赔率的模式调整方向倾向:低总进球偏向平局。
+    # 根据总进球赔率的模式和锚点调整方向倾向:低总进球偏向平局。
     try:
         ttg_probs = {}
         for gi in range(8):
@@ -1822,22 +1822,53 @@ def compute_direction_posterior(
                 ttg_probs[gi] = 1.0 / a_val
         if ttg_probs:
             tot_mode = max(ttg_probs, key=ttg_probs.get)
-            # 若最可能总进球<=2,可能是1-0/0-0/1-1等小比分,倾向平局
+            # 检测锚点: 某些总进球赔率异常压低
+            a4 = _f(match_obj.get("a4", 0))
+            a5 = _f(match_obj.get("a5", 0))
+            a7 = _f(match_obj.get("a7", 0))
+            anchor = None
+            if a4 > 0 and a4 < 5:
+                anchor = 4
+            elif a5 > 0 and a5 < 8:
+                anchor = 5
+            elif a7 > 0 and a7 < 18:
+                anchor = 7
+            # 当小球模式(<=2)时,偏向平局
             if tot_mode <= 2:
                 log_odds["draw"] += 0.5
                 log_odds["home"] -= 0.25
                 log_odds["away"] -= 0.25
                 evidences.append(f"总进球模式{tot_mode}球→平局倾向增强")
-            # 若最可能总进球>=5,多进球爆冷可能增大,小幅提高弱方或客方
+            # 当大球模式(>=5)时,偏向弱势方或客方
             elif tot_mode >= 5:
-                # 选择 shin 较小的一方作为弱方
                 weak_side = "home" if shin.get("home", 33) < shin.get("away", 33) else "away"
                 log_odds[weak_side] += 0.3
                 log_odds["draw"] += 0.1
-                # 相应削减强方
                 strong_side = "away" if weak_side == "home" else "home"
                 log_odds[strong_side] -= 0.3
                 evidences.append(f"总进球模式{tot_mode}球→爆冷偏向{weak_side}")
+            # 锚点进一步调整: 4球锚点偏向平局,5球偏向弱方,7球偏向强方
+            if anchor == 4:
+                log_odds["draw"] += 0.7
+                log_odds["home"] -= 0.35
+                log_odds["away"] -= 0.35
+                evidences.append("⚓ 4球赔率<5倍→强烈平局锚点")
+            elif anchor == 5:
+                # 增强弱势方,并轻微提升平局
+                weak_side = "home" if shin.get("home", 33) < shin.get("away", 33) else "away"
+                strong_side = "away" if weak_side == "home" else "home"
+                log_odds[weak_side] += 0.4
+                log_odds["draw"] += 0.1
+                log_odds[strong_side] -= 0.4
+                evidences.append(f"⚓ 5球赔率<8倍→弱势方爆冷锚点({weak_side})")
+            elif anchor == 7:
+                # 增强强势方(大比分惨案可能)并抑制弱方
+                strong_side = "home" if shin.get("home", 33) > shin.get("away", 33) else "away"
+                weak_side = "away" if strong_side == "home" else "home"
+                log_odds[strong_side] += 0.6
+                log_odds[weak_side] -= 0.6
+                log_odds["draw"] -= 0.2
+                evidences.append(f"⚓ 7球赔率<18倍→强势方碾压锚点({strong_side})")
     except Exception:
         pass
     
@@ -2218,6 +2249,18 @@ def select_score(
                 6: ["4-2", "2-4", "3-3"],
                 7: ["4-3", "3-4", "5-2", "2-5", "5-1", "1-5"],
             }
+            # 预检测锚点: 当某些总进球赔率明显压低时,增强对应典型比分
+            a4 = _f(match_obj.get("a4", 0))
+            a5 = _f(match_obj.get("a5", 0))
+            a7 = _f(match_obj.get("a7", 0))
+            anchor = None
+            # 按用户经验判断: 4球<5倍 或 5球<8倍 或 7球<18倍
+            if a4 > 0 and a4 < 5:
+                anchor = 4
+            elif a5 > 0 and a5 < 8:
+                anchor = 5
+            elif a7 > 0 and a7 < 18:
+                anchor = 7
             for sc in list(candidates.keys()):
                 h, a = _parse_score(sc)
                 total_g = 9 if h is None else (h + a)
@@ -2238,6 +2281,19 @@ def select_score(
                 # 若该比分属于典型模式,再加成(更强)
                 if sc in typical_scores.get(tot_mode, []):
                     weight *= 1.5
+                # 若触发锚点,进一步加强对应典型比分(弱化非典型)
+                if anchor is not None:
+                    anchor_typical = {
+                        4: ["2-2", "3-1", "1-3"],
+                        5: ["3-2", "2-3"],
+                        7: ["5-2", "2-5", "5-1", "1-5"],
+                    }
+                    if sc in anchor_typical.get(anchor, []):
+                        # 对于锚点下的典型比分,给予更强加权提升(从2.5提高至3.0)
+                        weight *= 3.0
+                    else:
+                        # 非典型比分大幅降权(从0.5降低至0.4),确保锚点模式更突出
+                        weight *= 0.4
                 candidates[sc] *= weight
     except Exception:
         pass
@@ -2522,20 +2578,27 @@ def decision_lock_chain(
 # 🤖 v18.0 AI Prompt — 铁律 + 5步思维锚
 # ====================================================================
 def load_ai_diary():
-    diary_file = "data/ai_diary.json"
-    if os.path.exists(diary_file):
-        try:
-            with open(diary_file, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except:
-            pass
-    return {"yesterday_win_rate": "N/A", "reflection": "v18.0 贝叶斯+16维陷阱启动", "kill_history": []}
+    """
+    v18.1 起,禁用跨日缓存记忆。
+
+    过去版本通过本地文件缓存上一日的胜率及反思,但这会导致模型在不同运行之间共享状态,
+    影响公平性和可重复性。根据用户要求,移除这一缓存机制,每次运行均从空记忆开始。
+
+    返回一个空白 diary 字典,供 prompt 构建使用,但不包含任何历史信息。
+    """
+    # 返回默认空记录; 不再尝试读取磁盘文件
+    return {"yesterday_win_rate": "N/A", "reflection": "", "kill_history": []}
 
 
 def save_ai_diary(diary):
-    os.makedirs("data", exist_ok=True)
-    with open("data/ai_diary.json", "w", encoding="utf-8") as f:
-        json.dump(diary, f, ensure_ascii=False, indent=2)
+    """
+    v18.1 起,禁用跨日缓存记忆保存。
+
+    本函数保留作占位,但不再将数据写入磁盘。这样保证每次运行的 diary 都是新鲜的,
+    避免外部环境对预测产生长期影响。
+    """
+    # 兼容旧接口,但不执行任何保存操作
+    return
 
 
 def build_v18_prompt(match_analyses):
@@ -2545,11 +2608,13 @@ def build_v18_prompt(match_analyses):
     2. 5 步思维锚 (强制思考路径)
     3. 把系统识别的陷阱作为线索展示给 AI
     """
+    # v18.1: 取消 diary 缓存,不引入跨日记忆
     diary = load_ai_diary()
     p = "<context>\n"
     p += "你正在中国体彩的竞彩足球市场进行对冲基金级别的量化比分预测。\n"
     p += "这里充满诱盘、反指、资金流陷阱。你必须识破庄家布下的局。\n"
-    if diary.get("reflection"):
+    # 不再输出上一次运行的反思和胜率,确保每次预测相互独立
+    if False and diary.get("reflection"):
         p += f"[系统记忆] 昨日: {diary.get('yesterday_win_rate','N/A')} | 反思: {diary['reflection']}\n"
     p += "</context>\n\n"
 
@@ -2571,6 +2636,7 @@ def build_v18_prompt(match_analyses):
     p += "Step2 [陷阱矩阵扫描] 检查 T1-T16 陷阱是否触发(系统已预扫,见 match_data 内的陷阱提示)\n"
     p += "Step3 [尾部分布探测] 进球数赔率(a0-a7)压低反推庄家真实预期:\n"
     p += "  - a7<25 或 a6<15 或 a5<8 → 防极端惨案 → 考虑胜其他/负其他\n"
+    p += "  - a4<5 → 可能是平局或3-1/1-3(2-2); a5<8 → 可能是3-2/2-3; a7<18 → 可能是5-2/5-1等\n"
     p += "  - a0-a2均压低+xG低 → 闷平\n"
     p += "Step4 [场景共鸣] 杯赛/淘汰/保级/赛季末等场景属性加成\n"
     p += "Step5 [EV锚定] 最终选 CRS赔率×概率 期望值最高的比分,拒绝追逐大热\n"
@@ -2649,6 +2715,19 @@ def build_v18_prompt(match_analyses):
             p += f"总进球: {' | '.join(a_list)}\n"
         if compressed:
             p += f"⚠️ 进球数压低: {', '.join(compressed)}\n"
+        # 总进球锚点提示: 若某个总进球赔率低于阈值,提示AI注意该比分模式
+        try:
+            a4_val = _f(m.get('a4', 0))
+            a5_val = _f(m.get('a5', 0))
+            a7_val = _f(m.get('a7', 0))
+            if a4_val > 0 and a4_val < 5:
+                p += f"⚓ 锚点提示: 4球赔率={a4_val}(<5), 典型比分 2-2 或 3-1/1-3\n"
+            if a5_val > 0 and a5_val < 8:
+                p += f"⚓ 锚点提示: 5球赔率={a5_val}(<8), 典型比分 3-2 或 2-3\n"
+            if a7_val > 0 and a7_val < 18:
+                p += f"⚓ 锚点提示: 7球赔率={a7_val}(<18), 典型比分 5-2/5-1/2-5/1-5\n"
+        except Exception:
+            pass
 
         # CRS 全量
         crs_lines = []
@@ -2737,7 +2816,7 @@ def build_v18_prompt(match_analyses):
 FALLBACK_URLS = [None, "https://www.api522.pro/v1", "https://api522.pro/v1",
                  "https://api521.pro/v1", "http://69.63.213.33:666/v1"]
 
-GPT_DEFAULT_URL = "https://direct.poloai.top/v1"
+GPT_DEFAULT_URL = "https://ai.newapi.life/v1"
 GPT_DEFAULT_KEY = ""
 
 
@@ -3116,7 +3195,7 @@ async def run_ai_matrix_two_phase(match_analyses):
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-5-grok-4.2-fast-200w上下文"]),
         ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY",
-         ["熊猫-特供-X-12-gemini-3.1-pro-preview-thinking"]),
+         ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
         ("claude", "CLAUDE_API_URL", "CLAUDE_API_KEY",
          ["熊猫-69-满血openrouter-claude-opus-4.7-上下文1000k"]),
     ]
@@ -3631,6 +3710,34 @@ def run_predictions(raw, use_ai=True):
         except Exception:
             sp = {}
 
+        # ---- 自定义信号: 总进球锚点检测 ----
+        # 根据用户经验,当某些总进球赔率低于阈值时,形成明显锚点,
+        # 例如4球赔率<5倍提示2-2/3-1,5球赔率<8倍提示3-2/2-3,7球赔率<18倍提示5-2/5-1等。
+        # 这些锚点会作为 smart_signals 喂给 AI,帮助其识别庄家的真实意图。
+        anchor_sigs: List[str] = []
+        try:
+            a4_val = _f(m.get('a4', 0))
+            a5_val = _f(m.get('a5', 0))
+            a7_val = _f(m.get('a7', 0))
+            if a4_val > 0 and a4_val < 5:
+                anchor_sigs.append(f"⚓4球锚点({a4_val:.2f})→典型2-2/3-1/1-3")
+            if a5_val > 0 and a5_val < 8:
+                anchor_sigs.append(f"⚓5球锚点({a5_val:.2f})→典型3-2/2-3")
+            if a7_val > 0 and a7_val < 18:
+                anchor_sigs.append(f"⚓7球锚点({a7_val:.2f})→典型5-2/5-1/2-5/1-5")
+        except Exception:
+            pass
+        if anchor_sigs:
+            # 将锚点信号附加到 stats.smart_signals
+            if isinstance(sp, dict):
+                existing = sp.get('smart_signals', [])
+                if not isinstance(existing, list):
+                    existing = [str(existing)]
+                sp['smart_signals'] = existing + anchor_sigs
+            else:
+                # 若 sp 非dict,转为 dict 以容纳 smart_signals
+                sp = {'smart_signals': anchor_sigs}
+
         try:
             exp_result = exp_engine.analyze(m) if exp_engine else {}
         except Exception:
@@ -3754,18 +3861,8 @@ def run_predictions(raw, use_ai=True):
         r["is_recommended"] = r.get("id") in t4ids
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
 
-    # ---- Phase 5: Diary ----
-    diary = load_ai_diary()
-    total_traps = sum(r.get("prediction", {}).get("trap_count", 0) for r in res)
-    others_count = sum(1 for r in res if r.get("prediction", {}).get("is_score_others"))
-    sharp_count = sum(1 for r in res if r.get("prediction", {}).get("sharp_detected"))
-    high_conf = sum(1 for r in res if r.get("prediction", {}).get("confidence", 0) > 70)
-
-    diary["yesterday_win_rate"] = f"{high_conf}/{max(1,len(res))}"
-    diary["reflection"] = (f"vMAX18.0 | {total_traps}陷阱 {others_count}胜其他 "
-                          f"{sharp_count}Sharp | 贝叶斯+16维+决策锁定")
-    save_ai_diary(diary)
-
+    # ---- Phase 5: Diary (已禁用) ----
+    # v18.1: 不再保存或加载 diary,保持预测独立
     return res, t4
 
 
