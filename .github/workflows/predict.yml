@@ -2,7 +2,8 @@ name: Football AI Predict
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    # 北京时间 11:30 = UTC 03:30
+    - cron: '30 3 * * *'
   workflow_dispatch:
 
 permissions:
