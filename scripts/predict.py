@@ -1,14 +1,16 @@
 # ====================================================================
-# 🚀 vMAX 19.2 — Raw Packet 四AI审计版
+# 🚀 vMAX 19.2 — Raw Packet 四AI审计版 / 修正版
 # --------------------------------------------------------------------
 # 核心逻辑:
 #   ✅ 抓包标准化 + 原始字段展开
-#   ✅ OBS 中性观察信号，不直接写死诱盘结论
+#   ✅ OBS 中性观察信号，不写死诱盘结论
 #   ✅ Phase 1: GPT / Grok / Gemini 三家并行独立分析
 #   ✅ Phase 2: Claude 拿原始抓包 + 三家分析做最终审计
 #   ✅ Claude 不是票数裁判，必须重新审计原始抓包
+#   ✅ GPT 通道兼容原始参考逻辑：多 KEY / URL 别名 + 默认 URL
+#   ✅ AI_CALL_STATUS 输出每家真实状态，避免只看到“未返回”
 #   ✅ 程序只做 JSON 校验 / 字段兼容 / 方向一致性，不篡改 Claude 逻辑
-#   ✅ EV / Kelly 只使用精确比分概率，禁止用方向概率代替比分概率
+#   ✅ EV / Kelly 默认不使用 LLM 主观比分概率，避免虚高
 # ====================================================================
 
 import json
@@ -112,8 +114,44 @@ except Exception as e:
 ENGINE_VERSION = "vMAX 19.2"
 ENGINE_ARCHITECTURE = "Raw Packet + 3 Analysts + Claude Final Audit"
 
-# 旧增强模块默认关闭。打开后也不允许改核心预测字段。
+# 旧增强模块默认关闭。即使打开，也不会允许它改核心字段。
 APPLY_LEGACY_ENHANCERS = False
+
+# LLM top3.prob 是主观概率，默认不用于正式 EV/Kelly。
+ENABLE_LLM_VALUE_BET = False
+
+AI_CALL_STATUS = {
+    "gpt": "",
+    "grok": "",
+    "gemini": "",
+    "claude": "",
+}
+
+GPT_DEFAULT_URL = "https://ai.newapi.life/v1"
+GPT_DEFAULT_KEY = globals().get("GPT_DEFAULT_KEY", "")
+
+GPT_KEY_ALIASES = [
+    "GPT_API_KEY",
+    "OPENAI_API_KEY",
+    "OPENAI_KEY",
+    "AI_API_KEY",
+    "NEWAPI_KEY",
+    "API_KEY",
+]
+
+GPT_URL_ALIASES = [
+    "GPT_API_URL",
+    "OPENAI_API_BASE",
+    "OPENAI_BASE_URL",
+    "AI_API_URL",
+    "NEWAPI_URL",
+    "BASE_URL",
+]
+
+MAX_OUTPUT_TOKENS = {
+    "phase1": 3200,
+    "claude": 5200,
+}
 
 LOCKED_CORE_FIELDS = {
     "predicted_score",
@@ -398,6 +436,113 @@ def _extract_observation_codes(observation_signals: List[str]) -> List[str]:
     return codes
 
 
+def _extract_observation_labels(observation_signals: List[str]) -> List[str]:
+    labels = []
+
+    for s in observation_signals:
+        text = str(s)
+        m = re.search(r"\[(OBS\d+)\s*([^\]]*)\]", text)
+
+        if m:
+            code = m.group(1)
+            name = m.group(2).strip()
+            labels.append(f"{code} {name}".strip())
+        else:
+            labels.append(text[:40])
+
+    return labels
+
+
+# ====================================================================
+# 环境变量 / GPT 通道兼容
+# ====================================================================
+
+def get_clean_env_url(name, default=""):
+    v = str(os.environ.get(name, globals().get(name, default))).strip(" \t\n\r\"'")
+    match = re.search(r"(https?://[a-zA-Z0-9._:/?#=&%-]+)", v)
+    return match.group(1) if match else v
+
+
+def get_clean_env_key(name):
+    return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
+
+
+def get_first_clean_env_key(names: List[str], default="") -> str:
+    for name in names:
+        v = str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
+        if v:
+            return v
+    return str(default or "").strip(" \t\n\r\"'")
+
+
+def get_first_clean_env_url(names: List[str], default="") -> str:
+    for name in names:
+        v = str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
+        if v:
+            match = re.search(r"(https?://[a-zA-Z0-9._:/?#=&%-]+)", v)
+            return match.group(1) if match else v
+
+    v = str(default or "").strip(" \t\n\r\"'")
+    match = re.search(r"(https?://[a-zA-Z0-9._:/?#=&%-]+)", v)
+    return match.group(1) if match else v
+
+
+def _mask_key(v: str) -> str:
+    if not v:
+        return "EMPTY"
+    s = str(v)
+    if len(s) >= 8:
+        return s[:4] + "****" + s[-4:]
+    return "SET"
+
+
+def debug_ai_config():
+    print("\n[AI配置检查]")
+    print(f"GPT key    = {_mask_key(get_first_clean_env_key(GPT_KEY_ALIASES, GPT_DEFAULT_KEY))}")
+    print(f"GPT url    = {get_first_clean_env_url(GPT_URL_ALIASES, GPT_DEFAULT_URL)}")
+    print(f"GROK key   = {_mask_key(get_clean_env_key('GROK_API_KEY'))}")
+    print(f"GROK url   = {get_clean_env_url('GROK_API_URL')}")
+    print(f"GEMINI key = {_mask_key(get_clean_env_key('GEMINI_API_KEY'))}")
+    print(f"GEMINI url = {get_clean_env_url('GEMINI_API_URL')}")
+    print(f"CLAUDE key = {_mask_key(get_clean_env_key('CLAUDE_API_KEY'))}")
+    print(f"CLAUDE url = {get_clean_env_url('CLAUDE_API_URL')}")
+
+
+def _norm_key(k: str) -> str:
+    return str(k).lower().replace(" ", "").replace("_", "").replace("-", "")
+
+
+def _deep_find_value(obj, aliases: List[str], positive_only=False, default=0):
+    """
+    在任意嵌套 dict/list 里查找字段。
+    positive_only=True 时只接受 >1.01 的赔率。
+    """
+    alias_set = {_norm_key(a) for a in aliases}
+
+    def _ok(v):
+        if positive_only:
+            return _f(v, 0) > 1.01
+        return v is not None and str(v).strip() != ""
+
+    def _walk(x):
+        if isinstance(x, dict):
+            for k, v in x.items():
+                if _norm_key(k) in alias_set and _ok(v):
+                    return v
+                found = _walk(v)
+                if found is not None:
+                    return found
+        elif isinstance(x, list):
+            for item in x:
+                found = _walk(item)
+                if found is not None:
+                    return found
+        return None
+
+    found = _walk(obj)
+    return found if found is not None else default
+
+
 # ====================================================================
 # Match 标准化
 # ====================================================================
@@ -405,9 +550,12 @@ def _extract_observation_codes(observation_signals: List[str]) -> List[str]:
 def normalize_match(raw_m: Dict) -> Dict:
     """
     把抓包里的嵌套赔率展开。
-    所有后续分析都使用标准化后的 m。
+    关键修复：
+    1. 字段存在但为0时，继续从别名/嵌套字段找有效赔率。
+    2. 欧赔、变盘、散户都做深度查找。
     """
-    m = dict(raw_m or {})
+    raw_m = raw_m or {}
+    m = dict(raw_m)
 
     for nested_key in [
         "v2_odds_dict",
@@ -417,52 +565,82 @@ def normalize_match(raw_m: Dict) -> Dict:
         "odds_v2",
         "packet",
         "raw_odds",
+        "data",
+        "detail",
     ]:
         nested = m.get(nested_key)
         if isinstance(nested, dict):
             m.update(nested)
 
-    if "home_team" not in m:
-        m["home_team"] = m.get("home", m.get("host", m.get("team_home", "Home")))
-    if "away_team" not in m:
-        m["away_team"] = m.get("guest", m.get("away", m.get("team_away", "Away")))
+    m["home_team"] = (
+        m.get("home_team")
+        or m.get("home")
+        or m.get("host")
+        or m.get("team_home")
+        or m.get("homeName")
+        or "Home"
+    )
+    m["away_team"] = (
+        m.get("away_team")
+        or m.get("guest")
+        or m.get("away")
+        or m.get("team_away")
+        or m.get("awayName")
+        or "Away"
+    )
 
-    if "home" not in m:
-        m["home"] = m.get("home_team", "Home")
-    if "guest" not in m:
-        m["guest"] = m.get("away_team", "Away")
+    m["home"] = m.get("home") or m["home_team"]
+    m["guest"] = m.get("guest") or m["away_team"]
 
-    if "sp_home" not in m:
-        m["sp_home"] = m.get("win", m.get("home_win", m.get("odds_home", 0)))
-    if "sp_draw" not in m:
-        m["sp_draw"] = m.get("same", m.get("draw", m.get("odds_draw", 0)))
-    if "sp_away" not in m:
-        m["sp_away"] = m.get("lose", m.get("away_win", m.get("odds_away", 0)))
+    sp_home = _deep_find_value(m, [
+        "sp_home", "win", "odds_win", "home_win", "home_win_odds",
+        "odds_home", "h_odds", "had_h", "had_win",
+        "spf_sp3", "spf_3", "sp3", "homeOdds", "winOdds", "胜",
+    ], positive_only=True, default=0)
 
-    if "win" not in m:
-        m["win"] = m.get("sp_home", 0)
-    if "same" not in m:
-        m["same"] = m.get("sp_draw", 0)
-    if "lose" not in m:
-        m["lose"] = m.get("sp_away", 0)
+    sp_draw = _deep_find_value(m, [
+        "sp_draw", "same", "draw", "odds_draw", "draw_odds",
+        "had_d", "had_draw", "spf_sp1", "spf_1", "sp1",
+        "drawOdds", "sameOdds", "平",
+    ], positive_only=True, default=0)
 
-    if "give_ball" not in m:
-        m["give_ball"] = m.get("handicap", m.get("rq", "0"))
+    sp_away = _deep_find_value(m, [
+        "sp_away", "lose", "away_win", "odds_away", "away_win_odds",
+        "guest_win", "guest_odds", "had_a", "had_lose",
+        "spf_sp0", "spf_0", "sp0", "awayOdds", "loseOdds", "负",
+    ], positive_only=True, default=0)
+
+    m["sp_home"] = sp_home
+    m["sp_draw"] = sp_draw
+    m["sp_away"] = sp_away
+    m["win"] = sp_home
+    m["same"] = sp_draw
+    m["lose"] = sp_away
+
+    m["give_ball"] = (
+        m.get("give_ball")
+        if m.get("give_ball") not in [None, ""]
+        else m.get("handicap", m.get("rq", m.get("let_ball", "0")))
+    )
 
     change = m.get("change", {})
     if not isinstance(change, dict):
         change = {}
 
-    for key, aliases in {
-        "win": ["change_win", "cw", "home_change"],
-        "same": ["change_same", "cs", "draw_change"],
-        "lose": ["change_lose", "cl", "away_change"],
-    }.items():
-        if key not in change:
-            for alias in aliases:
-                if alias in m:
-                    change[key] = m.get(alias)
-                    break
+    change["win"] = _deep_find_value(m, [
+        "change_win", "cw", "home_change", "win_change",
+        "odds_change_home", "change_sp3", "sp3_change",
+    ], positive_only=False, default=change.get("win", 0))
+
+    change["same"] = _deep_find_value(m, [
+        "change_same", "cs", "draw_change", "same_change",
+        "odds_change_draw", "change_sp1", "sp1_change",
+    ], positive_only=False, default=change.get("same", 0))
+
+    change["lose"] = _deep_find_value(m, [
+        "change_lose", "cl", "away_change", "lose_change",
+        "odds_change_away", "change_sp0", "sp0_change",
+    ], positive_only=False, default=change.get("lose", 0))
 
     m["change"] = change
 
@@ -470,16 +648,20 @@ def normalize_match(raw_m: Dict) -> Dict:
     if not isinstance(vote, dict):
         vote = {}
 
-    for key, aliases in {
-        "win": ["vote_win", "hot_home", "public_home"],
-        "same": ["vote_same", "hot_draw", "public_draw"],
-        "lose": ["vote_lose", "hot_away", "public_away"],
-    }.items():
-        if key not in vote:
-            for alias in aliases:
-                if alias in m:
-                    vote[key] = m.get(alias)
-                    break
+    vote["win"] = _deep_find_value(m, [
+        "vote_win", "hot_home", "public_home", "win_vote",
+        "home_vote", "vote_sp3", "support_home",
+    ], positive_only=False, default=vote.get("win", 0))
+
+    vote["same"] = _deep_find_value(m, [
+        "vote_same", "hot_draw", "public_draw", "draw_vote",
+        "same_vote", "vote_sp1", "support_draw",
+    ], positive_only=False, default=vote.get("same", 0))
+
+    vote["lose"] = _deep_find_value(m, [
+        "vote_lose", "hot_away", "public_away", "away_vote",
+        "lose_vote", "vote_sp0", "support_away",
+    ], positive_only=False, default=vote.get("lose", 0))
 
     m["vote"] = vote
 
@@ -514,12 +696,6 @@ def _compute_no_vig_probs(match_obj: Dict) -> Dict[str, float]:
 
 
 def _infer_theoretical_handicap(sp_h: float, sp_d: float, sp_a: float) -> float:
-    """
-    三项欧赔去水概率粗略反推理论让球。
-    内部约定:
-    + 表示主队让球
-    - 表示客队让球 / 主队受让
-    """
     if sp_h <= 1.01 or sp_d <= 1.01 or sp_a <= 1.01:
         return 0.0
 
@@ -535,7 +711,6 @@ def _infer_theoretical_handicap(sp_h: float, sp_d: float, sp_a: float) -> float:
 
     edge = home_p - away_p
 
-    # 平局越强，让球理论深度越浅
     draw_adjust = 1.0 - 0.50 * max(0.0, draw_p - 0.27)
     effective_edge = edge * draw_adjust
 
@@ -563,16 +738,6 @@ def _infer_theoretical_handicap(sp_h: float, sp_d: float, sp_a: float) -> float:
 
 
 def _parse_actual_handicap(match_obj: Dict) -> float:
-    """
-    解析实际让球值。
-    内部约定:
-    + 表示主队让球
-    - 表示客队让球 / 主队受让
-
-    竞彩常见字段:
-    give_ball = -1 通常表示主队让1球，因此内部返回 +1
-    give_ball = +1 通常表示主队受让1球，因此内部返回 -1
-    """
     raw = match_obj.get("give_ball", match_obj.get("handicap", "0"))
     s = str(raw).strip().replace(" ", "")
 
@@ -1235,7 +1400,7 @@ def build_phase1_prompt(match_blocks: List[str], role_key: str) -> str:
     p += "    \"key_signals\": [\"主胜赔率结构更完整\", \"总进球更接近3球\"],\n"
     p += "    \"doubts\": [\"平局仍有保护\", \"xG差距不大\"],\n"
     p += "    \"data_quality\": {\"odds_complete\": true, \"crs_complete\": true, \"ttg_complete\": true, \"notes\": []},\n"
-    p += "    \"reason\": \"300-600字中文推理\"\n"
+    p += "    \"reason\": \"120-260字中文推理\"\n"
     p += "  }\n"
     p += "]\n"
     p += "</output_format>\n"
@@ -1253,6 +1418,7 @@ def _phase1_summary_line(r: Dict) -> str:
 
     top3 = r.get("top3", [])
     top3_str = ""
+
     if isinstance(top3, list):
         tmp = []
         for t in top3[:3]:
@@ -1263,7 +1429,7 @@ def _phase1_summary_line(r: Dict) -> str:
     return (
         f"方向={r.get('predicted_direction', '?')} | "
         f"比分={r.get('predicted_score', '?')} | "
-        f"进球区间={r.get('goal_range', '?')} | "
+        f"进球区间={r.get('goal_range_label', r.get('goal_range', '?'))} | "
         f"信心={r.get('confidence', '?')} | "
         f"top3=[{top3_str}]"
     )
@@ -1291,6 +1457,12 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
     p += "10. 必须说明采纳/否决哪些分析师，以及为什么。\n"
     p += "</critical_rules>\n\n"
 
+    p += "<coverage_rules>\n"
+    p += "如果某一家显示无数据，说明该分析师本场缺席，不得把它当作反对或支持票。\n"
+    p += "你必须在输出中写 analysis_coverage，说明本场实际参与分析的 AI 数量。\n"
+    p += "如果只有 1 家或 2 家 Phase1 分析有效，confidence 不得超过 70，除非原始抓包证据极强。\n"
+    p += "</coverage_rules>\n\n"
+
     p += "<three_analysts_results>\n"
 
     for i in range(1, num_matches + 1):
@@ -1303,7 +1475,7 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
             if not r:
                 continue
 
-            reason = _safe_str(r.get("reason", ""), 700)
+            reason = _safe_str(r.get("reason", ""), 500)
             key_signals = r.get("key_signals", [])
             accepted = r.get("accepted_observations", [])
             rejected = r.get("rejected_observations", [])
@@ -1340,6 +1512,7 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
     p += "    \"away_win_pct\": 19,\n"
     p += "    \"confidence\": 72,\n"
     p += "    \"agreement_pattern\": \"GPT/Grok主胜，Gemini平局\",\n"
+    p += "    \"analysis_coverage\": {\"gpt\": true, \"grok\": true, \"gemini\": true, \"valid_count\": 3},\n"
     p += "    \"adopted_analysts\": [\"gpt\", \"grok\"],\n"
     p += "    \"rejected_analysts\": [\"gemini\"],\n"
     p += "    \"audit_result\": \"原始CRS和盘口更支持主胜小胜，Gemini的平局保护证据不足\",\n"
@@ -1351,7 +1524,7 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
     p += "    \"accepted_observations\": [\"让球深度与CRS主胜小比分共振\"],\n"
     p += "    \"rejected_observations\": [\"散户热度不足以反推客队\"],\n"
     p += "    \"doubts\": [\"xG差距不大\", \"平局赔率仍有保护\"],\n"
-    p += "    \"arbitration_reason\": \"500-900字中文终审理由，说明采纳和否决逻辑\"\n"
+    p += "    \"arbitration_reason\": \"250-500字中文终审理由，说明采纳和否决逻辑\"\n"
     p += "  }\n"
     p += "]\n"
     p += "</output_format>\n"
@@ -1371,15 +1544,17 @@ FALLBACK_URLS = [
     "http://69.63.213.33:666/v1",
 ]
 
-GPT_DEFAULT_URL = "https://ai.newapi.life/v1"
-GPT_DEFAULT_KEY = ""
-
 PHASE1_CONFIGS = [
     {
         "ai_name": "gpt",
         "url_env": "GPT_API_URL",
         "key_env": "GPT_API_KEY",
-        "models": ["gpt-5.5"],
+        "models": [
+            "gpt-5.5",
+            "gpt-5.5-thinking",
+            "gpt-5",
+            "gpt-4o",
+        ],
         "role_key": "gpt",
     },
     {
@@ -1407,27 +1582,27 @@ CLAUDE_CONFIG = {
 }
 
 
-def get_clean_env_url(name, default=""):
-    v = str(os.environ.get(name, globals().get(name, default))).strip(" \t\n\r\"'")
-    match = re.search(r"(https?://[a-zA-Z0-9._:/?#=&%-]+)", v)
-    return match.group(1) if match else v
-
-
-def get_clean_env_key(name):
-    return str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
-
-
 def _build_urls_for_ai(ai_name: str, url_env: str) -> List[str]:
     if ai_name == "gpt":
-        primary_url = get_clean_env_url(url_env, GPT_DEFAULT_URL)
-        if not primary_url:
-            primary_url = GPT_DEFAULT_URL
-        return [primary_url]
+        primary_url = get_first_clean_env_url(GPT_URL_ALIASES, GPT_DEFAULT_URL)
+
+        urls = []
+        if primary_url:
+            urls.append(primary_url)
+
+        if GPT_DEFAULT_URL and GPT_DEFAULT_URL not in urls:
+            urls.append(GPT_DEFAULT_URL)
+
+        return urls
 
     primary_url = get_clean_env_url(url_env)
     backup = [u for u in FALLBACK_URLS if u and u != primary_url][:1]
     return [primary_url] + backup
 
+
+# ====================================================================
+# AI 调用
+# ====================================================================
 
 async def async_call_ai_batch(
     session,
@@ -1441,13 +1616,15 @@ async def async_call_ai_batch(
     temperature: float,
     phase: str
 ) -> Tuple[str, Dict[int, Dict], str]:
-    key = get_clean_env_key(key_env)
-
-    if not key and ai_name == "gpt":
-        key = GPT_DEFAULT_KEY
+    if ai_name == "gpt":
+        key = get_first_clean_env_key(GPT_KEY_ALIASES, GPT_DEFAULT_KEY)
+    else:
+        key = get_clean_env_key(key_env)
 
     if not key:
-        return ai_name, {}, "no_key"
+        status = f"no_key:{key_env}"
+        print(f"  [跳过] {ai_name.upper()} 无可用 KEY: {key_env}")
+        return ai_name, {}, status
 
     urls = _build_urls_for_ai(ai_name, url_env)
 
@@ -1459,6 +1636,8 @@ async def async_call_ai_batch(
         "gemini": 360,
     }
     read_timeout = read_timeout_map.get(ai_name, 300)
+
+    max_tokens = MAX_OUTPUT_TOKENS.get(phase, 3200)
 
     for mn in models_list:
         connected = False
@@ -1486,6 +1665,7 @@ async def async_call_ai_batch(
                     ],
                     "generationConfig": {
                         "temperature": temperature,
+                        "maxOutputTokens": max_tokens,
                     },
                     "systemInstruction": {
                         "parts": [{"text": sys_prompt}],
@@ -1500,6 +1680,7 @@ async def async_call_ai_batch(
                         {"role": "user", "content": prompt},
                     ],
                     "temperature": temperature,
+                    "max_tokens": max_tokens,
                 }
 
             gw = url.split("/v1")[0][:48]
@@ -1524,7 +1705,7 @@ async def async_call_ai_batch(
 
                     if r.status == 400:
                         text = await r.text()
-                        print(f"    💀 HTTP 400 | {elapsed}s → 换模型 | {text[:120]}")
+                        print(f"    💀 HTTP 400 | {elapsed}s | 模型={mn} | {text[:300]}")
                         break
 
                     if r.status == 401:
@@ -1538,7 +1719,7 @@ async def async_call_ai_batch(
 
                     if r.status != 200:
                         text = await r.text()
-                        print(f"    ⚠️ HTTP {r.status} | {elapsed}s | {text[:120]}")
+                        print(f"    ⚠️ HTTP {r.status} | {elapsed}s | 模型={mn} | {text[:200]}")
                         continue
 
                     connected = True
@@ -1889,6 +2070,9 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
             "notes": [],
         }
 
+    if not isinstance(out.get("analysis_coverage"), dict):
+        out["analysis_coverage"] = {}
+
     if phase == "claude":
         if not out.get("arbitration_reason"):
             out["arbitration_reason"] = out.get("reason", "")
@@ -1945,8 +2129,12 @@ async def run_phase1_three(match_blocks: List[str], num_matches: int) -> Dict[st
 
     for res in raw_results:
         if isinstance(res, tuple):
-            ai_name, results, model_name = res
+            ai_name, results, status = res
             output[ai_name] = results
+            AI_CALL_STATUS[ai_name] = status
+            print(f"  [状态] {ai_name.upper()} => {status} | 返回 {len(results)}/{num_matches} 场")
+        else:
+            print(f"  [Phase1异常] {res}")
 
     ok = sum(1 for v in output.values() if v)
     print(f"  [Phase 1 完成] {ok}/3 家有数据")
@@ -1985,7 +2173,9 @@ async def run_phase2_claude_audit(
             phase="claude",
         )
 
-    print(f"  [Phase 2 完成] Claude 返回 {len(results)}/{num_matches}")
+    AI_CALL_STATUS["claude"] = model_name
+
+    print(f"  [Phase 2 完成] Claude 返回 {len(results)}/{num_matches} | 状态={model_name}")
 
     return results, f"claude:{model_name}"
 
@@ -2041,6 +2231,14 @@ def _enforce_direction_consistency(result: Dict) -> Dict:
     out["confidence_pct"] = conf
     out["analysis_confidence"] = conf
     out["dir_confidence"] = conf
+    out["ai_confidence_value"] = conf
+    out["aiConfidence"] = conf
+    out["confidenceValue"] = conf
+    out["final_confidence"] = conf
+    out["prediction_confidence"] = conf
+    out["finalConfidence"] = conf
+    out["ai_conf"] = conf
+    out["cf"] = conf
 
     out["home_win_pct"] = hp
     out["draw_pct"] = dp
@@ -2168,17 +2366,22 @@ def assemble_final_prediction(
     risk = "低" if confidence >= 75 else ("中" if confidence >= 55 else "高")
 
     final_odds = _get_score_odds(match, predicted_score, final_direction, is_others)
-    score_prob = _extract_score_prob_from_ai(cr, predicted_score)
-    ev_pct, kelly_pct, is_value = _calculate_score_ev(score_prob, final_odds)
+    raw_score_prob = _extract_score_prob_from_ai(cr, predicted_score)
 
-    value_reason = ""
-    if final_odds > 1.05 and score_prob <= 0:
-        value_reason = "缺少精确比分概率，禁止用方向概率计算比分EV"
+    if ENABLE_LLM_VALUE_BET:
+        score_prob = raw_score_prob
+        ev_pct, kelly_pct, is_value = _calculate_score_ev(score_prob, final_odds)
+        value_reason = "基于 Claude top3 精确比分概率计算，未做历史校准"
+    else:
+        score_prob = raw_score_prob
+        ev_pct, kelly_pct, is_value = 0.0, 0.0, False
+        value_reason = "v19.2 暂不使用 LLM 主观比分概率计算正式EV/Kelly"
 
     raw_goal_range = cr.get("goal_range") or _goal_range_from_score(predicted_score)
     goal_bucket, goal_label = _normalize_goal_range_for_ui(raw_goal_range, predicted_score)
 
     obs_codes = _extract_observation_codes(observation_signals)
+    obs_labels = _extract_observation_labels(observation_signals)
 
     hp_list = [home_pct, draw_pct, away_pct]
     hp_sorted = sorted(hp_list)
@@ -2229,6 +2432,17 @@ def assemble_final_prediction(
         "goal_interval": goal_bucket,
         "predicted_goal_range": goal_bucket,
         "goal_range_label": goal_label,
+        "goal_bucket": goal_bucket,
+        "goals_range": goal_bucket,
+        "goal_range_text": goal_label,
+        "total_goals_range": goal_bucket,
+        "predicted_goals_range": goal_bucket,
+        "predicted_goals_label": goal_label,
+        "expected_goal_range": goal_bucket,
+        "expected_goals_range": goal_bucket,
+        "goal_zone": goal_bucket,
+        "goals_zone": goal_bucket,
+        "score_goal_range": goal_bucket,
 
         # 概率
         "home_win_pct": home_pct,
@@ -2240,12 +2454,27 @@ def assemble_final_prediction(
         "ai_confidence": confidence,
         "ai_confidence_pct": confidence,
         "ai_confidence_score": confidence,
+        "ai_confidence_value": confidence,
+        "aiConfidence": confidence,
         "confidence_score": confidence,
+        "confidenceValue": confidence,
         "confidence_pct": confidence,
         "analysis_confidence": confidence,
+        "final_confidence": confidence,
+        "prediction_confidence": confidence,
+        "finalConfidence": confidence,
+        "ai_conf": confidence,
+        "cf": confidence,
         "dir_confidence": confidence,
         "risk_level": risk,
         "dir_gap": round(hp_sorted[-1] - hp_sorted[-2], 1) if len(hp_sorted) >= 2 else 0,
+
+        # AI 状态
+        "ai_call_status": dict(AI_CALL_STATUS),
+        "gpt_status": AI_CALL_STATUS.get("gpt", ""),
+        "grok_status": AI_CALL_STATUS.get("grok", ""),
+        "gemini_status": AI_CALL_STATUS.get("gemini", ""),
+        "claude_status": AI_CALL_STATUS.get("claude", ""),
 
         # Claude 终审
         "ai_provider": ai_provider,
@@ -2254,6 +2483,7 @@ def assemble_final_prediction(
         "arbitration_reason": claude_reason,
         "audit_result": cr.get("audit_result", ""),
         "agreement_pattern": cr.get("agreement_pattern", "Claude终审复盘"),
+        "analysis_coverage": cr.get("analysis_coverage", {}),
         "adopted_analysts": cr.get("adopted_analysts", []),
         "rejected_analysts": cr.get("rejected_analysts", []),
         "alternative_score": cr.get("alternative", {}),
@@ -2288,7 +2518,8 @@ def assemble_final_prediction(
         "data_quality": cr.get("data_quality", {}),
         "ai_validation_errors": cr.get("ai_validation_errors", []),
 
-        "traps_detected": obs_codes,
+        "traps_detected": obs_labels,
+        "trap_codes": obs_codes,
         "trap_count": len(observation_signals),
         "trap_facts": observation_signals,
         "observation_signals": observation_signals,
@@ -2297,6 +2528,7 @@ def assemble_final_prediction(
 
         # EV / Kelly
         "score_odds": final_odds,
+        "raw_llm_score_prob": round(raw_score_prob * 100, 2),
         "score_prob": round(score_prob * 100, 2),
         "suggested_kelly": kelly_pct,
         "edge_vs_market": ev_pct,
@@ -2355,8 +2587,6 @@ def select_top4(preds):
 
         if p.get("risk_level") == "高":
             risk_penalty += 8
-        if p.get("value_reason"):
-            risk_penalty += 3
         if p.get("ai_validation_errors"):
             risk_penalty += 5
         if p.get("ai_abstained"):
@@ -2387,10 +2617,6 @@ def extract_num(ms):
 
 
 def _fallback_claude_result_from_phase1(phase1_results: Dict[str, Dict[int, Dict]], idx: int) -> Dict:
-    """
-    Claude 失败时的保守兜底。
-    只在 Claude 没结果时使用。
-    """
     for name in ["gpt", "grok", "gemini"]:
         r = phase1_results.get(name, {}).get(idx, {})
         if r and r.get("predicted_score"):
@@ -2420,6 +2646,7 @@ def _fallback_claude_result_from_phase1(phase1_results: Dict[str, Dict[int, Dict
         "agreement_pattern": "全部AI失败",
         "adopted_analysts": [],
         "rejected_analysts": [],
+        "analysis_coverage": {"gpt": False, "grok": False, "gemini": False, "valid_count": 0},
         "audit_result": "全部AI失败，兜底输出1-1。",
         "arbitration_reason": "全部AI失败，兜底输出1-1。此结果不可作为强判断。",
         "accepted_observations": [],
@@ -2436,9 +2663,14 @@ def run_predictions(raw, use_ai=True):
     raw_matches = raw.get("matches", [])
     num = len(raw_matches)
 
+    for k in AI_CALL_STATUS:
+        AI_CALL_STATUS[k] = ""
+
     print("\n" + "=" * 80)
     print(f"  [{ENGINE_VERSION}] {ENGINE_ARCHITECTURE} | {num} 场")
     print("=" * 80)
+
+    debug_ai_config()
 
     match_analyses = []
     match_blocks = []
@@ -2613,22 +2845,51 @@ def run_predictions(raw, use_ai=True):
             "result",
             "display_direction",
             "final_direction",
+
             "confidence",
             "ai_confidence",
             "ai_confidence_pct",
             "ai_confidence_score",
+            "ai_confidence_value",
+            "aiConfidence",
             "confidence_score",
+            "confidenceValue",
             "confidence_pct",
             "analysis_confidence",
+            "final_confidence",
+            "prediction_confidence",
+            "finalConfidence",
+            "ai_conf",
+            "cf",
+
             "goal_range",
             "goal_interval",
             "predicted_goal_range",
             "goal_range_label",
+            "goal_bucket",
+            "goals_range",
+            "goal_range_text",
+            "total_goals_range",
+            "predicted_goals_range",
+            "predicted_goals_label",
+            "expected_goal_range",
+            "expected_goals_range",
+            "goal_zone",
+            "goals_zone",
+            "score_goal_range",
+
             "decision_title",
             "decision_engine_version",
             "decision_architecture",
             "engine_version",
             "engine_architecture",
+
+            "ai_call_status",
+            "gpt_status",
+            "grok_status",
+            "gemini_status",
+            "claude_status",
+
             "claude_score",
             "claude_analysis",
             "gpt_score",
@@ -2645,10 +2906,53 @@ def run_predictions(raw, use_ai=True):
         combined["decision_engine_version"] = ENGINE_VERSION
         combined["decision_architecture"] = ENGINE_ARCHITECTURE
 
+        # 强制同步置信度，防止旧 UI 读顶层字段失败
+        for ck in [
+            "confidence",
+            "ai_confidence",
+            "ai_confidence_pct",
+            "ai_confidence_score",
+            "ai_confidence_value",
+            "aiConfidence",
+            "confidence_score",
+            "confidenceValue",
+            "confidence_pct",
+            "analysis_confidence",
+            "final_confidence",
+            "prediction_confidence",
+            "finalConfidence",
+            "ai_conf",
+            "cf",
+        ]:
+            combined[ck] = mg.get("confidence", 0)
+
+        # 强制同步进球区间
+        for gk in [
+            "goal_range",
+            "goal_interval",
+            "predicted_goal_range",
+            "goal_bucket",
+            "goals_range",
+            "total_goals_range",
+            "predicted_goals_range",
+            "expected_goal_range",
+            "expected_goals_range",
+            "goal_zone",
+            "goals_zone",
+            "score_goal_range",
+        ]:
+            combined[gk] = mg.get("goal_range")
+
+        for gk in [
+            "goal_range_label",
+            "goal_range_text",
+            "predicted_goals_label",
+        ]:
+            combined[gk] = mg.get("goal_range_label")
+
         res.append(combined)
 
         obs_tag = f" [OBS{len(ma['observation_signals'])}]" if ma.get("observation_signals") else ""
-        val_tag = " [EV禁算]" if mg.get("value_reason") else ""
         err_tag = f" [校验{len(mg.get('ai_validation_errors', []))}]" if mg.get("ai_validation_errors") else ""
         abstain_tag = f" [缺席{','.join(mg.get('ai_abstained', []))}]" if mg.get("ai_abstained") else ""
 
@@ -2657,7 +2961,7 @@ def run_predictions(raw, use_ai=True):
             f"{m.get('away_team', m.get('guest', '?'))} => "
             f"{mg['result']} ({mg['predicted_score']}) | "
             f"CF: {mg['confidence']}% | {mg.get('agreement_pattern', 'Claude终审')}"
-            f"{obs_tag}{val_tag}{err_tag}{abstain_tag}"
+            f"{obs_tag}{err_tag}{abstain_tag}"
         )
 
     # Top4 推荐
@@ -2683,4 +2987,5 @@ if __name__ == "__main__":
     print("   Phase 1: GPT / Grok / Gemini 三家独立分析")
     print("   Phase 2: Claude 接收三家结论 + 原始抓包做最终审计")
     print("   规则: Claude 必须重新审计抓包，不按票数机械裁决")
-    print("   EV/Kelly: 只使用精确比分概率，禁止方向概率替代")
+    print("   GPT: 多 KEY / URL 别名兼容 + 状态日志")
+    print("   EV/Kelly: 默认不使用 LLM 主观比分概率")
