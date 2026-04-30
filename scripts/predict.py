@@ -497,21 +497,11 @@ GPT_DEFAULT_URL = "https://ai.newapi.life/v1"
 GPT_DEFAULT_KEY = globals().get("GPT_DEFAULT_KEY", "")
 
 GPT_KEY_ALIASES = [
-    "GPT_API_KEY",
-    "OPENAI_API_KEY",
-    "OPENAI_KEY",
-    "AI_API_KEY",
-    "NEWAPI_KEY",
-    "API_KEY",
+    "GPT_API_KEY","API_KEY"
 ]
 
 GPT_URL_ALIASES = [
-    "GPT_API_URL",
-    "OPENAI_API_BASE",
-    "OPENAI_BASE_URL",
-    "AI_API_URL",
-    "NEWAPI_URL",
-    "BASE_URL",
+    "GPT_API_URL"
 ]
 
 
@@ -1617,10 +1607,7 @@ PHASE1_CONFIGS = [
         "url_env": "GPT_API_URL",
         "key_env": "GPT_API_KEY",
         "models": [
-            "gpt-5.5",
-            "gpt-5.5-thinking",
-            "gpt-5",
-            "gpt-4o",
+            "gpt-5.5"
         ],
         "role_key": "gpt",
     },
