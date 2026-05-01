@@ -1,22 +1,23 @@
 # ====================================================================
-# 🚀 vMAX 19.2 — FirstBase Raw Packet 四AI审计版
+# 🚀 vMAX 19.3 — Market Probability Core 四AI审计版
 # --------------------------------------------------------------------
 # 这版原则:
-#   ✅ AI调用层回到第一版 v19.0 稳定底座
-#   ✅ 不限制输出字数，不传 max_tokens / maxOutputTokens
-#   ✅ 拉长 GPT/Grok/Gemini/Claude 等待时间
-#   ✅ Phase 1: GPT / Grok / Gemini 三家并行独立分析
-#   ✅ Phase 1 Repair: 缺失场次自动单场补跑
-#   ✅ Phase 2: Claude 接收三家结论 + 原始抓包做最终审计
-#   ✅ Claude 不按票数裁决，必须重新审计抓包
-#   ✅ 程序只做 JSON 校验、字段兼容、方向一致，不篡改 Claude 最终比分
-#   ✅ EV/Kelly 默认不使用 LLM 主观比分概率
+#   ✅ 最终预测权迁回本地市场概率核心 market_probability_core
+#   ✅ AI 只做结构化审计、冲突解释、证据补充，不再直接决定最终比分
+#   ✅ 1X2 使用严格赔率抽取 + provenance + overround 校验
+#   ✅ 盘口解析输出 handicap_parse_detail，避免正负号静默翻转
+#   ✅ 市场核心生成统一比分概率矩阵，导出方向/比分/总进球/top3
+#   ✅ TTG 总进球赔率与 CRS 精确比分赔率参与校准
+#   ✅ AI JSON 严格校验，坏输出丢弃，不再静默修成 1-1
+#   ✅ 修复 id=None 导致 Top4 全部推荐的 bug
+#   ✅ EV/Kelly 默认不使用 LLM 主观概率
 # ====================================================================
 
 import json
 import os
 import re
 import time
+import math
 import asyncio
 import aiohttp
 import logging
@@ -111,11 +112,17 @@ except Exception as e:
 # 基础配置
 # ====================================================================
 
-ENGINE_VERSION = "vMAX 19.2"
-ENGINE_ARCHITECTURE = "FirstBase Raw Packet + 3 Analysts + Claude Final Audit"
+ENGINE_VERSION = "vMAX 19.3"
+ENGINE_ARCHITECTURE = "Market Probability Core + 3 Analysts + Claude Audit"
 
 APPLY_LEGACY_ENHANCERS = False
 ENABLE_LLM_VALUE_BET = False
+
+USE_MARKET_PROBABILITY_CORE = True
+FINAL_DECISION_SOURCE = "market_core_first"
+STRICT_AI_VALIDATION = True
+USE_JSON_SCHEMA_RESPONSE = bool(globals().get("USE_JSON_SCHEMA_RESPONSE", True))
+DEFAULT_HANDICAP_SIGN_CONVENTION = str(globals().get("HANDICAP_SIGN_CONVENTION", "jczq"))
 
 AI_CALL_STATUS = {
     "gpt": "",
@@ -567,6 +574,127 @@ def debug_ai_config():
 
 
 # ====================================================================
+# 严格赔率抽取工具
+# ====================================================================
+
+TEAM_HOME_ALIASES = ["home_team", "home", "host", "team_home", "homeName", "home_name"]
+TEAM_AWAY_ALIASES = ["away_team", "guest", "away", "team_away", "awayName", "away_name"]
+
+ODDS_TRIPLE_CANDIDATES = [
+    ("direct_sp", ("sp_home", "sp_draw", "sp_away")),
+    ("direct_win_same_lose", ("win", "same", "lose")),
+    ("direct_had", ("had_h", "had_d", "had_a")),
+    ("direct_had_alt", ("had_win", "had_draw", "had_lose")),
+    ("direct_spf", ("spf_sp3", "spf_sp1", "spf_sp0")),
+    ("direct_spf_short", ("sp3", "sp1", "sp0")),
+    ("direct_odds", ("odds_home", "odds_draw", "odds_away")),
+    ("direct_home_draw_away", ("homeOdds", "drawOdds", "awayOdds")),
+    ("direct_zh_cn", ("胜", "平", "负")),
+]
+
+ODDS_CONTAINER_KEYS = [
+    "v2_odds_dict", "odds_dict", "odds", "v2", "odds_v2", "packet", "raw_odds",
+    "data", "detail", "had", "spf", "europe", "euro",
+]
+
+DANGEROUS_ODDS_CONTEXT_KEYS = {
+    "vote", "change", "points", "information", "prediction", "stats", "smart_signals",
+    "refined_poisson", "elo", "random_forest", "gradient_boost", "neural_net", "logistic",
+    "svm", "knn", "dixon_coles", "bradley_terry", "experience_analysis",
+}
+
+
+def _is_reasonable_1x2_odds(h, d, a) -> Tuple[bool, Dict[str, Any]]:
+    h, d, a = _f(h), _f(d), _f(a)
+    detail = {"sp_home": h, "sp_draw": d, "sp_away": a, "overround": 0.0, "reason": ""}
+
+    if not (1.01 < h < 100 and 1.01 < d < 100 and 1.01 < a < 100):
+        detail["reason"] = "odds_out_of_range"
+        return False, detail
+
+    overround = (1.0 / h) + (1.0 / d) + (1.0 / a)
+    detail["overround"] = round(overround, 4)
+
+    if not (0.98 <= overround <= 1.45):
+        detail["reason"] = "overround_invalid"
+        return False, detail
+
+    detail["reason"] = "ok"
+    return True, detail
+
+
+def _try_extract_triple_from_dict(d: Dict, source_name: str) -> Optional[Dict[str, Any]]:
+    if not isinstance(d, dict):
+        return None
+
+    for label, keys in ODDS_TRIPLE_CANDIDATES:
+        h, dr, a = d.get(keys[0]), d.get(keys[1]), d.get(keys[2])
+        ok, detail = _is_reasonable_1x2_odds(h, dr, a)
+        if ok:
+            return {
+                "sp_home": _f(h),
+                "sp_draw": _f(dr),
+                "sp_away": _f(a),
+                "source": f"{source_name}:{label}",
+                "keys": list(keys),
+                "quality": detail,
+            }
+
+    return None
+
+
+def _extract_1x2_odds_strict(raw_m: Dict) -> Dict[str, Any]:
+    raw_m = raw_m or {}
+    candidates = []
+
+    direct = _try_extract_triple_from_dict(raw_m, "root")
+    if direct:
+        candidates.append(direct)
+
+    dangerous_norm = {_norm_key(x) for x in DANGEROUS_ODDS_CONTEXT_KEYS}
+
+    for key in ODDS_CONTAINER_KEYS:
+        nested = raw_m.get(key)
+        if isinstance(nested, dict):
+            cand = _try_extract_triple_from_dict(nested, key)
+            if cand:
+                candidates.append(cand)
+
+            for subk, subv in nested.items():
+                if _norm_key(subk) in dangerous_norm:
+                    continue
+                if isinstance(subv, dict):
+                    cand2 = _try_extract_triple_from_dict(subv, f"{key}.{subk}")
+                    if cand2:
+                        candidates.append(cand2)
+
+    if candidates:
+        def _rank(c):
+            return abs(c.get("quality", {}).get("overround", 9) - 1.10)
+
+        best = sorted(candidates, key=_rank)[0]
+        best["all_candidates"] = [
+            {
+                "source": c.get("source"),
+                "keys": c.get("keys"),
+                "overround": c.get("quality", {}).get("overround"),
+            }
+            for c in candidates[:8]
+        ]
+        return best
+
+    return {
+        "sp_home": 0.0,
+        "sp_draw": 0.0,
+        "sp_away": 0.0,
+        "source": "not_found",
+        "keys": [],
+        "quality": {"reason": "not_found", "overround": 0.0},
+        "all_candidates": [],
+    }
+
+
+# ====================================================================
 # Match 标准化
 # ====================================================================
 
@@ -609,32 +737,15 @@ def normalize_match(raw_m: Dict) -> Dict:
     m["home"] = m.get("home") or m["home_team"]
     m["guest"] = m.get("guest") or m["away_team"]
 
-    odds_skip = ["vote", "change", "points", "information", "prediction", "stats", "smart_signals"]
-
-    sp_home = _deep_find_value(m, [
-        "sp_home", "win", "odds_win", "home_win", "home_win_odds",
-        "odds_home", "h_odds", "had_h", "had_win",
-        "spf_sp3", "spf_3", "sp3", "homeOdds", "winOdds", "胜",
-    ], positive_only=True, default=0, skip_keys=odds_skip)
-
-    sp_draw = _deep_find_value(m, [
-        "sp_draw", "same", "draw", "odds_draw", "draw_odds",
-        "had_d", "had_draw", "spf_sp1", "spf_1", "sp1",
-        "drawOdds", "sameOdds", "平",
-    ], positive_only=True, default=0, skip_keys=odds_skip)
-
-    sp_away = _deep_find_value(m, [
-        "sp_away", "lose", "away_win", "odds_away", "away_win_odds",
-        "guest_win", "guest_odds", "had_a", "had_lose",
-        "spf_sp0", "spf_0", "sp0", "awayOdds", "loseOdds", "负",
-    ], positive_only=True, default=0, skip_keys=odds_skip)
-
-    m["sp_home"] = sp_home
-    m["sp_draw"] = sp_draw
-    m["sp_away"] = sp_away
-    m["win"] = sp_home
-    m["same"] = sp_draw
-    m["lose"] = sp_away
+    odds_info = _extract_1x2_odds_strict(raw_m)
+    m["sp_home"] = odds_info["sp_home"]
+    m["sp_draw"] = odds_info["sp_draw"]
+    m["sp_away"] = odds_info["sp_away"]
+    m["win"] = odds_info["sp_home"]
+    m["same"] = odds_info["sp_draw"]
+    m["lose"] = odds_info["sp_away"]
+    m["odds_provenance"] = odds_info
+    m["odds_quality"] = odds_info.get("quality", {})
 
     m["give_ball"] = (
         m.get("give_ball")
@@ -684,6 +795,10 @@ def normalize_match(raw_m: Dict) -> Dict:
 
     m["vote"] = vote
 
+    hc_detail = _parse_actual_handicap_detail(m)
+    m["actual_handicap"] = hc_detail["value"]
+    m["handicap_parse_detail"] = hc_detail
+
     return m
 
 
@@ -704,6 +819,7 @@ def _compute_no_vig_probs(match_obj: Dict) -> Dict[str, float]:
                 "draw": (1 / sp_d) / margin * 100,
                 "away": (1 / sp_a) / margin * 100,
                 "margin": margin,
+                "method": "multiplicative",
             }
 
     return {
@@ -711,14 +827,125 @@ def _compute_no_vig_probs(match_obj: Dict) -> Dict[str, float]:
         "draw": 33.3,
         "away": 33.4,
         "margin": 0.0,
+        "method": "fallback_equal",
     }
+
+
+def _compute_power_fair_probs_from_odds(sp_h: float, sp_d: float, sp_a: float) -> Dict[str, float]:
+    ok, detail = _is_reasonable_1x2_odds(sp_h, sp_d, sp_a)
+    if not ok:
+        return _compute_no_vig_probs({"sp_home": sp_h, "sp_draw": sp_d, "sp_away": sp_a})
+
+    q = [1.0 / sp_h, 1.0 / sp_d, 1.0 / sp_a]
+    lo, hi = 0.2, 5.0
+
+    for _ in range(80):
+        mid = (lo + hi) / 2.0
+        s = sum(x ** mid for x in q)
+        if s > 1.0:
+            lo = mid
+        else:
+            hi = mid
+
+    c = (lo + hi) / 2.0
+    p = [x ** c for x in q]
+    total = sum(p)
+
+    if total <= 0:
+        return _compute_no_vig_probs({"sp_home": sp_h, "sp_draw": sp_d, "sp_away": sp_a})
+
+    p = [x / total * 100 for x in p]
+    return {
+        "home": p[0],
+        "draw": p[1],
+        "away": p[2],
+        "margin": detail.get("overround", 0.0),
+        "method": "power",
+        "power_c": round(c, 4),
+    }
+
+
+def _compute_market_fair_probs(match_obj: Dict) -> Dict[str, float]:
+    return _compute_power_fair_probs_from_odds(
+        _f(match_obj.get("sp_home", match_obj.get("win", 0))),
+        _f(match_obj.get("sp_draw", match_obj.get("same", 0))),
+        _f(match_obj.get("sp_away", match_obj.get("lose", 0))),
+    )
+
+
+def _parse_actual_handicap_detail(match_obj: Dict) -> Dict[str, Any]:
+    raw = match_obj.get("give_ball", match_obj.get("handicap", "0"))
+    source_convention = str(
+        match_obj.get("handicap_sign_convention")
+        or match_obj.get("handicapConvention")
+        or DEFAULT_HANDICAP_SIGN_CONVENTION
+    ).strip().lower()
+
+    s = str(raw).strip().replace(" ", "")
+    detail = {
+        "raw": raw,
+        "normalized_raw": s,
+        "value": 0.0,
+        "status": "ok",
+        "convention": source_convention,
+        "note": "内部约定：正数=主让，负数=客让/主受让",
+    }
+
+    if not s:
+        detail["status"] = "empty"
+        return detail
+
+    nums = re.findall(r"[-+]?\d+\.?\d*", s)
+    if not nums:
+        detail["status"] = "no_number"
+        return detail
+
+    vals = [_f(n) for n in nums]
+    mag = sum(abs(x) for x in vals) / len(vals)
+    if mag == 0:
+        return detail
+
+    if "主受让" in s or "客让" in s:
+        detail["value"] = -mag
+        detail["status"] = "explicit_text"
+        return detail
+
+    if "主让" in s or "客受让" in s:
+        detail["value"] = +mag
+        detail["status"] = "explicit_text"
+        return detail
+
+    avg_signed = sum(vals) / len(vals)
+
+    if source_convention in ["jczq", "home_negative", "rq", "china_lottery"]:
+        detail["value"] = -avg_signed
+        detail["status"] = "by_convention_jczq"
+        return detail
+
+    if source_convention in ["internal_home_positive", "home_positive", "asian_home_positive"]:
+        detail["value"] = avg_signed
+        detail["status"] = "by_convention_home_positive"
+        return detail
+
+    if "/" in s and not any(ch in s for ch in ["+", "-"]):
+        detail["value"] = 0.0
+        detail["status"] = "ambiguous_no_side"
+        return detail
+
+    detail["value"] = -avg_signed
+    detail["status"] = "uncertain_default_jczq"
+    return detail
+
+
+def _parse_actual_handicap(match_obj: Dict) -> float:
+    return _parse_actual_handicap_detail(match_obj).get("value", 0.0)
 
 
 def _infer_theoretical_handicap(sp_h: float, sp_d: float, sp_a: float) -> float:
     if sp_h <= 1.01 or sp_d <= 1.01 or sp_a <= 1.01:
         return 0.0
 
-    probs = _compute_no_vig_probs({
+    probs = _compute_market_fair_probs({
         "sp_home": sp_h,
         "sp_draw": sp_d,
         "sp_away": sp_a,
@@ -755,44 +982,6 @@ def _infer_theoretical_handicap(sp_h: float, sp_d: float, sp_a: float) -> float:
     return -2.25
 
 
-def _parse_actual_handicap(match_obj: Dict) -> float:
-    raw = match_obj.get("give_ball", match_obj.get("handicap", "0"))
-    s = str(raw).strip().replace(" ", "")
-
-    if not s:
-        return 0.0
-
-    def _extract_mag(x: str) -> float:
-        nums = re.findall(r"-?\d+\.?\d*", x)
-        if not nums:
-            return 0.0
-        vals = [abs(_f(n)) for n in nums]
-        return sum(vals) / len(vals)
-
-    mag = _extract_mag(s)
-
-    if mag == 0:
-        return 0.0
-
-    if "主受让" in s or "客让" in s:
-        return -mag
-    if "主让" in s or "客受让" in s:
-        return +mag
-
-    if "/" in s:
-        nums = re.findall(r"-?\d+\.?\d*", s)
-        if nums:
-            vals = [_f(n) for n in nums]
-            avg = sum(vals) / len(vals)
-            return -avg
-
-    numeric = _f(s, None)
-    if numeric is not None:
-        return -numeric
-
-    return 0.0
-
-
 def _extract_form_record(text: str) -> Tuple[int, int, int]:
     if not text:
         return 0, 0, 0
@@ -824,6 +1013,261 @@ def _extract_avg_goals(text: str) -> Tuple[float, float]:
         float(gf_match.group(1)) if gf_match else 0.0,
         float(ga_match.group(1)) if ga_match else 0.0,
     )
+
+
+# ====================================================================
+# 市场概率核心：比分矩阵 / TTG / CRS 校准
+# ====================================================================
+
+def _poisson_pmf(k: int, lam: float) -> float:
+    lam = max(0.02, min(8.0, float(lam)))
+    return math.exp(-lam) * (lam ** k) / math.factorial(k)
+
+
+def _independent_score_matrix(lam_h: float, lam_a: float, max_goals: int = 7) -> Dict[str, float]:
+    mat = {}
+    for h in range(max_goals):
+        ph = _poisson_pmf(h, lam_h)
+        for a in range(max_goals):
+            pa = _poisson_pmf(a, lam_a)
+            mat[f"{h}-{a}"] = ph * pa
+
+    s = sum(mat.values())
+    return {k: v / s for k, v in mat.items()} if s > 0 else mat
+
+
+def _matrix_direction_probs(mat: Dict[str, float]) -> Dict[str, float]:
+    out = {"home": 0.0, "draw": 0.0, "away": 0.0}
+    for score, p in mat.items():
+        d = _score_direction(score)
+        if d in out:
+            out[d] += p
+    return out
+
+
+def _matrix_total_goal_probs(mat: Dict[str, float]) -> Dict[int, float]:
+    out = {i: 0.0 for i in range(8)}
+    for score, p in mat.items():
+        h, a = _parse_score(score)
+        if h is None:
+            continue
+        total = h + a
+        bucket = total if total <= 6 else 7
+        out[bucket] = out.get(bucket, 0.0) + p
+
+    s = sum(out.values())
+    return {k: v / s for k, v in out.items()} if s > 0 else out
+
+
+def _extract_ttg_distribution(match: Dict) -> Dict[int, float]:
+    raw = {}
+    for g in range(8):
+        odds = _f(match.get(f"a{g}", 0))
+        if odds > 1.01:
+            raw[g] = 1.0 / odds
+
+    if len(raw) < 4:
+        return {}
+
+    s = sum(raw.values())
+    return {g: v / s for g, v in raw.items()} if s > 0 else {}
+
+
+def _expected_goals_from_ttg(ttg: Dict[int, float]) -> float:
+    return sum((g if g < 7 else 7.25) * p for g, p in ttg.items()) if ttg else 0.0
+
+
+def _extract_crs_distribution(match: Dict) -> Dict[str, float]:
+    raw = {}
+    for score, key in CRS_FULL_MAP.items():
+        odds = _f(match.get(key, 0))
+        if odds > 1.01:
+            raw[score] = 1.0 / odds
+
+    if len(raw) < 8:
+        return {}
+
+    s = sum(raw.values())
+    return {k: v / s for k, v in raw.items()} if s > 0 else {}
+
+
+def _apply_ttg_reweight(mat: Dict[str, float], ttg: Dict[int, float], weight: float = 0.35) -> Dict[str, float]:
+    if not ttg:
+        return dict(mat)
+
+    current = _matrix_total_goal_probs(mat)
+    out = {}
+
+    for score, p in mat.items():
+        h, a = _parse_score(score)
+        if h is None:
+            out[score] = p
+            continue
+
+        bucket = h + a if h + a <= 6 else 7
+        target = ttg.get(bucket, current.get(bucket, 0.0))
+        cur = max(current.get(bucket, 0.0), 1e-9)
+        out[score] = p * ((target / cur) ** weight)
+
+    s = sum(out.values())
+    return {k: v / s for k, v in out.items()} if s > 0 else out
+
+
+def _blend_distributions(base: Dict[str, float], other: Dict[str, float], w_other: float) -> Dict[str, float]:
+    if not other:
+        return dict(base)
+
+    keys = set(base.keys()) | set(other.keys())
+    w_other = max(0.0, min(1.0, w_other))
+    out = {
+        k: base.get(k, 0.0) * (1 - w_other) + other.get(k, 0.0) * w_other
+        for k in keys
+    }
+
+    s = sum(out.values())
+    return {k: v / s for k, v in out.items()} if s > 0 else out
+
+
+def _fit_lambdas_to_market(fair: Dict[str, float], expected_total: float, ttg: Dict[int, float]) -> Tuple[float, float, Dict[str, Any]]:
+    target_h = fair.get("home", 33.3) / 100.0
+    target_d = fair.get("draw", 33.3) / 100.0
+    target_a = fair.get("away", 33.4) / 100.0
+
+    total_target = expected_total if expected_total > 0 else _expected_goals_from_ttg(ttg)
+    total_target = max(1.20, min(4.30, total_target or 2.55))
+
+    best = None
+
+    for lh_i in range(20, 421, 5):
+        lh = lh_i / 100.0
+        for la_i in range(15, 401, 5):
+            la = la_i / 100.0
+            if lh + la < 1.0 or lh + la > 4.8:
+                continue
+
+            mat = _independent_score_matrix(lh, la, 7)
+            dp = _matrix_direction_probs(mat)
+            tg = _matrix_total_goal_probs(mat)
+            exp_g = sum((g if g < 7 else 7.25) * p for g, p in tg.items())
+            err = (
+                (dp["home"] - target_h) ** 2 * 1.3
+                + (dp["draw"] - target_d) ** 2 * 1.1
+                + (dp["away"] - target_a) ** 2 * 1.3
+                + ((exp_g - total_target) / 3.0) ** 2
+            )
+            if best is None or err < best[2]:
+                best = (lh, la, err, dp, exp_g)
+
+    if not best:
+        return 1.35, 1.15, {"status": "fallback", "fit_error": None}
+
+    return round(best[0], 3), round(best[1], 3), {
+        "status": "ok",
+        "fit_error": round(best[2], 6),
+        "fitted_direction_probs": {k: round(v * 100, 2) for k, v in best[3].items()},
+        "fitted_expected_goals": round(best[4], 3),
+        "target_expected_goals": round(total_target, 3),
+    }
+
+
+def _top_scores_from_matrix(mat: Dict[str, float], n: int = 3) -> List[Dict[str, Any]]:
+    rows = [(sc, p) for sc, p in mat.items() if _parse_score(sc)[0] is not None]
+    rows.sort(key=lambda x: x[1], reverse=True)
+    return [{"score": sc, "prob": round(p * 100, 2)} for sc, p in rows[:n]]
+
+
+def build_market_probability_core(match: Dict, engine_result: Dict, stats: Dict = None) -> Dict[str, Any]:
+    fair = _compute_market_fair_probs(match)
+    ttg = _extract_ttg_distribution(match)
+    crs = _extract_crs_distribution(match)
+
+    hxg = _f(engine_result.get("bookmaker_implied_home_xg", 0)) if isinstance(engine_result, dict) else 0.0
+    axg = _f(engine_result.get("bookmaker_implied_away_xg", 0)) if isinstance(engine_result, dict) else 0.0
+    eng_total = _f(engine_result.get("expected_total_goals", 0)) if isinstance(engine_result, dict) else 0.0
+
+    if eng_total <= 0 and hxg > 0 and axg > 0:
+        eng_total = hxg + axg
+
+    ttg_total = _expected_goals_from_ttg(ttg)
+    if ttg_total > 0 and eng_total > 0:
+        expected_total = 0.60 * ttg_total + 0.40 * eng_total
+    else:
+        expected_total = ttg_total or eng_total or 2.55
+
+    lam_h, lam_a, fit = _fit_lambdas_to_market(fair, expected_total, ttg)
+    base = _independent_score_matrix(lam_h, lam_a, 7)
+    mat = _apply_ttg_reweight(base, ttg, 0.35)
+
+    crs_weight = 0.38 if len(crs) >= 18 else (0.28 if len(crs) >= 12 else (0.18 if len(crs) >= 8 else 0.0))
+    mat = _blend_distributions(mat, crs, crs_weight)
+
+    dir_probs = _matrix_direction_probs(mat)
+    hp, dp, ap = _pct_normalize(dir_probs["home"], dir_probs["draw"], dir_probs["away"])
+
+    top3 = _top_scores_from_matrix(mat, 3) or [{"score": "1-1", "prob": 0.0}]
+    predicted_score = top3[0]["score"]
+    direction = _score_direction(predicted_score) or max(dir_probs, key=dir_probs.get)
+    goal_bucket, goal_label = _normalize_goal_range_for_ui(_goal_range_from_score(predicted_score), predicted_score)
+
+    flags = []
+    if match.get("odds_quality", {}).get("reason") != "ok":
+        flags.append("1x2_odds_quality_not_ok")
+    if not ttg:
+        flags.append("ttg_missing_or_sparse")
+    if len(crs) < 8:
+        flags.append("crs_missing_or_sparse")
+
+    hc_status = (match.get("handicap_parse_detail") or {}).get("status")
+    if hc_status in ["ambiguous_no_side", "uncertain_default_jczq"]:
+        flags.append(f"handicap_{hc_status}")
+
+    pct_by_dir = {"home": hp, "draw": dp, "away": ap}
+    predicted_dir_pct = pct_by_dir.get(direction, max(hp, dp, ap))
+    gap = sorted([hp, dp, ap])[-1] - sorted([hp, dp, ap])[-2]
+
+    confidence = int(round(
+        35
+        + predicted_dir_pct * 0.42
+        + min(gap, 25) * 0.30
+        + (4 if ttg else 0)
+        + (4 if crs_weight else 0)
+    ))
+
+    if flags:
+        confidence = min(confidence, 62)
+
+    confidence = max(30, min(86, confidence))
+
+    return {
+        "source": "market_probability_core",
+        "predicted_score": predicted_score,
+        "predicted_label": predicted_score,
+        "predicted_direction": direction,
+        "final_direction": direction,
+        "result": _direction_cn(direction),
+        "display_direction": _direction_cn(direction),
+        "goal_range": goal_bucket,
+        "goal_interval": goal_bucket,
+        "predicted_goal_range": goal_bucket,
+        "goal_range_label": goal_label,
+        "home_win_pct": hp,
+        "draw_pct": dp,
+        "away_win_pct": ap,
+        "confidence": confidence,
+        "top3": top3,
+        "score_prob": top3[0].get("prob", 0),
+        "market_score_matrix_top10": _top_scores_from_matrix(mat, 10),
+        "market_fair_probs": {
+            k: (round(v, 2) if isinstance(v, float) else v)
+            for k, v in fair.items()
+        },
+        "market_lambdas": {"home": lam_h, "away": lam_a},
+        "lambda_fit": fit,
+        "ttg_distribution": {str(k): round(v * 100, 2) for k, v in ttg.items()},
+        "crs_blend_weight": crs_weight,
+        "market_core_quality_flags": flags,
+        "expected_total_goals_core": round(expected_total, 3),
+    }
 
 
 # ====================================================================
@@ -873,11 +1317,12 @@ def build_observation_signals(
     match_obj: Dict,
     engine_result: Dict,
     smart_signals: List,
-    exp_goals: float
+    exp_goals: float,
+    market_core: Optional[Dict] = None,
 ) -> List[str]:
     facts = []
 
-    probs = _compute_no_vig_probs(match_obj)
+    probs = _compute_market_fair_probs(match_obj)
 
     sp_h = _f(match_obj.get("sp_home", match_obj.get("win", 0)))
     sp_d = _f(match_obj.get("sp_draw", match_obj.get("same", 0)))
@@ -913,18 +1358,19 @@ def build_observation_signals(
         theoretical = _infer_theoretical_handicap(sp_h, sp_d, sp_a)
         actual = _parse_actual_handicap(match_obj)
         diff = actual - theoretical
+        hc_detail = match_obj.get("handicap_parse_detail", {}) or {}
 
         if abs(diff) >= 0.5:
             facts.append(
                 f"[OBS04 让球深度差异] 实际让球 {actual:+.2f}, 欧赔反推理论 {theoretical:+.2f}, "
-                f"差异 {diff:+.2f} 球。"
+                f"差异 {diff:+.2f} 球，盘口解析={hc_detail.get('status', '?')}。"
             )
 
     max_dir = max(["home", "draw", "away"], key=lambda k: probs[k])
     if probs[max_dir] >= 45:
         facts.append(
             f"[OBS05 欧赔去水倾向] 主 {probs['home']:.1f}% / 平 {probs['draw']:.1f}% / "
-            f"客 {probs['away']:.1f}%, 最高方向={max_dir}。"
+            f"客 {probs['away']:.1f}%, 最高方向={max_dir}, 方法={probs.get('method', '?')}。"
         )
 
     if max(vh, vd, va) >= 58:
@@ -1011,6 +1457,16 @@ def build_observation_signals(
     sigs_short = [str(s) for s in smart_signals[:8]]
     if sigs_short:
         facts.append("[OBS17 原始智能信号] " + " | ".join(sigs_short))
+
+    if market_core:
+        facts.append(
+            f"[OBS18 市场概率核心] 核心比分={market_core.get('predicted_score')}，方向={market_core.get('predicted_direction')}，"
+            f"主/平/客={market_core.get('home_win_pct')}%/{market_core.get('draw_pct')}%/{market_core.get('away_win_pct')}%，"
+            f"λ={market_core.get('market_lambdas')}，CRS权重={market_core.get('crs_blend_weight')}。"
+        )
+        flags = market_core.get("market_core_quality_flags", [])
+        if flags:
+            facts.append("[OBS19 市场核心质量警告] " + " | ".join(flags) + "。")
 
     return facts
 
@@ -1116,7 +1572,7 @@ def format_match_block(
     engine_result: Dict,
     observation_signals: List[str],
     ensemble_signals: Dict,
-    smart_signals: List
+    smart_signals: List,
 ) -> str:
     home = match.get("home_team", match.get("home", "Home"))
     away = match.get("away_team", match.get("guest", "Away"))
@@ -1127,11 +1583,13 @@ def format_match_block(
     sp_d = _f(match.get("sp_draw", match.get("same", 0)))
     sp_a = _f(match.get("sp_away", match.get("lose", 0)))
 
-    probs = _compute_no_vig_probs(match)
+    probs = _compute_market_fair_probs(match)
 
     actual_hc = _parse_actual_handicap(match)
     theoretical_hc = _infer_theoretical_handicap(sp_h, sp_d, sp_a) if sp_h > 1 and sp_d > 1 and sp_a > 1 else 0.0
     hc_raw = match.get("give_ball", match.get("handicap", "0"))
+    hc_detail = match.get("handicap_parse_detail", {}) or {}
+    odds_prov = match.get("odds_provenance", {}) or {}
 
     block = f"\n════════════════════════════════════\n"
     block += f"第 {idx} 场: {home} vs {away}\n"
@@ -1141,17 +1599,22 @@ def format_match_block(
 
     block += "\n【1. 欧赔原始数据】\n"
     block += f"即时欧赔: 主胜 {sp_h:.2f} / 平局 {sp_d:.2f} / 客胜 {sp_a:.2f}\n"
+    block += (
+        f"赔率来源: {odds_prov.get('source', 'unknown')} / "
+        f"字段={odds_prov.get('keys', [])} / 质量={match.get('odds_quality', {})}\n"
+    )
 
     if probs.get("margin", 0) > 0:
         block += (
-            f"欧赔去水概率: 主 {probs['home']:.1f}% / 平 {probs['draw']:.1f}% / "
-            f"客 {probs['away']:.1f}% / 返还率约 {100 / probs['margin']:.1f}%\n"
+            f"欧赔公平概率: 主 {probs['home']:.1f}% / 平 {probs['draw']:.1f}% / "
+            f"客 {probs['away']:.1f}% / overround {probs.get('margin', 0):.3f} / 方法 {probs.get('method', '?')}\n"
         )
     else:
-        block += "欧赔去水概率: 数据不足\n"
+        block += "欧赔公平概率: 数据不足\n"
 
     block += "\n【2. 让球/盘口】\n"
     block += f"原始 give_ball/handicap: {hc_raw}\n"
+    block += f"盘口解析: {hc_detail}\n"
     block += f"标准化实际让球: {actual_hc:+.2f}，内部约定：正数=主让，负数=客让/主受让\n"
     block += f"欧赔反推理论让球: {theoretical_hc:+.2f}\n"
     block += f"实际 - 理论 差异: {actual_hc - theoretical_hc:+.2f} 球\n"
@@ -1350,21 +1813,56 @@ def format_match_block(
 
 PHASE1_ROLES = {
     "gpt": {
-        "name": "赔率结构分析师",
-        "focus": "欧赔、让球、总进球、CRS、半全场的一致性与裂痕。重点看赔率结构是否支持方向和比分。",
+        "name": "赔率结构审计师",
+        "focus": "审计市场概率核心是否与欧赔、让球、总进球、CRS、半全场一致，重点检查核心方向和比分是否被赔率结构支持。",
         "temperature": 0.18,
     },
     "grok": {
-        "name": "资金流分析师",
-        "focus": "Sharp、Steam、赔率变动、散户冷热、赔率是否跟随资金。重点看资金信号与盘口是否共振或冲突。",
+        "name": "资金流审计师",
+        "focus": "审计市场概率核心是否与 Sharp、Steam、赔率变动、散户冷热共振或冲突。",
         "temperature": 0.28,
     },
     "gemini": {
-        "name": "基本面分析师",
-        "focus": "战绩、伤停、赛程、联赛属性、杯赛属性、主客场强弱。重点看真实实力和比赛动机。",
+        "name": "基本面审计师",
+        "focus": "审计市场概率核心是否忽略战绩、伤停、赛程、联赛属性、杯赛属性、主客场强弱。",
         "temperature": 0.20,
     },
 }
+
+
+def _output_format_template(match_id: int = 1, include_claude_fields: bool = False) -> str:
+    base = ""
+    base += "{\n"
+    base += f"  \"match\": {match_id},\n"
+    base += "  \"predicted_score\": \"2-1\",\n"
+    base += "  \"predicted_direction\": \"home\",\n"
+    base += "  \"goal_range\": \"3球\",\n"
+    base += "  \"home_win_pct\": 52,\n"
+    base += "  \"draw_pct\": 27,\n"
+    base += "  \"away_win_pct\": 21,\n"
+    base += "  \"confidence\": 68,\n"
+    if include_claude_fields:
+        base += "  \"agreement_pattern\": \"市场核心主胜，GPT/Grok支持，Gemini提示平局风险\",\n"
+        base += "  \"analysis_coverage\": {\"gpt\": true, \"grok\": true, \"gemini\": true, \"valid_count\": 3},\n"
+        base += "  \"adopted_analysts\": [\"gpt\", \"grok\"],\n"
+        base += "  \"rejected_analysts\": [\"gemini\"],\n"
+        base += "  \"audit_result\": \"市场核心与CRS/TTG一致，基本面反对证据不足\",\n"
+    base += "  \"top3\": [\n"
+    base += "    {\"score\":\"2-1\", \"prob\":17},\n"
+    base += "    {\"score\":\"1-0\", \"prob\":14},\n"
+    base += "    {\"score\":\"1-1\", \"prob\":13}\n"
+    base += "  ],\n"
+    base += "  \"accepted_observations\": [\"市场核心与CRS主胜小比分共振\"],\n"
+    base += "  \"rejected_observations\": [\"散户热度不足以单独反打\"],\n"
+    base += "  \"key_signals\": [\"CRS支持主胜小比分\", \"TTG更接近3球\"],\n"
+    base += "  \"doubts\": [\"平局仍有保护\", \"xG差距不大\"],\n"
+    base += "  \"data_quality\": {\"odds_complete\": true, \"crs_complete\": true, \"ttg_complete\": true, \"notes\": []},\n"
+    if include_claude_fields:
+        base += "  \"arbitration_reason\": \"完整中文终审理由，必须审计市场概率核心，不得用自由文本替代概率模型\"\n"
+    else:
+        base += "  \"reason\": \"完整中文审计理由，必须审计市场概率核心，不得用自由文本替代概率模型\"\n"
+    base += "}"
+    return base
 
 
 def build_phase1_prompt(match_blocks: List[str], role_key: str) -> str:
@@ -1372,8 +1870,9 @@ def build_phase1_prompt(match_blocks: List[str], role_key: str) -> str:
 
     p = ""
     p += "<context>\n"
-    p += "你是竞彩足球分析团队中的一名独立分析师。下面是多场比赛的完整抓包数据。\n"
-    p += "你需要基于原始抓包自主分析。系统 OBS 观察信号只是线索，可能有效，也可能是噪声。\n"
+    p += "你是竞彩足球分析团队中的一名独立审计师。下面是多场比赛的完整抓包数据。\n"
+    p += "系统已先用本地市场概率核心生成方向/比分/top3，你的任务是审计它，而不是用自由文本重新发明概率模型。\n"
+    p += "系统 OBS 观察信号只是线索，可能有效，也可能是噪声。\n"
     p += "</context>\n\n"
 
     p += "<your_role>\n"
@@ -1382,14 +1881,15 @@ def build_phase1_prompt(match_blocks: List[str], role_key: str) -> str:
     p += "</your_role>\n\n"
 
     p += "<rules>\n"
-    p += "1. 必须先从你的专长角度分析，再检查其他维度是否反对你的结论。\n"
+    p += "1. 必须先从你的专长角度审计市场概率核心，再检查其他维度是否反对核心结论。\n"
     p += "2. 不要机械服从 OBS 信号，也不要机械反打 OBS 信号。\n"
-    p += "3. 必须给出 predicted_score、predicted_direction、goal_range、top3。\n"
-    p += "4. predicted_score 的方向必须与 predicted_direction 一致。\n"
-    p += "5. top3[0] 必须等于 predicted_score。\n"
-    p += "6. 必须列出 doubts，即反对自己结论的证据。\n"
-    p += "7. 如果数据不足，要降低 confidence。\n"
-    p += "8. 推理不限制字数，但必须保持 JSON 可解析，不要输出 markdown。\n"
+    p += "3. 你可以反对市场概率核心，但必须指出反对证据来自 CRS、TTG、1X2、盘口、xG、资金或基本面中的哪一层。\n"
+    p += "4. 必须给出 predicted_score、predicted_direction、goal_range、top3。\n"
+    p += "5. predicted_score 的方向必须与 predicted_direction 一致。\n"
+    p += "6. top3[0] 必须等于 predicted_score，top3 必须按概率降序，不允许把无概率依据的比分硬放第一。\n"
+    p += "7. 必须列出 doubts，即反对自己结论的证据。\n"
+    p += "8. 如果数据不足，要降低 confidence。\n"
+    p += "9. 推理不限制字数，但必须保持 JSON 可解析，不要输出 markdown。\n"
     p += "</rules>\n\n"
 
     p += "<match_data>\n"
@@ -1400,28 +1900,8 @@ def build_phase1_prompt(match_blocks: List[str], role_key: str) -> str:
     p += "<output_format>\n"
     p += "严格输出 JSON 数组，不要 markdown，不要代码块，不要前缀后缀。\n"
     p += "[\n"
-    p += "  {\n"
-    p += "    \"match\": 1,\n"
-    p += "    \"predicted_score\": \"2-1\",\n"
-    p += "    \"predicted_direction\": \"home\",\n"
-    p += "    \"goal_range\": \"3球\",\n"
-    p += "    \"home_win_pct\": 52,\n"
-    p += "    \"draw_pct\": 27,\n"
-    p += "    \"away_win_pct\": 21,\n"
-    p += "    \"confidence\": 68,\n"
-    p += "    \"top3\": [\n"
-    p += "      {\"score\":\"2-1\", \"prob\":17},\n"
-    p += "      {\"score\":\"1-0\", \"prob\":14},\n"
-    p += "      {\"score\":\"1-1\", \"prob\":13}\n"
-    p += "    ],\n"
-    p += "    \"accepted_observations\": [\"CRS主胜小比分低赔集中\"],\n"
-    p += "    \"rejected_observations\": [\"散户热度不足以单独反打\"],\n"
-    p += "    \"key_signals\": [\"主胜赔率结构更完整\", \"总进球更接近3球\"],\n"
-    p += "    \"doubts\": [\"平局仍有保护\", \"xG差距不大\"],\n"
-    p += "    \"data_quality\": {\"odds_complete\": true, \"crs_complete\": true, \"ttg_complete\": true, \"notes\": []},\n"
-    p += "    \"reason\": \"完整中文推理，不限制字数，但必须保持 JSON 字符串合法\"\n"
-    p += "  }\n"
-    p += "]\n"
+    p += _output_format_template(1, include_claude_fields=False)
+    p += "\n]\n"
     p += "</output_format>\n"
 
     return p
@@ -1432,8 +1912,9 @@ def build_phase1_retry_prompt(match_block: str, role_key: str, target_match_id: 
 
     p = ""
     p += "<context>\n"
-    p += "这是一次补分析。你只需要分析下面这一场比赛。\n"
+    p += "这是一次补审计。你只需要审计下面这一场比赛。\n"
     p += f"重要：输出 JSON 中 match 必须等于 {target_match_id}。\n"
+    p += "系统已先用本地市场概率核心生成方向/比分/top3，你的任务是审计它，而不是用自由文本重新发明概率模型。\n"
     p += "系统 OBS 只是观察线索，可以采纳也可以否决。\n"
     p += "</context>\n\n"
 
@@ -1443,11 +1924,12 @@ def build_phase1_retry_prompt(match_block: str, role_key: str, target_match_id: 
     p += "</your_role>\n\n"
 
     p += "<rules>\n"
-    p += "1. 只分析这一场，不要输出其他比赛。\n"
-    p += "2. predicted_score 必须与 predicted_direction 一致。\n"
-    p += "3. top3[0] 必须等于 predicted_score。\n"
-    p += "4. 推理不限制字数，但必须保持 JSON 可解析。\n"
-    p += "5. 严格 JSON 数组输出，不要 markdown。\n"
+    p += "1. 只审计这一场，不要输出其他比赛。\n"
+    p += "2. 如果你反对市场概率核心，必须指出反对证据层。\n"
+    p += "3. predicted_score 必须与 predicted_direction 一致。\n"
+    p += "4. top3[0] 必须等于 predicted_score，top3 必须按概率排序。\n"
+    p += "5. 推理不限制字数，但必须保持 JSON 可解析。\n"
+    p += "6. 严格 JSON 数组输出，不要 markdown。\n"
     p += "</rules>\n\n"
 
     p += "<match_data>\n"
@@ -1456,27 +1938,8 @@ def build_phase1_retry_prompt(match_block: str, role_key: str, target_match_id: 
 
     p += "<output_format>\n"
     p += "[\n"
-    p += "  {\n"
-    p += f"    \"match\": {target_match_id},\n"
-    p += "    \"predicted_score\": \"2-1\",\n"
-    p += "    \"predicted_direction\": \"home\",\n"
-    p += "    \"goal_range\": \"3球\",\n"
-    p += "    \"home_win_pct\": 52,\n"
-    p += "    \"draw_pct\": 27,\n"
-    p += "    \"away_win_pct\": 21,\n"
-    p += "    \"confidence\": 68,\n"
-    p += "    \"top3\": [\n"
-    p += "      {\"score\":\"2-1\", \"prob\":17},\n"
-    p += "      {\"score\":\"1-0\", \"prob\":14},\n"
-    p += "      {\"score\":\"1-1\", \"prob\":13}\n"
-    p += "    ],\n"
-    p += "    \"accepted_observations\": [],\n"
-    p += "    \"rejected_observations\": [],\n"
-    p += "    \"key_signals\": [],\n"
-    p += "    \"doubts\": [],\n"
-    p += "    \"reason\": \"完整中文推理，不限制字数，但必须保持 JSON 字符串合法\"\n"
-    p += "  }\n"
-    p += "]\n"
+    p += _output_format_template(target_match_id, include_claude_fields=False)
+    p += "\n]\n"
     p += "</output_format>\n"
 
     return p
@@ -1514,8 +1977,9 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
 
     p = ""
     p += "<context>\n"
-    p += "你是 Claude 终审复盘者。GPT / Grok / Gemini 已经分别从赔率结构、资金流、基本面角度完成独立分析。\n"
-    p += "你现在拿到三家完整结论 + 原始抓包，需要做最终审计并输出最终预测。\n"
+    p += "你是 Claude 终审复盘者。GPT / Grok / Gemini 已经分别从赔率结构、资金流、基本面角度完成独立审计。\n"
+    p += "系统已先用本地市场概率核心生成方向/比分/top3。你的任务是终审这个市场核心和三家审计结论，而不是用自由文本重新发明概率模型。\n"
+    p += "最终程序默认采用市场概率核心作为正式 predicted_score，Claude 的输出主要用于 audit_result、doubts、冲突解释。\n"
     p += "</context>\n\n"
 
     p += "<critical_rules>\n"
@@ -1526,10 +1990,11 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
     p += "5. 证据优先级：CRS/总进球赔率结构 > 欧赔/让球一致性 > xG > Sharp/Steam/变盘 > 基本面 > 散户热度。\n"
     p += "6. OBS 只是观察，不是诱盘结论。\n"
     p += "7. 如果三家共同依赖同一个 OBS 信号，要降低共识权重。\n"
-    p += "8. predicted_score 方向必须与 predicted_direction 一致。\n"
-    p += "9. top3[0] 必须等于 predicted_score。\n"
-    p += "10. 必须说明采纳/否决哪些分析师，以及为什么。\n"
-    p += "11. 推理不限制字数，但必须保持 JSON 可解析。\n"
+    p += "8. 如果你反对市场概率核心，必须指出反对证据来自 CRS、TTG、1X2、盘口、xG、资金或基本面中的哪一层。\n"
+    p += "9. predicted_score 方向必须与 predicted_direction 一致。\n"
+    p += "10. top3[0] 必须等于 predicted_score，top3 必须按概率降序。\n"
+    p += "11. 必须说明采纳/否决哪些分析师，以及为什么。\n"
+    p += "12. 推理不限制字数，但必须保持 JSON 可解析。\n"
     p += "</critical_rules>\n\n"
 
     p += "<coverage_rules>\n"
@@ -1577,31 +2042,8 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
     p += "<output_format>\n"
     p += "严格输出 JSON 数组，不要 markdown，不要代码块，不要前缀后缀。\n"
     p += "[\n"
-    p += "  {\n"
-    p += "    \"match\": 1,\n"
-    p += "    \"predicted_score\": \"2-1\",\n"
-    p += "    \"predicted_direction\": \"home\",\n"
-    p += "    \"goal_range\": \"3球\",\n"
-    p += "    \"home_win_pct\": 55,\n"
-    p += "    \"draw_pct\": 26,\n"
-    p += "    \"away_win_pct\": 19,\n"
-    p += "    \"confidence\": 72,\n"
-    p += "    \"agreement_pattern\": \"GPT/Grok主胜，Gemini平局\",\n"
-    p += "    \"analysis_coverage\": {\"gpt\": true, \"grok\": true, \"gemini\": true, \"valid_count\": 3},\n"
-    p += "    \"adopted_analysts\": [\"gpt\", \"grok\"],\n"
-    p += "    \"rejected_analysts\": [\"gemini\"],\n"
-    p += "    \"audit_result\": \"原始CRS和盘口更支持主胜小胜，Gemini的平局保护证据不足\",\n"
-    p += "    \"top3\": [\n"
-    p += "      {\"score\":\"2-1\", \"prob\":17},\n"
-    p += "      {\"score\":\"1-0\", \"prob\":14},\n"
-    p += "      {\"score\":\"1-1\", \"prob\":13}\n"
-    p += "    ],\n"
-    p += "    \"accepted_observations\": [\"让球深度与CRS主胜小比分共振\"],\n"
-    p += "    \"rejected_observations\": [\"散户热度不足以反推客队\"],\n"
-    p += "    \"doubts\": [\"xG差距不大\", \"平局赔率仍有保护\"],\n"
-    p += "    \"arbitration_reason\": \"完整中文终审理由，不限制字数，但必须保持 JSON 字符串合法\"\n"
-    p += "  }\n"
-    p += "]\n"
+    p += _output_format_template(1, include_claude_fields=True)
+    p += "\n]\n"
     p += "</output_format>\n"
 
     return p
@@ -1617,7 +2059,7 @@ PHASE1_CONFIGS = [
         "url_env": "GPT_API_URL",
         "key_env": "GPT_API_KEY",
         "models": [
-            "gpt-5.5"
+            "gpt-5.5",
         ],
         "role_key": "gpt",
     },
@@ -1664,8 +2106,57 @@ def _build_urls_for_ai(ai_name: str, url_env: str) -> List[str]:
     return [primary_url] + backup
 
 
+AI_PREDICTION_JSON_SCHEMA = {
+    "name": "vmax_prediction_array",
+    "schema": {
+        "type": "object",
+        "additionalProperties": False,
+        "properties": {
+            "predictions": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "additionalProperties": True,
+                    "properties": {
+                        "match": {"type": "integer"},
+                        "predicted_score": {"type": "string"},
+                        "predicted_direction": {"type": "string", "enum": ["home", "draw", "away"]},
+                        "goal_range": {"type": "string"},
+                        "home_win_pct": {"type": "number"},
+                        "draw_pct": {"type": "number"},
+                        "away_win_pct": {"type": "number"},
+                        "confidence": {"type": "number"},
+                        "top3": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": True,
+                                "properties": {
+                                    "score": {"type": "string"},
+                                    "prob": {"type": "number"},
+                                },
+                                "required": ["score", "prob"],
+                            },
+                        },
+                        "accepted_observations": {"type": "array", "items": {"type": "string"}},
+                        "rejected_observations": {"type": "array", "items": {"type": "string"}},
+                        "key_signals": {"type": "array", "items": {"type": "string"}},
+                        "doubts": {"type": "array", "items": {"type": "string"}},
+                        "reason": {"type": "string"},
+                        "arbitration_reason": {"type": "string"},
+                    },
+                    "required": ["match", "predicted_score", "predicted_direction", "goal_range", "confidence", "top3"],
+                },
+            }
+        },
+        "required": ["predictions"],
+    },
+    "strict": False,
+}
+
+
 # ====================================================================
-# AI 调用层：基于第一版，不限制输出字数
+# AI 调用层：兼容结构化输出，失败自动回退普通 JSON 文本
 # ====================================================================
 
 async def async_call_ai_batch(
@@ -1678,7 +2169,7 @@ async def async_call_ai_batch(
     ai_name: str,
     sys_prompt: str,
     temperature: float,
-    phase: str
+    phase: str,
 ) -> Tuple[str, Dict[int, Dict], str]:
     if ai_name == "gpt":
         key = get_first_clean_env_key(GPT_KEY_ALIASES, GPT_DEFAULT_KEY)
@@ -1714,115 +2205,130 @@ async def async_call_ai_batch(
             if not is_gem and "chat/completions" not in url:
                 url += "/chat/completions"
 
-            headers = {"Content-Type": "application/json"}
+            schema_modes = [True, False] if USE_JSON_SCHEMA_RESPONSE else [False]
 
-            if is_gem:
-                headers["x-goog-api-key"] = key
-                payload = {
-                    "contents": [
-                        {
-                            "role": "user",
-                            "parts": [{"text": prompt}],
-                        }
-                    ],
-                    "generationConfig": {
+            for use_schema in schema_modes:
+                headers = {"Content-Type": "application/json"}
+
+                if is_gem:
+                    headers["x-goog-api-key"] = key
+                    generation_config = {"temperature": temperature}
+                    if use_schema:
+                        generation_config["responseMimeType"] = "application/json"
+                    payload = {
+                        "contents": [
+                            {
+                                "role": "user",
+                                "parts": [{"text": prompt}],
+                            }
+                        ],
+                        "generationConfig": generation_config,
+                        "systemInstruction": {
+                            "parts": [{"text": sys_prompt}],
+                        },
+                    }
+                else:
+                    headers["Authorization"] = f"Bearer {key}"
+                    payload = {
+                        "model": mn,
+                        "messages": [
+                            {"role": "system", "content": sys_prompt},
+                            {"role": "user", "content": prompt},
+                        ],
                         "temperature": temperature,
-                    },
-                    "systemInstruction": {
-                        "parts": [{"text": sys_prompt}],
-                    },
-                }
-            else:
-                headers["Authorization"] = f"Bearer {key}"
-                payload = {
-                    "model": mn,
-                    "messages": [
-                        {"role": "system", "content": sys_prompt},
-                        {"role": "user", "content": prompt},
-                    ],
-                    "temperature": temperature,
-                }
+                    }
+                    if use_schema:
+                        payload["response_format"] = {
+                            "type": "json_schema",
+                            "json_schema": AI_PREDICTION_JSON_SCHEMA,
+                        }
 
-            gw = url.split("/v1")[0][:48]
-            print(f"  [🔌] {ai_name.upper()} | {mn[:32]} @ {gw}")
+                gw = url.split("/v1")[0][:48]
+                schema_tag = "schema" if use_schema else "json"
+                print(f"  [🔌] {ai_name.upper()} | {mn[:32]} @ {gw} | {schema_tag}")
 
-            t0 = time.time()
+                t0 = time.time()
 
-            try:
-                timeout = aiohttp.ClientTimeout(
-                    total=None,
-                    connect=CONNECT_TIMEOUT,
-                    sock_connect=CONNECT_TIMEOUT,
-                    sock_read=READ_TIMEOUT,
-                )
+                try:
+                    timeout = aiohttp.ClientTimeout(
+                        total=None,
+                        connect=CONNECT_TIMEOUT,
+                        sock_connect=CONNECT_TIMEOUT,
+                        sock_read=READ_TIMEOUT,
+                    )
 
-                async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
-                    elapsed = round(time.time() - t0, 1)
+                    async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
+                        elapsed = round(time.time() - t0, 1)
 
-                    if r.status in (502, 504):
-                        print(f"    💀 HTTP {r.status} | {elapsed}s → 换URL")
-                        continue
+                        if r.status in (502, 504):
+                            print(f"    💀 HTTP {r.status} | {elapsed}s → 换URL")
+                            break
 
-                    if r.status == 400:
-                        text = await r.text()
-                        print(f"    💀 HTTP 400 | {elapsed}s | 模型={mn} | {text[:300]}")
+                        if r.status == 400:
+                            text = await r.text()
+                            print(f"    💀 HTTP 400 | {elapsed}s | 模型={mn} | {text[:300]}")
+                            if use_schema:
+                                print("    ↩️ 结构化输出不兼容，自动回退普通 JSON 提示")
+                                continue
+                            break
+
+                        if r.status == 401:
+                            print("    💀 HTTP 401 | key无效 → 换通道")
+                            break
+
+                        if r.status == 429:
+                            print("    ⚠️ HTTP 429 | 限流，稍后重试")
+                            await asyncio.sleep(2.0)
+                            continue
+
+                        if r.status != 200:
+                            text = await r.text()
+                            print(f"    ⚠️ HTTP {r.status} | {elapsed}s | 模型={mn} | {text[:200]}")
+                            if use_schema:
+                                continue
+                            break
+
+                        connected = True
+                        print(f"    ✅ 已连上 {elapsed}s | 等待完整数据...")
+
+                        try:
+                            data = await r.json(content_type=None)
+                        except Exception as e:
+                            print(f"    ⚠️ JSON响应读取失败: {str(e)[:120]}")
+                            break
+
+                        elapsed = round(time.time() - t0, 1)
+                        raw_text = _extract_response_text(data, is_gem)
+
+                        if not raw_text or len(raw_text) < 10:
+                            print("    ⚠️ 空响应 → 换模型")
+                            break
+
+                        results = _parse_ai_json(raw_text, num_matches, phase=phase)
+
+                        if results:
+                            print(f"    ✅ {ai_name.upper()} 完成: {len(results)}/{num_matches} | {elapsed}s")
+                            return ai_name, results, mn
+
+                        print("    ⚠️ JSON解析0条 → 换模型")
                         break
 
-                    if r.status == 401:
-                        print(f"    💀 HTTP 401 | key无效 → 换通道")
-                        break
-
-                    if r.status == 429:
-                        print(f"    ⚠️ HTTP 429 | 限流，稍后重试")
-                        await asyncio.sleep(2.0)
-                        continue
-
-                    if r.status != 200:
-                        text = await r.text()
-                        print(f"    ⚠️ HTTP {r.status} | {elapsed}s | 模型={mn} | {text[:200]}")
-                        continue
-
-                    connected = True
-                    print(f"    ✅ 已连上 {elapsed}s | 等待完整数据...")
-
-                    try:
-                        data = await r.json(content_type=None)
-                    except Exception as e:
-                        print(f"    ⚠️ JSON响应读取失败: {str(e)[:120]}")
-                        break
-
-                    elapsed = round(time.time() - t0, 1)
-                    raw_text = _extract_response_text(data, is_gem)
-
-                    if not raw_text or len(raw_text) < 10:
-                        print("    ⚠️ 空响应 → 换模型")
-                        break
-
-                    results = _parse_ai_json(raw_text, num_matches, phase=phase)
-
-                    if results:
-                        print(f"    ✅ {ai_name.upper()} 完成: {len(results)}/{num_matches} | {elapsed}s")
-                        return ai_name, results, mn
-
-                    print("    ⚠️ JSON解析0条 → 换模型")
+                except aiohttp.ClientConnectorError:
                     break
+                except asyncio.TimeoutError:
+                    if not connected:
+                        break
+                    else:
+                        print(f"    ⏱️ {ai_name.upper()} 读取超时: {READ_TIMEOUT}s")
+                        return ai_name, {}, "read_timeout"
+                except Exception as e:
+                    if not connected:
+                        break
+                    else:
+                        print(f"    ⚠️ 调用异常: {str(e)[:120]}")
+                        return ai_name, {}, "error"
 
-            except aiohttp.ClientConnectorError:
-                continue
-            except asyncio.TimeoutError:
-                if not connected:
-                    continue
-                else:
-                    print(f"    ⏱️ {ai_name.upper()} 读取超时: {READ_TIMEOUT}s")
-                    return ai_name, {}, "read_timeout"
-            except Exception as e:
-                if not connected:
-                    continue
-                else:
-                    print(f"    ⚠️ 调用异常: {str(e)[:120]}")
-                    return ai_name, {}, "error"
-
-            await asyncio.sleep(0.2)
+                await asyncio.sleep(0.2)
 
     return ai_name, {}, "all_failed"
 
@@ -1830,10 +2336,44 @@ async def async_call_ai_batch(
 def _extract_response_text(data, is_gem=False) -> str:
     raw_text = ""
 
+    def _collect_text_from_parts(parts):
+        texts = []
+        if isinstance(parts, list):
+            for item in parts:
+                if not isinstance(item, dict):
+                    continue
+                t = item.get("text") or item.get("content") or item.get("output_text")
+                if isinstance(t, str) and t.strip():
+                    texts.append(t.strip())
+        return "\n".join(texts).strip()
+
     try:
         if is_gem:
-            raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
-            return raw_text
+            cand = (data.get("candidates") or [{}])[0]
+            content = cand.get("content", {}) or {}
+            raw_text = _collect_text_from_parts(content.get("parts", []))
+            if raw_text:
+                return raw_text
+
+        if isinstance(data.get("content"), list):
+            raw_text = _collect_text_from_parts(data.get("content"))
+            if raw_text:
+                return raw_text
+
+        if isinstance(data.get("output"), list):
+            texts = []
+            for block in data.get("output", []):
+                if not isinstance(block, dict):
+                    continue
+                if isinstance(block.get("content"), list):
+                    t = _collect_text_from_parts(block.get("content"))
+                    if t:
+                        texts.append(t)
+                elif isinstance(block.get("text"), str):
+                    texts.append(block.get("text"))
+            raw_text = "\n".join(texts).strip()
+            if raw_text:
+                return raw_text
 
         if data.get("choices"):
             msg = data["choices"][0].get("message", {})
@@ -1845,13 +2385,7 @@ def _extract_response_text(data, is_gem=False) -> str:
                     raw_text = content_val.strip()
 
                 elif isinstance(content_val, list):
-                    best = ""
-                    for item in content_val:
-                        if isinstance(item, dict):
-                            t = item.get("text", item.get("content", ""))
-                            if isinstance(t, str) and len(t) > len(best):
-                                best = t.strip()
-                    raw_text = best
+                    raw_text = _collect_text_from_parts(content_val)
 
                 if not raw_text:
                     for field in [
@@ -1875,7 +2409,7 @@ def _extract_response_text(data, is_gem=False) -> str:
                     for k, v in msg.items():
                         if k in skip:
                             continue
-                        if isinstance(v, str) and "[" in v and "match" in v:
+                        if isinstance(v, str) and ("[" in v or "predictions" in v) and "match" in v:
                             if len(v) > len(best):
                                 best = v.strip()
                     if best:
@@ -1883,30 +2417,9 @@ def _extract_response_text(data, is_gem=False) -> str:
 
         if not raw_text:
             full_str = json.dumps(data, ensure_ascii=False)
-            m_match = re.search(r'\[\s*\{\s*\\?"match\\?"', full_str)
+            m_match = re.search(r'(\[\s*\{\s*\\?"match\\?")|(\{\s*\\?"predictions\\?")', full_str)
             if m_match:
-                start_pos = m_match.start()
-                depth = 0
-                end_pos = start_pos
-
-                for ci in range(start_pos, min(start_pos + 500000, len(full_str))):
-                    if full_str[ci] == "[":
-                        depth += 1
-                    elif full_str[ci] == "]":
-                        depth -= 1
-
-                    if depth == 0:
-                        end_pos = ci + 1
-                        break
-
-                if end_pos > start_pos:
-                    extracted = full_str[start_pos:end_pos]
-                    if '\\"' in extracted:
-                        try:
-                            extracted = json.loads('"' + extracted + '"')
-                        except Exception:
-                            extracted = extracted.replace('\\"', '"')
-                    raw_text = extracted
+                raw_text = full_str
 
     except Exception as ex:
         print(f"    ⚠️ 响应提取异常: {str(ex)[:100]}")
@@ -1926,58 +2439,71 @@ def _strip_thinking_blocks(text: str) -> str:
     return clean.strip()
 
 
-def _extract_json_array(clean: str) -> str:
-    m_re = re.search(r'\[\s*\{\s*"match"', clean)
-    if not m_re:
-        m_re = re.search(r"\[\s*\{\s*'match'", clean)
+def _extract_json_object_or_array(clean: str) -> str:
+    starts = []
+    m_arr = re.search(r'\[\s*\{\s*["\']match["\']', clean)
+    if m_arr:
+        starts.append((m_arr.start(), "["))
+    m_obj = re.search(r'\{\s*["\']predictions["\']\s*:', clean)
+    if m_obj:
+        starts.append((m_obj.start(), "{"))
 
-    if m_re:
-        start_idx = m_re.start()
-        depth = 0
-        in_str = False
-        escape = False
-        end_idx = start_idx
+    if not starts:
+        start_arr = clean.find("[")
+        start_obj = clean.find("{")
+        if start_arr == -1 and start_obj == -1:
+            return ""
+        if start_obj != -1 and (start_arr == -1 or start_obj < start_arr):
+            starts.append((start_obj, "{"))
+        else:
+            starts.append((start_arr, "["))
 
-        for i in range(start_idx, len(clean)):
-            ch = clean[i]
+    start_idx, opener = sorted(starts, key=lambda x: x[0])[0]
+    closer = "]" if opener == "[" else "}"
 
-            if escape:
-                escape = False
-                continue
+    depth = 0
+    in_str = False
+    quote = ""
+    escape = False
 
-            if ch == "\\":
-                escape = True
-                continue
+    for i in range(start_idx, len(clean)):
+        ch = clean[i]
 
-            if ch == '"':
-                in_str = not in_str
-                continue
+        if escape:
+            escape = False
+            continue
 
-            if in_str:
-                continue
+        if ch == "\\":
+            escape = True
+            continue
 
-            if ch == "[":
-                depth += 1
-            elif ch == "]":
-                depth -= 1
-                if depth == 0:
-                    end_idx = i + 1
-                    break
+        if in_str:
+            if ch == quote:
+                in_str = False
+            continue
 
-        if end_idx > start_idx:
-            return clean[start_idx:end_idx]
+        if ch in ["'", '"']:
+            in_str = True
+            quote = ch
+            continue
 
-    start = clean.find("[")
-    end = clean.rfind("]") + 1
-    if start != -1 and end > start:
-        return clean[start:end]
+        if ch == opener:
+            depth += 1
+        elif ch == closer:
+            depth -= 1
+            if depth == 0:
+                return clean[start_idx:i + 1]
 
     return ""
 
 
+def _extract_json_array(clean: str) -> str:
+    return _extract_json_object_or_array(clean)
+
+
 def _parse_ai_json(raw_text: str, num_matches: int, phase: str) -> Dict[int, Dict]:
     clean = _strip_thinking_blocks(raw_text)
-    json_str = _extract_json_array(clean)
+    json_str = _extract_json_object_or_array(clean)
 
     results = {}
 
@@ -1995,13 +2521,18 @@ def _parse_ai_json(raw_text: str, num_matches: int, phase: str) -> Dict[int, Dic
         except Exception:
             try:
                 last_brace = json_str.rfind("}")
-                if last_brace != -1:
+                if last_brace != -1 and json_str.lstrip().startswith("["):
                     arr = json.loads(json_str[:last_brace + 1] + "]")
             except Exception:
                 arr = []
 
     if isinstance(arr, dict):
-        arr = [arr]
+        for key in ["predictions", "results", "items", "data"]:
+            if isinstance(arr.get(key), list):
+                arr = arr.get(key)
+                break
+        else:
+            arr = [arr]
 
     if not isinstance(arr, list):
         return results
@@ -2011,6 +2542,11 @@ def _parse_ai_json(raw_text: str, num_matches: int, phase: str) -> Dict[int, Dic
             continue
 
         valid, fixed, errors = validate_ai_item(item, phase=phase)
+        fixed["ai_validation_errors"] = errors
+
+        if STRICT_AI_VALIDATION and not valid:
+            print(f"    ⚠️ {phase} 第{fixed.get('match')}场AI输出无效，已丢弃: {errors}")
+            continue
 
         if not fixed.get("match"):
             continue
@@ -2019,8 +2555,6 @@ def _parse_ai_json(raw_text: str, num_matches: int, phase: str) -> Dict[int, Dic
             mid = int(fixed["match"])
         except Exception:
             continue
-
-        fixed["ai_validation_errors"] = errors
 
         if 1 <= mid <= max(num_matches, 1):
             results[mid] = fixed
@@ -2053,11 +2587,16 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
         score_label = "1-1"
 
     expected_dir = _score_direction(score_label)
+    pred_dir_raw = str(out.get("predicted_direction", "")).strip().lower()
 
     if expected_dir:
+        if pred_dir_raw and pred_dir_raw in VALID_DIRS and pred_dir_raw != expected_dir:
+            errors.append("score_direction_mismatch")
+        elif pred_dir_raw and pred_dir_raw not in VALID_DIRS:
+            errors.append("direction_invalid")
         out["predicted_direction"] = expected_dir
     else:
-        pred_dir = str(out.get("predicted_direction", "draw")).strip().lower()
+        pred_dir = pred_dir_raw or "draw"
         if pred_dir not in VALID_DIRS:
             errors.append("direction_invalid")
             pred_dir = "draw"
@@ -2091,7 +2630,6 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
         top3 = []
 
     fixed_top3 = []
-    top3_has_main = False
 
     for t in top3:
         if not isinstance(t, dict):
@@ -2110,17 +2648,14 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
             "prob": round(prob, 1),
         })
 
-        if sc == score_label:
-            top3_has_main = True
+    if not fixed_top3:
+        errors.append("top3_empty")
+        fixed_top3 = [{"score": score_label, "prob": 0.0}]
 
-    if not top3_has_main:
-        fixed_top3.insert(0, {"score": score_label, "prob": 0})
+    if fixed_top3 and fixed_top3[0].get("score") != score_label:
+        errors.append("top3_head_not_predicted_score")
 
-    fixed_top3 = sorted(
-        fixed_top3,
-        key=lambda x: 0 if x.get("score") == score_label else 1
-    )[:3]
-
+    fixed_top3 = fixed_top3[:5]
     out["top3"] = fixed_top3
 
     for k in [
@@ -2152,7 +2687,17 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
     else:
         out["reason"] = _safe_str(out.get("reason", ""), 5000)
 
-    return len(errors) == 0, out, errors
+    fatal = [e for e in errors if e in [
+        "match_id_invalid",
+        "score_missing",
+        "score_invalid",
+        "direction_invalid",
+        "score_direction_mismatch",
+        "top3_empty",
+        "top3_head_not_predicted_score",
+    ]]
+
+    return len(fatal) == 0, out, errors
 
 
 # ====================================================================
@@ -2171,6 +2716,19 @@ def _is_valid_phase1_result(r: Dict) -> bool:
 
     if direction not in VALID_DIRS:
         return False
+
+    if STRICT_AI_VALIDATION and r.get("ai_validation_errors"):
+        fatal = set(r.get("ai_validation_errors", [])) & {
+            "match_id_invalid",
+            "score_missing",
+            "score_invalid",
+            "direction_invalid",
+            "score_direction_mismatch",
+            "top3_empty",
+            "top3_head_not_predicted_score",
+        }
+        if fatal:
+            return False
 
     return True
 
@@ -2208,7 +2766,7 @@ async def repair_missing_phase1_results(
     phase1_results: Dict[str, Dict[int, Dict]],
     match_blocks: List[str],
     num_matches: int,
-    sys_prompts: Dict[str, str]
+    sys_prompts: Dict[str, str],
 ) -> Dict[str, Dict[int, Dict]]:
     print("\n  [Phase 1 Repair] 检查三家缺失场次...")
 
@@ -2265,12 +2823,12 @@ async def repair_missing_phase1_results(
 # ====================================================================
 
 async def run_phase1_three(match_blocks: List[str], num_matches: int) -> Dict[str, Dict[int, Dict]]:
-    print(f"\n  [Phase 1] GPT/Grok/Gemini 三家并行分析 ({num_matches} 场)...")
+    print(f"\n  [Phase 1] GPT/Grok/Gemini 三家并行审计 ({num_matches} 场)...")
 
     sys_prompts = {
-        "gpt": "<role>你是赔率结构分析师，专注欧赔、让球、总进球、CRS、半全场一致性。</role><instruction>严格输出 JSON 数组，不要 markdown。</instruction>",
-        "grok": "<role>你是资金流分析师，专注 Sharp、Steam、变盘、散户冷热、资金与盘口背离。</role><instruction>严格输出 JSON 数组，不要 markdown。</instruction>",
-        "gemini": "<role>你是基本面分析师，专注战绩、伤停、赛程、联赛属性、杯赛属性、主客场强弱。</role><instruction>严格输出 JSON 数组，不要 markdown。</instruction>",
+        "gpt": "<role>你是赔率结构审计师，专注欧赔、让球、总进球、CRS、半全场一致性。</role><instruction>严格输出 JSON 数组，不要 markdown。</instruction>",
+        "grok": "<role>你是资金流审计师，专注 Sharp、Steam、变盘、散户冷热、资金与盘口背离。</role><instruction>严格输出 JSON 数组，不要 markdown。</instruction>",
+        "gemini": "<role>你是基本面审计师，专注战绩、伤停、赛程、联赛属性、杯赛属性、主客场强弱。</role><instruction>严格输出 JSON 数组，不要 markdown。</instruction>",
     }
 
     connector = aiohttp.TCPConnector(limit=10, use_dns_cache=False)
@@ -2335,7 +2893,7 @@ async def run_phase1_three(match_blocks: List[str], num_matches: int) -> Dict[st
 async def run_phase2_claude_audit(
     match_blocks: List[str],
     phase1_results: Dict[str, Dict[int, Dict]],
-    num_matches: int
+    num_matches: int,
 ) -> Tuple[Dict[int, Dict], str]:
     print(f"\n  [Phase 2] Claude 终审复盘 ({num_matches} 场)...")
 
@@ -2343,7 +2901,7 @@ async def run_phase2_claude_audit(
     print(f"  [Claude Prompt] {len(prompt):,} 字符")
 
     sys_prompt = (
-        "<role>你是 Claude 终审复盘者。你必须重新审计原始抓包，不得简单按三家多数派裁决。</role>\n"
+        "<role>你是 Claude 终审复盘者。你必须重新审计原始抓包和市场概率核心，不得简单按三家多数派裁决。</role>\n"
         "<instruction>严格输出 JSON 数组，禁止 markdown，禁止前缀后缀。</instruction>"
     )
 
@@ -2541,9 +3099,34 @@ def assemble_final_prediction(
     observation_signals: List[str],
     ensemble_signals: Dict,
     idx: int,
-    ai_provider: str
+    ai_provider: str,
+    market_core: Optional[Dict] = None,
 ) -> Dict:
-    cr = _enforce_direction_consistency(claude_result or {})
+    coverage = _phase1_coverage_for_match(phase1_results, idx)
+
+    if USE_MARKET_PROBABILITY_CORE and market_core:
+        cr = _enforce_direction_consistency(market_core)
+        cr["claude_raw_result"] = claude_result or {}
+        cr["claude_score"] = (claude_result or {}).get("predicted_score", "-")
+        cr["claude_direction"] = (claude_result or {}).get("predicted_direction", "-")
+        cr["agreement_pattern"] = (claude_result or {}).get(
+            "agreement_pattern",
+            "市场概率核心优先，Claude审计解释",
+        )
+        cr["audit_result"] = (claude_result or {}).get("audit_result", "")
+        cr["arbitration_reason"] = (
+            (claude_result or {}).get("arbitration_reason")
+            or (claude_result or {}).get("reason", "")
+        )
+        cr["adopted_analysts"] = (claude_result or {}).get("adopted_analysts", [])
+        cr["rejected_analysts"] = (claude_result or {}).get("rejected_analysts", [])
+        cr["accepted_observations"] = (claude_result or {}).get("accepted_observations", [])
+        cr["rejected_observations"] = (claude_result or {}).get("rejected_observations", [])
+        cr["doubts"] = (claude_result or {}).get("doubts", [])
+        decision_source = "market_core"
+    else:
+        cr = _enforce_direction_consistency(claude_result or {})
+        decision_source = "claude_or_fallback"
 
     predicted_score = cr.get("predicted_score", "1-1")
     predicted_label = cr.get("predicted_label", predicted_score)
@@ -2561,26 +3144,29 @@ def assemble_final_prediction(
     confidence = _i(cr.get("confidence", 55), 55)
     confidence = max(25, min(95, confidence))
 
-    coverage = _phase1_coverage_for_match(phase1_results, idx)
-
-    if coverage["valid_count"] <= 1:
-        confidence = min(confidence, 62)
-    elif coverage["valid_count"] == 2:
-        confidence = min(confidence, 72)
+    if decision_source != "market_core":
+        if coverage["valid_count"] <= 1:
+            confidence = min(confidence, 62)
+        elif coverage["valid_count"] == 2:
+            confidence = min(confidence, 72)
 
     risk = "低" if confidence >= 75 else ("中" if confidence >= 55 else "高")
 
     final_odds = _get_score_odds(match, predicted_score, final_direction, is_others)
-    raw_score_prob = _extract_score_prob_from_ai(cr, predicted_score)
+
+    if decision_source == "market_core":
+        raw_score_prob = _f(cr.get("score_prob", 0)) / 100.0
+    else:
+        raw_score_prob = _extract_score_prob_from_ai(cr, predicted_score)
 
     if ENABLE_LLM_VALUE_BET:
         score_prob = raw_score_prob
         ev_pct, kelly_pct, is_value = _calculate_score_ev(score_prob, final_odds)
-        value_reason = "基于 Claude top3 精确比分概率计算，未做历史校准"
+        value_reason = "基于最终比分概率计算，未做历史校准"
     else:
         score_prob = raw_score_prob
         ev_pct, kelly_pct, is_value = 0.0, 0.0, False
-        value_reason = "v19.2 暂不使用 LLM 主观比分概率计算正式EV/Kelly"
+        value_reason = "v19.3 暂不使用未回测校准概率计算正式EV/Kelly"
 
     raw_goal_range = cr.get("goal_range") or _goal_range_from_score(predicted_score)
     goal_bucket, goal_label = _normalize_goal_range_for_ui(raw_goal_range, predicted_score)
@@ -2595,8 +3181,8 @@ def assemble_final_prediction(
     expected_total_goals = _f(engine_result.get("expected_total_goals", 0))
     if expected_total_goals <= 0:
         expected_total_goals = (
-            _f(engine_result.get("bookmaker_implied_home_xg", 1.3)) +
-            _f(engine_result.get("bookmaker_implied_away_xg", 0.9))
+            _f(engine_result.get("bookmaker_implied_home_xg", 1.3))
+            + _f(engine_result.get("bookmaker_implied_away_xg", 0.9))
         )
 
     smart_signals_raw = stats.get("smart_signals", []) if stats else []
@@ -2625,11 +3211,24 @@ def assemble_final_prediction(
         "final_direction": final_direction,
         "is_score_others": is_others,
 
-        "decision_title": "vMAX 19.2 决策剖析",
+        "decision_source": decision_source,
+        "final_decision_source": decision_source,
+        "decision_title": "vMAX 19.3 概率核心决策剖析",
         "decision_engine_version": ENGINE_VERSION,
         "decision_architecture": ENGINE_ARCHITECTURE,
         "engine_version": ENGINE_VERSION,
         "engine_architecture": ENGINE_ARCHITECTURE,
+
+        "market_probability_core": market_core or {},
+        "market_core_score": (market_core or {}).get("predicted_score", ""),
+        "market_core_top3": (market_core or {}).get("top3", []),
+        "market_core_quality_flags": cr.get("market_core_quality_flags", []),
+        "market_fair_probs": cr.get("market_fair_probs", {}),
+        "market_lambdas": cr.get("market_lambdas", {}),
+        "market_score_matrix_top10": cr.get("market_score_matrix_top10", []),
+        "odds_provenance": match.get("odds_provenance", {}),
+        "odds_quality": match.get("odds_quality", {}),
+        "handicap_parse_detail": match.get("handicap_parse_detail", {}),
 
         "goal_range": goal_bucket,
         "goal_interval": goal_bucket,
@@ -2686,11 +3285,12 @@ def assemble_final_prediction(
         "claude_status": AI_CALL_STATUS.get("claude", ""),
 
         "ai_provider": ai_provider,
-        "claude_score": predicted_score,
+        "claude_score": cr.get("claude_score", "-"),
+        "claude_direction": cr.get("claude_direction", "-"),
         "claude_analysis": claude_reason[:3000],
         "arbitration_reason": claude_reason,
         "audit_result": cr.get("audit_result", ""),
-        "agreement_pattern": cr.get("agreement_pattern", "Claude终审复盘"),
+        "agreement_pattern": cr.get("agreement_pattern", "市场概率核心优先，Claude审计解释"),
 
         "phase1_coverage": coverage,
         "analysis_coverage": cr.get("analysis_coverage", coverage),
@@ -2703,17 +3303,17 @@ def assemble_final_prediction(
         "top3": cr.get("top3", []),
 
         "gpt_score": _ai_score_summary(p1_gpt),
-        "gpt_analysis": _ai_reason_summary(p1_gpt, "GPT 未返回有效分析。"),
+        "gpt_analysis": _ai_reason_summary(p1_gpt, "GPT 未返回有效审计。"),
         "gpt_doubts": p1_gpt.get("doubts", []) if p1_gpt else [],
         "gpt_key_signals": p1_gpt.get("key_signals", []) if p1_gpt else [],
 
         "grok_score": _ai_score_summary(p1_grok),
-        "grok_analysis": _ai_reason_summary(p1_grok, "GROK 未返回有效分析。"),
+        "grok_analysis": _ai_reason_summary(p1_grok, "GROK 未返回有效审计。"),
         "grok_doubts": p1_grok.get("doubts", []) if p1_grok else [],
         "grok_key_signals": p1_grok.get("key_signals", []) if p1_grok else [],
 
         "gemini_score": _ai_score_summary(p1_gemini),
-        "gemini_analysis": _ai_reason_summary(p1_gemini, "GEMINI 未返回有效分析。"),
+        "gemini_analysis": _ai_reason_summary(p1_gemini, "GEMINI 未返回有效审计。"),
         "gemini_doubts": p1_gemini.get("doubts", []) if p1_gemini else [],
         "gemini_key_signals": p1_gemini.get("key_signals", []) if p1_gemini else [],
 
@@ -2741,6 +3341,7 @@ def assemble_final_prediction(
 
         "score_odds": final_odds,
         "raw_llm_score_prob": round(raw_score_prob * 100, 2),
+        "raw_core_score_prob": round(raw_score_prob * 100, 2),
         "score_prob": round(score_prob * 100, 2),
         "suggested_kelly": kelly_pct,
         "edge_vs_market": ev_pct,
@@ -2797,9 +3398,9 @@ def select_top4(preds):
             risk_penalty += 8
         if p.get("ai_validation_errors"):
             risk_penalty += 5
-        if p.get("ai_abstained"):
-            risk_penalty += len(p.get("ai_abstained", [])) * 2
-        if not p.get("coverage_ok", True):
+        if p.get("market_core_quality_flags"):
+            risk_penalty += len(p.get("market_core_quality_flags", [])) * 2
+        if not p.get("coverage_ok", True) and p.get("decision_source") != "market_core":
             risk_penalty += 8
 
         return confidence + score_prob * 0.2 - risk_penalty
@@ -2831,11 +3432,11 @@ def _fallback_claude_result_from_phase1(phase1_results: Dict[str, Dict[int, Dict
         r = phase1_results.get(name, {}).get(idx, {})
         if r and r.get("predicted_score"):
             out = dict(r)
-            out["agreement_pattern"] = f"Claude失败，采用{name.upper()}兜底"
+            out["agreement_pattern"] = f"Claude失败，采用{name.upper()}兜底审计"
             out["adopted_analysts"] = [name]
             out["rejected_analysts"] = []
-            out["audit_result"] = f"Claude 未返回有效终审，临时采用 {name.upper()} 输出。"
-            out["arbitration_reason"] = f"Claude 未返回有效终审，临时采用 {name.upper()} 输出：{r.get('reason', '')}"
+            out["audit_result"] = f"Claude 未返回有效终审，临时采用 {name.upper()} 审计输出。"
+            out["arbitration_reason"] = f"Claude 未返回有效终审，临时采用 {name.upper()} 审计输出：{r.get('reason', '')}"
             out["confidence"] = max(25, int(_f(r.get("confidence", 45)) * 0.85))
             return out
 
@@ -2917,11 +3518,14 @@ def run_predictions(raw, use_ai=True):
 
         smart_signals = sp.get("smart_signals", []) if isinstance(sp, dict) else []
 
+        market_core = build_market_probability_core(m, eng, sp)
+
         observation_signals = build_observation_signals(
             match_obj=m,
             engine_result=eng,
             smart_signals=smart_signals,
             exp_goals=exp_goals,
+            market_core=market_core,
         )
 
         ensemble_signals = collect_ensemble_signals(sp)
@@ -2943,6 +3547,7 @@ def run_predictions(raw, use_ai=True):
             "engine": eng,
             "stats": sp,
             "experience": exp_result,
+            "market_core": market_core,
             "observation_signals": observation_signals,
             "ensemble_signals": ensemble_signals,
         })
@@ -3016,6 +3621,7 @@ def run_predictions(raw, use_ai=True):
             ensemble_signals=ma["ensemble_signals"],
             idx=idx,
             ai_provider=ai_provider,
+            market_core=ma.get("market_core"),
         )
 
         if APPLY_LEGACY_ENHANCERS:
@@ -3037,6 +3643,7 @@ def run_predictions(raw, use_ai=True):
         mg = _enforce_direction_consistency(mg)
 
         combined = {**raw_m, **m, "prediction": mg}
+        combined["_rank_id"] = raw_m.get("id") or raw_m.get("match_id") or raw_m.get("match_num") or f"idx_{idx}"
 
         for k in [
             "predicted_score",
@@ -3045,6 +3652,19 @@ def run_predictions(raw, use_ai=True):
             "result",
             "display_direction",
             "final_direction",
+
+            "decision_source",
+            "final_decision_source",
+            "market_probability_core",
+            "market_core_score",
+            "market_core_top3",
+            "market_core_quality_flags",
+            "market_fair_probs",
+            "market_lambdas",
+            "market_score_matrix_top10",
+            "odds_provenance",
+            "odds_quality",
+            "handicap_parse_detail",
 
             "confidence",
             "ai_confidence",
@@ -3105,6 +3725,7 @@ def run_predictions(raw, use_ai=True):
             "coverage_full",
 
             "claude_score",
+            "claude_direction",
             "claude_analysis",
             "gpt_score",
             "gpt_analysis",
@@ -3116,7 +3737,7 @@ def run_predictions(raw, use_ai=True):
             combined[k] = mg.get(k)
 
         combined["engine_version"] = ENGINE_VERSION
-        combined["decision_title"] = "vMAX 19.2 决策剖析"
+        combined["decision_title"] = "vMAX 19.3 概率核心决策剖析"
         combined["decision_engine_version"] = ENGINE_VERSION
         combined["decision_architecture"] = ENGINE_ARCHITECTURE
 
@@ -3179,6 +3800,7 @@ def run_predictions(raw, use_ai=True):
 
         obs_tag = f" [OBS{len(ma['observation_signals'])}]" if ma.get("observation_signals") else ""
         err_tag = f" [校验{len(mg.get('ai_validation_errors', []))}]" if mg.get("ai_validation_errors") else ""
+        core_flag_tag = f" [核心警告{len(mg.get('market_core_quality_flags', []))}]" if mg.get("market_core_quality_flags") else ""
         abstain_tag = f" [缺席{','.join(mg.get('ai_abstained', []))}]" if mg.get("ai_abstained") else ""
         cov = mg.get("phase1_coverage", {})
         cov_tag = f" [覆盖{cov.get('valid_count', 0)}/3]"
@@ -3187,15 +3809,15 @@ def run_predictions(raw, use_ai=True):
             f"  [{idx}] {m.get('home_team', m.get('home', '?'))} vs "
             f"{m.get('away_team', m.get('guest', '?'))} => "
             f"{mg['result']} ({mg['predicted_score']}) | "
-            f"CF: {mg['confidence']}% | {mg.get('agreement_pattern', 'Claude终审')}"
-            f"{cov_tag}{obs_tag}{err_tag}{abstain_tag}"
+            f"CF: {mg['confidence']}% | {mg.get('decision_source', 'unknown')} | {mg.get('agreement_pattern', '市场核心')}"
+            f"{cov_tag}{obs_tag}{core_flag_tag}{err_tag}{abstain_tag}"
         )
 
     t4 = select_top4(res)
-    t4ids = [t.get("id") for t in t4]
+    t4ids = {t.get("_rank_id") for t in t4 if t.get("_rank_id") is not None}
 
     for r in res:
-        r["is_recommended"] = r.get("id") in t4ids
+        r["is_recommended"] = r.get("_rank_id") in t4ids
 
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
 
@@ -3210,9 +3832,10 @@ if __name__ == "__main__":
     logger.info(f"{ENGINE_VERSION} 启动")
     print(f"✅ {ENGINE_VERSION} 加载完成")
     print(f"   架构: {ENGINE_ARCHITECTURE}")
-    print("   Phase 1: GPT / Grok / Gemini 三家独立分析")
+    print("   Final: 市场概率核心优先生成 predicted_score / direction / top3")
+    print("   Phase 1: GPT / Grok / Gemini 三家独立审计")
     print("   Phase 1 Repair: 缺失场次自动单场补跑")
-    print("   Phase 2: Claude 接收三家结论 + 原始抓包做最终审计")
-    print("   规则: Claude 必须重新审计抓包，不按票数机械裁决")
-    print("   调用层: 回到第一版底座，不限制输出字数，长等待")
-    print("   EV/Kelly: 默认不使用 LLM 主观比分概率")
+    print("   Phase 2: Claude 接收三家审计 + 原始抓包 + 市场核心做最终复盘")
+    print("   规则: Claude 不再直接决定最终比分，最终比分默认来自 market_probability_core")
+    print("   调用层: 支持 schema 输出，不兼容时自动回退普通 JSON")
+    print("   EV/Kelly: 默认不使用未回测校准概率")
