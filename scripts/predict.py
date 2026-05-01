@@ -1,15 +1,14 @@
 # ====================================================================
-# 🚀 vMAX 19.2 — FirstBase Raw Packet 四AI审计版
+# 🚀 vMAX 19.3 — 体彩Sharp分级 + 外部市场比对 + 量化锁定链
 # --------------------------------------------------------------------
-# 这版原则:
-#   ✅ AI调用层回到第一版 v19.0 稳定底座
-#   ✅ 不限制输出字数，不传 max_tokens / maxOutputTokens
-#   ✅ 拉长 GPT/Grok/Gemini/Claude 等待时间
-#   ✅ Phase 1: GPT / Grok / Gemini 三家并行独立分析
-#   ✅ Phase 1 Repair: 缺失场次自动单场补跑
-#   ✅ Phase 2: Claude 接收三家结论 + 原始抓包做最终审计
-#   ✅ Claude 不按票数裁决，必须重新审计抓包
-#   ✅ 程序只做 JSON 校验、字段兼容、方向一致，不篡改 Claude 最终比分
+# 核心原则:
+#   ✅ 保留 v19.2 的 FirstBase Raw Packet 四AI审计结构
+#   ✅ 恢复 v18 的 CRS矩阵几何 + 贝叶斯方向后验 + 决策锁定链
+#   ✅ Sharp 是体彩核心变量，但必须先分级: S0/S1/S2/S3/S4/SD
+#   ✅ Claude 不再直接决定最终比分，只做终审审计意见
+#   ✅ 最终比分由程序锁定链决定: 方向 → 进球区间 → 比分
+#   ✅ 新增外部欧指/市场交叉验证入口 external_market / external_urls
+#   ✅ 体彩官方方向与外部市场冲突时标记 LOCAL_MARKET_TRAP
 #   ✅ EV/Kelly 默认不使用 LLM 主观比分概率
 # ====================================================================
 
@@ -17,6 +16,7 @@ import json
 import os
 import re
 import time
+import math
 import asyncio
 import aiohttp
 import logging
@@ -42,6 +42,7 @@ except Exception:
 EnsemblePredictor = None
 ExperienceEngine = None
 predict_match = None
+build_league_intelligence = None
 apply_experience_to_prediction = None
 upgrade_ensemble_predict = None
 
@@ -111,11 +112,12 @@ except Exception as e:
 # 基础配置
 # ====================================================================
 
-ENGINE_VERSION = "vMAX 19.2"
-ENGINE_ARCHITECTURE = "FirstBase Raw Packet + 3 Analysts + Claude Final Audit"
+ENGINE_VERSION = "vMAX 19.3"
+ENGINE_ARCHITECTURE = "FirstBase Raw Packet + External Market Audit + Sharp Grading + Quant Lock Chain"
 
 APPLY_LEGACY_ENHANCERS = False
 ENABLE_LLM_VALUE_BET = False
+ENABLE_EXTERNAL_FETCH = True
 
 AI_CALL_STATUS = {
     "gpt": "",
@@ -123,6 +125,8 @@ AI_CALL_STATUS = {
     "gemini": "",
     "claude": "",
 }
+
+VALID_DIRS = {"home", "draw", "away"}
 
 LOCKED_CORE_FIELDS = {
     "predicted_score",
@@ -145,8 +149,6 @@ LOCKED_CORE_FIELDS = {
     "predicted_goal_range",
     "goal_range_label",
 }
-
-VALID_DIRS = {"home", "draw", "away"}
 
 STANDARD_GOAL_ODDS = {
     0: 9.5,
@@ -203,6 +205,22 @@ CRS_FULL_MAP = {
     "2-5": "l25",
 }
 
+SCORE_OTHERS_HOME = [
+    "4-3", "5-3", "5-4", "6-0", "6-1", "6-2", "6-3", "6-4",
+    "7-0", "7-1", "7-2", "胜其他", "9-0",
+]
+
+SCORE_OTHERS_DRAW = [
+    "4-4", "5-5", "6-6", "平其他", "9-9",
+]
+
+SCORE_OTHERS_AWAY = [
+    "3-4", "0-6", "1-6", "2-6", "3-6", "0-7", "1-7", "2-7",
+    "负其他", "0-9",
+]
+
+ALL_SCORE_OTHERS = SCORE_OTHERS_HOME + SCORE_OTHERS_DRAW + SCORE_OTHERS_AWAY
+
 HFTF_MAP = {
     "ss": "主/主",
     "sp": "主/平",
@@ -223,11 +241,13 @@ CUP_KEYWORDS = [
     "四分之一",
     "欧冠",
     "欧联",
+    "欧协联",
+    "解放者杯",
+    "南球杯",
     "国王杯",
     "足总杯",
     "联赛杯",
-    "解放者杯",
-    "南球杯",
+    "Cup",
 ]
 
 
@@ -320,7 +340,7 @@ def _direction_cn(direction: str) -> str:
 
 
 def _score_to_label(score: str) -> Tuple[str, bool]:
-    s = str(score).strip()
+    s = str(score).strip().replace(" ", "")
 
     if "胜其他" in s or s == "9-0":
         return "胜其他", True
@@ -352,8 +372,19 @@ def _goal_range_from_score(score: str) -> str:
     return "6+球"
 
 
-def _normalize_goal_range_for_ui(goal_range: str, score: str = "") -> Tuple[str, str]:
+def _normalize_goal_range_for_ui(goal_range: Any, score: str = "") -> Tuple[str, str]:
     s = str(goal_range or "").strip().replace(" ", "")
+
+    if isinstance(goal_range, (list, tuple)) and len(goal_range) >= 2:
+        lo = int(goal_range[0])
+        hi = int(goal_range[1])
+        if lo == 0 and hi <= 1:
+            return "0-1", "0-1球"
+        if lo == hi:
+            return str(lo), f"{lo}球"
+        if hi >= 6:
+            return "6+", "6+球"
+        return f"{lo}-{hi}", f"{lo}-{hi}球"
 
     if not s or s in ["?", "None", "null", "其他"]:
         s = _goal_range_from_score(score)
@@ -405,7 +436,7 @@ def _deep_find_value(obj, aliases: List[str], positive_only=False, default=0, sk
 
     def _ok(v):
         if positive_only:
-            return 1.01 < _f(v, 0) < 100
+            return 1.01 < _f(v, 0) < 1000
         return v is not None and str(v).strip() != ""
 
     def _walk(x):
@@ -430,59 +461,97 @@ def _deep_find_value(obj, aliases: List[str], positive_only=False, default=0, sk
     return found if found is not None else default
 
 
-def _extract_observation_codes(observation_signals: List[str]) -> List[str]:
-    codes = []
-    for s in observation_signals:
-        m = re.search(r"\[(OBS\d+)[^\]]*\]", str(s))
+def _extract_form_record(text: str) -> Tuple[int, int, int]:
+    if not text:
+        return 0, 0, 0
+
+    patterns = [
+        r"近\s*\d+\s*[主客场]*\s*(\d+)\s*胜\s*(\d+)\s*平\s*(\d+)\s*[负败]",
+        r"(\d+)\s*胜\s*(\d+)\s*平\s*(\d+)\s*[负败]",
+        r"近\s*\d+[:：]\s*(\d+)W(\d+)D(\d+)L",
+    ]
+
+    for pat in patterns:
+        m = re.search(pat, str(text))
         if m:
-            codes.append(m.group(1))
-    return codes
+            try:
+                return int(m.group(1)), int(m.group(2)), int(m.group(3))
+            except Exception:
+                pass
+
+    return 0, 0, 0
 
 
-def _extract_observation_labels(observation_signals: List[str]) -> List[str]:
-    labels = []
+def _extract_avg_goals(text: str) -> Tuple[float, float]:
+    if not text:
+        return 0.0, 0.0
 
-    for s in observation_signals:
-        text = str(s)
-        m = re.search(r"\[(OBS\d+)\s*([^\]]*)\]", text)
+    gf_match = re.search(r"场均进球[^0-9]*(\d+\.?\d*)", str(text))
+    ga_match = re.search(r"场均失球[^0-9]*(\d+\.?\d*)", str(text))
 
-        if m:
-            code = m.group(1)
-            name = m.group(2).strip()
-            labels.append(f"{code} {name}".strip())
-        else:
-            labels.append(text[:40])
-
-    return labels
+    return (
+        float(gf_match.group(1)) if gf_match else 0.0,
+        float(ga_match.group(1)) if ga_match else 0.0,
+    )
 
 
-def _extract_observation_objects(observation_signals: List[str]) -> List[Dict[str, str]]:
-    items = []
+def _fundamental_strength(match_obj: Dict, side: str) -> Dict[str, Any]:
+    info_src = match_obj.get("points", {})
+    if not isinstance(info_src, dict):
+        info_src = {}
 
-    for s in observation_signals:
-        text = str(s)
-        m = re.search(r"\[(OBS\d+)\s*([^\]]*)\]\s*(.*)", text)
+    key_strength = "home_strength" if side == "home" else "guest_strength"
+    txt = str(info_src.get(key_strength, ""))
 
-        if m:
-            items.append({
-                "code": m.group(1),
-                "name": m.group(2).strip(),
-                "detail": m.group(3).strip(),
-                "raw": text,
-            })
-        else:
-            items.append({
-                "code": "",
-                "name": text[:30],
-                "detail": text,
-                "raw": text,
-            })
+    w, d, l = _extract_form_record(txt)
+    total = w + d + l
+    win_rate = (w / total) if total > 0 else 0.5
 
-    return items
+    goals_for, goals_against = _extract_avg_goals(txt)
+
+    score = 0.0
+    if total > 0:
+        score += (win_rate - 0.5) * 80
+    if goals_for > 0:
+        score += (goals_for - 1.3) * 20
+    if goals_against > 0:
+        score -= (goals_against - 1.3) * 20
+
+    return {
+        "wins": w,
+        "draws": d,
+        "losses": l,
+        "total": total,
+        "win_rate": round(win_rate, 3),
+        "goals_for": round(goals_for, 2),
+        "goals_against": round(goals_against, 2),
+        "strength_score": round(max(-100, min(100, score)), 1),
+    }
+
+
+def calculate_value_bet(prob_pct, odds):
+    if not odds or odds <= 1.05:
+        return {"ev": 0.0, "kelly": 0.0, "is_value": False}
+
+    prob = prob_pct / 100.0
+    ev = prob * odds - 1.0
+    b = odds - 1.0
+    q = 1.0 - prob
+
+    if b <= 0:
+        return {"ev": round(ev * 100, 2), "kelly": 0.0, "is_value": False}
+
+    kelly = ((b * prob) - q) / b
+
+    return {
+        "ev": round(ev * 100, 2),
+        "kelly": round(max(0.0, kelly * 0.5) * 100, 2),
+        "is_value": ev > 0.05,
+    }
 
 
 # ====================================================================
-# 环境变量 / 第一版 API 通道底座
+# 环境变量 / AI通道
 # ====================================================================
 
 FALLBACK_URLS = [
@@ -497,11 +566,12 @@ GPT_DEFAULT_URL = "https://ai.newapi.life/v1"
 GPT_DEFAULT_KEY = globals().get("GPT_DEFAULT_KEY", "")
 
 GPT_KEY_ALIASES = [
-    "GPT_API_KEY","API_KEY"
+    "GPT_API_KEY",
+    "API_KEY",
 ]
 
 GPT_URL_ALIASES = [
-    "GPT_API_URL"
+    "GPT_API_URL",
 ]
 
 
@@ -587,6 +657,7 @@ def normalize_match(raw_m: Dict) -> Dict:
         or m.get("homeName")
         or "Home"
     )
+
     m["away_team"] = (
         m.get("away_team")
         or m.get("guest")
@@ -678,7 +749,7 @@ def normalize_match(raw_m: Dict) -> Dict:
 
 
 # ====================================================================
-# 欧赔 / 盘口 / 基本面解析
+# 欧赔 / 盘口
 # ====================================================================
 
 def _compute_no_vig_probs(match_obj: Dict) -> Dict[str, float]:
@@ -783,230 +854,2191 @@ def _parse_actual_handicap(match_obj: Dict) -> float:
     return 0.0
 
 
-def _extract_form_record(text: str) -> Tuple[int, int, int]:
-    if not text:
-        return 0, 0, 0
+# ====================================================================
+# 外部市场联网/比对层
+# ====================================================================
 
-    patterns = [
-        r"近\s*\d+\s*[主客场]*\s*(\d+)\s*胜\s*(\d+)\s*平\s*(\d+)\s*[负败]",
-        r"(\d+)\s*胜\s*(\d+)\s*平\s*(\d+)\s*[负败]",
+def _extract_external_urls(match_obj: Dict) -> List[str]:
+    urls = []
+
+    for key in [
+        "external_url",
+        "external_urls",
+        "odds_url",
+        "odds_urls",
+        "market_url",
+        "market_urls",
+        "reference_url",
+        "reference_urls",
+    ]:
+        v = match_obj.get(key)
+        if not v:
+            continue
+
+        if isinstance(v, str):
+            urls.append(v)
+        elif isinstance(v, list):
+            urls.extend([str(x) for x in v if x])
+        elif isinstance(v, dict):
+            urls.extend([str(x) for x in v.values() if x])
+
+    clean = []
+    for u in urls:
+        u = str(u).strip()
+        if u.startswith("http://") or u.startswith("https://"):
+            if u not in clean:
+                clean.append(u)
+
+    return clean[:5]
+
+
+def _strip_html(text: str, max_len=5000) -> str:
+    s = str(text or "")
+    s = re.sub(r"<script.*?</script>", " ", s, flags=re.DOTALL | re.IGNORECASE)
+    s = re.sub(r"<style.*?</style>", " ", s, flags=re.DOTALL | re.IGNORECASE)
+    s = re.sub(r"<[^>]+>", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s[:max_len]
+
+
+async def _fetch_external_url(session, url: str) -> Dict[str, Any]:
+    try:
+        timeout = aiohttp.ClientTimeout(total=15, connect=8, sock_read=12)
+        headers = {
+            "User-Agent": "Mozilla/5.0 vMAX/19.3 MarketAudit",
+            "Accept": "text/html,application/json,text/plain,*/*",
+        }
+        async with session.get(url, headers=headers, timeout=timeout) as r:
+            text = await r.text(errors="ignore")
+            return {
+                "url": url,
+                "status": r.status,
+                "text": _strip_html(text, 5000),
+            }
+    except Exception as e:
+        return {
+            "url": url,
+            "status": "error",
+            "text": f"fetch_error: {str(e)[:120]}",
+        }
+
+
+async def enrich_external_contexts(match_analyses: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    connector = aiohttp.TCPConnector(limit=6, use_dns_cache=False)
+    async with aiohttp.ClientSession(connector=connector) as session:
+        tasks = []
+        task_map = []
+
+        for idx, ma in enumerate(match_analyses):
+            urls = _extract_external_urls(ma.get("match", {}))
+            for url in urls:
+                tasks.append(_fetch_external_url(session, url))
+                task_map.append(idx)
+
+        if not tasks:
+            return match_analyses
+
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        for ma in match_analyses:
+            ma["external_fetch"] = []
+
+        for idx, res in zip(task_map, results):
+            if isinstance(res, dict):
+                match_analyses[idx].setdefault("external_fetch", []).append(res)
+            else:
+                match_analyses[idx].setdefault("external_fetch", []).append({
+                    "url": "",
+                    "status": "error",
+                    "text": str(res)[:200],
+                })
+
+    return match_analyses
+
+
+def _extract_external_market_from_match(match_obj: Dict, fetched: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+    fetched = fetched or []
+
+    ext = match_obj.get("external_market")
+    if isinstance(ext, dict):
+        odds_obj = ext.get("odds", ext)
+        probs_obj = ext.get("probs", ext.get("probabilities", {}))
+
+        h_odd = _f(odds_obj.get("home", odds_obj.get("win", odds_obj.get("sp_home", 0))))
+        d_odd = _f(odds_obj.get("draw", odds_obj.get("same", odds_obj.get("sp_draw", 0))))
+        a_odd = _f(odds_obj.get("away", odds_obj.get("lose", odds_obj.get("sp_away", 0))))
+
+        hp = _f(probs_obj.get("home", probs_obj.get("win", 0)))
+        dp = _f(probs_obj.get("draw", probs_obj.get("same", 0)))
+        ap = _f(probs_obj.get("away", probs_obj.get("lose", 0)))
+
+        out = {
+            "available": False,
+            "source": ext.get("source", "external_market"),
+            "odds": {},
+            "probs": {},
+            "snippets": [],
+        }
+
+        if h_odd > 1 and d_odd > 1 and a_odd > 1:
+            probs = _compute_no_vig_probs({
+                "sp_home": h_odd,
+                "sp_draw": d_odd,
+                "sp_away": a_odd,
+            })
+            out["available"] = True
+            out["odds"] = {"home": h_odd, "draw": d_odd, "away": a_odd}
+            out["probs"] = {
+                "home": round(probs["home"], 1),
+                "draw": round(probs["draw"], 1),
+                "away": round(probs["away"], 1),
+            }
+            return out
+
+        if hp > 0 and dp > 0 and ap > 0:
+            hp, dp, ap = _pct_normalize(hp, dp, ap)
+            out["available"] = True
+            out["probs"] = {"home": hp, "draw": dp, "away": ap}
+            return out
+
+    h_odd = _deep_find_value(match_obj, [
+        "external_sp_home", "external_home", "external_win",
+        "avg_sp_home", "avg_home", "avg_win",
+        "market_sp_home", "market_home", "market_win",
+    ], positive_only=True, default=0)
+
+    d_odd = _deep_find_value(match_obj, [
+        "external_sp_draw", "external_draw", "external_same",
+        "avg_sp_draw", "avg_draw", "avg_same",
+        "market_sp_draw", "market_draw", "market_same",
+    ], positive_only=True, default=0)
+
+    a_odd = _deep_find_value(match_obj, [
+        "external_sp_away", "external_away", "external_lose",
+        "avg_sp_away", "avg_away", "avg_lose",
+        "market_sp_away", "market_away", "market_lose",
+    ], positive_only=True, default=0)
+
+    snippets = []
+    for item in fetched[:3]:
+        if isinstance(item, dict):
+            txt = _safe_str(item.get("text", ""), 1500)
+            if txt:
+                snippets.append({
+                    "url": item.get("url", ""),
+                    "status": item.get("status", ""),
+                    "text": txt,
+                })
+
+    if h_odd > 1 and d_odd > 1 and a_odd > 1:
+        probs = _compute_no_vig_probs({
+            "sp_home": h_odd,
+            "sp_draw": d_odd,
+            "sp_away": a_odd,
+        })
+        return {
+            "available": True,
+            "source": "external_odds_fields",
+            "odds": {"home": h_odd, "draw": d_odd, "away": a_odd},
+            "probs": {
+                "home": round(probs["home"], 1),
+                "draw": round(probs["draw"], 1),
+                "away": round(probs["away"], 1),
+            },
+            "snippets": snippets,
+        }
+
+    return {
+        "available": bool(snippets),
+        "source": "external_fetch_snippets_only" if snippets else "missing",
+        "odds": {},
+        "probs": {},
+        "snippets": snippets,
+    }
+
+
+def compute_external_market_audit(match_obj: Dict, external_market: Dict[str, Any]) -> Dict[str, Any]:
+    local_probs = _compute_no_vig_probs(match_obj)
+    local_core = {
+        "home": local_probs["home"],
+        "draw": local_probs["draw"],
+        "away": local_probs["away"],
+    }
+
+    local_dir = max(local_core, key=local_core.get)
+    local_sorted = sorted(local_core.values(), reverse=True)
+    local_gap = local_sorted[0] - local_sorted[1] if len(local_sorted) >= 2 else 0
+
+    if not external_market or not external_market.get("probs"):
+        return {
+            "available": False,
+            "local_dir": local_dir,
+            "external_dir": None,
+            "local_gap": round(local_gap, 1),
+            "external_gap": 0.0,
+            "conflict": False,
+            "risk_tag": "NO_EXTERNAL_MARKET",
+            "notes": ["无可标准化外部市场赔率。若提供 external_market 或 external_urls，可启用交叉验证。"],
+        }
+
+    ext_probs = external_market.get("probs", {})
+    hp, dp, ap = _pct_normalize(ext_probs.get("home", 0), ext_probs.get("draw", 0), ext_probs.get("away", 0))
+    external_core = {"home": hp, "draw": dp, "away": ap}
+
+    external_dir = max(external_core, key=external_core.get)
+    ext_sorted = sorted(external_core.values(), reverse=True)
+    external_gap = ext_sorted[0] - ext_sorted[1] if len(ext_sorted) >= 2 else 0
+
+    conflict = local_dir != external_dir
+
+    risk_tag = "normal"
+    notes = []
+
+    if conflict and local_gap >= 4:
+        risk_tag = "LOCAL_MARKET_TRAP"
+        notes.append("体彩/本地盘口最高方向与外部市场最高方向冲突，本地最低赔方向不得直接采纳。")
+    elif conflict:
+        risk_tag = "MARKET_DISAGREEMENT"
+        notes.append("本地盘口与外部市场方向不一致，但本地优势差距不大。")
+    else:
+        notes.append("本地盘口与外部市场方向一致。")
+
+    return {
+        "available": True,
+        "local_dir": local_dir,
+        "external_dir": external_dir,
+        "local_gap": round(local_gap, 1),
+        "external_gap": round(external_gap, 1),
+        "local_probs": {k: round(v, 1) for k, v in local_core.items()},
+        "external_probs": {k: round(v, 1) for k, v in external_core.items()},
+        "conflict": conflict,
+        "risk_tag": risk_tag,
+        "notes": notes,
+    }
+
+
+# ====================================================================
+# CRS 矩阵几何分析
+# ====================================================================
+
+def crs_implied_probabilities(match_obj: Dict) -> Tuple[Dict[str, float], float, float]:
+    raw_odds = {}
+
+    for score, key in CRS_FULL_MAP.items():
+        odds = _f(match_obj.get(key, 0))
+        if odds > 1.1:
+            raw_odds[score] = odds
+
+    extras = {}
+
+    for key, scores_set in [
+        ("crs_win", SCORE_OTHERS_HOME),
+        ("crs_same", SCORE_OTHERS_DRAW),
+        ("crs_lose", SCORE_OTHERS_AWAY),
+    ]:
+        odds = _f(match_obj.get(key, 0))
+        if odds > 1.1:
+            extras[key] = {
+                "odds": odds,
+                "scores": scores_set,
+            }
+
+    if len(raw_odds) < 8:
+        return {}, 0.0, 0.0
+
+    raw_sum = sum(1 / o for o in raw_odds.values())
+
+    for ex in extras.values():
+        raw_sum += 1 / ex["odds"]
+
+    if raw_sum <= 0:
+        return {}, 0.0, 0.0
+
+    margin = raw_sum - 1.0
+
+    probs = {}
+
+    for score, odds in raw_odds.items():
+        probs[score] = (1 / odds) / raw_sum * 100
+
+    for key, ex in extras.items():
+        total_prob = (1 / ex["odds"]) / raw_sum * 100
+        num = len(ex["scores"])
+        if num > 0:
+            per = total_prob / num
+            for sc in ex["scores"]:
+                probs[sc] = probs.get(sc, 0) + per
+
+    coverage = len(raw_odds) / len(CRS_FULL_MAP)
+
+    return probs, round(margin, 3), round(coverage, 2)
+
+
+def compute_statistical_moments(probs: Dict[str, float]) -> Dict[str, float]:
+    regular = {}
+
+    for sc, p in probs.items():
+        if sc in ALL_SCORE_OTHERS and not str(sc).replace("-", "").isdigit():
+            continue
+
+        try:
+            h, a = str(sc).split("-")
+            h, a = int(h), int(a)
+
+            if h > 8 or a > 8:
+                continue
+
+            regular[(h, a)] = p
+        except Exception:
+            continue
+
+    if not regular:
+        return {}
+
+    total = sum(regular.values())
+
+    if total < 1:
+        return {}
+
+    reg_normalized = {k: v / total for k, v in regular.items()}
+
+    e_h = sum(h * p for (h, a), p in reg_normalized.items())
+    e_a = sum(a * p for (h, a), p in reg_normalized.items())
+
+    var_h = sum((h - e_h) ** 2 * p for (h, a), p in reg_normalized.items())
+    var_a = sum((a - e_a) ** 2 * p for (h, a), p in reg_normalized.items())
+
+    std_h = math.sqrt(var_h) if var_h > 0 else 0.01
+    std_a = math.sqrt(var_a) if var_a > 0 else 0.01
+
+    cov = sum((h - e_h) * (a - e_a) * p for (h, a), p in reg_normalized.items())
+    corr = cov / (std_h * std_a) if (std_h * std_a) > 0 else 0.0
+
+    if std_h > 0.01:
+        skew_h = sum(((h - e_h) / std_h) ** 3 * p for (h, a), p in reg_normalized.items())
+    else:
+        skew_h = 0.0
+
+    if std_a > 0.01:
+        skew_a = sum(((a - e_a) / std_a) ** 3 * p for (h, a), p in reg_normalized.items())
+    else:
+        skew_a = 0.0
+
+    return {
+        "lambda_h": round(e_h, 3),
+        "lambda_a": round(e_a, 3),
+        "var_h": round(var_h, 3),
+        "var_a": round(var_a, 3),
+        "std_h": round(std_h, 3),
+        "std_a": round(std_a, 3),
+        "cov": round(cov, 3),
+        "corr": round(corr, 3),
+        "skew_h": round(skew_h, 3),
+        "skew_a": round(skew_a, 3),
+        "lambda_total": round(e_h + e_a, 3),
+    }
+
+
+def classify_shape(moments: Dict[str, float]) -> Tuple[str, List[str]]:
+    if not moments:
+        return "unknown", ["CRS数据不足，无法分析形状"]
+
+    lh = moments.get("lambda_h", 1.3)
+    la = moments.get("lambda_a", 1.2)
+    lt = moments.get("lambda_total", 2.5)
+    corr = moments.get("corr", 0.0)
+    var_h = moments.get("var_h", 1.0)
+    var_a = moments.get("var_a", 1.0)
+    skew_h = moments.get("skew_h", 0.0)
+    skew_a = moments.get("skew_a", 0.0)
+
+    anomalies = []
+    verdict = "normal"
+
+    if lt >= 3.0 and corr >= 0.15:
+        verdict = "shootout"
+        anomalies.append(f"互射局: λ总{lt:.2f}, 相关{corr:.2f}")
+    elif lt <= 2.2 and var_h < 1.2 and var_a < 1.2:
+        verdict = "grinder"
+        anomalies.append(f"磨局: λ总{lt:.2f}, 方差低({var_h:.2f}/{var_a:.2f})")
+    elif lh - la >= 1.2:
+        verdict = "lopsided_h"
+        anomalies.append(f"主队碾压: λ主{lh:.2f} vs 客{la:.2f}")
+    elif la - lh >= 1.2:
+        verdict = "lopsided_a"
+        anomalies.append(f"客队碾压: λ客{la:.2f} vs 主{lh:.2f}")
+    elif abs(lh - la) < 0.4:
+        verdict = "balanced"
+        anomalies.append(f"均势: λ主{lh:.2f} vs 客{la:.2f}")
+
+    if abs(skew_h) > 1.8:
+        anomalies.append(f"主队进球分布偏度异常: {skew_h:.2f}")
+    if abs(skew_a) > 1.8:
+        anomalies.append(f"客队进球分布偏度异常: {skew_a:.2f}")
+    if corr < -0.15:
+        anomalies.append(f"负相关{corr:.2f}: 单边场，一方得势另一方沉默")
+
+    return verdict, anomalies
+
+
+def compute_direction_from_crs(probs: Dict[str, float]) -> Dict[str, float]:
+    home_p = 0.0
+    draw_p = 0.0
+    away_p = 0.0
+
+    for sc, p in probs.items():
+        if sc == "胜其他" or sc == "9-0":
+            home_p += p
+            continue
+        if sc == "平其他" or sc == "9-9":
+            draw_p += p
+            continue
+        if sc == "负其他" or sc == "0-9":
+            away_p += p
+            continue
+
+        try:
+            h, a = str(sc).split("-")
+            h, a = int(h), int(a)
+
+            if h > a:
+                home_p += p
+            elif h < a:
+                away_p += p
+            else:
+                draw_p += p
+        except Exception:
+            pass
+
+    total = home_p + draw_p + away_p
+
+    if total > 0:
+        return {
+            "home": round(home_p / total * 100, 2),
+            "draw": round(draw_p / total * 100, 2),
+            "away": round(away_p / total * 100, 2),
+        }
+
+    return {
+        "home": 33.3,
+        "draw": 33.3,
+        "away": 33.4,
+    }
+
+
+def analyze_crs_matrix(match_obj: Dict) -> Dict[str, Any]:
+    probs, margin, coverage = crs_implied_probabilities(match_obj)
+
+    if not probs:
+        return {
+            "implied_probs": {},
+            "margin": 0.0,
+            "coverage": 0.0,
+            "moments": {},
+            "shape_verdict": "unknown",
+            "anomalies": ["CRS数据缺失"],
+            "direction_probs": {"home": 33.3, "draw": 33.3, "away": 33.4},
+            "top_scores": [],
+        }
+
+    moments = compute_statistical_moments(probs)
+    verdict, anomalies = classify_shape(moments)
+    direction_probs = compute_direction_from_crs(probs)
+
+    sorted_scores = sorted(probs.items(), key=lambda x: x[1], reverse=True)
+
+    top_scores = [
+        {
+            "score": sc,
+            "prob": round(p, 2),
+            "direction": _score_direction(sc),
+            "goals": sum(_parse_score(sc)) if _parse_score(sc)[0] is not None else None,
+            "odds": round(100 / p, 2) if p > 0 else 0,
+        }
+        for sc, p in sorted_scores[:10]
     ]
 
-    for pat in patterns:
-        m = re.search(pat, str(text))
-        if m:
-            try:
-                return int(m.group(1)), int(m.group(2)), int(m.group(3))
-            except Exception:
-                pass
-
-    return 0, 0, 0
-
-
-def _extract_avg_goals(text: str) -> Tuple[float, float]:
-    if not text:
-        return 0.0, 0.0
-
-    gf_match = re.search(r"场均进球[^0-9]*(\d+\.?\d*)", str(text))
-    ga_match = re.search(r"场均失球[^0-9]*(\d+\.?\d*)", str(text))
-
-    return (
-        float(gf_match.group(1)) if gf_match else 0.0,
-        float(ga_match.group(1)) if ga_match else 0.0,
-    )
+    return {
+        "implied_probs": {k: round(v, 2) for k, v in probs.items()},
+        "margin": margin,
+        "coverage": coverage,
+        "moments": moments,
+        "shape_verdict": verdict,
+        "anomalies": anomalies,
+        "direction_probs": direction_probs,
+        "top_scores": top_scores,
+    }
 
 
 # ====================================================================
-# Sharp / Steam 方向识别：仅作为观察，不做决策
+# TTG 总进球分析
 # ====================================================================
 
-def _detect_sharp_direction(smart_signals: List) -> Optional[str]:
+def analyze_ttg(match_obj: Dict) -> Dict[str, Any]:
+    odds = {}
+
+    for g in range(8):
+        v = _f(match_obj.get(f"a{g}", 0))
+        if v > 1:
+            odds[g] = v
+
+    if not odds:
+        return {
+            "available": False,
+            "mode": None,
+            "top3": [],
+            "mean": 2.5,
+            "anchors": [],
+            "low_points": [],
+        }
+
+    inv = {g: 1 / o for g, o in odds.items()}
+    total = sum(inv.values())
+
+    probs = {g: inv[g] / total * 100 for g in inv} if total > 0 else {}
+    mode = max(probs, key=probs.get)
+    mean = sum(g * (p / 100.0) for g, p in probs.items())
+
+    top3 = sorted(
+        [{"goals": g, "odds": odds[g], "prob": round(probs[g], 2)} for g in odds],
+        key=lambda x: x["prob"],
+        reverse=True,
+    )[:3]
+
+    anchors = []
+    low_points = []
+
+    for g, o in odds.items():
+        anchor = TTG_ANCHORS.get(g, {})
+        hard_low = anchor.get("hard_low", 0)
+        std = anchor.get("std", 0)
+
+        if hard_low and o <= hard_low:
+            low_points.append(f"{_ttg_label(g)}={o:.2f}")
+
+        if std and o > 0:
+            ratio = std / o
+            if ratio >= 1.45:
+                anchors.append({
+                    "goals": g,
+                    "odds": o,
+                    "std": std,
+                    "compression": round(ratio, 2),
+                })
+
+    return {
+        "available": True,
+        "mode": mode,
+        "top3": top3,
+        "mean": round(mean, 2),
+        "probs": {str(g): round(p, 2) for g, p in probs.items()},
+        "odds": {str(g): odds[g] for g in odds},
+        "anchors": anchors,
+        "low_points": low_points,
+    }
+
+
+def _ttg_score_weight(score: str, ttg_analysis: Dict[str, Any]) -> float:
+    h, a = _parse_score(score)
+    if h is None:
+        return 0.25
+
+    total_goals = h + a
+    mode = ttg_analysis.get("mode")
+
+    if mode is None:
+        return 1.0
+
+    diff = abs(total_goals - int(mode))
+    weight = math.exp(-0.45 * diff)
+
+    typical_scores = {
+        0: ["0-0"],
+        1: ["1-0", "0-1"],
+        2: ["1-1", "2-0", "0-2"],
+        3: ["2-1", "1-2", "3-0", "0-3"],
+        4: ["3-1", "1-3", "2-2"],
+        5: ["3-2", "2-3", "4-1", "1-4"],
+        6: ["4-2", "2-4", "3-3"],
+        7: ["4-3", "3-4", "5-2", "2-5", "5-1", "1-5"],
+    }
+
+    if score in typical_scores.get(int(mode), []):
+        weight *= 1.35
+
+    for anchor in ttg_analysis.get("anchors", []):
+        g = anchor.get("goals")
+        if g == total_goals:
+            weight *= 1.25
+        elif abs(g - total_goals) >= 2:
+            weight *= 0.75
+
+    return max(0.15, min(1.8, weight))
+
+
+# ====================================================================
+# Sharp / Steam 识别与分级
+# ====================================================================
+
+def detect_sharp_direction(smart_signals: List) -> Dict[str, Any]:
+    detected = False
+    sharp_dir = None
+    raw = []
+
     for s in smart_signals:
         s_str = str(s)
         if "Sharp" not in s_str and "sharp" not in s_str:
             continue
 
-        if re.search(r"(主胜|主队|走主|→\s*主|流向\s*主|资金\s*主|Sharp主)", s_str):
-            return "home"
-        if re.search(r"(客胜|客队|走客|→\s*客|流向\s*客|资金\s*客|Sharp客)", s_str):
-            return "away"
-        if re.search(r"(平局|平赔|走平|→\s*平|流向\s*平|资金\s*平|Sharp平)", s_str):
-            return "draw"
+        detected = True
+        raw.append(s_str)
 
-    return None
+        if re.search(r"(主胜|主队|走主|→\s*主|流向\s*主|资金\s*主|Sharp主|home)", s_str, flags=re.IGNORECASE):
+            sharp_dir = "home"
+            break
+
+        if re.search(r"(客胜|客队|走客|→\s*客|流向\s*客|资金\s*客|Sharp客|away)", s_str, flags=re.IGNORECASE):
+            sharp_dir = "away"
+            break
+
+        if re.search(r"(平局|平赔|走平|→\s*平|流向\s*平|资金\s*平|Sharp平|进平局|draw)", s_str, flags=re.IGNORECASE):
+            sharp_dir = "draw"
+            break
+
+    return {
+        "detected": detected,
+        "sharp_dir": sharp_dir,
+        "raw": raw,
+    }
 
 
-def _detect_steam_direction(smart_signals: List) -> Tuple[Optional[str], Optional[str]]:
+def detect_steam_direction(smart_signals: List) -> Dict[str, Any]:
+    steam_dir = None
+    steam_type = None
+    raw = []
+
     for s in smart_signals:
         s_str = str(s)
         if "Steam" not in s_str and "steam" not in s_str:
             continue
 
+        raw.append(s_str)
+
         is_reverse = "反向" in s_str or "未跟" in s_str or "不跟" in s_str
         steam_type = "reverse" if is_reverse else "normal"
 
-        if re.search(r"(主胜.*Steam|Steam.*主胜|主胜.*降水|主.*Steam)", s_str):
-            return "home", steam_type
-        if re.search(r"(客胜.*Steam|Steam.*客胜|客胜.*降水|客.*Steam)", s_str):
-            return "away", steam_type
-        if re.search(r"(平.*Steam|Steam.*平)", s_str):
-            return "draw", steam_type
+        if re.search(r"(主胜.*Steam|Steam.*主胜|主胜.*降水|主.*Steam|home)", s_str, flags=re.IGNORECASE):
+            steam_dir = "home"
+            break
 
-    return None, None
+        if re.search(r"(客胜.*Steam|Steam.*客胜|客胜.*降水|客.*Steam|away)", s_str, flags=re.IGNORECASE):
+            steam_dir = "away"
+            break
+
+        if re.search(r"(平.*Steam|Steam.*平|draw)", s_str, flags=re.IGNORECASE):
+            steam_dir = "draw"
+            break
+
+    return {
+        "steam_dir": steam_dir,
+        "steam_type": steam_type,
+        "raw": raw,
+    }
 
 
-# ====================================================================
-# OBS 中性观察信号
-# ====================================================================
-
-def build_observation_signals(
+def classify_sharp_signal(
     match_obj: Dict,
-    engine_result: Dict,
     smart_signals: List,
-    exp_goals: float
-) -> List[str]:
-    facts = []
+    crs_analysis: Dict,
+    ttg_analysis: Dict,
+    external_audit: Optional[Dict] = None,
+) -> Dict[str, Any]:
+    sharp_info = detect_sharp_direction(smart_signals)
+    sharp_dir = sharp_info.get("sharp_dir")
+    detected = sharp_info.get("detected", False)
 
-    probs = _compute_no_vig_probs(match_obj)
+    if not detected or not sharp_dir:
+        return {
+            "sharp_detected": False,
+            "sharp_dir": None,
+            "sharp_level": "S0",
+            "sharp_trust": 0.0,
+            "sharp_reason": ["无明确Sharp方向"],
+            "raw": sharp_info.get("raw", []),
+        }
 
-    sp_h = _f(match_obj.get("sp_home", match_obj.get("win", 0)))
-    sp_d = _f(match_obj.get("sp_draw", match_obj.get("same", 0)))
-    sp_a = _f(match_obj.get("sp_away", match_obj.get("lose", 0)))
+    reason = []
+    trust = 45.0
+
+    local_probs = _compute_no_vig_probs(match_obj)
+    local_core = {
+        "home": local_probs["home"],
+        "draw": local_probs["draw"],
+        "away": local_probs["away"],
+    }
+    local_dir = max(local_core, key=local_core.get)
 
     change = match_obj.get("change", {}) or {}
     cw = _f(change.get("win", 0))
     cs = _f(change.get("same", 0))
     cl = _f(change.get("lose", 0))
 
+    move_dir = None
+    if cw < cs and cw < cl and cw <= -0.04:
+        move_dir = "home"
+    elif cs < cw and cs < cl and cs <= -0.04:
+        move_dir = "draw"
+    elif cl < cw and cl < cs and cl <= -0.04:
+        move_dir = "away"
+
+    if move_dir == sharp_dir:
+        trust += 18
+        reason.append(f"Sharp方向与降水方向一致: {sharp_dir}")
+    elif move_dir:
+        trust -= 12
+        reason.append(f"Sharp方向{sharp_dir}与降水方向{move_dir}冲突")
+
+    if local_dir == sharp_dir:
+        trust += 10
+        reason.append(f"体彩/本地去水最高方向支持Sharp: {sharp_dir}")
+    else:
+        trust -= 8
+        reason.append(f"体彩/本地去水最高方向{local_dir}不支持Sharp{sharp_dir}")
+
+    crs_direction_probs = crs_analysis.get("direction_probs", {}) if crs_analysis else {}
+    crs_dir = None
+
+    if crs_direction_probs:
+        crs_dir = max(crs_direction_probs, key=crs_direction_probs.get)
+        crs_vals = sorted(crs_direction_probs.values(), reverse=True)
+        crs_gap = crs_vals[0] - crs_vals[1] if len(crs_vals) >= 2 else 0
+
+        if crs_dir == sharp_dir:
+            trust += 18 if crs_gap >= 5 else 10
+            reason.append(f"CRS方向聚合支持Sharp: {crs_dir}, gap={crs_gap:.1f}")
+        else:
+            trust -= 18 if crs_gap >= 5 else 8
+            reason.append(f"CRS方向聚合{crs_dir}反对Sharp{sharp_dir}, gap={crs_gap:.1f}")
+
+    top_scores = crs_analysis.get("top_scores", []) if crs_analysis else []
+    sharp_path_scores = []
+
+    for item in top_scores[:8]:
+        if isinstance(item, dict):
+            sc = item.get("score")
+        elif isinstance(item, tuple):
+            sc = item[0]
+        else:
+            continue
+
+        if _score_direction(sc) == sharp_dir:
+            sharp_path_scores.append(sc)
+
+    if sharp_path_scores:
+        trust += 10
+        reason.append(f"Sharp方向存在CRS低赔比分路径: {sharp_path_scores[:3]}")
+    else:
+        trust -= 15
+        reason.append("Sharp方向缺少CRS低赔比分路径")
+
     vote = match_obj.get("vote", {}) or {}
     vh = _f(vote.get("win", 0))
     vd = _f(vote.get("same", 0))
     va = _f(vote.get("lose", 0))
 
-    total_move = abs(cw) + abs(cs) + abs(cl)
-
-    if total_move > 0:
-        if cs <= -0.04 and cs < cw and cs < cl:
-            facts.append(
-                f"[OBS01 平赔独降] 平赔变化 {cs:+.2f}, 主胜变化 {cw:+.2f}, 客胜变化 {cl:+.2f}。"
-            )
-        if cw <= -0.04 and cw < cs and cw < cl:
-            facts.append(
-                f"[OBS02 主胜降水] 主胜变化 {cw:+.2f}, 平赔变化 {cs:+.2f}, 客胜变化 {cl:+.2f}。"
-            )
-        if cl <= -0.04 and cl < cw and cl < cs:
-            facts.append(
-                f"[OBS03 客胜降水] 客胜变化 {cl:+.2f}, 主胜变化 {cw:+.2f}, 平赔变化 {cs:+.2f}。"
-            )
-
-    if sp_h > 1.05 and sp_d > 1.05 and sp_a > 1.05:
-        theoretical = _infer_theoretical_handicap(sp_h, sp_d, sp_a)
-        actual = _parse_actual_handicap(match_obj)
-        diff = actual - theoretical
-
-        if abs(diff) >= 0.5:
-            facts.append(
-                f"[OBS04 让球深度差异] 实际让球 {actual:+.2f}, 欧赔反推理论 {theoretical:+.2f}, "
-                f"差异 {diff:+.2f} 球。"
-            )
-
-    max_dir = max(["home", "draw", "away"], key=lambda k: probs[k])
-    if probs[max_dir] >= 45:
-        facts.append(
-            f"[OBS05 欧赔去水倾向] 主 {probs['home']:.1f}% / 平 {probs['draw']:.1f}% / "
-            f"客 {probs['away']:.1f}%, 最高方向={max_dir}。"
-        )
-
+    hot_dir = None
     if max(vh, vd, va) >= 58:
-        hot_dir = "主胜" if vh >= max(vd, va) else ("平局" if vd >= max(vh, va) else "客胜")
-        hot_val = max(vh, vd, va)
-        facts.append(f"[OBS06 散户热度] {hot_dir}散户占比 {hot_val:.0f}%。")
+        if vh >= vd and vh >= va:
+            hot_dir = "home"
+        elif vd >= vh and vd >= va:
+            hot_dir = "draw"
+        else:
+            hot_dir = "away"
 
-    low_ttg = []
-    for g in range(8):
-        odds = _f(match_obj.get(f"a{g}", 0))
-        anchor = TTG_ANCHORS.get(g, {})
-        hard_low = anchor.get("hard_low", 0)
-        if odds > 1 and hard_low > 0 and odds <= hard_low:
-            low_ttg.append(f"{_ttg_label(g)}={odds:.2f}")
+    if hot_dir == sharp_dir:
+        trust -= 10
+        reason.append(f"Sharp方向与散户大热同向: {sharp_dir}，疑似顺势诱导")
+    elif hot_dir and hot_dir != sharp_dir:
+        trust += 12
+        reason.append(f"Sharp方向反散户大热: Sharp={sharp_dir}, hot={hot_dir}")
 
-    if low_ttg:
-        facts.append("[OBS07 总进球低赔点] " + " | ".join(low_ttg) + "。")
+    if external_audit and external_audit.get("available"):
+        external_dir = external_audit.get("external_dir")
+        local_external_conflict = external_audit.get("conflict", False)
 
-    if exp_goals > 0:
-        if exp_goals >= 2.8:
-            facts.append(f"[OBS08 期望总进球偏高] λ={exp_goals:.2f}。")
-        elif exp_goals <= 2.2:
-            facts.append(f"[OBS09 期望总进球偏低] λ={exp_goals:.2f}。")
+        if external_dir == sharp_dir:
+            trust += 15
+            reason.append(f"外部市场支持Sharp: {external_dir}")
+        elif local_external_conflict and local_dir == sharp_dir and external_dir != sharp_dir:
+            trust -= 18
+            reason.append(
+                f"体彩方向与Sharp同向但外部市场反对，疑似体彩诱盘: local={local_dir}, external={external_dir}"
+            )
+        elif external_dir and external_dir != sharp_dir:
+            trust -= 8
+            reason.append(f"外部市场不支持Sharp: external={external_dir}, sharp={sharp_dir}")
 
-    crs_items = []
-    for sc, key in CRS_FULL_MAP.items():
-        v = _f(match_obj.get(key, 0))
-        if v > 1:
-            crs_items.append((sc, key, v))
+    ttg_mode = ttg_analysis.get("mode") if ttg_analysis else None
+    if ttg_mode is not None:
+        if int(ttg_mode) <= 1 and sharp_dir != "draw":
+            reason.append(f"总进球主模态{ttg_mode}球，Sharp方向必须落到1-0/0-1路径")
+        elif int(ttg_mode) == 2:
+            reason.append(f"总进球主模态2球，Sharp方向需匹配2-0/0-2/1-1路径")
+        elif int(ttg_mode) == 3:
+            reason.append(f"总进球主模态3球，Sharp方向需匹配2-1/1-2路径")
 
-    if len(crs_items) < 8:
-        facts.append(f"[OBS10 CRS数据不足] 当前可见CRS项 {len(crs_items)}/27。")
+    trust = max(0, min(100, trust))
+
+    if trust >= 82:
+        level = "S4"
+    elif trust >= 68:
+        level = "S3"
+    elif trust >= 52:
+        level = "S2"
+    elif trust >= 35:
+        level = "S1"
     else:
-        lowest = sorted(crs_items, key=lambda x: x[2])[:5]
-        facts.append(
-            "[OBS11 CRS低赔Top5] " + " | ".join([f"{sc}={v:.1f}" for sc, _, v in lowest]) + "。"
-        )
+        level = "SD"
 
-    hftf_items = []
-    for k, label in HFTF_MAP.items():
-        v = _f(match_obj.get(k, 0))
-        if v > 1:
-            hftf_items.append((label, v))
+    return {
+        "sharp_detected": True,
+        "sharp_dir": sharp_dir,
+        "sharp_level": level,
+        "sharp_trust": round(trust, 1),
+        "sharp_reason": reason,
+        "raw": sharp_info.get("raw", []),
+    }
 
-    if hftf_items:
-        low_hftf = sorted(hftf_items, key=lambda x: x[1])[:3]
-        facts.append(
-            "[OBS12 半全场低赔Top3] " + " | ".join([f"{label}={v:.2f}" for label, v in low_hftf]) + "。"
-        )
 
-    points = match_obj.get("points", {}) or {}
-    h_txt = str(points.get("home_strength", ""))
-    a_txt = str(points.get("guest_strength", ""))
+# ====================================================================
+# 陷阱矩阵：v19.3 核心版
+# ====================================================================
+
+def detect_T1_draw_trap_with_crs(match_obj: Dict, crs_analysis: Dict, sharp_eval: Dict) -> Optional[Dict]:
+    change = match_obj.get("change", {}) or {}
+    cw = _f(change.get("win", 0))
+    cs = _f(change.get("same", 0))
+    cl = _f(change.get("lose", 0))
+
+    if cs >= -0.04:
+        return None
+
+    if cs > cw or cs > cl:
+        return None
+
+    w10 = _f(match_obj.get("w10", 999), 999)
+    w21 = _f(match_obj.get("w21", 999), 999)
+    l01 = _f(match_obj.get("l01", 999), 999)
+    l12 = _f(match_obj.get("l12", 999), 999)
+    s11 = _f(match_obj.get("s11", 999), 999)
+
+    if min(w10, w21, l01, l12, s11) >= 900:
+        return None
+
+    home_small_strong = min(w10, w21) <= s11 * 1.08
+    away_small_strong = min(l01, l12) <= s11 * 1.08
+    draw_really_strong = s11 < min(w10, w21, l01, l12) * 0.95
+
+    crs_dir = max(crs_analysis.get("direction_probs", {"draw": 33.3}), key=crs_analysis.get("direction_probs", {"draw": 33.3}).get)
+
+    if draw_really_strong and crs_dir == "draw":
+        return {
+            "trap": "T1_REAL_DRAW_PROTECTION",
+            "description": f"平赔独降但CRS真平局保护: s11={s11:.1f} 低于主/客小胜路径",
+            "severity": 2,
+            "direction_adjust": {"draw": +1.0, "home": -0.2, "away": -0.2},
+            "score_multipliers": {},
+            "boost_scores": ["1-1", "0-0"],
+        }
+
+    if home_small_strong:
+        return {
+            "trap": "T1_DRAW_TRAP_HOME_PATH",
+            "description": f"平赔独降但主胜小比分路径更强: 1-0={w10:.1f}, 2-1={w21:.1f}, 1-1={s11:.1f}",
+            "severity": 3,
+            "direction_adjust": {"home": +1.4, "draw": -1.2, "away": -0.3},
+            "score_multipliers": {"1-1": 0.45, "0-0": 0.5, "2-2": 0.55},
+            "boost_scores": ["1-0", "2-1"],
+            "suppress_draw_sharp": True,
+        }
+
+    if away_small_strong:
+        return {
+            "trap": "T1_DRAW_TRAP_AWAY_PATH",
+            "description": f"平赔独降但客胜小比分路径更强: 0-1={l01:.1f}, 1-2={l12:.1f}, 1-1={s11:.1f}",
+            "severity": 3,
+            "direction_adjust": {"away": +1.4, "draw": -1.2, "home": -0.3},
+            "score_multipliers": {"1-1": 0.45, "0-0": 0.5, "2-2": 0.55},
+            "boost_scores": ["0-1", "1-2"],
+            "suppress_draw_sharp": True,
+        }
+
+    return None
+
+
+def detect_T2_T3_handicap_trap(match_obj: Dict) -> Optional[Dict]:
+    sp_h = _f(match_obj.get("sp_home", match_obj.get("win", 0)))
+    sp_d = _f(match_obj.get("sp_draw", match_obj.get("same", 0)))
+    sp_a = _f(match_obj.get("sp_away", match_obj.get("lose", 0)))
+
+    if sp_h < 1.05 or sp_d < 1.05 or sp_a < 1.05:
+        return None
+
+    theoretical = _infer_theoretical_handicap(sp_h, sp_d, sp_a)
+    actual = _parse_actual_handicap(match_obj)
+    diff = actual - theoretical
+
+    if abs(diff) < 0.5:
+        return None
+
+    fund_h = _fundamental_strength(match_obj, "home")
+    fund_a = _fundamental_strength(match_obj, "away")
+
+    odds_strong = "home" if sp_h < sp_a else "away"
+
+    if fund_h["total"] >= 3 and fund_a["total"] >= 3:
+        fund_diff = fund_h["strength_score"] - fund_a["strength_score"]
+
+        if odds_strong == "home" and fund_diff >= 20:
+            return None
+
+        if odds_strong == "away" and fund_diff <= -20:
+            return None
+
+    if diff >= 0.5:
+        severity = 2 if abs(diff) < 1.0 else 3
+        return {
+            "trap": "T2_HANDICAP_DEEPER",
+            "description": f"让球偏深: 理论{theoretical:+.2f} vs 实际{actual:+.2f}, 差{diff:+.2f}球，主队真强路径",
+            "severity": severity,
+            "direction_adjust": {"home": +1.2 * min(2.0, abs(diff)), "away": -0.5, "draw": -0.3},
+            "score_multipliers": {},
+            "boost_scores": ["2-0", "3-0", "2-1", "3-1"] if abs(diff) >= 1.0 else ["2-1", "2-0"],
+        }
+
+    severity = 2 if abs(diff) < 1.0 else 3
+    return {
+        "trap": "T3_HANDICAP_SHALLOWER",
+        "description": f"让球偏浅: 理论{theoretical:+.2f} vs 实际{actual:+.2f}, 差{diff:+.2f}球，主队偏弱/客队不败路径",
+        "severity": severity,
+        "direction_adjust": {"home": -1.0 * min(2.0, abs(diff)), "away": +1.2 * min(2.0, abs(diff)), "draw": +0.4},
+        "score_multipliers": {},
+        "boost_scores": ["0-1", "1-2", "0-2", "1-1"] if abs(diff) >= 1.0 else ["0-1", "1-1"],
+    }
+
+
+def detect_T6_T7_score_range_trap(match_obj: Dict, exp_goals: float, ttg_analysis: Dict) -> Optional[Dict]:
+    a0 = _f(match_obj.get("a0", 999), 999)
+    a1 = _f(match_obj.get("a1", 999), 999)
+    a2 = _f(match_obj.get("a2", 999), 999)
+
+    low_small = 0
+    if 0 < a0 < 8.0:
+        low_small += 1
+    if 0 < a1 < 4.5:
+        low_small += 1
+    if 0 < a2 < 3.0:
+        low_small += 1
+
+    if low_small >= 2 and exp_goals >= 2.8:
+        return {
+            "trap": "T6_SMALL_SCORE_TRAP",
+            "description": f"诱小比分: a0/a1/a2压低{low_small}项，但λ={exp_goals:.2f}偏高",
+            "severity": 2,
+            "direction_adjust": {},
+            "score_multipliers": {"0-0": 0.35, "1-0": 0.65, "0-1": 0.65, "1-1": 0.7},
+            "boost_scores": ["2-1", "1-2", "2-2", "3-1", "1-3"],
+        }
+
+    a5 = _f(match_obj.get("a5", 999), 999)
+    a6 = _f(match_obj.get("a6", 999), 999)
+    a7 = _f(match_obj.get("a7", 999), 999)
+
+    low_large = 0
+    if 0 < a5 < 10:
+        low_large += 1
+    if 0 < a6 < 16:
+        low_large += 1
+    if 0 < a7 < 30:
+        low_large += 1
+
+    if low_large >= 2 and exp_goals <= 2.3:
+        return {
+            "trap": "T7_LARGE_SCORE_TRAP",
+            "description": f"诱大比分: a5/a6/a7压低{low_large}项，但λ={exp_goals:.2f}偏低",
+            "severity": 2,
+            "direction_adjust": {},
+            "score_multipliers": {"3-2": 0.4, "4-2": 0.35, "3-3": 0.35},
+            "boost_scores": ["1-0", "0-1", "1-1", "2-0", "0-2", "2-1", "1-2"],
+        }
+
+    return None
+
+
+def detect_T13_grinder_draw(match_obj: Dict, engine_result: Dict, ttg_analysis: Dict, crs_analysis: Dict) -> Optional[Dict]:
+    probs = _compute_no_vig_probs(match_obj)
+    max_dir_prob = max(probs["home"], probs["draw"], probs["away"])
 
     hxg = _f(engine_result.get("bookmaker_implied_home_xg", 0))
     axg = _f(engine_result.get("bookmaker_implied_away_xg", 0))
 
-    if hxg > 0 and axg > 0:
-        h_for, _ = _extract_avg_goals(h_txt)
-        a_for, _ = _extract_avg_goals(a_txt)
+    if hxg <= 0 or axg <= 0:
+        return None
 
-        diffs = []
-        if h_for > 0 and abs(hxg - h_for) >= 0.8:
-            diffs.append(f"主xG={hxg:.2f} vs 主场均进球={h_for:.2f}")
-        if a_for > 0 and abs(axg - a_for) >= 0.8:
-            diffs.append(f"客xG={axg:.2f} vs 客场均进球={a_for:.2f}")
+    total_xg = hxg + axg
+    xg_diff = abs(hxg - axg)
 
-        if diffs:
-            facts.append("[OBS13 xG与场均差异] " + "；".join(diffs) + "。")
+    mode = ttg_analysis.get("mode")
+    s11 = _f(match_obj.get("s11", 999), 999)
+    s00 = _f(match_obj.get("s00", 999), 999)
 
+    if total_xg <= 2.25 and xg_diff <= 0.35 and max_dir_prob < 48 and mode in [0, 1, 2]:
+        if min(s11, s00) < 9.5:
+            return {
+                "trap": "T13_GRINDER_DRAW",
+                "description": f"闷局/低比分平保护: xG总{total_xg:.2f}, xG差{xg_diff:.2f}, TTG模式{mode}球",
+                "severity": 2,
+                "direction_adjust": {"draw": +1.0, "home": -0.25, "away": -0.25},
+                "score_multipliers": {"2-1": 0.7, "1-2": 0.7, "3-1": 0.45, "1-3": 0.45},
+                "boost_scores": ["0-0", "1-1", "1-0", "0-1"],
+            }
+
+    return None
+
+
+def detect_T14_cup_context(match_obj: Dict, sharp_eval: Dict, crs_analysis: Dict) -> Optional[Dict]:
     league = str(match_obj.get("league", match_obj.get("cup", "")))
     is_cup = any(kw in league for kw in CUP_KEYWORDS)
-    if is_cup:
-        facts.append(f"[OBS14 杯赛属性] 联赛字段={league}, 需要考虑淘汰赛/轮换/保守性。")
 
-    sharp_dir = _detect_sharp_direction(smart_signals)
-    steam_dir, steam_type = _detect_steam_direction(smart_signals)
+    if not is_cup:
+        return None
 
-    if sharp_dir:
-        facts.append(f"[OBS15 Sharp方向] smart_signals中检测到 Sharp 方向={sharp_dir}。")
-    if steam_dir:
-        facts.append(f"[OBS16 Steam方向] smart_signals中检测到 Steam 方向={steam_dir}, 类型={steam_type}。")
+    probs = _compute_no_vig_probs(match_obj)
+    max_dir = max(["home", "draw", "away"], key=lambda k: probs[k])
+    max_prob = probs[max_dir]
 
-    sigs_short = [str(s) for s in smart_signals[:8]]
-    if sigs_short:
-        facts.append("[OBS17 原始智能信号] " + " | ".join(sigs_short))
+    crs_dir = max(crs_analysis.get("direction_probs", {"draw": 33.3}), key=crs_analysis.get("direction_probs", {"draw": 33.3}).get)
+
+    direction_adjust = {"home": 0.0, "draw": +0.25, "away": 0.0}
+    boost_scores = ["1-1", "1-0", "0-1", "2-1", "1-2"]
+    score_multipliers = {"3-0": 0.7, "0-3": 0.7, "4-1": 0.55, "1-4": 0.55}
+
+    if max_prob >= 55 and crs_dir != max_dir:
+        direction_adjust[max_dir] -= 0.45
+        direction_adjust["draw"] += 0.55
+
+    sharp_level = sharp_eval.get("sharp_level")
+    sharp_dir = sharp_eval.get("sharp_dir")
+
+    if sharp_level in ["S3", "S4"] and sharp_dir in VALID_DIRS:
+        direction_adjust[sharp_dir] += 0.35
+        direction_adjust["draw"] -= 0.15
+
+    return {
+        "trap": "T14_CUP_CONTEXT",
+        "description": f"杯赛/淘汰赛语境: {league}，降低大比分与单边碾压，优先小胜/平局路径",
+        "severity": 1,
+        "direction_adjust": direction_adjust,
+        "score_multipliers": score_multipliers,
+        "boost_scores": boost_scores,
+    }
+
+
+def detect_external_market_trap(external_audit: Dict, sharp_eval: Dict) -> Optional[Dict]:
+    if not external_audit or not external_audit.get("available"):
+        return None
+
+    if external_audit.get("risk_tag") != "LOCAL_MARKET_TRAP":
+        return None
+
+    local_dir = external_audit.get("local_dir")
+    external_dir = external_audit.get("external_dir")
+    sharp_dir = sharp_eval.get("sharp_dir")
+    sharp_level = sharp_eval.get("sharp_level")
+
+    direction_adjust = {}
+
+    if local_dir in VALID_DIRS:
+        direction_adjust[local_dir] = direction_adjust.get(local_dir, 0) - 0.85
+
+    if external_dir in VALID_DIRS:
+        direction_adjust[external_dir] = direction_adjust.get(external_dir, 0) + 0.85
+
+    if sharp_dir == local_dir and sharp_level in ["S1", "S2", "SD"]:
+        direction_adjust[sharp_dir] = direction_adjust.get(sharp_dir, 0) - 0.55
+
+    return {
+        "trap": "T17_LOCAL_MARKET_TRAP",
+        "description": f"体彩方向({local_dir})与外部市场({external_dir})冲突，本地最低赔/Sharp同向需降权",
+        "severity": 3,
+        "direction_adjust": direction_adjust,
+        "score_multipliers": {},
+        "boost_scores": [],
+    }
+
+
+def detect_all_traps(
+    match_obj: Dict,
+    engine_result: Dict,
+    smart_signals: List,
+    exp_goals: float,
+    crs_analysis: Dict,
+    ttg_analysis: Dict,
+    sharp_eval: Dict,
+    external_audit: Dict,
+) -> Dict[str, Any]:
+    detectors = [
+        lambda: detect_T1_draw_trap_with_crs(match_obj, crs_analysis, sharp_eval),
+        lambda: detect_T2_T3_handicap_trap(match_obj),
+        lambda: detect_T6_T7_score_range_trap(match_obj, exp_goals, ttg_analysis),
+        lambda: detect_T13_grinder_draw(match_obj, engine_result, ttg_analysis, crs_analysis),
+        lambda: detect_T14_cup_context(match_obj, sharp_eval, crs_analysis),
+        lambda: detect_external_market_trap(external_audit, sharp_eval),
+    ]
+
+    traps = []
+
+    for detector in detectors:
+        try:
+            r = detector()
+            if r:
+                traps.append(r)
+        except Exception as e:
+            logger.warning(f"trap detector failed: {e}")
+
+    has_real_draw = any(t.get("trap") == "T1_REAL_DRAW_PROTECTION" for t in traps)
+    if has_real_draw:
+        traps = [t for t in traps if t.get("trap") not in ["T1_DRAW_TRAP_HOME_PATH", "T1_DRAW_TRAP_AWAY_PATH"]]
+
+    has_t13 = any(t.get("trap") == "T13_GRINDER_DRAW" for t in traps)
+    if has_t13:
+        traps = [t for t in traps if t.get("trap") != "T6_SMALL_SCORE_TRAP"]
+
+    direction_adjust = {"home": 0.0, "draw": 0.0, "away": 0.0}
+    score_multipliers = {}
+    boost_scores = []
+    confidence_penalty = 0
+    total_severity = 0
+    suppress_draw_sharp = False
+
+    for t in traps:
+        total_severity += t.get("severity", 1)
+
+        for k, v in t.get("direction_adjust", {}).items():
+            if k in direction_adjust:
+                direction_adjust[k] += v
+
+        for k, v in t.get("score_multipliers", {}).items():
+            if k in score_multipliers:
+                score_multipliers[k] = min(score_multipliers[k], v)
+            else:
+                score_multipliers[k] = v
+
+        boost_scores.extend(t.get("boost_scores", []))
+        confidence_penalty += t.get("confidence_penalty", 0)
+
+        if t.get("suppress_draw_sharp"):
+            suppress_draw_sharp = True
+
+    steam_info = detect_steam_direction(smart_signals)
+
+    return {
+        "traps_detected": traps,
+        "trap_count": len(traps),
+        "total_severity": total_severity,
+        "direction_adjust": direction_adjust,
+        "score_multipliers": score_multipliers,
+        "boost_scores": list(dict.fromkeys(boost_scores)),
+        "confidence_penalty": confidence_penalty,
+        "suppress_draw_sharp": suppress_draw_sharp,
+        "sharp_eval": sharp_eval,
+        "sharp_detected": sharp_eval.get("sharp_detected", False),
+        "sharp_dir": sharp_eval.get("sharp_dir"),
+        "sharp_level": sharp_eval.get("sharp_level"),
+        "sharp_trust": sharp_eval.get("sharp_trust"),
+        "steam_dir": steam_info.get("steam_dir"),
+        "steam_type": steam_info.get("steam_type"),
+    }
+
+
+# ====================================================================
+# 量化审计摘要
+# ====================================================================
+
+def build_quant_audit(
+    match_obj: Dict,
+    crs_analysis: Dict,
+    ttg_analysis: Dict,
+    external_audit: Dict,
+    sharp_eval: Dict,
+    trap_report: Dict,
+) -> Dict[str, Any]:
+    probs = _compute_no_vig_probs(match_obj)
+    market_core = {
+        "home": probs["home"],
+        "draw": probs["draw"],
+        "away": probs["away"],
+    }
+    market_dir = max(market_core, key=market_core.get)
+    vals = sorted(market_core.values(), reverse=True)
+    market_gap = vals[0] - vals[1] if len(vals) >= 2 else 0
+
+    sp_h = _f(match_obj.get("sp_home", match_obj.get("win", 0)))
+    sp_d = _f(match_obj.get("sp_draw", match_obj.get("same", 0)))
+    sp_a = _f(match_obj.get("sp_away", match_obj.get("lose", 0)))
+
+    actual_hc = _parse_actual_handicap(match_obj)
+    theoretical_hc = _infer_theoretical_handicap(sp_h, sp_d, sp_a) if sp_h > 1 and sp_d > 1 and sp_a > 1 else 0.0
+
+    crs_dir_probs = crs_analysis.get("direction_probs", {})
+    crs_dir = max(crs_dir_probs, key=crs_dir_probs.get) if crs_dir_probs else None
+
+    crs_vals = sorted(crs_dir_probs.values(), reverse=True) if crs_dir_probs else []
+    crs_gap = crs_vals[0] - crs_vals[1] if len(crs_vals) >= 2 else 0
+
+    return {
+        "market_dir": market_dir,
+        "market_gap": round(market_gap, 1),
+        "market_probs": {k: round(v, 1) for k, v in market_core.items()},
+        "actual_handicap": actual_hc,
+        "theoretical_handicap": theoretical_hc,
+        "handicap_diff": round(actual_hc - theoretical_hc, 2),
+        "crs_dir": crs_dir,
+        "crs_gap": round(crs_gap, 1),
+        "crs_direction_probs": crs_dir_probs,
+        "crs_shape": crs_analysis.get("shape_verdict"),
+        "crs_moments": crs_analysis.get("moments", {}),
+        "crs_top_scores": crs_analysis.get("top_scores", [])[:6],
+        "ttg_mode": ttg_analysis.get("mode"),
+        "ttg_mean": ttg_analysis.get("mean"),
+        "ttg_top3": ttg_analysis.get("top3", []),
+        "ttg_anchors": ttg_analysis.get("anchors", []),
+        "external_audit": external_audit,
+        "sharp_eval": sharp_eval,
+        "trap_count": trap_report.get("trap_count", 0),
+        "trap_direction_adjust": trap_report.get("direction_adjust", {}),
+    }
+
+
+# ====================================================================
+# 贝叶斯方向后验 + 锁定链
+# ====================================================================
+
+def _ai_response_to_score(r: Dict) -> Optional[str]:
+    if not isinstance(r, dict):
+        return None
+
+    for key in ["predicted_score", "ai_score", "score", "claude_score"]:
+        sc = str(r.get(key, "")).strip()
+        if sc and _parse_score(sc)[0] is not None:
+            return sc
+
+    top3 = r.get("top3", [])
+    if isinstance(top3, list) and top3:
+        first = top3[0]
+        if isinstance(first, dict):
+            sc = str(first.get("score", "")).strip()
+        else:
+            sc = str(first).strip()
+        if sc and _parse_score(sc)[0] is not None:
+            return sc
+
+    return None
+
+
+def compute_direction_posterior(
+    match_obj: Dict,
+    engine_result: Dict,
+    trap_report: Dict,
+    crs_analysis: Dict,
+    ttg_analysis: Dict,
+    ai_responses: Dict[str, Dict],
+    external_audit: Dict,
+) -> Dict[str, Any]:
+    probs = _compute_no_vig_probs(match_obj)
+
+    prior = {
+        "home": max(0.05, probs["home"] / 100.0),
+        "draw": max(0.05, probs["draw"] / 100.0),
+        "away": max(0.05, probs["away"] / 100.0),
+    }
+
+    total_prior = sum(prior.values())
+    prior = {k: v / total_prior for k, v in prior.items()}
+
+    log_odds = {
+        "home": math.log(prior["home"]),
+        "draw": math.log(prior["draw"]),
+        "away": math.log(prior["away"]),
+    }
+
+    evidences = []
+
+    crs_direction = crs_analysis.get("direction_probs", {})
+    if crs_direction and sum(crs_direction.values()) > 50:
+        crs_p = {
+            "home": max(0.05, crs_direction.get("home", 33.3) / 100),
+            "draw": max(0.05, crs_direction.get("draw", 33.3) / 100),
+            "away": max(0.05, crs_direction.get("away", 33.4) / 100),
+        }
+
+        for d in log_odds:
+            llr = math.log(crs_p[d] / prior[d]) * 1.15
+            log_odds[d] += llr
+
+        evidences.append(f"CRS方向聚合:{crs_direction}")
+
+    if external_audit and external_audit.get("available"):
+        ext_probs = external_audit.get("external_probs", {})
+        if ext_probs:
+            ext_p = {
+                "home": max(0.05, ext_probs.get("home", 33.3) / 100),
+                "draw": max(0.05, ext_probs.get("draw", 33.3) / 100),
+                "away": max(0.05, ext_probs.get("away", 33.4) / 100),
+            }
+            for d in log_odds:
+                llr = math.log(ext_p[d] / prior[d]) * 1.05
+                log_odds[d] += llr
+            evidences.append(f"外部市场方向:{external_audit.get('external_dir')} risk={external_audit.get('risk_tag')}")
+
+    sharp_eval = trap_report.get("sharp_eval", {})
+    sharp_dir = sharp_eval.get("sharp_dir")
+    sharp_level = sharp_eval.get("sharp_level", "S0")
+    sharp_trust = _f(sharp_eval.get("sharp_trust", 0)) / 100.0
+
+    if sharp_dir in log_odds:
+        if sharp_level == "S4":
+            sharp_weight = 3.2
+        elif sharp_level == "S3":
+            sharp_weight = 2.4
+        elif sharp_level == "S2":
+            sharp_weight = 1.4
+        elif sharp_level == "S1":
+            sharp_weight = 0.5
+        elif sharp_level == "SD":
+            sharp_weight = -0.8
+        else:
+            sharp_weight = 0.0
+
+        if sharp_dir == "draw" and trap_report.get("suppress_draw_sharp"):
+            sharp_weight = min(sharp_weight, 0.2)
+
+        effective = sharp_weight * max(0.2, sharp_trust)
+
+        log_odds[sharp_dir] += effective
+        for other in log_odds:
+            if other != sharp_dir:
+                log_odds[other] -= effective / 2
+
+        evidences.append(f"Sharp分级:{sharp_level}→{sharp_dir}, trust={sharp_trust:.2f}, effective={effective:+.2f}")
+
+    steam_dir = trap_report.get("steam_dir")
+    steam_type = trap_report.get("steam_type")
+
+    if steam_dir in log_odds:
+        base = 1.2 if steam_type != "reverse" else 1.7
+        if steam_dir == sharp_dir and sharp_level in ["S3", "S4"]:
+            base += 0.4
+        if steam_dir == "draw" and trap_report.get("suppress_draw_sharp"):
+            base *= 0.25
+
+        log_odds[steam_dir] += base
+        for other in log_odds:
+            if other != steam_dir:
+                log_odds[other] -= base / 2
+
+        evidences.append(f"Steam({steam_type})→{steam_dir}, +{base:.2f}")
+
+    trap_adj = trap_report.get("direction_adjust", {})
+    for d, v in trap_adj.items():
+        if d in log_odds:
+            log_odds[d] += v
+
+    if trap_adj and any(abs(v) > 0.05 for v in trap_adj.values()):
+        evidences.append(f"陷阱方向调整:{trap_adj}")
+
+    ai_directions = {"home": 0.0, "draw": 0.0, "away": 0.0}
+    ai_score_votes = {}
+
+    ai_weights = {
+        "gpt": 0.75,
+        "grok": 0.75,
+        "gemini": 0.75,
+        "claude": 1.05,
+    }
+
+    for name, r in ai_responses.items():
+        sc = _ai_response_to_score(r)
+        if not sc:
+            continue
+
+        d = _score_direction(sc)
+        if d not in VALID_DIRS:
+            continue
+
+        conf = _f(r.get("confidence", r.get("ai_confidence", 60)), 60)
+        w = ai_weights.get(name, 0.7) * max(0.45, min(1.15, conf / 70))
+
+        ai_directions[d] += w
+        ai_score_votes[sc] = ai_score_votes.get(sc, 0) + w
+
+        top3 = r.get("top3", [])
+        if isinstance(top3, list):
+            for rank, item in enumerate(top3[1:3], 2):
+                if isinstance(item, dict):
+                    sc2 = str(item.get("score", "")).strip()
+                else:
+                    sc2 = str(item).strip()
+
+                if _parse_score(sc2)[0] is not None:
+                    ai_score_votes[sc2] = ai_score_votes.get(sc2, 0) + w * (0.35 if rank == 2 else 0.2)
+
+    total_ai = sum(ai_directions.values())
+    if total_ai > 0:
+        max_ai = max(ai_directions.values())
+        consensus = max_ai / total_ai
+
+        ai_weight = 0.65 if consensus >= 0.7 else (0.4 if consensus >= 0.5 else 0.2)
+
+        if sharp_level in ["S3", "S4"]:
+            ai_weight *= 0.75
+        elif sharp_level == "SD":
+            ai_weight *= 0.5
+
+        for d in log_odds:
+            if ai_directions.get(d, 0) > 0:
+                share = ai_directions[d] / total_ai
+                log_odds[d] += math.log(max(0.05, share) / (1 / 3)) * ai_weight
+
+        evidences.append(f"AI方向共识:{ai_directions}, 权重={ai_weight:.2f}")
+
+    hxg = _f(engine_result.get("bookmaker_implied_home_xg", 0))
+    axg = _f(engine_result.get("bookmaker_implied_away_xg", 0))
+
+    if hxg > 0.3 and axg > 0.3:
+        xg_diff = hxg - axg
+
+        if xg_diff > 0.5:
+            log_odds["home"] += min(1.0, xg_diff * 0.55)
+            log_odds["away"] -= min(0.7, xg_diff * 0.35)
+            evidences.append(f"xG主优{xg_diff:+.2f}")
+        elif xg_diff < -0.5:
+            log_odds["away"] += min(1.0, abs(xg_diff) * 0.55)
+            log_odds["home"] -= min(0.7, abs(xg_diff) * 0.35)
+            evidences.append(f"xG客优{xg_diff:+.2f}")
+
+    change = match_obj.get("change", {}) or {}
+    cw = _f(change.get("win", 0))
+    cs = _f(change.get("same", 0))
+    cl = _f(change.get("lose", 0))
+
+    if cw < -0.05:
+        log_odds["home"] += min(0.65, abs(cw) * 5)
+    elif cw > 0.05:
+        log_odds["home"] -= min(0.4, cw * 4)
+
+    if cs < -0.05:
+        if not trap_report.get("suppress_draw_sharp"):
+            log_odds["draw"] += min(0.55, abs(cs) * 4.5)
+    elif cs > 0.05:
+        log_odds["draw"] -= min(0.3, cs * 3)
+
+    if cl < -0.05:
+        log_odds["away"] += min(0.65, abs(cl) * 5)
+    elif cl > 0.05:
+        log_odds["away"] -= min(0.4, cl * 4)
+
+    mode = ttg_analysis.get("mode")
+    if mode is not None:
+        mode = int(mode)
+        if mode <= 1:
+            log_odds["draw"] += 0.25
+            evidences.append(f"TTG主模态{mode}球→低比分/平保护")
+        elif mode == 2:
+            log_odds["draw"] += 0.15
+            evidences.append("TTG主模态2球→1-1/2-0/0-2路径")
+        elif mode >= 5:
+            weak_side = "home" if probs["home"] < probs["away"] else "away"
+            log_odds[weak_side] += 0.18
+            evidences.append(f"TTG主模态{mode}球→弱方参与度提高")
+
+    league_str = str(match_obj.get("league", match_obj.get("cup", "")))
+    if any(kw in league_str for kw in CUP_KEYWORDS):
+        log_odds["draw"] += 0.22
+        evidences.append("杯赛/淘汰赛90分钟平局轻加成")
+
+    temperature = 1.65
+    scaled = {k: v / temperature for k, v in log_odds.items()}
+    max_log = max(scaled.values())
+    exp_vals = {k: math.exp(v - max_log) for k, v in scaled.items()}
+    total_exp = sum(exp_vals.values())
+
+    posterior = {k: v / total_exp for k, v in exp_vals.items()}
+
+    posterior = {k: max(0.03, min(0.88, v)) for k, v in posterior.items()}
+    total_adj = sum(posterior.values())
+    posterior = {k: v / total_adj for k, v in posterior.items()}
+
+    final_direction = max(posterior, key=posterior.get)
+    sorted_p = sorted(posterior.values(), reverse=True)
+    dir_gap = sorted_p[0] - sorted_p[1] if len(sorted_p) >= 2 else 0
+
+    return {
+        "posterior": {k: round(v * 100, 2) for k, v in posterior.items()},
+        "final_direction": final_direction,
+        "dir_confidence": round(posterior[final_direction] * 100, 1),
+        "dir_gap": round(dir_gap * 100, 1),
+        "evidences": evidences,
+        "prior": {k: round(v * 100, 2) for k, v in prior.items()},
+        "ai_score_votes": ai_score_votes,
+    }
+
+
+def check_sharp_override(
+    posterior_result: Dict[str, Any],
+    trap_report: Dict[str, Any],
+    external_audit: Dict[str, Any],
+) -> Tuple[bool, Optional[str], str]:
+    sharp_eval = trap_report.get("sharp_eval", {})
+    sharp_dir = sharp_eval.get("sharp_dir")
+    sharp_level = sharp_eval.get("sharp_level")
+    sharp_trust = _f(sharp_eval.get("sharp_trust", 0))
+
+    if sharp_dir not in VALID_DIRS:
+        return False, None, "无Sharp方向"
+
+    if sharp_level != "S4":
+        return False, None, f"Sharp等级{sharp_level}不足S4"
+
+    if sharp_trust < 82:
+        return False, None, f"Sharp trust {sharp_trust}不足82"
+
+    if external_audit and external_audit.get("available"):
+        if external_audit.get("conflict") and external_audit.get("external_dir") != sharp_dir:
+            return False, None, "外部市场反对Sharp，禁用Override"
+
+    posterior = posterior_result.get("posterior", {})
+    if _f(posterior.get(sharp_dir, 0)) < 25:
+        return False, None, "Sharp方向后验低于25"
+
+    return True, sharp_dir, "S4 Sharp Override触发"
+
+
+def determine_goal_range(
+    direction: str,
+    moments: Dict[str, float],
+    exp_goals: float,
+    trap_report: Dict[str, Any],
+    match_obj: Dict[str, Any],
+    engine_result: Dict[str, Any],
+    ttg_analysis: Dict[str, Any],
+) -> Tuple[int, int, str]:
+    mode = ttg_analysis.get("mode")
+    mean = _f(ttg_analysis.get("mean", 0))
+
+    lt = moments.get("lambda_total", 0) if moments else 0
+
+    if lt <= 0:
+        lt = exp_goals
+
+    blended = 0.45 * lt + 0.35 * exp_goals + 0.20 * (mean if mean > 0 else exp_goals)
+
+    if mode is not None:
+        mode = int(mode)
+
+        if mode <= 1:
+            return 0, 2, "grinder"
+        if mode == 2:
+            return 1, 3, "low_goals"
+        if mode == 3:
+            return 2, 4, "normal"
+        if mode == 4:
+            return 3, 5, "high_goals"
+        if mode >= 5:
+            return 3, 7, "shootout"
+
+    if blended >= 3.5:
+        return 3, 6, "shootout"
+    if blended >= 2.9:
+        return 2, 5, "high_goals"
+    if blended >= 2.3:
+        return 2, 4, "normal"
+    if blended >= 1.8:
+        return 1, 3, "low_goals"
+
+    return 0, 2, "grinder"
+
+
+def select_score(
+    direction: str,
+    goal_range: Tuple[int, int],
+    scenario: str,
+    crs_analysis: Dict[str, Any],
+    ai_score_votes: Dict[str, float],
+    trap_report: Dict[str, Any],
+    ttg_analysis: Dict[str, Any],
+    match_obj: Dict[str, Any],
+) -> Tuple[str, List[Tuple[str, float]]]:
+    g_min, g_max = goal_range
+    crs_probs = crs_analysis.get("implied_probs", {})
+    candidates = {}
+
+    for sc, p in crs_probs.items():
+        sc_dir = _score_direction(sc)
+        if sc_dir != direction:
+            continue
+
+        h, a = _parse_score(sc)
+        if h is None:
+            continue
+
+        total_goals = h + a
+
+        if "其他" in sc:
+            if scenario == "shootout":
+                candidates[sc] = p * 0.75
+            else:
+                candidates[sc] = p * 0.25
+            continue
+
+        if not (g_min <= total_goals <= g_max):
+            continue
+
+        candidates[sc] = p
+
+    for sc, vote_pts in ai_score_votes.items():
+        if _score_direction(sc) != direction:
+            continue
+
+        h, a = _parse_score(sc)
+        if h is None:
+            continue
+
+        total_goals = h + a
+        if not (g_min <= total_goals <= g_max):
+            continue
+
+        candidates[sc] = candidates.get(sc, 0) + vote_pts * 1.2
+
+    for sc, mult in trap_report.get("score_multipliers", {}).items():
+        if sc in candidates:
+            candidates[sc] *= mult
+
+    for sc in trap_report.get("boost_scores", []):
+        if sc in candidates:
+            candidates[sc] *= 1.35
+
+    for sc in list(candidates.keys()):
+        candidates[sc] *= _ttg_score_weight(sc, ttg_analysis)
+
+    if scenario == "shootout":
+        for sc in ["0-0", "1-0", "0-1"]:
+            if sc in candidates:
+                candidates[sc] *= 0.35
+        for sc in ["2-2", "3-2", "2-3", "3-3", "3-1", "1-3"]:
+            if sc in candidates:
+                candidates[sc] *= 1.18
+
+    elif scenario == "grinder":
+        for sc in ["2-2", "3-1", "1-3", "3-2", "2-3"]:
+            if sc in candidates:
+                candidates[sc] *= 0.4
+        for sc in ["1-0", "0-1", "0-0", "1-1"]:
+            if sc in candidates:
+                candidates[sc] *= 1.18
+
+    elif scenario == "low_goals":
+        for sc in ["3-2", "2-3", "3-3", "4-2", "2-4"]:
+            if sc in candidates:
+                candidates[sc] *= 0.45
+        for sc in ["1-0", "0-1", "2-1", "1-2", "1-1", "0-0", "2-0", "0-2"]:
+            if sc in candidates:
+                candidates[sc] *= 1.1
+
+    elif scenario == "high_goals":
+        for sc in ["0-0", "1-0", "0-1"]:
+            if sc in candidates:
+                candidates[sc] *= 0.55
+
+    sharp_eval = trap_report.get("sharp_eval", {})
+    sharp_dir = sharp_eval.get("sharp_dir")
+    sharp_level = sharp_eval.get("sharp_level")
+
+    if sharp_dir == direction and sharp_level in ["S3", "S4"]:
+        for sc in list(candidates.keys()):
+            if _score_direction(sc) == sharp_dir:
+                candidates[sc] *= 1.08
+
+    if not candidates:
+        fallback_map = {
+            "home": "1-0" if scenario in ["grinder", "low_goals"] else "2-1",
+            "away": "0-1" if scenario in ["grinder", "low_goals"] else "1-2",
+            "draw": "1-1" if scenario != "grinder" else "0-0",
+        }
+        return fallback_map[direction], [(fallback_map[direction], 1.0)]
+
+    sorted_scores = sorted(candidates.items(), key=lambda x: x[1], reverse=True)
+    best = sorted_scores[0][0]
+
+    return best, [(sc, round(v, 3)) for sc, v in sorted_scores[:10]]
+
+
+def decision_lock_chain(
+    match_obj: Dict[str, Any],
+    engine_result: Dict[str, Any],
+    trap_report: Dict[str, Any],
+    crs_analysis: Dict[str, Any],
+    ttg_analysis: Dict[str, Any],
+    ai_responses: Dict[str, Dict],
+    external_audit: Dict[str, Any],
+    exp_goals: float,
+) -> Dict[str, Any]:
+    posterior_result = compute_direction_posterior(
+        match_obj=match_obj,
+        engine_result=engine_result,
+        trap_report=trap_report,
+        crs_analysis=crs_analysis,
+        ttg_analysis=ttg_analysis,
+        ai_responses=ai_responses,
+        external_audit=external_audit,
+    )
+
+    posterior = posterior_result["posterior"]
+    final_direction = posterior_result["final_direction"]
+
+    override_triggered, override_dir, override_reason = check_sharp_override(
+        posterior_result=posterior_result,
+        trap_report=trap_report,
+        external_audit=external_audit,
+    )
+
+    if override_triggered and override_dir:
+        final_direction = override_dir
+        cur_max = max(posterior.values())
+
+        if posterior.get(override_dir, 0) < cur_max:
+            posterior[override_dir] = cur_max + 5
+            total = sum(posterior.values())
+            posterior = {k: round(v / total * 100, 2) for k, v in posterior.items()}
+
+    goal_range_min, goal_range_max, scenario = determine_goal_range(
+        direction=final_direction,
+        moments=crs_analysis.get("moments", {}),
+        exp_goals=exp_goals,
+        trap_report=trap_report,
+        match_obj=match_obj,
+        engine_result=engine_result,
+        ttg_analysis=ttg_analysis,
+    )
+
+    best_score, top_candidates = select_score(
+        direction=final_direction,
+        goal_range=(goal_range_min, goal_range_max),
+        scenario=scenario,
+        crs_analysis=crs_analysis,
+        ai_score_votes=posterior_result.get("ai_score_votes", {}),
+        trap_report=trap_report,
+        ttg_analysis=ttg_analysis,
+        match_obj=match_obj,
+    )
+
+    final_direction_lock = _score_direction(best_score) or final_direction
+
+    if final_direction_lock != final_direction:
+        aligned = None
+        for sc, pts in top_candidates:
+            if _score_direction(sc) == final_direction:
+                aligned = sc
+                break
+
+        if aligned:
+            best_score = aligned
+            final_direction_lock = _score_direction(best_score) or final_direction
+
+    is_score_others = best_score in ALL_SCORE_OTHERS or "其他" in str(best_score)
+    display_label = best_score
+
+    if is_score_others:
+        if final_direction_lock == "home":
+            display_label = "胜其他"
+            best_score = "胜其他"
+        elif final_direction_lock == "away":
+            display_label = "负其他"
+            best_score = "负其他"
+        else:
+            display_label = "平其他"
+            best_score = "平其他"
+
+    post_argmax = max(posterior, key=posterior.get)
+
+    raw_probability_argmax = post_argmax
+    probability_was_corrected = False
+
+    if post_argmax != final_direction_lock:
+        cur_max = posterior[post_argmax]
+        posterior[final_direction_lock] = cur_max + 3
+        total = sum(posterior.values())
+        posterior = {k: round(v / total * 100, 2) for k, v in posterior.items()}
+        probability_was_corrected = True
+
+    result_cn = _direction_cn(final_direction_lock)
+
+    return {
+        "predicted_score": best_score,
+        "predicted_label": display_label,
+        "predicted_direction": final_direction_lock,
+        "final_direction": final_direction_lock,
+        "result": result_cn,
+        "display_direction": result_cn,
+        "is_score_others": is_score_others,
+
+        "home_win_pct": posterior["home"],
+        "draw_pct": posterior["draw"],
+        "away_win_pct": posterior["away"],
+
+        "scenario": scenario,
+        "goal_range": (goal_range_min, goal_range_max),
+        "goal_range_label": _normalize_goal_range_for_ui((goal_range_min, goal_range_max), best_score)[1],
+
+        "dir_confidence": posterior_result["dir_confidence"],
+        "dir_gap": posterior_result["dir_gap"],
+        "bayesian_prior": posterior_result["prior"],
+        "bayesian_evidences": posterior_result["evidences"],
+
+        "override_triggered": override_triggered,
+        "override_reason": override_reason,
+
+        "top_score_candidates": top_candidates,
+        "raw_probability_argmax": raw_probability_argmax,
+        "probability_was_corrected": probability_was_corrected,
+        "posterior_after_lock": posterior,
+    }
+
+
+# ====================================================================
+# 观察信号与格式化
+# ====================================================================
+
+def _extract_observation_codes(observation_signals: List[str]) -> List[str]:
+    codes = []
+    for s in observation_signals:
+        m = re.search(r"\[(OBS\d+|T\d+|S[0-4D]+)[^\]]*\]", str(s))
+        if m:
+            codes.append(m.group(1))
+    return codes
+
+
+def _extract_observation_labels(observation_signals: List[str]) -> List[str]:
+    labels = []
+    for s in observation_signals:
+        text = str(s)
+        m = re.search(r"\[(OBS\d+|T\d+|S[0-4D]+)\s*([^\]]*)\]", text)
+        if m:
+            labels.append(f"{m.group(1)} {m.group(2).strip()}".strip())
+        else:
+            labels.append(text[:40])
+    return labels
+
+
+def _extract_observation_objects(observation_signals: List[str]) -> List[Dict[str, str]]:
+    items = []
+    for s in observation_signals:
+        text = str(s)
+        m = re.search(r"\[(OBS\d+|T\d+|S[0-4D]+)\s*([^\]]*)\]\s*(.*)", text)
+        if m:
+            items.append({
+                "code": m.group(1),
+                "name": m.group(2).strip(),
+                "detail": m.group(3).strip(),
+                "raw": text,
+            })
+        else:
+            items.append({
+                "code": "",
+                "name": text[:30],
+                "detail": text,
+                "raw": text,
+            })
+    return items
+
+
+def build_observation_signals(
+    match_obj: Dict,
+    engine_result: Dict,
+    crs_analysis: Dict,
+    ttg_analysis: Dict,
+    sharp_eval: Dict,
+    external_audit: Dict,
+    trap_report: Dict,
+    exp_goals: float,
+) -> List[str]:
+    facts = []
+
+    probs = _compute_no_vig_probs(match_obj)
+
+    facts.append(
+        f"[OBS01 欧赔去水] 主{probs['home']:.1f}% / 平{probs['draw']:.1f}% / 客{probs['away']:.1f}%，最高={max(['home','draw','away'], key=lambda k: probs[k])}。"
+    )
+
+    sp_h = _f(match_obj.get("sp_home", match_obj.get("win", 0)))
+    sp_d = _f(match_obj.get("sp_draw", match_obj.get("same", 0)))
+    sp_a = _f(match_obj.get("sp_away", match_obj.get("lose", 0)))
+
+    if sp_h > 1 and sp_d > 1 and sp_a > 1:
+        actual = _parse_actual_handicap(match_obj)
+        theoretical = _infer_theoretical_handicap(sp_h, sp_d, sp_a)
+        facts.append(
+            f"[OBS02 让球深度] 实际{actual:+.2f} / 欧赔理论{theoretical:+.2f} / 差异{actual - theoretical:+.2f}。"
+        )
+
+    change = match_obj.get("change", {}) or {}
+    cw = _f(change.get("win", 0))
+    cs = _f(change.get("same", 0))
+    cl = _f(change.get("lose", 0))
+
+    if abs(cw) + abs(cs) + abs(cl) > 0:
+        facts.append(f"[OBS03 赔率变动] 主{cw:+.2f} / 平{cs:+.2f} / 客{cl:+.2f}。")
+
+    if crs_analysis.get("coverage", 0) > 0:
+        facts.append(
+            f"[OBS04 CRS矩阵] 方向={crs_analysis.get('direction_probs')}，形状={crs_analysis.get('shape_verdict')}，λ={crs_analysis.get('moments', {}).get('lambda_total', '?')}。"
+        )
+        top = crs_analysis.get("top_scores", [])[:5]
+        if top:
+            facts.append(
+                "[OBS05 CRS低赔路径] " + " | ".join([f"{x.get('score')}({x.get('prob')}%)" for x in top]) + "。"
+            )
+
+    if ttg_analysis.get("available"):
+        facts.append(
+            f"[OBS06 TTG主模态] mode={ttg_analysis.get('mode')}球，均值={ttg_analysis.get('mean')}，Top3={ttg_analysis.get('top3')}。"
+        )
+        if ttg_analysis.get("anchors"):
+            facts.append(f"[OBS07 TTG锚点] {ttg_analysis.get('anchors')}。")
+
+    if sharp_eval.get("sharp_detected"):
+        facts.append(
+            f"[OBS08 Sharp分级] dir={sharp_eval.get('sharp_dir')} level={sharp_eval.get('sharp_level')} trust={sharp_eval.get('sharp_trust')}。"
+        )
+        for r in sharp_eval.get("sharp_reason", [])[:4]:
+            facts.append(f"[OBS08 Sharp证据] {r}。")
+
+    if external_audit:
+        facts.append(
+            f"[OBS09 外部市场] available={external_audit.get('available')} local={external_audit.get('local_dir')} external={external_audit.get('external_dir')} risk={external_audit.get('risk_tag')}。"
+        )
+
+    for t in trap_report.get("traps_detected", []):
+        facts.append(f"[{t.get('trap', 'TRAP')}] {t.get('description', '')}")
+
+    hxg = _f(engine_result.get("bookmaker_implied_home_xg", 0))
+    axg = _f(engine_result.get("bookmaker_implied_away_xg", 0))
+    if hxg > 0 and axg > 0:
+        facts.append(f"[OBS10 庄家xG] 主{xg:.2f} / 客{axg:.2f}。" if False else f"[OBS10 庄家xG] 主{hxg:.2f} / 客{axg:.2f} / 总{hxg+axg:.2f}。")
+
+    league = str(match_obj.get("league", match_obj.get("cup", "")))
+    if any(kw in league for kw in CUP_KEYWORDS):
+        facts.append(f"[OBS11 杯赛属性] {league}，90分钟需考虑保守/轮换/首回合/淘汰赛情境。")
 
     return facts
 
 
+def format_match_block(
+    idx: int,
+    match: Dict,
+    engine_result: Dict,
+    crs_analysis: Dict,
+    ttg_analysis: Dict,
+    sharp_eval: Dict,
+    external_market: Dict,
+    external_audit: Dict,
+    trap_report: Dict,
+    quant_audit: Dict,
+    observation_signals: List[str],
+    ensemble_signals: Dict,
+    smart_signals: List,
+) -> str:
+    home = match.get("home_team", match.get("home", "Home"))
+    away = match.get("away_team", match.get("guest", "Away"))
+    league = match.get("league", match.get("cup", ""))
+    is_cup = any(kw in str(league) for kw in CUP_KEYWORDS)
+
+    sp_h = _f(match.get("sp_home", match.get("win", 0)))
+    sp_d = _f(match.get("sp_draw", match.get("same", 0)))
+    sp_a = _f(match.get("sp_away", match.get("lose", 0)))
+
+    probs = _compute_no_vig_probs(match)
+
+    block = "\n════════════════════════════════════\n"
+    block += f"第 {idx} 场: {home} vs {away}\n"
+    block += "════════════════════════════════════\n"
+    block += f"联赛/赛事: {league}{' [杯赛/淘汰赛属性]' if is_cup else ''}\n"
+    block += f"比赛编号: {match.get('match_num', match.get('id', idx))}\n"
+
+    block += "\n【0. 程序量化审计摘要】\n"
+    block += f"本地欧赔方向: {quant_audit.get('market_dir')} gap={quant_audit.get('market_gap')} | probs={quant_audit.get('market_probs')}\n"
+    block += (
+        f"让球: 实际{quant_audit.get('actual_handicap'):+.2f} / "
+        f"理论{quant_audit.get('theoretical_handicap'):+.2f} / "
+        f"差异{quant_audit.get('handicap_diff'):+.2f}\n"
+    )
+    block += f"CRS方向: {quant_audit.get('crs_dir')} gap={quant_audit.get('crs_gap')} | shape={quant_audit.get('crs_shape')}\n"
+    block += f"CRS低赔路径: {quant_audit.get('crs_top_scores')}\n"
+    block += f"TTG主模态: {quant_audit.get('ttg_mode')}球 | 均值={quant_audit.get('ttg_mean')} | Top3={quant_audit.get('ttg_top3')}\n"
+    block += f"Sharp分级: {sharp_eval.get('sharp_level')} dir={sharp_eval.get('sharp_dir')} trust={sharp_eval.get('sharp_trust')}\n"
+    block += f"外部市场审计: {external_audit}\n"
+    block += f"陷阱方向调整: {trap_report.get('direction_adjust')}\n"
+
+    block += "\n【1. 欧赔原始数据】\n"
+    block += f"即时欧赔: 主胜 {sp_h:.2f} / 平局 {sp_d:.2f} / 客胜 {sp_a:.2f}\n"
+
+    if probs.get("margin", 0) > 0:
+        block += (
+            f"欧赔去水概率: 主 {probs['home']:.1f}% / 平 {probs['draw']:.1f}% / "
+            f"客 {probs['away']:.1f}% / 返还率约 {100 / probs['margin']:.1f}%\n"
+        )
+    else:
+        block += "欧赔去水概率: 数据不足\n"
+
+    block += "\n【2. 外部市场/联网比对】\n"
+    if external_market.get("odds"):
+        block += f"外部赔率: {external_market.get('odds')}\n"
+    if external_market.get("probs"):
+        block += f"外部去水概率: {external_market.get('probs')}\n"
+    if external_market.get("snippets"):
+        block += "外部抓取摘要:\n"
+        for sn in external_market.get("snippets", [])[:2]:
+            block += f"- {sn.get('url', '')} | status={sn.get('status')} | {sn.get('text', '')[:800]}\n"
+    if not external_market.get("available"):
+        block += "无可标准化外部市场数据。若模型通道具备联网能力，可以自行检索；若不能联网，严禁编造外部数据。\n"
+
+    block += "\n【3. 让球/盘口】\n"
+    block += f"原始 give_ball/handicap: {match.get('give_ball', match.get('handicap', '0'))}\n"
+    block += f"标准化实际让球: {_parse_actual_handicap(match):+.2f}，内部约定：正数=主让，负数=客让/主受让\n"
+    block += f"欧赔反推理论让球: {_infer_theoretical_handicap(sp_h, sp_d, sp_a):+.2f}\n"
+
+    change = match.get("change", {}) or {}
+    block += "\n【4. 赔率变动】\n"
+    block += f"主胜变化 {_f(change.get('win', 0)):+.2f} / 平赔变化 {_f(change.get('same', 0)):+.2f} / 客胜变化 {_f(change.get('lose', 0)):+.2f}\n"
+
+    block += "\n【5. 庄家隐含 xG / 期望进球】\n"
+    hxg = engine_result.get("bookmaker_implied_home_xg", None)
+    axg = engine_result.get("bookmaker_implied_away_xg", None)
+    exp_total = _f(engine_result.get("expected_total_goals", 0))
+    if exp_total <= 0:
+        exp_total = _f(hxg, 0) + _f(axg, 0)
+    block += f"主 xG: {hxg if hxg is not None else 'N/A'} / 客 xG: {axg if axg is not None else 'N/A'}\n"
+    block += f"期望总进球: {exp_total:.2f}\n"
+    block += f"大2.5概率: {engine_result.get('over_25', 'N/A')} / BTTS: {engine_result.get('btts', 'N/A')}\n"
+
+    block += "\n【6. 总进球数赔率 a0~a7】\n"
+    ttg_lines = []
+    for g in range(8):
+        v = _f(match.get(f"a{g}", 0))
+        if v > 1:
+            mark = ""
+            anchor = TTG_ANCHORS.get(g, {})
+            if anchor.get("hard_low") and v <= anchor["hard_low"]:
+                mark = " [低赔点]"
+            ttg_lines.append(f"{_ttg_label(g)}={v:.2f}{mark}")
+        else:
+            ttg_lines.append(f"{_ttg_label(g)}=N/A")
+    block += " | ".join(ttg_lines) + "\n"
+    block += f"TTG分析: {ttg_analysis}\n"
+
+    block += "\n【7. CRS 精确比分赔率】\n"
+    crs_h = []
+    crs_d = []
+    crs_a = []
+    for sc, key in CRS_FULL_MAP.items():
+        v = _f(match.get(key, 0))
+        if v <= 1:
+            continue
+        text = f"{sc}={v:.1f}"
+        d = _score_direction(sc)
+        if d == "home":
+            crs_h.append(text)
+        elif d == "draw":
+            crs_d.append(text)
+        elif d == "away":
+            crs_a.append(text)
+    block += "主胜系: " + (" | ".join(crs_h) if crs_h else "N/A") + "\n"
+    block += "平局系: " + (" | ".join(crs_d) if crs_d else "N/A") + "\n"
+    block += "客胜系: " + (" | ".join(crs_a) if crs_a else "N/A") + "\n"
+    block += f"CRS矩阵分析: direction={crs_analysis.get('direction_probs')} shape={crs_analysis.get('shape_verdict')} moments={crs_analysis.get('moments')}\n"
+    block += f"CRS TopScores: {crs_analysis.get('top_scores', [])[:8]}\n"
+
+    hf_lines = []
+    for k, label in HFTF_MAP.items():
+        v = _f(match.get(k, 0))
+        if v > 1:
+            hf_lines.append(f"{label}={v:.2f}")
+    if hf_lines:
+        block += "\n【8. 半全场赔率】\n"
+        block += " | ".join(hf_lines) + "\n"
+
+    vote = match.get("vote", {}) or {}
+    if vote:
+        block += "\n【9. 散户分布】\n"
+        block += f"主胜 {vote.get('win', '?')}% / 平局 {vote.get('same', '?')}% / 客胜 {vote.get('lose', '?')}%\n"
+
+    if smart_signals or sharp_eval.get("sharp_detected"):
+        block += "\n【10. Sharp/Steam/智能信号】\n"
+        block += f"Sharp分级: {sharp_eval}\n"
+        for s in smart_signals[:12]:
+            block += f"- {_safe_str(s, 260)}\n"
+
+    points = match.get("points", {}) or {}
+    if isinstance(points, dict):
+        block += "\n【11. 基本面情报】\n"
+        for k, label in [
+            ("home_strength", "主队"),
+            ("guest_strength", "客队"),
+            ("history", "交锋"),
+            ("h2h", "交锋"),
+            ("match_points", "赛事要点"),
+        ]:
+            txt = _safe_str(points.get(k, ""), 700)
+            if txt:
+                block += f"{label}: {txt}\n"
+
+    info = match.get("information", {}) or {}
+    if isinstance(info, dict):
+        info_lines = []
+        for k, label in [
+            ("home_injury", "主伤停"),
+            ("guest_injury", "客伤停"),
+            ("home_bad_news", "主利空"),
+            ("guest_bad_news", "客利空"),
+            ("home_good_news", "主利好"),
+            ("guest_good_news", "客利好"),
+        ]:
+            v = info.get(k)
+            if v:
+                info_lines.append(f"{label}: {_safe_str(v, 400)}")
+        if info_lines:
+            block += "\n【12. 伤停/异动消息】\n"
+            block += "\n".join(info_lines) + "\n"
+
+    if ensemble_signals.get("total", 0) > 0:
+        block += "\n【13. 统计模型矩阵，仅供参考】\n"
+        for row in ensemble_signals["models"]:
+            block += (
+                f"{row['name']}: 主{row['home']:.1f}% / 平{row['draw']:.1f}% / "
+                f"客{row['away']:.1f}% → {row['direction']}\n"
+            )
+        block += f"模型共识: {ensemble_signals.get('consensus')} {ensemble_signals.get('consensus_count')}/{ensemble_signals.get('total')}\n"
+
+    if observation_signals:
+        block += "\n【14. 系统观察信号/陷阱信号】\n"
+        for fact in observation_signals:
+            block += f"- {fact}\n"
+
+    return block
+
+
 # ====================================================================
-# Ensemble 信号：仅参考
+# Ensemble 信号
 # ====================================================================
 
 def _normalize_model_probs(h, d, a):
@@ -1097,261 +3129,23 @@ def collect_ensemble_signals(stats: Dict) -> Dict[str, Any]:
 
 
 # ====================================================================
-# 抓包格式化
-# ====================================================================
-
-def format_match_block(
-    idx: int,
-    match: Dict,
-    engine_result: Dict,
-    observation_signals: List[str],
-    ensemble_signals: Dict,
-    smart_signals: List
-) -> str:
-    home = match.get("home_team", match.get("home", "Home"))
-    away = match.get("away_team", match.get("guest", "Away"))
-    league = match.get("league", match.get("cup", ""))
-    is_cup = any(kw in str(league) for kw in CUP_KEYWORDS)
-
-    sp_h = _f(match.get("sp_home", match.get("win", 0)))
-    sp_d = _f(match.get("sp_draw", match.get("same", 0)))
-    sp_a = _f(match.get("sp_away", match.get("lose", 0)))
-
-    probs = _compute_no_vig_probs(match)
-
-    actual_hc = _parse_actual_handicap(match)
-    theoretical_hc = _infer_theoretical_handicap(sp_h, sp_d, sp_a) if sp_h > 1 and sp_d > 1 and sp_a > 1 else 0.0
-    hc_raw = match.get("give_ball", match.get("handicap", "0"))
-
-    block = f"\n════════════════════════════════════\n"
-    block += f"第 {idx} 场: {home} vs {away}\n"
-    block += f"════════════════════════════════════\n"
-    block += f"联赛/赛事: {league}{' [杯赛/淘汰赛属性]' if is_cup else ''}\n"
-    block += f"比赛编号: {match.get('match_num', match.get('id', idx))}\n"
-
-    block += "\n【1. 欧赔原始数据】\n"
-    block += f"即时欧赔: 主胜 {sp_h:.2f} / 平局 {sp_d:.2f} / 客胜 {sp_a:.2f}\n"
-
-    if probs.get("margin", 0) > 0:
-        block += (
-            f"欧赔去水概率: 主 {probs['home']:.1f}% / 平 {probs['draw']:.1f}% / "
-            f"客 {probs['away']:.1f}% / 返还率约 {100 / probs['margin']:.1f}%\n"
-        )
-    else:
-        block += "欧赔去水概率: 数据不足\n"
-
-    block += "\n【2. 让球/盘口】\n"
-    block += f"原始 give_ball/handicap: {hc_raw}\n"
-    block += f"标准化实际让球: {actual_hc:+.2f}，内部约定：正数=主让，负数=客让/主受让\n"
-    block += f"欧赔反推理论让球: {theoretical_hc:+.2f}\n"
-    block += f"实际 - 理论 差异: {actual_hc - theoretical_hc:+.2f} 球\n"
-
-    change = match.get("change", {}) or {}
-    cw = _f(change.get("win", 0))
-    cs = _f(change.get("same", 0))
-    cl = _f(change.get("lose", 0))
-
-    block += "\n【3. 赔率变动】\n"
-    block += f"主胜变化 {cw:+.2f} / 平赔变化 {cs:+.2f} / 客胜变化 {cl:+.2f}\n"
-    block += "说明: 负数=降水/赔率下调，正数=升水/赔率上调。\n"
-
-    hxg = engine_result.get("bookmaker_implied_home_xg", None)
-    axg = engine_result.get("bookmaker_implied_away_xg", None)
-    exp_total = _f(engine_result.get("expected_total_goals", 0))
-    if exp_total <= 0:
-        exp_total = _f(hxg, 0) + _f(axg, 0)
-
-    block += "\n【4. 庄家隐含 xG / 期望进球】\n"
-    block += f"主 xG: {hxg if hxg is not None else 'N/A'} / 客 xG: {axg if axg is not None else 'N/A'}\n"
-    block += f"期望总进球: {exp_total:.2f}\n"
-    block += f"大2.5概率: {engine_result.get('over_25', 'N/A')} / 双方进球BTTS: {engine_result.get('btts', 'N/A')}\n"
-
-    block += "\n【5. 总进球数赔率 a0~a7】\n"
-    ttg_lines = []
-    for g in range(8):
-        v = _f(match.get(f"a{g}", 0))
-        if v > 1:
-            anchor = TTG_ANCHORS.get(g, {})
-            hard_low = anchor.get("hard_low", 0)
-            mark = ""
-            if hard_low and v <= hard_low:
-                mark = " [低赔点]"
-            ttg_lines.append(f"{_ttg_label(g)}={v:.2f}{mark}")
-        else:
-            ttg_lines.append(f"{_ttg_label(g)}=N/A")
-    block += " | ".join(ttg_lines) + "\n"
-
-    block += "\n【6. 精确比分赔率 CRS】\n"
-
-    crs_h = []
-    crs_d = []
-    crs_a = []
-
-    for sc, key in CRS_FULL_MAP.items():
-        v = _f(match.get(key, 0))
-        if v <= 1:
-            continue
-
-        text = f"{sc}={v:.1f}"
-        direction = _score_direction(sc)
-
-        if direction == "home":
-            crs_h.append(text)
-        elif direction == "draw":
-            crs_d.append(text)
-        elif direction == "away":
-            crs_a.append(text)
-
-    block += "主胜系: " + (" | ".join(crs_h) if crs_h else "N/A") + "\n"
-    block += "平局系: " + (" | ".join(crs_d) if crs_d else "N/A") + "\n"
-    block += "客胜系: " + (" | ".join(crs_a) if crs_a else "N/A") + "\n"
-
-    others = []
-    for k, label in [
-        ("crs_win", "胜其他"),
-        ("crs_same", "平其他"),
-        ("crs_lose", "负其他"),
-    ]:
-        v = _f(match.get(k, 0))
-        if v > 1:
-            others.append(f"{label}={v:.1f}")
-
-    if others:
-        block += "其他比分: " + " | ".join(others) + "\n"
-
-    crs_items = []
-    for sc, key in CRS_FULL_MAP.items():
-        v = _f(match.get(key, 0))
-        if v > 1:
-            crs_items.append((sc, v))
-
-    if crs_items:
-        low = sorted(crs_items, key=lambda x: x[1])[:6]
-        block += "CRS低赔Top6: " + " | ".join([f"{sc}={v:.1f}" for sc, v in low]) + "\n"
-
-    hf_lines = []
-    for k, label in HFTF_MAP.items():
-        v = _f(match.get(k, 0))
-        if v > 1:
-            hf_lines.append(f"{label}={v:.2f}")
-
-    if hf_lines:
-        block += "\n【7. 半全场赔率】\n"
-        block += " | ".join(hf_lines) + "\n"
-
-    vote = match.get("vote", {}) or {}
-    if vote:
-        vh = vote.get("win", "?")
-        vd = vote.get("same", "?")
-        va = vote.get("lose", "?")
-        block += "\n【8. 散户分布】\n"
-        block += f"主胜 {vh}% / 平局 {vd}% / 客胜 {va}%\n"
-
-    sharp_dir = _detect_sharp_direction(smart_signals)
-    steam_dir, steam_type = _detect_steam_direction(smart_signals)
-
-    if smart_signals or sharp_dir or steam_dir:
-        block += "\n【9. 资金/智能信号原文】\n"
-        if sharp_dir:
-            block += f"识别到 Sharp 方向: {sharp_dir}\n"
-        if steam_dir:
-            block += f"识别到 Steam 方向: {steam_dir}, 类型={steam_type}\n"
-
-        for s in smart_signals[:12]:
-            block += f"- {_safe_str(s, 260)}\n"
-
-    points = match.get("points", {}) or {}
-    if isinstance(points, dict):
-        block += "\n【10. 基本面情报】\n"
-
-        h_text = _safe_str(points.get("home_strength", ""), 600)
-        a_text = _safe_str(points.get("guest_strength", ""), 600)
-        m_text = _safe_str(points.get("match_points", ""), 500)
-        h2h_text = _safe_str(points.get("history", points.get("h2h", "")), 400)
-
-        if h_text:
-            block += f"主队: {h_text}\n"
-        if a_text:
-            block += f"客队: {a_text}\n"
-        if h2h_text:
-            block += f"交锋: {h2h_text}\n"
-        if m_text:
-            block += f"赛事要点: {m_text}\n"
-
-    info = match.get("information", {}) or {}
-    if isinstance(info, dict):
-        info_lines = []
-
-        for k, label in [
-            ("home_injury", "主伤停"),
-            ("guest_injury", "客伤停"),
-            ("home_bad_news", "主利空"),
-            ("guest_bad_news", "客利空"),
-            ("home_good_news", "主利好"),
-            ("guest_good_news", "客利好"),
-        ]:
-            v = info.get(k)
-            if v:
-                info_lines.append(f"{label}: {_safe_str(v, 300)}")
-
-        if info_lines:
-            block += "\n【11. 伤停/异动消息】\n"
-            block += "\n".join(info_lines) + "\n"
-
-    if ensemble_signals.get("total", 0) > 0:
-        block += "\n【12. 统计模型矩阵，仅供参考】\n"
-
-        for row in ensemble_signals["models"]:
-            block += (
-                f"{row['name']}: 主{row['home']:.1f}% / 平{row['draw']:.1f}% / "
-                f"客{row['away']:.1f}% → {row['direction']}\n"
-            )
-
-        consensus = ensemble_signals.get("consensus")
-        if consensus:
-            ratio = ensemble_signals["consensus_count"] / max(1, ensemble_signals["total"])
-            block += (
-                f"模型共识: {ensemble_signals['consensus_count']}/{ensemble_signals['total']} "
-                f"倾向 {consensus} ({ratio:.0%})\n"
-            )
-
-        ts = ensemble_signals.get("top_scores", [])
-        if ts:
-            ts_str = []
-            for t in ts[:5]:
-                if isinstance(t, dict):
-                    ts_str.append(f"{t.get('score', '?')}({t.get('prob', '?')}%)")
-            if ts_str:
-                block += "Refined Poisson Top比分: " + " | ".join(ts_str) + "\n"
-
-    if observation_signals:
-        block += "\n【13. 系统 OBS 观察信号，仅供参考，可采纳也可否决】\n"
-        for fact in observation_signals:
-            block += f"- {fact}\n"
-    else:
-        block += "\n【13. 系统 OBS 观察信号】\n无明显 OBS。\n"
-
-    return block
-
-
-# ====================================================================
-# Prompt 构建：Phase 1 三家分析
+# AI Prompt
 # ====================================================================
 
 PHASE1_ROLES = {
     "gpt": {
         "name": "赔率结构分析师",
-        "focus": "欧赔、让球、总进球、CRS、半全场的一致性与裂痕。重点看赔率结构是否支持方向和比分。",
+        "focus": "欧赔、让球、CRS、TTG、半全场的一致性与裂痕。重点检查比分路径是否成立。",
         "temperature": 0.18,
     },
     "grok": {
-        "name": "资金流分析师",
-        "focus": "Sharp、Steam、赔率变动、散户冷热、赔率是否跟随资金。重点看资金信号与盘口是否共振或冲突。",
+        "name": "体彩Sharp资金流分析师",
+        "focus": "Sharp/Steam、赔率变动、散户冷热、体彩诱盘、外部市场冲突。重点给Sharp分级。",
         "temperature": 0.28,
     },
     "gemini": {
-        "name": "基本面分析师",
-        "focus": "战绩、伤停、赛程、联赛属性、杯赛属性、主客场强弱。重点看真实实力和比赛动机。",
+        "name": "基本面与赛事情境分析师",
+        "focus": "战绩、伤停、主客场、杯赛/淘汰赛属性、赛程动机。重点判断场景是否支持盘口方向。",
         "temperature": 0.20,
     },
 }
@@ -1362,8 +3156,9 @@ def build_phase1_prompt(match_blocks: List[str], role_key: str) -> str:
 
     p = ""
     p += "<context>\n"
-    p += "你是竞彩足球分析团队中的一名独立分析师。下面是多场比赛的完整抓包数据。\n"
-    p += "你需要基于原始抓包自主分析。系统 OBS 观察信号只是线索，可能有效，也可能是噪声。\n"
+    p += "你是竞彩足球体彩市场分析团队中的一名独立分析师。下面是完整原始抓包、程序量化审计、外部市场比对与Sharp分级。\n"
+    p += "体彩场次经过筛选，可能存在诱盘。Sharp是重要核心变量，但必须先判断Sharp真假与等级。\n"
+    p += "如果你的模型通道具备联网能力，可以主动检索赔率/赛前情报/主流市场，但必须和程序提供的外部市场审计交叉验证；如果不能联网，禁止编造外部数据。\n"
     p += "</context>\n\n"
 
     p += "<your_role>\n"
@@ -1371,16 +3166,26 @@ def build_phase1_prompt(match_blocks: List[str], role_key: str) -> str:
     p += f"专长: {role['focus']}\n"
     p += "</your_role>\n\n"
 
-    p += "<rules>\n"
-    p += "1. 必须先从你的专长角度分析，再检查其他维度是否反对你的结论。\n"
-    p += "2. 不要机械服从 OBS 信号，也不要机械反打 OBS 信号。\n"
-    p += "3. 必须给出 predicted_score、predicted_direction、goal_range、top3。\n"
-    p += "4. predicted_score 的方向必须与 predicted_direction 一致。\n"
-    p += "5. top3[0] 必须等于 predicted_score。\n"
-    p += "6. 必须列出 doubts，即反对自己结论的证据。\n"
-    p += "7. 如果数据不足，要降低 confidence。\n"
-    p += "8. 推理不限制字数，但必须保持 JSON 可解析，不要输出 markdown。\n"
-    p += "</rules>\n\n"
+    p += "<sharp_grading_rules>\n"
+    p += "S4: Sharp + 变盘 + CRS + 外部市场/盘口 至少3项共振，可覆盖方向。\n"
+    p += "S3: Sharp + 至少2项结构共振，是主方向强证据。\n"
+    p += "S2: Sharp + 1项结构共振，只能加权。\n"
+    p += "S1: 只有Sharp文本，不得单独改方向。\n"
+    p += "SD: Sharp与CRS/TTG/外部市场明显冲突，按诱饵或低可信处理。\n"
+    p += "</sharp_grading_rules>\n\n"
+
+    p += "<hard_rules>\n"
+    p += "1. 不得把Sharp文本直接等价为最终方向，必须说明Sharp等级。\n"
+    p += "2. 体彩/本地最低赔方向若与外部市场冲突，必须标记 LOCAL_MARKET_TRAP，不得直接采纳最低赔方向。\n"
+    p += "3. 最终比分必须落在 CRS低赔路径 + TTG主模态附近。\n"
+    p += "4. 平赔独降不等于真平局，必须比较1-1与1-0/2-1/0-1/1-2路径。\n"
+    p += "5. 杯赛属性只降低大比分和单边碾压，不得单独把强方向改成平局。\n"
+    p += "6. predicted_score 的方向必须与 predicted_direction 一致。\n"
+    p += "7. top3[0] 必须等于 predicted_score。\n"
+    p += "8. 必须输出 doubts，即反对自己结论的证据。\n"
+    p += "9. 如果数据不足，要降低 confidence。\n"
+    p += "10. 严格输出 JSON 数组，不要 markdown，不要前缀后缀。\n"
+    p += "</hard_rules>\n\n"
 
     p += "<match_data>\n"
     for block in match_blocks:
@@ -1388,28 +3193,34 @@ def build_phase1_prompt(match_blocks: List[str], role_key: str) -> str:
     p += "\n</match_data>\n\n"
 
     p += "<output_format>\n"
-    p += "严格输出 JSON 数组，不要 markdown，不要代码块，不要前缀后缀。\n"
     p += "[\n"
     p += "  {\n"
     p += "    \"match\": 1,\n"
-    p += "    \"predicted_score\": \"2-1\",\n"
+    p += "    \"surface_direction\": \"away\",\n"
+    p += "    \"sharp_direction\": \"away\",\n"
+    p += "    \"sharp_grade\": \"S2\",\n"
+    p += "    \"external_market_direction\": \"home\",\n"
+    p += "    \"local_market_trap\": true,\n"
+    p += "    \"crs_direction\": \"home\",\n"
+    p += "    \"ttg_mode\": 1,\n"
+    p += "    \"main_conflict\": \"Sharp客胜与CRS/外部市场冲突\",\n"
+    p += "    \"predicted_score\": \"1-0\",\n"
     p += "    \"predicted_direction\": \"home\",\n"
-    p += "    \"goal_range\": \"3球\",\n"
-    p += "    \"home_win_pct\": 52,\n"
-    p += "    \"draw_pct\": 27,\n"
-    p += "    \"away_win_pct\": 21,\n"
-    p += "    \"confidence\": 68,\n"
+    p += "    \"goal_range\": \"1球\",\n"
+    p += "    \"home_win_pct\": 44,\n"
+    p += "    \"draw_pct\": 31,\n"
+    p += "    \"away_win_pct\": 25,\n"
+    p += "    \"confidence\": 66,\n"
     p += "    \"top3\": [\n"
-    p += "      {\"score\":\"2-1\", \"prob\":17},\n"
-    p += "      {\"score\":\"1-0\", \"prob\":14},\n"
-    p += "      {\"score\":\"1-1\", \"prob\":13}\n"
+    p += "      {\"score\":\"1-0\", \"prob\":16},\n"
+    p += "      {\"score\":\"1-1\", \"prob\":14},\n"
+    p += "      {\"score\":\"2-1\", \"prob\":12}\n"
     p += "    ],\n"
-    p += "    \"accepted_observations\": [\"CRS主胜小比分低赔集中\"],\n"
-    p += "    \"rejected_observations\": [\"散户热度不足以单独反打\"],\n"
-    p += "    \"key_signals\": [\"主胜赔率结构更完整\", \"总进球更接近3球\"],\n"
-    p += "    \"doubts\": [\"平局仍有保护\", \"xG差距不大\"],\n"
-    p += "    \"data_quality\": {\"odds_complete\": true, \"crs_complete\": true, \"ttg_complete\": true, \"notes\": []},\n"
-    p += "    \"reason\": \"完整中文推理，不限制字数，但必须保持 JSON 字符串合法\"\n"
+    p += "    \"accepted_observations\": [],\n"
+    p += "    \"rejected_observations\": [],\n"
+    p += "    \"key_signals\": [],\n"
+    p += "    \"doubts\": [],\n"
+    p += "    \"reason\": \"中文推理，说明Sharp等级、外部市场、CRS、TTG、最终比分路径\"\n"
     p += "  }\n"
     p += "]\n"
     p += "</output_format>\n"
@@ -1422,9 +3233,8 @@ def build_phase1_retry_prompt(match_block: str, role_key: str, target_match_id: 
 
     p = ""
     p += "<context>\n"
-    p += "这是一次补分析。你只需要分析下面这一场比赛。\n"
-    p += f"重要：输出 JSON 中 match 必须等于 {target_match_id}。\n"
-    p += "系统 OBS 只是观察线索，可以采纳也可以否决。\n"
+    p += "这是一次单场补分析。只分析下面这一场。\n"
+    p += f"输出 JSON 中 match 必须等于 {target_match_id}。\n"
     p += "</context>\n\n"
 
     p += "<your_role>\n"
@@ -1433,11 +3243,11 @@ def build_phase1_retry_prompt(match_block: str, role_key: str, target_match_id: 
     p += "</your_role>\n\n"
 
     p += "<rules>\n"
-    p += "1. 只分析这一场，不要输出其他比赛。\n"
-    p += "2. predicted_score 必须与 predicted_direction 一致。\n"
-    p += "3. top3[0] 必须等于 predicted_score。\n"
-    p += "4. 推理不限制字数，但必须保持 JSON 可解析。\n"
-    p += "5. 严格 JSON 数组输出，不要 markdown。\n"
+    p += "1. 必须判断Sharp等级。\n"
+    p += "2. 必须检查外部市场冲突。\n"
+    p += "3. predicted_score 必须与 predicted_direction 一致。\n"
+    p += "4. top3[0] 必须等于 predicted_score。\n"
+    p += "5. 严格输出JSON数组，不要markdown。\n"
     p += "</rules>\n\n"
 
     p += "<match_data>\n"
@@ -1445,36 +3255,11 @@ def build_phase1_retry_prompt(match_block: str, role_key: str, target_match_id: 
     p += "\n</match_data>\n\n"
 
     p += "<output_format>\n"
-    p += "[\n"
-    p += "  {\n"
-    p += f"    \"match\": {target_match_id},\n"
-    p += "    \"predicted_score\": \"2-1\",\n"
-    p += "    \"predicted_direction\": \"home\",\n"
-    p += "    \"goal_range\": \"3球\",\n"
-    p += "    \"home_win_pct\": 52,\n"
-    p += "    \"draw_pct\": 27,\n"
-    p += "    \"away_win_pct\": 21,\n"
-    p += "    \"confidence\": 68,\n"
-    p += "    \"top3\": [\n"
-    p += "      {\"score\":\"2-1\", \"prob\":17},\n"
-    p += "      {\"score\":\"1-0\", \"prob\":14},\n"
-    p += "      {\"score\":\"1-1\", \"prob\":13}\n"
-    p += "    ],\n"
-    p += "    \"accepted_observations\": [],\n"
-    p += "    \"rejected_observations\": [],\n"
-    p += "    \"key_signals\": [],\n"
-    p += "    \"doubts\": [],\n"
-    p += "    \"reason\": \"完整中文推理，不限制字数，但必须保持 JSON 字符串合法\"\n"
-    p += "  }\n"
-    p += "]\n"
+    p += "[{\"match\":%d,\"predicted_score\":\"1-0\",\"predicted_direction\":\"home\",\"goal_range\":\"1球\",\"home_win_pct\":44,\"draw_pct\":31,\"away_win_pct\":25,\"confidence\":60,\"top3\":[{\"score\":\"1-0\",\"prob\":16},{\"score\":\"1-1\",\"prob\":14},{\"score\":\"2-1\",\"prob\":12}],\"sharp_grade\":\"S2\",\"local_market_trap\":false,\"key_signals\":[],\"doubts\":[],\"reason\":\"中文推理\"}]\n" % target_match_id
     p += "</output_format>\n"
 
     return p
 
-
-# ====================================================================
-# Prompt 构建：Phase 2 Claude 终审
-# ====================================================================
 
 def _phase1_summary_line(r: Dict) -> str:
     if not isinstance(r, dict) or not r:
@@ -1493,7 +3278,9 @@ def _phase1_summary_line(r: Dict) -> str:
     return (
         f"方向={r.get('predicted_direction', '?')} | "
         f"比分={r.get('predicted_score', '?')} | "
-        f"进球区间={r.get('goal_range_label', r.get('goal_range', '?'))} | "
+        f"Sharp={r.get('sharp_grade', '?')}/{r.get('sharp_direction', '?')} | "
+        f"外部方向={r.get('external_market_direction', '?')} | "
+        f"CRS={r.get('crs_direction', '?')} | "
         f"信心={r.get('confidence', '?')} | "
         f"top3=[{top3_str}]"
     )
@@ -1504,29 +3291,23 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
 
     p = ""
     p += "<context>\n"
-    p += "你是 Claude 终审复盘者。GPT / Grok / Gemini 已经分别从赔率结构、资金流、基本面角度完成独立分析。\n"
-    p += "你现在拿到三家完整结论 + 原始抓包，需要做最终审计并输出最终预测。\n"
+    p += "你是Claude终审审计者。GPT/Grok/Gemini已经从不同角度输出结论。\n"
+    p += "你必须重新审计原始抓包、程序量化审计、Sharp分级、外部市场比对和三家结论。\n"
+    p += "注意: 你的输出是审计意见，不是最终程序锁定结果。最终比分会经过程序决策锁定链。\n"
     p += "</context>\n\n"
 
     p += "<critical_rules>\n"
-    p += "1. 你不是投票裁判，不能简单按三家多数派裁决。\n"
-    p += "2. 你必须重新审计原始抓包。三家结论只是待验证材料。\n"
-    p += "3. 当三家一致但原始数据不支持时，你可以推翻三家。\n"
-    p += "4. 当二对一时，按证据质量裁决，不按人数裁决。\n"
-    p += "5. 证据优先级：CRS/总进球赔率结构 > 欧赔/让球一致性 > xG > Sharp/Steam/变盘 > 基本面 > 散户热度。\n"
-    p += "6. OBS 只是观察，不是诱盘结论。\n"
-    p += "7. 如果三家共同依赖同一个 OBS 信号，要降低共识权重。\n"
-    p += "8. predicted_score 方向必须与 predicted_direction 一致。\n"
-    p += "9. top3[0] 必须等于 predicted_score。\n"
-    p += "10. 必须说明采纳/否决哪些分析师，以及为什么。\n"
-    p += "11. 推理不限制字数，但必须保持 JSON 可解析。\n"
+    p += "1. 不按票数裁决，必须按证据质量裁决。\n"
+    p += "2. 三家如果共同依赖同一个OBS或同一个Sharp文本，只按1个证据源计。\n"
+    p += "3. Sharp是体彩核心变量，但必须分级；S3/S4可强跟，SD必须降权。\n"
+    p += "4. 本地最低赔方向若与外部市场冲突，必须标记LOCAL_MARKET_TRAP。\n"
+    p += "5. 平赔独降不能直接等于平局。\n"
+    p += "6. 杯赛属性不能单独改变方向，只能影响比分保守性。\n"
+    p += "7. 最终建议比分必须落在CRS低赔路径和TTG主模态附近。\n"
+    p += "8. predicted_score方向必须与predicted_direction一致。\n"
+    p += "9. top3[0]必须等于predicted_score。\n"
+    p += "10. 严格JSON数组输出，不要markdown。\n"
     p += "</critical_rules>\n\n"
-
-    p += "<coverage_rules>\n"
-    p += "如果某一家显示无数据，说明该分析师本场缺席，不得把它当作反对或支持票。\n"
-    p += "你必须在输出中写 analysis_coverage，说明本场实际参与分析的 AI 数量。\n"
-    p += "如果只有 1 家或 2 家 Phase1 分析有效，confidence 不得超过 70，除非原始抓包证据极强。\n"
-    p += "</coverage_rules>\n\n"
 
     p += "<three_analysts_results>\n"
 
@@ -1540,20 +3321,12 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
             if not r:
                 continue
 
-            reason = _safe_str(r.get("reason", ""), 2000)
-            key_signals = r.get("key_signals", [])
-            accepted = r.get("accepted_observations", [])
-            rejected = r.get("rejected_observations", [])
-            doubts = r.get("doubts", [])
+            for field in ["main_conflict", "key_signals", "accepted_observations", "rejected_observations", "doubts"]:
+                v = r.get(field)
+                if v:
+                    p += f"{field}: {v}\n"
 
-            if key_signals:
-                p += "key_signals: " + " | ".join(str(x) for x in key_signals[:8]) + "\n"
-            if accepted:
-                p += "accepted_observations: " + " | ".join(str(x) for x in accepted[:8]) + "\n"
-            if rejected:
-                p += "rejected_observations: " + " | ".join(str(x) for x in rejected[:8]) + "\n"
-            if doubts:
-                p += "doubts: " + " | ".join(str(x) for x in doubts[:8]) + "\n"
+            reason = _safe_str(r.get("reason", ""), 1800)
             if reason:
                 p += f"reason: {reason}\n"
 
@@ -1565,31 +3338,34 @@ def build_phase2_prompt(match_blocks: List[str], phase1_results: Dict[str, Dict[
     p += "\n</raw_match_data>\n\n"
 
     p += "<output_format>\n"
-    p += "严格输出 JSON 数组，不要 markdown，不要代码块，不要前缀后缀。\n"
     p += "[\n"
     p += "  {\n"
     p += "    \"match\": 1,\n"
-    p += "    \"predicted_score\": \"2-1\",\n"
+    p += "    \"predicted_score\": \"1-0\",\n"
     p += "    \"predicted_direction\": \"home\",\n"
-    p += "    \"goal_range\": \"3球\",\n"
-    p += "    \"home_win_pct\": 55,\n"
-    p += "    \"draw_pct\": 26,\n"
-    p += "    \"away_win_pct\": 19,\n"
-    p += "    \"confidence\": 72,\n"
-    p += "    \"agreement_pattern\": \"GPT/Grok主胜，Gemini平局\",\n"
+    p += "    \"goal_range\": \"1球\",\n"
+    p += "    \"home_win_pct\": 44,\n"
+    p += "    \"draw_pct\": 31,\n"
+    p += "    \"away_win_pct\": 25,\n"
+    p += "    \"confidence\": 66,\n"
+    p += "    \"sharp_grade_final\": \"S2\",\n"
+    p += "    \"external_market_conflict\": true,\n"
+    p += "    \"local_market_trap\": true,\n"
+    p += "    \"crs_ttg_score_path\": \"1-0/1-1强于客胜路径\",\n"
+    p += "    \"agreement_pattern\": \"GPT/Grok客胜但同源Sharp污染，Gemini主不败\",\n"
     p += "    \"analysis_coverage\": {\"gpt\": true, \"grok\": true, \"gemini\": true, \"valid_count\": 3},\n"
-    p += "    \"adopted_analysts\": [\"gpt\", \"grok\"],\n"
-    p += "    \"rejected_analysts\": [\"gemini\"],\n"
-    p += "    \"audit_result\": \"原始CRS和盘口更支持主胜小胜，Gemini的平局保护证据不足\",\n"
+    p += "    \"adopted_analysts\": [\"gemini\"],\n"
+    p += "    \"rejected_analysts\": [\"gpt\", \"grok\"],\n"
+    p += "    \"audit_result\": \"Sharp客胜没有通过外部市场和CRS验证，主不败路径更合理\",\n"
     p += "    \"top3\": [\n"
-    p += "      {\"score\":\"2-1\", \"prob\":17},\n"
-    p += "      {\"score\":\"1-0\", \"prob\":14},\n"
-    p += "      {\"score\":\"1-1\", \"prob\":13}\n"
+    p += "      {\"score\":\"1-0\", \"prob\":16},\n"
+    p += "      {\"score\":\"1-1\", \"prob\":14},\n"
+    p += "      {\"score\":\"2-1\", \"prob\":12}\n"
     p += "    ],\n"
-    p += "    \"accepted_observations\": [\"让球深度与CRS主胜小比分共振\"],\n"
-    p += "    \"rejected_observations\": [\"散户热度不足以反推客队\"],\n"
-    p += "    \"doubts\": [\"xG差距不大\", \"平局赔率仍有保护\"],\n"
-    p += "    \"arbitration_reason\": \"完整中文终审理由，不限制字数，但必须保持 JSON 字符串合法\"\n"
+    p += "    \"accepted_observations\": [],\n"
+    p += "    \"rejected_observations\": [],\n"
+    p += "    \"doubts\": [],\n"
+    p += "    \"arbitration_reason\": \"完整中文终审理由\"\n"
     p += "  }\n"
     p += "]\n"
     p += "</output_format>\n"
@@ -1606,9 +3382,7 @@ PHASE1_CONFIGS = [
         "ai_name": "gpt",
         "url_env": "GPT_API_URL",
         "key_env": "GPT_API_KEY",
-        "models": [
-            "gpt-5.5"
-        ],
+        "models": ["gpt-5.5"],
         "role_key": "gpt",
     },
     {
@@ -1632,7 +3406,7 @@ CLAUDE_CONFIG = {
     "url_env": "CLAUDE_API_URL",
     "key_env": "CLAUDE_API_KEY",
     "models": ["熊猫-69-满血openrouter-claude-opus-4.7-上下文1000k"],
-    "temperature": 0.22,
+    "temperature": 0.20,
 }
 
 
@@ -1655,7 +3429,7 @@ def _build_urls_for_ai(ai_name: str, url_env: str) -> List[str]:
 
 
 # ====================================================================
-# AI 调用层：基于第一版，不限制输出字数
+# AI 调用层
 # ====================================================================
 
 async def async_call_ai_batch(
@@ -1668,7 +3442,7 @@ async def async_call_ai_batch(
     ai_name: str,
     sys_prompt: str,
     temperature: float,
-    phase: str
+    phase: str,
 ) -> Tuple[str, Dict[int, Dict], str]:
     if ai_name == "gpt":
         key = get_first_clean_env_key(GPT_KEY_ALIASES, GPT_DEFAULT_KEY)
@@ -1683,12 +3457,14 @@ async def async_call_ai_batch(
     urls = _build_urls_for_ai(ai_name, url_env)
 
     CONNECT_TIMEOUT = 20
+
     READ_TIMEOUT_MAP = {
         "claude": 1800,
         "grok": 900,
         "gpt": 1200,
         "gemini": 1800,
     }
+
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 900)
 
     for mn in models_list:
@@ -1769,7 +3545,7 @@ async def async_call_ai_batch(
 
                     if r.status != 200:
                         text = await r.text()
-                        print(f"    ⚠️ HTTP {r.status} | {elapsed}s | 模型={mn} | {text[:200]}")
+                        print(f"    ⚠️ HTTP {r.status} | {elapsed}s | 模型={mn} | {text[:240]}")
                         continue
 
                     connected = True
@@ -1802,15 +3578,13 @@ async def async_call_ai_batch(
             except asyncio.TimeoutError:
                 if not connected:
                     continue
-                else:
-                    print(f"    ⏱️ {ai_name.upper()} 读取超时: {READ_TIMEOUT}s")
-                    return ai_name, {}, "read_timeout"
+                print(f"    ⏱️ {ai_name.upper()} 读取超时: {READ_TIMEOUT}s")
+                return ai_name, {}, "read_timeout"
             except Exception as e:
                 if not connected:
                     continue
-                else:
-                    print(f"    ⚠️ 调用异常: {str(e)[:120]}")
-                    return ai_name, {}, "error"
+                print(f"    ⚠️ 调用异常: {str(e)[:120]}")
+                return ai_name, {}, "error"
 
             await asyncio.sleep(0.2)
 
@@ -1853,6 +3627,9 @@ def _extract_response_text(data, is_gem=False) -> str:
                         "output",
                         "result",
                         "completion",
+                        "message_content",
+                        "assistant_content",
+                        "model_response",
                     ]:
                         v = msg.get(field, "")
                         if isinstance(v, str) and v.strip():
@@ -1860,7 +3637,7 @@ def _extract_response_text(data, is_gem=False) -> str:
                             break
 
                 if not raw_text:
-                    skip = ("reasoning_content", "thinking", "reasoning", "thoughts")
+                    skip = ("reasoning_content", "thinking", "reasoning", "thoughts", "chain_of_thought", "cot")
                     best = ""
                     for k, v in msg.items():
                         if k in skip:
@@ -1918,6 +3695,7 @@ def _strip_thinking_blocks(text: str) -> str:
 
 def _extract_json_array(clean: str) -> str:
     m_re = re.search(r'\[\s*\{\s*"match"', clean)
+
     if not m_re:
         m_re = re.search(r"\[\s*\{\s*'match'", clean)
 
@@ -1950,6 +3728,7 @@ def _extract_json_array(clean: str) -> str:
                 depth += 1
             elif ch == "]":
                 depth -= 1
+
                 if depth == 0:
                     end_idx = i + 1
                     break
@@ -1959,6 +3738,7 @@ def _extract_json_array(clean: str) -> str:
 
     start = clean.find("[")
     end = clean.rfind("]") + 1
+
     if start != -1 and end > start:
         return clean[start:end]
 
@@ -2032,12 +3812,22 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
     score = str(out.get("predicted_score", "")).strip()
 
     if not score:
+        top3 = out.get("top3", [])
+        if isinstance(top3, list) and top3:
+            first = top3[0]
+            if isinstance(first, dict):
+                score = str(first.get("score", "")).strip()
+            else:
+                score = str(first).strip()
+
+    if not score:
         errors.append("score_missing")
         score = "1-1"
 
     score_label, is_others = _score_to_label(score)
 
     h, a = _parse_score(score_label)
+
     if h is None and score_label not in ["胜其他", "平其他", "负其他"]:
         errors.append("score_invalid")
         score_label = "1-1"
@@ -2048,9 +3838,11 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
         out["predicted_direction"] = expected_dir
     else:
         pred_dir = str(out.get("predicted_direction", "draw")).strip().lower()
+
         if pred_dir not in VALID_DIRS:
             errors.append("direction_invalid")
             pred_dir = "draw"
+
         out["predicted_direction"] = pred_dir
 
     out["predicted_score"] = score_label
@@ -2067,9 +3859,10 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
     out["draw_pct"] = dp
     out["away_win_pct"] = ap
 
-    conf = _i(out.get("confidence", 55), 55)
+    conf = _i(out.get("confidence", out.get("ai_confidence", 55)), 55)
     conf = max(25, min(95, conf))
     out["confidence"] = conf
+    out["ai_confidence"] = conf
 
     raw_goal_range = out.get("goal_range") or _goal_range_from_score(score_label)
     bucket, label = _normalize_goal_range_for_ui(raw_goal_range, score_label)
@@ -2084,14 +3877,16 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
     top3_has_main = False
 
     for t in top3:
-        if not isinstance(t, dict):
-            continue
+        if isinstance(t, dict):
+            sc = str(t.get("score", "")).strip()
+            prob = _f(t.get("prob", 0))
+        else:
+            sc = str(t).strip()
+            prob = 0
 
-        sc = str(t.get("score", "")).strip()
         if not sc:
             continue
 
-        prob = _f(t.get("prob", 0))
         if prob <= 1 and prob > 0:
             prob *= 100
 
@@ -2108,7 +3903,7 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
 
     fixed_top3 = sorted(
         fixed_top3,
-        key=lambda x: 0 if x.get("score") == score_label else 1
+        key=lambda x: 0 if x.get("score") == score_label else 1,
     )[:3]
 
     out["top3"] = fixed_top3
@@ -2138,7 +3933,7 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
     if phase == "claude":
         if not out.get("arbitration_reason"):
             out["arbitration_reason"] = out.get("reason", "")
-        out["audit_result"] = _safe_str(out.get("audit_result", ""), 1200)
+        out["audit_result"] = _safe_str(out.get("audit_result", ""), 1500)
     else:
         out["reason"] = _safe_str(out.get("reason", ""), 5000)
 
@@ -2146,7 +3941,7 @@ def validate_ai_item(item: Dict, phase: str) -> Tuple[bool, Dict, List[str]]:
 
 
 # ====================================================================
-# Phase 1 覆盖率 / 缺失补跑
+# Phase 1 覆盖率 / 补跑
 # ====================================================================
 
 def _is_valid_phase1_result(r: Dict) -> bool:
@@ -2198,7 +3993,7 @@ async def repair_missing_phase1_results(
     phase1_results: Dict[str, Dict[int, Dict]],
     match_blocks: List[str],
     num_matches: int,
-    sys_prompts: Dict[str, str]
+    sys_prompts: Dict[str, str],
 ) -> Dict[str, Dict[int, Dict]]:
     print("\n  [Phase 1 Repair] 检查三家缺失场次...")
 
@@ -2258,9 +4053,18 @@ async def run_phase1_three(match_blocks: List[str], num_matches: int) -> Dict[st
     print(f"\n  [Phase 1] GPT/Grok/Gemini 三家并行分析 ({num_matches} 场)...")
 
     sys_prompts = {
-        "gpt": "<role>你是赔率结构分析师，专注欧赔、让球、总进球、CRS、半全场一致性。</role><instruction>严格输出 JSON 数组，不要 markdown。</instruction>",
-        "grok": "<role>你是资金流分析师，专注 Sharp、Steam、变盘、散户冷热、资金与盘口背离。</role><instruction>严格输出 JSON 数组，不要 markdown。</instruction>",
-        "gemini": "<role>你是基本面分析师，专注战绩、伤停、赛程、联赛属性、杯赛属性、主客场强弱。</role><instruction>严格输出 JSON 数组，不要 markdown。</instruction>",
+        "gpt": (
+            "<role>你是赔率结构分析师，专注欧赔、让球、CRS、TTG、半全场一致性。</role>"
+            "<instruction>严格输出JSON数组，不要markdown。若通道可联网，可检索赔率但必须说明外部市场冲突。</instruction>"
+        ),
+        "grok": (
+            "<role>你是体彩Sharp资金流分析师，专注Sharp/Steam、体彩诱盘、外部市场冲突。</role>"
+            "<instruction>必须给Sharp分级S0/S1/S2/S3/S4/SD。严格输出JSON数组。</instruction>"
+        ),
+        "gemini": (
+            "<role>你是基本面与赛事情境分析师，专注战绩、伤停、赛程、杯赛属性、主客场强弱。</role>"
+            "<instruction>严格输出JSON数组，不要markdown。</instruction>"
+        ),
     }
 
     connector = aiohttp.TCPConnector(limit=10, use_dns_cache=False)
@@ -2325,16 +4129,16 @@ async def run_phase1_three(match_blocks: List[str], num_matches: int) -> Dict[st
 async def run_phase2_claude_audit(
     match_blocks: List[str],
     phase1_results: Dict[str, Dict[int, Dict]],
-    num_matches: int
+    num_matches: int,
 ) -> Tuple[Dict[int, Dict], str]:
-    print(f"\n  [Phase 2] Claude 终审复盘 ({num_matches} 场)...")
+    print(f"\n  [Phase 2] Claude 终审审计 ({num_matches} 场)...")
 
     prompt = build_phase2_prompt(match_blocks, phase1_results)
     print(f"  [Claude Prompt] {len(prompt):,} 字符")
 
     sys_prompt = (
-        "<role>你是 Claude 终审复盘者。你必须重新审计原始抓包，不得简单按三家多数派裁决。</role>\n"
-        "<instruction>严格输出 JSON 数组，禁止 markdown，禁止前缀后缀。</instruction>"
+        "<role>你是Claude终审审计者。你必须重新审计原始抓包、Sharp分级、外部市场冲突、CRS/TTG路径。</role>\n"
+        "<instruction>你的输出是审计意见，不是最终程序锁定结果。严格JSON数组，禁止markdown。</instruction>"
     )
 
     connector = aiohttp.TCPConnector(limit=5, use_dns_cache=False)
@@ -2361,7 +4165,7 @@ async def run_phase2_claude_audit(
 
 
 # ====================================================================
-# 输出包装 / EV / 兼容字段
+# 输出包装
 # ====================================================================
 
 def _enforce_direction_consistency(result: Dict) -> Dict:
@@ -2390,6 +4194,18 @@ def _enforce_direction_consistency(result: Dict) -> Dict:
         out.get("away_win_pct", 33.4),
     )
 
+    raw_argmax = max({"home": hp, "draw": dp, "away": ap}, key={"home": hp, "draw": dp, "away": ap}.get)
+    probability_was_corrected = raw_argmax != expected_dir
+
+    if probability_was_corrected:
+        pcts = {"home": hp, "draw": dp, "away": ap}
+        cur_max = pcts[raw_argmax]
+        pcts[expected_dir] = cur_max + 3
+        total = sum(pcts.values())
+        hp = round(pcts["home"] / total * 100, 1)
+        dp = round(pcts["draw"] / total * 100, 1)
+        ap = round(pcts["away"] / total * 100, 1)
+
     out["predicted_score"] = score_label
     out["predicted_label"] = score_label
     out["predicted_direction"] = expected_dir
@@ -2410,71 +4226,18 @@ def _enforce_direction_consistency(result: Dict) -> Dict:
     out["confidence_score"] = conf
     out["confidence_pct"] = conf
     out["analysis_confidence"] = conf
-    out["dir_confidence"] = conf
-    out["ai_confidence_value"] = conf
-    out["aiConfidence"] = conf
-    out["confidenceValue"] = conf
     out["final_confidence"] = conf
     out["prediction_confidence"] = conf
-    out["finalConfidence"] = conf
-    out["ai_conf"] = conf
-    out["cf"] = conf
-    out["ai_trust"] = conf
-    out["ai_trust_pct"] = conf
-    out["trust_score"] = conf
-    out["model_confidence"] = conf
-    out["model_confidence_pct"] = conf
+    out["dir_confidence"] = out.get("dir_confidence", conf)
 
     out["home_win_pct"] = hp
     out["draw_pct"] = dp
     out["away_win_pct"] = ap
 
+    out["raw_probability_argmax"] = out.get("raw_probability_argmax", raw_argmax)
+    out["probability_was_corrected"] = out.get("probability_was_corrected", probability_was_corrected)
+
     return out
-
-
-def _extract_score_prob_from_ai(ai_result: Dict, score: str) -> float:
-    candidates = []
-
-    for key in ["top3", "score_probs", "scores"]:
-        arr = ai_result.get(key, [])
-        if isinstance(arr, list):
-            candidates.extend(arr)
-
-    alt = ai_result.get("alternative")
-    if isinstance(alt, dict):
-        candidates.append(alt)
-
-    for item in candidates:
-        if not isinstance(item, dict):
-            continue
-
-        if str(item.get("score", "")).strip() == str(score).strip():
-            p = _f(item.get("prob", 0))
-            if p > 1:
-                p /= 100.0
-            return max(0.0, min(1.0, p))
-
-    return 0.0
-
-
-def _calculate_score_ev(score_prob: float, odds: float) -> Tuple[float, float, bool]:
-    if odds <= 1.05 or score_prob <= 0:
-        return 0.0, 0.0, False
-
-    ev = score_prob * odds - 1.0
-    b = odds - 1.0
-    q = 1.0 - score_prob
-
-    if b > 0:
-        kelly = ((b * score_prob) - q) / b
-        kelly_pct = round(max(0.0, kelly * 0.5) * 100, 2)
-    else:
-        kelly_pct = 0.0
-
-    ev_pct = round(ev * 100, 2)
-    is_value = ev_pct > 5
-
-    return ev_pct, kelly_pct, is_value
 
 
 def _get_score_odds(match: Dict, score: str, direction: str, is_others: bool) -> float:
@@ -2495,31 +4258,32 @@ def _get_score_odds(match: Dict, score: str, direction: str, is_others: bool) ->
 def _ai_score_summary(r: Dict) -> str:
     if not isinstance(r, dict) or not r:
         return "-"
-    return str(r.get("predicted_score", "-"))
+    return str(r.get("predicted_score", r.get("ai_score", "-")))
 
 
 def _ai_reason_summary(r: Dict, empty_text: str) -> str:
     if not isinstance(r, dict) or not r:
         return empty_text
-    return _safe_str(r.get("reason", ""), 2000)
+
+    return _safe_str(
+        r.get("reason", r.get("arbitration_reason", r.get("audit_result", ""))),
+        2500,
+    )
 
 
-def _apply_legacy_enhancer_readonly(enhancer, match: Dict, mg: Dict, *args):
-    before = {k: mg.get(k) for k in LOCKED_CORE_FIELDS}
+def _ai_response_from_result(r: Dict) -> Dict:
+    if not isinstance(r, dict):
+        return {}
 
-    try:
-        mg2 = enhancer(match, mg, *args) if args else enhancer(match, mg)
-    except Exception as e:
-        logger.warning(f"{getattr(enhancer, '__name__', 'enhancer')} 失败: {e}")
-        return mg
-
-    if not isinstance(mg2, dict):
-        return mg
-
-    for k, v in before.items():
-        mg2[k] = v
-
-    return mg2
+    return {
+        "predicted_score": r.get("predicted_score", r.get("ai_score", "")),
+        "predicted_direction": r.get("predicted_direction", r.get("final_direction", "")),
+        "confidence": r.get("confidence", r.get("ai_confidence", 55)),
+        "top3": r.get("top3", []),
+        "reason": r.get("reason", r.get("arbitration_reason", r.get("audit_result", ""))),
+        "sharp_grade": r.get("sharp_grade", r.get("sharp_grade_final", "")),
+        "local_market_trap": r.get("local_market_trap", False),
+    }
 
 
 def assemble_final_prediction(
@@ -2530,10 +4294,70 @@ def assemble_final_prediction(
     claude_result: Dict,
     observation_signals: List[str],
     ensemble_signals: Dict,
+    crs_analysis: Dict,
+    ttg_analysis: Dict,
+    sharp_eval: Dict,
+    external_market: Dict,
+    external_audit: Dict,
+    trap_report: Dict,
+    quant_audit: Dict,
+    exp_goals: float,
     idx: int,
-    ai_provider: str
+    ai_provider: str,
 ) -> Dict:
-    cr = _enforce_direction_consistency(claude_result or {})
+    p1_gpt = phase1_results.get("gpt", {}).get(idx, {})
+    p1_grok = phase1_results.get("grok", {}).get(idx, {})
+    p1_gemini = phase1_results.get("gemini", {}).get(idx, {})
+
+    ai_responses = {
+        "gpt": _ai_response_from_result(p1_gpt),
+        "grok": _ai_response_from_result(p1_grok),
+        "gemini": _ai_response_from_result(p1_gemini),
+        "claude": _ai_response_from_result(claude_result),
+    }
+
+    lock_result = decision_lock_chain(
+        match_obj=match,
+        engine_result=engine_result,
+        trap_report=trap_report,
+        crs_analysis=crs_analysis,
+        ttg_analysis=ttg_analysis,
+        ai_responses=ai_responses,
+        external_audit=external_audit,
+        exp_goals=exp_goals,
+    )
+
+    confidence_base = _f(lock_result.get("dir_confidence", 55), 55)
+
+    confidence = confidence_base
+
+    if lock_result.get("dir_gap", 0) >= 12:
+        confidence += 6
+    elif lock_result.get("dir_gap", 0) < 6:
+        confidence -= 6
+
+    if sharp_eval.get("sharp_level") in ["S3", "S4"]:
+        confidence += 5
+    elif sharp_eval.get("sharp_level") == "SD":
+        confidence -= 5
+
+    if external_audit.get("risk_tag") == "LOCAL_MARKET_TRAP":
+        confidence -= 4
+
+    confidence -= trap_report.get("confidence_penalty", 0)
+
+    coverage = _phase1_coverage_for_match(phase1_results, idx)
+
+    if coverage["valid_count"] <= 1:
+        confidence = min(confidence, 62)
+    elif coverage["valid_count"] == 2:
+        confidence = min(confidence, 72)
+
+    confidence = int(max(30, min(95, round(confidence))))
+
+    lock_result["confidence"] = confidence
+
+    cr = _enforce_direction_consistency(lock_result)
 
     predicted_score = cr.get("predicted_score", "1-1")
     predicted_label = cr.get("predicted_label", predicted_score)
@@ -2544,67 +4368,39 @@ def assemble_final_prediction(
     h_score, a_score = _parse_score(predicted_score)
     goal_count = h_score + a_score if h_score is not None else None
 
-    home_pct = _f(cr.get("home_win_pct", 33.3), 33.3)
-    draw_pct = _f(cr.get("draw_pct", 33.3), 33.3)
-    away_pct = _f(cr.get("away_win_pct", 33.4), 33.4)
-
-    confidence = _i(cr.get("confidence", 55), 55)
-    confidence = max(25, min(95, confidence))
-
-    coverage = _phase1_coverage_for_match(phase1_results, idx)
-
-    if coverage["valid_count"] <= 1:
-        confidence = min(confidence, 62)
-    elif coverage["valid_count"] == 2:
-        confidence = min(confidence, 72)
-
     risk = "低" if confidence >= 75 else ("中" if confidence >= 55 else "高")
 
     final_odds = _get_score_odds(match, predicted_score, final_direction, is_others)
-    raw_score_prob = _extract_score_prob_from_ai(cr, predicted_score)
 
+    crs_prob = crs_analysis.get("implied_probs", {}).get(predicted_score, 0)
     if ENABLE_LLM_VALUE_BET:
-        score_prob = raw_score_prob
-        ev_pct, kelly_pct, is_value = _calculate_score_ev(score_prob, final_odds)
-        value_reason = "基于 Claude top3 精确比分概率计算，未做历史校准"
+        ev_data = calculate_value_bet(crs_prob, final_odds)
+        ev_pct, kelly_pct, is_value = ev_data["ev"], ev_data["kelly"], ev_data["is_value"]
+        value_reason = "基于CRS矩阵去水概率计算"
     else:
-        score_prob = raw_score_prob
         ev_pct, kelly_pct, is_value = 0.0, 0.0, False
-        value_reason = "v19.2 暂不使用 LLM 主观比分概率计算正式EV/Kelly"
+        value_reason = "v19.3 默认不使用LLM主观比分概率计算正式EV/Kelly"
 
-    raw_goal_range = cr.get("goal_range") or _goal_range_from_score(predicted_score)
-    goal_bucket, goal_label = _normalize_goal_range_for_ui(raw_goal_range, predicted_score)
+    goal_bucket, goal_label = _normalize_goal_range_for_ui(cr.get("goal_range"), predicted_score)
 
     obs_codes = _extract_observation_codes(observation_signals)
     obs_labels = _extract_observation_labels(observation_signals)
     obs_objects = _extract_observation_objects(observation_signals)
 
-    hp_list = [home_pct, draw_pct, away_pct]
-    hp_sorted = sorted(hp_list)
-
-    expected_total_goals = _f(engine_result.get("expected_total_goals", 0))
-    if expected_total_goals <= 0:
-        expected_total_goals = (
-            _f(engine_result.get("bookmaker_implied_home_xg", 1.3)) +
-            _f(engine_result.get("bookmaker_implied_away_xg", 0.9))
-        )
-
-    smart_signals_raw = stats.get("smart_signals", []) if stats else []
-
-    p1_gpt = phase1_results.get("gpt", {}).get(idx, {})
-    p1_grok = phase1_results.get("grok", {}).get(idx, {})
-    p1_gemini = phase1_results.get("gemini", {}).get(idx, {})
-
     claude_reason = (
-        cr.get("arbitration_reason")
-        or cr.get("reason")
-        or cr.get("audit_result")
+        claude_result.get("arbitration_reason")
+        or claude_result.get("reason")
+        or claude_result.get("audit_result")
         or ""
     )
 
-    accepted_obs = cr.get("accepted_observations", [])
-    rejected_obs = cr.get("rejected_observations", [])
-    doubts = cr.get("doubts", [])
+    accepted_obs = claude_result.get("accepted_observations", [])
+    rejected_obs = claude_result.get("rejected_observations", [])
+    doubts = claude_result.get("doubts", [])
+
+    top3 = [{"score": sc, "prob": round(score_pts, 2)} for sc, score_pts in cr.get("top_score_candidates", [])[:3]]
+    if not top3:
+        top3 = [{"score": predicted_score, "prob": 0}]
 
     return {
         "predicted_score": predicted_score,
@@ -2615,7 +4411,7 @@ def assemble_final_prediction(
         "final_direction": final_direction,
         "is_score_others": is_others,
 
-        "decision_title": "vMAX 19.2 决策剖析",
+        "decision_title": "vMAX 19.3 决策剖析",
         "decision_engine_version": ENGINE_VERSION,
         "decision_architecture": ENGINE_ARCHITECTURE,
         "engine_version": ENGINE_VERSION,
@@ -2641,9 +4437,9 @@ def assemble_final_prediction(
         "goals_count": goal_count,
         "goal_count_label": goal_label,
 
-        "home_win_pct": home_pct,
-        "draw_pct": draw_pct,
-        "away_win_pct": away_pct,
+        "home_win_pct": cr.get("home_win_pct"),
+        "draw_pct": cr.get("draw_pct"),
+        "away_win_pct": cr.get("away_win_pct"),
 
         "confidence": confidence,
         "ai_confidence": confidence,
@@ -2665,9 +4461,9 @@ def assemble_final_prediction(
         "trust_score": confidence,
         "model_confidence": confidence,
         "model_confidence_pct": confidence,
-        "dir_confidence": confidence,
+        "dir_confidence": cr.get("dir_confidence", confidence),
+        "dir_gap": cr.get("dir_gap", 0),
         "risk_level": risk,
-        "dir_gap": round(hp_sorted[-1] - hp_sorted[-2], 1) if len(hp_sorted) >= 2 else 0,
 
         "ai_call_status": dict(AI_CALL_STATUS),
         "gpt_status": AI_CALL_STATUS.get("gpt", ""),
@@ -2676,21 +4472,21 @@ def assemble_final_prediction(
         "claude_status": AI_CALL_STATUS.get("claude", ""),
 
         "ai_provider": ai_provider,
-        "claude_score": predicted_score,
-        "claude_analysis": claude_reason[:3000],
+        "claude_score": _ai_score_summary(claude_result),
+        "claude_analysis": claude_reason[:3500],
         "arbitration_reason": claude_reason,
-        "audit_result": cr.get("audit_result", ""),
-        "agreement_pattern": cr.get("agreement_pattern", "Claude终审复盘"),
+        "audit_result": claude_result.get("audit_result", ""),
+        "agreement_pattern": claude_result.get("agreement_pattern", "Claude终审审计"),
 
         "phase1_coverage": coverage,
-        "analysis_coverage": cr.get("analysis_coverage", coverage),
+        "analysis_coverage": claude_result.get("analysis_coverage", coverage),
         "coverage_ok": coverage["coverage_ok"],
         "coverage_full": coverage["coverage_full"],
 
-        "adopted_analysts": cr.get("adopted_analysts", []),
-        "rejected_analysts": cr.get("rejected_analysts", []),
-        "alternative_score": cr.get("alternative", {}),
-        "top3": cr.get("top3", []),
+        "adopted_analysts": claude_result.get("adopted_analysts", []),
+        "rejected_analysts": claude_result.get("rejected_analysts", []),
+        "top3": top3,
+        "top_score_candidates": cr.get("top_score_candidates", []),
 
         "gpt_score": _ai_score_summary(p1_gpt),
         "gpt_analysis": _ai_reason_summary(p1_gpt, "GPT 未返回有效分析。"),
@@ -2716,8 +4512,16 @@ def assemble_final_prediction(
         "accepted_observations": accepted_obs,
         "rejected_observations": rejected_obs,
         "doubts": doubts,
-        "data_quality": cr.get("data_quality", {}),
-        "ai_validation_errors": cr.get("ai_validation_errors", []),
+        "data_quality": claude_result.get("data_quality", {}),
+        "ai_validation_errors": claude_result.get("ai_validation_errors", []),
+
+        "bayesian_prior": cr.get("bayesian_prior", {}),
+        "bayesian_evidences": cr.get("bayesian_evidences", []),
+        "posterior_after_lock": cr.get("posterior_after_lock", {}),
+        "override_triggered": cr.get("override_triggered", False),
+        "override_reason": cr.get("override_reason", ""),
+        "raw_probability_argmax": cr.get("raw_probability_argmax", ""),
+        "probability_was_corrected": cr.get("probability_was_corrected", False),
 
         "traps_detected": obs_labels,
         "trap_codes": obs_codes,
@@ -2727,29 +4531,52 @@ def assemble_final_prediction(
         "trap_facts": observation_signals,
         "observation_signals": observation_signals,
         "trap_matrix_title": "观察信号矩阵",
-        "trap_matrix_subtitle": "仅为抓包观察，不代表固定诱盘结论",
+        "trap_matrix_subtitle": "抓包观察 + Sharp分级 + 外部市场审计",
+
+        "trap_report": trap_report,
+        "trap_details": [{"trap": t.get("trap"), "desc": t.get("description")} for t in trap_report.get("traps_detected", [])],
+        "trap_severity": trap_report.get("total_severity", 0),
+
+        "sharp_detected": sharp_eval.get("sharp_detected", False),
+        "sharp_dir": sharp_eval.get("sharp_dir"),
+        "sharp_level": sharp_eval.get("sharp_level"),
+        "sharp_trust": sharp_eval.get("sharp_trust"),
+        "sharp_reason": sharp_eval.get("sharp_reason", []),
+
+        "external_market": external_market,
+        "external_audit": external_audit,
+        "external_market_available": external_audit.get("available", False),
+        "external_market_direction": external_audit.get("external_dir"),
+        "local_market_trap": external_audit.get("risk_tag") == "LOCAL_MARKET_TRAP",
+        "market_risk_tag": external_audit.get("risk_tag"),
 
         "score_odds": final_odds,
-        "raw_llm_score_prob": round(raw_score_prob * 100, 2),
-        "score_prob": round(score_prob * 100, 2),
+        "crs_score_prob": round(crs_prob, 2),
         "suggested_kelly": kelly_pct,
         "edge_vs_market": ev_pct,
         "is_value": is_value,
         "value_reason": value_reason,
 
-        "raw_smart_signals": smart_signals_raw,
+        "raw_smart_signals": stats.get("smart_signals", []) if stats else [],
         "smart_signals": observation_signals,
         "smart_money_signal": " | ".join([str(s) for s in observation_signals[:10]]),
-        "sharp_detected": _detect_sharp_direction(smart_signals_raw) is not None,
-        "sharp_dir": _detect_sharp_direction(smart_signals_raw),
 
         "xG_home": round(_f(engine_result.get("bookmaker_implied_home_xg", 1.3)), 2),
         "xG_away": round(_f(engine_result.get("bookmaker_implied_away_xg", 0.9)), 2),
-        "expected_total_goals": round(expected_total_goals, 2),
+        "expected_total_goals": round(exp_goals, 2),
         "over_2_5": engine_result.get("over_25", 50) if engine_result else 50,
         "btts": engine_result.get("btts", 45) if engine_result else 45,
         "bookmaker_implied_home_xg": engine_result.get("bookmaker_implied_home_xg", "?"),
         "bookmaker_implied_away_xg": engine_result.get("bookmaker_implied_away_xg", "?"),
+
+        "crs_shape": crs_analysis.get("shape_verdict", "unknown"),
+        "crs_moments": crs_analysis.get("moments", {}),
+        "crs_margin": crs_analysis.get("margin", 0.0),
+        "crs_coverage": crs_analysis.get("coverage", 0.0),
+        "crs_implied_probs": crs_analysis.get("implied_probs", {}),
+        "crs_direction_probs": crs_analysis.get("direction_probs", {}),
+        "ttg_analysis": ttg_analysis,
+        "quant_audit": quant_audit,
 
         "model_consensus_dir": ensemble_signals.get("consensus", ""),
         "model_consensus_count": ensemble_signals.get("consensus_count", 0),
@@ -2772,6 +4599,28 @@ def assemble_final_prediction(
 
 
 # ====================================================================
+# 后处理保护
+# ====================================================================
+
+def _apply_legacy_enhancer_readonly(enhancer, match: Dict, mg: Dict, *args):
+    before = {k: mg.get(k) for k in LOCKED_CORE_FIELDS}
+
+    try:
+        mg2 = enhancer(match, mg, *args) if args else enhancer(match, mg)
+    except Exception as e:
+        logger.warning(f"{getattr(enhancer, '__name__', 'enhancer')} 失败: {e}")
+        return mg
+
+    if not isinstance(mg2, dict):
+        return mg
+
+    for k, v in before.items():
+        mg2[k] = v
+
+    return mg2
+
+
+# ====================================================================
 # Top4 推荐
 # ====================================================================
 
@@ -2780,19 +4629,35 @@ def select_top4(preds):
         p = x.get("prediction", {}) or {}
 
         confidence = _f(p.get("confidence", 0))
-        score_prob = _f(p.get("score_prob", 0))
+        dir_gap = _f(p.get("dir_gap", 0))
+        crs_prob = _f(p.get("crs_score_prob", 0))
         risk_penalty = 0
 
         if p.get("risk_level") == "高":
             risk_penalty += 8
+
         if p.get("ai_validation_errors"):
             risk_penalty += 5
+
         if p.get("ai_abstained"):
             risk_penalty += len(p.get("ai_abstained", [])) * 2
+
         if not p.get("coverage_ok", True):
             risk_penalty += 8
 
-        return confidence + score_prob * 0.2 - risk_penalty
+        if p.get("market_risk_tag") == "LOCAL_MARKET_TRAP":
+            risk_penalty += 3
+
+        sharp_level = p.get("sharp_level")
+        sharp_bonus = 0
+        if sharp_level == "S4":
+            sharp_bonus += 8
+        elif sharp_level == "S3":
+            sharp_bonus += 5
+        elif sharp_level == "SD":
+            sharp_bonus -= 5
+
+        return confidence + dir_gap * 0.35 + crs_prob * 0.15 + sharp_bonus - risk_penalty
 
     preds_sorted = sorted(preds, key=_score, reverse=True)
     return preds_sorted[:4]
@@ -2816,43 +4681,28 @@ def extract_num(ms):
     return base + int(nums[0]) if nums else 9999
 
 
-def _fallback_claude_result_from_phase1(phase1_results: Dict[str, Dict[int, Dict]], idx: int) -> Dict:
-    for name in ["gpt", "grok", "gemini"]:
-        r = phase1_results.get(name, {}).get(idx, {})
-        if r and r.get("predicted_score"):
-            out = dict(r)
-            out["agreement_pattern"] = f"Claude失败，采用{name.upper()}兜底"
-            out["adopted_analysts"] = [name]
-            out["rejected_analysts"] = []
-            out["audit_result"] = f"Claude 未返回有效终审，临时采用 {name.upper()} 输出。"
-            out["arbitration_reason"] = f"Claude 未返回有效终审，临时采用 {name.upper()} 输出：{r.get('reason', '')}"
-            out["confidence"] = max(25, int(_f(r.get("confidence", 45)) * 0.85))
-            return out
+def _run_coro_sync(coro):
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
 
-    return {
-        "match": idx,
-        "predicted_score": "1-1",
-        "predicted_direction": "draw",
-        "goal_range": "2球",
-        "home_win_pct": 33.3,
-        "draw_pct": 34.0,
-        "away_win_pct": 32.7,
-        "confidence": 30,
-        "top3": [
-            {"score": "1-1", "prob": 0},
-            {"score": "1-0", "prob": 0},
-            {"score": "0-1", "prob": 0},
-        ],
-        "agreement_pattern": "全部AI失败",
-        "adopted_analysts": [],
-        "rejected_analysts": [],
-        "analysis_coverage": {"gpt": False, "grok": False, "gemini": False, "valid_count": 0},
-        "audit_result": "全部AI失败，兜底输出1-1。",
-        "arbitration_reason": "全部AI失败，兜底输出1-1。此结果不可作为强判断。",
-        "accepted_observations": [],
-        "rejected_observations": [],
-        "doubts": ["AI未返回有效结果，使用保守兜底"],
-    }
+    if loop and loop.is_running():
+        import concurrent.futures
+
+        def _run_in_thread(c):
+            new_loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(new_loop)
+            try:
+                return new_loop.run_until_complete(c)
+            finally:
+                new_loop.close()
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(_run_in_thread, coro)
+            return future.result()
+
+    return asyncio.run(coro)
 
 
 # ====================================================================
@@ -2873,7 +4723,6 @@ def run_predictions(raw, use_ai=True):
     debug_ai_config()
 
     match_analyses = []
-    match_blocks = []
 
     for i, raw_m in enumerate(raw_matches):
         m = normalize_match(raw_m)
@@ -2906,26 +4755,12 @@ def run_predictions(raw, use_ai=True):
             exp_goals = hxg + axg if (hxg and axg) else 2.5
 
         smart_signals = sp.get("smart_signals", []) if isinstance(sp, dict) else []
+        if not isinstance(smart_signals, list):
+            smart_signals = [str(smart_signals)]
 
-        observation_signals = build_observation_signals(
-            match_obj=m,
-            engine_result=eng,
-            smart_signals=smart_signals,
-            exp_goals=exp_goals,
-        )
-
+        crs_analysis = analyze_crs_matrix(m)
+        ttg_analysis = analyze_ttg(m)
         ensemble_signals = collect_ensemble_signals(sp)
-
-        block = format_match_block(
-            idx=i + 1,
-            match=m,
-            engine_result=eng,
-            observation_signals=observation_signals,
-            ensemble_signals=ensemble_signals,
-            smart_signals=smart_signals,
-        )
-
-        match_blocks.append(block)
 
         match_analyses.append({
             "raw_match": raw_m,
@@ -2933,15 +4768,109 @@ def run_predictions(raw, use_ai=True):
             "engine": eng,
             "stats": sp,
             "experience": exp_result,
-            "observation_signals": observation_signals,
+            "smart_signals": smart_signals,
+            "exp_goals": exp_goals,
+            "crs_analysis": crs_analysis,
+            "ttg_analysis": ttg_analysis,
             "ensemble_signals": ensemble_signals,
+            "external_fetch": [],
         })
+
+    if ENABLE_EXTERNAL_FETCH and match_analyses:
+        try:
+            print("\n  [External Fetch] 检查 external_urls / odds_urls ...")
+            match_analyses = _run_coro_sync(enrich_external_contexts(match_analyses))
+        except Exception as e:
+            logger.warning(f"外部市场抓取失败: {e}")
+
+    match_blocks = []
+
+    for i, ma in enumerate(match_analyses):
+        m = ma["match"]
+        eng = ma["engine"]
+        sp = ma["stats"]
+        smart_signals = ma["smart_signals"]
+        exp_goals = ma["exp_goals"]
+        crs_analysis = ma["crs_analysis"]
+        ttg_analysis = ma["ttg_analysis"]
+
+        external_market = _extract_external_market_from_match(
+            m,
+            ma.get("external_fetch", []),
+        )
+
+        external_audit = compute_external_market_audit(m, external_market)
+
+        sharp_eval = classify_sharp_signal(
+            match_obj=m,
+            smart_signals=smart_signals,
+            crs_analysis=crs_analysis,
+            ttg_analysis=ttg_analysis,
+            external_audit=external_audit,
+        )
+
+        trap_report = detect_all_traps(
+            match_obj=m,
+            engine_result=eng,
+            smart_signals=smart_signals,
+            exp_goals=exp_goals,
+            crs_analysis=crs_analysis,
+            ttg_analysis=ttg_analysis,
+            sharp_eval=sharp_eval,
+            external_audit=external_audit,
+        )
+
+        quant_audit = build_quant_audit(
+            match_obj=m,
+            crs_analysis=crs_analysis,
+            ttg_analysis=ttg_analysis,
+            external_audit=external_audit,
+            sharp_eval=sharp_eval,
+            trap_report=trap_report,
+        )
+
+        observation_signals = build_observation_signals(
+            match_obj=m,
+            engine_result=eng,
+            crs_analysis=crs_analysis,
+            ttg_analysis=ttg_analysis,
+            sharp_eval=sharp_eval,
+            external_audit=external_audit,
+            trap_report=trap_report,
+            exp_goals=exp_goals,
+        )
+
+        block = format_match_block(
+            idx=i + 1,
+            match=m,
+            engine_result=eng,
+            crs_analysis=crs_analysis,
+            ttg_analysis=ttg_analysis,
+            sharp_eval=sharp_eval,
+            external_market=external_market,
+            external_audit=external_audit,
+            trap_report=trap_report,
+            quant_audit=quant_audit,
+            observation_signals=observation_signals,
+            ensemble_signals=ma["ensemble_signals"],
+            smart_signals=smart_signals,
+        )
+
+        ma["external_market"] = external_market
+        ma["external_audit"] = external_audit
+        ma["sharp_eval"] = sharp_eval
+        ma["trap_report"] = trap_report
+        ma["quant_audit"] = quant_audit
+        ma["observation_signals"] = observation_signals
+
+        match_blocks.append(block)
 
     phase1_results = {
         "gpt": {},
         "grok": {},
         "gemini": {},
     }
+
     claude_results = {}
     ai_provider = "no_ai"
 
@@ -2952,38 +4881,12 @@ def run_predictions(raw, use_ai=True):
             return p1, p2, provider
 
         try:
-            loop = asyncio.get_running_loop()
-        except RuntimeError:
-            loop = None
-
-        if loop and loop.is_running():
-            import concurrent.futures
-
-            def _run_in_thread(coro):
-                new_loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(new_loop)
-                try:
-                    return new_loop.run_until_complete(coro)
-                finally:
-                    new_loop.close()
-
-            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-                future = pool.submit(_run_in_thread, _run_full_ai())
-                try:
-                    phase1_results, claude_results, ai_provider = future.result()
-                except Exception as e:
-                    logger.error(f"AI 四家矩阵执行崩溃: {e}")
-                    phase1_results = {"gpt": {}, "grok": {}, "gemini": {}}
-                    claude_results = {}
-                    ai_provider = "ai_crashed"
-        else:
-            try:
-                phase1_results, claude_results, ai_provider = asyncio.run(_run_full_ai())
-            except Exception as e:
-                logger.error(f"AI 四家矩阵执行崩溃: {e}")
-                phase1_results = {"gpt": {}, "grok": {}, "gemini": {}}
-                claude_results = {}
-                ai_provider = "ai_crashed"
+            phase1_results, claude_results, ai_provider = _run_coro_sync(_run_full_ai())
+        except Exception as e:
+            logger.error(f"AI 四家矩阵执行崩溃: {e}")
+            phase1_results = {"gpt": {}, "grok": {}, "gemini": {}}
+            claude_results = {}
+            ai_provider = "ai_crashed"
 
     res = []
 
@@ -2993,8 +4896,6 @@ def run_predictions(raw, use_ai=True):
         m = ma["match"]
 
         cr = claude_results.get(idx, {})
-        if not cr:
-            cr = _fallback_claude_result_from_phase1(phase1_results, idx)
 
         mg = assemble_final_prediction(
             match=m,
@@ -3004,6 +4905,14 @@ def run_predictions(raw, use_ai=True):
             claude_result=cr,
             observation_signals=ma["observation_signals"],
             ensemble_signals=ma["ensemble_signals"],
+            crs_analysis=ma["crs_analysis"],
+            ttg_analysis=ma["ttg_analysis"],
+            sharp_eval=ma["sharp_eval"],
+            external_market=ma["external_market"],
+            external_audit=ma["external_audit"],
+            trap_report=ma["trap_report"],
+            quant_audit=ma["quant_audit"],
+            exp_goals=ma["exp_goals"],
             idx=idx,
             ai_provider=ai_provider,
         )
@@ -3028,7 +4937,7 @@ def run_predictions(raw, use_ai=True):
 
         combined = {**raw_m, **m, "prediction": mg}
 
-        for k in [
+        root_fields = [
             "predicted_score",
             "predicted_label",
             "predicted_direction",
@@ -3102,11 +5011,28 @@ def run_predictions(raw, use_ai=True):
             "grok_analysis",
             "gemini_score",
             "gemini_analysis",
-        ]:
+
+            "sharp_detected",
+            "sharp_dir",
+            "sharp_level",
+            "sharp_trust",
+
+            "external_market_available",
+            "external_market_direction",
+            "local_market_trap",
+            "market_risk_tag",
+
+            "crs_shape",
+            "crs_moments",
+            "ttg_analysis",
+            "quant_audit",
+        ]
+
+        for k in root_fields:
             combined[k] = mg.get(k)
 
         combined["engine_version"] = ENGINE_VERSION
-        combined["decision_title"] = "vMAX 19.2 决策剖析"
+        combined["decision_title"] = "vMAX 19.3 决策剖析"
         combined["decision_engine_version"] = ENGINE_VERSION
         combined["decision_architecture"] = ENGINE_ARCHITECTURE
 
@@ -3167,9 +5093,9 @@ def run_predictions(raw, use_ai=True):
 
         res.append(combined)
 
-        obs_tag = f" [OBS{len(ma['observation_signals'])}]" if ma.get("observation_signals") else ""
-        err_tag = f" [校验{len(mg.get('ai_validation_errors', []))}]" if mg.get("ai_validation_errors") else ""
-        abstain_tag = f" [缺席{','.join(mg.get('ai_abstained', []))}]" if mg.get("ai_abstained") else ""
+        sharp_tag = f" [Sharp {mg.get('sharp_level')}:{mg.get('sharp_dir')} {mg.get('sharp_trust')}]" if mg.get("sharp_detected") else ""
+        market_tag = f" [{mg.get('market_risk_tag')}]" if mg.get("market_risk_tag") else ""
+        trap_tag = f" [陷阱{ma['trap_report'].get('trap_count', 0)}]" if ma.get("trap_report") else ""
         cov = mg.get("phase1_coverage", {})
         cov_tag = f" [覆盖{cov.get('valid_count', 0)}/3]"
 
@@ -3177,8 +5103,9 @@ def run_predictions(raw, use_ai=True):
             f"  [{idx}] {m.get('home_team', m.get('home', '?'))} vs "
             f"{m.get('away_team', m.get('guest', '?'))} => "
             f"{mg['result']} ({mg['predicted_score']}) | "
-            f"CF: {mg['confidence']}% | {mg.get('agreement_pattern', 'Claude终审')}"
-            f"{cov_tag}{obs_tag}{err_tag}{abstain_tag}"
+            f"CF: {mg['confidence']}% | "
+            f"{mg.get('scenario', 'normal')}"
+            f"{cov_tag}{sharp_tag}{market_tag}{trap_tag}"
         )
 
     t4 = select_top4(res)
@@ -3200,9 +5127,10 @@ if __name__ == "__main__":
     logger.info(f"{ENGINE_VERSION} 启动")
     print(f"✅ {ENGINE_VERSION} 加载完成")
     print(f"   架构: {ENGINE_ARCHITECTURE}")
-    print("   Phase 1: GPT / Grok / Gemini 三家独立分析")
-    print("   Phase 1 Repair: 缺失场次自动单场补跑")
-    print("   Phase 2: Claude 接收三家结论 + 原始抓包做最终审计")
-    print("   规则: Claude 必须重新审计抓包，不按票数机械裁决")
-    print("   调用层: 回到第一版底座，不限制输出字数，长等待")
+    print("   Phase 0: 原始抓包标准化")
+    print("   Phase 1: 外部市场比对 + CRS矩阵 + TTG主模态 + Sharp分级")
+    print("   Phase 2: GPT/Grok/Gemini 三家独立分析")
+    print("   Phase 3: Claude 终审审计")
+    print("   Phase 4: 程序决策锁定链，方向→区间→比分")
+    print("   规则: Sharp是体彩核心变量，但必须先分级；Claude不直接锁死最终比分")
     print("   EV/Kelly: 默认不使用 LLM 主观比分概率")
