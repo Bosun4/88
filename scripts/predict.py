@@ -3130,7 +3130,7 @@ async def run_ai_matrix_two_phase(match_analyses):
 
     phase1_configs = [
         ("grok", "GROK_API_URL", "GROK_API_KEY", ["熊猫-A-5-grok-4.2-fast-200w上下文"]),
-        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.5"]),
+        ("gpt", "GPT_API_URL", "GPT_API_KEY", ["gpt-5.4"]),
         ("gemini", "GEMINI_API_URL", "GEMINI_API_KEY", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"]),
     ]
 
