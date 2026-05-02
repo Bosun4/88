@@ -1,14 +1,15 @@
 # ====================================================================
-# 🚀 vMAX 19.4 — RAW-ONLY 一次性四AI审计版
+# 🚀 vMAX 19.4 — RAW-ONLY 一次性四AI联网审计版
 # --------------------------------------------------------------------
-# 这版原则:
+# 核心原则:
 #   ✅ 抓包和原始数据一次性完整提交给 AI
-#   ✅ GPT / Grok / Gemini 三家不分工，全部看同一份完整数据
+#   ✅ GPT / GroK / Gemini 三家不分工，全部看同一份完整数据
+#   ✅ 每个 AI 都被要求自行联网搜索：赔率、亚盘、聪明钱、Polymarket、伤停、首发、战意
 #   ✅ 不使用本地市场概率核心限制 AI
 #   ✅ 不使用本地比分矩阵覆盖 AI
 #   ✅ 不做 Phase1 Repair，不逐场补跑，避免 Grok/Gemini 重复消耗 token
-#   ✅ 每家 AI 只调用一次
-#   ✅ Claude 接收完整抓包 + 三家完整结论做最终审计
+#   ✅ 每家 AI 只调用一次主通道
+#   ✅ Claude 接收完整抓包 + 三家完整结论 + 自己联网搜索材料做最终审计
 #   ✅ Claude 不按票数机械裁决，但三家完全一致时不得无证据乱改比分
 #   ✅ 本地只做 JSON 解析、字段兼容、展示包装，不篡改 Claude 最终比分
 #   ✅ EV/Kelly 默认不使用 LLM 主观比分概率
@@ -37,93 +38,35 @@ except Exception:
 
 
 # ====================================================================
-# 安全导入：只保留兼容，不让本地模型决定最终结果
-# ====================================================================
-
-EnsemblePredictor = None
-ExperienceEngine = None
-predict_match = None
-apply_experience_to_prediction = None
-upgrade_ensemble_predict = None
-
-try:
-    from config import *
-except Exception as e:
-    logger.warning(f"config 导入异常: {e}")
-
-try:
-    from models import EnsemblePredictor
-except Exception as e:
-    logger.warning(f"models 导入异常: {e}")
-
-try:
-    from odds_engine import predict_match
-except Exception as e:
-    logger.warning(f"odds_engine 导入异常: {e}")
-
-try:
-    from league_intel import build_league_intelligence
-except Exception as e:
-    logger.warning(f"league_intel 导入异常: {e}")
-
-try:
-    from experience_rules import ExperienceEngine, apply_experience_to_prediction
-except Exception as e:
-    logger.warning(f"experience_rules 导入异常: {e}")
-
-try:
-    from advanced_models import upgrade_ensemble_predict
-except Exception as e:
-    logger.warning(f"advanced_models 导入异常: {e}")
-
-try:
-    from odds_history import apply_odds_history
-except Exception:
-    def apply_odds_history(m, mg):
-        return mg
-
-try:
-    from quant_edge import apply_quant_edge
-except Exception:
-    def apply_quant_edge(m, mg):
-        return mg
-
-try:
-    from wencai_intel import apply_wencai_intel
-except Exception:
-    def apply_wencai_intel(m, mg):
-        return mg
-
-
-try:
-    ensemble = EnsemblePredictor() if EnsemblePredictor else None
-except Exception as e:
-    logger.warning(f"EnsemblePredictor 初始化失败: {e}")
-    ensemble = None
-
-try:
-    exp_engine = ExperienceEngine() if ExperienceEngine else None
-except Exception as e:
-    logger.warning(f"ExperienceEngine 初始化失败: {e}")
-    exp_engine = None
-
-
-# ====================================================================
 # 基础配置
 # ====================================================================
 
 ENGINE_VERSION = "vMAX 19.4"
-ENGINE_ARCHITECTURE = "RAW-ONLY Single-Shot 3AI + Claude Audit"
+ENGINE_ARCHITECTURE = "RAW-ONLY Single-Shot Web-Research 3AI + Claude Audit"
 
-# 关键开关：这版不让本地算法决定方向/比分
+# 这版不允许本地概率模型决定最终方向/比分
 ENABLE_LOCAL_MARKET_CORE = False
 ENABLE_PHASE1_REPAIR = False
 ENABLE_GROK_REPAIR = False
 ENABLE_LLM_VALUE_BET = False
 APPLY_LEGACY_ENHANCERS = False
 
-# 每家 AI 严格只尝试一次主通道
+# 每家 AI 只调用一次，不 fallback，不逐场补跑
 STRICT_SINGLE_CALL_PER_AI = True
+
+# 要求模型自行联网研究
+ENABLE_AI_WEB_RESEARCH = True
+
+WEB_RESEARCH_TARGETS = [
+    "最新欧赔 / 亚盘 / 大小球 / 精确比分赔率变化",
+    "赔率公司分歧、盘口升降水、临场盘口变化",
+    "Sharp money / smart money / steam move / reverse line movement",
+    "Betfair / Pinnacle / exchanges / Asian handicap 市场信号",
+    "Polymarket 是否有相关比赛、冠军、晋级、杯赛或球队市场",
+    "球队最新伤停、首发、轮换、赛前发布会",
+    "赛程密度、战意、杯赛轮换、天气、裁判信息",
+    "本地媒体、俱乐部官方、可靠足球数据源的赛前情报",
+]
 
 AI_CALL_STATUS = {
     "gpt": "",
@@ -165,18 +108,6 @@ CRS_FULL_MAP = {
     "0-5": "l05",
     "1-5": "l15",
     "2-5": "l25",
-}
-
-HFTF_MAP = {
-    "ss": "主/主",
-    "sp": "主/平",
-    "sf": "主/负",
-    "ps": "平/主",
-    "pp": "平/平",
-    "pf": "平/负",
-    "fs": "负/主",
-    "fp": "负/平",
-    "ff": "负/负",
 }
 
 CUP_KEYWORDS = [
@@ -232,8 +163,10 @@ def _safe_json(obj: Any, max_len: Optional[int] = None) -> str:
         text = json.dumps(obj, ensure_ascii=False, indent=2)
     except Exception:
         text = str(obj)
+
     if max_len and len(text) > max_len:
         return text[:max_len] + "\n...<TRUNCATED_BY_LOCAL_DISPLAY_ONLY>"
+
     return text
 
 
@@ -248,7 +181,7 @@ def _parse_score(s: str) -> Tuple[Optional[int], Optional[int]]:
         if "负" in s_str and "其他" in s_str:
             return 0, 9
 
-        if s_str in ["主胜", "客胜", "平局", "home", "away", "draw", "", "待定"]:
+        if s_str in ["主胜", "客胜", "平局", "home", "away", "draw", "", "待定", "None", "null"]:
             return None, None
 
         p = s_str.split("-")
@@ -394,6 +327,7 @@ def _stable_match_key(raw_m: Dict, idx: int) -> str:
     home = raw_m.get("home_team") or raw_m.get("home") or raw_m.get("host") or ""
     away = raw_m.get("away_team") or raw_m.get("guest") or raw_m.get("away") or ""
     league = raw_m.get("league") or raw_m.get("cup") or ""
+
     return f"idx:{idx}|{league}|{home}|{away}"
 
 
@@ -438,6 +372,7 @@ def get_first_clean_env_key(names: List[str], default="") -> str:
         v = str(os.environ.get(name, globals().get(name, ""))).strip(" \t\n\r\"'")
         if v:
             return v
+
     return str(default or "").strip(" \t\n\r\"'")
 
 
@@ -456,9 +391,12 @@ def get_first_clean_env_url(names: List[str], default="") -> str:
 def _mask_key(v: str) -> str:
     if not v:
         return "EMPTY"
+
     s = str(v)
+
     if len(s) >= 8:
         return s[:4] + "****" + s[-4:]
+
     return "SET"
 
 
@@ -475,14 +413,14 @@ def debug_ai_config():
 
 
 # ====================================================================
-# Match 标准化：只做展示字段，不做赔率误吸附，不做本地决策
+# Match 标准化：只做字段兼容，不做本地判断
 # ====================================================================
 
 def normalize_match(raw_m: Dict) -> Dict:
     raw_m = raw_m or {}
     m = dict(raw_m)
 
-    # 只做浅层兼容，不通过泛化 win/draw/lose 深搜吸赔率，避免字段误吸附
+    # 只做浅层兼容，避免深度递归误吸附 win/draw/lose 非赔率字段
     for nested_key in [
         "v2_odds_dict",
         "odds_dict",
@@ -495,6 +433,7 @@ def normalize_match(raw_m: Dict) -> Dict:
         "detail",
     ]:
         nested = raw_m.get(nested_key)
+
         if isinstance(nested, dict):
             for k, v in nested.items():
                 if k not in m:
@@ -544,35 +483,43 @@ def build_raw_match_brief(idx: int, match: Dict) -> str:
     lines.append(f"联赛/赛事: {league}")
     lines.append(f"比赛编号: {match_num}")
 
-    # 以下只做摘要展示，不做本地判断
-    for k in [
+    # 只做摘要展示，不做本地计算限制
+    important_keys = [
         "win", "same", "lose",
         "sp_home", "sp_draw", "sp_away",
-        "give_ball", "handicap",
+        "give_ball", "handicap", "rq", "let_ball",
+
+        "change", "vote", "points", "information", "smart_signals",
+
         "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
+
         "w10", "w20", "w21", "w30", "w31", "w32",
-        "s00", "s11", "s22",
+        "w40", "w41", "w42", "w50", "w51", "w52",
+
+        "s00", "s11", "s22", "s33",
+
         "l01", "l02", "l12", "l03", "l13", "l23",
+        "l04", "l14", "l24", "l05", "l15", "l25",
+
         "crs_win", "crs_same", "crs_lose",
-    ]:
+
+        "ss", "sp", "sf", "ps", "pp", "pf", "fs", "fp", "ff",
+    ]
+
+    for k in important_keys:
         if k in match and match.get(k) not in [None, ""]:
-            lines.append(f"{k}: {match.get(k)}")
-
-    points = match.get("points")
-    if isinstance(points, dict):
-        lines.append("【points】")
-        lines.append(_safe_json(points))
-
-    information = match.get("information")
-    if isinstance(information, dict):
-        lines.append("【information】")
-        lines.append(_safe_json(information))
+            v = match.get(k)
+            if isinstance(v, (dict, list)):
+                lines.append(f"{k}: {_safe_json(v, 3000)}")
+            else:
+                lines.append(f"{k}: {v}")
 
     return "\n".join(lines)
 
 
 def build_full_raw_packet(raw: Dict, normalized_matches: List[Dict]) -> str:
     brief_blocks = []
+
     for i, m in enumerate(normalized_matches, 1):
         brief_blocks.append(build_raw_match_brief(i, m))
 
@@ -591,27 +538,73 @@ def build_full_raw_packet(raw: Dict, normalized_matches: List[Dict]) -> str:
 
 
 # ====================================================================
-# Prompt：Phase 1 三家不分工，一次性完整分析
+# 联网研究指令
+# ====================================================================
+
+def build_ai_web_research_instruction() -> str:
+    if not ENABLE_AI_WEB_RESEARCH:
+        return ""
+
+    p = ""
+    p += "<web_research_required>\n"
+    p += "你具备联网搜索能力。你必须在分析前主动联网检索每场比赛的最新外部信息。\n"
+    p += "不要只依赖我给你的抓包；抓包是基础数据，联网信息用于补充验证。\n\n"
+
+    p += "必须搜索的方向：\n"
+    for i, target in enumerate(WEB_RESEARCH_TARGETS, 1):
+        p += f"{i}. {target}\n"
+
+    p += "\n搜索要求：\n"
+    p += "1. 每场比赛至少搜索：主队名 + 客队名 + odds / betting odds / asian handicap / line movement。\n"
+    p += "2. 每场比赛至少搜索：主队名 + 客队名 + injury / lineup / team news / preview。\n"
+    p += "3. 热门赛事必须额外搜索 smart money、steam move、sharp money、Pinnacle、Betfair、exchange odds。\n"
+    p += "4. 必须检查 Polymarket 是否存在相关比赛、冠军、晋级、杯赛或球队市场；如果没有，写 not_found。\n"
+    p += "5. 联网材料只能作为补充证据，不能机械覆盖抓包赔率结构。\n"
+    p += "6. 如果联网信息与抓包冲突，必须说明冲突点，以及你选择相信哪一边。\n"
+    p += "7. 不要编造来源；没有搜到就写 not_found。\n"
+    p += "8. 你必须把实际搜索关键词写入 queries。\n\n"
+
+    p += "每场 JSON 必须输出 web_research 字段：\n"
+    p += "{\n"
+    p += "  \"searched\": true,\n"
+    p += "  \"queries\": [\"实际搜索关键词1\", \"实际搜索关键词2\"],\n"
+    p += "  \"odds_market_findings\": [\"最新赔率/盘口/水位发现\"],\n"
+    p += "  \"smart_money_findings\": [\"Sharp/Steam/交易所/盘口异动发现\"],\n"
+    p += "  \"polymarket_findings\": [\"Polymarket相关发现或not_found\"],\n"
+    p += "  \"team_news_findings\": [\"伤停/首发/轮换/战意发现\"],\n"
+    p += "  \"source_notes\": [\"来源说明，尽量包含网站名或媒体名\"],\n"
+    p += "  \"conflicts_with_raw_packet\": [\"如果联网信息和抓包冲突，写这里\"]\n"
+    p += "}\n"
+    p += "</web_research_required>\n\n"
+
+    return p
+
+
+# ====================================================================
+# Prompt：Phase 1 三家不分工，一次性完整抓包 + 联网研究
 # ====================================================================
 
 def build_phase1_unified_prompt(raw_packet_text: str, num_matches: int) -> str:
     p = ""
     p += "<context>\n"
     p += "你是竞彩足球独立分析 AI。下面是一次性提交的完整抓包数据，包含所有比赛、赔率、盘口、比分赔率、总进球、基本面、伤停、资金信号等原始字段。\n"
-    p += "你不需要分工，也不要等待其他模型。你要独立阅读完整抓包，自行计算、自行判断每场最终方向和比分。\n"
+    p += "你不需要分工，也不要等待其他模型。你要独立阅读完整抓包，自行联网搜索、自行计算、自行判断每场最终方向和比分。\n"
     p += "</context>\n\n"
+
+    p += build_ai_web_research_instruction()
 
     p += "<hard_rules>\n"
     p += "1. 必须分析全部比赛，不要漏场。\n"
     p += f"2. 本次共有 {num_matches} 场，输出 JSON 数组长度应为 {num_matches}。\n"
     p += "3. match 字段必须对应第几场，从 1 开始编号。\n"
-    p += "4. 不要因为常见比分就机械输出 1-1；只有抓包证据支持平局小球时才可输出 1-1。\n"
-    p += "5. predicted_score 必须和 predicted_direction 一致。\n"
-    p += "6. top3[0] 必须等于 predicted_score。\n"
-    p += "7. 必须基于完整抓包自主计算，不要只复述赔率最低项。\n"
-    p += "8. 必须列出 key_evidence 和 doubts。\n"
-    p += "9. 如果数据矛盾，可以降低 confidence，但不要漏场。\n"
-    p += "10. 严格输出 JSON 数组，不要 markdown，不要代码块，不要前缀，不要后缀。\n"
+    p += "4. 必须先联网搜索，再结合抓包分析，不允许只看抓包就下结论。\n"
+    p += "5. 不要因为常见比分就机械输出 1-1；只有抓包和联网材料共同支持平局小球时才可输出 1-1。\n"
+    p += "6. predicted_score 必须和 predicted_direction 一致。\n"
+    p += "7. top3[0] 必须等于 predicted_score。\n"
+    p += "8. 必须基于完整抓包 + 联网情报自主计算，不要只复述赔率最低项。\n"
+    p += "9. 必须列出 key_evidence、web_research、doubts。\n"
+    p += "10. 如果数据矛盾，可以降低 confidence，但不要漏场。\n"
+    p += "11. 严格输出 JSON 数组，不要 markdown，不要代码块，不要前缀，不要后缀。\n"
     p += "</hard_rules>\n\n"
 
     p += "<analysis_requirements>\n"
@@ -623,6 +616,7 @@ def build_phase1_unified_prompt(raw_packet_text: str, num_matches: int) -> str:
     p += "- 半全场\n"
     p += "- 赔率变化\n"
     p += "- Sharp / Steam / 散户热度\n"
+    p += "- 联网搜索到的最新赔率、聪明钱、Polymarket、伤停、首发、战意\n"
     p += "- 基本面、战意、伤停、赛程、杯赛属性\n"
     p += "- 各市场是否共振或互相矛盾\n"
     p += "</analysis_requirements>\n\n"
@@ -648,7 +642,17 @@ def build_phase1_unified_prompt(raw_packet_text: str, num_matches: int) -> str:
     p += "      {\"score\":\"1-1\", \"prob\":13},\n"
     p += "      {\"score\":\"1-0\", \"prob\":12}\n"
     p += "    ],\n"
-    p += "    \"key_evidence\": [\"证据1\", \"证据2\"],\n"
+    p += "    \"key_evidence\": [\"抓包证据1\", \"联网证据1\"],\n"
+    p += "    \"web_research\": {\n"
+    p += "      \"searched\": true,\n"
+    p += "      \"queries\": [\"Team A vs Team B odds\", \"Team A Team B injury lineup\"],\n"
+    p += "      \"odds_market_findings\": [\"最新欧赔/亚盘/大小球变化\"],\n"
+    p += "      \"smart_money_findings\": [\"Sharp/Steam/盘口异动/交易所发现\"],\n"
+    p += "      \"polymarket_findings\": [\"Polymarket相关市场或not_found\"],\n"
+    p += "      \"team_news_findings\": [\"伤停/首发/轮换/战意\"],\n"
+    p += "      \"source_notes\": [\"网站或媒体来源说明\"],\n"
+    p += "      \"conflicts_with_raw_packet\": []\n"
+    p += "    },\n"
     p += "    \"doubts\": [\"反证1\", \"风险1\"],\n"
     p += "    \"data_quality\": {\"raw_complete\": true, \"odds_complete\": true, \"crs_complete\": true, \"notes\": []},\n"
     p += "    \"reason\": \"中文分析\"\n"
@@ -660,7 +664,7 @@ def build_phase1_unified_prompt(raw_packet_text: str, num_matches: int) -> str:
 
 
 # ====================================================================
-# Prompt：Phase 2 Claude 一次性终审
+# Prompt：Phase 2 Claude 一次性终审 + 自己联网搜索
 # ====================================================================
 
 def _phase1_result_for_prompt(ai_name: str, results: Dict[int, Dict], num_matches: int) -> str:
@@ -668,8 +672,10 @@ def _phase1_result_for_prompt(ai_name: str, results: Dict[int, Dict], num_matche
     p += f"\n<{ai_name}_full_result>\n"
 
     arr = []
+
     for i in range(1, num_matches + 1):
         r = results.get(i)
+
         if isinstance(r, dict):
             arr.append(r)
         else:
@@ -692,29 +698,34 @@ def build_phase2_claude_prompt(
     p = ""
     p += "<context>\n"
     p += "你是最终审计 AI。GPT / Grok / Gemini 已经分别拿到同一份完整抓包，并且不分工完成独立分析。\n"
-    p += "你现在拿到：完整原始抓包 + 三家完整结论。你需要输出最终预测。\n"
+    p += "你现在拿到：完整原始抓包 + 三家完整结论。你需要自行联网搜索后输出最终预测。\n"
     p += "</context>\n\n"
+
+    p += build_ai_web_research_instruction()
 
     p += "<core_rules>\n"
     p += "1. 你必须重新审计完整抓包，不能只按票数机械裁决。\n"
-    p += "2. 但如果 GPT/Grok/Gemini 三家的 predicted_score 和 predicted_direction 完全一致，你默认必须沿用一致结论。\n"
-    p += "3. 三家完全一致时，只有在原始抓包存在非常明确的反证时，你才允许推翻；推翻必须写出具体反证字段和原因。\n"
-    p += "4. 禁止出现三家都给 1-1，而你没有强反证就改成 2-1 的情况。\n"
-    p += "5. 禁止为了显得独立而刻意改比分。\n"
-    p += "6. 二对一时，按抓包证据质量裁决，不按人数裁决。\n"
-    p += "7. 三家都缺失时，你才基于完整抓包独立判断，并降低 confidence。\n"
-    p += "8. predicted_score 必须和 predicted_direction 一致。\n"
-    p += "9. top3[0] 必须等于 predicted_score。\n"
-    p += "10. 必须输出 analyst_consensus，说明三家是否一致。\n"
-    p += "11. 必须输出 override_unanimous，如果三家一致但你推翻，则为 true，否则 false。\n"
-    p += "12. 严格输出 JSON 数组，不要 markdown，不要代码块，不要前缀，不要后缀。\n"
+    p += "2. 你也必须自行联网搜索最新赔率、盘口、聪明钱、Polymarket、伤停、首发、战意信息。\n"
+    p += "3. 如果 GPT/Grok/Gemini 三家的 predicted_score 和 predicted_direction 完全一致，你默认必须沿用一致结论。\n"
+    p += "4. 三家完全一致时，只有在原始抓包或你联网搜索到的最新强反证非常明确时，你才允许推翻。\n"
+    p += "5. 如果你推翻三家一致结论，必须写出具体反证字段、联网来源类型、盘口变化或伤停突发原因。\n"
+    p += "6. 禁止出现三家都给 1-1，而你没有强反证就改成 2-1 的情况。\n"
+    p += "7. 禁止为了显得独立而刻意改比分。\n"
+    p += "8. 二对一时，按抓包证据 + 联网证据质量裁决，不按人数裁决。\n"
+    p += "9. 三家都缺失时，你才基于完整抓包 + 联网搜索独立判断，并降低 confidence。\n"
+    p += "10. predicted_score 必须和 predicted_direction 一致。\n"
+    p += "11. top3[0] 必须等于 predicted_score。\n"
+    p += "12. 必须输出 analyst_consensus，说明三家是否一致。\n"
+    p += "13. 必须输出 override_unanimous，如果三家一致但你推翻，则为 true，否则 false。\n"
+    p += "14. 必须输出 web_research，说明你自己终审阶段联网搜索到的材料。\n"
+    p += "15. 严格输出 JSON 数组，不要 markdown，不要代码块，不要前缀，不要后缀。\n"
     p += "</core_rules>\n\n"
 
     p += "<decision_policy>\n"
-    p += "你的任务不是制造新答案，而是审计三家结论与原始抓包是否匹配。\n"
-    p += "当三家一致且抓包没有强反证，最终比分应与三家一致。\n"
-    p += "当三家分歧，优先选择与原始抓包多市场共振更强的一方。\n"
-    p += "当比分很接近，例如 1-1 与 2-1，只能在总进球、CRS、让球、欧赔、基本面同时支持时才上调或下调。\n"
+    p += "你的任务不是制造新答案，而是审计三家结论、原始抓包与联网材料是否匹配。\n"
+    p += "当三家一致且抓包与联网材料没有强反证，最终比分应与三家一致。\n"
+    p += "当三家分歧，优先选择与原始抓包 + 联网材料多市场共振更强的一方。\n"
+    p += "当比分很接近，例如 1-1 与 2-1，只能在总进球、CRS、让球、欧赔、基本面、联网信息同时支持时才上调或下调。\n"
     p += "</decision_policy>\n\n"
 
     p += "<three_ai_results>\n"
@@ -756,7 +767,17 @@ def build_phase2_claude_prompt(
     p += "    \"override_unanimous\": false,\n"
     p += "    \"adopted_analysts\": [\"gpt\", \"grok\"],\n"
     p += "    \"rejected_analysts\": [\"gemini\"],\n"
-    p += "    \"key_evidence\": [\"原始抓包证据1\", \"原始抓包证据2\"],\n"
+    p += "    \"key_evidence\": [\"原始抓包证据1\", \"联网证据1\"],\n"
+    p += "    \"web_research\": {\n"
+    p += "      \"searched\": true,\n"
+    p += "      \"queries\": [\"Team A vs Team B latest odds\", \"Team A Team B sharp money\", \"Team A Team B injuries\"],\n"
+    p += "      \"odds_market_findings\": [\"终审阶段最新赔率/盘口/大小球发现\"],\n"
+    p += "      \"smart_money_findings\": [\"Sharp/Steam/交易所/盘口异动发现\"],\n"
+    p += "      \"polymarket_findings\": [\"Polymarket相关市场或not_found\"],\n"
+    p += "      \"team_news_findings\": [\"伤停/首发/轮换/战意发现\"],\n"
+    p += "      \"source_notes\": [\"来源说明\"],\n"
+    p += "      \"conflicts_with_raw_packet\": [\"联网信息与抓包冲突点\"]\n"
+    p += "    },\n"
     p += "    \"doubts\": [\"风险1\", \"反证1\"],\n"
     p += "    \"audit_result\": \"终审结论摘要\",\n"
     p += "    \"arbitration_reason\": \"完整中文终审理由\"\n"
@@ -776,7 +797,7 @@ PHASE1_CONFIGS = [
         "ai_name": "gpt",
         "url_env": "GPT_API_URL",
         "key_env": "GPT_API_KEY",
-        "models": ["gpt-5.4"],
+        "models": ["gpt-5.5"],
     },
     {
         "ai_name": "grok",
@@ -832,12 +853,14 @@ async def async_call_ai_once(
     phase: str
 ) -> Tuple[str, Dict[int, Dict], str]:
     key = _get_key_for_ai(ai_name, key_env)
+
     if not key:
         status = f"no_key:{key_env}"
         print(f"  [跳过] {ai_name.upper()} 无可用 KEY: {key_env}")
         return ai_name, {}, status
 
     base_url = _build_single_url_for_ai(ai_name, url_env)
+
     if not base_url:
         status = f"no_url:{url_env}"
         print(f"  [跳过] {ai_name.upper()} 无可用 URL: {url_env}")
@@ -846,12 +869,14 @@ async def async_call_ai_once(
     model_name = models_list[0] if models_list else ""
 
     CONNECT_TIMEOUT = 30
+
     READ_TIMEOUT_MAP = {
         "claude": 1800,
         "grok": 900,
         "gpt": 1200,
         "gemini": 1800,
     }
+
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 900)
 
     is_gem = "generateContent" in base_url
@@ -939,9 +964,11 @@ async def async_call_ai_once(
     except asyncio.TimeoutError:
         print(f"    ⏱️ {ai_name.upper()} 单次读取超时: {READ_TIMEOUT}s")
         return ai_name, {}, "read_timeout"
+
     except aiohttp.ClientConnectorError as e:
         print(f"    ⚠️ {ai_name.upper()} 连接失败: {str(e)[:160]}")
         return ai_name, {}, "connect_error"
+
     except Exception as e:
         print(f"    ⚠️ {ai_name.upper()} 调用异常: {str(e)[:160]}")
         return ai_name, {}, "error"
@@ -953,9 +980,11 @@ def _extract_response_text(data, is_gem=False) -> str:
     try:
         if is_gem:
             candidates = data.get("candidates", [])
+
             for cand in candidates:
                 content = cand.get("content", {})
                 parts = content.get("parts", [])
+
                 for part in parts:
                     t = part.get("text")
                     if isinstance(t, str) and t.strip():
@@ -965,6 +994,7 @@ def _extract_response_text(data, is_gem=False) -> str:
 
         # OpenAI-compatible Chat Completions
         choices = data.get("choices")
+
         if isinstance(choices, list) and choices:
             msg = choices[0].get("message", {})
 
@@ -998,10 +1028,12 @@ def _extract_response_text(data, is_gem=False) -> str:
 
         # Responses API / xAI style / mixed proxy
         output = data.get("output")
+
         if isinstance(output, list):
             for block in output:
                 if isinstance(block, dict):
                     content = block.get("content")
+
                     if isinstance(content, list):
                         for c in content:
                             if isinstance(c, dict):
@@ -1009,15 +1041,18 @@ def _extract_response_text(data, is_gem=False) -> str:
                                     t = c.get(key)
                                     if isinstance(t, str) and t.strip():
                                         pieces.append(t.strip())
+
                     for key in ["text", "content", "output_text"]:
                         t = block.get(key)
                         if isinstance(t, str) and t.strip():
                             pieces.append(t.strip())
+
         elif isinstance(output, str) and output.strip():
             pieces.append(output.strip())
 
         # Claude native style
         content = data.get("content")
+
         if isinstance(content, list):
             for block in content:
                 if isinstance(block, dict):
@@ -1025,6 +1060,7 @@ def _extract_response_text(data, is_gem=False) -> str:
                         pieces.append(block["text"].strip())
                     elif isinstance(block.get("text"), str):
                         pieces.append(block["text"].strip())
+
         elif isinstance(content, str) and content.strip():
             pieces.append(content.strip())
 
@@ -1033,9 +1069,10 @@ def _extract_response_text(data, is_gem=False) -> str:
         if raw_text:
             return raw_text
 
-        # 最后兜底：从完整 JSON 中找数组
+        # 最后兜底：从完整 JSON 响应中找数组
         full_str = json.dumps(data, ensure_ascii=False)
         m_match = re.search(r'\[\s*\{\s*\\?"match\\?"', full_str)
+
         if m_match:
             start_pos = m_match.start()
             depth = 0
@@ -1071,11 +1108,13 @@ def _extract_response_text(data, is_gem=False) -> str:
 
             if end_pos > start_pos:
                 extracted = full_str[start_pos:end_pos]
+
                 if '\\"' in extracted:
                     try:
                         extracted = json.loads('"' + extracted + '"')
                     except Exception:
                         extracted = extracted.replace('\\"', '"')
+
                 return extracted.strip()
 
     except Exception as ex:
@@ -1104,6 +1143,7 @@ def _extract_json_array(clean: str) -> str:
     ]
 
     m_re = None
+
     for pat in patterns:
         m_re = re.search(pat, clean)
         if m_re:
@@ -1154,6 +1194,7 @@ def _extract_json_array(clean: str) -> str:
 
     start = clean.find("[")
     end = clean.rfind("]") + 1
+
     if start != -1 and end > start:
         return clean[start:end]
 
@@ -1179,7 +1220,6 @@ def _parse_ai_json(raw_text: str, num_matches: int, phase: str) -> Dict[int, Dic
             arr = json.loads(fixed)
         except Exception:
             try:
-                # 尽量修闭合，但不改写具体内容
                 last_brace = json_str.rfind("}")
                 if last_brace != -1:
                     arr = json.loads(json_str[:last_brace + 1] + "]")
@@ -1199,6 +1239,7 @@ def _parse_ai_json(raw_text: str, num_matches: int, phase: str) -> Dict[int, Dic
         fixed, errors = validate_ai_item_without_overwrite(item, phase=phase)
 
         mid = _extract_match_index(fixed)
+
         if mid is None:
             continue
 
@@ -1233,11 +1274,12 @@ def validate_ai_item_without_overwrite(item: Dict, phase: str) -> Tuple[Dict, Li
         errors.append("direction_invalid")
 
     score_dir = _score_direction(score)
+
     if score_dir and direction and score_dir != direction:
         errors.append(f"score_direction_mismatch:{score_dir}!={direction}")
 
+    # 只在 direction 缺失时根据比分补字段，不覆盖 AI 原意
     if not direction and score_dir:
-        # 这里只做缺失填充，不做反向覆盖
         out["predicted_direction"] = score_dir
         direction = score_dir
 
@@ -1264,17 +1306,20 @@ def validate_ai_item_without_overwrite(item: Dict, phase: str) -> Tuple[Dict, Li
     out["goal_range_label"] = label
 
     top3 = out.get("top3", [])
+
     if not isinstance(top3, list):
         errors.append("top3_invalid")
         top3 = []
 
     fixed_top3 = []
+
     for t in top3:
         if not isinstance(t, dict):
             continue
 
         sc = str(t.get("score", "")).strip()
         prob = _f(t.get("prob", 0))
+
         if prob <= 1 and prob > 0:
             prob *= 100
 
@@ -1306,6 +1351,22 @@ def validate_ai_item_without_overwrite(item: Dict, phase: str) -> Tuple[Dict, Li
     if not isinstance(out.get("data_quality"), dict):
         out["data_quality"] = {}
 
+    if not isinstance(out.get("web_research"), dict):
+        out["web_research"] = {
+            "searched": False,
+            "queries": [],
+            "odds_market_findings": [],
+            "smart_money_findings": [],
+            "polymarket_findings": [],
+            "team_news_findings": [],
+            "source_notes": [],
+            "conflicts_with_raw_packet": [],
+        }
+        errors.append("web_research_missing")
+
+    if not isinstance(out.get("analyst_consensus"), dict):
+        out["analyst_consensus"] = {}
+
     if phase == "claude":
         if not out.get("arbitration_reason"):
             out["arbitration_reason"] = out.get("reason", "")
@@ -1320,12 +1381,12 @@ def validate_ai_item_without_overwrite(item: Dict, phase: str) -> Tuple[Dict, Li
 # ====================================================================
 
 async def run_phase1_three_once(raw_packet_text: str, num_matches: int) -> Dict[str, Dict[int, Dict]]:
-    print(f"\n  [Phase 1] GPT/Grok/Gemini 三家一次性完整抓包分析 ({num_matches} 场)...")
+    print(f"\n  [Phase 1] GPT/Grok/Gemini 三家一次性完整抓包 + 联网分析 ({num_matches} 场)...")
     print("  [规则] 不分工、不分段、不逐场、不 Repair，每家只调用一次")
 
     sys_prompt = (
         "<role>你是竞彩足球独立分析AI。</role>"
-        "<instruction>你会收到完整抓包。请独立分析全部比赛，严格输出 JSON 数组，不要 markdown。</instruction>"
+        "<instruction>你会收到完整抓包。你必须自行联网搜索赔率、聪明钱、Polymarket、伤停首发后分析全部比赛。严格输出 JSON 数组，不要 markdown。</instruction>"
     )
 
     prompt = build_phase1_unified_prompt(raw_packet_text, num_matches)
@@ -1375,14 +1436,14 @@ async def run_phase2_claude_once(
     phase1_results: Dict[str, Dict[int, Dict]],
     num_matches: int
 ) -> Tuple[Dict[int, Dict], str]:
-    print(f"\n  [Phase 2] Claude 一次性终审 ({num_matches} 场)...")
+    print(f"\n  [Phase 2] Claude 一次性联网终审 ({num_matches} 场)...")
 
     prompt = build_phase2_claude_prompt(raw_packet_text, phase1_results, num_matches)
     print(f"  [Claude Prompt] {len(prompt):,} 字符")
 
     sys_prompt = (
         "<role>你是最终审计AI。</role>"
-        "<instruction>你必须审计完整抓包和三家结论。三家完全一致时不得无证据改比分。严格输出 JSON 数组。</instruction>"
+        "<instruction>你必须审计完整抓包和三家结论，并且自行联网搜索赔率、聪明钱、Polymarket、伤停首发。三家完全一致时不得无证据改比分。严格输出 JSON 数组。</instruction>"
     )
 
     connector = aiohttp.TCPConnector(limit=5, use_dns_cache=False)
@@ -1408,7 +1469,7 @@ async def run_phase2_claude_once(
 
 
 # ====================================================================
-# 三家一致性检查 / 兜底：不制造 1-1
+# 三家一致性检查 / Claude 失败兜底：不制造 1-1
 # ====================================================================
 
 def _get_ai_result(phase1_results: Dict[str, Dict[int, Dict]], name: str, idx: int) -> Dict:
@@ -1421,6 +1482,7 @@ def build_analyst_consensus(phase1_results: Dict[str, Dict[int, Dict]], idx: int
 
     for name in ["gpt", "grok", "gemini"]:
         r = _get_ai_result(phase1_results, name, idx)
+
         rows[name] = {
             "score": str(r.get("predicted_score", "")).strip() if r else "",
             "direction": str(r.get("predicted_direction", "")).strip() if r else "",
@@ -1463,10 +1525,11 @@ def build_analyst_consensus(phase1_results: Dict[str, Dict[int, Dict]], idx: int
 def _fallback_result_from_phase1(phase1_results: Dict[str, Dict[int, Dict]], idx: int) -> Dict:
     consensus = build_analyst_consensus(phase1_results, idx)
 
-    # 三家完全一致：兜底沿用一致结果
+    # 三家完全一致：Claude 失败时沿用一致结果
     if consensus["unanimous_score"]:
         for name in ["gpt", "grok", "gemini"]:
             r = _get_ai_result(phase1_results, name, idx)
+
             if r and r.get("predicted_score") == consensus["best_score"]:
                 out = dict(r)
                 out["agreement_pattern"] = "Claude失败，三家AI比分一致，沿用三家一致结果"
@@ -1487,6 +1550,7 @@ def _fallback_result_from_phase1(phase1_results: Dict[str, Dict[int, Dict]], idx
 
         for name in ["gpt", "grok", "gemini"]:
             r = _get_ai_result(phase1_results, name, idx)
+
             if r and r.get("predicted_score") == best_score:
                 adopted.append(name)
                 if not base:
@@ -1508,6 +1572,7 @@ def _fallback_result_from_phase1(phase1_results: Dict[str, Dict[int, Dict]], idx
 
     for name in ["gpt", "grok", "gemini"]:
         r = _get_ai_result(phase1_results, name, idx)
+
         if r and r.get("predicted_score"):
             candidates.append((name, _i(r.get("confidence", 0), 0), r))
 
@@ -1542,6 +1607,16 @@ def _fallback_result_from_phase1(phase1_results: Dict[str, Dict[int, Dict]], idx
         "override_unanimous": False,
         "adopted_analysts": [],
         "rejected_analysts": [],
+        "web_research": {
+            "searched": False,
+            "queries": [],
+            "odds_market_findings": [],
+            "smart_money_findings": [],
+            "polymarket_findings": [],
+            "team_news_findings": [],
+            "source_notes": [],
+            "conflicts_with_raw_packet": [],
+        },
         "audit_result": "GPT/Grok/Gemini/Claude 均未返回有效结果。本场不输出伪比分。",
         "arbitration_reason": "全部AI失败，不再静默兜底为1-1，避免污染复盘。",
         "doubts": ["AI未返回有效结果"],
@@ -1562,6 +1637,7 @@ def _get_score_odds(match: Dict, score: str, direction: str, is_others: bool) ->
         return _f(match.get("crs_same", 0))
 
     key = CRS_FULL_MAP.get(score, "")
+
     if not key:
         return 0.0
 
@@ -1573,6 +1649,7 @@ def _extract_score_prob_from_result(ai_result: Dict, score: str) -> float:
 
     for key in ["top3", "score_probs", "scores"]:
         arr = ai_result.get(key, [])
+
         if isinstance(arr, list):
             candidates.extend(arr)
 
@@ -1582,8 +1659,10 @@ def _extract_score_prob_from_result(ai_result: Dict, score: str) -> float:
 
         if str(item.get("score", "")).strip() == str(score).strip():
             p = _f(item.get("prob", 0))
+
             if p > 1:
                 p /= 100.0
+
             return max(0.0, min(1.0, p))
 
     return 0.0
@@ -1636,6 +1715,7 @@ def assemble_final_prediction(
 
     # 不覆盖 Claude，只在 direction 缺失时用比分补字段
     score_dir = _score_direction(predicted_score)
+
     if not final_direction and score_dir:
         final_direction = score_dir
 
@@ -1659,7 +1739,8 @@ def assemble_final_prediction(
     risk = "低" if confidence >= 75 else ("中" if confidence >= 55 else "高")
 
     consensus = cr.get("analyst_consensus")
-    if not isinstance(consensus, dict):
+
+    if not isinstance(consensus, dict) or not consensus:
         consensus = build_analyst_consensus(phase1_results, idx)
 
     p1_gpt = _get_ai_result(phase1_results, "gpt", idx)
@@ -1674,6 +1755,7 @@ def assemble_final_prediction(
     )
 
     top3 = cr.get("top3", [])
+
     if not isinstance(top3, list):
         top3 = []
 
@@ -1690,10 +1772,16 @@ def assemble_final_prediction(
         value_reason = "v19.4 默认不使用 LLM 主观比分概率计算正式EV/Kelly"
 
     validation_errors = cr.get("ai_validation_errors", [])
+
     if not isinstance(validation_errors, list):
         validation_errors = []
 
     prediction_valid = bool(predicted_score and final_direction in VALID_DIRS)
+
+    web_research = cr.get("web_research", {})
+
+    if not isinstance(web_research, dict):
+        web_research = {}
 
     out = {
         "predicted_score": predicted_label,
@@ -1705,7 +1793,7 @@ def assemble_final_prediction(
         "is_score_others": is_others,
         "prediction_valid": prediction_valid,
 
-        "decision_title": "vMAX 19.4 RAW-ONLY 一次性四AI审计",
+        "decision_title": "vMAX 19.4 RAW-ONLY 一次性四AI联网审计",
         "decision_engine_version": ENGINE_VERSION,
         "decision_architecture": ENGINE_ARCHITECTURE,
         "engine_version": ENGINE_VERSION,
@@ -1781,16 +1869,19 @@ def assemble_final_prediction(
         "gpt_analysis": _ai_reason_summary(p1_gpt, "GPT 未返回有效分析。"),
         "gpt_doubts": p1_gpt.get("doubts", []) if p1_gpt else [],
         "gpt_key_evidence": p1_gpt.get("key_evidence", p1_gpt.get("key_signals", [])) if p1_gpt else [],
+        "gpt_web_research": p1_gpt.get("web_research", {}) if p1_gpt else {},
 
         "grok_score": _ai_score_summary(p1_grok),
         "grok_analysis": _ai_reason_summary(p1_grok, "GROK 未返回有效分析。"),
         "grok_doubts": p1_grok.get("doubts", []) if p1_grok else [],
         "grok_key_evidence": p1_grok.get("key_evidence", p1_grok.get("key_signals", [])) if p1_grok else [],
+        "grok_web_research": p1_grok.get("web_research", {}) if p1_grok else {},
 
         "gemini_score": _ai_score_summary(p1_gemini),
         "gemini_analysis": _ai_reason_summary(p1_gemini, "GEMINI 未返回有效分析。"),
         "gemini_doubts": p1_gemini.get("doubts", []) if p1_gemini else [],
         "gemini_key_evidence": p1_gemini.get("key_evidence", p1_gemini.get("key_signals", [])) if p1_gemini else [],
+        "gemini_web_research": p1_gemini.get("web_research", {}) if p1_gemini else {},
 
         "ai_abstained": [
             n.upper()
@@ -1801,6 +1892,8 @@ def assemble_final_prediction(
         "accepted_observations": cr.get("accepted_observations", []),
         "rejected_observations": cr.get("rejected_observations", []),
         "key_evidence": cr.get("key_evidence", cr.get("key_signals", [])),
+        "web_research": web_research,
+        "ai_web_research_enabled": ENABLE_AI_WEB_RESEARCH,
         "doubts": cr.get("doubts", []),
         "data_quality": cr.get("data_quality", {}),
         "ai_validation_errors": validation_errors,
@@ -1840,6 +1933,7 @@ def select_top4(preds):
             risk_penalty += 6
 
         consensus = p.get("analyst_consensus", {})
+
         if isinstance(consensus, dict):
             if consensus.get("unanimous_score"):
                 risk_penalty -= 5
@@ -1885,18 +1979,18 @@ def run_predictions(raw, use_ai=True):
     for k in AI_CALL_STATUS:
         AI_CALL_STATUS[k] = ""
 
-    print("\n" + "=" * 88)
+    print("\n" + "=" * 96)
     print(f"  [{ENGINE_VERSION}] {ENGINE_ARCHITECTURE} | {num} 场")
-    print("=" * 88)
-
+    print("=" * 96)
     print("  规则:")
     print("   - GPT/Grok/Gemini 三家一次性读取完整抓包")
-    print("   - 三家不分工，不分段，不逐场")
+    print("   - GPT/Grok/Gemini 三家不分工，不分段，不逐场")
+    print("   - GPT/Grok/Gemini 三家均被要求自行联网搜索赔率、聪明钱、Polymarket、伤停首发")
     print("   - 禁止 Phase1 Repair，避免重复跑 Grok / Gemini")
-    print("   - Claude 一次性读取完整抓包 + 三家结论终审")
+    print("   - Claude 一次性读取完整抓包 + 三家结论，并自行联网终审")
     print("   - 本地不使用概率核心覆盖 AI 比分")
     print("   - 本地不静默兜底 1-1")
-    print("=" * 88)
+    print("=" * 96)
 
     debug_ai_config()
 
@@ -1907,36 +2001,9 @@ def run_predictions(raw, use_ai=True):
         m = normalize_match(raw_m)
         normalized_matches.append(m)
 
-        # 兼容旧模块，但不作为最终决策
-        eng = {}
-        sp = {}
-        exp_result = {}
-
-        try:
-            if predict_match:
-                eng = predict_match(m)
-        except Exception as e:
-            logger.warning(f"predict_match 兼容调用失败，不影响RAW-ONLY主流程: {e}")
-            eng = {}
-
-        try:
-            sp = ensemble.predict(m, {}) if ensemble else {}
-        except Exception as e:
-            logger.warning(f"ensemble.predict 兼容调用失败，不影响RAW-ONLY主流程: {e}")
-            sp = {}
-
-        try:
-            exp_result = exp_engine.analyze(m) if exp_engine else {}
-        except Exception as e:
-            logger.warning(f"exp_engine.analyze 兼容调用失败，不影响RAW-ONLY主流程: {e}")
-            exp_result = {}
-
         match_analyses.append({
             "raw_match": raw_m,
             "match": m,
-            "engine": eng,
-            "stats": sp,
-            "experience": exp_result,
             "_stable_key": _stable_match_key(raw_m, i),
         })
 
@@ -1947,6 +2014,7 @@ def run_predictions(raw, use_ai=True):
         "grok": {},
         "gemini": {},
     }
+
     claude_results = {}
     ai_provider = "no_ai"
 
@@ -1967,6 +2035,7 @@ def run_predictions(raw, use_ai=True):
             def _run_in_thread(coro):
                 new_loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(new_loop)
+
                 try:
                     return new_loop.run_until_complete(coro)
                 finally:
@@ -1974,6 +2043,7 @@ def run_predictions(raw, use_ai=True):
 
             with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
                 future = pool.submit(_run_in_thread, _run_full_ai_once())
+
                 try:
                     phase1_results, claude_results, ai_provider = future.result()
                 except Exception as e:
@@ -1981,6 +2051,7 @@ def run_predictions(raw, use_ai=True):
                     phase1_results = {"gpt": {}, "grok": {}, "gemini": {}}
                     claude_results = {}
                     ai_provider = "ai_crashed"
+
         else:
             try:
                 phase1_results, claude_results, ai_provider = asyncio.run(_run_full_ai_once())
@@ -1998,6 +2069,7 @@ def run_predictions(raw, use_ai=True):
         m = ma["match"]
 
         cr = claude_results.get(idx, {})
+
         if not cr:
             cr = _fallback_result_from_phase1(phase1_results, idx)
 
@@ -2089,20 +2161,28 @@ def run_predictions(raw, use_ai=True):
             "agreement_pattern",
             "audit_result",
             "arbitration_reason",
+
+            "web_research",
+            "ai_web_research_enabled",
+            "gpt_web_research",
+            "grok_web_research",
+            "gemini_web_research",
         ]
 
         for k in sync_keys:
             combined[k] = mg.get(k)
 
         combined["engine_version"] = ENGINE_VERSION
-        combined["decision_title"] = "vMAX 19.4 RAW-ONLY 一次性四AI审计"
+        combined["decision_title"] = "vMAX 19.4 RAW-ONLY 一次性四AI联网审计"
         combined["decision_engine_version"] = ENGINE_VERSION
         combined["decision_architecture"] = ENGINE_ARCHITECTURE
 
         res.append(combined)
 
         consensus = mg.get("analyst_consensus", {}) or {}
+
         unanimous_tag = ""
+
         if consensus.get("unanimous_score"):
             unanimous_tag = " [三家比分一致]"
         elif consensus.get("same_score_count", 0) >= 2:
@@ -2112,18 +2192,25 @@ def run_predictions(raw, use_ai=True):
         err_tag = f" [校验{len(mg.get('ai_validation_errors', []))}]" if mg.get("ai_validation_errors") else ""
         abstain_tag = f" [缺席{','.join(mg.get('ai_abstained', []))}]" if mg.get("ai_abstained") else ""
 
+        web_tag = ""
+
+        web_info = mg.get("web_research", {})
+
+        if isinstance(web_info, dict):
+            web_tag = " [联网]" if web_info.get("searched") else " [未联网/未返回联网字段]"
+
         print(
             f"  [{idx}] {m.get('home_team', m.get('home', '?'))} vs "
             f"{m.get('away_team', m.get('guest', '?'))} => "
             f"{mg.get('result', '待审')} ({mg.get('predicted_score', '')}) | "
             f"CF: {mg.get('confidence', 0)}% | "
             f"{mg.get('agreement_pattern', 'Claude终审')}"
-            f"{unanimous_tag}{override_tag}{err_tag}{abstain_tag}"
+            f"{unanimous_tag}{override_tag}{web_tag}{err_tag}{abstain_tag}"
         )
 
     t4 = select_top4(res)
 
-    # 修复 id=None 全部推荐 bug：用稳定 key
+    # 修复 id=None 全部推荐 bug：使用稳定 key
     top_keys = {x.get("_stable_key") for x in t4 if x.get("_stable_key")}
 
     for r in res:
@@ -2143,8 +2230,9 @@ if __name__ == "__main__":
     print(f"✅ {ENGINE_VERSION} 加载完成")
     print(f"   架构: {ENGINE_ARCHITECTURE}")
     print("   Phase 1: GPT / Grok / Gemini 三家不分工，一次性读取完整抓包")
+    print("   Phase 1 联网: 三家均被要求自行搜索赔率、聪明钱、Polymarket、伤停、首发")
     print("   Phase 1 Repair: 已禁用，避免重复跑和 token 浪费")
-    print("   Phase 2: Claude 一次性读取完整抓包 + 三家完整结论")
-    print("   规则: 三家完全一致时，Claude 不得无抓包强反证乱改比分")
+    print("   Phase 2: Claude 一次性读取完整抓包 + 三家完整结论，并自行联网终审")
+    print("   规则: 三家完全一致时，Claude 不得无抓包/联网强反证乱改比分")
     print("   本地算法: 不使用本地概率核心限制 AI")
     print("   EV/Kelly: 默认不使用 LLM 主观比分概率")
