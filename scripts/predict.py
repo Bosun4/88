@@ -2289,7 +2289,7 @@ def build_v18_prompt(match_analyses):
     p += "严格 JSON 数组,每场必含:\n"
     p += "- match: 整数序号\n"
     p += "- top3: [{\"score\":\"2-1\",\"prob\":15}, ...] 3个候选比分,方向必须与 reason 一致\n"
-    p += "- reason: 300字左右,必须按5步思维锚写\n"
+    p += "- reason: 500字左右,必须按5步思维锚写\n"
     p += "- ai_confidence: 0-100\n"
     p += "- is_score_others: 若 top3 任一是胜其他/平其他/负其他 → true\n"
     p += "- detected_traps: 识别出的陷阱编号数组,如 [\"T1\",\"T3\",\"T14\"]\n"
@@ -2484,7 +2484,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
         urls = [primary_url] + backup
 
     CONNECT_TIMEOUT = 20
-    READ_TIMEOUT_MAP = {"claude": 380, "grok": 300, "gpt": 300, "gemini": 250}
+    READ_TIMEOUT_MAP = {"claude": 380, "grok": 300, "gpt": 300, "gemini": 300}
     READ_TIMEOUT = READ_TIMEOUT_MAP.get(ai_name, 200)
 
     AI_PROFILES = {
