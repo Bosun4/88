@@ -1,0 +1,100 @@
+{
+  "choices": [
+    {
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "protected_material_code": {
+          "detected": false,
+          "filtered": false
+        },
+        "protected_material_text": {
+          "detected": false,
+          "filtered": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      },
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "content": "[\n  {\n    \"match\": \"圣保利 vs 美因茨\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.19\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.14\n      }\n    ],\n    \"reason\": \"公平1X2与隐含xG均略偏客，但λ接近且总进球2.46偏中低，1-1低赔、平/平低赔、2球低赔共同触发强平局保护，必须防平。让球偏深显示主队名义让步不可信，Sharp资金也流向客胜，故方向以平为先、客胜为辅。\",\n    \"ai_confidence\": 0.78,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_GUARD\",\n      \"HANDICAP_DEEPER\",\n      \"SHARP_TO_AWAY\"\n    ],\n    \"final_direction\": \"平\"\n  },\n  {\n    \"match\": \"赫塔费 vs 巴列卡诺\",\n    \"top3\": [\n      {\n        \"score\": \"1-0\",\n        \"prob\": 0.24\n      },\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.17\n      },\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.16\n      }\n    ],\n    \"reason\": \"主胜面最强，公平概率53.3%且Sharp资金流向主胜，但比赛是低总进球grinder结构，0球/1球/2球都被压低，1-1与0-0也有保护，说明穿盘空间有限。按铁律不能因主让深而机械强化大胜，更适合主胜小比分并防平。\",\n    \"ai_confidence\": 0.76,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_GUARD\",\n      \"LOW_TOTAL_GRINDER\",\n      \"SHARP_TO_HOME\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"曼联 vs 利物浦\",\n    \"top3\": [\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.15\n      },\n      {\n        \"score\": \"2-2\",\n        \"prob\": 0.13\n      }\n    ],\n    \"reason\": \"表面主队公平概率略高，但平赔独降构成诱平，且让球偏深明显不支持主队真实强势。Sharp资金流向客胜，负赔同步下调；总进球3.0且4/5/7球锚点清晰，市场偏向高波动对攻。综合更倾向客队不败中的客胜端，首选1-2。\",\n    \"ai_confidence\": 0.71,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_TRAP\",\n      \"HANDICAP_DEEPER\",\n      \"SHARP_TO_AWAY\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"客胜\"\n  },\n  {\n    \"match\": \"阿尔克马 vs 特温特\",\n    \"top3\": [\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.14\n      },\n      {\n        \"score\": \"2-2\",\n        \"prob\": 0.13\n      }\n    ],\n    \"reason\": \"公平1X2与隐含xG几乎完全均衡但客队略优，实际让球却偏向主侧，属于让球偏浅/错位，且Sharp资金反向流向主胜，说明主队受热有对冲成分。总进球3.02配合4球、5球锚点，最容易落在1-2、2-2这类开放比分，略倾客胜并保留平局。\",\n    \"ai_confidence\": 0.66,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_SHALLOWER\",\n      \"SHARP_TO_HOME\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"客胜\"\n  },\n  {\n    \"match\": \"克里斯蒂 vs 汉坎\",\n    \"top3\": [\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.15\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.12\n      }\n    ],\n    \"reason\": \"主队公平面和xG均小优，Sharp资金也在主胜，但让球偏深意味着不穿盘风险较高，不能强化主队大胜。CRS中2-1最低，1-1也很低，且总进球中高位分布支撑2-1、2-2、3-1一带，主胜仍是首选但须防平与对攻反噬。\",\n    \"ai_confidence\": 0.69,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_DEEPER\",\n      \"SHARP_TO_HOME\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"斯特拉斯 vs 图卢兹\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob\": 0.14\n      }\n    ],\n    \"reason\": \"客队公平面最强且Sharp流向客胜，但λ几乎完全接近，1-1处于CRS前列，平/平与平/负都低，属于典型需防平的客优格局。让球深度失真也说明客胜不会轻松兑现，最终以平局优先、客胜次选。\",\n    \"ai_confidence\": 0.77,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_GUARD\",\n      \"HANDICAP_DEEPER\",\n      \"SHARP_TO_AWAY\"\n    ],\n    \"final_direction\": \"平\"\n  },\n  {\n    \"match\": \"门兴 vs 多特蒙德\",\n    \"top3\": [\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.19\n      },\n      {\n        \"score\": \"0-2\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"1-3\",\n        \"prob\": 0.14\n      }\n    ],\n    \"reason\": \"客胜公平概率54%明显占优，隐含xG客队优势更大，负赔下降且Sharp资金流向客胜。虽然存在长客陷阱提示，但CRS客胜端0-2、1-2、1-3集中，半全场负/负也很低；总进球高位锚点支撑客队2球以上输出，客胜为正解。\",\n    \"ai_confidence\": 0.8,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"LONG_AWAY_TRAP\",\n      \"SHARP_TO_AWAY\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"客胜\"\n  },\n  {\n    \"match\": \"尤文图斯 vs 维罗纳\",\n    \"top3\": [\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.23\n      },\n      {\n        \"score\": \"3-0\",\n        \"prob\": 0.2\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.12\n      }\n    ],\n    \"reason\": \"主胜面极强，lopsided主倾结构明显，CRS最低集中在2-0、3-0、1-0、4-0。让球偏浅反而代表市场对主胜穿深有保留，但并不改变胜负方向；同时存在主胜超热与诱反指，宜取主胜而不过度追大屠杀。\",\n    \"ai_confidence\": 0.87,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_SHALLOWER\",\n      \"FAKE_CONTRARIAN\",\n      \"HOME_OVERHEAT\",\n      \"SHARP_TO_HOME\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"贝蒂斯 vs 奥维耶多\",\n    \"top3\": [\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.21\n      },\n      {\n        \"score\": \"1-0\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.15\n      }\n    ],\n    \"reason\": \"主队公平概率67.1%且Sharp资金持续流向主胜，CRS主胜端1-0、2-0、2-1、3-0全部靠前。让球偏浅与主胜超热并存，说明更像赢球但未必轻松穿深，故选主胜小中胜区间。\",\n    \"ai_confidence\": 0.83,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_SHALLOWER\",\n      \"FAKE_CONTRARIAN\",\n      \"HOME_OVERHEAT\",\n      \"SHARP_TO_HOME\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"布拉加 vs 埃斯托里\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.17\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.12\n      }\n    ],\n    \"reason\": \"主队基本面占优，但平赔独降构成明显诱平，且Sharp资金流向客胜，负赔同步走低，说明主胜定价并不稳。CRS最强仍在2-1与1-1附近，4球/5球锚点说明比赛可能开放但先从平局裂缝入手更合理。\",\n    \"ai_confidence\": 0.68,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_TRAP\",\n      \"SHARP_TO_AWAY\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"平\"\n  },\n  {\n    \"match\": \"弗赖堡 vs 沃夫斯堡\",\n    \"top3\": [\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.17\n      },\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.15\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.13\n      }\n    ],\n    \"reason\": \"主队公平面略优且Sharp偏主，但让球偏深说明市场对主队穿盘预期过头。CRS核心在2-1、1-1、2-2、1-2之间，典型五五开偏主格局，适合主胜小比分并防平。\",\n    \"ai_confidence\": 0.67,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_DEEPER\",\n      \"SHARP_TO_HOME\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"胡巴卡德 vs 利雅胜利\",\n    \"top3\": [\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"1-3\",\n        \"prob\": 0.15\n      },\n      {\n        \"score\": \"2-2\",\n        \"prob\": 0.11\n      }\n    ],\n    \"reason\": \"客队公平概率53%与xG优势都较明确，CRS中1-2、1-3、0-2、0-3均处在客胜主轴。平赔独降有诱平成分，而Sharp资金却流向主队，形成逆向噪音；结合总进球3.01与高比分锚点，更应跟随模型面选择客胜。\",\n    \"ai_confidence\": 0.74,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_TRAP\",\n      \"SHARP_TO_HOME\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"客胜\"\n  },\n  {\n    \"match\": \"维拉 vs 热刺\",\n    \"top3\": [\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.14\n      }\n    ],\n    \"reason\": \"主队公平和xG略优，但让球偏深，Sharp资金反向流向客胜，负赔也在下降，说明主队热度不够扎实。CRS最密集仍是2-1、1-1、1-2，属典型胶着盘；在资金与赔率同向偏客背景下，略偏客胜。\",\n    \"ai_confidence\": 0.64,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_DEEPER\",\n      \"SHARP_TO_AWAY\"\n    ],\n    \"final_direction\": \"客胜\"\n  },\n  {\n    \"match\": \"国际米兰 vs 帕尔马\",\n    \"top3\": [\n      {\n        \"score\": \"3-0\",\n        \"prob\": 0.22\n      },\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.2\n      },\n      {\n        \"score\": \"4-0\",\n        \"prob\": 0.14\n      }\n    ],\n    \"reason\": \"1X2数据失真采用fallback，但CRS与λ呈明显主倾lopsided结构，2-0、3-0、4-0连续压低，半全场主/主极低。机构重诱下盘说明市场对受让方有承接，但比分分布仍清楚偏向主队净胜2球以上。\",\n    \"ai_confidence\": 0.79,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"FALLBACK_1X2\",\n      \"INSTITUTION_BAIT_UNDERDOG\",\n      \"LOPSIDED_HOME\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"里昂 vs 雷恩\",\n    \"top3\": [\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.14\n      },\n      {\n        \"score\": \"3-1\",\n        \"prob\": 0.13\n      }\n    ],\n    \"reason\": \"主队公平面与xG占优，Sharp资金也流向主胜，CRS最低在2-1、3-1、2-0区域。让球偏深提示不宜夸大强势，但主胜基础仍在，总进球分布支撑2-1/3-1这类中强输出。\",\n    \"ai_confidence\": 0.74,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_DEEPER\",\n      \"SHARP_TO_HOME\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"西班牙人 vs 皇马\",\n    \"top3\": [\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.19\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"0-2\",\n        \"prob\": 0.16\n      }\n    ],\n    \"reason\": \"客胜公平概率61.9%显著领先，xG差距也大，Sharp资金继续流向客胜。CRS中0-1、0-2、1-2、0-3均在客胜主链，且0-1/0-2是标准合法客胜比分。客胜超热存在，但未看到足够反转裂缝，仍以客胜为主。\",\n    \"ai_confidence\": 0.82,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"AWAY_OVERHEAT\",\n      \"SHARP_TO_AWAY\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"客胜\"\n  },\n  {\n    \"match\": \"纽约城 vs 华盛顿\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.12\n      }\n    ],\n    \"reason\": \"主队基本面占优，但平赔独降形成诱平，且Sharp资金流向客胜、负赔同步下修，主胜稳定性下降。CRS上1-1与2-1都很强，属于主优但有明显平局裂缝的结构，因此先防平，再看主胜小胜。\",\n    \"ai_confidence\": 0.69,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_TRAP\",\n      \"SHARP_TO_AWAY\"\n    ],\n    \"final_direction\": \"平\"\n  },\n  {\n    \"match\": \"里奥阿维 vs 吉维森特\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.19\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob\": 0.17\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.14\n      }\n    ],\n    \"reason\": \"客队面板占优且Sharp流向客胜，但λ差值仅0.22，总进球2.50不高，1-1低赔、平/平低赔和2球低赔形成完整平局保护。按照铁律此类必须防平，故平局置前，客胜置后。\",\n    \"ai_confidence\": 0.78,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_GUARD\",\n      \"SHARP_TO_AWAY\"\n    ],\n    \"final_direction\": \"平\"\n  },\n  {\n    \"match\": \"切尔西 vs 诺丁汉\",\n    \"top3\": [\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"1-0\",\n        \"prob\": 0.16\n      }\n    ],\n    \"reason\": \"主队公平概率61.9%且CRS主胜端2-1、2-0、1-0、3-1全面领先，基本盘清晰偏主。虽有主胜超热，但未见明显逆转信号；总进球分布集中在2-3球区间，优先考虑主胜且不追过深。\",\n    \"ai_confidence\": 0.8,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HOME_OVERHEAT\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"赫尔辛基 vs 拉赫蒂\",\n    \"top3\": [\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.21\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"3-0\",\n        \"prob\": 0.15\n      }\n    ],\n    \"reason\": \"主队公平概率接近70%，xG优势显著，CRS最低位于2-1、1-0、2-0、3-0。让球偏浅说明盘口未完全匹配主队实力，更像主胜兑现而非主队风险；虽有超热，但方向仍应站主。\",\n    \"ai_confidence\": 0.82,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_SHALLOWER\",\n      \"HOME_OVERHEAT\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"克雷莫纳 vs 拉齐奥\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.21\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.14\n      }\n    ],\n    \"reason\": \"客队略优但不是强碾压，λ仅1.10比1.18，且0-0、1-1、2球、平/平全部低位，构成强平局保护。让球偏浅说明市场对客胜有保留，因此优先1-1，再带客胜小比分。\",\n    \"ai_confidence\": 0.79,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_GUARD\",\n      \"HANDICAP_SHALLOWER\"\n    ],\n    \"final_direction\": \"平\"\n  },\n  {\n    \"match\": \"佐加顿斯 vs 哥德堡\",\n    \"top3\": [\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.19\n      },\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"1-0\",\n        \"prob\": 0.16\n      }\n    ],\n    \"reason\": \"主胜公平概率58.9%，xG和CRS均明显倾向主队，2-1、2-0、1-0形成稳定主胜带。总进球不算极高，主队赢球方式更偏控制型，不必刻意追大比分。\",\n    \"ai_confidence\": 0.79,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"NONE_SIGNIFICANT\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"哈尔姆斯 vs 布鲁马波\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.2\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob\": 0.16\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.15\n      }\n    ],\n    \"reason\": \"客队略优，但λ几乎重合且总进球2.47偏低，1-1低赔、平/平低赔、2球低赔全部满足强防平条件。让球偏浅虽对客队有支持，但在平局保护面前不能激进压客，先看1-1，再带0-1/1-2。\",\n    \"ai_confidence\": 0.78,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_GUARD\",\n      \"HANDICAP_SHALLOWER\"\n    ],\n    \"final_direction\": \"平\"\n  },\n  {\n    \"match\": \"博德闪耀 vs 莫尔德\",\n    \"top3\": [\n      {\n        \"score\": \"3-1\",\n        \"prob\": 0.2\n      },\n      {\n        \"score\": \"3-0\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.15\n      }\n    ],\n    \"reason\": \"主胜基本盘极强，公平概率77.3%，主队xG高达2.52，CRS主胜端3-1、2-1、3-0、4-1密集。让球仅-1明显偏浅，说明机构对主胜穿深并未充分表达；虽有主胜超热，但比分分布仍偏主队多球胜出。\",\n    \"ai_confidence\": 0.85,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_SHALLOWER\",\n      \"HOME_OVERHEAT\",\n      \"LOPSIDED_HOME\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"吉达联合 vs 拉斯永恒\",\n    \"top3\": [\n      {\n        \"score\": \"3-1\",\n        \"prob\": 0.19\n      },\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.17\n      }\n    ],\n    \"reason\": \"主队公平概率69.3%，主队xG和CRS均显著占优，2-1、2-0、3-1、3-0连续压低。让球偏浅支持主队赢球方向，超热只影响穿盘预期，不改赛果倾向，主胜应是正向选择。\",\n    \"ai_confidence\": 0.83,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_SHALLOWER\",\n      \"HOME_OVERHEAT\",\n      \"HIGH_GOAL_ANCHOR\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"罗马 vs 佛罗伦萨\",\n    \"top3\": [\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.2\n      },\n      {\n        \"score\": \"1-0\",\n        \"prob\": 0.18\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.17\n      }\n    ],\n    \"reason\": \"主队公平面61.8%，xG优势清晰，CRS以1-0、2-0、2-1、3-0为核心，标准主胜模型。主胜超热存在但缺乏反向资金裂缝，且总进球2.54偏中低，更适合主队控制式赢球。\",\n    \"ai_confidence\": 0.81,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HOME_OVERHEAT\"\n    ],\n    \"final_direction\": \"主胜\"\n  },\n  {\n    \"match\": \"埃弗顿 vs 曼城\",\n    \"top3\": [\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.2\n      },\n      {\n        \"score\": \"0-2\",\n        \"prob\": 0.19\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob\": 0.15\n      }\n    ],\n    \"reason\": \"客胜面极强，公平概率71%，Sharp与赔率同步流向客队，CRS最低为1-2、0-2、0-1、0-3。虽然存在客胜超热和诱反指，但让球只到1球反而偏浅，说明胜负方向仍应跟客，不宜逆向搏冷。\",\n    \"ai_confidence\": 0.84,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"HANDICAP_DEEPER\",\n      \"FAKE_CONTRARIAN\",\n      \"AWAY_OVERHEAT\",\n      \"SHARP_TO_AWAY\"\n    ],\n    \"final_direction\": \"客胜\"\n  },\n  {\n    \"match\": \"塞维利亚 vs 皇家社会\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob\": 0.2\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob\": 0.14\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.14\n      }\n    ],\n    \"reason\": \"两队公平概率和xG几乎完全对称，1-1低赔、平/平低赔、2球低赔且λ接近，典型必须防平的结构。让球偏浅造成主侧假强势，但不足以打破平局保护层，故首选1-1。\",\n    \"ai_confidence\": 0.8,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"DRAW_GUARD\",\n      \"HANDICAP_SHALLOWER\"\n    ],\n    \"final_direction\": \"平\"\n  },\n  {\n    \"match\": \"里斯本 vs 吉马良斯\",\n    \"top3\": [\n      {\n        \"score\": \"3-0\",\n        \"prob\": 0.21\n      },\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.2\n      },\n      {\n        \"score\": \"3-1\",\n        \"prob\": 0.14\n      }\n    ],\n    \"reason\": \"1X2缺失采用fallback，但CRS和λ都呈显著主倾，2-0、3-0、3-1、4-0构成完整强主序列。机构重诱下盘提示受让方受捧，但比分层面仍明显偏向主队净胜2球左右。\",\n    \"ai_confidence\": 0.78,\n    \"is_score_others\": false,\n    \"detected_traps\": [\n      \"FALLBACK_1X2\",\n      \"INSTITUTION_BAIT_UNDERDOG\",\n      \"LOPSIDED_HOME\"\n    ],\n    \"final_direction\": \"主胜\"\n  }\n]",
+        "refusal": null,
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1777813714,
+  "id": "chatcmpl-DbQqg1ySnhmO1uQONQf2pLEVEL1LS",
+  "model": "gpt-5.4-2026-03-05",
+  "object": "chat.completion",
+  "prompt_filter_results": [
+    {
+      "prompt_index": 0,
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "jailbreak": {
+          "detected": false,
+          "filtered": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      }
+    }
+  ],
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 6875,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "engine_tbt_ms": 12,
+      "engine_ttft_ms": 420,
+      "engine_ttlt_ms": 84399,
+      "pre_inference_ms": 91,
+      "service_tbt_ms": 12,
+      "service_ttft_ms": 641,
+      "service_ttlt_ms": 84609,
+      "total_duration_ms": 84528,
+      "user_visible_ttft_ms": 550
+    },
+    "prompt_tokens": 18369,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0
+    },
+    "total_tokens": 25244
+  }
+}
