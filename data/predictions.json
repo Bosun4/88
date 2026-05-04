@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-05 03:32:09",
+  "update_time": "2026-05-05 03:47:51",
   "version": "MAX-v1.1",
   "top4": [
     {
@@ -174,54 +174,47 @@
         "display_direction": "主胜",
         "final_direction": "home",
         "is_score_others": false,
-        "home_win_pct": 57.6,
-        "draw_pct": 24.5,
-        "away_win_pct": 17.9,
+        "home_win_pct": 61.1,
+        "draw_pct": 22.9,
+        "away_win_pct": 16.0,
         "scenario": "normal",
         "goal_range": [
           2,
           4
         ],
-        "dir_confidence": 57.6,
-        "dir_gap": 33.1,
+        "dir_confidence": 61.1,
+        "dir_gap": 38.3,
         "evidences": [
           "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
           "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
-          "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
-          "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
-          "决策来源:matrix_authority; authority_mode=claude_guarded",
-          "陷阱/保护:1个 严重度3"
+          "后验方向:{'home': 61.15, 'draw': 22.85, 'away': 16.0}",
+          "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.307%",
+          "决策来源:claude_guarded_authority; authority_mode=claude_guarded",
+          "陷阱/保护:1个 严重度3",
+          "AI residual:{'home': 2.94, 'draw': 0.88, 'away': 0.0}"
         ],
         "override_triggered": false,
         "top_score_candidates": [
           [
             "2-0",
-            10.648
+            0.18
+          ],
+          [
+            "1-0",
+            0.16
           ],
           [
             "2-1",
-            10.336
-          ],
-          [
-            "3-0",
-            7.246
-          ],
-          [
-            "3-1",
-            5.206
-          ],
-          [
-            "4-0",
-            2.738
+            0.13
           ]
         ],
-        "calibrated_score_prob_pct": 10.648,
+        "calibrated_score_prob_pct": 11.307,
         "bayesian_prior": {
           "home": 62.745,
           "draw": 22.225,
           "away": 15.03
         },
-        "decision_source": "matrix_authority",
+        "decision_source": "claude_guarded_authority",
         "ai_authority_mode": "claude_guarded",
         "unified_matrix_top_scores": [
           [
@@ -376,16 +369,17 @@
           "draw": 24.5,
           "home": 57.59
         },
-        "confidence": 75.0,
+        "confidence": 77.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
         "risk_level": "低",
         "bayesian_evidences": [
           "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
           "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
-          "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
-          "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
-          "决策来源:matrix_authority; authority_mode=claude_guarded",
-          "陷阱/保护:1个 严重度3"
+          "后验方向:{'home': 61.15, 'draw': 22.85, 'away': 16.0}",
+          "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.307%",
+          "决策来源:claude_guarded_authority; authority_mode=claude_guarded",
+          "陷阱/保护:1个 严重度3",
+          "AI residual:{'home': 2.94, 'draw': 0.88, 'away': 0.0}"
         ],
         "traps_detected": [
           "T14_CUP_FAVORITE"
@@ -427,27 +421,22 @@
           "low_scores": []
         },
         "suggested_kelly": 0.0,
-        "edge_vs_market": -30.79,
+        "edge_vs_market": -26.5,
         "is_value": false,
         "ev_note": "calibrated_matrix_prob_vs_market",
-        "score_model_prob": 10.648,
+        "score_model_prob": 11.307,
         "score_market_odds": 6.5,
         "score_market_implied_pct": 15.385,
-        "gpt_score": "弃权",
-        "gpt_analysis": "弃权",
-        "grok_score": "弃权",
-        "grok_analysis": "弃权",
-        "gemini_score": "弃权",
-        "gemini_analysis": "弃权",
-        "claude_score": "弃权",
-        "claude_analysis": "弃权",
-        "ai_abstained": [
-          "GPT",
-          "GROK",
-          "GEMINI",
-          "CLAUDE"
-        ],
-        "ai_avg_confidence": 0.0,
+        "gpt_score": "2-0",
+        "gpt_analysis": "1X2公平概率显示主胜62.7%，主队是明确基础强方。欧赔1.50/3.70/5.20对应的结构并非极端碾压，而是稳定主导。盘口层面理论应到主让1.25，实际仅主让1.0，存在0.25档偏浅，说明市场对主队大胜穿盘有所保留，但不等于否定主胜本身，更像是防范一球胜或胜而不穿。总进球分布中2球与3球最集中，0-1球并非主导，4球以上明显抬高，属于正常偏谨慎的进球环境，最合理的是主队在2球附近完成比赛控制。资金面上主胜赔率微升、客胜赔率微降，且有Sharp流向客胜，同时主胜散户热度59%偏高，这对主胜赔率形成扰动，提示热门主胜存在定价压力；但让球盘并未进一步退到更弱位置，说明机构主要防的是主队赢球不畅，而非客胜主路径。因此主方向仍保留在home，但比分分布回避夸张大胜，优先一球到两球的主胜区间。",
+        "grok_score": "1-0",
+        "grok_analysis": "Fair 1X2 gives home clear 62.7% edge with xG 1.63 vs 0.775. Actual handicap -1.0 is shallower than theoretical -1.25 indicating market caution. Total goals odds peak at 2-3 goals suggesting controlled scoring. Sharp money flows to away but public 59% on home creates trap risk in cup tie. Selected home win over draw due to only 22.2% draw probability and home strength. Selected home win over away due to only 15% away probability despite contrarian sharp flow.",
+        "gemini_score": "1-1",
+        "gemini_analysis": "主队阿森纳在散户市场呈现59%的绝对热度，但实际盘口（-1.00）浅于理论盘口（-1.25），机构对主队大胜信心不足。同时，主胜赔率处于上升通道，而Sharp资金精准介入客胜，客胜赔率下调。结合马竞在欧战淘汰赛中极强的抗压与防守反击属性，本场主胜大热必死，首选平局，次防客胜爆冷。",
+        "claude_score": "2-0",
+        "claude_analysis": "三方初审中GPT与Grok均选home方向，形成2:1共识。Gemini选draw的核心论据是Sharp资金流向客胜+主胜过热，但审计发现：(1)公平1X2主胜62.7%远超平局22.2%，平局并非结构性主结果；(2)盘口虽浅于理论0.25档，但仍维持在-1.0而非退至-0.75，机构并未将平局抬为主路径；(3)半全场平/平赔率6.10远高于主/主2.12，平局在半全场市场无支撑；(4)Sharp流向客胜是风险信号但非硬反证——客胜公平概率仅15%，客队隐含xG仅0.775，不足以独立支撑方向翻转。Gemini将资金信号过度放大为方向翻转依据，缺乏BTTS/防守端/xG层面的硬数据支持。最终维持home方向，比分分布集中在2-0与1-0区间，反映盘口偏浅+客队低xG的双重约束。",
+        "ai_abstained": [],
+        "ai_avg_confidence": 48.8,
         "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热59% | T14_CUP_FAVORITE:杯赛大热保护:home公平概率62.7%+散户59%,淘汰赛弱队反扑",
         "smart_signals": [
           "💰 Sharp资金流向客胜",
@@ -458,8 +447,8 @@
           "📊 客队冷门(>5.0)实际胜率低于隐含8%",
           "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅17%)",
           "⚡ 主队攻防效率碾压(差值1.16)",
-          "⚠️ 负CLV-9.7% [主胜]",
-          "⚠️ 负CLV-10.5% [客胜]"
+          "⚠️ 负CLV-10.4% [平局]",
+          "⚠️ 负CLV-17.4% [客胜]"
         ],
         "sharp_detected": true,
         "sharp_dir": "away",
@@ -557,14 +546,14 @@
             }
           ]
         },
-        "engine_version": "vMAX 18.3.3",
-        "engine_architecture": "RAW-AI主审 + API_KEY/API_URL兼容GPT旧变量 + singleflight + 不缓存失败AI + Claude守门裁判",
+        "engine_version": "vMAX 18.3.4",
+        "engine_architecture": "RAW-AI主审 + API_KEY/API_URL兼容GPT旧变量 + match名称解析修复 + singleflight + 不缓存失败AI + Claude守门裁判",
         "validation_warnings": [],
         "postprocess_warnings": [
           "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
           "odds_history_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
           "quant_edge_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-          "advanced_models_core_fields_restored:away_win_pct,draw_pct,home_win_pct"
+          "advanced_models_core_fields_restored:away_win_pct,draw_pct"
         ],
         "line_movement_anomaly": {
           "has_anomaly": true,
@@ -633,7 +622,7 @@
           "true_draw": 24.1,
           "true_away": 17.2
         },
-        "predictability_score": 43,
+        "predictability_score": 50,
         "asian_handicap_probs": {
           "ah_0": [
             0.5376,
@@ -675,7 +664,7 @@
           "model": 0.31
         }
       },
-      "recommend_score": 42.99,
+      "recommend_score": 44.2,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     }
@@ -1236,8 +1225,8 @@
               }
             ]
           },
-          "engine_version": "vMAX 18.3.3",
-          "engine_architecture": "RAW-AI主审 + API_KEY/API_URL兼容GPT旧变量 + singleflight + 不缓存失败AI + Claude守门裁判",
+          "engine_version": "vMAX 18.3.4",
+          "engine_architecture": "RAW-AI主审 + API_KEY/API_URL兼容GPT旧变量 + match名称解析修复 + singleflight + 不缓存失败AI + Claude守门裁判",
           "validation_warnings": [],
           "postprocess_warnings": [
             "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
@@ -1530,54 +1519,47 @@
           "display_direction": "主胜",
           "final_direction": "home",
           "is_score_others": false,
-          "home_win_pct": 57.6,
-          "draw_pct": 24.5,
-          "away_win_pct": 17.9,
+          "home_win_pct": 61.1,
+          "draw_pct": 22.9,
+          "away_win_pct": 16.0,
           "scenario": "normal",
           "goal_range": [
             2,
             4
           ],
-          "dir_confidence": 57.6,
-          "dir_gap": 33.1,
+          "dir_confidence": 61.1,
+          "dir_gap": 38.3,
           "evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
             "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
-            "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
-            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度3"
+            "后验方向:{'home': 61.15, 'draw': 22.85, 'away': 16.0}",
+            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.307%",
+            "决策来源:claude_guarded_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度3",
+            "AI residual:{'home': 2.94, 'draw': 0.88, 'away': 0.0}"
           ],
           "override_triggered": false,
           "top_score_candidates": [
             [
               "2-0",
-              10.648
+              0.18
+            ],
+            [
+              "1-0",
+              0.16
             ],
             [
               "2-1",
-              10.336
-            ],
-            [
-              "3-0",
-              7.246
-            ],
-            [
-              "3-1",
-              5.206
-            ],
-            [
-              "4-0",
-              2.738
+              0.13
             ]
           ],
-          "calibrated_score_prob_pct": 10.648,
+          "calibrated_score_prob_pct": 11.307,
           "bayesian_prior": {
             "home": 62.745,
             "draw": 22.225,
             "away": 15.03
           },
-          "decision_source": "matrix_authority",
+          "decision_source": "claude_guarded_authority",
           "ai_authority_mode": "claude_guarded",
           "unified_matrix_top_scores": [
             [
@@ -1732,16 +1714,17 @@
             "draw": 24.5,
             "home": 57.59
           },
-          "confidence": 75.0,
+          "confidence": 77.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
             "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
-            "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
-            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度3"
+            "后验方向:{'home': 61.15, 'draw': 22.85, 'away': 16.0}",
+            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.307%",
+            "决策来源:claude_guarded_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度3",
+            "AI residual:{'home': 2.94, 'draw': 0.88, 'away': 0.0}"
           ],
           "traps_detected": [
             "T14_CUP_FAVORITE"
@@ -1783,27 +1766,22 @@
             "low_scores": []
           },
           "suggested_kelly": 0.0,
-          "edge_vs_market": -30.79,
+          "edge_vs_market": -26.5,
           "is_value": false,
           "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 10.648,
+          "score_model_prob": 11.307,
           "score_market_odds": 6.5,
           "score_market_implied_pct": 15.385,
-          "gpt_score": "弃权",
-          "gpt_analysis": "弃权",
-          "grok_score": "弃权",
-          "grok_analysis": "弃权",
-          "gemini_score": "弃权",
-          "gemini_analysis": "弃权",
-          "claude_score": "弃权",
-          "claude_analysis": "弃权",
-          "ai_abstained": [
-            "GPT",
-            "GROK",
-            "GEMINI",
-            "CLAUDE"
-          ],
-          "ai_avg_confidence": 0.0,
+          "gpt_score": "2-0",
+          "gpt_analysis": "1X2公平概率显示主胜62.7%，主队是明确基础强方。欧赔1.50/3.70/5.20对应的结构并非极端碾压，而是稳定主导。盘口层面理论应到主让1.25，实际仅主让1.0，存在0.25档偏浅，说明市场对主队大胜穿盘有所保留，但不等于否定主胜本身，更像是防范一球胜或胜而不穿。总进球分布中2球与3球最集中，0-1球并非主导，4球以上明显抬高，属于正常偏谨慎的进球环境，最合理的是主队在2球附近完成比赛控制。资金面上主胜赔率微升、客胜赔率微降，且有Sharp流向客胜，同时主胜散户热度59%偏高，这对主胜赔率形成扰动，提示热门主胜存在定价压力；但让球盘并未进一步退到更弱位置，说明机构主要防的是主队赢球不畅，而非客胜主路径。因此主方向仍保留在home，但比分分布回避夸张大胜，优先一球到两球的主胜区间。",
+          "grok_score": "1-0",
+          "grok_analysis": "Fair 1X2 gives home clear 62.7% edge with xG 1.63 vs 0.775. Actual handicap -1.0 is shallower than theoretical -1.25 indicating market caution. Total goals odds peak at 2-3 goals suggesting controlled scoring. Sharp money flows to away but public 59% on home creates trap risk in cup tie. Selected home win over draw due to only 22.2% draw probability and home strength. Selected home win over away due to only 15% away probability despite contrarian sharp flow.",
+          "gemini_score": "1-1",
+          "gemini_analysis": "主队阿森纳在散户市场呈现59%的绝对热度，但实际盘口（-1.00）浅于理论盘口（-1.25），机构对主队大胜信心不足。同时，主胜赔率处于上升通道，而Sharp资金精准介入客胜，客胜赔率下调。结合马竞在欧战淘汰赛中极强的抗压与防守反击属性，本场主胜大热必死，首选平局，次防客胜爆冷。",
+          "claude_score": "2-0",
+          "claude_analysis": "三方初审中GPT与Grok均选home方向，形成2:1共识。Gemini选draw的核心论据是Sharp资金流向客胜+主胜过热，但审计发现：(1)公平1X2主胜62.7%远超平局22.2%，平局并非结构性主结果；(2)盘口虽浅于理论0.25档，但仍维持在-1.0而非退至-0.75，机构并未将平局抬为主路径；(3)半全场平/平赔率6.10远高于主/主2.12，平局在半全场市场无支撑；(4)Sharp流向客胜是风险信号但非硬反证——客胜公平概率仅15%，客队隐含xG仅0.775，不足以独立支撑方向翻转。Gemini将资金信号过度放大为方向翻转依据，缺乏BTTS/防守端/xG层面的硬数据支持。最终维持home方向，比分分布集中在2-0与1-0区间，反映盘口偏浅+客队低xG的双重约束。",
+          "ai_abstained": [],
+          "ai_avg_confidence": 48.8,
           "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热59% | T14_CUP_FAVORITE:杯赛大热保护:home公平概率62.7%+散户59%,淘汰赛弱队反扑",
           "smart_signals": [
             "💰 Sharp资金流向客胜",
@@ -1814,8 +1792,8 @@
             "📊 客队冷门(>5.0)实际胜率低于隐含8%",
             "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅17%)",
             "⚡ 主队攻防效率碾压(差值1.16)",
-            "⚠️ 负CLV-9.7% [主胜]",
-            "⚠️ 负CLV-10.5% [客胜]"
+            "⚠️ 负CLV-10.4% [平局]",
+            "⚠️ 负CLV-17.4% [客胜]"
           ],
           "sharp_detected": true,
           "sharp_dir": "away",
@@ -1913,14 +1891,14 @@
               }
             ]
           },
-          "engine_version": "vMAX 18.3.3",
-          "engine_architecture": "RAW-AI主审 + API_KEY/API_URL兼容GPT旧变量 + singleflight + 不缓存失败AI + Claude守门裁判",
+          "engine_version": "vMAX 18.3.4",
+          "engine_architecture": "RAW-AI主审 + API_KEY/API_URL兼容GPT旧变量 + match名称解析修复 + singleflight + 不缓存失败AI + Claude守门裁判",
           "validation_warnings": [],
           "postprocess_warnings": [
             "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
             "odds_history_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
             "quant_edge_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "advanced_models_core_fields_restored:away_win_pct,draw_pct,home_win_pct"
+            "advanced_models_core_fields_restored:away_win_pct,draw_pct"
           ],
           "line_movement_anomaly": {
             "has_anomaly": true,
@@ -1989,7 +1967,7 @@
             "true_draw": 24.1,
             "true_away": 17.2
           },
-          "predictability_score": 43,
+          "predictability_score": 50,
           "asian_handicap_probs": {
             "ah_0": [
               0.5376,
@@ -2031,7 +2009,7 @@
             "model": 0.31
           }
         },
-        "recommend_score": 42.99,
+        "recommend_score": 44.2,
         "is_recommended": true
       }
     ],
@@ -2207,54 +2185,47 @@
           "display_direction": "主胜",
           "final_direction": "home",
           "is_score_others": false,
-          "home_win_pct": 57.6,
-          "draw_pct": 24.5,
-          "away_win_pct": 17.9,
+          "home_win_pct": 61.1,
+          "draw_pct": 22.9,
+          "away_win_pct": 16.0,
           "scenario": "normal",
           "goal_range": [
             2,
             4
           ],
-          "dir_confidence": 57.6,
-          "dir_gap": 33.1,
+          "dir_confidence": 61.1,
+          "dir_gap": 38.3,
           "evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
             "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
-            "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
-            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度3"
+            "后验方向:{'home': 61.15, 'draw': 22.85, 'away': 16.0}",
+            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.307%",
+            "决策来源:claude_guarded_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度3",
+            "AI residual:{'home': 2.94, 'draw': 0.88, 'away': 0.0}"
           ],
           "override_triggered": false,
           "top_score_candidates": [
             [
               "2-0",
-              10.648
+              0.18
+            ],
+            [
+              "1-0",
+              0.16
             ],
             [
               "2-1",
-              10.336
-            ],
-            [
-              "3-0",
-              7.246
-            ],
-            [
-              "3-1",
-              5.206
-            ],
-            [
-              "4-0",
-              2.738
+              0.13
             ]
           ],
-          "calibrated_score_prob_pct": 10.648,
+          "calibrated_score_prob_pct": 11.307,
           "bayesian_prior": {
             "home": 62.745,
             "draw": 22.225,
             "away": 15.03
           },
-          "decision_source": "matrix_authority",
+          "decision_source": "claude_guarded_authority",
           "ai_authority_mode": "claude_guarded",
           "unified_matrix_top_scores": [
             [
@@ -2409,16 +2380,17 @@
             "draw": 24.5,
             "home": 57.59
           },
-          "confidence": 75.0,
+          "confidence": 77.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
             "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
-            "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
-            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度3"
+            "后验方向:{'home': 61.15, 'draw': 22.85, 'away': 16.0}",
+            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.307%",
+            "决策来源:claude_guarded_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度3",
+            "AI residual:{'home': 2.94, 'draw': 0.88, 'away': 0.0}"
           ],
           "traps_detected": [
             "T14_CUP_FAVORITE"
@@ -2460,27 +2432,22 @@
             "low_scores": []
           },
           "suggested_kelly": 0.0,
-          "edge_vs_market": -30.79,
+          "edge_vs_market": -26.5,
           "is_value": false,
           "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 10.648,
+          "score_model_prob": 11.307,
           "score_market_odds": 6.5,
           "score_market_implied_pct": 15.385,
-          "gpt_score": "弃权",
-          "gpt_analysis": "弃权",
-          "grok_score": "弃权",
-          "grok_analysis": "弃权",
-          "gemini_score": "弃权",
-          "gemini_analysis": "弃权",
-          "claude_score": "弃权",
-          "claude_analysis": "弃权",
-          "ai_abstained": [
-            "GPT",
-            "GROK",
-            "GEMINI",
-            "CLAUDE"
-          ],
-          "ai_avg_confidence": 0.0,
+          "gpt_score": "2-0",
+          "gpt_analysis": "1X2公平概率显示主胜62.7%，主队是明确基础强方。欧赔1.50/3.70/5.20对应的结构并非极端碾压，而是稳定主导。盘口层面理论应到主让1.25，实际仅主让1.0，存在0.25档偏浅，说明市场对主队大胜穿盘有所保留，但不等于否定主胜本身，更像是防范一球胜或胜而不穿。总进球分布中2球与3球最集中，0-1球并非主导，4球以上明显抬高，属于正常偏谨慎的进球环境，最合理的是主队在2球附近完成比赛控制。资金面上主胜赔率微升、客胜赔率微降，且有Sharp流向客胜，同时主胜散户热度59%偏高，这对主胜赔率形成扰动，提示热门主胜存在定价压力；但让球盘并未进一步退到更弱位置，说明机构主要防的是主队赢球不畅，而非客胜主路径。因此主方向仍保留在home，但比分分布回避夸张大胜，优先一球到两球的主胜区间。",
+          "grok_score": "1-0",
+          "grok_analysis": "Fair 1X2 gives home clear 62.7% edge with xG 1.63 vs 0.775. Actual handicap -1.0 is shallower than theoretical -1.25 indicating market caution. Total goals odds peak at 2-3 goals suggesting controlled scoring. Sharp money flows to away but public 59% on home creates trap risk in cup tie. Selected home win over draw due to only 22.2% draw probability and home strength. Selected home win over away due to only 15% away probability despite contrarian sharp flow.",
+          "gemini_score": "1-1",
+          "gemini_analysis": "主队阿森纳在散户市场呈现59%的绝对热度，但实际盘口（-1.00）浅于理论盘口（-1.25），机构对主队大胜信心不足。同时，主胜赔率处于上升通道，而Sharp资金精准介入客胜，客胜赔率下调。结合马竞在欧战淘汰赛中极强的抗压与防守反击属性，本场主胜大热必死，首选平局，次防客胜爆冷。",
+          "claude_score": "2-0",
+          "claude_analysis": "三方初审中GPT与Grok均选home方向，形成2:1共识。Gemini选draw的核心论据是Sharp资金流向客胜+主胜过热，但审计发现：(1)公平1X2主胜62.7%远超平局22.2%，平局并非结构性主结果；(2)盘口虽浅于理论0.25档，但仍维持在-1.0而非退至-0.75，机构并未将平局抬为主路径；(3)半全场平/平赔率6.10远高于主/主2.12，平局在半全场市场无支撑；(4)Sharp流向客胜是风险信号但非硬反证——客胜公平概率仅15%，客队隐含xG仅0.775，不足以独立支撑方向翻转。Gemini将资金信号过度放大为方向翻转依据，缺乏BTTS/防守端/xG层面的硬数据支持。最终维持home方向，比分分布集中在2-0与1-0区间，反映盘口偏浅+客队低xG的双重约束。",
+          "ai_abstained": [],
+          "ai_avg_confidence": 48.8,
           "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热59% | T14_CUP_FAVORITE:杯赛大热保护:home公平概率62.7%+散户59%,淘汰赛弱队反扑",
           "smart_signals": [
             "💰 Sharp资金流向客胜",
@@ -2491,8 +2458,8 @@
             "📊 客队冷门(>5.0)实际胜率低于隐含8%",
             "🔥 客胜Steam! 赔率降-1.00但散户未跟(仅17%)",
             "⚡ 主队攻防效率碾压(差值1.16)",
-            "⚠️ 负CLV-9.7% [主胜]",
-            "⚠️ 负CLV-10.5% [客胜]"
+            "⚠️ 负CLV-10.4% [平局]",
+            "⚠️ 负CLV-17.4% [客胜]"
           ],
           "sharp_detected": true,
           "sharp_dir": "away",
@@ -2590,14 +2557,14 @@
               }
             ]
           },
-          "engine_version": "vMAX 18.3.3",
-          "engine_architecture": "RAW-AI主审 + API_KEY/API_URL兼容GPT旧变量 + singleflight + 不缓存失败AI + Claude守门裁判",
+          "engine_version": "vMAX 18.3.4",
+          "engine_architecture": "RAW-AI主审 + API_KEY/API_URL兼容GPT旧变量 + match名称解析修复 + singleflight + 不缓存失败AI + Claude守门裁判",
           "validation_warnings": [],
           "postprocess_warnings": [
             "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
             "odds_history_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
             "quant_edge_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "advanced_models_core_fields_restored:away_win_pct,draw_pct,home_win_pct"
+            "advanced_models_core_fields_restored:away_win_pct,draw_pct"
           ],
           "line_movement_anomaly": {
             "has_anomaly": true,
@@ -2666,7 +2633,7 @@
             "true_draw": 24.1,
             "true_away": 17.2
           },
-          "predictability_score": 43,
+          "predictability_score": 50,
           "asian_handicap_probs": {
             "ah_0": [
               0.5376,
@@ -2708,7 +2675,7 @@
             "model": 0.31
           }
         },
-        "recommend_score": 42.99,
+        "recommend_score": 44.2,
         "is_recommended": true
       }
     ]
