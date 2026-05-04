@@ -1,0 +1,100 @@
+{
+  "choices": [
+    {
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "protected_material_code": {
+          "detected": false,
+          "filtered": false
+        },
+        "protected_material_text": {
+          "detected": false,
+          "filtered": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      },
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "content": "[\n  {\n    \"match\": \"切尔西 vs 诺丁汉\",\n    \"final_direction\": \"平\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"1-0\",\n        \"prob_hint\": \"medium\"\n      }\n    ],\n    \"reason\": [\n      \"公平1X2主59.7%虽占优，但理论-0.75实际-1.00，配合D18大热浅盘防平/防弱，胜赔降水不代表可放心穿盘。\",\n      \"CRS低赔中1-1@7.5与1-0/2-0非常接近，平局分布未被拉开，平局保护明显。\",\n      \"总进球3球最低，但4球锚点要求防2-2/3-1/1-3；主队热度55%不低，需防赢不了让球甚至被平。\"\n    ],\n    \"ai_confidence\": 0.66,\n    \"risk_level\": \"medium\",\n    \"detected_traps\": [\n      \"D18_FAVORITE_HEAT_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"强方浅盘必须防平或弱方\",\n      \"sharp主胜与浅盘防平信号冲突\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"主胜优势明确但未到可无脑打穿\",\n      \"handicap\": \"主让-1相对理论偏深0.25，易形成主胜热但让球不稳\",\n      \"crs\": \"1-1、2-1、1-0最密集，平局需重点覆盖\",\n      \"ttg\": \"3球主锚，兼顾2球\",\n      \"external_context\": \"missing\",\n      \"risk\": \"热门主队穿盘风险高\",\n      \"rejection\": \"未使用任何外部伤停/天气/首发编造信息\"\n    }\n  },\n  {\n    \"match\": \"赫尔辛基 vs 拉赫蒂\",\n    \"final_direction\": \"平\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-2\",\n        \"prob_hint\": \"medium\"\n      }\n    ],\n    \"reason\": [\n      \"公平主胜68.8%对应理论应到-1.75，实际仅-1.00，T3强烈示警强方让球偏浅。\",\n      \"平赔独降且系统给出T1_FAKE_DRAW_TRAP，但在超热主胜65%+sharp流向客胜背景下，主胜赔付挤压后更像胜平摇摆，优先防平。\",\n      \"CRS中1-1仍处低位，4球锚点按规则落2-2/3-1/1-3，符合大热浅盘下的平局扩散。\"\n    ],\n    \"ai_confidence\": 0.68,\n    \"risk_level\": \"high\",\n    \"detected_traps\": [\n      \"T1_FAKE_DRAW_TRAP\",\n      \"T3_HANDICAP_SHALLOWER\",\n      \"D18_FAVORITE_HEAT_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"强方浅盘必须防平或弱方\",\n      \"sharp资金流向客胜\",\n      \"主胜超热65%\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"主胜很强但盘口严重跟不上\",\n      \"handicap\": \"理论-1.75/实际-1.00，浅盘裂缝大\",\n      \"crs\": \"1-1与2-1共振，平局不能放\",\n      \"ttg\": \"3球主锚并联4球平局锚点2-2\",\n      \"external_context\": \"missing\",\n      \"risk\": \"主热过高，盘口与概率背离显著\",\n      \"rejection\": \"未使用外部情报推断\"\n    }\n  },\n  {\n    \"match\": \"克雷莫纳 vs 拉齐奥\",\n    \"final_direction\": \"客\",\n    \"top3\": [\n      {\n        \"score\": \"0-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"1-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob_hint\": \"high\"\n      }\n    ],\n    \"reason\": [\n      \"公平1X2客41.8%领先但不碾压，赔率与sharp资金同步流向客胜，客胜仍是主方向。\",\n      \"CRS最低为1-1@5.5，其次0-1@6.5、1-2@7.5，说明客胜大概率是小胜而非大胜。\",\n      \"让球从理论客让0.25到实际客让1.00属偏深，配合D17均势平局保护，需严防平局，但首选仍给0-1以满足客胜主方向。\"\n    ],\n    \"ai_confidence\": 0.64,\n    \"risk_level\": \"medium\",\n    \"detected_traps\": [\n      \"T2_HANDICAP_DEEPER\",\n      \"D17_BALANCED_DRAW_GUARD\",\n      \"D19_LONG_AWAY_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"平局保护明显\",\n      \"客队让深不利穿盘\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"客胜领先但差距有限\",\n      \"handicap\": \"客让1偏深，市场对客队高看过头\",\n      \"crs\": \"0-1/1-1/1-2构成核心带\",\n      \"ttg\": \"2-3球区间\",\n      \"external_context\": \"missing\",\n      \"risk\": \"平局粘性强\",\n      \"rejection\": \"未调用缺失外部信息\"\n    }\n  },\n  {\n    \"match\": \"佐加顿斯 vs 哥德堡\",\n    \"final_direction\": \"平\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"1-0\",\n        \"prob_hint\": \"medium\"\n      }\n    ],\n    \"reason\": [\n      \"主胜公平61.4%不低，但理论-1.25实际-1.00，属于浅盘保护，D18提示需防平/弱。\",\n      \"CRS低赔里2-1@6.5与1-1@6.7、1-0@7.0几乎并列，主队优势存在但无法甩开平局。\",\n      \"赔率主胜降水叠加主胜超热58%，更像吸热而非真实放行，优先落在1-1。\"\n    ],\n    \"ai_confidence\": 0.65,\n    \"risk_level\": \"medium\",\n    \"detected_traps\": [\n      \"D18_FAVORITE_HEAT_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"强方浅盘必须防平或弱方\",\n      \"主胜热度偏高\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"主胜面大于客队\",\n      \"handicap\": \"实际略浅，穿盘不稳\",\n      \"crs\": \"1-1处于极低位，平局保护成立\",\n      \"ttg\": \"2-3球\",\n      \"external_context\": \"missing\",\n      \"risk\": \"热门主胜可能只赢半格或失手\",\n      \"rejection\": \"无外部虚构内容\"\n    }\n  },\n  {\n    \"match\": \"哈尔姆斯 vs 布鲁马波\",\n    \"final_direction\": \"平\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob_hint\": \"medium\"\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob_hint\": \"medium\"\n      }\n    ],\n    \"reason\": [\n      \"系统直接给出T1_REAL_DRAW_SIGNAL，且1-1为CRS最低赔5.8，是真平强信号。\",\n      \"公平客40.3%略占优，但差距仅10.1%，D17均势平局保护非常明显。\",\n      \"客队理论仅让0.25却实际让1.00，偏深导致客胜真实回报受损，最合理的结果是平局，不排除客队小胜。\"\n    ],\n    \"ai_confidence\": 0.74,\n    \"risk_level\": \"medium\",\n    \"detected_traps\": [\n      \"T1_REAL_DRAW_SIGNAL\",\n      \"T2_HANDICAP_DEEPER\",\n      \"D17_BALANCED_DRAW_GUARD\",\n      \"D19_LONG_AWAY_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"真平信号\",\n      \"均势盘不宜重压单边\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"客略强但接近平衡\",\n      \"handicap\": \"客让明显过深，利于平局兑现\",\n      \"crs\": \"1-1为第一低赔，0-1/1-2为客胜补位\",\n      \"ttg\": \"2球核心，3球次选\",\n      \"external_context\": \"missing\",\n      \"risk\": \"客胜热度40%会分流投注\",\n      \"rejection\": \"未编造基本面\"\n    }\n  },\n  {\n    \"match\": \"博德闪耀 vs 莫尔德\",\n    \"final_direction\": \"主\",\n    \"top3\": [\n      {\n        \"score\": \"3-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"3-0\",\n        \"prob_hint\": \"high\"\n      }\n    ],\n    \"reason\": [\n      \"公平主胜78.7%极强，sharp资金继续流向主胜，尽管存在T3浅盘与超热风险，但T9提示此类反指容易被诱导，不能轻易逆主。\",\n      \"CRS最低赔集中在2-1、3-1、2-0、3-0，主胜强趋势清晰，且总进球3/4/5球连续低位，适合中高比分主胜。\",\n      \"4球锚点按规则优先3-1，且主队xG显著高于客队，3-1兼顾强势与失球容错。\"\n    ],\n    \"ai_confidence\": 0.76,\n    \"risk_level\": \"high\",\n    \"detected_traps\": [\n      \"T3_HANDICAP_SHALLOWER\",\n      \"T9_FAKE_CONTRARIAN\",\n      \"D18_FAVORITE_HEAT_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"超热主胜73%\",\n      \"浅盘不支持深穿，需区分胜负与让球\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"主胜极高\",\n      \"handicap\": \"理论-2.25但实际-1.00，盘口严重浅化\",\n      \"crs\": \"3-1/2-1/3-0集中度高\",\n      \"ttg\": \"3到5球强区间，4球锚点有效\",\n      \"external_context\": \"missing\",\n      \"risk\": \"赢球大概率，赢几球不确定\",\n      \"rejection\": \"未使用缺失资讯\"\n    }\n  },\n  {\n    \"match\": \"吉达联合 vs 拉斯永恒\",\n    \"final_direction\": \"平\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob_hint\": \"medium\"\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-0\",\n        \"prob_hint\": \"medium\"\n      }\n    ],\n    \"reason\": [\n      \"公平主胜69.3%应更深，实际仅-1.00，T3浅盘明确要求防平或弱。\",\n      \"CRS虽然2-1最低，但1-1@9.0仍在核心区，且D18大热浅盘保护与主胜超热65%共振。\",\n      \"总进球3球最低，若主队未能形成净胜2球结构，最容易滑向2-1或1-1；出于盘赔裂缝优先给平。\"\n    ],\n    \"ai_confidence\": 0.61,\n    \"risk_level\": \"high\",\n    \"detected_traps\": [\n      \"T3_HANDICAP_SHALLOWER\",\n      \"D18_FAVORITE_HEAT_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"强方浅盘必须防平或弱方\",\n      \"未提供赔率变动\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"主胜基本盘强\",\n      \"handicap\": \"理论-1.75/实际-1.00明显偏浅\",\n      \"crs\": \"2-1主导但1-1需纳入主方案\",\n      \"ttg\": \"3球主锚\",\n      \"external_context\": \"missing\",\n      \"risk\": \"热度高且缺少变盘信息\",\n      \"rejection\": \"无外部信息编造\"\n    }\n  },\n  {\n    \"match\": \"罗马 vs 佛罗伦萨\",\n    \"final_direction\": \"主\",\n    \"top3\": [\n      {\n        \"score\": \"1-0\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"1-1\",\n        \"prob_hint\": \"high\"\n      }\n    ],\n    \"reason\": [\n      \"公平主胜65.6%配合sharp主胜与胜赔降水，主队方向仍是主线。\",\n      \"CRS最低为1-0@6.0，其后2-1@6.5、2-0@6.7、1-1@6.7，呈现典型主队小胜格局。\",\n      \"虽有D18与T9反指陷阱，但其含义更多是防止盲目逆向，说明主胜仍应保留为首选，只是必须覆盖平。\"\n    ],\n    \"ai_confidence\": 0.69,\n    \"risk_level\": \"medium\",\n    \"detected_traps\": [\n      \"T9_FAKE_CONTRARIAN\",\n      \"D18_FAVORITE_HEAT_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"主胜热度62%\",\n      \"平局1-1低赔需覆盖\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"主胜显著占优\",\n      \"handicap\": \"实际-1略浅于理论-1.25，穿盘不稳但赢面仍大\",\n      \"crs\": \"1-0最优，2-1次之，1-1防守项强\",\n      \"ttg\": \"2-3球为主\",\n      \"external_context\": \"missing\",\n      \"risk\": \"热门主队可能只赢一球\",\n      \"rejection\": \"未引入外部信息\"\n    }\n  },\n  {\n    \"match\": \"埃弗顿 vs 曼城\",\n    \"final_direction\": \"客\",\n    \"top3\": [\n      {\n        \"score\": \"1-2\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"0-2\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob_hint\": \"medium\"\n      }\n    ],\n    \"reason\": [\n      \"公平客胜72.2%绝对强势，sharp与赔率降水一致流向客胜，基本面定价上客胜仍应站主位。\",\n      \"CRS最低赔为1-2@6.5、0-2@7.0、0-1@7.75，说明客胜更偏小中胜而非横扫。\",\n      \"理论客让1.75而实际仅1.00属浅盘保护，D18/D19提示大热强客需防不穿甚至平局，但不改客胜主方向。\"\n    ],\n    \"ai_confidence\": 0.77,\n    \"risk_level\": \"medium\",\n    \"detected_traps\": [\n      \"T3_HANDICAP_SHALLOWER\",\n      \"T9_FAKE_CONTRARIAN\",\n      \"D18_FAVORITE_HEAT_GUARD\",\n      \"D19_LONG_AWAY_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"客胜超热66%\",\n      \"强客浅盘保护，注意胜负与让球分离\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"客胜绝对优势\",\n      \"handicap\": \"实际让1偏浅，示警穿盘风险\",\n      \"crs\": \"1-2/0-2/0-1最集中的客胜带\",\n      \"ttg\": \"2-3球核心\",\n      \"external_context\": \"missing\",\n      \"risk\": \"热度过高但反指空间有限\",\n      \"rejection\": \"未编造伤停首发\"\n    }\n  },\n  {\n    \"match\": \"塞维利亚 vs 皇家社会\",\n    \"final_direction\": \"平\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"1-0\",\n        \"prob_hint\": \"medium\"\n      },\n      {\n        \"score\": \"1-2\",\n        \"prob_hint\": \"medium\"\n      }\n    ],\n    \"reason\": [\n      \"公平1X2主37.4%、平29.1%、客33.6%，三项接近，D17均势平局保护非常强。\",\n      \"系统给出T1_REAL_DRAW_SIGNAL，且1-1@6.0为CRS最低赔，是真平模型中最硬的证据之一。\",\n      \"理论盘口0.00却实际主让-1.00，主队被明显高抬，深盘更利于平局或一球内分胜负，首选1-1。\"\n    ],\n    \"ai_confidence\": 0.79,\n    \"risk_level\": \"medium\",\n    \"detected_traps\": [\n      \"T1_REAL_DRAW_SIGNAL\",\n      \"T2_HANDICAP_DEEPER\",\n      \"D17_BALANCED_DRAW_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"真平信号极强\",\n      \"盘口与公平概率严重背离\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"接近均势\",\n      \"handicap\": \"理论0到实际主让1，定价失真明显\",\n      \"crs\": \"1-1最优，1-0/1-2两侧包夹\",\n      \"ttg\": \"2-3球\",\n      \"external_context\": \"missing\",\n      \"risk\": \"分胜负概率也不低，但平局定价最佳\",\n      \"rejection\": \"未使用外部缺失资料\"\n    }\n  },\n  {\n    \"match\": \"里斯本 vs 吉马良斯\",\n    \"final_direction\": \"主\",\n    \"top3\": [\n      {\n        \"score\": \"3-0\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-0\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"3-1\",\n        \"prob_hint\": \"high\"\n      }\n    ],\n    \"reason\": [\n      \"虽然公平1X2数据异常为33.3/33.3/33.4且欧赔缺失，不能据此做常规定价，但CRS矩与比分赔付明显倾向主队大优。\",\n      \"CRS低赔集中在2-0、3-0、1-0、2-1、3-1，主队零封或净胜2球的密度最高。\",\n      \"让球直接给到主让-2.00，且信号提示机构重诱下盘；在缺失1X2有效欧赔情况下，按可用CRS与盘口结构，主胜大比分更合理。\"\n    ],\n    \"ai_confidence\": 0.58,\n    \"risk_level\": \"high\",\n    \"detected_traps\": [\n      \"D17_BALANCED_DRAW_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"欧赔全缺失\",\n      \"公平1X2明显异常\",\n      \"需人工复核数据源有效性\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\",\n      \"valid_1x2_odds\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"数据异常不可直接采用\",\n      \"handicap\": \"主让-2.00显示市场强主预期\",\n      \"crs\": \"3-0/2-0/3-1最强\",\n      \"ttg\": \"3-4球优先\",\n      \"external_context\": \"missing\",\n      \"risk\": \"基础赔率异常导致整体可信度下降\",\n      \"rejection\": \"未补造任何外部信息，且已标记数据异常\"\n    }\n  },\n  {\n    \"match\": \"阿森纳 vs 马竞\",\n    \"final_direction\": \"主\",\n    \"top3\": [\n      {\n        \"score\": \"1-0\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-0\",\n        \"prob_hint\": \"high\"\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob_hint\": \"high\"\n      }\n    ],\n    \"reason\": [\n      \"公平主胜62.7%仍是最强项，CRS前三为1-0、2-0、2-1，主队小胜结构非常清晰。\",\n      \"杯赛属性触发T14_CUP_FAVORITE，说明要防热门不穿或被逼平，但并非直接改判客队方向。\",\n      \"sharp资金流向客胜与主胜热度59%构成冲突，因此更适合选主胜但比分保守，落在1-0/2-0而非大开。\"\n    ],\n    \"ai_confidence\": 0.67,\n    \"risk_level\": \"medium\",\n    \"detected_traps\": [\n      \"T14_CUP_FAVORITE\",\n      \"D18_FAVORITE_HEAT_GUARD\"\n    ],\n    \"must_review_flags\": [\n      \"杯赛热门保护\",\n      \"sharp流向客胜\",\n      \"需防1-1\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"主胜占优明确\",\n      \"handicap\": \"实际-1略浅于理论-1.25，赢球大于穿盘\",\n      \"crs\": \"1-0/2-0/2-1形成主胜窄带\",\n      \"ttg\": \"2-3球为核心\",\n      \"external_context\": \"missing\",\n      \"risk\": \"淘汰赛环境下平局防守价值高\",\n      \"rejection\": \"未编造伤停、天气、首发\"\n    }\n  }\n]",
+        "refusal": null,
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1777893950,
+  "id": "chatcmpl-DblioVL3cGmBIKZSYUkPB6mHv4X4w",
+  "model": "gpt-5.4-2026-03-05",
+  "object": "chat.completion",
+  "prompt_filter_results": [
+    {
+      "prompt_index": 0,
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "jailbreak": {
+          "detected": false,
+          "filtered": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      }
+    }
+  ],
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 5786,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "engine_tbt_ms": 17,
+      "engine_ttft_ms": 438,
+      "engine_ttlt_ms": 99793,
+      "pre_inference_ms": 62,
+      "service_tbt_ms": 17,
+      "service_ttft_ms": 540,
+      "service_ttlt_ms": 99895,
+      "total_duration_ms": 99859,
+      "user_visible_ttft_ms": 478
+    },
+    "prompt_tokens": 9828,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0
+    },
+    "total_tokens": 15614
+  }
+}
