@@ -1,0 +1,630 @@
+[
+  {
+    "match": "切尔西 vs 诺丁汉",
+    "final_direction": "主胜",
+    "top3": [
+      {
+        "score": "2-0",
+        "prob": 0.19,
+        "market_logic": "主队公平胜率高且主胜降水，隐含xG 1.842:0.846，偏向主队稳定压制且客队进球受限。"
+      },
+      {
+        "score": "2-1",
+        "prob": 0.15,
+        "market_logic": "总进球集中在2-3球区间，客队仍有接近0.85隐含xG，存在单球回应空间。"
+      },
+      {
+        "score": "3-0",
+        "prob": 0.12,
+        "market_logic": "半全场主主较低，若主队先开局领先，存在扩大比分的次级路径。"
+      }
+    ],
+    "reason": "1X2公平概率主胜66.6%明显占优，且主胜端有Sharp资金配合降水，基础面与交易面一致。理论盘口-1.25，实际-1.00略浅，说明市场对主胜认可但对净胜两球以上并未极度激进，更像赢球为先、穿盘未必轻松。总进球结构偏中低到正常，3球附近最密集，结合主客隐含xG更适配主队零封或仅失1球的主胜分布。",
+    "ai_confidence": 0.74,
+    "risk_level": "medium",
+    "detected_traps": [
+      "让球略浅，存在赢球不穿的保护",
+      "缺少伤停与首发信息，无法验证轮换强度"
+    ],
+    "must_review_flags": [],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主66.6% 平19.5% 客13.9%，主胜为唯一显著优势方向。",
+      "handicap": "理论-1.25 vs 实际-1.00，主队被轻微降档，不支持盲目追大胜但仍支持主胜。",
+      "total_goals": "总进球2-4球区间密集，低尾部与高尾部都不强，偏正常进球环境。",
+      "money_flow": "Sharp流向主胜，主胜赔率下调，市场主方向明确。",
+      "external_context": "无外部伤停/天气/首发资料，不能做额外修正。",
+      "risk": "若主队效率偏低，最容易滑向小胜而非冷门。",
+      "rejection": {
+        "home_not_selected_reason": "",
+        "draw_not_selected_reason": "平局公平概率仅19.5%，且主胜资金与价格同步走强，不符合平局主导结构。",
+        "away_not_selected_reason": "客胜仅13.9%，且缺乏任何逆向资金支持，隐含xG也明显落后。"
+      }
+    }
+  },
+  {
+    "match": "赫尔辛基 vs 拉赫蒂",
+    "final_direction": "平局",
+    "top3": [
+      {
+        "score": "1-1",
+        "prob": 0.16,
+        "market_logic": "主胜超热且盘口大幅偏浅，平赔独降并有假平标签，但结合Sharp去客与主胜热度过高，更像主队优势被压缩后的中性结果。"
+      },
+      {
+        "score": "0-0",
+        "prob": 0.11,
+        "market_logic": "盘口与1X2强弱严重错位，若主队迟迟不能兑现优势，低比分平局具备保护价值。"
+      },
+      {
+        "score": "1-2",
+        "prob": 0.1,
+        "market_logic": "Sharp资金流向客胜，若浅盘真实反映主队赢球阻力，客队偷袭路径存在。"
+      }
+    ],
+    "reason": "公平1X2给到主胜68.8%，但理论盘口应到-1.75，实际却仅-1.00，浅了0.75档，这是本组最明显的主强盘弱错位之一。与此同时主胜不降反升，平局与客胜降水，且主胜散户热度64%过热。虽然本地标签提示假平诱盘，但在没有进一步外部情报证伪的情况下，主胜价格未获支持、盘口又显著退让，市场更像在回避主胜穿透力。综合看，主不败仍大，但单挑方向更偏平。",
+    "ai_confidence": 0.62,
+    "risk_level": "high",
+    "detected_traps": [
+      "主胜超热64%",
+      "理论-1.75到实际-1.00严重偏浅",
+      "平赔与客赔同步降水，存在反主路径",
+      "假平标签存在干扰，需防客胜尾部"
+    ],
+    "must_review_flags": [
+      "主胜热度与盘口深度严重背离",
+      "Sharp去客与平赔独降共振"
+    ],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主68.8% 平18.1% 客13.1%，账面主强但赔率后续不配合。",
+      "handicap": "理论-1.75 vs 实际-1.00，主队优势被大幅削弱，是核心反证。",
+      "total_goals": "总进球结构偏2-4球，支持正常环境，但不必然等于主队兑现大胜。",
+      "money_flow": "Sharp流向客胜，主胜超热且未降水，风险集中在反主。",
+      "external_context": "无外部信息，无法确认主队轮换或客队利空，需更尊重盘口异动。",
+      "risk": "若假平标签成立则可能回到主胜，但当前交易证据不足以跟随主胜。",
+      "rejection": {
+        "home_not_selected_reason": "虽然公平概率高，但盘口比理论浅0.75且主胜价格不被支持，热度过高不利于单挑主胜。",
+        "draw_not_selected_reason": "",
+        "away_not_selected_reason": "客胜基础概率只有13.1%，即便有Sharp支持也更像冷门尾部，不宜压过平局。"
+      }
+    }
+  },
+  {
+    "match": "克雷莫纳 vs 拉齐奥",
+    "final_direction": "客胜",
+    "top3": [
+      {
+        "score": "0-1",
+        "prob": 0.18,
+        "market_logic": "客队为强方，隐含xG仅小幅领先且总进球环境偏低，最匹配低比分客胜。"
+      },
+      {
+        "score": "0-2",
+        "prob": 0.13,
+        "market_logic": "客胜降水且Sharp流向客队，若先手得分，主队0.936隐含xG不足以稳定追平。"
+      },
+      {
+        "score": "1-2",
+        "prob": 0.11,
+        "market_logic": "总进球2-3球密集，兼顾主队一球回应与客队胜出。"
+      }
+    ],
+    "reason": "公平1X2客胜42.4%虽非碾压，但已是三项最高，且客胜降水并得到Sharp支持。盘口方面理论仅客让0.25，实际却到客让1.0，深了0.75，说明让球端明显强化客队定位；这种结构会抬高平局防守价值，但并不自然转向主队。总进球偏低，庄家隐含xG合计约2.10，更利于实力稍强一方以一球或两球差带走比赛。",
+    "ai_confidence": 0.67,
+    "risk_level": "medium",
+    "detected_traps": [
+      "客让偏深，存在平局保护",
+      "平局公平概率29.0%不低"
+    ],
+    "must_review_flags": [],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主28.6% 平29.0% 客42.4%，客胜为第一方向但平局不弱。",
+      "handicap": "理论客让0.25，实际客让1.0，市场对客队强度表达明显强化。",
+      "total_goals": "0-3球区间最密，偏低比分，利于客队小胜。",
+      "money_flow": "Sharp去客且客赔下降，客方向得到资金确认。",
+      "external_context": "无补充情报，不做阵容层面的攻防修正。",
+      "risk": "平局是最大干扰项，尤其在低总进球环境下。",
+      "rejection": {
+        "home_not_selected_reason": "主胜基础概率仅28.6%，且没有资金与赔率支持，盘口还在强化客队。",
+        "draw_not_selected_reason": "平局虽有29.0%保护，但客胜是最高公平概率且有Sharp降水共振，仍应优先客胜。",
+        "away_not_selected_reason": ""
+      }
+    }
+  },
+  {
+    "match": "佐加顿斯 vs 哥德堡",
+    "final_direction": "主胜",
+    "top3": [
+      {
+        "score": "2-0",
+        "prob": 0.18,
+        "market_logic": "主队隐含xG 1.664对0.82，主胜降水且Sharp支持，零封主胜优先。"
+      },
+      {
+        "score": "2-1",
+        "prob": 0.14,
+        "market_logic": "总进球正常区间，客队并非完全无进球能力，次优为失一球主胜。"
+      },
+      {
+        "score": "1-0",
+        "prob": 0.12,
+        "market_logic": "盘口略浅，意味着主队赢球未必顺滑，小胜路径不能忽略。"
+      }
+    ],
+    "reason": "主胜公平概率62.3%有明显优势，且主胜降水、Sharp流向主队，交易面与基础面一致。理论-1.25实际-1.00，仅轻微偏浅，更像对大胜有所保留，不构成逆转方向。总进球分布在2-3球最密集，适合主队主导但不失去低比分控制感的场景，因此主胜仍是最稳方向。",
+    "ai_confidence": 0.72,
+    "risk_level": "medium",
+    "detected_traps": [
+      "主胜超热59%",
+      "让球略浅，需防只赢一球"
+    ],
+    "must_review_flags": [],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主62.3% 平21.9% 客15.8%，主胜优势清晰。",
+      "handicap": "理论-1.25 vs 实际-1.00，仅小幅保守，不足以推翻主胜。",
+      "total_goals": "2-3球最集中，偏主队小中胜。",
+      "money_flow": "Sharp资金流向主胜且主胜降水，资金面支持充分。",
+      "external_context": "无外部伤停首发信息。",
+      "risk": "热度偏高，若临场效率不足可能走向1球险胜。",
+      "rejection": {
+        "home_not_selected_reason": "",
+        "draw_not_selected_reason": "平局只有21.9%，且主胜资金与赔率共振，不符合平局主导。",
+        "away_not_selected_reason": "客胜概率15.8%偏低，资金也未支持逆袭。"
+      }
+    }
+  },
+  {
+    "match": "哈尔姆斯 vs 布鲁马波",
+    "final_direction": "平局",
+    "top3": [
+      {
+        "score": "1-1",
+        "prob": 0.18,
+        "market_logic": "公平概率主30.1/平30.2/客39.8接近均衡，平赔独降且平局Sharp突进，最吻合中位分布。"
+      },
+      {
+        "score": "0-0",
+        "prob": 0.12,
+        "market_logic": "双方隐含xG合计约2.00，低中进球环境下僵持可能性不低。"
+      },
+      {
+        "score": "1-2",
+        "prob": 0.1,
+        "market_logic": "客队账面略强且盘口深开，若平局未兑现，客队小胜是次级路径。"
+      }
+    ],
+    "reason": "这场是典型均衡结构：主30.1%、平30.2%、客39.8%，客队只略占优而非强势碾压。理论盘口客让0.25，实际却到客让1.0，深开0.75，说明让球端对客队过度强化，往往会抬升平局保护价值。更关键是平局出现Sharp突进，且平赔下降，交易层面对平局有明确确认。总进球环境偏低中位，僵持格局自然增强，因此单挑平局最合逻辑。",
+    "ai_confidence": 0.69,
+    "risk_level": "medium",
+    "detected_traps": [
+      "客让过深制造客强错觉",
+      "客队仍为1X2第一概率项，需防客胜落地"
+    ],
+    "must_review_flags": [
+      "平局Sharp突进"
+    ],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "三向接近，平局30.2%几乎与主胜持平，客胜也仅39.8%。",
+      "handicap": "理论客让0.25 vs 实际客让1.0，深盘对平局更有保护意义。",
+      "total_goals": "2球最密，整体偏低中，利于平局落点。",
+      "money_flow": "平局Sharp突进是核心证据，且平赔下降。",
+      "external_context": "无额外情报，盘口与资金信号权重上升。",
+      "risk": "若客队真实强度被盘口正确反映，则客胜会先于主胜发生。",
+      "rejection": {
+        "home_not_selected_reason": "主胜仅30.1%，无价格与资金支持，且客队至少在账面上略强。",
+        "draw_not_selected_reason": "",
+        "away_not_selected_reason": "客胜虽然最高，但优势只有9.6个百分点且客让过深，平局保护更明显。"
+      }
+    }
+  },
+  {
+    "match": "博德闪耀 vs 莫尔德",
+    "final_direction": "主胜",
+    "top3": [
+      {
+        "score": "3-1",
+        "prob": 0.16,
+        "market_logic": "主队隐含xG高达2.562，客队仍有1.004，属于高进球主导型主胜。"
+      },
+      {
+        "score": "2-1",
+        "prob": 0.14,
+        "market_logic": "盘口极浅但主胜资金与1X2优势太强，若有保护更像只赢一球而非翻车。"
+      },
+      {
+        "score": "3-0",
+        "prob": 0.12,
+        "market_logic": "半全场主主极低，若主队前段建立优势，可转化为净胜两球以上。"
+      }
+    ],
+    "reason": "公平主胜高达78.7%，1X2层面几乎是一边倒，且主胜降水、Sharp继续流入主队。理论盘口应到-2.25，实际却只有-1.00，浅了1.25档，这是非常大的错位，但这种错位在超强主胜场更像防范穿深盘而非直接否定主胜。总进球环境明显偏高，主队xG超过2.5，客队也有1.0左右，说明最合理的是主胜且比赛不沉闷。风险主要在让球盘，不在胜负主方向。",
+    "ai_confidence": 0.78,
+    "risk_level": "high",
+    "detected_traps": [
+      "主胜超热73%",
+      "理论-2.25到实际-1.00极度偏浅",
+      "存在诱反指标签",
+      "更可能防穿盘而非防胜负"
+    ],
+    "must_review_flags": [
+      "盘口与公平概率错位极大"
+    ],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主78.7% 平12.3% 客9.0%，主胜压倒性第一。",
+      "handicap": "理论-2.25 vs 实际-1.00，盘口极浅，重心应理解为不稳穿盘而非不稳取胜。",
+      "total_goals": "高进球环境明显，4-6球尾部被明显抬高。",
+      "money_flow": "主胜降水+Sharp流入，但伴随超热，存在市场博弈噪音。",
+      "external_context": "无阵容与赛程情报，无法判断是否有轮换导致浅盘。",
+      "risk": "若市场真实担忧轮换或战意，可能从大胜收缩为小胜，但客胜基础仍弱。",
+      "rejection": {
+        "home_not_selected_reason": "",
+        "draw_not_selected_reason": "平局仅12.3%，在高进球场景下更难维持，除非主队极端低效。",
+        "away_not_selected_reason": "客胜只有9.0%，且无任何逆向降水支持，冷门支撑不足。"
+      }
+    }
+  },
+  {
+    "match": "吉达联合 vs 拉斯永恒",
+    "final_direction": "主胜",
+    "top3": [
+      {
+        "score": "2-0",
+        "prob": 0.18,
+        "market_logic": "主队胜率71.0%，主胜降水且Sharp支持，客队隐含xG仅0.818，主队零封面较大。"
+      },
+      {
+        "score": "3-1",
+        "prob": 0.13,
+        "market_logic": "总进球中高位，主队接近2.0 xG，有放大比分能力。"
+      },
+      {
+        "score": "2-1",
+        "prob": 0.12,
+        "market_logic": "盘口偏浅意味着赢球与大胜之间存在落差，失一球主胜需保留。"
+      }
+    ],
+    "reason": "主胜公平概率71.0%非常高，且主胜降水并有Sharp资金同向，基础面与交易面均支持主胜。理论盘口-1.75，实际-1.00，浅了0.75档，说明市场对净胜两球以上并不激进，更像在防主胜不穿而非防主胜翻车。总进球分布偏正常到略高，主队接近2球期望，客队不足1球，最合适的是主胜且净胜1-2球之间。",
+    "ai_confidence": 0.75,
+    "risk_level": "high",
+    "detected_traps": [
+      "主胜超热66%",
+      "浅盘与降水同向，容易引发反指争议",
+      "防小胜不防冷门"
+    ],
+    "must_review_flags": [],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主71.0% 平17.5% 客11.5%，主胜显著占优。",
+      "handicap": "理论-1.75 vs 实际-1.00，浅盘压制大胜预期，但不改主方向。",
+      "total_goals": "2-5球区间较活跃，主队主导型正常环境。",
+      "money_flow": "Sharp主胜+主胜降水，尽管主队过热，方向仍集中于主胜。",
+      "external_context": "无外部补充，盘口解释不能依赖未知伤停。",
+      "risk": "若效率下降，容易落在1球胜差。",
+      "rejection": {
+        "home_not_selected_reason": "",
+        "draw_not_selected_reason": "平局17.5%偏低，且市场没有给平局资金确认。",
+        "away_not_selected_reason": "客胜11.5%且无降水支持，不足以对抗主胜优势。"
+      }
+    }
+  },
+  {
+    "match": "罗马 vs 佛罗伦萨",
+    "final_direction": "主胜",
+    "top3": [
+      {
+        "score": "2-0",
+        "prob": 0.17,
+        "market_logic": "主队隐含xG 1.747，客队仅0.76，典型主导且限制客队输出的结构。"
+      },
+      {
+        "score": "1-0",
+        "prob": 0.14,
+        "market_logic": "盘口浅于理论，主队赢球但未必高比分，低比分主胜需提高权重。"
+      },
+      {
+        "score": "2-1",
+        "prob": 0.12,
+        "market_logic": "总进球集中在2-3球，允许客队拿到单球。"
+      }
+    ],
+    "reason": "主胜公平概率66.6%，与切尔西场类似但客队进攻期望更低。主胜降水并获Sharp支持，说明主方向具备交易确认。理论让步-1.75而实际-1.00，浅了0.75档，代表市场不愿高估罗马净胜两球以上能力，但并未削弱主胜本身。总进球环境偏中低，配合客队低xG，更偏向主队控制局面的小中胜。",
+    "ai_confidence": 0.73,
+    "risk_level": "high",
+    "detected_traps": [
+      "主胜超热63%",
+      "理论深盘到实际浅盘，需防赢球不穿",
+      "存在诱反指标签"
+    ],
+    "must_review_flags": [],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主66.6% 平20.4% 客13.0%，主胜明显领先。",
+      "handicap": "理论-1.75 vs 实际-1.00，主要打压大胜预期。",
+      "total_goals": "2-3球集中，偏罗马控制型赢球。",
+      "money_flow": "Sharp主胜且主胜降水，主向确认充分。",
+      "external_context": "缺失外部资料，无法验证是否有欧战/轮换影响。",
+      "risk": "若主队效率不足，平局会成为尾部风险，但客胜仍偏弱。",
+      "rejection": {
+        "home_not_selected_reason": "",
+        "draw_not_selected_reason": "平局20.4%不高且缺乏价格支持，难压过主胜。",
+        "away_not_selected_reason": "客胜仅13.0%，xG与资金面都处下风。"
+      }
+    }
+  },
+  {
+    "match": "埃弗顿 vs 曼城",
+    "final_direction": "客胜",
+    "top3": [
+      {
+        "score": "0-2",
+        "prob": 0.18,
+        "market_logic": "客队公平胜率72.2%，隐含xG 2.039显著领先，客队零封两球胜最贴合。"
+      },
+      {
+        "score": "1-2",
+        "prob": 0.14,
+        "market_logic": "总进球正常区间且主队仍有0.825 xG，存在单球回应概率。"
+      },
+      {
+        "score": "0-3",
+        "prob": 0.12,
+        "market_logic": "若客队早段领先，半全场负负极低，延展到两球以上客胜是自然分支。"
+      }
+    ],
+    "reason": "客胜公平概率72.2%是全组最强客队之一，且客胜降水、Sharp流向客胜，基础与交易完全一致。理论应客让1.75，实际仅1.00，浅了0.75档，说明市场担心曼城无法轻松穿深盘，但不是在否定客胜。总进球环境正常，客队进攻期望超2球而主队不足1球，最优仍是客胜，区别只在赢几球。",
+    "ai_confidence": 0.79,
+    "risk_level": "high",
+    "detected_traps": [
+      "客胜超热67%",
+      "强客浅盘保护明显",
+      "诱反指标签存在，但更像防穿盘"
+    ],
+    "must_review_flags": [
+      "客队热度高且盘口偏浅"
+    ],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主11.0% 平16.8% 客72.2%，客胜压倒性优势。",
+      "handicap": "理论客让1.75 vs 实际客让1.00，明显浅盘，警惕只赢不穿。",
+      "total_goals": "2-4球密集，利于客队在正常进球环境中取胜。",
+      "money_flow": "Sharp去客且客赔下降，市场主方向清晰。",
+      "external_context": "无外部信息，不能假设轮换，但浅盘需作为风险备注。",
+      "risk": "平局是唯一相对可防尾部，不足以翻转主方向。",
+      "rejection": {
+        "home_not_selected_reason": "主胜只有11.0%，xG差距巨大且无资金支持。",
+        "draw_not_selected_reason": "平局16.8%偏低，且客胜资金与赔率同步走强。",
+        "away_not_selected_reason": ""
+      }
+    }
+  },
+  {
+    "match": "塞维利亚 vs 皇家社会",
+    "final_direction": "平局",
+    "top3": [
+      {
+        "score": "1-1",
+        "prob": 0.19,
+        "market_logic": "公平概率主37.4/平29.6/客33.0非常接近，平赔下降，且双方xG几乎对称。"
+      },
+      {
+        "score": "0-0",
+        "prob": 0.12,
+        "market_logic": "总进球偏低中位，均势局面下闷平具备现实性。"
+      },
+      {
+        "score": "2-1",
+        "prob": 0.09,
+        "market_logic": "若深盘真实看好主队，主队小胜是平局之外的首要分支。"
+      }
+    ],
+    "reason": "这场1X2极其接近，主37.4%、平29.6%、客33.0，根本不是明确主强格局。理论盘口应为平手，实际却给到主让1.0，深了整整1档，这是极不寻常的偏深结构，往往会抬高平局价值。与此同时平赔下降，说明交易面对平局有防守动作。总进球仅约2.07，低中环境更有利于均势僵持，因此单挑平局更合理。",
+    "ai_confidence": 0.71,
+    "risk_level": "medium",
+    "detected_traps": [
+      "主让深盘与1X2均势严重不符",
+      "平赔下降",
+      "若深盘真实反映主队信息面，则主胜会形成反杀"
+    ],
+    "must_review_flags": [
+      "让球与1X2结构冲突极大"
+    ],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主37.4% 平29.6% 客33.0，接近三分结构。",
+      "handicap": "理论0.00 vs 实际-1.00，主队被异常强化，典型需防平。",
+      "total_goals": "低中进球环境，最利于平局兑现。",
+      "money_flow": "已知仅平赔下降，缺少更完整资金流，但足够支撑平局入围第一。",
+      "external_context": "无伤停首发信息，无法解释深盘来源，因此更应尊重赔率冲突本身。",
+      "risk": "若存在未披露利好主队信息，主胜会替代平局。",
+      "rejection": {
+        "home_not_selected_reason": "主胜仅比客胜高4.4个百分点，账面并不支持主让1球，深盘更像主胜风险放大器。",
+        "draw_not_selected_reason": "",
+        "away_not_selected_reason": "客胜虽接近主胜，但没有客赔降水与资金确认，且深盘更常先防平而非直接转客。"
+      }
+    }
+  },
+  {
+    "match": "里斯本 vs 吉马良斯",
+    "final_direction": "平局",
+    "top3": [
+      {
+        "score": "1-1",
+        "prob": 0.17,
+        "market_logic": "公平1X2被给成33.3/33.3/33.4且隐含xG仅1.249:1.086，市场本体是均势，平局自然居中。"
+      },
+      {
+        "score": "2-1",
+        "prob": 0.1,
+        "market_logic": "半全场主主极低显示主场被强力包装，但1X2缺失导致信号失真，主胜只能做次级备选。"
+      },
+      {
+        "score": "1-2",
+        "prob": 0.1,
+        "market_logic": "机构重诱下盘说明让球端信息噪声很大，若反向失衡，客队也有偷袭路径。"
+      }
+    ],
+    "reason": "本场数据质量异常：1X2欧赔为0，理论盘口却给0.00，实际让到-2.00，强方深浅差+2.00，内部字段冲突极大。唯一相对稳定的是公平1X2接近完全均衡、xG也只是1.249对1.086，并不支持两球深让。再叠加“机构重诱下盘”的备注，说明让球端高度失真，不适合作为主导依据。在这种数据不一致场景下，选择最中性的平局更稳妥。",
+    "ai_confidence": 0.36,
+    "risk_level": "very_high",
+    "detected_traps": [
+      "1X2欧赔缺失为0",
+      "公平概率与让球盘完全冲突",
+      "机构重诱下盘",
+      "全场数据结构异常"
+    ],
+    "must_review_flags": [
+      "严重数据异常，建议人工复核",
+      "缺少1X2真实价格"
+    ],
+    "data_missing": [
+      "1x2_odds",
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主33.3% 平33.3% 客33.4%，完全均势。",
+      "handicap": "理论0.00 vs 实际-2.00，冲突极端，无法正常解释。",
+      "total_goals": "总进球偏中位，支持平局与单球胜负并存。",
+      "money_flow": "仅知机构重诱下盘，无法确认主客真实资金方向。",
+      "external_context": "无外部情报，且关键赔率缺失。",
+      "risk": "这是全列表最需人工复核的一场，任何方向都有数据失真风险。",
+      "rejection": {
+        "home_not_selected_reason": "尽管半全场像强主，但公平1X2与xG都不支持-2强势，无法信任主胜单挑。",
+        "draw_not_selected_reason": "",
+        "away_not_selected_reason": "客队并未获得资金或赔率明确信任，只是在数据冲突下具备尾部可能，不足以超越平局。"
+      }
+    }
+  },
+  {
+    "match": "阿森纳 vs 马竞",
+    "final_direction": "主胜",
+    "top3": [
+      {
+        "score": "1-0",
+        "prob": 0.17,
+        "market_logic": "主队公平胜率62.7%领先，但客胜降水与杯赛属性压制大胜预期，低比分主胜优先。"
+      },
+      {
+        "score": "2-0",
+        "prob": 0.14,
+        "market_logic": "主队xG 1.63对0.775仍有明显优势，若率先进球可进一步压制。"
+      },
+      {
+        "score": "1-1",
+        "prob": 0.12,
+        "market_logic": "淘汰赛环境+Sharp去客，平局是主胜之外最大干扰项。"
+      }
+    ],
+    "reason": "主胜公平概率62.7%仍是明显第一，理论盘口-1.25实际-1.00，只轻微偏浅，基础上仍应先看主队不败中的胜。不同之处在于客胜端出现降水且Sharp资金流向客队，叠加杯赛大热保护标签，说明市场对主胜路径有所保留，尤其是大胜被压缩。总进球环境偏中低，客队隐含xG不足0.8，更像阿森纳主导下的低比分比赛。综合后，主胜仍是第一，但比分分布需明显收缩。",
+    "ai_confidence": 0.61,
+    "risk_level": "high",
+    "detected_traps": [
+      "主胜超热59%",
+      "客胜降水且Sharp去客",
+      "杯赛淘汰赛属性增加保守与变数"
+    ],
+    "must_review_flags": [
+      "客胜资金异动与主胜高热并存"
+    ],
+    "data_missing": [
+      "injuries",
+      "suspensions",
+      "lineup_news",
+      "weather",
+      "motivation",
+      "odds_history"
+    ],
+    "audit": {
+      "fair_1x2": "主62.7% 平22.2% 客15.0%，主胜依然是概率第一。",
+      "handicap": "理论-1.25 vs 实际-1.00，仅轻微偏浅，不足以直接转向平/负。",
+      "total_goals": "偏中低环境，适合低比分主胜或平局。",
+      "money_flow": "客胜降水+Sharp去客，是反主的重要风险来源。",
+      "external_context": "无首发与伤停，杯赛战术倾向无法进一步校准。",
+      "risk": "若阿森纳保守或效率不足，平局可能截留主胜概率。",
+      "rejection": {
+        "home_not_selected_reason": "",
+        "draw_not_selected_reason": "平局虽有杯赛支撑，但主胜仍具备明显概率领先与主场让步基础。",
+        "away_not_selected_reason": "客胜只有15.0%，资金异动更多像风险提示而非足够翻盘证据。"
+      }
+    }
+  }
+]
