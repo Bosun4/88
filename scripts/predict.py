@@ -1777,8 +1777,8 @@ AI_SINGLEFLIGHT_ENABLED = str(os.environ.get("AI_SINGLEFLIGHT_ENABLED", "true"))
 
 # v18.3.2: 所有模型可统一走同一个 OpenAI-compatible 中转。
 # 你只需要配置 API_KEY / API_URL；也可以单独覆盖 GPT_API_KEY/GPT_API_URL 等。
-COMMON_GATEWAY_KEY_ALIASES = ["API_KEY"]
-COMMON_GATEWAY_URL_ALIASES = ["API_URL"]
+COMMON_GATEWAY_KEY_ALIASES = ["API_KEY", "OPENAI_API_KEY"]
+COMMON_GATEWAY_URL_ALIASES = ["API_URL", "BASE_URL", "OPENAI_API_URL"]
 
 # Claude 不是反指模型。若三家初审形成强共识，Claude 只在有硬反证时改票。
 AI_JUDGE_CONTRARIAN_GUARD = str(os.environ.get("AI_JUDGE_CONTRARIAN_GUARD", "true")).strip().lower() in ("1", "true", "yes")
@@ -1891,14 +1891,14 @@ def get_clean_env_url(name, default=""):
             return common
 
     aliases = [name]
-    if name == "API_URL":
-        aliases += ["API_URL"]
-    elif name == "API_URL":
-        aliases += ["API_URL"]
-    elif name == "API_URL":
-        aliases += ["API_URL"]
-    elif name == "API_URL":
-        aliases += ["API_URL"]
+    if name == "GPT_API_URL":
+        aliases += ["OPENAI_API_URL"]
+    elif name == "GROK_API_URL":
+        aliases += ["XAI_API_URL"]
+    elif name == "CLAUDE_API_URL":
+        aliases += ["ANTHROPIC_API_URL"]
+    elif name == "GEMINI_API_URL":
+        aliases += ["GOOGLE_API_URL"]
 
     aliases += COMMON_GATEWAY_URL_ALIASES
     return get_first_clean_env_url(aliases, default)
@@ -1911,14 +1911,14 @@ def get_clean_env_key(name):
             return common
 
     aliases = [name]
-    if name == "API_KEY":
-        aliases += ["API_KEY"]
-    elif name == "API_KEY":
-        aliases += ["API_KEY"]
-    elif name == "API_KEY":
-        aliases += ["API_KEY"]
-    elif name == "API_KEY":
-        aliases += ["API_KEY", "AI_API_KEY"]
+    if name == "GPT_API_KEY":
+        aliases += ["OPENAI_API_KEY"]
+    elif name == "GROK_API_KEY":
+        aliases += ["XAI_API_KEY"]
+    elif name == "CLAUDE_API_KEY":
+        aliases += ["ANTHROPIC_API_KEY"]
+    elif name == "GEMINI_API_KEY":
+        aliases += ["GOOGLE_API_KEY", "GOOGLE_AI_API_KEY"]
 
     aliases += COMMON_GATEWAY_KEY_ALIASES
     return get_first_clean_env_key(aliases, "")
@@ -1927,7 +1927,7 @@ def _mask_key(k):
     return "" if not k else "***" if len(k) <= 8 else f"{k[:4]}...{k[-4:]}"
 
 def debug_ai_config():
-    for name, url_env, key_env in [("GPT","API_URL","API_KEY"),("GROK","API_URL","API_KEY"),("GEMINI","API_URL","API_KEY"),("CLAUDE","API_URL","API_KEY")]:
+    for name, url_env, key_env in [("GPT","GPT_API_URL","GPT_API_KEY"),("GROK","GROK_API_URL","GROK_API_KEY"),("GEMINI","GEMINI_API_URL","GEMINI_API_KEY"),("CLAUDE","CLAUDE_API_URL","CLAUDE_API_KEY")]:
         print(f"[AI CONFIG] {name}: url={get_clean_env_url(url_env)} key={_mask_key(get_clean_env_key(key_env))} models={_model_list_from_env(name.lower(), [])}")
     print(f"[AI MODE] authority={AI_SCORE_AUTHORITY_MODE} cache_ttl={AI_DECISION_CACHE_TTL} disable_cache={AI_DISABLE_CACHE} contrarian_guard={AI_JUDGE_CONTRARIAN_GUARD} singleflight={AI_SINGLEFLIGHT_ENABLED} max_req_per_ai={AI_MAX_REQUESTS_PER_AI}")
     print(f"[COMMON GATEWAY] force={FORCE_COMMON_GATEWAY_URL} API_URL={get_first_clean_env_url(['API_URL'], '')} API_KEY={_mask_key(get_first_clean_env_key(['API_KEY'], ''))}")
@@ -1940,7 +1940,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
         key = GPT_DEFAULT_KEY
     if not key:
         _AI_CALL_STATUS[ai_name] = {"ok": False, "status": "no_key", "model": None, "count": 0}
-        print(f"  [{ai_name.upper()}] no_key: 检查 {key_env} / API_KEY 等环境变量")
+        print(f"  [{ai_name.upper()}] no_key: 检查 {key_env} / API_KEY / OPENAI_API_KEY 等环境变量")
         return ai_name, {}, "no_key"
     primary = get_clean_env_url(url_env, GPT_DEFAULT_URL if ai_name == "gpt" else "")
     # v18.3.2：四个模型全部只走一个 API_URL，不走旧备用 URL，避免同一模型被重试扣费。
