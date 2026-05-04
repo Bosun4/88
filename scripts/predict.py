@@ -1760,6 +1760,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                         print(f"    {ai_name.upper()} 完成: {len(results)}/{num_matches} | {round(time.time()-t0,1)}s")
                         return ai_name, results, mn
                     _save_debug_dump(ai_name, data, "parse0")
+                    _save_debug_text(ai_name, raw, "parse0_raw")
+                    print(f"    解析0条，raw前200字: {raw[:200].replace(chr(10), chr(32))}")
                     break
             except asyncio.TimeoutError:
                 return ai_name, {}, "read_timeout" if connected else "connect_timeout"
@@ -1770,89 +1772,368 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
                 return ai_name, {}, "error"
     return ai_name, {}, "all_failed"
 
+
 def _extract_response_text(data, is_gem, ai_name):
+    """
+    v18.2.2 修复点:
+    1) 兼容 OpenAI chat/completions、Responses API、Gemini generateContent、部分中转站魔改字段。
+    2) 不只读取 message.content；当供应商把正文塞进 output_text/text/result/answer 等字段时也能提取。
+    3) 如果常规字段为空，会递归扫描包含 JSON 痕迹的字符串，避免 API 有输出但解析层拿不到正文。
+    """
+    candidates = []
+
+    def add_text(v, source=""):
+        if isinstance(v, str):
+            t = v.strip()
+            if t:
+                candidates.append((source, t))
+        elif isinstance(v, list):
+            for i, it in enumerate(v):
+                add_text(it, f"{source}[{i}]")
+        elif isinstance(v, dict):
+            # 常见文本字段优先
+            for k in [
+                "content", "text", "output_text", "answer", "response", "result",
+                "completion", "final_answer", "message_content", "assistant_content",
+                "model_response", "generated_text",
+            ]:
+                if k in v:
+                    add_text(v.get(k), f"{source}.{k}")
+
+            # content parts
+            if isinstance(v.get("parts"), list):
+                for j, part in enumerate(v["parts"]):
+                    if isinstance(part, dict):
+                        add_text(part.get("text"), f"{source}.parts[{j}].text")
+
+            # output content blocks
+            if isinstance(v.get("content"), list):
+                for j, ct in enumerate(v["content"]):
+                    if isinstance(ct, dict):
+                        add_text(ct.get("text"), f"{source}.content[{j}].text")
+                        add_text(ct.get("output_text"), f"{source}.content[{j}].output_text")
+
     try:
         if is_gem:
-            return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+            for cand in data.get("candidates", []) if isinstance(data, dict) else []:
+                content = cand.get("content", {}) if isinstance(cand, dict) else {}
+                for part in content.get("parts", []) if isinstance(content, dict) else []:
+                    if isinstance(part, dict):
+                        add_text(part.get("text"), "gemini.candidates.content.parts.text")
+            if candidates:
+                return max((t for _, t in candidates), key=len).strip()
+
         if isinstance(data, dict) and data.get("choices"):
-            msg = data["choices"][0].get("message", {})
-            content = msg.get("content", "") if isinstance(msg, dict) else ""
-            if isinstance(content, str) and content.strip():
-                return content.strip()
-            if isinstance(content, list):
-                texts = [x.get("text","") for x in content if isinstance(x, dict)]
-                if texts:
-                    return max(texts, key=len).strip()
+            for ci, choice in enumerate(data.get("choices", [])):
+                if not isinstance(choice, dict):
+                    continue
+                msg = choice.get("message", {})
+                if isinstance(msg, dict):
+                    add_text(msg.get("content"), f"choices[{ci}].message.content")
+                    # 某些中转会把最终答案塞到这些字段
+                    for field in [
+                        "text", "answer", "response", "output_text", "final_answer",
+                        "output", "result", "completion", "message_content",
+                        "assistant_content", "model_response",
+                    ]:
+                        add_text(msg.get(field), f"choices[{ci}].message.{field}")
+
+                    # reasoning_content 不用于展示，但如果供应商错误地把 JSON 放在这里，允许作为结构化解析兜底
+                    for field in ["reasoning_content", "reasoning", "thinking", "reasoning_text"]:
+                        val = msg.get(field)
+                        if isinstance(val, str) and ('"match"' in val or "'match'" in val or "top3" in val):
+                            add_text(val, f"choices[{ci}].message.{field}")
+                add_text(choice.get("text"), f"choices[{ci}].text")
+
+        # OpenAI Responses API / 其他 output 数组
         if isinstance(data, dict) and isinstance(data.get("output"), list):
-            texts = []
-            for oi in data["output"]:
-                for ct in oi.get("content", []) if isinstance(oi, dict) else []:
-                    if isinstance(ct, dict) and ct.get("text"):
-                        texts.append(ct["text"])
-            if texts:
-                return max(texts, key=len).strip()
+            for oi, out_item in enumerate(data["output"]):
+                add_text(out_item, f"output[{oi}]")
+
+        # 常见顶层字段
+        if isinstance(data, dict):
+            for field in ["output_text", "text", "answer", "response", "result", "content"]:
+                add_text(data.get(field), f"top.{field}")
+
+        # 递归兜底：只收集看起来包含 JSON 结果的字符串，避免拿到无关字段
+        def walk(obj, path="root"):
+            if isinstance(obj, dict):
+                for k, v in obj.items():
+                    walk(v, f"{path}.{k}")
+            elif isinstance(obj, list):
+                for i, v in enumerate(obj):
+                    walk(v, f"{path}[{i}]")
+            elif isinstance(obj, str):
+                s = obj.strip()
+                if len(s) >= 20 and ("match" in s or "top3" in s or "final_direction" in s) and ("[" in s or "{" in s):
+                    candidates.append((path, s))
+
+        walk(data)
+
+        if candidates:
+            # 优先选择包含 JSON 数组和 match/top3 的文本，其次最长文本
+            def score_item(item):
+                src, t = item
+                score = len(t)
+                if re.search(r'\[\s*\{', t):
+                    score += 50000
+                if '"match"' in t or "'match'" in t:
+                    score += 30000
+                if "top3" in t:
+                    score += 20000
+                if "final_direction" in t:
+                    score += 10000
+                return score
+            src, best = max(candidates, key=score_item)
+            if os.environ.get("AI_PARSE_DEBUG", "").lower() in ("1", "true", "yes"):
+                print(f"    提取响应字段: {src} | {len(best)}字")
+            return best.strip()
+
+    except Exception as ex:
+        print(f"    响应文本提取异常: {str(ex)[:100]}")
+
+    try:
+        s = json.dumps(data, ensure_ascii=False)
+        m = re.search(r'\[\s*\{\s*\\?"match\\?"', s)
+        if m:
+            return s[m.start():]
     except Exception:
         pass
-    s = json.dumps(data, ensure_ascii=False)
-    m = re.search(r"\[\s*\{\s*\\?\"match\\?\"", s)
-    return s[m.start():] if m else ""
+    return ""
+
+
+def _balanced_json_slice(text: str, start_idx: int) -> str:
+    """从 start_idx 位置截取完整 JSON array/object，处理字符串中的括号。"""
+    if start_idx < 0 or start_idx >= len(text):
+        return ""
+    opener = text[start_idx]
+    closer = "]" if opener == "[" else "}"
+    depth = 0
+    in_str = False
+    esc = False
+    quote = ""
+    for i in range(start_idx, len(text)):
+        ch = text[i]
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == quote:
+                in_str = False
+            continue
+        if ch in ('"', "'"):
+            in_str = True
+            quote = ch
+            continue
+        if ch == opener:
+            depth += 1
+        elif ch == closer:
+            depth -= 1
+            if depth == 0:
+                return text[start_idx:i + 1]
+    return ""
+
+
+def _try_load_json_like(s: str):
+    if not s:
+        return None
+    raw = s.strip()
+    # 去掉代码围栏残留
+    raw = re.sub(r"^```(?:json)?", "", raw, flags=re.I).strip()
+    raw = re.sub(r"```$", "", raw).strip()
+    # 修复常见尾逗号
+    raw2 = re.sub(r",\s*([}\]])", r"\1", raw)
+    for cand in [raw, raw2]:
+        try:
+            return json.loads(cand)
+        except Exception:
+            pass
+    # 某些模型会输出 Python 单引号风格
+    try:
+        import ast
+        return ast.literal_eval(raw2)
+    except Exception:
+        return None
+
+
+def _extract_result_array(raw_text: str):
+    clean = raw_text or ""
+    clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", clean, flags=re.S | re.I)
+    clean = re.sub(r"```[a-zA-Z0-9_-]*", "", clean).strip()
+
+    # 如果是被 JSON 字符串转义过的一整段，先尝试反转义
+    if '\\"match\\"' in clean or '\\n' in clean:
+        try:
+            maybe = json.loads('"' + clean.replace('"', '\\"') + '"')
+            if isinstance(maybe, str) and len(maybe) > len(clean) * 0.5:
+                clean = maybe
+        except Exception:
+            clean = clean.replace('\\"', '"').replace('\\n', '\n')
+
+    # 直接整体解析
+    obj = _try_load_json_like(clean)
+    if isinstance(obj, list):
+        return obj
+    if isinstance(obj, dict):
+        for k in ["predictions", "results", "matches", "data", "output", "items"]:
+            if isinstance(obj.get(k), list):
+                return obj[k]
+
+    # 优先找包含 match 的数组
+    starts = [m.start() for m in re.finditer(r"\[", clean)]
+    candidate_arrays = []
+    for st in starts:
+        frag = _balanced_json_slice(clean, st)
+        if not frag:
+            continue
+        if "match" not in frag and "top3" not in frag and "score" not in frag:
+            continue
+        parsed = _try_load_json_like(frag)
+        if isinstance(parsed, list):
+            candidate_arrays.append(parsed)
+
+    if candidate_arrays:
+        # 选择包含 dict 数量最多的数组
+        return max(candidate_arrays, key=lambda arr: sum(isinstance(x, dict) for x in arr))
+
+    # 可能是对象包数组，例如 {"predictions":[...]}
+    for st in [m.start() for m in re.finditer(r"\{", clean)]:
+        frag = _balanced_json_slice(clean, st)
+        if not frag:
+            continue
+        parsed = _try_load_json_like(frag)
+        if isinstance(parsed, dict):
+            for k in ["predictions", "results", "matches", "data", "output", "items"]:
+                if isinstance(parsed.get(k), list):
+                    return parsed[k]
+
+    return []
+
+
+def _score_from_candidate(obj) -> str:
+    if isinstance(obj, str):
+        return _normalize_score_text(obj)
+    if not isinstance(obj, dict):
+        return ""
+    for k in ["score", "predicted_score", "ai_score", "final_score", "比分", "预测比分", "top_score"]:
+        if obj.get(k) is not None:
+            sc = _normalize_score_text(obj.get(k))
+            if _score_direction(sc):
+                return sc
+    # 有些模型输出 {"home":2,"away":1}
+    hv = obj.get("home_goals", obj.get("home", obj.get("主", None)))
+    av = obj.get("away_goals", obj.get("away", obj.get("客", None)))
+    if hv is not None and av is not None:
+        try:
+            return f"{int(float(hv))}-{int(float(av))}"
+        except Exception:
+            pass
+    return ""
+
+
+def _normalize_top3(item: Dict[str, Any]) -> List[Any]:
+    raw_top3 = None
+    for k in ["top3", "top_3", "top_scores", "scores", "score_candidates", "candidates", "比分候选"]:
+        if isinstance(item.get(k), list):
+            raw_top3 = item.get(k)
+            break
+    if raw_top3 is None:
+        raw_top3 = []
+
+    top3 = []
+    for cand in raw_top3[:5]:
+        sc = _score_from_candidate(cand)
+        if not sc:
+            continue
+        if isinstance(cand, dict):
+            out = dict(cand)
+            out["score"] = sc
+            if "prob" not in out:
+                out["prob"] = out.get("probability", out.get("pct", out.get("概率", 0)))
+            top3.append(out)
+        else:
+            top3.append({"score": sc, "prob": 0})
+        if len(top3) >= 3:
+            break
+
+    if not top3:
+        sc = _score_from_candidate(item)
+        if sc:
+            top3 = [{"score": sc, "prob": item.get("prob", item.get("probability", 0))}]
+    return top3
+
 
 def _parse_ai_json(raw_text, num_matches):
-    clean = re.sub(r"<think(?:ing)?>.*?</think(?:ing)?>", "", raw_text, flags=re.S|re.I)
-    clean = re.sub(r"```[\w]*", "", clean).strip()
-    json_str = ""
-    m = re.search(r'\[\s*\{\s*"match"', clean)
-    if m:
-        start = m.start(); depth = 0
-        for i in range(start, len(clean)):
-            if clean[i] == "[": depth += 1
-            elif clean[i] == "]":
-                depth -= 1
-                if depth == 0:
-                    json_str = clean[start:i+1]; break
-    if not json_str:
-        st, ed = clean.find("["), clean.rfind("]")+1
-        if st >= 0 and ed > st:
-            json_str = clean[st:ed]
+    arr = _extract_result_array(raw_text)
     results = {}
-    if not json_str:
-        return results
-    try:
-        arr = json.loads(json_str)
-    except Exception:
-        try:
-            last = json_str.rfind("}")
-            arr = json.loads(json_str[:last+1] + "]")
-        except Exception:
-            return results
     if not isinstance(arr, list):
         return results
-    for item in arr:
-        if not isinstance(item, dict) or not item.get("match"):
+
+    for pos, item in enumerate(arr, 1):
+        if not isinstance(item, dict):
             continue
-        try:
-            mid = int(item["match"])
-        except Exception:
-            continue
-        if mid < 1 or mid > max(num_matches, 9999):
-            continue
-        top3 = item.get("top3", [])
-        sc = ""
-        if top3 and isinstance(top3, list):
-            first = top3[0]
-            sc = _normalize_score_text(first.get("score", "1-1") if isinstance(first, dict) else first)
-        elif item.get("score"):
-            sc = _normalize_score_text(item.get("score"))
-            top3 = [{"score": sc, "prob": 0}]
+
+        mid_raw = None
+        for k in ["match", "match_id", "match_index", "index", "idx", "场次", "序号"]:
+            if item.get(k) is not None:
+                mid_raw = item.get(k)
+                break
+        if mid_raw is None:
+            # 如果数组长度等于比赛数，允许按顺序兜底
+            mid = pos if len(arr) == num_matches else None
         else:
+            try:
+                # 支持 "1" / "001" / "match 1"
+                mm = re.search(r"\d+", str(mid_raw))
+                mid = int(mm.group(0)) if mm else int(mid_raw)
+            except Exception:
+                mid = None
+        if mid is None or mid < 1 or mid > max(num_matches, 9999):
             continue
-        final_dir = item.get("final_direction", "")
+
+        top3 = _normalize_top3(item)
+        if not top3:
+            continue
+
+        sc = _score_from_candidate(top3[0])
+        if not sc or not _score_direction(sc):
+            continue
+
+        final_dir = item.get("final_direction", item.get("direction", item.get("result", "")))
+        final_dir = _dir_from_cn(final_dir) or final_dir
         parsed = _score_direction(sc)
         if parsed and final_dir not in VALID_DIRS:
             final_dir = parsed
-        conf = item.get("ai_confidence", item.get("confidence", 60))
-        reason = item.get("reason", "") or _json_compact(item.get("audit", {}), 2500)
-        results[mid] = {"top3": top3, "ai_score": sc, "reason": str(reason), "ai_confidence": int(_clip(_f(conf,60),0,100)), "is_score_others": _score_display_label(sc) in ("胜其他","平其他","负其他"), "detected_traps": item.get("detected_traps", []), "final_direction": final_dir, "audit": item.get("audit", {}), "risk_level": item.get("risk_level",""), "must_review_flags": item.get("must_review_flags", []), "data_missing": item.get("data_missing", [])}
+
+        conf = item.get("ai_confidence", item.get("confidence", item.get("置信度", 60)))
+        reason = (
+            item.get("reason") or item.get("analysis") or item.get("rationale") or
+            item.get("market_logic") or item.get("结论理由") or ""
+        )
+        if not reason and item.get("audit"):
+            reason = _json_compact(item.get("audit", {}), 2500)
+
+        traps = item.get("detected_traps", item.get("traps", item.get("risk_flags", [])))
+        if not isinstance(traps, list):
+            traps = [str(traps)] if traps else []
+
+        results[mid] = {
+            "top3": top3,
+            "ai_score": sc,
+            "reason": str(reason),
+            "ai_confidence": int(_clip(_f(conf, 60), 0, 100)),
+            "is_score_others": _score_display_label(sc) in ("胜其他", "平其他", "负其他"),
+            "detected_traps": traps,
+            "final_direction": final_dir,
+            "audit": item.get("audit", {}),
+            "risk_level": item.get("risk_level", item.get("risk", "")),
+            "must_review_flags": item.get("must_review_flags", []),
+            "data_missing": item.get("data_missing", []),
+        }
+
+    if not results and os.environ.get("AI_PARSE_DEBUG", "").lower() in ("1", "true", "yes"):
+        print(f"    JSON解析为空，raw前500字: {(raw_text or '')[:500]}")
     return results
 
 def _save_debug_dump(ai_name, data, tag):
@@ -1862,6 +2143,16 @@ def _save_debug_dump(ai_name, data, tag):
         with open(fn, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         print(f"    失败响应已保存: {fn}")
+    except Exception:
+        pass
+
+def _save_debug_text(ai_name, text, tag):
+    try:
+        os.makedirs("data/debug", exist_ok=True)
+        fn = f"data/debug/{ai_name}_{tag}_{int(time.time())}.txt"
+        with open(fn, "w", encoding="utf-8") as f:
+            f.write(str(text or ""))
+        print(f"    原始文本已保存: {fn}")
     except Exception:
         pass
 
@@ -2015,7 +2306,16 @@ def _validate_prediction_consistency(mg):
 def merge_result(engine_result, gpt_r, grok_r, gemini_r, claude_r, stats, match_obj):
     match_obj = normalize_match(match_obj)
     def valid(r):
-        return isinstance(r, dict) and _parse_score(r.get("ai_score",""))[0] is not None
+        if not isinstance(r, dict):
+            return False
+        if _parse_score(r.get("ai_score", ""))[0] is not None:
+            return True
+        top3 = r.get("top3", [])
+        if isinstance(top3, list) and top3:
+            first = top3[0]
+            sc = first.get("score", "") if isinstance(first, dict) else first
+            return _parse_score(sc)[0] is not None
+        return False
     ai_valid = {"gpt":valid(gpt_r), "grok":valid(grok_r), "gemini":valid(gemini_r), "claude":valid(claude_r)}
     if any(not v for v in ai_valid.values()):
         print("    弃权AI:", ", ".join(k.upper() for k,v in ai_valid.items() if not v))
