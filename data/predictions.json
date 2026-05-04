@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-04 22:39:11",
+  "update_time": "2026-05-04 22:56:54",
   "version": "MAX-v1.1",
   "top4": [
     {
@@ -188,7 +188,7 @@
         "dir_gap": 42.7,
         "evidences": [
           "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-          "混合方向目标:{'home': 58.99, 'away': 17.97, 'draw': 23.04}",
+          "混合方向目标:{'away': 17.97, 'draw': 23.04, 'home': 58.99}",
           "后验方向:{'home': 63.23, 'draw': 20.55, 'away': 16.22}",
           "本地校准λ主1.717/λ客0.827；AI锁定=2-0；校准概率10.385%",
           "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -359,16 +359,16 @@
           "shin_z": null
         },
         "mixed_target_dir": {
-          "home": 58.99,
           "away": 17.97,
-          "draw": 23.04
+          "draw": 23.04,
+          "home": 58.99
         },
         "confidence": 80.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
         "risk_level": "低",
         "bayesian_evidences": [
           "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-          "混合方向目标:{'home': 58.99, 'away': 17.97, 'draw': 23.04}",
+          "混合方向目标:{'away': 17.97, 'draw': 23.04, 'home': 58.99}",
           "后验方向:{'home': 63.23, 'draw': 20.55, 'away': 16.22}",
           "本地校准λ主1.717/λ客0.827；AI锁定=2-0；校准概率10.385%",
           "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -422,7 +422,7 @@
         "score_market_odds": 7.5,
         "score_market_implied_pct": 13.333,
         "gpt_score": "2-0",
-        "gpt_analysis": "主胜63.7%对客胜15.1%，强弱清晰。理论-1.25，实际-1.00略浅，与主胜降水、Sharp流向主胜形成共振，说明市场并非单纯做热。总xG约2.54，处于正常偏上的主导环境，主1.717对应2球附近落点。虽然本地标签提示诱反指，但仅凭主热+降水不足以否定基本面与赔率面同时支持的主胜主线，更合理解释是主队赢球确定性较高，但未必夸张大胜。",
+        "gpt_analysis": "公平1X2主63.7%显著领先，且主胜降水、Sharp资金也流向主胜，市场并非单纯虚热。理论-1.25实际-1.00略浅，说明机构对净胜2球以上不想过度暴露，但对主胜本身仍认可。总进球集中2-3球，适合主队赢一到两球。虽然存在‘主热+同向降水’的反指提示，但这种结构在主队真实强势场景下也可能只是顺势定价，不足以单独反做。",
         "grok_score": "弃权",
         "grok_analysis": "弃权",
         "gemini_score": "弃权",
@@ -821,8 +821,8 @@
         "raw": {}
       },
       "prediction": {
-        "predicted_score": "2-0",
-        "predicted_label": "2-0",
+        "predicted_score": "1-0",
+        "predicted_label": "1-0",
         "result": "主胜",
         "display_direction": "主胜",
         "final_direction": "home",
@@ -830,18 +830,18 @@
         "home_win_pct": 62.0,
         "draw_pct": 21.8,
         "away_win_pct": 16.2,
-        "scenario": "normal",
+        "scenario": "grinder",
         "goal_range": [
-          2,
+          1,
           4
         ],
         "dir_confidence": 62.0,
         "dir_gap": 40.1,
         "evidences": [
           "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-          "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
+          "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
           "后验方向:{'home': 61.95, 'draw': 21.84, 'away': 16.21}",
-          "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.455%",
+          "本地校准λ主1.63/λ客0.775；AI锁定=1-0；校准概率12.421%",
           "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
           "陷阱/保护:1个 严重度3",
           "AI residual:{'home': 0.88, 'draw': 0.0, 'away': 0.0}"
@@ -849,11 +849,11 @@
         "override_triggered": false,
         "top_score_candidates": [
           [
-            "2-0",
-            21.455
+            "1-0",
+            22.421
           ]
         ],
-        "calibrated_score_prob_pct": 11.455,
+        "calibrated_score_prob_pct": 12.421,
         "bayesian_prior": {
           "home": 62.745,
           "draw": 22.225,
@@ -1010,18 +1010,18 @@
           "shin_z": null
         },
         "mixed_target_dir": {
-          "home": 57.59,
           "away": 17.91,
-          "draw": 24.5
+          "draw": 24.5,
+          "home": 57.59
         },
         "confidence": 79.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
         "risk_level": "低",
         "bayesian_evidences": [
           "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-          "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
+          "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
           "后验方向:{'home': 61.95, 'draw': 21.84, 'away': 16.21}",
-          "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.455%",
+          "本地校准λ主1.63/λ客0.775；AI锁定=1-0；校准概率12.421%",
           "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
           "陷阱/保护:1个 严重度3",
           "AI residual:{'home': 0.88, 'draw': 0.0, 'away': 0.0}"
@@ -1066,14 +1066,14 @@
           "low_scores": []
         },
         "suggested_kelly": 0.0,
-        "edge_vs_market": -25.54,
+        "edge_vs_market": -25.47,
         "is_value": false,
         "ev_note": "calibrated_matrix_prob_vs_market",
-        "score_model_prob": 11.455,
-        "score_market_odds": 6.5,
-        "score_market_implied_pct": 15.385,
-        "gpt_score": "2-0",
-        "gpt_analysis": "主胜公平62.7%，仍是明确第一方向；理论-1.25，实际-1.00略浅，支持主胜但不支持夸张大胜。总进球环境偏中低，主1.63客0.775更像主队小中胜。资金层面客胜Sharp而主胜过热，杯赛大热保护确实存在，所以不宜把比赛理解成轻松碾压；但这类信息更像压低主胜信心、抬升平/客防守权重，而非足以推翻主向。综合后选择主胜，比分保守化处理。",
+        "score_model_prob": 12.421,
+        "score_market_odds": 6.0,
+        "score_market_implied_pct": 16.667,
+        "gpt_score": "1-0",
+        "gpt_analysis": "公平1X2主62.7%对客15.0%，主队基础面清晰领先。理论-1.25、实际-1.00略浅，说明市场承认主队更强，但对净胜两球以上略保留。总球结构偏向2-3球，符合欧战淘汰赛谨慎节奏。客胜Sharp流入且主胜未降水，说明市场对热门主队有一定反制，但半全场主/主2.12与平/主3.90仍说明阿森纳从僵持转主胜的路径最强。综合看，主胜成立，但比分应偏收敛。",
         "grok_score": "弃权",
         "grok_analysis": "弃权",
         "gemini_score": "弃权",
@@ -1503,7 +1503,7 @@
         "dir_gap": 47.4,
         "evidences": [
           "公平1X2(power):{'home': 67.168, 'draw': 19.237, 'away': 13.595}",
-          "混合方向目标:{'home': 62.24, 'away': 16.69, 'draw': 21.06}",
+          "混合方向目标:{'away': 16.69, 'draw': 21.06, 'home': 62.24}",
           "后验方向:{'home': 66.19, 'draw': 18.77, 'away': 15.04}",
           "本地校准λ主1.864/λ客0.844；AI锁定=2-0；校准概率10.085%",
           "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -1674,16 +1674,16 @@
           "shin_z": null
         },
         "mixed_target_dir": {
-          "home": 62.24,
           "away": 16.69,
-          "draw": 21.06
+          "draw": 21.06,
+          "home": 62.24
         },
         "confidence": 82.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
         "risk_level": "低",
         "bayesian_evidences": [
           "公平1X2(power):{'home': 67.168, 'draw': 19.237, 'away': 13.595}",
-          "混合方向目标:{'home': 62.24, 'away': 16.69, 'draw': 21.06}",
+          "混合方向目标:{'away': 16.69, 'draw': 21.06, 'home': 62.24}",
           "后验方向:{'home': 66.19, 'draw': 18.77, 'away': 15.04}",
           "本地校准λ主1.864/λ客0.844；AI锁定=2-0；校准概率10.085%",
           "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -1737,7 +1737,7 @@
         "score_market_odds": 7.25,
         "score_market_implied_pct": 13.793,
         "gpt_score": "2-0",
-        "gpt_analysis": "1X2公平概率主胜67.2%已形成明确强弱。理论盘-1.25，实际仅-1.00，属于强方略浅，不支持盲目追大胜但仍支持主方向。总进球环境偏正常，主队隐含xG 1.864、客队0.844，最自然区间是主队2球上下、客队0-1球。资金面上平赔下调且有客胜Sharp，同时主胜过热，说明单关主胜并非完全舒适，但半全场主/主与平/主价格仍指向主队后程掌控。综合看，更像主队赢球、但盘面故意留出平/客想象空间的结构。",
+        "gpt_analysis": "公平1X2主67.2%明显领先，主队为基础方向。理论盘-1.25而实际仅-1.00，说明让幅并未继续强化，对主胜穿深不算极端支持，但不至于逆转主胜结论。总进球结构集中在2-4球，属于正常偏中低环境，更利于主队以控制型胜出。资金面有客胜Sharp与平赔下调，确实构成对主热的反制，但主/主半全场2.00与平/主4.10仍说明主队最终收下比赛是主路径。综合看，更像‘主胜但未必轻松穿深’。",
         "grok_score": "弃权",
         "grok_analysis": "弃权",
         "gemini_score": "弃权",
@@ -2164,7 +2164,7 @@
         "dir_gap": 59.0,
         "evidences": [
           "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-          "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
+          "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
           "后验方向:{'home': 73.61, 'draw': 14.59, 'away': 11.8}",
           "本地校准λ主2.562/λ客1.004；AI锁定=3-1；校准概率9.117%",
           "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -2335,16 +2335,16 @@
           "shin_z": null
         },
         "mixed_target_dir": {
-          "home": 70.71,
           "away": 13.02,
-          "draw": 16.27
+          "draw": 16.27,
+          "home": 70.71
         },
         "confidence": 75.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
         "risk_level": "低",
         "bayesian_evidences": [
           "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-          "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
+          "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
           "后验方向:{'home': 73.61, 'draw': 14.59, 'away': 11.8}",
           "本地校准λ主2.562/λ客1.004；AI锁定=3-1；校准概率9.117%",
           "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -2411,7 +2411,7 @@
         "score_market_odds": 8.5,
         "score_market_implied_pct": 11.765,
         "gpt_score": "3-1",
-        "gpt_analysis": "公平1X2主胜高达78.7%，这是全样本最强之一。理论盘口应到-2.25，实际只有-1.00，表面极浅，但1X2主胜继续降水且Sharp流向主胜，说明浅盘更像降低入手门槛并承接市场，而不是否定主胜本身。总进球环境明显偏高，4-6球区间活跃，主2.562客1.004意味着主队至少2球的期望非常强。D18提示大热浅盘防平防弱，但在主胜概率如此高、半全场主/主仅1.63的情况下，逆向到非主方向证据不足，更适合判断为主胜且比分上限较高。",
+        "gpt_analysis": "公平1X2主78.7%是样本内最强之一，主胜为绝对基础方向。理论盘口应到-2.25，实际只有-1.00，极度偏浅，这种结构更像压制穿盘预期而非否定胜负归属。总进球分布明显偏高，3-6球区间都很活跃，因此主胜与高总球并行。Sharp与赔率同向支持主胜，虽有大热风险，但更像‘赢球稳、净胜不稳’。因此方向仍取主胜，比分不往过分夸张净胜走。",
         "grok_score": "弃权",
         "grok_analysis": "弃权",
         "gemini_score": "弃权",
@@ -2849,7 +2849,7 @@
           "dir_gap": 41.2,
           "evidences": [
             "公平1X2(power):{'home': 67.168, 'draw': 19.237, 'away': 13.595}",
-            "混合方向目标:{'home': 62.24, 'away': 16.69, 'draw': 21.06}",
+            "混合方向目标:{'away': 16.69, 'draw': 21.06, 'home': 62.24}",
             "后验方向:{'home': 62.24, 'draw': 21.06, 'away': 16.69}",
             "本地校准λ主1.864/λ客0.844；AI锁定=2-1；校准概率11.087%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -3047,16 +3047,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 62.24,
             "away": 16.69,
-            "draw": 21.06
+            "draw": 21.06,
+            "home": 62.24
           },
           "confidence": 79.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 67.168, 'draw': 19.237, 'away': 13.595}",
-            "混合方向目标:{'home': 62.24, 'away': 16.69, 'draw': 21.06}",
+            "混合方向目标:{'away': 16.69, 'draw': 21.06, 'home': 62.24}",
             "后验方向:{'home': 62.24, 'draw': 21.06, 'away': 16.69}",
             "本地校准λ主1.864/λ客0.844；AI锁定=2-1；校准概率11.087%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -3533,7 +3533,7 @@
           "dir_gap": 9.8,
           "evidences": [
             "公平1X2(power):{'home': 28.601, 'draw': 29.812, 'away': 41.587}",
-            "混合方向目标:{'home': 29.03, 'away': 40.36, 'draw': 30.61}",
+            "混合方向目标:{'away': 40.36, 'draw': 30.61, 'home': 29.03}",
             "后验方向:{'home': 29.03, 'draw': 30.61, 'away': 40.36}",
             "本地校准λ主0.907/λ客1.118；AI锁定=0-1；校准概率12.382%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -3715,16 +3715,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 29.03,
             "away": 40.36,
-            "draw": 30.61
+            "draw": 30.61,
+            "home": 29.03
           },
           "confidence": 49.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 28.601, 'draw': 29.812, 'away': 41.587}",
-            "混合方向目标:{'home': 29.03, 'away': 40.36, 'draw': 30.61}",
+            "混合方向目标:{'away': 40.36, 'draw': 30.61, 'home': 29.03}",
             "后验方向:{'home': 29.03, 'draw': 30.61, 'away': 40.36}",
             "本地校准λ主0.907/λ客1.118；AI锁定=0-1；校准概率12.382%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -4223,7 +4223,7 @@
           "dir_gap": 36.0,
           "evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'home': 58.99, 'away': 17.97, 'draw': 23.04}",
+            "混合方向目标:{'away': 17.97, 'draw': 23.04, 'home': 58.99}",
             "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
             "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -4409,16 +4409,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 58.99,
             "away": 17.97,
-            "draw": 23.04
+            "draw": 23.04,
+            "home": 58.99
           },
           "confidence": 76.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'home': 58.99, 'away': 17.97, 'draw': 23.04}",
+            "混合方向目标:{'away': 17.97, 'draw': 23.04, 'home': 58.99}",
             "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
             "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -4888,7 +4888,7 @@
           "dir_gap": 7.9,
           "evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
+            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
             "后验方向:{'home': 30.25, 'draw': 30.92, 'away': 38.82}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-2；校准概率9.098%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -5070,16 +5070,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 30.25,
             "away": 38.82,
-            "draw": 30.92
+            "draw": 30.92,
+            "home": 30.25
           },
           "confidence": 44.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
+            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
             "后验方向:{'home': 30.25, 'draw': 30.92, 'away': 38.82}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-2；校准概率9.098%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -5567,7 +5567,7 @@
           "dir_gap": 54.4,
           "evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
+            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
             "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
             "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -5765,16 +5765,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 70.71,
             "away": 13.02,
-            "draw": 16.27
+            "draw": 16.27,
+            "home": 70.71
           },
           "confidence": 71.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
+            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
             "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
             "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -6274,7 +6274,7 @@
           "dir_gap": 43.8,
           "evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
+            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
             "后验方向:{'home': 64.37, 'draw': 20.55, 'away': 15.08}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-1；校准概率10.874%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -6472,16 +6472,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 64.37,
             "away": 15.08,
-            "draw": 20.55
+            "draw": 20.55,
+            "home": 64.37
           },
           "confidence": 68.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
+            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
             "后验方向:{'home': 64.37, 'draw': 20.55, 'away': 15.08}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-1；校准概率10.874%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -6981,7 +6981,7 @@
           "dir_gap": 37.7,
           "evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
+            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
             "后验方向:{'home': 60.66, 'draw': 22.98, 'away': 16.36}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率11.929%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -7167,16 +7167,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 60.66,
             "away": 16.36,
-            "draw": 22.98
+            "draw": 22.98,
+            "home": 60.66
           },
           "confidence": 66.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
+            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
             "后验方向:{'home': 60.66, 'draw': 22.98, 'away': 16.36}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率11.929%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -7665,7 +7665,7 @@
           "dir_gap": 44.9,
           "evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
+            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
             "后验方向:{'home': 14.81, 'draw': 20.13, 'away': 65.05}",
             "本地校准λ主0.825/λ客2.039；AI锁定=1-2；校准概率10.704%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -7863,16 +7863,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 14.81,
             "away": 65.05,
-            "draw": 20.13
+            "draw": 20.13,
+            "home": 14.81
           },
           "confidence": 68.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
+            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
             "后验方向:{'home': 14.81, 'draw': 20.13, 'away': 65.05}",
             "本地校准λ主0.825/λ客2.039；AI锁定=1-2；校准概率10.704%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -8378,7 +8378,7 @@
           "dir_gap": 4.2,
           "evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
+            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
             "后验方向:{'home': 36.88, 'draw': 30.43, 'away': 32.7}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-0；校准概率9.470%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -8560,16 +8560,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 36.87,
             "away": 32.7,
-            "draw": 30.43
+            "draw": 30.43,
+            "home": 36.87
           },
           "confidence": 40,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
+            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
             "后验方向:{'home': 36.88, 'draw': 30.43, 'away': 32.7}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-0；校准概率9.470%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -9047,7 +9047,7 @@
           "dir_gap": 0.4,
           "evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
+            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
             "后验方向:{'home': 33.13, 'draw': 33.66, 'away': 33.21}",
             "本地校准λ主1.249/λ客1.086；AI锁定=2-2；校准概率13.396%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -9217,16 +9217,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 33.13,
             "away": 33.21,
-            "draw": 33.66
+            "draw": 33.66,
+            "home": 33.13
           },
           "confidence": 40,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
+            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
             "后验方向:{'home': 33.13, 'draw': 33.66, 'away': 33.21}",
             "本地校准λ主1.249/λ客1.086；AI锁定=2-2；校准概率13.396%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -9657,7 +9657,7 @@
           "dir_gap": 33.1,
           "evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
+            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
             "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
             "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -9843,16 +9843,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 57.59,
             "away": 17.91,
-            "draw": 24.5
+            "draw": 24.5,
+            "home": 57.59
           },
           "confidence": 75.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
+            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
             "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
             "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -10336,7 +10336,7 @@
           "dir_gap": 47.4,
           "evidences": [
             "公平1X2(power):{'home': 67.168, 'draw': 19.237, 'away': 13.595}",
-            "混合方向目标:{'home': 62.24, 'away': 16.69, 'draw': 21.06}",
+            "混合方向目标:{'away': 16.69, 'draw': 21.06, 'home': 62.24}",
             "后验方向:{'home': 66.19, 'draw': 18.77, 'away': 15.04}",
             "本地校准λ主1.864/λ客0.844；AI锁定=2-0；校准概率10.085%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -10507,16 +10507,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 62.24,
             "away": 16.69,
-            "draw": 21.06
+            "draw": 21.06,
+            "home": 62.24
           },
           "confidence": 82.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 67.168, 'draw': 19.237, 'away': 13.595}",
-            "混合方向目标:{'home': 62.24, 'away': 16.69, 'draw': 21.06}",
+            "混合方向目标:{'away': 16.69, 'draw': 21.06, 'home': 62.24}",
             "后验方向:{'home': 66.19, 'draw': 18.77, 'away': 15.04}",
             "本地校准λ主1.864/λ客0.844；AI锁定=2-0；校准概率10.085%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -10570,7 +10570,7 @@
           "score_market_odds": 7.25,
           "score_market_implied_pct": 13.793,
           "gpt_score": "2-0",
-          "gpt_analysis": "1X2公平概率主胜67.2%已形成明确强弱。理论盘-1.25，实际仅-1.00，属于强方略浅，不支持盲目追大胜但仍支持主方向。总进球环境偏正常，主队隐含xG 1.864、客队0.844，最自然区间是主队2球上下、客队0-1球。资金面上平赔下调且有客胜Sharp，同时主胜过热，说明单关主胜并非完全舒适，但半全场主/主与平/主价格仍指向主队后程掌控。综合看，更像主队赢球、但盘面故意留出平/客想象空间的结构。",
+          "gpt_analysis": "公平1X2主67.2%明显领先，主队为基础方向。理论盘-1.25而实际仅-1.00，说明让幅并未继续强化，对主胜穿深不算极端支持，但不至于逆转主胜结论。总进球结构集中在2-4球，属于正常偏中低环境，更利于主队以控制型胜出。资金面有客胜Sharp与平赔下调，确实构成对主热的反制，但主/主半全场2.00与平/主4.10仍说明主队最终收下比赛是主路径。综合看，更像‘主胜但未必轻松穿深’。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -10995,7 +10995,7 @@
           "dir_gap": 1.6,
           "evidences": [
             "公平1X2(power):{'home': 28.601, 'draw': 29.812, 'away': 41.587}",
-            "混合方向目标:{'home': 29.03, 'away': 40.36, 'draw': 30.61}",
+            "混合方向目标:{'away': 40.36, 'draw': 30.61, 'home': 29.03}",
             "后验方向:{'home': 27.19, 'draw': 35.6, 'away': 37.21}",
             "本地校准λ主0.907/λ客1.118；AI锁定=1-1；校准概率18.092%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -11166,16 +11166,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 29.03,
             "away": 40.36,
-            "draw": 30.61
+            "draw": 30.61,
+            "home": 29.03
           },
           "confidence": 40.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 28.601, 'draw': 29.812, 'away': 41.587}",
-            "混合方向目标:{'home': 29.03, 'away': 40.36, 'draw': 30.61}",
+            "混合方向目标:{'away': 40.36, 'draw': 30.61, 'home': 29.03}",
             "后验方向:{'home': 27.19, 'draw': 35.6, 'away': 37.21}",
             "本地校准λ主0.907/λ客1.118；AI锁定=1-1；校准概率18.092%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -11236,7 +11236,7 @@
           "score_market_odds": 5.5,
           "score_market_implied_pct": 18.182,
           "gpt_score": "1-1",
-          "gpt_analysis": "客胜虽是1X2第一方向，但只有41.6%，并未形成压倒优势。理论盘口仅0.25，实际却到客让1.00，深了0.75，盘口明显用力过猛。总进球环境偏低到中低，主0.907客1.118的xG结构更像细碎差距而非强碾压。平赔独降、半全场平/平4.00与平/负5.00都不高，说明庄家对僵持阶段有充分防范。让球盘客队太深而1X2不够强，这种错位更容易回到平局。",
+          "gpt_analysis": "公平1X2为主28.6%平29.8%客41.6%，客队虽领先但并未形成碾压。理论盘口仅客让0.25，实际却到1.00，深得异常，通常意味着让球面与1X2并不一致，更适合警惕客队无法兑现。总xG约2.03，属于偏低到正常下沿，适合胶着。平赔下调而客胜未同步强化，半全场平/平4.00、平/负5.00都显示中前段僵持概率高。综合不追深盘客胜，优先平。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -11676,7 +11676,7 @@
           "dir_gap": 42.7,
           "evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'home': 58.99, 'away': 17.97, 'draw': 23.04}",
+            "混合方向目标:{'away': 17.97, 'draw': 23.04, 'home': 58.99}",
             "后验方向:{'home': 63.23, 'draw': 20.55, 'away': 16.22}",
             "本地校准λ主1.717/λ客0.827；AI锁定=2-0；校准概率10.385%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -11847,16 +11847,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 58.99,
             "away": 17.97,
-            "draw": 23.04
+            "draw": 23.04,
+            "home": 58.99
           },
           "confidence": 80.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'home': 58.99, 'away': 17.97, 'draw': 23.04}",
+            "混合方向目标:{'away': 17.97, 'draw': 23.04, 'home': 58.99}",
             "后验方向:{'home': 63.23, 'draw': 20.55, 'away': 16.22}",
             "本地校准λ主1.717/λ客0.827；AI锁定=2-0；校准概率10.385%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -11910,7 +11910,7 @@
           "score_market_odds": 7.5,
           "score_market_implied_pct": 13.333,
           "gpt_score": "2-0",
-          "gpt_analysis": "主胜63.7%对客胜15.1%，强弱清晰。理论-1.25，实际-1.00略浅，与主胜降水、Sharp流向主胜形成共振，说明市场并非单纯做热。总xG约2.54，处于正常偏上的主导环境，主1.717对应2球附近落点。虽然本地标签提示诱反指，但仅凭主热+降水不足以否定基本面与赔率面同时支持的主胜主线，更合理解释是主队赢球确定性较高，但未必夸张大胜。",
+          "gpt_analysis": "公平1X2主63.7%显著领先，且主胜降水、Sharp资金也流向主胜，市场并非单纯虚热。理论-1.25实际-1.00略浅，说明机构对净胜2球以上不想过度暴露，但对主胜本身仍认可。总进球集中2-3球，适合主队赢一到两球。虽然存在‘主热+同向降水’的反指提示，但这种结构在主队真实强势场景下也可能只是顺势定价，不足以单独反做。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -12327,7 +12327,7 @@
           "dir_gap": 0.1,
           "evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
+            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
             "后验方向:{'home': 28.26, 'draw': 35.91, 'away': 35.83}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-1；校准概率19.393%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -12498,16 +12498,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 30.25,
             "away": 38.82,
-            "draw": 30.92
+            "draw": 30.92,
+            "home": 30.25
           },
           "confidence": 38,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
+            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
             "后验方向:{'home': 28.26, 'draw': 35.91, 'away': 35.83}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-1；校准概率19.393%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -12568,7 +12568,7 @@
           "score_market_odds": 5.75,
           "score_market_implied_pct": 17.391,
           "gpt_score": "1-1",
-          "gpt_analysis": "客胜39.8%、主胜30.1%、平30.2%，本就是标准均衡盘。理论仅客让0.25，实际做到1.00，深度远超1X2支持力度，这类结构常见结果是上盘打不穿甚至无法取胜。平局Sharp突进且平赔独降，资金方向与赔率方向共同指向平。xG 0.924比1.08说明客队优势极轻，难以支撑强势客让逻辑，最像低比分僵持。",
+          "gpt_analysis": "公平1X2几乎均势，平局30.2%为三向最高。理论盘口客让0.25，实际却到1.00，深盘明显过度，容易把投注推向客队方向，反而提升平局价值。平赔下降且有平局Sharp突进，与本场均势结构高度一致。总进球偏低，半全场平/平4.65、平/负5.10都说明僵持后分胜负或直接平收是核心脚本。优先取平而不追客。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -12998,7 +12998,7 @@
           "dir_gap": 59.0,
           "evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
+            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
             "后验方向:{'home': 73.61, 'draw': 14.59, 'away': 11.8}",
             "本地校准λ主2.562/λ客1.004；AI锁定=3-1；校准概率9.117%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -13169,16 +13169,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 70.71,
             "away": 13.02,
-            "draw": 16.27
+            "draw": 16.27,
+            "home": 70.71
           },
           "confidence": 75.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
+            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
             "后验方向:{'home': 73.61, 'draw': 14.59, 'away': 11.8}",
             "本地校准λ主2.562/λ客1.004；AI锁定=3-1；校准概率9.117%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -13245,7 +13245,7 @@
           "score_market_odds": 8.5,
           "score_market_implied_pct": 11.765,
           "gpt_score": "3-1",
-          "gpt_analysis": "公平1X2主胜高达78.7%，这是全样本最强之一。理论盘口应到-2.25，实际只有-1.00，表面极浅，但1X2主胜继续降水且Sharp流向主胜，说明浅盘更像降低入手门槛并承接市场，而不是否定主胜本身。总进球环境明显偏高，4-6球区间活跃，主2.562客1.004意味着主队至少2球的期望非常强。D18提示大热浅盘防平防弱，但在主胜概率如此高、半全场主/主仅1.63的情况下，逆向到非主方向证据不足，更适合判断为主胜且比分上限较高。",
+          "gpt_analysis": "公平1X2主78.7%是样本内最强之一，主胜为绝对基础方向。理论盘口应到-2.25，实际只有-1.00，极度偏浅，这种结构更像压制穿盘预期而非否定胜负归属。总进球分布明显偏高，3-6球区间都很活跃，因此主胜与高总球并行。Sharp与赔率同向支持主胜，虽有大热风险，但更像‘赢球稳、净胜不稳’。因此方向仍取主胜，比分不往过分夸张净胜走。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -13679,7 +13679,7 @@
           "dir_gap": 49.5,
           "evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
+            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
             "后验方向:{'home': 67.91, 'draw': 18.39, 'away': 13.7}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-0；校准概率8.737%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -13850,16 +13850,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 64.37,
             "away": 15.08,
-            "draw": 20.55
+            "draw": 20.55,
+            "home": 64.37
           },
           "confidence": 71.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
+            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
             "后验方向:{'home': 67.91, 'draw': 18.39, 'away': 13.7}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-0；校准概率8.737%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -13926,7 +13926,7 @@
           "score_market_odds": 8.0,
           "score_market_implied_pct": 12.5,
           "gpt_score": "2-0",
-          "gpt_analysis": "主胜71.0%具备明确统治力。理论-1.75，实际-1.00偏浅，属于典型大热浅盘。结合主胜降水与Sharp资金同向，更像市场对主胜方向有共识但对穿深仍存顾虑。总xG约2.80并不低，主队接近2球期望，客队不足1球，最合理是主队赢1到2球。盘面风险主要在热度和让球深浅错位，不在1X2方向本身。",
+          "gpt_analysis": "公平1X2主71.0%具备明显优势，主胜应为基础。理论-1.75实际-1.00偏浅，和博德闪耀类似，更像在限制主队大胜预期。总进球分布在3-5球区域有一定活跃，说明主队并非只能低比分获胜。Sharp与赔率都流向主胜，说明资金并未逆主。尽管主热66%较高，但从1X2和半全场主/主1.97看，主队占主动并最终拿下比赛的路径依旧最强。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -14361,7 +14361,7 @@
           "dir_gap": 44.0,
           "evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
+            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
             "后验方向:{'home': 64.54, 'draw': 20.57, 'away': 14.89}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率12.692%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -14532,16 +14532,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 60.66,
             "away": 16.36,
-            "draw": 22.98
+            "draw": 22.98,
+            "home": 60.66
           },
           "confidence": 69.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
+            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
             "后验方向:{'home': 64.54, 'draw': 20.57, 'away': 14.89}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率12.692%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -14608,7 +14608,7 @@
           "score_market_odds": 6.7,
           "score_market_implied_pct": 14.925,
           "gpt_score": "2-0",
-          "gpt_analysis": "主胜66.6%明显领先，客胜仅13.0%。理论-1.75，实际-1.00偏浅，属于热门强但让步保守的格局。主胜降水、Sharp同向主胜，说明至少在胜负方向上机构并未逆主。总xG约2.51，适合主导型中等比分。风险来自杯赛/联赛背景未知及热度偏高，但在缺少反向情报的前提下，仍应顺着主胜基础概率与主/主半全场低位去判断。",
+          "gpt_analysis": "公平1X2主66.6%显著优于平客，客队仅13.0%。理论-1.75而实际-1.00偏浅，意味着市场对罗马赢球认可高于赢两球以上。总球结构集中2-3球，契合主队控制节奏取胜。Sharp资金流向主胜与主胜降水同步，说明至少在胜负方向上并不逆势。主热63%确有风险，但在缺乏任何伤停负面外部情报的情况下，仍应站在主胜一侧。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -15030,7 +15030,7 @@
           "dir_gap": 50.5,
           "evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
+            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
             "后验方向:{'home': 13.45, 'draw': 18.02, 'away': 68.53}",
             "本地校准λ主0.825/λ客2.039；AI锁定=0-2；校准概率10.104%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -15201,16 +15201,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 14.81,
             "away": 65.05,
-            "draw": 20.13
+            "draw": 20.13,
+            "home": 14.81
           },
           "confidence": 72.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
+            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
             "后验方向:{'home': 13.45, 'draw': 18.02, 'away': 68.53}",
             "本地校准λ主0.825/λ客2.039；AI锁定=0-2；校准概率10.104%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -15283,7 +15283,7 @@
           "score_market_odds": 7.0,
           "score_market_implied_pct": 14.286,
           "gpt_score": "0-2",
-          "gpt_analysis": "客胜公平概率72.2%，是极强客场模型。理论让1.75，实际只让1.00偏浅，但客胜仍持续降水且Sharp流向客胜，说明方向认可度很高，只是对净胜幅度保守。总进球环境正常偏上，客2.039主0.825，典型客队控制局面。浅盘与超热并不自动构成逆向依据，在1X2如此极端且半全场负/负仅1.86时，客胜仍是主线，比分更偏向中等净胜而非血洗。",
+          "gpt_analysis": "公平1X2客72.2%属于绝对强势客胜格局，1X2已足够明确。理论客让1.75，实际仅1.00偏浅，和其他大热场类似，是典型‘胜负看客、穿盘保守’结构。总xG指向正常偏高，但半全场负/负1.86非常强势，表示客队从过程到结果都占优。客胜降水且Sharp流向客胜，虽然客热67%很高，但在如此高基础概率下，逆向去主平缺乏赔率支撑。选择客胜，比分倾向净胜1-2球而非极端屠杀。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -15718,7 +15718,7 @@
           "dir_gap": 1.2,
           "evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
+            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
             "后验方向:{'home': 34.15, 'draw': 35.4, 'away': 30.45}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-1；校准概率18.514%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -15889,16 +15889,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 36.87,
             "away": 32.7,
-            "draw": 30.43
+            "draw": 30.43,
+            "home": 36.87
           },
           "confidence": 38,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
+            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
             "后验方向:{'home': 34.15, 'draw': 35.4, 'away': 30.45}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-1；校准概率18.514%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -15959,7 +15959,7 @@
           "score_market_odds": 5.75,
           "score_market_implied_pct": 17.391,
           "gpt_score": "1-1",
-          "gpt_analysis": "公平1X2主37.4%、平29.6%、客33.0%，几乎无明显强弱，但实际盘口却给到主让1.00，远深于理论0.00，明显不协调。平赔下调与均势平局保护同时出现，表明机构对和局非常忌惮。主1.072客1.0的xG差微乎其微，比赛更像拉锯而非一边倒。盘口强造主强，反而令平局成为最顺的修正结果。",
+          "gpt_analysis": "本场公平1X2几乎接近平衡，主37.4%、平29.6%、客33.0，任何一方都无明显压制。理论盘口应为0，但实际竟成主让-1.00，深得离谱，明显不匹配1X2结构，强烈暗示主胜热度被放大。平赔下调与D17均势平局保护一致。总xG只有2.07，低比分胶着是主线。既然让球刻意强化主队，那么反而更应回到1X2公平层，平局是最稳妥的中枢判断。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -16360,39 +16360,39 @@
           "raw": {}
         },
         "prediction": {
-          "predicted_score": "1-2",
-          "predicted_label": "1-2",
-          "result": "客胜",
-          "display_direction": "客胜",
-          "final_direction": "away",
+          "predicted_score": "1-1",
+          "predicted_label": "1-1",
+          "result": "平局",
+          "display_direction": "平局",
+          "final_direction": "draw",
           "is_score_others": false,
           "home_win_pct": 30.6,
-          "draw_pct": 31.1,
-          "away_win_pct": 38.2,
+          "draw_pct": 38.7,
+          "away_win_pct": 30.7,
           "scenario": "draw_guard",
           "goal_range": [
             2,
             4
           ],
-          "dir_confidence": 38.2,
-          "dir_gap": 7.1,
+          "dir_confidence": 38.7,
+          "dir_gap": 8.0,
           "evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
-            "后验方向:{'home': 30.65, 'draw': 31.11, 'away': 38.24}",
-            "本地校准λ主1.249/λ客1.086；AI锁定=1-2；校准概率11.694%",
+            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "后验方向:{'home': 30.62, 'draw': 38.69, 'away': 30.69}",
+            "本地校准λ主1.249/λ客1.086；AI锁定=1-1；校准概率15.381%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
             "陷阱/保护:1个 严重度2",
-            "AI residual:{'home': 0.0, 'draw': 0.0, 'away': 0.88}"
+            "AI residual:{'home': 0.0, 'draw': 0.88, 'away': 0.0}"
           ],
           "override_triggered": false,
           "top_score_candidates": [
             [
-              "1-2",
-              21.694
+              "1-1",
+              25.381
             ]
           ],
-          "calibrated_score_prob_pct": 11.694,
+          "calibrated_score_prob_pct": 15.381,
           "bayesian_prior": {
             "home": 33.3,
             "draw": 33.3,
@@ -16545,21 +16545,21 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 33.13,
             "away": 33.21,
-            "draw": 33.66
+            "draw": 33.66,
+            "home": 33.13
           },
-          "confidence": 48,
+          "confidence": 49,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
-            "后验方向:{'home': 30.65, 'draw': 31.11, 'away': 38.24}",
-            "本地校准λ主1.249/λ客1.086；AI锁定=1-2；校准概率11.694%",
+            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "后验方向:{'home': 30.62, 'draw': 38.69, 'away': 30.69}",
+            "本地校准λ主1.249/λ客1.086；AI锁定=1-1；校准概率15.381%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
             "陷阱/保护:1个 严重度2",
-            "AI residual:{'home': 0.0, 'draw': 0.0, 'away': 0.88}"
+            "AI residual:{'home': 0.0, 'draw': 0.88, 'away': 0.0}"
           ],
           "traps_detected": [
             "D17_BALANCED_DRAW_GUARD"
@@ -16598,15 +16598,15 @@
             "draw_low_odds": 999.0,
             "low_scores": []
           },
-          "suggested_kelly": 4.27,
-          "edge_vs_market": 239.13,
+          "suggested_kelly": 3.24,
+          "edge_vs_market": 61.5,
           "is_value": true,
           "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 11.694,
-          "score_market_odds": 29.0,
-          "score_market_implied_pct": 3.448,
-          "gpt_score": "1-2",
-          "gpt_analysis": "本场1X2欧赔为0.00/0.00/0.00，核心胜平负价格缺失，公平概率33.3/33.3/33.4显然不可信，只能把它视作数据异常。异常点在于：理论盘口0.00，实际却是主让2.00，深了整整两个档位，同时市场信号明确提示机构重诱下盘。这种结构无法正常支持主胜，反而显示盘口有强烈误导性。半全场主/主1.50非常低，但与均等公平概率严重冲突，说明数据层之间断裂。既然必须三向取舍，在主胜数据自相矛盾、平局有保护但不足以解释超深让步时，更激进且更符合“反过深造热”的是客方向冷门。此场为全样本最高审查场次。",
+          "score_model_prob": 15.381,
+          "score_market_odds": 10.5,
+          "score_market_implied_pct": 9.524,
+          "gpt_score": "1-1",
+          "gpt_analysis": "这是全样本中最异常的结构之一：1X2欧赔为0且公平概率被给到33.3/33.3/33.4，说明胜平负原始定价缺失或失真；同时原始让球却到主让-2.0，半全场主/主又极低，显著矛盾。既然缺失严重，就不能机械追主让。庄家隐含xG仅1.249对1.086，优势非常有限，完全不支持两球深让。加上‘机构重诱下盘’备注，本质上是数据结构冲突场，最稳的处理是回归到仅有的相对均衡xG与公平概率，取平局中枢。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -16623,7 +16623,7 @@
           "smart_signals": [
             "🚨 机构重诱下盘",
             "⚡ 主队攻防效率碾压(差值0.82)",
-            "⚠️ 建议跳过"
+            "🚫 强烈建议跳过"
           ],
           "sharp_detected": false,
           "sharp_dir": null,
@@ -16756,8 +16756,8 @@
               }
             ]
           },
-          "predictability_score": 35,
-          "skip_warning": "⚠️ 建议跳过",
+          "predictability_score": 28,
+          "skip_warning": "🚫 强烈建议跳过",
           "asian_handicap_probs": {
             "ah_0": [
               0.4746,
@@ -16799,7 +16799,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 9.21,
+        "recommend_score": 18.65,
         "is_recommended": false
       },
       {
@@ -16967,8 +16967,8 @@
           "raw": {}
         },
         "prediction": {
-          "predicted_score": "2-0",
-          "predicted_label": "2-0",
+          "predicted_score": "1-0",
+          "predicted_label": "1-0",
           "result": "主胜",
           "display_direction": "主胜",
           "final_direction": "home",
@@ -16976,18 +16976,18 @@
           "home_win_pct": 62.0,
           "draw_pct": 21.8,
           "away_win_pct": 16.2,
-          "scenario": "normal",
+          "scenario": "grinder",
           "goal_range": [
-            2,
+            1,
             4
           ],
           "dir_confidence": 62.0,
           "dir_gap": 40.1,
           "evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
+            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
             "后验方向:{'home': 61.95, 'draw': 21.84, 'away': 16.21}",
-            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.455%",
+            "本地校准λ主1.63/λ客0.775；AI锁定=1-0；校准概率12.421%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
             "陷阱/保护:1个 严重度3",
             "AI residual:{'home': 0.88, 'draw': 0.0, 'away': 0.0}"
@@ -16995,11 +16995,11 @@
           "override_triggered": false,
           "top_score_candidates": [
             [
-              "2-0",
-              21.455
+              "1-0",
+              22.421
             ]
           ],
-          "calibrated_score_prob_pct": 11.455,
+          "calibrated_score_prob_pct": 12.421,
           "bayesian_prior": {
             "home": 62.745,
             "draw": 22.225,
@@ -17156,18 +17156,18 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 57.59,
             "away": 17.91,
-            "draw": 24.5
+            "draw": 24.5,
+            "home": 57.59
           },
           "confidence": 79.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
+            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
             "后验方向:{'home': 61.95, 'draw': 21.84, 'away': 16.21}",
-            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.455%",
+            "本地校准λ主1.63/λ客0.775；AI锁定=1-0；校准概率12.421%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
             "陷阱/保护:1个 严重度3",
             "AI residual:{'home': 0.88, 'draw': 0.0, 'away': 0.0}"
@@ -17212,14 +17212,14 @@
             "low_scores": []
           },
           "suggested_kelly": 0.0,
-          "edge_vs_market": -25.54,
+          "edge_vs_market": -25.47,
           "is_value": false,
           "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 11.455,
-          "score_market_odds": 6.5,
-          "score_market_implied_pct": 15.385,
-          "gpt_score": "2-0",
-          "gpt_analysis": "主胜公平62.7%，仍是明确第一方向；理论-1.25，实际-1.00略浅，支持主胜但不支持夸张大胜。总进球环境偏中低，主1.63客0.775更像主队小中胜。资金层面客胜Sharp而主胜过热，杯赛大热保护确实存在，所以不宜把比赛理解成轻松碾压；但这类信息更像压低主胜信心、抬升平/客防守权重，而非足以推翻主向。综合后选择主胜，比分保守化处理。",
+          "score_model_prob": 12.421,
+          "score_market_odds": 6.0,
+          "score_market_implied_pct": 16.667,
+          "gpt_score": "1-0",
+          "gpt_analysis": "公平1X2主62.7%对客15.0%，主队基础面清晰领先。理论-1.25、实际-1.00略浅，说明市场承认主队更强，但对净胜两球以上略保留。总球结构偏向2-3球，符合欧战淘汰赛谨慎节奏。客胜Sharp流入且主胜未降水，说明市场对热门主队有一定反制，但半全场主/主2.12与平/主3.90仍说明阿森纳从僵持转主胜的路径最强。综合看，主胜成立，但比分应偏收敛。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -17649,7 +17649,7 @@
           "dir_gap": 47.4,
           "evidences": [
             "公平1X2(power):{'home': 67.168, 'draw': 19.237, 'away': 13.595}",
-            "混合方向目标:{'home': 62.24, 'away': 16.69, 'draw': 21.06}",
+            "混合方向目标:{'away': 16.69, 'draw': 21.06, 'home': 62.24}",
             "后验方向:{'home': 66.19, 'draw': 18.77, 'away': 15.04}",
             "本地校准λ主1.864/λ客0.844；AI锁定=2-0；校准概率10.085%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -17820,16 +17820,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 62.24,
             "away": 16.69,
-            "draw": 21.06
+            "draw": 21.06,
+            "home": 62.24
           },
           "confidence": 82.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 67.168, 'draw': 19.237, 'away': 13.595}",
-            "混合方向目标:{'home': 62.24, 'away': 16.69, 'draw': 21.06}",
+            "混合方向目标:{'away': 16.69, 'draw': 21.06, 'home': 62.24}",
             "后验方向:{'home': 66.19, 'draw': 18.77, 'away': 15.04}",
             "本地校准λ主1.864/λ客0.844；AI锁定=2-0；校准概率10.085%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -17883,7 +17883,7 @@
           "score_market_odds": 7.25,
           "score_market_implied_pct": 13.793,
           "gpt_score": "2-0",
-          "gpt_analysis": "1X2公平概率主胜67.2%已形成明确强弱。理论盘-1.25，实际仅-1.00，属于强方略浅，不支持盲目追大胜但仍支持主方向。总进球环境偏正常，主队隐含xG 1.864、客队0.844，最自然区间是主队2球上下、客队0-1球。资金面上平赔下调且有客胜Sharp，同时主胜过热，说明单关主胜并非完全舒适，但半全场主/主与平/主价格仍指向主队后程掌控。综合看，更像主队赢球、但盘面故意留出平/客想象空间的结构。",
+          "gpt_analysis": "公平1X2主67.2%明显领先，主队为基础方向。理论盘-1.25而实际仅-1.00，说明让幅并未继续强化，对主胜穿深不算极端支持，但不至于逆转主胜结论。总进球结构集中在2-4球，属于正常偏中低环境，更利于主队以控制型胜出。资金面有客胜Sharp与平赔下调，确实构成对主热的反制，但主/主半全场2.00与平/主4.10仍说明主队最终收下比赛是主路径。综合看，更像‘主胜但未必轻松穿深’。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -18308,7 +18308,7 @@
           "dir_gap": 1.6,
           "evidences": [
             "公平1X2(power):{'home': 28.601, 'draw': 29.812, 'away': 41.587}",
-            "混合方向目标:{'home': 29.03, 'away': 40.36, 'draw': 30.61}",
+            "混合方向目标:{'away': 40.36, 'draw': 30.61, 'home': 29.03}",
             "后验方向:{'home': 27.19, 'draw': 35.6, 'away': 37.21}",
             "本地校准λ主0.907/λ客1.118；AI锁定=1-1；校准概率18.092%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -18479,16 +18479,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 29.03,
             "away": 40.36,
-            "draw": 30.61
+            "draw": 30.61,
+            "home": 29.03
           },
           "confidence": 40.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 28.601, 'draw': 29.812, 'away': 41.587}",
-            "混合方向目标:{'home': 29.03, 'away': 40.36, 'draw': 30.61}",
+            "混合方向目标:{'away': 40.36, 'draw': 30.61, 'home': 29.03}",
             "后验方向:{'home': 27.19, 'draw': 35.6, 'away': 37.21}",
             "本地校准λ主0.907/λ客1.118；AI锁定=1-1；校准概率18.092%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -18549,7 +18549,7 @@
           "score_market_odds": 5.5,
           "score_market_implied_pct": 18.182,
           "gpt_score": "1-1",
-          "gpt_analysis": "客胜虽是1X2第一方向，但只有41.6%，并未形成压倒优势。理论盘口仅0.25，实际却到客让1.00，深了0.75，盘口明显用力过猛。总进球环境偏低到中低，主0.907客1.118的xG结构更像细碎差距而非强碾压。平赔独降、半全场平/平4.00与平/负5.00都不高，说明庄家对僵持阶段有充分防范。让球盘客队太深而1X2不够强，这种错位更容易回到平局。",
+          "gpt_analysis": "公平1X2为主28.6%平29.8%客41.6%，客队虽领先但并未形成碾压。理论盘口仅客让0.25，实际却到1.00，深得异常，通常意味着让球面与1X2并不一致，更适合警惕客队无法兑现。总xG约2.03，属于偏低到正常下沿，适合胶着。平赔下调而客胜未同步强化，半全场平/平4.00、平/负5.00都显示中前段僵持概率高。综合不追深盘客胜，优先平。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -18989,7 +18989,7 @@
           "dir_gap": 42.7,
           "evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'home': 58.99, 'away': 17.97, 'draw': 23.04}",
+            "混合方向目标:{'away': 17.97, 'draw': 23.04, 'home': 58.99}",
             "后验方向:{'home': 63.23, 'draw': 20.55, 'away': 16.22}",
             "本地校准λ主1.717/λ客0.827；AI锁定=2-0；校准概率10.385%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -19160,16 +19160,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 58.99,
             "away": 17.97,
-            "draw": 23.04
+            "draw": 23.04,
+            "home": 58.99
           },
           "confidence": 80.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'home': 58.99, 'away': 17.97, 'draw': 23.04}",
+            "混合方向目标:{'away': 17.97, 'draw': 23.04, 'home': 58.99}",
             "后验方向:{'home': 63.23, 'draw': 20.55, 'away': 16.22}",
             "本地校准λ主1.717/λ客0.827；AI锁定=2-0；校准概率10.385%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -19223,7 +19223,7 @@
           "score_market_odds": 7.5,
           "score_market_implied_pct": 13.333,
           "gpt_score": "2-0",
-          "gpt_analysis": "主胜63.7%对客胜15.1%，强弱清晰。理论-1.25，实际-1.00略浅，与主胜降水、Sharp流向主胜形成共振，说明市场并非单纯做热。总xG约2.54，处于正常偏上的主导环境，主1.717对应2球附近落点。虽然本地标签提示诱反指，但仅凭主热+降水不足以否定基本面与赔率面同时支持的主胜主线，更合理解释是主队赢球确定性较高，但未必夸张大胜。",
+          "gpt_analysis": "公平1X2主63.7%显著领先，且主胜降水、Sharp资金也流向主胜，市场并非单纯虚热。理论-1.25实际-1.00略浅，说明机构对净胜2球以上不想过度暴露，但对主胜本身仍认可。总进球集中2-3球，适合主队赢一到两球。虽然存在‘主热+同向降水’的反指提示，但这种结构在主队真实强势场景下也可能只是顺势定价，不足以单独反做。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -19640,7 +19640,7 @@
           "dir_gap": 0.1,
           "evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
+            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
             "后验方向:{'home': 28.26, 'draw': 35.91, 'away': 35.83}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-1；校准概率19.393%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -19811,16 +19811,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 30.25,
             "away": 38.82,
-            "draw": 30.92
+            "draw": 30.92,
+            "home": 30.25
           },
           "confidence": 38,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
+            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
             "后验方向:{'home': 28.26, 'draw': 35.91, 'away': 35.83}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-1；校准概率19.393%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -19881,7 +19881,7 @@
           "score_market_odds": 5.75,
           "score_market_implied_pct": 17.391,
           "gpt_score": "1-1",
-          "gpt_analysis": "客胜39.8%、主胜30.1%、平30.2%，本就是标准均衡盘。理论仅客让0.25，实际做到1.00，深度远超1X2支持力度，这类结构常见结果是上盘打不穿甚至无法取胜。平局Sharp突进且平赔独降，资金方向与赔率方向共同指向平。xG 0.924比1.08说明客队优势极轻，难以支撑强势客让逻辑，最像低比分僵持。",
+          "gpt_analysis": "公平1X2几乎均势，平局30.2%为三向最高。理论盘口客让0.25，实际却到1.00，深盘明显过度，容易把投注推向客队方向，反而提升平局价值。平赔下降且有平局Sharp突进，与本场均势结构高度一致。总进球偏低，半全场平/平4.65、平/负5.10都说明僵持后分胜负或直接平收是核心脚本。优先取平而不追客。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -20311,7 +20311,7 @@
           "dir_gap": 59.0,
           "evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
+            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
             "后验方向:{'home': 73.61, 'draw': 14.59, 'away': 11.8}",
             "本地校准λ主2.562/λ客1.004；AI锁定=3-1；校准概率9.117%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -20482,16 +20482,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 70.71,
             "away": 13.02,
-            "draw": 16.27
+            "draw": 16.27,
+            "home": 70.71
           },
           "confidence": 75.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
+            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
             "后验方向:{'home': 73.61, 'draw': 14.59, 'away': 11.8}",
             "本地校准λ主2.562/λ客1.004；AI锁定=3-1；校准概率9.117%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -20558,7 +20558,7 @@
           "score_market_odds": 8.5,
           "score_market_implied_pct": 11.765,
           "gpt_score": "3-1",
-          "gpt_analysis": "公平1X2主胜高达78.7%，这是全样本最强之一。理论盘口应到-2.25，实际只有-1.00，表面极浅，但1X2主胜继续降水且Sharp流向主胜，说明浅盘更像降低入手门槛并承接市场，而不是否定主胜本身。总进球环境明显偏高，4-6球区间活跃，主2.562客1.004意味着主队至少2球的期望非常强。D18提示大热浅盘防平防弱，但在主胜概率如此高、半全场主/主仅1.63的情况下，逆向到非主方向证据不足，更适合判断为主胜且比分上限较高。",
+          "gpt_analysis": "公平1X2主78.7%是样本内最强之一，主胜为绝对基础方向。理论盘口应到-2.25，实际只有-1.00，极度偏浅，这种结构更像压制穿盘预期而非否定胜负归属。总进球分布明显偏高，3-6球区间都很活跃，因此主胜与高总球并行。Sharp与赔率同向支持主胜，虽有大热风险，但更像‘赢球稳、净胜不稳’。因此方向仍取主胜，比分不往过分夸张净胜走。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -20992,7 +20992,7 @@
           "dir_gap": 49.5,
           "evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
+            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
             "后验方向:{'home': 67.91, 'draw': 18.39, 'away': 13.7}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-0；校准概率8.737%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -21163,16 +21163,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 64.37,
             "away": 15.08,
-            "draw": 20.55
+            "draw": 20.55,
+            "home": 64.37
           },
           "confidence": 71.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
+            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
             "后验方向:{'home': 67.91, 'draw': 18.39, 'away': 13.7}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-0；校准概率8.737%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -21239,7 +21239,7 @@
           "score_market_odds": 8.0,
           "score_market_implied_pct": 12.5,
           "gpt_score": "2-0",
-          "gpt_analysis": "主胜71.0%具备明确统治力。理论-1.75，实际-1.00偏浅，属于典型大热浅盘。结合主胜降水与Sharp资金同向，更像市场对主胜方向有共识但对穿深仍存顾虑。总xG约2.80并不低，主队接近2球期望，客队不足1球，最合理是主队赢1到2球。盘面风险主要在热度和让球深浅错位，不在1X2方向本身。",
+          "gpt_analysis": "公平1X2主71.0%具备明显优势，主胜应为基础。理论-1.75实际-1.00偏浅，和博德闪耀类似，更像在限制主队大胜预期。总进球分布在3-5球区域有一定活跃，说明主队并非只能低比分获胜。Sharp与赔率都流向主胜，说明资金并未逆主。尽管主热66%较高，但从1X2和半全场主/主1.97看，主队占主动并最终拿下比赛的路径依旧最强。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -21674,7 +21674,7 @@
           "dir_gap": 44.0,
           "evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
+            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
             "后验方向:{'home': 64.54, 'draw': 20.57, 'away': 14.89}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率12.692%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -21845,16 +21845,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 60.66,
             "away": 16.36,
-            "draw": 22.98
+            "draw": 22.98,
+            "home": 60.66
           },
           "confidence": 69.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
+            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
             "后验方向:{'home': 64.54, 'draw': 20.57, 'away': 14.89}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率12.692%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -21921,7 +21921,7 @@
           "score_market_odds": 6.7,
           "score_market_implied_pct": 14.925,
           "gpt_score": "2-0",
-          "gpt_analysis": "主胜66.6%明显领先，客胜仅13.0%。理论-1.75，实际-1.00偏浅，属于热门强但让步保守的格局。主胜降水、Sharp同向主胜，说明至少在胜负方向上机构并未逆主。总xG约2.51，适合主导型中等比分。风险来自杯赛/联赛背景未知及热度偏高，但在缺少反向情报的前提下，仍应顺着主胜基础概率与主/主半全场低位去判断。",
+          "gpt_analysis": "公平1X2主66.6%显著优于平客，客队仅13.0%。理论-1.75而实际-1.00偏浅，意味着市场对罗马赢球认可高于赢两球以上。总球结构集中2-3球，契合主队控制节奏取胜。Sharp资金流向主胜与主胜降水同步，说明至少在胜负方向上并不逆势。主热63%确有风险，但在缺乏任何伤停负面外部情报的情况下，仍应站在主胜一侧。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -22343,7 +22343,7 @@
           "dir_gap": 50.5,
           "evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
+            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
             "后验方向:{'home': 13.45, 'draw': 18.02, 'away': 68.53}",
             "本地校准λ主0.825/λ客2.039；AI锁定=0-2；校准概率10.104%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -22514,16 +22514,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 14.81,
             "away": 65.05,
-            "draw": 20.13
+            "draw": 20.13,
+            "home": 14.81
           },
           "confidence": 72.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
+            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
             "后验方向:{'home': 13.45, 'draw': 18.02, 'away': 68.53}",
             "本地校准λ主0.825/λ客2.039；AI锁定=0-2；校准概率10.104%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -22596,7 +22596,7 @@
           "score_market_odds": 7.0,
           "score_market_implied_pct": 14.286,
           "gpt_score": "0-2",
-          "gpt_analysis": "客胜公平概率72.2%，是极强客场模型。理论让1.75，实际只让1.00偏浅，但客胜仍持续降水且Sharp流向客胜，说明方向认可度很高，只是对净胜幅度保守。总进球环境正常偏上，客2.039主0.825，典型客队控制局面。浅盘与超热并不自动构成逆向依据，在1X2如此极端且半全场负/负仅1.86时，客胜仍是主线，比分更偏向中等净胜而非血洗。",
+          "gpt_analysis": "公平1X2客72.2%属于绝对强势客胜格局，1X2已足够明确。理论客让1.75，实际仅1.00偏浅，和其他大热场类似，是典型‘胜负看客、穿盘保守’结构。总xG指向正常偏高，但半全场负/负1.86非常强势，表示客队从过程到结果都占优。客胜降水且Sharp流向客胜，虽然客热67%很高，但在如此高基础概率下，逆向去主平缺乏赔率支撑。选择客胜，比分倾向净胜1-2球而非极端屠杀。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -23031,7 +23031,7 @@
           "dir_gap": 1.2,
           "evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
+            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
             "后验方向:{'home': 34.15, 'draw': 35.4, 'away': 30.45}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-1；校准概率18.514%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -23202,16 +23202,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 36.87,
             "away": 32.7,
-            "draw": 30.43
+            "draw": 30.43,
+            "home": 36.87
           },
           "confidence": 38,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
+            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
             "后验方向:{'home': 34.15, 'draw': 35.4, 'away': 30.45}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-1；校准概率18.514%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
@@ -23272,7 +23272,7 @@
           "score_market_odds": 5.75,
           "score_market_implied_pct": 17.391,
           "gpt_score": "1-1",
-          "gpt_analysis": "公平1X2主37.4%、平29.6%、客33.0%，几乎无明显强弱，但实际盘口却给到主让1.00，远深于理论0.00，明显不协调。平赔下调与均势平局保护同时出现，表明机构对和局非常忌惮。主1.072客1.0的xG差微乎其微，比赛更像拉锯而非一边倒。盘口强造主强，反而令平局成为最顺的修正结果。",
+          "gpt_analysis": "本场公平1X2几乎接近平衡，主37.4%、平29.6%、客33.0，任何一方都无明显压制。理论盘口应为0，但实际竟成主让-1.00，深得离谱，明显不匹配1X2结构，强烈暗示主胜热度被放大。平赔下调与D17均势平局保护一致。总xG只有2.07，低比分胶着是主线。既然让球刻意强化主队，那么反而更应回到1X2公平层，平局是最稳妥的中枢判断。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -23673,39 +23673,39 @@
           "raw": {}
         },
         "prediction": {
-          "predicted_score": "1-2",
-          "predicted_label": "1-2",
-          "result": "客胜",
-          "display_direction": "客胜",
-          "final_direction": "away",
+          "predicted_score": "1-1",
+          "predicted_label": "1-1",
+          "result": "平局",
+          "display_direction": "平局",
+          "final_direction": "draw",
           "is_score_others": false,
           "home_win_pct": 30.6,
-          "draw_pct": 31.1,
-          "away_win_pct": 38.2,
+          "draw_pct": 38.7,
+          "away_win_pct": 30.7,
           "scenario": "draw_guard",
           "goal_range": [
             2,
             4
           ],
-          "dir_confidence": 38.2,
-          "dir_gap": 7.1,
+          "dir_confidence": 38.7,
+          "dir_gap": 8.0,
           "evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
-            "后验方向:{'home': 30.65, 'draw': 31.11, 'away': 38.24}",
-            "本地校准λ主1.249/λ客1.086；AI锁定=1-2；校准概率11.694%",
+            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "后验方向:{'home': 30.62, 'draw': 38.69, 'away': 30.69}",
+            "本地校准λ主1.249/λ客1.086；AI锁定=1-1；校准概率15.381%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
             "陷阱/保护:1个 严重度2",
-            "AI residual:{'home': 0.0, 'draw': 0.0, 'away': 0.88}"
+            "AI residual:{'home': 0.0, 'draw': 0.88, 'away': 0.0}"
           ],
           "override_triggered": false,
           "top_score_candidates": [
             [
-              "1-2",
-              21.694
+              "1-1",
+              25.381
             ]
           ],
-          "calibrated_score_prob_pct": 11.694,
+          "calibrated_score_prob_pct": 15.381,
           "bayesian_prior": {
             "home": 33.3,
             "draw": 33.3,
@@ -23858,21 +23858,21 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 33.13,
             "away": 33.21,
-            "draw": 33.66
+            "draw": 33.66,
+            "home": 33.13
           },
-          "confidence": 48,
+          "confidence": 49,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
-            "后验方向:{'home': 30.65, 'draw': 31.11, 'away': 38.24}",
-            "本地校准λ主1.249/λ客1.086；AI锁定=1-2；校准概率11.694%",
+            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "后验方向:{'home': 30.62, 'draw': 38.69, 'away': 30.69}",
+            "本地校准λ主1.249/λ客1.086；AI锁定=1-1；校准概率15.381%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
             "陷阱/保护:1个 严重度2",
-            "AI residual:{'home': 0.0, 'draw': 0.0, 'away': 0.88}"
+            "AI residual:{'home': 0.0, 'draw': 0.88, 'away': 0.0}"
           ],
           "traps_detected": [
             "D17_BALANCED_DRAW_GUARD"
@@ -23911,15 +23911,15 @@
             "draw_low_odds": 999.0,
             "low_scores": []
           },
-          "suggested_kelly": 4.27,
-          "edge_vs_market": 239.13,
+          "suggested_kelly": 3.24,
+          "edge_vs_market": 61.5,
           "is_value": true,
           "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 11.694,
-          "score_market_odds": 29.0,
-          "score_market_implied_pct": 3.448,
-          "gpt_score": "1-2",
-          "gpt_analysis": "本场1X2欧赔为0.00/0.00/0.00，核心胜平负价格缺失，公平概率33.3/33.3/33.4显然不可信，只能把它视作数据异常。异常点在于：理论盘口0.00，实际却是主让2.00，深了整整两个档位，同时市场信号明确提示机构重诱下盘。这种结构无法正常支持主胜，反而显示盘口有强烈误导性。半全场主/主1.50非常低，但与均等公平概率严重冲突，说明数据层之间断裂。既然必须三向取舍，在主胜数据自相矛盾、平局有保护但不足以解释超深让步时，更激进且更符合“反过深造热”的是客方向冷门。此场为全样本最高审查场次。",
+          "score_model_prob": 15.381,
+          "score_market_odds": 10.5,
+          "score_market_implied_pct": 9.524,
+          "gpt_score": "1-1",
+          "gpt_analysis": "这是全样本中最异常的结构之一：1X2欧赔为0且公平概率被给到33.3/33.3/33.4，说明胜平负原始定价缺失或失真；同时原始让球却到主让-2.0，半全场主/主又极低，显著矛盾。既然缺失严重，就不能机械追主让。庄家隐含xG仅1.249对1.086，优势非常有限，完全不支持两球深让。加上‘机构重诱下盘’备注，本质上是数据结构冲突场，最稳的处理是回归到仅有的相对均衡xG与公平概率，取平局中枢。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
@@ -23936,7 +23936,7 @@
           "smart_signals": [
             "🚨 机构重诱下盘",
             "⚡ 主队攻防效率碾压(差值0.82)",
-            "⚠️ 建议跳过"
+            "🚫 强烈建议跳过"
           ],
           "sharp_detected": false,
           "sharp_dir": null,
@@ -24069,8 +24069,8 @@
               }
             ]
           },
-          "predictability_score": 35,
-          "skip_warning": "⚠️ 建议跳过",
+          "predictability_score": 28,
+          "skip_warning": "🚫 强烈建议跳过",
           "asian_handicap_probs": {
             "ah_0": [
               0.4746,
@@ -24112,7 +24112,7 @@
             "model": 0.25
           }
         },
-        "recommend_score": 9.21,
+        "recommend_score": 18.65,
         "is_recommended": false
       },
       {
@@ -24280,8 +24280,8 @@
           "raw": {}
         },
         "prediction": {
-          "predicted_score": "2-0",
-          "predicted_label": "2-0",
+          "predicted_score": "1-0",
+          "predicted_label": "1-0",
           "result": "主胜",
           "display_direction": "主胜",
           "final_direction": "home",
@@ -24289,18 +24289,18 @@
           "home_win_pct": 62.0,
           "draw_pct": 21.8,
           "away_win_pct": 16.2,
-          "scenario": "normal",
+          "scenario": "grinder",
           "goal_range": [
-            2,
+            1,
             4
           ],
           "dir_confidence": 62.0,
           "dir_gap": 40.1,
           "evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
+            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
             "后验方向:{'home': 61.95, 'draw': 21.84, 'away': 16.21}",
-            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.455%",
+            "本地校准λ主1.63/λ客0.775；AI锁定=1-0；校准概率12.421%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
             "陷阱/保护:1个 严重度3",
             "AI residual:{'home': 0.88, 'draw': 0.0, 'away': 0.0}"
@@ -24308,11 +24308,11 @@
           "override_triggered": false,
           "top_score_candidates": [
             [
-              "2-0",
-              21.455
+              "1-0",
+              22.421
             ]
           ],
-          "calibrated_score_prob_pct": 11.455,
+          "calibrated_score_prob_pct": 12.421,
           "bayesian_prior": {
             "home": 62.745,
             "draw": 22.225,
@@ -24469,18 +24469,18 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "home": 57.59,
             "away": 17.91,
-            "draw": 24.5
+            "draw": 24.5,
+            "home": 57.59
           },
           "confidence": 79.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
+            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
             "后验方向:{'home': 61.95, 'draw': 21.84, 'away': 16.21}",
-            "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率11.455%",
+            "本地校准λ主1.63/λ客0.775；AI锁定=1-0；校准概率12.421%",
             "决策来源:ai_consensus_authority; authority_mode=claude_guarded",
             "陷阱/保护:1个 严重度3",
             "AI residual:{'home': 0.88, 'draw': 0.0, 'away': 0.0}"
@@ -24525,14 +24525,14 @@
             "low_scores": []
           },
           "suggested_kelly": 0.0,
-          "edge_vs_market": -25.54,
+          "edge_vs_market": -25.47,
           "is_value": false,
           "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 11.455,
-          "score_market_odds": 6.5,
-          "score_market_implied_pct": 15.385,
-          "gpt_score": "2-0",
-          "gpt_analysis": "主胜公平62.7%，仍是明确第一方向；理论-1.25，实际-1.00略浅，支持主胜但不支持夸张大胜。总进球环境偏中低，主1.63客0.775更像主队小中胜。资金层面客胜Sharp而主胜过热，杯赛大热保护确实存在，所以不宜把比赛理解成轻松碾压；但这类信息更像压低主胜信心、抬升平/客防守权重，而非足以推翻主向。综合后选择主胜，比分保守化处理。",
+          "score_model_prob": 12.421,
+          "score_market_odds": 6.0,
+          "score_market_implied_pct": 16.667,
+          "gpt_score": "1-0",
+          "gpt_analysis": "公平1X2主62.7%对客15.0%，主队基础面清晰领先。理论-1.25、实际-1.00略浅，说明市场承认主队更强，但对净胜两球以上略保留。总球结构偏向2-3球，符合欧战淘汰赛谨慎节奏。客胜Sharp流入且主胜未降水，说明市场对热门主队有一定反制，但半全场主/主2.12与平/主3.90仍说明阿森纳从僵持转主胜的路径最强。综合看，主胜成立，但比分应偏收敛。",
           "grok_score": "弃权",
           "grok_analysis": "弃权",
           "gemini_score": "弃权",
