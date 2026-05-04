@@ -20,6 +20,7 @@ import time
 import math
 import asyncio
 import logging
+import threading
 from typing import Dict, List, Any, Tuple, Optional
 
 try:
@@ -108,8 +109,8 @@ except Exception as e:
     exp_engine = None
 
 
-ENGINE_VERSION = "vMAX 18.3.1"
-ENGINE_ARCHITECTURE = "RAW-AI主审 + 去CRS提示 + 去常见比分锚定 + 盘口坐标硬修复 + 外部情报入口 + 防重复请求缓存"
+ENGINE_VERSION = "vMAX 18.3.2"
+ENGINE_ARCHITECTURE = "RAW-AI主审 + 统一API_URL中转 + 单批次singleflight防重复扣费 + Claude守门裁判 + 去CRS/去常见比分锚定"
 VALID_DIRS = {"home", "draw", "away"}
 
 # v18.3 默认关闭 CRS 分析框架与常见比分锚点。
@@ -1768,7 +1769,13 @@ AI_SCORE_AUTHORITY_MODE = str(os.environ.get("AI_SCORE_AUTHORITY_MODE", "claude_
 AI_DECISION_CACHE_TTL = int(_f(os.environ.get("AI_DECISION_CACHE_TTL", 900), 900))
 AI_DISABLE_CACHE = str(os.environ.get("AI_DISABLE_CACHE", "false")).strip().lower() in ("1", "true", "yes")
 
-# v18.3.1: 所有模型可统一走同一个 OpenAI-compatible 中转。
+# v18.3.2: 统一中转 + 严格单请求。
+# 目标：四个 AI 全部走同一个 API_URL/API_KEY，且同一批比赛前端重复触发时只扣费一次。
+FORCE_COMMON_GATEWAY_URL = str(os.environ.get("FORCE_COMMON_GATEWAY_URL", "true")).strip().lower() in ("1", "true", "yes")
+AI_MAX_REQUESTS_PER_AI = int(_f(os.environ.get("AI_MAX_REQUESTS_PER_AI", 1), 1))
+AI_SINGLEFLIGHT_ENABLED = str(os.environ.get("AI_SINGLEFLIGHT_ENABLED", "true")).strip().lower() in ("1", "true", "yes")
+
+# v18.3.2: 所有模型可统一走同一个 OpenAI-compatible 中转。
 # 你只需要配置 API_KEY / API_URL；也可以单独覆盖 GPT_API_KEY/GPT_API_URL 等。
 COMMON_GATEWAY_KEY_ALIASES = ["API_KEY", "OPENAI_API_KEY"]
 COMMON_GATEWAY_URL_ALIASES = ["API_URL", "BASE_URL", "OPENAI_API_URL"]
@@ -1786,6 +1793,10 @@ DEFAULT_AI_MODELS = {
 
 _AI_RESULT_CACHE: Dict[str, Tuple[float, Dict[str, Dict[int, Dict[str, Any]]]]] = {}
 _AI_CALL_STATUS: Dict[str, Any] = {}
+_AI_INFLIGHT_LOCK = threading.RLock()
+_AI_INFLIGHT_EVENTS: Dict[str, threading.Event] = {}
+_AI_INFLIGHT_RESULTS: Dict[str, Dict[str, Dict[int, Dict[str, Any]]]] = {}
+_AI_INFLIGHT_ERRORS: Dict[str, str] = {}
 
 def _split_env_list(v: Any) -> List[str]:
     if v is None:
@@ -1821,8 +1832,16 @@ def get_first_clean_env_url(names, default=""):
 def _model_list_from_env(ai_name: str, fallback: List[str]) -> List[str]:
     key = f"{ai_name.upper()}_MODELS"
     single = f"{ai_name.upper()}_MODEL"
-    arr = _split_env_list(os.environ.get(key)) or _split_env_list(os.environ.get(single))
-    return arr or fallback
+    arr = _split_env_list(os.environ.get(key)) or _split_env_list(os.environ.get(single)) or list(fallback or [])
+    out = []
+    seen = set()
+    for m in arr:
+        ms = str(m).strip()
+        if not ms or ms in seen:
+            continue
+        out.append(ms)
+        seen.add(ms)
+    return out or list(fallback or [])
 
 def _ai_cache_key(prompt: str, num_matches: int) -> str:
     try:
@@ -1831,10 +1850,47 @@ def _ai_cache_key(prompt: str, num_matches: int) -> str:
     except Exception:
         return str(abs(hash((num_matches, prompt[:10000]))))
 
-def get_clean_env_url(name, default=""):
-    aliases = [name]
+def _compact_for_cache(obj: Any, limit_str: int = 300) -> Any:
+    """生成稳定缓存指纹：去掉运行时动态字段，只保留会影响同一批比赛判断的数据。"""
+    if isinstance(obj, dict):
+        skip = {
+            "external_context", "fetched_at", "timestamp", "time_now", "created_at",
+            "updated_at", "debug", "raw_html", "raw_text", "analysis", "reason",
+        }
+        return {str(k): _compact_for_cache(v, limit_str) for k, v in sorted(obj.items(), key=lambda x: str(x[0])) if str(k) not in skip}
+    if isinstance(obj, list):
+        return [_compact_for_cache(x, limit_str) for x in obj]
+    if isinstance(obj, float):
+        return round(obj, 6)
+    if isinstance(obj, str):
+        return obj[:limit_str]
+    return obj
 
-    # 单模型专用别名优先，其次统一中转 API_URL / BASE_URL。
+def _ai_cache_key_from_match_analyses(match_analyses: List[Dict[str, Any]]) -> str:
+    try:
+        import hashlib
+        core = []
+        for ma in match_analyses or []:
+            core.append({
+                "index": ma.get("index"),
+                "match": _compact_for_cache(ma.get("match", {})),
+                "engine": _compact_for_cache(ma.get("engine", {})),
+                "stats": _compact_for_cache(ma.get("stats", {})),
+                "trap_preview": _compact_for_cache(ma.get("trap_preview", {})),
+            })
+        payload = json.dumps(core, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        return hashlib.sha256(payload.encode("utf-8", errors="ignore")).hexdigest()
+    except Exception:
+        return _ai_cache_key(str(len(match_analyses)), len(match_analyses))
+
+def get_clean_env_url(name, default=""):
+    # v18.3.2：默认强制四个模型全部走统一中转 API_URL，避免某些模型误走旧 URL / 备用 URL。
+    if FORCE_COMMON_GATEWAY_URL:
+        common = get_first_clean_env_url(["API_URL"], "")
+        if common:
+            return common
+
+    aliases = [name]
     if name == "GPT_API_URL":
         aliases += ["OPENAI_API_URL"]
     elif name == "GROK_API_URL":
@@ -1848,9 +1904,13 @@ def get_clean_env_url(name, default=""):
     return get_first_clean_env_url(aliases, default)
 
 def get_clean_env_key(name):
-    aliases = [name]
+    # v18.3.2：默认强制四个模型全部走统一中转 API_KEY。
+    if FORCE_COMMON_GATEWAY_URL:
+        common = get_first_clean_env_key(["API_KEY"], "")
+        if common:
+            return common
 
-    # 单模型专用 key 优先，其次统一中转 API_KEY。
+    aliases = [name]
     if name == "GPT_API_KEY":
         aliases += ["OPENAI_API_KEY"]
     elif name == "GROK_API_KEY":
@@ -1869,8 +1929,8 @@ def _mask_key(k):
 def debug_ai_config():
     for name, url_env, key_env in [("GPT","GPT_API_URL","GPT_API_KEY"),("GROK","GROK_API_URL","GROK_API_KEY"),("GEMINI","GEMINI_API_URL","GEMINI_API_KEY"),("CLAUDE","CLAUDE_API_URL","CLAUDE_API_KEY")]:
         print(f"[AI CONFIG] {name}: url={get_clean_env_url(url_env)} key={_mask_key(get_clean_env_key(key_env))} models={_model_list_from_env(name.lower(), [])}")
-    print(f"[AI MODE] authority={AI_SCORE_AUTHORITY_MODE} cache_ttl={AI_DECISION_CACHE_TTL} disable_cache={AI_DISABLE_CACHE} contrarian_guard={AI_JUDGE_CONTRARIAN_GUARD}")
-    print(f"[COMMON GATEWAY] API_URL={get_first_clean_env_url(COMMON_GATEWAY_URL_ALIASES, '')} API_KEY={_mask_key(get_first_clean_env_key(COMMON_GATEWAY_KEY_ALIASES, ''))}")
+    print(f"[AI MODE] authority={AI_SCORE_AUTHORITY_MODE} cache_ttl={AI_DECISION_CACHE_TTL} disable_cache={AI_DISABLE_CACHE} contrarian_guard={AI_JUDGE_CONTRARIAN_GUARD} singleflight={AI_SINGLEFLIGHT_ENABLED} max_req_per_ai={AI_MAX_REQUESTS_PER_AI}")
+    print(f"[COMMON GATEWAY] force={FORCE_COMMON_GATEWAY_URL} API_URL={get_first_clean_env_url(['API_URL'], '')} API_KEY={_mask_key(get_first_clean_env_key(['API_KEY'], ''))}")
     print(f"[EXTERNAL] enabled={_external_context_enabled()} endpoints={_parse_external_endpoints()} bing={bool(os.environ.get('BING_SEARCH_API_KEY'))}")
     print(f"[RAW MODE] disable_crs={DISABLE_CRS_ANALYSIS} disable_safe_score_anchors={DISABLE_SAFE_SCORE_ANCHORS} raw_ai_prompt={RAW_AI_PROMPT_MODE}")
 
@@ -1883,8 +1943,8 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
         print(f"  [{ai_name.upper()}] no_key: 检查 {key_env} / API_KEY / OPENAI_API_KEY 等环境变量")
         return ai_name, {}, "no_key"
     primary = get_clean_env_url(url_env, GPT_DEFAULT_URL if ai_name == "gpt" else "")
-    # GPT 默认只走主URL，避免无意义重复扣费；其他模型允许一个备用URL。
-    urls = [primary or GPT_DEFAULT_URL] if ai_name == "gpt" else [primary] + [u for u in FALLBACK_URLS if u and u != primary][:1]
+    # v18.3.2：四个模型全部只走一个 API_URL，不走旧备用 URL，避免同一模型被重试扣费。
+    urls = [primary or GPT_DEFAULT_URL] if primary or ai_name == "gpt" else []
     request_count = 0
     profiles = {
         "claude": {"temp":0.12, "sys":"你是最终审计模型，不是反指模型。只输出JSON数组。默认尊重初审中证据最完整的结论；只有盘口/总进球/半全场/资金/外部情报存在硬反证时才改票。禁止无证据把2-0改2-1或3-1改2-1。禁止引用CRS或固定常见比分模板。"},
@@ -1909,6 +1969,10 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
             else:
                 headers["Authorization"] = f"Bearer {key}"
                 payload = {"model": mn, "messages":[{"role":"system","content":profile["sys"]},{"role":"user","content":prompt}], "temperature": profile["temp"]}
+            if request_count >= max(1, AI_MAX_REQUESTS_PER_AI):
+                print(f"  [{ai_name.upper()}] 已达到单AI请求上限 {AI_MAX_REQUESTS_PER_AI}，停止重试，避免重复扣费")
+                _AI_CALL_STATUS[ai_name] = {"ok": False, "status": "max_requests_reached", "model": mn, "count": 0, "requests": request_count}
+                return ai_name, {}, "max_requests_reached"
             request_count += 1
             print(f"  [连接中] {ai_name.upper()} | {mn[:36]} @ {url.split('/v1')[0][:55]} | request#{request_count}")
             t0 = time.time()
@@ -2338,41 +2402,96 @@ def _save_debug_text(ai_name, text, tag):
     except Exception:
         pass
 
-async def run_ai_matrix_two_phase(match_analyses):
-    if aiohttp is None:
-        return {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
+async def _run_ai_matrix_two_phase_inner(match_analyses, prompt: str, cache_key: str):
     num = len(match_analyses)
-    prompt = build_v18_prompt(match_analyses)
-    cache_key = _ai_cache_key(prompt, num)
-    now = time.time()
-    if not AI_DISABLE_CACHE and cache_key in _AI_RESULT_CACHE:
-        ts, cached = _AI_RESULT_CACHE[cache_key]
-        if now - ts <= AI_DECISION_CACHE_TTL:
-            print(f"  [AI CACHE] 命中同一批次结果，避免重复请求/重复扣费 ttl={AI_DECISION_CACHE_TTL}s")
-            return cached
-    print(f"  [v18.3.1 Phase1 Prompt] {len(prompt):,}字符 → GPT/Grok/Gemini | common_gateway={bool(get_first_clean_env_key(COMMON_GATEWAY_KEY_ALIASES, '')) and bool(get_first_clean_env_url(COMMON_GATEWAY_URL_ALIASES, ''))}")
+    print(f"  [v18.3.2 Phase1 Prompt] {len(prompt):,}字符 → GPT/Grok/Gemini | force_api_url={FORCE_COMMON_GATEWAY_URL} common_gateway={bool(get_first_clean_env_key(['API_KEY'], '')) and bool(get_first_clean_env_url(['API_URL'], ''))}")
     configs = [
-        ("grok","GROK_API_URL","GROK_API_KEY", _model_list_from_env("grok", DEFAULT_AI_MODELS["grok"])),
-        ("gpt","GPT_API_URL","GPT_API_KEY", _model_list_from_env("gpt", DEFAULT_AI_MODELS["gpt"])),
-        ("gemini","GEMINI_API_URL","GEMINI_API_KEY", _model_list_from_env("gemini", DEFAULT_AI_MODELS["gemini"])),
+        ("grok", "API_URL", "API_KEY", _model_list_from_env("grok", DEFAULT_AI_MODELS["grok"])),
+        ("gpt", "API_URL", "API_KEY", _model_list_from_env("gpt", DEFAULT_AI_MODELS["gpt"])),
+        ("gemini", "API_URL", "API_KEY", _model_list_from_env("gemini", DEFAULT_AI_MODELS["gemini"])),
     ]
     all_results = {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
     _AI_CALL_STATUS.clear()
     async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(limit=8, use_dns_cache=False)) as session:
-        rs = await asyncio.gather(*[async_call_one_ai_batch(session, prompt, u, k, m, num, n) for n,u,k,m in configs], return_exceptions=True)
+        rs = await asyncio.gather(*[async_call_one_ai_batch(session, prompt, u, k, m, num, n) for n, u, k, m in configs], return_exceptions=True)
         for r in rs:
             if isinstance(r, tuple):
                 all_results[r[0]] = r[1]
             else:
                 print(f"  [Phase1 ERROR] {r}")
         audit_prompt = build_claude_final_audit_prompt(match_analyses, all_results)
-        print(f"  [v18.3.1 Phase2 Claude Audit] {len(audit_prompt):,}字符")
-        _, cr, _ = await async_call_one_ai_batch(session, audit_prompt, "CLAUDE_API_URL", "CLAUDE_API_KEY", _model_list_from_env("claude", DEFAULT_AI_MODELS["claude"]), num, "claude")
+        print(f"  [v18.3.2 Phase2 Claude Audit] {len(audit_prompt):,}字符")
+        _, cr, _ = await async_call_one_ai_batch(
+            session,
+            audit_prompt,
+            "API_URL",
+            "API_KEY",
+            _model_list_from_env("claude", DEFAULT_AI_MODELS["claude"]),
+            num,
+            "claude",
+        )
         all_results["claude"] = cr or {}
     print(f"  [完成] {sum(1 for v in all_results.values() if v)}/4 AI有数据 | status={_AI_CALL_STATUS}")
     if not AI_DISABLE_CACHE:
         _AI_RESULT_CACHE[cache_key] = (time.time(), all_results)
     return all_results
+
+async def run_ai_matrix_two_phase(match_analyses):
+    if aiohttp is None:
+        return {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
+
+    num = len(match_analyses)
+    prompt = build_v18_prompt(match_analyses)
+    # v18.3.2：缓存 key 改为比赛数据稳定指纹，而不是 prompt 全文，避免外部情报时间戳/前端重渲染导致缓存 miss。
+    cache_key = _ai_cache_key_from_match_analyses(match_analyses)
+    now = time.time()
+
+    if not AI_DISABLE_CACHE and cache_key in _AI_RESULT_CACHE:
+        ts, cached = _AI_RESULT_CACHE[cache_key]
+        if now - ts <= AI_DECISION_CACHE_TTL:
+            print(f"  [AI CACHE] 命中同一批次结果，避免重复请求/重复扣费 ttl={AI_DECISION_CACHE_TTL}s")
+            return cached
+
+    if not AI_SINGLEFLIGHT_ENABLED:
+        return await _run_ai_matrix_two_phase_inner(match_analyses, prompt, cache_key)
+
+    owner = False
+    with _AI_INFLIGHT_LOCK:
+        ev = _AI_INFLIGHT_EVENTS.get(cache_key)
+        if ev is None:
+            ev = threading.Event()
+            _AI_INFLIGHT_EVENTS[cache_key] = ev
+            _AI_INFLIGHT_ERRORS.pop(cache_key, None)
+            _AI_INFLIGHT_RESULTS.pop(cache_key, None)
+            owner = True
+        else:
+            print("  [AI SINGLEFLIGHT] 同批次AI正在运行，等待首个结果，避免重复扣费")
+
+    if not owner:
+        await asyncio.to_thread(ev.wait)
+        with _AI_INFLIGHT_LOCK:
+            if cache_key in _AI_INFLIGHT_RESULTS:
+                return _AI_INFLIGHT_RESULTS[cache_key]
+            if cache_key in _AI_RESULT_CACHE:
+                return _AI_RESULT_CACHE[cache_key][1]
+            err = _AI_INFLIGHT_ERRORS.get(cache_key, "unknown")
+        print(f"  [AI SINGLEFLIGHT] 首个任务失败: {err}")
+        return {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
+
+    try:
+        result = await _run_ai_matrix_two_phase_inner(match_analyses, prompt, cache_key)
+        with _AI_INFLIGHT_LOCK:
+            _AI_INFLIGHT_RESULTS[cache_key] = result
+        return result
+    except Exception as e:
+        with _AI_INFLIGHT_LOCK:
+            _AI_INFLIGHT_ERRORS[cache_key] = str(e)[:240]
+        raise
+    finally:
+        with _AI_INFLIGHT_LOCK:
+            ev = _AI_INFLIGHT_EVENTS.pop(cache_key, None)
+            if ev:
+                ev.set()
 
 
 # ==============================
@@ -2464,7 +2583,7 @@ def _choose_ai_authority_score(ai_responses: Dict[str, Dict[str, Any]], matrix: 
     claude = ai_responses.get("claude", {}) if isinstance(ai_responses, dict) else {}
     cl_sc = _valid_ai_score_from_response(claude)
 
-    # v18.3.1: Claude guarded。Claude 仍是主裁，但不允许无硬反证地故意反着初审走。
+    # v18.3.2: Claude guarded。Claude 仍是主裁，但不允许无硬反证地故意反着初审走。
     consensus_sc, consensus_n, consensus_names = _phase1_exact_consensus(ai_responses or {})
     if mode in ("claude_guarded", "guarded", "ai_guarded") and cl_sc:
         if (
