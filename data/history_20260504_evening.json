@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-04 21:55:41",
+  "update_time": "2026-05-04 22:11:23",
   "version": "MAX-v1.1",
   "top4": [
     {
@@ -18,12 +18,12 @@
         "lose": -1
       },
       "vote": {
-        "win": "64",
-        "same": "20",
+        "win": "63",
+        "same": "21",
         "lose": "16",
-        "hhad_win": "39",
+        "hhad_win": "38",
         "hhad_same": "27",
-        "hhad_lose": "34"
+        "hhad_lose": "35"
       },
       "odds_movement": "主胜升水，客胜降水",
       "intelligence": {
@@ -77,7 +77,7 @@
         "fp": 16.0,
         "ff": 9.5
       },
-      "id": 2,
+      "id": 1,
       "date": "2026-05-04",
       "home_id": 0,
       "away_id": 0,
@@ -462,10 +462,10 @@
           "CLAUDE"
         ],
         "ai_avg_confidence": 0.0,
-        "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热64% | T1_FAKE_DRAW_TRAP:假平诱盘:平赔独降-1.00+强方home公平67.2%",
+        "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热63% | T1_FAKE_DRAW_TRAP:假平诱盘:平赔独降-1.00+强方home公平67.2%",
         "smart_signals": [
           "💰 Sharp资金流向客胜",
-          "🚨 主胜超热64%",
+          "🚨 主胜超热63%",
           "🔥 赔率剧变(幅度1.00)",
           "🔥 客胜Steam! 降水-1.00但散户未跟(16%)",
           "🔥 赔率剧变(幅度1.00)",
@@ -690,6 +690,673 @@
     },
     {
       "rank": 2,
+      "home_team": "佐加顿斯",
+      "away_team": "哥德堡",
+      "league": "瑞超",
+      "match_num": "周一004",
+      "sp_home": 1.48,
+      "sp_draw": 3.85,
+      "sp_away": 5.15,
+      "give_ball": -1.0,
+      "change": {
+        "win": -1,
+        "same": 1,
+        "lose": 1
+      },
+      "vote": {
+        "win": "60",
+        "same": "23",
+        "lose": "17",
+        "hhad_win": "32",
+        "hhad_same": "29",
+        "hhad_lose": "39"
+      },
+      "odds_movement": "主胜降水，客胜升水",
+      "intelligence": {
+        "h_inj": "M·尼尔森 受伤 肘关节受伤 桑特里·哈拉拉 停赛 轮休 尼诺·祖格利 停赛 轮休 米克尔·安德森 停赛 轮休 丹尼尔·斯滕森 停赛 轮休 奥斯卡·法伦纽斯 停赛 轮休",
+        "g_inj": "阿尔伯诺·穆科里 受伤 膝关节受伤 卡赫德 受伤 髋关节损伤 拉蒙·帕斯卡·隆德维奇 受伤 未知伤病 维克多·安德森 停赛 轮休 乔纳森·拉希德 停赛 轮休",
+        "home_bad_news": "1.在前5场瑞典超比赛中，尤尔加登取得2胜1平2负的战绩，球队整体表现一般。需要注意的是，尤尔加登在开局取得2连胜之后，随后连续3场比赛未能取胜，状态出现明显下滑。",
+        "guest_bad_news": "1.哥德堡本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.从新赛季开局的表现来看，哥德堡状态十分糟糕。前5场瑞典超联赛，球队只收获了3平2负，至今未尝胜绩，一胜难求的尴尬开局让球队在积分榜上处于被动地位，接下来的比赛必须全力抢分。 3.从新赛季开局的数据来看，哥德堡进攻端收获4"
+      },
+      "expert_intro": "佐加顿斯主场作战排名第七，近期状态稳健；哥德堡连续六场不胜且场均失1.6球，攻防失衡明显，保级压力巨大。",
+      "baseface": "本场为瑞典超级联赛第6轮。目前主队5场积7分，排在第7位。客队5场积3分，排在第14位。主队实力明显占优。\n\n主队佐加顿斯本赛季5场赛事2胜1平2负，状态一般；主场近5场2胜1平2负，主场表现中规中矩。\n\n客队哥德堡本赛季5场赛事0胜3平2负，状态低迷；客场近5场0胜2平3负，客场状态较差。\n\n综合来看，双方实力差距明显。\n\n历史交锋数据暂未提供。\n\n机构胜平负指数分析支持主胜方向。\n\n半全场分析：主队上半场领先可能性为60%\n主队近5场赛事主场的上半场：\n领先3，打平1，落后1丨4场有进球，2场有失球\n客队近5场赛事客场的上半场：\n打平3，落后2，领先0丨2场有进球，3场有失球\n\n战意与策略分析：佐加顿斯主场作战力争欧战区席位，需提升进攻效率；哥德堡深陷降级区且连续6场不胜，客场以求稳防守为主，双方阵容均有主力伤停影响。",
+      "had_analyse": [
+        "win"
+      ],
+      "home_rank": 10,
+      "away_rank": 15,
+      "v2_odds_dict": {
+        "a0": 13.0,
+        "a1": 5.15,
+        "a2": 3.6,
+        "a3": 3.35,
+        "a4": 5.0,
+        "a5": 9.55,
+        "a6": 16.5,
+        "a7": 24.0,
+        "s00": 13.0,
+        "s11": 6.7,
+        "s22": 13.0,
+        "s33": 65.0,
+        "w10": 7.0,
+        "w20": 7.5,
+        "w21": 6.5,
+        "w30": 12.0,
+        "w31": 12.0,
+        "w32": 21.0,
+        "w40": 26.0,
+        "w41": 27.0,
+        "w42": 56.0,
+        "l01": 13.5,
+        "l02": 26.0,
+        "l12": 13.0,
+        "l03": 75.0,
+        "l13": 38.0,
+        "l23": 40.0,
+        "ss": 2.4,
+        "sp": 15.0,
+        "sf": 38.0,
+        "ps": 4.05,
+        "pp": 5.65,
+        "pf": 11.0,
+        "fs": 22.0,
+        "fp": 15.0,
+        "ff": 8.5
+      },
+      "id": 3,
+      "date": "2026-05-04",
+      "home_id": 0,
+      "away_id": 0,
+      "home_stats": {
+        "played": 25,
+        "wins": 13,
+        "draws": 6,
+        "losses": 6,
+        "goals_for": 38,
+        "goals_against": 21,
+        "avg_goals_for": "1.52",
+        "avg_goals_against": "0.85",
+        "clean_sheets": 4,
+        "form": "WWDWW"
+      },
+      "away_stats": {
+        "played": 25,
+        "wins": 7,
+        "draws": 6,
+        "losses": 12,
+        "goals_for": 19,
+        "goals_against": 39,
+        "avg_goals_for": "0.78",
+        "avg_goals_against": "1.55",
+        "clean_sheets": 2,
+        "form": "LLDLL"
+      },
+      "h2h": [],
+      "information": {},
+      "a0": 13.0,
+      "a1": 5.15,
+      "a2": 3.6,
+      "a3": 3.35,
+      "a4": 5.0,
+      "a5": 9.55,
+      "a6": 16.5,
+      "a7": 24.0,
+      "s00": 13.0,
+      "s11": 6.7,
+      "s22": 13.0,
+      "s33": 65.0,
+      "w10": 7.0,
+      "w20": 7.5,
+      "w21": 6.5,
+      "w30": 12.0,
+      "w31": 12.0,
+      "w32": 21.0,
+      "w40": 26.0,
+      "w41": 27.0,
+      "w42": 56.0,
+      "l01": 13.5,
+      "l02": 26.0,
+      "l12": 13.0,
+      "l03": 75.0,
+      "l13": 38.0,
+      "l23": 40.0,
+      "ss": 2.4,
+      "sp": 15.0,
+      "sf": 38.0,
+      "ps": 4.05,
+      "pp": 5.65,
+      "pf": 11.0,
+      "fs": 22.0,
+      "fp": 15.0,
+      "ff": 8.5,
+      "home": "佐加顿斯",
+      "guest": "哥德堡",
+      "win": 1.48,
+      "same": 3.85,
+      "lose": 5.15,
+      "external_context": {
+        "source_quality": "missing",
+        "injuries": [],
+        "suspensions": [],
+        "lineup_news": [],
+        "weather": {},
+        "motivation": [],
+        "schedule_pressure": [],
+        "odds_history": [],
+        "sharp_market_notes": [],
+        "news_snippets": [],
+        "data_missing": [
+          "injuries",
+          "suspensions",
+          "lineup_news",
+          "weather",
+          "motivation",
+          "odds_history"
+        ],
+        "raw": {}
+      },
+      "prediction": {
+        "predicted_score": "2-1",
+        "predicted_label": "2-1",
+        "result": "主胜",
+        "display_direction": "主胜",
+        "final_direction": "home",
+        "is_score_others": false,
+        "home_win_pct": 59.0,
+        "draw_pct": 23.0,
+        "away_win_pct": 18.0,
+        "scenario": "normal",
+        "goal_range": [
+          2,
+          4
+        ],
+        "dir_confidence": 59.0,
+        "dir_gap": 36.0,
+        "evidences": [
+          "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
+          "混合方向目标:{'draw': 23.04, 'home': 58.99, 'away': 17.97}",
+          "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
+          "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
+          "决策来源:matrix_authority; authority_mode=claude_guarded",
+          "陷阱/保护:1个 严重度2"
+        ],
+        "override_triggered": false,
+        "top_score_candidates": [
+          [
+            "2-1",
+            11.112
+          ],
+          [
+            "2-0",
+            9.689
+          ],
+          [
+            "3-0",
+            7.69
+          ],
+          [
+            "3-1",
+            6.022
+          ],
+          [
+            "4-0",
+            3.126
+          ]
+        ],
+        "calibrated_score_prob_pct": 11.112,
+        "bayesian_prior": {
+          "home": 63.673,
+          "draw": 21.178,
+          "away": 15.149
+        },
+        "decision_source": "matrix_authority",
+        "ai_authority_mode": "claude_guarded",
+        "unified_matrix_top_scores": [
+          [
+            "1-1",
+            11.259
+          ],
+          [
+            "2-1",
+            11.112
+          ],
+          [
+            "1-0",
+            10.317
+          ],
+          [
+            "2-0",
+            9.689
+          ],
+          [
+            "3-0",
+            7.69
+          ],
+          [
+            "3-1",
+            6.022
+          ],
+          [
+            "1-2",
+            5.582
+          ],
+          [
+            "0-0",
+            5.406
+          ],
+          [
+            "2-2",
+            5.249
+          ],
+          [
+            "0-1",
+            5.183
+          ],
+          [
+            "4-0",
+            3.126
+          ],
+          [
+            "4-1",
+            2.568
+          ],
+          [
+            "3-2",
+            2.474
+          ],
+          [
+            "0-2",
+            2.344
+          ],
+          [
+            "1-3",
+            1.457
+          ],
+          [
+            "4-2",
+            1.294
+          ],
+          [
+            "2-3",
+            1.243
+          ],
+          [
+            "5-1",
+            1.075
+          ],
+          [
+            "5-0",
+            1.066
+          ],
+          [
+            "3-3",
+            1.003
+          ],
+          [
+            "0-3",
+            0.896
+          ],
+          [
+            "5-2",
+            0.577
+          ],
+          [
+            "4-3",
+            0.463
+          ],
+          [
+            "6-1",
+            0.399
+          ],
+          [
+            "6-0",
+            0.372
+          ],
+          [
+            "2-4",
+            0.313
+          ],
+          [
+            "1-4",
+            0.299
+          ],
+          [
+            "3-4",
+            0.233
+          ],
+          [
+            "0-4",
+            0.175
+          ],
+          [
+            "6-2",
+            0.165
+          ]
+        ],
+        "unified_goal_probs": {
+          "0": 5.41,
+          "1": 15.5,
+          "2": 23.29,
+          "3": 25.28,
+          "4": 16.03,
+          "5": 7.68,
+          "6": 4.12,
+          "7": 2.69
+        },
+        "unified_source": "unified_score_matrix_v18_2_final_ipf",
+        "fair_1x2_pack": {
+          "method": "power",
+          "fair_probs": {
+            "home": 63.673,
+            "draw": 21.178,
+            "away": 15.149
+          },
+          "raw_implied": {
+            "home": 67.568,
+            "draw": 25.974,
+            "away": 19.417
+          },
+          "overround": 0.12959,
+          "shin_z": null
+        },
+        "mixed_target_dir": {
+          "draw": 23.04,
+          "home": 58.99,
+          "away": 17.97
+        },
+        "confidence": 76.0,
+        "confidence_meaning": "排序置信度，不等于历史命中率",
+        "risk_level": "低",
+        "bayesian_evidences": [
+          "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
+          "混合方向目标:{'draw': 23.04, 'home': 58.99, 'away': 17.97}",
+          "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
+          "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
+          "决策来源:matrix_authority; authority_mode=claude_guarded",
+          "陷阱/保护:1个 严重度2"
+        ],
+        "traps_detected": [
+          "T9_FAKE_CONTRARIAN"
+        ],
+        "trap_count": 1,
+        "trap_severity": 2,
+        "trap_details": [
+          {
+            "trap": "T9_FAKE_CONTRARIAN",
+            "desc": "诱反指陷阱:home散户60%+赔率同向降水,反指风险高"
+          }
+        ],
+        "trap_flags": {},
+        "fair_1x2": {
+          "home": 63.673,
+          "draw": 21.178,
+          "away": 15.149
+        },
+        "fair_1x2_method": "power",
+        "market_overround": 0.12959,
+        "raw_implied_1x2": {
+          "home": 67.568,
+          "draw": 25.974,
+          "away": 19.417
+        },
+        "crs_shape": "disabled",
+        "crs_moments": {},
+        "crs_margin": 0.0,
+        "crs_coverage": 0.0,
+        "crs_implied_probs": {},
+        "crs_low_rank_info": {
+          "all_sorted": [],
+          "rank": {},
+          "min_draw": null,
+          "draw_available": [],
+          "draw_low_rank": 999,
+          "draw_low_score": "",
+          "draw_low_odds": 999.0,
+          "low_scores": []
+        },
+        "suggested_kelly": 0.0,
+        "edge_vs_market": -27.77,
+        "is_value": false,
+        "ev_note": "calibrated_matrix_prob_vs_market",
+        "score_model_prob": 11.112,
+        "score_market_odds": 6.5,
+        "score_market_implied_pct": 15.385,
+        "gpt_score": "弃权",
+        "gpt_analysis": "弃权",
+        "grok_score": "弃权",
+        "grok_analysis": "弃权",
+        "gemini_score": "弃权",
+        "gemini_analysis": "弃权",
+        "claude_score": "弃权",
+        "claude_analysis": "弃权",
+        "ai_abstained": [
+          "GPT",
+          "GROK",
+          "GEMINI",
+          "CLAUDE"
+        ],
+        "ai_avg_confidence": 0.0,
+        "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热60% | T9_FAKE_CONTRARIAN:诱反指陷阱:home散户60%+赔率同向降水,反指风险高",
+        "smart_signals": [
+          "💰 Sharp资金流向主胜",
+          "🚨 主胜超热60%",
+          "🔥 赔率剧变(幅度1.00)",
+          "🚨 主胜降水-1.00+热度60%=造热主队",
+          "📊 客队冷门(>5.0)实际胜率低于隐含8%",
+          "🚨 主胜反向Steam! 降水-1.00+热度60%=庄家造热",
+          "⚡ 主队攻防效率碾压(差值1.20)",
+          "⚠️ 负CLV-14.0% [客胜]"
+        ],
+        "sharp_detected": true,
+        "sharp_dir": "home",
+        "xG_home": 1.72,
+        "xG_away": 0.83,
+        "expected_total_goals": 2.54,
+        "actual_handicap_signed": -1.0,
+        "theoretical_handicap_signed": -1.25,
+        "external_context": {
+          "source_quality": "missing",
+          "injuries": [],
+          "suspensions": [],
+          "lineup_news": [],
+          "weather": {},
+          "motivation": [],
+          "schedule_pressure": [],
+          "odds_history": [],
+          "sharp_market_notes": [],
+          "news_snippets": [],
+          "data_missing": [
+            "injuries",
+            "suspensions",
+            "lineup_news",
+            "weather",
+            "motivation",
+            "odds_history"
+          ],
+          "raw": {}
+        },
+        "refined_poisson": {
+          "home_win": 74.0,
+          "draw": 18.1,
+          "away_win": 7.9,
+          "predicted_score": "1-0",
+          "top_scores": [
+            {
+              "score": "1-0",
+              "prob": 16.4
+            },
+            {
+              "score": "2-0",
+              "prob": 13.7
+            },
+            {
+              "score": "2-1",
+              "prob": 10.4
+            },
+            {
+              "score": "3-0",
+              "prob": 9.9
+            },
+            {
+              "score": "1-1",
+              "prob": 9.6
+            },
+            {
+              "score": "0-0",
+              "prob": 5.8
+            }
+          ]
+        },
+        "elo": {
+          "home_win": 59.4,
+          "draw": 20.0,
+          "away_win": 30.6,
+          "elo_diff": 115
+        },
+        "experience_analysis": {
+          "triggered_count": 2,
+          "total_score": 15,
+          "draw_rules": 1,
+          "recommendation": "🔶 经验信号较强，建议重点关注",
+          "over_adj": 0.0,
+          "zero_zero_boost": 0.0,
+          "rules": [
+            {
+              "id": "D06",
+              "name": "德比/克星效应",
+              "weight": 8
+            },
+            {
+              "id": "U10",
+              "name": "赔率剧变",
+              "weight": 7
+            }
+          ]
+        },
+        "engine_version": "vMAX 18.3.2",
+        "engine_architecture": "RAW-AI主审 + 统一API_URL中转 + 单批次singleflight防重复扣费 + Claude守门裁判 + 去CRS/去常见比分锚定",
+        "validation_warnings": [],
+        "postprocess_warnings": [
+          "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
+          "odds_history_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
+          "quant_edge_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
+          "advanced_models_core_fields_restored:away_win_pct,draw_pct,home_win_pct"
+        ],
+        "line_movement_anomaly": {
+          "has_anomaly": true,
+          "signal": "🚨 主胜降水-1.00+热度60%=造热主队",
+          "direction": "upset_away"
+        },
+        "odds_pattern": "大冷门客",
+        "steam_move": {
+          "steam": true,
+          "signal": "🚨 主胜反向Steam! 降水-1.00+热度60%=庄家造热",
+          "direction": "upset_away",
+          "strength": 10
+        },
+        "odds_range_analysis": {
+          "home": {
+            "hist_rate": 68.0,
+            "desc": "强势主队:胜率68%最佳区间"
+          },
+          "draw": {
+            "hist_rate": 24.0,
+            "desc": "平局偏少"
+          },
+          "away": {
+            "hist_rate": 18.0,
+            "desc": "弱势客队:FLB区间"
+          }
+        },
+        "bivariate_poisson": {
+          "home_win": 52.8,
+          "draw": 30.3,
+          "away_win": 16.9,
+          "predicted_score": "1-0",
+          "btts": 42.5,
+          "over_2_5": 38.9,
+          "correlation": 0.1,
+          "p0_inflate": 0.03,
+          "top_scores": [
+            {
+              "score": "1-0",
+              "prob": 14.84
+            },
+            {
+              "score": "0-0",
+              "prob": 14.18
+            },
+            {
+              "score": "1-1",
+              "prob": 11.91
+            },
+            {
+              "score": "2-0",
+              "prob": 10.83
+            },
+            {
+              "score": "2-1",
+              "prob": 8.89
+            },
+            {
+              "score": "0-1",
+              "prob": 6.89
+            }
+          ]
+        },
+        "pro_odds": {
+          "true_home": 59.5,
+          "true_draw": 23.2,
+          "true_away": 17.3
+        },
+        "predictability_score": 65,
+        "asian_handicap_probs": {
+          "ah_0": [
+            0.5485,
+            0.2594,
+            0.1921
+          ],
+          "ah_0.5": [
+            0.5485,
+            0.0,
+            0.4515
+          ],
+          "ah_1.0": [
+            0.286,
+            0.2625,
+            0.4515
+          ],
+          "ou_1.5": [
+            0.6691,
+            0.0,
+            0.3309
+          ],
+          "ou_2.5": [
+            0.4038,
+            0.0,
+            0.5962
+          ],
+          "ou_3.5": [
+            0.2005,
+            0.0,
+            0.7995
+          ],
+          "btts": 0.4231
+        },
+        "over_2_5": 45.3,
+        "btts": 46.6,
+        "total_models": 15,
+        "fusion_weights": {
+          "market": 0.77,
+          "model": 0.23
+        }
+      },
+      "recommend_score": 43.55,
+      "is_recommended": true,
+      "fusion_summary": "vMAX-Dynamic-Hybrid"
+    },
+    {
+      "rank": 3,
       "home_team": "阿森纳",
       "away_team": "马竞",
       "league": "欧冠",
@@ -761,7 +1428,7 @@
         "fp": 18.0,
         "ff": 9.5
       },
-      "id": 12,
+      "id": 11,
       "date": "2026-05-04",
       "home_id": 0,
       "away_id": 0,
@@ -1366,14 +2033,14 @@
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     },
     {
-      "rank": 3,
-      "home_team": "佐加顿斯",
-      "away_team": "哥德堡",
-      "league": "瑞超",
-      "match_num": "周一004",
-      "sp_home": 1.48,
-      "sp_draw": 3.85,
-      "sp_away": 5.15,
+      "rank": 4,
+      "home_team": "博德闪耀",
+      "away_team": "莫尔德",
+      "league": "挪超",
+      "match_num": "周一006",
+      "sp_home": 1.22,
+      "sp_draw": 5.71,
+      "sp_away": 7.4,
       "give_ball": -1.0,
       "change": {
         "win": -1,
@@ -1381,136 +2048,136 @@
         "lose": 1
       },
       "vote": {
-        "win": "59",
-        "same": "24",
-        "lose": "17",
-        "hhad_win": "32",
-        "hhad_same": "28",
-        "hhad_lose": "40"
+        "win": "73",
+        "same": "16",
+        "lose": "11",
+        "hhad_win": "53",
+        "hhad_same": "21",
+        "hhad_lose": "26"
       },
       "odds_movement": "主胜降水，客胜升水",
       "intelligence": {
-        "h_inj": "M·尼尔森 受伤 肘关节受伤 桑特里·哈拉拉 停赛 轮休 尼诺·祖格利 停赛 轮休 米克尔·安德森 停赛 轮休 丹尼尔·斯滕森 停赛 轮休 奥斯卡·法伦纽斯 停赛 轮休",
-        "g_inj": "阿尔伯诺·穆科里 受伤 膝关节受伤 卡赫德 受伤 髋关节损伤 拉蒙·帕斯卡·隆德维奇 受伤 未知伤病 维克多·安德森 停赛 轮休 乔纳森·拉希德 停赛 轮休",
-        "home_bad_news": "1.在前5场瑞典超比赛中，尤尔加登取得2胜1平2负的战绩，球队整体表现一般。需要注意的是，尤尔加登在开局取得2连胜之后，随后连续3场比赛未能取胜，状态出现明显下滑。",
-        "guest_bad_news": "1.哥德堡本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.从新赛季开局的表现来看，哥德堡状态十分糟糕。前5场瑞典超联赛，球队只收获了3平2负，至今未尝胜绩，一胜难求的尴尬开局让球队在积分榜上处于被动地位，接下来的比赛必须全力抢分。 3.从新赛季开局的数据来看，哥德堡进攻端收获4"
+        "h_inj": "乌尔里克·萨尔特尼斯 腹股沟受伤 奥拉·布林希森 膝关节受伤",
+        "g_inj": "丹尼尔·达加 受伤 受伤 卡斯帕·奥瓦恩 受伤 弗雷德里克·克里斯滕森·达尔 受伤 膝关节受伤 马斯·基肯伯格 受伤 跟腱受伤",
+        "home_bad_news": "",
+        "guest_bad_news": "1.莫尔德在客场的表现一直不尽如人意，本赛季截至目前2场联赛客场仅取得1平1负的成绩，尚未尝到胜利的滋味。若将时间线拉长至跨赛季数据，球队在近10个联赛客场更是遭遇严峻挑战，最终战绩定格为1胜2平7负，整体竞争力显得极其有限，客场作战能力亟待提升。 2.莫尔德在防守端的表现显得不够稳定，近5轮联赛中"
       },
-      "expert_intro": "佐加顿斯主场作战排名第七，近期状态稳健；哥德堡连续六场不胜且场均失1.6球，攻防失衡明显，保级压力巨大。",
-      "baseface": "本场为瑞典超级联赛第6轮。目前主队5场积7分，排在第7位。客队5场积3分，排在第14位。主队实力明显占优。\n\n主队佐加顿斯本赛季5场赛事2胜1平2负，状态一般；主场近5场2胜1平2负，主场表现中规中矩。\n\n客队哥德堡本赛季5场赛事0胜3平2负，状态低迷；客场近5场0胜2平3负，客场状态较差。\n\n综合来看，双方实力差距明显。\n\n历史交锋数据暂未提供。\n\n机构胜平负指数分析支持主胜方向。\n\n半全场分析：主队上半场领先可能性为60%\n主队近5场赛事主场的上半场：\n领先3，打平1，落后1丨4场有进球，2场有失球\n客队近5场赛事客场的上半场：\n打平3，落后2，领先0丨2场有进球，3场有失球\n\n战意与策略分析：佐加顿斯主场作战力争欧战区席位，需提升进攻效率；哥德堡深陷降级区且连续6场不胜，客场以求稳防守为主，双方阵容均有主力伤停影响。",
+      "expert_intro": "博德闪耀总身价超8000万欧元且主场攻击力强劲，场均进球逾2个；莫尔德伤停四人导致阵容不整，防守端场均失1.3球漏洞明显，客场挑战难度极大。",
+      "baseface": "本场为挪威超级联赛第7轮。目前主队6场积13分，排在第3位。客队6场积10分，位列第5。主队实力明显高出一筹。\n\n主队博德闪耀本赛季6场4胜1平1负，状态良好；主场表现强势。\n客队莫尔德本赛季6场3胜1平2负，状态一般；客场表现平平。\n\n综合来看，主队实力占优。\n\n历史交锋数据暂缺。\n\n主流机构主胜指数1.30-1.37，明显支持主队。\n\n双方上半场打平的可能性为35%\n主队近5场赛事主场的上半场: 领先3，打平1，落后1丨4场有进球，2场有失球\n客队近5场赛事客场的上半场: 领先1，打平2，落后2丨2场有进球，3场有失球\n\n博德闪耀坐镇主场力求巩固欧战资格区位置，莫尔德客场挑战强敌需稳固防守寻找反击机会，双方均渴望积分提升排名。",
       "had_analyse": [
         "win"
       ],
-      "home_rank": 10,
-      "away_rank": 15,
+      "home_rank": 4,
+      "away_rank": 6,
       "v2_odds_dict": {
-        "a0": 13.0,
-        "a1": 5.15,
-        "a2": 3.6,
-        "a3": 3.35,
-        "a4": 5.0,
-        "a5": 9.55,
-        "a6": 16.5,
-        "a7": 24.0,
-        "s00": 13.0,
-        "s11": 6.7,
-        "s22": 13.0,
-        "s33": 65.0,
-        "w10": 7.0,
-        "w20": 7.5,
-        "w21": 6.5,
-        "w30": 12.0,
-        "w31": 12.0,
-        "w32": 21.0,
-        "w40": 26.0,
-        "w41": 27.0,
-        "w42": 56.0,
-        "l01": 13.5,
-        "l02": 26.0,
-        "l12": 13.0,
-        "l03": 75.0,
-        "l13": 38.0,
+        "a0": 36.0,
+        "a1": 10.5,
+        "a2": 5.5,
+        "a3": 3.75,
+        "a4": 3.8,
+        "a5": 5.5,
+        "a6": 8.3,
+        "a7": 8.5,
+        "s00": 36.0,
+        "s11": 12.0,
+        "s22": 15.0,
+        "s33": 36.0,
+        "w10": 12.0,
+        "w20": 9.05,
+        "w21": 7.5,
+        "w30": 9.5,
+        "w31": 8.5,
+        "w32": 14.5,
+        "w40": 14.0,
+        "w41": 12.5,
+        "w42": 23.0,
+        "l01": 34.0,
+        "l02": 65.0,
+        "l12": 23.0,
+        "l03": 150.0,
+        "l13": 60.0,
         "l23": 40.0,
-        "ss": 2.4,
-        "sp": 15.0,
-        "sf": 38.0,
-        "ps": 4.05,
-        "pp": 5.65,
-        "pf": 11.0,
-        "fs": 22.0,
-        "fp": 15.0,
-        "ff": 8.5
+        "ss": 1.63,
+        "sp": 19.0,
+        "sf": 50.0,
+        "ps": 4.2,
+        "pp": 10.5,
+        "pf": 19.0,
+        "fs": 19.0,
+        "fp": 19.0,
+        "ff": 13.0
       },
-      "id": 4,
+      "id": 5,
       "date": "2026-05-04",
       "home_id": 0,
       "away_id": 0,
       "home_stats": {
         "played": 25,
-        "wins": 13,
+        "wins": 15,
         "draws": 6,
-        "losses": 6,
-        "goals_for": 38,
-        "goals_against": 21,
-        "avg_goals_for": "1.52",
-        "avg_goals_against": "0.85",
-        "clean_sheets": 4,
+        "losses": 4,
+        "goals_for": 44,
+        "goals_against": 15,
+        "avg_goals_for": "1.77",
+        "avg_goals_against": "0.62",
+        "clean_sheets": 5,
         "form": "WWDWW"
       },
       "away_stats": {
         "played": 25,
-        "wins": 7,
+        "wins": 8,
         "draws": 6,
-        "losses": 12,
-        "goals_for": 19,
-        "goals_against": 39,
-        "avg_goals_for": "0.78",
-        "avg_goals_against": "1.55",
-        "clean_sheets": 2,
-        "form": "LLDLL"
+        "losses": 11,
+        "goals_for": 23,
+        "goals_against": 35,
+        "avg_goals_for": "0.91",
+        "avg_goals_against": "1.42",
+        "clean_sheets": 3,
+        "form": "LDWDL"
       },
       "h2h": [],
       "information": {},
-      "a0": 13.0,
-      "a1": 5.15,
-      "a2": 3.6,
-      "a3": 3.35,
-      "a4": 5.0,
-      "a5": 9.55,
-      "a6": 16.5,
-      "a7": 24.0,
-      "s00": 13.0,
-      "s11": 6.7,
-      "s22": 13.0,
-      "s33": 65.0,
-      "w10": 7.0,
-      "w20": 7.5,
-      "w21": 6.5,
-      "w30": 12.0,
-      "w31": 12.0,
-      "w32": 21.0,
-      "w40": 26.0,
-      "w41": 27.0,
-      "w42": 56.0,
-      "l01": 13.5,
-      "l02": 26.0,
-      "l12": 13.0,
-      "l03": 75.0,
-      "l13": 38.0,
+      "a0": 36.0,
+      "a1": 10.5,
+      "a2": 5.5,
+      "a3": 3.75,
+      "a4": 3.8,
+      "a5": 5.5,
+      "a6": 8.3,
+      "a7": 8.5,
+      "s00": 36.0,
+      "s11": 12.0,
+      "s22": 15.0,
+      "s33": 36.0,
+      "w10": 12.0,
+      "w20": 9.05,
+      "w21": 7.5,
+      "w30": 9.5,
+      "w31": 8.5,
+      "w32": 14.5,
+      "w40": 14.0,
+      "w41": 12.5,
+      "w42": 23.0,
+      "l01": 34.0,
+      "l02": 65.0,
+      "l12": 23.0,
+      "l03": 150.0,
+      "l13": 60.0,
       "l23": 40.0,
-      "ss": 2.4,
-      "sp": 15.0,
-      "sf": 38.0,
-      "ps": 4.05,
-      "pp": 5.65,
-      "pf": 11.0,
-      "fs": 22.0,
-      "fp": 15.0,
-      "ff": 8.5,
-      "home": "佐加顿斯",
-      "guest": "哥德堡",
-      "win": 1.48,
-      "same": 3.85,
-      "lose": 5.15,
+      "ss": 1.63,
+      "sp": 19.0,
+      "sf": 50.0,
+      "ps": 4.2,
+      "pp": 10.5,
+      "pf": 19.0,
+      "fs": 19.0,
+      "fp": 19.0,
+      "ff": 13.0,
+      "home": "博德闪耀",
+      "guest": "莫尔德",
+      "win": 1.22,
+      "same": 5.71,
+      "lose": 7.4,
       "external_context": {
         "source_quality": "missing",
         "injuries": [],
@@ -1539,908 +2206,267 @@
         "display_direction": "主胜",
         "final_direction": "home",
         "is_score_others": false,
-        "home_win_pct": 58.8,
-        "draw_pct": 23.1,
-        "away_win_pct": 18.1,
-        "scenario": "normal",
-        "goal_range": [
-          2,
-          4
-        ],
-        "dir_confidence": 58.8,
-        "dir_gap": 35.7,
-        "evidences": [
-          "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-          "混合方向目标:{'draw': 23.12, 'home': 58.82, 'away': 18.06}",
-          "后验方向:{'home': 58.82, 'draw': 23.12, 'away': 18.06}",
-          "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.091%",
-          "决策来源:matrix_authority; authority_mode=claude_guarded"
-        ],
-        "override_triggered": false,
-        "top_score_candidates": [
-          [
-            "2-1",
-            11.091
-          ],
-          [
-            "2-0",
-            9.638
-          ],
-          [
-            "3-0",
-            7.675
-          ],
-          [
-            "3-1",
-            5.999
-          ],
-          [
-            "4-0",
-            3.114
-          ]
-        ],
-        "calibrated_score_prob_pct": 11.091,
-        "bayesian_prior": {
-          "home": 63.673,
-          "draw": 21.178,
-          "away": 15.149
-        },
-        "decision_source": "matrix_authority",
-        "ai_authority_mode": "claude_guarded",
-        "unified_matrix_top_scores": [
-          [
-            "1-1",
-            11.306
-          ],
-          [
-            "2-1",
-            11.091
-          ],
-          [
-            "1-0",
-            10.292
-          ],
-          [
-            "2-0",
-            9.638
-          ],
-          [
-            "3-0",
-            7.675
-          ],
-          [
-            "3-1",
-            5.999
-          ],
-          [
-            "1-2",
-            5.612
-          ],
-          [
-            "0-0",
-            5.406
-          ],
-          [
-            "2-2",
-            5.278
-          ],
-          [
-            "0-1",
-            5.208
-          ],
-          [
-            "4-0",
-            3.114
-          ],
-          [
-            "4-1",
-            2.564
-          ],
-          [
-            "3-2",
-            2.47
-          ],
-          [
-            "0-2",
-            2.349
-          ],
-          [
-            "1-3",
-            1.462
-          ],
-          [
-            "4-2",
-            1.29
-          ],
-          [
-            "2-3",
-            1.25
-          ],
-          [
-            "5-1",
-            1.072
-          ],
-          [
-            "5-0",
-            1.065
-          ],
-          [
-            "3-3",
-            1.009
-          ],
-          [
-            "0-3",
-            0.901
-          ],
-          [
-            "5-2",
-            0.576
-          ],
-          [
-            "4-3",
-            0.462
-          ],
-          [
-            "6-1",
-            0.399
-          ],
-          [
-            "6-0",
-            0.371
-          ],
-          [
-            "2-4",
-            0.315
-          ],
-          [
-            "1-4",
-            0.301
-          ],
-          [
-            "3-4",
-            0.234
-          ],
-          [
-            "0-4",
-            0.176
-          ],
-          [
-            "6-2",
-            0.165
-          ]
-        ],
-        "unified_goal_probs": {
-          "0": 5.41,
-          "1": 15.5,
-          "2": 23.29,
-          "3": 25.28,
-          "4": 16.03,
-          "5": 7.68,
-          "6": 4.12,
-          "7": 2.69
-        },
-        "unified_source": "unified_score_matrix_v18_2_final_ipf",
-        "fair_1x2_pack": {
-          "method": "power",
-          "fair_probs": {
-            "home": 63.673,
-            "draw": 21.178,
-            "away": 15.149
-          },
-          "raw_implied": {
-            "home": 67.568,
-            "draw": 25.974,
-            "away": 19.417
-          },
-          "overround": 0.12959,
-          "shin_z": null
-        },
-        "mixed_target_dir": {
-          "draw": 23.12,
-          "home": 58.82,
-          "away": 18.06
-        },
-        "confidence": 76.0,
-        "confidence_meaning": "排序置信度，不等于历史命中率",
-        "risk_level": "低",
-        "bayesian_evidences": [
-          "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-          "混合方向目标:{'draw': 23.12, 'home': 58.82, 'away': 18.06}",
-          "后验方向:{'home': 58.82, 'draw': 23.12, 'away': 18.06}",
-          "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.091%",
-          "决策来源:matrix_authority; authority_mode=claude_guarded"
-        ],
-        "traps_detected": [],
-        "trap_count": 0,
-        "trap_severity": 0,
-        "trap_details": [],
-        "trap_flags": {},
-        "fair_1x2": {
-          "home": 63.673,
-          "draw": 21.178,
-          "away": 15.149
-        },
-        "fair_1x2_method": "power",
-        "market_overround": 0.12959,
-        "raw_implied_1x2": {
-          "home": 67.568,
-          "draw": 25.974,
-          "away": 19.417
-        },
-        "crs_shape": "disabled",
-        "crs_moments": {},
-        "crs_margin": 0.0,
-        "crs_coverage": 0.0,
-        "crs_implied_probs": {},
-        "crs_low_rank_info": {
-          "all_sorted": [],
-          "rank": {},
-          "min_draw": null,
-          "draw_available": [],
-          "draw_low_rank": 999,
-          "draw_low_score": "",
-          "draw_low_odds": 999.0,
-          "low_scores": []
-        },
-        "suggested_kelly": 0.0,
-        "edge_vs_market": -27.91,
-        "is_value": false,
-        "ev_note": "calibrated_matrix_prob_vs_market",
-        "score_model_prob": 11.091,
-        "score_market_odds": 6.5,
-        "score_market_implied_pct": 15.385,
-        "gpt_score": "弃权",
-        "gpt_analysis": "弃权",
-        "grok_score": "弃权",
-        "grok_analysis": "弃权",
-        "gemini_score": "弃权",
-        "gemini_analysis": "弃权",
-        "claude_score": "弃权",
-        "claude_analysis": "弃权",
-        "ai_abstained": [
-          "GPT",
-          "GROK",
-          "GEMINI",
-          "CLAUDE"
-        ],
-        "ai_avg_confidence": 0.0,
-        "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热59%",
-        "smart_signals": [
-          "💰 Sharp资金流向主胜",
-          "🚨 主胜超热59%",
-          "🔥 赔率剧变(幅度1.00)",
-          "🚨 主胜降水-1.00+热度59%=造热主队",
-          "📊 客队冷门(>5.0)实际胜率低于隐含8%",
-          "⚡ 主队攻防效率碾压(差值1.20)",
-          "⚠️ 负CLV-13.5% [客胜]"
-        ],
-        "sharp_detected": true,
-        "sharp_dir": "home",
-        "xG_home": 1.72,
-        "xG_away": 0.83,
-        "expected_total_goals": 2.54,
-        "actual_handicap_signed": -1.0,
-        "theoretical_handicap_signed": -1.25,
-        "external_context": {
-          "source_quality": "missing",
-          "injuries": [],
-          "suspensions": [],
-          "lineup_news": [],
-          "weather": {},
-          "motivation": [],
-          "schedule_pressure": [],
-          "odds_history": [],
-          "sharp_market_notes": [],
-          "news_snippets": [],
-          "data_missing": [
-            "injuries",
-            "suspensions",
-            "lineup_news",
-            "weather",
-            "motivation",
-            "odds_history"
-          ],
-          "raw": {}
-        },
-        "refined_poisson": {
-          "home_win": 74.0,
-          "draw": 18.1,
-          "away_win": 7.9,
-          "predicted_score": "1-0",
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 16.4
-            },
-            {
-              "score": "2-0",
-              "prob": 13.7
-            },
-            {
-              "score": "2-1",
-              "prob": 10.4
-            },
-            {
-              "score": "3-0",
-              "prob": 9.9
-            },
-            {
-              "score": "1-1",
-              "prob": 9.6
-            },
-            {
-              "score": "0-0",
-              "prob": 5.8
-            }
-          ]
-        },
-        "elo": {
-          "home_win": 59.4,
-          "draw": 20.0,
-          "away_win": 30.6,
-          "elo_diff": 115
-        },
-        "experience_analysis": {
-          "triggered_count": 2,
-          "total_score": 15,
-          "draw_rules": 1,
-          "recommendation": "🔶 经验信号较强，建议重点关注",
-          "over_adj": 0.0,
-          "zero_zero_boost": 0.0,
-          "rules": [
-            {
-              "id": "D06",
-              "name": "德比/克星效应",
-              "weight": 8
-            },
-            {
-              "id": "U10",
-              "name": "赔率剧变",
-              "weight": 7
-            }
-          ]
-        },
-        "engine_version": "vMAX 18.3.2",
-        "engine_architecture": "RAW-AI主审 + 统一API_URL中转 + 单批次singleflight防重复扣费 + Claude守门裁判 + 去CRS/去常见比分锚定",
-        "validation_warnings": [],
-        "postprocess_warnings": [
-          "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-          "odds_history_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-          "quant_edge_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-          "advanced_models_core_fields_restored:away_win_pct,draw_pct,home_win_pct"
-        ],
-        "line_movement_anomaly": {
-          "has_anomaly": true,
-          "signal": "🚨 主胜降水-1.00+热度59%=造热主队",
-          "direction": "upset_away"
-        },
-        "odds_pattern": "大冷门客",
-        "odds_range_analysis": {
-          "home": {
-            "hist_rate": 68.0,
-            "desc": "强势主队:胜率68%最佳区间"
-          },
-          "draw": {
-            "hist_rate": 24.0,
-            "desc": "平局偏少"
-          },
-          "away": {
-            "hist_rate": 18.0,
-            "desc": "弱势客队:FLB区间"
-          }
-        },
-        "bivariate_poisson": {
-          "home_win": 52.8,
-          "draw": 30.3,
-          "away_win": 16.9,
-          "predicted_score": "1-0",
-          "btts": 42.5,
-          "over_2_5": 38.9,
-          "correlation": 0.1,
-          "p0_inflate": 0.03,
-          "top_scores": [
-            {
-              "score": "1-0",
-              "prob": 14.84
-            },
-            {
-              "score": "0-0",
-              "prob": 14.18
-            },
-            {
-              "score": "1-1",
-              "prob": 11.91
-            },
-            {
-              "score": "2-0",
-              "prob": 10.83
-            },
-            {
-              "score": "2-1",
-              "prob": 8.89
-            },
-            {
-              "score": "0-1",
-              "prob": 6.89
-            }
-          ]
-        },
-        "pro_odds": {
-          "true_home": 59.5,
-          "true_draw": 23.2,
-          "true_away": 17.3
-        },
-        "predictability_score": 65,
-        "asian_handicap_probs": {
-          "ah_0": [
-            0.5485,
-            0.2594,
-            0.1921
-          ],
-          "ah_0.5": [
-            0.5485,
-            0.0,
-            0.4515
-          ],
-          "ah_1.0": [
-            0.286,
-            0.2625,
-            0.4515
-          ],
-          "ou_1.5": [
-            0.6691,
-            0.0,
-            0.3309
-          ],
-          "ou_2.5": [
-            0.4038,
-            0.0,
-            0.5962
-          ],
-          "ou_3.5": [
-            0.2005,
-            0.0,
-            0.7995
-          ],
-          "btts": 0.4231
-        },
-        "over_2_5": 45.3,
-        "btts": 46.6,
-        "total_models": 15,
-        "fusion_weights": {
-          "market": 0.77,
-          "model": 0.23
-        }
-      },
-      "recommend_score": 42.52,
-      "is_recommended": true,
-      "fusion_summary": "vMAX-Dynamic-Hybrid"
-    },
-    {
-      "rank": 4,
-      "home_team": "切尔西",
-      "away_team": "诺丁汉",
-      "league": "英超",
-      "match_num": "周一001",
-      "sp_home": 1.33,
-      "sp_draw": 4.5,
-      "sp_away": 6.5,
-      "give_ball": -1.0,
-      "change": {
-        "win": -1,
-        "same": 1,
-        "lose": 1
-      },
-      "vote": {
-        "win": "57",
-        "same": "23",
-        "lose": "20",
-        "hhad_win": "33",
-        "hhad_same": "25",
-        "hhad_lose": "42"
-      },
-      "odds_movement": "主胜降水，客胜升水",
-      "intelligence": {
-        "h_inj": "米哈伊洛·穆德里克 停赛 停赛 列维·科尔威尔 体能 里斯·詹姆斯 腿筋受伤 杰米·吉滕斯 肌肉挫伤 菲利普·约恩森 腹股沟受伤 埃斯特旺·威廉 受伤 腿筋受伤",
-        "g_inj": "穆里略·圣地亚哥 肌肉挫伤 卡勒姆·哈德森·奥多伊 受伤 受伤 威利·博利 受伤 膝关节受伤 约翰·维克托 受伤 膝关节受伤 尼科洛·萨沃纳 受伤 膝关节受伤 雅伊尔·库尼亚 肩部受伤 丹·恩多耶 受伤 易卜拉希马·桑加雷 受伤",
-        "home_bad_news": "1.本赛季联赛切尔西34场比赛，得到7张红牌，是联赛得到红牌数最多的球队。 2.切尔西在最近10场英超比赛中交出了2胜2平6负的成绩单，整体状态可谓跌入谷底。更为棘手的是，球队正陷入联赛5连败的深重泥潭，球队士气与竞技水平均已降至冰点，急需一场胜利来重振信心。 3.近6场英超比赛中，切尔西仅打入4球",
-        "guest_bad_news": "1.诺丁汉森林本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.诺丁汉森林在本周中的欧联杯中与阿斯顿维拉激战90分钟，球队体能消耗极为严重。而对手切尔西则保持一周一赛的正常节奏，以逸待劳，体能储备明显占优。这一体能差距可能成为影响本场比赛走向的关键因素。 3.诺丁汉森林本场比赛面"
-      },
-      "expert_intro": "切尔西遭遇主场3连败且近10场输掉7场，状态跌至谷底；诺丁汉森林4连胜且场均攻入2.4球，士气正盛。尽管蓝军历史交锋占优，但严重伤病与低迷状态令其取胜难度大增，客队保级战意浓烈。",
-      "baseface": "本场为英超第35轮。目前主队34场积48分，排在第8位。客队34场积39分，位列第16位。主队阵容身价明显占优，但近期状态反差显著。\n\n主队切尔西近10场赛事3胜0平7负，状态低迷；近5个主场1胜0平4负，主场状态较差。\n\n客队诺丁汉森林近10场赛事5胜2平3负，状态极佳；近5个客场1胜1平3负，客场状态一般。\n\n综合来看，主队纸面实力占优但状态堪忧，客队士气正盛且战意更浓，双方实力差距有所缩小。\n\n双方最近一次交锋数据未提供。双方近6次交锋切尔西取得4胜1平1负，占据上风；在切尔西的主场，近3次交锋，切尔西取得2胜1平，处于上风。\n\n机构普遍看好主胜，支持方向为主胜。\n\n双方上半场打平的可能性为50%\n主队近5场赛事主场的上半场：\n领先1，打平2，落后2丨3场有进球，4场有失球\n客队近5场赛事客场的上半场：\n领先1，打平2，落后2丨2场有进球，3场有失球\n\n切尔西虽已基本无缘欧战，但主场作战需挽回尊严；诺丁汉森林仅领先降级区3分，保级压力巨大，战意十足。主队或依托控球组织进攻，客队可能立足防守伺机反击。",
-      "had_analyse": [
-        "win",
-        "same"
-      ],
-      "home_rank": 9,
-      "away_rank": 16,
-      "v2_odds_dict": {
-        "a0": 17.5,
-        "a1": 6.25,
-        "a2": 4.05,
-        "a3": 3.35,
-        "a4": 4.2,
-        "a5": 7.7,
-        "a6": 14.0,
-        "a7": 19.0,
-        "s00": 17.5,
-        "s11": 8.0,
-        "s22": 13.0,
-        "s33": 50.0,
-        "w10": 7.0,
-        "w20": 7.5,
-        "w21": 6.5,
-        "w30": 14.0,
-        "w31": 9.75,
-        "w32": 19.0,
-        "w40": 25.0,
-        "w41": 22.0,
-        "w42": 38.0,
-        "l01": 19.0,
-        "l02": 32.0,
-        "l12": 15.0,
-        "l03": 65.0,
-        "l13": 36.0,
-        "l23": 38.0,
-        "ss": 1.9,
-        "sp": 16.0,
-        "sf": 45.0,
-        "ps": 4.0,
-        "pp": 7.8,
-        "pf": 15.0,
-        "fs": 21.0,
-        "fp": 16.0,
-        "ff": 11.5
-      },
-      "id": 1,
-      "date": "2026-05-04",
-      "home_id": 0,
-      "away_id": 0,
-      "home_stats": {
-        "played": 25,
-        "wins": 14,
-        "draws": 6,
-        "losses": 5,
-        "goals_for": 40,
-        "goals_against": 19,
-        "avg_goals_for": "1.61",
-        "avg_goals_against": "0.77",
-        "clean_sheets": 4,
-        "form": "WWDWW"
-      },
-      "away_stats": {
-        "played": 25,
-        "wins": 6,
-        "draws": 6,
-        "losses": 13,
-        "goals_for": 17,
-        "goals_against": 41,
-        "avg_goals_for": "0.69",
-        "avg_goals_against": "1.63",
-        "clean_sheets": 2,
-        "form": "LLDLL"
-      },
-      "h2h": [],
-      "information": {},
-      "a0": 17.5,
-      "a1": 6.25,
-      "a2": 4.05,
-      "a3": 3.35,
-      "a4": 4.2,
-      "a5": 7.7,
-      "a6": 14.0,
-      "a7": 19.0,
-      "s00": 17.5,
-      "s11": 8.0,
-      "s22": 13.0,
-      "s33": 50.0,
-      "w10": 7.0,
-      "w20": 7.5,
-      "w21": 6.5,
-      "w30": 14.0,
-      "w31": 9.75,
-      "w32": 19.0,
-      "w40": 25.0,
-      "w41": 22.0,
-      "w42": 38.0,
-      "l01": 19.0,
-      "l02": 32.0,
-      "l12": 15.0,
-      "l03": 65.0,
-      "l13": 36.0,
-      "l23": 38.0,
-      "ss": 1.9,
-      "sp": 16.0,
-      "sf": 45.0,
-      "ps": 4.0,
-      "pp": 7.8,
-      "pf": 15.0,
-      "fs": 21.0,
-      "fp": 16.0,
-      "ff": 11.5,
-      "home": "切尔西",
-      "guest": "诺丁汉",
-      "win": 1.33,
-      "same": 4.5,
-      "lose": 6.5,
-      "external_context": {
-        "source_quality": "missing",
-        "injuries": [],
-        "suspensions": [],
-        "lineup_news": [],
-        "weather": {},
-        "motivation": [],
-        "schedule_pressure": [],
-        "odds_history": [],
-        "sharp_market_notes": [],
-        "news_snippets": [],
-        "data_missing": [
-          "injuries",
-          "suspensions",
-          "lineup_news",
-          "weather",
-          "motivation",
-          "odds_history"
-        ],
-        "raw": {}
-      },
-      "prediction": {
-        "predicted_score": "2-1",
-        "predicted_label": "2-1",
-        "result": "主胜",
-        "display_direction": "主胜",
-        "final_direction": "home",
-        "is_score_others": false,
-        "home_win_pct": 65.1,
-        "draw_pct": 20.0,
-        "away_win_pct": 14.8,
+        "home_win_pct": 70.7,
+        "draw_pct": 16.3,
+        "away_win_pct": 13.0,
         "scenario": "five_goal_anchor",
         "goal_range": [
           2,
           5
         ],
-        "dir_confidence": 65.1,
-        "dir_gap": 45.1,
+        "dir_confidence": 70.7,
+        "dir_gap": 54.4,
         "evidences": [
-          "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-          "混合方向目标:{'draw': 20.03, 'home': 65.14, 'away': 14.83}",
-          "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
-          "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
+          "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
+          "混合方向目标:{'draw': 16.27, 'home': 70.71, 'away': 13.02}",
+          "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
+          "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
           "决策来源:matrix_authority; authority_mode=claude_guarded",
-          "陷阱/保护:1个 严重度2"
+          "陷阱/保护:3个 严重度8"
         ],
         "override_triggered": false,
         "top_score_candidates": [
           [
             "2-1",
-            10.876
-          ],
-          [
-            "2-0",
-            9.39
-          ],
-          [
-            "3-0",
-            8.94
+            9.58
           ],
           [
             "3-1",
-            7.649
+            8.758
+          ],
+          [
+            "3-0",
+            8.148
+          ],
+          [
+            "2-0",
+            6.925
           ],
           [
             "4-0",
-            4.716
+            5.587
           ],
           [
             "4-1",
-            3.583
+            5.366
           ],
           [
             "3-2",
-            2.906
+            4.206
           ],
           [
             "5-0",
-            1.767
+            2.738
           ]
         ],
-        "calibrated_score_prob_pct": 10.876,
+        "calibrated_score_prob_pct": 9.58,
         "bayesian_prior": {
-          "home": 71.621,
-          "draw": 17.197,
-          "away": 11.182
+          "home": 78.718,
+          "draw": 12.288,
+          "away": 8.994
         },
         "decision_source": "matrix_authority",
         "ai_authority_mode": "claude_guarded",
         "unified_matrix_top_scores": [
           [
             "2-1",
-            10.876
-          ],
-          [
-            "2-0",
-            9.39
-          ],
-          [
-            "1-1",
-            9.323
-          ],
-          [
-            "3-0",
-            8.94
-          ],
-          [
-            "1-0",
-            8.623
+            9.58
           ],
           [
             "3-1",
-            7.649
+            8.758
+          ],
+          [
+            "3-0",
+            8.148
+          ],
+          [
+            "2-0",
+            6.925
+          ],
+          [
+            "1-1",
+            6.404
           ],
           [
             "2-2",
-            5.696
-          ],
-          [
-            "1-2",
-            4.849
+            6.074
           ],
           [
             "4-0",
-            4.716
-          ],
-          [
-            "0-0",
-            3.87
-          ],
-          [
-            "0-1",
-            3.844
+            5.587
           ],
           [
             "4-1",
-            3.583
+            5.366
+          ],
+          [
+            "1-0",
+            4.877
           ],
           [
             "3-2",
-            2.906
+            4.206
           ],
           [
-            "5-0",
-            1.767
-          ],
-          [
-            "0-2",
-            1.697
-          ],
-          [
-            "4-2",
-            1.527
+            "1-2",
+            4.1
           ],
           [
             "5-1",
-            1.506
+            2.84
           ],
           [
-            "1-3",
-            1.383
+            "4-2",
+            2.782
+          ],
+          [
+            "5-0",
+            2.738
+          ],
+          [
+            "0-1",
+            2.087
           ],
           [
             "2-3",
-            1.296
+            1.8
+          ],
+          [
+            "0-0",
+            1.724
           ],
           [
             "3-3",
-            1.011
+            1.715
           ],
           [
             "5-2",
-            0.743
+            1.654
           ],
           [
-            "0-3",
-            0.655
-          ],
-          [
-            "6-0",
-            0.619
+            "1-3",
+            1.469
           ],
           [
             "6-1",
-            0.611
+            1.407
+          ],
+          [
+            "6-0",
+            1.208
+          ],
+          [
+            "0-2",
+            1.161
           ],
           [
             "4-3",
-            0.502
-          ],
-          [
-            "2-4",
-            0.276
-          ],
-          [
-            "1-4",
-            0.263
+            1.08
           ],
           [
             "6-2",
-            0.248
+            0.706
           ],
           [
-            "3-4",
-            0.224
+            "5-3",
+            0.554
+          ],
+          [
+            "0-3",
+            0.536
+          ],
+          [
+            "7-1",
+            0.515
           ],
           [
             "7-0",
-            0.215
+            0.513
+          ],
+          [
+            "2-4",
+            0.467
           ]
         ],
         "unified_goal_probs": {
-          "0": 3.87,
-          "1": 12.47,
-          "2": 20.41,
-          "3": 25.32,
-          "4": 19.58,
-          "5": 9.84,
-          "6": 4.99,
-          "7": 3.52
+          "0": 1.72,
+          "1": 6.96,
+          "2": 14.49,
+          "3": 22.36,
+          "4": 22.03,
+          "5": 14.49,
+          "6": 9.09,
+          "7": 8.85
         },
         "unified_source": "unified_score_matrix_v18_2_final_ipf",
         "fair_1x2_pack": {
           "method": "power",
           "fair_probs": {
-            "home": 71.621,
-            "draw": 17.197,
-            "away": 11.182
+            "home": 78.718,
+            "draw": 12.288,
+            "away": 8.994
           },
           "raw_implied": {
-            "home": 75.188,
-            "draw": 22.222,
-            "away": 15.385
+            "home": 81.967,
+            "draw": 17.513,
+            "away": 13.514
           },
-          "overround": 0.12795,
+          "overround": 0.12994,
           "shin_z": null
         },
         "mixed_target_dir": {
-          "draw": 20.03,
-          "home": 65.14,
-          "away": 14.83
+          "draw": 16.27,
+          "home": 70.71,
+          "away": 13.02
         },
-        "confidence": 80.0,
+        "confidence": 71.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
-        "risk_level": "低",
+        "risk_level": "中",
         "bayesian_evidences": [
-          "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-          "混合方向目标:{'draw': 20.03, 'home': 65.14, 'away': 14.83}",
-          "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
-          "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
+          "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
+          "混合方向目标:{'draw': 16.27, 'home': 70.71, 'away': 13.02}",
+          "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
+          "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
           "决策来源:matrix_authority; authority_mode=claude_guarded",
-          "陷阱/保护:1个 严重度2"
+          "陷阱/保护:3个 严重度8"
         ],
         "traps_detected": [
-          "T3_HANDICAP_SHALLOWER"
+          "T3_HANDICAP_SHALLOWER",
+          "T9_FAKE_CONTRARIAN",
+          "D18_FAVORITE_HEAT_GUARD"
         ],
-        "trap_count": 1,
-        "trap_severity": 2,
+        "trap_count": 3,
+        "trap_severity": 8,
         "trap_details": [
           {
             "trap": "T3_HANDICAP_SHALLOWER",
-            "desc": "强方让球偏浅:home 理论-1.75 vs 实际-1.00,强方差-0.75"
+            "desc": "强方让球偏浅:home 理论-2.25 vs 实际-1.00,强方差-1.25"
+          },
+          {
+            "trap": "T9_FAKE_CONTRARIAN",
+            "desc": "诱反指陷阱:home散户73%+赔率同向降水,反指风险高"
+          },
+          {
+            "trap": "D18_FAVORITE_HEAT_GUARD",
+            "desc": "大热浅盘防平/防弱:强方home公平78.7% 散户73% diff-1.25"
           }
         ],
         "trap_flags": {
-          "shallow_guard": true
+          "shallow_guard": true,
+          "favorite_guard": true
         },
         "fair_1x2": {
-          "home": 71.621,
-          "draw": 17.197,
-          "away": 11.182
+          "home": 78.718,
+          "draw": 12.288,
+          "away": 8.994
         },
         "fair_1x2_method": "power",
-        "market_overround": 0.12795,
+        "market_overround": 0.12994,
         "raw_implied_1x2": {
-          "home": 75.188,
-          "draw": 22.222,
-          "away": 15.385
+          "home": 81.967,
+          "draw": 17.513,
+          "away": 13.514
         },
         "crs_shape": "disabled",
         "crs_moments": {},
@@ -2458,12 +2484,12 @@
           "low_scores": []
         },
         "suggested_kelly": 0.0,
-        "edge_vs_market": -29.31,
+        "edge_vs_market": -28.15,
         "is_value": false,
         "ev_note": "calibrated_matrix_prob_vs_market",
-        "score_model_prob": 10.876,
-        "score_market_odds": 6.5,
-        "score_market_implied_pct": 15.385,
+        "score_model_prob": 9.58,
+        "score_market_odds": 7.5,
+        "score_market_implied_pct": 13.333,
         "gpt_score": "弃权",
         "gpt_analysis": "弃权",
         "grok_score": "弃权",
@@ -2479,24 +2505,26 @@
           "CLAUDE"
         ],
         "ai_avg_confidence": 0.0,
-        "smart_money_signal": "💰 Sharp资金流向主胜 | T3_HANDICAP_SHALLOWER:强方让球偏浅:home 理论-1.75 vs 实际-1.00,强方差-0.75",
+        "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热73% | T3_HANDICAP_SHALLOWER:强方让球偏浅:home 理论-2.25 vs 实际-1.00,强方差-1.25 | T9_FAKE_CONTRARIAN:诱反指陷阱:home散户73%+赔率同向降水,反指风险高 | D18_FAVORITE_HEAT_GUARD:大热浅盘防平/防弱:强方home公平78.7% 散户73% diff-1.25",
         "smart_signals": [
           "💰 Sharp资金流向主胜",
+          "🚨 主胜超热73%",
           "🚨 大热必死",
           "🔥 赔率剧变(幅度1.00)",
-          "🚨 主胜降水-1.00+热度57%=造热主队",
-          "⚠️ 大热(<1.40)平局率+12%",
-          "⚡ 主队攻防效率碾压(差值1.41)",
-          "⚠️ 负CLV-9.0% [主胜]",
-          "⚠️ 负CLV-11.5% [客胜]"
+          "🔥 7+球@8.5大球信号",
+          "🚨 主胜降水-1.00+热度73%=造热主队",
+          "🚨 超级大热(<1.25)历史翻车率28%",
+          "🚨 主胜反向Steam! 降水-1.00+热度73%=庄家造热",
+          "⚡ 主队攻防效率碾压(差值1.35)",
+          "⚠️ 负CLV-10.1% [主胜]"
         ],
         "sharp_detected": true,
         "sharp_dir": "home",
-        "xG_home": 2.0,
-        "xG_away": 0.81,
-        "expected_total_goals": 2.81,
+        "xG_home": 2.56,
+        "xG_away": 1.0,
+        "expected_total_goals": 3.57,
         "actual_handicap_signed": -1.0,
-        "theoretical_handicap_signed": -1.75,
+        "theoretical_handicap_signed": -2.25,
         "external_context": {
           "source_quality": "missing",
           "injuries": [],
@@ -2519,49 +2547,49 @@
           "raw": {}
         },
         "refined_poisson": {
-          "home_win": 78.4,
-          "draw": 15.4,
-          "away_win": 6.2,
-          "predicted_score": "1-0",
+          "home_win": 78.0,
+          "draw": 14.3,
+          "away_win": 7.7,
+          "predicted_score": "2-0",
           "top_scores": [
             {
-              "score": "1-0",
-              "prob": 16.6
-            },
-            {
               "score": "2-0",
-              "prob": 14.7
-            },
-            {
-              "score": "3-0",
-              "prob": 11.3
+              "prob": 12.6
             },
             {
               "score": "2-1",
+              "prob": 11.1
+            },
+            {
+              "score": "3-0",
+              "prob": 10.6
+            },
+            {
+              "score": "1-0",
               "prob": 9.9
             },
             {
-              "score": "1-1",
-              "prob": 7.6
+              "score": "3-1",
+              "prob": 7.2
             },
             {
-              "score": "4-0",
-              "prob": 6.5
+              "score": "1-1",
+              "prob": 6.8
             }
           ]
         },
         "elo": {
-          "home_win": 62.8,
-          "draw": 20.0,
-          "away_win": 27.2,
-          "elo_diff": 145
+          "home_win": 52.1,
+          "draw": 26.0,
+          "away_win": 34.9,
+          "elo_diff": 70
         },
         "experience_analysis": {
           "triggered_count": 5,
-          "total_score": 33,
+          "total_score": 38,
           "draw_rules": 2,
           "recommendation": "⚠️ 多规则叠加，需高度警惕",
-          "over_adj": 0.0,
+          "over_adj": 6.0,
           "zero_zero_boost": 0.0,
           "rules": [
             {
@@ -2575,18 +2603,18 @@
               "weight": 8
             },
             {
+              "id": "U04",
+              "name": "受注一边倒反向",
+              "weight": 8
+            },
+            {
               "id": "U10",
               "name": "赔率剧变",
               "weight": 7
             },
             {
-              "id": "L01",
-              "name": "英超主场优势下降",
-              "weight": 3
-            },
-            {
-              "id": "M01",
-              "name": "保级队激战",
+              "id": "G09",
+              "name": "7+球赔率极低=大球",
               "weight": 7
             }
           ]
@@ -2594,6 +2622,7 @@
         "engine_version": "vMAX 18.3.2",
         "engine_architecture": "RAW-AI主审 + 统一API_URL中转 + 单批次singleflight防重复扣费 + Claude守门裁判 + 去CRS/去常见比分锚定",
         "validation_warnings": [],
+        "over_2_5": 51.8,
         "postprocess_warnings": [
           "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
           "odds_history_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
@@ -2602,14 +2631,20 @@
         ],
         "line_movement_anomaly": {
           "has_anomaly": true,
-          "signal": "🚨 主胜降水-1.00+热度57%=造热主队",
+          "signal": "🚨 主胜降水-1.00+热度73%=造热主队",
           "direction": "upset_away"
         },
-        "odds_pattern": "大热",
+        "odds_pattern": "超级大热",
+        "steam_move": {
+          "steam": true,
+          "signal": "🚨 主胜反向Steam! 降水-1.00+热度73%=庄家造热",
+          "direction": "upset_away",
+          "strength": 10
+        },
         "odds_range_analysis": {
           "home": {
-            "hist_rate": 68.0,
-            "desc": "强势主队:胜率68%最佳区间"
+            "hist_rate": 82.0,
+            "desc": "超热门:胜率82%但赔率无利润"
           },
           "draw": {
             "hist_rate": 18.0,
@@ -2621,784 +2656,94 @@
           }
         },
         "bivariate_poisson": {
-          "home_win": 57.5,
-          "draw": 28.9,
-          "away_win": 13.6,
+          "home_win": 56.8,
+          "draw": 25.8,
+          "away_win": 17.4,
           "predicted_score": "1-0",
-          "btts": 40.1,
-          "over_2_5": 38.9,
+          "btts": 50.2,
+          "over_2_5": 49.0,
           "correlation": 0.1,
-          "p0_inflate": 0.03,
+          "p0_inflate": 0.01,
           "top_scores": [
             {
               "score": "1-0",
-              "prob": 15.84
-            },
-            {
-              "score": "0-0",
-              "prob": 14.14
-            },
-            {
-              "score": "2-0",
-              "prob": 12.25
+              "prob": 12.12
             },
             {
               "score": "1-1",
-              "prob": 11.07
+              "prob": 11.33
+            },
+            {
+              "score": "2-0",
+              "prob": 10.46
             },
             {
               "score": "2-1",
-              "prob": 8.85
+              "prob": 9.72
+            },
+            {
+              "score": "0-0",
+              "prob": 8.95
             },
             {
               "score": "3-0",
-              "prob": 6.17
+              "prob": 5.82
             }
           ]
         },
         "pro_odds": {
-          "true_home": 66.3,
-          "true_draw": 19.9,
-          "true_away": 13.8
+          "true_home": 72.1,
+          "true_draw": 15.7,
+          "true_away": 12.1
         },
         "predictability_score": 65,
         "asian_handicap_probs": {
           "ah_0": [
-            0.5952,
-            0.2467,
-            0.158
+            0.5764,
+            0.2324,
+            0.1912
           ],
           "ah_0.5": [
-            0.5952,
+            0.5764,
             0.0,
-            0.4048
+            0.4236
           ],
           "ah_1.0": [
-            0.3259,
-            0.2694,
-            0.4048
+            0.3272,
+            0.2493,
+            0.4236
           ],
           "ou_1.5": [
-            0.6691,
+            0.7476,
             0.0,
-            0.3309
+            0.2524
           ],
           "ou_2.5": [
-            0.4038,
+            0.5012,
             0.0,
-            0.5962
+            0.4988
           ],
           "ou_3.5": [
-            0.2004,
+            0.2811,
             0.0,
-            0.7996
+            0.7189
           ],
-          "btts": 0.3988
+          "btts": 0.4957
         },
-        "over_2_5": 45.3,
-        "btts": 45.5,
+        "btts": 50.0,
         "total_models": 15,
         "fusion_weights": {
           "market": 0.69,
           "model": 0.31
         }
       },
-      "recommend_score": 41.86,
+      "recommend_score": 31.17,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     }
   ],
   "matches": {
     "yesterday": [
-      {
-        "home_team": "切尔西",
-        "away_team": "诺丁汉",
-        "league": "英超",
-        "match_num": "周一001",
-        "sp_home": 1.33,
-        "sp_draw": 4.5,
-        "sp_away": 6.5,
-        "give_ball": -1.0,
-        "change": {
-          "win": -1,
-          "same": 1,
-          "lose": 1
-        },
-        "vote": {
-          "win": "57",
-          "same": "23",
-          "lose": "20",
-          "hhad_win": "33",
-          "hhad_same": "25",
-          "hhad_lose": "42"
-        },
-        "odds_movement": "主胜降水，客胜升水",
-        "intelligence": {
-          "h_inj": "米哈伊洛·穆德里克 停赛 停赛 列维·科尔威尔 体能 里斯·詹姆斯 腿筋受伤 杰米·吉滕斯 肌肉挫伤 菲利普·约恩森 腹股沟受伤 埃斯特旺·威廉 受伤 腿筋受伤",
-          "g_inj": "穆里略·圣地亚哥 肌肉挫伤 卡勒姆·哈德森·奥多伊 受伤 受伤 威利·博利 受伤 膝关节受伤 约翰·维克托 受伤 膝关节受伤 尼科洛·萨沃纳 受伤 膝关节受伤 雅伊尔·库尼亚 肩部受伤 丹·恩多耶 受伤 易卜拉希马·桑加雷 受伤",
-          "home_bad_news": "1.本赛季联赛切尔西34场比赛，得到7张红牌，是联赛得到红牌数最多的球队。 2.切尔西在最近10场英超比赛中交出了2胜2平6负的成绩单，整体状态可谓跌入谷底。更为棘手的是，球队正陷入联赛5连败的深重泥潭，球队士气与竞技水平均已降至冰点，急需一场胜利来重振信心。 3.近6场英超比赛中，切尔西仅打入4球",
-          "guest_bad_news": "1.诺丁汉森林本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.诺丁汉森林在本周中的欧联杯中与阿斯顿维拉激战90分钟，球队体能消耗极为严重。而对手切尔西则保持一周一赛的正常节奏，以逸待劳，体能储备明显占优。这一体能差距可能成为影响本场比赛走向的关键因素。 3.诺丁汉森林本场比赛面"
-        },
-        "expert_intro": "切尔西遭遇主场3连败且近10场输掉7场，状态跌至谷底；诺丁汉森林4连胜且场均攻入2.4球，士气正盛。尽管蓝军历史交锋占优，但严重伤病与低迷状态令其取胜难度大增，客队保级战意浓烈。",
-        "baseface": "本场为英超第35轮。目前主队34场积48分，排在第8位。客队34场积39分，位列第16位。主队阵容身价明显占优，但近期状态反差显著。\n\n主队切尔西近10场赛事3胜0平7负，状态低迷；近5个主场1胜0平4负，主场状态较差。\n\n客队诺丁汉森林近10场赛事5胜2平3负，状态极佳；近5个客场1胜1平3负，客场状态一般。\n\n综合来看，主队纸面实力占优但状态堪忧，客队士气正盛且战意更浓，双方实力差距有所缩小。\n\n双方最近一次交锋数据未提供。双方近6次交锋切尔西取得4胜1平1负，占据上风；在切尔西的主场，近3次交锋，切尔西取得2胜1平，处于上风。\n\n机构普遍看好主胜，支持方向为主胜。\n\n双方上半场打平的可能性为50%\n主队近5场赛事主场的上半场：\n领先1，打平2，落后2丨3场有进球，4场有失球\n客队近5场赛事客场的上半场：\n领先1，打平2，落后2丨2场有进球，3场有失球\n\n切尔西虽已基本无缘欧战，但主场作战需挽回尊严；诺丁汉森林仅领先降级区3分，保级压力巨大，战意十足。主队或依托控球组织进攻，客队可能立足防守伺机反击。",
-        "had_analyse": [
-          "win",
-          "same"
-        ],
-        "home_rank": 9,
-        "away_rank": 16,
-        "v2_odds_dict": {
-          "a0": 17.5,
-          "a1": 6.25,
-          "a2": 4.05,
-          "a3": 3.35,
-          "a4": 4.2,
-          "a5": 7.7,
-          "a6": 14.0,
-          "a7": 19.0,
-          "s00": 17.5,
-          "s11": 8.0,
-          "s22": 13.0,
-          "s33": 50.0,
-          "w10": 7.0,
-          "w20": 7.5,
-          "w21": 6.5,
-          "w30": 14.0,
-          "w31": 9.75,
-          "w32": 19.0,
-          "w40": 25.0,
-          "w41": 22.0,
-          "w42": 38.0,
-          "l01": 19.0,
-          "l02": 32.0,
-          "l12": 15.0,
-          "l03": 65.0,
-          "l13": 36.0,
-          "l23": 38.0,
-          "ss": 1.9,
-          "sp": 16.0,
-          "sf": 45.0,
-          "ps": 4.0,
-          "pp": 7.8,
-          "pf": 15.0,
-          "fs": 21.0,
-          "fp": 16.0,
-          "ff": 11.5
-        },
-        "id": 1,
-        "date": "2026-05-03",
-        "home_id": 0,
-        "away_id": 0,
-        "home_stats": {
-          "played": 25,
-          "wins": 14,
-          "draws": 6,
-          "losses": 5,
-          "goals_for": 40,
-          "goals_against": 19,
-          "avg_goals_for": "1.61",
-          "avg_goals_against": "0.77",
-          "clean_sheets": 4,
-          "form": "WWDWW"
-        },
-        "away_stats": {
-          "played": 25,
-          "wins": 6,
-          "draws": 6,
-          "losses": 13,
-          "goals_for": 17,
-          "goals_against": 41,
-          "avg_goals_for": "0.69",
-          "avg_goals_against": "1.63",
-          "clean_sheets": 2,
-          "form": "LLDLL"
-        },
-        "h2h": [],
-        "information": {},
-        "a0": 17.5,
-        "a1": 6.25,
-        "a2": 4.05,
-        "a3": 3.35,
-        "a4": 4.2,
-        "a5": 7.7,
-        "a6": 14.0,
-        "a7": 19.0,
-        "s00": 17.5,
-        "s11": 8.0,
-        "s22": 13.0,
-        "s33": 50.0,
-        "w10": 7.0,
-        "w20": 7.5,
-        "w21": 6.5,
-        "w30": 14.0,
-        "w31": 9.75,
-        "w32": 19.0,
-        "w40": 25.0,
-        "w41": 22.0,
-        "w42": 38.0,
-        "l01": 19.0,
-        "l02": 32.0,
-        "l12": 15.0,
-        "l03": 65.0,
-        "l13": 36.0,
-        "l23": 38.0,
-        "ss": 1.9,
-        "sp": 16.0,
-        "sf": 45.0,
-        "ps": 4.0,
-        "pp": 7.8,
-        "pf": 15.0,
-        "fs": 21.0,
-        "fp": 16.0,
-        "ff": 11.5,
-        "home": "切尔西",
-        "guest": "诺丁汉",
-        "win": 1.33,
-        "same": 4.5,
-        "lose": 6.5,
-        "external_context": {
-          "source_quality": "missing",
-          "injuries": [],
-          "suspensions": [],
-          "lineup_news": [],
-          "weather": {},
-          "motivation": [],
-          "schedule_pressure": [],
-          "odds_history": [],
-          "sharp_market_notes": [],
-          "news_snippets": [],
-          "data_missing": [
-            "injuries",
-            "suspensions",
-            "lineup_news",
-            "weather",
-            "motivation",
-            "odds_history"
-          ],
-          "raw": {}
-        },
-        "prediction": {
-          "predicted_score": "2-1",
-          "predicted_label": "2-1",
-          "result": "主胜",
-          "display_direction": "主胜",
-          "final_direction": "home",
-          "is_score_others": false,
-          "home_win_pct": 65.1,
-          "draw_pct": 20.0,
-          "away_win_pct": 14.8,
-          "scenario": "five_goal_anchor",
-          "goal_range": [
-            2,
-            5
-          ],
-          "dir_confidence": 65.1,
-          "dir_gap": 45.1,
-          "evidences": [
-            "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'draw': 20.03, 'home': 65.14, 'away': 14.83}",
-            "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
-            "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度2"
-          ],
-          "override_triggered": false,
-          "top_score_candidates": [
-            [
-              "2-1",
-              10.876
-            ],
-            [
-              "2-0",
-              9.39
-            ],
-            [
-              "3-0",
-              8.94
-            ],
-            [
-              "3-1",
-              7.649
-            ],
-            [
-              "4-0",
-              4.716
-            ],
-            [
-              "4-1",
-              3.583
-            ],
-            [
-              "3-2",
-              2.906
-            ],
-            [
-              "5-0",
-              1.767
-            ]
-          ],
-          "calibrated_score_prob_pct": 10.876,
-          "bayesian_prior": {
-            "home": 71.621,
-            "draw": 17.197,
-            "away": 11.182
-          },
-          "decision_source": "matrix_authority",
-          "ai_authority_mode": "claude_guarded",
-          "unified_matrix_top_scores": [
-            [
-              "2-1",
-              10.876
-            ],
-            [
-              "2-0",
-              9.39
-            ],
-            [
-              "1-1",
-              9.323
-            ],
-            [
-              "3-0",
-              8.94
-            ],
-            [
-              "1-0",
-              8.623
-            ],
-            [
-              "3-1",
-              7.649
-            ],
-            [
-              "2-2",
-              5.696
-            ],
-            [
-              "1-2",
-              4.849
-            ],
-            [
-              "4-0",
-              4.716
-            ],
-            [
-              "0-0",
-              3.87
-            ],
-            [
-              "0-1",
-              3.844
-            ],
-            [
-              "4-1",
-              3.583
-            ],
-            [
-              "3-2",
-              2.906
-            ],
-            [
-              "5-0",
-              1.767
-            ],
-            [
-              "0-2",
-              1.697
-            ],
-            [
-              "4-2",
-              1.527
-            ],
-            [
-              "5-1",
-              1.506
-            ],
-            [
-              "1-3",
-              1.383
-            ],
-            [
-              "2-3",
-              1.296
-            ],
-            [
-              "3-3",
-              1.011
-            ],
-            [
-              "5-2",
-              0.743
-            ],
-            [
-              "0-3",
-              0.655
-            ],
-            [
-              "6-0",
-              0.619
-            ],
-            [
-              "6-1",
-              0.611
-            ],
-            [
-              "4-3",
-              0.502
-            ],
-            [
-              "2-4",
-              0.276
-            ],
-            [
-              "1-4",
-              0.263
-            ],
-            [
-              "6-2",
-              0.248
-            ],
-            [
-              "3-4",
-              0.224
-            ],
-            [
-              "7-0",
-              0.215
-            ]
-          ],
-          "unified_goal_probs": {
-            "0": 3.87,
-            "1": 12.47,
-            "2": 20.41,
-            "3": 25.32,
-            "4": 19.58,
-            "5": 9.84,
-            "6": 4.99,
-            "7": 3.52
-          },
-          "unified_source": "unified_score_matrix_v18_2_final_ipf",
-          "fair_1x2_pack": {
-            "method": "power",
-            "fair_probs": {
-              "home": 71.621,
-              "draw": 17.197,
-              "away": 11.182
-            },
-            "raw_implied": {
-              "home": 75.188,
-              "draw": 22.222,
-              "away": 15.385
-            },
-            "overround": 0.12795,
-            "shin_z": null
-          },
-          "mixed_target_dir": {
-            "draw": 20.03,
-            "home": 65.14,
-            "away": 14.83
-          },
-          "confidence": 80.0,
-          "confidence_meaning": "排序置信度，不等于历史命中率",
-          "risk_level": "低",
-          "bayesian_evidences": [
-            "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'draw': 20.03, 'home': 65.14, 'away': 14.83}",
-            "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
-            "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度2"
-          ],
-          "traps_detected": [
-            "T3_HANDICAP_SHALLOWER"
-          ],
-          "trap_count": 1,
-          "trap_severity": 2,
-          "trap_details": [
-            {
-              "trap": "T3_HANDICAP_SHALLOWER",
-              "desc": "强方让球偏浅:home 理论-1.75 vs 实际-1.00,强方差-0.75"
-            }
-          ],
-          "trap_flags": {
-            "shallow_guard": true
-          },
-          "fair_1x2": {
-            "home": 71.621,
-            "draw": 17.197,
-            "away": 11.182
-          },
-          "fair_1x2_method": "power",
-          "market_overround": 0.12795,
-          "raw_implied_1x2": {
-            "home": 75.188,
-            "draw": 22.222,
-            "away": 15.385
-          },
-          "crs_shape": "disabled",
-          "crs_moments": {},
-          "crs_margin": 0.0,
-          "crs_coverage": 0.0,
-          "crs_implied_probs": {},
-          "crs_low_rank_info": {
-            "all_sorted": [],
-            "rank": {},
-            "min_draw": null,
-            "draw_available": [],
-            "draw_low_rank": 999,
-            "draw_low_score": "",
-            "draw_low_odds": 999.0,
-            "low_scores": []
-          },
-          "suggested_kelly": 0.0,
-          "edge_vs_market": -29.31,
-          "is_value": false,
-          "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 10.876,
-          "score_market_odds": 6.5,
-          "score_market_implied_pct": 15.385,
-          "gpt_score": "弃权",
-          "gpt_analysis": "弃权",
-          "grok_score": "弃权",
-          "grok_analysis": "弃权",
-          "gemini_score": "弃权",
-          "gemini_analysis": "弃权",
-          "claude_score": "弃权",
-          "claude_analysis": "弃权",
-          "ai_abstained": [
-            "GPT",
-            "GROK",
-            "GEMINI",
-            "CLAUDE"
-          ],
-          "ai_avg_confidence": 0.0,
-          "smart_money_signal": "💰 Sharp资金流向主胜 | T3_HANDICAP_SHALLOWER:强方让球偏浅:home 理论-1.75 vs 实际-1.00,强方差-0.75",
-          "smart_signals": [
-            "💰 Sharp资金流向主胜",
-            "🚨 大热必死",
-            "🔥 赔率剧变(幅度1.00)",
-            "🚨 主胜降水-1.00+热度57%=造热主队",
-            "⚠️ 大热(<1.40)平局率+12%",
-            "⚡ 主队攻防效率碾压(差值1.41)",
-            "⚠️ 负CLV-9.0% [主胜]",
-            "⚠️ 负CLV-11.5% [客胜]"
-          ],
-          "sharp_detected": true,
-          "sharp_dir": "home",
-          "xG_home": 2.0,
-          "xG_away": 0.81,
-          "expected_total_goals": 2.81,
-          "actual_handicap_signed": -1.0,
-          "theoretical_handicap_signed": -1.75,
-          "external_context": {
-            "source_quality": "missing",
-            "injuries": [],
-            "suspensions": [],
-            "lineup_news": [],
-            "weather": {},
-            "motivation": [],
-            "schedule_pressure": [],
-            "odds_history": [],
-            "sharp_market_notes": [],
-            "news_snippets": [],
-            "data_missing": [
-              "injuries",
-              "suspensions",
-              "lineup_news",
-              "weather",
-              "motivation",
-              "odds_history"
-            ],
-            "raw": {}
-          },
-          "refined_poisson": {
-            "home_win": 78.4,
-            "draw": 15.4,
-            "away_win": 6.2,
-            "predicted_score": "1-0",
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 16.6
-              },
-              {
-                "score": "2-0",
-                "prob": 14.7
-              },
-              {
-                "score": "3-0",
-                "prob": 11.3
-              },
-              {
-                "score": "2-1",
-                "prob": 9.9
-              },
-              {
-                "score": "1-1",
-                "prob": 7.6
-              },
-              {
-                "score": "4-0",
-                "prob": 6.5
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 62.8,
-            "draw": 20.0,
-            "away_win": 27.2,
-            "elo_diff": 145
-          },
-          "experience_analysis": {
-            "triggered_count": 5,
-            "total_score": 33,
-            "draw_rules": 2,
-            "recommendation": "⚠️ 多规则叠加，需高度警惕",
-            "over_adj": 0.0,
-            "zero_zero_boost": 0.0,
-            "rules": [
-              {
-                "id": "D01",
-                "name": "大热必死",
-                "weight": 8
-              },
-              {
-                "id": "D06",
-                "name": "德比/克星效应",
-                "weight": 8
-              },
-              {
-                "id": "U10",
-                "name": "赔率剧变",
-                "weight": 7
-              },
-              {
-                "id": "L01",
-                "name": "英超主场优势下降",
-                "weight": 3
-              },
-              {
-                "id": "M01",
-                "name": "保级队激战",
-                "weight": 7
-              }
-            ]
-          },
-          "engine_version": "vMAX 18.3.2",
-          "engine_architecture": "RAW-AI主审 + 统一API_URL中转 + 单批次singleflight防重复扣费 + Claude守门裁判 + 去CRS/去常见比分锚定",
-          "validation_warnings": [],
-          "postprocess_warnings": [
-            "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "odds_history_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "quant_edge_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "advanced_models_core_fields_restored:away_win_pct,draw_pct,home_win_pct"
-          ],
-          "line_movement_anomaly": {
-            "has_anomaly": true,
-            "signal": "🚨 主胜降水-1.00+热度57%=造热主队",
-            "direction": "upset_away"
-          },
-          "odds_pattern": "大热",
-          "odds_range_analysis": {
-            "home": {
-              "hist_rate": 68.0,
-              "desc": "强势主队:胜率68%最佳区间"
-            },
-            "draw": {
-              "hist_rate": 18.0,
-              "desc": "平局罕见"
-            },
-            "away": {
-              "hist_rate": 18.0,
-              "desc": "弱势客队:FLB区间"
-            }
-          },
-          "bivariate_poisson": {
-            "home_win": 57.5,
-            "draw": 28.9,
-            "away_win": 13.6,
-            "predicted_score": "1-0",
-            "btts": 40.1,
-            "over_2_5": 38.9,
-            "correlation": 0.1,
-            "p0_inflate": 0.03,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 15.84
-              },
-              {
-                "score": "0-0",
-                "prob": 14.14
-              },
-              {
-                "score": "2-0",
-                "prob": 12.25
-              },
-              {
-                "score": "1-1",
-                "prob": 11.07
-              },
-              {
-                "score": "2-1",
-                "prob": 8.85
-              },
-              {
-                "score": "3-0",
-                "prob": 6.17
-              }
-            ]
-          },
-          "pro_odds": {
-            "true_home": 66.3,
-            "true_draw": 19.9,
-            "true_away": 13.8
-          },
-          "predictability_score": 65,
-          "asian_handicap_probs": {
-            "ah_0": [
-              0.5952,
-              0.2467,
-              0.158
-            ],
-            "ah_0.5": [
-              0.5952,
-              0.0,
-              0.4048
-            ],
-            "ah_1.0": [
-              0.3259,
-              0.2694,
-              0.4048
-            ],
-            "ou_1.5": [
-              0.6691,
-              0.0,
-              0.3309
-            ],
-            "ou_2.5": [
-              0.4038,
-              0.0,
-              0.5962
-            ],
-            "ou_3.5": [
-              0.2004,
-              0.0,
-              0.7996
-            ],
-            "btts": 0.3988
-          },
-          "over_2_5": 45.3,
-          "btts": 45.5,
-          "total_models": 15,
-          "fusion_weights": {
-            "market": 0.69,
-            "model": 0.31
-          }
-        },
-        "recommend_score": 41.86,
-        "is_recommended": true
-      },
       {
         "home_team": "赫尔辛基",
         "away_team": "拉赫蒂",
@@ -3414,12 +2759,12 @@
           "lose": -1
         },
         "vote": {
-          "win": "64",
-          "same": "20",
+          "win": "63",
+          "same": "21",
           "lose": "16",
-          "hhad_win": "39",
+          "hhad_win": "38",
           "hhad_same": "27",
-          "hhad_lose": "34"
+          "hhad_lose": "35"
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
@@ -3473,7 +2818,7 @@
           "fp": 16.0,
           "ff": 9.5
         },
-        "id": 2,
+        "id": 1,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -3858,10 +3203,10 @@
             "CLAUDE"
           ],
           "ai_avg_confidence": 0.0,
-          "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热64% | T1_FAKE_DRAW_TRAP:假平诱盘:平赔独降-1.00+强方home公平67.2%",
+          "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热63% | T1_FAKE_DRAW_TRAP:假平诱盘:平赔独降-1.00+强方home公平67.2%",
           "smart_signals": [
             "💰 Sharp资金流向客胜",
-            "🚨 主胜超热64%",
+            "🚨 主胜超热63%",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 客胜Steam! 降水-1.00但散户未跟(16%)",
             "🔥 赔率剧变(幅度1.00)",
@@ -4101,8 +3446,8 @@
           "win": "29",
           "same": "30",
           "lose": "41",
-          "hhad_win": "58",
-          "hhad_same": "24",
+          "hhad_win": "59",
+          "hhad_same": "23",
           "hhad_lose": "18"
         },
         "odds_movement": "主胜平稳，客胜升水",
@@ -4157,7 +3502,7 @@
           "fp": 15.0,
           "ff": 3.75
         },
-        "id": 3,
+        "id": 2,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -4788,12 +4133,12 @@
           "lose": 1
         },
         "vote": {
-          "win": "59",
-          "same": "24",
+          "win": "60",
+          "same": "23",
           "lose": "17",
           "hhad_win": "32",
-          "hhad_same": "28",
-          "hhad_lose": "40"
+          "hhad_same": "29",
+          "hhad_lose": "39"
         },
         "odds_movement": "主胜降水，客胜升水",
         "intelligence": {
@@ -4847,7 +4192,7 @@
           "fp": 15.0,
           "ff": 8.5
         },
-        "id": 4,
+        "id": 3,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -4946,47 +4291,48 @@
           "display_direction": "主胜",
           "final_direction": "home",
           "is_score_others": false,
-          "home_win_pct": 58.8,
-          "draw_pct": 23.1,
-          "away_win_pct": 18.1,
+          "home_win_pct": 59.0,
+          "draw_pct": 23.0,
+          "away_win_pct": 18.0,
           "scenario": "normal",
           "goal_range": [
             2,
             4
           ],
-          "dir_confidence": 58.8,
-          "dir_gap": 35.7,
+          "dir_confidence": 59.0,
+          "dir_gap": 36.0,
           "evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'draw': 23.12, 'home': 58.82, 'away': 18.06}",
-            "后验方向:{'home': 58.82, 'draw': 23.12, 'away': 18.06}",
-            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.091%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded"
+            "混合方向目标:{'draw': 23.04, 'home': 58.99, 'away': 17.97}",
+            "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
+            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
+            "决策来源:matrix_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度2"
           ],
           "override_triggered": false,
           "top_score_candidates": [
             [
               "2-1",
-              11.091
+              11.112
             ],
             [
               "2-0",
-              9.638
+              9.689
             ],
             [
               "3-0",
-              7.675
+              7.69
             ],
             [
               "3-1",
-              5.999
+              6.022
             ],
             [
               "4-0",
-              3.114
+              3.126
             ]
           ],
-          "calibrated_score_prob_pct": 11.091,
+          "calibrated_score_prob_pct": 11.112,
           "bayesian_prior": {
             "home": 63.673,
             "draw": 21.178,
@@ -4997,31 +4343,31 @@
           "unified_matrix_top_scores": [
             [
               "1-1",
-              11.306
+              11.259
             ],
             [
               "2-1",
-              11.091
+              11.112
             ],
             [
               "1-0",
-              10.292
+              10.317
             ],
             [
               "2-0",
-              9.638
+              9.689
             ],
             [
               "3-0",
-              7.675
+              7.69
             ],
             [
               "3-1",
-              5.999
+              6.022
             ],
             [
               "1-2",
-              5.612
+              5.582
             ],
             [
               "0-0",
@@ -5029,63 +4375,63 @@
             ],
             [
               "2-2",
-              5.278
+              5.249
             ],
             [
               "0-1",
-              5.208
+              5.183
             ],
             [
               "4-0",
-              3.114
+              3.126
             ],
             [
               "4-1",
-              2.564
+              2.568
             ],
             [
               "3-2",
-              2.47
+              2.474
             ],
             [
               "0-2",
-              2.349
+              2.344
             ],
             [
               "1-3",
-              1.462
+              1.457
             ],
             [
               "4-2",
-              1.29
+              1.294
             ],
             [
               "2-3",
-              1.25
+              1.243
             ],
             [
               "5-1",
-              1.072
+              1.075
             ],
             [
               "5-0",
-              1.065
+              1.066
             ],
             [
               "3-3",
-              1.009
+              1.003
             ],
             [
               "0-3",
-              0.901
+              0.896
             ],
             [
               "5-2",
-              0.576
+              0.577
             ],
             [
               "4-3",
-              0.462
+              0.463
             ],
             [
               "6-1",
@@ -5093,23 +4439,23 @@
             ],
             [
               "6-0",
-              0.371
+              0.372
             ],
             [
               "2-4",
-              0.315
+              0.313
             ],
             [
               "1-4",
-              0.301
+              0.299
             ],
             [
               "3-4",
-              0.234
+              0.233
             ],
             [
               "0-4",
-              0.176
+              0.175
             ],
             [
               "6-2",
@@ -5143,24 +4489,32 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "draw": 23.12,
-            "home": 58.82,
-            "away": 18.06
+            "draw": 23.04,
+            "home": 58.99,
+            "away": 17.97
           },
           "confidence": 76.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'draw': 23.12, 'home': 58.82, 'away': 18.06}",
-            "后验方向:{'home': 58.82, 'draw': 23.12, 'away': 18.06}",
-            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.091%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded"
+            "混合方向目标:{'draw': 23.04, 'home': 58.99, 'away': 17.97}",
+            "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
+            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
+            "决策来源:matrix_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度2"
           ],
-          "traps_detected": [],
-          "trap_count": 0,
-          "trap_severity": 0,
-          "trap_details": [],
+          "traps_detected": [
+            "T9_FAKE_CONTRARIAN"
+          ],
+          "trap_count": 1,
+          "trap_severity": 2,
+          "trap_details": [
+            {
+              "trap": "T9_FAKE_CONTRARIAN",
+              "desc": "诱反指陷阱:home散户60%+赔率同向降水,反指风险高"
+            }
+          ],
           "trap_flags": {},
           "fair_1x2": {
             "home": 63.673,
@@ -5190,10 +4544,10 @@
             "low_scores": []
           },
           "suggested_kelly": 0.0,
-          "edge_vs_market": -27.91,
+          "edge_vs_market": -27.77,
           "is_value": false,
           "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 11.091,
+          "score_model_prob": 11.112,
           "score_market_odds": 6.5,
           "score_market_implied_pct": 15.385,
           "gpt_score": "弃权",
@@ -5211,15 +4565,16 @@
             "CLAUDE"
           ],
           "ai_avg_confidence": 0.0,
-          "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热59%",
+          "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热60% | T9_FAKE_CONTRARIAN:诱反指陷阱:home散户60%+赔率同向降水,反指风险高",
           "smart_signals": [
             "💰 Sharp资金流向主胜",
-            "🚨 主胜超热59%",
+            "🚨 主胜超热60%",
             "🔥 赔率剧变(幅度1.00)",
-            "🚨 主胜降水-1.00+热度59%=造热主队",
+            "🚨 主胜降水-1.00+热度60%=造热主队",
             "📊 客队冷门(>5.0)实际胜率低于隐含8%",
+            "🚨 主胜反向Steam! 降水-1.00+热度60%=庄家造热",
             "⚡ 主队攻防效率碾压(差值1.20)",
-            "⚠️ 负CLV-13.5% [客胜]"
+            "⚠️ 负CLV-14.0% [客胜]"
           ],
           "sharp_detected": true,
           "sharp_dir": "home",
@@ -5318,10 +4673,16 @@
           ],
           "line_movement_anomaly": {
             "has_anomaly": true,
-            "signal": "🚨 主胜降水-1.00+热度59%=造热主队",
+            "signal": "🚨 主胜降水-1.00+热度60%=造热主队",
             "direction": "upset_away"
           },
           "odds_pattern": "大冷门客",
+          "steam_move": {
+            "steam": true,
+            "signal": "🚨 主胜反向Steam! 降水-1.00+热度60%=庄家造热",
+            "direction": "upset_away",
+            "strength": 10
+          },
           "odds_range_analysis": {
             "home": {
               "hist_rate": 68.0,
@@ -5419,7 +4780,7 @@
             "model": 0.23
           }
         },
-        "recommend_score": 42.52,
+        "recommend_score": 43.55,
         "is_recommended": true
       },
       {
@@ -5438,11 +4799,11 @@
         },
         "vote": {
           "win": "31",
-          "same": "30",
-          "lose": "39",
-          "hhad_win": "59",
+          "same": "31",
+          "lose": "38",
+          "hhad_win": "60",
           "hhad_same": "23",
-          "hhad_lose": "18"
+          "hhad_lose": "17"
         },
         "odds_movement": "主胜升水，客胜升水",
         "intelligence": {
@@ -5496,7 +4857,7 @@
           "fp": 14.0,
           "ff": 3.7
         },
-        "id": 5,
+        "id": 4,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -6175,7 +5536,7 @@
           "fp": 19.0,
           "ff": 13.0
         },
-        "id": 6,
+        "id": 5,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -6806,7 +6167,7 @@
           }
         },
         "recommend_score": 31.17,
-        "is_recommended": false
+        "is_recommended": true
       },
       {
         "home_team": "吉达联合",
@@ -6882,7 +6243,7 @@
           "fp": 17.0,
           "ff": 10.0
         },
-        "id": 7,
+        "id": 6,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -7589,7 +6950,7 @@
           "fp": 17.0,
           "ff": 10.0
         },
-        "id": 8,
+        "id": 7,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -8218,8 +7579,8 @@
           "same": "19",
           "lose": "67",
           "hhad_win": "32",
-          "hhad_same": "24",
-          "hhad_lose": "44"
+          "hhad_same": "23",
+          "hhad_lose": "45"
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
@@ -8273,7 +7634,7 @@
           "fp": 19.0,
           "ff": 1.86
         },
-        "id": 9,
+        "id": 8,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -8930,9 +8291,9 @@
           "win": "37",
           "same": "30",
           "lose": "33",
-          "hhad_win": "65",
+          "hhad_win": "66",
           "hhad_same": "21",
-          "hhad_lose": "14"
+          "hhad_lose": "13"
         },
         "odds_movement": "主胜平稳，客胜升水",
         "intelligence": {
@@ -8986,7 +8347,7 @@
           "fp": 13.0,
           "ff": 4.3
         },
-        "id": 10,
+        "id": 9,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -9658,7 +9019,7 @@
           "fp": 26.0,
           "ff": 20.0
         },
-        "id": 11,
+        "id": 10,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -10265,7 +9626,7 @@
           "fp": 18.0,
           "ff": 9.5
         },
-        "id": 12,
+        "id": 11,
         "date": "2026-05-03",
         "home_id": 0,
         "away_id": 0,
@@ -10871,695 +10232,6 @@
     ],
     "today": [
       {
-        "home_team": "切尔西",
-        "away_team": "诺丁汉",
-        "league": "英超",
-        "match_num": "周一001",
-        "sp_home": 1.33,
-        "sp_draw": 4.5,
-        "sp_away": 6.5,
-        "give_ball": -1.0,
-        "change": {
-          "win": -1,
-          "same": 1,
-          "lose": 1
-        },
-        "vote": {
-          "win": "57",
-          "same": "23",
-          "lose": "20",
-          "hhad_win": "33",
-          "hhad_same": "25",
-          "hhad_lose": "42"
-        },
-        "odds_movement": "主胜降水，客胜升水",
-        "intelligence": {
-          "h_inj": "米哈伊洛·穆德里克 停赛 停赛 列维·科尔威尔 体能 里斯·詹姆斯 腿筋受伤 杰米·吉滕斯 肌肉挫伤 菲利普·约恩森 腹股沟受伤 埃斯特旺·威廉 受伤 腿筋受伤",
-          "g_inj": "穆里略·圣地亚哥 肌肉挫伤 卡勒姆·哈德森·奥多伊 受伤 受伤 威利·博利 受伤 膝关节受伤 约翰·维克托 受伤 膝关节受伤 尼科洛·萨沃纳 受伤 膝关节受伤 雅伊尔·库尼亚 肩部受伤 丹·恩多耶 受伤 易卜拉希马·桑加雷 受伤",
-          "home_bad_news": "1.本赛季联赛切尔西34场比赛，得到7张红牌，是联赛得到红牌数最多的球队。 2.切尔西在最近10场英超比赛中交出了2胜2平6负的成绩单，整体状态可谓跌入谷底。更为棘手的是，球队正陷入联赛5连败的深重泥潭，球队士气与竞技水平均已降至冰点，急需一场胜利来重振信心。 3.近6场英超比赛中，切尔西仅打入4球",
-          "guest_bad_news": "1.诺丁汉森林本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.诺丁汉森林在本周中的欧联杯中与阿斯顿维拉激战90分钟，球队体能消耗极为严重。而对手切尔西则保持一周一赛的正常节奏，以逸待劳，体能储备明显占优。这一体能差距可能成为影响本场比赛走向的关键因素。 3.诺丁汉森林本场比赛面"
-        },
-        "expert_intro": "切尔西遭遇主场3连败且近10场输掉7场，状态跌至谷底；诺丁汉森林4连胜且场均攻入2.4球，士气正盛。尽管蓝军历史交锋占优，但严重伤病与低迷状态令其取胜难度大增，客队保级战意浓烈。",
-        "baseface": "本场为英超第35轮。目前主队34场积48分，排在第8位。客队34场积39分，位列第16位。主队阵容身价明显占优，但近期状态反差显著。\n\n主队切尔西近10场赛事3胜0平7负，状态低迷；近5个主场1胜0平4负，主场状态较差。\n\n客队诺丁汉森林近10场赛事5胜2平3负，状态极佳；近5个客场1胜1平3负，客场状态一般。\n\n综合来看，主队纸面实力占优但状态堪忧，客队士气正盛且战意更浓，双方实力差距有所缩小。\n\n双方最近一次交锋数据未提供。双方近6次交锋切尔西取得4胜1平1负，占据上风；在切尔西的主场，近3次交锋，切尔西取得2胜1平，处于上风。\n\n机构普遍看好主胜，支持方向为主胜。\n\n双方上半场打平的可能性为50%\n主队近5场赛事主场的上半场：\n领先1，打平2，落后2丨3场有进球，4场有失球\n客队近5场赛事客场的上半场：\n领先1，打平2，落后2丨2场有进球，3场有失球\n\n切尔西虽已基本无缘欧战，但主场作战需挽回尊严；诺丁汉森林仅领先降级区3分，保级压力巨大，战意十足。主队或依托控球组织进攻，客队可能立足防守伺机反击。",
-        "had_analyse": [
-          "win",
-          "same"
-        ],
-        "home_rank": 9,
-        "away_rank": 16,
-        "v2_odds_dict": {
-          "a0": 17.5,
-          "a1": 6.25,
-          "a2": 4.05,
-          "a3": 3.35,
-          "a4": 4.2,
-          "a5": 7.7,
-          "a6": 14.0,
-          "a7": 19.0,
-          "s00": 17.5,
-          "s11": 8.0,
-          "s22": 13.0,
-          "s33": 50.0,
-          "w10": 7.0,
-          "w20": 7.5,
-          "w21": 6.5,
-          "w30": 14.0,
-          "w31": 9.75,
-          "w32": 19.0,
-          "w40": 25.0,
-          "w41": 22.0,
-          "w42": 38.0,
-          "l01": 19.0,
-          "l02": 32.0,
-          "l12": 15.0,
-          "l03": 65.0,
-          "l13": 36.0,
-          "l23": 38.0,
-          "ss": 1.9,
-          "sp": 16.0,
-          "sf": 45.0,
-          "ps": 4.0,
-          "pp": 7.8,
-          "pf": 15.0,
-          "fs": 21.0,
-          "fp": 16.0,
-          "ff": 11.5
-        },
-        "id": 1,
-        "date": "2026-05-04",
-        "home_id": 0,
-        "away_id": 0,
-        "home_stats": {
-          "played": 25,
-          "wins": 14,
-          "draws": 6,
-          "losses": 5,
-          "goals_for": 40,
-          "goals_against": 19,
-          "avg_goals_for": "1.61",
-          "avg_goals_against": "0.77",
-          "clean_sheets": 4,
-          "form": "WWDWW"
-        },
-        "away_stats": {
-          "played": 25,
-          "wins": 6,
-          "draws": 6,
-          "losses": 13,
-          "goals_for": 17,
-          "goals_against": 41,
-          "avg_goals_for": "0.69",
-          "avg_goals_against": "1.63",
-          "clean_sheets": 2,
-          "form": "LLDLL"
-        },
-        "h2h": [],
-        "information": {},
-        "a0": 17.5,
-        "a1": 6.25,
-        "a2": 4.05,
-        "a3": 3.35,
-        "a4": 4.2,
-        "a5": 7.7,
-        "a6": 14.0,
-        "a7": 19.0,
-        "s00": 17.5,
-        "s11": 8.0,
-        "s22": 13.0,
-        "s33": 50.0,
-        "w10": 7.0,
-        "w20": 7.5,
-        "w21": 6.5,
-        "w30": 14.0,
-        "w31": 9.75,
-        "w32": 19.0,
-        "w40": 25.0,
-        "w41": 22.0,
-        "w42": 38.0,
-        "l01": 19.0,
-        "l02": 32.0,
-        "l12": 15.0,
-        "l03": 65.0,
-        "l13": 36.0,
-        "l23": 38.0,
-        "ss": 1.9,
-        "sp": 16.0,
-        "sf": 45.0,
-        "ps": 4.0,
-        "pp": 7.8,
-        "pf": 15.0,
-        "fs": 21.0,
-        "fp": 16.0,
-        "ff": 11.5,
-        "home": "切尔西",
-        "guest": "诺丁汉",
-        "win": 1.33,
-        "same": 4.5,
-        "lose": 6.5,
-        "external_context": {
-          "source_quality": "missing",
-          "injuries": [],
-          "suspensions": [],
-          "lineup_news": [],
-          "weather": {},
-          "motivation": [],
-          "schedule_pressure": [],
-          "odds_history": [],
-          "sharp_market_notes": [],
-          "news_snippets": [],
-          "data_missing": [
-            "injuries",
-            "suspensions",
-            "lineup_news",
-            "weather",
-            "motivation",
-            "odds_history"
-          ],
-          "raw": {}
-        },
-        "prediction": {
-          "predicted_score": "2-1",
-          "predicted_label": "2-1",
-          "result": "主胜",
-          "display_direction": "主胜",
-          "final_direction": "home",
-          "is_score_others": false,
-          "home_win_pct": 65.1,
-          "draw_pct": 20.0,
-          "away_win_pct": 14.8,
-          "scenario": "five_goal_anchor",
-          "goal_range": [
-            2,
-            5
-          ],
-          "dir_confidence": 65.1,
-          "dir_gap": 45.1,
-          "evidences": [
-            "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'draw': 20.03, 'home': 65.14, 'away': 14.83}",
-            "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
-            "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度2"
-          ],
-          "override_triggered": false,
-          "top_score_candidates": [
-            [
-              "2-1",
-              10.876
-            ],
-            [
-              "2-0",
-              9.39
-            ],
-            [
-              "3-0",
-              8.94
-            ],
-            [
-              "3-1",
-              7.649
-            ],
-            [
-              "4-0",
-              4.716
-            ],
-            [
-              "4-1",
-              3.583
-            ],
-            [
-              "3-2",
-              2.906
-            ],
-            [
-              "5-0",
-              1.767
-            ]
-          ],
-          "calibrated_score_prob_pct": 10.876,
-          "bayesian_prior": {
-            "home": 71.621,
-            "draw": 17.197,
-            "away": 11.182
-          },
-          "decision_source": "matrix_authority",
-          "ai_authority_mode": "claude_guarded",
-          "unified_matrix_top_scores": [
-            [
-              "2-1",
-              10.876
-            ],
-            [
-              "2-0",
-              9.39
-            ],
-            [
-              "1-1",
-              9.323
-            ],
-            [
-              "3-0",
-              8.94
-            ],
-            [
-              "1-0",
-              8.623
-            ],
-            [
-              "3-1",
-              7.649
-            ],
-            [
-              "2-2",
-              5.696
-            ],
-            [
-              "1-2",
-              4.849
-            ],
-            [
-              "4-0",
-              4.716
-            ],
-            [
-              "0-0",
-              3.87
-            ],
-            [
-              "0-1",
-              3.844
-            ],
-            [
-              "4-1",
-              3.583
-            ],
-            [
-              "3-2",
-              2.906
-            ],
-            [
-              "5-0",
-              1.767
-            ],
-            [
-              "0-2",
-              1.697
-            ],
-            [
-              "4-2",
-              1.527
-            ],
-            [
-              "5-1",
-              1.506
-            ],
-            [
-              "1-3",
-              1.383
-            ],
-            [
-              "2-3",
-              1.296
-            ],
-            [
-              "3-3",
-              1.011
-            ],
-            [
-              "5-2",
-              0.743
-            ],
-            [
-              "0-3",
-              0.655
-            ],
-            [
-              "6-0",
-              0.619
-            ],
-            [
-              "6-1",
-              0.611
-            ],
-            [
-              "4-3",
-              0.502
-            ],
-            [
-              "2-4",
-              0.276
-            ],
-            [
-              "1-4",
-              0.263
-            ],
-            [
-              "6-2",
-              0.248
-            ],
-            [
-              "3-4",
-              0.224
-            ],
-            [
-              "7-0",
-              0.215
-            ]
-          ],
-          "unified_goal_probs": {
-            "0": 3.87,
-            "1": 12.47,
-            "2": 20.41,
-            "3": 25.32,
-            "4": 19.58,
-            "5": 9.84,
-            "6": 4.99,
-            "7": 3.52
-          },
-          "unified_source": "unified_score_matrix_v18_2_final_ipf",
-          "fair_1x2_pack": {
-            "method": "power",
-            "fair_probs": {
-              "home": 71.621,
-              "draw": 17.197,
-              "away": 11.182
-            },
-            "raw_implied": {
-              "home": 75.188,
-              "draw": 22.222,
-              "away": 15.385
-            },
-            "overround": 0.12795,
-            "shin_z": null
-          },
-          "mixed_target_dir": {
-            "draw": 20.03,
-            "home": 65.14,
-            "away": 14.83
-          },
-          "confidence": 80.0,
-          "confidence_meaning": "排序置信度，不等于历史命中率",
-          "risk_level": "低",
-          "bayesian_evidences": [
-            "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'draw': 20.03, 'home': 65.14, 'away': 14.83}",
-            "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
-            "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度2"
-          ],
-          "traps_detected": [
-            "T3_HANDICAP_SHALLOWER"
-          ],
-          "trap_count": 1,
-          "trap_severity": 2,
-          "trap_details": [
-            {
-              "trap": "T3_HANDICAP_SHALLOWER",
-              "desc": "强方让球偏浅:home 理论-1.75 vs 实际-1.00,强方差-0.75"
-            }
-          ],
-          "trap_flags": {
-            "shallow_guard": true
-          },
-          "fair_1x2": {
-            "home": 71.621,
-            "draw": 17.197,
-            "away": 11.182
-          },
-          "fair_1x2_method": "power",
-          "market_overround": 0.12795,
-          "raw_implied_1x2": {
-            "home": 75.188,
-            "draw": 22.222,
-            "away": 15.385
-          },
-          "crs_shape": "disabled",
-          "crs_moments": {},
-          "crs_margin": 0.0,
-          "crs_coverage": 0.0,
-          "crs_implied_probs": {},
-          "crs_low_rank_info": {
-            "all_sorted": [],
-            "rank": {},
-            "min_draw": null,
-            "draw_available": [],
-            "draw_low_rank": 999,
-            "draw_low_score": "",
-            "draw_low_odds": 999.0,
-            "low_scores": []
-          },
-          "suggested_kelly": 0.0,
-          "edge_vs_market": -29.31,
-          "is_value": false,
-          "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 10.876,
-          "score_market_odds": 6.5,
-          "score_market_implied_pct": 15.385,
-          "gpt_score": "弃权",
-          "gpt_analysis": "弃权",
-          "grok_score": "弃权",
-          "grok_analysis": "弃权",
-          "gemini_score": "弃权",
-          "gemini_analysis": "弃权",
-          "claude_score": "弃权",
-          "claude_analysis": "弃权",
-          "ai_abstained": [
-            "GPT",
-            "GROK",
-            "GEMINI",
-            "CLAUDE"
-          ],
-          "ai_avg_confidence": 0.0,
-          "smart_money_signal": "💰 Sharp资金流向主胜 | T3_HANDICAP_SHALLOWER:强方让球偏浅:home 理论-1.75 vs 实际-1.00,强方差-0.75",
-          "smart_signals": [
-            "💰 Sharp资金流向主胜",
-            "🚨 大热必死",
-            "🔥 赔率剧变(幅度1.00)",
-            "🚨 主胜降水-1.00+热度57%=造热主队",
-            "⚠️ 大热(<1.40)平局率+12%",
-            "⚡ 主队攻防效率碾压(差值1.41)",
-            "⚠️ 负CLV-9.0% [主胜]",
-            "⚠️ 负CLV-11.5% [客胜]"
-          ],
-          "sharp_detected": true,
-          "sharp_dir": "home",
-          "xG_home": 2.0,
-          "xG_away": 0.81,
-          "expected_total_goals": 2.81,
-          "actual_handicap_signed": -1.0,
-          "theoretical_handicap_signed": -1.75,
-          "external_context": {
-            "source_quality": "missing",
-            "injuries": [],
-            "suspensions": [],
-            "lineup_news": [],
-            "weather": {},
-            "motivation": [],
-            "schedule_pressure": [],
-            "odds_history": [],
-            "sharp_market_notes": [],
-            "news_snippets": [],
-            "data_missing": [
-              "injuries",
-              "suspensions",
-              "lineup_news",
-              "weather",
-              "motivation",
-              "odds_history"
-            ],
-            "raw": {}
-          },
-          "refined_poisson": {
-            "home_win": 78.4,
-            "draw": 15.4,
-            "away_win": 6.2,
-            "predicted_score": "1-0",
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 16.6
-              },
-              {
-                "score": "2-0",
-                "prob": 14.7
-              },
-              {
-                "score": "3-0",
-                "prob": 11.3
-              },
-              {
-                "score": "2-1",
-                "prob": 9.9
-              },
-              {
-                "score": "1-1",
-                "prob": 7.6
-              },
-              {
-                "score": "4-0",
-                "prob": 6.5
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 62.8,
-            "draw": 20.0,
-            "away_win": 27.2,
-            "elo_diff": 145
-          },
-          "experience_analysis": {
-            "triggered_count": 5,
-            "total_score": 33,
-            "draw_rules": 2,
-            "recommendation": "⚠️ 多规则叠加，需高度警惕",
-            "over_adj": 0.0,
-            "zero_zero_boost": 0.0,
-            "rules": [
-              {
-                "id": "D01",
-                "name": "大热必死",
-                "weight": 8
-              },
-              {
-                "id": "D06",
-                "name": "德比/克星效应",
-                "weight": 8
-              },
-              {
-                "id": "U10",
-                "name": "赔率剧变",
-                "weight": 7
-              },
-              {
-                "id": "L01",
-                "name": "英超主场优势下降",
-                "weight": 3
-              },
-              {
-                "id": "M01",
-                "name": "保级队激战",
-                "weight": 7
-              }
-            ]
-          },
-          "engine_version": "vMAX 18.3.2",
-          "engine_architecture": "RAW-AI主审 + 统一API_URL中转 + 单批次singleflight防重复扣费 + Claude守门裁判 + 去CRS/去常见比分锚定",
-          "validation_warnings": [],
-          "postprocess_warnings": [
-            "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "odds_history_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "quant_edge_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "advanced_models_core_fields_restored:away_win_pct,draw_pct,home_win_pct"
-          ],
-          "line_movement_anomaly": {
-            "has_anomaly": true,
-            "signal": "🚨 主胜降水-1.00+热度57%=造热主队",
-            "direction": "upset_away"
-          },
-          "odds_pattern": "大热",
-          "odds_range_analysis": {
-            "home": {
-              "hist_rate": 68.0,
-              "desc": "强势主队:胜率68%最佳区间"
-            },
-            "draw": {
-              "hist_rate": 18.0,
-              "desc": "平局罕见"
-            },
-            "away": {
-              "hist_rate": 18.0,
-              "desc": "弱势客队:FLB区间"
-            }
-          },
-          "bivariate_poisson": {
-            "home_win": 57.5,
-            "draw": 28.9,
-            "away_win": 13.6,
-            "predicted_score": "1-0",
-            "btts": 40.1,
-            "over_2_5": 38.9,
-            "correlation": 0.1,
-            "p0_inflate": 0.03,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 15.84
-              },
-              {
-                "score": "0-0",
-                "prob": 14.14
-              },
-              {
-                "score": "2-0",
-                "prob": 12.25
-              },
-              {
-                "score": "1-1",
-                "prob": 11.07
-              },
-              {
-                "score": "2-1",
-                "prob": 8.85
-              },
-              {
-                "score": "3-0",
-                "prob": 6.17
-              }
-            ]
-          },
-          "pro_odds": {
-            "true_home": 66.3,
-            "true_draw": 19.9,
-            "true_away": 13.8
-          },
-          "predictability_score": 65,
-          "asian_handicap_probs": {
-            "ah_0": [
-              0.5952,
-              0.2467,
-              0.158
-            ],
-            "ah_0.5": [
-              0.5952,
-              0.0,
-              0.4048
-            ],
-            "ah_1.0": [
-              0.3259,
-              0.2694,
-              0.4048
-            ],
-            "ou_1.5": [
-              0.6691,
-              0.0,
-              0.3309
-            ],
-            "ou_2.5": [
-              0.4038,
-              0.0,
-              0.5962
-            ],
-            "ou_3.5": [
-              0.2004,
-              0.0,
-              0.7996
-            ],
-            "btts": 0.3988
-          },
-          "over_2_5": 45.3,
-          "btts": 45.5,
-          "total_models": 15,
-          "fusion_weights": {
-            "market": 0.69,
-            "model": 0.31
-          }
-        },
-        "recommend_score": 41.86,
-        "is_recommended": true
-      },
-      {
         "home_team": "赫尔辛基",
         "away_team": "拉赫蒂",
         "league": "芬超",
@@ -11574,12 +10246,12 @@
           "lose": -1
         },
         "vote": {
-          "win": "64",
-          "same": "20",
+          "win": "63",
+          "same": "21",
           "lose": "16",
-          "hhad_win": "39",
+          "hhad_win": "38",
           "hhad_same": "27",
-          "hhad_lose": "34"
+          "hhad_lose": "35"
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
@@ -11633,7 +10305,7 @@
           "fp": 16.0,
           "ff": 9.5
         },
-        "id": 2,
+        "id": 1,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -12018,10 +10690,10 @@
             "CLAUDE"
           ],
           "ai_avg_confidence": 0.0,
-          "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热64% | T1_FAKE_DRAW_TRAP:假平诱盘:平赔独降-1.00+强方home公平67.2%",
+          "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热63% | T1_FAKE_DRAW_TRAP:假平诱盘:平赔独降-1.00+强方home公平67.2%",
           "smart_signals": [
             "💰 Sharp资金流向客胜",
-            "🚨 主胜超热64%",
+            "🚨 主胜超热63%",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 客胜Steam! 降水-1.00但散户未跟(16%)",
             "🔥 赔率剧变(幅度1.00)",
@@ -12261,8 +10933,8 @@
           "win": "29",
           "same": "30",
           "lose": "41",
-          "hhad_win": "58",
-          "hhad_same": "24",
+          "hhad_win": "59",
+          "hhad_same": "23",
           "hhad_lose": "18"
         },
         "odds_movement": "主胜平稳，客胜升水",
@@ -12317,7 +10989,7 @@
           "fp": 15.0,
           "ff": 3.75
         },
-        "id": 3,
+        "id": 2,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -12948,12 +11620,12 @@
           "lose": 1
         },
         "vote": {
-          "win": "59",
-          "same": "24",
+          "win": "60",
+          "same": "23",
           "lose": "17",
           "hhad_win": "32",
-          "hhad_same": "28",
-          "hhad_lose": "40"
+          "hhad_same": "29",
+          "hhad_lose": "39"
         },
         "odds_movement": "主胜降水，客胜升水",
         "intelligence": {
@@ -13007,7 +11679,7 @@
           "fp": 15.0,
           "ff": 8.5
         },
-        "id": 4,
+        "id": 3,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -13106,47 +11778,48 @@
           "display_direction": "主胜",
           "final_direction": "home",
           "is_score_others": false,
-          "home_win_pct": 58.8,
-          "draw_pct": 23.1,
-          "away_win_pct": 18.1,
+          "home_win_pct": 59.0,
+          "draw_pct": 23.0,
+          "away_win_pct": 18.0,
           "scenario": "normal",
           "goal_range": [
             2,
             4
           ],
-          "dir_confidence": 58.8,
-          "dir_gap": 35.7,
+          "dir_confidence": 59.0,
+          "dir_gap": 36.0,
           "evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'draw': 23.12, 'home': 58.82, 'away': 18.06}",
-            "后验方向:{'home': 58.82, 'draw': 23.12, 'away': 18.06}",
-            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.091%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded"
+            "混合方向目标:{'draw': 23.04, 'home': 58.99, 'away': 17.97}",
+            "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
+            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
+            "决策来源:matrix_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度2"
           ],
           "override_triggered": false,
           "top_score_candidates": [
             [
               "2-1",
-              11.091
+              11.112
             ],
             [
               "2-0",
-              9.638
+              9.689
             ],
             [
               "3-0",
-              7.675
+              7.69
             ],
             [
               "3-1",
-              5.999
+              6.022
             ],
             [
               "4-0",
-              3.114
+              3.126
             ]
           ],
-          "calibrated_score_prob_pct": 11.091,
+          "calibrated_score_prob_pct": 11.112,
           "bayesian_prior": {
             "home": 63.673,
             "draw": 21.178,
@@ -13157,31 +11830,31 @@
           "unified_matrix_top_scores": [
             [
               "1-1",
-              11.306
+              11.259
             ],
             [
               "2-1",
-              11.091
+              11.112
             ],
             [
               "1-0",
-              10.292
+              10.317
             ],
             [
               "2-0",
-              9.638
+              9.689
             ],
             [
               "3-0",
-              7.675
+              7.69
             ],
             [
               "3-1",
-              5.999
+              6.022
             ],
             [
               "1-2",
-              5.612
+              5.582
             ],
             [
               "0-0",
@@ -13189,63 +11862,63 @@
             ],
             [
               "2-2",
-              5.278
+              5.249
             ],
             [
               "0-1",
-              5.208
+              5.183
             ],
             [
               "4-0",
-              3.114
+              3.126
             ],
             [
               "4-1",
-              2.564
+              2.568
             ],
             [
               "3-2",
-              2.47
+              2.474
             ],
             [
               "0-2",
-              2.349
+              2.344
             ],
             [
               "1-3",
-              1.462
+              1.457
             ],
             [
               "4-2",
-              1.29
+              1.294
             ],
             [
               "2-3",
-              1.25
+              1.243
             ],
             [
               "5-1",
-              1.072
+              1.075
             ],
             [
               "5-0",
-              1.065
+              1.066
             ],
             [
               "3-3",
-              1.009
+              1.003
             ],
             [
               "0-3",
-              0.901
+              0.896
             ],
             [
               "5-2",
-              0.576
+              0.577
             ],
             [
               "4-3",
-              0.462
+              0.463
             ],
             [
               "6-1",
@@ -13253,23 +11926,23 @@
             ],
             [
               "6-0",
-              0.371
+              0.372
             ],
             [
               "2-4",
-              0.315
+              0.313
             ],
             [
               "1-4",
-              0.301
+              0.299
             ],
             [
               "3-4",
-              0.234
+              0.233
             ],
             [
               "0-4",
-              0.176
+              0.175
             ],
             [
               "6-2",
@@ -13303,24 +11976,32 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "draw": 23.12,
-            "home": 58.82,
-            "away": 18.06
+            "draw": 23.04,
+            "home": 58.99,
+            "away": 17.97
           },
           "confidence": 76.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'draw': 23.12, 'home': 58.82, 'away': 18.06}",
-            "后验方向:{'home': 58.82, 'draw': 23.12, 'away': 18.06}",
-            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.091%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded"
+            "混合方向目标:{'draw': 23.04, 'home': 58.99, 'away': 17.97}",
+            "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
+            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
+            "决策来源:matrix_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度2"
           ],
-          "traps_detected": [],
-          "trap_count": 0,
-          "trap_severity": 0,
-          "trap_details": [],
+          "traps_detected": [
+            "T9_FAKE_CONTRARIAN"
+          ],
+          "trap_count": 1,
+          "trap_severity": 2,
+          "trap_details": [
+            {
+              "trap": "T9_FAKE_CONTRARIAN",
+              "desc": "诱反指陷阱:home散户60%+赔率同向降水,反指风险高"
+            }
+          ],
           "trap_flags": {},
           "fair_1x2": {
             "home": 63.673,
@@ -13350,10 +12031,10 @@
             "low_scores": []
           },
           "suggested_kelly": 0.0,
-          "edge_vs_market": -27.91,
+          "edge_vs_market": -27.77,
           "is_value": false,
           "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 11.091,
+          "score_model_prob": 11.112,
           "score_market_odds": 6.5,
           "score_market_implied_pct": 15.385,
           "gpt_score": "弃权",
@@ -13371,15 +12052,16 @@
             "CLAUDE"
           ],
           "ai_avg_confidence": 0.0,
-          "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热59%",
+          "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热60% | T9_FAKE_CONTRARIAN:诱反指陷阱:home散户60%+赔率同向降水,反指风险高",
           "smart_signals": [
             "💰 Sharp资金流向主胜",
-            "🚨 主胜超热59%",
+            "🚨 主胜超热60%",
             "🔥 赔率剧变(幅度1.00)",
-            "🚨 主胜降水-1.00+热度59%=造热主队",
+            "🚨 主胜降水-1.00+热度60%=造热主队",
             "📊 客队冷门(>5.0)实际胜率低于隐含8%",
+            "🚨 主胜反向Steam! 降水-1.00+热度60%=庄家造热",
             "⚡ 主队攻防效率碾压(差值1.20)",
-            "⚠️ 负CLV-13.5% [客胜]"
+            "⚠️ 负CLV-14.0% [客胜]"
           ],
           "sharp_detected": true,
           "sharp_dir": "home",
@@ -13478,10 +12160,16 @@
           ],
           "line_movement_anomaly": {
             "has_anomaly": true,
-            "signal": "🚨 主胜降水-1.00+热度59%=造热主队",
+            "signal": "🚨 主胜降水-1.00+热度60%=造热主队",
             "direction": "upset_away"
           },
           "odds_pattern": "大冷门客",
+          "steam_move": {
+            "steam": true,
+            "signal": "🚨 主胜反向Steam! 降水-1.00+热度60%=庄家造热",
+            "direction": "upset_away",
+            "strength": 10
+          },
           "odds_range_analysis": {
             "home": {
               "hist_rate": 68.0,
@@ -13579,7 +12267,7 @@
             "model": 0.23
           }
         },
-        "recommend_score": 42.52,
+        "recommend_score": 43.55,
         "is_recommended": true
       },
       {
@@ -13598,11 +12286,11 @@
         },
         "vote": {
           "win": "31",
-          "same": "30",
-          "lose": "39",
-          "hhad_win": "59",
+          "same": "31",
+          "lose": "38",
+          "hhad_win": "60",
           "hhad_same": "23",
-          "hhad_lose": "18"
+          "hhad_lose": "17"
         },
         "odds_movement": "主胜升水，客胜升水",
         "intelligence": {
@@ -13656,7 +12344,7 @@
           "fp": 14.0,
           "ff": 3.7
         },
-        "id": 5,
+        "id": 4,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -14335,7 +13023,7 @@
           "fp": 19.0,
           "ff": 13.0
         },
-        "id": 6,
+        "id": 5,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -14966,7 +13654,7 @@
           }
         },
         "recommend_score": 31.17,
-        "is_recommended": false
+        "is_recommended": true
       },
       {
         "home_team": "吉达联合",
@@ -15042,7 +13730,7 @@
           "fp": 17.0,
           "ff": 10.0
         },
-        "id": 7,
+        "id": 6,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -15749,7 +14437,7 @@
           "fp": 17.0,
           "ff": 10.0
         },
-        "id": 8,
+        "id": 7,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -16378,8 +15066,8 @@
           "same": "19",
           "lose": "67",
           "hhad_win": "32",
-          "hhad_same": "24",
-          "hhad_lose": "44"
+          "hhad_same": "23",
+          "hhad_lose": "45"
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
@@ -16433,7 +15121,7 @@
           "fp": 19.0,
           "ff": 1.86
         },
-        "id": 9,
+        "id": 8,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -17090,9 +15778,9 @@
           "win": "37",
           "same": "30",
           "lose": "33",
-          "hhad_win": "65",
+          "hhad_win": "66",
           "hhad_same": "21",
-          "hhad_lose": "14"
+          "hhad_lose": "13"
         },
         "odds_movement": "主胜平稳，客胜升水",
         "intelligence": {
@@ -17146,7 +15834,7 @@
           "fp": 13.0,
           "ff": 4.3
         },
-        "id": 10,
+        "id": 9,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -17818,7 +16506,7 @@
           "fp": 26.0,
           "ff": 20.0
         },
-        "id": 11,
+        "id": 10,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -18425,7 +17113,7 @@
           "fp": 18.0,
           "ff": 9.5
         },
-        "id": 12,
+        "id": 11,
         "date": "2026-05-04",
         "home_id": 0,
         "away_id": 0,
@@ -19031,695 +17719,6 @@
     ],
     "tomorrow": [
       {
-        "home_team": "切尔西",
-        "away_team": "诺丁汉",
-        "league": "英超",
-        "match_num": "周一001",
-        "sp_home": 1.33,
-        "sp_draw": 4.5,
-        "sp_away": 6.5,
-        "give_ball": -1.0,
-        "change": {
-          "win": -1,
-          "same": 1,
-          "lose": 1
-        },
-        "vote": {
-          "win": "57",
-          "same": "23",
-          "lose": "20",
-          "hhad_win": "33",
-          "hhad_same": "25",
-          "hhad_lose": "42"
-        },
-        "odds_movement": "主胜降水，客胜升水",
-        "intelligence": {
-          "h_inj": "米哈伊洛·穆德里克 停赛 停赛 列维·科尔威尔 体能 里斯·詹姆斯 腿筋受伤 杰米·吉滕斯 肌肉挫伤 菲利普·约恩森 腹股沟受伤 埃斯特旺·威廉 受伤 腿筋受伤",
-          "g_inj": "穆里略·圣地亚哥 肌肉挫伤 卡勒姆·哈德森·奥多伊 受伤 受伤 威利·博利 受伤 膝关节受伤 约翰·维克托 受伤 膝关节受伤 尼科洛·萨沃纳 受伤 膝关节受伤 雅伊尔·库尼亚 肩部受伤 丹·恩多耶 受伤 易卜拉希马·桑加雷 受伤",
-          "home_bad_news": "1.本赛季联赛切尔西34场比赛，得到7张红牌，是联赛得到红牌数最多的球队。 2.切尔西在最近10场英超比赛中交出了2胜2平6负的成绩单，整体状态可谓跌入谷底。更为棘手的是，球队正陷入联赛5连败的深重泥潭，球队士气与竞技水平均已降至冰点，急需一场胜利来重振信心。 3.近6场英超比赛中，切尔西仅打入4球",
-          "guest_bad_news": "1.诺丁汉森林本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 2.诺丁汉森林在本周中的欧联杯中与阿斯顿维拉激战90分钟，球队体能消耗极为严重。而对手切尔西则保持一周一赛的正常节奏，以逸待劳，体能储备明显占优。这一体能差距可能成为影响本场比赛走向的关键因素。 3.诺丁汉森林本场比赛面"
-        },
-        "expert_intro": "切尔西遭遇主场3连败且近10场输掉7场，状态跌至谷底；诺丁汉森林4连胜且场均攻入2.4球，士气正盛。尽管蓝军历史交锋占优，但严重伤病与低迷状态令其取胜难度大增，客队保级战意浓烈。",
-        "baseface": "本场为英超第35轮。目前主队34场积48分，排在第8位。客队34场积39分，位列第16位。主队阵容身价明显占优，但近期状态反差显著。\n\n主队切尔西近10场赛事3胜0平7负，状态低迷；近5个主场1胜0平4负，主场状态较差。\n\n客队诺丁汉森林近10场赛事5胜2平3负，状态极佳；近5个客场1胜1平3负，客场状态一般。\n\n综合来看，主队纸面实力占优但状态堪忧，客队士气正盛且战意更浓，双方实力差距有所缩小。\n\n双方最近一次交锋数据未提供。双方近6次交锋切尔西取得4胜1平1负，占据上风；在切尔西的主场，近3次交锋，切尔西取得2胜1平，处于上风。\n\n机构普遍看好主胜，支持方向为主胜。\n\n双方上半场打平的可能性为50%\n主队近5场赛事主场的上半场：\n领先1，打平2，落后2丨3场有进球，4场有失球\n客队近5场赛事客场的上半场：\n领先1，打平2，落后2丨2场有进球，3场有失球\n\n切尔西虽已基本无缘欧战，但主场作战需挽回尊严；诺丁汉森林仅领先降级区3分，保级压力巨大，战意十足。主队或依托控球组织进攻，客队可能立足防守伺机反击。",
-        "had_analyse": [
-          "win",
-          "same"
-        ],
-        "home_rank": 9,
-        "away_rank": 16,
-        "v2_odds_dict": {
-          "a0": 17.5,
-          "a1": 6.25,
-          "a2": 4.05,
-          "a3": 3.35,
-          "a4": 4.2,
-          "a5": 7.7,
-          "a6": 14.0,
-          "a7": 19.0,
-          "s00": 17.5,
-          "s11": 8.0,
-          "s22": 13.0,
-          "s33": 50.0,
-          "w10": 7.0,
-          "w20": 7.5,
-          "w21": 6.5,
-          "w30": 14.0,
-          "w31": 9.75,
-          "w32": 19.0,
-          "w40": 25.0,
-          "w41": 22.0,
-          "w42": 38.0,
-          "l01": 19.0,
-          "l02": 32.0,
-          "l12": 15.0,
-          "l03": 65.0,
-          "l13": 36.0,
-          "l23": 38.0,
-          "ss": 1.9,
-          "sp": 16.0,
-          "sf": 45.0,
-          "ps": 4.0,
-          "pp": 7.8,
-          "pf": 15.0,
-          "fs": 21.0,
-          "fp": 16.0,
-          "ff": 11.5
-        },
-        "id": 1,
-        "date": "2026-05-05",
-        "home_id": 0,
-        "away_id": 0,
-        "home_stats": {
-          "played": 25,
-          "wins": 14,
-          "draws": 6,
-          "losses": 5,
-          "goals_for": 40,
-          "goals_against": 19,
-          "avg_goals_for": "1.61",
-          "avg_goals_against": "0.77",
-          "clean_sheets": 4,
-          "form": "WWDWW"
-        },
-        "away_stats": {
-          "played": 25,
-          "wins": 6,
-          "draws": 6,
-          "losses": 13,
-          "goals_for": 17,
-          "goals_against": 41,
-          "avg_goals_for": "0.69",
-          "avg_goals_against": "1.63",
-          "clean_sheets": 2,
-          "form": "LLDLL"
-        },
-        "h2h": [],
-        "information": {},
-        "a0": 17.5,
-        "a1": 6.25,
-        "a2": 4.05,
-        "a3": 3.35,
-        "a4": 4.2,
-        "a5": 7.7,
-        "a6": 14.0,
-        "a7": 19.0,
-        "s00": 17.5,
-        "s11": 8.0,
-        "s22": 13.0,
-        "s33": 50.0,
-        "w10": 7.0,
-        "w20": 7.5,
-        "w21": 6.5,
-        "w30": 14.0,
-        "w31": 9.75,
-        "w32": 19.0,
-        "w40": 25.0,
-        "w41": 22.0,
-        "w42": 38.0,
-        "l01": 19.0,
-        "l02": 32.0,
-        "l12": 15.0,
-        "l03": 65.0,
-        "l13": 36.0,
-        "l23": 38.0,
-        "ss": 1.9,
-        "sp": 16.0,
-        "sf": 45.0,
-        "ps": 4.0,
-        "pp": 7.8,
-        "pf": 15.0,
-        "fs": 21.0,
-        "fp": 16.0,
-        "ff": 11.5,
-        "home": "切尔西",
-        "guest": "诺丁汉",
-        "win": 1.33,
-        "same": 4.5,
-        "lose": 6.5,
-        "external_context": {
-          "source_quality": "missing",
-          "injuries": [],
-          "suspensions": [],
-          "lineup_news": [],
-          "weather": {},
-          "motivation": [],
-          "schedule_pressure": [],
-          "odds_history": [],
-          "sharp_market_notes": [],
-          "news_snippets": [],
-          "data_missing": [
-            "injuries",
-            "suspensions",
-            "lineup_news",
-            "weather",
-            "motivation",
-            "odds_history"
-          ],
-          "raw": {}
-        },
-        "prediction": {
-          "predicted_score": "2-1",
-          "predicted_label": "2-1",
-          "result": "主胜",
-          "display_direction": "主胜",
-          "final_direction": "home",
-          "is_score_others": false,
-          "home_win_pct": 65.1,
-          "draw_pct": 20.0,
-          "away_win_pct": 14.8,
-          "scenario": "five_goal_anchor",
-          "goal_range": [
-            2,
-            5
-          ],
-          "dir_confidence": 65.1,
-          "dir_gap": 45.1,
-          "evidences": [
-            "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'draw': 20.03, 'home': 65.14, 'away': 14.83}",
-            "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
-            "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度2"
-          ],
-          "override_triggered": false,
-          "top_score_candidates": [
-            [
-              "2-1",
-              10.876
-            ],
-            [
-              "2-0",
-              9.39
-            ],
-            [
-              "3-0",
-              8.94
-            ],
-            [
-              "3-1",
-              7.649
-            ],
-            [
-              "4-0",
-              4.716
-            ],
-            [
-              "4-1",
-              3.583
-            ],
-            [
-              "3-2",
-              2.906
-            ],
-            [
-              "5-0",
-              1.767
-            ]
-          ],
-          "calibrated_score_prob_pct": 10.876,
-          "bayesian_prior": {
-            "home": 71.621,
-            "draw": 17.197,
-            "away": 11.182
-          },
-          "decision_source": "matrix_authority",
-          "ai_authority_mode": "claude_guarded",
-          "unified_matrix_top_scores": [
-            [
-              "2-1",
-              10.876
-            ],
-            [
-              "2-0",
-              9.39
-            ],
-            [
-              "1-1",
-              9.323
-            ],
-            [
-              "3-0",
-              8.94
-            ],
-            [
-              "1-0",
-              8.623
-            ],
-            [
-              "3-1",
-              7.649
-            ],
-            [
-              "2-2",
-              5.696
-            ],
-            [
-              "1-2",
-              4.849
-            ],
-            [
-              "4-0",
-              4.716
-            ],
-            [
-              "0-0",
-              3.87
-            ],
-            [
-              "0-1",
-              3.844
-            ],
-            [
-              "4-1",
-              3.583
-            ],
-            [
-              "3-2",
-              2.906
-            ],
-            [
-              "5-0",
-              1.767
-            ],
-            [
-              "0-2",
-              1.697
-            ],
-            [
-              "4-2",
-              1.527
-            ],
-            [
-              "5-1",
-              1.506
-            ],
-            [
-              "1-3",
-              1.383
-            ],
-            [
-              "2-3",
-              1.296
-            ],
-            [
-              "3-3",
-              1.011
-            ],
-            [
-              "5-2",
-              0.743
-            ],
-            [
-              "0-3",
-              0.655
-            ],
-            [
-              "6-0",
-              0.619
-            ],
-            [
-              "6-1",
-              0.611
-            ],
-            [
-              "4-3",
-              0.502
-            ],
-            [
-              "2-4",
-              0.276
-            ],
-            [
-              "1-4",
-              0.263
-            ],
-            [
-              "6-2",
-              0.248
-            ],
-            [
-              "3-4",
-              0.224
-            ],
-            [
-              "7-0",
-              0.215
-            ]
-          ],
-          "unified_goal_probs": {
-            "0": 3.87,
-            "1": 12.47,
-            "2": 20.41,
-            "3": 25.32,
-            "4": 19.58,
-            "5": 9.84,
-            "6": 4.99,
-            "7": 3.52
-          },
-          "unified_source": "unified_score_matrix_v18_2_final_ipf",
-          "fair_1x2_pack": {
-            "method": "power",
-            "fair_probs": {
-              "home": 71.621,
-              "draw": 17.197,
-              "away": 11.182
-            },
-            "raw_implied": {
-              "home": 75.188,
-              "draw": 22.222,
-              "away": 15.385
-            },
-            "overround": 0.12795,
-            "shin_z": null
-          },
-          "mixed_target_dir": {
-            "draw": 20.03,
-            "home": 65.14,
-            "away": 14.83
-          },
-          "confidence": 80.0,
-          "confidence_meaning": "排序置信度，不等于历史命中率",
-          "risk_level": "低",
-          "bayesian_evidences": [
-            "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'draw': 20.03, 'home': 65.14, 'away': 14.83}",
-            "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
-            "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded",
-            "陷阱/保护:1个 严重度2"
-          ],
-          "traps_detected": [
-            "T3_HANDICAP_SHALLOWER"
-          ],
-          "trap_count": 1,
-          "trap_severity": 2,
-          "trap_details": [
-            {
-              "trap": "T3_HANDICAP_SHALLOWER",
-              "desc": "强方让球偏浅:home 理论-1.75 vs 实际-1.00,强方差-0.75"
-            }
-          ],
-          "trap_flags": {
-            "shallow_guard": true
-          },
-          "fair_1x2": {
-            "home": 71.621,
-            "draw": 17.197,
-            "away": 11.182
-          },
-          "fair_1x2_method": "power",
-          "market_overround": 0.12795,
-          "raw_implied_1x2": {
-            "home": 75.188,
-            "draw": 22.222,
-            "away": 15.385
-          },
-          "crs_shape": "disabled",
-          "crs_moments": {},
-          "crs_margin": 0.0,
-          "crs_coverage": 0.0,
-          "crs_implied_probs": {},
-          "crs_low_rank_info": {
-            "all_sorted": [],
-            "rank": {},
-            "min_draw": null,
-            "draw_available": [],
-            "draw_low_rank": 999,
-            "draw_low_score": "",
-            "draw_low_odds": 999.0,
-            "low_scores": []
-          },
-          "suggested_kelly": 0.0,
-          "edge_vs_market": -29.31,
-          "is_value": false,
-          "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 10.876,
-          "score_market_odds": 6.5,
-          "score_market_implied_pct": 15.385,
-          "gpt_score": "弃权",
-          "gpt_analysis": "弃权",
-          "grok_score": "弃权",
-          "grok_analysis": "弃权",
-          "gemini_score": "弃权",
-          "gemini_analysis": "弃权",
-          "claude_score": "弃权",
-          "claude_analysis": "弃权",
-          "ai_abstained": [
-            "GPT",
-            "GROK",
-            "GEMINI",
-            "CLAUDE"
-          ],
-          "ai_avg_confidence": 0.0,
-          "smart_money_signal": "💰 Sharp资金流向主胜 | T3_HANDICAP_SHALLOWER:强方让球偏浅:home 理论-1.75 vs 实际-1.00,强方差-0.75",
-          "smart_signals": [
-            "💰 Sharp资金流向主胜",
-            "🚨 大热必死",
-            "🔥 赔率剧变(幅度1.00)",
-            "🚨 主胜降水-1.00+热度57%=造热主队",
-            "⚠️ 大热(<1.40)平局率+12%",
-            "⚡ 主队攻防效率碾压(差值1.41)",
-            "⚠️ 负CLV-9.0% [主胜]",
-            "⚠️ 负CLV-11.5% [客胜]"
-          ],
-          "sharp_detected": true,
-          "sharp_dir": "home",
-          "xG_home": 2.0,
-          "xG_away": 0.81,
-          "expected_total_goals": 2.81,
-          "actual_handicap_signed": -1.0,
-          "theoretical_handicap_signed": -1.75,
-          "external_context": {
-            "source_quality": "missing",
-            "injuries": [],
-            "suspensions": [],
-            "lineup_news": [],
-            "weather": {},
-            "motivation": [],
-            "schedule_pressure": [],
-            "odds_history": [],
-            "sharp_market_notes": [],
-            "news_snippets": [],
-            "data_missing": [
-              "injuries",
-              "suspensions",
-              "lineup_news",
-              "weather",
-              "motivation",
-              "odds_history"
-            ],
-            "raw": {}
-          },
-          "refined_poisson": {
-            "home_win": 78.4,
-            "draw": 15.4,
-            "away_win": 6.2,
-            "predicted_score": "1-0",
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 16.6
-              },
-              {
-                "score": "2-0",
-                "prob": 14.7
-              },
-              {
-                "score": "3-0",
-                "prob": 11.3
-              },
-              {
-                "score": "2-1",
-                "prob": 9.9
-              },
-              {
-                "score": "1-1",
-                "prob": 7.6
-              },
-              {
-                "score": "4-0",
-                "prob": 6.5
-              }
-            ]
-          },
-          "elo": {
-            "home_win": 62.8,
-            "draw": 20.0,
-            "away_win": 27.2,
-            "elo_diff": 145
-          },
-          "experience_analysis": {
-            "triggered_count": 5,
-            "total_score": 33,
-            "draw_rules": 2,
-            "recommendation": "⚠️ 多规则叠加，需高度警惕",
-            "over_adj": 0.0,
-            "zero_zero_boost": 0.0,
-            "rules": [
-              {
-                "id": "D01",
-                "name": "大热必死",
-                "weight": 8
-              },
-              {
-                "id": "D06",
-                "name": "德比/克星效应",
-                "weight": 8
-              },
-              {
-                "id": "U10",
-                "name": "赔率剧变",
-                "weight": 7
-              },
-              {
-                "id": "L01",
-                "name": "英超主场优势下降",
-                "weight": 3
-              },
-              {
-                "id": "M01",
-                "name": "保级队激战",
-                "weight": 7
-              }
-            ]
-          },
-          "engine_version": "vMAX 18.3.2",
-          "engine_architecture": "RAW-AI主审 + 统一API_URL中转 + 单批次singleflight防重复扣费 + Claude守门裁判 + 去CRS/去常见比分锚定",
-          "validation_warnings": [],
-          "postprocess_warnings": [
-            "experience_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "odds_history_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "quant_edge_core_fields_restored:away_win_pct,draw_pct,home_win_pct",
-            "advanced_models_core_fields_restored:away_win_pct,draw_pct,home_win_pct"
-          ],
-          "line_movement_anomaly": {
-            "has_anomaly": true,
-            "signal": "🚨 主胜降水-1.00+热度57%=造热主队",
-            "direction": "upset_away"
-          },
-          "odds_pattern": "大热",
-          "odds_range_analysis": {
-            "home": {
-              "hist_rate": 68.0,
-              "desc": "强势主队:胜率68%最佳区间"
-            },
-            "draw": {
-              "hist_rate": 18.0,
-              "desc": "平局罕见"
-            },
-            "away": {
-              "hist_rate": 18.0,
-              "desc": "弱势客队:FLB区间"
-            }
-          },
-          "bivariate_poisson": {
-            "home_win": 57.5,
-            "draw": 28.9,
-            "away_win": 13.6,
-            "predicted_score": "1-0",
-            "btts": 40.1,
-            "over_2_5": 38.9,
-            "correlation": 0.1,
-            "p0_inflate": 0.03,
-            "top_scores": [
-              {
-                "score": "1-0",
-                "prob": 15.84
-              },
-              {
-                "score": "0-0",
-                "prob": 14.14
-              },
-              {
-                "score": "2-0",
-                "prob": 12.25
-              },
-              {
-                "score": "1-1",
-                "prob": 11.07
-              },
-              {
-                "score": "2-1",
-                "prob": 8.85
-              },
-              {
-                "score": "3-0",
-                "prob": 6.17
-              }
-            ]
-          },
-          "pro_odds": {
-            "true_home": 66.3,
-            "true_draw": 19.9,
-            "true_away": 13.8
-          },
-          "predictability_score": 65,
-          "asian_handicap_probs": {
-            "ah_0": [
-              0.5952,
-              0.2467,
-              0.158
-            ],
-            "ah_0.5": [
-              0.5952,
-              0.0,
-              0.4048
-            ],
-            "ah_1.0": [
-              0.3259,
-              0.2694,
-              0.4048
-            ],
-            "ou_1.5": [
-              0.6691,
-              0.0,
-              0.3309
-            ],
-            "ou_2.5": [
-              0.4038,
-              0.0,
-              0.5962
-            ],
-            "ou_3.5": [
-              0.2004,
-              0.0,
-              0.7996
-            ],
-            "btts": 0.3988
-          },
-          "over_2_5": 45.3,
-          "btts": 45.5,
-          "total_models": 15,
-          "fusion_weights": {
-            "market": 0.69,
-            "model": 0.31
-          }
-        },
-        "recommend_score": 41.86,
-        "is_recommended": true
-      },
-      {
         "home_team": "赫尔辛基",
         "away_team": "拉赫蒂",
         "league": "芬超",
@@ -19734,12 +17733,12 @@
           "lose": -1
         },
         "vote": {
-          "win": "64",
-          "same": "20",
+          "win": "63",
+          "same": "21",
           "lose": "16",
-          "hhad_win": "39",
+          "hhad_win": "38",
           "hhad_same": "27",
-          "hhad_lose": "34"
+          "hhad_lose": "35"
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
@@ -19793,7 +17792,7 @@
           "fp": 16.0,
           "ff": 9.5
         },
-        "id": 2,
+        "id": 1,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -20178,10 +18177,10 @@
             "CLAUDE"
           ],
           "ai_avg_confidence": 0.0,
-          "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热64% | T1_FAKE_DRAW_TRAP:假平诱盘:平赔独降-1.00+强方home公平67.2%",
+          "smart_money_signal": "💰 Sharp资金流向客胜 | 🚨 主胜超热63% | T1_FAKE_DRAW_TRAP:假平诱盘:平赔独降-1.00+强方home公平67.2%",
           "smart_signals": [
             "💰 Sharp资金流向客胜",
-            "🚨 主胜超热64%",
+            "🚨 主胜超热63%",
             "🔥 赔率剧变(幅度1.00)",
             "🔥 客胜Steam! 降水-1.00但散户未跟(16%)",
             "🔥 赔率剧变(幅度1.00)",
@@ -20421,8 +18420,8 @@
           "win": "29",
           "same": "30",
           "lose": "41",
-          "hhad_win": "58",
-          "hhad_same": "24",
+          "hhad_win": "59",
+          "hhad_same": "23",
           "hhad_lose": "18"
         },
         "odds_movement": "主胜平稳，客胜升水",
@@ -20477,7 +18476,7 @@
           "fp": 15.0,
           "ff": 3.75
         },
-        "id": 3,
+        "id": 2,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -21108,12 +19107,12 @@
           "lose": 1
         },
         "vote": {
-          "win": "59",
-          "same": "24",
+          "win": "60",
+          "same": "23",
           "lose": "17",
           "hhad_win": "32",
-          "hhad_same": "28",
-          "hhad_lose": "40"
+          "hhad_same": "29",
+          "hhad_lose": "39"
         },
         "odds_movement": "主胜降水，客胜升水",
         "intelligence": {
@@ -21167,7 +19166,7 @@
           "fp": 15.0,
           "ff": 8.5
         },
-        "id": 4,
+        "id": 3,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -21266,47 +19265,48 @@
           "display_direction": "主胜",
           "final_direction": "home",
           "is_score_others": false,
-          "home_win_pct": 58.8,
-          "draw_pct": 23.1,
-          "away_win_pct": 18.1,
+          "home_win_pct": 59.0,
+          "draw_pct": 23.0,
+          "away_win_pct": 18.0,
           "scenario": "normal",
           "goal_range": [
             2,
             4
           ],
-          "dir_confidence": 58.8,
-          "dir_gap": 35.7,
+          "dir_confidence": 59.0,
+          "dir_gap": 36.0,
           "evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'draw': 23.12, 'home': 58.82, 'away': 18.06}",
-            "后验方向:{'home': 58.82, 'draw': 23.12, 'away': 18.06}",
-            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.091%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded"
+            "混合方向目标:{'draw': 23.04, 'home': 58.99, 'away': 17.97}",
+            "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
+            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
+            "决策来源:matrix_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度2"
           ],
           "override_triggered": false,
           "top_score_candidates": [
             [
               "2-1",
-              11.091
+              11.112
             ],
             [
               "2-0",
-              9.638
+              9.689
             ],
             [
               "3-0",
-              7.675
+              7.69
             ],
             [
               "3-1",
-              5.999
+              6.022
             ],
             [
               "4-0",
-              3.114
+              3.126
             ]
           ],
-          "calibrated_score_prob_pct": 11.091,
+          "calibrated_score_prob_pct": 11.112,
           "bayesian_prior": {
             "home": 63.673,
             "draw": 21.178,
@@ -21317,31 +19317,31 @@
           "unified_matrix_top_scores": [
             [
               "1-1",
-              11.306
+              11.259
             ],
             [
               "2-1",
-              11.091
+              11.112
             ],
             [
               "1-0",
-              10.292
+              10.317
             ],
             [
               "2-0",
-              9.638
+              9.689
             ],
             [
               "3-0",
-              7.675
+              7.69
             ],
             [
               "3-1",
-              5.999
+              6.022
             ],
             [
               "1-2",
-              5.612
+              5.582
             ],
             [
               "0-0",
@@ -21349,63 +19349,63 @@
             ],
             [
               "2-2",
-              5.278
+              5.249
             ],
             [
               "0-1",
-              5.208
+              5.183
             ],
             [
               "4-0",
-              3.114
+              3.126
             ],
             [
               "4-1",
-              2.564
+              2.568
             ],
             [
               "3-2",
-              2.47
+              2.474
             ],
             [
               "0-2",
-              2.349
+              2.344
             ],
             [
               "1-3",
-              1.462
+              1.457
             ],
             [
               "4-2",
-              1.29
+              1.294
             ],
             [
               "2-3",
-              1.25
+              1.243
             ],
             [
               "5-1",
-              1.072
+              1.075
             ],
             [
               "5-0",
-              1.065
+              1.066
             ],
             [
               "3-3",
-              1.009
+              1.003
             ],
             [
               "0-3",
-              0.901
+              0.896
             ],
             [
               "5-2",
-              0.576
+              0.577
             ],
             [
               "4-3",
-              0.462
+              0.463
             ],
             [
               "6-1",
@@ -21413,23 +19413,23 @@
             ],
             [
               "6-0",
-              0.371
+              0.372
             ],
             [
               "2-4",
-              0.315
+              0.313
             ],
             [
               "1-4",
-              0.301
+              0.299
             ],
             [
               "3-4",
-              0.234
+              0.233
             ],
             [
               "0-4",
-              0.176
+              0.175
             ],
             [
               "6-2",
@@ -21463,24 +19463,32 @@
             "shin_z": null
           },
           "mixed_target_dir": {
-            "draw": 23.12,
-            "home": 58.82,
-            "away": 18.06
+            "draw": 23.04,
+            "home": 58.99,
+            "away": 17.97
           },
           "confidence": 76.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 63.673, 'draw': 21.178, 'away': 15.149}",
-            "混合方向目标:{'draw': 23.12, 'home': 58.82, 'away': 18.06}",
-            "后验方向:{'home': 58.82, 'draw': 23.12, 'away': 18.06}",
-            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.091%",
-            "决策来源:matrix_authority; authority_mode=claude_guarded"
+            "混合方向目标:{'draw': 23.04, 'home': 58.99, 'away': 17.97}",
+            "后验方向:{'home': 58.99, 'draw': 23.04, 'away': 17.97}",
+            "本地校准λ主1.717/λ客0.827；AI锁定=2-1；校准概率11.112%",
+            "决策来源:matrix_authority; authority_mode=claude_guarded",
+            "陷阱/保护:1个 严重度2"
           ],
-          "traps_detected": [],
-          "trap_count": 0,
-          "trap_severity": 0,
-          "trap_details": [],
+          "traps_detected": [
+            "T9_FAKE_CONTRARIAN"
+          ],
+          "trap_count": 1,
+          "trap_severity": 2,
+          "trap_details": [
+            {
+              "trap": "T9_FAKE_CONTRARIAN",
+              "desc": "诱反指陷阱:home散户60%+赔率同向降水,反指风险高"
+            }
+          ],
           "trap_flags": {},
           "fair_1x2": {
             "home": 63.673,
@@ -21510,10 +19518,10 @@
             "low_scores": []
           },
           "suggested_kelly": 0.0,
-          "edge_vs_market": -27.91,
+          "edge_vs_market": -27.77,
           "is_value": false,
           "ev_note": "calibrated_matrix_prob_vs_market",
-          "score_model_prob": 11.091,
+          "score_model_prob": 11.112,
           "score_market_odds": 6.5,
           "score_market_implied_pct": 15.385,
           "gpt_score": "弃权",
@@ -21531,15 +19539,16 @@
             "CLAUDE"
           ],
           "ai_avg_confidence": 0.0,
-          "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热59%",
+          "smart_money_signal": "💰 Sharp资金流向主胜 | 🚨 主胜超热60% | T9_FAKE_CONTRARIAN:诱反指陷阱:home散户60%+赔率同向降水,反指风险高",
           "smart_signals": [
             "💰 Sharp资金流向主胜",
-            "🚨 主胜超热59%",
+            "🚨 主胜超热60%",
             "🔥 赔率剧变(幅度1.00)",
-            "🚨 主胜降水-1.00+热度59%=造热主队",
+            "🚨 主胜降水-1.00+热度60%=造热主队",
             "📊 客队冷门(>5.0)实际胜率低于隐含8%",
+            "🚨 主胜反向Steam! 降水-1.00+热度60%=庄家造热",
             "⚡ 主队攻防效率碾压(差值1.20)",
-            "⚠️ 负CLV-13.5% [客胜]"
+            "⚠️ 负CLV-14.0% [客胜]"
           ],
           "sharp_detected": true,
           "sharp_dir": "home",
@@ -21638,10 +19647,16 @@
           ],
           "line_movement_anomaly": {
             "has_anomaly": true,
-            "signal": "🚨 主胜降水-1.00+热度59%=造热主队",
+            "signal": "🚨 主胜降水-1.00+热度60%=造热主队",
             "direction": "upset_away"
           },
           "odds_pattern": "大冷门客",
+          "steam_move": {
+            "steam": true,
+            "signal": "🚨 主胜反向Steam! 降水-1.00+热度60%=庄家造热",
+            "direction": "upset_away",
+            "strength": 10
+          },
           "odds_range_analysis": {
             "home": {
               "hist_rate": 68.0,
@@ -21739,7 +19754,7 @@
             "model": 0.23
           }
         },
-        "recommend_score": 42.52,
+        "recommend_score": 43.55,
         "is_recommended": true
       },
       {
@@ -21758,11 +19773,11 @@
         },
         "vote": {
           "win": "31",
-          "same": "30",
-          "lose": "39",
-          "hhad_win": "59",
+          "same": "31",
+          "lose": "38",
+          "hhad_win": "60",
           "hhad_same": "23",
-          "hhad_lose": "18"
+          "hhad_lose": "17"
         },
         "odds_movement": "主胜升水，客胜升水",
         "intelligence": {
@@ -21816,7 +19831,7 @@
           "fp": 14.0,
           "ff": 3.7
         },
-        "id": 5,
+        "id": 4,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -22495,7 +20510,7 @@
           "fp": 19.0,
           "ff": 13.0
         },
-        "id": 6,
+        "id": 5,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -23126,7 +21141,7 @@
           }
         },
         "recommend_score": 31.17,
-        "is_recommended": false
+        "is_recommended": true
       },
       {
         "home_team": "吉达联合",
@@ -23202,7 +21217,7 @@
           "fp": 17.0,
           "ff": 10.0
         },
-        "id": 7,
+        "id": 6,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -23909,7 +21924,7 @@
           "fp": 17.0,
           "ff": 10.0
         },
-        "id": 8,
+        "id": 7,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -24538,8 +22553,8 @@
           "same": "19",
           "lose": "67",
           "hhad_win": "32",
-          "hhad_same": "24",
-          "hhad_lose": "44"
+          "hhad_same": "23",
+          "hhad_lose": "45"
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
@@ -24593,7 +22608,7 @@
           "fp": 19.0,
           "ff": 1.86
         },
-        "id": 9,
+        "id": 8,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -25250,9 +23265,9 @@
           "win": "37",
           "same": "30",
           "lose": "33",
-          "hhad_win": "65",
+          "hhad_win": "66",
           "hhad_same": "21",
-          "hhad_lose": "14"
+          "hhad_lose": "13"
         },
         "odds_movement": "主胜平稳，客胜升水",
         "intelligence": {
@@ -25306,7 +23321,7 @@
           "fp": 13.0,
           "ff": 4.3
         },
-        "id": 10,
+        "id": 9,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -25978,7 +23993,7 @@
           "fp": 26.0,
           "ff": 20.0
         },
-        "id": 11,
+        "id": 10,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
@@ -26585,7 +24600,7 @@
           "fp": 18.0,
           "ff": 9.5
         },
-        "id": 12,
+        "id": 11,
         "date": "2026-05-05",
         "home_id": 0,
         "away_id": 0,
