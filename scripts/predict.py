@@ -108,7 +108,7 @@ except Exception as e:
     exp_engine = None
 
 
-ENGINE_VERSION = "vMAX 18.3"
+ENGINE_VERSION = "vMAX 18.3.1"
 ENGINE_ARCHITECTURE = "RAW-AI主审 + 去CRS提示 + 去常见比分锚定 + 盘口坐标硬修复 + 外部情报入口 + 防重复请求缓存"
 VALID_DIRS = {"home", "draw", "away"}
 
@@ -1733,10 +1733,13 @@ def build_v18_prompt(match_analyses):
 
 def build_claude_final_audit_prompt(match_analyses, phase1_results):
     p = "<final_audit_context>\n"
-    p += "你是最终审计模型，也是本系统默认 AI 主裁。你不能按票数裁决，也不能机械服从本地矩阵。\n"
+    p += "你是最终审计模型，也是本系统默认 AI 主裁；但你不是反指模型，不需要为了体现审计而反对 GPT/Grok/Gemini。\n"
+    p += "三家初审是证据输入，不是你必须推翻的对象。默认选择证据最完整、与原始盘口/总进球/资金流最一致的一组。\n"
+    p += "只有存在硬反证时才允许改票：明确盘口方向矛盾、总进球赔率矛盾、半全场矛盾、资金流/变盘矛盾、外部伤停/首发/天气硬信息。\n"
+    p += "禁止无硬反证地把 2-0 改成 2-1、3-1 改成 2-1、0-2 改成 1-2；如果只是多给弱方一个进球，必须写明 BTTS/防守端/xG/赔率变动的具体字段证据。\n"
     p += "本版本去除 CRS 框架和常见比分锚定。不得引用 CRS 低赔、CRS 矩阵、CRS 形状、固定比分模板。\n"
     p += "你必须重新审计 1X2、盘口深浅、总进球赔率、半全场、资金流、外部情报和本地风险备注。\n"
-    p += "如果三家初审一致，你仍要检查是否只是跟随模板比分；如果证据不足，要改为证据更强的方向/比分。\n"
+    p += "如果三家或两家初审形成同比分共识，除非能列出硬反证，否则优先沿用该比分或只调整置信度。\n"
     p += "如果你输出 1-1、2-1、1-0、0-1、1-2，只能因为原始数据支持，而不是因为它们常见。\n"
     p += "</final_audit_context>\n\n"
     p += build_v18_prompt(match_analyses)
@@ -1761,9 +1764,26 @@ GPT_DEFAULT_KEY = ""
 # v18.2.3: AI 主裁开关。
 # claude = Claude 有效时直接采用 Claude top1/top3，本地矩阵只做概率校准和风控提示；
 # consensus = 多AI方向/比分共识主裁； matrix = 旧版本地矩阵主裁。
-AI_SCORE_AUTHORITY_MODE = str(os.environ.get("AI_SCORE_AUTHORITY_MODE", "claude")).strip().lower()
+AI_SCORE_AUTHORITY_MODE = str(os.environ.get("AI_SCORE_AUTHORITY_MODE", "claude_guarded")).strip().lower()
 AI_DECISION_CACHE_TTL = int(_f(os.environ.get("AI_DECISION_CACHE_TTL", 900), 900))
 AI_DISABLE_CACHE = str(os.environ.get("AI_DISABLE_CACHE", "false")).strip().lower() in ("1", "true", "yes")
+
+# v18.3.1: 所有模型可统一走同一个 OpenAI-compatible 中转。
+# 你只需要配置 API_KEY / API_URL；也可以单独覆盖 GPT_API_KEY/GPT_API_URL 等。
+COMMON_GATEWAY_KEY_ALIASES = ["API_KEY", "OPENAI_API_KEY"]
+COMMON_GATEWAY_URL_ALIASES = ["API_URL", "BASE_URL", "OPENAI_API_URL"]
+
+# Claude 不是反指模型。若三家初审形成强共识，Claude 只在有硬反证时改票。
+AI_JUDGE_CONTRARIAN_GUARD = str(os.environ.get("AI_JUDGE_CONTRARIAN_GUARD", "true")).strip().lower() in ("1", "true", "yes")
+AI_CONSENSUS_MIN_EXACT = int(_f(os.environ.get("AI_CONSENSUS_MIN_EXACT", 2), 2))
+
+DEFAULT_AI_MODELS = {
+    "gpt": ["gpt-5.4"],
+    "claude": ["claude-opus-4-7"],
+    "gemini": ["gemini-3.1-pro-preview-thinking-high"],
+    "grok": ["grok-4.3"],
+}
+
 _AI_RESULT_CACHE: Dict[str, Tuple[float, Dict[str, Dict[int, Dict[str, Any]]]]] = {}
 _AI_CALL_STATUS: Dict[str, Any] = {}
 
@@ -1813,26 +1833,34 @@ def _ai_cache_key(prompt: str, num_matches: int) -> str:
 
 def get_clean_env_url(name, default=""):
     aliases = [name]
+
+    # 单模型专用别名优先，其次统一中转 API_URL / BASE_URL。
     if name == "GPT_API_URL":
-        aliases += ["OPENAI_API_URL", "API_URL", "BASE_URL"]
-    if name == "GROK_API_URL":
+        aliases += ["OPENAI_API_URL"]
+    elif name == "GROK_API_URL":
         aliases += ["XAI_API_URL"]
-    if name == "CLAUDE_API_URL":
+    elif name == "CLAUDE_API_URL":
         aliases += ["ANTHROPIC_API_URL"]
-    if name == "GEMINI_API_URL":
+    elif name == "GEMINI_API_URL":
         aliases += ["GOOGLE_API_URL"]
+
+    aliases += COMMON_GATEWAY_URL_ALIASES
     return get_first_clean_env_url(aliases, default)
 
 def get_clean_env_key(name):
     aliases = [name]
+
+    # 单模型专用 key 优先，其次统一中转 API_KEY。
     if name == "GPT_API_KEY":
-        aliases += ["OPENAI_API_KEY", "API_KEY"]
-    if name == "GROK_API_KEY":
+        aliases += ["OPENAI_API_KEY"]
+    elif name == "GROK_API_KEY":
         aliases += ["XAI_API_KEY"]
-    if name == "CLAUDE_API_KEY":
+    elif name == "CLAUDE_API_KEY":
         aliases += ["ANTHROPIC_API_KEY"]
-    if name == "GEMINI_API_KEY":
+    elif name == "GEMINI_API_KEY":
         aliases += ["GOOGLE_API_KEY", "GOOGLE_AI_API_KEY"]
+
+    aliases += COMMON_GATEWAY_KEY_ALIASES
     return get_first_clean_env_key(aliases, "")
 
 def _mask_key(k):
@@ -1841,7 +1869,8 @@ def _mask_key(k):
 def debug_ai_config():
     for name, url_env, key_env in [("GPT","GPT_API_URL","GPT_API_KEY"),("GROK","GROK_API_URL","GROK_API_KEY"),("GEMINI","GEMINI_API_URL","GEMINI_API_KEY"),("CLAUDE","CLAUDE_API_URL","CLAUDE_API_KEY")]:
         print(f"[AI CONFIG] {name}: url={get_clean_env_url(url_env)} key={_mask_key(get_clean_env_key(key_env))} models={_model_list_from_env(name.lower(), [])}")
-    print(f"[AI MODE] authority={AI_SCORE_AUTHORITY_MODE} cache_ttl={AI_DECISION_CACHE_TTL} disable_cache={AI_DISABLE_CACHE}")
+    print(f"[AI MODE] authority={AI_SCORE_AUTHORITY_MODE} cache_ttl={AI_DECISION_CACHE_TTL} disable_cache={AI_DISABLE_CACHE} contrarian_guard={AI_JUDGE_CONTRARIAN_GUARD}")
+    print(f"[COMMON GATEWAY] API_URL={get_first_clean_env_url(COMMON_GATEWAY_URL_ALIASES, '')} API_KEY={_mask_key(get_first_clean_env_key(COMMON_GATEWAY_KEY_ALIASES, ''))}")
     print(f"[EXTERNAL] enabled={_external_context_enabled()} endpoints={_parse_external_endpoints()} bing={bool(os.environ.get('BING_SEARCH_API_KEY'))}")
     print(f"[RAW MODE] disable_crs={DISABLE_CRS_ANALYSIS} disable_safe_score_anchors={DISABLE_SAFE_SCORE_ANCHORS} raw_ai_prompt={RAW_AI_PROMPT_MODE}")
 
@@ -1858,7 +1887,7 @@ async def async_call_one_ai_batch(session, prompt, url_env, key_env, models_list
     urls = [primary or GPT_DEFAULT_URL] if ai_name == "gpt" else [primary] + [u for u in FALLBACK_URLS if u and u != primary][:1]
     request_count = 0
     profiles = {
-        "claude": {"temp":0.14, "sys":"你是最终审计模型。只输出JSON数组。复查1X2、盘口、总进球、外部情报、资金和风控；禁止引用CRS或固定常见比分模板。"},
+        "claude": {"temp":0.12, "sys":"你是最终审计模型，不是反指模型。只输出JSON数组。默认尊重初审中证据最完整的结论；只有盘口/总进球/半全场/资金/外部情报存在硬反证时才改票。禁止无证据把2-0改2-1或3-1改2-1。禁止引用CRS或固定常见比分模板。"},
         "gpt": {"temp":0.18, "sys":"你是衍生品定价+比分分布量化策略师。只输出JSON数组；不引用CRS，不套常见比分。"},
         "grok": {"temp":0.24, "sys":"你是另类数据和市场情绪分析师。只输出JSON数组，不得编造未给数据，不套常见比分。"},
         "gemini": {"temp":0.15, "sys":"你是非线性特征和多市场共振识别模型。只输出JSON数组；不要套用固定比分模板。"},
@@ -2321,11 +2350,11 @@ async def run_ai_matrix_two_phase(match_analyses):
         if now - ts <= AI_DECISION_CACHE_TTL:
             print(f"  [AI CACHE] 命中同一批次结果，避免重复请求/重复扣费 ttl={AI_DECISION_CACHE_TTL}s")
             return cached
-    print(f"  [v18.2.3 Phase1 Prompt] {len(prompt):,}字符 → GPT/Grok/Gemini")
+    print(f"  [v18.3.1 Phase1 Prompt] {len(prompt):,}字符 → GPT/Grok/Gemini | common_gateway={bool(get_first_clean_env_key(COMMON_GATEWAY_KEY_ALIASES, '')) and bool(get_first_clean_env_url(COMMON_GATEWAY_URL_ALIASES, ''))}")
     configs = [
-        ("grok","GROK_API_URL","GROK_API_KEY", _model_list_from_env("grok", ["熊猫-A-5-grok-4.2-fast-200w上下文"])),
-        ("gpt","GPT_API_URL","GPT_API_KEY", _model_list_from_env("gpt", ["gpt-5.4"])),
-        ("gemini","GEMINI_API_URL","GEMINI_API_KEY", _model_list_from_env("gemini", ["熊猫特供-按量-SSS-gemini-3.1-pro-preview-thinking"])),
+        ("grok","GROK_API_URL","GROK_API_KEY", _model_list_from_env("grok", DEFAULT_AI_MODELS["grok"])),
+        ("gpt","GPT_API_URL","GPT_API_KEY", _model_list_from_env("gpt", DEFAULT_AI_MODELS["gpt"])),
+        ("gemini","GEMINI_API_URL","GEMINI_API_KEY", _model_list_from_env("gemini", DEFAULT_AI_MODELS["gemini"])),
     ]
     all_results = {"gpt": {}, "grok": {}, "gemini": {}, "claude": {}}
     _AI_CALL_STATUS.clear()
@@ -2337,8 +2366,8 @@ async def run_ai_matrix_two_phase(match_analyses):
             else:
                 print(f"  [Phase1 ERROR] {r}")
         audit_prompt = build_claude_final_audit_prompt(match_analyses, all_results)
-        print(f"  [v18.2.3 Phase2 Claude Audit] {len(audit_prompt):,}字符")
-        _, cr, _ = await async_call_one_ai_batch(session, audit_prompt, "CLAUDE_API_URL", "CLAUDE_API_KEY", _model_list_from_env("claude", ["熊猫-69-满血openrouter-claude-opus-4.7-上下文1000k"]), num, "claude")
+        print(f"  [v18.3.1 Phase2 Claude Audit] {len(audit_prompt):,}字符")
+        _, cr, _ = await async_call_one_ai_batch(session, audit_prompt, "CLAUDE_API_URL", "CLAUDE_API_KEY", _model_list_from_env("claude", DEFAULT_AI_MODELS["claude"]), num, "claude")
         all_results["claude"] = cr or {}
     print(f"  [完成] {sum(1 for v in all_results.values() if v)}/4 AI有数据 | status={_AI_CALL_STATUS}")
     if not AI_DISABLE_CACHE:
@@ -2385,15 +2414,76 @@ def _ai_top_candidates_from_response(r: Dict[str, Any], matrix: Dict[str, float]
         out.append((sc, round(val, 3)))
     return out
 
+def _phase1_exact_consensus(ai_responses: Dict[str, Dict[str, Any]]) -> Tuple[str, int, List[str]]:
+    counts: Dict[str, List[str]] = {}
+    for name in ["gpt", "grok", "gemini"]:
+        r = ai_responses.get(name, {}) if isinstance(ai_responses, dict) else {}
+        sc = _valid_ai_score_from_response(r)
+        if sc:
+            counts.setdefault(sc, []).append(name)
+    if not counts:
+        return "", 0, []
+    best_sc, names = sorted(counts.items(), key=lambda kv: (len(kv[1]), kv[0]), reverse=True)[0]
+    return best_sc, len(names), names
+
+def _score_delta(a: str, b: str) -> Tuple[Optional[int], Optional[int]]:
+    ah, aa = _parse_score(a)
+    bh, ba = _parse_score(b)
+    if ah is None or bh is None:
+        return None, None
+    return ah - bh, aa - ba
+
+def _claude_has_hard_contradiction(r: Dict[str, Any]) -> bool:
+    if not isinstance(r, dict):
+        return False
+    text = " ".join([
+        str(r.get("reason", "")),
+        json.dumps(r.get("audit", {}), ensure_ascii=False),
+        " ".join(str(x) for x in r.get("must_review_flags", []) if isinstance(r.get("must_review_flags", []), list)),
+    ])
+    hard_keywords = [
+        "硬反证", "明确反证", "首发", "伤停", "红牌", "停赛", "天气", "confirmed",
+        "盘口矛盾", "总进球矛盾", "半全场", "BTTS", "双方进球", "防守漏洞",
+        "xG差", "赔率变动", "降水", "升水", "外部情报", "阵容", "门将",
+    ]
+    return any(k in text for k in hard_keywords)
+
+def _same_direction_one_goal_shift(a: str, b: str) -> bool:
+    if _score_direction(a) != _score_direction(b):
+        return False
+    dh, da = _score_delta(a, b)
+    if dh is None:
+        return False
+    return abs(dh) + abs(da) == 1
+
 def _choose_ai_authority_score(ai_responses: Dict[str, Dict[str, Any]], matrix: Dict[str, float]) -> Tuple[str, str, List[Tuple[str, float]]]:
     mode = AI_SCORE_AUTHORITY_MODE
     if mode in ("off", "false", "0", "matrix", "local"):
         return "", "matrix", []
-    # 默认：Claude 有效则 Claude 是主裁。
+
     claude = ai_responses.get("claude", {}) if isinstance(ai_responses, dict) else {}
     cl_sc = _valid_ai_score_from_response(claude)
+
+    # v18.3.1: Claude guarded。Claude 仍是主裁，但不允许无硬反证地故意反着初审走。
+    consensus_sc, consensus_n, consensus_names = _phase1_exact_consensus(ai_responses or {})
+    if mode in ("claude_guarded", "guarded", "ai_guarded") and cl_sc:
+        if (
+            AI_JUDGE_CONTRARIAN_GUARD
+            and consensus_sc
+            and consensus_n >= AI_CONSENSUS_MIN_EXACT
+            and consensus_sc != cl_sc
+            and _same_direction_one_goal_shift(cl_sc, consensus_sc)
+            and not _claude_has_hard_contradiction(claude)
+        ):
+            tops = _ai_top_candidates_from_response(claude, matrix)
+            if consensus_sc not in [x[0] for x in tops]:
+                tops = [(consensus_sc, round(matrix.get(consensus_sc, 0.0) * 100, 3))] + tops
+            return consensus_sc, f"phase1_consensus_guard:{','.join(consensus_names)}", tops[:5]
+        return cl_sc, "claude_guarded_authority", _ai_top_candidates_from_response(claude, matrix)
+
     if mode in ("claude", "ai", "ai_first", "ai-final", "ai_final") and cl_sc:
         return cl_sc, "claude_authority", _ai_top_candidates_from_response(claude, matrix)
+
     # 多AI共识：按比分票重，票数相同时用矩阵校准概率排。
     score_w = {}
     model_w = {"claude": 1.35, "gpt": 1.0, "grok": 1.0, "gemini": 1.0}
