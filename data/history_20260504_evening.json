@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-04 21:28:04",
+  "update_time": "2026-05-04 21:38:24",
   "version": "MAX-v1.1",
   "top4": [
     {
@@ -186,7 +186,7 @@
         "dir_gap": 33.1,
         "evidences": [
           "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-          "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
+          "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
           "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
           "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
           "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -372,16 +372,16 @@
           "shin_z": null
         },
         "mixed_target_dir": {
+          "home": 57.59,
           "away": 17.91,
-          "draw": 24.5,
-          "home": 57.59
+          "draw": 24.5
         },
         "confidence": 75.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
         "risk_level": "低",
         "bayesian_evidences": [
           "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-          "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
+          "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
           "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
           "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
           "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -865,7 +865,7 @@
         "dir_gap": 33.9,
         "evidences": [
           "公平1X2(power):{'home': 62.308, 'draw': 21.93, 'away': 15.762}",
-          "混合方向目标:{'away': 18.57, 'draw': 23.75, 'home': 57.67}",
+          "混合方向目标:{'home': 57.67, 'away': 18.57, 'draw': 23.75}",
           "后验方向:{'home': 57.67, 'draw': 23.75, 'away': 18.57}",
           "本地校准λ主1.664/λ客0.82；AI锁定=2-1；校准概率11.068%",
           "决策来源:matrix_authority; authority_mode=claude_guarded"
@@ -1050,16 +1050,16 @@
           "shin_z": null
         },
         "mixed_target_dir": {
+          "home": 57.67,
           "away": 18.57,
-          "draw": 23.75,
-          "home": 57.67
+          "draw": 23.75
         },
         "confidence": 75.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
         "risk_level": "低",
         "bayesian_evidences": [
           "公平1X2(power):{'home': 62.308, 'draw': 21.93, 'away': 15.762}",
-          "混合方向目标:{'away': 18.57, 'draw': 23.75, 'home': 57.67}",
+          "混合方向目标:{'home': 57.67, 'away': 18.57, 'draw': 23.75}",
           "后验方向:{'home': 57.67, 'draw': 23.75, 'away': 18.57}",
           "本地校准λ主1.664/λ客0.82；AI锁定=2-1；校准概率11.068%",
           "决策来源:matrix_authority; authority_mode=claude_guarded"
@@ -1516,7 +1516,7 @@
         "dir_gap": 45.1,
         "evidences": [
           "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-          "混合方向目标:{'away': 14.83, 'draw': 20.03, 'home': 65.14}",
+          "混合方向目标:{'home': 65.14, 'away': 14.83, 'draw': 20.03}",
           "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
           "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
           "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -1714,16 +1714,16 @@
           "shin_z": null
         },
         "mixed_target_dir": {
+          "home": 65.14,
           "away": 14.83,
-          "draw": 20.03,
-          "home": 65.14
+          "draw": 20.03
         },
         "confidence": 80.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
         "risk_level": "低",
         "bayesian_evidences": [
           "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-          "混合方向目标:{'away': 14.83, 'draw': 20.03, 'home': 65.14}",
+          "混合方向目标:{'home': 65.14, 'away': 14.83, 'draw': 20.03}",
           "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
           "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
           "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -2206,7 +2206,7 @@
         "dir_gap": 54.4,
         "evidences": [
           "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-          "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
+          "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
           "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
           "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
           "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -2404,16 +2404,16 @@
           "shin_z": null
         },
         "mixed_target_dir": {
+          "home": 70.71,
           "away": 13.02,
-          "draw": 16.27,
-          "home": 70.71
+          "draw": 16.27
         },
         "confidence": 71.0,
         "confidence_meaning": "排序置信度，不等于历史命中率",
         "risk_level": "中",
         "bayesian_evidences": [
           "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-          "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
+          "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
           "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
           "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
           "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -2918,7 +2918,7 @@
           "dir_gap": 45.1,
           "evidences": [
             "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'away': 14.83, 'draw': 20.03, 'home': 65.14}",
+            "混合方向目标:{'home': 65.14, 'away': 14.83, 'draw': 20.03}",
             "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
             "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -3116,16 +3116,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 65.14,
             "away": 14.83,
-            "draw": 20.03,
-            "home": 65.14
+            "draw": 20.03
           },
           "confidence": 80.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'away': 14.83, 'draw': 20.03, 'home': 65.14}",
+            "混合方向目标:{'home': 65.14, 'away': 14.83, 'draw': 20.03}",
             "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
             "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -3606,7 +3606,7 @@
           "dir_gap": 42.0,
           "evidences": [
             "公平1X2(power):{'home': 68.781, 'draw': 18.118, 'away': 13.101}",
-            "混合方向目标:{'away': 16.47, 'draw': 20.75, 'home': 62.79}",
+            "混合方向目标:{'home': 62.79, 'away': 16.47, 'draw': 20.75}",
             "后验方向:{'home': 62.79, 'draw': 20.75, 'away': 16.47}",
             "本地校准λ主1.966/λ客0.879；AI锁定=2-1；校准概率11.080%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -3804,16 +3804,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 62.79,
             "away": 16.47,
-            "draw": 20.75,
-            "home": 62.79
+            "draw": 20.75
           },
           "confidence": 67.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 68.781, 'draw': 18.118, 'away': 13.101}",
-            "混合方向目标:{'away': 16.47, 'draw': 20.75, 'home': 62.79}",
+            "混合方向目标:{'home': 62.79, 'away': 16.47, 'draw': 20.75}",
             "后验方向:{'home': 62.79, 'draw': 20.75, 'away': 16.47}",
             "本地校准λ主1.966/λ客0.879；AI锁定=2-1；校准概率11.080%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -4309,7 +4309,7 @@
           "dir_gap": 11.1,
           "evidences": [
             "公平1X2(power):{'home': 28.569, 'draw': 28.999, 'away': 42.432}",
-            "混合方向目标:{'away': 41.07, 'draw': 29.93, 'home': 29.0}",
+            "混合方向目标:{'home': 29.0, 'away': 41.07, 'draw': 29.93}",
             "后验方向:{'home': 29.0, 'draw': 29.93, 'away': 41.07}",
             "本地校准λ主0.936/λ客1.163；AI锁定=0-1；校准概率12.453%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -4491,16 +4491,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 29.0,
             "away": 41.07,
-            "draw": 29.93,
-            "home": 29.0
+            "draw": 29.93
           },
           "confidence": 50.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 28.569, 'draw': 28.999, 'away': 42.432}",
-            "混合方向目标:{'away': 41.07, 'draw': 29.93, 'home': 29.0}",
+            "混合方向目标:{'home': 29.0, 'away': 41.07, 'draw': 29.93}",
             "后验方向:{'home': 29.0, 'draw': 29.93, 'away': 41.07}",
             "本地校准λ主0.936/λ客1.163；AI锁定=0-1；校准概率12.453%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -5006,7 +5006,7 @@
           "dir_gap": 33.9,
           "evidences": [
             "公平1X2(power):{'home': 62.308, 'draw': 21.93, 'away': 15.762}",
-            "混合方向目标:{'away': 18.57, 'draw': 23.75, 'home': 57.67}",
+            "混合方向目标:{'home': 57.67, 'away': 18.57, 'draw': 23.75}",
             "后验方向:{'home': 57.67, 'draw': 23.75, 'away': 18.57}",
             "本地校准λ主1.664/λ客0.82；AI锁定=2-1；校准概率11.068%",
             "决策来源:matrix_authority; authority_mode=claude_guarded"
@@ -5191,16 +5191,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 57.67,
             "away": 18.57,
-            "draw": 23.75,
-            "home": 57.67
+            "draw": 23.75
           },
           "confidence": 75.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.308, 'draw': 21.93, 'away': 15.762}",
-            "混合方向目标:{'away': 18.57, 'draw': 23.75, 'home': 57.67}",
+            "混合方向目标:{'home': 57.67, 'away': 18.57, 'draw': 23.75}",
             "后验方向:{'home': 57.67, 'draw': 23.75, 'away': 18.57}",
             "本地校准λ主1.664/λ客0.82；AI锁定=2-1；校准概率11.068%",
             "决策来源:matrix_authority; authority_mode=claude_guarded"
@@ -5654,7 +5654,7 @@
           "dir_gap": 7.9,
           "evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
+            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
             "后验方向:{'home': 30.25, 'draw': 30.92, 'away': 38.82}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-2；校准概率9.098%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -5836,16 +5836,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 30.25,
             "away": 38.82,
-            "draw": 30.92,
-            "home": 30.25
+            "draw": 30.92
           },
           "confidence": 44.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
+            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
             "后验方向:{'home': 30.25, 'draw': 30.92, 'away': 38.82}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-2；校准概率9.098%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -6333,7 +6333,7 @@
           "dir_gap": 54.4,
           "evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
+            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
             "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
             "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -6531,16 +6531,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 70.71,
             "away": 13.02,
-            "draw": 16.27,
-            "home": 70.71
+            "draw": 16.27
           },
           "confidence": 71.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
+            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
             "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
             "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -7040,7 +7040,7 @@
           "dir_gap": 43.8,
           "evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
+            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
             "后验方向:{'home': 64.37, 'draw': 20.55, 'away': 15.08}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-1；校准概率10.874%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -7238,16 +7238,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 64.37,
             "away": 15.08,
-            "draw": 20.55,
-            "home": 64.37
+            "draw": 20.55
           },
           "confidence": 68.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
+            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
             "后验方向:{'home': 64.37, 'draw': 20.55, 'away': 15.08}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-1；校准概率10.874%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -7747,7 +7747,7 @@
           "dir_gap": 37.7,
           "evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
+            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
             "后验方向:{'home': 60.66, 'draw': 22.98, 'away': 16.36}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率11.929%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -7933,16 +7933,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 60.66,
             "away": 16.36,
-            "draw": 22.98,
-            "home": 60.66
+            "draw": 22.98
           },
           "confidence": 66.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
+            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
             "后验方向:{'home': 60.66, 'draw': 22.98, 'away': 16.36}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率11.929%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -8431,7 +8431,7 @@
           "dir_gap": 44.9,
           "evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
+            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
             "后验方向:{'home': 14.81, 'draw': 20.13, 'away': 65.05}",
             "本地校准λ主0.825/λ客2.039；AI锁定=1-2；校准概率10.704%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -8629,16 +8629,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 14.81,
             "away": 65.05,
-            "draw": 20.13,
-            "home": 14.81
+            "draw": 20.13
           },
           "confidence": 68.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
+            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
             "后验方向:{'home': 14.81, 'draw': 20.13, 'away': 65.05}",
             "本地校准λ主0.825/λ客2.039；AI锁定=1-2；校准概率10.704%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -9005,8 +9005,8 @@
           "a6": 19.0,
           "a7": 28.0,
           "s00": 12.0,
-          "s11": 6.0,
-          "s22": 11.5,
+          "s11": 5.75,
+          "s22": 11.0,
           "s33": 50.0,
           "w10": 8.25,
           "w20": 11.5,
@@ -9018,10 +9018,10 @@
           "w41": 55.0,
           "w42": 55.0,
           "l01": 8.5,
-          "l02": 12.0,
+          "l02": 13.0,
           "l12": 8.25,
-          "l03": 26.0,
-          "l13": 21.0,
+          "l03": 29.0,
+          "l13": 22.0,
           "l23": 26.0,
           "ss": 4.1,
           "sp": 13.0,
@@ -9072,8 +9072,8 @@
         "a6": 19.0,
         "a7": 28.0,
         "s00": 12.0,
-        "s11": 6.0,
-        "s22": 11.5,
+        "s11": 5.75,
+        "s22": 11.0,
         "s33": 50.0,
         "w10": 8.25,
         "w20": 11.5,
@@ -9085,10 +9085,10 @@
         "w41": 55.0,
         "w42": 55.0,
         "l01": 8.5,
-        "l02": 12.0,
+        "l02": 13.0,
         "l12": 8.25,
-        "l03": 26.0,
-        "l13": 21.0,
+        "l03": 29.0,
+        "l13": 22.0,
         "l23": 26.0,
         "ss": 4.1,
         "sp": 13.0,
@@ -9144,7 +9144,7 @@
           "dir_gap": 4.2,
           "evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
+            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
             "后验方向:{'home': 36.88, 'draw': 30.43, 'away': 32.7}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-0；校准概率9.470%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -9326,16 +9326,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 36.87,
             "away": 32.7,
-            "draw": 30.43,
-            "home": 36.87
+            "draw": 30.43
           },
           "confidence": 40,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
+            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
             "后验方向:{'home': 36.88, 'draw': 30.43, 'away': 32.7}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-0；校准概率9.470%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -9447,34 +9447,34 @@
             "raw": {}
           },
           "refined_poisson": {
-            "home_win": 31.3,
-            "draw": 29.2,
-            "away_win": 39.5,
+            "home_win": 31.1,
+            "draw": 29.6,
+            "away_win": 39.3,
             "predicted_score": "1-1",
             "top_scores": [
               {
                 "score": "1-1",
-                "prob": 15.6
+                "prob": 15.5
               },
               {
                 "score": "0-1",
-                "prob": 12.9
+                "prob": 12.8
               },
               {
                 "score": "1-0",
-                "prob": 11.1
+                "prob": 11.0
               },
               {
                 "score": "0-0",
-                "prob": 9.0
+                "prob": 8.9
               },
               {
                 "score": "1-2",
-                "prob": 8.6
+                "prob": 8.5
               },
               {
                 "score": "2-1",
-                "prob": 7.4
+                "prob": 7.3
               }
             ]
           },
@@ -9813,7 +9813,7 @@
           "dir_gap": 0.4,
           "evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
             "后验方向:{'home': 33.13, 'draw': 33.66, 'away': 33.21}",
             "本地校准λ主1.249/λ客1.086；AI锁定=2-2；校准概率13.396%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -9983,16 +9983,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 33.13,
             "away": 33.21,
-            "draw": 33.66,
-            "home": 33.13
+            "draw": 33.66
           },
           "confidence": 40,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
             "后验方向:{'home': 33.13, 'draw': 33.66, 'away': 33.21}",
             "本地校准λ主1.249/λ客1.086；AI锁定=2-2；校准概率13.396%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -10423,7 +10423,7 @@
           "dir_gap": 33.1,
           "evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
+            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
             "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
             "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -10609,16 +10609,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 57.59,
             "away": 17.91,
-            "draw": 24.5,
-            "home": 57.59
+            "draw": 24.5
           },
           "confidence": 75.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
+            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
             "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
             "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -11103,7 +11103,7 @@
           "dir_gap": 45.1,
           "evidences": [
             "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'away': 14.83, 'draw': 20.03, 'home': 65.14}",
+            "混合方向目标:{'home': 65.14, 'away': 14.83, 'draw': 20.03}",
             "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
             "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -11301,16 +11301,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 65.14,
             "away": 14.83,
-            "draw": 20.03,
-            "home": 65.14
+            "draw": 20.03
           },
           "confidence": 80.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'away': 14.83, 'draw': 20.03, 'home': 65.14}",
+            "混合方向目标:{'home': 65.14, 'away': 14.83, 'draw': 20.03}",
             "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
             "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -11791,7 +11791,7 @@
           "dir_gap": 42.0,
           "evidences": [
             "公平1X2(power):{'home': 68.781, 'draw': 18.118, 'away': 13.101}",
-            "混合方向目标:{'away': 16.47, 'draw': 20.75, 'home': 62.79}",
+            "混合方向目标:{'home': 62.79, 'away': 16.47, 'draw': 20.75}",
             "后验方向:{'home': 62.79, 'draw': 20.75, 'away': 16.47}",
             "本地校准λ主1.966/λ客0.879；AI锁定=2-1；校准概率11.080%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -11989,16 +11989,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 62.79,
             "away": 16.47,
-            "draw": 20.75,
-            "home": 62.79
+            "draw": 20.75
           },
           "confidence": 67.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 68.781, 'draw': 18.118, 'away': 13.101}",
-            "混合方向目标:{'away': 16.47, 'draw': 20.75, 'home': 62.79}",
+            "混合方向目标:{'home': 62.79, 'away': 16.47, 'draw': 20.75}",
             "后验方向:{'home': 62.79, 'draw': 20.75, 'away': 16.47}",
             "本地校准λ主1.966/λ客0.879；AI锁定=2-1；校准概率11.080%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -12494,7 +12494,7 @@
           "dir_gap": 11.1,
           "evidences": [
             "公平1X2(power):{'home': 28.569, 'draw': 28.999, 'away': 42.432}",
-            "混合方向目标:{'away': 41.07, 'draw': 29.93, 'home': 29.0}",
+            "混合方向目标:{'home': 29.0, 'away': 41.07, 'draw': 29.93}",
             "后验方向:{'home': 29.0, 'draw': 29.93, 'away': 41.07}",
             "本地校准λ主0.936/λ客1.163；AI锁定=0-1；校准概率12.453%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -12676,16 +12676,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 29.0,
             "away": 41.07,
-            "draw": 29.93,
-            "home": 29.0
+            "draw": 29.93
           },
           "confidence": 50.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 28.569, 'draw': 28.999, 'away': 42.432}",
-            "混合方向目标:{'away': 41.07, 'draw': 29.93, 'home': 29.0}",
+            "混合方向目标:{'home': 29.0, 'away': 41.07, 'draw': 29.93}",
             "后验方向:{'home': 29.0, 'draw': 29.93, 'away': 41.07}",
             "本地校准λ主0.936/λ客1.163；AI锁定=0-1；校准概率12.453%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -13191,7 +13191,7 @@
           "dir_gap": 33.9,
           "evidences": [
             "公平1X2(power):{'home': 62.308, 'draw': 21.93, 'away': 15.762}",
-            "混合方向目标:{'away': 18.57, 'draw': 23.75, 'home': 57.67}",
+            "混合方向目标:{'home': 57.67, 'away': 18.57, 'draw': 23.75}",
             "后验方向:{'home': 57.67, 'draw': 23.75, 'away': 18.57}",
             "本地校准λ主1.664/λ客0.82；AI锁定=2-1；校准概率11.068%",
             "决策来源:matrix_authority; authority_mode=claude_guarded"
@@ -13376,16 +13376,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 57.67,
             "away": 18.57,
-            "draw": 23.75,
-            "home": 57.67
+            "draw": 23.75
           },
           "confidence": 75.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.308, 'draw': 21.93, 'away': 15.762}",
-            "混合方向目标:{'away': 18.57, 'draw': 23.75, 'home': 57.67}",
+            "混合方向目标:{'home': 57.67, 'away': 18.57, 'draw': 23.75}",
             "后验方向:{'home': 57.67, 'draw': 23.75, 'away': 18.57}",
             "本地校准λ主1.664/λ客0.82；AI锁定=2-1；校准概率11.068%",
             "决策来源:matrix_authority; authority_mode=claude_guarded"
@@ -13839,7 +13839,7 @@
           "dir_gap": 7.9,
           "evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
+            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
             "后验方向:{'home': 30.25, 'draw': 30.92, 'away': 38.82}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-2；校准概率9.098%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -14021,16 +14021,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 30.25,
             "away": 38.82,
-            "draw": 30.92,
-            "home": 30.25
+            "draw": 30.92
           },
           "confidence": 44.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
+            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
             "后验方向:{'home': 30.25, 'draw': 30.92, 'away': 38.82}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-2；校准概率9.098%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -14518,7 +14518,7 @@
           "dir_gap": 54.4,
           "evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
+            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
             "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
             "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -14716,16 +14716,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 70.71,
             "away": 13.02,
-            "draw": 16.27,
-            "home": 70.71
+            "draw": 16.27
           },
           "confidence": 71.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
+            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
             "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
             "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -15225,7 +15225,7 @@
           "dir_gap": 43.8,
           "evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
+            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
             "后验方向:{'home': 64.37, 'draw': 20.55, 'away': 15.08}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-1；校准概率10.874%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -15423,16 +15423,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 64.37,
             "away": 15.08,
-            "draw": 20.55,
-            "home": 64.37
+            "draw": 20.55
           },
           "confidence": 68.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
+            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
             "后验方向:{'home': 64.37, 'draw': 20.55, 'away': 15.08}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-1；校准概率10.874%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -15932,7 +15932,7 @@
           "dir_gap": 37.7,
           "evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
+            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
             "后验方向:{'home': 60.66, 'draw': 22.98, 'away': 16.36}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率11.929%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -16118,16 +16118,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 60.66,
             "away": 16.36,
-            "draw": 22.98,
-            "home": 60.66
+            "draw": 22.98
           },
           "confidence": 66.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
+            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
             "后验方向:{'home': 60.66, 'draw': 22.98, 'away': 16.36}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率11.929%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -16616,7 +16616,7 @@
           "dir_gap": 44.9,
           "evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
+            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
             "后验方向:{'home': 14.81, 'draw': 20.13, 'away': 65.05}",
             "本地校准λ主0.825/λ客2.039；AI锁定=1-2；校准概率10.704%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -16814,16 +16814,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 14.81,
             "away": 65.05,
-            "draw": 20.13,
-            "home": 14.81
+            "draw": 20.13
           },
           "confidence": 68.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
+            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
             "后验方向:{'home': 14.81, 'draw': 20.13, 'away': 65.05}",
             "本地校准λ主0.825/λ客2.039；AI锁定=1-2；校准概率10.704%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -17190,8 +17190,8 @@
           "a6": 19.0,
           "a7": 28.0,
           "s00": 12.0,
-          "s11": 6.0,
-          "s22": 11.5,
+          "s11": 5.75,
+          "s22": 11.0,
           "s33": 50.0,
           "w10": 8.25,
           "w20": 11.5,
@@ -17203,10 +17203,10 @@
           "w41": 55.0,
           "w42": 55.0,
           "l01": 8.5,
-          "l02": 12.0,
+          "l02": 13.0,
           "l12": 8.25,
-          "l03": 26.0,
-          "l13": 21.0,
+          "l03": 29.0,
+          "l13": 22.0,
           "l23": 26.0,
           "ss": 4.1,
           "sp": 13.0,
@@ -17257,8 +17257,8 @@
         "a6": 19.0,
         "a7": 28.0,
         "s00": 12.0,
-        "s11": 6.0,
-        "s22": 11.5,
+        "s11": 5.75,
+        "s22": 11.0,
         "s33": 50.0,
         "w10": 8.25,
         "w20": 11.5,
@@ -17270,10 +17270,10 @@
         "w41": 55.0,
         "w42": 55.0,
         "l01": 8.5,
-        "l02": 12.0,
+        "l02": 13.0,
         "l12": 8.25,
-        "l03": 26.0,
-        "l13": 21.0,
+        "l03": 29.0,
+        "l13": 22.0,
         "l23": 26.0,
         "ss": 4.1,
         "sp": 13.0,
@@ -17329,7 +17329,7 @@
           "dir_gap": 4.2,
           "evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
+            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
             "后验方向:{'home': 36.88, 'draw': 30.43, 'away': 32.7}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-0；校准概率9.470%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -17511,16 +17511,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 36.87,
             "away": 32.7,
-            "draw": 30.43,
-            "home": 36.87
+            "draw": 30.43
           },
           "confidence": 40,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
+            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
             "后验方向:{'home': 36.88, 'draw': 30.43, 'away': 32.7}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-0；校准概率9.470%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -17632,34 +17632,34 @@
             "raw": {}
           },
           "refined_poisson": {
-            "home_win": 31.3,
-            "draw": 29.2,
-            "away_win": 39.5,
+            "home_win": 31.1,
+            "draw": 29.6,
+            "away_win": 39.3,
             "predicted_score": "1-1",
             "top_scores": [
               {
                 "score": "1-1",
-                "prob": 15.6
+                "prob": 15.5
               },
               {
                 "score": "0-1",
-                "prob": 12.9
+                "prob": 12.8
               },
               {
                 "score": "1-0",
-                "prob": 11.1
+                "prob": 11.0
               },
               {
                 "score": "0-0",
-                "prob": 9.0
+                "prob": 8.9
               },
               {
                 "score": "1-2",
-                "prob": 8.6
+                "prob": 8.5
               },
               {
                 "score": "2-1",
-                "prob": 7.4
+                "prob": 7.3
               }
             ]
           },
@@ -17998,7 +17998,7 @@
           "dir_gap": 0.4,
           "evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
             "后验方向:{'home': 33.13, 'draw': 33.66, 'away': 33.21}",
             "本地校准λ主1.249/λ客1.086；AI锁定=2-2；校准概率13.396%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -18168,16 +18168,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 33.13,
             "away": 33.21,
-            "draw": 33.66,
-            "home": 33.13
+            "draw": 33.66
           },
           "confidence": 40,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
             "后验方向:{'home': 33.13, 'draw': 33.66, 'away': 33.21}",
             "本地校准λ主1.249/λ客1.086；AI锁定=2-2；校准概率13.396%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -18608,7 +18608,7 @@
           "dir_gap": 33.1,
           "evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
+            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
             "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
             "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -18794,16 +18794,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 57.59,
             "away": 17.91,
-            "draw": 24.5,
-            "home": 57.59
+            "draw": 24.5
           },
           "confidence": 75.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
+            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
             "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
             "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -19288,7 +19288,7 @@
           "dir_gap": 45.1,
           "evidences": [
             "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'away': 14.83, 'draw': 20.03, 'home': 65.14}",
+            "混合方向目标:{'home': 65.14, 'away': 14.83, 'draw': 20.03}",
             "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
             "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -19486,16 +19486,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 65.14,
             "away": 14.83,
-            "draw": 20.03,
-            "home": 65.14
+            "draw": 20.03
           },
           "confidence": 80.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 71.621, 'draw': 17.197, 'away': 11.182}",
-            "混合方向目标:{'away': 14.83, 'draw': 20.03, 'home': 65.14}",
+            "混合方向目标:{'home': 65.14, 'away': 14.83, 'draw': 20.03}",
             "后验方向:{'home': 65.14, 'draw': 20.03, 'away': 14.83}",
             "本地校准λ主2.0/λ客0.811；AI锁定=2-1；校准概率10.876%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -19976,7 +19976,7 @@
           "dir_gap": 42.0,
           "evidences": [
             "公平1X2(power):{'home': 68.781, 'draw': 18.118, 'away': 13.101}",
-            "混合方向目标:{'away': 16.47, 'draw': 20.75, 'home': 62.79}",
+            "混合方向目标:{'home': 62.79, 'away': 16.47, 'draw': 20.75}",
             "后验方向:{'home': 62.79, 'draw': 20.75, 'away': 16.47}",
             "本地校准λ主1.966/λ客0.879；AI锁定=2-1；校准概率11.080%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -20174,16 +20174,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 62.79,
             "away": 16.47,
-            "draw": 20.75,
-            "home": 62.79
+            "draw": 20.75
           },
           "confidence": 67.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 68.781, 'draw': 18.118, 'away': 13.101}",
-            "混合方向目标:{'away': 16.47, 'draw': 20.75, 'home': 62.79}",
+            "混合方向目标:{'home': 62.79, 'away': 16.47, 'draw': 20.75}",
             "后验方向:{'home': 62.79, 'draw': 20.75, 'away': 16.47}",
             "本地校准λ主1.966/λ客0.879；AI锁定=2-1；校准概率11.080%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -20679,7 +20679,7 @@
           "dir_gap": 11.1,
           "evidences": [
             "公平1X2(power):{'home': 28.569, 'draw': 28.999, 'away': 42.432}",
-            "混合方向目标:{'away': 41.07, 'draw': 29.93, 'home': 29.0}",
+            "混合方向目标:{'home': 29.0, 'away': 41.07, 'draw': 29.93}",
             "后验方向:{'home': 29.0, 'draw': 29.93, 'away': 41.07}",
             "本地校准λ主0.936/λ客1.163；AI锁定=0-1；校准概率12.453%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -20861,16 +20861,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 29.0,
             "away": 41.07,
-            "draw": 29.93,
-            "home": 29.0
+            "draw": 29.93
           },
           "confidence": 50.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 28.569, 'draw': 28.999, 'away': 42.432}",
-            "混合方向目标:{'away': 41.07, 'draw': 29.93, 'home': 29.0}",
+            "混合方向目标:{'home': 29.0, 'away': 41.07, 'draw': 29.93}",
             "后验方向:{'home': 29.0, 'draw': 29.93, 'away': 41.07}",
             "本地校准λ主0.936/λ客1.163；AI锁定=0-1；校准概率12.453%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -21376,7 +21376,7 @@
           "dir_gap": 33.9,
           "evidences": [
             "公平1X2(power):{'home': 62.308, 'draw': 21.93, 'away': 15.762}",
-            "混合方向目标:{'away': 18.57, 'draw': 23.75, 'home': 57.67}",
+            "混合方向目标:{'home': 57.67, 'away': 18.57, 'draw': 23.75}",
             "后验方向:{'home': 57.67, 'draw': 23.75, 'away': 18.57}",
             "本地校准λ主1.664/λ客0.82；AI锁定=2-1；校准概率11.068%",
             "决策来源:matrix_authority; authority_mode=claude_guarded"
@@ -21561,16 +21561,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 57.67,
             "away": 18.57,
-            "draw": 23.75,
-            "home": 57.67
+            "draw": 23.75
           },
           "confidence": 75.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.308, 'draw': 21.93, 'away': 15.762}",
-            "混合方向目标:{'away': 18.57, 'draw': 23.75, 'home': 57.67}",
+            "混合方向目标:{'home': 57.67, 'away': 18.57, 'draw': 23.75}",
             "后验方向:{'home': 57.67, 'draw': 23.75, 'away': 18.57}",
             "本地校准λ主1.664/λ客0.82；AI锁定=2-1；校准概率11.068%",
             "决策来源:matrix_authority; authority_mode=claude_guarded"
@@ -22024,7 +22024,7 @@
           "dir_gap": 7.9,
           "evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
+            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
             "后验方向:{'home': 30.25, 'draw': 30.92, 'away': 38.82}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-2；校准概率9.098%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -22206,16 +22206,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 30.25,
             "away": 38.82,
-            "draw": 30.92,
-            "home": 30.25
+            "draw": 30.92
           },
           "confidence": 44.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 30.063, 'draw': 30.18, 'away': 39.756}",
-            "混合方向目标:{'away': 38.82, 'draw': 30.92, 'home': 30.25}",
+            "混合方向目标:{'home': 30.25, 'away': 38.82, 'draw': 30.92}",
             "后验方向:{'home': 30.25, 'draw': 30.92, 'away': 38.82}",
             "本地校准λ主0.924/λ客1.08；AI锁定=1-2；校准概率9.098%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -22703,7 +22703,7 @@
           "dir_gap": 54.4,
           "evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
+            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
             "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
             "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -22901,16 +22901,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 70.71,
             "away": 13.02,
-            "draw": 16.27,
-            "home": 70.71
+            "draw": 16.27
           },
           "confidence": 71.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 78.718, 'draw': 12.288, 'away': 8.994}",
-            "混合方向目标:{'away': 13.02, 'draw': 16.27, 'home': 70.71}",
+            "混合方向目标:{'home': 70.71, 'away': 13.02, 'draw': 16.27}",
             "后验方向:{'home': 70.71, 'draw': 16.27, 'away': 13.02}",
             "本地校准λ主2.562/λ客1.004；AI锁定=2-1；校准概率9.580%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -23410,7 +23410,7 @@
           "dir_gap": 43.8,
           "evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
+            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
             "后验方向:{'home': 64.37, 'draw': 20.55, 'away': 15.08}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-1；校准概率10.874%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -23608,16 +23608,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 64.37,
             "away": 15.08,
-            "draw": 20.55,
-            "home": 64.37
+            "draw": 20.55
           },
           "confidence": 68.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 71.023, 'draw': 17.457, 'away': 11.52}",
-            "混合方向目标:{'away': 15.08, 'draw': 20.55, 'home': 64.37}",
+            "混合方向目标:{'home': 64.37, 'away': 15.08, 'draw': 20.55}",
             "后验方向:{'home': 64.37, 'draw': 20.55, 'away': 15.08}",
             "本地校准λ主1.983/λ客0.818；AI锁定=2-1；校准概率10.874%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -24117,7 +24117,7 @@
           "dir_gap": 37.7,
           "evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
+            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
             "后验方向:{'home': 60.66, 'draw': 22.98, 'away': 16.36}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率11.929%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -24303,16 +24303,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 60.66,
             "away": 16.36,
-            "draw": 22.98,
-            "home": 60.66
+            "draw": 22.98
           },
           "confidence": 66.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 66.607, 'draw': 20.353, 'away': 13.04}",
-            "混合方向目标:{'away': 16.36, 'draw': 22.98, 'home': 60.66}",
+            "混合方向目标:{'home': 60.66, 'away': 16.36, 'draw': 22.98}",
             "后验方向:{'home': 60.66, 'draw': 22.98, 'away': 16.36}",
             "本地校准λ主1.747/λ客0.76；AI锁定=2-0；校准概率11.929%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -24801,7 +24801,7 @@
           "dir_gap": 44.9,
           "evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
+            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
             "后验方向:{'home': 14.81, 'draw': 20.13, 'away': 65.05}",
             "本地校准λ主0.825/λ客2.039；AI锁定=1-2；校准概率10.704%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -24999,16 +24999,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 14.81,
             "away": 65.05,
-            "draw": 20.13,
-            "home": 14.81
+            "draw": 20.13
           },
           "confidence": 68.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "中",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 11.025, 'draw': 16.775, 'away': 72.2}",
-            "混合方向目标:{'away': 65.05, 'draw': 20.13, 'home': 14.81}",
+            "混合方向目标:{'home': 14.81, 'away': 65.05, 'draw': 20.13}",
             "后验方向:{'home': 14.81, 'draw': 20.13, 'away': 65.05}",
             "本地校准λ主0.825/λ客2.039；AI锁定=1-2；校准概率10.704%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -25514,7 +25514,7 @@
           "dir_gap": 4.2,
           "evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
+            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
             "后验方向:{'home': 36.88, 'draw': 30.43, 'away': 32.7}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-0；校准概率9.470%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -25696,16 +25696,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 36.87,
             "away": 32.7,
-            "draw": 30.43,
-            "home": 36.87
+            "draw": 30.43
           },
           "confidence": 40,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 37.366, 'draw': 29.629, 'away': 33.006}",
-            "混合方向目标:{'away': 32.7, 'draw': 30.43, 'home': 36.87}",
+            "混合方向目标:{'home': 36.87, 'away': 32.7, 'draw': 30.43}",
             "后验方向:{'home': 36.88, 'draw': 30.43, 'away': 32.7}",
             "本地校准λ主1.072/λ客1.0；AI锁定=1-0；校准概率9.470%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -26183,7 +26183,7 @@
           "dir_gap": 0.4,
           "evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
             "后验方向:{'home': 33.13, 'draw': 33.66, 'away': 33.21}",
             "本地校准λ主1.249/λ客1.086；AI锁定=2-2；校准概率13.396%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -26353,16 +26353,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 33.13,
             "away": 33.21,
-            "draw": 33.66,
-            "home": 33.13
+            "draw": 33.66
           },
           "confidence": 40,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "高",
           "bayesian_evidences": [
             "公平1X2(fallback):{'home': 33.3, 'draw': 33.3, 'away': 33.4}",
-            "混合方向目标:{'away': 33.21, 'draw': 33.66, 'home': 33.13}",
+            "混合方向目标:{'home': 33.13, 'away': 33.21, 'draw': 33.66}",
             "后验方向:{'home': 33.13, 'draw': 33.66, 'away': 33.21}",
             "本地校准λ主1.249/λ客1.086；AI锁定=2-2；校准概率13.396%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -26793,7 +26793,7 @@
           "dir_gap": 33.1,
           "evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
+            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
             "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
             "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
@@ -26979,16 +26979,16 @@
             "shin_z": null
           },
           "mixed_target_dir": {
+            "home": 57.59,
             "away": 17.91,
-            "draw": 24.5,
-            "home": 57.59
+            "draw": 24.5
           },
           "confidence": 75.0,
           "confidence_meaning": "排序置信度，不等于历史命中率",
           "risk_level": "低",
           "bayesian_evidences": [
             "公平1X2(power):{'home': 62.745, 'draw': 22.225, 'away': 15.03}",
-            "混合方向目标:{'away': 17.91, 'draw': 24.5, 'home': 57.59}",
+            "混合方向目标:{'home': 57.59, 'away': 17.91, 'draw': 24.5}",
             "后验方向:{'home': 57.59, 'draw': 24.5, 'away': 17.91}",
             "本地校准λ主1.63/λ客0.775；AI锁定=2-0；校准概率10.648%",
             "决策来源:matrix_authority; authority_mode=claude_guarded",
