@@ -1,0 +1,39 @@
+{
+  "id": "msg_9fd0101e6b614329ab40c023bb56a89b",
+  "model": "claude-opus-4.7",
+  "object": "chat.completion",
+  "created": 1777923318,
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "```json\n[\n  {\n    \"match\": \"阿森纳 vs 马竞\",\n    \"final_direction\": \"主胜\",\n    \"top3\": [\n      {\"score\": \"2-0\", \"prob\": 0.18, \"market_logic\": \"主让1球浅盘+总进球2球峰值3.3最低赔+半全场主/主2.12强势\"},\n      {\"score\": \"1-0\", \"prob\": 0.15, \"market_logic\": \"马竞防守体系强硬，总进球1球赔4.65次低，低比分主胜合理\"},\n      {\"score\": \"2-1\", \"prob\": 0.13, \"market_logic\": \"BTTS场景下主胜，半全场平/主3.90暗示上半场僵持下半场主队爆发\"}\n    ],\n    \"reason\": \"公平概率主胜62.7%占绝对优势，盘口-1.0较理论-1.25偏浅0.25格，庄家对主队让步保守但方向明确。总进球峰值在2球(3.3)，2-3球区间赔率最低，指向中低进球环境。半全场主/主2.12为最低赔，主队控场能力强。Sharp资金流向客胜+散户主胜59%超热构成杯赛大热保护信号，但盘口浅开而非反向开盘，说明庄家仍认可主胜方向只是降低赔付深度。马竞淘汰赛防守韧性强但客场进攻受限，主队xG1.63对客0.775差距明显。\",\n    \"ai_confidence\": 0.55,\n    \"risk_level\": \"medium-high\",\n    \"detected_traps\": [\"杯赛大热保护：散户59%主胜超热+Sharp资金流向客胜，存在庄家降低主胜赔付意图\"],\n    \"must_review_flags\": [\"三家初审全部弃权，数据缺失严重\", \"Sharp资金与公平概率方向矛盾需警惕\"],\n    \"data_missing\": [\"injuries\", \"suspensions\", \"lineup_news\", \"weather\", \"motivation\", \"odds_history\", \"首回合比分\"],\n    \"audit\": {\n      \"fair_1x2\": \"主62.7%/平22.2%/客15.0%，主胜方向明确，无争议\",\n      \"handicap\": \"理论-1.25实际-1.0，浅开0.25格，庄家对主队信心略有保留但不构成反向信号\",\n      \"total_goals\": \"2球峰值赔率3.3最低，1球4.65次低，3球3.55接近；中低进球环境2-2.5球预期\",\n      \"money_flow\": \"Sharp流向客胜+主胜散户59%超热，经典杯赛大热降温信号，但盘口未反向开出，判断为降赔付而非翻方向\",\n      \"external_context\": \"无任何外部情报，伤停/首发/天气全部缺失，无法验证阵容完整性\",\n      \"risk\": \"杯赛淘汰赛+大热+Sharp反向=中高风险；马竞防守体系在淘汰赛有历史韧性\",\n      \"rejection\": {\n        \"平局\": \"公平概率仅22.2%，半全场平/平6.10非最低区间，盘口-1.0仍让球而非平手，平局缺乏盘口支撑\",\n        \"客胜\": \"公平概率仅15.0%，盘口仍为主让而非客让，Sharp资金虽流向客胜但可能是对冲行为而非方向判断，半全场负/负9.50赔率偏高不支持客胜主流\"\n      }\n    }\n  }\n]\n```"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1766,
+    "completion_tokens": 866,
+    "total_tokens": 2632,
+    "usage_semantic": "openai",
+    "usage_source": "anthropic",
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 0,
+      "audio_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "text_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0
+    },
+    "input_tokens": 1766,
+    "output_tokens": 0,
+    "input_tokens_details": null,
+    "claude_cache_creation_5_m_tokens": 0,
+    "claude_cache_creation_1_h_tokens": 0
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "msg_d2b8ac64562a43a490a04bb0d959e12c",
+  "model": "claude-opus-4.7",
+  "object": "chat.completion",
+  "created": 1777923227,
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "```json\n[\n  {\n    \"match\": \"阿森纳 vs 马竞\",\n    \"final_direction\": \"主胜\",\n    \"top3\": [\n      {\"score\": \"2-0\", \"prob\": 0.22, \"market_logic\": \"主让1球盘浅开但主队xG1.63+马竞防守型客场低产，2球净胜匹配盘口\"},\n      {\"score\": \"1-0\", \"prob\": 0.18, \"market_logic\": \"总进球2球最低赔3.3，1-0是低进球主胜核心比分\"},\n      {\"score\": \"2-1\", \"prob\": 0.14, \"market_logic\": \"半全场平/主3.90暗示马竞可能先僵持后丢球，但也可能扳回一球\"}\n    ],\n    \"reason\": \"公平概率主胜62.7%为基础方向。盘口实际-1.0比理论-1.25浅0.25格，庄家对主队让步保守但未反转方向。总进球赔率2球3.3最低、3球3.55次低，期望总进球2-3球区间。马竞欧冠客场历来低产防守优先，半全场平/主3.90和平/平6.10说明上半场僵局概率高。Sharp资金流向客胜+主胜散户59%超热构成杯赛大热保护信号，但公平概率62.7%本身支撑主胜方向，盘口浅开只是降低让球赢盘概率而非否定胜负方向。不选平局：公平概率仅22.2%，阿森纳主场攻击力xG1.63足够破门；不选客胜：马竞客场xG仅0.775，公平概率15%，即使Sharp资金流入也不足以翻转基本面。\",\n    \"ai_confidence\": 0.52,\n    \"risk_level\": \"high\",\n    \"detected_traps\": [\"杯赛大热保护\", \"Sharp资金流向客胜与基本面矛盾\", \"盘口浅开0.25格\"],\n    \"must_review_flags\": [\"三家初审全部弃权\", \"Sharp逆向信号\", \"淘汰赛单场变数大\"],\n    \"data_missing\": [\"injuries\", \"suspensions\", \"lineup_news\", \"weather\", \"motivation\", \"odds_history\", \"首回合比分\"],\n    \"audit\": {\n      \"fair_1x2\": \"主62.7%/平22.2%/客15.0%，主胜为明确强方向\",\n      \"handicap\": \"理论-1.25实际-1.0，浅开0.25格，庄家对主队全场净胜1+球信心略保守，可能预期马竞防守韧性\",\n      \"total_goals\": \"2球赔率3.3最低，3球3.55次低，期望总进球2.3-2.5球，低到中等进球环境\",\n      \"money_flow\": \"Sharp资金流向客胜，主胜散户59%超热，存在反向信号但未达到盘口方向翻转级别\",\n      \"external_context\": \"无任何外部情报可用，所有字段缺失\",\n      \"risk\": \"杯赛淘汰赛+大热+Sharp逆向+数据全缺失，风险极高\",\n      \"rejection\": \"不选平局：主队xG1.63+公平概率62.7%支撑破门能力，半全场主/主2.12为最低赔说明全场主胜仍是最大概率路径；不选客胜：马竞xG0.775+公平概率仅15%，Sharp信号可能是对冲或陷阱资金而非真实方向判断\"\n    }\n  }\n]\n```"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1766,
+    "completion_tokens": 846,
+    "total_tokens": 2612,
+    "usage_semantic": "openai",
+    "usage_source": "anthropic",
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 0,
+      "audio_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "text_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0
+    },
+    "input_tokens": 1766,
+    "output_tokens": 0,
+    "input_tokens_details": null,
+    "claude_cache_creation_5_m_tokens": 0,
+    "claude_cache_creation_1_h_tokens": 0
+  }
+}

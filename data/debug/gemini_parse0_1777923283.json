@@ -1,0 +1,37 @@
+{
+  "id": "chatcmpl-20260504193350966348478268d9d6FPcm1wE2",
+  "model": "gemini-3.1-pro-preview",
+  "object": "chat.completion",
+  "created": 1777923283,
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "```json\n[\n  {\n    \"match\": \"阿森纳 vs 马竞\",\n    \"final_direction\": \"draw\",\n    \"top3\": [\n      {\n        \"score\": \"1-1\",\n        \"prob\": \"35%\",\n        \"market_logic\": \"总进球赔率2球最低（3.3），结合马竞0.775的低xG与阿森纳主场优势，各取一球是最符合盘口浅开与资金反打的赛果。\"\n      },\n      {\n        \"score\": \"0-0\",\n        \"prob\": \"25%\",\n        \"market_logic\": \"总进球1球和0球赔率防范力度存在，马竞杯赛客场常态化龟缩防守，在低进球环境下极可能导致互交白卷。\"\n      },\n      {\n        \"score\": \"0-1\",\n        \"prob\": \"20%\",\n        \"market_logic\": \"尊重Sharp资金直接流向客胜及客胜赔率下调的异动，防范马竞利用反击偷袭得手。\"\n      }\n    ],\n    \"reason\": \"阿森纳作为主场强方，实际盘口（-1.00）浅于理论盘口（-1.25），且在散户主胜热度高达59%的情况下，主胜赔率不降反升。同时，Sharp资金明确流向客胜，客胜赔率下调。结合杯赛大热保护机制，主胜打出难度极大。考虑到马竞极低的隐含进球期望（0.775），平局是最合理的首选方向，客胜为次选防范。\",\n    \"ai_confidence\": \"75%\",\n    \"risk_level\": \"high\",\n    \"detected_traps\": [\n      \"T14_CUP_FAVORITE\",\n      \"浅盘诱主陷阱\"\n    ],\n    \"must_review_flags\": [\n      \"Sharp资金流向客胜\",\n      \"主胜赔率异常抬升\",\n      \"实际盘口浅于理论盘口\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": \"主胜公平概率62.7%占据绝对优势，但市场资金与赔率走势与之背离，存在诱导主胜倾向。\",\n      \"handicap\": \"理论盘口-1.25，实际盘口-1.00，强方深浅差-0.25。在主队大热背景下盘口托大，未能有效阻挡主队筹码，属于典型的浅盘诱导。\",\n      \"total_goals\": \"2球（3.3）和3球（3.55）为核心分布，1球（4.65）处于中低位，整体指向中低进球环境，符合马竞客场战术特征。\",\n      \"money_flow\": \"散户主胜热度59%严重超载，而Sharp资金精准打击客胜，赔率端主升客降，资金面完全不支持主胜顺利打出。\",\n      \"external_context\": \"外部情报缺失，完全依赖盘赔结构与资金信号进行独立推演。\",\n      \"risk\": \"阿森纳主场进攻火力若超常发挥（xG 1.63），可能强行打穿浅盘（如2-0或2-1），这是本场最大的尾部风险。\",\n      \"rejection\": {\n        \"home\": \"盘口偏浅（-1.00 vs -1.25）且主胜赔率抬升，散户大热（59%）叠加杯赛大热造热嫌疑，Sharp资金明确反打，故坚决放弃主胜。\",\n        \"draw\": \"不选平局的唯一顾虑是阿森纳可能依靠个人能力强行破局（如1-0），但综合资金流向与马竞的防守韧性，平局是阻击主胜的最佳缓冲，故最终逆向选择平局作为主推。\",\n        \"away\": \"马竞隐含xG仅为0.775，进攻端缺乏足够火力支撑其在常规时间内稳定击穿阿森纳防线，直接单挑客胜风险过高，故仅作为次选比分防范。\"\n      }\n    }\n  }\n]\n```"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1210,
+    "completion_tokens": 5033,
+    "total_tokens": 6243,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 1210,
+      "audio_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "text_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 3994
+    },
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "input_tokens_details": null,
+    "claude_cache_creation_5_m_tokens": 0,
+    "claude_cache_creation_1_h_tokens": 0
+  }
+}

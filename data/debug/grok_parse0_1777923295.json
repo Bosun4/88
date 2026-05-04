@@ -1,0 +1,38 @@
+{
+  "id": "7166b106-9da9-9acb-a83b-9d7838d4816b",
+  "object": "chat.completion",
+  "created": 1777923230,
+  "model": "grok-4.3",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n{\"match\": \"阿森纳 vs 马竞 | 欧冠\", \"final_direction\": \"主胜\", \"top3\": [{\"score\": \"2-1\", \"prob\": 0.26}, {\"score\": \"1-0\", \"prob\": 0.22}, {\"score\": \"2-0\", \"prob\": 0.17}], \"reason\": \"Step1公平1X2主62.7%主导平22.2%客15.0%；Step2实际盘口-1.00浅于理论-1.25仍为主让；Step3总进球峰值2球xG合计2.405正常偏低环境；Step4赔率客胜下降Sharp流向客胜但散户主胜59%超热；Step5 external无情报；Step6不选平局因公平概率低且主xG优势，不选客胜因公平15%低且客xG仅0.775。\", \"ai_confidence\": 55, \"risk_level\": \"medium\", \"detected_traps\": [\"杯赛大热保护\", \"主胜散户超热59%\"], \"must_review_flags\": [\"Sharp资金流向客胜\"], \"data_missing\": [\"injuries\", \"suspensions\", \"lineup_news\", \"weather\", \"motivation\", \"odds_history\"], \"audit\": {\"fair_1x2\": \"主62.7% 平22.2% 客15.0%\", \"handicap\": \"实际-1.00 理论-1.25 浅盘差-0.25\", \"total_goals\": \"正常偏低 2球最高概率\", \"money_flow\": \"Sharp客胜 散户主胜59%\", \"external_context\": \"source_quality=missing 无伤停等\", \"risk\": \"T14_CUP_FAVORITE\", \"rejection\": \"不选平局：公平概率22.2%低；不选客胜：公平概率15.0%低 xG客0.775\"}}]\n]",
+        "reasoning_content": "I analyzed the Arsenal vs Atletico Madrid Champions League match using the given data. The 1X2 odds are 1.50 for Arsenal win, 3.70 for draw, and 5.20 for Atletico win. The handicap is -1."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1209,
+    "completion_tokens": 5350,
+    "total_tokens": 6559,
+    "prompt_tokens_details": {
+      "cached_tokens": 1152,
+      "cached_creation_tokens": 0,
+      "text_tokens": 1209,
+      "audio_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "text_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 4918,
+      "image_tokens": 0
+    },
+    "input_tokens": 1209,
+    "output_tokens": 5350,
+    "input_tokens_details": null
+  }
+}

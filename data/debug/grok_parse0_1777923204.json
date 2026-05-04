@@ -1,0 +1,38 @@
+{
+  "id": "abf71ed4-176a-bd04-ce22-d883cf9a7084",
+  "object": "chat.completion",
+  "created": 1777923136,
+  "model": "grok-4.3",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "[\n{\n\"match\": \"阿森纳 vs 马竞 | 欧冠\",\n\"final_direction\": \"home\",\n\"top3\": [\n{\"score\": \"2-1\", \"prob\": 0.27, \"market_logic\": \"xG 1.63-0.775 supports home 2 goals away 1 goal in normal total environment\"},\n{\"score\": \"1-0\", \"prob\": 0.19, \"market_logic\": \"Fits a1=4.65 and a2=3.3 odds peak with home edge\"},\n{\"score\": \"3-1\", \"prob\": 0.14, \"market_logic\": \"a3=3.55 and a4=5.65 allow for home scoring burst\"}\n],\n\"reason\": \"Fair probability and xG differential establish home as base direction. Total goals odds concentrate on 2-3 goals. Shallow handicap still leaves home with edge despite mixed money signals.\",\n\"ai_confidence\": 61,\n\"risk_level\": \"high\",\n\"detected_traps\": [\"T14_CUP_FAVORITE\"],\n\"must_review_flags\": [\"contrarian_sharp_money\", \"retail_overheat_59_percent\"],\n\"data_missing\": [\"injuries\", \"suspensions\", \"lineup_news\", \"weather\", \"motivation\", \"odds_history\"],\n\"audit\": {\n\"fair_1x2\": \"Home 62.7%, Draw 22.2%, Away 15.0%\",\n\"handicap\": \"Actual -1.00 vs theoretical -1.25, strong side depth difference -0.25 indicating shallow line\",\n\"total_goals\": \"Normal environment, a2=3.3 and a3=3.55 as lowest odds point to 2-3 goals most likely\",\n\"money_flow\": \"Sharp funds to away win, retail 59% on home, odds movement win +1 lose -1\",\n\"external_context\": \"source_quality=missing; data_missing all fields including injuries lineup weather motivation\",\n\"risk\": \"Knockout stage with cup favorite protection label and retail heat create trap potential for home overbet\",\n\"rejection\": \"Reject draw: fair only 22.2% and xG gap too wide for equal outcome. Reject away: fair 15.0% and xG 0.775 too low to override structure despite sharp flow. Home selected as only direction supported by probability and xG.\"\n}\n}\n]",
+        "reasoning_content": "I'm looking at this Champions League match between Arsenal and Atletico Madrid. The odds heavily favor Arsenal at 1.50 for a home win, compared to 5.20 for away, indicating they're the clear favorite. The handicap is -1.0 actual versus -1."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1209,
+    "completion_tokens": 4981,
+    "total_tokens": 6190,
+    "prompt_tokens_details": {
+      "cached_tokens": 64,
+      "cached_creation_tokens": 0,
+      "text_tokens": 1209,
+      "audio_tokens": 0,
+      "image_tokens": 0
+    },
+    "completion_tokens_details": {
+      "text_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 4476,
+      "image_tokens": 0
+    },
+    "input_tokens": 1209,
+    "output_tokens": 4981,
+    "input_tokens_details": null
+  }
+}

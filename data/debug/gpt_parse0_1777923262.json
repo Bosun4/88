@@ -1,0 +1,100 @@
+{
+  "choices": [
+    {
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "protected_material_code": {
+          "detected": false,
+          "filtered": false
+        },
+        "protected_material_text": {
+          "detected": false,
+          "filtered": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      },
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "content": "[\n  {\n    \"match\": \"阿森纳 vs 马竞\",\n    \"final_direction\": \"home\",\n    \"top3\": [\n      {\n        \"score\": \"2-0\",\n        \"prob\": 0.154,\n        \"market_logic\": \"主队公平胜率高于六成，主客隐含xG约1.63比0.78，客队进球压制明显；总进球重心落在2-3球，且主让1实际浅于理论-1.25，更像赢球但未必穿深。\"\n      },\n      {\n        \"score\": \"2-1\",\n        \"prob\": 0.131,\n        \"market_logic\": \"半全场主/主最低，主导权仍在主队；但客胜赔率有降水且Sharp资金偏客，意味着客队偷到1球的风险不能忽视。\"\n      },\n      {\n        \"score\": \"1-0\",\n        \"prob\": 0.124,\n        \"market_logic\": \"总进球低尾不低，0球与1球赔率不算极端高，比赛存在偏谨慎、淘汰赛控制节奏的可能；若主队兑现优势但市场对穿盘存疑，1球小胜是自然落点。\"\n      }\n    ],\n    \"reason\": \"1X2公平概率显示主队为明确强方，62.7%对15.0%的基础面优势足以支撑主胜为首选。隐含xG 1.63比0.775说明主队进攻创造和客队进球上限都偏受限，比赛更像主队控制下的中低比分胜局。盘口层面，理论应到主让1.25，实际仅主让1.00，存在0.25档的偏浅，这不是对主队大胜的强确认，反而更像庄家防范主队赢球但控制在1球或2球范围。总进球分布中2球最低、3球接近，4球后迅速抬升，说明主流环境不是开放对攻，而是2-3球区间最密集。资金面上主胜散户59%明显偏热，同时客胜赔率下降且Sharp资金流向客胜，构成对主胜穿深的反制，但并不足以推翻主队基础优势，只能把结果从大胜修正为偏保守主胜。综合判断，方向仍取主胜，但比分分布避免追逐过深穿盘，优先落在2-0、2-1、1-0这类主胜且总球不过热的结构。\",\n    \"ai_confidence\": 0.67,\n    \"risk_level\": \"medium\",\n    \"detected_traps\": [\n      \"杯赛大热保护：主队公平概率高且散户主胜过热，存在只赢不穿或局部冷门对冲风险\",\n      \"理论盘口-1.25而实际仅-1.00，盘口偏浅，对主队大胜预期不足\",\n      \"客胜降水并伴随Sharp资金流入，说明市场专业资金在防客队顽抗\"\n    ],\n    \"must_review_flags\": [\n      \"缺少伤停和首发，无法确认主队是否轮换或客队防守核心是否完整\",\n      \"缺少临场赔率历史，无法确认客胜降水是持续趋势还是短时噪音\",\n      \"杯赛淘汰赛语境下战术保守概率偏高，需警惕节奏压低\"\n    ],\n    \"data_missing\": [\n      \"injuries\",\n      \"suspensions\",\n      \"lineup_news\",\n      \"weather\",\n      \"motivation\",\n      \"odds_history\"\n    ],\n    \"audit\": {\n      \"fair_1x2\": {\n        \"home\": 0.627,\n        \"draw\": 0.222,\n        \"away\": 0.15,\n        \"judgement\": \"主胜基础明显占优，平局次之，客胜为第三选择\"\n      },\n      \"handicap\": {\n        \"original\": -1.0,\n        \"theoretical\": -1.25,\n        \"actual\": -1.0,\n        \"depth_diff\": -0.25,\n        \"judgement\": \"强方盘口偏浅，支持主胜但削弱大胜信号\"\n      },\n      \"total_goals\": {\n        \"environment\": \"normal_to_low\",\n        \"focus_band\": \"2-3 goals\",\n        \"tail_risk\": \"limited_high_tail\",\n        \"judgement\": \"更偏控制型比赛，不支持极端大比分\"\n      },\n      \"money_flow\": {\n        \"retail\": {\n          \"home_win\": 59,\n          \"draw\": 24,\n          \"away_win\": 17\n        },\n        \"movement\": {\n          \"home_win\": 1,\n          \"draw\": 0,\n          \"away_win\": -1\n        },\n        \"signals\": [\n          \"Sharp资金流向客胜\",\n          \"主胜超热59%\"\n        ],\n        \"judgement\": \"主胜方向有热度风险，客队受专业资金防守，但尚未反转主队基本面\"\n      },\n      \"external_context\": {\n        \"source_quality\": \"missing\",\n        \"usable_info\": [],\n        \"judgement\": \"无可验证伤停、天气、首发、新闻，不能额外放大任何一侧\"\n      },\n      \"risk\": {\n        \"level\": \"medium\",\n        \"core_risks\": [\n          \"主胜热门保护导致赢球不穿或被逼平\",\n          \"客队资金面逆向支持增强小比分不确定性\"\n        ]\n      },\n      \"rejection\": {\n        \"not_home_loss\": \"客胜基础概率仅15.0%，隐含xG客队不足0.8，除非主队效率极差或红牌等外生事件，否则直接做客胜缺乏赔率结构支持。\",\n        \"not_draw\": \"平局虽有22.2%且杯赛环境可能保守，但半全场主/主和主胜1X2都明显压低，说明主队最终拿下比赛仍是主路径；盘口偏浅更像防1球胜而不是主不胜。\",\n        \"not_away\": \"虽然客胜降水和Sharp资金流入值得重视，但这更像冷门保护而非主路径切换；若客队真被强力看好，1X2与让球不会仍维持如此明确的主强结构。\"\n      }\n    }\n  }\n]",
+        "refusal": null,
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1777923230,
+  "id": "chatcmpl-DbtL4qDjQdVRAZVG1XTizMiBEVtoS",
+  "model": "gpt-5.4-2026-03-05",
+  "object": "chat.completion",
+  "prompt_filter_results": [
+    {
+      "prompt_index": 0,
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "jailbreak": {
+          "detected": false,
+          "filtered": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      }
+    }
+  ],
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 1451,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "latency_checkpoint": {
+      "engine_tbt_ms": 22,
+      "engine_ttft_ms": 130,
+      "engine_ttlt_ms": 31576,
+      "pre_inference_ms": 70,
+      "service_tbt_ms": 22,
+      "service_ttft_ms": 344,
+      "service_ttlt_ms": 31791,
+      "total_duration_ms": 31730,
+      "user_visible_ttft_ms": 274
+    },
+    "prompt_tokens": 1130,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 1024
+    },
+    "total_tokens": 2581
+  }
+}
