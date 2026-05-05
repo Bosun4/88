@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-vMAX 18.4 — PURE RAW-AI 主审版
+vMAX 18.4.2 — PURE RAW-AI 主审版 + 体彩赔率标注 + 联网欧赔核对 + Sharp/联赛球队风格
 ============================================================
 设计边界：
 1. 纯 AI 主审：GPT/Grok/Gemini 初审，Claude 终审；Claude 失败时使用 Phase1 AI 共识。
 2. 完全移除本地比分主裁：不跑 CRS 矩阵、不跑贝叶斯后验、不跑本地比分矩阵、不跑 T1-T16/D17-D19 风控裁决。
 3. 不给 AI 喂本地判断：不喂 fair_1x2、本地理论盘口、强方深浅差、本地陷阱、本地候选比分排序、本地校准 lambda。
-4. AI 成功时，本地只做 JSON 解析、字段闭环、前端兼容字段填充。
-5. AI 全失败时直接弃权，不使用本地兜底比分。
-6. 四个模型默认全部走统一 OpenAI-compatible 中转：API_KEY / API_URL。兼容旧变量作为兜底。
-7. singleflight + cache：同批次重复触发时不重复扣费；但 0/4 AI 失败不写缓存。
+4. AI 必须自主识别 Sharp/聪明钱方向，并结合联赛风格、球队风格判断比分形态；例子只作思路，不作为模板。
+5. AI 成功时，本地只做 JSON 解析、字段闭环、前端兼容字段填充。
+6. AI 全失败时直接弃权，不使用本地兜底比分。
+7. 四个模型默认全部走统一 OpenAI-compatible 中转：API_KEY / API_URL。兼容旧变量作为兜底。
+8. singleflight + cache：同批次重复触发时不重复扣费；但 0/4 AI 失败不写缓存。
 
 推荐环境变量：
     API_KEY=你的统一中转key
@@ -56,8 +57,8 @@ except Exception:
 # 版本常量
 # ============================================================
 
-ENGINE_VERSION = "vMAX 18.4"
-ENGINE_ARCHITECTURE = "PURE RAW-AI: GPT/Grok/Gemini 初审 + Claude 终审；无 CRS/无本地矩阵/无本地风控兜底/AI失败即弃权"
+ENGINE_VERSION = "vMAX 18.4.2"
+ENGINE_ARCHITECTURE = "PURE RAW-AI: 体彩竞彩抓包赔率 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权"
 
 VALID_DIRS = {"home", "draw", "away"}
 AI_NAMES = ["gpt", "grok", "gemini", "claude"]
@@ -474,22 +475,53 @@ def _raw_field_line(label: str, value: Any, limit: int = 1200) -> str:
 
 def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
     p = "<context>\n"
-    p += "你是竞彩足球 RAW-AI 比分预测模型。你只能基于本段给出的原始字段和 external_context 做判断。\n"
+    p += "你是竞彩足球 RAW-AI 比分预测模型。你只能基于本段给出的原始字段、external_context，以及你自己可用的联网/浏览能力做判断。\n"
+    p += "重要数据源说明：本段 match_data 里的 1X2、让球、总进球、半全场、赔率变动、散户热度，均来自中国体彩竞彩足球/竞彩相关抓包赔率，不是欧洲博彩公司平均欧赔。\n"
+    p += "你需要把体彩竞彩赔率视为中国市场定价，再主动联网核对欧洲主流欧赔/交易市场/赔率比较站的最新赔率变化，用于判断中外市场是否同向或背离。\n"
+    p += "你必须自主识别 Sharp/聪明钱方向：重点看赔率下降与散户热度是否同向、弱队/强队身份与盘口阻力是否背离、欧洲欧赔与体彩竞彩是否共振。\n"
+    p += "你必须结合联赛风格和球队风格给出比分形态：例如强队控场型、反击型、低节奏防守型、高节奏英超型、杯赛保守型会对应不同进球分布。\n"
+    p += "示例只作思路，不是模板：AC米兰可能常见1-1/2-1/2-0，国米可能常见2-1/1-1/3-0，英超爆冷和大开大合概率相对更高；必须结合当场赔率、球队状态、联赛节奏和联网材料判断。\n"
+    p += "如果你的当前运行环境没有真实联网/浏览能力，必须在 audit.web_odds_check 写 web_search_unavailable，并在 data_missing 加入 external_european_odds；禁止假装查过欧赔。\n"
     p += "禁止引用或假设任何未给出的本地模型结论。禁止使用 CRS 框架、贝叶斯、本地矩阵、陷阱编号、固定常见比分模板。\n"
     p += "如果外部情报为空，必须写 data_missing，不得编造伤停、天气、首发或新闻。\n"
     p += "</context>\n\n"
 
     p += "<task_rules>\n"
-    p += "1. 直接从原始 1X2、让球、总进球、半全场、赔率变动、散户热度、原始情报、external_context 推导方向与比分。\n"
-    p += "2. 不要默认输出 1-1、2-1、1-0、0-1、1-2；若选择这些比分，必须是你从原始字段独立推导出的结果。\n"
-    p += "3. top3 必须是比分分布，不要只给方向。top3[0].score 必须与 final_direction 一致。\n"
-    p += "4. 必须说明为什么不选另外两个方向。\n"
-    p += "5. 0-1、0-2、0-3 是合法客胜比分；其他比分可输出 4-3、3-4 等精确比分。\n"
+    p += "1. 先把本段给出的赔率识别为体彩竞彩赔率；不要把它误读为欧洲博彩公司欧赔。\n"
+    p += "2. 若具备联网能力，必须搜索并核对欧洲主流欧赔/交易市场赔率：至少检查主流欧赔方向、赔率升降、是否与体彩竞彩方向一致；如果搜索不到，明确写 missing。\n"
+    p += "3. 直接从体彩竞彩原始 1X2、让球、总进球、半全场、赔率变动、散户热度、原始情报、external_context、联网欧赔核对结果推导方向与比分。\n"
+    p += "4. 必须识别 Sharp/聪明钱方向：若弱队主场踢强队，但主胜赔率下降、平赔受压、散户并不极热或欧洲市场也支持主队，则不能机械选强队；可能是主胜或平局，最终由你根据证据判断。\n"
+    p += "5. 若热门方向很热但赔率不降反升，或弱方赔率逆势下压，应判断是否存在反向资金、造热、阻上或诱盘，但不能无证据反指。\n"
+    p += "6. 必须结合联赛风格和球队风格给比分：低节奏/防守型倾向小比分，强控球强压迫可能2-0/3-0，高节奏联赛可放大爆冷和双方进球，杯赛/淘汰赛需考虑保守与加时前策略。\n"
+    p += "7. 不要默认输出 1-1、2-1、1-0、0-1、1-2；若选择这些比分，必须是你从原始字段、Sharp方向、联赛/球队风格和联网核对中独立推导出的结果。\n"
+    p += "8. top3 必须是比分分布，不要只给方向。top3[0].score 必须与 final_direction 一致。\n"
+    p += "9. 必须说明为什么不选另外两个方向。\n"
+    p += "10. 0-1、0-2、0-3 是合法客胜比分；其他比分可输出 4-3、3-4 等精确比分。\n"
     p += "</task_rules>\n\n"
+
+    p += "<web_odds_search_instruction>\n"
+    p += "对每场比赛，若你具备联网能力，请用球队名、赛事名、match odds、1x2 odds、odds comparison、bookmaker odds 等关键词搜索欧洲主流欧赔或交易市场。\n"
+    p += "需要核对：欧洲主胜/平/客胜大致区间、盘口方向、赔率变化是否与体彩竞彩同向、是否存在中外市场背离。\n"
+    p += "禁止编造具体公司、赔率或新闻。如果没有查到或无联网能力，写 web_search_unavailable 或 european_odds_missing。\n"
+    p += "</web_odds_search_instruction>\n\n"
+
+    p += "<sharp_money_instruction>\n"
+    p += "Sharp/聪明钱不是简单看哪边赔率低，而是看价格变化、散户热度、盘口阻力、欧洲欧赔与体彩竞彩是否共振。\n"
+    p += "典型判断：弱队主场对强队时，如果主胜或平局方向获得降赔/承压，而散户热度并未极端支持弱队，可能代表专业资金保护主队不败；具体是主胜还是平局由你结合总进球、半全场、球队风格判断。\n"
+    p += "若强队很热但客胜/主胜赔率不降反升，要警惕热门受阻；若冷门方向赔率逆势下降，要评估是否为真实Sharp还是诱导。\n"
+    p += "输出 audit.sharp_money_direction，值可为 home/draw/away/home_or_draw/away_or_draw/unclear，并写 audit.sharp_evidence。\n"
+    p += "</sharp_money_instruction>\n\n"
+
+    p += "<league_team_style_instruction>\n"
+    p += "必须把联赛风格与球队风格转化为比分形态，而不是只判断方向。\n"
+    p += "需要考虑：联赛平均节奏、爆冷率、平局倾向、强弱队差距、球队控球/压迫/反击/防守风格、近期进失球、杯赛或联赛战意。\n"
+    p += "示例只作推理框架，不是固定模板：AC米兰类稳健强队可能落在1-1/2-1/2-0区间，国米类强压迫队可能出现2-1/1-1/3-0，英超高对抗高波动更容易出现爆冷、逆转或双方进球。\n"
+    p += "如果你联网得到球队风格或联赛风格资料，写入 audit.league_style 与 audit.team_style；如果没有资料，用原始赔率和已给情报推断，并说明不确定性。\n"
+    p += "</league_team_style_instruction>\n\n"
 
     p += "<output_format>\n"
     p += "严格输出 JSON 数组。每场一个对象：\n"
-    p += '{"match":1,"final_direction":"home/draw/away","top3":[{"score":"2-0","prob":0.18,"market_logic":"..."}],"reason":"...","ai_confidence":0-100,"risk_level":"low/medium/high","data_missing":[],"audit":{"direction_rejection":"...","total_goals":"...","money_flow":"...","external_context":"..."}}\n'
+    p += '{"match":1,"final_direction":"home/draw/away","top3":[{"score":"2-0","prob":0.18,"market_logic":"..."}],"reason":"...","ai_confidence":0-100,"risk_level":"low/medium/high","data_missing":[],"audit":{"odds_source":"体彩竞彩抓包赔率","web_odds_check":"searched/web_search_unavailable/european_odds_missing","european_odds":"...","market_divergence":"...","sharp_money_direction":"home/draw/away/home_or_draw/away_or_draw/unclear","sharp_evidence":"...","league_style":"...","team_style":"...","style_score_logic":"...","direction_rejection":"...","total_goals":"...","money_flow":"...","external_context":"..."}}\n'
     p += "禁止 markdown，禁止 JSON 外文本。match 字段优先输出数字序号。\n"
     p += "</output_format>\n\n"
 
@@ -501,9 +533,9 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
         league = m.get("league", m.get("cup", ""))
         p += f'<match index="{i}">\n'
         p += f"[{i}] {h} vs {a} | {league}\n"
-        p += f"1X2欧赔原始值: 主胜={m.get('sp_home', m.get('win',''))} 平局={m.get('sp_draw', m.get('same',''))} 客胜={m.get('sp_away', m.get('lose',''))}\n"
-        p += f"让球原始值: {m.get('give_ball', m.get('handicap', m.get('rq','')))}\n"
-        p += "总进球a0-a7原始赔率:" + " | ".join([f"{g}={m.get(f'a{g}','')}" for g in range(8)]) + "\n"
+        p += f"体彩竞彩1X2抓包赔率: 主胜={m.get('sp_home', m.get('win',''))} 平局={m.get('sp_draw', m.get('same',''))} 客胜={m.get('sp_away', m.get('lose',''))}\n"
+        p += f"体彩竞彩让球抓包值: {m.get('give_ball', m.get('handicap', m.get('rq','')))}\n"
+        p += "体彩竞彩总进球a0-a7抓包赔率:" + " | ".join([f"{g}={m.get(f'a{g}','')}" for g in range(8)]) + "\n"
 
         hf_l = []
         for k, lb in HFTF_MAP.items():
@@ -511,13 +543,13 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
             if v not in (None, "", 0, "0"):
                 hf_l.append(f"{lb}={v}")
         if hf_l:
-            p += "半全场原始赔率:" + " | ".join(hf_l) + "\n"
+            p += "体彩竞彩半全场抓包赔率:" + " | ".join(hf_l) + "\n"
 
-        p += _raw_field_line("赔率变动原始字段", m.get("change"), 2000)
-        p += _raw_field_line("散户/热度原始字段", m.get("vote"), 1600)
+        p += _raw_field_line("体彩竞彩赔率变动抓包字段", m.get("change"), 2000)
+        p += _raw_field_line("体彩竞彩散户/热度抓包字段", m.get("vote"), 1600)
         p += _raw_field_line("information原始字段", m.get("information"), 2500)
         p += _raw_field_line("points原始字段", m.get("points"), 3000)
-        p += _raw_field_line("raw_extra原始字段", {k: v for k, v in m.items() if k in ("weather", "injury", "lineup", "news", "motivation", "schedule", "home_form", "away_form")}, 2500)
+        p += _raw_field_line("raw_style_extra原始字段", {k: v for k, v in m.items() if k in ("league_style", "league_profile", "team_style", "home_style", "away_style", "play_style", "tactical_style", "pace_rating", "tempo", "home_form", "away_form", "weather", "injury", "lineup", "news", "motivation", "schedule")}, 3000)
         p += "<external_context>\n" + _format_external_context_for_prompt(ma.get("external_context", {})) + "</external_context>\n"
         p += "</match>\n\n"
     p += "</match_data>\n"
@@ -526,10 +558,13 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
 
 def build_claude_final_audit_prompt(match_analyses: List[Dict[str, Any]], phase1_results: Dict[str, Dict[int, Dict[str, Any]]]) -> str:
     p = "<final_audit_context>\n"
-    p += "你是 Claude 最终 RAW-AI 主裁。你看到的是原始比赛字段和 GPT/Grok/Gemini 初审。\n"
-    p += "你不是反指模型，不需要为了体现审计而反对初审。选择证据最完整、最符合原始字段的一组。\n"
+    p += "你是 Claude 最终 RAW-AI 主裁。你看到的是中国体彩竞彩抓包赔率、原始比赛字段、external_context，以及 GPT/Grok/Gemini 初审。\n"
+    p += "你不是反指模型，不需要为了体现审计而反对初审。选择证据最完整、最符合体彩竞彩原始字段与联网欧赔核对结果的一组。\n"
+    p += "必须明确区分：match_data 中的赔率是体彩竞彩赔率；欧洲主流欧赔需要你自己联网核对。若无联网能力，必须写 web_search_unavailable，不能假装查过。\n"
     p += "禁止引用 CRS、贝叶斯、本地矩阵、本地风控编号、固定常见比分模板。\n"
-    p += "如果你改动初审比分，必须指出原始字段中的硬依据；不能只是把 2-0 改成 2-1 或把 3-1 改成 2-1。\n"
+    p += "如果你改动初审比分，必须指出体彩竞彩原始字段、联网欧赔核对、Sharp/聪明钱方向、联赛/球队风格、资金变动、总进球或半全场中的硬依据；不能只是把 2-0 改成 2-1 或把 3-1 改成 2-1。\n"
+    p += "你必须复核 Sharp/聪明钱方向：弱队主场受专业资金支持时，不能机械跟强队；强队过热但价格受阻时，不能机械跟热门。\n"
+    p += "你必须复核联赛/球队风格对比分的影响，例如稳健控场队、压迫队、防守低节奏队、英超高波动场景对应不同比分分布。示例不是固定模板。\n"
     p += "</final_audit_context>\n\n"
     p += build_phase1_prompt(match_analyses)
     p += "\n<phase1_ai_results>\n"
