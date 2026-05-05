@@ -38,7 +38,7 @@ def env_bool(name: str, default: bool = False) -> bool:
 
 def env_int(name: str, default: int = 0) -> int:
     try:
-        return int(str(os.environ.get(name, default)).strip())
+        return int(float(str(os.environ.get(name, default)).strip()))
     except Exception:
         return default
 
@@ -85,7 +85,7 @@ def auto_install():
 auto_install()
 
 # ============================================================
-# 运行锁：防止 GitHub Actions / 前端重复触发导致重复扣费
+# 运行锁：防止 GitHub Actions / 手动重复触发导致重复扣费
 # ============================================================
 
 class RunLock:
@@ -138,12 +138,13 @@ def get_target_date(offset=0):
 
     默认 VMAX_DATE_SHIFT_HOURS=11：
     北京时间凌晨 00:00 - 10:59 仍归入前一个竞彩业务日。
+
     例如北京时间 2026-05-06 04:00：
       自然日是 2026-05-06
       减 11 小时后是 2026-05-05 17:00
       程序 today = 2026-05-05
 
-    如果你以后想按自然日跑，设置：
+    如果以后想按自然日跑，设置：
       VMAX_DATE_SHIFT_HOURS=0
     """
     beijing_tz = timezone(timedelta(hours=8))
@@ -154,28 +155,33 @@ def get_target_date(offset=0):
 
 def configure_ai_defaults():
     """
-    给 predict.py 读取的 AI 配置设默认值。
-    已经在环境变量中设置的不会被覆盖。
+    这里只设置不会影响预测结构的安全默认值。
+
+    注意：
+    不再在 main.py 里强制 AI_BATCH_SIZE=4。
+    不再在 main.py 里强制 AI_MODEL_CONCURRENCY=1。
+    不再在 main.py 里强制 AI_PHASE1_PARALLEL=false。
+
+    批次、并发、是否串行，应该由 predict.py 自己支持后再由 yml/env 控制。
+    main.py 不再制造“看起来是4场小批次、实际没生效”的误导日志。
     """
 
-    # 4场一批
-    os.environ.setdefault("AI_BATCH_SIZE", "4")
-    os.environ.setdefault("AI_BATCH_CONCURRENCY", "1")
+    # 只跑 today
+    os.environ.setdefault("AI_RUN_DAYS", "today")
+    os.environ.setdefault("VMAX_RUN_DAYS", "today")
 
-    # 先不并发模型，降低重复扣费和排查难度
-    os.environ.setdefault("AI_MODEL_CONCURRENCY", "1")
-    os.environ.setdefault("AI_PHASE1_PARALLEL", "false")
-
-    # Claude 条件触发，Phase1 至少2家有效再跑
-    os.environ.setdefault("AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID", "true")
-    os.environ.setdefault("AI_MIN_PHASE1_VALID_FOR_CLAUDE", "2")
+    # 每个模型最多请求一次，避免失败后重复扣费
     os.environ.setdefault("AI_MAX_REQUESTS_PER_AI", "1")
 
-    # Claude 终审使用压缩版 Phase1 结果，降低 token
+    # Claude 条件触发：如果 predict.py 支持，就会生效；不支持也不会影响 main.py
+    os.environ.setdefault("AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID", "true")
+    os.environ.setdefault("AI_MIN_PHASE1_VALID_FOR_CLAUDE", "2")
+
+    # Claude 终审压缩：如果 predict.py 支持，就会生效
     os.environ.setdefault("AI_USE_COMPACT_CLAUDE_AUDIT", "true")
     os.environ.setdefault("AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE", "350")
 
-    # 持久化缓存，避免重复扣费
+    # 持久化缓存，避免同批重复扣费
     os.environ.setdefault("AI_PERSISTENT_CACHE_ENABLED", "true")
     os.environ.setdefault("AI_CACHE_DIR", "data/ai_cache")
     os.environ.setdefault("AI_CACHE_STRIP_VOLATILE_KEYS", "true")
@@ -184,9 +190,34 @@ def configure_ai_defaults():
     os.environ.setdefault("AI_DECISION_CACHE_TTL", "1800")
     os.environ.setdefault("AI_WRITE_BATCH_RESULT_IMMEDIATELY", "true")
 
-    # 本 main.py 只跑 today，这里也固定 today
-    os.environ.setdefault("AI_RUN_DAYS", "today")
-    os.environ.setdefault("VMAX_RUN_DAYS", "today")
+
+def print_runtime_config():
+    print("⚙️ AI运行配置:")
+    print(f"   VMAX_DATE_SHIFT_HOURS={os.environ.get('VMAX_DATE_SHIFT_HOURS', '11')}")
+    print(f"   VMAX_RUN_DAYS={os.environ.get('VMAX_RUN_DAYS', 'today')}")
+    print(f"   AI_RUN_DAYS={os.environ.get('AI_RUN_DAYS', 'today')}")
+    print(f"   AI_MAX_REQUESTS_PER_AI={os.environ.get('AI_MAX_REQUESTS_PER_AI', '1')}")
+    print(f"   AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID={os.environ.get('AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID', 'true')}")
+    print(f"   AI_MIN_PHASE1_VALID_FOR_CLAUDE={os.environ.get('AI_MIN_PHASE1_VALID_FOR_CLAUDE', '2')}")
+    print(f"   AI_USE_COMPACT_CLAUDE_AUDIT={os.environ.get('AI_USE_COMPACT_CLAUDE_AUDIT', 'true')}")
+    print(f"   AI_PERSISTENT_CACHE_ENABLED={os.environ.get('AI_PERSISTENT_CACHE_ENABLED', 'true')}")
+    print(f"   AI_DECISION_CACHE_TTL={os.environ.get('AI_DECISION_CACHE_TTL', '1800')}")
+    print(f"   AI_CACHE_DIR={os.environ.get('AI_CACHE_DIR', 'data/ai_cache')}")
+
+    if os.environ.get("AI_BATCH_SIZE"):
+        print(f"   AI_BATCH_SIZE={os.environ.get('AI_BATCH_SIZE')}  # 来自 yml/env，main.py 未强制设置")
+    else:
+        print("   AI_BATCH_SIZE=<unset>  # main.py 未强制设置")
+
+    if os.environ.get("AI_MODEL_CONCURRENCY"):
+        print(f"   AI_MODEL_CONCURRENCY={os.environ.get('AI_MODEL_CONCURRENCY')}  # 来自 yml/env，main.py 未强制设置")
+    else:
+        print("   AI_MODEL_CONCURRENCY=<unset>  # main.py 未强制设置")
+
+    if os.environ.get("AI_PHASE1_PARALLEL"):
+        print(f"   AI_PHASE1_PARALLEL={os.environ.get('AI_PHASE1_PARALLEL')}  # 来自 yml/env，main.py 未强制设置")
+    else:
+        print("   AI_PHASE1_PARALLEL=<unset>  # main.py 未强制设置")
 
 
 # ============================================================
@@ -221,19 +252,10 @@ def main():
         print("=" * 80)
         print("⚽ 量化足球投研终端 vMAX 终极版（只跑今日竞彩业务日）")
         print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
-        print("🔧 核心升级：仅 today + 4场小批次 + 防重复运行锁 + Claude压缩终审")
+        print("🔧 核心升级：仅 today + 防重复运行锁 + 持久化缓存 + AI失败不本地兜底")
         print("=" * 80)
 
-        print("⚙️ AI运行配置:")
-        print(f"   VMAX_DATE_SHIFT_HOURS={os.environ.get('VMAX_DATE_SHIFT_HOURS', '11')}")
-        print(f"   VMAX_RUN_DAYS={os.environ.get('VMAX_RUN_DAYS', 'today')}")
-        print(f"   AI_RUN_DAYS={os.environ.get('AI_RUN_DAYS', 'today')}")
-        print(f"   AI_BATCH_SIZE={os.environ.get('AI_BATCH_SIZE', '4')}")
-        print(f"   AI_BATCH_CONCURRENCY={os.environ.get('AI_BATCH_CONCURRENCY', '1')}")
-        print(f"   AI_MODEL_CONCURRENCY={os.environ.get('AI_MODEL_CONCURRENCY', '1')}")
-        print(f"   AI_PHASE1_PARALLEL={os.environ.get('AI_PHASE1_PARALLEL', 'false')}")
-        print(f"   AI_USE_COMPACT_CLAUDE_AUDIT={os.environ.get('AI_USE_COMPACT_CLAUDE_AUDIT', 'true')}")
-        print(f"   AI_PERSISTENT_CACHE_ENABLED={os.environ.get('AI_PERSISTENT_CACHE_ENABLED', 'true')}")
+        print_runtime_config()
 
         # ============================================================
         # 自学习/复盘模块
@@ -263,9 +285,11 @@ def main():
                 "session": session,
                 "target_mode": "today_only",
                 "date_shift_hours": os.environ.get("VMAX_DATE_SHIFT_HOURS", "11"),
-                "ai_batch_size": os.environ.get("AI_BATCH_SIZE", "4"),
-                "ai_model_concurrency": os.environ.get("AI_MODEL_CONCURRENCY", "1"),
-                "ai_phase1_parallel": os.environ.get("AI_PHASE1_PARALLEL", "false"),
+                "ai_batch_size": os.environ.get("AI_BATCH_SIZE", ""),
+                "ai_model_concurrency": os.environ.get("AI_MODEL_CONCURRENCY", ""),
+                "ai_phase1_parallel": os.environ.get("AI_PHASE1_PARALLEL", ""),
+                "ai_max_requests_per_ai": os.environ.get("AI_MAX_REQUESTS_PER_AI", "1"),
+                "ai_cache_ttl": os.environ.get("AI_DECISION_CACHE_TTL", "1800"),
             },
         }
 
@@ -321,7 +345,6 @@ def main():
         for match in raw_data.get("matches", []):
             match["information"] = match.get("information") or {}
 
-        # 只跑 today，所以 use_ai=True
         use_ai = True
         print(f"  [AI ENABLED] today 将启用 AI 推理 | 比赛数={len(raw_data.get('matches', []))}")
 
