@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-06 05:52:05",
+  "update_time": "2026-05-06 05:55:55",
   "version": "MAX-v1.1",
   "scope": "today_only",
   "top4": [
@@ -3250,8 +3250,10 @@
     "session": "morning",
     "target_mode": "today_only",
     "date_shift_hours": "11",
-    "ai_batch_size": "4",
-    "ai_model_concurrency": "1",
-    "ai_phase1_parallel": "false"
+    "ai_batch_size": "",
+    "ai_model_concurrency": "",
+    "ai_phase1_parallel": "",
+    "ai_max_requests_per_ai": "1",
+    "ai_cache_ttl": "1800"
   }
 }
