@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿量化足球 vMAX 18</title>
+<title>小鱼儿量化足球 vMAX 18.4.6</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#08090e;--s1:#0e1118;--s2:#141822;--s3:#1a2030;--bd:#1e2536;--bd2:#2a3447;
   --tx:#b8c4d6;--t2:#6b7a90;--t3:#3d4a5e;--w:#eaf0f8;
   --red:#ff4d5a;--gn:#00e08e;--bl:#4d8aff;--am:#ffb020;--pr:#b366ff;--cy:#00d4e0;--pk:#ff5ca0;--or:#ff8030;
-  --t1c:#ff5ca0;--t2c:#ff8030;--t3c:#ffb020;--t4c:#b366ff;--t5c:#4d8aff;--t6c:#00d4e0;--t7c:#00e08e;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;font-size:13px}
@@ -40,6 +39,10 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 .sec-b{background:var(--am);color:#000;font-size:7px;font-weight:800;padding:2px 5px;border-radius:2px}
 .sec-i{font-size:9px;color:var(--t2);margin-left:auto}
 
+.today-pill{display:flex;align-items:center;gap:6px;justify-content:center;margin:0 auto 14px;background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;max-width:360px}
+.today-pill strong{color:var(--gn);font-size:11px}
+.today-pill span{font-size:9px;color:var(--t2)}
+
 .t4g{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:5px;margin-bottom:14px}
 .t4{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:12px;position:relative;cursor:pointer;transition:.15s;overflow:hidden}
 .t4:hover{border-color:var(--am);transform:translateY(-1px)}
@@ -57,13 +60,11 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 .t4-ft{font-size:9px;color:var(--or);margin-top:6px;font-weight:600;display:flex;flex-wrap:wrap;gap:3px}
 .t4-ftag{padding:1px 4px;border-radius:2px;font-size:8px}
 
-.tabs{display:flex;gap:2px;background:var(--s1);border:1px solid var(--bd);border-radius:4px;padding:2px;max-width:320px;margin:0 auto 14px}
-.tab{flex:1;text-align:center;padding:5px;border-radius:3px;font-size:10px;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:.15s}
-.tab.ac{background:var(--bl);color:#fff}
-
-.mc{background:var(--s1);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:5px}
+.mc{background:var(--s1);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:7px}
 .mc.rec{border-color:var(--am);box-shadow:0 0 0 1px #ffb02020}
-.mc-h{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.mc.s{border-color:var(--gn);box-shadow:0 0 0 1px #00e08e18}
+.mc.a{border-color:var(--am)}
+.mc-h{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:var(--bg);border-bottom:1px solid var(--bd);gap:6px;flex-wrap:wrap}
 .mc-lg{font-size:10px;color:var(--bl);font-weight:700}
 .mc-badge{background:var(--am);color:#000;font-size:7px;font-weight:800;padding:1px 4px;border-radius:2px;margin-left:4px}
 .mc-eng{font-size:8px;color:var(--gn);background:#00e08e10;padding:2px 5px;border-radius:2px;font-family:'IBM Plex Mono';border:1px solid #00e08e25}
@@ -80,7 +81,7 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 .res-tag.d{background:#ffb02018;color:var(--am)}
 .res-tag.a{background:#4d8aff18;color:var(--bl)}
 
-.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px}
+.sr{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:8px}
 .sb{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:5px;text-align:center}
 .sb-l{font-size:7px;color:var(--t3);text-transform:uppercase}
 .sb-v{font-family:'IBM Plex Mono';font-size:12px;font-weight:700}
@@ -90,56 +91,31 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 .prob-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--s2)}
 .prob-bar .h{background:var(--red)}.prob-bar .d{background:#64748b}.prob-bar .a{background:var(--bl)}
 
-/* v18 决策剖析模块 */
-.v18{margin-bottom:10px;border-radius:8px;overflow:hidden;background:linear-gradient(135deg,#0e1118,#0a0d14);border:1px solid var(--bd2)}
-.v18-h{padding:6px 10px;background:linear-gradient(90deg,#00e08e15,#4d8aff10);border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
-.v18-t{font-size:10px;font-weight:800;color:var(--gn);letter-spacing:.5px}
-.v18-meta{font-family:'IBM Plex Mono';font-size:9px;color:var(--t2)}
-.v18-b{padding:8px 10px}
+.block{margin-bottom:10px;border-radius:8px;overflow:hidden;background:linear-gradient(135deg,#0e1118,#0a0d14);border:1px solid var(--bd2)}
+.block-h{padding:6px 10px;background:linear-gradient(90deg,#00e08e15,#4d8aff10);border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+.block-t{font-size:10px;font-weight:800;color:var(--gn);letter-spacing:.5px}
+.block-meta{font-family:'IBM Plex Mono';font-size:9px;color:var(--t2)}
+.block-b{padding:8px 10px}
 
-.trap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:4px;margin-bottom:8px}
-.trap{background:var(--s2);border:1px solid var(--bd);border-radius:4px;padding:6px 8px;position:relative;overflow:hidden}
-.trap::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px}
-.trap.T1::before,.trap.T6::before,.trap.T7::before,.trap.T13::before,.trap.T15::before{background:var(--t1c)}
-.trap.T2::before,.trap.T3::before{background:var(--t2c)}
-.trap.T4::before,.trap.T5::before,.trap.T8::before{background:var(--t3c)}
-.trap.T9::before,.trap.T10::before,.trap.T16::before{background:var(--t4c)}
-.trap.T11::before{background:var(--t5c)}
-.trap.T12::before{background:var(--t6c)}
-.trap.T14::before{background:var(--t7c)}
-.trap-id{font-family:'IBM Plex Mono';font-size:8px;font-weight:800;display:inline-block;padding:1px 4px;border-radius:2px;background:var(--bg);margin-bottom:3px}
-.trap-id.T1,.trap-id.T6,.trap-id.T7,.trap-id.T13,.trap-id.T15{color:var(--t1c)}
-.trap-id.T2,.trap-id.T3{color:var(--t2c)}
-.trap-id.T4,.trap-id.T5,.trap-id.T8{color:var(--t3c)}
-.trap-id.T9,.trap-id.T10,.trap-id.T16{color:var(--t4c)}
-.trap-id.T11{color:var(--t5c)}
-.trap-id.T12{color:var(--t6c)}
-.trap-id.T14{color:var(--t7c)}
-.trap-d{font-size:9px;color:var(--tx);line-height:1.4;margin-top:2px}
+.sel-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:8px}
+.sel{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px;text-align:center}
+.sel-l{font-size:7px;color:var(--t3);text-transform:uppercase}
+.sel-v{font-family:'IBM Plex Mono';font-size:12px;font-weight:800;margin-top:2px}
+.tier-S{color:var(--gn)}.tier-A{color:var(--am)}.tier-B{color:var(--bl)}.tier-C{color:var(--cy)}.tier-D{color:var(--red)}
 
-.no-trap{font-size:9px;color:var(--t3);padding:6px 0;text-align:center;font-style:italic}
+.sl{font-size:8px;color:var(--t3);font-weight:700;margin:6px 0 3px;padding-bottom:2px;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px}
 
-.chain{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px;margin-bottom:8px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px}
-.chain-step{text-align:center;position:relative}
-.chain-step:not(:last-child)::after{content:'›';position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:var(--gn);font-size:14px;font-weight:700}
-.chain-l{font-size:7px;color:var(--t3);text-transform:uppercase}
-.chain-v{font-family:'IBM Plex Mono';font-size:11px;font-weight:700;color:var(--w);margin-top:2px}
-.chain-v.gn{color:var(--gn)}.chain-v.am{color:var(--am)}.chain-v.bl{color:var(--bl)}.chain-v.pr{color:var(--pr)}
+.review-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px;margin-bottom:6px}
+.review{background:var(--s2);border:1px solid var(--bd);border-radius:4px;padding:6px 8px}
+.review-top{display:flex;align-items:center;gap:4px;margin-bottom:3px}
+.review-id{font-family:'IBM Plex Mono';font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px;background:var(--bg);color:var(--or)}
+.review-decision{font-size:8px;font-weight:800;padding:1px 4px;border-radius:2px}
+.review-decision.accepted{background:#00e08e18;color:var(--gn)}
+.review-decision.rejected{background:#ff4d5a18;color:var(--red)}
+.review-decision.neutral{background:#ffb02018;color:var(--am)}
+.review-d{font-size:9px;color:var(--tx);line-height:1.45}
 
-.bay{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px 8px;margin-bottom:6px}
-.bay-l{font-size:8px;color:var(--gn);font-weight:800;text-transform:uppercase;margin-bottom:4px;letter-spacing:.5px}
-.bay-evt{font-family:'IBM Plex Mono';font-size:9px;color:var(--tx);padding:2px 0;line-height:1.4;word-break:break-all}
-.bay-evt::before{content:'›';color:var(--gn);margin-right:4px;font-weight:700}
-
-.crs-geo{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:6px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px}
-.crs-c{text-align:center}
-.crs-cl{font-size:7px;color:var(--t3);text-transform:uppercase}
-.crs-cv{font-family:'IBM Plex Mono';font-size:10px;font-weight:700;color:var(--cy);margin-top:1px}
-
-.tcand{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
-.tcand-c{background:var(--s2);border:1px solid var(--bd);padding:2px 6px;border-radius:3px;font-family:'IBM Plex Mono';font-size:9px}
-.tcand-c.top{border-color:var(--gn);background:#00e08e15;color:var(--gn);font-weight:700}
-
+.warn{padding:5px 8px;border-radius:4px;font-size:9px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:4px;background:#ff4d5a0a;border:1px solid #ff4d5a20;color:var(--red)}
 .sig{padding:5px 8px;border-radius:4px;font-size:9px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:4px}
 .sig-r{background:#ff4d5a0a;border:1px solid #ff4d5a20;color:var(--red)}
 .sig-a{background:#ffb0200a;border:1px solid #ffb02020;color:var(--am)}
@@ -151,8 +127,7 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 .ai-h{padding:6px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,176,32,.15)}
 .ai-t{font-size:11px;font-weight:800;color:var(--am)}
 .ai-s{font-family:'IBM Plex Mono';font-size:14px;font-weight:700;color:var(--w);background:var(--s2);padding:1px 6px;border-radius:3px}
-.ai-x{font-size:11px;color:var(--tx);line-height:1.6;padding:10px;letter-spacing:0.3px}
-.ai-verdict{background:var(--red);color:#fff;font-size:10px;font-weight:800;text-align:center;padding:4px 0;letter-spacing:1px;text-transform:uppercase}
+.ai-x{font-size:11px;color:var(--tx);line-height:1.6;padding:10px;letter-spacing:0.3px;white-space:pre-wrap;word-break:break-word}
 
 .ai3{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:5px}
 .ai3-c{padding:7px;background:var(--bg);border-right:1px solid var(--bd)}
@@ -161,20 +136,7 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 .ai3-t{font-size:9px;font-weight:800}
 .ai3-t.gpt{color:var(--gn)}.ai3-t.grk{color:var(--cy)}.ai3-t.gem{color:var(--bl)}
 .ai3-s{font-family:'IBM Plex Mono';font-size:10px;font-weight:700;color:var(--w);background:var(--s2);padding:2px 4px;border-radius:2px}
-.ai3-x{font-size:8px;color:var(--t3);line-height:1.4}
-
-.exp{border:1px solid var(--or);border-radius:6px;overflow:hidden;margin-bottom:5px;background:linear-gradient(135deg,rgba(255,128,48,.04),rgba(255,80,90,.02))}
-.exp-h{padding:5px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,128,48,.15)}
-.exp-t{font-size:10px;font-weight:800;color:var(--or)}
-.exp-s{font-family:'IBM Plex Mono';font-size:12px;font-weight:700;color:var(--w);background:var(--s2);padding:1px 5px;border-radius:3px}
-.exp-b{padding:5px 10px;font-size:9px;line-height:1.5}
-.exp-rule{display:flex;gap:4px;padding:1px 0}
-.exp-id{font-family:'IBM Plex Mono';font-size:7px;color:var(--or);background:#ff803010;padding:0 3px;border-radius:2px}
-.exp-rn{color:var(--w);font-weight:600;font-size:9px}
-.exp-rec{margin-top:3px;padding:3px 6px;border-radius:3px;font-size:9px;font-weight:700}
-.exp-rec.hi{background:#ff4d5a12;color:var(--red)}
-.exp-rec.md{background:#ffb02012;color:var(--am)}
-.exp-rec.lo{background:#00e08e12;color:var(--gn)}
+.ai3-x{font-size:8px;color:var(--t2);line-height:1.4;white-space:pre-wrap;word-break:break-word}
 
 .tbtn{width:100%;padding:5px;background:none;border:1px solid var(--bd);border-radius:4px;color:var(--t2);font-size:10px;cursor:pointer;font-weight:600;transition:.15s;font-family:'IBM Plex Sans','Noto Sans SC'}
 .tbtn:hover{background:var(--s2);color:var(--w)}
@@ -183,45 +145,29 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 
 .mg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
 .mb{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px;position:relative;overflow:hidden}
-.mb::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.mb.c1::before{background:var(--gn)}.mb.c2::before{background:var(--bl)}.mb.c3::before{background:var(--pr)}.mb.c4::before{background:var(--am)}.mb.c5::before{background:var(--cy)}.mb.c6::before{background:var(--pk)}.mb.c7::before{background:var(--or)}
-.mb-t{font-size:8px;font-weight:700;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px}
-.mb-t.c1{color:var(--gn)}.mb-t.c2{color:var(--bl)}.mb-t.c3{color:var(--pr)}.mb-t.c4{color:var(--am)}.mb-t.c5{color:var(--cy)}.mb-t.c6{color:var(--pk)}.mb-t.c7{color:var(--or)}
-.mb-r{display:flex;justify-content:space-between;font-size:8px;padding:1px 0}
+.mb::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gn)}
+.mb-t{font-size:8px;font-weight:700;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px;color:var(--gn)}
+.mb-r{display:flex;justify-content:space-between;font-size:8px;padding:1px 0;gap:8px}
 .mb-l{color:var(--t3)}
-.mb-v{font-family:'IBM Plex Mono';font-weight:600;color:var(--w);font-size:8px}
-.chip{display:inline-block;background:var(--s2);border:1px solid var(--bd);padding:1px 4px;border-radius:2px;font-size:7px;font-family:'IBM Plex Mono';color:var(--t3);margin:1px}
+.mb-v{font-family:'IBM Plex Mono';font-weight:600;color:var(--w);font-size:8px;text-align:right}
+.chip{display:inline-block;background:var(--s2);border:1px solid var(--bd);padding:1px 4px;border-radius:2px;font-size:7px;font-family:'IBM Plex Mono';color:var(--t2);margin:1px}
 .chip.top{border-color:var(--gn);color:var(--gn)}
-
-.sl{font-size:8px;color:var(--t3);font-weight:700;margin:6px 0 3px;padding-bottom:2px;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px}
-
-.ahg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:5px}
-.ahc{background:var(--bg);border:1px solid var(--bd);border-radius:3px;padding:4px;text-align:center}
-.ahc-l{font-size:6px;color:var(--t3);text-transform:uppercase}
-.ahc-v{font-family:'IBM Plex Mono';font-size:10px;font-weight:700;color:var(--w)}
-.ahc-v.hot{color:var(--gn)}
-
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px}
-.fb{background:var(--bg);border-radius:4px;padding:6px;border:1px solid var(--bd)}
-.fb-t{font-size:8px;font-weight:700;color:var(--t2);margin-bottom:2px;text-transform:uppercase}
-.fb-r{display:flex;justify-content:space-between;font-size:8px;padding:1px 0}
-.fb-l{color:var(--t3)}
-.fb-v{font-family:'IBM Plex Mono';font-weight:600;color:var(--w);font-size:8px}
 
 .foot{text-align:center;padding:14px;color:var(--t3);font-size:7px;border-top:1px solid var(--bd);margin-top:16px;line-height:1.6}
 .empty{text-align:center;padding:40px;color:var(--t3)}
 
-@media(max-width:640px){
+@media(max-width:760px){
   .dash{grid-template-columns:repeat(3,1fr)}
-  .mg,.fg{grid-template-columns:1fr}
+  .sr{grid-template-columns:repeat(3,1fr)}
+  .sel-grid{grid-template-columns:repeat(2,1fr)}
+  .mg{grid-template-columns:1fr}
   .ai3{grid-template-columns:1fr}
   .ai3-c{border-right:none;border-bottom:1px solid var(--bd)}
   .t4g{grid-template-columns:1fr}
-  .ahg,.sr{grid-template-columns:repeat(2,1fr)}
-  .chain{grid-template-columns:repeat(2,1fr);row-gap:8px}
-  .chain-step:nth-child(2n)::after{display:none}
-  .crs-geo{grid-template-columns:repeat(3,1fr)}
-  .trap-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .dash{grid-template-columns:repeat(2,1fr)}
+  .sr{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
@@ -232,365 +178,462 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
     <div class="hdr-l">
       <div class="hdr-logo"></div>
       <div class="hdr-t">小鱼儿量化足球 vMAX</div>
-      <div class="hdr-v" id="ver">v18</div>
+      <div class="hdr-v" id="ver">v18.4.6</div>
     </div>
     <div class="live"><div class="live-d"></div><span class="m" id="ut">…</span></div>
   </div>
 </div>
 
 <div class="wrap">
-<div class="dash" id="db"></div>
-<div class="sec"><div class="sec-t">精选推荐</div><div class="sec-b">核心杀招</div><div class="sec-i" id="t4ic"></div></div>
-<div class="t4g" id="t4"></div>
-<div class="tabs">
-  <button class="tab" onclick="sw(event,'yesterday')">昨日</button>
-  <button class="tab ac" onclick="sw(event,'today')">今日</button>
-  <button class="tab" onclick="sw(event,'tomorrow')">明日</button>
-</div>
-<div id="ms"></div>
-<div class="foot">
-  vMAX 18 · 16维陷阱矩阵 · CRS矩阵几何 · 贝叶斯后验决策锁定链 · 4AI异构裁决<br>
-  零膨胀泊松 · 迪克森修正 · 蒙特卡洛 · ELO · 随机森林 · 梯度提升 · 神经网络 · SVM · KNN<br>
-  专业去水 · 冷热偏差 · CLV · Steam检测 · 自适应校准 · 智能过滤 · 58条经验规则 · 历史赔率 · 亚盘分析 · 量化边缘
-</div>
+  <div class="dash" id="db"></div>
+
+  <div class="sec">
+    <div class="sec-t">今日精选推荐</div>
+    <div class="sec-b">AI小批次终审</div>
+    <div class="sec-i" id="t4ic"></div>
+  </div>
+  <div class="t4g" id="t4"></div>
+
+  <div class="today-pill">
+    <strong>今日竞彩业务日</strong>
+    <span id="scopeInfo">今天</span>
+  </div>
+
+  <div id="ms"></div>
+
+  <div class="foot">
+    vMAX 18.4.6 · PURE RAW-AI · GPT/Grok/Gemini 初审 · Claude 压缩终审 · 经验审计卡 Prompt Only<br>
+    方向分层 · 比分形态分层 · goal_band · BTTS · Sharp/Steam 审计 · 体彩赔率 + 欧赔联网核验<br>
+    前端当前仅展示 today，避免 yesterday/tomorrow 重复触发与重复扣费
+  </div>
 </div>
 
 <script>
-var D=null, CT='today';
+var D=null;
 
-var TRAP_CN = {
-  'T1_DRAW_TRAP':'诱平赔陷阱',
-  'T2_HANDICAP_DEEPER':'让球偏深(强方真强)',
-  'T3_HANDICAP_SHALLOWER':'让球偏浅(强方真弱)',
-  'T4_FAKE_HOME_FAVORITE':'虚假主热',
-  'T5_FAKE_AWAY_FAVORITE':'虚假客热',
-  'T6_SMALL_SCORE_TRAP':'诱小比分',
-  'T7_LARGE_SCORE_TRAP':'诱大比分',
-  'T8_FALSE_COLD':'假冷门',
-  'T9_FAKE_CONTRARIAN':'诱反指',
-  'T10_SILENT_MARKET':'沉默盘',
-  'T11_XG_DIVERGENCE':'xG背离',
-  'T12_MISSING_HANDICAP':'让球未开',
-  'T13_GOALLESS_DRAW':'闷平局',
-  'T14_CUP_FAVORITE':'杯赛大热必死',
-  'T15_HISTORICAL_DEADLOCK':'历史僵局',
-  'T16_SHARP_BADNEWS_CONFLICT':'Sharp+坏消息对冲'
-};
+function esc(s){
+  if(s===null||s===undefined)return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-function trapShortId(t){var x=String(t||'').match(/^T(\d+)_/);return x?'T'+x[1]:t;}
+function V(v, fallback='?'){
+  return (v!==null&&v!==undefined&&v!==''&&v!=='None') ? v : fallback;
+}
 
-function cl(t){if(!t)return '正在进行极深度的逻辑推演,或该场次无特定解析…';return String(t).replace(/```json/g,'').replace(/```/g,'').trim();}
+function num(v, d=0){
+  var n=parseFloat(v);
+  return isFinite(n)?n:d;
+}
 
-function fm(f){if(!f)return '?';var o='';for(var i=0;i<f.length;i++){var c=f[i];if(c==='W')o+='<span style="color:var(--gn)">W</span>';else if(c==='D')o+='<span style="color:var(--am)">D</span>';else if(c==='L')o+='<span style="color:var(--red)">L</span>';else o+=c;}return o;}
+function fmt1(v){
+  var n=num(v, NaN);
+  return isFinite(n)?n.toFixed(1):'?';
+}
 
-function V(v){return(v!=null&&v!=='?'&&v!=='')?v:'?';}
-function P(v){if(v==null)return '?';return(parseFloat(v)*100).toFixed(1)+'%';}
-function cc(c){return c>=70?'color:var(--gn)':c>=50?'color:var(--am)':'color:var(--red)';}
-function DS(p){var cs=p.claude_score||'';if(cs&&cs!=='-'&&cs!=='?'&&cs!=='弃权')return cs;return p.predicted_score||'?';}
+function validScore(s){
+  if(!s)return false;
+  s=String(s).trim();
+  return !(s===''||s==='-'||s==='?'||s==='弃权'||s==='N/A'||s==='None');
+}
 
-function getMatches(d,t){
+function cl(t){
+  if(!t)return '弃权或暂无解析';
+  return esc(String(t).replace(/```json/g,'').replace(/```/g,'').trim());
+}
+
+function resultClass(r){
+  return r==='主胜'?'h':r==='平局'?'d':'a';
+}
+
+function confidenceColor(c){
+  c=num(c,0);
+  return c>=70?'color:var(--gn)':c>=55?'color:var(--am)':'color:var(--red)';
+}
+
+function tierClass(t){
+  t=String(t||'D').toUpperCase();
+  if(['S','A','B','C','D'].indexOf(t)<0)t='D';
+  return 'tier-'+t;
+}
+
+function matchKey(m){
+  var key = m.id || m.match_id || m.match_num || ((m.league||'')+'|'+(m.home_team||m.home||'')+'|'+(m.away_team||m.guest||''));
+  return String(key).replace(/[^\w\u4e00-\u9fa5-]/g,'_');
+}
+
+function getTodayMatches(d){
   if(!d)return [];
-  if(d.matches&&Array.isArray(d.matches[t]))return d.matches[t];
-  if(Array.isArray(d[t]))return d[t];
+  if(d.matches && Array.isArray(d.matches.today))return d.matches.today;
+  if(Array.isArray(d.today))return d.today;
+  if(Array.isArray(d.matches))return d.matches;
   return [];
 }
 
+function DS(p){
+  if(validScore(p.claude_score))return p.claude_score;
+  if(validScore(p.predicted_score))return p.predicted_score;
+  if(validScore(p.predicted_label))return p.predicted_label;
+  return '?';
+}
+
+function getBttsLabel(p){
+  var v = p.btts_ai || p.ai_btts || p.btts_label || p.btts_decision;
+  if(v!==undefined && v!==null && String(v).trim()!=='')return String(v);
+  if(typeof p.btts === 'string' && isNaN(parseFloat(p.btts)))return p.btts;
+  return p.btts!==undefined ? String(p.btts) : '?';
+}
+
+function getProb(p){
+  var hp=num(p.home_win_pct, 33);
+  var dp=num(p.draw_pct, 33);
+  var ap=num(p.away_win_pct, 34);
+  var s=hp+dp+ap;
+  if(s<=0){hp=33;dp=33;ap=34;s=100;}
+  if(Math.abs(s-100)>2){
+    hp=hp/s*100;dp=dp/s*100;ap=100-hp-dp;
+  }
+  return {h:Math.max(0,hp),d:Math.max(0,dp),a:Math.max(0,ap)};
+}
+
+function getWarnings(p){
+  var arr=[];
+  ['score_shape_warnings','selection_warnings','validation_warnings','postprocess_warnings'].forEach(function(k){
+    if(Array.isArray(p[k]))arr=arr.concat(p[k]);
+    else if(p[k])arr.push(p[k]);
+  });
+  if(p.experience_review_missing)arr.push('experience_review_missing');
+  return arr;
+}
+
+function getExperienceReview(p){
+  var r=p.experience_review || (p.ai_audit && p.ai_audit.experience_review) || [];
+  if(Array.isArray(r))return r;
+  if(typeof r==='string'){
+    try{
+      var parsed=JSON.parse(r);
+      if(Array.isArray(parsed))return parsed;
+    }catch(e){}
+    return [{id:'TEXT',decision:'neutral',reason:r}];
+  }
+  return [];
+}
+
+function getCards(p){
+  var cards=p.experience_audit_cards || p.experience_cards || p.audit_cards || [];
+  if(Array.isArray(cards))return cards;
+  return [];
+}
+
+function aiOk(p){
+  return validScore(p.gpt_score)||validScore(p.grok_score)||validScore(p.gemini_score)||validScore(p.claude_score);
+}
+
 fetch('data/predictions.json?t='+Date.now())
-  .then(function(r){if(!r.ok)throw new Error('网络请求失败 HTTP '+r.status);return r.json();})
+  .then(function(r){
+    if(!r.ok)throw new Error('网络请求失败 HTTP '+r.status);
+    return r.json();
+  })
   .then(function(d){
     D=d;
     document.getElementById('ut').textContent=d.update_time||'数据已最新';
-    var ver=d.version||(d.engine_version||'vMAX 18');
-    document.getElementById('ver').textContent=ver;
-    rdb();
-    rt4(d.top4||[]);
-    rm();
+    document.getElementById('ver').textContent=d.version||'v18.4.6';
+    var rt=d.runtime||{};
+    document.getElementById('scopeInfo').textContent='业务日偏移 '+V(rt.date_shift_hours,'11')+'h · batch='+V(rt.ai_batch_size,'4')+' · model_concurrency='+V(rt.ai_model_concurrency,'1');
+    renderDashboard();
+    renderTop4(d.top4||[]);
+    renderMatches();
   })
   .catch(function(e){
-    console.error("加载失败:",e);
-    document.getElementById('ms').innerHTML='<div class="empty">等待数据同步或解析失败<br><span style="font-size:10px;opacity:0.5">'+e.message+'</span></div>';
+    console.error('加载失败:',e);
+    document.getElementById('ms').innerHTML='<div class="empty">等待数据同步或解析失败<br><span style="font-size:10px;opacity:.5">'+esc(e.message)+'</span></div>';
   });
 
-function sw(e,t){CT=t;document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('ac');});e.target.classList.add('ac');rm();}
+function renderDashboard(){
+  var ms=getTodayMatches(D);
+  var total=ms.length;
+  var cf=0, ds=0, ss=0, aiCount=0, sTier=0, abTier=0;
 
-function rdb(){
-  var tt=0,trapTotal=0,othersC=0,sharpC=0,cf=0,vb=0;
-  ['yesterday','today','tomorrow'].forEach(function(k){
-    var a=getMatches(D,k);tt+=a.length;
-    a.forEach(function(m){
-      var p=m.prediction||{};
-      cf+=p.confidence||0;
-      trapTotal+=p.trap_count||0;
-      if(p.is_score_others)othersC++;
-      if(p.sharp_detected)sharpC++;
-      if(p.value_bets&&p.value_bets.length)vb+=p.value_bets.length;
-      if(p.multi_market_value&&p.multi_market_value.best_value&&(p.multi_market_value.best_value.is_value===true||p.multi_market_value.best_value.is_value==='True'))vb++;
-      else if(p.is_value)vb++;
-    });
+  ms.forEach(function(m){
+    var p=m.prediction||{};
+    cf+=num(p.confidence,0);
+    ds+=num(p.direction_selection_score,0);
+    ss+=num(p.score_shape_score,0);
+    if(aiOk(p))aiCount++;
+    var tier=String(p.recommendation_tier||p.direction_tier||'').toUpperCase();
+    if(tier==='S')sTier++;
+    if(tier==='A'||tier==='B')abTier++;
   });
-  var av=tt?Math.round(cf/tt):0;
+
+  var avgCf=total?Math.round(cf/total):0;
+  var avgDs=total?Math.round(ds/total):0;
+  var avgSs=total?Math.round(ss/total):0;
+
   document.getElementById('db').innerHTML=
-    '<div class="dc"><div class="dc-v" style="color:var(--am)">'+tt+'</div><div class="dc-l">赛事</div></div>'+
+    '<div class="dc"><div class="dc-v" style="color:var(--am)">'+total+'</div><div class="dc-l">今日赛事</div></div>'+
     '<div class="dc t"><div class="dc-v" style="color:var(--gn)">'+(D.top4?D.top4.length:0)+'</div><div class="dc-l">精选</div></div>'+
-    '<div class="dc r"><div class="dc-v" style="color:var(--red)">'+trapTotal+'</div><div class="dc-l">陷阱触发</div></div>'+
-    '<div class="dc p"><div class="dc-v" style="color:var(--pr)">'+av+'%</div><div class="dc-l">平均信心</div></div>'+
-    '<div class="dc c"><div class="dc-v" style="color:var(--cy)">'+sharpC+'</div><div class="dc-l">Sharp检出</div></div>'+
-    '<div class="dc b"><div class="dc-v" style="color:var(--bl)">'+othersC+'</div><div class="dc-l">胜其他场</div></div>';
+    '<div class="dc r"><div class="dc-v" style="color:var(--gn)">'+sTier+'</div><div class="dc-l">S级</div></div>'+
+    '<div class="dc p"><div class="dc-v" style="color:var(--am)">'+abTier+'</div><div class="dc-l">A/B级</div></div>'+
+    '<div class="dc c"><div class="dc-v" style="color:var(--cy)">'+avgDs+'</div><div class="dc-l">方向分</div></div>'+
+    '<div class="dc b"><div class="dc-v" style="color:var(--bl)">'+avgSs+'</div><div class="dc-l">比分形态</div></div>';
 }
 
-function rt4(t4){
+function renderTop4(t4){
   var el=document.getElementById('t4');
-  if(!t4||!t4.length){el.innerHTML='<div class="empty">暂无核心杀招数据</div>';document.getElementById('t4ic').textContent='';return;}
+  if(!t4||!t4.length){
+    el.innerHTML='<div class="empty">暂无今日精选推荐</div>';
+    document.getElementById('t4ic').textContent='';
+    return;
+  }
+
   document.getElementById('t4ic').textContent=t4.length+'场';
+
   el.innerHTML=t4.map(function(m,i){
-    try{
-      var p=m.prediction||{};
-      var ft='';
-      if(p.trap_count>0)ft+='<span class="t4-ftag" style="background:#ff4d5a15;color:var(--red)">🎭'+p.trap_count+'陷阱</span>';
-      if(p.is_score_others)ft+='<span class="t4-ftag" style="background:#ff5ca015;color:var(--pk)">🔥胜其他</span>';
-      if(p.sharp_detected)ft+='<span class="t4-ftag" style="background:#00d4e015;color:var(--cy)">💰Sharp</span>';
-      if(p.override_triggered)ft+='<span class="t4-ftag" style="background:#b366ff15;color:var(--pr)">⚡Override</span>';
-      if(p.suggested_units&&p.suggested_units>0)ft+='<span class="t4-ftag" style="background:#00e08e15;color:var(--gn)">💎'+p.suggested_units+'U</span>';
-      if(p.cold_door&&p.cold_door.is_cold_door)ft+='<span class="t4-ftag" style="background:#ff4d5a15;color:var(--red)">'+(p.cold_door.dark_verdict||'冷门')+'</span>';
-      
-      return '<div class="t4" onclick="go(\'m-'+m.id+'\')"><div class="t4-bar"></div><div class="t4-rank">#'+(i+1)+'</div><div class="t4-lg">'+(m.league||'')+' '+(m.match_num||'')+'</div><div class="t4-teams"><span class="t4-tn">'+m.home_team+'</span><span class="t4-vs">VS</span><span class="t4-tn">'+m.away_team+'</span></div><div class="t4-grid"><div class="t4-c"><div class="t4-cl">比分</div><div class="t4-cv" style="color:var(--gn)">'+DS(p)+'</div></div><div class="t4-c"><div class="t4-cl">结果</div><div class="t4-cv">'+(p.result||'?')+'</div></div><div class="t4-c"><div class="t4-cl">信心</div><div class="t4-cv" style="'+cc(p.confidence||0)+'">'+(p.confidence||0)+'%</div></div></div>'+(ft?'<div class="t4-ft">'+ft+'</div>':'')+'</div>';
-    }catch(err){console.error("TOP4渲染异常:",err);return '';}
+    var p=m.prediction||{};
+    var key=matchKey(m);
+    var tier=String(p.recommendation_tier||p.direction_tier||'D').toUpperCase();
+    var ft='';
+
+    if(tier)ft+='<span class="t4-ftag" style="background:#00e08e15;color:var(--gn)">评级 '+tier+'</span>';
+    if(p.direction_selection_score!==undefined)ft+='<span class="t4-ftag" style="background:#4d8aff15;color:var(--bl)">方向 '+fmt1(p.direction_selection_score)+'</span>';
+    if(p.score_shape_score!==undefined)ft+='<span class="t4-ftag" style="background:#b366ff15;color:var(--pr)">比分 '+fmt1(p.score_shape_score)+'</span>';
+    if(p.sharp_detected||p.sharp_money_direction)ft+='<span class="t4-ftag" style="background:#00d4e015;color:var(--cy)">Sharp</span>';
+    if(getWarnings(p).length)ft+='<span class="t4-ftag" style="background:#ff4d5a15;color:var(--red)">警告 '+getWarnings(p).length+'</span>';
+
+    return '<div class="t4" onclick="go(\'m-'+key+'\')">'+
+      '<div class="t4-bar"></div>'+
+      '<div class="t4-rank">#'+(i+1)+'</div>'+
+      '<div class="t4-lg">'+esc(m.league||'')+' '+esc(m.match_num||'')+'</div>'+
+      '<div class="t4-teams"><span class="t4-tn">'+esc(m.home_team||m.home||'')+'</span><span class="t4-vs">VS</span><span class="t4-tn">'+esc(m.away_team||m.guest||'')+'</span></div>'+
+      '<div class="t4-grid">'+
+        '<div class="t4-c"><div class="t4-cl">比分</div><div class="t4-cv" style="color:var(--gn)">'+esc(DS(p))+'</div></div>'+
+        '<div class="t4-c"><div class="t4-cl">结果</div><div class="t4-cv">'+esc(p.result||'?')+'</div></div>'+
+        '<div class="t4-c"><div class="t4-cl">推荐层</div><div class="t4-cv '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
+      '</div>'+
+      (ft?'<div class="t4-ft">'+ft+'</div>':'')+
+    '</div>';
   }).join('');
 }
 
-function renderV18Block(p){
-  var traps=p.trap_details||[];
-  var traps_simple=p.traps_detected||[];
-  var hasTraps=(traps&&traps.length)||(traps_simple&&traps_simple.length);
-  var hasV18=p.engine_version||p.bayesian_evidences||p.crs_moments||hasTraps||p.scenario||p.dir_confidence;
-  if(!hasV18)return '';
-  
-  var ev=p.bayesian_evidences||[];
-  var moments=p.crs_moments||{};
-  var shape=p.crs_shape||'unknown';
-  var topCands=p.top_score_candidates||[];
-  var scenario=p.scenario||'';
-  var goalRange=p.goal_range||[];
-  
-  var trapHtml='';
-  if(hasTraps){
-    if(traps&&traps.length){
-      trapHtml='<div class="trap-grid">'+traps.map(function(t){
-        var sid=trapShortId(t.trap);
-        var name=TRAP_CN[t.trap]||t.trap;
-        return '<div class="trap '+sid+'"><span class="trap-id '+sid+'">'+sid+'</span> <span style="font-size:9px;color:var(--w);font-weight:700">'+name+'</span><div class="trap-d">'+(t.desc||'')+'</div></div>';
-      }).join('')+'</div>';
-    }else{
-      trapHtml='<div class="trap-grid">'+traps_simple.map(function(t){
-        var sid=trapShortId(t);
-        var name=TRAP_CN[t]||t;
-        return '<div class="trap '+sid+'"><span class="trap-id '+sid+'">'+sid+'</span> <span style="font-size:9px;color:var(--w);font-weight:700">'+name+'</span></div>';
-      }).join('')+'</div>';
-    }
-  }else{
-    trapHtml='<div class="no-trap">未识别明显陷阱,本场为干净盘</div>';
+function renderSelectionBlock(p){
+  var tier=String(p.recommendation_tier||'D').toUpperCase();
+  var dt=String(p.direction_tier||'D').toUpperCase();
+  var st=String(p.score_tier||'D').toUpperCase();
+  var warnings=getWarnings(p);
+  var review=getExperienceReview(p);
+  var cards=getCards(p);
+
+  var warnHtml='';
+  if(warnings.length){
+    warnHtml='<div class="sl">⚠️ 结构冲突 / 降级原因</div>'+
+      warnings.slice(0,8).map(function(w){return '<div class="warn">'+esc(w)+'</div>';}).join('');
   }
-  
-  var chainHtml='';
-  if(scenario||(goalRange&&goalRange.length)||p.dir_confidence){
-    var scTag=DS(p);
-    var gr=(goalRange&&goalRange.length>=2)?(goalRange[0]+'-'+goalRange[1]+'球'):'?';
-    chainHtml='<div class="chain">'+
-      '<div class="chain-step"><div class="chain-l">方向</div><div class="chain-v am">'+(p.result||'?')+' <span style="font-size:8px">('+(p.dir_confidence||0).toFixed(0)+'%)</span></div></div>'+
-      '<div class="chain-step"><div class="chain-l">场景</div><div class="chain-v bl">'+(scenario||'normal')+'</div></div>'+
-      '<div class="chain-step"><div class="chain-l">进球区间</div><div class="chain-v pr">'+gr+'</div></div>'+
-      '<div class="chain-step"><div class="chain-l">锁定比分</div><div class="chain-v gn">'+scTag+'</div></div>'+
+
+  var reviewHtml='';
+  if(review.length){
+    reviewHtml='<div class="sl">📋 经验审计卡回应</div><div class="review-list">'+
+      review.slice(0,12).map(function(r){
+        var id=r.id||r.rule_id||r.card_id||'EXP';
+        var dec=String(r.decision||r.status||'neutral').toLowerCase();
+        if(['accepted','rejected','neutral'].indexOf(dec)<0)dec='neutral';
+        return '<div class="review">'+
+          '<div class="review-top"><span class="review-id">'+esc(id)+'</span><span class="review-decision '+dec+'">'+esc(dec)+'</span></div>'+
+          '<div class="review-d">'+esc(r.reason||r.note||r.name||'')+'</div>'+
+        '</div>';
+      }).join('')+
+    '</div>';
+  }else if(cards.length){
+    reviewHtml='<div class="sl">📋 触发经验审计卡</div><div class="review-list">'+
+      cards.slice(0,12).map(function(c){
+        return '<div class="review"><div class="review-top"><span class="review-id">'+esc(c.id||c.rule_id||'EXP')+'</span><span class="review-decision neutral">pending</span></div><div class="review-d">'+esc(c.name||c.reason||c.question||'等待AI回应')+'</div></div>';
+      }).join('')+
     '</div>';
   }
-  
-  var crsHtml='';
-  if(moments&&moments.lambda_h!==undefined){
-    crsHtml='<div class="crs-geo">'+
-      '<div class="crs-c"><div class="crs-cl">λ主</div><div class="crs-cv">'+(moments.lambda_h||0).toFixed(2)+'</div></div>'+
-      '<div class="crs-c"><div class="crs-cl">λ客</div><div class="crs-cv">'+(moments.lambda_a||0).toFixed(2)+'</div></div>'+
-      '<div class="crs-c"><div class="crs-cl">总进球</div><div class="crs-cv">'+(moments.lambda_total||0).toFixed(2)+'</div></div>'+
-      '<div class="crs-c"><div class="crs-cl">相关</div><div class="crs-cv">'+((moments.corr||0)>0?'+':'')+(moments.corr||0).toFixed(2)+'</div></div>'+
-      '<div class="crs-c"><div class="crs-cl">形状</div><div class="crs-cv" style="color:var(--cy)">'+shape+'</div></div>'+
-    '</div>';
-  }
-  
-  var bayHtml='';
-  if(ev&&ev.length){
-    bayHtml='<div class="bay"><div class="bay-l">🧠 贝叶斯证据链</div>'+
-      ev.slice(0,8).map(function(e){return '<div class="bay-evt">'+String(e).replace(/</g,'&lt;')+'</div>';}).join('')+
-    '</div>';
-  }
-  
-  var candHtml='';
-  if(topCands&&topCands.length){
-    candHtml='<div class="tcand">';
-    for(var i=0;i<Math.min(topCands.length,6);i++){
-      var c=topCands[i];
-      var sc=Array.isArray(c)?c[0]:(c.score||c[0]||'?');
-      var pr=Array.isArray(c)?c[1]:(c.prob||c[1]||0);
-      candHtml+='<span class="tcand-c'+(i===0?' top':'')+'">'+sc+' <span style="opacity:.7">'+(typeof pr==='number'?pr.toFixed(1):pr)+'</span></span>';
-    }
-    candHtml+='</div>';
-  }
-  
-  var trapSeverityTag=p.trap_severity?'<span style="color:var(--red);background:#ff4d5a15;padding:1px 5px;border-radius:2px;font-family:IBM Plex Mono;font-size:9px;font-weight:700">严重度'+p.trap_severity+'</span>':'';
-  var overrideTag=p.override_triggered?'<span style="color:var(--pr);background:#b366ff15;padding:1px 5px;border-radius:2px;font-size:9px;font-weight:700;margin-left:4px">⚡Override</span>':'';
-  
-  return '<div class="v18">'+
-    '<div class="v18-h"><div class="v18-t">🎯 vMAX 18 决策剖析 '+trapSeverityTag+overrideTag+'</div><div class="v18-meta">'+(p.engine_architecture||'贝叶斯+16维陷阱+决策锁定')+'</div></div>'+
-    '<div class="v18-b">'+
-      chainHtml+
-      '<div class="sl" style="margin-top:0">🎭 庄家陷阱矩阵</div>'+trapHtml+
-      (crsHtml?'<div class="sl">📊 CRS矩阵几何</div>'+crsHtml:'')+
-      bayHtml+
-      (candHtml?'<div class="sl" style="margin-bottom:3px">候选比分排序</div>'+candHtml:'')+
+
+  return '<div class="block">'+
+    '<div class="block-h">'+
+      '<div class="block-t">🎯 PURE RAW-AI 推荐分层</div>'+
+      '<div class="block-meta">不改比分，只做推荐分层</div>'+
+    '</div>'+
+    '<div class="block-b">'+
+      '<div class="sel-grid">'+
+        '<div class="sel"><div class="sel-l">综合推荐</div><div class="sel-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">综合分</div><div class="sel-v '+tierClass(tier)+'">'+fmt1(p.overall_selection_score)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">方向层</div><div class="sel-v '+tierClass(dt)+'">'+esc(dt)+' / '+fmt1(p.direction_selection_score)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">比分层</div><div class="sel-v '+tierClass(st)+'">'+esc(st)+' / '+fmt1(p.score_shape_score)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">形态</div><div class="sel-v">'+esc(V(p.goal_band,'?'))+' · '+esc(getBttsLabel(p))+'</div></div>'+
+      '</div>'+
+      (p.score_shape_reason?'<div class="sig sig-b">比分形态：'+esc(p.score_shape_reason)+'</div>':'')+
+      (p.sharp_money_direction?'<div class="sig sig-g">Sharp方向：'+esc(p.sharp_money_direction)+' '+esc(p.sharp_evidence||'')+'</div>':'')+
+      warnHtml+
+      reviewHtml+
     '</div>'+
   '</div>';
 }
 
-function rm(){
+function renderAiBlock(p){
+  return '<div class="ai-box">'+
+    '<div class="ai-h"><div class="ai-t">👑 CLAUDE 终审</div><div class="ai-s">'+esc(p.claude_score||'弃权')+'</div></div>'+
+    '<div class="ai-x">'+cl(p.claude_analysis||p.final_audit_reason||p.reason)+'</div>'+
+  '</div>'+
+  '<div class="ai3">'+
+    '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT初审</span><span class="ai3-s">'+esc(p.gpt_score||'弃权')+'</span></div><div class="ai3-x">'+cl(p.gpt_analysis)+'</div></div>'+
+    '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">GROK初审</span><span class="ai3-s">'+esc(p.grok_score||'弃权')+'</span></div><div class="ai3-x">'+cl(p.grok_analysis)+'</div></div>'+
+    '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">GEMINI初审</span><span class="ai3-s">'+esc(p.gemini_score||'弃权')+'</span></div><div class="ai3-x">'+cl(p.gemini_analysis)+'</div></div>'+
+  '</div>';
+}
+
+function renderSignals(p){
+  var html='';
+  var sigs=p.smart_signals||[];
+  var seen={};
+
+  if(p.web_odds_check)html+='<div class="sig sig-b">欧赔联网核验：'+esc(p.web_odds_check)+' '+esc(p.european_odds||'')+'</div>';
+  if(p.market_divergence)html+='<div class="sig sig-a">市场背离：'+esc(p.market_divergence)+'</div>';
+  if(p.data_missing)html+='<div class="sig sig-r">数据缺失：'+esc(Array.isArray(p.data_missing)?p.data_missing.join(', '):p.data_missing)+'</div>';
+
+  sigs.forEach(function(s){
+    if(!s||seen[s])return;
+    seen[s]=1;
+    var cls='sig-a';
+    var txt=String(s);
+    if(txt.indexOf('Sharp')>=0||txt.indexOf('Steam')>=0||txt.indexOf('聪明钱')>=0)cls='sig-g';
+    if(txt.indexOf('价值')>=0||txt.indexOf('EV')>=0)cls='sig-p';
+    if(txt.indexOf('警')>=0||txt.indexOf('🚨')>=0||txt.indexOf('冲突')>=0)cls='sig-r';
+    html+='<div class="sig '+cls+'">'+esc(txt)+'</div>';
+  });
+
+  return html;
+}
+
+function renderDetails(m,p){
+  var top=p.top_score_candidates||p.unified_matrix_top_scores||[];
+  var ev=p.bayesian_evidences||p.ai_evidences||p.evidences||[];
+  var fair=p.fair_1x2||{};
+  var odds=[
+    ['体彩主胜',m.sp_home||m.win],
+    ['体彩平局',m.sp_draw||m.same],
+    ['体彩客胜',m.sp_away||m.lose],
+    ['让球',m.give_ball||m.handicap||m.rq],
+    ['总进球0',m.a0],
+    ['总进球1',m.a1],
+    ['总进球2',m.a2],
+    ['总进球3',m.a3],
+    ['总进球4',m.a4],
+    ['总进球5',m.a5],
+    ['总进球6',m.a6],
+    ['总进球7+',m.a7]
+  ];
+
+  var html='<div class="sl">抓包赔率 / 结构字段</div><div class="mg">';
+  html+='<div class="mb"><div class="mb-t">体彩竞彩抓包</div>';
+  odds.forEach(function(o){html+='<div class="mb-r"><span class="mb-l">'+esc(o[0])+'</span><span class="mb-v">'+esc(V(o[1]))+'</span></div>';});
+  html+='</div>';
+
+  html+='<div class="mb"><div class="mb-t">AI结构输出</div>'+
+    '<div class="mb-r"><span class="mb-l">goal_band</span><span class="mb-v">'+esc(V(p.goal_band))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">btts_ai</span><span class="mb-v">'+esc(getBttsLabel(p))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">AI平均置信</span><span class="mb-v">'+esc(V(p.ai_avg_confidence))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">方向gap</span><span class="mb-v">'+esc(V(p.dir_gap))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">xG主/客</span><span class="mb-v">'+esc(V(p.bookmaker_implied_home_xg||p.xG_home))+' / '+esc(V(p.bookmaker_implied_away_xg||p.xG_away))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">expected_total_goals</span><span class="mb-v">'+esc(V(p.expected_total_goals))+'</span></div>'+
+  '</div>';
+  html+='</div>';
+
+  if(top&&top.length){
+    html+='<div class="sl">候选比分</div><div>';
+    top.slice(0,10).forEach(function(c,i){
+      var sc=Array.isArray(c)?c[0]:(c.score||'?');
+      var pr=Array.isArray(c)?c[1]:(c.prob||c.p||'');
+      html+='<span class="chip '+(i===0?'top':'')+'">'+esc(sc)+' '+esc(pr)+'</span>';
+    });
+    html+='</div>';
+  }
+
+  if(ev&&ev.length){
+    html+='<div class="sl">证据链 / 审计摘要</div>';
+    ev.slice(0,10).forEach(function(e){
+      html+='<div class="sig sig-b">'+esc(e)+'</div>';
+    });
+  }
+
+  return html;
+}
+
+function renderMatches(){
   var el=document.getElementById('ms');
-  var ms=getMatches(D,CT);
-  if(!ms||!ms.length){el.innerHTML='<div class="empty">暂无比赛数据</div>';return;}
-  
+  var ms=getTodayMatches(D);
+
+  if(!ms||!ms.length){
+    el.innerHTML='<div class="empty">今日暂无比赛数据</div>';
+    return;
+  }
+
   el.innerHTML=ms.map(function(m,idx){
-    try{
-      var p=m.prediction||{};
-      var hp=p.home_win_pct||33,dp=p.draw_pct||33,ap=p.away_win_pct||34;
-      var rc=p.result==='主胜'?'h':p.result==='平局'?'d':'a';
-      
-      var poi=p.poisson||{},bvp=p.bivariate_poisson||{},elo=p.elo||{};
-      var rf=p.random_forest||{},gb=p.gradient_boost||{},nn=p.neural_net||{};
-      var dc=p.dixon_coles||{},mc=p.monte_carlo||{};
-      var hf=p.home_form||{},af=p.away_form||{},hs=m.home_stats||{},as2=m.away_stats||{};
-      var ts=p.top_scores||[],ex=p.experience_analysis||{};
-      var ahp=p.asian_handicap_probs||{},po=p.pro_odds||{};
-      
-      var ixh=p.bookmaker_implied_home_xg,ixa=p.bookmaker_implied_away_xg;
-      var displayScore=DS(p);
-      
-      var dark_verdict='';
-      if(p.cold_door&&p.cold_door.is_cold_door&&p.cold_door.dark_verdict)
-        dark_verdict='<div class="ai-verdict">⚠️ 庄家陷阱: '+p.cold_door.dark_verdict+'</div>';
+    var p=m.prediction||{};
+    var key=matchKey(m);
+    var prob=getProb(p);
+    var score=DS(p);
+    var rc=resultClass(p.result);
+    var tier=String(p.recommendation_tier||p.direction_tier||'D').toUpperCase();
+    var cls=(m.is_recommended?'rec ':'')+(tier==='S'?'s ':tier==='A'?'a ':'');
+    var aiConf=V(p.ai_avg_confidence||p.ai_confidence||p.confidence,0);
 
-      var ai='<div class="ai-box">'+dark_verdict+'<div class="ai-h"><div class="ai-t">👑 CLAUDE 终极裁决</div><div class="ai-s">'+(p.claude_score||'-')+'</div></div><div class="ai-x">'+cl(p.claude_analysis)+'</div></div>'+
-             '<div class="ai3"><div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT先锋</span><span class="ai3-s">'+(p.gpt_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gpt_analysis)+'</div></div>'+
-             '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">GROK先锋</span><span class="ai3-s">'+(p.grok_score||'-')+'</span></div><div class="ai3-x">'+cl(p.grok_analysis)+'</div></div>'+
-             '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">GEMINI先锋</span><span class="ai3-s">'+(p.gemini_score||'-')+'</span></div><div class="ai3-x">'+cl(p.gemini_analysis)+'</div></div></div>';
+    return '<div class="mc '+cls+'" id="m-'+key+'">'+
+      '<div class="mc-h">'+
+        '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mc-badge">精选</span>':'')+'</div>'+
+        '<div class="mc-eng">'+esc(p.engine_version||D.version||'vMAX 18.4.6')+'</div>'+
+      '</div>'+
+      '<div class="mc-b">'+
+        '<div class="teams">'+
+          '<div class="tm"><div class="tm-n">'+esc(m.home_team||m.home||'')+'</div></div>'+
+          '<div class="sc-c"><div class="sc-big">'+esc(score)+'</div><div class="sc-sub">AI终审比分</div><span class="res-tag '+rc+'">'+esc(p.result||'?')+'</span></div>'+
+          '<div class="tm"><div class="tm-n">'+esc(m.away_team||m.guest||'')+'</div></div>'+
+        '</div>'+
 
-      var sig='';
-      var ss=p.smart_signals||[];
-      var ew=p.extreme_warning||'';
-      if(ew&&ew!=='无'&&ew!=='')sig+='<div class="sig sig-r">'+ew+'</div>';
-      var seen={};
-      for(var si=0;si<ss.length;si++){
-        var s=ss[si];if(seen[s])continue;seen[s]=1;
-        if(s.indexOf('🎭')>=0)continue;
-        if(s.indexOf('🔥')>=0||s.indexOf('CLV')>=0)sig+='<div class="sig sig-g">'+s+'</div>';
-        else if(s.indexOf('💎')>=0||s.indexOf('价值')>=0)sig+='<div class="sig sig-p">'+s+'</div>';
-        else if(s.indexOf('📊')>=0)sig+='<div class="sig sig-b">'+s+'</div>';
-        else if(s.indexOf('🚨')>=0||s.indexOf('⚡')>=0)sig+='<div class="sig sig-r">'+s+'</div>';
-        else sig+='<div class="sig sig-a">'+s+'</div>';
-      }
+        '<div class="sr">'+
+          '<div class="sb"><div class="sb-l">推荐层</div><div class="sb-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
+          '<div class="sb"><div class="sb-l">方向分</div><div class="sb-v" style="color:var(--cy)">'+fmt1(p.direction_selection_score)+'</div></div>'+
+          '<div class="sb"><div class="sb-l">比分分</div><div class="sb-v" style="color:var(--pr)">'+fmt1(p.score_shape_score)+'</div></div>'+
+          '<div class="sb"><div class="sb-l">Goal Band</div><div class="sb-v" style="color:var(--am)">'+esc(V(p.goal_band))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">BTTS</div><div class="sb-v" style="color:var(--bl)">'+esc(getBttsLabel(p))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">AI均分</div><div class="sb-v" style="'+confidenceColor(aiConf)+'">'+esc(aiConf)+'%</div></div>'+
+        '</div>'+
 
-      var vbH='';
-      if(p.multi_market_value&&p.multi_market_value.best_value&&(p.multi_market_value.best_value.is_value===true||p.multi_market_value.best_value.is_value==="True")){
-        var bv=p.multi_market_value.best_value;
-        var marketName=(bv.market||"未知玩法").replace('1X2_home','主胜').replace('1X2_draw','平局').replace('1X2_away','客胜').replace('Over_','大球').replace('Under_','小球');
-        vbH='<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px">';
-        vbH+='<span style="background:#b366ff15;color:var(--pr);font-size:10px;padding:3px 6px;border-radius:4px;border:1px solid #b366ff30;font-weight:700">💎 EV之王: '+marketName+' (+'+bv.ev+'%)</span>';
-        if(p.suggested_units>0)vbH+='<span style="background:#00e08e15;color:var(--gn);font-size:10px;padding:3px 6px;border-radius:4px;border:1px solid #00e08e30;font-weight:700">🎯 推荐投入: '+p.suggested_units+' U</span>';
-        vbH+='</div>';
-      }else{
-        var vbs=p.value_bets||[];
-        if(p.is_value){
-          vbH='<div style="display:flex;gap:4px;margin-bottom:6px"><span style="background:#00e08e15;color:var(--gn);font-size:10px;padding:3px 6px;border-radius:4px;border:1px solid #00e08e30;font-weight:700">💎 价值注 EV+'+(p.edge_vs_market||0)+'% Kelly '+(p.suggested_kelly||0)+'%</span></div>';
-        }else if(vbs.length){
-          vbH='<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:4px">';
-          for(var vi=0;vi<vbs.length;vi++){
-            var v=vbs[vi];
-            if(typeof v==='object')vbH+='<span style="background:#b366ff10;color:var(--pr);font-size:8px;padding:2px 5px;border-radius:2px;border:1px solid #b366ff20">💎'+(v.direction||'')+' EV+'+(v.ev||0)+'%</span>';
-            else vbH+='<span style="background:#ffb02010;color:var(--am);font-size:8px;padding:2px 5px;border-radius:2px;border:1px solid #ffb02020">'+v+'</span>';
-          }
-          vbH+='</div>';
-        }
-      }
+        '<div class="prob">'+
+          '<div class="prob-h"><span style="color:var(--red)">主 '+fmt1(prob.h)+'%</span><span style="color:var(--t2)">平 '+fmt1(prob.d)+'%</span><span style="color:var(--bl)">客 '+fmt1(prob.a)+'%</span></div>'+
+          '<div class="prob-bar"><div class="h" style="width:'+prob.h+'%"></div><div class="d" style="width:'+prob.d+'%"></div><div class="a" style="width:'+prob.a+'%"></div></div>'+
+        '</div>'+
 
-      var expH='';
-      if(ex.triggered_count>0){
-        var rc2=ex.total_score>=20?'hi':ex.total_score>=10?'md':'lo';
-        expH='<div class="exp"><div class="exp-h"><div class="exp-t">📋 本地风控拦截网</div><div class="exp-s">'+ex.triggered_count+'条预警触发</div></div><div class="exp-b">';
-        var rules=ex.rules||[];
-        for(var ri=0;ri<rules.length;ri++){
-          var r=rules[ri];
-          expH+='<div class="exp-rule"><span class="exp-id">'+(r.id||'')+'</span><span class="exp-rn">'+(r.name||'')+'</span></div>';
-        }
-        expH+='<div class="exp-rec '+rc2+'">'+(ex.recommendation||'')+'</div></div></div>';
-      }
+        renderSelectionBlock(p)+
+        renderAiBlock(p)+
+        renderSignals(p)+
 
-      var mdl='<div class="sl">底层量化数据矩阵</div><div class="mg">';
-      mdl+='<div class="mb c1"><div class="mb-t c1">泊松分布</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">'+V(poi.predicted_score)+'</span></div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(poi.home_win)+'/'+V(poi.draw)+'/'+V(poi.away_win)+'</span></div><div class="mb-r"><span class="mb-l">期望进球</span><span class="mb-v">'+V(poi.home_xg)+'-'+V(poi.away_xg)+'</span></div>';
-      if(ts.length){mdl+='<div style="margin-top:2px">';for(var ti=0;ti<Math.min(ts.length,5);ti++){mdl+='<span class="chip'+(ti<1?' top':'')+'">'+(ts[ti].score||'')+' '+(ts[ti].prob||'')+'%</span>';}mdl+='</div>';}
-      mdl+='</div>';
-      mdl+='<div class="mb c6"><div class="mb-t c6">零膨胀双变量泊松</div><div class="mb-r"><span class="mb-l">比分</span><span class="mb-v">'+V(bvp.predicted_score)+'</span></div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(bvp.home_win)+'/'+V(bvp.draw)+'/'+V(bvp.away_win)+'</span></div><div class="mb-r"><span class="mb-l">ρ/p0</span><span class="mb-v">'+V(bvp.correlation)+'/'+V(bvp.p0_inflate)+'</span></div></div>';
-      mdl+='<div class="mb c5"><div class="mb-t c5">蒙特卡洛模拟</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(mc.home_win)+'/'+V(mc.draw)+'/'+V(mc.away_win)+'</span></div><div class="mb-r"><span class="mb-l">场均进球</span><span class="mb-v">'+V(mc.avg_goals)+'</span></div></div>';
-      mdl+='<div class="mb c2"><div class="mb-t c2">ELO评分</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(elo.home_win)+'/'+V(elo.draw)+'/'+V(elo.away_win)+'</span></div><div class="mb-r"><span class="mb-l">Δ</span><span class="mb-v" style="'+(parseFloat(elo.elo_diff||0)>0?'color:var(--gn)':'color:var(--red)')+'">'+(elo.elo_diff>0?'+':'')+V(elo.elo_diff)+'</span></div></div>';
-      if(po.true_home)mdl+='<div class="mb c7"><div class="mb-t c7">专业去水</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+po.true_home+'/'+po.true_draw+'/'+po.true_away+'</span></div></div>';
-      else mdl+='<div class="mb c7"><div class="mb-t c7">随机森林</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(rf.home_win)+'/'+V(rf.draw)+'/'+V(rf.away_win)+'</span></div></div>';
-      mdl+='<div class="mb c3"><div class="mb-t c3">神经网络</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(nn.home_win)+'/'+V(nn.draw)+'/'+V(nn.away_win)+'</span></div></div>';
-      mdl+='<div class="mb c4"><div class="mb-t c4">梯度提升</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(gb.home_win)+'/'+V(gb.draw)+'/'+V(gb.away_win)+'</span></div></div>';
-      mdl+='<div class="mb c1"><div class="mb-t c1">迪克森修正</div><div class="mb-r"><span class="mb-l">胜/平/负</span><span class="mb-v">'+V(dc.home_win)+'/'+V(dc.draw)+'/'+V(dc.away_win)+'</span></div></div>';
-      mdl+='</div>';
-
-      var ixgH='';
-      if(ixh&&ixh!=='?')ixgH='<div class="sl">庄家隐含期望进球</div><div class="ahg"><div class="ahc"><div class="ahc-l">主队xG</div><div class="ahc-v" style="color:var(--am)">'+ixh+'</div></div><div class="ahc"><div class="ahc-l">客队xG</div><div class="ahc-v" style="color:var(--cy)">'+ixa+'</div></div><div class="ahc"><div class="ahc-l">总进球</div><div class="ahc-v" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(2):'?')+'</div></div></div>';
-      
-      var ahH='';
-      if(ahp['ah_0']||ahp['ou_2.5']){
-        var ah0=ahp['ah_0']||[0,0,0],ah05=ahp['ah_0.5']||[0,0,0],ou25=ahp['ou_2.5']||[0,0,0];
-        var bt=ahp.btts||0;
-        ahH='<div class="sl">亚盘 & 大小球</div><div class="ahg">';
-        ahH+='<div class="ahc"><div class="ahc-l">让0主</div><div class="ahc-v">'+P(ah0[0])+'</div></div>';
-        ahH+='<div class="ahc"><div class="ahc-l">让0走</div><div class="ahc-v">'+P(ah0[1])+'</div></div>';
-        ahH+='<div class="ahc"><div class="ahc-l">让0客</div><div class="ahc-v">'+P(ah0[2])+'</div></div>';
-        ahH+='<div class="ahc"><div class="ahc-l">让半主</div><div class="ahc-v'+(ah05[0]>0.55?' hot':'')+'">'+P(ah05[0])+'</div></div>';
-        ahH+='<div class="ahc"><div class="ahc-l">大2.5</div><div class="ahc-v'+(ou25[0]>0.55?' hot':'')+'">'+P(ou25[0])+'</div></div>';
-        ahH+='<div class="ahc"><div class="ahc-l">双方进球</div><div class="ahc-v'+(bt>0.55?' hot':'')+'">'+P(bt)+'</div></div>';
-        ahH+='</div>';
-      }
-      
-      var frm='<div class="sl">近期状态</div><div class="fg"><div class="fb"><div class="fb-t">'+(m.home_team||'')+'</div><div class="fb-r"><span class="fb-l">走势</span><span class="fb-v">'+V(hf.trend)+'</span></div><div class="fb-r"><span class="fb-l">评分</span><span class="fb-v">'+V(hf.score)+'</span></div><div class="fb-r"><span class="fb-l">状态</span><span class="fb-v">'+fm(hs.form)+'</span></div><div class="fb-r"><span class="fb-l">胜/平/负</span><span class="fb-v">'+V(hs.wins)+'胜'+V(hs.draws)+'平'+V(hs.losses)+'负</span></div></div><div class="fb"><div class="fb-t">'+(m.away_team||'')+'</div><div class="fb-r"><span class="fb-l">走势</span><span class="fb-v">'+V(af.trend)+'</span></div><div class="fb-r"><span class="fb-l">评分</span><span class="fb-v">'+V(af.score)+'</span></div><div class="fb-r"><span class="fb-l">状态</span><span class="fb-v">'+fm(as2.form)+'</span></div><div class="fb-r"><span class="fb-l">胜/平/负</span><span class="fb-v">'+V(as2.wins)+'胜'+V(as2.draws)+'平'+V(as2.losses)+'负</span></div></div></div>';
-      
-      var meta='<div style="text-align:center;margin-top:5px;font-size:8px;color:var(--t3)">引擎: '+(p.engine_version||'vMAX')+' | 弃权AI: '+((p.ai_abstained||[]).join(',')||'无')+' | AI均分: '+V(p.ai_avg_confidence||50)+'%</div>';
-
-      return '<div class="mc '+(m.is_recommended?'rec':'')+'" id="m-'+m.id+'">'+
-             '<div class="mc-h"><div class="mc-lg">'+(m.league||'')+' <span class="m">'+(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mc-badge">核心杀招</span>':'')+'</div>'+(p.engine_version?'<div class="mc-eng">'+p.engine_version+'</div>':'')+'</div>'+
-             '<div class="mc-b">'+
-               '<div class="teams"><div class="tm"><div class="tm-n">'+(m.home_team||'')+'</div></div><div class="sc-c"><div class="sc-big">'+displayScore+'</div><div class="sc-sub">独立裁定</div><span class="res-tag '+rc+'">'+(p.result||'?')+'</span></div><div class="tm"><div class="tm-n">'+(m.away_team||'')+'</div></div></div>'+
-               '<div class="sr"><div class="sb"><div class="sb-l">期望进球</div><div class="sb-v" style="color:var(--gn)">'+(p.expected_total_goals?parseFloat(p.expected_total_goals).toFixed(1):'?')+'</div></div><div class="sb"><div class="sb-l">大2.5</div><div class="sb-v" style="color:var(--pr)">'+V(p.over_2_5)+'%</div></div><div class="sb"><div class="sb-l">双方进球</div><div class="sb-v" style="color:var(--cy)">'+V(p.btts)+'%</div></div><div class="sb"><div class="sb-l">AI确信度</div><div class="sb-v" style="'+cc(p.ai_avg_confidence||0)+'">'+(p.ai_avg_confidence||0)+'%</div></div></div>'+
-               '<div class="prob"><div class="prob-h"><span style="color:var(--red)">主 '+hp+'%</span><span style="color:var(--t2)">平 '+dp+'%</span><span style="color:var(--bl)">客 '+ap+'%</span></div><div class="prob-bar"><div class="h" style="width:'+hp+'%"></div><div class="d" style="width:'+dp+'%"></div><div class="a" style="width:'+ap+'%"></div></div></div>'+
-               renderV18Block(p)+
-               ai+sig+vbH+expH+
-               '<button class="tbtn" onclick="tg(this,\'d-'+m.id+'\')">展开底层量化数据 ▼</button>'+
-             '</div>'+
-             '<div class="det" id="d-'+m.id+'">'+mdl+ixgH+ahH+frm+meta+'</div>'+
-             '</div>';
-    }catch(err){
-      console.error("单场比赛渲染失败 ID:"+m.id,err);
-      return '<div class="mc"><div class="mc-b" style="color:var(--red);text-align:center;padding:20px;">数据缺失,本场渲染跳过<br><span style="font-size:10px;color:var(--t3)">'+err.message+'</span></div></div>';
-    }
+        '<button class="tbtn" onclick="tg(this,\'d-'+key+'\')">展开抓包与底层字段 ▼</button>'+
+      '</div>'+
+      '<div class="det" id="d-'+key+'">'+renderDetails(m,p)+'</div>'+
+    '</div>';
   }).join('');
 }
 
 function tg(b,id){
   var e=document.getElementById(id);
-  if(e.classList.contains('open')){e.classList.remove('open');b.textContent='展开底层量化数据 ▼';}
-  else{e.classList.add('open');b.textContent='收起 ▲';}
+  if(!e)return;
+  if(e.classList.contains('open')){
+    e.classList.remove('open');
+    b.textContent='展开抓包与底层字段 ▼';
+  }else{
+    e.classList.add('open');
+    b.textContent='收起 ▲';
+  }
 }
 
 function go(id){
   var e=document.getElementById(id);
-  if(e){e.scrollIntoView({behavior:'smooth',block:'center'});var d=document.getElementById('d-'+id.replace('m-',''));if(d&&!d.classList.contains('open'))d.classList.add('open');}
+  if(e){
+    e.scrollIntoView({behavior:'smooth',block:'center'});
+    var det=document.getElementById('d-'+id.replace('m-',''));
+    if(det&&!det.classList.contains('open'))det.classList.add('open');
+  }
 }
 </script>
 </body>
