@@ -52,62 +52,47 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
 
           # ============================================================
-          # 统一 AI 中转变量
-          # predict.py 优先读取 API_KEY / API_URL
+          # 旧版四模型变量
+          # 注意：这里不再传 API_KEY / API_URL，避免抢占 GPT_API_URL
+          # 如果四家都走同一个中转，就在 GitHub Secrets 里把这四组填成同一个 key/url
           # ============================================================
-          API_KEY: ${{ secrets.API_KEY }}
-          API_URL: ${{ secrets.API_URL }}
+          GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
+          GPT_API_URL: ${{ secrets.GPT_API_URL }}
 
-          # ============================================================
-          # 四模型变量兼容层
-          # 如果 API_KEY / API_URL 已配置，四家统一走同一个中转
-          # ============================================================
-          GPT_API_KEY: ${{ secrets.API_KEY || secrets.GPT_API_KEY }}
-          GPT_API_URL: ${{ secrets.API_URL || secrets.GPT_API_URL }}
+          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
+          GROK_API_URL: ${{ secrets.GROK_API_URL }}
 
-          GROK_API_KEY: ${{ secrets.API_KEY || secrets.GROK_API_KEY }}
-          GROK_API_URL: ${{ secrets.API_URL || secrets.GROK_API_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
 
-          GEMINI_API_KEY: ${{ secrets.API_KEY || secrets.GEMINI_API_KEY }}
-          GEMINI_API_URL: ${{ secrets.API_URL || secrets.GEMINI_API_URL }}
-
-          CLAUDE_API_KEY: ${{ secrets.API_KEY || secrets.CLAUDE_API_KEY }}
-          CLAUDE_API_URL: ${{ secrets.API_URL || secrets.CLAUDE_API_URL }}
-
-          # ============================================================
-          # 模型名称
-          # ============================================================
-          GPT_MODEL: "gpt-5.4"
-          GROK_MODEL: "grok-4.3"
-          GEMINI_MODEL: "gemini-3.1-pro-preview-thinking-high"
-          CLAUDE_MODEL: "claude-opus-4-7"
+          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+          CLAUDE_API_URL: ${{ secrets.CLAUDE_API_URL }}
 
           # ============================================================
           # 只跑今日竞彩业务日
+          # 北京时间凌晨 00:00-10:59 仍归入前一个竞彩业务日
           # ============================================================
           VMAX_RUN_DAYS: today
           AI_RUN_DAYS: today
-
-          # 北京时间凌晨 00:00-10:59 仍归入前一个竞彩业务日
           VMAX_DATE_SHIFT_HOURS: "11"
 
           # ============================================================
-          # 正常全量跑，不限制 4 场批次
+          # 成本控制
+          # 不限制 4 场一批，不传 AI_BATCH_SIZE
+          # 由当前 predict.py 自己按整批逻辑跑
           # ============================================================
           AI_MAX_REQUESTS_PER_AI: "1"
 
-          # Claude 条件触发：Phase1 有效不足时跳过 Claude，避免白花终审 token
+          # Claude 条件触发：Phase1 有效不足时跳过 Claude
           AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID: "true"
           AI_MIN_PHASE1_VALID_FOR_CLAUDE: "2"
 
-          # Claude 压缩终审；如果当前 predict.py 不支持，会自动忽略
+          # Claude 压缩终审；当前 predict.py 不支持时会自动忽略
           AI_USE_COMPACT_CLAUDE_AUDIT: "true"
           AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE: "350"
 
           # ============================================================
           # 持久化缓存
-          # 这里的 data/ai_cache 是相对 scripts 目录
-          # workflow 前面已经把 root data/ 回灌到 scripts/data/
           # ============================================================
           AI_PERSISTENT_CACHE_ENABLED: "true"
           AI_CACHE_DIR: "data/ai_cache"
@@ -144,7 +129,7 @@ jobs:
           git add data/
 
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (today-only full AI)"
+            git commit -m "🤖 Auto-update prediction data (today-only old-ai-env)"
             git pull --rebase --autostash origin main || true
             git push
           else
