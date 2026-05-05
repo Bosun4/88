@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-vMAX 18.4.2 — PURE RAW-AI 主审版 + 体彩赔率标注 + 联网欧赔核对 + Sharp/联赛球队风格
+vMAX 18.4.3 — PURE RAW-AI 主审版 + 完整抓包输入 + AI方向概率 + 体彩赔率/联网欧赔/Sharp/风格
 ============================================================
 设计边界：
 1. 纯 AI 主审：GPT/Grok/Gemini 初审，Claude 终审；Claude 失败时使用 Phase1 AI 共识。
@@ -11,6 +11,8 @@ vMAX 18.4.2 — PURE RAW-AI 主审版 + 体彩赔率标注 + 联网欧赔核对 
 6. AI 全失败时直接弃权，不使用本地兜底比分。
 7. 四个模型默认全部走统一 OpenAI-compatible 中转：API_KEY / API_URL。兼容旧变量作为兜底。
 8. singleflight + cache：同批次重复触发时不重复扣费；但 0/4 AI 失败不写缓存。
+9. 默认把完整 normalized match JSON 作为 raw_match_full_json 喂给 AI；可用 RAW_PACKET_CHAR_LIMIT 控制单场抓包字数。
+10. 优先解析 AI 输出的 direction_probs；没有时才用 top3 方向占比做前端兼容。
 
 推荐环境变量：
     API_KEY=你的统一中转key
@@ -23,6 +25,10 @@ vMAX 18.4.2 — PURE RAW-AI 主审版 + 体彩赔率标注 + 联网欧赔核对 
     AI_SINGLEFLIGHT_ENABLED=true
     AI_MAX_REQUESTS_PER_AI=1
     ENABLE_EXTERNAL_CONTEXT=false/true
+    INCLUDE_FULL_RAW_PACKET=true
+    RAW_PACKET_CHAR_LIMIT=20000
+    FIELD_LIMIT_INFORMATION=8000
+    FIELD_LIMIT_POINTS=8000
 
 入口：
     run_predictions(raw, use_ai=True) -> (res, top4)
@@ -57,8 +63,8 @@ except Exception:
 # 版本常量
 # ============================================================
 
-ENGINE_VERSION = "vMAX 18.4.2"
-ENGINE_ARCHITECTURE = "PURE RAW-AI: 体彩竞彩抓包赔率 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权"
+ENGINE_VERSION = "vMAX 18.4.3"
+ENGINE_ARCHITECTURE = "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权"
 
 VALID_DIRS = {"home", "draw", "away"}
 AI_NAMES = ["gpt", "grok", "gemini", "claude"]
@@ -125,6 +131,19 @@ AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 25)
 ENABLE_EXTERNAL_CONTEXT = _env_bool("ENABLE_EXTERNAL_CONTEXT", False)
 AI_PARSE_DEBUG = _env_bool("AI_PARSE_DEBUG", False)
 
+# v18.4.3: 抓包输入完整度控制。默认把 normalized match 的完整 JSON 喂给 AI，
+# 但每场设软限制，避免一次批量过大导致中转上下文溢出。设为 0 表示不限制。
+INCLUDE_FULL_RAW_PACKET = _env_bool("INCLUDE_FULL_RAW_PACKET", True)
+RAW_PACKET_CHAR_LIMIT = _env_int("RAW_PACKET_CHAR_LIMIT", 20000)
+FIELD_LIMIT_CHANGE = _env_int("FIELD_LIMIT_CHANGE", 4000)
+FIELD_LIMIT_VOTE = _env_int("FIELD_LIMIT_VOTE", 3000)
+FIELD_LIMIT_INFORMATION = _env_int("FIELD_LIMIT_INFORMATION", 8000)
+FIELD_LIMIT_POINTS = _env_int("FIELD_LIMIT_POINTS", 8000)
+FIELD_LIMIT_STYLE_EXTRA = _env_int("FIELD_LIMIT_STYLE_EXTRA", 6000)
+EXTERNAL_CONTEXT_MAX_ITEMS = _env_int("EXTERNAL_CONTEXT_MAX_ITEMS", 8)
+EXTERNAL_CONTEXT_ITEM_CHAR_LIMIT = _env_int("EXTERNAL_CONTEXT_ITEM_CHAR_LIMIT", 2500)
+EXTERNAL_CONTEXT_ERROR_CHAR_LIMIT = _env_int("EXTERNAL_CONTEXT_ERROR_CHAR_LIMIT", 1200)
+
 _AI_RESULT_CACHE: Dict[str, Tuple[float, Dict[str, Dict[int, Dict[str, Any]]], Dict[str, Any]]] = {}
 _AI_INFLIGHT_TASKS: Dict[str, asyncio.Task] = {}
 AI_CALL_STATUS: Dict[str, Dict[str, Any]] = {n: {} for n in AI_NAMES}
@@ -175,7 +194,17 @@ def _json_compact(obj: Any, max_len: int = 4000) -> str:
         s = json.dumps(obj, ensure_ascii=False, separators=(",", ":"))
     except Exception:
         s = str(obj)
-    return s[:max_len]
+    if max_len and max_len > 0:
+        return s[:max_len]
+    return s
+
+
+def _hash_obj(obj: Any) -> str:
+    try:
+        raw = json.dumps(obj, ensure_ascii=False, sort_keys=True, default=str, separators=(",", ":"))
+    except Exception:
+        raw = str(obj)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 def _normalize_prob_dict(d: Dict[Any, float], floor: float = 0.0) -> Dict[Any, float]:
@@ -457,10 +486,10 @@ def _format_external_context_for_prompt(ctx: Dict[str, Any]) -> str:
     if not items:
         lines.append("items: []")
     else:
-        for idx, item in enumerate(items[:5], 1):
-            lines.append(f"item{idx}:{_json_compact(item, 1800)}")
+        for idx, item in enumerate(items[:max(1, EXTERNAL_CONTEXT_MAX_ITEMS)], 1):
+            lines.append(f"item{idx}:{_json_compact(item, EXTERNAL_CONTEXT_ITEM_CHAR_LIMIT)}")
     if ctx.get("errors"):
-        lines.append(f"errors:{_json_compact(ctx.get('errors'), 800)}")
+        lines.append(f"errors:{_json_compact(ctx.get('errors'), EXTERNAL_CONTEXT_ERROR_CHAR_LIMIT)}")
     return "\n".join(lines) + "\n"
 
 # ============================================================
@@ -470,7 +499,25 @@ def _format_external_context_for_prompt(ctx: Dict[str, Any]) -> str:
 def _raw_field_line(label: str, value: Any, limit: int = 1200) -> str:
     if value is None or value == "" or value == {} or value == []:
         return ""
-    return f"{label}:{str(value)[:limit].replace(chr(10), ' ')}\n"
+    text = _json_compact(value, limit) if isinstance(value, (dict, list)) else str(value)
+    if limit and limit > 0:
+        text = text[:limit]
+    return f"{label}:{text.replace(chr(10), ' ')}\n"
+
+
+def _raw_full_packet_line(match_obj: Dict[str, Any]) -> str:
+    if not INCLUDE_FULL_RAW_PACKET:
+        return ""
+    limit = RAW_PACKET_CHAR_LIMIT
+    raw_json = _json_compact(match_obj, limit if limit and limit > 0 else 0)
+    suffix = ""
+    try:
+        full_len = len(json.dumps(match_obj, ensure_ascii=False, default=str, separators=(",", ":")))
+        if limit and limit > 0 and full_len > limit:
+            suffix = f"...[TRUNCATED full_len={full_len} limit={limit}]"
+    except Exception:
+        pass
+    return f"raw_match_full_json:{raw_json}{suffix}\n"
 
 
 def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
@@ -482,7 +529,7 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
     p += "你必须结合联赛风格和球队风格给出比分形态：例如强队控场型、反击型、低节奏防守型、高节奏英超型、杯赛保守型会对应不同进球分布。\n"
     p += "示例只作思路，不是模板：AC米兰可能常见1-1/2-1/2-0，国米可能常见2-1/1-1/3-0，英超爆冷和大开大合概率相对更高；必须结合当场赔率、球队状态、联赛节奏和联网材料判断。\n"
     p += "如果你的当前运行环境没有真实联网/浏览能力，必须在 audit.web_odds_check 写 web_search_unavailable，并在 data_missing 加入 external_european_odds；禁止假装查过欧赔。\n"
-    p += "禁止引用或假设任何未给出的本地模型结论。禁止使用 CRS 框架、贝叶斯、本地矩阵、陷阱编号、固定常见比分模板。\n"
+    p += "禁止引用或假设任何未给出的本地模型结论。禁止使用 CRS 框架、贝叶斯、本地矩阵、陷阱编号、固定常见比分模板。每场会附 raw_match_full_json，这是完整抓包JSON；精选字段与 full_json 冲突时，以 full_json 中更原始的字段为准。\n"
     p += "如果外部情报为空，必须写 data_missing，不得编造伤停、天气、首发或新闻。\n"
     p += "</context>\n\n"
 
@@ -494,7 +541,7 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
     p += "5. 若热门方向很热但赔率不降反升，或弱方赔率逆势下压，应判断是否存在反向资金、造热、阻上或诱盘，但不能无证据反指。\n"
     p += "6. 必须结合联赛风格和球队风格给比分：低节奏/防守型倾向小比分，强控球强压迫可能2-0/3-0，高节奏联赛可放大爆冷和双方进球，杯赛/淘汰赛需考虑保守与加时前策略。\n"
     p += "7. 不要默认输出 1-1、2-1、1-0、0-1、1-2；若选择这些比分，必须是你从原始字段、Sharp方向、联赛/球队风格和联网核对中独立推导出的结果。\n"
-    p += "8. top3 必须是比分分布，不要只给方向。top3[0].score 必须与 final_direction 一致。\n"
+    p += '8. top3 必须是比分分布，不要只给方向。top3[0].score 必须与 final_direction 一致。必须额外输出 direction_probs={"home":数字,"draw":数字,"away":数字}，表示你对三方向的完整概率判断，不是top3比分占比。\n' 
     p += "9. 必须说明为什么不选另外两个方向。\n"
     p += "10. 0-1、0-2、0-3 是合法客胜比分；其他比分可输出 4-3、3-4 等精确比分。\n"
     p += "</task_rules>\n\n"
@@ -521,7 +568,7 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
 
     p += "<output_format>\n"
     p += "严格输出 JSON 数组。每场一个对象：\n"
-    p += '{"match":1,"final_direction":"home/draw/away","top3":[{"score":"2-0","prob":0.18,"market_logic":"..."}],"reason":"...","ai_confidence":0-100,"risk_level":"low/medium/high","data_missing":[],"audit":{"odds_source":"体彩竞彩抓包赔率","web_odds_check":"searched/web_search_unavailable/european_odds_missing","european_odds":"...","market_divergence":"...","sharp_money_direction":"home/draw/away/home_or_draw/away_or_draw/unclear","sharp_evidence":"...","league_style":"...","team_style":"...","style_score_logic":"...","direction_rejection":"...","total_goals":"...","money_flow":"...","external_context":"..."}}\n'
+    p += '{"match":1,"final_direction":"home/draw/away","direction_probs":{"home":45,"draw":28,"away":27},"top3":[{"score":"2-0","prob":0.18,"market_logic":"..."}],"reason":"...","ai_confidence":0-100,"risk_level":"low/medium/high","data_missing":[],"audit":{"odds_source":"体彩竞彩抓包赔率","web_odds_check":"searched/web_search_unavailable/european_odds_missing","european_odds":"...","market_divergence":"...","sharp_money_direction":"home/draw/away/home_or_draw/away_or_draw/unclear","sharp_evidence":"...","league_style":"...","team_style":"...","style_score_logic":"...","direction_rejection":"...","total_goals":"...","money_flow":"...","external_context":"..."}}\n'
     p += "禁止 markdown，禁止 JSON 外文本。match 字段优先输出数字序号。\n"
     p += "</output_format>\n\n"
 
@@ -545,11 +592,12 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
         if hf_l:
             p += "体彩竞彩半全场抓包赔率:" + " | ".join(hf_l) + "\n"
 
-        p += _raw_field_line("体彩竞彩赔率变动抓包字段", m.get("change"), 2000)
-        p += _raw_field_line("体彩竞彩散户/热度抓包字段", m.get("vote"), 1600)
-        p += _raw_field_line("information原始字段", m.get("information"), 2500)
-        p += _raw_field_line("points原始字段", m.get("points"), 3000)
-        p += _raw_field_line("raw_style_extra原始字段", {k: v for k, v in m.items() if k in ("league_style", "league_profile", "team_style", "home_style", "away_style", "play_style", "tactical_style", "pace_rating", "tempo", "home_form", "away_form", "weather", "injury", "lineup", "news", "motivation", "schedule")}, 3000)
+        p += _raw_field_line("体彩竞彩赔率变动抓包字段", m.get("change"), FIELD_LIMIT_CHANGE)
+        p += _raw_field_line("体彩竞彩散户/热度抓包字段", m.get("vote"), FIELD_LIMIT_VOTE)
+        p += _raw_field_line("information原始字段", m.get("information"), FIELD_LIMIT_INFORMATION)
+        p += _raw_field_line("points原始字段", m.get("points"), FIELD_LIMIT_POINTS)
+        p += _raw_field_line("raw_style_extra原始字段", {k: v for k, v in m.items() if k in ("league_style", "league_profile", "team_style", "home_style", "away_style", "play_style", "tactical_style", "pace_rating", "tempo", "home_form", "away_form", "weather", "injury", "lineup", "news", "motivation", "schedule")}, FIELD_LIMIT_STYLE_EXTRA)
+        p += _raw_full_packet_line(m)
         p += "<external_context>\n" + _format_external_context_for_prompt(ma.get("external_context", {})) + "</external_context>\n"
         p += "</match>\n\n"
     p += "</match_data>\n"
@@ -915,6 +963,38 @@ def _normalize_direction(v: Any, top_score: str = "") -> str:
     return sd or "draw"
 
 
+def _normalize_ai_direction_probs(obj: Any) -> Dict[str, float]:
+    if not isinstance(obj, dict):
+        return {}
+    # 支持 direction_probs / probabilities / direction_probability / 中文方向概率等多种字段。
+    cand = None
+    for k in ["direction_probs", "direction_probabilities", "probabilities", "direction_probability", "方向概率", "三项概率"]:
+        if isinstance(obj.get(k), dict):
+            cand = obj.get(k)
+            break
+    if cand is None and isinstance(obj.get("audit"), dict):
+        for k in ["direction_probs", "direction_probabilities", "probabilities", "方向概率", "三项概率"]:
+            if isinstance(obj["audit"].get(k), dict):
+                cand = obj["audit"].get(k)
+                break
+    if not isinstance(cand, dict):
+        return {}
+    raw = {"home": 0.0, "draw": 0.0, "away": 0.0}
+    alias = {
+        "home": "home", "主": "home", "主胜": "home", "胜": "home", "home_win": "home",
+        "draw": "draw", "平": "draw", "平局": "draw", "和": "draw",
+        "away": "away", "客": "away", "客胜": "away", "负": "away", "away_win": "away",
+    }
+    for k, v in cand.items():
+        kk = alias.get(str(k).strip().lower(), alias.get(str(k).strip()))
+        if kk in raw:
+            raw[kk] += _prob_to_float(v)
+    if sum(raw.values()) <= 0:
+        return {}
+    s = sum(raw.values())
+    return {k: round(v / s * 100, 1) for k, v in raw.items()}
+
+
 def _match_index_from_item(item: Dict[str, Any], fallback_idx: int, num_matches: int) -> Optional[int]:
     raw = item.get("match", item.get("index", item.get("match_index", item.get("id"))))
     if isinstance(raw, int):
@@ -967,6 +1047,7 @@ def _parse_ai_json(raw_text: str, num_matches: int, ai_name: str = "") -> Dict[i
             "detected_traps": traps,
             "data_missing": data_missing,
             "audit": item.get("audit", {}) if isinstance(item.get("audit", {}), dict) else {},
+            "direction_probs": _normalize_ai_direction_probs(item),
             "final_direction": final_direction,
             "raw_item": item,
         }
@@ -1087,6 +1168,10 @@ def _stable_ai_cache_key(match_analyses: List[Dict[str, Any]], phase: str = "pur
             "a": [m.get(f"a{i}") for i in range(8)],
             "change": m.get("change"),
             "vote": m.get("vote"),
+            "information_hash": _hash_obj(m.get("information")),
+            "points_hash": _hash_obj(m.get("points")),
+            "raw_match_hash": _hash_obj(m),
+            "external_context_hash": _hash_obj(ma.get("external_context", {})),
         })
     raw = json.dumps({"version": ENGINE_VERSION, "phase": phase, "matches": compact}, ensure_ascii=False, sort_keys=True, default=str)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
@@ -1349,7 +1434,7 @@ def _make_ai_prediction(
     if not top_candidates and score != "弃权":
         top_candidates = [(score, 0.0)]
 
-    pct = _direction_pct_from_top3(top3, direction)
+    pct = final_r.get("direction_probs") if isinstance(final_r.get("direction_probs"), dict) and final_r.get("direction_probs") else _direction_pct_from_top3(top3, direction)
     conf = int(_clip(_f(final_r.get("ai_confidence", 60), 60), 0, 100))
     gmin, gmax, scenario = _goal_range_from_score(score)
     total_goals = _score_total(score) or 0
@@ -1373,6 +1458,7 @@ def _make_ai_prediction(
         "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
         f"最终来源:{decision_source}; final_model={final_name}; score={score}; direction={direction}",
         f"AI top3:{top_candidates[:5]}",
+        f"AI direction_probs:{pct} ({'AI原生direction_probs' if final_r.get('direction_probs') else 'top3_direction_share_fallback'})",
     ]
     if final_r.get("audit"):
         evidences.append("AI audit:" + _json_compact(final_r.get("audit"), 1500))
