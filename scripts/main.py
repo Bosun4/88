@@ -1,14 +1,19 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import json
 import os
 import sys
 import subprocess
 import traceback
 import asyncio
+import time
 from datetime import datetime, timedelta, timezone
 
 # ============================================================
-#  自动安装依赖
+# 自动安装依赖
 # ============================================================
+
 REQUIRED_PACKAGES = [
     "penaltyblog",
     "soccerdata",
@@ -20,13 +25,34 @@ REQUIRED_PACKAGES = [
     "scikit-learn>=1.4.0",
     "pandas>=2.2.0",
     "scipy>=1.12.0",
-    "deep-translator>=1.11.4"
+    "deep-translator>=1.11.4",
 ]
 
+
+def env_bool(name: str, default: bool = False) -> bool:
+    v = os.environ.get(name)
+    if v is None:
+        return default
+    return str(v).strip().lower() in ("1", "true", "yes", "y", "on")
+
+
+def env_int(name: str, default: int = 0) -> int:
+    try:
+        return int(str(os.environ.get(name, default)).strip())
+    except Exception:
+        return default
+
+
 def auto_install():
+    if env_bool("SKIP_AUTO_INSTALL", False):
+        print("📦 SKIP_AUTO_INSTALL=true，跳过依赖自动安装")
+        return
+
     missing = []
+
     try:
         import pkg_resources
+
         for pkg in REQUIRED_PACKAGES:
             try:
                 pkg_resources.require(pkg)
@@ -38,156 +64,312 @@ def auto_install():
     if missing:
         print("📦 正在同步并升级核心量化依赖 (严格校验版本):")
         print("   " + ", ".join(missing))
+
         try:
             subprocess.check_call([
-                sys.executable, "-m", "pip", "install", *missing,
-                "--break-system-packages", "-q"
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                *missing,
+                "--break-system-packages",
+                "-q",
             ])
             print("  ✅ 所有依赖环境已同步至最新/指定版本")
         except subprocess.CalledProcessError:
             print("  ⚠️ 部分依赖安装或升级失败，系统将尝试降级运行")
+
         print()
+
 
 auto_install()
 
 # ============================================================
-#  正常逻辑启动
+# 运行锁：防止 GitHub Actions / 前端重复触发导致重复扣费
+# ============================================================
+
+class RunLock:
+    def __init__(self, lock_path: str, stale_seconds: int = 7200):
+        self.lock_path = lock_path
+        self.stale_seconds = stale_seconds
+        self.fd = None
+
+    def acquire(self) -> bool:
+        os.makedirs(os.path.dirname(self.lock_path), exist_ok=True)
+
+        if os.path.exists(self.lock_path):
+            try:
+                age = time.time() - os.path.getmtime(self.lock_path)
+                if age > self.stale_seconds:
+                    print(f"  [LOCK] 清理过期锁: {self.lock_path}, age={age:.0f}s")
+                    os.remove(self.lock_path)
+            except Exception:
+                pass
+
+        try:
+            self.fd = os.open(self.lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.write(self.fd, str(os.getpid()).encode("utf-8"))
+            return True
+        except FileExistsError:
+            return False
+
+    def release(self):
+        try:
+            if self.fd is not None:
+                os.close(self.fd)
+                self.fd = None
+        except Exception:
+            pass
+
+        try:
+            if os.path.exists(self.lock_path):
+                os.remove(self.lock_path)
+        except Exception:
+            pass
+
+
+# ============================================================
+# 日期逻辑
 # ============================================================
 
 def get_target_date(offset=0):
+    """
+    竞彩业务日逻辑。
+
+    默认 VMAX_DATE_SHIFT_HOURS=11：
+    北京时间凌晨 00:00 - 10:59 仍归入前一个竞彩业务日。
+    例如北京时间 2026-05-06 04:00：
+      自然日是 2026-05-06
+      减 11 小时后是 2026-05-05 17:00
+      程序 today = 2026-05-05
+
+    如果你以后想按自然日跑，设置：
+      VMAX_DATE_SHIFT_HOURS=0
+    """
     beijing_tz = timezone(timedelta(hours=8))
-    now = datetime.now(beijing_tz) - timedelta(hours=11)
+    shift_hours = env_int("VMAX_DATE_SHIFT_HOURS", 11)
+    now = datetime.now(beijing_tz) - timedelta(hours=shift_hours)
     return (now + timedelta(days=offset)).strftime("%Y-%m-%d")
+
+
+def configure_ai_defaults():
+    """
+    给 predict.py 读取的 AI 配置设默认值。
+    已经在环境变量中设置的不会被覆盖。
+    """
+
+    # 4场一批
+    os.environ.setdefault("AI_BATCH_SIZE", "4")
+    os.environ.setdefault("AI_BATCH_CONCURRENCY", "1")
+
+    # 先不并发模型，降低重复扣费和排查难度
+    os.environ.setdefault("AI_MODEL_CONCURRENCY", "1")
+    os.environ.setdefault("AI_PHASE1_PARALLEL", "false")
+
+    # Claude 条件触发，Phase1 至少2家有效再跑
+    os.environ.setdefault("AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID", "true")
+    os.environ.setdefault("AI_MIN_PHASE1_VALID_FOR_CLAUDE", "2")
+    os.environ.setdefault("AI_MAX_REQUESTS_PER_AI", "1")
+
+    # Claude 终审使用压缩版 Phase1 结果，降低 token
+    os.environ.setdefault("AI_USE_COMPACT_CLAUDE_AUDIT", "true")
+    os.environ.setdefault("AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE", "350")
+
+    # 持久化缓存，避免重复扣费
+    os.environ.setdefault("AI_PERSISTENT_CACHE_ENABLED", "true")
+    os.environ.setdefault("AI_CACHE_DIR", "data/ai_cache")
+    os.environ.setdefault("AI_CACHE_STRIP_VOLATILE_KEYS", "true")
+    os.environ.setdefault("AI_DISK_LOCK_WAIT_SECONDS", "900")
+    os.environ.setdefault("AI_DISK_LOCK_POLL_SECONDS", "3")
+    os.environ.setdefault("AI_DECISION_CACHE_TTL", "1800")
+    os.environ.setdefault("AI_WRITE_BATCH_RESULT_IMMEDIATELY", "true")
+
+    # 本 main.py 只跑 today，这里也固定 today
+    os.environ.setdefault("AI_RUN_DAYS", "today")
+    os.environ.setdefault("VMAX_RUN_DAYS", "today")
+
+
+# ============================================================
+# 主流程：只跑 today
+# ============================================================
 
 def main():
     beijing_tz = timezone(timedelta(hours=8))
     now_time = datetime.now(beijing_tz)
     session = "morning" if now_time.hour < 15 else "evening"
 
-    print("=" * 80)
-    print("⚽ 量化足球投研终端 vMAX 终极版（动态寻优 + 庄家底牌穿透）")
-    print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
-    print("🔧 核心升级：强力兜底落盘防崩溃机制 + Koudai 情报源已移除")
-    print("=" * 80)
-
-    try:
-        import verify
-        verify.verify_and_learn()
-    except Exception as e:
-        print(f"  [WARN] 自学习模块跳过或未找到数据: {e}")
-
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, "data")
     os.makedirs(data_dir, exist_ok=True)
-    
-    target_path = os.path.join(data_dir, "predictions.json")
-    history_path = os.path.join(data_dir, f"history_{now_time.strftime('%Y%m%d')}_{session}.json")
 
-    final_output = {
-        "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
-        "version": "MAX-v1.1",
-        "top4": [], 
-        "matches": {
-            "yesterday": [],
-            "today": [],
-            "tomorrow": []
-        }
-    }
+    lock_path = os.path.join(data_dir, ".vmax_main_today.lock")
+    lock = RunLock(
+        lock_path,
+        stale_seconds=env_int("VMAX_MAIN_LOCK_STALE_SECONDS", 7200),
+    )
 
-    # ============================================================
-    #  强制兜底落盘
-    # ============================================================
-    # 无论后续是否抓到数据，先写入空骨架文件。
-    # 这样 GitHub Actions 后续 cp / 上传步骤不会因为文件不存在而失败。
-    with open(target_path, "w", encoding="utf-8") as f:
-        json.dump(final_output, f, ensure_ascii=False, indent=2)
-
-    days_map = {
-        "yesterday": -1,
-        "today": 0,
-        "tomorrow": 1
-    }
+    if not lock.acquire():
+        print("=" * 80)
+        print("⚠️ 检测到 main.py 已有运行锁，本次退出，避免重复触发 AI 扣费。")
+        print(f"LOCK: {lock_path}")
+        print("=" * 80)
+        return
 
     try:
-        from fetch_data import async_collect_all
-        from predict import run_predictions
+        configure_ai_defaults()
+
+        print("=" * 80)
+        print("⚽ 量化足球投研终端 vMAX 终极版（只跑今日竞彩业务日）")
+        print(f"📅 运行时间: {now_time.strftime('%Y-%m-%d %H:%M:%S')} | 时段: {session}")
+        print("🔧 核心升级：仅 today + 4场小批次 + 防重复运行锁 + Claude压缩终审")
+        print("=" * 80)
+
+        print("⚙️ AI运行配置:")
+        print(f"   VMAX_DATE_SHIFT_HOURS={os.environ.get('VMAX_DATE_SHIFT_HOURS', '11')}")
+        print(f"   VMAX_RUN_DAYS={os.environ.get('VMAX_RUN_DAYS', 'today')}")
+        print(f"   AI_RUN_DAYS={os.environ.get('AI_RUN_DAYS', 'today')}")
+        print(f"   AI_BATCH_SIZE={os.environ.get('AI_BATCH_SIZE', '4')}")
+        print(f"   AI_BATCH_CONCURRENCY={os.environ.get('AI_BATCH_CONCURRENCY', '1')}")
+        print(f"   AI_MODEL_CONCURRENCY={os.environ.get('AI_MODEL_CONCURRENCY', '1')}")
+        print(f"   AI_PHASE1_PARALLEL={os.environ.get('AI_PHASE1_PARALLEL', 'false')}")
+        print(f"   AI_USE_COMPACT_CLAUDE_AUDIT={os.environ.get('AI_USE_COMPACT_CLAUDE_AUDIT', 'true')}")
+        print(f"   AI_PERSISTENT_CACHE_ENABLED={os.environ.get('AI_PERSISTENT_CACHE_ENABLED', 'true')}")
 
         # ============================================================
-        #  Koudai 情报源已彻底禁用
+        # 自学习/复盘模块
         # ============================================================
-        # 原逻辑会导入 koudai_intel.KoudaiSpider，并请求 91bixin 接口。
-        # 该接口容易返回 403，且不应作为主流程必要条件。
-        # 当前版本不再导入、不再请求、不再合并 Koudai 数据。
-        # 每场比赛 information 字段统一保留为空字典，保证下游兼容。
-        all_intel_map = {}
+
+        try:
+            import verify
+            verify.verify_and_learn()
+        except Exception as e:
+            print(f"  [WARN] 自学习模块跳过或未找到数据: {e}")
+
+        # ============================================================
+        # 输出文件骨架：前端只保留 today
+        # ============================================================
+
+        target_path = os.path.join(data_dir, "predictions.json")
+
+        final_output = {
+            "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "version": "MAX-v1.1",
+            "scope": "today_only",
+            "top4": [],
+            "matches": {
+                "today": []
+            },
+            "runtime": {
+                "session": session,
+                "target_mode": "today_only",
+                "date_shift_hours": os.environ.get("VMAX_DATE_SHIFT_HOURS", "11"),
+                "ai_batch_size": os.environ.get("AI_BATCH_SIZE", "4"),
+                "ai_model_concurrency": os.environ.get("AI_MODEL_CONCURRENCY", "1"),
+                "ai_phase1_parallel": os.environ.get("AI_PHASE1_PARALLEL", "false"),
+            },
+        }
+
+        # 先写空骨架，防止后续流程找不到文件
+        with open(target_path, "w", encoding="utf-8") as f:
+            json.dump(final_output, f, ensure_ascii=False, indent=2)
+
+        # ============================================================
+        # 只抓 today
+        # ============================================================
+
+        day_key = "today"
+        target_date = get_target_date(0)
+
         print("\n" + "=" * 80)
         print("🕵️‍♂️ [INTEL NETWORK] Koudai 情报源已移除，跳过 91bixin 接口。")
         print("ℹ️ 当前仅使用主数据源、赔率数据、模型特征与 AI 融合逻辑。")
         print("=" * 80)
 
-        for day_key, offset in days_map.items():
-            target_date = get_target_date(offset)
-            print(f"\n{'='*20} 正在并发抓取并清洗 {day_key} ({target_date}) {'='*20}")
-            
-            raw_data = asyncio.run(async_collect_all(target_date))
-            
-            if not raw_data or not raw_data.get("matches"):
-                print(f"  [SKIP] {target_date} 暂无比赛数据，跳过 AI 推理。")
+        print(f"\n{'=' * 20} 正在并发抓取并清洗 {day_key} ({target_date}) {'=' * 20}")
 
-                # 即使当天没有数据，也立即落盘，保持 predictions.json 可用
-                with open(target_path, "w", encoding="utf-8") as f:
-                    json.dump(final_output, f, ensure_ascii=False, indent=2)
-                with open(history_path, "w", encoding="utf-8") as f:
-                    json.dump(final_output, f, ensure_ascii=False, indent=2)
+        try:
+            from fetch_data import async_collect_all
+            from predict import run_predictions
+        except Exception as e:
+            print("\n" + "!" * 80)
+            print(f"🚨 模块导入失败: {type(e).__name__}: {e}")
+            traceback.print_exc()
+            raise
 
-                continue
+        raw_data = asyncio.run(async_collect_all(target_date))
 
-            # ============================================================
-            #  保留下游兼容字段 information
-            # ============================================================
-            # Koudai 已移除，因此不做任何情报匹配。
-            # 但为了避免 predict.py 或其他模块读取 match["information"] 报错，
-            # 这里给每场比赛补一个空 information。
-            for match in raw_data.get("matches", []):
-                match["information"] = {}
+        if not raw_data or not raw_data.get("matches"):
+            print(f"  [SKIP] {target_date} 暂无比赛数据，跳过 AI 推理。")
 
-            use_ai = day_key in ["today", "tomorrow"]
-            results, top4 = run_predictions(raw_data, use_ai=use_ai)
-            
-            final_output["matches"][day_key] = json.loads(
-                json.dumps(results, ensure_ascii=False, default=str)
-            )
-            
-            if day_key == "today" and top4:
-                final_output["top4"] = [
-                    {
-                        "rank": i + 1,
-                        **t,
-                        "fusion_summary": "vMAX-Dynamic-Hybrid"
-                    }
-                    for i, t in enumerate(
-                        json.loads(json.dumps(top4, ensure_ascii=False, default=str))
-                    )
-                ]
+            final_output["matches"]["today"] = []
+            final_output["update_time"] = datetime.now(beijing_tz).strftime("%Y-%m-%d %H:%M:%S")
 
-            # 抓到数据后，覆盖骨架文件
             with open(target_path, "w", encoding="utf-8") as f:
                 json.dump(final_output, f, ensure_ascii=False, indent=2)
 
+            history_path = os.path.join(
+                data_dir,
+                f"history_{target_date}_today_{session}.json",
+            )
             with open(history_path, "w", encoding="utf-8") as f:
                 json.dump(final_output, f, ensure_ascii=False, indent=2)
-                
-            print(f"  ✅ {day_key} 任务完成，数据已同步至 predictions.json")
 
-        print(f"\n{'='*80}")
-        print("✅ 全链路执行成功！融合引擎已完成所有预测任务。")
-        print(f"{'='*80}")
+            print("✅ 已落盘空 today 结构。")
+            return
+
+        # 保留下游兼容字段 information
+        for match in raw_data.get("matches", []):
+            match["information"] = match.get("information") or {}
+
+        # 只跑 today，所以 use_ai=True
+        use_ai = True
+        print(f"  [AI ENABLED] today 将启用 AI 推理 | 比赛数={len(raw_data.get('matches', []))}")
+
+        results, top4 = run_predictions(raw_data, use_ai=use_ai)
+
+        final_output["matches"]["today"] = json.loads(
+            json.dumps(results, ensure_ascii=False, default=str)
+        )
+
+        if top4:
+            final_output["top4"] = [
+                {
+                    "rank": i + 1,
+                    **t,
+                    "fusion_summary": "vMAX-Dynamic-Hybrid",
+                }
+                for i, t in enumerate(
+                    json.loads(json.dumps(top4, ensure_ascii=False, default=str))
+                )
+            ]
+
+        final_output["update_time"] = datetime.now(beijing_tz).strftime("%Y-%m-%d %H:%M:%S")
+
+        with open(target_path, "w", encoding="utf-8") as f:
+            json.dump(final_output, f, ensure_ascii=False, indent=2)
+
+        history_path = os.path.join(
+            data_dir,
+            f"history_{target_date}_today_{session}.json",
+        )
+        with open(history_path, "w", encoding="utf-8") as f:
+            json.dump(final_output, f, ensure_ascii=False, indent=2)
+
+        print(f"  ✅ today 任务完成，数据已同步至 predictions.json")
+
+        print(f"\n{'=' * 80}")
+        print("✅ 全链路执行成功！今日竞彩业务日预测任务完成。")
+        print(f"{'=' * 80}")
 
     except Exception as e:
         print("\n" + "!" * 80)
-        print(f"🚨 致命崩溃: {type(e).__name__}")
+        print(f"🚨 致命崩溃: {type(e).__name__}: {e}")
         traceback.print_exc()
         sys.exit(1)
+
+    finally:
+        lock.release()
+
 
 if __name__ == "__main__":
     main()
