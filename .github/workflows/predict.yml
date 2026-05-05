@@ -52,32 +52,36 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
 
           # ============================================================
-          # 通用中转变量：如果 predict.py 支持 API_KEY / API_URL，会优先读取
+          # 统一 AI 中转变量
+          # 你的 predict.py 如果支持 API_KEY / API_URL，会优先读取这组
           # ============================================================
           API_KEY: ${{ secrets.API_KEY }}
           API_URL: ${{ secrets.API_URL }}
 
           # ============================================================
-          # 四模型变量：兼容旧代码
-          # 如果你已经统一为 API_KEY / API_URL，也可以把下面四组都改成 secrets.API_KEY / secrets.API_URL
+          # 四模型变量兼容层
+          # 如果你已经统一成 API_KEY / API_URL，这里会统一映射到同一个中转
+          # 如果 API_KEY/API_URL 没配置，则回退到各模型独立 secrets
           # ============================================================
-          GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
-          GPT_API_URL: ${{ secrets.GPT_API_URL }}
+          GPT_API_KEY: ${{ secrets.API_KEY || secrets.GPT_API_KEY }}
+          GPT_API_URL: ${{ secrets.API_URL || secrets.GPT_API_URL }}
 
-          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
-          GROK_API_URL: ${{ secrets.GROK_API_URL }}
+          GROK_API_KEY: ${{ secrets.API_KEY || secrets.GROK_API_KEY }}
+          GROK_API_URL: ${{ secrets.API_URL || secrets.GROK_API_URL }}
 
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
+          GEMINI_API_KEY: ${{ secrets.API_KEY || secrets.GEMINI_API_KEY }}
+          GEMINI_API_URL: ${{ secrets.API_URL || secrets.GEMINI_API_URL }}
 
-          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
-          CLAUDE_API_URL: ${{ secrets.CLAUDE_API_URL }}
+          CLAUDE_API_KEY: ${{ secrets.API_KEY || secrets.CLAUDE_API_KEY }}
+          CLAUDE_API_URL: ${{ secrets.API_URL || secrets.CLAUDE_API_URL }}
 
           # ============================================================
           # 只跑今日竞彩业务日
           # ============================================================
           VMAX_RUN_DAYS: today
           AI_RUN_DAYS: today
+
+          # 北京时间凌晨 00:00-10:59 仍归入前一个竞彩业务日
           VMAX_DATE_SHIFT_HOURS: "11"
 
           # ============================================================
@@ -87,8 +91,8 @@ jobs:
           AI_BATCH_CONCURRENCY: "1"
 
           # ============================================================
-          # 按量 key：先不并发模型，避免重复扣费和排查困难
-          # 后续稳定后可改 AI_MODEL_CONCURRENCY=2、AI_PHASE1_PARALLEL=true
+          # 按量 key：先不并发模型，避免重复扣费
+          # 稳定后再考虑 AI_MODEL_CONCURRENCY=2 / AI_PHASE1_PARALLEL=true
           # ============================================================
           AI_MODEL_CONCURRENCY: "1"
           AI_PHASE1_PARALLEL: "false"
@@ -103,7 +107,9 @@ jobs:
           AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE: "350"
 
           # ============================================================
-          # 持久化缓存：必须配合 Restore runtime data cache into scripts 使用
+          # 持久化缓存
+          # 注意：这里的 data/ai_cache 是相对 scripts 目录
+          # workflow 前面已经把 root data/ 回灌到 scripts/data/
           # ============================================================
           AI_PERSISTENT_CACHE_ENABLED: "true"
           AI_CACHE_DIR: "data/ai_cache"
@@ -117,6 +123,9 @@ jobs:
           # main.py 运行锁
           # ============================================================
           VMAX_MAIN_LOCK_STALE_SECONDS: "7200"
+
+          # workflow 已经 pip install，这里让 main.py 跳过二次自动安装
+          SKIP_AUTO_INSTALL: "true"
 
         run: |
           cd scripts
