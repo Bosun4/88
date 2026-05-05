@@ -61,7 +61,6 @@ jobs:
           # ============================================================
           # 四模型变量兼容层
           # 如果 API_KEY / API_URL 已配置，四家统一走同一个中转
-          # 如果没有配置，则回退到各模型独立 secrets
           # ============================================================
           GPT_API_KEY: ${{ secrets.API_KEY || secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.API_URL || secrets.GPT_API_URL }}
@@ -76,6 +75,14 @@ jobs:
           CLAUDE_API_URL: ${{ secrets.API_URL || secrets.CLAUDE_API_URL }}
 
           # ============================================================
+          # 模型名称
+          # ============================================================
+          GPT_MODEL: "gpt-5.4"
+          GROK_MODEL: "grok-4.3"
+          GEMINI_MODEL: "gemini-3.1-pro-preview-thinking-high"
+          CLAUDE_MODEL: "claude-opus-4-7"
+
+          # ============================================================
           # 只跑今日竞彩业务日
           # ============================================================
           VMAX_RUN_DAYS: today
@@ -85,8 +92,7 @@ jobs:
           VMAX_DATE_SHIFT_HOURS: "11"
 
           # ============================================================
-          # 按量 key 成本控制
-          # 当前不控制 4 场一批；是否整批由 predict.py 当前逻辑决定
+          # 正常全量跑，不限制 4 场批次
           # ============================================================
           AI_MAX_REQUESTS_PER_AI: "1"
 
@@ -138,7 +144,7 @@ jobs:
           git add data/
 
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (today-only AI)"
+            git commit -m "🤖 Auto-update prediction data (today-only full AI)"
             git pull --rebase --autostash origin main || true
             git push
           else
