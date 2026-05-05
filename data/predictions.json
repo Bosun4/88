@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-06 05:30:41",
+  "update_time": "2026-05-06 05:40:37",
   "version": "MAX-v1.1",
   "scope": "today_only",
   "top4": [
@@ -167,13 +167,6 @@
           0,
           0
         ],
-        "goal_band": "",
-        "btts_ai": "unclear",
-        "score_shape_reason": "",
-        "direction_selection_score": 0,
-        "score_shape_score": 0,
-        "overall_selection_score": 0,
-        "recommendation_tier": "D",
         "bayesian_evidences": [
           "AI全失败，PURE模式不使用本地兜底"
         ],
@@ -239,15 +232,8 @@
         "gemini_analysis": "弃权",
         "claude_score": "弃权",
         "claude_analysis": "弃权",
-        "experience_analysis": {
-          "mode": "prompt_only_no_decision",
-          "enabled": true,
-          "triggered_count": 0,
-          "total_score": 0,
-          "rules": []
-        },
-        "engine_version": "vMAX 18.4.7",
-        "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+        "engine_version": "vMAX 18.4.6",
+        "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
         "validation_warnings": []
       },
       "recommend_score": -999,
@@ -418,13 +404,6 @@
           0,
           0
         ],
-        "goal_band": "",
-        "btts_ai": "unclear",
-        "score_shape_reason": "",
-        "direction_selection_score": 0,
-        "score_shape_score": 0,
-        "overall_selection_score": 0,
-        "recommendation_tier": "D",
         "bayesian_evidences": [
           "AI全失败，PURE模式不使用本地兜底"
         ],
@@ -490,15 +469,8 @@
         "gemini_analysis": "弃权",
         "claude_score": "弃权",
         "claude_analysis": "弃权",
-        "experience_analysis": {
-          "mode": "prompt_only_no_decision",
-          "enabled": true,
-          "triggered_count": 0,
-          "total_score": 0,
-          "rules": []
-        },
-        "engine_version": "vMAX 18.4.7",
-        "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+        "engine_version": "vMAX 18.4.6",
+        "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
         "validation_warnings": []
       },
       "recommend_score": -999,
@@ -663,13 +635,6 @@
           0,
           0
         ],
-        "goal_band": "",
-        "btts_ai": "unclear",
-        "score_shape_reason": "",
-        "direction_selection_score": 0,
-        "score_shape_score": 0,
-        "overall_selection_score": 0,
-        "recommendation_tier": "D",
         "bayesian_evidences": [
           "AI全失败，PURE模式不使用本地兜底"
         ],
@@ -735,15 +700,8 @@
         "gemini_analysis": "弃权",
         "claude_score": "弃权",
         "claude_analysis": "弃权",
-        "experience_analysis": {
-          "mode": "prompt_only_no_decision",
-          "enabled": true,
-          "triggered_count": 0,
-          "total_score": 0,
-          "rules": []
-        },
-        "engine_version": "vMAX 18.4.7",
-        "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+        "engine_version": "vMAX 18.4.6",
+        "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
         "validation_warnings": []
       },
       "recommend_score": -999,
@@ -908,13 +866,6 @@
           0,
           0
         ],
-        "goal_band": "",
-        "btts_ai": "unclear",
-        "score_shape_reason": "",
-        "direction_selection_score": 0,
-        "score_shape_score": 0,
-        "overall_selection_score": 0,
-        "recommendation_tier": "D",
         "bayesian_evidences": [
           "AI全失败，PURE模式不使用本地兜底"
         ],
@@ -980,15 +931,8 @@
         "gemini_analysis": "弃权",
         "claude_score": "弃权",
         "claude_analysis": "弃权",
-        "experience_analysis": {
-          "mode": "prompt_only_no_decision",
-          "enabled": true,
-          "triggered_count": 0,
-          "total_score": 0,
-          "rules": []
-        },
-        "engine_version": "vMAX 18.4.7",
-        "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+        "engine_version": "vMAX 18.4.6",
+        "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
         "validation_warnings": []
       },
       "recommend_score": -999,
@@ -1161,13 +1105,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -1233,15 +1170,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
@@ -1410,13 +1340,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -1482,15 +1405,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
@@ -1653,13 +1569,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -1725,15 +1634,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
@@ -1896,13 +1798,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -1968,15 +1863,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
@@ -2139,13 +2027,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -2211,15 +2092,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
@@ -2382,13 +2256,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -2454,15 +2321,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
@@ -2625,13 +2485,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -2697,15 +2550,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
@@ -2868,13 +2714,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -2940,15 +2779,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
@@ -3111,13 +2943,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -3183,15 +3008,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
@@ -3354,13 +3172,6 @@
             0,
             0
           ],
-          "goal_band": "",
-          "btts_ai": "unclear",
-          "score_shape_reason": "",
-          "direction_selection_score": 0,
-          "score_shape_score": 0,
-          "overall_selection_score": 0,
-          "recommendation_tier": "D",
           "bayesian_evidences": [
             "AI全失败，PURE模式不使用本地兜底"
           ],
@@ -3426,15 +3237,8 @@
           "gemini_analysis": "弃权",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
-          "experience_analysis": {
-            "mode": "prompt_only_no_decision",
-            "enabled": true,
-            "triggered_count": 0,
-            "total_score": 0,
-            "rules": []
-          },
-          "engine_version": "vMAX 18.4.7",
-          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 4场小批次 + 默认顺序调用 + 持久化缓存/磁盘锁防重复扣费",
+          "engine_version": "vMAX 18.4.6",
+          "engine_architecture": "PURE RAW-AI: 完整抓包raw_match_full_json + 体彩竞彩赔率标注 + AI自主联网核对欧洲主流欧赔 + Sharp/聪明钱方向识别 + 联赛/球队风格比分约束 + AI direction_probs优先 + 历史经验审计卡强制回应 + 四层比分结构(direction/goal_band/btts/score) + 方向精选分/比分形态分双评分 + GPT/Grok/Gemini初审 + Claude终审；无CRS/无本地矩阵/AI失败即弃权 + 持久化缓存/磁盘锁防重复扣费",
           "validation_warnings": []
         },
         "recommend_score": -999,
