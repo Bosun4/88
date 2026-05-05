@@ -53,15 +53,15 @@ jobs:
 
           # ============================================================
           # 统一 AI 中转变量
-          # 你的 predict.py 如果支持 API_KEY / API_URL，会优先读取这组
+          # predict.py 优先读取 API_KEY / API_URL
           # ============================================================
           API_KEY: ${{ secrets.API_KEY }}
           API_URL: ${{ secrets.API_URL }}
 
           # ============================================================
           # 四模型变量兼容层
-          # 如果你已经统一成 API_KEY / API_URL，这里会统一映射到同一个中转
-          # 如果 API_KEY/API_URL 没配置，则回退到各模型独立 secrets
+          # 如果 API_KEY / API_URL 已配置，四家统一走同一个中转
+          # 如果没有配置，则回退到各模型独立 secrets
           # ============================================================
           GPT_API_KEY: ${{ secrets.API_KEY || secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.API_URL || secrets.GPT_API_URL }}
@@ -85,30 +85,22 @@ jobs:
           VMAX_DATE_SHIFT_HOURS: "11"
 
           # ============================================================
-          # 4场一批，小批次串行
+          # 按量 key 成本控制
+          # 当前不控制 4 场一批；是否整批由 predict.py 当前逻辑决定
           # ============================================================
-          AI_BATCH_SIZE: "4"
-          AI_BATCH_CONCURRENCY: "1"
+          AI_MAX_REQUESTS_PER_AI: "1"
 
-          # ============================================================
-          # 按量 key：先不并发模型，避免重复扣费
-          # 稳定后再考虑 AI_MODEL_CONCURRENCY=2 / AI_PHASE1_PARALLEL=true
-          # ============================================================
-          AI_MODEL_CONCURRENCY: "1"
-          AI_PHASE1_PARALLEL: "false"
-
-          # ============================================================
-          # Claude 条件触发与压缩终审
-          # ============================================================
+          # Claude 条件触发：Phase1 有效不足时跳过 Claude，避免白花终审 token
           AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID: "true"
           AI_MIN_PHASE1_VALID_FOR_CLAUDE: "2"
-          AI_MAX_REQUESTS_PER_AI: "1"
+
+          # Claude 压缩终审；如果当前 predict.py 不支持，会自动忽略
           AI_USE_COMPACT_CLAUDE_AUDIT: "true"
           AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE: "350"
 
           # ============================================================
           # 持久化缓存
-          # 注意：这里的 data/ai_cache 是相对 scripts 目录
+          # 这里的 data/ai_cache 是相对 scripts 目录
           # workflow 前面已经把 root data/ 回灌到 scripts/data/
           # ============================================================
           AI_PERSISTENT_CACHE_ENABLED: "true"
@@ -146,7 +138,7 @@ jobs:
           git add data/
 
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (today-only 4-batch AI)"
+            git commit -m "🤖 Auto-update prediction data (today-only AI)"
             git pull --rebase --autostash origin main || true
             git push
           else
