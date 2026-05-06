@@ -73,7 +73,7 @@ PHASE1_NAMES = ["gpt", "grok", "gemini"]
 DEFAULT_MODELS = {
     "gpt": "gpt-5.4",
     "grok": "grok-4.3",
-    "gemini": "gemini-3.1-pro-preview-thinking-high",
+    "gemini": "gemini-3.1-pro-preview",
     "claude": "claude-opus-4-7",
 }
 
