@@ -78,14 +78,14 @@ jobs:
 
           # ============================================================
           # AI 等待时间
-          # GPT / Grok / Gemini：300秒
-          # Claude：600秒
+          # GPT / Grok / Gemini：1000秒
+          # Claude：1500秒
           # ============================================================
           AI_CONNECT_TIMEOUT: "45"
-          AI_READ_TIMEOUT: "600"
+          AI_READ_TIMEOUT: "1000"
 
           AI_CLAUDE_CONNECT_TIMEOUT: "60"
-          AI_CLAUDE_READ_TIMEOUT: "900"
+          AI_CLAUDE_READ_TIMEOUT: "1500"
 
           # 不增加请求轮数，避免重复扣费
           AI_MAX_REQUESTS_PER_AI: "1"
