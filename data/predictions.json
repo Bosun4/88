@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-06 19:22:38",
+  "update_time": "2026-05-06 20:06:58",
   "version": "MAX-v1.1",
   "scope": "today_only",
   "top4": [
@@ -150,40 +150,40 @@
         "final_direction": "home",
         "is_abstain": false,
         "is_score_others": false,
-        "home_win_pct": 65.0,
+        "home_win_pct": 63.0,
         "draw_pct": 22.0,
-        "away_win_pct": 13.0,
-        "confidence": 80,
+        "away_win_pct": 15.0,
+        "confidence": 77,
         "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
-        "risk_level": "low",
+        "risk_level": "medium",
         "goal_band": "2",
         "btts_ai": "no",
-        "score_shape_reason": "主队掌控局面，客队难以反扑",
+        "score_shape_reason": "2球、3球区间较热，但客队进攻疲弱，优先2-0和1-0，BTTS偏否。",
         "experience_review": [
           {
             "id": "D01",
             "decision": "neutral",
-            "reason": "D01:neutral because 主场优势和战意支撑低赔"
+            "reason": "D01:neutral because 低赔与高热存在，但小组关键战和基本面足以支撑热门"
           },
           {
             "id": "U04",
-            "decision": "accepted",
-            "reason": " U04:accepted because 散户倾向符合基本面"
+            "decision": "neutral",
+            "reason": " U04:neutral because 主胜偏热但未见明显反做证据"
           },
           {
             "id": "X03",
             "decision": "accepted",
-            "reason": " X03:accepted because 2球赔率最低支持2-0"
+            "reason": " X03:accepted because 2-0与总进球2及BTTS否一致"
           },
           {
             "id": "D15",
-            "decision": "neutral",
-            "reason": " D15:neutral"
+            "decision": "rejected",
+            "reason": " D15:rejected because 这是小组赛，不适用首回合保守逻辑。"
           }
         ],
-        "direction_selection_score": 96.0,
-        "score_shape_score": 85.5,
-        "overall_selection_score": 92.3,
+        "direction_selection_score": 93.6,
+        "score_shape_score": 85.7,
+        "overall_selection_score": 92.6,
         "recommendation_tier": "S",
         "direction_tier": "S",
         "score_tier": "S",
@@ -203,8 +203,8 @@
         "experience_review_missing": [],
         "score_shape_warnings": [],
         "web_odds_missing_penalty": true,
-        "dir_confidence": 65.0,
-        "dir_gap": 43.0,
+        "dir_confidence": 63.0,
+        "dir_gap": 41.0,
         "scenario": "ai_raw_2_goals",
         "goal_range": [
           1,
@@ -212,11 +212,12 @@
         ],
         "bayesian_evidences": [
           "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-          "最终来源:phase1_exact_consensus:gpt,grok,gemini; final_model=gemini; score=2-0; direction=home",
-          "AI top3:[('2-0', 18.0), ('1-0', 15.0), ('2-1', 12.0)]",
-          "AI direction_probs:{'home': 65.0, 'draw': 22.0, 'away': 13.0} (AI原生direction_probs)",
-          "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home\",\"sharp_evidence\":\"主胜赔率极低且稳定\",\"league_style\":\"南美赛事主场优势极大\",\"team_style\":\"主队主场强势，客队客场疲软\",\"style_score_logic\":\"主队掌控局面，客队难以反扑\",\"direction_rejection\":\"客队客场战绩差，难以爆冷\",\"experience_review\":\"D01:neutral because 主场优势和战意支撑低赔; U04:accepted because 散户倾向符合基本面; X03:accepted because 2球赔率最低支持2-0; D15:neutral\"}",
-          "data_missing:[\"external_european_odds\"]",
+          "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+          "最终来源:phase1_exact_consensus:gpt,grok,gemini; final_model=gpt; score=2-0; direction=home",
+          "AI top3:[('2-0', 19.0), ('1-0', 15.0), ('2-1', 12.0)]",
+          "AI direction_probs:{'home': 63.0, 'draw': 22.0, 'away': 15.0} (AI原生direction_probs)",
+          "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home\",\"sharp_evidence\":\"静态主胜极低且文字说明主胜持续下调，市场主导方向清晰。\",\"league_style\":\"解放者杯小组关键战更重结果，领先方通常会降低风险。\",\"team_style\":\"主队主场会主动施压，客队偏稳守反击但客场输出有限。\",\"style_score_logic\":\"2球、3球区间较热，但客队进攻疲弱，优先2-0和1-0，BTTS偏否。\",\"direction_rejection\":\"未选draw/away，因主胜赔率优势明显且客队客场不稳。\",\"experience_review\":\"D01:neutral because 低赔与高热存在，但小组关键战和基本面足以支撑热门; U04:neutral because 主胜偏热但未见明显反做证据; X03:accepted because 2-0与总进球2及BTTS否一致; D15:rejected because 这是小组赛，不适用首回合保守逻辑。\"}",
+          "data_missing:[\"external_european_odds\",\"odds_movement_detail_missing\"]",
           "experience_audit_cards(prompt_only):[{\"id\":\"D01\",\"name\":\"大热必死\",\"reason\":\"主赔1.37极低+主胜受注65%\",\"ai_question\":\"热门低赔是否只是名气盘？是否存在防平/防冷？\"},{\"id\":\"U04\",\"name\":\"受注比例一边倒反向操作\",\"reason\":\"主胜受注65%过热\",\"ai_question\":\"受注一边倒是真共识还是反向操作？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@4.8/2球@3.3，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]"
         ],
         "bayesian_prior": {},
@@ -239,7 +240,7 @@
         "top_score_candidates": [
           [
             "2-0",
-            18.0
+            19.0
           ],
           [
             "1-0",
@@ -253,7 +254,7 @@
         "unified_matrix_top_scores": [
           [
             "2-0",
-            18.0
+            19.0
           ],
           [
             "1-0",
@@ -271,23 +272,23 @@
         "decision_source": "phase1_exact_consensus:gpt,grok,gemini",
         "ai_authority_mode": "pure_raw_ai",
         "gpt_score": "2-0",
-        "gpt_analysis": "主胜1.37属于低赔强支持，且小组同积6分、主队主场复仇题材强，市场对主队倾斜合理。客队近10场全部不超过2球，客场进攻弱化明显。总进球2球与3球是核心区域，说明主队最可能以1到2球差距取胜。虽然主胜受注65%有一定热度，但客队基本面与客场表现难以构成足够反制，平局只是次防。",
+        "gpt_analysis": "主胜1.37已经给出清晰方向，且主队具备复仇与争夺小组主动权双重战意。客队客场近况不稳，且主力中场伤缺影响攻防衔接。总进球盘并不极端偏大，更像主队掌控后的中低比分赢球。虽然主胜受注65%偏热，但在实力、主场与战意同时站队的情况下，仍以主胜为主。",
         "grok_score": "2-0",
-        "grok_analysis": "主队首回合落后战意浓，客队客场3负，65%受注过热但主场优势",
+        "grok_analysis": "主队主场复仇战意，客队客场3负，1.37低赔热盘但方向主胜",
         "gemini_score": "2-0",
-        "gemini_analysis": "主队主场战绩出色且急需复仇，客队客场表现不佳且有主力伤缺。极低的主胜赔率显示机构对主队的高度信任。",
+        "gemini_analysis": "米拉索尔首回合失利，回到主场复仇战意浓烈。基多体大客场战绩不佳且有主力伤缺。机构大幅下调主胜赔率至1.37，对主队支持力度极大，主胜稳健。",
         "claude_score": "弃权",
         "claude_analysis": "弃权",
         "ai_abstained": [
           "CLAUDE"
         ],
-        "ai_avg_confidence": 73.3,
+        "ai_avg_confidence": 72.0,
         "value_kill_count": 0,
         "suggested_kelly": 0.0,
         "edge_vs_market": 0.0,
         "is_value": false,
         "ev_note": "disabled_pure_raw_ai_no_local_probability",
-        "score_model_prob": 18.0,
+        "score_model_prob": 19.0,
         "score_market_odds": 6.25,
         "score_market_implied_pct": 16.0,
         "smart_money_signal": "EXP_D01 大热必死 | EXP_U04 主胜超热65%",
@@ -348,6 +349,7 @@
         "experience_analysis": {
           "mode": "prompt_only_no_probability_change_no_score_change",
           "enabled": true,
+          "change_is_direction_code": false,
           "triggered": [
             {
               "id": "D01",
@@ -401,188 +403,193 @@
         "pro_odds": {},
         "asian_handicap_probs": {},
         "top_scores": [],
-        "engine_version": "vMAX 18.4.8",
-        "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+        "engine_version": "vMAX 18.4.9",
+        "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
         "validation_warnings": []
       },
-      "recommend_score": 102.5,
+      "recommend_score": 97.64,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     },
     {
       "rank": 2,
-      "home_team": "利雅青年",
-      "away_team": "利雅胜利",
-      "league": "沙职",
-      "match_num": "周四001",
-      "sp_home": 8.25,
-      "sp_draw": 5.8,
-      "sp_away": 1.2,
-      "give_ball": 2.0,
+      "home_team": "麦独立",
+      "away_team": "弗拉门戈",
+      "league": "解放者杯",
+      "match_num": "周四006",
+      "sp_home": 4.45,
+      "sp_draw": 3.27,
+      "sp_away": 1.67,
+      "give_ball": 1.0,
       "change": {},
       "vote": {
-        "win": "11",
-        "same": "15",
-        "lose": "74",
+        "win": "20",
+        "same": "27",
+        "lose": "53",
         "hhad_win": "46",
-        "hhad_same": "22",
-        "hhad_lose": "32"
+        "hhad_same": "28",
+        "hhad_lose": "26"
       },
       "odds_movement": "主胜平稳，客胜平稳",
       "intelligence": {
-        "h_inj": "无",
+        "h_inj": "J.域加 受伤 肌腱炎 莱德·贝里奥 受伤 膝关节韧带撕裂",
         "g_inj": "无",
-        "home_bad_news": "1.利雅得青年人在上一场联赛中坐镇主场以1比5的惨败比分不敌布赖代合作，近6场正式比赛他们仅取得4平2负的成绩且从未赢球，整体竞技状态陷入严重低迷。此外，球队在主场的表现同样令人失望，最近3个主场赛事取得1平2负的战绩，依然未能收获一场胜利。 2.利雅得青年人近期的整体表现堪称攻防两端全面崩盘，在近",
-        "guest_bad_news": "1.利雅得胜利在上一场联赛中客场以1比3的比分不敌胡拜尔库迪西亚，此前球队在正式比赛中豪取20连胜的辉煌纪录就此终结，这一结果无疑对全队士气造成了沉重打击。此外，单场比赛丢3球的表现也充分暴露了球队后防线存在的明显漏洞与防守隐患。 2.利雅得胜利在客场作战时表现相当出色，特别是在最近10场正式客场比"
+        "home_bad_news": "1.麦德林独立在上一轮联赛主场以1比2的比分不敌里奥内格罗老鹰，此前他们在各项正式比赛中取得的4连胜也因此宣告终结，这一结果对球队士气造成了一定程度的打击。与此同时，球队防守端连续4场零封对手的纪录也随之画下句点，近期防守表现出现明显起伏，稳定性有待进一步巩固。",
+        "guest_bad_news": "1.弗拉门戈本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。"
       },
-      "expert_intro": "利雅得青年人近6场未尝胜绩且上轮主场1-5惨败，防线崩盘近6场丢13球；利雅得胜利历史交锋10场不败且争冠战意浓烈，虽上轮终结连胜但实力碾压。",
-      "baseface": "本场为沙特阿拉伯超级联赛第33轮。目前主队30场积32分，排在第13位。客队31场积79分，高居第1位。客队实力明显高出一筹。\n\n主队利雅得青年人近10场赛事2胜5平3负，状态低迷；近5个主场1胜1平3负，主场状态较差。\n\n客队利雅得胜利近10场赛事9胜0平1负，状态火热；近5个客场4胜0平1负，客场状态出色。\n\n综合来看，双方实力差距悬殊。\n\n双方最近一次交锋中，利雅得胜利主场3:2击败利雅得青年人。双方近10次交锋利雅得青年人取得0胜3平7负，完全处于下风；在利雅得青年人的主场，近3次交锋，利雅得青年人取得0胜0平3负，处于绝对下风。\n\n机构普遍压低客胜指数至1.2左右，看好客胜。\n\n半全场分析：双方上半场打平的可能性为40%\n主队近5场赛事主场的上半场:\n领先1，打平1，落后3丨3场有进球，3场有失球\n客队近5场赛事客场的上半场:\n领先3，打平1，落后1丨4场有进球，2场有失球\n\n战意与策略：利雅得胜利刚终结20连胜急需反弹巩固榜首，利雅得青年人保级无忧但需止颓，双方战意明确但实力悬殊，客队控球压制为主，主队或倚仗反击与定位球。",
+      "expert_intro": "弗拉门戈首回合4:1大胜，身价是对手15倍，实力碾压；麦德林独立虽有主场之利且急需抢分，但关键前锋伤缺，防线面对强敌压力巨大。",
+      "baseface": "本场为南美解放者杯分组赛第4轮。目前主队3场积4分，排在第3位。客队3场积7分，高居第1位。客队实力明显高出一筹。\n\n主队麦德林独立近10场赛事5胜2平3负，状态一般；近5个主场3胜0平2负，主场状态尚可。\n\n客队弗拉门戈近10场赛事7胜2平1负，状态出色；近5个客场3胜1平1负，客场状态良好。\n\n综合来看，双方实力差距明显。\n\n双方最近一次交锋中，弗拉门戈主场4:1击败麦德林独立。双方近1次交锋麦德林独立取得0胜0平1负，处于下风；在麦德林独立的主场，近0次交锋，暂无数据。\n\n主流机构持续下调客胜指数，一致看好客胜方向。\n\n双方上半场打平的可能性为60%\n主队近5场赛事主场的上半场:\n领先1，打平3，落后1丨2场有进球，2场有失球\n客队近5场赛事客场的上半场:\n领先3，打平1，落后1丨3场有进球，1场有失球\n\n麦德林独立急需抢分争取出线资格，但主力前锋伤缺影响进攻；弗拉门戈领跑小组，客场作战将利用阵容优势控制节奏，稳守反击寻找破门机会。",
       "had_analyse": [
         "lose"
       ],
-      "home_rank": 13,
-      "away_rank": 1,
+      "home_rank": 11,
+      "away_rank": 2,
       "v2_odds_dict": {
-        "a0": 31.0,
-        "a1": 8.5,
-        "a2": 5.55,
-        "a3": 3.8,
-        "a4": 4.1,
-        "a5": 5.75,
-        "a6": 8.1,
-        "a7": 8.35,
-        "s00": 31.0,
-        "s11": 11.5,
+        "a0": 9.25,
+        "a1": 4.0,
+        "a2": 3.15,
+        "a3": 3.65,
+        "a4": 6.2,
+        "a5": 12.5,
+        "a6": 26.0,
+        "a7": 40.0,
+        "s00": 9.25,
+        "s11": 6.75,
         "s22": 16.0,
-        "s33": 45.0,
-        "w10": 30.0,
-        "w20": 60.0,
-        "w21": 24.0,
-        "w30": 150.0,
-        "w31": 65.0,
-        "w32": 45.0,
-        "w40": 450.0,
-        "w41": 250.0,
-        "w42": 175.0,
-        "l01": 11.0,
-        "l02": 8.0,
-        "l12": 7.5,
-        "l03": 9.5,
-        "l13": 8.5,
-        "l23": 17.0,
-        "ss": 14.5,
-        "sp": 21.0,
-        "sf": 17.0,
-        "ps": 21.0,
-        "pp": 11.5,
+        "s33": 80.0,
+        "w10": 10.0,
+        "w20": 22.0,
+        "w21": 14.0,
+        "w30": 65.0,
+        "w31": 39.0,
+        "w32": 50.0,
+        "w40": 300.0,
+        "w41": 175.0,
+        "w42": 250.0,
+        "l01": 5.25,
+        "l02": 6.75,
+        "l12": 7.0,
+        "l03": 13.0,
+        "l13": 14.0,
+        "l23": 28.0,
+        "ss": 7.65,
+        "sp": 16.0,
+        "sf": 25.0,
+        "ps": 9.4,
+        "pp": 5.1,
         "pf": 4.1,
-        "fs": 65.0,
-        "fp": 21.0,
-        "ff": 1.57
+        "fs": 35.0,
+        "fp": 16.0,
+        "ff": 2.61
       },
-      "id": 6,
+      "id": 10,
       "date": "2026-05-06",
       "home_id": 0,
       "away_id": 0,
       "home_stats": {
         "played": 25,
-        "wins": 6,
+        "wins": 8,
         "draws": 6,
-        "losses": 13,
-        "goals_for": 18,
-        "goals_against": 40,
-        "avg_goals_for": "0.72",
-        "avg_goals_against": "1.6",
-        "clean_sheets": 2,
-        "form": "LLDLL"
+        "losses": 11,
+        "goals_for": 23,
+        "goals_against": 35,
+        "avg_goals_for": "0.93",
+        "avg_goals_against": "1.4",
+        "clean_sheets": 3,
+        "form": "LDWDL"
       },
       "away_stats": {
         "played": 25,
-        "wins": 16,
+        "wins": 15,
         "draws": 6,
-        "losses": 3,
-        "goals_for": 46,
-        "goals_against": 13,
-        "avg_goals_for": "1.86",
-        "avg_goals_against": "0.53",
-        "clean_sheets": 5,
+        "losses": 4,
+        "goals_for": 42,
+        "goals_against": 18,
+        "avg_goals_for": "1.67",
+        "avg_goals_against": "0.71",
+        "clean_sheets": 4,
         "form": "WWDWW"
       },
       "h2h": [],
       "information": {},
-      "a0": 31.0,
-      "a1": 8.5,
-      "a2": 5.55,
-      "a3": 3.8,
-      "a4": 4.1,
-      "a5": 5.75,
-      "a6": 8.1,
-      "a7": 8.35,
-      "s00": 31.0,
-      "s11": 11.5,
+      "a0": 9.25,
+      "a1": 4.0,
+      "a2": 3.15,
+      "a3": 3.65,
+      "a4": 6.2,
+      "a5": 12.5,
+      "a6": 26.0,
+      "a7": 40.0,
+      "s00": 9.25,
+      "s11": 6.75,
       "s22": 16.0,
-      "s33": 45.0,
-      "w10": 30.0,
-      "w20": 60.0,
-      "w21": 24.0,
-      "w30": 150.0,
-      "w31": 65.0,
-      "w32": 45.0,
-      "w40": 450.0,
-      "w41": 250.0,
-      "w42": 175.0,
-      "l01": 11.0,
-      "l02": 8.0,
-      "l12": 7.5,
-      "l03": 9.5,
-      "l13": 8.5,
-      "l23": 17.0,
-      "ss": 14.5,
-      "sp": 21.0,
-      "sf": 17.0,
-      "ps": 21.0,
-      "pp": 11.5,
+      "s33": 80.0,
+      "w10": 10.0,
+      "w20": 22.0,
+      "w21": 14.0,
+      "w30": 65.0,
+      "w31": 39.0,
+      "w32": 50.0,
+      "w40": 300.0,
+      "w41": 175.0,
+      "w42": 250.0,
+      "l01": 5.25,
+      "l02": 6.75,
+      "l12": 7.0,
+      "l03": 13.0,
+      "l13": 14.0,
+      "l23": 28.0,
+      "ss": 7.65,
+      "sp": 16.0,
+      "sf": 25.0,
+      "ps": 9.4,
+      "pp": 5.1,
       "pf": 4.1,
-      "fs": 65.0,
-      "fp": 21.0,
-      "ff": 1.57,
-      "home": "利雅青年",
-      "guest": "利雅胜利",
+      "fs": 35.0,
+      "fp": 16.0,
+      "ff": 2.61,
+      "home": "麦独立",
+      "guest": "弗拉门戈",
       "prediction": {
-        "predicted_score": "0-2",
-        "predicted_label": "0-2",
+        "predicted_score": "1-2",
+        "predicted_label": "1-2",
         "result": "客胜",
         "display_direction": "客胜",
         "final_direction": "away",
         "is_abstain": false,
         "is_score_others": false,
-        "home_win_pct": 10.0,
-        "draw_pct": 16.0,
-        "away_win_pct": 74.0,
-        "confidence": 86,
+        "home_win_pct": 18.0,
+        "draw_pct": 25.0,
+        "away_win_pct": 57.0,
+        "confidence": 70,
         "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
         "risk_level": "medium",
-        "goal_band": "2",
-        "btts_ai": "no",
-        "score_shape_reason": "客队强势但主队进攻弱，0-2/0-3最合拍，BTTS偏否；若比赛后程松动再向1-2扩散。",
+        "goal_band": "3",
+        "btts_ai": "yes",
+        "score_shape_reason": "客队实力强劲，即使客场也能取得进球，主队可能借主场之利扳回一城。",
         "experience_review": [
           {
-            "id": "D01",
-            "decision": "rejected",
-            "reason": "D01:rejected because 这是实力面与赔率面同步的真实强盘，不是单纯名气盘"
+            "id": "G10",
+            "decision": "neutral",
+            "reason": "G10: neutral"
           },
           {
-            "id": "U04",
+            "id": "X03",
+            "decision": "accepted",
+            "reason": " X03: accepted"
+          },
+          {
+            "id": "D15",
             "decision": "neutral",
-            "reason": " U04:neutral because 客胜受注74%虽热，但并未看到赔率端明显反向示警。"
+            "reason": " D15: neutral."
           }
         ],
-        "direction_selection_score": 100,
-        "score_shape_score": 78.2,
-        "overall_selection_score": 84.5,
+        "direction_selection_score": 84.7,
+        "score_shape_score": 76.1,
+        "overall_selection_score": 82.2,
         "recommendation_tier": "S",
         "direction_tier": "S",
-        "score_tier": "S",
+        "score_tier": "A",
         "model_agreement": {
           "valid_models": [
             "gpt",
@@ -590,30 +597,31 @@
             "gemini"
           ],
           "valid_count": 3,
-          "same_score": 1,
+          "same_score": 2,
           "same_direction": 3,
-          "score_agreement": 0.3333333333333333,
+          "score_agreement": 0.6666666666666666,
           "direction_agreement": 1.0
         },
         "experience_review_coverage": 1.0,
         "experience_review_missing": [],
         "score_shape_warnings": [],
         "web_odds_missing_penalty": true,
-        "dir_confidence": 74.0,
-        "dir_gap": 58.0,
-        "scenario": "ai_raw_2_goals",
+        "dir_confidence": 57.0,
+        "dir_gap": 32.0,
+        "scenario": "ai_raw_3_goals",
         "goal_range": [
-          1,
-          2
+          2,
+          3
         ],
         "bayesian_evidences": [
           "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-          "最终来源:phase1_best_confidence:gpt; final_model=gpt; score=0-2; direction=away",
-          "AI top3:[('0-2', 19.0), ('0-3', 16.0), ('1-2', 10.0)]",
-          "AI direction_probs:{'home': 10.0, 'draw': 16.0, 'away': 74.0} (AI原生direction_probs)",
-          "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"赔率平稳但客胜定在1.2极低位，属于持续强支持，不需要额外降水也能维持客队强势。\",\"league_style\":\"沙职强队打弱旅时常出现单边压制，且高位球队争冠动力明确。\",\"team_style\":\"利雅胜利前场压制力强，利雅青年抗压与回追都偏弱。\",\"style_score_logic\":\"客队强势但主队进攻弱，0-2/0-3最合拍，BTTS偏否；若比赛后程松动再向1-2扩散。\",\"direction_rejection\":\"未选平局和主胜，因为赔率级别与双方攻防落差都不支持正常冷门主线。\",\"experience_review\":\"D01:rejected because 这是实力面与赔率面同步的真实强盘，不是单纯名气盘； U04:neutral because 客胜受注74%虽热，但并未看到赔率端明显反向示警。\"}",
+          "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+          "最终来源:phase1_exact_consensus:grok,gemini; final_model=gemini; score=1-2; direction=away",
+          "AI top3:[('1-2', 15.0), ('0-2', 12.0), ('1-1', 10.0)]",
+          "AI direction_probs:{'home': 18.0, 'draw': 25.0, 'away': 57.0} (AI原生direction_probs)",
+          "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"客胜赔率保持低位，资金认可双方巨大的实力鸿沟。\",\"league_style\":\"巴西豪门在解放者杯中面对其他国家球队优势明显。\",\"team_style\":\"弗拉门戈攻守兼备，麦德林独立进攻受损。\",\"style_score_logic\":\"客队实力强劲，即使客场也能取得进球，主队可能借主场之利扳回一城。\",\"direction_rejection\":\"主队实力太弱且有伤病，难以爆冷击败夺冠热门。\",\"experience_review\":\"G10: neutral; X03: accepted; D15: neutral.\"}",
           "data_missing:[\"external_european_odds\"]",
-          "experience_audit_cards(prompt_only):[{\"id\":\"D01\",\"name\":\"大热必死\",\"reason\":\"客赔1.2极低+客胜受注74%\",\"ai_question\":\"热门低赔是否只是名气盘？是否存在防平/防冷？\"},{\"id\":\"U04\",\"name\":\"受注比例一边倒反向操作\",\"reason\":\"客胜受注74%过热\",\"ai_question\":\"受注一边倒是真共识还是反向操作？\"}]"
+          "experience_audit_cards(prompt_only):[{\"id\":\"G10\",\"name\":\"CRS 0-0赔率极低\",\"reason\":\"0-0@9.25\",\"ai_question\":\"0-0赔率低是否与总0球低位共振？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@4.0/2球@3.15，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]"
         ],
         "bayesian_prior": {},
         "override_triggered": false,
@@ -634,29 +642,29 @@
         "crs_low_rank_info": {},
         "top_score_candidates": [
           [
-            "0-2",
-            19.0
-          ],
-          [
-            "0-3",
-            16.0
-          ],
-          [
             "1-2",
+            15.0
+          ],
+          [
+            "0-2",
+            12.0
+          ],
+          [
+            "1-1",
             10.0
           ]
         ],
         "unified_matrix_top_scores": [
           [
-            "0-2",
-            19.0
-          ],
-          [
-            "0-3",
-            16.0
-          ],
-          [
             "1-2",
+            15.0
+          ],
+          [
+            "0-2",
+            12.0
+          ],
+          [
+            "1-1",
             10.0
           ]
         ],
@@ -664,33 +672,30 @@
         "fair_1x2_pack": {},
         "mixed_target_dir": {},
         "unified_source": "disabled_pure_raw_ai",
-        "decision_source": "phase1_best_confidence:gpt",
+        "decision_source": "phase1_exact_consensus:grok,gemini",
         "ai_authority_mode": "pure_raw_ai",
-        "gpt_score": "0-2",
-        "gpt_analysis": "客胜1.20属于极强盘，且负负1.57远低于其他半全场，说明客队从开局到全场都更可能控制比赛。主队排名13、进攻均值0.72、防守均值失1.6，近期还遭1比5惨败；客队排名第1、攻防两端都是碾压级别。虽然客胜受注74%偏热，但在这类强弱分明对阵中并不构成反向充分条件。总进球3球最低、4球次低，客队2到3球获胜最符合赔率与基本面。",
-        "grok_score": "0-3",
-        "grok_analysis": "客队争冠战意+主队6场未胜丢13球，74%受注过热但实力差距",
+        "gpt_score": "0-1",
+        "gpt_analysis": "弗拉门戈整体实力、近况和首回合交锋都明显占优，客胜1.67在客场盘中已属强支持。主队有抢分需求但锋线伤缺，不利于高效率进攻。总进球结构偏2球附近，说明更像客队稳控比赛、用成熟度拿结果，而不是大开大合。平局存在一定防守价值，但首选仍是客胜。",
+        "grok_score": "1-2",
+        "grok_analysis": "客队实力碾压+小组领跑，0-0赔率低但方向客胜",
         "gemini_score": "1-2",
-        "gemini_analysis": "客队实力远超主队，且急需胜利反弹。主队近期防线崩盘，难以抵挡客队猛攻。极低的客胜赔率反映了比赛的悬殊程度。",
+        "gemini_analysis": "弗拉门戈实力远超麦德林独立，首回合大胜已证明差距。主队虽有主场之利但主力前锋伤缺，难以对客队防线造成实质威胁。客胜赔率1.67合理反映了实力差距，看好客胜。",
         "claude_score": "弃权",
         "claude_analysis": "弃权",
         "ai_abstained": [
           "CLAUDE"
         ],
-        "ai_avg_confidence": 82.0,
+        "ai_avg_confidence": 70.0,
         "value_kill_count": 0,
         "suggested_kelly": 0.0,
         "edge_vs_market": 0.0,
         "is_value": false,
         "ev_note": "disabled_pure_raw_ai_no_local_probability",
-        "score_model_prob": 19.0,
-        "score_market_odds": 8.0,
-        "score_market_implied_pct": 12.5,
-        "smart_money_signal": "EXP_D01 大热必死 | EXP_U04 客胜超热74%",
-        "smart_signals": [
-          "EXP_AUDIT:EXP_D01 大热必死",
-          "EXP_AUDIT:EXP_U04 客胜超热74%"
-        ],
+        "score_model_prob": 15.0,
+        "score_market_odds": 7.0,
+        "score_market_implied_pct": 14.286,
+        "smart_money_signal": "",
+        "smart_signals": [],
         "cold_door": {
           "is_cold_door": false,
           "strength": 0,
@@ -701,9 +706,9 @@
         },
         "xG_home": "?",
         "xG_away": "?",
-        "over_under_2_5": "小",
-        "both_score": "否",
-        "expected_total_goals": 2,
+        "over_under_2_5": "大",
+        "both_score": "是",
+        "expected_total_goals": 3,
         "over_2_5": null,
         "btts": null,
         "bookmaker_implied_home_xg": "?",
@@ -744,44 +749,52 @@
         "experience_analysis": {
           "mode": "prompt_only_no_probability_change_no_score_change",
           "enabled": true,
+          "change_is_direction_code": false,
           "triggered": [
             {
-              "id": "D01",
-              "name": "大热必死",
-              "category": "平局",
-              "weight": 8,
-              "reason": "客赔1.2极低+客胜受注74%",
-              "direction": "draw",
-              "ai_question": "热门低赔是否只是名气盘？是否存在防平/防冷？",
+              "id": "G10",
+              "name": "CRS 0-0赔率极低",
+              "category": "大小球",
+              "weight": 7,
+              "reason": "0-0@9.25",
+              "direction": "zero_zero",
+              "ai_question": "0-0赔率低是否与总0球低位共振？",
               "mode": "advisory_only_no_local_decision"
             },
             {
-              "id": "U04",
-              "name": "受注比例一边倒反向操作",
-              "category": "冷门",
-              "weight": 8,
-              "reason": "客胜受注74%过热",
-              "direction": "upset_home",
-              "ai_question": "受注一边倒是真共识还是反向操作？",
+              "id": "X03",
+              "name": "方向与总进球/BTTS一致性复核",
+              "category": "二次升级",
+              "weight": 6,
+              "reason": "1球@4.0/2球@3.15，需审计经济型赢球与BTTS",
+              "direction": "audit_goal_shape",
+              "ai_question": "最终比分必须与总进球和BTTS一致。",
+              "mode": "advisory_only_no_local_decision"
+            },
+            {
+              "id": "D15",
+              "name": "杯赛首轮易平",
+              "category": "平局",
+              "weight": 5,
+              "reason": "杯赛/淘汰赛属性",
+              "direction": "draw",
+              "ai_question": "杯赛/首回合是否保守？",
               "mode": "advisory_only_no_local_decision"
             }
           ],
-          "triggered_count": 2,
-          "total_score": 16,
-          "risk_signals": [
-            "EXP_D01 大热必死",
-            "EXP_U04 客胜超热74%"
-          ],
+          "triggered_count": 3,
+          "total_score": 18,
+          "risk_signals": [],
           "recommendation": "存在经验审计卡：AI需逐条回应"
         },
         "pro_odds": {},
         "asian_handicap_probs": {},
         "top_scores": [],
-        "engine_version": "vMAX 18.4.8",
-        "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+        "engine_version": "vMAX 18.4.9",
+        "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
         "validation_warnings": []
       },
-      "recommend_score": 90.42,
+      "recommend_score": 86.76,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     },
@@ -936,35 +949,30 @@
         "final_direction": "home",
         "is_abstain": false,
         "is_score_others": false,
-        "home_win_pct": 51.0,
-        "draw_pct": 25.0,
-        "away_win_pct": 24.0,
-        "confidence": 63,
+        "home_win_pct": 50.0,
+        "draw_pct": 24.0,
+        "away_win_pct": 26.0,
+        "confidence": 62,
         "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
         "risk_level": "high",
         "goal_band": "3",
         "btts_ai": "yes",
-        "score_shape_reason": "2-3球落点最集中，主推2-1既符合主胜又兼容客队反击得手，BTTS偏是。",
+        "score_shape_reason": "总2球和3球最受支持，主胜首选2-1，其次1-0；客队若凭反击得手则更接近BTTS是。",
         "experience_review": [
           {
             "id": "B_STEAM",
             "decision": "accepted",
-            "reason": "B_STEAM:accepted because 客赔下行且客胜仅19%受注，说明有隐藏资金防客"
-          },
-          {
-            "id": "U10",
-            "decision": "neutral",
-            "reason": " U10:neutral because 变盘与赛制因素均可能影响"
+            "reason": "B_STEAM:accepted because 客赔降水且受注仅19%，确有客向资金信号，因此提高风险等级"
           },
           {
             "id": "X03",
             "decision": "accepted",
-            "reason": " X03:accepted because 2-1、2-0、1-1均与总进球2-3球相匹配。"
+            "reason": " X03:accepted because 2-1与2/3球区间及BTTS判断一致。"
           }
         ],
-        "direction_selection_score": 77.9,
-        "score_shape_score": 74.7,
-        "overall_selection_score": 77.9,
+        "direction_selection_score": 76.1,
+        "score_shape_score": 75.0,
+        "overall_selection_score": 76.1,
         "recommendation_tier": "A",
         "direction_tier": "A",
         "score_tier": "A",
@@ -984,8 +992,8 @@
         "experience_review_missing": [],
         "score_shape_warnings": [],
         "web_odds_missing_penalty": true,
-        "dir_confidence": 51.0,
-        "dir_gap": 26.0,
+        "dir_confidence": 50.0,
+        "dir_gap": 24.0,
         "scenario": "ai_raw_3_goals",
         "goal_range": [
           2,
@@ -993,12 +1001,13 @@
         ],
         "bayesian_evidences": [
           "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
+          "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
           "最终来源:phase1_exact_consensus:gpt,grok; final_model=gpt; score=2-1; direction=home",
-          "AI top3:[('2-1', 15.0), ('2-0', 12.0), ('1-1', 11.0)]",
-          "AI direction_probs:{'home': 51.0, 'draw': 25.0, 'away': 24.0} (AI原生direction_probs)",
-          "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away_or_draw\",\"sharp_evidence\":\"客赔下降而客胜受注仅19%，存在资金对客队守住结果的防范。\",\"league_style\":\"欧联淘汰赛次回合，落后主队通常提升压迫和射门量，比赛更易出现两端机会。\",\"team_style\":\"维拉主场主动推进，诺丁汉更像低位防反，但伤病影响其前后场连接。\",\"style_score_logic\":\"2-3球落点最集中，主推2-1既符合主胜又兼容客队反击得手，BTTS偏是。\",\"direction_rejection\":\"未选平局，因为静态主胜优势与主队翻盘动力仍在；未选客胜，因为客队人员问题较重且客胜仍是高位项。\",\"experience_review\":\"B_STEAM:accepted because 客赔下行且客胜仅19%受注，说明有隐藏资金防客； U10:neutral because 变盘与赛制因素均可能影响； X03:accepted because 2-1、2-0、1-1均与总进球2-3球相匹配。\"}",
+          "AI top3:[('2-1', 16.0), ('1-0', 14.0), ('1-1', 12.0)]",
+          "AI direction_probs:{'home': 50.0, 'draw': 24.0, 'away': 26.0} (AI原生direction_probs)",
+          "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"客胜降水且客胜受注仅19%，存在非大众资金向客队不败一侧流入的痕迹。\",\"league_style\":\"欧联次回合在总比分压力下，主队落后常主动拉高节奏。\",\"team_style\":\"维拉必须压上，诺丁汉更偏守反，但客队阵容残缺削弱其执行力。\",\"style_score_logic\":\"总2球和3球最受支持，主胜首选2-1，其次1-0；客队若凭反击得手则更接近BTTS是。\",\"direction_rejection\":\"未选away为首选，因为客队伤病过重且客场交锋劣势明显；未选draw为首选，因为维拉战术上不接受平局。\",\"experience_review\":\"B_STEAM:accepted because 客赔降水且受注仅19%，确有客向资金信号，因此提高风险等级; X03:accepted because 2-1与2/3球区间及BTTS判断一致。\"}",
           "data_missing:[\"external_european_odds\"]",
-          "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"客赔降-1.00散户仅19%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"U10\",\"name\":\"赔率剧烈变动\",\"reason\":\"最大变动1.00\",\"ai_question\":\"剧烈变盘是信息/资金驱动还是诱导？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@5.0/2球@3.3，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"}]"
+          "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"客赔降水方向信号，散户仅19%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@5.0/2球@3.3，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"}]"
         ],
         "bayesian_prior": {},
         "override_triggered": false,
@@ -1020,29 +1029,29 @@
         "top_score_candidates": [
           [
             "2-1",
-            15.0
+            16.0
           ],
           [
-            "2-0",
-            12.0
+            "1-0",
+            14.0
           ],
           [
             "1-1",
-            11.0
+            12.0
           ]
         ],
         "unified_matrix_top_scores": [
           [
             "2-1",
-            15.0
+            16.0
           ],
           [
-            "2-0",
-            12.0
+            "1-0",
+            14.0
           ],
           [
             "1-1",
-            11.0
+            12.0
           ]
         ],
         "unified_goal_probs": {},
@@ -1052,23 +1061,23 @@
         "decision_source": "phase1_exact_consensus:gpt,grok",
         "ai_authority_mode": "pure_raw_ai",
         "gpt_score": "2-1",
-        "gpt_analysis": "竞彩静态面仍明显偏主，主胜1.56说明主场维拉赢球是基础预期；但变动为主胜升、客胜降，说明市场对诺丁汉方向有补强，尤其是客队不败路径不能轻视。首回合维拉落后必须前压，次回合战术会更主动，而客队伤病较多，守转攻连续性存疑。总进球2球与3球最热，比赛更像主队赢球但未必轻松，2-1优于2-0。",
+        "gpt_analysis": "这是一个静态主胜、动态略偏客的矛盾盘。1X2静态上维拉主胜明显占先，但变动编码显示主胜升水、客胜降水，说明市场对诺丁汉有承接。结合两回合背景，维拉必须主动进攻，而诺丁汉伤病较重、客场历史对阵又差，最终仍倾向维拉主场赢球，但穿透性和稳定性不足。总进球倾向2-3球，主队赢一球最合适。",
         "grok_score": "2-1",
-        "grok_analysis": "维拉主场对诺丁汉5连胜，客队伤病潮，升水主胜支持",
+        "grok_analysis": "主队主场历史优势+战意，客队伤病满营，升水主胜信号",
         "gemini_score": "2-0",
-        "gemini_analysis": "主队首回合落后，主场战意极强。客队虽然手握优势但遭遇严重伤病潮，核心球员缺阵。主队历史交锋占优，有望主场翻盘。",
+        "gemini_analysis": "维拉首回合落后，主场战意极强且历史交锋占优。诺丁汉森林虽然手握优势但遭遇严重伤病潮，客场难以抵挡维拉的攻势。主胜赔率处于合理区间，看好维拉主场取胜。",
         "claude_score": "弃权",
         "claude_analysis": "弃权",
         "ai_abstained": [
           "CLAUDE"
         ],
-        "ai_avg_confidence": 66.0,
+        "ai_avg_confidence": 63.7,
         "value_kill_count": 0,
         "suggested_kelly": 0.0,
         "edge_vs_market": 0.0,
         "is_value": false,
         "ev_note": "disabled_pure_raw_ai_no_local_probability",
-        "score_model_prob": 15.0,
+        "score_model_prob": 16.0,
         "score_market_odds": 6.5,
         "score_market_implied_pct": 15.385,
         "smart_money_signal": "",
@@ -1126,25 +1135,16 @@
         "experience_analysis": {
           "mode": "prompt_only_no_probability_change_no_score_change",
           "enabled": true,
+          "change_is_direction_code": true,
           "triggered": [
             {
               "id": "B_STEAM",
               "name": "Steam资金方向",
               "category": "盘口",
               "weight": 7,
-              "reason": "客赔降-1.00散户仅19%",
+              "reason": "客赔降水方向信号，散户仅19%",
               "direction": "steam_away",
               "ai_question": "散户未跟的降水是否更像专业资金？",
-              "mode": "advisory_only_no_local_decision"
-            },
-            {
-              "id": "U10",
-              "name": "赔率剧烈变动",
-              "category": "盘口",
-              "weight": 7,
-              "reason": "最大变动1.00",
-              "direction": "audit",
-              "ai_question": "剧烈变盘是信息/资金驱动还是诱导？",
               "mode": "advisory_only_no_local_decision"
             },
             {
@@ -1158,220 +1158,205 @@
               "mode": "advisory_only_no_local_decision"
             }
           ],
-          "triggered_count": 3,
-          "total_score": 20,
+          "triggered_count": 2,
+          "total_score": 13,
           "risk_signals": [],
           "recommendation": "存在经验审计卡：AI需逐条回应"
         },
         "pro_odds": {},
         "asian_handicap_probs": {},
         "top_scores": [],
-        "engine_version": "vMAX 18.4.8",
-        "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+        "engine_version": "vMAX 18.4.9",
+        "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
         "validation_warnings": []
       },
-      "recommend_score": 73.98,
+      "recommend_score": 72.1,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     },
     {
       "rank": 4,
-      "home_team": "圣菲独立",
-      "away_team": "科林蒂安",
-      "league": "解放者杯",
-      "match_num": "周三009",
-      "sp_home": 2.79,
-      "sp_draw": 2.7,
-      "sp_away": 2.5,
+      "home_team": "吉达国民",
+      "away_team": "穆拜征服",
+      "league": "沙职",
+      "match_num": "周三006",
+      "sp_home": 1.21,
+      "sp_draw": 5.4,
+      "sp_away": 8.5,
       "give_ball": -1.0,
       "change": {
-        "win": 1,
-        "same": -1,
-        "lose": -1
+        "win": -1,
+        "same": 1,
+        "lose": 1
       },
       "vote": {
-        "win": "32",
-        "same": "33",
-        "lose": "35",
-        "hhad_win": "12",
-        "hhad_same": "21",
-        "hhad_lose": "67"
+        "win": "72",
+        "same": "17",
+        "lose": "11",
+        "hhad_win": "50",
+        "hhad_same": "23",
+        "hhad_lose": "27"
       },
-      "odds_movement": "主胜升水，客胜降水",
+      "odds_movement": "主胜降水，客胜升水",
       "intelligence": {
         "h_inj": "无",
         "g_inj": "无",
-        "home_bad_news": "1.圣塔菲在解放者杯赛场的攻防表现显得较为乏力，三场赛事仅攻入2球，其中一场更是未能破门交出白卷，进攻效率明显偏低。与此同时，球队防线也漏洞百出，三场比赛累计失球5个，且场场都有丢球记录，特别是最近两场比赛连续出现单场失球2球的糟糕情况，防守稳定性亟待改善。 2.圣塔菲虽然近期整体竞技状态保持得相当",
-        "guest_bad_news": "1.科林蒂安近10场比赛得失球不超过2球的场次达到8场。 2.科林蒂安近10场客场比赛得失球不超过2球的场次达到8场。 3.科林蒂安本赛季近10个客场比赛，在落后的情况下最终客场输球率达100%。 4.科林蒂安在上一轮联赛中客场以1比2惜败于米拉索，此前保持的7场正式比赛5胜2平的不败纪录因此宣告终"
+        "home_bad_news": "1.吉达国民近6次联赛面对哈萨征服仅取得2胜1平3负的战绩，过往交锋处于劣势。期间打入6球，丢9球，攻防两端均被对手压制。",
+        "guest_bad_news": "1.哈萨征服近期的竞技状态稍显低迷。在近6轮联赛中，球队仅交出1胜2平3负的成绩单，整体表现缺乏足够的稳定性。上轮联赛主场2-2踢平新未来城体育，近2轮联赛更是连续踢出平局。 2.哈萨征服的客场表现相当低迷，堪称球队的明显短板。在本赛季的14个联赛客场中，球队仅取得了2胜5平7负的糟糕战绩，胜率低至"
       },
-      "expert_intro": "科林蒂安近6场4胜1平1负，状态出色且防守稳固，10场正赛7场零封；圣塔菲解放者杯3战仅1分，攻防失衡且实力差距明显，虽主场作战但抢分难度极大。",
-      "baseface": "本场为南美解放者杯小组赛第4轮。目前主队3场积1分，排在第3位；客队3场积9分，高居第1位。客队实力明显高出一筹。\n\n主队圣塔菲近10场赛事4胜3平3负，状态一般；近5个主场3胜1平1负，主场状态尚可。\n\n客队科林蒂安近10场赛事5胜2平3负，状态尚可；近5个客场2胜1平2负，客场状态一般。\n\n综合来看，客队实力完全碾压主队。\n\n双方最近一次交锋中，科林蒂安主场2:0击败圣塔菲。双方近3次交锋圣塔菲取得0胜1平2负，处于下风；在圣塔菲的主场，近1次交锋，圣塔菲取得0胜1平0负，不落下风。\n\n主流机构客胜指数维持在2.4-2.6区间，支持客队不败。\n\n双方上半场打平的可能性为 60% \n主队近5场赛事主场的上半场: \n领先3，打平2，落后0丨3场有进球，0场有失球 \n客队近5场赛事客场的上半场: \n领先1，打平2，落后2丨1场有进球，2场有失球\n\n战意与策略分析：主队急需抢分避免提前出局，但进攻乏力防线不稳；客队手握出线主动权，可能采取稳健策略，利用阵容深度控制节奏，稳中求胜。",
+      "expert_intro": "吉达国民主场5战不败且仅失1球，主场优势极其明显；哈萨征服客场5轮不胜且场均失2球，客战能力羸弱。双方战意与主场因素形成鲜明对比。",
+      "baseface": "本场为沙特阿拉伯超级联赛第28轮较量。目前主队30轮积69分，排在第3位；客队30轮积33分，位列第12位。双方实力差距悬殊。\n\n主队吉达国民近10场赛事4胜4平2负，状态稳健；近5个主场3胜2平0负，主场状态上佳。\n\n客队哈萨征服近10场赛事2胜3平5负，状态低迷；近5个客场0胜2平3负，客场状态堪忧。\n\n综合来看，双方实力差距明显。\n\n双方最近一次交锋中，哈萨征服2025年12月26日客场2-1击败吉达国民。双方近6次交锋吉达国民取得2胜1平3负，略处下风；在吉达国民的主场，近3次交锋，吉达国民取得1胜2平0负，不败率100%。\n\n机构一致压低主胜指数，看好方向：力挺主队取胜。\n\n半全场分析：主队上半场领先的可能性为40%\n主队近5场赛事主场的上半场：\n领先2，打平3，落后0丨3场有进球，1场有失球\n客队近5场赛事客场的上半场：\n领先1，打平1，落后3丨3场有进球，4场有失球\n\n战意与策略分析：吉达国民位列第三，距榜首10分，为争夺亚冠精英联赛附加赛资格甚至冲击前二，主场战意浓烈；哈萨征服保级压力不大，客场或采取守势。主队需把握控球权尽早破门，客队则需立足防守寻找反击机会。",
       "had_analyse": [
-        "same"
+        "win"
       ],
-      "home_rank": 7,
-      "away_rank": 17,
+      "home_rank": 3,
+      "away_rank": 12,
       "v2_odds_dict": {
-        "a0": 6.2,
-        "a1": 3.25,
-        "a2": 2.85,
-        "a3": 4.3,
-        "a4": 8.8,
-        "a5": 23.0,
-        "a6": 34.0,
-        "a7": 65.0,
-        "s00": 6.2,
-        "s11": 5.4,
-        "s22": 18.0,
-        "s33": 100.0,
-        "w10": 6.1,
-        "w20": 12.0,
-        "w21": 9.5,
-        "w30": 32.0,
-        "w31": 29.0,
-        "w32": 45.0,
-        "w40": 85.0,
-        "w41": 80.0,
-        "w42": 150.0,
-        "l01": 5.95,
-        "l02": 11.0,
-        "l12": 9.45,
-        "l03": 28.0,
-        "l13": 27.0,
-        "l23": 40.0,
-        "ss": 4.6,
-        "sp": 16.0,
-        "sf": 32.0,
-        "ps": 5.75,
-        "pp": 3.75,
-        "pf": 5.5,
-        "fs": 33.0,
-        "fp": 16.0,
-        "ff": 4.4
+        "a0": 24.0,
+        "a1": 8.2,
+        "a2": 4.75,
+        "a3": 3.15,
+        "a4": 3.7,
+        "a5": 7.0,
+        "a6": 12.0,
+        "a7": 15.0,
+        "s00": 24.0,
+        "s11": 10.5,
+        "s22": 15.0,
+        "s33": 50.0,
+        "w10": 10.0,
+        "w20": 7.8,
+        "w21": 6.5,
+        "w30": 9.5,
+        "w31": 8.5,
+        "w32": 17.0,
+        "w40": 14.0,
+        "w41": 14.5,
+        "w42": 28.0,
+        "l01": 25.0,
+        "l02": 50.0,
+        "l12": 19.0,
+        "l03": 120.0,
+        "l13": 60.0,
+        "l23": 50.0,
+        "ss": 1.7,
+        "sp": 19.0,
+        "sf": 60.0,
+        "ps": 4.05,
+        "pp": 9.5,
+        "pf": 18.0,
+        "fs": 17.0,
+        "fp": 19.0,
+        "ff": 13.0
       },
-      "id": 5,
+      "id": 2,
       "date": "2026-05-06",
       "home_id": 0,
       "away_id": 0,
       "home_stats": {
         "played": 25,
-        "wins": 11,
+        "wins": 16,
         "draws": 6,
-        "losses": 8,
-        "goals_for": 31,
-        "goals_against": 27,
-        "avg_goals_for": "1.26",
-        "avg_goals_against": "1.1",
-        "clean_sheets": 4,
-        "form": "WDLWD"
+        "losses": 3,
+        "goals_for": 45,
+        "goals_against": 14,
+        "avg_goals_for": "1.81",
+        "avg_goals_against": "0.58",
+        "clean_sheets": 5,
+        "form": "WWDWW"
       },
       "away_stats": {
         "played": 25,
-        "wins": 9,
+        "wins": 7,
         "draws": 6,
-        "losses": 10,
-        "goals_for": 27,
-        "goals_against": 32,
-        "avg_goals_for": "1.07",
-        "avg_goals_against": "1.28",
-        "clean_sheets": 3,
-        "form": "WDLWD"
+        "losses": 12,
+        "goals_for": 19,
+        "goals_against": 39,
+        "avg_goals_for": "0.74",
+        "avg_goals_against": "1.58",
+        "clean_sheets": 2,
+        "form": "LLDLL"
       },
       "h2h": [],
       "information": {},
-      "a0": 6.2,
-      "a1": 3.25,
-      "a2": 2.85,
-      "a3": 4.3,
-      "a4": 8.8,
-      "a5": 23.0,
-      "a6": 34.0,
-      "a7": 65.0,
-      "s00": 6.2,
-      "s11": 5.4,
-      "s22": 18.0,
-      "s33": 100.0,
-      "w10": 6.1,
-      "w20": 12.0,
-      "w21": 9.5,
-      "w30": 32.0,
-      "w31": 29.0,
-      "w32": 45.0,
-      "w40": 85.0,
-      "w41": 80.0,
-      "w42": 150.0,
-      "l01": 5.95,
-      "l02": 11.0,
-      "l12": 9.45,
-      "l03": 28.0,
-      "l13": 27.0,
-      "l23": 40.0,
-      "ss": 4.6,
-      "sp": 16.0,
-      "sf": 32.0,
-      "ps": 5.75,
-      "pp": 3.75,
-      "pf": 5.5,
-      "fs": 33.0,
-      "fp": 16.0,
-      "ff": 4.4,
-      "home": "圣菲独立",
-      "guest": "科林蒂安",
+      "a0": 24.0,
+      "a1": 8.2,
+      "a2": 4.75,
+      "a3": 3.15,
+      "a4": 3.7,
+      "a5": 7.0,
+      "a6": 12.0,
+      "a7": 15.0,
+      "s00": 24.0,
+      "s11": 10.5,
+      "s22": 15.0,
+      "s33": 50.0,
+      "w10": 10.0,
+      "w20": 7.8,
+      "w21": 6.5,
+      "w30": 9.5,
+      "w31": 8.5,
+      "w32": 17.0,
+      "w40": 14.0,
+      "w41": 14.5,
+      "w42": 28.0,
+      "l01": 25.0,
+      "l02": 50.0,
+      "l12": 19.0,
+      "l03": 120.0,
+      "l13": 60.0,
+      "l23": 50.0,
+      "ss": 1.7,
+      "sp": 19.0,
+      "sf": 60.0,
+      "ps": 4.05,
+      "pp": 9.5,
+      "pf": 18.0,
+      "fs": 17.0,
+      "fp": 19.0,
+      "ff": 13.0,
+      "home": "吉达国民",
+      "guest": "穆拜征服",
       "prediction": {
-        "predicted_score": "0-1",
-        "predicted_label": "0-1",
-        "result": "客胜",
-        "display_direction": "客胜",
-        "final_direction": "away",
+        "predicted_score": "2-0",
+        "predicted_label": "2-0",
+        "result": "主胜",
+        "display_direction": "主胜",
+        "final_direction": "home",
         "is_abstain": false,
         "is_score_others": false,
-        "home_win_pct": 28.0,
-        "draw_pct": 32.0,
-        "away_win_pct": 40.0,
-        "confidence": 70,
+        "home_win_pct": 75.0,
+        "draw_pct": 15.0,
+        "away_win_pct": 10.0,
+        "confidence": 85,
         "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
-        "risk_level": "medium",
-        "goal_band": "0-1",
+        "risk_level": "low",
+        "goal_band": "2",
         "btts_ai": "no",
-        "score_shape_reason": "客队稳固防守伺机反击，主队难以得分",
+        "score_shape_reason": "主队主场防守稳固，客队客场场均失球多，零封大胜逻辑成立。",
         "experience_review": [
           {
-            "id": "B_STEAM",
-            "decision": "accepted",
-            "reason": "B_STEAM:accepted because 客赔下降且散户热度不高"
-          },
-          {
-            "id": "G08",
-            "decision": "accepted",
-            "reason": " G08:accepted because 0球赔率极低提示极小球"
-          },
-          {
-            "id": "G10",
-            "decision": "accepted",
-            "reason": " G10:accepted because 0-0赔率低与总进球共振"
-          },
-          {
-            "id": "U10",
+            "id": "D01",
             "decision": "neutral",
-            "reason": " U10:neutral"
+            "reason": "D01: neutral because the low odds reflect a genuine massive class gap"
           },
           {
-            "id": "X03",
-            "decision": "accepted",
-            "reason": " X03:accepted because 1-2球赔率最低，支持经济型比分"
-          },
-          {
-            "id": "D15",
+            "id": "U04",
             "decision": "neutral",
-            "reason": " D15:neutral because 客队实力优势明显"
+            "reason": " U04: neutral because one-sided betting is normal for such a mismatch"
+          },
+          {
+            "id": "X02",
+            "decision": "accepted",
+            "reason": " X02: accepted because strong direction aligns with fundamentals."
           }
         ],
-        "direction_selection_score": 61.3,
-        "score_shape_score": 73.4,
-        "overall_selection_score": 61.3,
+        "direction_selection_score": 100,
+        "score_shape_score": 56.5,
+        "overall_selection_score": 61.0,
         "recommendation_tier": "B",
-        "direction_tier": "B",
-        "score_tier": "A",
+        "direction_tier": "S",
+        "score_tier": "B",
         "model_agreement": {
           "valid_models": [
             "gpt",
@@ -1379,30 +1364,34 @@
             "gemini"
           ],
           "valid_count": 3,
-          "same_score": 2,
+          "same_score": 3,
           "same_direction": 3,
-          "score_agreement": 0.6666666666666666,
+          "score_agreement": 1.0,
           "direction_agreement": 1.0
         },
         "experience_review_coverage": 1.0,
         "experience_review_missing": [],
-        "score_shape_warnings": [],
+        "score_shape_warnings": [
+          "goal_band_conflict:3!=2"
+        ],
         "web_odds_missing_penalty": true,
-        "dir_confidence": 40.0,
-        "dir_gap": 8.0,
-        "scenario": "ai_raw_0_1_goals",
+        "dir_confidence": 75.0,
+        "dir_gap": 60.0,
+        "scenario": "ai_raw_2_goals",
         "goal_range": [
-          0,
-          1
+          1,
+          2
         ],
         "bayesian_evidences": [
           "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-          "最终来源:phase1_exact_consensus:gpt,gemini; final_model=gemini; score=0-1; direction=away",
-          "AI top3:[('0-1', 18.0), ('0-0', 15.0), ('1-1', 12.0)]",
-          "AI direction_probs:{'home': 28.0, 'draw': 32.0, 'away': 40.0} (AI原生direction_probs)",
-          "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"客胜赔率下降，资金倾向客队不败\",\"league_style\":\"南美赛事客场难打，进球偏少\",\"team_style\":\"客队防守反击，主队攻坚能力差\",\"style_score_logic\":\"客队稳固防守伺机反击，主队难以得分\",\"direction_rejection\":\"主队实力和状态均不足以支撑主胜\",\"experience_review\":\"B_STEAM:accepted because 客赔下降且散户热度不高; G08:accepted because 0球赔率极低提示极小球; G10:accepted because 0-0赔率低与总进球共振; U10:neutral; X03:accepted because 1-2球赔率最低，支持经济型比分; D15:neutral because 客队实力优势明显\"}",
+          "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+          "最终来源:phase1_exact_consensus:gpt,grok,gemini; final_model=gemini; score=2-0; direction=home",
+          "AI top3:[('2-0', 18.0), ('3-0', 15.0), ('2-1', 10.0)]",
+          "AI direction_probs:{'home': 75.0, 'draw': 15.0, 'away': 10.0} (AI原生direction_probs)",
+          "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home\",\"sharp_evidence\":\"主胜赔率降水且基本面完全碾压，资金顺应实力差距流动。\",\"league_style\":\"沙职强弱分明，强队主场胜率极高。\",\"team_style\":\"吉达国民控球压制，哈萨征服客场防守漏洞大。\",\"style_score_logic\":\"主队主场防守稳固，客队客场场均失球多，零封大胜逻辑成立。\",\"direction_rejection\":\"客队客场5轮不胜，实力差距悬殊，排除平负。\",\"experience_review\":\"D01: neutral because the low odds reflect a genuine massive class gap; U04: neutral because one-sided betting is normal for such a mismatch; X02: accepted because strong direction aligns with fundamentals.\"}",
           "data_missing:[\"external_european_odds\"]",
-          "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"客赔降-1.00散户仅35%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"G08\",\"name\":\"0球赔率极低信号\",\"reason\":\"0球@6.2\",\"ai_question\":\"0球赔率偏低是否提示极小球/0-0？\"},{\"id\":\"G10\",\"name\":\"CRS 0-0赔率极低\",\"reason\":\"0-0@6.2\",\"ai_question\":\"0-0赔率低是否与总0球低位共振？\"},{\"id\":\"U10\",\"name\":\"赔率剧烈变动\",\"reason\":\"最大变动1.00\",\"ai_question\":\"剧烈变盘是信息/资金驱动还是诱导？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@3.25/2球@2.85，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]"
+          "experience_audit_cards(prompt_only):[{\"id\":\"D01\",\"name\":\"大热必死\",\"reason\":\"主赔1.21极低+主胜受注72%\",\"ai_question\":\"热门低赔是否只是名气盘？是否存在防平/防冷？\"},{\"id\":\"U04\",\"name\":\"受注比例一边倒反向操作\",\"reason\":\"主胜受注72%过热\",\"ai_question\":\"受注一边倒是真共识还是反向操作？\"},{\"id\":\"X02\",\"name\":\"体彩让球强方向受热复核\",\"reason\":\"主方向热度与降水方向信号同向\",\"ai_question\":\"强方向热度与降水同向，需验证是真资金还是顺水？\"}]",
+          "score_shape_warnings:[\"goal_band_conflict:3!=2\"]"
         ],
         "bayesian_prior": {},
         "override_triggered": false,
@@ -1423,61 +1412,62 @@
         "crs_low_rank_info": {},
         "top_score_candidates": [
           [
-            "0-1",
+            "2-0",
             18.0
           ],
           [
-            "0-0",
+            "3-0",
             15.0
           ],
           [
-            "1-1",
-            12.0
+            "2-1",
+            10.0
           ]
         ],
         "unified_matrix_top_scores": [
           [
-            "0-1",
+            "2-0",
             18.0
           ],
           [
-            "0-0",
+            "3-0",
             15.0
           ],
           [
-            "1-1",
-            12.0
+            "2-1",
+            10.0
           ]
         ],
         "unified_goal_probs": {},
         "fair_1x2_pack": {},
         "mixed_target_dir": {},
         "unified_source": "disabled_pure_raw_ai",
-        "decision_source": "phase1_exact_consensus:gpt,gemini",
+        "decision_source": "phase1_exact_consensus:gpt,grok,gemini",
         "ai_authority_mode": "pure_raw_ai",
-        "gpt_score": "0-1",
-        "gpt_analysis": "这是典型的低比分拉扯盘，平赔2.7很低，主客胜赔率也非常接近，但变化为主胜升、客胜降，市场重心更向客队偏移。总进球0球6.2、1球3.25、2球2.85，清楚指向小比分。圣菲独立杯赛进攻效率差、防线又不稳，科林蒂安虽然客场也偏保守，但整体稳定性更高，小组形势更好。平局阻力很大，不过客胜赔率端更主动，优先客队经济型小胜。",
-        "grok_score": "1-2",
-        "grok_analysis": "客队实力碾压+状态5胜2平，0球赔率低提示小球，客胜降水支持",
-        "gemini_score": "0-1",
-        "gemini_analysis": "客队实力明显强于主队，且防守端表现出色。主队进攻乏力。进球数赔率极低，客队有望在沉闷的比赛中带走胜利或平局。",
+        "gpt_score": "2-0",
+        "gpt_analysis": "这场主胜为全天最强基础面之一。1.21主胜与1.7主主形成明显联动，主队排名、主场表现、防守质量都远高于客队。客队客场长期低迷，近期状态也差。虽然主胜受注72%偏热，但降水方向仍继续给到主队，说明并非单纯名气盘。总进球3最合适，客队进球能力弱，BTTS倾向否。",
+        "grok_score": "2-0",
+        "grok_analysis": "主队主场碾压，客队客场5轮不胜，1.21低赔+高受注需防平但方向仍主胜",
+        "gemini_score": "2-0",
+        "gemini_analysis": "吉达国民实力远超对手，且需争夺亚冠资格战意十足。主胜赔率1.21极低，虽然散户热度较高，但属于实力盘的正常体现。客队客场战绩糟糕，难以爆冷。",
         "claude_score": "弃权",
         "claude_analysis": "弃权",
         "ai_abstained": [
           "CLAUDE"
         ],
-        "ai_avg_confidence": 63.0,
+        "ai_avg_confidence": 79.3,
         "value_kill_count": 0,
         "suggested_kelly": 0.0,
         "edge_vs_market": 0.0,
         "is_value": false,
         "ev_note": "disabled_pure_raw_ai_no_local_probability",
         "score_model_prob": 18.0,
-        "score_market_odds": 5.95,
-        "score_market_implied_pct": 16.807,
-        "smart_money_signal": "EXP_G08 0球@6.2",
+        "score_market_odds": 7.8,
+        "score_market_implied_pct": 12.821,
+        "smart_money_signal": "EXP_D01 大热必死 | EXP_U04 主胜超热72%",
         "smart_signals": [
-          "EXP_AUDIT:EXP_G08 0球@6.2"
+          "EXP_AUDIT:EXP_D01 大热必死",
+          "EXP_AUDIT:EXP_U04 主胜超热72%"
         ],
         "cold_door": {
           "is_cold_door": false,
@@ -1491,7 +1481,7 @@
         "xG_away": "?",
         "over_under_2_5": "小",
         "both_score": "否",
-        "expected_total_goals": 1,
+        "expected_total_goals": 2,
         "over_2_5": null,
         "btts": null,
         "bookmaker_implied_home_xg": "?",
@@ -1532,83 +1522,57 @@
         "experience_analysis": {
           "mode": "prompt_only_no_probability_change_no_score_change",
           "enabled": true,
+          "change_is_direction_code": true,
           "triggered": [
             {
-              "id": "B_STEAM",
-              "name": "Steam资金方向",
-              "category": "盘口",
-              "weight": 7,
-              "reason": "客赔降-1.00散户仅35%",
-              "direction": "steam_away",
-              "ai_question": "散户未跟的降水是否更像专业资金？",
+              "id": "D01",
+              "name": "大热必死",
+              "category": "平局",
+              "weight": 8,
+              "reason": "主赔1.21极低+主胜受注72%",
+              "direction": "draw",
+              "ai_question": "热门低赔是否只是名气盘？是否存在防平/防冷？",
               "mode": "advisory_only_no_local_decision"
             },
             {
-              "id": "G08",
-              "name": "0球赔率极低信号",
-              "category": "大小球",
-              "weight": 7,
-              "reason": "0球@6.2",
-              "direction": "under",
-              "ai_question": "0球赔率偏低是否提示极小球/0-0？",
+              "id": "U04",
+              "name": "受注比例一边倒反向操作",
+              "category": "冷门",
+              "weight": 8,
+              "reason": "主胜受注72%过热",
+              "direction": "upset_away",
+              "ai_question": "受注一边倒是真共识还是反向操作？",
               "mode": "advisory_only_no_local_decision"
             },
             {
-              "id": "G10",
-              "name": "CRS 0-0赔率极低",
-              "category": "大小球",
-              "weight": 7,
-              "reason": "0-0@6.2",
-              "direction": "zero_zero",
-              "ai_question": "0-0赔率低是否与总0球低位共振？",
-              "mode": "advisory_only_no_local_decision"
-            },
-            {
-              "id": "U10",
-              "name": "赔率剧烈变动",
-              "category": "盘口",
-              "weight": 7,
-              "reason": "最大变动1.00",
-              "direction": "audit",
-              "ai_question": "剧烈变盘是信息/资金驱动还是诱导？",
-              "mode": "advisory_only_no_local_decision"
-            },
-            {
-              "id": "X03",
-              "name": "方向与总进球/BTTS一致性复核",
+              "id": "X02",
+              "name": "体彩让球强方向受热复核",
               "category": "二次升级",
               "weight": 6,
-              "reason": "1球@3.25/2球@2.85，需审计经济型赢球与BTTS",
-              "direction": "audit_goal_shape",
-              "ai_question": "最终比分必须与总进球和BTTS一致。",
-              "mode": "advisory_only_no_local_decision"
-            },
-            {
-              "id": "D15",
-              "name": "杯赛首轮易平",
-              "category": "平局",
-              "weight": 5,
-              "reason": "杯赛/淘汰赛属性",
-              "direction": "draw",
-              "ai_question": "杯赛/首回合是否保守？",
+              "reason": "主方向热度与降水方向信号同向",
+              "direction": "audit_hot_drop",
+              "ai_question": "强方向热度与降水同向，需验证是真资金还是顺水？",
               "mode": "advisory_only_no_local_decision"
             }
           ],
-          "triggered_count": 6,
-          "total_score": 39,
+          "triggered_count": 3,
+          "total_score": 22,
           "risk_signals": [
-            "EXP_G08 0球@6.2"
+            "EXP_D01 大热必死",
+            "EXP_U04 主胜超热72%"
           ],
           "recommendation": "存在经验审计卡：AI需逐条回应"
         },
         "pro_odds": {},
         "asian_handicap_probs": {},
         "top_scores": [],
-        "engine_version": "vMAX 18.4.8",
-        "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
-        "validation_warnings": []
+        "engine_version": "vMAX 18.4.9",
+        "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+        "validation_warnings": [
+          "goal_band_auto_fixed:3->2"
+        ]
       },
-      "recommend_score": 64.5,
+      "recommend_score": 72.0,
       "is_recommended": true,
       "fusion_summary": "vMAX-Dynamic-Hybrid"
     }
@@ -1758,65 +1722,75 @@
         "home": "阿尔梅勒",
         "guest": "格拉夫",
         "prediction": {
-          "predicted_score": "2-0",
-          "predicted_label": "2-0",
+          "predicted_score": "2-1",
+          "predicted_label": "2-1",
           "result": "主胜",
           "display_direction": "主胜",
           "final_direction": "home",
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 50.0,
-          "draw_pct": 25.0,
-          "away_win_pct": 25.0,
-          "confidence": 60,
+          "home_win_pct": 52.0,
+          "draw_pct": 26.0,
+          "away_win_pct": 22.0,
+          "confidence": 65,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
           "risk_level": "medium",
-          "goal_band": "2",
-          "btts_ai": "no",
-          "score_shape_reason": "text_fallback_parser",
-          "experience_review": [],
-          "direction_selection_score": 67.8,
-          "score_shape_score": 55.4,
-          "overall_selection_score": 59.8,
-          "recommendation_tier": "B",
-          "direction_tier": "B",
-          "score_tier": "C",
+          "goal_band": "3",
+          "btts_ai": "yes",
+          "score_shape_reason": "附加赛战意浓烈，主队主场优势明显，预计能取得进球并控制比赛。",
+          "experience_review": [
+            {
+              "id": "B_STEAM",
+              "decision": "accepted",
+              "reason": "B_STEAM: accepted because home odds dropping with moderate public vote indicates sharp money"
+            },
+            {
+              "id": "D13",
+              "decision": "neutral",
+              "reason": " D13: neutral because home form is significantly better despite close rankings."
+            }
+          ],
+          "direction_selection_score": 75.4,
+          "score_shape_score": 42.8,
+          "overall_selection_score": 46.2,
+          "recommendation_tier": "C",
+          "direction_tier": "A",
+          "score_tier": "D",
           "model_agreement": {
             "valid_models": [
               "gpt",
               "grok",
-              "gemini",
-              "claude"
+              "gemini"
             ],
-            "valid_count": 4,
+            "valid_count": 3,
             "same_score": 2,
-            "same_direction": 4,
-            "score_agreement": 0.5,
+            "same_direction": 3,
+            "score_agreement": 0.6666666666666666,
             "direction_agreement": 1.0
           },
-          "experience_review_coverage": 0.0,
-          "experience_review_missing": [
-            "B_STEAM",
-            "U10",
-            "D13"
+          "experience_review_coverage": 1.0,
+          "experience_review_missing": [],
+          "score_shape_warnings": [
+            "goal_band_conflict:2!=3"
           ],
-          "score_shape_warnings": [],
-          "web_odds_missing_penalty": false,
-          "dir_confidence": 50.0,
-          "dir_gap": 25.0,
-          "scenario": "ai_raw_2_goals",
+          "web_odds_missing_penalty": true,
+          "dir_confidence": 52.0,
+          "dir_gap": 26.0,
+          "scenario": "ai_raw_3_goals",
           "goal_range": [
-            1,
-            2
+            2,
+            3
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-            "最终来源:claude_pure_authority; final_model=claude; score=2-0; direction=home",
-            "AI top3:[('2-0', 0.0)]",
-            "AI direction_probs:{'home': 50.0, 'draw': 25.0, 'away': 25.0} (top3_direction_share_fallback)",
-            "data_missing:[\"json_format_missing_text_fallback\"]",
-            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"主赔降-1.00散户仅45%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"U10\",\"name\":\"赔率剧烈变动\",\"reason\":\"最大变动1.00\",\"ai_question\":\"剧烈变盘是信息/资金驱动还是诱导？\"},{\"id\":\"D13\",\"name\":\"攻防数据接近必防平\",\"reason\":\"排名接近5vs4\",\"ai_question\":\"攻防接近是否支持平局或低比分？\"}]",
-            "experience_review_missing:[\"B_STEAM\",\"U10\",\"D13\"]"
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+            "最终来源:phase1_exact_consensus:grok,gemini; final_model=gemini; score=2-1; direction=home",
+            "AI top3:[('2-1', 15.0), ('1-1', 12.0), ('2-0', 10.0)]",
+            "AI direction_probs:{'home': 52.0, 'draw': 26.0, 'away': 22.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home\",\"sharp_evidence\":\"主胜赔率降水且散户投票率仅为45%，资金流向主队迹象明显。\",\"league_style\":\"荷乙通常注重进攻，但附加赛阶段可能相对谨慎。\",\"team_style\":\"主队攻守平衡，客队客场防守存在隐患。\",\"style_score_logic\":\"附加赛战意浓烈，主队主场优势明显，预计能取得进球并控制比赛。\",\"direction_rejection\":\"客胜赔率升水且客队近期客场表现不佳，排除客胜。\",\"experience_review\":\"B_STEAM: accepted because home odds dropping with moderate public vote indicates sharp money; D13: neutral because home form is significantly better despite close rankings.\"}",
+            "data_missing:[\"external_european_odds\"]",
+            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"主赔降水方向信号，散户仅45%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"D13\",\"name\":\"攻防数据接近必防平\",\"reason\":\"排名接近5vs4\",\"ai_question\":\"攻防接近是否支持平局或低比分？\"}]",
+            "score_shape_warnings:[\"goal_band_conflict:2!=3\"]"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -1837,40 +1811,58 @@
           "crs_low_rank_info": {},
           "top_score_candidates": [
             [
+              "2-1",
+              15.0
+            ],
+            [
+              "1-1",
+              12.0
+            ],
+            [
               "2-0",
-              0.0
+              10.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
+              "2-1",
+              15.0
+            ],
+            [
+              "1-1",
+              12.0
+            ],
+            [
               "2-0",
-              0.0
+              10.0
             ]
           ],
           "unified_goal_probs": {},
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "disabled_pure_raw_ai",
-          "decision_source": "claude_pure_authority",
+          "decision_source": "phase1_exact_consensus:grok,gemini",
           "ai_authority_mode": "pure_raw_ai",
           "gpt_score": "2-0",
-          "gpt_analysis": "竞彩主胜1.97在接近盘面里已给主队明确优势，且变动为主胜降、客胜升，说明资金面更偏向主队。散户主胜45%不算极热，降水未被完全跟随，更像偏理性资金流入。基本面上主队近况和主场走势优于客队，客队客场近3场不胜且锋线伤缺。总进球3球最低、2球次低，比赛更像中低比分的主队占优局，平局有防范但首选主胜。",
+          "gpt_analysis": "体彩抓包显示主胜端处于真实主导位，且变动方向为主降客升，和散户45%并未极热形成错位，更像主队得到相对实质支持。阿尔梅勒近况与主场表现优于客队，格拉夫客场近况波动且锋线核心伤停，对附加赛这种强对抗场景影响更大。总进球盘面明显集中在2-3球，不支持纯大开大合，优先考虑主队控制局面的经济型赢球。平局仍需防，但首选主胜。",
           "grok_score": "2-1",
-          "grok_analysis": "主队近5主场优势明显，客队客场起伏，散户45%未跟降水偏专业",
+          "grok_analysis": "主队近期6胜1平状态佳，主胜降水信号明确，附加赛战意高但客队客场疲软",
           "gemini_score": "2-1",
-          "gemini_analysis": "主队近期状态优于客队，且主场表现稳健。机构下调主胜赔率，结合较高的总进球预期，看好主队在对攻中取胜。",
-          "claude_score": "2-0",
-          "claude_analysis": "1.0，总进球数分布显示0球概率最高。\n\n我注意到三个AI模型的预测有分歧：GPT预测2-0主胜，而Grok和Gemini都预测2-1主胜，后者的进球数为3。关键在于总进球数分布中3球的概率（",
-          "ai_abstained": [],
-          "ai_avg_confidence": 66.8,
+          "gemini_analysis": "阿尔梅勒近期状态出色且主场战绩稳定，机构主胜降水信号明确，散户热度未过热，符合主力资金顺势推高的逻辑。客队客战能力一般，主队有望在附加赛中占据先机。",
+          "claude_score": "弃权",
+          "claude_analysis": "弃权",
+          "ai_abstained": [
+            "CLAUDE"
+          ],
+          "ai_avg_confidence": 65.7,
           "value_kill_count": 0,
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
           "ev_note": "disabled_pure_raw_ai_no_local_probability",
-          "score_model_prob": 0.0,
-          "score_market_odds": 14.5,
-          "score_market_implied_pct": 6.897,
+          "score_model_prob": 15.0,
+          "score_market_odds": 7.75,
+          "score_market_implied_pct": 12.903,
           "smart_money_signal": "",
           "smart_signals": [],
           "cold_door": {
@@ -1883,9 +1875,9 @@
           },
           "xG_home": "?",
           "xG_away": "?",
-          "over_under_2_5": "小",
-          "both_score": "否",
-          "expected_total_goals": 2,
+          "over_under_2_5": "大",
+          "both_score": "是",
+          "expected_total_goals": 3,
           "over_2_5": null,
           "btts": null,
           "bookmaker_implied_home_xg": "?",
@@ -1896,7 +1888,7 @@
           "shin_dir": null,
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
-          "model_consensus": 4,
+          "model_consensus": 3,
           "total_models": 4,
           "extreme_warning": "",
           "refined_poisson": {},
@@ -1926,25 +1918,16 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": true,
             "triggered": [
               {
                 "id": "B_STEAM",
                 "name": "Steam资金方向",
                 "category": "盘口",
                 "weight": 7,
-                "reason": "主赔降-1.00散户仅45%",
+                "reason": "主赔降水方向信号，散户仅45%",
                 "direction": "steam_home",
                 "ai_question": "散户未跟的降水是否更像专业资金？",
-                "mode": "advisory_only_no_local_decision"
-              },
-              {
-                "id": "U10",
-                "name": "赔率剧烈变动",
-                "category": "盘口",
-                "weight": 7,
-                "reason": "最大变动1.00",
-                "direction": "audit",
-                "ai_question": "剧烈变盘是信息/资金驱动还是诱导？",
                 "mode": "advisory_only_no_local_decision"
               },
               {
@@ -1958,19 +1941,21 @@
                 "mode": "advisory_only_no_local_decision"
               }
             ],
-            "triggered_count": 3,
-            "total_score": 19,
+            "triggered_count": 2,
+            "total_score": 12,
             "risk_signals": [],
             "recommendation": "存在经验审计卡：AI需逐条回应"
           },
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
-          "validation_warnings": []
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "validation_warnings": [
+            "goal_band_auto_fixed:2->3"
+          ]
         },
-        "recommend_score": 63.8,
+        "recommend_score": 50.36,
         "is_recommended": false
       },
       {
@@ -1978,9 +1963,9 @@
         "away_team": "穆拜征服",
         "league": "沙职",
         "match_num": "周三006",
-        "sp_home": 1.23,
-        "sp_draw": 5.25,
-        "sp_away": 8.0,
+        "sp_home": 1.21,
+        "sp_draw": 5.4,
+        "sp_away": 8.5,
         "give_ball": -1.0,
         "change": {
           "win": -1,
@@ -2057,9 +2042,9 @@
           "draws": 6,
           "losses": 3,
           "goals_for": 45,
-          "goals_against": 15,
-          "avg_goals_for": "1.8",
-          "avg_goals_against": "0.59",
+          "goals_against": 14,
+          "avg_goals_for": "1.81",
+          "avg_goals_against": "0.58",
           "clean_sheets": 5,
           "form": "WWDWW"
         },
@@ -2070,8 +2055,8 @@
           "losses": 12,
           "goals_for": 19,
           "goals_against": 39,
-          "avg_goals_for": "0.75",
-          "avg_goals_against": "1.57",
+          "avg_goals_for": "0.74",
+          "avg_goals_against": "1.58",
           "clean_sheets": 2,
           "form": "LLDLL"
         },
@@ -2116,66 +2101,80 @@
         "home": "吉达国民",
         "guest": "穆拜征服",
         "prediction": {
-          "predicted_score": "0-3",
-          "predicted_label": "0-3",
-          "result": "客胜",
-          "display_direction": "客胜",
-          "final_direction": "away",
+          "predicted_score": "2-0",
+          "predicted_label": "2-0",
+          "result": "主胜",
+          "display_direction": "主胜",
+          "final_direction": "home",
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 25.0,
-          "draw_pct": 25.0,
-          "away_win_pct": 50.0,
-          "confidence": 60,
+          "home_win_pct": 75.0,
+          "draw_pct": 15.0,
+          "away_win_pct": 10.0,
+          "confidence": 85,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
-          "risk_level": "medium",
-          "goal_band": "3",
+          "risk_level": "low",
+          "goal_band": "2",
           "btts_ai": "no",
-          "score_shape_reason": "text_fallback_parser",
-          "experience_review": [],
-          "direction_selection_score": 56.8,
-          "score_shape_score": 50.2,
-          "overall_selection_score": 54.2,
-          "recommendation_tier": "C",
-          "direction_tier": "B",
-          "score_tier": "C",
+          "score_shape_reason": "主队主场防守稳固，客队客场场均失球多，零封大胜逻辑成立。",
+          "experience_review": [
+            {
+              "id": "D01",
+              "decision": "neutral",
+              "reason": "D01: neutral because the low odds reflect a genuine massive class gap"
+            },
+            {
+              "id": "U04",
+              "decision": "neutral",
+              "reason": " U04: neutral because one-sided betting is normal for such a mismatch"
+            },
+            {
+              "id": "X02",
+              "decision": "accepted",
+              "reason": " X02: accepted because strong direction aligns with fundamentals."
+            }
+          ],
+          "direction_selection_score": 100,
+          "score_shape_score": 56.5,
+          "overall_selection_score": 61.0,
+          "recommendation_tier": "B",
+          "direction_tier": "S",
+          "score_tier": "B",
           "model_agreement": {
             "valid_models": [
               "gpt",
               "grok",
-              "gemini",
-              "claude"
+              "gemini"
             ],
-            "valid_count": 4,
-            "same_score": 1,
-            "same_direction": 1,
-            "score_agreement": 0.25,
-            "direction_agreement": 0.25
+            "valid_count": 3,
+            "same_score": 3,
+            "same_direction": 3,
+            "score_agreement": 1.0,
+            "direction_agreement": 1.0
           },
-          "experience_review_coverage": 0.0,
-          "experience_review_missing": [
-            "D01",
-            "U04",
-            "U10",
-            "X02"
+          "experience_review_coverage": 1.0,
+          "experience_review_missing": [],
+          "score_shape_warnings": [
+            "goal_band_conflict:3!=2"
           ],
-          "score_shape_warnings": [],
-          "web_odds_missing_penalty": false,
-          "dir_confidence": 50.0,
-          "dir_gap": 25.0,
-          "scenario": "ai_raw_3_goals",
+          "web_odds_missing_penalty": true,
+          "dir_confidence": 75.0,
+          "dir_gap": 60.0,
+          "scenario": "ai_raw_2_goals",
           "goal_range": [
-            2,
-            3
+            1,
+            2
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-            "最终来源:claude_pure_authority; final_model=claude; score=0-3; direction=away",
-            "AI top3:[('0-3', 0.0)]",
-            "AI direction_probs:{'home': 25.0, 'draw': 25.0, 'away': 50.0} (top3_direction_share_fallback)",
-            "data_missing:[\"json_format_missing_text_fallback\"]",
-            "experience_audit_cards(prompt_only):[{\"id\":\"D01\",\"name\":\"大热必死\",\"reason\":\"主赔1.23极低+主胜受注72%\",\"ai_question\":\"热门低赔是否只是名气盘？是否存在防平/防冷？\"},{\"id\":\"U04\",\"name\":\"受注比例一边倒反向操作\",\"reason\":\"主胜受注72%过热\",\"ai_question\":\"受注一边倒是真共识还是反向操作？\"},{\"id\":\"U10\",\"name\":\"赔率剧烈变动\",\"reason\":\"最大变动1.00\",\"ai_question\":\"剧烈变盘是信息/资金驱动还是诱导？\"},{\"id\":\"X02\",\"name\":\"体彩让球强方向受热复核\",\"reason\":\"主方向热度与降水同向\",\"ai_question\":\"强方向热度与降水同向，需验证是真资金还是顺水？\"}]",
-            "experience_review_missing:[\"D01\",\"U04\",\"U10\",\"X02\"]"
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+            "最终来源:phase1_exact_consensus:gpt,grok,gemini; final_model=gemini; score=2-0; direction=home",
+            "AI top3:[('2-0', 18.0), ('3-0', 15.0), ('2-1', 10.0)]",
+            "AI direction_probs:{'home': 75.0, 'draw': 15.0, 'away': 10.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home\",\"sharp_evidence\":\"主胜赔率降水且基本面完全碾压，资金顺应实力差距流动。\",\"league_style\":\"沙职强弱分明，强队主场胜率极高。\",\"team_style\":\"吉达国民控球压制，哈萨征服客场防守漏洞大。\",\"style_score_logic\":\"主队主场防守稳固，客队客场场均失球多，零封大胜逻辑成立。\",\"direction_rejection\":\"客队客场5轮不胜，实力差距悬殊，排除平负。\",\"experience_review\":\"D01: neutral because the low odds reflect a genuine massive class gap; U04: neutral because one-sided betting is normal for such a mismatch; X02: accepted because strong direction aligns with fundamentals.\"}",
+            "data_missing:[\"external_european_odds\"]",
+            "experience_audit_cards(prompt_only):[{\"id\":\"D01\",\"name\":\"大热必死\",\"reason\":\"主赔1.21极低+主胜受注72%\",\"ai_question\":\"热门低赔是否只是名气盘？是否存在防平/防冷？\"},{\"id\":\"U04\",\"name\":\"受注比例一边倒反向操作\",\"reason\":\"主胜受注72%过热\",\"ai_question\":\"受注一边倒是真共识还是反向操作？\"},{\"id\":\"X02\",\"name\":\"体彩让球强方向受热复核\",\"reason\":\"主方向热度与降水方向信号同向\",\"ai_question\":\"强方向热度与降水同向，需验证是真资金还是顺水？\"}]",
+            "score_shape_warnings:[\"goal_band_conflict:3!=2\"]"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -2196,40 +2195,58 @@
           "crs_low_rank_info": {},
           "top_score_candidates": [
             [
-              "0-3",
-              0.0
+              "2-0",
+              18.0
+            ],
+            [
+              "3-0",
+              15.0
+            ],
+            [
+              "2-1",
+              10.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
-              "0-3",
-              0.0
+              "2-0",
+              18.0
+            ],
+            [
+              "3-0",
+              15.0
+            ],
+            [
+              "2-1",
+              10.0
             ]
           ],
           "unified_goal_probs": {},
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "disabled_pure_raw_ai",
-          "decision_source": "claude_pure_authority",
+          "decision_source": "phase1_exact_consensus:gpt,grok,gemini",
           "ai_authority_mode": "pure_raw_ai",
           "gpt_score": "2-0",
-          "gpt_analysis": "主胜1.23属于强势低赔，且主胜继续降水、客胜升水，市场方向与基本面一致。主队排名、攻防、状态全面压制，客队近况差且客场疲弱。半全场主主1.7极低，说明主队从上半场就占主导。总进球3球最低，4球也不高，倾向主队2到3球输出而客队难形成持续威胁。虽然热门且受注72%偏热，但让球热度并未极端失控，仍以主胜为正解。",
+          "gpt_analysis": "这场主胜为全天最强基础面之一。1.21主胜与1.7主主形成明显联动，主队排名、主场表现、防守质量都远高于客队。客队客场长期低迷，近期状态也差。虽然主胜受注72%偏热，但降水方向仍继续给到主队，说明并非单纯名气盘。总进球3最合适，客队进球能力弱，BTTS倾向否。",
           "grok_score": "2-0",
-          "grok_analysis": "主队主场碾压，客队客场5轮不胜，72%受注过热但方向明确",
-          "gemini_score": "2-1",
-          "gemini_analysis": "主客队实力差距悬殊，主队主场战绩极佳且战意浓烈，客队客场表现低迷。极低的主胜赔率反映了实力的巨大鸿沟。",
-          "claude_score": "0-3",
-          "claude_analysis": "2、0-3都符合赔率，但考虑到3球最热且客队强势，0-3最符合整体结构。\n\n不过让球主胜的高热度也支持1-2的可能性。我倾向于0-3。\n\n第7场，2球(",
-          "ai_abstained": [],
-          "ai_avg_confidence": 76.2,
+          "grok_analysis": "主队主场碾压，客队客场5轮不胜，1.21低赔+高受注需防平但方向仍主胜",
+          "gemini_score": "2-0",
+          "gemini_analysis": "吉达国民实力远超对手，且需争夺亚冠资格战意十足。主胜赔率1.21极低，虽然散户热度较高，但属于实力盘的正常体现。客队客场战绩糟糕，难以爆冷。",
+          "claude_score": "弃权",
+          "claude_analysis": "弃权",
+          "ai_abstained": [
+            "CLAUDE"
+          ],
+          "ai_avg_confidence": 79.3,
           "value_kill_count": 0,
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
           "ev_note": "disabled_pure_raw_ai_no_local_probability",
-          "score_model_prob": 0.0,
-          "score_market_odds": 120.0,
-          "score_market_implied_pct": 0.833,
+          "score_model_prob": 18.0,
+          "score_market_odds": 7.8,
+          "score_market_implied_pct": 12.821,
           "smart_money_signal": "EXP_D01 大热必死 | EXP_U04 主胜超热72%",
           "smart_signals": [
             "EXP_AUDIT:EXP_D01 大热必死",
@@ -2245,9 +2262,9 @@
           },
           "xG_home": "?",
           "xG_away": "?",
-          "over_under_2_5": "大",
+          "over_under_2_5": "小",
           "both_score": "否",
-          "expected_total_goals": 3,
+          "expected_total_goals": 2,
           "over_2_5": null,
           "btts": null,
           "bookmaker_implied_home_xg": "?",
@@ -2258,7 +2275,7 @@
           "shin_dir": null,
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
-          "model_consensus": 4,
+          "model_consensus": 3,
           "total_models": 4,
           "extreme_warning": "",
           "refined_poisson": {},
@@ -2288,13 +2305,14 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": true,
             "triggered": [
               {
                 "id": "D01",
                 "name": "大热必死",
                 "category": "平局",
                 "weight": 8,
-                "reason": "主赔1.23极低+主胜受注72%",
+                "reason": "主赔1.21极低+主胜受注72%",
                 "direction": "draw",
                 "ai_question": "热门低赔是否只是名气盘？是否存在防平/防冷？",
                 "mode": "advisory_only_no_local_decision"
@@ -2310,28 +2328,18 @@
                 "mode": "advisory_only_no_local_decision"
               },
               {
-                "id": "U10",
-                "name": "赔率剧烈变动",
-                "category": "盘口",
-                "weight": 7,
-                "reason": "最大变动1.00",
-                "direction": "audit",
-                "ai_question": "剧烈变盘是信息/资金驱动还是诱导？",
-                "mode": "advisory_only_no_local_decision"
-              },
-              {
                 "id": "X02",
                 "name": "体彩让球强方向受热复核",
                 "category": "二次升级",
                 "weight": 6,
-                "reason": "主方向热度与降水同向",
+                "reason": "主方向热度与降水方向信号同向",
                 "direction": "audit_hot_drop",
                 "ai_question": "强方向热度与降水同向，需验证是真资金还是顺水？",
                 "mode": "advisory_only_no_local_decision"
               }
             ],
-            "triggered_count": 4,
-            "total_score": 29,
+            "triggered_count": 3,
+            "total_score": 22,
             "risk_signals": [
               "EXP_D01 大热必死",
               "EXP_U04 主胜超热72%"
@@ -2341,12 +2349,14 @@
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
-          "validation_warnings": []
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "validation_warnings": [
+            "goal_band_auto_fixed:3->2"
+          ]
         },
-        "recommend_score": 58.2,
-        "is_recommended": false
+        "recommend_score": 72.0,
+        "is_recommended": true
       },
       {
         "home_team": "拜仁",
@@ -2414,8 +2424,8 @@
           "l23": 22.0,
           "ss": 2.08,
           "sp": 15.0,
-          "sf": 25.0,
-          "ps": 5.2,
+          "sf": 23.0,
+          "ps": 5.3,
           "pp": 10.5,
           "pf": 11.5,
           "fs": 14.0,
@@ -2481,8 +2491,8 @@
         "l23": 22.0,
         "ss": 2.08,
         "sp": 15.0,
-        "sf": 25.0,
-        "ps": 5.2,
+        "sf": 23.0,
+        "ps": 5.3,
         "pp": 10.5,
         "pf": 11.5,
         "fs": 14.0,
@@ -2491,65 +2501,72 @@
         "home": "拜仁",
         "guest": "巴黎圣曼",
         "prediction": {
-          "predicted_score": "2-0",
-          "predicted_label": "2-0",
+          "predicted_score": "3-2",
+          "predicted_label": "3-2",
           "result": "主胜",
           "display_direction": "主胜",
           "final_direction": "home",
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 50.0,
-          "draw_pct": 25.0,
-          "away_win_pct": 25.0,
-          "confidence": 60,
+          "home_win_pct": 48.0,
+          "draw_pct": 22.0,
+          "away_win_pct": 30.0,
+          "confidence": 63,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
-          "risk_level": "medium",
-          "goal_band": "2",
-          "btts_ai": "no",
-          "score_shape_reason": "text_fallback_parser",
-          "experience_review": [],
-          "direction_selection_score": 67.8,
-          "score_shape_score": 51.4,
-          "overall_selection_score": 55.5,
-          "recommendation_tier": "C",
-          "direction_tier": "B",
-          "score_tier": "C",
+          "risk_level": "high",
+          "goal_band": "4+",
+          "btts_ai": "yes",
+          "score_shape_reason": "总进球3、4、5区间都低，考虑次回合战术拉升，优先4+与双方进球，主胜比分以3-2、2-1领先。",
+          "experience_review": [
+            {
+              "id": "B_STEAM",
+              "decision": "accepted",
+              "reason": "B_STEAM:accepted because 客赔降水且受注仅23%，确有专业资金偏客的审计信号，但只作为抬高风险而非改判"
+            },
+            {
+              "id": "D13",
+              "decision": "rejected",
+              "reason": " D13:rejected because 双方名义接近，但次回合总比分背景和进攻强度不支持典型低比分平局。"
+            }
+          ],
+          "direction_selection_score": 71.4,
+          "score_shape_score": 73.5,
+          "overall_selection_score": 71.4,
+          "recommendation_tier": "A",
+          "direction_tier": "A",
+          "score_tier": "A",
           "model_agreement": {
             "valid_models": [
               "gpt",
               "grok",
-              "gemini",
-              "claude"
+              "gemini"
             ],
-            "valid_count": 4,
-            "same_score": 1,
-            "same_direction": 4,
-            "score_agreement": 0.25,
+            "valid_count": 3,
+            "same_score": 2,
+            "same_direction": 3,
+            "score_agreement": 0.6666666666666666,
             "direction_agreement": 1.0
           },
-          "experience_review_coverage": 0.0,
-          "experience_review_missing": [
-            "B_STEAM",
-            "U10",
-            "D13"
-          ],
+          "experience_review_coverage": 1.0,
+          "experience_review_missing": [],
           "score_shape_warnings": [],
-          "web_odds_missing_penalty": false,
-          "dir_confidence": 50.0,
-          "dir_gap": 25.0,
-          "scenario": "ai_raw_2_goals",
+          "web_odds_missing_penalty": true,
+          "dir_confidence": 48.0,
+          "dir_gap": 18.0,
+          "scenario": "ai_raw_5_goals",
           "goal_range": [
-            1,
-            2
+            4,
+            5
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-            "最终来源:claude_pure_authority; final_model=claude; score=2-0; direction=home",
-            "AI top3:[('2-0', 0.0)]",
-            "AI direction_probs:{'home': 50.0, 'draw': 25.0, 'away': 25.0} (top3_direction_share_fallback)",
-            "data_missing:[\"json_format_missing_text_fallback\"]",
-            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"客赔降-1.00散户仅23%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"U10\",\"name\":\"赔率剧烈变动\",\"reason\":\"最大变动1.00\",\"ai_question\":\"剧烈变盘是信息/资金驱动还是诱导？\"},{\"id\":\"D13\",\"name\":\"攻防数据接近必防平\",\"reason\":\"排名接近1vs1\",\"ai_question\":\"攻防接近是否支持平局或低比分？\"}]",
-            "experience_review_missing:[\"B_STEAM\",\"U10\",\"D13\"]"
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+            "最终来源:phase1_exact_consensus:gpt,grok; final_model=gpt; score=3-2; direction=home",
+            "AI top3:[('3-2', 15.0), ('2-1', 14.0), ('2-2', 11.0)]",
+            "AI direction_probs:{'home': 48.0, 'draw': 22.0, 'away': 30.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"客胜降水而客胜受注仅23%，存在散户未跟随的客队资金信号。\",\"league_style\":\"欧冠半决赛次回合在总比分牵引下，比赛节奏 often 分阶段拉高。\",\"team_style\":\"拜仁必须主动压迫，巴黎更适合反击偷身后，互相都具备高质量进攻输出。\",\"style_score_logic\":\"总进球3、4、5区间都低，考虑次回合战术拉升，优先4+与双方进球，主胜比分以3-2、2-1领先。\",\"direction_rejection\":\"未选away为首选，因为主胜静态赔率仍更强且拜仁主场必须冲击；未选draw为首选，因为战术环境不利于长期均衡。\",\"experience_review\":\"B_STEAM:accepted because 客赔降水且受注仅23%，确有专业资金偏客的审计信号，但只作为抬高风险而非改判; D13:rejected because 双方名义接近，但次回合总比分背景和进攻强度不支持典型低比分平局。\"}",
+            "data_missing:[\"external_european_odds\"]",
+            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"客赔降水方向信号，散户仅23%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"D13\",\"name\":\"攻防数据接近必防平\",\"reason\":\"排名接近1vs1\",\"ai_question\":\"攻防接近是否支持平局或低比分？\"}]"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -2570,40 +2587,58 @@
           "crs_low_rank_info": {},
           "top_score_candidates": [
             [
-              "2-0",
-              0.0
+              "3-2",
+              15.0
+            ],
+            [
+              "2-1",
+              14.0
+            ],
+            [
+              "2-2",
+              11.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
-              "2-0",
-              0.0
+              "3-2",
+              15.0
+            ],
+            [
+              "2-1",
+              14.0
+            ],
+            [
+              "2-2",
+              11.0
             ]
           ],
           "unified_goal_probs": {},
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "disabled_pure_raw_ai",
-          "decision_source": "claude_pure_authority",
+          "decision_source": "phase1_exact_consensus:gpt,grok",
           "ai_authority_mode": "pure_raw_ai",
-          "gpt_score": "2-1",
-          "gpt_analysis": "虽然抓包变化显示主胜升水、客胜降水，对巴黎有一定资金拉力，但竞彩原始1X2仍给拜仁1.50主胜主导地位。次回合拜仁必须取胜，战术上更主动，半全场主主2.08依旧很强。总进球4球与3球都处低位，明显不是保守小球框架，BTTS应偏是。巴黎有反击能力与市场资金支持，因此不宜看成拜仁轻松零封，但主场强攻与晋级压力综合后，仍倾向主胜。",
+          "gpt_score": "3-2",
+          "gpt_analysis": "虽然抓包变动显示主胜升水、客胜降水，说明客队方向有一定资金承接，但静态1X2仍是主胜占优，且拜仁回主场必须主动出击，战术上不会保守。首回合5比4本身已说明对攻属性，双方近期欧战攻击端都很强。巴黎手握优势可打反击，拜仁则必须压上，因此BTTS与4+球更值得顺配。方向上主胜仍略优，但风险高。",
           "grok_score": "3-2",
-          "grok_analysis": "拜仁主场必须取胜翻盘，巴黎客场优势但伤病，升水主胜支持进攻",
+          "grok_analysis": "拜仁主场必须取胜翻盘，巴黎客场对攻但伤病多，升水主胜信号",
           "gemini_score": "2-1",
-          "gemini_analysis": "主队首回合落后，次回合回到主场必须全力争胜。双方进攻火力均属欧洲顶级，预计将是一场进球大战，主队凭借主场之利更有希望拿下比赛。",
-          "claude_score": "2-0",
-          "claude_analysis": "3.45)次热，主队排名更高且赔率更低。2-0和2-1都合理，但考虑到客队还有进攻能力，2-1更可能。\n\n第8场还没看完。\n\n维拉对诺丁汉，主队排名5，客队排名16。虽然客胜降水但受注只有19%，这可能反映了专业资金的判断。2球最热但3球也接近，2-1主胜最合理。\n\n第9场，米拉索尔对基多体大，主队排名18但近期状态好（WWDWW），客队排名6。主队赔率",
-          "ai_abstained": [],
-          "ai_avg_confidence": 63.5,
+          "gemini_analysis": "拜仁首回合落后，次回合回到主场必须全力进攻取胜。虽然客胜赔率降水，但拜仁主场战力极强，且巴黎有关键防守球员缺阵。预计拜仁能赢下比赛，但巴黎的反击会制造威胁，进球数不会少。",
+          "claude_score": "弃权",
+          "claude_analysis": "弃权",
+          "ai_abstained": [
+            "CLAUDE"
+          ],
+          "ai_avg_confidence": 60.3,
           "value_kill_count": 0,
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
           "ev_note": "disabled_pure_raw_ai_no_local_probability",
-          "score_model_prob": 0.0,
-          "score_market_odds": 17.0,
-          "score_market_implied_pct": 5.882,
+          "score_model_prob": 15.0,
+          "score_market_odds": 12.0,
+          "score_market_implied_pct": 8.333,
           "smart_money_signal": "",
           "smart_signals": [],
           "cold_door": {
@@ -2616,9 +2651,9 @@
           },
           "xG_home": "?",
           "xG_away": "?",
-          "over_under_2_5": "小",
-          "both_score": "否",
-          "expected_total_goals": 2,
+          "over_under_2_5": "大",
+          "both_score": "是",
+          "expected_total_goals": 5,
           "over_2_5": null,
           "btts": null,
           "bookmaker_implied_home_xg": "?",
@@ -2629,7 +2664,7 @@
           "shin_dir": null,
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
-          "model_consensus": 4,
+          "model_consensus": 3,
           "total_models": 4,
           "extreme_warning": "",
           "refined_poisson": {},
@@ -2659,25 +2694,16 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": true,
             "triggered": [
               {
                 "id": "B_STEAM",
                 "name": "Steam资金方向",
                 "category": "盘口",
                 "weight": 7,
-                "reason": "客赔降-1.00散户仅23%",
+                "reason": "客赔降水方向信号，散户仅23%",
                 "direction": "steam_away",
                 "ai_question": "散户未跟的降水是否更像专业资金？",
-                "mode": "advisory_only_no_local_decision"
-              },
-              {
-                "id": "U10",
-                "name": "赔率剧烈变动",
-                "category": "盘口",
-                "weight": 7,
-                "reason": "最大变动1.00",
-                "direction": "audit",
-                "ai_question": "剧烈变盘是信息/资金驱动还是诱导？",
                 "mode": "advisory_only_no_local_decision"
               },
               {
@@ -2691,19 +2717,19 @@
                 "mode": "advisory_only_no_local_decision"
               }
             ],
-            "triggered_count": 3,
-            "total_score": 19,
+            "triggered_count": 2,
+            "total_score": 12,
             "risk_signals": [],
             "recommendation": "存在经验审计卡：AI需逐条回应"
           },
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
           "validation_warnings": []
         },
-        "recommend_score": 59.5,
+        "recommend_score": 67.24,
         "is_recommended": false
       },
       {
@@ -2771,14 +2797,14 @@
           "l13": 29.0,
           "l23": 45.0,
           "ss": 3.85,
-          "sp": 14.0,
+          "sp": 14.5,
           "sf": 34.0,
-          "ps": 5.0,
-          "pp": 4.1,
-          "pf": 6.6,
+          "ps": 4.8,
+          "pp": 4.0,
+          "pf": 6.8,
           "fs": 30.0,
-          "fp": 14.0,
-          "ff": 5.2
+          "fp": 14.5,
+          "ff": 5.3
         },
         "id": 4,
         "date": "2026-05-06",
@@ -2838,14 +2864,14 @@
         "l13": 29.0,
         "l23": 45.0,
         "ss": 3.85,
-        "sp": 14.0,
+        "sp": 14.5,
         "sf": 34.0,
-        "ps": 5.0,
-        "pp": 4.1,
-        "pf": 6.6,
+        "ps": 4.8,
+        "pp": 4.0,
+        "pf": 6.8,
         "fs": 30.0,
-        "fp": 14.0,
-        "ff": 5.2,
+        "fp": 14.5,
+        "ff": 5.3,
         "home": "里独立",
         "guest": "弗鲁米嫩",
         "prediction": {
@@ -2857,57 +2883,47 @@
           "is_abstain": false,
           "is_score_others": false,
           "home_win_pct": 48.0,
-          "draw_pct": 30.0,
-          "away_win_pct": 22.0,
-          "confidence": 75,
+          "draw_pct": 32.0,
+          "away_win_pct": 20.0,
+          "confidence": 70,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
           "risk_level": "medium",
-          "goal_band": "2",
+          "goal_band": "0-1",
           "btts_ai": "no",
-          "score_shape_reason": "主队控制节奏，客队难以破门",
+          "score_shape_reason": "极低的总进球赔率限制了比分上限，1-0和0-0是核心选择。",
           "experience_review": [
             {
               "id": "B_STEAM",
               "decision": "accepted",
-              "reason": "B_STEAM:accepted because 主赔下降符合专业资金动向"
+              "reason": "B_STEAM: accepted"
             },
             {
               "id": "G08",
               "decision": "accepted",
-              "reason": " G08:accepted because 0球赔率极低提示小球属性"
+              "reason": " G08: accepted because 0 goals at 7.8 is a strong signal for a tight match"
             },
             {
               "id": "G10",
               "decision": "accepted",
-              "reason": " G10:accepted because 0-0赔率低与总进球共振"
-            },
-            {
-              "id": "U10",
-              "decision": "neutral",
-              "reason": " U10:neutral"
+              "reason": " G10: accepted"
             },
             {
               "id": "X03",
               "decision": "accepted",
-              "reason": " X03:accepted because 1-2球赔率最低，支持经济型比分"
+              "reason": " X03: accepted"
             },
             {
               "id": "D13",
               "decision": "neutral",
-              "reason": " D13:neutral"
-            },
-            {
-              "id": "D15",
-              "decision": "neutral",
-              "reason": " D15:neutral because 主队状态明显占优"
+              "reason": " D13/D15: neutral because home form is dominant."
             }
           ],
-          "direction_selection_score": 64.4,
-          "score_shape_score": 38.2,
-          "overall_selection_score": 41.3,
-          "recommendation_tier": "D",
+          "direction_selection_score": 66.8,
+          "score_shape_score": 78.5,
+          "overall_selection_score": 66.8,
+          "recommendation_tier": "B",
           "direction_tier": "B",
-          "score_tier": "D",
+          "score_tier": "S",
           "model_agreement": {
             "valid_models": [
               "gpt",
@@ -2915,19 +2931,19 @@
               "gemini"
             ],
             "valid_count": 3,
-            "same_score": 1,
-            "same_direction": 2,
-            "score_agreement": 0.3333333333333333,
-            "direction_agreement": 0.6666666666666666
+            "same_score": 3,
+            "same_direction": 3,
+            "score_agreement": 1.0,
+            "direction_agreement": 1.0
           },
-          "experience_review_coverage": 1.0,
-          "experience_review_missing": [],
-          "score_shape_warnings": [
-            "goal_band_conflict:2!=0-1"
+          "experience_review_coverage": 0.833,
+          "experience_review_missing": [
+            "D15"
           ],
+          "score_shape_warnings": [],
           "web_odds_missing_penalty": true,
           "dir_confidence": 48.0,
-          "dir_gap": 18.0,
+          "dir_gap": 16.0,
           "scenario": "ai_raw_0_1_goals",
           "goal_range": [
             0,
@@ -2935,13 +2951,14 @@
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-            "最终来源:phase1_best_confidence:gemini; final_model=gemini; score=1-0; direction=home",
-            "AI top3:[('1-0', 18.0), ('2-0', 15.0), ('1-1', 12.0)]",
-            "AI direction_probs:{'home': 48.0, 'draw': 30.0, 'away': 22.0} (AI原生direction_probs)",
-            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home\",\"sharp_evidence\":\"主胜赔率下降且散户热度适中，主力资金看好主队\",\"league_style\":\"南美赛事主场优势大，对抗激烈\",\"team_style\":\"主队防守稳固，客队客场进攻乏力\",\"style_score_logic\":\"主队控制节奏，客队难以破门\",\"direction_rejection\":\"客队客场战绩差且有落后必败属性，排除客胜\",\"experience_review\":\"B_STEAM:accepted because 主赔下降符合专业资金动向; G08:accepted because 0球赔率极低提示小球属性; G10:accepted because 0-0赔率低与总进球共振; U10:neutral; X03:accepted because 1-2球赔率最低，支持经济型比分; D13:neutral; D15:neutral because 主队状态明显占优\"}",
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+            "最终来源:phase1_exact_consensus:gpt,grok,gemini; final_model=gemini; score=1-0; direction=home",
+            "AI top3:[('1-0', 18.0), ('0-0', 15.0), ('2-0', 12.0)]",
+            "AI direction_probs:{'home': 48.0, 'draw': 32.0, 'away': 20.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home_or_draw\",\"sharp_evidence\":\"主胜降水且0球赔率极低，指向主队不败且比分极小。\",\"league_style\":\"解放者杯主场优势大，但强队客场往往采取保守策略。\",\"team_style\":\"主队防守稳固，客队客场进攻乏力。\",\"style_score_logic\":\"极低的总进球赔率限制了比分上限，1-0和0-0是核心选择。\",\"direction_rejection\":\"客队客场状态低迷，难以在魔鬼主场取胜，排除客胜。\",\"experience_review\":\"B_STEAM: accepted; G08: accepted because 0 goals at 7.8 is a strong signal for a tight match; G10: accepted; X03: accepted; D13/D15: neutral because home form is dominant.\"}",
             "data_missing:[\"external_european_odds\"]",
-            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"主赔降-1.00散户仅43%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"G08\",\"name\":\"0球赔率极低信号\",\"reason\":\"0球@7.8\",\"ai_question\":\"0球赔率偏低是否提示极小球/0-0？\"},{\"id\":\"G10\",\"name\":\"CRS 0-0赔率极低\",\"reason\":\"0-0@7.8\",\"ai_question\":\"0-0赔率低是否与总0球低位共振？\"},{\"id\":\"U10\",\"name\":\"赔率剧烈变动\",\"reason\":\"最大变动1.00\",\"ai_question\":\"剧烈变盘是信息/资金驱动还是诱导？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@3.7/2球@3.05，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D13\",\"name\":\"攻防数据接近必防平\",\"reason\":\"排名接近1vs3\",\"ai_question\":\"攻防接近是否支持平局或低比分？\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]",
-            "score_shape_warnings:[\"goal_band_conflict:2!=0-1\"]"
+            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"主赔降水方向信号，散户仅43%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"G08\",\"name\":\"0球赔率极低信号\",\"reason\":\"0球@7.8\",\"ai_question\":\"0球赔率偏低是否提示极小球/0-0？\"},{\"id\":\"G10\",\"name\":\"CRS 0-0赔率极低\",\"reason\":\"0-0@7.8\",\"ai_question\":\"0-0赔率低是否与总0球低位共振？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@3.7/2球@3.05，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D13\",\"name\":\"攻防数据接近必防平\",\"reason\":\"排名接近1vs3\",\"ai_question\":\"攻防接近是否支持平局或低比分？\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]",
+            "experience_review_missing:[\"D15\"]"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -2966,11 +2983,11 @@
               18.0
             ],
             [
-              "2-0",
+              "0-0",
               15.0
             ],
             [
-              "1-1",
+              "2-0",
               12.0
             ]
           ],
@@ -2980,11 +2997,11 @@
               18.0
             ],
             [
-              "2-0",
+              "0-0",
               15.0
             ],
             [
-              "1-1",
+              "2-0",
               12.0
             ]
           ],
@@ -2992,14 +3009,14 @@
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "disabled_pure_raw_ai",
-          "decision_source": "phase1_best_confidence:gemini",
+          "decision_source": "phase1_exact_consensus:gpt,grok,gemini",
           "ai_authority_mode": "pure_raw_ai",
-          "gpt_score": "0-0",
-          "gpt_analysis": "这场赔率结构对低比分的提示非常强：0球7.8、1球3.7、2球3.05，且平平4.1明显压低，说明平局尤其低比分平局有明显市场防范。虽然主胜2.09并伴随降水，且主队近况、主场、小组形势都更好，但竞彩并未把主胜打到明显强势区，反而在总进球端持续压低小比分。杯赛小组赛关键轮，主队有守住优势的动机，客队也不敢轻易大开。综合看，平局略优先于主胜。",
-          "grok_score": "2-1",
-          "grok_analysis": "主队状态8胜2平，客队客场疲软，0球赔率低提示小球但主场进攻",
+          "gpt_score": "1-0",
+          "gpt_analysis": "这场盘面最鲜明的特征不是强主，而是极强的小球压缩。总0球7.8、1球3.7、2球3.05都处在很低位置，说明比赛更可能落在0-2球。主胜2.09为轻优势，配合主胜降水、主队状态火热、客队客场疲软，主队方向略优。但由于平局赔不高且0-0信号强，不能高看穿盘，最佳理解是主队小胜或闷平。",
+          "grok_score": "1-0",
+          "grok_analysis": "主队状态火热主场全胜，客队客场疲软，0球赔率低提示经济型小胜",
           "gemini_score": "1-0",
-          "gemini_analysis": "主队近期状态火热且主场全胜，客队客场表现低迷。进球数赔率极低，预示比赛场面胶着，主队有望凭借主场优势小胜。",
+          "gemini_analysis": "主队小组领跑且主场全胜，客队垫底且客场疲软。主胜降水且散户热度不高，资金支持主队。但0球和1球赔率极低，预示比赛可能非常沉闷，主队小胜或闷平是大概率事件。",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
           "ai_abstained": [
@@ -3071,13 +3088,14 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": true,
             "triggered": [
               {
                 "id": "B_STEAM",
                 "name": "Steam资金方向",
                 "category": "盘口",
                 "weight": 7,
-                "reason": "主赔降-1.00散户仅43%",
+                "reason": "主赔降水方向信号，散户仅43%",
                 "direction": "steam_home",
                 "ai_question": "散户未跟的降水是否更像专业资金？",
                 "mode": "advisory_only_no_local_decision"
@@ -3100,16 +3118,6 @@
                 "reason": "0-0@7.8",
                 "direction": "zero_zero",
                 "ai_question": "0-0赔率低是否与总0球低位共振？",
-                "mode": "advisory_only_no_local_decision"
-              },
-              {
-                "id": "U10",
-                "name": "赔率剧烈变动",
-                "category": "盘口",
-                "weight": 7,
-                "reason": "最大变动1.00",
-                "direction": "audit",
-                "ai_question": "剧烈变盘是信息/资金驱动还是诱导？",
                 "mode": "advisory_only_no_local_decision"
               },
               {
@@ -3143,8 +3151,8 @@
                 "mode": "advisory_only_no_local_decision"
               }
             ],
-            "triggered_count": 7,
-            "total_score": 44,
+            "triggered_count": 6,
+            "total_score": 37,
             "risk_signals": [
               "EXP_G08 0球@7.8"
             ],
@@ -3153,11 +3161,11 @@
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
           "validation_warnings": []
         },
-        "recommend_score": 45.14,
+        "recommend_score": 70.64,
         "is_recommended": false
       },
       {
@@ -3303,59 +3311,54 @@
         "home": "圣菲独立",
         "guest": "科林蒂安",
         "prediction": {
-          "predicted_score": "0-1",
-          "predicted_label": "0-1",
-          "result": "客胜",
-          "display_direction": "客胜",
-          "final_direction": "away",
+          "predicted_score": "0-0",
+          "predicted_label": "0-0",
+          "result": "平局",
+          "display_direction": "平局",
+          "final_direction": "draw",
           "is_abstain": false,
           "is_score_others": false,
           "home_win_pct": 28.0,
-          "draw_pct": 32.0,
-          "away_win_pct": 40.0,
-          "confidence": 70,
+          "draw_pct": 38.0,
+          "away_win_pct": 34.0,
+          "confidence": 65,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
           "risk_level": "medium",
           "goal_band": "0-1",
           "btts_ai": "no",
-          "score_shape_reason": "客队稳固防守伺机反击，主队难以得分",
+          "score_shape_reason": "进球数被极度压低，0-0是最符合赔率结构的赛果。",
           "experience_review": [
             {
               "id": "B_STEAM",
-              "decision": "accepted",
-              "reason": "B_STEAM:accepted because 客赔下降且散户热度不高"
+              "decision": "neutral",
+              "reason": "B_STEAM: neutral"
             },
             {
               "id": "G08",
               "decision": "accepted",
-              "reason": " G08:accepted because 0球赔率极低提示极小球"
+              "reason": " G08: accepted, 0 goals at 6.2 is a massive anomaly pointing to 0-0"
             },
             {
               "id": "G10",
               "decision": "accepted",
-              "reason": " G10:accepted because 0-0赔率低与总进球共振"
-            },
-            {
-              "id": "U10",
-              "decision": "neutral",
-              "reason": " U10:neutral"
+              "reason": " G10: accepted"
             },
             {
               "id": "X03",
               "decision": "accepted",
-              "reason": " X03:accepted because 1-2球赔率最低，支持经济型比分"
+              "reason": " X03: accepted"
             },
             {
               "id": "D15",
-              "decision": "neutral",
-              "reason": " D15:neutral because 客队实力优势明显"
+              "decision": "accepted",
+              "reason": " D15: accepted."
             }
           ],
-          "direction_selection_score": 61.3,
-          "score_shape_score": 73.4,
-          "overall_selection_score": 61.3,
-          "recommendation_tier": "B",
-          "direction_tier": "B",
+          "direction_selection_score": 49.9,
+          "score_shape_score": 68.7,
+          "overall_selection_score": 49.9,
+          "recommendation_tier": "C",
+          "direction_tier": "C",
           "score_tier": "A",
           "model_agreement": {
             "valid_models": [
@@ -3364,17 +3367,17 @@
               "gemini"
             ],
             "valid_count": 3,
-            "same_score": 2,
-            "same_direction": 3,
-            "score_agreement": 0.6666666666666666,
-            "direction_agreement": 1.0
+            "same_score": 1,
+            "same_direction": 1,
+            "score_agreement": 0.3333333333333333,
+            "direction_agreement": 0.3333333333333333
           },
           "experience_review_coverage": 1.0,
           "experience_review_missing": [],
           "score_shape_warnings": [],
           "web_odds_missing_penalty": true,
-          "dir_confidence": 40.0,
-          "dir_gap": 8.0,
+          "dir_confidence": 38.0,
+          "dir_gap": 4.0,
           "scenario": "ai_raw_0_1_goals",
           "goal_range": [
             0,
@@ -3382,12 +3385,13 @@
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-            "最终来源:phase1_exact_consensus:gpt,gemini; final_model=gemini; score=0-1; direction=away",
-            "AI top3:[('0-1', 18.0), ('0-0', 15.0), ('1-1', 12.0)]",
-            "AI direction_probs:{'home': 28.0, 'draw': 32.0, 'away': 40.0} (AI原生direction_probs)",
-            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"客胜赔率下降，资金倾向客队不败\",\"league_style\":\"南美赛事客场难打，进球偏少\",\"team_style\":\"客队防守反击，主队攻坚能力差\",\"style_score_logic\":\"客队稳固防守伺机反击，主队难以得分\",\"direction_rejection\":\"主队实力和状态均不足以支撑主胜\",\"experience_review\":\"B_STEAM:accepted because 客赔下降且散户热度不高; G08:accepted because 0球赔率极低提示极小球; G10:accepted because 0-0赔率低与总进球共振; U10:neutral; X03:accepted because 1-2球赔率最低，支持经济型比分; D15:neutral because 客队实力优势明显\"}",
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+            "最终来源:phase1_best_confidence:gemini; final_model=gemini; score=0-0; direction=draw",
+            "AI top3:[('0-0', 20.0), ('0-1', 18.0), ('1-1', 12.0)]",
+            "AI direction_probs:{'home': 28.0, 'draw': 38.0, 'away': 34.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"draw\",\"sharp_evidence\":\"0球赔率极低，平局赔率适中，资金在防范小比分平局。\",\"league_style\":\"解放者杯小组赛末段，出线无忧的球队客场常出工不出力。\",\"team_style\":\"主队进攻极差，客队防守极好且客场保守。\",\"style_score_logic\":\"进球数被极度压低，0-0是最符合赔率结构的赛果。\",\"direction_rejection\":\"主队实力太弱难以取胜，客队战意不足可能不愿全力进攻，平局最优。\",\"experience_review\":\"B_STEAM: neutral; G08: accepted, 0 goals at 6.2 is a massive anomaly pointing to 0-0; G10: accepted; X03: accepted; D15: accepted.\"}",
             "data_missing:[\"external_european_odds\"]",
-            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"客赔降-1.00散户仅35%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"G08\",\"name\":\"0球赔率极低信号\",\"reason\":\"0球@6.2\",\"ai_question\":\"0球赔率偏低是否提示极小球/0-0？\"},{\"id\":\"G10\",\"name\":\"CRS 0-0赔率极低\",\"reason\":\"0-0@6.2\",\"ai_question\":\"0-0赔率低是否与总0球低位共振？\"},{\"id\":\"U10\",\"name\":\"赔率剧烈变动\",\"reason\":\"最大变动1.00\",\"ai_question\":\"剧烈变盘是信息/资金驱动还是诱导？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@3.25/2球@2.85，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]"
+            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"客赔降水方向信号，散户仅35%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"G08\",\"name\":\"0球赔率极低信号\",\"reason\":\"0球@6.2\",\"ai_question\":\"0球赔率偏低是否提示极小球/0-0？\"},{\"id\":\"G10\",\"name\":\"CRS 0-0赔率极低\",\"reason\":\"0-0@6.2\",\"ai_question\":\"0-0赔率低是否与总0球低位共振？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@3.25/2球@2.85，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -3408,12 +3412,12 @@
           "crs_low_rank_info": {},
           "top_score_candidates": [
             [
-              "0-1",
-              18.0
+              "0-0",
+              20.0
             ],
             [
-              "0-0",
-              15.0
+              "0-1",
+              18.0
             ],
             [
               "1-1",
@@ -3422,12 +3426,12 @@
           ],
           "unified_matrix_top_scores": [
             [
-              "0-1",
-              18.0
+              "0-0",
+              20.0
             ],
             [
-              "0-0",
-              15.0
+              "0-1",
+              18.0
             ],
             [
               "1-1",
@@ -3438,28 +3442,28 @@
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "disabled_pure_raw_ai",
-          "decision_source": "phase1_exact_consensus:gpt,gemini",
+          "decision_source": "phase1_best_confidence:gemini",
           "ai_authority_mode": "pure_raw_ai",
           "gpt_score": "0-1",
-          "gpt_analysis": "这是典型的低比分拉扯盘，平赔2.7很低，主客胜赔率也非常接近，但变化为主胜升、客胜降，市场重心更向客队偏移。总进球0球6.2、1球3.25、2球2.85，清楚指向小比分。圣菲独立杯赛进攻效率差、防线又不稳，科林蒂安虽然客场也偏保守，但整体稳定性更高，小组形势更好。平局阻力很大，不过客胜赔率端更主动，优先客队经济型小胜。",
+          "gpt_analysis": "这场是典型低比分摇摆盘。胜平负三项接近，但客胜2.5略占先手，且主胜升水、平赔降向、客胜降水，说明市场更偏客队不败，其中客胜略优。总进球结构极度压低在0-2球，特别是0球与1球信号很强，配合客队近况更稳、防守更好，最合理是客队一球小胜。平局仍然很强，需要重点防。",
           "grok_score": "1-2",
-          "grok_analysis": "客队实力碾压+状态5胜2平，0球赔率低提示小球，客胜降水支持",
-          "gemini_score": "0-1",
-          "gemini_analysis": "客队实力明显强于主队，且防守端表现出色。主队进攻乏力。进球数赔率极低，客队有望在沉闷的比赛中带走胜利或平局。",
+          "grok_analysis": "客队实力碾压+防守强，0球低赔提示小球，客胜降水信号",
+          "gemini_score": "0-0",
+          "gemini_analysis": "客队实力碾压但已基本出线，战意可能不如急需抢分的主队。0球赔率6.2异常低，暗示机构极度防范没有进球的赛果。结合主队进攻乏力和客队防守稳固，闷平是最合理的预期。",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
           "ai_abstained": [
             "CLAUDE"
           ],
-          "ai_avg_confidence": 63.0,
+          "ai_avg_confidence": 62.0,
           "value_kill_count": 0,
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
           "ev_note": "disabled_pure_raw_ai_no_local_probability",
-          "score_model_prob": 18.0,
-          "score_market_odds": 5.95,
-          "score_market_implied_pct": 16.807,
+          "score_model_prob": 20.0,
+          "score_market_odds": 6.2,
+          "score_market_implied_pct": 16.129,
           "smart_money_signal": "EXP_G08 0球@6.2",
           "smart_signals": [
             "EXP_AUDIT:EXP_G08 0球@6.2"
@@ -3476,7 +3480,7 @@
           "xG_away": "?",
           "over_under_2_5": "小",
           "both_score": "否",
-          "expected_total_goals": 1,
+          "expected_total_goals": 0,
           "over_2_5": null,
           "btts": null,
           "bookmaker_implied_home_xg": "?",
@@ -3517,13 +3521,14 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": true,
             "triggered": [
               {
                 "id": "B_STEAM",
                 "name": "Steam资金方向",
                 "category": "盘口",
                 "weight": 7,
-                "reason": "客赔降-1.00散户仅35%",
+                "reason": "客赔降水方向信号，散户仅35%",
                 "direction": "steam_away",
                 "ai_question": "散户未跟的降水是否更像专业资金？",
                 "mode": "advisory_only_no_local_decision"
@@ -3549,16 +3554,6 @@
                 "mode": "advisory_only_no_local_decision"
               },
               {
-                "id": "U10",
-                "name": "赔率剧烈变动",
-                "category": "盘口",
-                "weight": 7,
-                "reason": "最大变动1.00",
-                "direction": "audit",
-                "ai_question": "剧烈变盘是信息/资金驱动还是诱导？",
-                "mode": "advisory_only_no_local_decision"
-              },
-              {
                 "id": "X03",
                 "name": "方向与总进球/BTTS一致性复核",
                 "category": "二次升级",
@@ -3579,8 +3574,8 @@
                 "mode": "advisory_only_no_local_decision"
               }
             ],
-            "triggered_count": 6,
-            "total_score": 39,
+            "triggered_count": 5,
+            "total_score": 32,
             "risk_signals": [
               "EXP_G08 0球@6.2"
             ],
@@ -3589,12 +3584,12 @@
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
           "validation_warnings": []
         },
-        "recommend_score": 64.5,
-        "is_recommended": true
+        "recommend_score": 52.94,
+        "is_recommended": false
       },
       {
         "home_team": "利雅青年",
@@ -3743,32 +3738,32 @@
           "is_abstain": false,
           "is_score_others": false,
           "home_win_pct": 10.0,
-          "draw_pct": 16.0,
-          "away_win_pct": 74.0,
-          "confidence": 86,
+          "draw_pct": 14.0,
+          "away_win_pct": 76.0,
+          "confidence": 85,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
           "risk_level": "medium",
           "goal_band": "2",
           "btts_ai": "no",
-          "score_shape_reason": "客队强势但主队进攻弱，0-2/0-3最合拍，BTTS偏否；若比赛后程松动再向1-2扩散。",
+          "score_shape_reason": "总进球3附近，强弱差明显，优先0-2和0-3，BTTS偏否。",
           "experience_review": [
             {
               "id": "D01",
               "decision": "rejected",
-              "reason": "D01:rejected because 这是实力面与赔率面同步的真实强盘，不是单纯名气盘"
+              "reason": "D01:rejected because 超低客赔背后有充分实力与战意支撑，不是单纯名气热"
             },
             {
               "id": "U04",
               "decision": "neutral",
-              "reason": " U04:neutral because 客胜受注74%虽热，但并未看到赔率端明显反向示警。"
+              "reason": " U04:neutral because 客胜受注74%确实过热，但在这种强弱结构下更像真共识而非强反做。"
             }
           ],
           "direction_selection_score": 100,
-          "score_shape_score": 78.2,
-          "overall_selection_score": 84.5,
-          "recommendation_tier": "S",
+          "score_shape_score": 53.4,
+          "overall_selection_score": 57.7,
+          "recommendation_tier": "B",
           "direction_tier": "S",
-          "score_tier": "S",
+          "score_tier": "C",
           "model_agreement": {
             "valid_models": [
               "gpt",
@@ -3776,17 +3771,19 @@
               "gemini"
             ],
             "valid_count": 3,
-            "same_score": 1,
+            "same_score": 2,
             "same_direction": 3,
-            "score_agreement": 0.3333333333333333,
+            "score_agreement": 0.6666666666666666,
             "direction_agreement": 1.0
           },
           "experience_review_coverage": 1.0,
           "experience_review_missing": [],
-          "score_shape_warnings": [],
+          "score_shape_warnings": [
+            "goal_band_conflict:3!=2"
+          ],
           "web_odds_missing_penalty": true,
-          "dir_confidence": 74.0,
-          "dir_gap": 58.0,
+          "dir_confidence": 76.0,
+          "dir_gap": 62.0,
           "scenario": "ai_raw_2_goals",
           "goal_range": [
             1,
@@ -3794,12 +3791,14 @@
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-            "最终来源:phase1_best_confidence:gpt; final_model=gpt; score=0-2; direction=away",
-            "AI top3:[('0-2', 19.0), ('0-3', 16.0), ('1-2', 10.0)]",
-            "AI direction_probs:{'home': 10.0, 'draw': 16.0, 'away': 74.0} (AI原生direction_probs)",
-            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"赔率平稳但客胜定在1.2极低位，属于持续强支持，不需要额外降水也能维持客队强势。\",\"league_style\":\"沙职强队打弱旅时常出现单边压制，且高位球队争冠动力明确。\",\"team_style\":\"利雅胜利前场压制力强，利雅青年抗压与回追都偏弱。\",\"style_score_logic\":\"客队强势但主队进攻弱，0-2/0-3最合拍，BTTS偏否；若比赛后程松动再向1-2扩散。\",\"direction_rejection\":\"未选平局和主胜，因为赔率级别与双方攻防落差都不支持正常冷门主线。\",\"experience_review\":\"D01:rejected because 这是实力面与赔率面同步的真实强盘，不是单纯名气盘； U04:neutral because 客胜受注74%虽热，但并未看到赔率端明显反向示警。\"}",
-            "data_missing:[\"external_european_odds\"]",
-            "experience_audit_cards(prompt_only):[{\"id\":\"D01\",\"name\":\"大热必死\",\"reason\":\"客赔1.2极低+客胜受注74%\",\"ai_question\":\"热门低赔是否只是名气盘？是否存在防平/防冷？\"},{\"id\":\"U04\",\"name\":\"受注比例一边倒反向操作\",\"reason\":\"客胜受注74%过热\",\"ai_question\":\"受注一边倒是真共识还是反向操作？\"}]"
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+            "最终来源:phase1_exact_consensus:gpt,grok; final_model=gpt; score=0-2; direction=away",
+            "AI top3:[('0-2', 21.0), ('0-3', 18.0), ('1-3', 12.0)]",
+            "AI direction_probs:{'home': 10.0, 'draw': 14.0, 'away': 76.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"静态客胜1.2和负负1.57已是极强压制，虽缺少变动细节，但市场共识明确偏客。\",\"league_style\":\"沙职头部强队打下游时，常靠个人能力与持续压制解决比赛。\",\"team_style\":\"主队防守崩塌且反击效率有限，客队更擅长高位压迫和前场终结。\",\"style_score_logic\":\"总进球3附近，强弱差明显，优先0-2和0-3，BTTS偏否。\",\"direction_rejection\":\"未选draw/home，因赔率层级、状态层级和交锋层级全部不支持。\",\"experience_review\":\"D01:rejected because 超低客赔背后有充分实力与战意支撑，不是单纯名气热; U04:neutral because 客胜受注74%确实过热，但在这种强弱结构下更像真共识而非强反做。\"}",
+            "data_missing:[\"external_european_odds\",\"odds_movement_detail_missing\"]",
+            "experience_audit_cards(prompt_only):[{\"id\":\"D01\",\"name\":\"大热必死\",\"reason\":\"客赔1.2极低+客胜受注74%\",\"ai_question\":\"热门低赔是否只是名气盘？是否存在防平/防冷？\"},{\"id\":\"U04\",\"name\":\"受注比例一边倒反向操作\",\"reason\":\"客胜受注74%过热\",\"ai_question\":\"受注一边倒是真共识还是反向操作？\"}]",
+            "score_shape_warnings:[\"goal_band_conflict:3!=2\"]"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -3821,55 +3820,55 @@
           "top_score_candidates": [
             [
               "0-2",
-              19.0
+              21.0
             ],
             [
               "0-3",
-              16.0
+              18.0
             ],
             [
-              "1-2",
-              10.0
+              "1-3",
+              12.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
               "0-2",
-              19.0
+              21.0
             ],
             [
               "0-3",
-              16.0
+              18.0
             ],
             [
-              "1-2",
-              10.0
+              "1-3",
+              12.0
             ]
           ],
           "unified_goal_probs": {},
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "disabled_pure_raw_ai",
-          "decision_source": "phase1_best_confidence:gpt",
+          "decision_source": "phase1_exact_consensus:gpt,grok",
           "ai_authority_mode": "pure_raw_ai",
           "gpt_score": "0-2",
-          "gpt_analysis": "客胜1.20属于极强盘，且负负1.57远低于其他半全场，说明客队从开局到全场都更可能控制比赛。主队排名13、进攻均值0.72、防守均值失1.6，近期还遭1比5惨败；客队排名第1、攻防两端都是碾压级别。虽然客胜受注74%偏热，但在这类强弱分明对阵中并不构成反向充分条件。总进球3球最低、4球次低，客队2到3球获胜最符合赔率与基本面。",
-          "grok_score": "0-3",
-          "grok_analysis": "客队争冠战意+主队6场未胜丢13球，74%受注过热但实力差距",
+          "gpt_analysis": "这场基础面极度倾向利雅胜利。客胜1.2、负负1.57、客队排名和状态全面碾压，主队近况糟糕且防线连续失守。没有变动信息可强化冷门思路，现有抓包已经足够支撑客胜。总进球盘面偏向3球附近，客队净胜2球最合理。让球盘给到主队受让2球也说明常规胜平负层面客队优势极大。",
+          "grok_score": "0-2",
+          "grok_analysis": "客队实力碾压+争冠反弹，主队近6场未胜，1.2低赔热盘但方向明确",
           "gemini_score": "1-2",
-          "gemini_analysis": "客队实力远超主队，且急需胜利反弹。主队近期防线崩盘，难以抵挡客队猛攻。极低的客胜赔率反映了比赛的悬殊程度。",
+          "gemini_analysis": "利雅得胜利实力完全碾压主队，且急需反弹巩固榜首。主队近期防线崩盘，难以抵挡客队攻势。客胜1.2的赔率反映了真实的实力差距，客胜无悬念。",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
           "ai_abstained": [
             "CLAUDE"
           ],
-          "ai_avg_confidence": 82.0,
+          "ai_avg_confidence": 82.3,
           "value_kill_count": 0,
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
           "ev_note": "disabled_pure_raw_ai_no_local_probability",
-          "score_model_prob": 19.0,
+          "score_model_prob": 21.0,
           "score_market_odds": 8.0,
           "score_market_implied_pct": 12.5,
           "smart_money_signal": "EXP_D01 大热必死 | EXP_U04 客胜超热74%",
@@ -3930,6 +3929,7 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": false,
             "triggered": [
               {
                 "id": "D01",
@@ -3963,12 +3963,14 @@
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
-          "validation_warnings": []
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "validation_warnings": [
+            "goal_band_auto_fixed:3->2"
+          ]
         },
-        "recommend_score": 90.42,
-        "is_recommended": true
+        "recommend_score": 63.78,
+        "is_recommended": false
       },
       {
         "home_team": "弗赖堡",
@@ -4109,64 +4111,75 @@
         "home": "弗赖堡",
         "guest": "布拉加",
         "prediction": {
-          "predicted_score": "1-0",
-          "predicted_label": "1-0",
+          "predicted_score": "2-1",
+          "predicted_label": "2-1",
           "result": "主胜",
           "display_direction": "主胜",
           "final_direction": "home",
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 50.0,
-          "draw_pct": 25.0,
-          "away_win_pct": 25.0,
-          "confidence": 60,
+          "home_win_pct": 57.0,
+          "draw_pct": 24.0,
+          "away_win_pct": 19.0,
+          "confidence": 71,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
           "risk_level": "medium",
-          "goal_band": "0-1",
-          "btts_ai": "no",
-          "score_shape_reason": "text_fallback_parser",
-          "experience_review": [],
-          "direction_selection_score": 69.8,
-          "score_shape_score": 52.6,
-          "overall_selection_score": 56.8,
-          "recommendation_tier": "B",
-          "direction_tier": "A",
+          "goal_band": "3",
+          "btts_ai": "yes",
+          "score_shape_reason": "2球和3球赔率较低，主队赢球优先考虑2-1或1-0，BTTS略偏是因为主队近期防线不稳。",
+          "experience_review": [
+            {
+              "id": "X03",
+              "decision": "accepted",
+              "reason": "X03:accepted because 2-1与2球/3球区间及BTTS是相容的"
+            },
+            {
+              "id": "D13",
+              "decision": "neutral",
+              "reason": " D13:neutral because 排名接近带来一定平局防范，但次回合形势使主胜主动性更高。"
+            }
+          ],
+          "direction_selection_score": 82.3,
+          "score_shape_score": 50.8,
+          "overall_selection_score": 54.9,
+          "recommendation_tier": "C",
+          "direction_tier": "S",
           "score_tier": "C",
           "model_agreement": {
             "valid_models": [
               "gpt",
               "grok",
-              "gemini",
-              "claude"
+              "gemini"
             ],
-            "valid_count": 4,
-            "same_score": 1,
-            "same_direction": 4,
-            "score_agreement": 0.25,
+            "valid_count": 3,
+            "same_score": 3,
+            "same_direction": 3,
+            "score_agreement": 1.0,
             "direction_agreement": 1.0
           },
-          "experience_review_coverage": 0.0,
-          "experience_review_missing": [
-            "X03",
-            "D13"
+          "experience_review_coverage": 1.0,
+          "experience_review_missing": [],
+          "score_shape_warnings": [
+            "goal_band_conflict:2!=3"
           ],
-          "score_shape_warnings": [],
-          "web_odds_missing_penalty": false,
-          "dir_confidence": 50.0,
-          "dir_gap": 25.0,
-          "scenario": "ai_raw_0_1_goals",
+          "web_odds_missing_penalty": true,
+          "dir_confidence": 57.0,
+          "dir_gap": 33.0,
+          "scenario": "ai_raw_3_goals",
           "goal_range": [
-            0,
-            1
+            2,
+            3
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-            "最终来源:claude_pure_authority; final_model=claude; score=1-0; direction=home",
-            "AI top3:[('1-0', 0.0)]",
-            "AI direction_probs:{'home': 50.0, 'draw': 25.0, 'away': 25.0} (top3_direction_share_fallback)",
-            "data_missing:[\"json_format_missing_text_fallback\"]",
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+            "最终来源:phase1_exact_consensus:gpt,grok,gemini; final_model=gpt; score=2-1; direction=home",
+            "AI top3:[('2-1', 17.0), ('1-0', 14.0), ('2-0', 13.0)]",
+            "AI direction_probs:{'home': 57.0, 'draw': 24.0, 'away': 19.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home\",\"sharp_evidence\":\"静态主胜处于清晰低位，且文字信息提到主胜指数下调，支持主胜方向。\",\"league_style\":\"欧联淘汰赛次回合会受首回合比分牵引，主队落后时主动性更强。\",\"team_style\":\"弗赖堡需压上争胜，布拉加可能低位防反，但伤病影响其转换质量。\",\"style_score_logic\":\"2球和3球赔率较低，主队赢球优先考虑2-1或1-0，BTTS略偏是因为主队近期防线不稳。\",\"direction_rejection\":\"未选draw，因为主队必须争胜且客队伤病过多；未选away，因为静态赔率和次回合态势都不利。\",\"experience_review\":\"X03:accepted because 2-1与2球/3球区间及BTTS是相容的; D13:neutral because 排名接近带来一定平局防范，但次回合形势使主胜主动性更高。\"}",
+            "data_missing:[\"external_european_odds\",\"odds_movement_detail_missing\"]",
             "experience_audit_cards(prompt_only):[{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@4.5/2球@3.3，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D13\",\"name\":\"攻防数据接近必防平\",\"reason\":\"排名接近7vs4\",\"ai_question\":\"攻防接近是否支持平局或低比分？\"}]",
-            "experience_review_missing:[\"X03\",\"D13\"]"
+            "score_shape_warnings:[\"goal_band_conflict:2!=3\"]"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -4187,38 +4200,56 @@
           "crs_low_rank_info": {},
           "top_score_candidates": [
             [
+              "2-1",
+              17.0
+            ],
+            [
               "1-0",
-              0.0
+              14.0
+            ],
+            [
+              "2-0",
+              13.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
+              "2-1",
+              17.0
+            ],
+            [
               "1-0",
-              0.0
+              14.0
+            ],
+            [
+              "2-0",
+              13.0
             ]
           ],
           "unified_goal_probs": {},
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "disabled_pure_raw_ai",
-          "decision_source": "claude_pure_authority",
+          "decision_source": "phase1_exact_consensus:gpt,grok,gemini",
           "ai_authority_mode": "pure_raw_ai",
           "gpt_score": "2-1",
-          "gpt_analysis": "主胜1.62在欧战淘汰赛里已属明确支持，且主队具备次回合必须争胜的战术动机。总进球2球和3球位置最强，说明比赛最常见落点是经济型逆转区间。布拉加伤病较重，尤其对中前场与边路组织影响明显，客队若想守住优势可能被持续压制。弗赖堡近期状态不稳是风险点，所以平局不能完全放弃，但主场与赛制驱动下仍优先主胜。",
+          "gpt_analysis": "弗赖堡基础赔率优势明确，且次回合必须争胜，主场动力很足。布拉加虽然首回合领先，但伤病名单过长，尤其对阵容平衡影响明显。总进球结构集中在2-3球，适合主队在中等总球区间内完成逆转。由于弗赖堡近期连续失球，BTTS不能完全排除，因此2-1略优于1-0。",
           "grok_score": "2-1",
-          "grok_analysis": "弗赖堡主场欧战强势，布拉加7人伤缺，1.62主胜支持",
-          "gemini_score": "2-0",
-          "gemini_analysis": "主队首回合落后，次回合必须取胜。客队遭遇严重伤病潮，多名主力缺阵，防线隐患极大。主队有望借主场之利逆转。",
-          "claude_score": "1-0",
-          "claude_analysis": "7 vs 7)但赔率给了客胜降水，专业资金看好客队反击。我倾向于客队小胜1-0或平局0-0，goal_band=0-1。\n\n对于第6场，客胜赔率",
-          "ai_abstained": [],
-          "ai_avg_confidence": 65.2,
+          "grok_analysis": "主队主场欧战6胜必须取胜，客队7人伤缺，方向主胜",
+          "gemini_score": "2-1",
+          "gemini_analysis": "弗赖堡首回合落后，回到强势主场必须取胜。布拉加遭遇严重伤病危机，多名主力缺阵导致防线不稳。机构下调主胜赔率，支持弗赖堡主场赢球。",
+          "claude_score": "弃权",
+          "claude_analysis": "弃权",
+          "ai_abstained": [
+            "CLAUDE"
+          ],
+          "ai_avg_confidence": 65.7,
           "value_kill_count": 0,
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
           "ev_note": "disabled_pure_raw_ai_no_local_probability",
-          "score_model_prob": 0.0,
+          "score_model_prob": 17.0,
           "score_market_odds": 6.5,
           "score_market_implied_pct": 15.385,
           "smart_money_signal": "",
@@ -4233,9 +4264,9 @@
           },
           "xG_home": "?",
           "xG_away": "?",
-          "over_under_2_5": "小",
-          "both_score": "否",
-          "expected_total_goals": 1,
+          "over_under_2_5": "大",
+          "both_score": "是",
+          "expected_total_goals": 3,
           "over_2_5": null,
           "btts": null,
           "bookmaker_implied_home_xg": "?",
@@ -4246,7 +4277,7 @@
           "shin_dir": null,
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
-          "model_consensus": 4,
+          "model_consensus": 3,
           "total_models": 4,
           "extreme_warning": "",
           "refined_poisson": {},
@@ -4276,6 +4307,7 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": false,
             "triggered": [
               {
                 "id": "X03",
@@ -4306,11 +4338,13 @@
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
-          "validation_warnings": []
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "validation_warnings": [
+            "goal_band_auto_fixed:2->3"
+          ]
         },
-        "recommend_score": 60.8,
+        "recommend_score": 59.46,
         "is_recommended": false
       },
       {
@@ -4463,35 +4497,30 @@
           "final_direction": "home",
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 51.0,
-          "draw_pct": 25.0,
-          "away_win_pct": 24.0,
-          "confidence": 63,
+          "home_win_pct": 50.0,
+          "draw_pct": 24.0,
+          "away_win_pct": 26.0,
+          "confidence": 62,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
           "risk_level": "high",
           "goal_band": "3",
           "btts_ai": "yes",
-          "score_shape_reason": "2-3球落点最集中，主推2-1既符合主胜又兼容客队反击得手，BTTS偏是。",
+          "score_shape_reason": "总2球和3球最受支持，主胜首选2-1，其次1-0；客队若凭反击得手则更接近BTTS是。",
           "experience_review": [
             {
               "id": "B_STEAM",
               "decision": "accepted",
-              "reason": "B_STEAM:accepted because 客赔下行且客胜仅19%受注，说明有隐藏资金防客"
-            },
-            {
-              "id": "U10",
-              "decision": "neutral",
-              "reason": " U10:neutral because 变盘与赛制因素均可能影响"
+              "reason": "B_STEAM:accepted because 客赔降水且受注仅19%，确有客向资金信号，因此提高风险等级"
             },
             {
               "id": "X03",
               "decision": "accepted",
-              "reason": " X03:accepted because 2-1、2-0、1-1均与总进球2-3球相匹配。"
+              "reason": " X03:accepted because 2-1与2/3球区间及BTTS判断一致。"
             }
           ],
-          "direction_selection_score": 77.9,
-          "score_shape_score": 74.7,
-          "overall_selection_score": 77.9,
+          "direction_selection_score": 76.1,
+          "score_shape_score": 75.0,
+          "overall_selection_score": 76.1,
           "recommendation_tier": "A",
           "direction_tier": "A",
           "score_tier": "A",
@@ -4511,8 +4540,8 @@
           "experience_review_missing": [],
           "score_shape_warnings": [],
           "web_odds_missing_penalty": true,
-          "dir_confidence": 51.0,
-          "dir_gap": 26.0,
+          "dir_confidence": 50.0,
+          "dir_gap": 24.0,
           "scenario": "ai_raw_3_goals",
           "goal_range": [
             2,
@@ -4520,12 +4549,13 @@
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
             "最终来源:phase1_exact_consensus:gpt,grok; final_model=gpt; score=2-1; direction=home",
-            "AI top3:[('2-1', 15.0), ('2-0', 12.0), ('1-1', 11.0)]",
-            "AI direction_probs:{'home': 51.0, 'draw': 25.0, 'away': 24.0} (AI原生direction_probs)",
-            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away_or_draw\",\"sharp_evidence\":\"客赔下降而客胜受注仅19%，存在资金对客队守住结果的防范。\",\"league_style\":\"欧联淘汰赛次回合，落后主队通常提升压迫和射门量，比赛更易出现两端机会。\",\"team_style\":\"维拉主场主动推进，诺丁汉更像低位防反，但伤病影响其前后场连接。\",\"style_score_logic\":\"2-3球落点最集中，主推2-1既符合主胜又兼容客队反击得手，BTTS偏是。\",\"direction_rejection\":\"未选平局，因为静态主胜优势与主队翻盘动力仍在；未选客胜，因为客队人员问题较重且客胜仍是高位项。\",\"experience_review\":\"B_STEAM:accepted because 客赔下行且客胜仅19%受注，说明有隐藏资金防客； U10:neutral because 变盘与赛制因素均可能影响； X03:accepted because 2-1、2-0、1-1均与总进球2-3球相匹配。\"}",
+            "AI top3:[('2-1', 16.0), ('1-0', 14.0), ('1-1', 12.0)]",
+            "AI direction_probs:{'home': 50.0, 'draw': 24.0, 'away': 26.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"客胜降水且客胜受注仅19%，存在非大众资金向客队不败一侧流入的痕迹。\",\"league_style\":\"欧联次回合在总比分压力下，主队落后常主动拉高节奏。\",\"team_style\":\"维拉必须压上，诺丁汉更偏守反，但客队阵容残缺削弱其执行力。\",\"style_score_logic\":\"总2球和3球最受支持，主胜首选2-1，其次1-0；客队若凭反击得手则更接近BTTS是。\",\"direction_rejection\":\"未选away为首选，因为客队伤病过重且客场交锋劣势明显；未选draw为首选，因为维拉战术上不接受平局。\",\"experience_review\":\"B_STEAM:accepted because 客赔降水且受注仅19%，确有客向资金信号，因此提高风险等级; X03:accepted because 2-1与2/3球区间及BTTS判断一致。\"}",
             "data_missing:[\"external_european_odds\"]",
-            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"客赔降-1.00散户仅19%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"U10\",\"name\":\"赔率剧烈变动\",\"reason\":\"最大变动1.00\",\"ai_question\":\"剧烈变盘是信息/资金驱动还是诱导？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@5.0/2球@3.3，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"}]"
+            "experience_audit_cards(prompt_only):[{\"id\":\"B_STEAM\",\"name\":\"Steam资金方向\",\"reason\":\"客赔降水方向信号，散户仅19%\",\"ai_question\":\"散户未跟的降水是否更像专业资金？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@5.0/2球@3.3，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"}]"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -4547,29 +4577,29 @@
           "top_score_candidates": [
             [
               "2-1",
-              15.0
+              16.0
             ],
             [
-              "2-0",
-              12.0
+              "1-0",
+              14.0
             ],
             [
               "1-1",
-              11.0
+              12.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
               "2-1",
-              15.0
+              16.0
             ],
             [
-              "2-0",
-              12.0
+              "1-0",
+              14.0
             ],
             [
               "1-1",
-              11.0
+              12.0
             ]
           ],
           "unified_goal_probs": {},
@@ -4579,23 +4609,23 @@
           "decision_source": "phase1_exact_consensus:gpt,grok",
           "ai_authority_mode": "pure_raw_ai",
           "gpt_score": "2-1",
-          "gpt_analysis": "竞彩静态面仍明显偏主，主胜1.56说明主场维拉赢球是基础预期；但变动为主胜升、客胜降，说明市场对诺丁汉方向有补强，尤其是客队不败路径不能轻视。首回合维拉落后必须前压，次回合战术会更主动，而客队伤病较多，守转攻连续性存疑。总进球2球与3球最热，比赛更像主队赢球但未必轻松，2-1优于2-0。",
+          "gpt_analysis": "这是一个静态主胜、动态略偏客的矛盾盘。1X2静态上维拉主胜明显占先，但变动编码显示主胜升水、客胜降水，说明市场对诺丁汉有承接。结合两回合背景，维拉必须主动进攻，而诺丁汉伤病较重、客场历史对阵又差，最终仍倾向维拉主场赢球，但穿透性和稳定性不足。总进球倾向2-3球，主队赢一球最合适。",
           "grok_score": "2-1",
-          "grok_analysis": "维拉主场对诺丁汉5连胜，客队伤病潮，升水主胜支持",
+          "grok_analysis": "主队主场历史优势+战意，客队伤病满营，升水主胜信号",
           "gemini_score": "2-0",
-          "gemini_analysis": "主队首回合落后，主场战意极强。客队虽然手握优势但遭遇严重伤病潮，核心球员缺阵。主队历史交锋占优，有望主场翻盘。",
+          "gemini_analysis": "维拉首回合落后，主场战意极强且历史交锋占优。诺丁汉森林虽然手握优势但遭遇严重伤病潮，客场难以抵挡维拉的攻势。主胜赔率处于合理区间，看好维拉主场取胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
           "ai_abstained": [
             "CLAUDE"
           ],
-          "ai_avg_confidence": 66.0,
+          "ai_avg_confidence": 63.7,
           "value_kill_count": 0,
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
           "ev_note": "disabled_pure_raw_ai_no_local_probability",
-          "score_model_prob": 15.0,
+          "score_model_prob": 16.0,
           "score_market_odds": 6.5,
           "score_market_implied_pct": 15.385,
           "smart_money_signal": "",
@@ -4653,25 +4683,16 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": true,
             "triggered": [
               {
                 "id": "B_STEAM",
                 "name": "Steam资金方向",
                 "category": "盘口",
                 "weight": 7,
-                "reason": "客赔降-1.00散户仅19%",
+                "reason": "客赔降水方向信号，散户仅19%",
                 "direction": "steam_away",
                 "ai_question": "散户未跟的降水是否更像专业资金？",
-                "mode": "advisory_only_no_local_decision"
-              },
-              {
-                "id": "U10",
-                "name": "赔率剧烈变动",
-                "category": "盘口",
-                "weight": 7,
-                "reason": "最大变动1.00",
-                "direction": "audit",
-                "ai_question": "剧烈变盘是信息/资金驱动还是诱导？",
                 "mode": "advisory_only_no_local_decision"
               },
               {
@@ -4685,19 +4706,19 @@
                 "mode": "advisory_only_no_local_decision"
               }
             ],
-            "triggered_count": 3,
-            "total_score": 20,
+            "triggered_count": 2,
+            "total_score": 13,
             "risk_signals": [],
             "recommendation": "存在经验审计卡：AI需逐条回应"
           },
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
           "validation_warnings": []
         },
-        "recommend_score": 73.98,
+        "recommend_score": 72.1,
         "is_recommended": true
       },
       {
@@ -4846,40 +4867,40 @@
           "final_direction": "home",
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 65.0,
+          "home_win_pct": 63.0,
           "draw_pct": 22.0,
-          "away_win_pct": 13.0,
-          "confidence": 80,
+          "away_win_pct": 15.0,
+          "confidence": 77,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
-          "risk_level": "low",
+          "risk_level": "medium",
           "goal_band": "2",
           "btts_ai": "no",
-          "score_shape_reason": "主队掌控局面，客队难以反扑",
+          "score_shape_reason": "2球、3球区间较热，但客队进攻疲弱，优先2-0和1-0，BTTS偏否。",
           "experience_review": [
             {
               "id": "D01",
               "decision": "neutral",
-              "reason": "D01:neutral because 主场优势和战意支撑低赔"
+              "reason": "D01:neutral because 低赔与高热存在，但小组关键战和基本面足以支撑热门"
             },
             {
               "id": "U04",
-              "decision": "accepted",
-              "reason": " U04:accepted because 散户倾向符合基本面"
+              "decision": "neutral",
+              "reason": " U04:neutral because 主胜偏热但未见明显反做证据"
             },
             {
               "id": "X03",
               "decision": "accepted",
-              "reason": " X03:accepted because 2球赔率最低支持2-0"
+              "reason": " X03:accepted because 2-0与总进球2及BTTS否一致"
             },
             {
               "id": "D15",
-              "decision": "neutral",
-              "reason": " D15:neutral"
+              "decision": "rejected",
+              "reason": " D15:rejected because 这是小组赛，不适用首回合保守逻辑。"
             }
           ],
-          "direction_selection_score": 96.0,
-          "score_shape_score": 85.5,
-          "overall_selection_score": 92.3,
+          "direction_selection_score": 93.6,
+          "score_shape_score": 85.7,
+          "overall_selection_score": 92.6,
           "recommendation_tier": "S",
           "direction_tier": "S",
           "score_tier": "S",
@@ -4899,8 +4920,8 @@
           "experience_review_missing": [],
           "score_shape_warnings": [],
           "web_odds_missing_penalty": true,
-          "dir_confidence": 65.0,
-          "dir_gap": 43.0,
+          "dir_confidence": 63.0,
+          "dir_gap": 41.0,
           "scenario": "ai_raw_2_goals",
           "goal_range": [
             1,
@@ -4908,11 +4929,12 @@
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-            "最终来源:phase1_exact_consensus:gpt,grok,gemini; final_model=gemini; score=2-0; direction=home",
-            "AI top3:[('2-0', 18.0), ('1-0', 15.0), ('2-1', 12.0)]",
-            "AI direction_probs:{'home': 65.0, 'draw': 22.0, 'away': 13.0} (AI原生direction_probs)",
-            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home\",\"sharp_evidence\":\"主胜赔率极低且稳定\",\"league_style\":\"南美赛事主场优势极大\",\"team_style\":\"主队主场强势，客队客场疲软\",\"style_score_logic\":\"主队掌控局面，客队难以反扑\",\"direction_rejection\":\"客队客场战绩差，难以爆冷\",\"experience_review\":\"D01:neutral because 主场优势和战意支撑低赔; U04:accepted because 散户倾向符合基本面; X03:accepted because 2球赔率最低支持2-0; D15:neutral\"}",
-            "data_missing:[\"external_european_odds\"]",
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+            "最终来源:phase1_exact_consensus:gpt,grok,gemini; final_model=gpt; score=2-0; direction=home",
+            "AI top3:[('2-0', 19.0), ('1-0', 15.0), ('2-1', 12.0)]",
+            "AI direction_probs:{'home': 63.0, 'draw': 22.0, 'away': 15.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"home\",\"sharp_evidence\":\"静态主胜极低且文字说明主胜持续下调，市场主导方向清晰。\",\"league_style\":\"解放者杯小组关键战更重结果，领先方通常会降低风险。\",\"team_style\":\"主队主场会主动施压，客队偏稳守反击但客场输出有限。\",\"style_score_logic\":\"2球、3球区间较热，但客队进攻疲弱，优先2-0和1-0，BTTS偏否。\",\"direction_rejection\":\"未选draw/away，因主胜赔率优势明显且客队客场不稳。\",\"experience_review\":\"D01:neutral because 低赔与高热存在，但小组关键战和基本面足以支撑热门; U04:neutral because 主胜偏热但未见明显反做证据; X03:accepted because 2-0与总进球2及BTTS否一致; D15:rejected because 这是小组赛，不适用首回合保守逻辑。\"}",
+            "data_missing:[\"external_european_odds\",\"odds_movement_detail_missing\"]",
             "experience_audit_cards(prompt_only):[{\"id\":\"D01\",\"name\":\"大热必死\",\"reason\":\"主赔1.37极低+主胜受注65%\",\"ai_question\":\"热门低赔是否只是名气盘？是否存在防平/防冷？\"},{\"id\":\"U04\",\"name\":\"受注比例一边倒反向操作\",\"reason\":\"主胜受注65%过热\",\"ai_question\":\"受注一边倒是真共识还是反向操作？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@4.8/2球@3.3，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]"
           ],
           "bayesian_prior": {},
@@ -4935,7 +4957,7 @@
           "top_score_candidates": [
             [
               "2-0",
-              18.0
+              19.0
             ],
             [
               "1-0",
@@ -4949,7 +4971,7 @@
           "unified_matrix_top_scores": [
             [
               "2-0",
-              18.0
+              19.0
             ],
             [
               "1-0",
@@ -4967,23 +4989,23 @@
           "decision_source": "phase1_exact_consensus:gpt,grok,gemini",
           "ai_authority_mode": "pure_raw_ai",
           "gpt_score": "2-0",
-          "gpt_analysis": "主胜1.37属于低赔强支持，且小组同积6分、主队主场复仇题材强，市场对主队倾斜合理。客队近10场全部不超过2球，客场进攻弱化明显。总进球2球与3球是核心区域，说明主队最可能以1到2球差距取胜。虽然主胜受注65%有一定热度，但客队基本面与客场表现难以构成足够反制，平局只是次防。",
+          "gpt_analysis": "主胜1.37已经给出清晰方向，且主队具备复仇与争夺小组主动权双重战意。客队客场近况不稳，且主力中场伤缺影响攻防衔接。总进球盘并不极端偏大，更像主队掌控后的中低比分赢球。虽然主胜受注65%偏热，但在实力、主场与战意同时站队的情况下，仍以主胜为主。",
           "grok_score": "2-0",
-          "grok_analysis": "主队首回合落后战意浓，客队客场3负，65%受注过热但主场优势",
+          "grok_analysis": "主队主场复仇战意，客队客场3负，1.37低赔热盘但方向主胜",
           "gemini_score": "2-0",
-          "gemini_analysis": "主队主场战绩出色且急需复仇，客队客场表现不佳且有主力伤缺。极低的主胜赔率显示机构对主队的高度信任。",
+          "gemini_analysis": "米拉索尔首回合失利，回到主场复仇战意浓烈。基多体大客场战绩不佳且有主力伤缺。机构大幅下调主胜赔率至1.37，对主队支持力度极大，主胜稳健。",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
           "ai_abstained": [
             "CLAUDE"
           ],
-          "ai_avg_confidence": 73.3,
+          "ai_avg_confidence": 72.0,
           "value_kill_count": 0,
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
           "ev_note": "disabled_pure_raw_ai_no_local_probability",
-          "score_model_prob": 18.0,
+          "score_model_prob": 19.0,
           "score_market_odds": 6.25,
           "score_market_implied_pct": 16.0,
           "smart_money_signal": "EXP_D01 大热必死 | EXP_U04 主胜超热65%",
@@ -5044,6 +5066,7 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": false,
             "triggered": [
               {
                 "id": "D01",
@@ -5097,11 +5120,11 @@
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
           "validation_warnings": []
         },
-        "recommend_score": 102.5,
+        "recommend_score": 97.64,
         "is_recommended": true
       },
       {
@@ -5243,45 +5266,45 @@
         "home": "麦独立",
         "guest": "弗拉门戈",
         "prediction": {
-          "predicted_score": "0-1",
-          "predicted_label": "0-1",
+          "predicted_score": "1-2",
+          "predicted_label": "1-2",
           "result": "客胜",
           "display_direction": "客胜",
           "final_direction": "away",
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 20.0,
+          "home_win_pct": 18.0,
           "draw_pct": 25.0,
-          "away_win_pct": 55.0,
-          "confidence": 75,
+          "away_win_pct": 57.0,
+          "confidence": 70,
           "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
           "risk_level": "medium",
-          "goal_band": "2",
-          "btts_ai": "no",
-          "score_shape_reason": "客队控制节奏，经济型赢球",
+          "goal_band": "3",
+          "btts_ai": "yes",
+          "score_shape_reason": "客队实力强劲，即使客场也能取得进球，主队可能借主场之利扳回一城。",
           "experience_review": [
             {
               "id": "G10",
-              "decision": "accepted",
-              "reason": "G10:accepted because 0-0赔率低提示进球数不多"
+              "decision": "neutral",
+              "reason": "G10: neutral"
             },
             {
               "id": "X03",
               "decision": "accepted",
-              "reason": " X03:accepted because 2球赔率最低支持0-2或1-1，结合实力倾向0-2"
+              "reason": " X03: accepted"
             },
             {
               "id": "D15",
               "decision": "neutral",
-              "reason": " D15:neutral"
+              "reason": " D15: neutral."
             }
           ],
-          "direction_selection_score": 79.4,
-          "score_shape_score": 40.2,
-          "overall_selection_score": 43.4,
-          "recommendation_tier": "D",
+          "direction_selection_score": 84.7,
+          "score_shape_score": 76.1,
+          "overall_selection_score": 82.2,
+          "recommendation_tier": "S",
           "direction_tier": "S",
-          "score_tier": "D",
+          "score_tier": "A",
           "model_agreement": {
             "valid_models": [
               "gpt",
@@ -5289,33 +5312,31 @@
               "gemini"
             ],
             "valid_count": 3,
-            "same_score": 1,
+            "same_score": 2,
             "same_direction": 3,
-            "score_agreement": 0.3333333333333333,
+            "score_agreement": 0.6666666666666666,
             "direction_agreement": 1.0
           },
           "experience_review_coverage": 1.0,
           "experience_review_missing": [],
-          "score_shape_warnings": [
-            "goal_band_conflict:2!=0-1"
-          ],
+          "score_shape_warnings": [],
           "web_odds_missing_penalty": true,
-          "dir_confidence": 55.0,
-          "dir_gap": 30.0,
-          "scenario": "ai_raw_0_1_goals",
+          "dir_confidence": 57.0,
+          "dir_gap": 32.0,
+          "scenario": "ai_raw_3_goals",
           "goal_range": [
-            0,
-            1
+            2,
+            3
           ],
           "bayesian_evidences": [
             "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-            "最终来源:phase1_best_confidence:gemini; final_model=gemini; score=0-1; direction=away",
-            "AI top3:[('0-1', 18.0), ('0-2', 15.0), ('1-2', 12.0)]",
-            "AI direction_probs:{'home': 20.0, 'draw': 25.0, 'away': 55.0} (AI原生direction_probs)",
-            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"客胜赔率处于低位，机构看好客队\",\"league_style\":\"南美赛事，强队客场以稳为主\",\"team_style\":\"客队实力碾压，主队进攻受损\",\"style_score_logic\":\"客队控制节奏，经济型赢球\",\"direction_rejection\":\"主队实力不足以抗衡客队\",\"experience_review\":\"G10:accepted because 0-0赔率低提示进球数不多; X03:accepted because 2球赔率最低支持0-2或1-1，结合实力倾向0-2; D15:neutral\"}",
+            "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
+            "最终来源:phase1_exact_consensus:grok,gemini; final_model=gemini; score=1-2; direction=away",
+            "AI top3:[('1-2', 15.0), ('0-2', 12.0), ('1-1', 10.0)]",
+            "AI direction_probs:{'home': 18.0, 'draw': 25.0, 'away': 57.0} (AI原生direction_probs)",
+            "AI audit:{\"odds_source\":\"体彩竞彩抓包赔率\",\"web_odds_check\":\"web_search_unavailable\",\"sharp_money_direction\":\"away\",\"sharp_evidence\":\"客胜赔率保持低位，资金认可双方巨大的实力鸿沟。\",\"league_style\":\"巴西豪门在解放者杯中面对其他国家球队优势明显。\",\"team_style\":\"弗拉门戈攻守兼备，麦德林独立进攻受损。\",\"style_score_logic\":\"客队实力强劲，即使客场也能取得进球，主队可能借主场之利扳回一城。\",\"direction_rejection\":\"主队实力太弱且有伤病，难以爆冷击败夺冠热门。\",\"experience_review\":\"G10: neutral; X03: accepted; D15: neutral.\"}",
             "data_missing:[\"external_european_odds\"]",
-            "experience_audit_cards(prompt_only):[{\"id\":\"G10\",\"name\":\"CRS 0-0赔率极低\",\"reason\":\"0-0@9.25\",\"ai_question\":\"0-0赔率低是否与总0球低位共振？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@4.0/2球@3.15，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]",
-            "score_shape_warnings:[\"goal_band_conflict:2!=0-1\"]"
+            "experience_audit_cards(prompt_only):[{\"id\":\"G10\",\"name\":\"CRS 0-0赔率极低\",\"reason\":\"0-0@9.25\",\"ai_question\":\"0-0赔率低是否与总0球低位共振？\"},{\"id\":\"X03\",\"name\":\"方向与总进球/BTTS一致性复核\",\"reason\":\"1球@4.0/2球@3.15，需审计经济型赢球与BTTS\",\"ai_question\":\"最终比分必须与总进球和BTTS一致。\"},{\"id\":\"D15\",\"name\":\"杯赛首轮易平\",\"reason\":\"杯赛/淘汰赛属性\",\"ai_question\":\"杯赛/首回合是否保守？\"}]"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -5336,58 +5357,58 @@
           "crs_low_rank_info": {},
           "top_score_candidates": [
             [
-              "0-1",
-              18.0
-            ],
-            [
-              "0-2",
+              "1-2",
               15.0
             ],
             [
-              "1-2",
+              "0-2",
               12.0
+            ],
+            [
+              "1-1",
+              10.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
-              "0-1",
-              18.0
-            ],
-            [
-              "0-2",
+              "1-2",
               15.0
             ],
             [
-              "1-2",
+              "0-2",
               12.0
+            ],
+            [
+              "1-1",
+              10.0
             ]
           ],
           "unified_goal_probs": {},
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "disabled_pure_raw_ai",
-          "decision_source": "phase1_best_confidence:gemini",
+          "decision_source": "phase1_exact_consensus:grok,gemini",
           "ai_authority_mode": "pure_raw_ai",
-          "gpt_score": "0-2",
-          "gpt_analysis": "客胜1.67在解放者杯客场已属明显优势，且首回合4比1的直接交锋优势、整体实力和状态都在客队一边。主队关键前锋伤缺，对其反扑质量有直接削弱。总进球2球最低、1球和3球次之，意味着客队赢球更偏经济型而非大开打穿。平局是主要风险，因为客队可能接受过程控节奏，但如果正常兑现实力，仍是客胜主线。",
+          "gpt_score": "0-1",
+          "gpt_analysis": "弗拉门戈整体实力、近况和首回合交锋都明显占优，客胜1.67在客场盘中已属强支持。主队有抢分需求但锋线伤缺，不利于高效率进攻。总进球结构偏2球附近，说明更像客队稳控比赛、用成熟度拿结果，而不是大开大合。平局存在一定防守价值，但首选仍是客胜。",
           "grok_score": "1-2",
-          "grok_analysis": "弗拉门戈首回合4-1领先+实力碾压，0-0赔率低提示小球但客强",
-          "gemini_score": "0-1",
-          "gemini_analysis": "客队实力远超主队，且近期状态极佳。主队主力前锋伤缺影响进攻。客队有望在客场稳健取胜。",
+          "grok_analysis": "客队实力碾压+小组领跑，0-0赔率低但方向客胜",
+          "gemini_score": "1-2",
+          "gemini_analysis": "弗拉门戈实力远超麦德林独立，首回合大胜已证明差距。主队虽有主场之利但主力前锋伤缺，难以对客队防线造成实质威胁。客胜赔率1.67合理反映了实力差距，看好客胜。",
           "claude_score": "弃权",
           "claude_analysis": "弃权",
           "ai_abstained": [
             "CLAUDE"
           ],
-          "ai_avg_confidence": 71.3,
+          "ai_avg_confidence": 70.0,
           "value_kill_count": 0,
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
           "ev_note": "disabled_pure_raw_ai_no_local_probability",
-          "score_model_prob": 18.0,
-          "score_market_odds": 5.25,
-          "score_market_implied_pct": 19.048,
+          "score_model_prob": 15.0,
+          "score_market_odds": 7.0,
+          "score_market_implied_pct": 14.286,
           "smart_money_signal": "",
           "smart_signals": [],
           "cold_door": {
@@ -5400,9 +5421,9 @@
           },
           "xG_home": "?",
           "xG_away": "?",
-          "over_under_2_5": "小",
-          "both_score": "否",
-          "expected_total_goals": 1,
+          "over_under_2_5": "大",
+          "both_score": "是",
+          "expected_total_goals": 3,
           "over_2_5": null,
           "btts": null,
           "bookmaker_implied_home_xg": "?",
@@ -5443,6 +5464,7 @@
           "experience_analysis": {
             "mode": "prompt_only_no_probability_change_no_score_change",
             "enabled": true,
+            "change_is_direction_code": false,
             "triggered": [
               {
                 "id": "G10",
@@ -5483,12 +5505,12 @@
           "pro_odds": {},
           "asian_handicap_probs": {},
           "top_scores": [],
-          "engine_version": "vMAX 18.4.8",
-          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
+          "engine_version": "vMAX 18.4.9",
+          "engine_architecture": "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权",
           "validation_warnings": []
         },
-        "recommend_score": 47.8,
-        "is_recommended": false
+        "recommend_score": 86.76,
+        "is_recommended": true
       }
     ]
   },
