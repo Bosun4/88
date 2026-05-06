@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-vMAX 18.4.8 — PURE RAW-AI + 顶级解析容错版
+vMAX 18.4.9 — PURE RAW-AI + STRICT JSON 解析修复版
 ============================================================
 设计边界：
 1. 纯 AI 主审：GPT/Grok/Gemini 初审，Claude 终审；Claude 失败时使用 Phase1 AI 共识。
 2. 不跑 CRS 矩阵、不跑贝叶斯后验、不跑本地比分矩阵、不跑本地风控裁决。
-3. 本地只做：抓包格式化、AI 调用、JSON/文本解析、字段闭环、前端兼容。
-4. Phase1 三家吃完整抓包；Claude 终审默认吃压缩抓包 + 三家结构化摘要。
+3. 本地只做：抓包格式化、AI 调用、JSON/JSON-like 解析、字段闭环、前端兼容。
+4. Phase1 三家吃完整抓包；Claude 终审只吃压缩抓包 + 三家结构化摘要。
 5. 默认等待：GPT/Grok/Gemini 1000 秒，Claude 1500 秒。
 6. URL/KEY 默认保持旧版统一中转逻辑：API_KEY/API_URL 优先，旧变量兼容兜底。
+7. 严禁 Claude 自然语言残片进入最终裁决：Claude 非结构化 JSON 直接弃权。
+8. change=-1/0/1 按方向编码处理，不再误判为真实赔率变动幅度。
 
 入口：
     run_predictions(raw, use_ai=True) -> (res, top4)
@@ -43,10 +45,11 @@ except Exception:
 # 版本常量
 # ============================================================
 
-ENGINE_VERSION = "vMAX 18.4.8"
+ENGINE_VERSION = "vMAX 18.4.9"
 ENGINE_ARCHITECTURE = (
-    "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + 顶级解析容错 + "
-    "方向/比分字段闭环；无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权"
+    "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude只吃压缩抓包终审 + "
+    "STRICT JSON解析 + 禁止文本残片裁决 + 方向/比分字段闭环；"
+    "无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权"
 )
 
 VALID_DIRS = {"home", "draw", "away"}
@@ -87,6 +90,27 @@ HFTF_MAP = {
     "fs": "负/主", "fp": "负/平", "ff": "负/负",
 }
 
+# 进入 prompt / cache 前要剔除的历史预测和前端展示字段，防止二次喂回污染 AI。
+PROMPT_DROP_KEYS = {
+    "prediction", "recommend_score", "is_recommended", "fusion_summary",
+    "bayesian_evidences", "bayesian_prior", "override_triggered",
+    "top_score_candidates", "unified_matrix_top_scores", "unified_goal_probs",
+    "fair_1x2_pack", "mixed_target_dir", "unified_source",
+    "decision_source", "ai_authority_mode",
+    "gpt_score", "gpt_analysis", "grok_score", "grok_analysis",
+    "gemini_score", "gemini_analysis", "claude_score", "claude_analysis",
+    "ai_abstained", "ai_avg_confidence",
+    "engine_version", "engine_architecture", "validation_warnings",
+    "refined_poisson", "poisson", "elo", "random_forest", "gradient_boost",
+    "neural_net", "logistic", "svm", "knn", "dixon_coles", "bradley_terry",
+    "crs_analysis", "ttg_analysis", "fair_1x2", "raw_implied_1x2",
+    "crs_shape", "crs_moments", "crs_implied_probs", "crs_low_rank_info",
+    "market_overround", "kelly_home", "kelly_away", "odds",
+    "value_kill_count", "suggested_kelly", "edge_vs_market", "is_value", "ev_note",
+    "score_model_prob", "score_market_odds", "score_market_implied_pct",
+    "cold_door", "smart_money_signal", "smart_signals",
+}
+
 # ============================================================
 # 配置
 # ============================================================
@@ -118,6 +142,7 @@ ENABLE_EXTERNAL_CONTEXT = _env_bool("ENABLE_EXTERNAL_CONTEXT", False)
 AI_PARSE_DEBUG = _env_bool("AI_PARSE_DEBUG", False)
 AI_SAVE_RAW_RESPONSE = _env_bool("AI_SAVE_RAW_RESPONSE", False)
 
+# Phase1 仍然允许完整抓包；Claude 不使用完整 raw。
 INCLUDE_FULL_RAW_PACKET = _env_bool("INCLUDE_FULL_RAW_PACKET", True)
 RAW_PACKET_CHAR_LIMIT = _env_int("RAW_PACKET_CHAR_LIMIT", 20000)
 FIELD_LIMIT_CHANGE = _env_int("FIELD_LIMIT_CHANGE", 4000)
@@ -128,7 +153,13 @@ FIELD_LIMIT_STYLE_EXTRA = _env_int("FIELD_LIMIT_STYLE_EXTRA", 6000)
 
 AI_USE_COMPACT_CLAUDE_AUDIT = _env_bool("AI_USE_COMPACT_CLAUDE_AUDIT", True)
 AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE = _env_int("AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE", 260)
-CLAUDE_COMPACT_FIELD_LIMIT = _env_int("CLAUDE_COMPACT_FIELD_LIMIT", 2500)
+CLAUDE_COMPACT_FIELD_LIMIT = _env_int("CLAUDE_COMPACT_FIELD_LIMIT", 1200)
+CLAUDE_BASEFACE_LIMIT = _env_int("CLAUDE_BASEFACE_LIMIT", 1400)
+CLAUDE_NEWS_LIMIT = _env_int("CLAUDE_NEWS_LIMIT", 700)
+
+# 关键：默认禁止文本 fallback 成为有效预测。
+AI_ALLOW_TEXT_FALLBACK_PHASE1 = _env_bool("AI_ALLOW_TEXT_FALLBACK_PHASE1", False)
+AI_ALLOW_TEXT_FALLBACK_CLAUDE = _env_bool("AI_ALLOW_TEXT_FALLBACK_CLAUDE", False)
 
 AI_PERSISTENT_CACHE_ENABLED = _env_bool("AI_PERSISTENT_CACHE_ENABLED", True)
 AI_CACHE_DIR = str(os.environ.get("AI_CACHE_DIR", "data/ai_cache")).strip() or "data/ai_cache"
@@ -222,6 +253,29 @@ def _deep_find_value(obj: Any, aliases: List[str], skip_keys: Optional[set] = No
             if found is not None:
                 return found
     return None
+
+
+def _truncate_text(v: Any, limit: int) -> str:
+    s = "" if v is None else str(v)
+    s = s.replace("\r", " ").replace("\n", " ").strip()
+    if limit and limit > 0:
+        return s[:limit]
+    return s
+
+
+def _drop_prompt_pollution(obj: Any, depth: int = 0) -> Any:
+    if depth > 8:
+        return obj
+    if isinstance(obj, dict):
+        out = {}
+        for k, v in obj.items():
+            if str(k) in PROMPT_DROP_KEYS:
+                continue
+            out[k] = _drop_prompt_pollution(v, depth + 1)
+        return out
+    if isinstance(obj, list):
+        return [_drop_prompt_pollution(x, depth + 1) for x in obj]
+    return obj
 
 # ============================================================
 # 比分与方向
@@ -409,14 +463,20 @@ async def build_external_context_for_match(session: aiohttp.ClientSession, match
         "home_team": match_obj.get("home_team", ""),
         "away_team": match_obj.get("away_team", ""),
         "league": match_obj.get("league", match_obj.get("cup", "")),
-        "match": match_obj,
+        "match": _drop_prompt_pollution(match_obj),
     }
     token = os.environ.get("EXTERNAL_CONTEXT_TOKEN", "").strip()
     for url in _parse_external_endpoints()[:3]:
         headers = {"Content-Type": "application/json"}
         if token:
             headers["Authorization"] = f"Bearer {token}"
-        ok, data, kind = await _fetch_json_or_text(session, os.environ.get("EXTERNAL_CONTEXT_METHOD", "POST").upper(), url, headers=headers, json=payload)
+        ok, data, kind = await _fetch_json_or_text(
+            session,
+            os.environ.get("EXTERNAL_CONTEXT_METHOD", "POST").upper(),
+            url,
+            headers=headers,
+            json=payload,
+        )
         if ok:
             ctx["items"].append({"source": url, "kind": kind, "data": data})
             ctx["source_quality"] = "provider"
@@ -478,6 +538,38 @@ _RULE_QUESTION = {
     "X03": "最终比分必须与总进球和BTTS一致。",
 }
 
+
+def _is_change_direction_code(change: Dict[str, Any]) -> bool:
+    """
+    当前抓包里的 change 常见是方向编码：
+        -1 = 降水方向
+         0 = 不变
+         1 = 升水方向
+    不是真实赔率变动幅度，不能当 -1.00 / +1.00 使用。
+    """
+    if not isinstance(change, dict) or not change:
+        return False
+    vals = []
+    for k in ("win", "same", "draw", "lose", "away"):
+        if k in change:
+            vals.append(change.get(k))
+    if not vals:
+        return False
+    for v in vals:
+        s = str(v).strip()
+        if s not in ("-1", "0", "1", "-1.0", "0.0", "1.0"):
+            return False
+    return True
+
+
+def _change_word(v: float) -> str:
+    if v < 0:
+        return "降水"
+    if v > 0:
+        return "升水"
+    return "平稳"
+
+
 class ExperienceAuditEngine:
     def _sf(self, val: Any, d: float = 0.0) -> float:
         return _f(val, d)
@@ -514,12 +606,16 @@ class ExperienceAuditEngine:
         ar = self._si(match_data.get("away_rank"), 10)
         vote = match_data.get("vote", {}) or {}
         change = match_data.get("change", {}) or {}
+        change_is_code = _is_change_direction_code(change)
+
         league = str(match_data.get("league", match_data.get("cup", "")))
         vh = self._si(vote.get("win"), 33)
         va = self._si(vote.get("lose"), 33)
+
         wc = self._sf(change.get("win"), 0)
         lc = self._sf(change.get("lose"), 0)
         sc = self._sf(change.get("same", change.get("draw")), 0)
+
         a0 = self._sf(match_data.get("a0"), 99)
         a1 = self._sf(match_data.get("a1"), 99)
         a2 = self._sf(match_data.get("a2"), 99)
@@ -531,40 +627,71 @@ class ExperienceAuditEngine:
         if sp_a < 1.40 and va >= 55:
             add("D01", "平局", 8, f"客赔{sp_a}极低+客胜受注{va}%", "draw")
             risk_signals.append("EXP_D01 大热必死")
-        if abs(give_ball) < 0.1 and abs(wc) < 0.02 and abs(lc) < 0.02:
-            add("D10", "平局", 8, "平手盘临场水位几乎不变", "draw")
+
+        if abs(give_ball) < 0.1:
+            if change_is_code:
+                if wc == 0 and lc == 0 and sc == 0:
+                    add("D10", "平局", 8, "平手盘方向编码全部平稳", "draw")
+            else:
+                if abs(wc) < 0.02 and abs(lc) < 0.02:
+                    add("D10", "平局", 8, "平手盘临场水位几乎不变", "draw")
+
         if abs(hr - ar) <= 3:
             add("D13", "平局", 5, f"排名接近{hr}vs{ar}", "draw")
+
         if any(k in league for k in ["杯", "cup", "Cup", "解放者", "南球"]):
             add("D15", "平局", 5, "杯赛/淘汰赛属性", "draw")
+
         if vh >= 65:
             add("U04", "冷门", 8, f"主胜受注{vh}%过热", "upset_away")
             risk_signals.append(f"EXP_U04 主胜超热{vh}%")
         if va >= 65:
             add("U04", "冷门", 8, f"客胜受注{va}%过热", "upset_home")
             risk_signals.append(f"EXP_U04 客胜超热{va}%")
+
         if abs(hr - ar) >= 8 and abs(give_ball) <= 0.5:
             add("U09", "冷门", 8, f"排名差{abs(hr-ar)}但让球仅{give_ball}", "upset")
-        if max(abs(wc), abs(lc), abs(sc)) >= 0.15:
-            add("U10", "盘口", 7, f"最大变动{max(abs(wc),abs(lc),abs(sc)):.2f}", "audit")
+
+        if not change_is_code and max(abs(wc), abs(lc), abs(sc)) >= 0.15:
+            add("U10", "盘口", 7, f"真实赔率最大变动{max(abs(wc),abs(lc),abs(sc)):.2f}", "audit")
+
         if a0 < 8.5:
             add("G08", "大小球", 7, f"0球@{a0}", "under")
             risk_signals.append(f"EXP_G08 0球@{a0}")
         if s00 < 9.5:
             add("G10", "大小球", 7, f"0-0@{s00}", "zero_zero")
-        if sc < -0.05 and wc > 0 and lc > 0:
-            add("B_SHARP", "盘口", 7, f"平赔降{sc:.2f}且胜负升", "draw")
-        if wc < -0.10 and vh < 50:
-            add("B_STEAM", "盘口", 7, f"主赔降{wc:.2f}散户仅{vh}%", "steam_home")
-        if lc < -0.10 and va < 50:
-            add("B_STEAM", "盘口", 7, f"客赔降{lc:.2f}散户仅{va}%", "steam_away")
+
+        if change_is_code:
+            if sc < 0 and wc > 0 and lc > 0:
+                add("B_SHARP", "盘口", 7, "平赔方向编码降水且胜负升水", "draw")
+            if wc < 0 and vh < 50:
+                add("B_STEAM", "盘口", 7, f"主赔降水方向信号，散户仅{vh}%", "steam_home")
+            if lc < 0 and va < 50:
+                add("B_STEAM", "盘口", 7, f"客赔降水方向信号，散户仅{va}%", "steam_away")
+        else:
+            if sc < -0.05 and wc > 0 and lc > 0:
+                add("B_SHARP", "盘口", 7, f"平赔降{sc:.2f}且胜负升", "draw")
+            if wc < -0.10 and vh < 50:
+                add("B_STEAM", "盘口", 7, f"主赔降{wc:.2f}散户仅{vh}%", "steam_home")
+            if lc < -0.10 and va < 50:
+                add("B_STEAM", "盘口", 7, f"客赔降{lc:.2f}散户仅{va}%", "steam_away")
+
         if EXPERIENCE_AUDIT_INCLUDE_EXTENDED:
-            if sp_a <= 1.75 and 50 <= va < 65 and lc < 0:
-                add("X01", "二次升级", 8, f"客赔{sp_a}低位+客热{va}%+客赔降{lc:.2f}", "audit_strong_away_heat")
-                risk_signals.append("EXP_X01 强客低赔中热复核")
-            if (vh >= 55 and wc < 0) or (va >= 55 and lc < 0):
-                hot = "主" if vh >= 55 and wc < 0 else "客"
-                add("X02", "二次升级", 6, f"{hot}方向热度与降水同向", "audit_hot_drop")
+            if change_is_code:
+                if sp_a <= 1.75 and 50 <= va < 65 and lc < 0:
+                    add("X01", "二次升级", 8, f"客赔{sp_a}低位+客热{va}%+客赔降水方向信号", "audit_strong_away_heat")
+                    risk_signals.append("EXP_X01 强客低赔中热复核")
+                if (vh >= 55 and wc < 0) or (va >= 55 and lc < 0):
+                    hot = "主" if vh >= 55 and wc < 0 else "客"
+                    add("X02", "二次升级", 6, f"{hot}方向热度与降水方向信号同向", "audit_hot_drop")
+            else:
+                if sp_a <= 1.75 and 50 <= va < 65 and lc < 0:
+                    add("X01", "二次升级", 8, f"客赔{sp_a}低位+客热{va}%+客赔降{lc:.2f}", "audit_strong_away_heat")
+                    risk_signals.append("EXP_X01 强客低赔中热复核")
+                if (vh >= 55 and wc < 0) or (va >= 55 and lc < 0):
+                    hot = "主" if vh >= 55 and wc < 0 else "客"
+                    add("X02", "二次升级", 6, f"{hot}方向热度与降水同向", "audit_hot_drop")
+
             if (0 < a1 <= 5.2) or (0 < a2 <= 3.7):
                 add("X03", "二次升级", 6, f"1球@{a1}/2球@{a2}，需审计经济型赢球与BTTS", "audit_goal_shape")
 
@@ -579,6 +706,7 @@ class ExperienceAuditEngine:
         return {
             "enabled": True,
             "mode": "prompt_only_no_probability_change_no_score_change",
+            "change_is_direction_code": bool(change_is_code),
             "triggered": out,
             "triggered_count": len(out),
             "total_score": total_score,
@@ -604,6 +732,8 @@ def _format_experience_audit_for_prompt(exp: Dict[str, Any]) -> str:
         return '<experience_audit_cards mode="prompt_only_no_decision">无明显历史经验审计卡。</experience_audit_cards>\n'
     p = '<experience_audit_cards mode="prompt_only_no_decision">\n'
     p += "这些卡片只作为审计问题；禁止直接改方向、禁止直接改比分。必须在 audit.experience_review 中说明 accepted/rejected/neutral。\n"
+    if exp.get("change_is_direction_code"):
+        p += "注意：本场 change=-1/0/1 是方向编码，-1=降水方向，0=平稳，1=升水方向，不是真实赔率变动幅度。\n"
     for t in rows:
         p += f"- {t.get('id')} {t.get('name')} | 权重={t.get('weight')} | 原因={t.get('reason')} | 问题={t.get('ai_question')}\n"
     p += "</experience_audit_cards>\n"
@@ -626,10 +756,11 @@ def _raw_full_packet_line(match_obj: Dict[str, Any]) -> str:
     if not INCLUDE_FULL_RAW_PACKET:
         return ""
     limit = RAW_PACKET_CHAR_LIMIT
-    raw_json = _json_compact(match_obj, limit if limit and limit > 0 else 0)
+    safe_obj = _drop_prompt_pollution(match_obj)
+    raw_json = _json_compact(safe_obj, limit if limit and limit > 0 else 0)
     suffix = ""
     try:
-        full_len = len(json.dumps(match_obj, ensure_ascii=False, default=str, separators=(",", ":")))
+        full_len = len(json.dumps(safe_obj, ensure_ascii=False, default=str, separators=(",", ":")))
         if limit and limit > 0 and full_len > limit:
             suffix = f"...[TRUNCATED full_len={full_len} limit={limit}]"
     except Exception:
@@ -648,20 +779,23 @@ def _output_format_rule() -> str:
         '"sharp_money_direction":"home/draw/away/home_or_draw/away_or_draw/unclear","sharp_evidence":"...",'
         '"league_style":"...","team_style":"...","style_score_logic":"...","direction_rejection":"...",'
         '"experience_review":"D01:neutral because ...; X01:accepted because ..."}}\n'
-        "禁止 markdown，禁止 JSON 外文本。match 字段优先输出数字序号。\n"
+        "禁止 markdown，禁止 JSON 外文本。match 字段必须用数字序号。\n"
+        "top3[0].score 必须和 final_direction 方向一致；方向必须以主队在前、客队在后的比分坐标表达。\n"
     )
 
 
 def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
     p = "<context>\n"
     p += "你是竞彩足球 RAW-AI 比分预测模型。match_data 中的赔率是中国体彩竞彩抓包赔率，不是欧洲公司均赔。\n"
-    p += "你需要基于原始抓包、赔率变动、散户热度、总进球、半全场、经验审计卡、可用联网材料，独立判断方向和比分。\n"
+    p += "你需要基于原始抓包、赔率变动方向、散户热度、总进球、半全场、经验审计卡、可用联网材料，独立判断方向和比分。\n"
     p += "禁止引用 CRS、贝叶斯、本地矩阵、本地陷阱裁决。经验卡只作为审计问题，不是裁决。\n"
     p += "若没有联网能力，audit.web_odds_check 写 web_search_unavailable，data_missing 加 external_european_odds，禁止假装联网。\n"
     p += "必须输出 direction_probs、goal_band、btts、top3比分；top3[0]必须与final_direction一致。\n"
+    p += "注意：change 若为 -1/0/1，则是方向编码，不是真实赔率变动幅度。\n"
     p += "</context>\n\n"
     p += "<output_format>\n" + _output_format_rule() + "</output_format>\n\n"
     p += "<match_data>\n"
+
     for i, ma in enumerate(match_analyses, 1):
         m = ma["match"]
         h = m.get("home_team", m.get("home", "Home"))
@@ -672,6 +806,7 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
         p += f"体彩竞彩1X2: 主胜={m.get('sp_home', m.get('win',''))} 平={m.get('sp_draw', m.get('same',''))} 客胜={m.get('sp_away', m.get('lose',''))}\n"
         p += f"让球:{m.get('give_ball', m.get('handicap', m.get('rq','')))}\n"
         p += "总进球a0-a7:" + " | ".join([f"{g}={m.get(f'a{g}','')}" for g in range(8)]) + "\n"
+
         hf_l = []
         for k, lb in HFTF_MAP.items():
             v = m.get(k, None)
@@ -679,17 +814,23 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
                 hf_l.append(f"{lb}={v}")
         if hf_l:
             p += "半全场:" + " | ".join(hf_l) + "\n"
+
         p += _raw_field_line("change", m.get("change"), FIELD_LIMIT_CHANGE)
+        if _is_change_direction_code(m.get("change", {}) or {}):
+            p += "change_note:-1=降水方向,0=平稳,1=升水方向；不是赔率真实变动幅度。\n"
         p += _raw_field_line("vote", m.get("vote"), FIELD_LIMIT_VOTE)
         p += _raw_field_line("information", m.get("information"), FIELD_LIMIT_INFORMATION)
         p += _raw_field_line("points", m.get("points"), FIELD_LIMIT_POINTS)
+
         style_pack = {k: v for k, v in m.items() if k in (
             "league_style", "league_profile", "team_style", "home_style", "away_style", "play_style",
             "tactical_style", "pace_rating", "tempo", "home_form", "away_form", "weather", "injury",
             "lineup", "news", "motivation", "schedule", "home_rank", "away_rank", "home_stats", "away_stats",
+            "baseface", "expert_intro", "intelligence",
         )}
-        p += _raw_field_line("style_and_team_core", style_pack, FIELD_LIMIT_STYLE_EXTRA)
+        p += _raw_field_line("style_and_team_core", _drop_prompt_pollution(style_pack), FIELD_LIMIT_STYLE_EXTRA)
         p += _raw_full_packet_line(m)
+
         exp = ma.get("experience_audit") or _experience_engine().analyze(m)
         p += _format_experience_audit_for_prompt(exp)
         p += "<external_context>\n" + _format_external_context_for_prompt(ma.get("external_context", {})) + "</external_context>\n"
@@ -698,42 +839,91 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
     return p
 
 
+def _compact_correct_scores(m: Dict[str, Any]) -> Dict[str, Any]:
+    keys = [
+        "s00", "s11", "s22", "s33",
+        "w10", "w20", "w21", "w30", "w31", "w32", "w40", "w41", "w42",
+        "l01", "l02", "l12", "l03", "l13", "l23",
+    ]
+    out = {}
+    reverse = {v: k for k, v in CRS_FULL_MAP.items()}
+    for key in keys:
+        if key in m and m.get(key) not in (None, "", 0, "0"):
+            label = reverse.get(key, key)
+            out[label] = m.get(key)
+    return out
+
+
+def _compact_hftf(m: Dict[str, Any]) -> Dict[str, Any]:
+    out = {}
+    for k, lb in HFTF_MAP.items():
+        if k in m and m.get(k) not in (None, "", 0, "0"):
+            out[lb] = m.get(k)
+    return out
+
+
+def _compact_match_for_claude(ma: Dict[str, Any], idx: int) -> Dict[str, Any]:
+    m = ma["match"]
+    intel = m.get("intelligence", {}) if isinstance(m.get("intelligence"), dict) else {}
+
+    change = m.get("change", {}) or {}
+    exp = ma.get("experience_audit") or _experience_engine().analyze(m)
+
+    compact = {
+        "match": idx,
+        "match_num": m.get("match_num", ""),
+        "league": m.get("league", m.get("cup", "")),
+        "home_team": m.get("home_team", m.get("home", "")),
+        "away_team": m.get("away_team", m.get("guest", "")),
+        "rank": {
+            "home": m.get("home_rank", ""),
+            "away": m.get("away_rank", ""),
+        },
+        "spf": {
+            "home": m.get("sp_home", m.get("win", "")),
+            "draw": m.get("sp_draw", m.get("same", "")),
+            "away": m.get("sp_away", m.get("lose", "")),
+        },
+        "handicap": m.get("give_ball", m.get("handicap", m.get("rq", ""))),
+        "change": change,
+        "change_note": "-1=降水方向,0=平稳,1=升水方向；不是赔率真实变动幅度" if _is_change_direction_code(change) else "真实变动幅度或未知格式",
+        "vote": m.get("vote", {}),
+        "ttg": {str(i): m.get(f"a{i}", "") for i in range(7)} | {"7+": m.get("a7", "")},
+        "correct_score_core": _compact_correct_scores(m),
+        "hftf_core": _compact_hftf(m),
+        "stats": {
+            "home": m.get("home_stats", {}),
+            "away": m.get("away_stats", {}),
+        },
+        "injury_news": {
+            "home": _truncate_text(intel.get("h_inj", m.get("h_inj", "")), CLAUDE_NEWS_LIMIT),
+            "away": _truncate_text(intel.get("g_inj", m.get("g_inj", "")), CLAUDE_NEWS_LIMIT),
+            "home_bad_news": _truncate_text(intel.get("home_bad_news", ""), CLAUDE_NEWS_LIMIT),
+            "away_bad_news": _truncate_text(intel.get("guest_bad_news", ""), CLAUDE_NEWS_LIMIT),
+        },
+        "expert_intro": _truncate_text(m.get("expert_intro", ""), CLAUDE_NEWS_LIMIT),
+        "baseface": _truncate_text(m.get("baseface", ""), CLAUDE_BASEFACE_LIMIT),
+        "experience_audit_cards": [
+            {
+                "id": t.get("id"),
+                "name": t.get("name"),
+                "reason": t.get("reason"),
+                "ai_question": t.get("ai_question"),
+            }
+            for t in (exp.get("triggered", []) if isinstance(exp, dict) else [])
+        ],
+    }
+    return _drop_prompt_pollution(compact)
+
+
 def build_compact_claude_match_data(match_analyses: List[Dict[str, Any]]) -> str:
+    rows = [_compact_match_for_claude(ma, i) for i, ma in enumerate(match_analyses, 1)]
     p = "<compact_match_data_for_claude>\n"
-    p += "Claude终审压缩抓包：Phase1三家已经看过完整抓包。这里保留核心原始字段、赔率结构、经验审计卡，避免prompt过大导致断流。\n"
-    p += "这些字段仍然是体彩竞彩抓包赔率，不是欧洲欧赔。Claude必须重新审计，不按票数机械裁决。\n\n"
-    for i, ma in enumerate(match_analyses, 1):
-        m = ma["match"]
-        h = m.get("home_team", m.get("home", "Home"))
-        a = m.get("away_team", m.get("guest", "Away"))
-        league = m.get("league", m.get("cup", ""))
-        p += f'<match index="{i}">\n'
-        p += f"[{i}] {h} vs {a} | {league}\n"
-        p += f"match_num:{m.get('match_num','')} | time:{m.get('match_time', m.get('time',''))}\n"
-        p += f"体彩竞彩1X2: 主胜={m.get('sp_home', m.get('win',''))} 平={m.get('sp_draw', m.get('same',''))} 客胜={m.get('sp_away', m.get('lose',''))}\n"
-        p += f"让球:{m.get('give_ball', m.get('handicap', m.get('rq','')))}\n"
-        p += "总进球a0-a7:" + " | ".join([f"{g}={m.get(f'a{g}','')}" for g in range(8)]) + "\n"
-        hf_l = []
-        for k, lb in HFTF_MAP.items():
-            v = m.get(k, None)
-            if v not in (None, "", 0, "0"):
-                hf_l.append(f"{lb}={v}")
-        if hf_l:
-            p += "半全场:" + " | ".join(hf_l[:9]) + "\n"
-        p += _raw_field_line("change", m.get("change"), 1800)
-        p += _raw_field_line("vote", m.get("vote"), 1600)
-        p += _raw_field_line("information", m.get("information"), CLAUDE_COMPACT_FIELD_LIMIT)
-        p += _raw_field_line("points", m.get("points"), CLAUDE_COMPACT_FIELD_LIMIT)
-        style_pack = {k: v for k, v in m.items() if k in (
-            "league_style", "league_profile", "team_style", "home_style", "away_style", "play_style",
-            "tactical_style", "pace_rating", "tempo", "home_form", "away_form", "weather", "injury",
-            "lineup", "news", "motivation", "schedule", "home_rank", "away_rank", "home_stats", "away_stats",
-        )}
-        p += _raw_field_line("style_and_team_core", style_pack, CLAUDE_COMPACT_FIELD_LIMIT)
-        exp = ma.get("experience_audit") or _experience_engine().analyze(m)
-        p += _format_experience_audit_for_prompt(exp)
-        p += "</match>\n\n"
-    p += "</compact_match_data_for_claude>\n"
+    p += "Claude终审压缩抓包：Phase1三家已经看过完整抓包。这里只保留可裁决字段，避免长 prompt 串场。\n"
+    p += "所有赔率均为体彩竞彩抓包赔率，不是欧洲公司均赔。Claude必须重新审计原始字段，不按票数机械裁决。\n"
+    p += "严禁跨场引用；每个对象的 match 序号必须对应本段 compact_match_data 中的 match。\n"
+    p += json.dumps(rows, ensure_ascii=False, separators=(",", ":"), default=str)
+    p += "\n</compact_match_data_for_claude>\n"
     return p
 
 
@@ -764,16 +954,20 @@ def _short_ai_row(r: Dict[str, Any], idx: int) -> Dict[str, Any]:
 
 def build_claude_final_audit_prompt(match_analyses: List[Dict[str, Any]], phase1_results: Dict[str, Dict[int, Dict[str, Any]]]) -> str:
     p = "<final_audit_context>\n"
-    p += "你是 Claude 最终 RAW-AI 主裁。你看到的是体彩竞彩抓包核心字段和 GPT/Grok/Gemini 初审。\n"
-    p += "你不是反指模型，不需要为了审计而反对初审。选择证据最完整、最符合原始字段的一组。\n"
+    p += "你是 Claude 最终 RAW-AI 主裁。你看到的是体彩竞彩核心压缩抓包和 GPT/Grok/Gemini 初审。\n"
+    p += "你不是反指模型，不需要为了审计而反对初审；选择证据最完整、最符合原始字段的一组。\n"
     p += "必须输出 JSON 数组；字段同 phase1；禁止 JSON 外文本。\n"
     p += "必须复核：方向、direction_probs、goal_band、btts、top3比分、experience_review。\n"
-    p += "如果改动初审比分，必须指出硬依据；不能无证据从2-0改2-1或从1-1改0-0。\n"
+    p += "如果改动初审比分，必须指出硬依据；不能无证据从2-0改2-1、从主胜改客胜、或跨场引用。\n"
+    p += "比分坐标固定：主队进球在前，客队进球在后。比如客队1-0小胜必须写0-1，不得写1-0。\n"
     p += "</final_audit_context>\n\n"
+
     if AI_USE_COMPACT_CLAUDE_AUDIT:
         p += build_compact_claude_match_data(match_analyses)
     else:
+        # 保底兼容开关，但默认不建议。
         p += build_phase1_prompt(match_analyses)
+
     p += "\n<phase1_ai_results>\n"
     for ai in PHASE1_NAMES:
         p += f"<{ai}>\n"
@@ -783,7 +977,7 @@ def build_claude_final_audit_prompt(match_analyses: List[Dict[str, Any]], phase1
             if r:
                 p += json.dumps(_short_ai_row(r, idx), ensure_ascii=False, separators=(",", ":")) + "\n"
             else:
-                p += json.dumps({"match": idx, "abstain": True}, ensure_ascii=False) + "\n"
+                p += json.dumps({"match": idx, "abstain": True}, ensure_ascii=False, separators=(",", ":")) + "\n"
         p += f"</{ai}>\n"
     p += "</phase1_ai_results>\n\n"
     p += "<output_format>\n" + _output_format_rule() + "</output_format>\n"
@@ -853,13 +1047,17 @@ def debug_ai_config() -> None:
     print(f"[COMMON GATEWAY] API_URL={url or '<missing>'} API_KEY={_mask_key(key)} force_common={AI_FORCE_COMMON_GATEWAY}")
     for n in AI_NAMES:
         print(f"[AI CONFIG] {n.upper()} model={_model_for(n)} timeout={AI_CLAUDE_READ_TIMEOUT if n == 'claude' else AI_READ_TIMEOUT}s")
-    print(f"[AI MODE] compact_claude={AI_USE_COMPACT_CLAUDE_AUDIT} cache_ttl={AI_DECISION_CACHE_TTL} max_req_per_ai={AI_MAX_REQUESTS_PER_AI}")
+    print(
+        f"[AI MODE] compact_claude={AI_USE_COMPACT_CLAUDE_AUDIT} "
+        f"strict_json_phase1={not AI_ALLOW_TEXT_FALLBACK_PHASE1} "
+        f"strict_json_claude={not AI_ALLOW_TEXT_FALLBACK_CLAUDE} "
+        f"cache_ttl={AI_DECISION_CACHE_TTL} max_req_per_ai={AI_MAX_REQUESTS_PER_AI}"
+    )
 
 # ============================================================
-# 顶级解析器
+# 顶级解析器：结构化优先，默认不允许自然语言残片裁决
 # ============================================================
 
-_JSON_START_CHARS = "[{"
 _DIRECTION_RE = re.compile(r"(final_direction|direction|方向|赛果|结果)\s*[:：=]\s*['\"]?(home|draw|away|主胜|平局|客胜|胜|平|负)", re.I)
 _SCORE_RE = re.compile(r"(\d{1,2})\s*[-:：]\s*(\d{1,2})")
 
@@ -936,10 +1134,12 @@ def _extract_response_text(data: Any, ai_name: str = "") -> str:
                     for k in ["text", "answer", "response", "output_text", "final_answer", "output", "result", "model_response"]:
                         add(msg.get(k), f"choices.message.{k}", bonus=5)
                 add(ch.get("text"), "choices.text", bonus=5)
+
             add(data.get("output_text"), "output_text", bonus=10)
             add(data.get("text"), "text", bonus=5)
             add(data.get("answer"), "answer", bonus=5)
             add(data.get("result"), "result", bonus=5)
+
             if isinstance(data.get("candidates"), list):
                 for cand in data["candidates"]:
                     if isinstance(cand, dict):
@@ -948,6 +1148,7 @@ def _extract_response_text(data: Any, ai_name: str = "") -> str:
                             for part in cont.get("parts", []) or []:
                                 if isinstance(part, dict):
                                     add(part.get("text"), "candidates.content.parts.text", bonus=10)
+
             walk(data)
         elif isinstance(data, str):
             add(data, "raw", bonus=5)
@@ -976,16 +1177,16 @@ def _remove_trailing_commas(s: str) -> str:
 
 
 def _quote_unquoted_keys(s: str) -> str:
-    # 只在 JSON-like 场景下做温和修复，避免破坏自然语言。
     return re.sub(r"([\{,]\s*)([A-Za-z_][A-Za-z0-9_]*)(\s*:)", r'\1"\2"\3', s)
 
 
 def _json_loads_best_effort(s: str) -> Any:
     raw = s.strip()
-    variants = []
-    variants.append(raw)
-    variants.append(_remove_trailing_commas(raw))
-    variants.append(_quote_unquoted_keys(_remove_trailing_commas(raw)))
+    variants = [
+        raw,
+        _remove_trailing_commas(raw),
+        _quote_unquoted_keys(_remove_trailing_commas(raw)),
+    ]
     for cand in variants:
         try:
             return json.loads(cand)
@@ -1038,7 +1239,7 @@ def _balanced_fragments(text: str) -> List[str]:
             if any(k in frag for k in ["top3", "final_direction", "direction_probs", "score", "match", "比分"]):
                 frags.append(frag)
     frags.sort(key=len, reverse=True)
-    return frags[:20]
+    return frags[:30]
 
 
 def _object_lines(text: str) -> List[Dict[str, Any]]:
@@ -1061,7 +1262,11 @@ def _unwrap_json_result(obj: Any) -> List[Any]:
     if isinstance(obj, list):
         return obj
     if isinstance(obj, dict):
-        for k in ["predictions", "results", "matches", "data", "items", "output", "prediction", "result"]:
+        for k in ["predictions", "results", "items", "output"]:
+            v = obj.get(k)
+            if isinstance(v, list):
+                return v
+        for k in ["prediction", "result", "data"]:
             v = obj.get(k)
             if isinstance(v, list):
                 return v
@@ -1076,12 +1281,12 @@ def _extract_json_items(text: str) -> List[Any]:
     clean = _preclean_text(text)
     if not clean:
         return []
-    # 1. 整体解析。
+
     try:
         return _unwrap_json_result(_json_loads_best_effort(clean))
     except Exception:
         pass
-    # 2. 平衡数组/对象片段。
+
     best: List[Any] = []
     for frag in _balanced_fragments(clean):
         try:
@@ -1092,11 +1297,11 @@ def _extract_json_items(text: str) -> List[Any]:
             continue
     if best:
         return best
-    # 3. JSON Lines。
+
     lines = _object_lines(clean)
     if lines:
         return lines
-    # 4. 包裹多个对象：{...},{...}。
+
     obj_frags = [f for f in _balanced_fragments(clean) if f.startswith("{")]
     objs = []
     for f in obj_frags:
@@ -1107,7 +1312,6 @@ def _extract_json_items(text: str) -> List[Any]:
         except Exception:
             pass
     if objs:
-        # 去重，避免外层对象和内层对象重复。
         uniq = []
         seen = set()
         for o in objs:
@@ -1221,7 +1425,6 @@ def _normalize_ai_direction_probs(obj: Any) -> Dict[str, float]:
                 cand = obj["audit"].get(k)
                 break
     if not isinstance(cand, dict):
-        # 兼容 home_win_pct/draw_pct/away_win_pct
         keys = ["home_win_pct", "draw_pct", "away_win_pct"]
         if any(k in obj for k in keys):
             cand = {"home": obj.get("home_win_pct"), "draw": obj.get("draw_pct"), "away": obj.get("away_win_pct")}
@@ -1257,10 +1460,25 @@ def _match_index_from_item(item: Dict[str, Any], fallback_idx: int, num_matches:
 
 
 def _normalize_goal_band_value(v: Any, top_score: str = "") -> str:
+    if isinstance(v, (list, tuple)) and len(v) >= 2:
+        try:
+            lo, hi = int(float(v[0])), int(float(v[1]))
+            if hi <= 1:
+                return "0-1"
+            if lo <= 1 and hi <= 2:
+                return "2"
+            if lo <= 2 and hi <= 3:
+                return "3"
+            return "4+"
+        except Exception:
+            pass
     s = str(v or "").strip().lower().replace(" ", "")
     aliases = {
         "0-1": "0-1", "0_1": "0-1", "0~1": "0-1", "0至1": "0-1", "0到1": "0-1", "0/1": "0-1", "low": "0-1", "小球": "0-1",
+        "1": "0-1", "1球": "0-1",
+        "1-2": "2", "1~2": "2", "1/2": "2",
         "2": "2", "2球": "2", "two": "2",
+        "2-3": "3", "2~3": "3", "2/3": "3",
         "3": "3", "3球": "3", "three": "3",
         "4+": "4+", "4plus": "4+", "4以上": "4+", "4球+": "4+", "high": "4+", "大球": "4+",
     }
@@ -1322,7 +1540,11 @@ def _normalize_experience_review(item: Dict[str, Any]) -> List[Dict[str, str]]:
 
 
 def _fallback_parse_text_blocks(raw_text: str, num_matches: int) -> Dict[int, Dict[str, Any]]:
-    # 最后兜底：AI没给JSON但给了每场自然语言，尽量提取序号+比分。
+    """
+    仅保留调试能力。
+    默认不会进入最终结果；除非显式设置 AI_ALLOW_TEXT_FALLBACK_PHASE1=true。
+    Claude 默认永远不允许文本 fallback。
+    """
     clean = _preclean_text(raw_text)
     results: Dict[int, Dict[str, Any]] = {}
     parts = re.split(r"(?=\n?\s*(?:\[?\d+\]?|match\s*\d+|第\s*\d+\s*场)[\].、:：\s])", clean, flags=re.I)
@@ -1349,7 +1571,7 @@ def _fallback_parse_text_blocks(raw_text: str, num_matches: int) -> Dict[int, Di
         conf_match = re.search(r"(?:confidence|置信度|ai_confidence)\D{0,8}(\d{1,3})", part, flags=re.I)
         conf = int(_clip(_f(conf_match.group(1), 60) if conf_match else 60, 0, 100))
         results[idx] = {
-            "top3": [{"score": score, "prob": 0.0, "market_logic": "text_fallback"}],
+            "top3": [{"score": score, "prob": 0.0, "market_logic": "text_fallback_debug_only"}],
             "ai_score": score,
             "reason": part[:4000],
             "ai_confidence": conf,
@@ -1365,11 +1587,28 @@ def _fallback_parse_text_blocks(raw_text: str, num_matches: int) -> Dict[int, Di
             "experience_review": [],
             "final_direction": direction,
             "raw_item": {"text_fallback": part[:1000]},
+            "_parse_mode": "text_fallback",
         }
     return results
 
 
-def _parse_ai_json(raw_text: str, num_matches: int, ai_name: str = "") -> Dict[int, Dict[str, Any]]:
+def _is_text_fallback_result(r: Dict[str, Any]) -> bool:
+    if not isinstance(r, dict):
+        return True
+    if r.get("_parse_mode") == "text_fallback":
+        return True
+    if r.get("score_shape_reason") == "text_fallback_parser":
+        return True
+    dm = r.get("data_missing", [])
+    if isinstance(dm, list) and "json_format_missing_text_fallback" in dm:
+        return True
+    return False
+
+
+def _parse_ai_json(raw_text: str, num_matches: int, ai_name: str = "", allow_text_fallback: Optional[bool] = None) -> Dict[int, Dict[str, Any]]:
+    if allow_text_fallback is None:
+        allow_text_fallback = AI_ALLOW_TEXT_FALLBACK_CLAUDE if ai_name == "claude" else AI_ALLOW_TEXT_FALLBACK_PHASE1
+
     items = _extract_json_items(raw_text)
     results: Dict[int, Dict[str, Any]] = {}
     if not isinstance(items, list):
@@ -1378,7 +1617,7 @@ def _parse_ai_json(raw_text: str, num_matches: int, ai_name: str = "") -> Dict[i
     for pos, item in enumerate(items, 1):
         if not isinstance(item, dict):
             continue
-        # 支持内部再包一层 prediction/result。
+
         for k in ["prediction", "result", "data"]:
             if isinstance(item.get(k), dict) and not any(x in item for x in ["top3", "score", "predicted_score", "ai_score"]):
                 inner = dict(item[k])
@@ -1386,25 +1625,32 @@ def _parse_ai_json(raw_text: str, num_matches: int, ai_name: str = "") -> Dict[i
                     inner["match"] = item["match"]
                 item = inner
                 break
+
         top3 = _normalize_top3(item)
         if not top3:
             continue
+
         top_score = top3[0]["score"]
         mid = _match_index_from_item(item, pos, num_matches)
         if not mid:
             continue
+
         final_direction = _normalize_direction(item.get("final_direction", item.get("direction", item.get("result", item.get("赛果", "")))), top_score)
         score_dir = _score_direction(top_score)
         if score_dir in VALID_DIRS:
             final_direction = score_dir
+
         conf = item.get("ai_confidence", item.get("confidence", item.get("conf", item.get("置信度", 60))))
         traps = item.get("detected_traps", item.get("traps", item.get("risk_flags", [])))
         if not isinstance(traps, list):
             traps = [str(traps)] if traps else []
+
         data_missing = item.get("data_missing", [])
         if not isinstance(data_missing, list):
             data_missing = [str(data_missing)] if data_missing else []
+
         audit = item.get("audit", {}) if isinstance(item.get("audit", {}), dict) else {}
+
         results[mid] = {
             "top3": top3,
             "ai_score": top_score,
@@ -1422,9 +1668,10 @@ def _parse_ai_json(raw_text: str, num_matches: int, ai_name: str = "") -> Dict[i
             "experience_review": _normalize_experience_review(item),
             "final_direction": final_direction,
             "raw_item": item,
+            "_parse_mode": "json",
         }
 
-    if not results:
+    if not results and allow_text_fallback:
         results = _fallback_parse_text_blocks(raw_text, num_matches)
 
     if AI_PARSE_DEBUG and not results:
@@ -1476,6 +1723,7 @@ async def async_call_one_ai_batch(
             read_timeout = AI_CLAUDE_READ_TIMEOUT if ai_name == "claude" else AI_READ_TIMEOUT
             connect_timeout = AI_CLAUDE_CONNECT_TIMEOUT if ai_name == "claude" else AI_CONNECT_TIMEOUT
             timeout = aiohttp.ClientTimeout(total=None, connect=connect_timeout, sock_connect=connect_timeout, sock_read=read_timeout)
+
             async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
                 elapsed = round(time.time() - t0, 1)
                 if r.status != 200:
@@ -1486,38 +1734,53 @@ async def async_call_one_ai_batch(
                     print(f"    HTTP {r.status} | {elapsed}s | {text_for_error[:260]}")
                     AI_CALL_STATUS[ai_name].update({"status": f"http_{r.status}", "http_error": text_for_error[:500]})
                     continue
+
                 try:
                     data = await r.json(content_type=None)
                 except Exception:
                     text = await r.text()
                     data = {"raw": text.strip()}
+
                 raw_text = _extract_response_text(data, ai_name)
                 if AI_SAVE_RAW_RESPONSE:
                     _save_debug_dump(ai_name, data, "raw_saved", raw_text)
+
                 if not raw_text:
                     print("    空文本响应")
                     _save_debug_dump(ai_name, data, "empty", "")
                     AI_CALL_STATUS[ai_name].update({"status": "empty"})
                     continue
+
                 parsed = _parse_ai_json(raw_text, num_matches, ai_name)
                 if parsed:
-                    print(f"    {ai_name.upper()} 完成: {len(parsed)}/{num_matches} | {round(time.time()-t0,1)}s")
-                    AI_CALL_STATUS[ai_name].update({"ok": True, "status": "ok", "count": len(parsed), "model": model})
+                    strict_note = "json"
+                    if any(_is_text_fallback_result(v) for v in parsed.values()):
+                        strict_note = "text_fallback"
+                    print(f"    {ai_name.upper()} 完成: {len(parsed)}/{num_matches} | {round(time.time()-t0,1)}s | parse={strict_note}")
+                    AI_CALL_STATUS[ai_name].update({"ok": True, "status": "ok", "count": len(parsed), "model": model, "parse_mode": strict_note})
                     return ai_name, parsed, model
-                print(f"    解析0条，raw前260字: {raw_text[:260].replace(chr(10),' ')}")
+
+                print(f"    结构化解析0条，raw前260字: {raw_text[:260].replace(chr(10),' ')}")
+                if ai_name == "claude":
+                    print("    CLAUDE 非 JSON / JSON-like 输出已按失败处理，禁止自然语言残片裁决")
                 _save_debug_dump(ai_name, data, "parse0", raw_text)
-                AI_CALL_STATUS[ai_name].update({"status": "parse0"})
+                AI_CALL_STATUS[ai_name].update({"status": "parse0_strict_json"})
         except asyncio.TimeoutError:
             print(f"    {ai_name.upper()} 读取超时")
             AI_CALL_STATUS[ai_name].update({"status": "timeout"})
         except Exception as e:
             print(f"    {ai_name.upper()} 调用异常: {str(e)[:220]}")
             AI_CALL_STATUS[ai_name].update({"status": "error", "error": str(e)[:500]})
+
     return ai_name, {}, "all_failed"
 
 
 def _phase_system(ai_name: str) -> str:
-    base = "只输出 JSON 数组。禁止 markdown、禁止 JSON 外说明。不得引用 CRS、本地矩阵、贝叶斯或固定模板。"
+    base = (
+        "只输出 JSON 数组。禁止 markdown、禁止 JSON 外说明。"
+        "不得引用 CRS、本地矩阵、贝叶斯或固定模板。"
+        "比分坐标固定为主队在前、客队在后。"
+    )
     if ai_name == "gpt":
         return "你是 RAW 赔率结构和比分分布分析师。" + base
     if ai_name == "grok":
@@ -1525,7 +1788,10 @@ def _phase_system(ai_name: str) -> str:
     if ai_name == "gemini":
         return "你是 RAW 多市场一致性和异常结构分析师。" + base
     if ai_name == "claude":
-        return "你是最终 RAW-AI 主裁，不是反指模型。默认尊重证据最完整的初审，只有原始字段硬反证才改票。" + base
+        return (
+            "你是最终 RAW-AI 主裁，不是反指模型。默认尊重证据最完整的初审，只有原始字段硬反证才改票。"
+            "必须输出 JSON 数组；禁止自然语言解释包在 JSON 外。"
+        ) + base
     return base
 
 # ============================================================
@@ -1542,15 +1808,16 @@ _VOLATILE_CACHE_KEYS = {
 
 
 def _sanitize_for_ai_cache(obj: Any) -> Any:
-    if not AI_CACHE_STRIP_VOLATILE_KEYS:
-        return obj
     if isinstance(obj, dict):
         out = {}
         for k, v in obj.items():
             kl = str(k).strip().lower()
-            if kl in _VOLATILE_CACHE_KEYS:
-                continue
-            if kl.endswith("_ts") or kl.endswith("_timestamp") or kl.endswith("_time_ms"):
+            if AI_CACHE_STRIP_VOLATILE_KEYS:
+                if kl in _VOLATILE_CACHE_KEYS:
+                    continue
+                if kl.endswith("_ts") or kl.endswith("_timestamp") or kl.endswith("_time_ms"):
+                    continue
+            if str(k) in PROMPT_DROP_KEYS:
                 continue
             out[k] = _sanitize_for_ai_cache(v)
         return out
@@ -1559,7 +1826,7 @@ def _sanitize_for_ai_cache(obj: Any) -> Any:
     return obj
 
 
-def _stable_ai_cache_key(match_analyses: List[Dict[str, Any]], phase: str = "pure") -> str:
+def _stable_ai_cache_key(match_analyses: List[Dict[str, Any]], phase: str = "pure_strict_json_18_4_9") -> str:
     compact = []
     for ma in match_analyses:
         m = ma.get("match", {})
@@ -1597,6 +1864,21 @@ def _ai_lock_file(cache_key: str) -> str:
     return os.path.join(AI_CACHE_DIR, f"{cache_key}.lock")
 
 
+def _purge_text_fallback_from_cached_results(results: Dict[str, Dict[int, Dict[str, Any]]]) -> Dict[str, Dict[int, Dict[str, Any]]]:
+    clean = {n: {} for n in AI_NAMES}
+    for name in AI_NAMES:
+        rows = results.get(name, {}) or {}
+        for idx, r in rows.items():
+            try:
+                ii = int(idx)
+            except Exception:
+                continue
+            if _is_text_fallback_result(r):
+                continue
+            clean[name][ii] = r
+    return clean
+
+
 def _load_ai_disk_cache(cache_key: str) -> Optional[Dict[str, Dict[int, Dict[str, Any]]]]:
     if AI_DISABLE_CACHE or not AI_PERSISTENT_CACHE_ENABLED:
         return None
@@ -1623,7 +1905,9 @@ def _load_ai_disk_cache(cache_key: str) -> Optional[Dict[str, Dict[int, Dict[str
                         restored[name][int(k)] = v
                     except Exception:
                         continue
-        print(f"  [AI DISK CACHE] 命中持久化缓存 ttl={AI_DECISION_CACHE_TTL}s")
+
+        restored = _purge_text_fallback_from_cached_results(restored)
+        print(f"  [AI DISK CACHE] 命中持久化缓存 ttl={AI_DECISION_CACHE_TTL}s | 已剔除text_fallback结果")
         return restored
     except Exception as e:
         print(f"  [AI DISK CACHE] 读取失败: {str(e)[:100]}")
@@ -1634,6 +1918,7 @@ def _save_ai_disk_cache(cache_key: str, results: Dict[str, Dict[int, Dict[str, A
     if AI_DISABLE_CACHE or not AI_PERSISTENT_CACHE_ENABLED:
         return
     try:
+        results = _purge_text_fallback_from_cached_results(results)
         ok = sum(1 for n in AI_NAMES if results.get(n))
         if ok <= 0:
             return
@@ -1697,7 +1982,7 @@ async def _run_ai_matrix_two_phase_inner(match_analyses: List[Dict[str, Any]], c
     debug_ai_config()
     num = len(match_analyses)
     prompt = build_phase1_prompt(match_analyses)
-    print(f"  [v18.4 Phase1 Prompt] {len(prompt):,}字符 → GPT/Grok/Gemini")
+    print(f"  [v18.4.9 Phase1 Prompt] {len(prompt):,}字符 → GPT/Grok/Gemini")
 
     all_results: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in AI_NAMES}
     connector = aiohttp.TCPConnector(limit=8, use_dns_cache=False, ttl_dns_cache=0)
@@ -1718,18 +2003,19 @@ async def _run_ai_matrix_two_phase_inner(match_analyses: List[Dict[str, Any]], c
                 all_results["claude"] = {}
             else:
                 audit_prompt = build_claude_final_audit_prompt(match_analyses, all_results)
-                print(f"  [v18.4 Phase2 Claude Audit] {len(audit_prompt):,}字符 | compact={AI_USE_COMPACT_CLAUDE_AUDIT}")
+                print(f"  [v18.4.9 Phase2 Claude Compact Audit] {len(audit_prompt):,}字符 | compact={AI_USE_COMPACT_CLAUDE_AUDIT}")
                 _, cl_res, _ = await async_call_one_ai_batch(session, audit_prompt, num, "claude", _phase_system("claude"))
                 all_results["claude"] = cl_res or {}
         else:
             audit_prompt = build_claude_final_audit_prompt(match_analyses, all_results)
-            print(f"  [v18.4 Phase2 Claude Audit] {len(audit_prompt):,}字符 | compact={AI_USE_COMPACT_CLAUDE_AUDIT}")
+            print(f"  [v18.4.9 Phase2 Claude Compact Audit] {len(audit_prompt):,}字符 | compact={AI_USE_COMPACT_CLAUDE_AUDIT}")
             _, cl_res, _ = await async_call_one_ai_batch(session, audit_prompt, num, "claude", _phase_system("claude"))
             all_results["claude"] = cl_res or {}
 
+    all_results = _purge_text_fallback_from_cached_results(all_results)
     ok = sum(1 for n in AI_NAMES if all_results.get(n))
     status = {k: AI_CALL_STATUS.get(k, {}) for k in AI_NAMES}
-    print(f"  [完成] {ok}/4 AI有数据 | status={status}")
+    print(f"  [完成] {ok}/4 AI有结构化数据 | status={status}")
 
     if not AI_DISABLE_CACHE and ok > 0:
         _AI_RESULT_CACHE[cache_key] = (time.time(), all_results, status)
@@ -1747,7 +2033,7 @@ async def run_ai_matrix_two_phase(match_analyses: List[Dict[str, Any]]) -> Dict[
         ts, results, _ = _AI_RESULT_CACHE[cache_key]
         if now - ts <= AI_DECISION_CACHE_TTL:
             print(f"  [AI CACHE] 命中内存缓存 ttl={AI_DECISION_CACHE_TTL}s")
-            return results
+            return _purge_text_fallback_from_cached_results(results)
         _AI_RESULT_CACHE.pop(cache_key, None)
 
     cached = _load_ai_disk_cache(cache_key)
@@ -1786,6 +2072,7 @@ def _run_async(coro):
         return asyncio.run(coro)
     if loop and loop.is_running():
         import concurrent.futures
+
         def runner():
             nl = asyncio.new_event_loop()
             try:
@@ -1793,6 +2080,7 @@ def _run_async(coro):
                 return nl.run_until_complete(coro)
             finally:
                 nl.close()
+
         with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
             return pool.submit(runner).result()
     return asyncio.run(coro)
@@ -1803,6 +2091,8 @@ def _run_async(coro):
 
 def _valid_ai_score_from_response(r: Dict[str, Any]) -> str:
     if not isinstance(r, dict):
+        return ""
+    if _is_text_fallback_result(r):
         return ""
     sc = _score_from_candidate(r.get("ai_score", ""))
     if _parse_score(sc)[0] is not None:
@@ -1828,16 +2118,20 @@ def _phase1_exact_consensus(ai_responses: Dict[str, Dict[str, Any]]) -> Tuple[st
 
 
 def _choose_final_ai(ai_responses: Dict[str, Dict[str, Any]]) -> Tuple[str, Dict[str, Any], str]:
+    # Claude 只有结构化 JSON / JSON-like 解析成功才有主裁权。
     if _valid_ai_score_from_response(ai_responses.get("claude", {})):
         return "claude", ai_responses["claude"], "claude_pure_authority"
+
     sc, n, names = _phase1_exact_consensus(ai_responses)
     if sc and n >= 2:
         best_name = max(names, key=lambda nm: _f(ai_responses.get(nm, {}).get("ai_confidence", 60), 60))
         return best_name, ai_responses[best_name], f"phase1_exact_consensus:{','.join(names)}"
+
     valid = [(name, ai_responses.get(name, {})) for name in PHASE1_NAMES if _valid_ai_score_from_response(ai_responses.get(name, {}))]
     if valid:
         name, r = max(valid, key=lambda nr: _f(nr[1].get("ai_confidence", 60), 60))
         return name, r, f"phase1_best_confidence:{name}"
+
     return "", {}, "ai_abstain_no_valid_model"
 
 
@@ -1847,7 +2141,8 @@ def _direction_pct_from_top3(top3: List[Dict[str, Any]], final_direction: str) -
         sc = _score_from_candidate(cand)
         d = _score_direction(sc)
         if d in mass:
-            mass[d] += max(0.0, _prob_to_float(cand.get("prob", 0) if isinstance(cand, dict) else 0))
+            prob = cand.get("prob", 0) if isinstance(cand, dict) else 0
+            mass[d] += max(0.0, _prob_to_float(prob))
     if sum(mass.values()) <= 0:
         if final_direction in mass:
             mass[final_direction] = 50.0
@@ -1912,7 +2207,14 @@ def _ai_model_agreement(all_ai: Dict[str, Dict[str, Any]], score: str, direction
         if (_score_direction(sc) or "") == direction:
             same_dir += 1
     total = max(1, len(valid))
-    return {"valid_models": valid, "valid_count": len(valid), "same_score": same_score, "same_direction": same_dir, "score_agreement": same_score / total, "direction_agreement": same_dir / total}
+    return {
+        "valid_models": valid,
+        "valid_count": len(valid),
+        "same_score": same_score,
+        "same_direction": same_dir,
+        "score_agreement": same_score / total,
+        "direction_agreement": same_dir / total,
+    }
 
 
 def _experience_review_coverage(final_r: Dict[str, Any], exp_audit: Dict[str, Any]) -> Tuple[float, List[str]]:
@@ -1926,7 +2228,16 @@ def _experience_review_coverage(final_r: Dict[str, Any], exp_audit: Dict[str, An
     return max(0.0, 1.0 - len(missing) / max(1, len(ids))), missing
 
 
-def _compute_recommendation_scores(final_r: Dict[str, Any], all_ai: Dict[str, Dict[str, Any]], match_obj: Dict[str, Any], exp_audit: Dict[str, Any], score: str, direction: str, pct: Dict[str, float], top_candidates: List[Tuple[str, float]]) -> Dict[str, Any]:
+def _compute_recommendation_scores(
+    final_r: Dict[str, Any],
+    all_ai: Dict[str, Dict[str, Any]],
+    match_obj: Dict[str, Any],
+    exp_audit: Dict[str, Any],
+    score: str,
+    direction: str,
+    pct: Dict[str, float],
+    top_candidates: List[Tuple[str, float]],
+) -> Dict[str, Any]:
     vals = sorted([_f(v, 0.0) for v in pct.values()], reverse=True)
     top = vals[0] if vals else 33.3
     gap = vals[0] - vals[1] if len(vals) >= 2 else 0.0
@@ -1936,25 +2247,49 @@ def _compute_recommendation_scores(final_r: Dict[str, Any], all_ai: Dict[str, Di
     if sprob > 0:
         ps = [p / sprob for p in ps]
         entropy = -sum(p * math.log(p) for p in ps) / math.log(3)
+
     agreement = _ai_model_agreement(all_ai, score, direction)
     exp_cov, exp_missing = _experience_review_coverage(final_r, exp_audit)
     audit = final_r.get("audit", {}) if isinstance(final_r.get("audit", {}), dict) else {}
     data_missing = final_r.get("data_missing", []) if isinstance(final_r.get("data_missing", []), list) else []
-    web_missing = "external_european_odds" in data_missing or str(audit.get("web_odds_check", "")).lower() in ("web_search_unavailable", "european_odds_missing", "missing")
-    gb = final_r.get("goal_band", "") or _score_goal_band(score)
-    bt = final_r.get("btts", "") or _score_btts(score)
+    web_missing = "external_european_odds" in data_missing or str(audit.get("web_odds_check", "")).lower() in (
+        "web_search_unavailable", "european_odds_missing", "missing"
+    )
+
+    gb = final_r.get("goal_band") or _score_goal_band(score)
+    bt = final_r.get("btts") or _score_btts(score)
     score_gb = _score_goal_band(score)
     score_bt = _score_btts(score)
+
     warnings = []
     if gb and score_gb and gb != score_gb:
         warnings.append(f"goal_band_conflict:{gb}!={score_gb}")
     if bt in ("yes", "no") and score_bt in ("yes", "no") and bt != score_bt:
         warnings.append(f"btts_conflict:{bt}!={score_bt}")
+
     has_shape_reason = bool(str(final_r.get("score_shape_reason", "")).strip() or str(audit.get("style_score_logic", "")).strip())
     top_score_prob = top_candidates[0][1] if top_candidates else 0.0
     tsp = top_score_prob if top_score_prob <= 1 else top_score_prob / 100.0
-    direction_score = 25.0 + 0.40 * top + 0.65 * gap + 10.0 * (1 - entropy) + 12.0 * agreement.get("direction_agreement", 0.0) + 8.0 * exp_cov
-    shape_score = 18.0 + 16.0 * (top / 100.0) + 8.0 * (gap / 100.0) + 65.0 * min(1.0, tsp) + 16.0 * agreement.get("score_agreement", 0.0) + 14.0 * (1.0 if not warnings else 0.0) + 9.0 * (1.0 if has_shape_reason else 0.0) + 6.0 * exp_cov
+
+    direction_score = (
+        25.0
+        + 0.40 * top
+        + 0.65 * gap
+        + 10.0 * (1 - entropy)
+        + 12.0 * agreement.get("direction_agreement", 0.0)
+        + 8.0 * exp_cov
+    )
+    shape_score = (
+        18.0
+        + 16.0 * (top / 100.0)
+        + 8.0 * (gap / 100.0)
+        + 65.0 * min(1.0, tsp)
+        + 16.0 * agreement.get("score_agreement", 0.0)
+        + 14.0 * (1.0 if not warnings else 0.0)
+        + 9.0 * (1.0 if has_shape_reason else 0.0)
+        + 6.0 * exp_cov
+    )
+
     if web_missing:
         direction_score -= 5
         shape_score -= 3
@@ -1964,9 +2299,11 @@ def _compute_recommendation_scores(final_r: Dict[str, Any], all_ai: Dict[str, Di
     if warnings:
         shape_score -= 18
         direction_score -= 3
+
     direction_score = round(_clip(direction_score, 0, 100), 1)
     shape_score = round(_clip(shape_score, 0, 100), 1)
     overall = round(min(direction_score, shape_score * 1.08), 1)
+
     return {
         "direction_selection_score": direction_score,
         "score_shape_score": shape_score,
@@ -1984,30 +2321,96 @@ def _compute_recommendation_scores(final_r: Dict[str, Any], all_ai: Dict[str, Di
 
 def _abstain_prediction(reason: str = "AI全失败，PURE模式不使用本地兜底") -> Dict[str, Any]:
     return {
-        "predicted_score": "弃权", "predicted_label": "弃权", "result": "弃权", "display_direction": "弃权", "final_direction": "abstain",
-        "is_abstain": True, "is_score_others": False,
-        "home_win_pct": 0.0, "draw_pct": 0.0, "away_win_pct": 0.0,
-        "confidence": 0, "confidence_meaning": "PURE RAW-AI 模式：AI全失败即弃权，不使用本地兜底",
-        "risk_level": "高", "dir_confidence": 0, "dir_gap": 0, "scenario": "ai_abstain", "goal_range": (0, 0),
-        "bayesian_evidences": [reason], "bayesian_prior": {}, "override_triggered": False,
-        "traps_detected": [], "trap_count": 0, "trap_severity": 0, "trap_details": [], "trap_flags": {},
-        "fair_1x2": {}, "fair_1x2_method": "disabled_pure_raw_ai", "market_overround": 0.0, "raw_implied_1x2": {},
-        "crs_shape": "disabled_pure_raw_ai", "crs_moments": {}, "crs_margin": 0.0, "crs_coverage": 0.0, "crs_implied_probs": {}, "crs_low_rank_info": {},
-        "top_score_candidates": [], "unified_matrix_top_scores": [], "unified_goal_probs": {}, "fair_1x2_pack": {}, "mixed_target_dir": {},
-        "unified_source": "disabled_pure_raw_ai", "decision_source": "ai_abstain_no_local_fallback", "ai_authority_mode": "pure_raw_ai",
-        "suggested_kelly": 0.0, "edge_vs_market": 0.0, "is_value": False, "ev_note": "disabled_pure_raw_ai",
-        "score_model_prob": 0.0, "score_market_odds": 0.0, "score_market_implied_pct": None,
-        "smart_money_signal": "", "smart_signals": [], "cold_door": {"is_cold_door": False, "strength": 0, "level": "普通", "signals": [], "sharp_confirmed": False, "dark_verdict": ""},
-        "xG_home": "?", "xG_away": "?", "expected_total_goals": 0, "over_under_2_5": "弃权", "both_score": "弃权",
-        "ai_avg_confidence": 0, "ai_abstained": ["GPT", "GROK", "GEMINI", "CLAUDE"],
-        "gpt_score": "弃权", "gpt_analysis": "弃权", "grok_score": "弃权", "grok_analysis": "弃权", "gemini_score": "弃权", "gemini_analysis": "弃权", "claude_score": "弃权", "claude_analysis": "弃权",
-        "engine_version": ENGINE_VERSION, "engine_architecture": ENGINE_ARCHITECTURE,
+        "predicted_score": "弃权",
+        "predicted_label": "弃权",
+        "result": "弃权",
+        "display_direction": "弃权",
+        "final_direction": "abstain",
+        "is_abstain": True,
+        "is_score_others": False,
+        "home_win_pct": 0.0,
+        "draw_pct": 0.0,
+        "away_win_pct": 0.0,
+        "confidence": 0,
+        "confidence_meaning": "PURE RAW-AI 模式：AI全失败即弃权，不使用本地兜底",
+        "risk_level": "高",
+        "dir_confidence": 0,
+        "dir_gap": 0,
+        "scenario": "ai_abstain",
+        "goal_range": (0, 0),
+        "bayesian_evidences": [reason],
+        "bayesian_prior": {},
+        "override_triggered": False,
+        "traps_detected": [],
+        "trap_count": 0,
+        "trap_severity": 0,
+        "trap_details": [],
+        "trap_flags": {},
+        "fair_1x2": {},
+        "fair_1x2_method": "disabled_pure_raw_ai",
+        "market_overround": 0.0,
+        "raw_implied_1x2": {},
+        "crs_shape": "disabled_pure_raw_ai",
+        "crs_moments": {},
+        "crs_margin": 0.0,
+        "crs_coverage": 0.0,
+        "crs_implied_probs": {},
+        "crs_low_rank_info": {},
+        "top_score_candidates": [],
+        "unified_matrix_top_scores": [],
+        "unified_goal_probs": {},
+        "fair_1x2_pack": {},
+        "mixed_target_dir": {},
+        "unified_source": "disabled_pure_raw_ai",
+        "decision_source": "ai_abstain_no_local_fallback",
+        "ai_authority_mode": "pure_raw_ai",
+        "suggested_kelly": 0.0,
+        "edge_vs_market": 0.0,
+        "is_value": False,
+        "ev_note": "disabled_pure_raw_ai",
+        "score_model_prob": 0.0,
+        "score_market_odds": 0.0,
+        "score_market_implied_pct": None,
+        "smart_money_signal": "",
+        "smart_signals": [],
+        "cold_door": {
+            "is_cold_door": False,
+            "strength": 0,
+            "level": "普通",
+            "signals": [],
+            "sharp_confirmed": False,
+            "dark_verdict": "",
+        },
+        "xG_home": "?",
+        "xG_away": "?",
+        "expected_total_goals": 0,
+        "over_under_2_5": "弃权",
+        "both_score": "弃权",
+        "ai_avg_confidence": 0,
+        "ai_abstained": ["GPT", "GROK", "GEMINI", "CLAUDE"],
+        "gpt_score": "弃权",
+        "gpt_analysis": "弃权",
+        "grok_score": "弃权",
+        "grok_analysis": "弃权",
+        "gemini_score": "弃权",
+        "gemini_analysis": "弃权",
+        "claude_score": "弃权",
+        "claude_analysis": "弃权",
+        "engine_version": ENGINE_VERSION,
+        "engine_architecture": ENGINE_ARCHITECTURE,
     }
 
 
-def _make_ai_prediction(final_name: str, final_r: Dict[str, Any], decision_source: str, all_ai: Dict[str, Dict[str, Any]], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+def _make_ai_prediction(
+    final_name: str,
+    final_r: Dict[str, Any],
+    decision_source: str,
+    all_ai: Dict[str, Dict[str, Any]],
+    match_obj: Dict[str, Any],
+) -> Dict[str, Any]:
     score = _valid_ai_score_from_response(final_r)
     direction = _score_direction(score) or _normalize_direction(final_r.get("final_direction", ""), score)
+
     top3 = final_r.get("top3", []) if isinstance(final_r.get("top3", []), list) else []
     top_candidates = []
     for cand in top3[:8]:
@@ -2018,12 +2421,18 @@ def _make_ai_prediction(final_name: str, final_r: Dict[str, Any], decision_sourc
     if not top_candidates and score != "弃权":
         top_candidates = [(score, 0.0)]
 
-    pct = final_r.get("direction_probs") if isinstance(final_r.get("direction_probs"), dict) and final_r.get("direction_probs") else _direction_pct_from_top3(top3, direction)
+    pct = (
+        final_r.get("direction_probs")
+        if isinstance(final_r.get("direction_probs"), dict) and final_r.get("direction_probs")
+        else _direction_pct_from_top3(top3, direction)
+    )
+
     conf = int(_clip(_f(final_r.get("ai_confidence", 60), 60), 0, 100))
     gmin, gmax, scenario = _goal_range_from_score(score)
     total_goals = _score_total(score) or 0
     final_odds = get_market_odds_for_score(match_obj, score)
     market_implied = round(100.0 / final_odds, 3) if final_odds > 1.05 else None
+
     ai_abstained = [n.upper() for n in AI_NAMES if not _valid_ai_score_from_response(all_ai.get(n, {}))]
     confs = [_f(r.get("ai_confidence", 60), 60) for r in all_ai.values() if isinstance(r, dict) and _valid_ai_score_from_response(r)]
     avg_conf = round(sum(confs) / len(confs), 1) if confs else conf
@@ -2039,8 +2448,10 @@ def _make_ai_prediction(final_name: str, final_r: Dict[str, Any], decision_sourc
 
     exp_audit = _experience_engine().analyze(match_obj)
     selection_pack = _compute_recommendation_scores(final_r, all_ai, match_obj, exp_audit, score, direction, pct, top_candidates)
+
     evidences = [
         "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
+        "STRICT JSON：Claude/Phase1默认不允许自然语言残片进入最终裁决。",
         f"最终来源:{decision_source}; final_model={final_name}; score={score}; direction={direction}",
         f"AI top3:{top_candidates[:5]}",
         f"AI direction_probs:{pct} ({'AI原生direction_probs' if final_r.get('direction_probs') else 'top3_direction_share_fallback'})",
@@ -2050,11 +2461,20 @@ def _make_ai_prediction(final_name: str, final_r: Dict[str, Any], decision_sourc
     if final_r.get("data_missing"):
         evidences.append("data_missing:" + _json_compact(final_r.get("data_missing"), 800))
     if exp_audit.get("triggered"):
-        evidences.append("experience_audit_cards(prompt_only):" + _json_compact([{k: t.get(k) for k in ("id", "name", "reason", "ai_question")} for t in exp_audit.get("triggered", [])], 1800))
+        evidences.append(
+            "experience_audit_cards(prompt_only):"
+            + _json_compact([{k: t.get(k) for k in ("id", "name", "reason", "ai_question")} for t in exp_audit.get("triggered", [])], 1800)
+        )
     if selection_pack.get("score_shape_warnings"):
         evidences.append("score_shape_warnings:" + _json_compact(selection_pack.get("score_shape_warnings"), 500))
     if selection_pack.get("experience_review_missing"):
         evidences.append("experience_review_missing:" + _json_compact(selection_pack.get("experience_review_missing"), 800))
+
+    gb = final_r.get("goal_band") or _score_goal_band(score)
+    bt = final_r.get("btts") or _score_btts(score)
+
+    h_goal, a_goal = _parse_score(score)
+    both_score_cn = "是" if (h_goal or 0) > 0 and (a_goal or 0) > 0 else "否"
 
     return {
         "predicted_score": score,
@@ -2064,12 +2484,14 @@ def _make_ai_prediction(final_name: str, final_r: Dict[str, Any], decision_sourc
         "final_direction": direction,
         "is_abstain": False,
         "is_score_others": _score_display_label(score, direction) in ("胜其他", "平其他", "负其他"),
-        "home_win_pct": pct.get("home", 0.0), "draw_pct": pct.get("draw", 0.0), "away_win_pct": pct.get("away", 0.0),
+        "home_win_pct": pct.get("home", 0.0),
+        "draw_pct": pct.get("draw", 0.0),
+        "away_win_pct": pct.get("away", 0.0),
         "confidence": conf,
         "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
         "risk_level": str(final_r.get("risk_level", "medium")),
-        "goal_band": final_r.get("goal_band", _score_goal_band(score)),
-        "btts_ai": final_r.get("btts", _score_btts(score)),
+        "goal_band": gb,
+        "btts_ai": bt,
         "score_shape_reason": final_r.get("score_shape_reason", ""),
         "experience_review": final_r.get("experience_review", []),
         **selection_pack,
@@ -2078,38 +2500,107 @@ def _make_ai_prediction(final_name: str, final_r: Dict[str, Any], decision_sourc
         "scenario": scenario,
         "goal_range": (gmin, gmax),
         "bayesian_evidences": evidences,
-        "bayesian_prior": {}, "override_triggered": False,
-        "traps_detected": [], "trap_count": 0, "trap_severity": 0, "trap_details": [], "trap_flags": {},
-        "fair_1x2": {}, "fair_1x2_method": "disabled_pure_raw_ai", "market_overround": 0.0, "raw_implied_1x2": {},
-        "crs_shape": "disabled_pure_raw_ai", "crs_moments": {}, "crs_margin": 0.0, "crs_coverage": 0.0, "crs_implied_probs": {}, "crs_low_rank_info": {},
-        "top_score_candidates": top_candidates, "unified_matrix_top_scores": top_candidates, "unified_goal_probs": {}, "fair_1x2_pack": {}, "mixed_target_dir": {},
-        "unified_source": "disabled_pure_raw_ai", "decision_source": decision_source, "ai_authority_mode": "pure_raw_ai",
-        "gpt_score": sc_of("gpt"), "gpt_analysis": reason_of("gpt"),
-        "grok_score": sc_of("grok"), "grok_analysis": reason_of("grok"),
-        "gemini_score": sc_of("gemini"), "gemini_analysis": reason_of("gemini"),
-        "claude_score": sc_of("claude"), "claude_analysis": reason_of("claude"),
-        "ai_abstained": ai_abstained, "ai_avg_confidence": avg_conf,
-        "value_kill_count": 0, "suggested_kelly": 0.0, "edge_vs_market": 0.0, "is_value": False,
+        "bayesian_prior": {},
+        "override_triggered": False,
+        "traps_detected": [],
+        "trap_count": 0,
+        "trap_severity": 0,
+        "trap_details": [],
+        "trap_flags": {},
+        "fair_1x2": {},
+        "fair_1x2_method": "disabled_pure_raw_ai",
+        "market_overround": 0.0,
+        "raw_implied_1x2": {},
+        "crs_shape": "disabled_pure_raw_ai",
+        "crs_moments": {},
+        "crs_margin": 0.0,
+        "crs_coverage": 0.0,
+        "crs_implied_probs": {},
+        "crs_low_rank_info": {},
+        "top_score_candidates": top_candidates,
+        "unified_matrix_top_scores": top_candidates,
+        "unified_goal_probs": {},
+        "fair_1x2_pack": {},
+        "mixed_target_dir": {},
+        "unified_source": "disabled_pure_raw_ai",
+        "decision_source": decision_source,
+        "ai_authority_mode": "pure_raw_ai",
+        "gpt_score": sc_of("gpt"),
+        "gpt_analysis": reason_of("gpt"),
+        "grok_score": sc_of("grok"),
+        "grok_analysis": reason_of("grok"),
+        "gemini_score": sc_of("gemini"),
+        "gemini_analysis": reason_of("gemini"),
+        "claude_score": sc_of("claude"),
+        "claude_analysis": reason_of("claude"),
+        "ai_abstained": ai_abstained,
+        "ai_avg_confidence": avg_conf,
+        "value_kill_count": 0,
+        "suggested_kelly": 0.0,
+        "edge_vs_market": 0.0,
+        "is_value": False,
         "ev_note": "disabled_pure_raw_ai_no_local_probability",
         "score_model_prob": top_candidates[0][1] if top_candidates else 0.0,
-        "score_market_odds": final_odds, "score_market_implied_pct": market_implied,
+        "score_market_odds": final_odds,
+        "score_market_implied_pct": market_implied,
         "smart_money_signal": " | ".join(exp_audit.get("risk_signals", [])[:8]),
         "smart_signals": ["EXP_AUDIT:" + s for s in exp_audit.get("risk_signals", [])],
-        "cold_door": {"is_cold_door": False, "strength": 0, "level": "普通", "signals": [], "sharp_confirmed": False, "dark_verdict": ""},
-        "xG_home": "?", "xG_away": "?",
+        "cold_door": {
+            "is_cold_door": False,
+            "strength": 0,
+            "level": "普通",
+            "signals": [],
+            "sharp_confirmed": False,
+            "dark_verdict": "",
+        },
+        "xG_home": "?",
+        "xG_away": "?",
         "over_under_2_5": "大" if total_goals >= 3 else "小",
-        "both_score": "是" if (_parse_score(score)[0] or 0) > 0 and (_parse_score(score)[1] or 0) > 0 else "否",
+        "both_score": both_score_cn,
         "expected_total_goals": total_goals,
-        "over_2_5": None, "btts": None,
-        "bookmaker_implied_home_xg": "?", "bookmaker_implied_away_xg": "?",
-        "sharp_detected": False, "sharp_dir": None, "fair_dir": None, "shin_dir": None,
-        "actual_handicap_signed": None, "theoretical_handicap_signed": None,
+        "over_2_5": None,
+        "btts": None,
+        "bookmaker_implied_home_xg": "?",
+        "bookmaker_implied_away_xg": "?",
+        "sharp_detected": False,
+        "sharp_dir": None,
+        "fair_dir": None,
+        "shin_dir": None,
+        "actual_handicap_signed": None,
+        "theoretical_handicap_signed": None,
         "model_consensus": len([n for n in AI_NAMES if _valid_ai_score_from_response(all_ai.get(n, {}))]),
-        "total_models": 4, "extreme_warning": "",
-        "refined_poisson": {}, "poisson": {}, "elo": {}, "random_forest": {}, "gradient_boost": {}, "neural_net": {}, "logistic": {}, "svm": {}, "knn": {}, "dixon_coles": {}, "bradley_terry": {},
-        "home_form": {}, "away_form": {}, "handicap_signal": "", "odds_movement": {}, "vote_analysis": {}, "h2h_blood": {}, "crs_analysis": {}, "ttg_analysis": {}, "halftime": {}, "pace_rating": "",
-        "kelly_home": {}, "kelly_away": {}, "odds": {}, "experience_analysis": {"mode": "prompt_only_no_decision", **exp_audit}, "pro_odds": {}, "asian_handicap_probs": {}, "top_scores": [],
-        "engine_version": ENGINE_VERSION, "engine_architecture": ENGINE_ARCHITECTURE,
+        "total_models": 4,
+        "extreme_warning": "",
+        "refined_poisson": {},
+        "poisson": {},
+        "elo": {},
+        "random_forest": {},
+        "gradient_boost": {},
+        "neural_net": {},
+        "logistic": {},
+        "svm": {},
+        "knn": {},
+        "dixon_coles": {},
+        "bradley_terry": {},
+        "home_form": {},
+        "away_form": {},
+        "handicap_signal": "",
+        "odds_movement": {},
+        "vote_analysis": {},
+        "h2h_blood": {},
+        "crs_analysis": {},
+        "ttg_analysis": {},
+        "halftime": {},
+        "pace_rating": "",
+        "kelly_home": {},
+        "kelly_away": {},
+        "odds": {},
+        "experience_analysis": {"mode": "prompt_only_no_decision", **exp_audit},
+        "pro_odds": {},
+        "asian_handicap_probs": {},
+        "top_scores": [],
+        "engine_version": ENGINE_VERSION,
+        "engine_architecture": ENGINE_ARCHITECTURE,
     }
 
 
@@ -2132,6 +2623,7 @@ def _enforce_consistency(mg: Dict[str, Any]) -> Dict[str, Any]:
         mg["display_direction"] = "弃权"
         mg["final_direction"] = "abstain"
         return mg
+
     score = _normalize_score_text(mg.get("predicted_score", ""))
     d = _score_direction(score) or _dir_from_cn(mg.get("result", "")) or "draw"
     mg["predicted_score"] = score
@@ -2140,6 +2632,12 @@ def _enforce_consistency(mg: Dict[str, Any]) -> Dict[str, Any]:
     mg["display_direction"] = _direction_cn(d)
     mg["final_direction"] = d
     mg["is_score_others"] = mg["predicted_label"] in ("胜其他", "平其他", "负其他")
+
+    gb = mg.get("goal_band") or _score_goal_band(score)
+    bt = mg.get("btts_ai") or _score_btts(score)
+    mg["goal_band"] = gb
+    mg["btts_ai"] = bt
+
     return mg
 
 
@@ -2148,6 +2646,7 @@ def _validate_prediction_consistency(mg: Dict[str, Any]) -> Dict[str, Any]:
     if mg.get("is_abstain"):
         mg["validation_warnings"] = warnings
         return _enforce_consistency(mg)
+
     score = _normalize_score_text(mg.get("predicted_score", ""))
     h, a = _parse_score(score)
     if h is None:
@@ -2162,7 +2661,20 @@ def _validate_prediction_consistency(mg: Dict[str, Any]) -> Dict[str, Any]:
             if not (gmin <= total <= gmax):
                 warnings.append(f"goal_range_adjusted_for_ai_score:{gr}->{total}")
                 mg["goal_range"] = (min(gmin, total), max(gmax, total))
-    mg["validation_warnings"] = warnings
+
+        gb = mg.get("goal_band") or _score_goal_band(score)
+        score_gb = _score_goal_band(score)
+        if gb != score_gb:
+            warnings.append(f"goal_band_auto_fixed:{gb}->{score_gb}")
+            mg["goal_band"] = score_gb
+
+        bt = mg.get("btts_ai") or _score_btts(score)
+        score_bt = _score_btts(score)
+        if bt in ("yes", "no") and bt != score_bt:
+            warnings.append(f"btts_auto_fixed:{bt}->{score_bt}")
+            mg["btts_ai"] = score_bt
+
+    mg["validation_warnings"] = list(dict.fromkeys(warnings))
     return _enforce_consistency(mg)
 
 
@@ -2197,7 +2709,7 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     ms = [normalize_match(m) for m in ms]
 
     print("\n" + "=" * 88)
-    print(f"  [{ENGINE_VERSION}] PURE RAW-AI 主审 | {len(ms)} 场 | 顶级解析容错 | AI失败即弃权")
+    print(f"  [{ENGINE_VERSION}] PURE RAW-AI 主审 | {len(ms)} 场 | STRICT JSON | AI失败即弃权")
     print("=" * 88)
 
     match_analyses: List[Dict[str, Any]] = []
@@ -2221,7 +2733,7 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
 
     all_ai: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in AI_NAMES}
     if use_ai and match_analyses:
-        print(f"  [{ENGINE_VERSION} AI] 启动 GPT/Grok/Gemini 初审 + Claude 终审")
+        print(f"  [{ENGINE_VERSION} AI] 启动 GPT/Grok/Gemini 初审 + Claude 压缩终审")
         try:
             all_ai = _run_async(run_ai_matrix_two_phase(match_analyses))
         except Exception as e:
@@ -2230,14 +2742,17 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     elif not use_ai:
         print("  [PURE RAW-AI] use_ai=False → 全部弃权，不启用本地兜底")
 
+    all_ai = _purge_text_fallback_from_cached_results(all_ai)
+
     res = []
     for i, ma in enumerate(match_analyses, 1):
         m = ma["match"]
         mg = merge_result_pure_ai(all_ai, i, m)
         mg = _validate_prediction_consistency(mg)
         res.append({**m, "prediction": mg})
+
         if mg.get("is_abstain"):
-            print(f"  [{i}] {m.get('home_team')} vs {m.get('away_team')} => 弃权 | PURE模式AI无有效结果")
+            print(f"  [{i}] {m.get('home_team')} vs {m.get('away_team')} => 弃权 | PURE模式AI无有效结构化结果")
         else:
             print(
                 f"  [{i}] {m.get('home_team')} vs {m.get('away_team')} => "
@@ -2249,6 +2764,7 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     t4_ids = set(id(x) for x in t4)
     for r in res:
         r["is_recommended"] = id(r) in t4_ids
+
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
     return res, t4
 
@@ -2257,4 +2773,4 @@ if __name__ == "__main__":
     logger.info(f"{ENGINE_VERSION} 启动")
     print(f"✅ {ENGINE_VERSION} 加载完成")
     print(f"   架构: {ENGINE_ARCHITECTURE}")
-    print("   模式: AI成功=AI直出；AI失败=弃权；无本地兜底")
+    print("   模式: AI成功=AI直出；AI失败=弃权；无本地兜底；Claude非JSON不裁决")
