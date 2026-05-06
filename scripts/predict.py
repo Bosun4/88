@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-vMAX 18.4.11 — PURE RAW-AI STRICT ONE-CALL 稳定版
+vMAX 18.4.12 — PURE RAW-AI SAFE-HYBRID 稳定版
 ============================================================
 设计边界：
 1. 纯 AI 主审：GPT/Grok/Gemini 初审，Claude 终审；Claude 失败时使用 Phase1 AI 共识。
@@ -8,9 +8,10 @@ vMAX 18.4.11 — PURE RAW-AI STRICT ONE-CALL 稳定版
 3. 本地只做：抓包格式化、AI 调用、严格 JSON 解析、字段闭环、前端兼容、推荐分层。
 4. Phase1 三家吃完整抓包；Claude 终审默认吃压缩抓包 + 三家结构化摘要。
 5. 严格每模型一次请求：GPT/Grok/Gemini/Claude 默认每家最多请求一次，不做二次 repair。
-6. 默认禁用文本兜底解析：模型不返回严格 JSON，则该模型弃权，避免 Grok/Claude 自然语言误解析。
-7. Claude 若有效但缺少 experience_review，本地只从同比分/同方向 Phase1 继承审计卡，不改比分、不改方向。
-8. URL/KEY 默认保持统一中转逻辑：API_KEY/API_URL 优先，旧变量兼容兜底。
+6. JSON优先；JSON失败时启用“安全文本兜底”，只在明确出现预测比分/最终比分/score标签时解析，避免首回合比分误抓。
+7. Claude 若有效但缺少 experience_review，本地先从同比分/同方向 Phase1 继承审计卡，再补齐缺失卡为 neutral，不改比分、不改方向。
+8. 稳定缓存键剔除 prediction/top4/recommend 等输出字段，避免前端二次请求触发重复 Claude 消费。
+9. URL/KEY 默认保持统一中转逻辑：API_KEY/API_URL 优先，旧变量兼容兜底。
 
 入口：
     run_predictions(raw, use_ai=True) -> (res, top4)
@@ -45,10 +46,10 @@ except Exception:
 # 版本常量
 # ============================================================
 
-ENGINE_VERSION = "vMAX 18.4.11"
+ENGINE_VERSION = "vMAX 18.4.12"
 ENGINE_ARCHITECTURE = (
     "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + STRICT ONE-CALL + "
-    "STRICT JSON解析 + 禁止文本残片裁决 + 经验卡继承补齐 + 方向/比分字段闭环；"
+    "JSON优先解析 + 安全文本兜底 + 经验卡强制覆盖补齐 + 稳定缓存键 + 方向/比分字段闭环；"
     "无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权"
 )
 
@@ -122,8 +123,10 @@ STRICT_ONE_CALL_PER_MODEL = _env_bool("STRICT_ONE_CALL_PER_MODEL", True)
 AI_ALLOW_SECOND_CALL_REPAIR = _env_bool("AI_ALLOW_SECOND_CALL_REPAIR", False)
 AI_ENABLE_CLAUDE_JSON_REPAIR = _env_bool("AI_ENABLE_CLAUDE_JSON_REPAIR", False)
 AI_ENABLE_ANY_MODEL_JSON_REPAIR = _env_bool("AI_ENABLE_ANY_MODEL_JSON_REPAIR", False)
-AI_ALLOW_TEXT_FALLBACK = _env_bool("AI_ALLOW_TEXT_FALLBACK", False)
-AI_ALLOW_CLAUDE_TEXT_FALLBACK = _env_bool("AI_ALLOW_CLAUDE_TEXT_FALLBACK", False)
+AI_ALLOW_TEXT_FALLBACK = _env_bool("AI_ALLOW_TEXT_FALLBACK", True)
+AI_ALLOW_CLAUDE_TEXT_FALLBACK = _env_bool("AI_ALLOW_CLAUDE_TEXT_FALLBACK", True)
+AI_SAFE_TEXT_FALLBACK_ONLY = _env_bool("AI_SAFE_TEXT_FALLBACK_ONLY", True)
+AI_CACHE_SCHEMA_VERSION = str(os.environ.get("AI_CACHE_SCHEMA_VERSION", "18.4.12-safe-hybrid")).strip()
 AI_FORCE_CHINESE_REASON = _env_bool("AI_FORCE_CHINESE_REASON", True)
 AI_USE_RESPONSE_FORMAT = _env_bool("AI_USE_RESPONSE_FORMAT", False)
 
@@ -1470,53 +1473,88 @@ def _normalize_experience_review(item: Dict[str, Any]) -> List[Dict[str, str]]:
     return out
 
 
+
+def _score_from_safe_text_block(part: str) -> str:
+    text = part or ""
+    # 优先只认明确预测标签附近的比分；避免把“首回合1-2、上一场0-1、赔率6.5”误当预测。
+    label_patterns = [
+        r"(?:预测比分|最终比分|首选比分|建议比分|比分预测|比分|final_score|predicted_score|scoreline|score|top1|第一比分|主推比分)\s*[:：=为是\-]*\s*(\d{1,2})\s*[-:：]\s*(\d{1,2})",
+        r"(?:看好|倾向|预计|预测|主推|首选)\D{0,18}(\d{1,2})\s*[-:：]\s*(\d{1,2})",
+    ]
+    for pat in label_patterns:
+        m = re.search(pat, text, flags=re.I)
+        if m:
+            return f"{int(m.group(1))}-{int(m.group(2))}"
+
+    candidates = []
+    for m in _SCORE_RE.finditer(text):
+        start, end = m.span()
+        ctx = text[max(0, start - 35): min(len(text), end + 35)]
+        if re.search(r"首回合|上轮|上一场|历史|交锋|半场|全场|总比分|比分层|赔率|@|a\d|w\d|l\d|s\d", ctx, flags=re.I):
+            continue
+        if not re.search(r"预测|最终|首选|主推|看好|倾向|score|比分", ctx, flags=re.I):
+            continue
+        candidates.append(f"{int(m.group(1))}-{int(m.group(2))}")
+    uniq = list(dict.fromkeys(candidates))
+    return uniq[0] if len(uniq) == 1 else ""
+
+
+def _extract_match_blocks_for_text_fallback(clean: str, num_matches: int) -> List[Tuple[int, str]]:
+    blocks: List[Tuple[int, str]] = []
+    if num_matches <= 0:
+        return blocks
+    starts = []
+    for m in re.finditer(r"(?:^|\n)\s*(?:\[\s*(\d{1,2})\s*\]|match\s*(\d{1,2})|第\s*(\d{1,2})\s*场|场次\s*(\d{1,2}))", clean, flags=re.I):
+        idx = next((int(g) for g in m.groups() if g), None)
+        if idx and 1 <= idx <= num_matches:
+            starts.append((idx, m.start()))
+    if starts:
+        for n, (idx, st) in enumerate(starts):
+            ed = starts[n + 1][1] if n + 1 < len(starts) else len(clean)
+            blocks.append((idx, clean[st:ed]))
+        return blocks
+    if num_matches == 1:
+        blocks.append((1, clean))
+    return blocks
+
 def _fallback_parse_text_blocks(raw_text: str, num_matches: int) -> Dict[int, Dict[str, Any]]:
-    # 默认关闭。仅当 AI_ALLOW_TEXT_FALLBACK=true 时使用。
     clean = _preclean_text(raw_text)
     results: Dict[int, Dict[str, Any]] = {}
-    parts = re.split(r"(?=\n?\s*(?:\[?\d+\]?|match\s*\d+|第\s*\d+\s*场)[\].、:：\s])", clean, flags=re.I)
-    if len(parts) <= 1:
-        parts = [clean]
-    for pos, part in enumerate(parts, 1):
-        if not part.strip():
+    blocks = _extract_match_blocks_for_text_fallback(clean, num_matches)
+
+    for idx, part in blocks:
+        if not part.strip() or idx in results:
             continue
-        idx = None
-        m_idx = re.search(r"(?:match\s*|第\s*)?(\d{1,2})(?:\s*场)?", part, flags=re.I)
-        if m_idx:
-            cand_idx = int(m_idx.group(1))
-            if 1 <= cand_idx <= num_matches:
-                idx = cand_idx
-        if idx is None:
-            idx = pos if 1 <= pos <= num_matches else None
-        if idx is None or idx in results:
+        score = _score_from_safe_text_block(part) if AI_SAFE_TEXT_FALLBACK_ONLY else ""
+        if not score and not AI_SAFE_TEXT_FALLBACK_ONLY:
+            m_score = _SCORE_RE.search(part)
+            if m_score:
+                score = f"{int(m_score.group(1))}-{int(m_score.group(2))}"
+        if not score:
             continue
-        m_score = _SCORE_RE.search(part)
-        if not m_score:
-            continue
-        score = f"{int(m_score.group(1))}-{int(m_score.group(2))}"
         direction = _score_direction(score) or "draw"
         conf_match = re.search(r"(?:confidence|置信度|ai_confidence)\D{0,8}(\d{1,3})", part, flags=re.I)
         conf = int(_clip(_f(conf_match.group(1), 60) if conf_match else 60, 0, 100))
+        reason = part[:4000]
         results[idx] = {
-            "top3": [{"score": score, "prob": 0.0, "market_logic": "text_fallback"}],
+            "top3": [{"score": score, "prob": 0.0, "market_logic": "safe_text_fallback"}],
             "ai_score": score,
-            "reason": part[:4000],
+            "reason": reason,
             "ai_confidence": conf,
             "risk_level": "medium",
             "is_score_others": False,
             "detected_traps": [],
-            "data_missing": ["json_format_missing_text_fallback"],
-            "audit": {},
+            "data_missing": ["json_format_missing_safe_text_fallback"],
+            "audit": {"parse_mode": "safe_text_fallback"},
             "direction_probs": {},
             "goal_band": _normalize_goal_band_value("", score),
             "btts": _normalize_btts_value("", score),
-            "score_shape_reason": "text_fallback_parser",
-            "experience_review": [],
+            "score_shape_reason": "safe_text_fallback_parser",
+            "experience_review": _normalize_experience_review({"audit": {"experience_review": reason}}),
             "final_direction": direction,
-            "raw_item": {"text_fallback": part[:1000]},
+            "raw_item": {"safe_text_fallback": part[:1000]},
         }
     return results
-
 
 def _parse_ai_json(raw_text: str, num_matches: int, ai_name: str = "") -> Dict[int, Dict[str, Any]]:
     items = _extract_json_items(raw_text)
@@ -1671,7 +1709,7 @@ async def async_call_one_ai_batch(
                     continue
                 parsed = _parse_ai_json(raw_text, num_matches, ai_name)
                 if parsed:
-                    parse_mode = "strict_json" if not (AI_ALLOW_TEXT_FALLBACK or AI_ALLOW_CLAUDE_TEXT_FALLBACK) else "json_or_allowed_text"
+                    parse_mode = "json_or_safe_text"
                     print(f"    {ai_name.upper()} 完成: {len(parsed)}/{num_matches} | {round(time.time()-t0,1)}s | parse={parse_mode}")
                     AI_CALL_STATUS[ai_name].update({
                         "ok": True,
@@ -1698,7 +1736,7 @@ async def async_call_one_ai_batch(
 
 def _phase_system(ai_name: str) -> str:
     base = (
-        "你必须只输出严格 JSON 数组，禁止 markdown，禁止 JSON 外说明，禁止自然语言前后缀。"
+        "你必须只输出严格 JSON 数组，禁止 markdown，禁止 JSON 外说明，禁止自然语言前后缀；不要输出弃权文本。"
         "每个对象必须包含 match、final_direction、direction_probs、goal_band、btts、top3、reason、ai_confidence、risk_level、data_missing、audit。"
         "top3 必须是数组，元素必须包含 score、prob、market_logic。"
         "final_direction 只能是 home/draw/away。"
@@ -1734,6 +1772,14 @@ _VOLATILE_CACHE_KEYS = {
     "uuid", "uid", "runtime", "elapsed", "latency", "cache_hit", "cache_ts",
 }
 
+_OUTPUT_CACHE_IGNORE_KEYS = {
+    "prediction", "predictions", "top4", "rank", "recommend_score", "is_recommended",
+    "fusion_summary", "engine_version", "engine_architecture", "validation_warnings",
+    "model_agreement", "experience_review", "experience_review_missing", "bayesian_evidences",
+    "gpt_score", "grok_score", "gemini_score", "claude_score",
+    "gpt_analysis", "grok_analysis", "gemini_analysis", "claude_analysis",
+}
+
 
 def _sanitize_for_ai_cache(obj: Any) -> Any:
     if not AI_CACHE_STRIP_VOLATILE_KEYS:
@@ -1742,7 +1788,7 @@ def _sanitize_for_ai_cache(obj: Any) -> Any:
         out = {}
         for k, v in obj.items():
             kl = str(k).strip().lower()
-            if kl in _VOLATILE_CACHE_KEYS:
+            if kl in _VOLATILE_CACHE_KEYS or kl in _OUTPUT_CACHE_IGNORE_KEYS:
                 continue
             if kl.endswith("_ts") or kl.endswith("_timestamp") or kl.endswith("_time_ms"):
                 continue
@@ -1777,7 +1823,7 @@ def _stable_ai_cache_key(match_analyses: List[Dict[str, Any]], phase: str = "pur
             "raw_match_hash": _hash_obj(stable_m),
             "external_context_hash": _hash_obj(stable_ctx),
         })
-    raw = json.dumps({"version": ENGINE_VERSION, "phase": phase, "matches": compact}, ensure_ascii=False, sort_keys=True, default=str)
+    raw = json.dumps({"version": ENGINE_VERSION, "schema": AI_CACHE_SCHEMA_VERSION, "phase": phase, "matches": compact}, ensure_ascii=False, sort_keys=True, default=str)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
@@ -1807,6 +1853,8 @@ def _load_ai_disk_cache(cache_key: str) -> Optional[Dict[str, Dict[int, Dict[str
             except Exception:
                 pass
             return None
+        if str(pack.get("schema", "")) != AI_CACHE_SCHEMA_VERSION:
+            return None
         results = pack.get("results", {})
         restored = {n: {} for n in AI_NAMES}
         for name, rows in (results or {}).items():
@@ -1834,7 +1882,7 @@ def _save_ai_disk_cache(cache_key: str, results: Dict[str, Dict[int, Dict[str, A
         path = _ai_cache_file(cache_key)
         tmp = path + ".tmp"
         with open(tmp, "w", encoding="utf-8") as f:
-            json.dump({"ts": time.time(), "version": ENGINE_VERSION, "status": status, "results": results}, f, ensure_ascii=False, default=str)
+            json.dump({"ts": time.time(), "version": ENGINE_VERSION, "schema": AI_CACHE_SCHEMA_VERSION, "status": status, "results": results}, f, ensure_ascii=False, default=str)
         os.replace(tmp, path)
     except Exception as e:
         print(f"  [AI DISK CACHE] 写入失败: {str(e)[:100]}")
@@ -2168,6 +2216,41 @@ def _inherit_experience_review_if_missing(
     return final_r
 
 
+
+def _force_experience_review_full_coverage(final_r: Dict[str, Any], exp_audit: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(final_r, dict):
+        return final_r
+    triggered = exp_audit.get("triggered", []) if isinstance(exp_audit, dict) else []
+    if not triggered:
+        return final_r
+    review = final_r.get("experience_review")
+    if not isinstance(review, list):
+        review = []
+    reviewed = {str(r.get("id", "")).replace("EXP_", "") for r in review if isinstance(r, dict)}
+    for r in review:
+        if isinstance(r, dict):
+            txt = str(r.get("reason", ""))
+            for rid in re.findall(r"EXP_[A-Z0-9_]+|B_SHARP|B_STEAM|X\d{2}|[DUG]\d{2}", txt):
+                reviewed.add(rid.replace("EXP_", ""))
+    added = []
+    for t in triggered:
+        rid = str(t.get("id", "")).replace("EXP_", "").strip()
+        if not rid or rid in reviewed:
+            continue
+        added.append({
+            "id": rid,
+            "decision": "neutral",
+            "reason": f"{rid}:neutral because 本地字段闭环补齐：该审计卡未被最终模型逐条输出；仅作为覆盖标记，不改方向、不改比分。",
+        })
+        reviewed.add(rid)
+    if added:
+        final_r = dict(final_r)
+        final_r["experience_review"] = review + added
+        audit = final_r.get("audit", {}) if isinstance(final_r.get("audit", {}), dict) else {}
+        audit["experience_review_auto_filled"] = [x["id"] for x in added]
+        final_r["audit"] = audit
+    return final_r
+
 def _fix_shape_fields_to_score(final_r: Dict[str, Any], score: str) -> Tuple[Dict[str, Any], List[str]]:
     final_r = dict(final_r or {})
     warnings: List[str] = []
@@ -2319,6 +2402,7 @@ def _make_ai_prediction(final_name: str, final_r: Dict[str, Any], decision_sourc
         return str(r.get("reason", ""))[:3000]
 
     exp_audit = _experience_engine().analyze(match_obj)
+    final_r = _force_experience_review_full_coverage(final_r, exp_audit)
     selection_pack = _compute_recommendation_scores(final_r, all_ai, match_obj, exp_audit, score, direction, pct, top_candidates)
 
     evidences = [
@@ -2511,7 +2595,7 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     ms = [normalize_match(m) for m in raw_ms]
 
     print("\n" + "=" * 88)
-    print(f"  [{ENGINE_VERSION}] PURE RAW-AI 主审 | {len(ms)} 场 | STRICT ONE-CALL | STRICT JSON | AI失败即弃权")
+    print(f"  [{ENGINE_VERSION}] PURE RAW-AI 主审 | {len(ms)} 场 | STRICT ONE-CALL | JSON优先+安全兜底 | AI失败即弃权")
     print("=" * 88)
 
     match_analyses: List[Dict[str, Any]] = []
