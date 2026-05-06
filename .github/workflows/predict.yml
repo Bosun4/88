@@ -16,7 +16,7 @@ concurrency:
 jobs:
   predict:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 240
 
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
 
           # ============================================================
           # 旧版四模型变量
-          # 注意：这里不再传 API_KEY / API_URL，避免抢占 GPT_API_URL
+          # 不传 API_KEY / API_URL，避免抢占 GPT_API_URL
           # 如果四家都走同一个中转，就在 GitHub Secrets 里把这四组填成同一个 key/url
           # ============================================================
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
@@ -77,19 +77,32 @@ jobs:
           VMAX_DATE_SHIFT_HOURS: "11"
 
           # ============================================================
-          # 成本控制
-          # 不限制 4 场一批，不传 AI_BATCH_SIZE
-          # 由当前 predict.py 自己按整批逻辑跑
+          # AI 等待时间
+          # GPT / Grok / Gemini：300秒
+          # Claude：600秒
           # ============================================================
-          AI_MAX_REQUESTS_PER_AI: "1"
+          AI_CONNECT_TIMEOUT: "45"
+          AI_READ_TIMEOUT: "300"
 
-          # Claude 条件触发：Phase1 有效不足时跳过 Claude
+          AI_CLAUDE_CONNECT_TIMEOUT: "60"
+          AI_CLAUDE_READ_TIMEOUT: "600"
+
+          # 不增加请求轮数，避免重复扣费
+          AI_MAX_REQUESTS_PER_AI: "1"
+          AI_CLAUDE_MAX_REQUESTS: "1"
+          AI_CLAUDE_RETRY_BACKOFF_SECONDS: "20"
+
+          # ============================================================
+          # Claude 条件触发与压缩终审
+          # Phase1 有效不足时跳过 Claude
+          # ============================================================
           AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID: "true"
           AI_MIN_PHASE1_VALID_FOR_CLAUDE: "2"
 
-          # Claude 压缩终审；当前 predict.py 不支持时会自动忽略
           AI_USE_COMPACT_CLAUDE_AUDIT: "true"
           AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE: "350"
+          CLAUDE_RAW_PACKET_CHAR_LIMIT: "4500"
+          CLAUDE_MATCH_SUMMARY_CHAR_LIMIT: "2200"
 
           # ============================================================
           # 持久化缓存
@@ -97,8 +110,11 @@ jobs:
           AI_PERSISTENT_CACHE_ENABLED: "true"
           AI_CACHE_DIR: "data/ai_cache"
           AI_CACHE_STRIP_VOLATILE_KEYS: "true"
+
+          # Claude 600秒，所以磁盘锁等待必须大于 Claude 等待时间
           AI_DISK_LOCK_WAIT_SECONDS: "900"
           AI_DISK_LOCK_POLL_SECONDS: "3"
+
           AI_DECISION_CACHE_TTL: "1800"
           AI_WRITE_BATCH_RESULT_IMMEDIATELY: "true"
 
