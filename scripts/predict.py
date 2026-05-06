@@ -7,7 +7,7 @@ vMAX 18.4.8 — PURE RAW-AI + 顶级解析容错版
 2. 不跑 CRS 矩阵、不跑贝叶斯后验、不跑本地比分矩阵、不跑本地风控裁决。
 3. 本地只做：抓包格式化、AI 调用、JSON/文本解析、字段闭环、前端兼容。
 4. Phase1 三家吃完整抓包；Claude 终审默认吃压缩抓包 + 三家结构化摘要。
-5. 默认等待：GPT/Grok/Gemini 500 秒，Claude 900 秒。
+5. 默认等待：GPT/Grok/Gemini 1000 秒，Claude 1500 秒。
 6. URL/KEY 默认保持旧版统一中转逻辑：API_KEY/API_URL 优先，旧变量兼容兜底。
 
 入口：
@@ -56,7 +56,7 @@ PHASE1_NAMES = ["gpt", "grok", "gemini"]
 DEFAULT_MODELS = {
     "gpt": "gpt-5.4",
     "grok": "grok-4.3",
-    "gemini": "gemini-3.1-pro-preview",
+    "gemini": "gemini-3.1-pro-preview-thinking-high",
     "claude": "claude-opus-4-7",
 }
 
@@ -109,8 +109,8 @@ AI_SINGLEFLIGHT_ENABLED = _env_bool("AI_SINGLEFLIGHT_ENABLED", True)
 AI_MAX_REQUESTS_PER_AI = max(1, _env_int("AI_MAX_REQUESTS_PER_AI", 1))
 AI_FORCE_COMMON_GATEWAY = _env_bool("FORCE_COMMON_GATEWAY_URL", True)
 
-AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 700)
-AI_CLAUDE_READ_TIMEOUT = _env_int("AI_CLAUDE_READ_TIMEOUT", 900)
+AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 1000)
+AI_CLAUDE_READ_TIMEOUT = _env_int("AI_CLAUDE_READ_TIMEOUT", 1500)
 AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 25)
 AI_CLAUDE_CONNECT_TIMEOUT = _env_int("AI_CLAUDE_CONNECT_TIMEOUT", 45)
 
