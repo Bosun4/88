@@ -19,7 +19,7 @@ vMAX 18.4.5 — PURE RAW-AI + 历史经验审计卡版
     API_URL=https://xxx/v1
     GPT_MODEL=gpt-5.4
     GROK_MODEL=grok-4.3
-    GEMINI_MODEL=gemini-3.1-pro-preview-thinking-high
+    GEMINI_MODEL=gemini-3.1-pro-preview
     CLAUDE_MODEL=claude-opus-4-7
     AI_DECISION_CACHE_TTL=900
     AI_SINGLEFLIGHT_ENABLED=true
