@@ -82,10 +82,10 @@ jobs:
           # Claude：600秒
           # ============================================================
           AI_CONNECT_TIMEOUT: "45"
-          AI_READ_TIMEOUT: "300"
+          AI_READ_TIMEOUT: "600"
 
           AI_CLAUDE_CONNECT_TIMEOUT: "60"
-          AI_CLAUDE_READ_TIMEOUT: "600"
+          AI_CLAUDE_READ_TIMEOUT: "900"
 
           # 不增加请求轮数，避免重复扣费
           AI_MAX_REQUESTS_PER_AI: "1"
