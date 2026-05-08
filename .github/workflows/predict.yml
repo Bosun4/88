@@ -42,8 +42,14 @@ jobs:
             echo "ℹ️ No root data/ directory found, start clean."
           fi
 
+          echo "🧹 Clearing old AI cache to avoid stale prediction pollution"
+          rm -rf scripts/data/ai_cache || true
+          rm -rf data/ai_cache || true
+
       - name: Run Predictions
         env:
+          PYTHONUNBUFFERED: "1"
+
           # ============================================================
           # 主数据源
           # ============================================================
@@ -52,9 +58,9 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
 
           # ============================================================
-          # 旧版四模型变量
-          # 不传 API_KEY / API_URL，避免抢占 GPT_API_URL
-          # 如果四家都走同一个中转，就在 GitHub Secrets 里把这四组填成同一个 key/url
+          # 四模型 API
+          # 保持旧版四模型变量，不传 API_KEY / API_URL
+          # 如果四家走同一中转，四组 secrets 可填同一套 key/url
           # ============================================================
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
@@ -68,6 +74,8 @@ jobs:
           CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
           CLAUDE_API_URL: ${{ secrets.CLAUDE_API_URL }}
 
+          FORCE_COMMON_GATEWAY_URL: "true"
+
           # ============================================================
           # 只跑今日竞彩业务日
           # 北京时间凌晨 00:00-10:59 仍归入前一个竞彩业务日
@@ -77,27 +85,33 @@ jobs:
           VMAX_DATE_SHIFT_HOURS: "11"
 
           # ============================================================
-          # AI 等待时间
-          # GPT / Grok / Gemini：1000秒
-          # Claude：1500秒
+          # AI 超长等待
+          # 不分批，一次性全场大包，等待模型完整返回
           # ============================================================
-          AI_CONNECT_TIMEOUT: "45"
-          AI_READ_TIMEOUT: "1000"
+          AI_CONNECT_TIMEOUT: "120"
+          AI_READ_TIMEOUT: "5400"
+          AI_CLAUDE_CONNECT_TIMEOUT: "120"
+          AI_CLAUDE_READ_TIMEOUT: "7200"
+          AI_HTTP_TOTAL_TIMEOUT: "0"
 
-          AI_CLAUDE_CONNECT_TIMEOUT: "60"
-          AI_CLAUDE_READ_TIMEOUT: "1500"
-
-          # 不增加请求轮数，避免重复扣费
+          # ============================================================
+          # 严格每模型一次请求，避免重复扣费
+          # ============================================================
+          STRICT_ONE_CALL_PER_MODEL: "true"
           AI_MAX_REQUESTS_PER_AI: "1"
           AI_CLAUDE_MAX_REQUESTS: "1"
+          AI_ALLOW_SECOND_CALL_REPAIR: "false"
+          AI_ENABLE_CLAUDE_JSON_REPAIR: "false"
+          AI_ENABLE_ANY_MODEL_JSON_REPAIR: "false"
           AI_CLAUDE_RETRY_BACKOFF_SECONDS: "20"
 
           # ============================================================
-          # Claude 条件触发与压缩终审
-          # Phase1 有效不足时跳过 Claude
+          # Claude 必须终审
+          # 不再因为 Phase1 有效不足跳过 Claude
           # ============================================================
-          AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID: "true"
-          AI_MIN_PHASE1_VALID_FOR_CLAUDE: "2"
+          AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID: "false"
+          AI_RUN_CLAUDE_ALWAYS: "true"
+          AI_MIN_PHASE1_VALID_FOR_CLAUDE: "0"
 
           AI_USE_COMPACT_CLAUDE_AUDIT: "true"
           AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE: "350"
@@ -105,23 +119,43 @@ jobs:
           CLAUDE_MATCH_SUMMARY_CHAR_LIMIT: "2200"
 
           # ============================================================
-          # 持久化缓存
+          # 禁止文本兜底
+          # 防止 Grok / Claude 自然语言残片误抓成 1/56 假完成
           # ============================================================
-          AI_PERSISTENT_CACHE_ENABLED: "true"
+          AI_ALLOW_TEXT_FALLBACK: "false"
+          AI_ALLOW_CLAUDE_TEXT_FALLBACK: "false"
+          AI_SAFE_TEXT_FALLBACK_ONLY: "false"
+
+          # ============================================================
+          # 全批次覆盖要求
+          # partial 结果不得当成完整成功
+          # ============================================================
+          AI_REQUIRE_FULL_BATCH_COVERAGE: "true"
+          AI_ACCEPT_PARTIAL_PHASE1: "false"
+          AI_ACCEPT_PARTIAL_CLAUDE: "false"
+          AI_PARTIAL_AS_FAILED: "true"
+
+          # ============================================================
+          # 关闭 AI 缓存
+          # 防止手动重跑、赔率变化、临场变动被旧缓存污染
+          # ============================================================
+          AI_DISABLE_CACHE: "true"
+          AI_PERSISTENT_CACHE_ENABLED: "false"
+          AI_SINGLEFLIGHT_ENABLED: "false"
+          AI_DECISION_CACHE_TTL: "0"
           AI_CACHE_DIR: "data/ai_cache"
           AI_CACHE_STRIP_VOLATILE_KEYS: "true"
+          AI_WRITE_BATCH_RESULT_IMMEDIATELY: "false"
 
-          # Claude 600秒，所以磁盘锁等待必须大于 Claude 等待时间
-          AI_DISK_LOCK_WAIT_SECONDS: "900"
+          # 缓存关闭后磁盘锁不参与 AI 判断，仅保留极短安全值
+          AI_DISK_LOCK_WAIT_SECONDS: "30"
           AI_DISK_LOCK_POLL_SECONDS: "3"
-
-          AI_DECISION_CACHE_TTL: "1800"
-          AI_WRITE_BATCH_RESULT_IMMEDIATELY: "true"
 
           # ============================================================
           # main.py 运行锁
+          # job timeout 240分钟，所以 stale 给 4小时
           # ============================================================
-          VMAX_MAIN_LOCK_STALE_SECONDS: "7200"
+          VMAX_MAIN_LOCK_STALE_SECONDS: "14400"
 
           # workflow 已经 pip install，这里让 main.py 跳过二次自动安装
           SKIP_AUTO_INSTALL: "true"
@@ -139,13 +173,19 @@ jobs:
 
           if [ -d "scripts/data" ]; then
             echo "📤 Syncing scripts/data/ -> root data/"
-            rsync -a --delete --exclude "debug/" scripts/data/ data/
+            rsync -a --delete \
+              --exclude "debug/" \
+              --exclude "ai_cache/" \
+              scripts/data/ data/
           fi
+
+          echo "🧹 Ensure AI cache is not committed"
+          rm -rf data/ai_cache || true
 
           git add data/
 
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (today-only old-ai-env)"
+            git commit -m "🤖 Auto-update prediction data (today-only strict-ai-no-cache)"
             git pull --rebase --autostash origin main || true
             git push
           else
