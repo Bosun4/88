@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
 """
-vMAX 18.4.13 — PURE RAW-AI SHARP-GATED SCORE-MARKET 稳定版
+vMAX 18.4.14 — PURE RAW-AI STRICT-FULL-BATCH SHARP-GATED 稳定版
 ============================================================
 设计边界：
 1. 纯 AI 主审：GPT/Grok/Gemini 初审，Claude 终审；Claude 失败时使用 Phase1 AI 共识。
 2. 不跑 CRS 矩阵、不跑贝叶斯后验、不跑本地比分矩阵、不跑本地风控裁决。
-3. 本地只做：抓包格式化、AI 调用、严格 JSON 解析、安全文本兜底、字段闭环、前端兼容、推荐分层。
+3. 本地只做：抓包格式化、AI 调用、严格 JSON 解析、字段闭环、前端兼容、推荐分层。
 4. Phase1 三家吃完整抓包；Claude 终审默认吃压缩抓包 + 三家结构化摘要。
 5. 严格每模型一次请求：GPT/Grok/Gemini/Claude 默认每家最多请求一次，不做二次 repair。
-6. JSON优先；JSON失败时启用“安全文本兜底”，只在明确出现预测比分/最终比分/score/top1 标签时解析，避免首回合比分误抓。
-7. Claude 若有效但缺少 experience_review，本地先从同比分/同方向 Phase1 继承审计卡，再补齐缺失卡为 neutral，不改比分、不改方向。
-8. 默认关闭持久化缓存，避免赔率变动/手动刷新/二次启动复用旧数据。
-9. 新增 SHARP-GATE：识别低赔热门升水、冷门降水、平赔独降、散户未跟降水、强强对话反向资金。
-10. 新增 SCORE-MARKET-GATE：比分赔率低位、方向内比分排名、总进球主模态、BTTS 四项闭环；不闭环不得强推。
-11. 推荐 top4 不再裸用 confidence，而是使用 safe_top_gate_score 综合排序。
-12. AI 负责预测方向和比分；本地只负责推荐门控和降级，不篡改 AI 最终比分。
+6. STRICT-FULL-BATCH：默认要求每个模型返回完整 match 1..N；1/56、2/56、半截 JSON 一律视为该模型失败。
+7. 默认关闭安全文本兜底，防止 Grok/Claude 自然语言残片被误抓成单场结果。
+8. Claude 默认必须终审，即使 Phase1 有效不足，也让 Claude 基于原始抓包重新审计。
+9. 默认关闭持久化缓存，避免赔率变动/手动刷新/二次启动复用旧数据。
+10. SHARP-GATE：识别低赔热门升水、冷门降水、平赔独降、散户未跟降水、强强对话反向资金。
+11. SCORE-MARKET-GATE：比分赔率低位、方向内比分排名、总进球主模态、BTTS 四项闭环；不闭环不得强推。
+12. 推荐 top4 使用 safe_top_gate_score 综合排序，不裸用 confidence。
+13. AI 负责预测方向和比分；本地只负责推荐门控和降级，不篡改 AI 最终比分。
 
 入口：
     run_predictions(raw, use_ai=True) -> (res, top4)
@@ -50,11 +51,11 @@ except Exception:
 # 版本常量
 # ============================================================
 
-ENGINE_VERSION = "vMAX 18.4.13"
+ENGINE_VERSION = "vMAX 18.4.14"
 
 ENGINE_ARCHITECTURE = (
     "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + STRICT ONE-CALL + "
-    "JSON优先解析 + 安全文本兜底 + 经验卡强制覆盖补齐 + 默认关闭持久化缓存 + "
+    "STRICT-FULL-BATCH完整覆盖校验 + 默认禁用文本兜底 + 默认关闭持久化缓存 + "
     "SHARP-GATE + SCORE-MARKET-GATE + 方向/比分字段闭环；"
     "无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权"
 )
@@ -114,34 +115,42 @@ def _env_int(name: str, default: int) -> int:
         return default
 
 
-# 18.4.13：默认关闭 AI 缓存。赔率变动/手动刷新/二次启动必须重新请求 AI。
 AI_ENABLE_CACHE = _env_bool("AI_ENABLE_CACHE", False)
 AI_DISABLE_CACHE = not AI_ENABLE_CACHE
-AI_DECISION_CACHE_TTL = _env_int("AI_DECISION_CACHE_TTL", 1800)
+AI_DECISION_CACHE_TTL = _env_int("AI_DECISION_CACHE_TTL", 0)
 AI_PERSISTENT_CACHE_ENABLED = _env_bool("AI_PERSISTENT_CACHE_ENABLED", False)
 AI_CACHE_DIR = str(os.environ.get("AI_CACHE_DIR", "data/ai_cache")).strip() or "data/ai_cache"
-AI_CACHE_SCHEMA_VERSION = str(os.environ.get("AI_CACHE_SCHEMA_VERSION", "18.4.13-sharp-gated")).strip()
+AI_CACHE_SCHEMA_VERSION = str(os.environ.get("AI_CACHE_SCHEMA_VERSION", "18.4.14-strict-full-batch")).strip()
 AI_CACHE_STRIP_VOLATILE_KEYS = _env_bool("AI_CACHE_STRIP_VOLATILE_KEYS", True)
 
-# singleflight 只防同一进程内完全相同抓包的并发重复触发；不跨启动、不写盘。
-AI_SINGLEFLIGHT_ENABLED = _env_bool("AI_SINGLEFLIGHT_ENABLED", True)
+AI_SINGLEFLIGHT_ENABLED = _env_bool("AI_SINGLEFLIGHT_ENABLED", False)
 
 AI_MAX_REQUESTS_PER_AI = max(1, _env_int("AI_MAX_REQUESTS_PER_AI", 1))
 AI_FORCE_COMMON_GATEWAY = _env_bool("FORCE_COMMON_GATEWAY_URL", True)
 
-AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 1000)
-AI_CLAUDE_READ_TIMEOUT = _env_int("AI_CLAUDE_READ_TIMEOUT", 1500)
-AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 25)
-AI_CLAUDE_CONNECT_TIMEOUT = _env_int("AI_CLAUDE_CONNECT_TIMEOUT", 45)
+AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 5400)
+AI_CLAUDE_READ_TIMEOUT = _env_int("AI_CLAUDE_READ_TIMEOUT", 7200)
+AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 120)
+AI_CLAUDE_CONNECT_TIMEOUT = _env_int("AI_CLAUDE_CONNECT_TIMEOUT", 120)
+AI_HTTP_TOTAL_TIMEOUT = _env_int("AI_HTTP_TOTAL_TIMEOUT", 0)
 
 STRICT_ONE_CALL_PER_MODEL = _env_bool("STRICT_ONE_CALL_PER_MODEL", True)
 AI_ALLOW_SECOND_CALL_REPAIR = _env_bool("AI_ALLOW_SECOND_CALL_REPAIR", False)
 AI_ENABLE_CLAUDE_JSON_REPAIR = _env_bool("AI_ENABLE_CLAUDE_JSON_REPAIR", False)
 AI_ENABLE_ANY_MODEL_JSON_REPAIR = _env_bool("AI_ENABLE_ANY_MODEL_JSON_REPAIR", False)
 
-AI_ALLOW_TEXT_FALLBACK = _env_bool("AI_ALLOW_TEXT_FALLBACK", True)
-AI_ALLOW_CLAUDE_TEXT_FALLBACK = _env_bool("AI_ALLOW_CLAUDE_TEXT_FALLBACK", True)
-AI_SAFE_TEXT_FALLBACK_ONLY = _env_bool("AI_SAFE_TEXT_FALLBACK_ONLY", True)
+AI_ALLOW_TEXT_FALLBACK = _env_bool("AI_ALLOW_TEXT_FALLBACK", False)
+AI_ALLOW_CLAUDE_TEXT_FALLBACK = _env_bool("AI_ALLOW_CLAUDE_TEXT_FALLBACK", False)
+AI_SAFE_TEXT_FALLBACK_ONLY = _env_bool("AI_SAFE_TEXT_FALLBACK_ONLY", False)
+
+AI_REQUIRE_FULL_BATCH_COVERAGE = _env_bool("AI_REQUIRE_FULL_BATCH_COVERAGE", True)
+AI_ACCEPT_PARTIAL_PHASE1 = _env_bool("AI_ACCEPT_PARTIAL_PHASE1", False)
+AI_ACCEPT_PARTIAL_CLAUDE = _env_bool("AI_ACCEPT_PARTIAL_CLAUDE", False)
+AI_PARTIAL_AS_FAILED = _env_bool("AI_PARTIAL_AS_FAILED", True)
+
+AI_RUN_CLAUDE_ALWAYS = _env_bool("AI_RUN_CLAUDE_ALWAYS", True)
+AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID = _env_bool("AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID", False)
+AI_MIN_PHASE1_VALID_FOR_CLAUDE = _env_int("AI_MIN_PHASE1_VALID_FOR_CLAUDE", 0)
 
 AI_FORCE_CHINESE_REASON = _env_bool("AI_FORCE_CHINESE_REASON", True)
 AI_USE_RESPONSE_FORMAT = _env_bool("AI_USE_RESPONSE_FORMAT", False)
@@ -159,7 +168,7 @@ FIELD_LIMIT_POINTS = _env_int("FIELD_LIMIT_POINTS", 8000)
 FIELD_LIMIT_STYLE_EXTRA = _env_int("FIELD_LIMIT_STYLE_EXTRA", 6000)
 
 AI_USE_COMPACT_CLAUDE_AUDIT = _env_bool("AI_USE_COMPACT_CLAUDE_AUDIT", True)
-AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE = _env_int("AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE", 260)
+AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE = _env_int("AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE", 350)
 CLAUDE_COMPACT_FIELD_LIMIT = _env_int("CLAUDE_COMPACT_FIELD_LIMIT", 2500)
 
 ENABLE_EXPERIENCE_AUDIT_CARDS = _env_bool("ENABLE_EXPERIENCE_AUDIT_CARDS", True)
@@ -167,7 +176,6 @@ EXPERIENCE_AUDIT_MAX_CARDS = max(0, _env_int("EXPERIENCE_AUDIT_MAX_CARDS", 12))
 EXPERIENCE_AUDIT_MIN_WEIGHT = _env_int("EXPERIENCE_AUDIT_MIN_WEIGHT", 4)
 EXPERIENCE_AUDIT_INCLUDE_EXTENDED = _env_bool("EXPERIENCE_AUDIT_INCLUDE_EXTENDED", True)
 
-# 推荐门控
 ENABLE_SHARP_GATE = _env_bool("ENABLE_SHARP_GATE", True)
 ENABLE_SCORE_MARKET_GATE = _env_bool("ENABLE_SCORE_MARKET_GATE", True)
 STRICT_RECOMMEND_GATE = _env_bool("STRICT_RECOMMEND_GATE", True)
@@ -820,7 +828,8 @@ def _raw_full_packet_line(match_obj: Dict[str, Any]) -> str:
 
 def _output_format_rule() -> str:
     return (
-        "严格输出 JSON 数组。每场一个对象。不要输出 markdown，不要输出解释。对象模板："
+        "严格输出 JSON 数组。每场一个对象。必须覆盖 match=1 到 match=N，不能只输出部分场次。"
+        "不要输出 markdown，不要输出解释。对象模板："
         '{"match":1,"final_direction":"home/draw/away","direction_probs":{"home":45,"draw":28,"away":27},'
         '"goal_band":"0-1/2/3/4+","btts":"yes/no/unclear",'
         '"top3":[{"score":"2-0","prob":18,"market_logic":"中文说明"}],'
@@ -840,15 +849,17 @@ def _correct_score_odds_pack(m: Dict[str, Any], limit: int = 5000) -> str:
 
 
 def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
+    total_n = len(match_analyses)
     p = "<context>\n"
     p += "你是竞彩足球 RAW-AI 比分预测模型。match_data 中的赔率是中国体彩竞彩抓包赔率，不是欧洲公司均赔。\n"
+    p += f"本批次一共有 {total_n} 场。你必须一次性输出完整 JSON 数组，数组必须覆盖 match=1 到 match={total_n}，不能漏场，不能只输出一场。\n"
     p += "你需要基于原始抓包、赔率变动、散户热度、总进球、比分赔率、半全场、经验审计卡、可用联网材料，独立判断方向和比分。\n"
     p += "必须重点识别 Sharp/聪明钱：低赔热门升水、冷门降水、平赔独降、散户未跟的降水、强强对话反向资金。\n"
     p += "禁止引用 CRS、贝叶斯、本地矩阵、本地陷阱裁决。经验卡只作为审计问题，不是裁决。\n"
     p += "若没有联网能力，audit.web_odds_check 写 web_search_unavailable，data_missing 加 external_european_odds，禁止假装联网。\n"
     p += "必须输出 direction_probs、goal_band、btts、top3比分；top3[0]必须与final_direction一致。\n"
     p += "必须逐条回应 experience_audit_cards 中每个 id，不得漏项，不得合并 id。\n"
-    p += "必须只输出 JSON 数组。\n"
+    p += "必须只输出 JSON 数组，不要输出 JSON 外文本。\n"
     p += "</context>\n\n"
     p += "<output_format>\n" + _output_format_rule() + "</output_format>\n\n"
     p += "<match_data>\n"
@@ -901,8 +912,10 @@ def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
 
 
 def build_compact_claude_match_data(match_analyses: List[Dict[str, Any]]) -> str:
+    total_n = len(match_analyses)
     p = "<compact_match_data_for_claude>\n"
-    p += "Claude终审压缩抓包：Phase1三家已经看过完整抓包。这里保留核心原始字段、赔率结构、经验审计卡，避免prompt过大导致断流。\n"
+    p += f"Claude终审压缩抓包：本批次一共有 {total_n} 场，你必须输出 match=1 到 match={total_n} 的完整 JSON 数组，不能漏场。\n"
+    p += "Phase1三家已经看过完整抓包。这里保留核心原始字段、赔率结构、经验审计卡，避免prompt过大导致断流。\n"
     p += "这些字段仍然是体彩竞彩抓包赔率，不是欧洲欧赔。Claude必须重新审计，不按票数机械裁决。\n"
     p += "必须重点识别 Sharp/聪明钱：低赔热门升水、冷门降水、平赔独降、散户未跟的降水、强强对话反向资金。\n"
     p += "每个经验审计卡 id 必须在 audit.experience_review 逐条回应，不得漏项。\n\n"
@@ -986,8 +999,10 @@ def build_claude_final_audit_prompt(
     match_analyses: List[Dict[str, Any]],
     phase1_results: Dict[str, Dict[int, Dict[str, Any]]],
 ) -> str:
+    total_n = len(match_analyses)
     p = "<final_audit_context>\n"
     p += "你是 Claude 最终 RAW-AI 主裁。你看到的是体彩竞彩抓包核心字段和 GPT/Grok/Gemini 初审。\n"
+    p += f"本批次一共有 {total_n} 场。你必须输出完整 JSON 数组，覆盖 match=1 到 match={total_n}，不能漏场，不能只输出部分场次。\n"
     p += "你不是反指模型，不需要为了审计而反对初审。选择证据最完整、最符合原始字段的一组。\n"
     p += "必须输出 JSON 数组；字段同 phase1；禁止 JSON 外文本。\n"
     p += "必须复核：方向、direction_probs、goal_band、btts、top3比分、Sharp资金方向、experience_review。\n"
@@ -1100,6 +1115,10 @@ def debug_ai_config() -> None:
         f"[AI MODE] strict_one_call={STRICT_ONE_CALL_PER_MODEL} "
         f"text_fallback={AI_ALLOW_TEXT_FALLBACK} "
         f"claude_text_fallback={AI_ALLOW_CLAUDE_TEXT_FALLBACK} "
+        f"full_batch_required={AI_REQUIRE_FULL_BATCH_COVERAGE} "
+        f"accept_partial_phase1={AI_ACCEPT_PARTIAL_PHASE1} "
+        f"accept_partial_claude={AI_ACCEPT_PARTIAL_CLAUDE} "
+        f"run_claude_always={AI_RUN_CLAUDE_ALWAYS} "
         f"second_repair={AI_ALLOW_SECOND_CALL_REPAIR} "
         f"compact_claude={AI_USE_COMPACT_CLAUDE_AUDIT} "
         f"cache_enabled={AI_ENABLE_CACHE} "
@@ -1807,6 +1826,16 @@ def _parse_ai_json(raw_text: str, num_matches: int, ai_name: str = "") -> Dict[i
     return results
 
 
+def _batch_coverage_missing(parsed: Dict[int, Dict[str, Any]], num_matches: int) -> List[int]:
+    expected = set(range(1, num_matches + 1))
+    got = {int(k) for k in parsed.keys() if isinstance(k, int) or str(k).isdigit()}
+    return sorted(expected - got)
+
+
+def _allow_partial_for_model(ai_name: str) -> bool:
+    return AI_ACCEPT_PARTIAL_CLAUDE if str(ai_name).lower() == "claude" else AI_ACCEPT_PARTIAL_PHASE1
+
+
 # ============================================================
 # AI 调用
 # ============================================================
@@ -1830,6 +1859,7 @@ async def async_call_one_ai_batch(
         "requests": 0,
         "strict_one_call": STRICT_ONE_CALL_PER_MODEL,
         "text_fallback": AI_ALLOW_CLAUDE_TEXT_FALLBACK if ai_name == "claude" else AI_ALLOW_TEXT_FALLBACK,
+        "full_batch_required": AI_REQUIRE_FULL_BATCH_COVERAGE,
     }
 
     if not key:
@@ -1867,8 +1897,9 @@ async def async_call_one_ai_batch(
         try:
             read_timeout = AI_CLAUDE_READ_TIMEOUT if ai_name == "claude" else AI_READ_TIMEOUT
             connect_timeout = AI_CLAUDE_CONNECT_TIMEOUT if ai_name == "claude" else AI_CONNECT_TIMEOUT
+            total_timeout = None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT
             timeout = aiohttp.ClientTimeout(
-                total=None,
+                total=total_timeout,
                 connect=connect_timeout,
                 sock_connect=connect_timeout,
                 sock_read=read_timeout,
@@ -1908,7 +1939,25 @@ async def async_call_one_ai_batch(
 
                 parsed = _parse_ai_json(raw_text, num_matches, ai_name)
                 if parsed:
-                    parse_mode = "json_or_safe_text"
+                    missing = _batch_coverage_missing(parsed, num_matches)
+                    if AI_REQUIRE_FULL_BATCH_COVERAGE and missing and not _allow_partial_for_model(ai_name):
+                        print(
+                            f"    {ai_name.upper()} PARTIAL失败: {len(parsed)}/{num_matches}，"
+                            f"缺失match={missing[:20]}{'...' if len(missing) > 20 else ''}；不接受半截结果"
+                        )
+                        _save_debug_dump(ai_name, data, "partial_failed", raw_text)
+                        AI_CALL_STATUS[ai_name].update({
+                            "ok": False,
+                            "status": "partial_failed",
+                            "count": len(parsed),
+                            "missing": missing[:100],
+                            "model": model,
+                            "elapsed": round(time.time() - t0, 1),
+                        })
+                        if AI_PARTIAL_AS_FAILED:
+                            return ai_name, {}, "partial_failed"
+
+                    parse_mode = "strict_json"
                     print(f"    {ai_name.upper()} 完成: {len(parsed)}/{num_matches} | {round(time.time()-t0,1)}s | parse={parse_mode}")
                     AI_CALL_STATUS[ai_name].update({
                         "ok": True,
@@ -1918,6 +1967,7 @@ async def async_call_one_ai_batch(
                         "parse_mode": parse_mode,
                         "elapsed": round(time.time() - t0, 1),
                         "second_call_used": False,
+                        "missing": missing,
                     })
                     return ai_name, parsed, model
 
@@ -1945,6 +1995,7 @@ def _phase_system(ai_name: str) -> str:
         "top3 必须是数组，元素必须包含 score、prob、market_logic。"
         "final_direction 只能是 home/draw/away。"
         "reason、market_logic、audit 内所有说明必须使用中文。"
+        "必须覆盖用户给出的全部 match 序号，不能只返回部分场次。"
         "必须重点分析 Sharp/聪明钱：低赔热门升水、冷门降水、平赔独降、散户未跟的降水、强强对话反向资金。"
         "不得引用 CRS、本地矩阵、贝叶斯或固定模板。"
         "如果信息不足，把缺失项写入 data_missing，不得编造联网欧赔。"
@@ -2071,7 +2122,7 @@ async def _run_ai_matrix_two_phase_inner(
 
     all_results: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in AI_NAMES}
 
-    connector = aiohttp.TCPConnector(limit=8, use_dns_cache=False, ttl_dns_cache=0)
+    connector = aiohttp.TCPConnector(limit=8, use_dns_cache=False, ttl_dns_cache=0, force_close=False)
     async with aiohttp.ClientSession(connector=connector) as session:
         tasks = [
             async_call_one_ai_batch(session, prompt, num, name, _phase_system(name))
@@ -2088,8 +2139,10 @@ async def _run_ai_matrix_two_phase_inner(
         valid_phase1 = sum(1 for n in PHASE1_NAMES if all_results.get(n))
         should_run_claude = True
 
-        if _env_bool("AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID", False):
-            min_valid = _env_int("AI_MIN_PHASE1_VALID_FOR_CLAUDE", 2)
+        if AI_RUN_CLAUDE_ALWAYS:
+            should_run_claude = True
+        elif AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID:
+            min_valid = AI_MIN_PHASE1_VALID_FOR_CLAUDE
             if valid_phase1 < min_valid:
                 print(f"  [Claude Skip] Phase1有效模型不足 {valid_phase1}/{min_valid}")
                 should_run_claude = False
@@ -3013,6 +3066,7 @@ def _make_ai_prediction(
     evidences = [
         "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
         "STRICT ONE-CALL：每个模型默认最多请求一次；Claude不做二次repair消费。",
+        "STRICT-FULL-BATCH：模型结果必须覆盖全部场次，半截结果不作为成功。",
         "CACHE OFF BY DEFAULT：默认关闭持久化缓存，赔率变化/手动刷新会重新跑AI。",
         "SHARP-GATE：本地不改AI比分，只判断Sharp冲突是否允许进入推荐池。",
         "SCORE-MARKET-GATE：比分赔率低位和总进球主模态不支持时，比分评级降级。",
@@ -3342,7 +3396,7 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     ms = [normalize_match(m) for m in raw_ms]
 
     print("\n" + "=" * 88)
-    print(f"  [{ENGINE_VERSION}] PURE RAW-AI 主审 | {len(ms)} 场 | STRICT ONE-CALL | SHARP-GATE | SCORE-MARKET-GATE")
+    print(f"  [{ENGINE_VERSION}] PURE RAW-AI 主审 | {len(ms)} 场 | STRICT ONE-CALL | STRICT-FULL-BATCH | SHARP-GATE")
     print("=" * 88)
 
     match_analyses: List[Dict[str, Any]] = []
@@ -3367,7 +3421,10 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     all_ai: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in AI_NAMES}
 
     if use_ai and match_analyses:
-        print(f"  [{ENGINE_VERSION} AI] 启动 GPT/Grok/Gemini 初审 + Claude 终审 | 每模型最多一次请求 | cache_enabled={AI_ENABLE_CACHE}")
+        print(
+            f"  [{ENGINE_VERSION} AI] 启动 GPT/Grok/Gemini 初审 + Claude 终审 | "
+            f"每模型最多一次请求 | cache_enabled={AI_ENABLE_CACHE} | full_batch_required={AI_REQUIRE_FULL_BATCH_COVERAGE}"
+        )
         try:
             all_ai = _run_async(run_ai_matrix_two_phase(match_analyses))
         except Exception as e:
@@ -3410,4 +3467,4 @@ if __name__ == "__main__":
     logger.info(f"{ENGINE_VERSION} 启动")
     print(f"✅ {ENGINE_VERSION} 加载完成")
     print(f"   架构: {ENGINE_ARCHITECTURE}")
-    print("   模式: AI成功=AI直出；AI失败=弃权；每模型最多一次请求；默认关闭持久化缓存；推荐层强过滤")
+    print("   模式: AI成功=AI直出；AI失败=弃权；每模型最多一次请求；默认关闭缓存；默认禁用文本兜底；半截结果直接判失败")
