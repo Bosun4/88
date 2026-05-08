@@ -1,0 +1,5574 @@
+{
+  "engine_version": "vMAX 18.4.15",
+  "run_id": "20260508_160618_54m_94451abf78b0_帕德博恩_卡斯鲁厄",
+  "ai_name": "gemini",
+  "model": "gemini-3.1-pro-preview-thinking-high",
+  "saved_at": "2026-05-08T16:09:33",
+  "match_count": 54,
+  "accepted_count": 54,
+  "partial_rejected_count": 0,
+  "status": {
+    "ok": true,
+    "status": "ok",
+    "model": "gemini-3.1-pro-preview-thinking-high",
+    "count": 54,
+    "requests": 1,
+    "strict_one_call": true,
+    "text_fallback": false,
+    "full_batch_required": true,
+    "parse_mode": "strict_json",
+    "elapsed": 195.2,
+    "second_call_used": false,
+    "missing": []
+  },
+  "accepted_results": {
+    "1": {
+      "top3": [
+        {
+          "score": "3-1",
+          "prob": 20.0,
+          "market_logic": "主胜降水实力占优"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "market_logic": "防守端有漏洞"
+        },
+        {
+          "score": "2-0",
+          "prob": 10.0,
+          "market_logic": "主场优势明显"
+        }
+      ],
+      "ai_score": "3-1",
+      "reason": "主队实力占优且主胜赔率下降，市场资金倾向主队。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜降水且热度较高",
+        "league_style": "德乙大开大合",
+        "team_style": "主队攻强守弱",
+        "style_score_logic": "支持大比分和双边进球",
+        "direction_rejection": "客队客场战绩差排除客胜",
+        "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常; G12:accepted because 双方防守均有漏洞; X02:accepted because 降水与热度同向需防大热"
+      },
+      "direction_probs": {
+        "home": 60.0,
+        "draw": 25.0,
+        "away": 15.0
+      },
+      "goal_band": "4+",
+      "btts": "yes",
+      "score_shape_reason": "支持大比分和双边进球",
+      "experience_review": [
+        {
+          "id": "D01",
+          "decision": "neutral",
+          "reason": "D01:neutral because 实力差距大低赔合理"
+        },
+        {
+          "id": "U04",
+          "decision": "neutral",
+          "reason": " U04:neutral because 强队主场受热正常"
+        },
+        {
+          "id": "G12",
+          "decision": "accepted",
+          "reason": " G12:accepted because 双方防守均有漏洞"
+        },
+        {
+          "id": "X02",
+          "decision": "accepted",
+          "reason": " X02:accepted because 降水与热度同向需防大热"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 1,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 60,
+          "draw": 25,
+          "away": 15
+        },
+        "goal_band": "4+",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "3-1",
+            "prob": 20,
+            "market_logic": "主胜降水实力占优"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "market_logic": "防守端有漏洞"
+          },
+          {
+            "score": "2-0",
+            "prob": 10,
+            "market_logic": "主场优势明显"
+          }
+        ],
+        "reason": "主队实力占优且主胜赔率下降，市场资金倾向主队。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜降水且热度较高",
+          "league_style": "德乙大开大合",
+          "team_style": "主队攻强守弱",
+          "style_score_logic": "支持大比分和双边进球",
+          "direction_rejection": "客队客场战绩差排除客胜",
+          "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常; G12:accepted because 双方防守均有漏洞; X02:accepted because 降水与热度同向需防大热"
+        }
+      }
+    },
+    "2": {
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "market_logic": "客胜降水且客队保级战意浓"
+        },
+        {
+          "score": "0-2",
+          "prob": 15.0,
+          "market_logic": "客队进攻火力不错"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "主队主场有一定抗衡能力"
+        }
+      ],
+      "ai_score": "1-2",
+      "reason": "客队保级战意更浓，且客胜赔率下降，市场资金倾向客队。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜降水且散户未跟",
+        "league_style": "德乙大开大合",
+        "team_style": "客队攻强守弱",
+        "style_score_logic": "支持双边进球",
+        "direction_rejection": "主队战意存疑排除主胜",
+        "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+      },
+      "direction_probs": {
+        "home": 30.0,
+        "draw": 25.0,
+        "away": 45.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持双边进球",
+      "experience_review": [
+        {
+          "id": "B_STEAM",
+          "decision": "accepted",
+          "reason": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 2,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 30,
+          "draw": 25,
+          "away": 45
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18,
+            "market_logic": "客胜降水且客队保级战意浓"
+          },
+          {
+            "score": "0-2",
+            "prob": 15,
+            "market_logic": "客队进攻火力不错"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "主队主场有一定抗衡能力"
+          }
+        ],
+        "reason": "客队保级战意更浓，且客胜赔率下降，市场资金倾向客队。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜降水且散户未跟",
+          "league_style": "德乙大开大合",
+          "team_style": "客队攻强守弱",
+          "style_score_logic": "支持双边进球",
+          "direction_rejection": "主队战意存疑排除主胜",
+          "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      }
+    },
+    "3": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队实力占优但防守有隐患"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "客胜降水需防平"
+        },
+        {
+          "score": "2-0",
+          "prob": 12.0,
+          "market_logic": "主队主场强势"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队实力明显占优且主场强势，虽主胜升水但整体基本面支持主队。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away_or_draw",
+        "sharp_evidence": "客胜降水且主胜升水",
+        "league_style": "瑞超主场优势大",
+        "team_style": "主队主场龙",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场防守差排除客胜",
+        "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金; X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 55.0,
+        "draw": 25.0,
+        "away": 20.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "B_STEAM",
+          "decision": "accepted",
+          "reason": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 3,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 55,
+          "draw": 25,
+          "away": 20
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队实力占优但防守有隐患"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "客胜降水需防平"
+          },
+          {
+            "score": "2-0",
+            "prob": 12,
+            "market_logic": "主队主场强势"
+          }
+        ],
+        "reason": "主队实力明显占优且主场强势，虽主胜升水但整体基本面支持主队。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away_or_draw",
+          "sharp_evidence": "客胜降水且主胜升水",
+          "league_style": "瑞超主场优势大",
+          "team_style": "主队主场龙",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场防守差排除客胜",
+          "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金; X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "4": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主胜降水且主场抢分意愿强"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方实力接近需防平"
+        },
+        {
+          "score": "2-0",
+          "prob": 12.0,
+          "market_logic": "客队状态低迷"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队主场抢分欲望强烈，且主胜赔率下降，客队状态跌入谷底。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜降水且散户未跟",
+        "league_style": "挪超主场优势明显",
+        "team_style": "主队攻强守弱",
+        "style_score_logic": "支持双边进球",
+        "direction_rejection": "客队状态极差排除客胜",
+        "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持双边进球",
+      "experience_review": [
+        {
+          "id": "B_STEAM",
+          "decision": "accepted",
+          "reason": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 4,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主胜降水且主场抢分意愿强"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方实力接近需防平"
+          },
+          {
+            "score": "2-0",
+            "prob": 12,
+            "market_logic": "客队状态低迷"
+          }
+        ],
+        "reason": "主队主场抢分欲望强烈，且主胜赔率下降，客队状态跌入谷底。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜降水且散户未跟",
+          "league_style": "挪超主场优势明显",
+          "team_style": "主队攻强守弱",
+          "style_score_logic": "支持双边进球",
+          "direction_rejection": "客队状态极差排除客胜",
+          "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      }
+    },
+    "5": {
+      "top3": [
+        {
+          "score": "2-0",
+          "prob": 20.0,
+          "market_logic": "主队实力占优且主场强势"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "market_logic": "客队有保级战意"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "主队阵容有伤停"
+        }
+      ],
+      "ai_score": "2-0",
+      "reason": "主队实力与排名均占优，主场统治力极强，客队客场防守不稳。",
+      "ai_confidence": 75,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away_or_draw",
+        "sharp_evidence": "客胜降水且主胜升水",
+        "league_style": "芬超主场优势大",
+        "team_style": "主队防守稳健",
+        "style_score_logic": "支持主队零封小胜",
+        "direction_rejection": "客队客场战绩差排除客胜",
+        "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+      },
+      "direction_probs": {
+        "home": 60.0,
+        "draw": 25.0,
+        "away": 15.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持主队零封小胜",
+      "experience_review": [
+        {
+          "id": "B_STEAM",
+          "decision": "accepted",
+          "reason": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 5,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 60,
+          "draw": 25,
+          "away": 15
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 20,
+            "market_logic": "主队实力占优且主场强势"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "market_logic": "客队有保级战意"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "主队阵容有伤停"
+          }
+        ],
+        "reason": "主队实力与排名均占优，主场统治力极强，客队客场防守不稳。",
+        "ai_confidence": 75,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away_or_draw",
+          "sharp_evidence": "客胜降水且主胜升水",
+          "league_style": "芬超主场优势大",
+          "team_style": "主队防守稳健",
+          "style_score_logic": "支持主队零封小胜",
+          "direction_rejection": "客队客场战绩差排除客胜",
+          "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      }
+    },
+    "6": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队实力占优但防守有隐患"
+        },
+        {
+          "score": "3-1",
+          "prob": 15.0,
+          "market_logic": "主队历史交锋碾压"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "客胜降水需防平"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队综合实力更胜一筹，历史交锋碾压对手，客队后防核心停赛。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away_or_draw",
+        "sharp_evidence": "客胜降水且主胜升水",
+        "league_style": "德甲大开大合",
+        "team_style": "主队主场强势",
+        "style_score_logic": "支持双边进球和大比分",
+        "direction_rejection": "客队客场胜率极低排除客胜",
+        "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金; G12:accepted because 双方防守均有漏洞"
+      },
+      "direction_probs": {
+        "home": 55.0,
+        "draw": 25.0,
+        "away": 20.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持双边进球和大比分",
+      "experience_review": [
+        {
+          "id": "B_STEAM",
+          "decision": "accepted",
+          "reason": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        },
+        {
+          "id": "G12",
+          "decision": "accepted",
+          "reason": " G12:accepted because 双方防守均有漏洞"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 6,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 55,
+          "draw": 25,
+          "away": 20
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队实力占优但防守有隐患"
+          },
+          {
+            "score": "3-1",
+            "prob": 15,
+            "market_logic": "主队历史交锋碾压"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "客胜降水需防平"
+          }
+        ],
+        "reason": "主队综合实力更胜一筹，历史交锋碾压对手，客队后防核心停赛。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away_or_draw",
+          "sharp_evidence": "客胜降水且主胜升水",
+          "league_style": "德甲大开大合",
+          "team_style": "主队主场强势",
+          "style_score_logic": "支持双边进球和大比分",
+          "direction_rejection": "客队客场胜率极低排除客胜",
+          "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金; G12:accepted because 双方防守均有漏洞"
+        }
+      }
+    },
+    "7": {
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 20.0,
+          "market_logic": "平赔独降且双方实力接近"
+        },
+        {
+          "score": "0-0",
+          "prob": 15.0,
+          "market_logic": "双方皆面临阵容不整"
+        },
+        {
+          "score": "2-1",
+          "prob": 10.0,
+          "market_logic": "主队有主场优势"
+        }
+      ],
+      "ai_score": "1-1",
+      "reason": "平赔独降且胜负升水，双方实力差距不大且皆面临阵容不整，平局概率大。",
+      "ai_confidence": 70,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "draw",
+        "sharp_evidence": "平赔独降且胜负升水",
+        "league_style": "意甲防守严密",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持小比分平局",
+        "direction_rejection": "双方均无必胜把握排除单选",
+        "experience_review": "B_SHARP:accepted because 平赔独降且两边升提示平局; X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 35.0,
+        "draw": 35.0,
+        "away": 30.0
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "score_shape_reason": "支持小比分平局",
+      "experience_review": [
+        {
+          "id": "B_SHARP",
+          "decision": "accepted",
+          "reason": "B_SHARP:accepted because 平赔独降且两边升提示平局"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 7,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 35,
+          "draw": 35,
+          "away": 30
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 20,
+            "market_logic": "平赔独降且双方实力接近"
+          },
+          {
+            "score": "0-0",
+            "prob": 15,
+            "market_logic": "双方皆面临阵容不整"
+          },
+          {
+            "score": "2-1",
+            "prob": 10,
+            "market_logic": "主队有主场优势"
+          }
+        ],
+        "reason": "平赔独降且胜负升水，双方实力差距不大且皆面临阵容不整，平局概率大。",
+        "ai_confidence": 70,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "draw",
+          "sharp_evidence": "平赔独降且胜负升水",
+          "league_style": "意甲防守严密",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持小比分平局",
+          "direction_rejection": "双方均无必胜把握排除单选",
+          "experience_review": "B_SHARP:accepted because 平赔独降且两边升提示平局; X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "8": {
+      "top3": [
+        {
+          "score": "2-0",
+          "prob": 20.0,
+          "market_logic": "主队实力碾压且主场强势"
+        },
+        {
+          "score": "3-0",
+          "prob": 15.0,
+          "market_logic": "客队防线伤病严重"
+        },
+        {
+          "score": "2-1",
+          "prob": 10.0,
+          "market_logic": "客队有保级战意"
+        }
+      ],
+      "ai_score": "2-0",
+      "reason": "主队实力明显高出一筹，主场战绩极佳，客队面临严重的后防人员危机。",
+      "ai_confidence": 80,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜降水且热度高",
+        "league_style": "法甲主场优势大",
+        "team_style": "主队攻防俱佳",
+        "style_score_logic": "支持主队完胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常; X02:accepted because 降水与热度同向需防大热"
+      },
+      "direction_probs": {
+        "home": 70.0,
+        "draw": 20.0,
+        "away": 10.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持主队完胜",
+      "experience_review": [
+        {
+          "id": "D01",
+          "decision": "neutral",
+          "reason": "D01:neutral because 实力差距大低赔合理"
+        },
+        {
+          "id": "U04",
+          "decision": "neutral",
+          "reason": " U04:neutral because 强队主场受热正常"
+        },
+        {
+          "id": "X02",
+          "decision": "accepted",
+          "reason": " X02:accepted because 降水与热度同向需防大热"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 8,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 70,
+          "draw": 20,
+          "away": 10
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 20,
+            "market_logic": "主队实力碾压且主场强势"
+          },
+          {
+            "score": "3-0",
+            "prob": 15,
+            "market_logic": "客队防线伤病严重"
+          },
+          {
+            "score": "2-1",
+            "prob": 10,
+            "market_logic": "客队有保级战意"
+          }
+        ],
+        "reason": "主队实力明显高出一筹，主场战绩极佳，客队面临严重的后防人员危机。",
+        "ai_confidence": 80,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜降水且热度高",
+          "league_style": "法甲主场优势大",
+          "team_style": "主队攻防俱佳",
+          "style_score_logic": "支持主队完胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常; X02:accepted because 降水与热度同向需防大热"
+        }
+      }
+    },
+    "9": {
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 22.0,
+          "market_logic": "附加赛首回合双方谨慎"
+        },
+        {
+          "score": "0-0",
+          "prob": 15.0,
+          "market_logic": "进球赔率支持小比分"
+        },
+        {
+          "score": "0-1",
+          "prob": 12.0,
+          "market_logic": "客队状态更佳"
+        }
+      ],
+      "ai_score": "1-1",
+      "reason": "升级附加赛首回合，双方实力接近，客队状态出色但客场作战，平局概率高。",
+      "ai_confidence": 70,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "draw",
+        "sharp_evidence": "主胜升水且平赔较低",
+        "league_style": "英冠对抗激烈",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持小比分平局",
+        "direction_rejection": "附加赛首回合谨慎排除大胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 30.0,
+        "draw": 40.0,
+        "away": 30.0
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "score_shape_reason": "支持小比分平局",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 9,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 30,
+          "draw": 40,
+          "away": 30
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 22,
+            "market_logic": "附加赛首回合双方谨慎"
+          },
+          {
+            "score": "0-0",
+            "prob": 15,
+            "market_logic": "进球赔率支持小比分"
+          },
+          {
+            "score": "0-1",
+            "prob": 12,
+            "market_logic": "客队状态更佳"
+          }
+        ],
+        "reason": "升级附加赛首回合，双方实力接近，客队状态出色但客场作战，平局概率高。",
+        "ai_confidence": 70,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "draw",
+          "sharp_evidence": "主胜升水且平赔较低",
+          "league_style": "英冠对抗激烈",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持小比分平局",
+          "direction_rejection": "附加赛首回合谨慎排除大胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "10": {
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 20.0,
+          "market_logic": "平赔较低且双方实力接近"
+        },
+        {
+          "score": "0-0",
+          "prob": 15.0,
+          "market_logic": "进球赔率支持小比分"
+        },
+        {
+          "score": "2-1",
+          "prob": 10.0,
+          "market_logic": "主队保级战意更浓"
+        }
+      ],
+      "ai_score": "1-1",
+      "reason": "主队有保级战意但伤病严重，客队无欲无求但客场疲软，平局是合理结果。",
+      "ai_confidence": 70,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "draw",
+        "sharp_evidence": "胜负升水提示平局",
+        "league_style": "西甲主场优势大",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持小比分平局",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "B_SHARP:accepted because 平赔独降且两边升提示平局; X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 35.0,
+        "draw": 35.0,
+        "away": 30.0
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "score_shape_reason": "支持小比分平局",
+      "experience_review": [
+        {
+          "id": "B_SHARP",
+          "decision": "accepted",
+          "reason": "B_SHARP:accepted because 平赔独降且两边升提示平局"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 10,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 35,
+          "draw": 35,
+          "away": 30
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 20,
+            "market_logic": "平赔较低且双方实力接近"
+          },
+          {
+            "score": "0-0",
+            "prob": 15,
+            "market_logic": "进球赔率支持小比分"
+          },
+          {
+            "score": "2-1",
+            "prob": 10,
+            "market_logic": "主队保级战意更浓"
+          }
+        ],
+        "reason": "主队有保级战意但伤病严重，客队无欲无求但客场疲软，平局是合理结果。",
+        "ai_confidence": 70,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "draw",
+          "sharp_evidence": "胜负升水提示平局",
+          "league_style": "西甲主场优势大",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持小比分平局",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "B_SHARP:accepted because 平赔独降且两边升提示平局; X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "11": {
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 20.0,
+          "market_logic": "半决赛首回合双方谨慎"
+        },
+        {
+          "score": "2-2",
+          "prob": 12.0,
+          "market_logic": "双方防守均有隐患"
+        },
+        {
+          "score": "0-1",
+          "prob": 15.0,
+          "market_logic": "客队状态更佳且降水"
+        }
+      ],
+      "ai_score": "1-1",
+      "reason": "半决赛首回合，主队伤病严重且防线不稳，客队状态火热但锋线核心停赛，平局居多。",
+      "ai_confidence": 70,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜降水且散户未跟",
+        "league_style": "澳超大开大合",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持双边进球平局",
+        "direction_rejection": "主队状态低迷排除主胜",
+        "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金; X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 30.0,
+        "draw": 35.0,
+        "away": 35.0
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "score_shape_reason": "支持双边进球平局",
+      "experience_review": [
+        {
+          "id": "B_STEAM",
+          "decision": "accepted",
+          "reason": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 11,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 30,
+          "draw": 35,
+          "away": 35
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 20,
+            "market_logic": "半决赛首回合双方谨慎"
+          },
+          {
+            "score": "2-2",
+            "prob": 12,
+            "market_logic": "双方防守均有隐患"
+          },
+          {
+            "score": "0-1",
+            "prob": 15,
+            "market_logic": "客队状态更佳且降水"
+          }
+        ],
+        "reason": "半决赛首回合，主队伤病严重且防线不稳，客队状态火热但锋线核心停赛，平局居多。",
+        "ai_confidence": 70,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜降水且散户未跟",
+          "league_style": "澳超大开大合",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持双边进球平局",
+          "direction_rejection": "主队状态低迷排除主胜",
+          "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金; X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "12": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队实力略占优且主场作战"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "主队近期平局多"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队急需打破平局僵局，主场具备拿分底气，客队客场防守不稳。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "unclear",
+        "sharp_evidence": "赔率平稳无明显异常",
+        "league_style": "日职主场优势一般",
+        "team_style": "主队防守较好",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场防守差排除客胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 12,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队实力略占优且主场作战"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "主队近期平局多"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "主队急需打破平局僵局，主场具备拿分底气，客队客场防守不稳。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "unclear",
+          "sharp_evidence": "赔率平稳无明显异常",
+          "league_style": "日职主场优势一般",
+          "team_style": "主队防守较好",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场防守差排除客胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "13": {
+      "top3": [
+        {
+          "score": "0-2",
+          "prob": 20.0,
+          "market_logic": "客队实力碾压且状态好"
+        },
+        {
+          "score": "1-2",
+          "prob": 15.0,
+          "market_logic": "主队主场或有反扑"
+        },
+        {
+          "score": "0-1",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "0-2",
+      "reason": "主队遭遇8连败状态持续低迷，客队实力明显高出一筹且交锋占优。",
+      "ai_confidence": 80,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率极低",
+        "league_style": "韩职客场有一定抗衡力",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队完胜",
+        "direction_rejection": "主队状态极差排除主胜",
+        "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队客场受热正常; X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 10.0,
+        "draw": 20.0,
+        "away": 70.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持客队完胜",
+      "experience_review": [
+        {
+          "id": "D01",
+          "decision": "neutral",
+          "reason": "D01:neutral because 实力差距大低赔合理"
+        },
+        {
+          "id": "U04",
+          "decision": "neutral",
+          "reason": " U04:neutral because 强队客场受热正常"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 13,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 10,
+          "draw": 20,
+          "away": 70
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 20,
+            "market_logic": "客队实力碾压且状态好"
+          },
+          {
+            "score": "1-2",
+            "prob": 15,
+            "market_logic": "主队主场或有反扑"
+          },
+          {
+            "score": "0-1",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "主队遭遇8连败状态持续低迷，客队实力明显高出一筹且交锋占优。",
+        "ai_confidence": 80,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率极低",
+          "league_style": "韩职客场有一定抗衡力",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队完胜",
+          "direction_rejection": "主队状态极差排除主胜",
+          "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队客场受热正常; X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "14": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队状态回暖且主场作战"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方积分相同实力接近"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "两队积分相同，主队近期状态回暖急需改善主场颓势，客队客场表现平平。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "unclear",
+        "sharp_evidence": "赔率平稳无明显异常",
+        "league_style": "韩职主场优势明显",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场防守差排除客胜",
+        "experience_review": "G10:accepted because 0-0赔率低与总0球低位共振; X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 40.0,
+        "draw": 35.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "G10",
+          "decision": "accepted",
+          "reason": "G10:accepted because 0-0赔率低与总0球低位共振"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 14,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 40,
+          "draw": 35,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队状态回暖且主场作战"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方积分相同实力接近"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "两队积分相同，主队近期状态回暖急需改善主场颓势，客队客场表现平平。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "unclear",
+          "sharp_evidence": "赔率平稳无明显异常",
+          "league_style": "韩职主场优势明显",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场防守差排除客胜",
+          "experience_review": "G10:accepted because 0-0赔率低与总0球低位共振; X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "15": {
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "market_logic": "客队实力占优且升级战意强"
+        },
+        {
+          "score": "0-2",
+          "prob": 15.0,
+          "market_logic": "主队防线伤病严重"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "主队主场有一定抗衡力"
+        }
+      ],
+      "ai_score": "1-2",
+      "reason": "客队实力明显高出一筹且升级战意强烈，主队防线伤病严重隐患突出。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率较低",
+        "league_style": "德乙大开大合",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队取胜",
+        "direction_rejection": "主队防线不稳排除主胜",
+        "experience_review": "None:neutral because 无明显历史经验审计卡"
+      },
+      "direction_probs": {
+        "home": 25.0,
+        "draw": 30.0,
+        "away": 45.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持客队取胜",
+      "experience_review": [],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 15,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 25,
+          "draw": 30,
+          "away": 45
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18,
+            "market_logic": "客队实力占优且升级战意强"
+          },
+          {
+            "score": "0-2",
+            "prob": 15,
+            "market_logic": "主队防线伤病严重"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "主队主场有一定抗衡力"
+          }
+        ],
+        "reason": "客队实力明显高出一筹且升级战意强烈，主队防线伤病严重隐患突出。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率较低",
+          "league_style": "德乙大开大合",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队取胜",
+          "direction_rejection": "主队防线不稳排除主胜",
+          "experience_review": "None:neutral because 无明显历史经验审计卡"
+        }
+      }
+    },
+    "16": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队主场强势且争四战意浓"
+        },
+        {
+          "score": "3-1",
+          "prob": 15.0,
+          "market_logic": "客队深陷连败低谷"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "主队伤病严重需防平"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队为争夺欧冠资格战意浓烈，主场战力强劲；客队深陷连败低谷且客场乏力。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜降水且散户未跟",
+        "league_style": "英超主场优势大",
+        "team_style": "主队攻强守弱",
+        "style_score_logic": "支持主队取胜",
+        "direction_rejection": "客队状态极差排除客胜",
+        "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+      },
+      "direction_probs": {
+        "home": 50.0,
+        "draw": 25.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队取胜",
+      "experience_review": [
+        {
+          "id": "B_STEAM",
+          "decision": "accepted",
+          "reason": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 16,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 50,
+          "draw": 25,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队主场强势且争四战意浓"
+          },
+          {
+            "score": "3-1",
+            "prob": 15,
+            "market_logic": "客队深陷连败低谷"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "主队伤病严重需防平"
+          }
+        ],
+        "reason": "主队为争夺欧冠资格战意浓烈，主场战力强劲；客队深陷连败低谷且客场乏力。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜降水且散户未跟",
+          "league_style": "英超主场优势大",
+          "team_style": "主队攻强守弱",
+          "style_score_logic": "支持主队取胜",
+          "direction_rejection": "客队状态极差排除客胜",
+          "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      }
+    },
+    "17": {
+      "top3": [
+        {
+          "score": "1-0",
+          "prob": 20.0,
+          "market_logic": "主队主场强势且进球赔率低"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方均有保级战意需防平"
+        },
+        {
+          "score": "0-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "1-0",
+      "reason": "主队主场战力强劲，客队客场表现低迷且防线崩溃，主队保级战意下主场优势明显。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "unclear",
+        "sharp_evidence": "赔率平稳无明显异常",
+        "league_style": "西甲主场优势大",
+        "team_style": "客队客场极差",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 35.0,
+        "away": 20.0
+      },
+      "goal_band": "0-1",
+      "btts": "no",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 17,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 35,
+          "away": 20
+        },
+        "goal_band": "0-1",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "1-0",
+            "prob": 20,
+            "market_logic": "主队主场强势且进球赔率低"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方均有保级战意需防平"
+          },
+          {
+            "score": "0-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "主队主场战力强劲，客队客场表现低迷且防线崩溃，主队保级战意下主场优势明显。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "unclear",
+          "sharp_evidence": "赔率平稳无明显异常",
+          "league_style": "西甲主场优势大",
+          "team_style": "客队客场极差",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "18": {
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 22.0,
+          "market_logic": "双方实力接近且进球赔率低"
+        },
+        {
+          "score": "0-0",
+          "prob": 15.0,
+          "market_logic": "0-0赔率极低提示平局"
+        },
+        {
+          "score": "0-1",
+          "prob": 12.0,
+          "market_logic": "客队防守稳健"
+        }
+      ],
+      "ai_score": "1-1",
+      "reason": "主队遭遇严重伤病潮，客队近期防守稳健但战意存疑，平局是双方都能接受的结果。",
+      "ai_confidence": 70,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "draw",
+        "sharp_evidence": "平赔较低且0-0赔率极低",
+        "league_style": "意甲防守严密",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持小比分平局",
+        "direction_rejection": "主队伤病严重排除主胜",
+        "experience_review": "G10:accepted because 0-0赔率低与总0球低位共振; X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 30.0,
+        "draw": 40.0,
+        "away": 30.0
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "score_shape_reason": "支持小比分平局",
+      "experience_review": [
+        {
+          "id": "G10",
+          "decision": "accepted",
+          "reason": "G10:accepted because 0-0赔率低与总0球低位共振"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 18,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 30,
+          "draw": 40,
+          "away": 30
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 22,
+            "market_logic": "双方实力接近且进球赔率低"
+          },
+          {
+            "score": "0-0",
+            "prob": 15,
+            "market_logic": "0-0赔率极低提示平局"
+          },
+          {
+            "score": "0-1",
+            "prob": 12,
+            "market_logic": "客队防守稳健"
+          }
+        ],
+        "reason": "主队遭遇严重伤病潮，客队近期防守稳健但战意存疑，平局是双方都能接受的结果。",
+        "ai_confidence": 70,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "draw",
+          "sharp_evidence": "平赔较低且0-0赔率极低",
+          "league_style": "意甲防守严密",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持小比分平局",
+          "direction_rejection": "主队伤病严重排除主胜",
+          "experience_review": "G10:accepted because 0-0赔率低与总0球低位共振; X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "19": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队主场稳健且实力接近"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方均有取分动力需防平"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "客队客场挑战难度大"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队主场状态稳健，客队客场不胜且攻防核心停赛缺战，主队主场优势明显。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "unclear",
+        "sharp_evidence": "赔率平稳无明显异常",
+        "league_style": "德甲大开大合",
+        "team_style": "主队主场强势",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队核心停赛排除客胜",
+        "experience_review": "D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": "D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 19,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队主场稳健且实力接近"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方均有取分动力需防平"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "客队客场挑战难度大"
+          }
+        ],
+        "reason": "主队主场状态稳健，客队客场不胜且攻防核心停赛缺战，主队主场优势明显。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "unclear",
+          "sharp_evidence": "赔率平稳无明显异常",
+          "league_style": "德甲大开大合",
+          "team_style": "主队主场强势",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队核心停赛排除客胜",
+          "experience_review": "D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "20": {
+      "top3": [
+        {
+          "score": "3-1",
+          "prob": 18.0,
+          "market_logic": "主队实力占优且战意浓烈"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "market_logic": "客队防线漏洞明显"
+        },
+        {
+          "score": "2-0",
+          "prob": 12.0,
+          "market_logic": "主队历史交锋占优"
+        }
+      ],
+      "ai_score": "3-1",
+      "reason": "主队历史交锋占优且近期状态回暖，客队伤停严重防线漏洞明显，主队争夺欧战资格战意强烈。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率极低",
+        "league_style": "德甲大开大合",
+        "team_style": "主队攻强守弱",
+        "style_score_logic": "支持大比分主胜",
+        "direction_rejection": "客队伤病严重排除客胜",
+        "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常; G12:accepted because 双方防守均有漏洞"
+      },
+      "direction_probs": {
+        "home": 60.0,
+        "draw": 25.0,
+        "away": 15.0
+      },
+      "goal_band": "4+",
+      "btts": "yes",
+      "score_shape_reason": "支持大比分主胜",
+      "experience_review": [
+        {
+          "id": "D01",
+          "decision": "neutral",
+          "reason": "D01:neutral because 实力差距大低赔合理"
+        },
+        {
+          "id": "U04",
+          "decision": "neutral",
+          "reason": " U04:neutral because 强队主场受热正常"
+        },
+        {
+          "id": "G12",
+          "decision": "accepted",
+          "reason": " G12:accepted because 双方防守均有漏洞"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 20,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 60,
+          "draw": 25,
+          "away": 15
+        },
+        "goal_band": "4+",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "3-1",
+            "prob": 18,
+            "market_logic": "主队实力占优且战意浓烈"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "market_logic": "客队防线漏洞明显"
+          },
+          {
+            "score": "2-0",
+            "prob": 12,
+            "market_logic": "主队历史交锋占优"
+          }
+        ],
+        "reason": "主队历史交锋占优且近期状态回暖，客队伤停严重防线漏洞明显，主队争夺欧战资格战意强烈。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率极低",
+          "league_style": "德甲大开大合",
+          "team_style": "主队攻强守弱",
+          "style_score_logic": "支持大比分主胜",
+          "direction_rejection": "客队伤病严重排除客胜",
+          "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常; G12:accepted because 双方防守均有漏洞"
+        }
+      }
+    },
+    "21": {
+      "top3": [
+        {
+          "score": "2-2",
+          "prob": 15.0,
+          "market_logic": "双方实力接近且战意极高"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "进球赔率支持双边进球"
+        },
+        {
+          "score": "1-2",
+          "prob": 12.0,
+          "market_logic": "客队交锋心理优势明显"
+        }
+      ],
+      "ai_score": "2-2",
+      "reason": "两队同分争夺欧冠资格战意极高，主队伤病严重防线不稳，客队状态火热且交锋占优，平局概率大。",
+      "ai_confidence": 70,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "draw",
+        "sharp_evidence": "赔率平稳且双方实力接近",
+        "league_style": "德甲大开大合",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持大比分平局",
+        "direction_rejection": "双方均无必胜把握排除单选",
+        "experience_review": "G12:accepted because 双方防守均有漏洞; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 35.0,
+        "draw": 35.0,
+        "away": 30.0
+      },
+      "goal_band": "4+",
+      "btts": "yes",
+      "score_shape_reason": "支持大比分平局",
+      "experience_review": [
+        {
+          "id": "G12",
+          "decision": "accepted",
+          "reason": "G12:accepted because 双方防守均有漏洞"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 21,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 35,
+          "draw": 35,
+          "away": 30
+        },
+        "goal_band": "4+",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-2",
+            "prob": 15,
+            "market_logic": "双方实力接近且战意极高"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "进球赔率支持双边进球"
+          },
+          {
+            "score": "1-2",
+            "prob": 12,
+            "market_logic": "客队交锋心理优势明显"
+          }
+        ],
+        "reason": "两队同分争夺欧冠资格战意极高，主队伤病严重防线不稳，客队状态火热且交锋占优，平局概率大。",
+        "ai_confidence": 70,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "draw",
+          "sharp_evidence": "赔率平稳且双方实力接近",
+          "league_style": "德甲大开大合",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持大比分平局",
+          "direction_rejection": "双方均无必胜把握排除单选",
+          "experience_review": "G12:accepted because 双方防守均有漏洞; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "22": {
+      "top3": [
+        {
+          "score": "3-0",
+          "prob": 20.0,
+          "market_logic": "主队实力碾压且主场强势"
+        },
+        {
+          "score": "2-0",
+          "prob": 15.0,
+          "market_logic": "客队进攻火力极弱"
+        },
+        {
+          "score": "4-0",
+          "prob": 10.0,
+          "market_logic": "主队需确保欧冠资格"
+        }
+      ],
+      "ai_score": "3-0",
+      "reason": "主队实力明显高出一筹，主场优势极为明显，客队客场作战能力羸弱且进攻火力最弱。",
+      "ai_confidence": 85,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率极低",
+        "league_style": "德甲大开大合",
+        "team_style": "主队攻防俱佳",
+        "style_score_logic": "支持主队大胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常"
+      },
+      "direction_probs": {
+        "home": 75.0,
+        "draw": 15.0,
+        "away": 10.0
+      },
+      "goal_band": "3",
+      "btts": "no",
+      "score_shape_reason": "支持主队大胜",
+      "experience_review": [
+        {
+          "id": "D01",
+          "decision": "neutral",
+          "reason": "D01:neutral because 实力差距大低赔合理"
+        },
+        {
+          "id": "U04",
+          "decision": "neutral",
+          "reason": " U04:neutral because 强队主场受热正常"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 22,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 75,
+          "draw": 15,
+          "away": 10
+        },
+        "goal_band": "3",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "3-0",
+            "prob": 20,
+            "market_logic": "主队实力碾压且主场强势"
+          },
+          {
+            "score": "2-0",
+            "prob": 15,
+            "market_logic": "客队进攻火力极弱"
+          },
+          {
+            "score": "4-0",
+            "prob": 10,
+            "market_logic": "主队需确保欧冠资格"
+          }
+        ],
+        "reason": "主队实力明显高出一筹，主场优势极为明显，客队客场作战能力羸弱且进攻火力最弱。",
+        "ai_confidence": 85,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率极低",
+          "league_style": "德甲大开大合",
+          "team_style": "主队攻防俱佳",
+          "style_score_logic": "支持主队大胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常"
+        }
+      }
+    },
+    "23": {
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "market_logic": "客队实力占优且状态上佳"
+        },
+        {
+          "score": "0-2",
+          "prob": 15.0,
+          "market_logic": "主队防线伤停严重"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "主队主场有一定抗衡力"
+        }
+      ],
+      "ai_score": "1-2",
+      "reason": "客队近期连胜且争冠战意更浓，主队防线伤停严重且战意松懈，客队有望延续强势。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率较低",
+        "league_style": "英超客场有一定抗衡力",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队取胜",
+        "direction_rejection": "主队战意松懈排除主胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 20.0,
+        "draw": 25.0,
+        "away": 55.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持客队取胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 23,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 20,
+          "draw": 25,
+          "away": 55
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18,
+            "market_logic": "客队实力占优且状态上佳"
+          },
+          {
+            "score": "0-2",
+            "prob": 15,
+            "market_logic": "主队防线伤停严重"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "主队主场有一定抗衡力"
+          }
+        ],
+        "reason": "客队近期连胜且争冠战意更浓，主队防线伤停严重且战意松懈，客队有望延续强势。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率较低",
+          "league_style": "英超客场有一定抗衡力",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队取胜",
+          "direction_rejection": "主队战意松懈排除主胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "24": {
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "market_logic": "客队状态火热且战意浓烈"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "主队主场强势需防平"
+        },
+        {
+          "score": "0-2",
+          "prob": 12.0,
+          "market_logic": "主队遭遇主力伤停"
+        }
+      ],
+      "ai_score": "1-2",
+      "reason": "客队连续不败状态火热且为保欧战资格战意浓烈，主队无欲无求且遭遇主力伤停。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率较低",
+        "league_style": "英超客场有一定抗衡力",
+        "team_style": "客队状态出色",
+        "style_score_logic": "支持客队取胜",
+        "direction_rejection": "主队战意存疑排除主胜",
+        "experience_review": "None:neutral because 无明显历史经验审计卡"
+      },
+      "direction_probs": {
+        "home": 30.0,
+        "draw": 30.0,
+        "away": 40.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持客队取胜",
+      "experience_review": [],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 24,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 30,
+          "draw": 30,
+          "away": 40
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18,
+            "market_logic": "客队状态火热且战意浓烈"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "主队主场强势需防平"
+          },
+          {
+            "score": "0-2",
+            "prob": 12,
+            "market_logic": "主队遭遇主力伤停"
+          }
+        ],
+        "reason": "客队连续不败状态火热且为保欧战资格战意浓烈，主队无欲无求且遭遇主力伤停。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率较低",
+          "league_style": "英超客场有一定抗衡力",
+          "team_style": "客队状态出色",
+          "style_score_logic": "支持客队取胜",
+          "direction_rejection": "主队战意存疑排除主胜",
+          "experience_review": "None:neutral because 无明显历史经验审计卡"
+        }
+      }
+    },
+    "25": {
+      "top3": [
+        {
+          "score": "1-0",
+          "prob": 20.0,
+          "market_logic": "主队保级战意强烈且主场占优"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "进球赔率支持小比分"
+        },
+        {
+          "score": "0-0",
+          "prob": 12.0,
+          "market_logic": "0-0赔率极低提示平局"
+        }
+      ],
+      "ai_score": "1-0",
+      "reason": "主队保级战意强烈且历史交锋主场优势明显，客队状态跌至谷底且锋线核心报销。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "西甲主场优势大",
+        "team_style": "客队状态极差",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "G10:accepted because 0-0赔率低与总0球低位共振; X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 35.0,
+        "away": 20.0
+      },
+      "goal_band": "0-1",
+      "btts": "no",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "G10",
+          "decision": "accepted",
+          "reason": "G10:accepted because 0-0赔率低与总0球低位共振"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 25,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 35,
+          "away": 20
+        },
+        "goal_band": "0-1",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "1-0",
+            "prob": 20,
+            "market_logic": "主队保级战意强烈且主场占优"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "进球赔率支持小比分"
+          },
+          {
+            "score": "0-0",
+            "prob": 12,
+            "market_logic": "0-0赔率极低提示平局"
+          }
+        ],
+        "reason": "主队保级战意强烈且历史交锋主场优势明显，客队状态跌至谷底且锋线核心报销。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "西甲主场优势大",
+          "team_style": "客队状态极差",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "G10:accepted because 0-0赔率低与总0球低位共振; X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "26": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队状态火热且主场优势大"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "附加赛双方谨慎需防平"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "客队伤病严重"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队近期状态火热且历史交锋主场连胜，客队伤病严重且核心停赛，主队胜算更大。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "荷乙主场优势明显",
+        "team_style": "主队状态出色",
+        "style_score_logic": "支持主队取胜",
+        "direction_rejection": "客队伤病严重排除客胜",
+        "experience_review": "D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 50.0,
+        "draw": 30.0,
+        "away": 20.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队取胜",
+      "experience_review": [
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": "D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 26,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 50,
+          "draw": 30,
+          "away": 20
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队状态火热且主场优势大"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "附加赛双方谨慎需防平"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "客队伤病严重"
+          }
+        ],
+        "reason": "主队近期状态火热且历史交锋主场连胜，客队伤病严重且核心停赛，主队胜算更大。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "荷乙主场优势明显",
+          "team_style": "主队状态出色",
+          "style_score_logic": "支持主队取胜",
+          "direction_rejection": "客队伤病严重排除客胜",
+          "experience_review": "D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "27": {
+      "top3": [
+        {
+          "score": "0-2",
+          "prob": 18.0,
+          "market_logic": "客队实力明显高出一筹"
+        },
+        {
+          "score": "1-2",
+          "prob": 15.0,
+          "market_logic": "主队主场有一定抗衡力"
+        },
+        {
+          "score": "0-1",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "0-2",
+      "reason": "客队整体实力占据明显优势且历史交锋完全占优，主队防线伤病严重恐难抵挡强敌。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率较低",
+        "league_style": "意甲客场有一定抗衡力",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队取胜",
+        "direction_rejection": "主队交锋劣势明显排除主胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 20.0,
+        "draw": 30.0,
+        "away": 50.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持客队取胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 27,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 20,
+          "draw": 30,
+          "away": 50
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 18,
+            "market_logic": "客队实力明显高出一筹"
+          },
+          {
+            "score": "1-2",
+            "prob": 15,
+            "market_logic": "主队主场有一定抗衡力"
+          },
+          {
+            "score": "0-1",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "客队整体实力占据明显优势且历史交锋完全占优，主队防线伤病严重恐难抵挡强敌。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率较低",
+          "league_style": "意甲客场有一定抗衡力",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队取胜",
+          "direction_rejection": "主队交锋劣势明显排除主胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "28": {
+      "top3": [
+        {
+          "score": "3-0",
+          "prob": 20.0,
+          "market_logic": "主队实力碾压且争冠战意浓"
+        },
+        {
+          "score": "2-0",
+          "prob": 15.0,
+          "market_logic": "客队客场面对强队劣势明显"
+        },
+        {
+          "score": "3-1",
+          "prob": 10.0,
+          "market_logic": "主队防线偶有漏洞"
+        }
+      ],
+      "ai_score": "3-0",
+      "reason": "主队实力明显高出一筹，争冠形势严峻必争三分，客队客场面对强队历史交锋处于绝对下风。",
+      "ai_confidence": 80,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率极低",
+        "league_style": "英超主场优势大",
+        "team_style": "主队攻防俱佳",
+        "style_score_logic": "支持主队大胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常; G12:accepted because 双方防守均有漏洞"
+      },
+      "direction_probs": {
+        "home": 70.0,
+        "draw": 20.0,
+        "away": 10.0
+      },
+      "goal_band": "3",
+      "btts": "no",
+      "score_shape_reason": "支持主队大胜",
+      "experience_review": [
+        {
+          "id": "D01",
+          "decision": "neutral",
+          "reason": "D01:neutral because 实力差距大低赔合理"
+        },
+        {
+          "id": "U04",
+          "decision": "neutral",
+          "reason": " U04:neutral because 强队主场受热正常"
+        },
+        {
+          "id": "G12",
+          "decision": "accepted",
+          "reason": " G12:accepted because 双方防守均有漏洞"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 28,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 70,
+          "draw": 20,
+          "away": 10
+        },
+        "goal_band": "3",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "3-0",
+            "prob": 20,
+            "market_logic": "主队实力碾压且争冠战意浓"
+          },
+          {
+            "score": "2-0",
+            "prob": 15,
+            "market_logic": "客队客场面对强队劣势明显"
+          },
+          {
+            "score": "3-1",
+            "prob": 10,
+            "market_logic": "主队防线偶有漏洞"
+          }
+        ],
+        "reason": "主队实力明显高出一筹，争冠形势严峻必争三分，客队客场面对强队历史交锋处于绝对下风。",
+        "ai_confidence": 80,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率极低",
+          "league_style": "英超主场优势大",
+          "team_style": "主队攻防俱佳",
+          "style_score_logic": "支持主队大胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队主场受热正常; G12:accepted because 双方防守均有漏洞"
+        }
+      }
+    },
+    "29": {
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 20.0,
+          "market_logic": "双方实力接近且战意浓烈"
+        },
+        {
+          "score": "2-2",
+          "prob": 15.0,
+          "market_logic": "末轮决战可能展开对攻"
+        },
+        {
+          "score": "2-1",
+          "prob": 12.0,
+          "market_logic": "主队主场进攻犀利"
+        }
+      ],
+      "ai_score": "1-1",
+      "reason": "末轮关键战双方均需抢分，主队主场进攻犀利但伤停多，客队不败金身稳定性极佳，平局概率大。",
+      "ai_confidence": 70,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "draw",
+        "sharp_evidence": "赔率平稳且双方实力接近",
+        "league_style": "法乙主场优势一般",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持双边进球平局",
+        "direction_rejection": "双方均无必胜把握排除单选",
+        "experience_review": "D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 35.0,
+        "draw": 35.0,
+        "away": 30.0
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "score_shape_reason": "支持双边进球平局",
+      "experience_review": [
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": "D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 29,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 35,
+          "draw": 35,
+          "away": 30
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 20,
+            "market_logic": "双方实力接近且战意浓烈"
+          },
+          {
+            "score": "2-2",
+            "prob": 15,
+            "market_logic": "末轮决战可能展开对攻"
+          },
+          {
+            "score": "2-1",
+            "prob": 12,
+            "market_logic": "主队主场进攻犀利"
+          }
+        ],
+        "reason": "末轮关键战双方均需抢分，主队主场进攻犀利但伤停多，客队不败金身稳定性极佳，平局概率大。",
+        "ai_confidence": 70,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "draw",
+          "sharp_evidence": "赔率平稳且双方实力接近",
+          "league_style": "法乙主场优势一般",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持双边进球平局",
+          "direction_rejection": "双方均无必胜把握排除单选",
+          "experience_review": "D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "30": {
+      "top3": [
+        {
+          "score": "0-2",
+          "prob": 20.0,
+          "market_logic": "客队实力明显高出一筹"
+        },
+        {
+          "score": "0-1",
+          "prob": 15.0,
+          "market_logic": "进球赔率支持小比分"
+        },
+        {
+          "score": "1-2",
+          "prob": 12.0,
+          "market_logic": "主队保级战意强烈"
+        }
+      ],
+      "ai_score": "0-2",
+      "reason": "客队实力明显高出一筹且交锋历史不败占优，主队状态低迷虽有保级战意但实力差距大。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率极低",
+        "league_style": "意甲客场有一定抗衡力",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队取胜",
+        "direction_rejection": "主队状态极差排除主胜",
+        "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队客场受热正常; X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 15.0,
+        "draw": 25.0,
+        "away": 60.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持客队取胜",
+      "experience_review": [
+        {
+          "id": "D01",
+          "decision": "neutral",
+          "reason": "D01:neutral because 实力差距大低赔合理"
+        },
+        {
+          "id": "U04",
+          "decision": "neutral",
+          "reason": " U04:neutral because 强队客场受热正常"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 30,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 15,
+          "draw": 25,
+          "away": 60
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 20,
+            "market_logic": "客队实力明显高出一筹"
+          },
+          {
+            "score": "0-1",
+            "prob": 15,
+            "market_logic": "进球赔率支持小比分"
+          },
+          {
+            "score": "1-2",
+            "prob": 12,
+            "market_logic": "主队保级战意强烈"
+          }
+        ],
+        "reason": "客队实力明显高出一筹且交锋历史不败占优，主队状态低迷虽有保级战意但实力差距大。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率极低",
+          "league_style": "意甲客场有一定抗衡力",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队取胜",
+          "direction_rejection": "主队状态极差排除主胜",
+          "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队客场受热正常; X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "31": {
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 20.0,
+          "market_logic": "双方实力接近且客胜降水"
+        },
+        {
+          "score": "1-2",
+          "prob": 15.0,
+          "market_logic": "客队争四战意更浓"
+        },
+        {
+          "score": "0-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "1-1",
+      "reason": "客队争夺欧冠席位战意强烈且交锋心理占优，主队后防核心停赛状态低迷，客队有望不败。",
+      "ai_confidence": 70,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away_or_draw",
+        "sharp_evidence": "客胜降水且主胜升水",
+        "league_style": "西甲主场优势大",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持小比分平局",
+        "direction_rejection": "主队状态低迷排除主胜",
+        "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+      },
+      "direction_probs": {
+        "home": 30.0,
+        "draw": 35.0,
+        "away": 35.0
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "score_shape_reason": "支持小比分平局",
+      "experience_review": [
+        {
+          "id": "B_STEAM",
+          "decision": "accepted",
+          "reason": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 31,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 30,
+          "draw": 35,
+          "away": 35
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 20,
+            "market_logic": "双方实力接近且客胜降水"
+          },
+          {
+            "score": "1-2",
+            "prob": 15,
+            "market_logic": "客队争四战意更浓"
+          },
+          {
+            "score": "0-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "客队争夺欧冠席位战意强烈且交锋心理占优，主队后防核心停赛状态低迷，客队有望不败。",
+        "ai_confidence": 70,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away_or_draw",
+          "sharp_evidence": "客胜降水且主胜升水",
+          "league_style": "西甲主场优势大",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持小比分平局",
+          "direction_rejection": "主队状态低迷排除主胜",
+          "experience_review": "B_STEAM:accepted because 散户未跟的降水更像专业资金"
+        }
+      }
+    },
+    "32": {
+      "top3": [
+        {
+          "score": "2-0",
+          "prob": 20.0,
+          "market_logic": "主队实力占优且交锋碾压"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "market_logic": "主队防线有失球隐患"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "2-0",
+      "reason": "主队实力占优且历史交锋对客队保持全胜，客队客场表现低迷且进攻火力弱。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "韩职主场优势明显",
+        "team_style": "主队攻强守弱",
+        "style_score_logic": "支持主队取胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 55.0,
+        "draw": 30.0,
+        "away": 15.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持主队取胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 32,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 55,
+          "draw": 30,
+          "away": 15
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 20,
+            "market_logic": "主队实力占优且交锋碾压"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "market_logic": "主队防线有失球隐患"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "主队实力占优且历史交锋对客队保持全胜，客队客场表现低迷且进攻火力弱。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "韩职主场优势明显",
+          "team_style": "主队攻强守弱",
+          "style_score_logic": "支持主队取胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "33": {
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "market_logic": "客队实力略占优且交锋占优"
+        },
+        {
+          "score": "0-2",
+          "prob": 15.0,
+          "market_logic": "主队伤病严重"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "客队近期连败需防平"
+        }
+      ],
+      "ai_score": "1-2",
+      "reason": "客队整体实力略占优且历史交锋占优，主队伤病严重，客队有望客场反弹。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率较低",
+        "league_style": "日职客场有一定抗衡力",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队取胜",
+        "direction_rejection": "主队伤病严重排除主胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 25.0,
+        "draw": 30.0,
+        "away": 45.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持客队取胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 33,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 25,
+          "draw": 30,
+          "away": 45
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18,
+            "market_logic": "客队实力略占优且交锋占优"
+          },
+          {
+            "score": "0-2",
+            "prob": 15,
+            "market_logic": "主队伤病严重"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "客队近期连败需防平"
+          }
+        ],
+        "reason": "客队整体实力略占优且历史交锋占优，主队伤病严重，客队有望客场反弹。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率较低",
+          "league_style": "日职客场有一定抗衡力",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队取胜",
+          "direction_rejection": "主队伤病严重排除主胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "34": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队主场作战且实力接近"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方近期状态均低迷"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "双方近期状态均低迷，但主队拥有主场优势，客队客场表现糟糕且防线失球多。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "日职主场优势一般",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 34,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队主场作战且实力接近"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方近期状态均低迷"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "双方近期状态均低迷，但主队拥有主场优势，客队客场表现糟糕且防线失球多。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "日职主场优势一般",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "35": {
+      "top3": [
+        {
+          "score": "0-2",
+          "prob": 20.0,
+          "market_logic": "客队实力明显高出一筹"
+        },
+        {
+          "score": "1-2",
+          "prob": 15.0,
+          "market_logic": "主队主场或有反扑"
+        },
+        {
+          "score": "0-1",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "0-2",
+      "reason": "客队实力明显高出一筹且状态出色，主队状态低迷且主场全败，客队胜算极大。",
+      "ai_confidence": 80,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率极低",
+        "league_style": "日职客场有一定抗衡力",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队完胜",
+        "direction_rejection": "主队状态极差排除主胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 15.0,
+        "draw": 25.0,
+        "away": 60.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持客队完胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 35,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 15,
+          "draw": 25,
+          "away": 60
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 20,
+            "market_logic": "客队实力明显高出一筹"
+          },
+          {
+            "score": "1-2",
+            "prob": 15,
+            "market_logic": "主队主场或有反扑"
+          },
+          {
+            "score": "0-1",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "客队实力明显高出一筹且状态出色，主队状态低迷且主场全败，客队胜算极大。",
+        "ai_confidence": 80,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率极低",
+          "league_style": "日职客场有一定抗衡力",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队完胜",
+          "direction_rejection": "主队状态极差排除主胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "36": {
+      "top3": [
+        {
+          "score": "0-2",
+          "prob": 20.0,
+          "market_logic": "客队实力碾压且状态好"
+        },
+        {
+          "score": "1-2",
+          "prob": 15.0,
+          "market_logic": "主队主场或有反扑"
+        },
+        {
+          "score": "0-1",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "0-2",
+      "reason": "客队实力明显高出一筹且状态出色，主队状态低迷且进攻火力极弱，客队客场有望轻取。",
+      "ai_confidence": 80,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率极低",
+        "league_style": "意甲客场有一定抗衡力",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队完胜",
+        "direction_rejection": "主队状态极差排除主胜",
+        "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队客场受热正常; X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 10.0,
+        "draw": 20.0,
+        "away": 70.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持客队完胜",
+      "experience_review": [
+        {
+          "id": "D01",
+          "decision": "neutral",
+          "reason": "D01:neutral because 实力差距大低赔合理"
+        },
+        {
+          "id": "U04",
+          "decision": "neutral",
+          "reason": " U04:neutral because 强队客场受热正常"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 36,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 10,
+          "draw": 20,
+          "away": 70
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 20,
+            "market_logic": "客队实力碾压且状态好"
+          },
+          {
+            "score": "1-2",
+            "prob": 15,
+            "market_logic": "主队主场或有反扑"
+          },
+          {
+            "score": "0-1",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "客队实力明显高出一筹且状态出色，主队状态低迷且进攻火力极弱，客队客场有望轻取。",
+        "ai_confidence": 80,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率极低",
+          "league_style": "意甲客场有一定抗衡力",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队完胜",
+          "direction_rejection": "主队状态极差排除主胜",
+          "experience_review": "D01:neutral because 实力差距大低赔合理; U04:neutral because 强队客场受热正常; X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "37": {
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "market_logic": "客队实力占优且状态出色"
+        },
+        {
+          "score": "0-2",
+          "prob": 15.0,
+          "market_logic": "主队状态低迷且伤病多"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "客队客场防守有隐患"
+        }
+      ],
+      "ai_score": "1-2",
+      "reason": "客队实力明显高出一筹且状态出色，主队状态低迷且伤病严重，客队有望客场全取三分。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率较低",
+        "league_style": "德乙大开大合",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队取胜",
+        "direction_rejection": "主队状态极差排除主胜",
+        "experience_review": "None:neutral because 无明显历史经验审计卡"
+      },
+      "direction_probs": {
+        "home": 25.0,
+        "draw": 30.0,
+        "away": 45.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持客队取胜",
+      "experience_review": [],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 37,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 25,
+          "draw": 30,
+          "away": 45
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18,
+            "market_logic": "客队实力占优且状态出色"
+          },
+          {
+            "score": "0-2",
+            "prob": 15,
+            "market_logic": "主队状态低迷且伤病多"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "客队客场防守有隐患"
+          }
+        ],
+        "reason": "客队实力明显高出一筹且状态出色，主队状态低迷且伤病严重，客队有望客场全取三分。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率较低",
+          "league_style": "德乙大开大合",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队取胜",
+          "direction_rejection": "主队状态极差排除主胜",
+          "experience_review": "None:neutral because 无明显历史经验审计卡"
+        }
+      }
+    },
+    "38": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队主场作战且实力接近"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方近期状态均一般"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "双方实力接近，主队拥有主场优势，客队客场防守不稳且落后时输球率高。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "西甲主场优势大",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场防守差排除客胜",
+        "experience_review": "None:neutral because 无明显历史经验审计卡"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 38,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队主场作战且实力接近"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方近期状态均一般"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "双方实力接近，主队拥有主场优势，客队客场防守不稳且落后时输球率高。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "西甲主场优势大",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场防守差排除客胜",
+          "experience_review": "None:neutral because 无明显历史经验审计卡"
+        }
+      }
+    },
+    "39": {
+      "top3": [
+        {
+          "score": "2-0",
+          "prob": 20.0,
+          "market_logic": "主队实力占优且主场作战"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "market_logic": "客队状态持续低迷"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "2-0",
+      "reason": "主队实力略占优，客队状态持续低迷且客场连败，主队有望借主场之利全取三分。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "意甲主场优势大",
+        "team_style": "客队状态极差",
+        "style_score_logic": "支持主队取胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 55.0,
+        "draw": 25.0,
+        "away": 20.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持主队取胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 39,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 55,
+          "draw": 25,
+          "away": 20
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 20,
+            "market_logic": "主队实力占优且主场作战"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "market_logic": "客队状态持续低迷"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "主队实力略占优，客队状态持续低迷且客场连败，主队有望借主场之利全取三分。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "意甲主场优势大",
+          "team_style": "客队状态极差",
+          "style_score_logic": "支持主队取胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "40": {
+      "top3": [
+        {
+          "score": "1-0",
+          "prob": 20.0,
+          "market_logic": "主队主场作战且实力接近"
+        },
+        {
+          "score": "2-0",
+          "prob": 15.0,
+          "market_logic": "客队交锋历史处于劣势"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "1-0",
+      "reason": "双方实力接近，主队拥有主场优势且历史交锋占优，客队客场落后时输球率高。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "意甲主场优势大",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队交锋劣势排除客胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0
+      },
+      "goal_band": "0-1",
+      "btts": "no",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 40,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "0-1",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "1-0",
+            "prob": 20,
+            "market_logic": "主队主场作战且实力接近"
+          },
+          {
+            "score": "2-0",
+            "prob": 15,
+            "market_logic": "客队交锋历史处于劣势"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "双方实力接近，主队拥有主场优势且历史交锋占优，客队客场落后时输球率高。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "意甲主场优势大",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队交锋劣势排除客胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "41": {
+      "top3": [
+        {
+          "score": "2-0",
+          "prob": 18.0,
+          "market_logic": "主队实力占优且主场作战"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "market_logic": "客队防线连续失球"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "2-0",
+      "reason": "主队实力占优且主场战绩尚可，客队近期状态低迷且防线连续失球，主队胜算更大。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "西甲主场优势大",
+        "team_style": "主队攻强守弱",
+        "style_score_logic": "支持主队取胜",
+        "direction_rejection": "客队状态低迷排除客胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 50.0,
+        "draw": 30.0,
+        "away": 20.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持主队取胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 41,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 50,
+          "draw": 30,
+          "away": 20
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 18,
+            "market_logic": "主队实力占优且主场作战"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "market_logic": "客队防线连续失球"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "主队实力占优且主场战绩尚可，客队近期状态低迷且防线连续失球，主队胜算更大。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "西甲主场优势大",
+          "team_style": "主队攻强守弱",
+          "style_score_logic": "支持主队取胜",
+          "direction_rejection": "客队状态低迷排除客胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "42": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队实力占优且主场强势"
+        },
+        {
+          "score": "3-1",
+          "prob": 15.0,
+          "market_logic": "客队交锋历史处于劣势"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "双方均有伤病隐患"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队实力占优且主场强势，历史交锋对客队保持极高胜率，客队客场落后时输球率高。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "荷甲大开大合",
+        "team_style": "主队攻防俱佳",
+        "style_score_logic": "支持主队取胜",
+        "direction_rejection": "客队交锋劣势排除客胜",
+        "experience_review": "None:neutral because 无明显历史经验审计卡"
+      },
+      "direction_probs": {
+        "home": 50.0,
+        "draw": 25.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队取胜",
+      "experience_review": [],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 42,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 50,
+          "draw": 25,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队实力占优且主场强势"
+          },
+          {
+            "score": "3-1",
+            "prob": 15,
+            "market_logic": "客队交锋历史处于劣势"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "双方均有伤病隐患"
+          }
+        ],
+        "reason": "主队实力占优且主场强势，历史交锋对客队保持极高胜率，客队客场落后时输球率高。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "荷甲大开大合",
+          "team_style": "主队攻防俱佳",
+          "style_score_logic": "支持主队取胜",
+          "direction_rejection": "客队交锋劣势排除客胜",
+          "experience_review": "None:neutral because 无明显历史经验审计卡"
+        }
+      }
+    },
+    "43": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队实力占优且主场强势"
+        },
+        {
+          "score": "3-1",
+          "prob": 15.0,
+          "market_logic": "客队客场防守极差"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "主队防线也有隐患"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队实力明显高出一筹且主场强势，客队客场防守极差且交锋历史处于劣势。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "荷甲大开大合",
+        "team_style": "主队攻强守弱",
+        "style_score_logic": "支持主队取胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "G12:accepted because 双方防守均有漏洞"
+      },
+      "direction_probs": {
+        "home": 55.0,
+        "draw": 25.0,
+        "away": 20.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队取胜",
+      "experience_review": [
+        {
+          "id": "G12",
+          "decision": "accepted",
+          "reason": "G12:accepted because 双方防守均有漏洞"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 43,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 55,
+          "draw": 25,
+          "away": 20
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队实力占优且主场强势"
+          },
+          {
+            "score": "3-1",
+            "prob": 15,
+            "market_logic": "客队客场防守极差"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "主队防线也有隐患"
+          }
+        ],
+        "reason": "主队实力明显高出一筹且主场强势，客队客场防守极差且交锋历史处于劣势。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "荷甲大开大合",
+          "team_style": "主队攻强守弱",
+          "style_score_logic": "支持主队取胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "G12:accepted because 双方防守均有漏洞"
+        }
+      }
+    },
+    "44": {
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "market_logic": "客队实力占优且状态出色"
+        },
+        {
+          "score": "2-2",
+          "prob": 15.0,
+          "market_logic": "主队主场有一定抗衡力"
+        },
+        {
+          "score": "0-2",
+          "prob": 12.0,
+          "market_logic": "主队防线失球多"
+        }
+      ],
+      "ai_score": "1-2",
+      "reason": "客队实力占优且近期状态出色，主队防线失球多且交锋历史处于劣势，客队有望客场取胜。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率较低",
+        "league_style": "荷甲大开大合",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队取胜",
+        "direction_rejection": "主队防线不稳排除主胜",
+        "experience_review": "G12:accepted because 双方防守均有漏洞"
+      },
+      "direction_probs": {
+        "home": 30.0,
+        "draw": 25.0,
+        "away": 45.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持客队取胜",
+      "experience_review": [
+        {
+          "id": "G12",
+          "decision": "accepted",
+          "reason": "G12:accepted because 双方防守均有漏洞"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 44,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 30,
+          "draw": 25,
+          "away": 45
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18,
+            "market_logic": "客队实力占优且状态出色"
+          },
+          {
+            "score": "2-2",
+            "prob": 15,
+            "market_logic": "主队主场有一定抗衡力"
+          },
+          {
+            "score": "0-2",
+            "prob": 12,
+            "market_logic": "主队防线失球多"
+          }
+        ],
+        "reason": "客队实力占优且近期状态出色，主队防线失球多且交锋历史处于劣势，客队有望客场取胜。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率较低",
+          "league_style": "荷甲大开大合",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队取胜",
+          "direction_rejection": "主队防线不稳排除主胜",
+          "experience_review": "G12:accepted because 双方防守均有漏洞"
+        }
+      }
+    },
+    "45": {
+      "top3": [
+        {
+          "score": "0-2",
+          "prob": 20.0,
+          "market_logic": "客队实力碾压且状态好"
+        },
+        {
+          "score": "1-2",
+          "prob": 15.0,
+          "market_logic": "主队主场或有反扑"
+        },
+        {
+          "score": "0-1",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "0-2",
+      "reason": "客队实力明显高出一筹且状态出色，主队防线失球多且交锋历史处于劣势，客队胜算极大。",
+      "ai_confidence": 80,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率极低",
+        "league_style": "英超客场有一定抗衡力",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队完胜",
+        "direction_rejection": "主队防线极差排除主胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 15.0,
+        "draw": 25.0,
+        "away": 60.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持客队完胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 45,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 15,
+          "draw": 25,
+          "away": 60
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 20,
+            "market_logic": "客队实力碾压且状态好"
+          },
+          {
+            "score": "1-2",
+            "prob": 15,
+            "market_logic": "主队主场或有反扑"
+          },
+          {
+            "score": "0-1",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "客队实力明显高出一筹且状态出色，主队防线失球多且交锋历史处于劣势，客队胜算极大。",
+        "ai_confidence": 80,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率极低",
+          "league_style": "英超客场有一定抗衡力",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队完胜",
+          "direction_rejection": "主队防线极差排除主胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "46": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队主场作战且实力接近"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方近期平局多"
+        },
+        {
+          "score": "2-0",
+          "prob": 12.0,
+          "market_logic": "客队客场防守极差"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "双方实力接近，主队拥有主场优势，客队客场表现低迷且防线失球极多。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "德甲大开大合",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场极差排除客胜",
+        "experience_review": "None:neutral because 无明显历史经验审计卡"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 46,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队主场作战且实力接近"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方近期平局多"
+          },
+          {
+            "score": "2-0",
+            "prob": 12,
+            "market_logic": "客队客场防守极差"
+          }
+        ],
+        "reason": "双方实力接近，主队拥有主场优势，客队客场表现低迷且防线失球极多。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "德甲大开大合",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场极差排除客胜",
+          "experience_review": "None:neutral because 无明显历史经验审计卡"
+        }
+      }
+    },
+    "47": {
+      "top3": [
+        {
+          "score": "0-2",
+          "prob": 20.0,
+          "market_logic": "客队实力碾压且状态好"
+        },
+        {
+          "score": "1-2",
+          "prob": 15.0,
+          "market_logic": "主队主场或有反扑"
+        },
+        {
+          "score": "0-1",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "0-2",
+      "reason": "客队实力明显高出一筹且状态出色，主队进攻火力极弱且交锋历史处于绝对劣势。",
+      "ai_confidence": 80,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "away",
+        "sharp_evidence": "客胜赔率极低",
+        "league_style": "意甲客场有一定抗衡力",
+        "team_style": "客队攻防俱佳",
+        "style_score_logic": "支持客队完胜",
+        "direction_rejection": "主队进攻极差排除主胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 15.0,
+        "draw": 25.0,
+        "away": 60.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持客队完胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "away",
+      "raw_item": {
+        "match": 47,
+        "final_direction": "away",
+        "direction_probs": {
+          "home": 15,
+          "draw": 25,
+          "away": 60
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 20,
+            "market_logic": "客队实力碾压且状态好"
+          },
+          {
+            "score": "1-2",
+            "prob": 15,
+            "market_logic": "主队主场或有反扑"
+          },
+          {
+            "score": "0-1",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "客队实力明显高出一筹且状态出色，主队进攻火力极弱且交锋历史处于绝对劣势。",
+        "ai_confidence": 80,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "away",
+          "sharp_evidence": "客胜赔率极低",
+          "league_style": "意甲客场有一定抗衡力",
+          "team_style": "客队攻防俱佳",
+          "style_score_logic": "支持客队完胜",
+          "direction_rejection": "主队进攻极差排除主胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "48": {
+      "top3": [
+        {
+          "score": "0-0",
+          "prob": 25.0,
+          "market_logic": "0球赔率极低提示极小球"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方实力接近需防平"
+        },
+        {
+          "score": "0-1",
+          "prob": 10.0,
+          "market_logic": "客队实力略占优"
+        }
+      ],
+      "ai_score": "0-0",
+      "reason": "双方进攻火力均极弱，且0球赔率极低，平局尤其是0-0的可能性非常大。",
+      "ai_confidence": 75,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "draw",
+        "sharp_evidence": "0球赔率极低",
+        "league_style": "西甲防守严密",
+        "team_style": "双方进攻极差",
+        "style_score_logic": "支持极小比分平局",
+        "direction_rejection": "双方进攻极差排除大胜",
+        "experience_review": "G08:accepted because 0球赔率偏低提示极小球; G10:accepted because 0-0赔率低与总0球低位共振; X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 30.0,
+        "draw": 40.0,
+        "away": 30.0
+      },
+      "goal_band": "0-1",
+      "btts": "no",
+      "score_shape_reason": "支持极小比分平局",
+      "experience_review": [
+        {
+          "id": "G08",
+          "decision": "accepted",
+          "reason": "G08:accepted because 0球赔率偏低提示极小球"
+        },
+        {
+          "id": "G10",
+          "decision": "accepted",
+          "reason": " G10:accepted because 0-0赔率低与总0球低位共振"
+        },
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": " X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 48,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 30,
+          "draw": 40,
+          "away": 30
+        },
+        "goal_band": "0-1",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-0",
+            "prob": 25,
+            "market_logic": "0球赔率极低提示极小球"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方实力接近需防平"
+          },
+          {
+            "score": "0-1",
+            "prob": 10,
+            "market_logic": "客队实力略占优"
+          }
+        ],
+        "reason": "双方进攻火力均极弱，且0球赔率极低，平局尤其是0-0的可能性非常大。",
+        "ai_confidence": 75,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "draw",
+          "sharp_evidence": "0球赔率极低",
+          "league_style": "西甲防守严密",
+          "team_style": "双方进攻极差",
+          "style_score_logic": "支持极小比分平局",
+          "direction_rejection": "双方进攻极差排除大胜",
+          "experience_review": "G08:accepted because 0球赔率偏低提示极小球; G10:accepted because 0-0赔率低与总0球低位共振; X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "49": {
+      "top3": [
+        {
+          "score": "2-0",
+          "prob": 18.0,
+          "market_logic": "主队实力占优且主场强势"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "market_logic": "客队防线连续失球"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "2-0",
+      "reason": "主队实力占优且主场战绩尚可，客队近期状态低迷且客场连败，主队胜算更大。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "德甲大开大合",
+        "team_style": "主队攻强守弱",
+        "style_score_logic": "支持主队取胜",
+        "direction_rejection": "客队状态极差排除客胜",
+        "experience_review": "D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 50.0,
+        "draw": 30.0,
+        "away": 20.0
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "score_shape_reason": "支持主队取胜",
+      "experience_review": [
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": "D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 49,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 50,
+          "draw": 30,
+          "away": 20
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 18,
+            "market_logic": "主队实力占优且主场强势"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "market_logic": "客队防线连续失球"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "主队实力占优且主场战绩尚可，客队近期状态低迷且客场连败，主队胜算更大。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "德甲大开大合",
+          "team_style": "主队攻强守弱",
+          "style_score_logic": "支持主队取胜",
+          "direction_rejection": "客队状态极差排除客胜",
+          "experience_review": "D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "50": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队实力占优且主场强势"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方近期平局多"
+        },
+        {
+          "score": "1-0",
+          "prob": 12.0,
+          "market_logic": "进球赔率支持小比分"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队实力占优且主场强势，客队客场落后时输球率高，主队有望借主场之利取胜。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "意甲主场优势大",
+        "team_style": "主队防守稳健",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场落后易崩盘排除客胜",
+        "experience_review": "X03:accepted because 进球赔率支持小比分"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 50,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队实力占优且主场强势"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方近期平局多"
+          },
+          {
+            "score": "1-0",
+            "prob": 12,
+            "market_logic": "进球赔率支持小比分"
+          }
+        ],
+        "reason": "主队实力占优且主场强势，客队客场落后时输球率高，主队有望借主场之利取胜。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "意甲主场优势大",
+          "team_style": "主队防守稳健",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场落后易崩盘排除客胜",
+          "experience_review": "X03:accepted because 进球赔率支持小比分"
+        }
+      }
+    },
+    "51": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队实力占优且主场强势"
+        },
+        {
+          "score": "3-1",
+          "prob": 15.0,
+          "market_logic": "客队伤病严重"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "market_logic": "双方实力接近需防平"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "主队实力占优且主场强势，客队伤病严重且客场落后时输球率高，主队胜算更大。",
+      "ai_confidence": 75,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "西甲主场优势大",
+        "team_style": "主队攻防俱佳",
+        "style_score_logic": "支持主队取胜",
+        "direction_rejection": "客队伤病严重排除客胜",
+        "experience_review": "G12:accepted because 双方防守均有漏洞; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 50.0,
+        "draw": 25.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队取胜",
+      "experience_review": [
+        {
+          "id": "G12",
+          "decision": "accepted",
+          "reason": "G12:accepted because 双方防守均有漏洞"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 51,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 50,
+          "draw": 25,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队实力占优且主场强势"
+          },
+          {
+            "score": "3-1",
+            "prob": 15,
+            "market_logic": "客队伤病严重"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "market_logic": "双方实力接近需防平"
+          }
+        ],
+        "reason": "主队实力占优且主场强势，客队伤病严重且客场落后时输球率高，主队胜算更大。",
+        "ai_confidence": 75,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "西甲主场优势大",
+          "team_style": "主队攻防俱佳",
+          "style_score_logic": "支持主队取胜",
+          "direction_rejection": "客队伤病严重排除客胜",
+          "experience_review": "G12:accepted because 双方防守均有漏洞; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "52": {
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 20.0,
+          "market_logic": "双方近期平局多且实力接近"
+        },
+        {
+          "score": "0-0",
+          "prob": 15.0,
+          "market_logic": "进球赔率支持小比分"
+        },
+        {
+          "score": "2-1",
+          "prob": 10.0,
+          "market_logic": "主队主场有一定优势"
+        }
+      ],
+      "ai_score": "1-1",
+      "reason": "双方实力接近且近期平局极多，客队客场表现低迷但防守尚可，平局概率大。",
+      "ai_confidence": 70,
+      "risk_level": "high",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "draw",
+        "sharp_evidence": "赔率平稳且双方平局多",
+        "league_style": "法甲防守严密",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持小比分平局",
+        "direction_rejection": "双方均无必胜把握排除单选",
+        "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 35.0,
+        "draw": 35.0,
+        "away": 30.0
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "score_shape_reason": "支持小比分平局",
+      "experience_review": [
+        {
+          "id": "X03",
+          "decision": "accepted",
+          "reason": "X03:accepted because 进球赔率支持小比分"
+        },
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": " D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "draw",
+      "raw_item": {
+        "match": 52,
+        "final_direction": "draw",
+        "direction_probs": {
+          "home": 35,
+          "draw": 35,
+          "away": 30
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 20,
+            "market_logic": "双方近期平局多且实力接近"
+          },
+          {
+            "score": "0-0",
+            "prob": 15,
+            "market_logic": "进球赔率支持小比分"
+          },
+          {
+            "score": "2-1",
+            "prob": 10,
+            "market_logic": "主队主场有一定优势"
+          }
+        ],
+        "reason": "双方实力接近且近期平局极多，客队客场表现低迷但防守尚可，平局概率大。",
+        "ai_confidence": 70,
+        "risk_level": "high",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "draw",
+          "sharp_evidence": "赔率平稳且双方平局多",
+          "league_style": "法甲防守严密",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持小比分平局",
+          "direction_rejection": "双方均无必胜把握排除单选",
+          "experience_review": "X03:accepted because 进球赔率支持小比分; D13:accepted because 攻防接近支持平局"
+        }
+      }
+    },
+    "53": {
+      "top3": [
+        {
+          "score": "3-0",
+          "prob": 20.0,
+          "market_logic": "主队实力碾压且主场强势"
+        },
+        {
+          "score": "2-0",
+          "prob": 15.0,
+          "market_logic": "客队状态持续低迷"
+        },
+        {
+          "score": "4-0",
+          "prob": 10.0,
+          "market_logic": "主队进攻火力极强"
+        }
+      ],
+      "ai_score": "3-0",
+      "reason": "主队实力明显高出一筹且主场战绩极佳，客队状态持续低迷且防线连续失球。",
+      "ai_confidence": 80,
+      "risk_level": "low",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率极低",
+        "league_style": "法甲主场优势大",
+        "team_style": "主队攻防俱佳",
+        "style_score_logic": "支持主队大胜",
+        "direction_rejection": "客队状态极差排除客胜",
+        "experience_review": "G12:accepted because 双方防守均有漏洞"
+      },
+      "direction_probs": {
+        "home": 70.0,
+        "draw": 20.0,
+        "away": 10.0
+      },
+      "goal_band": "3",
+      "btts": "no",
+      "score_shape_reason": "支持主队大胜",
+      "experience_review": [
+        {
+          "id": "G12",
+          "decision": "accepted",
+          "reason": "G12:accepted because 双方防守均有漏洞"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 53,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 70,
+          "draw": 20,
+          "away": 10
+        },
+        "goal_band": "3",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "3-0",
+            "prob": 20,
+            "market_logic": "主队实力碾压且主场强势"
+          },
+          {
+            "score": "2-0",
+            "prob": 15,
+            "market_logic": "客队状态持续低迷"
+          },
+          {
+            "score": "4-0",
+            "prob": 10,
+            "market_logic": "主队进攻火力极强"
+          }
+        ],
+        "reason": "主队实力明显高出一筹且主场战绩极佳，客队状态持续低迷且防线连续失球。",
+        "ai_confidence": 80,
+        "risk_level": "low",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率极低",
+          "league_style": "法甲主场优势大",
+          "team_style": "主队攻防俱佳",
+          "style_score_logic": "支持主队大胜",
+          "direction_rejection": "客队状态极差排除客胜",
+          "experience_review": "G12:accepted because 双方防守均有漏洞"
+        }
+      }
+    },
+    "54": {
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "market_logic": "主队主场作战且实力接近"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "market_logic": "双方近期状态均不错"
+        },
+        {
+          "score": "2-0",
+          "prob": 12.0,
+          "market_logic": "客队客场落后易崩盘"
+        }
+      ],
+      "ai_score": "2-1",
+      "reason": "双方实力接近，主队拥有主场优势，客队客场落后时输球率高，主队有望借主场之利取胜。",
+      "ai_confidence": 70,
+      "risk_level": "medium",
+      "is_score_others": false,
+      "detected_traps": [],
+      "data_missing": [
+        "external_european_odds"
+      ],
+      "audit": {
+        "odds_source": "体彩竞彩抓包赔率",
+        "web_odds_check": "web_search_unavailable",
+        "sharp_money_direction": "home",
+        "sharp_evidence": "主胜赔率较低",
+        "league_style": "法甲主场优势大",
+        "team_style": "双方攻防接近",
+        "style_score_logic": "支持主队小胜",
+        "direction_rejection": "客队客场落后易崩盘排除客胜",
+        "experience_review": "D13:accepted because 攻防接近支持平局"
+      },
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "score_shape_reason": "支持主队小胜",
+      "experience_review": [
+        {
+          "id": "D13",
+          "decision": "accepted",
+          "reason": "D13:accepted because 攻防接近支持平局"
+        }
+      ],
+      "final_direction": "home",
+      "raw_item": {
+        "match": 54,
+        "final_direction": "home",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "market_logic": "主队主场作战且实力接近"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "market_logic": "双方近期状态均不错"
+          },
+          {
+            "score": "2-0",
+            "prob": 12,
+            "market_logic": "客队客场落后易崩盘"
+          }
+        ],
+        "reason": "双方实力接近，主队拥有主场优势，客队客场落后时输球率高，主队有望借主场之利取胜。",
+        "ai_confidence": 70,
+        "risk_level": "medium",
+        "data_missing": [
+          "external_european_odds"
+        ],
+        "audit": {
+          "odds_source": "体彩竞彩抓包赔率",
+          "web_odds_check": "web_search_unavailable",
+          "sharp_money_direction": "home",
+          "sharp_evidence": "主胜赔率较低",
+          "league_style": "法甲主场优势大",
+          "team_style": "双方攻防接近",
+          "style_score_logic": "支持主队小胜",
+          "direction_rejection": "客队客场落后易崩盘排除客胜",
+          "experience_review": "D13:accepted because 攻防接近支持平局"
+        }
+      }
+    }
+  },
+  "partial_rejected_results": {},
+  "extra": {
+    "phase": "phase1"
+  }
+}

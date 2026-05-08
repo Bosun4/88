@@ -1,0 +1,26 @@
+{
+  "engine_version": "vMAX 18.4.15",
+  "run_id": "20260508_160618_54m_94451abf78b0_帕德博恩_卡斯鲁厄",
+  "ai_name": "claude",
+  "model": "all_failed",
+  "saved_at": "2026-05-08T16:15:18",
+  "match_count": 54,
+  "accepted_count": 0,
+  "partial_rejected_count": 0,
+  "status": {
+    "ok": false,
+    "status": "error",
+    "model": "claude-opus-4-7",
+    "count": 0,
+    "requests": 1,
+    "strict_one_call": true,
+    "text_fallback": false,
+    "full_batch_required": true,
+    "error": "[Errno 104] Connection reset by peer"
+  },
+  "accepted_results": {},
+  "partial_rejected_results": {},
+  "extra": {
+    "phase": "claude_final"
+  }
+}
