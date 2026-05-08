@@ -62,7 +62,7 @@ except Exception:  # pragma: no cover
 # 版本常量 / 基础配置
 # ============================================================
 
-ENGINE_VERSION = "vMAX 20.1.1"
+ENGINE_VERSION = "vMAX 20.1.2"
 ENGINE_ARCHITECTURE = (
     "AI-NATIVE WEB-AUGMENTED: 本地只做协议层；GPT/Grok/Gemini 分工初审 + AI互审 + "
     "Claude Web-aware 终审 + 一致性审计；Top4/推荐等级由 AI 输出；本地不做 Sharp/比分/推荐裁决。"
@@ -141,14 +141,37 @@ def _env_float(name: str, default: float) -> float:
 
 AI_MOCK_MODE = _env_bool("AI_MOCK_MODE", False)
 AI_FORCE_COMMON_GATEWAY = _env_bool("FORCE_COMMON_GATEWAY_URL", True)
-AI_NATIVE_WEB = _env_bool("AI_NATIVE_WEB", True)
-AI_REQUIRE_WEB_SOURCES = _env_bool("AI_REQUIRE_WEB_SOURCES", True)
+
+# 成本模式：production 默认用于日常全量跑；enhanced 用于精选复核；research 才是满血互审。
+# 关键原则：默认不能再用高成本 research 配置，避免 40+ 场批量时成本爆炸。
+AI_RESEARCH_MODE = str(os.environ.get("AI_RESEARCH_MODE", "production")).strip().lower()
+if AI_RESEARCH_MODE not in {"production", "enhanced", "research"}:
+    AI_RESEARCH_MODE = "production"
+
+if AI_RESEARCH_MODE == "production":
+    _default_native_web = False
+    _default_cross_exam = False
+    _default_consistency = False
+    _default_chunk_size = 10
+elif AI_RESEARCH_MODE == "enhanced":
+    _default_native_web = False  # 建议只在最终候选/冲突场通过环境变量打开。
+    _default_cross_exam = False
+    _default_consistency = True
+    _default_chunk_size = 8
+else:  # research
+    _default_native_web = True
+    _default_cross_exam = True
+    _default_consistency = True
+    _default_chunk_size = 6
+
+AI_NATIVE_WEB = _env_bool("AI_NATIVE_WEB", _default_native_web)
+AI_REQUIRE_WEB_SOURCES = _env_bool("AI_REQUIRE_WEB_SOURCES", AI_NATIVE_WEB)
 AI_WARN_MISSING_PUBLISHED_AT = _env_bool("AI_WARN_MISSING_PUBLISHED_AT", False)
 AI_WEB_MAX_SOURCES_PER_MATCH = max(0, _env_int("AI_WEB_MAX_SOURCES_PER_MATCH", 8))
-AI_CHUNK_SIZE = max(1, _env_int("AI_CHUNK_SIZE", 8))
+AI_CHUNK_SIZE = max(1, _env_int("AI_CHUNK_SIZE", _default_chunk_size))
 AI_MAX_PROMPT_CHARS_PER_CHUNK = max(30000, _env_int("AI_MAX_PROMPT_CHARS_PER_CHUNK", 140000))
-AI_ENABLE_CROSS_EXAM = _env_bool("AI_ENABLE_CROSS_EXAM", True)
-AI_ENABLE_CONSISTENCY_JUDGE = _env_bool("AI_ENABLE_CONSISTENCY_JUDGE", True)
+AI_ENABLE_CROSS_EXAM = _env_bool("AI_ENABLE_CROSS_EXAM", _default_cross_exam)
+AI_ENABLE_CONSISTENCY_JUDGE = _env_bool("AI_ENABLE_CONSISTENCY_JUDGE", _default_consistency)
 AI_ENABLE_FALLBACK_REFEREE = _env_bool("AI_ENABLE_FALLBACK_REFEREE", True)
 AI_CONSISTENCY_JUDGE_MODEL = str(os.environ.get("AI_CONSISTENCY_JUDGE_MODEL", "gpt")).strip().lower()
 AI_FALLBACK_REFEREE_MODEL = str(os.environ.get("AI_FALLBACK_REFEREE_MODEL", "gpt")).strip().lower()
@@ -908,7 +931,7 @@ def _chat_url(base_url: str) -> str:
 
 
 def debug_ai_config() -> None:
-    print(f"[AI CONFIG] mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE}")
+    print(f"[AI CONFIG] mode={AI_RESEARCH_MODE} mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE}")
     for n in AI_NAMES:
         print(f"[AI CONFIG] {n.upper()} model={_model_for(n)} key={_mask_key(get_key_for_ai(n))} url={get_url_for_ai(n) or '<missing>'}")
 
@@ -1721,6 +1744,12 @@ def _protocol_enforce_prediction(r: Dict[str, Any]) -> Dict[str, Any]:
 
 async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
     global _LAST_AI_RUN_METADATA
+    # 防止同一 Python 进程多次 run_predictions 时遗留上一轮 AI 状态。
+    for _n in AI_NAMES:
+        AI_CALL_STATUS[_n] = {}
+    AI_RESULT_FILES.clear()
+    _LAST_AI_RUN_METADATA = {}
+
     run_id = _make_run_id(evidence_all)
     chunks = _chunk_evidence(evidence_all)
     debug_ai_config()
@@ -1749,6 +1778,7 @@ async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dic
         "aggregate_file": agg_path,
         "ai_call_status": dict(AI_CALL_STATUS),
         "mock_mode": AI_MOCK_MODE,
+        "research_mode": AI_RESEARCH_MODE,
         "native_web": AI_NATIVE_WEB,
         "cross_exam": AI_ENABLE_CROSS_EXAM,
         "consistency_judge": AI_ENABLE_CONSISTENCY_JUDGE,
