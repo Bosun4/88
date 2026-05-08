@@ -1,26 +1,33 @@
 # -*- coding: utf-8 -*-
 """
-vMAX 18.4.15 — PURE RAW-AI EVENT-DRIVEN FULL-BATCH 稳定修复版
-============================================================
+vMAX 20.1 — AI-Native Web-Augmented Multi-Agent Adjudication Engine
+=====================================================================
 
 设计边界：
-1. 纯 AI 主审：GPT / Grok / Gemini 初审，Claude 终审；Claude 失败时使用 Phase1 共识。
-2. 不跑 CRS 矩阵、不跑贝叶斯后验、不跑本地比分矩阵、不跑本地风控裁决。
-3. 本地只做：抓包格式化、AI 调用、严格 JSON 解析、完整批次校验、阶段结果落盘、字段闭环、前端兼容、推荐分层。
-4. Phase1 三家吃完整抓包；Claude 终审吃压缩抓包 + 三家结构化摘要。
-5. 严格每模型一次请求：GPT/Grok/Gemini/Claude 默认每家最多请求一次，不做二次 repair。
-6. STRICT-FULL-BATCH：默认要求每个模型返回完整 match=1..N；1/56、2/56、半截 JSON 一律视为该模型失败。
-7. 默认关闭文本兜底，防止 Grok/Claude 自然语言残片被误抓成单场结果。
-8. Claude 默认必须终审，即使 Phase1 有效不足，也让 Claude 基于原始抓包重新审计。
-9. 默认关闭持久化缓存，避免赔率变动/手动刷新/二次启动复用旧数据。
-10. EVENT-DRIVEN：GPT/Grok/Gemini 并发启动；每个 AI 完成后立刻保存独立结果文件；三家 Phase1 全部进入终态后立刻触发 Claude。
-11. SHARP-GATE：识别低赔热门升水、冷门降水、平赔独降、散户未跟降水、强强对话反向资金。
-12. SCORE-MARKET-GATE：比分赔率低位、方向内比分排名、总进球主模态、BTTS 四项闭环；不闭环不得强推。
-13. AI 负责预测方向和比分；本地只负责推荐门控和降级，不篡改 AI 最终比分。
-14. 前端字段不删减：gpt/grok/gemini/claude 分析字段、推荐字段、兼容空字段全部保留。
+1. 本地不做足球预测判断：不判断 Sharp 真伪、不判断比分是否应该推荐、不用经验规则改方向/比分。
+2. 本地只做协议层：抓包整理、Evidence 编译、动态分批、AI 调用、JSON 解析、Schema 校验、落盘、前端字段兼容。
+3. 四 AI 分工：
+   - GPT：市场结构 + 外部赔率/盘口对照。
+   - Grok：资金流/热度/临场新闻。
+   - Gemini：战术/赛程/风格一致性。
+   - Claude：最终 Web-aware 仲裁。
+4. 支持 AI 原生联网：Prompt 强制输出 web_research / sources / freshness / source_conflicts。
+5. 支持 AI 互审：Phase1 三家初审后，可进入 critic 阶段，互相指出漏洞。
+6. 支持一致性审计：Final Judge 只检查 JSON、方向/比分/goal_band/BTTS/source 格式，不做足球判断。
+7. Top4 / 推荐等级由 AI 输出；本地只根据 AI 的 recommendation 字段排序。
+8. Claude 失败时可启用 AI fallback referee；若仍失败才使用 Phase1 AI 共识兜底。
+9. 提供 AI_MOCK_MODE，可在无真实 API 时做闭环测试。Mock 只用于工程可行性，不代表真实命中率。
 
 入口：
     run_predictions(raw, use_ai=True) -> (res, top4)
+
+环境变量要点：
+    API_URL / API_KEY 或各模型单独 *_API_URL / *_API_KEY
+    AI_MOCK_MODE=true       # 沙盒/本地闭环测试
+    AI_CHUNK_SIZE=8         # 小批次
+    AI_ENABLE_CROSS_EXAM=true
+    AI_ENABLE_CONSISTENCY_JUDGE=true
+    AI_NATIVE_WEB=true
 """
 
 from __future__ import annotations
@@ -34,33 +41,31 @@ import math
 import os
 import re
 import time
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 try:
     import aiohttp
-except Exception:
+except Exception:  # pragma: no cover
     aiohttp = None
 
 try:
     import structlog
     logger = structlog.get_logger()
-except Exception:
+except Exception:  # pragma: no cover
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     logger = logging.getLogger(__name__)
 
 
 # ============================================================
-# 版本常量
+# 版本常量 / 基础配置
 # ============================================================
 
-ENGINE_VERSION = "vMAX 18.4.15"
-
+ENGINE_VERSION = "vMAX 20.1"
 ENGINE_ARCHITECTURE = (
-    "PURE RAW-AI: GPT/Grok/Gemini完整抓包初审 + Claude压缩终审 + STRICT ONE-CALL + "
-    "STRICT-FULL-BATCH完整覆盖校验 + EVENT-DRIVEN阶段落盘 + 默认禁用文本兜底 + 默认关闭持久化缓存 + "
-    "SHARP-GATE + SCORE-MARKET-GATE + 方向/比分字段闭环；"
-    "无CRS/无贝叶斯/无本地比分矩阵/AI失败即弃权"
+    "AI-NATIVE WEB-AUGMENTED: 本地只做协议层；GPT/Grok/Gemini 分工初审 + AI互审 + "
+    "Claude Web-aware 终审 + 一致性审计；Top4/推荐等级由 AI 输出；本地不做 Sharp/比分/推荐裁决。"
 )
 
 VALID_DIRS = {"home", "draw", "away"}
@@ -93,7 +98,6 @@ SCORE_OTHERS_AWAY = [
     "3-4", "0-6", "1-6", "2-6", "3-6", "0-7", "1-7", "2-7",
     "负其他", "0-9",
 ]
-ALL_SCORE_OTHERS = SCORE_OTHERS_HOME + SCORE_OTHERS_DRAW + SCORE_OTHERS_AWAY
 
 HFTF_MAP = {
     "ss": "主/主", "sp": "主/平", "sf": "主/负",
@@ -101,9 +105,19 @@ HFTF_MAP = {
     "fs": "负/主", "fp": "负/平", "ff": "负/负",
 }
 
+PROMPT_STRIP_KEYS = {
+    "prediction", "predictions", "top4", "rank", "recommend_score",
+    "predicted_score", "predicted_label", "result", "display_direction", "final_direction",
+    "raw_ai_direction", "score_implied_direction", "home_win_pct", "draw_pct", "away_win_pct",
+    "confidence", "is_recommended", "is_strict_recommended", "is_top4_candidate",
+    "gpt_score", "gpt_analysis", "grok_score", "grok_analysis", "gemini_score", "gemini_analysis",
+    "claude_score", "claude_analysis", "bayesian_evidences", "score_market_evidence", "sharp_audit",
+    "model_agreement", "experience_review", "recommendation", "ai_run_metadata", "ai_call_status",
+}
+
 
 # ============================================================
-# 配置
+# 环境变量工具
 # ============================================================
 
 def _env_bool(name: str, default: bool = False) -> bool:
@@ -118,100 +132,44 @@ def _env_int(name: str, default: int) -> int:
         return default
 
 
-AI_ENABLE_CACHE = _env_bool("AI_ENABLE_CACHE", False)
-AI_DISABLE_CACHE = not AI_ENABLE_CACHE
-AI_DECISION_CACHE_TTL = _env_int("AI_DECISION_CACHE_TTL", 0)
-AI_PERSISTENT_CACHE_ENABLED = _env_bool("AI_PERSISTENT_CACHE_ENABLED", False)
-AI_CACHE_DIR = str(os.environ.get("AI_CACHE_DIR", "data/ai_cache")).strip() or "data/ai_cache"
-AI_CACHE_SCHEMA_VERSION = str(os.environ.get("AI_CACHE_SCHEMA_VERSION", "18.4.15-event-driven")).strip()
-AI_CACHE_STRIP_VOLATILE_KEYS = _env_bool("AI_CACHE_STRIP_VOLATILE_KEYS", True)
+def _env_float(name: str, default: float) -> float:
+    try:
+        return float(str(os.environ.get(name, default)).strip())
+    except Exception:
+        return default
 
-AI_SINGLEFLIGHT_ENABLED = _env_bool("AI_SINGLEFLIGHT_ENABLED", False)
 
-AI_MAX_REQUESTS_PER_AI = max(1, _env_int("AI_MAX_REQUESTS_PER_AI", 1))
+AI_MOCK_MODE = _env_bool("AI_MOCK_MODE", False)
 AI_FORCE_COMMON_GATEWAY = _env_bool("FORCE_COMMON_GATEWAY_URL", True)
+AI_NATIVE_WEB = _env_bool("AI_NATIVE_WEB", True)
+AI_REQUIRE_WEB_SOURCES = _env_bool("AI_REQUIRE_WEB_SOURCES", True)
+AI_WEB_MAX_SOURCES_PER_MATCH = max(0, _env_int("AI_WEB_MAX_SOURCES_PER_MATCH", 8))
+AI_CHUNK_SIZE = max(1, _env_int("AI_CHUNK_SIZE", 8))
+AI_MAX_PROMPT_CHARS_PER_CHUNK = max(30000, _env_int("AI_MAX_PROMPT_CHARS_PER_CHUNK", 140000))
+AI_ENABLE_CROSS_EXAM = _env_bool("AI_ENABLE_CROSS_EXAM", True)
+AI_ENABLE_CONSISTENCY_JUDGE = _env_bool("AI_ENABLE_CONSISTENCY_JUDGE", True)
+AI_ENABLE_FALLBACK_REFEREE = _env_bool("AI_ENABLE_FALLBACK_REFEREE", True)
+AI_CONSISTENCY_JUDGE_MODEL = str(os.environ.get("AI_CONSISTENCY_JUDGE_MODEL", "gpt")).strip().lower()
+AI_FALLBACK_REFEREE_MODEL = str(os.environ.get("AI_FALLBACK_REFEREE_MODEL", "gpt")).strip().lower()
 
 AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 5400)
 AI_CLAUDE_READ_TIMEOUT = _env_int("AI_CLAUDE_READ_TIMEOUT", 7200)
 AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 120)
-AI_CLAUDE_CONNECT_TIMEOUT = _env_int("AI_CLAUDE_CONNECT_TIMEOUT", 120)
 AI_HTTP_TOTAL_TIMEOUT = _env_int("AI_HTTP_TOTAL_TIMEOUT", 0)
-
-STRICT_ONE_CALL_PER_MODEL = _env_bool("STRICT_ONE_CALL_PER_MODEL", True)
-AI_ALLOW_SECOND_CALL_REPAIR = _env_bool("AI_ALLOW_SECOND_CALL_REPAIR", False)
-AI_ENABLE_CLAUDE_JSON_REPAIR = _env_bool("AI_ENABLE_CLAUDE_JSON_REPAIR", False)
-AI_ENABLE_ANY_MODEL_JSON_REPAIR = _env_bool("AI_ENABLE_ANY_MODEL_JSON_REPAIR", False)
-
-AI_ALLOW_TEXT_FALLBACK = _env_bool("AI_ALLOW_TEXT_FALLBACK", False)
-AI_ALLOW_CLAUDE_TEXT_FALLBACK = _env_bool("AI_ALLOW_CLAUDE_TEXT_FALLBACK", False)
-AI_SAFE_TEXT_FALLBACK_ONLY = _env_bool("AI_SAFE_TEXT_FALLBACK_ONLY", False)
-
-AI_REQUIRE_FULL_BATCH_COVERAGE = _env_bool("AI_REQUIRE_FULL_BATCH_COVERAGE", True)
-AI_ACCEPT_PARTIAL_PHASE1 = _env_bool("AI_ACCEPT_PARTIAL_PHASE1", False)
-AI_ACCEPT_PARTIAL_CLAUDE = _env_bool("AI_ACCEPT_PARTIAL_CLAUDE", False)
-AI_PARTIAL_AS_FAILED = _env_bool("AI_PARTIAL_AS_FAILED", True)
-
-AI_RUN_CLAUDE_ALWAYS = _env_bool("AI_RUN_CLAUDE_ALWAYS", True)
-AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID = _env_bool("AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID", False)
-AI_MIN_PHASE1_VALID_FOR_CLAUDE = _env_int("AI_MIN_PHASE1_VALID_FOR_CLAUDE", 0)
-
-AI_FORCE_CHINESE_REASON = _env_bool("AI_FORCE_CHINESE_REASON", True)
-AI_USE_RESPONSE_FORMAT = _env_bool("AI_USE_RESPONSE_FORMAT", False)
-AI_PARSE_DEBUG = _env_bool("AI_PARSE_DEBUG", False)
+AI_TEMPERATURE_PHASE1 = _env_float("AI_TEMPERATURE_PHASE1", 0.18)
+AI_TEMPERATURE_CRITIC = _env_float("AI_TEMPERATURE_CRITIC", 0.10)
+AI_TEMPERATURE_FINAL = _env_float("AI_TEMPERATURE_FINAL", 0.08)
+AI_USE_RESPONSE_FORMAT = _env_bool("AI_USE_RESPONSE_FORMAT", True)
 AI_SAVE_RAW_RESPONSE = _env_bool("AI_SAVE_RAW_RESPONSE", False)
+AI_PARSE_DEBUG = _env_bool("AI_PARSE_DEBUG", False)
 
-# 新增：阶段结果独立落盘。这个不等于缓存，不参与复用，只做运行过程可追踪。
 AI_PHASE_SNAPSHOT_ENABLED = _env_bool("AI_PHASE_SNAPSHOT_ENABLED", True)
-AI_PHASE_RESULT_DIR = str(os.environ.get("AI_PHASE_RESULT_DIR", "data/ai_phase_results")).strip() or "data/ai_phase_results"
-AI_SAVE_PARTIAL_REJECTED_RESULTS = _env_bool("AI_SAVE_PARTIAL_REJECTED_RESULTS", True)
-AI_WRITE_BATCH_RESULT_IMMEDIATELY = _env_bool("AI_WRITE_BATCH_RESULT_IMMEDIATELY", True)
+AI_PHASE_RESULT_DIR = str(os.environ.get("AI_PHASE_RESULT_DIR", "data/ai_phase_results_v20")).strip() or "data/ai_phase_results_v20"
 
-ENABLE_EXTERNAL_CONTEXT = _env_bool("ENABLE_EXTERNAL_CONTEXT", False)
+AI_FILL_TOP4_WITH_NON_RECOMMENDABLE = _env_bool("AI_FILL_TOP4_WITH_NON_RECOMMENDABLE", False)
+MIN_AI_RECOMMEND_TIER = str(os.environ.get("MIN_AI_RECOMMEND_TIER", "B")).strip().upper()
 
-INCLUDE_FULL_RAW_PACKET = _env_bool("INCLUDE_FULL_RAW_PACKET", True)
-RAW_PACKET_CHAR_LIMIT = _env_int("RAW_PACKET_CHAR_LIMIT", 20000)
-FIELD_LIMIT_CHANGE = _env_int("FIELD_LIMIT_CHANGE", 4000)
-FIELD_LIMIT_VOTE = _env_int("FIELD_LIMIT_VOTE", 3000)
-FIELD_LIMIT_INFORMATION = _env_int("FIELD_LIMIT_INFORMATION", 8000)
-FIELD_LIMIT_POINTS = _env_int("FIELD_LIMIT_POINTS", 8000)
-FIELD_LIMIT_STYLE_EXTRA = _env_int("FIELD_LIMIT_STYLE_EXTRA", 6000)
-
-AI_USE_COMPACT_CLAUDE_AUDIT = _env_bool("AI_USE_COMPACT_CLAUDE_AUDIT", True)
-AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE = _env_int("AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE", 350)
-CLAUDE_COMPACT_FIELD_LIMIT = _env_int("CLAUDE_COMPACT_FIELD_LIMIT", 2500)
-
-ENABLE_EXPERIENCE_AUDIT_CARDS = _env_bool("ENABLE_EXPERIENCE_AUDIT_CARDS", True)
-EXPERIENCE_AUDIT_MAX_CARDS = max(0, _env_int("EXPERIENCE_AUDIT_MAX_CARDS", 12))
-EXPERIENCE_AUDIT_MIN_WEIGHT = _env_int("EXPERIENCE_AUDIT_MIN_WEIGHT", 4)
-EXPERIENCE_AUDIT_INCLUDE_EXTENDED = _env_bool("EXPERIENCE_AUDIT_INCLUDE_EXTENDED", True)
-
-ENABLE_SHARP_GATE = _env_bool("ENABLE_SHARP_GATE", True)
-ENABLE_SCORE_MARKET_GATE = _env_bool("ENABLE_SCORE_MARKET_GATE", True)
-STRICT_RECOMMEND_GATE = _env_bool("STRICT_RECOMMEND_GATE", True)
-
-AI_FILL_TOP4_WITH_NON_RECOMMENDABLE = _env_bool("AI_FILL_TOP4_WITH_NON_RECOMMENDABLE", True)
-
-MIN_RECOMMEND_OVERALL_SCORE = _env_int("MIN_RECOMMEND_OVERALL_SCORE", 56)
-MIN_SAFE_TOP_GATE_SCORE = _env_int("MIN_SAFE_TOP_GATE_SCORE", 64)
-MIN_DIRECTION_GAP_FOR_RECOMMEND = _env_int("MIN_DIRECTION_GAP_FOR_RECOMMEND", 18)
-
-MAX_SCORE_ODDS_FOR_STRONG_SCORE = _env_int("MAX_SCORE_ODDS_FOR_STRONG_SCORE", 10)
-MAX_DIR_RANK_FOR_SCORE_GATE = _env_int("MAX_DIR_RANK_FOR_SCORE_GATE", 3)
-MAX_ALL_RANK_FOR_SCORE_GATE = _env_int("MAX_ALL_RANK_FOR_SCORE_GATE", 8)
-
-SHARP_CONFLICT_DEGRADE_TO_MAX_TIER = str(os.environ.get("SHARP_CONFLICT_DEGRADE_TO_MAX_TIER", "B")).strip().upper()
-CLAUDE_MISSING_DEGRADE_TO_MAX_TIER = str(os.environ.get("CLAUDE_MISSING_DEGRADE_TO_MAX_TIER", "A")).strip().upper()
-SCORE_MARKET_BAD_DEGRADE_TO_MAX_TIER = str(os.environ.get("SCORE_MARKET_BAD_DEGRADE_TO_MAX_TIER", "B")).strip().upper()
-
-SELECTION_TIER_S = _env_int("SELECTION_TIER_S", 78)
-SELECTION_TIER_A = _env_int("SELECTION_TIER_A", 68)
-SELECTION_TIER_B = _env_int("SELECTION_TIER_B", 56)
-SELECTION_TIER_C = _env_int("SELECTION_TIER_C", 44)
-
-_AI_RESULT_CACHE: Dict[str, Tuple[float, Dict[str, Dict[int, Dict[str, Any]]], Dict[str, Any]]] = {}
-_AI_INFLIGHT_TASKS: Dict[str, asyncio.Task] = {}
 AI_CALL_STATUS: Dict[str, Dict[str, Any]] = {n: {} for n in AI_NAMES}
-AI_PARTIAL_RESULTS: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in AI_NAMES}
 AI_RESULT_FILES: Dict[str, str] = {}
 _LAST_AI_RUN_METADATA: Dict[str, Any] = {}
 
@@ -243,12 +201,8 @@ def _clip(v: float, lo: float, hi: float) -> float:
     return max(lo, min(hi, _f(v, 0.0)))
 
 
-def _mask_key(k: str) -> str:
-    if not k:
-        return ""
-    if len(k) <= 8:
-        return "***"
-    return f"{k[:4]}...{k[-4:]}"
+def _exists(v: Any) -> bool:
+    return v not in (None, "", "-", "N/A", "n/a", "None", "none", "null", {}, [])
 
 
 def _json_compact(obj: Any, max_len: int = 4000) -> str:
@@ -269,7 +223,7 @@ def _hash_obj(obj: Any) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
-def _short_hash(s: str, n: int = 12) -> str:
+def _short_hash(s: Any, n: int = 12) -> str:
     return hashlib.sha256(str(s).encode("utf-8")).hexdigest()[:n]
 
 
@@ -284,40 +238,32 @@ def _ensure_dir(path: str) -> None:
         pass
 
 
-def _to_jsonable_results(results: Dict[int, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
-    out: Dict[str, Dict[str, Any]] = {}
-    for k, v in (results or {}).items():
-        try:
-            out[str(int(k))] = v
-        except Exception:
-            out[str(k)] = v
-    return out
+def _mask_key(k: str) -> str:
+    if not k:
+        return ""
+    if len(k) <= 8:
+        return "***"
+    return f"{k[:4]}...{k[-4:]}"
 
 
-def _deep_find_value(obj: Any, aliases: List[str], skip_keys: Optional[set] = None) -> Any:
-    skip_keys = set(skip_keys or [])
-    aliases_low = {str(a).lower() for a in aliases}
+def _strip_output_fields(obj: Any) -> Any:
     if isinstance(obj, dict):
-        for k, v in obj.items():
-            if str(k).lower() in aliases_low:
-                return v
-        for k, v in obj.items():
-            if str(k).lower() in skip_keys:
-                continue
-            found = _deep_find_value(v, aliases, skip_keys)
-            if found is not None:
-                return found
-    elif isinstance(obj, list):
-        for it in obj:
-            found = _deep_find_value(it, aliases, skip_keys)
-            if found is not None:
-                return found
-    return None
+        return {k: _strip_output_fields(v) for k, v in obj.items() if str(k) not in PROMPT_STRIP_KEYS}
+    if isinstance(obj, list):
+        return [_strip_output_fields(x) for x in obj]
+    return obj
+
+
+def _safe_json_line(obj: Any) -> str:
+    return json.dumps(obj, ensure_ascii=False, separators=(",", ":"), default=str)
 
 
 # ============================================================
-# 比分与方向
+# 比分 / 方向
 # ============================================================
+
+_SCORE_RE = re.compile(r"(\d{1,2})\s*[-:：]\s*(\d{1,2})")
+
 
 def _normalize_score_text(s: Any) -> str:
     return str(s).strip().replace(" ", "").replace("：", "-").replace(":", "-").replace("–", "-").replace("—", "-")
@@ -334,9 +280,9 @@ def _parse_score(s: Any) -> Tuple[Optional[int], Optional[int]]:
             return 9, 9
         if "负" in ss and "其他" in ss:
             return 0, 9
-        if ss.lower() in ("home", "draw", "away", "abstain") or ss in ("主胜", "客胜", "平局", "胜", "平", "负", "弃权"):
+        if ss.lower() in ("home", "draw", "away", "abstain"):
             return None, None
-        m = re.search(r"(\d{1,2})\s*[-:：]\s*(\d{1,2})", ss)
+        m = _SCORE_RE.search(ss)
         if not m:
             return None, None
         return int(m.group(1)), int(m.group(2))
@@ -364,35 +310,9 @@ def _score_direction(score_str: Any) -> Optional[str]:
 
 def _score_total(score_str: Any) -> Optional[int]:
     h, a = _parse_score(score_str)
-    if h is None:
+    if h is None or a is None:
         return None
     return h + a
-
-
-def _direction_cn(direction: str) -> str:
-    return {"home": "主胜", "draw": "平局", "away": "客胜", "abstain": "弃权"}.get(direction, "弃权")
-
-
-def _dir_from_cn(v: Any) -> Optional[str]:
-    s = str(v).strip().lower()
-    if s in ("home", "主胜", "胜", "主", "主队", "home_win", "h", "win"):
-        return "home"
-    if s in ("draw", "平局", "平", "和", "tie", "x", "d", "same"):
-        return "draw"
-    if s in ("away", "客胜", "负", "客", "客队", "away_win", "a", "lose"):
-        return "away"
-    return None
-
-
-def _score_display_label(score_str: Any, direction_code: Optional[str] = None) -> str:
-    ss = _normalize_score_text(score_str)
-    if ss in SCORE_OTHERS_HOME or ss in ("胜其他", "9-0"):
-        return "胜其他"
-    if ss in SCORE_OTHERS_DRAW or ss in ("平其他", "9-9"):
-        return "平其他"
-    if ss in SCORE_OTHERS_AWAY or ss in ("负其他", "0-9"):
-        return "负其他"
-    return ss
 
 
 def _score_goal_band(score: str) -> str:
@@ -415,9 +335,56 @@ def _score_btts(score: str) -> str:
     return "yes" if h > 0 and a > 0 else "no"
 
 
+def _direction_cn(direction: str) -> str:
+    return {"home": "主胜", "draw": "平局", "away": "客胜", "abstain": "弃权"}.get(direction, "弃权")
+
+
+def _dir_from_any(v: Any) -> Optional[str]:
+    s = str(v).strip().lower()
+    if s in ("home", "主胜", "胜", "主", "主队", "home_win", "h", "win"):
+        return "home"
+    if s in ("draw", "平局", "平", "和", "tie", "x", "d", "same"):
+        return "draw"
+    if s in ("away", "客胜", "负", "客", "客队", "away_win", "a", "lose"):
+        return "away"
+    return None
+
+
+def _score_display_label(score_str: Any, direction_code: Optional[str] = None) -> str:
+    ss = _normalize_score_text(score_str)
+    if ss in SCORE_OTHERS_HOME or ss in ("胜其他", "9-0"):
+        return "胜其他"
+    if ss in SCORE_OTHERS_DRAW or ss in ("平其他", "9-9"):
+        return "平其他"
+    if ss in SCORE_OTHERS_AWAY or ss in ("负其他", "0-9"):
+        return "负其他"
+    return ss
+
+
 # ============================================================
-# match 规范化 / 输入抽取
+# 输入抽取 / 标准化
 # ============================================================
+
+def _deep_find_value(obj: Any, aliases: List[str], skip_keys: Optional[set] = None) -> Any:
+    skip_keys = set(skip_keys or [])
+    aliases_low = {str(a).lower() for a in aliases}
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if str(k).lower() in aliases_low:
+                return v
+        for k, v in obj.items():
+            if str(k).lower() in skip_keys:
+                continue
+            found = _deep_find_value(v, aliases, skip_keys)
+            if found is not None:
+                return found
+    elif isinstance(obj, list):
+        for it in obj:
+            found = _deep_find_value(it, aliases, skip_keys)
+            if found is not None:
+                return found
+    return None
+
 
 def _is_change_direction_code(change: Any) -> bool:
     if not isinstance(change, dict) or not change:
@@ -429,14 +396,6 @@ def _is_change_direction_code(change: Any) -> bool:
     if not vals:
         return False
     return all(v in (-1, 0, 1) for v in vals)
-
-
-def _change_value(change: Dict[str, Any], key: str, default: float = 0.0) -> float:
-    if not isinstance(change, dict):
-        return default
-    if key == "same":
-        return _f(change.get("same", change.get("draw", default)), default)
-    return _f(change.get(key, default), default)
 
 
 def normalize_match(raw_m: Dict[str, Any]) -> Dict[str, Any]:
@@ -455,7 +414,7 @@ def normalize_match(raw_m: Dict[str, Any]) -> Dict[str, Any]:
     m["home"] = home
     m["guest"] = away
 
-    skip = {"vote", "change", "points", "information", "prediction", "stats", "smart_signals"}
+    skip = {"vote", "change", "points", "information", "prediction", "stats", "smart_signals", "recommendation"}
     if m.get("sp_home") is None:
         v = _deep_find_value(m, ["win", "odds_win", "spf_sp3", "sp3", "胜"], skip)
         if v is not None:
@@ -473,7 +432,7 @@ def normalize_match(raw_m: Dict[str, Any]) -> Dict[str, Any]:
             m["lose"] = v
 
     if "give_ball" not in m:
-        m["give_ball"] = m.get("handicap") or m.get("rq") or m.get("let_ball") or "0"
+        m["give_ball"] = m.get("handicap") or m.get("rq") or m.get("let_ball") or ""
 
     if not isinstance(m.get("change"), dict):
         ch = {}
@@ -540,545 +499,367 @@ def get_market_odds_for_score(match_obj: Dict[str, Any], score: str) -> float:
 
 
 # ============================================================
-# 外部情报入口
+# Evidence Compiler：只产事实，不做足球判断
 # ============================================================
 
-async def _fetch_json_or_text(session: aiohttp.ClientSession, method: str, url: str, **kwargs) -> Tuple[bool, Any, str]:
-    try:
-        async with session.request(method, url, timeout=aiohttp.ClientTimeout(total=30), **kwargs) as r:
-            text = await r.text()
-            if r.status < 200 or r.status >= 300:
-                return False, {"status": r.status, "text": text[:1000]}, "http_error"
-            try:
-                return True, json.loads(text), "json"
-            except Exception:
-                return True, text, "text"
-    except Exception as e:
-        return False, {"error": str(e)[:300]}, "exception"
+def _score_market_facts(match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    rows = []
+    for sc, key in CRS_FULL_MAP.items():
+        odd = _f(match_obj.get(key), 0.0)
+        if odd > 1.01:
+            rows.append({"score": sc, "odds": odd, "direction": _score_direction(sc), "total_goals": _score_total(sc)})
+    rows = sorted(rows, key=lambda x: x["odds"])
+    for i, r in enumerate(rows, 1):
+        r["all_rank"] = i
 
+    by_dir = {"home": [], "draw": [], "away": []}
+    for r in rows:
+        d = r.get("direction")
+        if d in by_dir:
+            by_dir[d].append(r)
+    for d, arr in by_dir.items():
+        for i, r in enumerate(arr, 1):
+            r["direction_rank"] = i
 
-def _parse_external_endpoints() -> List[str]:
-    raw = os.environ.get("EXTERNAL_CONTEXT_ENDPOINTS", "") or os.environ.get("EXTERNAL_CONTEXT_URLS", "")
-    if not raw:
-        one = os.environ.get("EXTERNAL_CONTEXT_URL", "").strip()
-        return [one] if one else []
-    try:
-        arr = json.loads(raw)
-        if isinstance(arr, list):
-            return [str(x).strip() for x in arr if str(x).strip()]
-    except Exception:
-        pass
-    return [x.strip() for x in raw.split(",") if x.strip()]
-
-
-async def build_external_context_for_match(session: aiohttp.ClientSession, match_obj: Dict[str, Any]) -> Dict[str, Any]:
-    ctx = {
-        "enabled": bool(ENABLE_EXTERNAL_CONTEXT),
-        "source_quality": "disabled" if not ENABLE_EXTERNAL_CONTEXT else "missing",
-        "items": [],
-        "errors": [],
+    return {
+        "available": bool(rows),
+        "lowest_scores_overall": rows[:10],
+        "lowest_scores_by_direction": {d: arr[:6] for d, arr in by_dir.items()},
+        "coverage_count": len(rows),
     }
-    if not ENABLE_EXTERNAL_CONTEXT:
-        return ctx
 
-    payload = {
-        "home_team": match_obj.get("home_team", ""),
-        "away_team": match_obj.get("away_team", ""),
-        "league": match_obj.get("league", match_obj.get("cup", "")),
-        "match": match_obj,
+
+def _total_goal_market_facts(match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    rows = []
+    for i in range(8):
+        odd = _f(match_obj.get(f"a{i}"), 0.0)
+        if odd > 1.01:
+            rows.append({"goals": i, "odds": odd})
+    rows = sorted(rows, key=lambda x: x["odds"])
+    for i, r in enumerate(rows, 1):
+        r["rank"] = i
+    return {
+        "available": bool(rows),
+        "lowest_total_goals": rows[:8],
+        "mode_goals": rows[0]["goals"] if rows else None,
+        "coverage_count": len(rows),
     }
-    token = os.environ.get("EXTERNAL_CONTEXT_TOKEN", "").strip()
-    for url in _parse_external_endpoints()[:3]:
-        headers = {"Content-Type": "application/json"}
-        if token:
-            headers["Authorization"] = f"Bearer {token}"
-        ok, data, kind = await _fetch_json_or_text(
-            session,
-            os.environ.get("EXTERNAL_CONTEXT_METHOD", "POST").upper(),
-            url,
-            headers=headers,
-            json=payload,
-        )
-        if ok:
-            ctx["items"].append({"source": url, "kind": kind, "data": data})
-            ctx["source_quality"] = "provider"
-        else:
-            ctx["errors"].append({"source": url, "data": data})
-    return ctx
 
 
-async def enrich_external_context(match_analyses: List[Dict[str, Any]]) -> None:
-    if not ENABLE_EXTERNAL_CONTEXT or aiohttp is None:
-        for ma in match_analyses:
-            ma["external_context"] = {"enabled": False, "source_quality": "disabled", "items": [], "errors": []}
-        return
-    async with aiohttp.ClientSession() as session:
-        tasks = [build_external_context_for_match(session, ma["match"]) for ma in match_analyses]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        for ma, r in zip(match_analyses, results):
-            if isinstance(r, Exception):
-                ma["external_context"] = {"enabled": True, "source_quality": "error", "items": [], "errors": [str(r)[:300]]}
-            else:
-                ma["external_context"] = r
+def _half_full_facts(match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    rows = []
+    for k, lb in HFTF_MAP.items():
+        odd = _f(match_obj.get(k), 0.0)
+        if odd > 1.01:
+            rows.append({"code": k, "label": lb, "odds": odd})
+    rows.sort(key=lambda x: x["odds"])
+    return {"available": bool(rows), "lowest": rows[:9], "coverage_count": len(rows)}
 
 
-def _format_external_context_for_prompt(ctx: Dict[str, Any], limit: int = 2500) -> str:
-    if not isinstance(ctx, dict) or not ctx.get("enabled"):
-        return "external_context: disabled\n"
-    return _json_compact(ctx, limit) + "\n"
+def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, Any]:
+    m = _strip_output_fields(match_obj)
+
+    style_keys = [
+        "league_style", "league_profile", "team_style", "home_style", "away_style", "play_style",
+        "tactical_style", "pace_rating", "tempo", "home_form", "away_form", "weather", "injury",
+        "lineup", "news", "motivation", "schedule", "home_rank", "away_rank", "home_stats", "away_stats",
+    ]
+
+    correct_score_odds = {
+        sc: m.get(key)
+        for sc, key in CRS_FULL_MAP.items()
+        if m.get(key) not in (None, "", 0, "0")
+    }
+
+    total_goals_odds = {
+        str(i): m.get(f"a{i}")
+        for i in range(8)
+        if m.get(f"a{i}") not in (None, "", 0, "0")
+    }
+
+    evidence = {
+        "match": index,
+        "identity": {
+            "home_team": m.get("home_team", m.get("home", "Home")),
+            "away_team": m.get("away_team", m.get("guest", "Away")),
+            "league": m.get("league", m.get("cup", "")),
+            "match_num": m.get("match_num", ""),
+            "match_time": m.get("match_time", m.get("time", "")),
+        },
+        "lottery_market_1x2": {
+            "home": m.get("sp_home", m.get("win")),
+            "draw": m.get("sp_draw", m.get("same")),
+            "away": m.get("sp_away", m.get("lose")),
+            "note": "中国体彩竞彩抓包赔率，不是欧洲均赔。",
+        },
+        "handicap": {"raw": m.get("give_ball", m.get("handicap", m.get("rq", "")))},
+        "movement": {
+            "change": m.get("change", {}),
+            "change_is_direction_code": bool(m.get("change_is_direction_code", False)),
+            "coding_note": "change_is_direction_code=true 时，-1=降水/下降，0=不变，1=升水/上升。",
+            "odds_movement": m.get("odds_movement", {}),
+        },
+        "public_vote": m.get("vote", {}),
+        "total_goals_odds": total_goals_odds,
+        "correct_score_odds": correct_score_odds,
+        "half_full_time_odds": {
+            HFTF_MAP[k]: m.get(k)
+            for k in HFTF_MAP
+            if m.get(k) not in (None, "", 0, "0")
+        },
+        "derived_market_facts_no_judgement": {
+            "score_market_facts": _score_market_facts(m),
+            "total_goal_market_facts": _total_goal_market_facts(m),
+            "half_full_market_facts": _half_full_facts(m),
+        },
+        "context_raw_fields": {
+            "information": m.get("information", ""),
+            "points": m.get("points", ""),
+            "baseface": m.get("baseface", ""),
+            "expert_intro": m.get("expert_intro", ""),
+            "intelligence": m.get("intelligence", ""),
+            "style_and_team_core": {k: m.get(k) for k in style_keys if m.get(k) not in (None, "", {}, [])},
+        },
+        "data_quality": {
+            "has_1x2": all(m.get(k) not in (None, "", 0, "0") for k in ["sp_home", "sp_draw", "sp_away"]),
+            "has_total_goals": bool(total_goals_odds),
+            "has_correct_score": bool(correct_score_odds),
+            "has_vote": isinstance(m.get("vote"), dict) and bool(m.get("vote")),
+            "has_change": isinstance(m.get("change"), dict) and bool(m.get("change")),
+            "has_context_news": any(_exists(m.get(k)) for k in ["information", "points", "injury", "lineup", "news"]),
+        },
+    }
+    return evidence
 
 
 # ============================================================
-# 经验审计卡：只进 prompt，不改结果
+# Prompt / Schema
 # ============================================================
 
-_RULE_NAME = {
-    "D01": "大热必死",
-    "D08": "强强对话平局率高",
-    "D10": "平手盘水位不动易平",
-    "D13": "攻防数据接近必防平",
-    "D15": "杯赛/淘汰赛保守复核",
-    "U04": "受注比例一边倒反向操作",
-    "U09": "排名差大但盘口便宜",
-    "U10": "赔率剧烈变动",
-    "G08": "0球赔率极低信号",
-    "G10": "CRS 0-0赔率极低",
-    "G11": "双闷队0-0高危",
-    "G12": "双攻队大球高危",
-    "B_SHARP": "平局Sharp资金突进",
-    "B_STEAM": "Steam资金方向",
-    "X01": "强客低赔中热复核",
-    "X02": "体彩让球强方向受热复核",
-    "X03": "方向与总进球/BTTS一致性复核",
-    "S01": "Sharp冲突强制审计",
-    "M01": "比分赔率低位审计",
+def _canonical_output_schema_text() -> str:
+    return r'''
+必须输出严格 JSON object，顶层格式：{"predictions":[...]}。不要输出 markdown，不要输出 JSON 外文本。
+每个 prediction 必须包含：
+{
+  "match": 1,
+  "final_direction": "home/draw/away",
+  "predicted_score": "2-1",
+  "direction_probs": {"home": 45, "draw": 28, "away": 27},
+  "goal_band": "0-1/2/3/4+",
+  "btts": "yes/no/unclear",
+  "top3": [
+    {"score":"2-1", "prob":16, "logic":"中文专业说明"}
+  ],
+  "market_interpretation": {
+    "one_x_two":"中文说明", "handicap":"中文说明", "correct_score":"中文说明",
+    "total_goals":"中文说明", "half_full_time":"中文说明", "external_market":"中文说明"
+  },
+  "money_flow": {
+    "public_money_direction":"home/draw/away/unclear",
+    "sharp_money_direction":"home/draw/away/unclear",
+    "sharp_confidence":0,
+    "reverse_line_movement":false,
+    "steam_move":"home/draw/away/none/unclear",
+    "evidence":"中文说明"
+  },
+  "contextual_logic": {
+    "league_style":"中文说明", "team_style":"中文说明", "tempo":"low/medium/high/unclear",
+    "score_shape":"中文说明", "btts_likelihood":"yes/no/unclear", "rotation_risk":"low/medium/high/unclear"
+  },
+  "rejected_cases": {"home":"中文说明", "draw":"中文说明", "away":"中文说明"},
+  "web_research": {
+    "used": true,
+    "failure_reason": "",
+    "search_queries": [],
+    "sources": [
+      {"title":"", "url":"", "publisher":"", "published_at":"", "accessed_at":"", "source_type":"injury/lineup/odds/news/stats/tactical", "reliability":"high/medium/low", "claim":"", "impact":"direction/score/risk/no_impact"}
+    ],
+    "freshness_grade":"live/recent/stale/missing",
+    "key_findings": [],
+    "source_conflicts": []
+  },
+  "recommendation": {
+    "tier":"S/A/B/C/D",
+    "is_recommended":true,
+    "top4_priority":1,
+    "bet_confidence":0,
+    "direction_stability":"strong/medium/weak",
+    "score_stability":"strong/medium/weak",
+    "risk_level":"low/medium/high",
+    "risk_tags":[],
+    "why_recommended":"中文说明"
+  },
+  "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
+  "reason":"中文综合理由"
 }
-
-_RULE_QUESTION = {
-    "D01": "热门低赔是否只是名气盘？是否存在防平/防冷？",
-    "D08": "强强对话是否更像试探、消耗、保守？",
-    "D10": "平手盘不动是否说明双方定价均衡？",
-    "D13": "攻防接近是否支持平局或低比分？",
-    "D15": "杯赛/淘汰赛/次回合是否因为赛制而保守？若只是小组赛，不得机械套用首回合保守逻辑。",
-    "U04": "受注一边倒是真共识还是反向操作？",
-    "U09": "排名差与盘口不匹配，是强队低估还是盘口便宜？",
-    "U10": "剧烈变盘是信息/资金驱动还是诱导？",
-    "G08": "0球赔率偏低是否提示极小球/0-0？",
-    "G10": "0-0赔率低是否与总0球低位共振？",
-    "G11": "双闷队是否支持0-0/1-0/0-1？",
-    "G12": "双攻/双漏是否支持BTTS与大球？",
-    "B_SHARP": "平赔独降且两边升，是真平局资金还是诱平？",
-    "B_STEAM": "散户未跟的降水是否更像专业资金？",
-    "X01": "强客低赔+客热中高+客赔降水，是真强客还是顺水诱买？",
-    "X02": "强方向热度与降水同向，需验证是真资金还是顺水？",
-    "X03": "最终比分必须与总进球和BTTS一致。",
-    "S01": "Sharp方向与最终方向冲突时，必须解释为何忽略资金信号；解释不充分则推荐降级。",
-    "M01": "最终比分是否处于本方向比分赔率低位，是否与总进球主模态一致。",
-}
+硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score。
+'''.strip()
 
 
-class ExperienceAuditEngine:
-    def _sf(self, val: Any, d: float = 0.0) -> float:
-        return _f(val, d)
-
-    def _si(self, val: Any, d: int = 0) -> int:
-        return _i(val, d)
-
-    def analyze(self, match_data: Dict[str, Any]) -> Dict[str, Any]:
-        if not ENABLE_EXPERIENCE_AUDIT_CARDS:
-            return {"enabled": False, "triggered": [], "risk_signals": [], "total_score": 0, "recommendation": "disabled"}
-
-        triggered: List[Dict[str, Any]] = []
-        risk_signals: List[str] = []
-
-        def add(rid: str, category: str, weight: int, reason: str, direction: str = "audit"):
-            if weight < EXPERIENCE_AUDIT_MIN_WEIGHT:
-                return
-            triggered.append({
-                "id": rid,
-                "name": _RULE_NAME.get(rid, rid),
-                "category": category,
-                "weight": int(weight),
-                "reason": str(reason)[:260],
-                "direction": direction,
-                "ai_question": _RULE_QUESTION.get(rid, "请作为审计问题，不得机械裁决。"),
-                "mode": "advisory_only_no_local_decision",
-            })
-
-        sp_h = self._sf(match_data.get("sp_home", match_data.get("win")), 2.5)
-        sp_a = self._sf(match_data.get("sp_away", match_data.get("lose")), 3.5)
-        give_ball = self._sf(match_data.get("give_ball", match_data.get("handicap", match_data.get("rq", 0))), 0)
-        hr = self._si(match_data.get("home_rank"), 10)
-        ar = self._si(match_data.get("away_rank"), 10)
-        vote = match_data.get("vote", {}) or {}
-        change = match_data.get("change", {}) or {}
-        league = str(match_data.get("league", match_data.get("cup", "")))
-        vh = self._si(vote.get("win"), 33)
-        va = self._si(vote.get("lose"), 33)
-        wc = self._sf(change.get("win"), 0)
-        lc = self._sf(change.get("lose"), 0)
-        sc = self._sf(change.get("same", change.get("draw")), 0)
-        change_is_code = _is_change_direction_code(change)
-
-        a0 = self._sf(match_data.get("a0"), 99)
-        a1 = self._sf(match_data.get("a1"), 99)
-        a2 = self._sf(match_data.get("a2"), 99)
-        a5 = self._sf(match_data.get("a5"), 99)
-        a6 = self._sf(match_data.get("a6"), 99)
-        a7 = self._sf(match_data.get("a7"), 99)
-        s00 = self._sf(match_data.get("s00"), 99)
-
-        if sp_h < 1.40 and vh >= 55:
-            add("D01", "平局", 8, f"主赔{sp_h}极低+主胜受注{vh}%", "draw")
-            risk_signals.append("EXP_D01 大热必死")
-        if sp_a < 1.40 and va >= 55:
-            add("D01", "平局", 8, f"客赔{sp_a}极低+客胜受注{va}%", "draw")
-            risk_signals.append("EXP_D01 大热必死")
-        if vh >= 65:
-            add("U04", "冷门", 8, f"主胜受注{vh}%过热", "upset_away")
-            risk_signals.append(f"EXP_U04 主胜超热{vh}%")
-        if va >= 65:
-            add("U04", "冷门", 8, f"客胜受注{va}%过热", "upset_home")
-            risk_signals.append(f"EXP_U04 客胜超热{va}%")
-
-        if abs(give_ball) < 0.1 and (change_is_code or (abs(wc) < 0.02 and abs(lc) < 0.02)):
-            add("D10", "平局", 8, "平手盘临场水位几乎不变或方向编码无明显偏移", "draw")
-        if abs(hr - ar) <= 3:
-            add("D13", "平局", 5, f"排名接近{hr}vs{ar}", "draw")
-        if any(k.lower() in league.lower() for k in ["杯", "cup", "解放者", "南球", "欧冠", "欧罗巴", "欧联"]):
-            add("D15", "赛制", 5, "杯赛/洲际赛属性，需区分小组赛、淘汰赛、次回合", "audit_format")
-        if abs(hr - ar) >= 8 and abs(give_ball) <= 0.5:
-            add("U09", "冷门", 8, f"排名差{abs(hr-ar)}但让球仅{give_ball}", "upset")
-
-        if change_is_code:
-            if wc < 0 and vh < 55:
-                add("B_STEAM", "盘口", 7, f"主赔降水方向信号，散户仅{vh}%", "steam_home")
-            if lc < 0 and va < 55:
-                add("B_STEAM", "盘口", 7, f"客赔降水方向信号，散户仅{va}%", "steam_away")
-            if sc < 0 and wc > 0 and lc > 0:
-                add("B_SHARP", "盘口", 8, "平赔降水且胜负升水方向编码", "draw")
-                risk_signals.append("EXP_B_SHARP 平赔独降")
-            if wc < 0 and vh >= 55:
-                add("X02", "二次升级", 6, "主方向热度与降水方向信号同向", "audit_hot_drop")
-            if lc < 0 and va >= 55:
-                add("X02", "二次升级", 6, "客方向热度与降水方向信号同向", "audit_hot_drop")
-        else:
-            if max(abs(wc), abs(lc), abs(sc)) >= 0.15:
-                add("U10", "盘口", 7, f"最大变动{max(abs(wc), abs(lc), abs(sc)):.2f}", "audit")
-            if sc < -0.05 and wc > 0 and lc > 0:
-                add("B_SHARP", "盘口", 8, f"平赔降{sc:.2f}且胜负升", "draw")
-                risk_signals.append("EXP_B_SHARP 平赔独降")
-            if wc < -0.10 and vh < 50:
-                add("B_STEAM", "盘口", 7, f"主赔降{wc:.2f}散户仅{vh}%", "steam_home")
-            if lc < -0.10 and va < 50:
-                add("B_STEAM", "盘口", 7, f"客赔降{lc:.2f}散户仅{va}%", "steam_away")
-            if (vh >= 55 and wc < 0) or (va >= 55 and lc < 0):
-                hot = "主" if vh >= 55 and wc < 0 else "客"
-                add("X02", "二次升级", 6, f"{hot}方向热度与降水同向", "audit_hot_drop")
-
-        if a0 < 8.5:
-            add("G08", "大小球", 7, f"0球@{a0}", "under")
-            risk_signals.append(f"EXP_G08 0球@{a0}")
-        if s00 < 9.5:
-            add("G10", "大小球", 7, f"0-0@{s00}", "zero_zero")
-        if EXPERIENCE_AUDIT_INCLUDE_EXTENDED:
-            if sp_a <= 1.75 and 50 <= va < 65 and ((change_is_code and lc <= 0) or (not change_is_code and lc < 0)):
-                add("X01", "二次升级", 8, f"客赔{sp_a}低位+客热{va}%+客赔降水", "audit_strong_away_heat")
-                risk_signals.append("EXP_X01 强客低赔中热复核")
-            if (0 < a1 <= 5.2) or (0 < a2 <= 3.7):
-                add("X03", "二次升级", 6, f"1球@{a1}/2球@{a2}，需审计经济型赢球与BTTS", "audit_goal_shape")
-            if (0 < a7 <= 6.0) or (0 < a6 <= 7.0) or (0 < a5 <= 6.0):
-                add("G12", "大小球", 7, f"高进球低位 a5={a5}/a6={a6}/a7={a7}", "over")
-
-        dedup: Dict[str, Dict[str, Any]] = {}
-        for t in triggered:
-            if t["id"] not in dedup or t["weight"] > dedup[t["id"]]["weight"]:
-                dedup[t["id"]] = t
-        out = sorted(dedup.values(), key=lambda x: (-int(x.get("weight", 0)), str(x.get("id", ""))))
-        if EXPERIENCE_AUDIT_MAX_CARDS > 0:
-            out = out[:EXPERIENCE_AUDIT_MAX_CARDS]
-
-        total_score = sum(int(t.get("weight", 0)) for t in out)
-        return {
-            "enabled": True,
-            "mode": "prompt_only_no_probability_change_no_score_change",
-            "change_is_direction_code": bool(change_is_code),
-            "triggered": out,
-            "triggered_count": len(out),
-            "total_score": total_score,
-            "risk_signals": list(dict.fromkeys(risk_signals)),
-            "recommendation": "存在经验审计卡：AI需逐条回应" if out else "无明显历史经验审计卡",
-        }
+def _web_research_instruction(role: str) -> str:
+    if not AI_NATIVE_WEB:
+        return "AI_NATIVE_WEB=false：如果无法联网，web_research.used=false，failure_reason 写 no_web_capability_or_disabled。"
+    common = (
+        "必须执行 Web-Augmented Match Research。若你的 API/模型具备联网能力，必须搜索并输出 sources；"
+        "若无法联网，web_research.used=false 且 failure_reason 写 no_web_tool_available，禁止编造来源。"
+        "所有影响方向/比分/推荐等级的联网信息必须进入 web_research.sources。来源必须有 title/url/published_at/claim；"
+        "没有来源的所谓最新消息不能作为硬证据。"
+    )
+    if role == "gpt":
+        return common + "你的联网重点：外部欧赔/亚盘/交易所、赔率时间点、竞彩与外部市场分歧。"
+    if role == "grok":
+        return common + "你的联网重点：最新伤停、预计首发、临场新闻、资金流/热度/市场异动。"
+    if role == "gemini":
+        return common + "你的联网重点：球队风格、赛程密度、杯赛赛制、战意、战术影响。"
+    return common + "你的联网重点：审计三家来源质量、冲突来源、新鲜度，以及哪些外部信息真正改变判断。"
 
 
-def _experience_engine() -> ExperienceAuditEngine:
-    global _EXPERIENCE_AUDIT_ENGINE
-    try:
-        return _EXPERIENCE_AUDIT_ENGINE
-    except NameError:
-        _EXPERIENCE_AUDIT_ENGINE = ExperienceAuditEngine()
-        return _EXPERIENCE_AUDIT_ENGINE
-
-
-def _format_experience_audit_for_prompt(exp: Dict[str, Any]) -> str:
-    if not exp or not exp.get("enabled"):
-        return '<experience_audit_cards mode="disabled">disabled</experience_audit_cards>\n'
-    rows = exp.get("triggered", []) or []
-    if not rows:
-        return '<experience_audit_cards mode="prompt_only_no_decision">无明显历史经验审计卡。</experience_audit_cards>\n'
-    p = '<experience_audit_cards mode="prompt_only_no_decision">\n'
-    p += "这些卡片只作为审计问题；禁止直接改方向、禁止直接改比分。必须在 audit.experience_review 中逐条输出 accepted/rejected/neutral。\n"
-    p += "输出格式必须覆盖每个 id：D01:neutral because ...; X03:accepted because ...。不要合并成 D13/D15，必须分开写。\n"
-    for t in rows:
-        p += f"- {t.get('id')} {t.get('name')} | 权重={t.get('weight')} | 原因={t.get('reason')} | 问题={t.get('ai_question')}\n"
-    p += "</experience_audit_cards>\n"
-    return p
-
-
-# ============================================================
-# Prompt 构造
-# ============================================================
-
-def _raw_field_line(label: str, value: Any, limit: int = 1200) -> str:
-    if value is None or value == "" or value == {} or value == []:
-        return ""
-    text = _json_compact(value, limit) if isinstance(value, (dict, list)) else str(value)
-    if limit and limit > 0:
-        text = text[:limit]
-    return f"{label}:{text.replace(chr(10), ' ')}\n"
-
-
-def _raw_full_packet_line(match_obj: Dict[str, Any]) -> str:
-    if not INCLUDE_FULL_RAW_PACKET:
-        return ""
-    limit = RAW_PACKET_CHAR_LIMIT
-    raw_json = _json_compact(match_obj, limit if limit and limit > 0 else 0)
-    suffix = ""
-    try:
-        full_len = len(json.dumps(match_obj, ensure_ascii=False, default=str, separators=(",", ":")))
-        if limit and limit > 0 and full_len > limit:
-            suffix = f"...[TRUNCATED full_len={full_len} limit={limit}]"
-    except Exception:
-        pass
-    return f"raw_match_full_json:{raw_json}{suffix}\n"
-
-
-def _output_format_rule() -> str:
+def _phase1_system(ai_name: str) -> str:
+    role_intro = {
+        "gpt": "你是 Probabilistic Market Structure Analyst，专攻 1X2、让球、正确比分赔率簇、总进球模态、外部赔率对照。",
+        "grok": "你是 Money Flow / Sharp Movement Analyst，专攻 change、vote、热度、Sharp/Steam/Reverse Line Movement、临场新闻。",
+        "gemini": "你是 Tactical & Contextual Consistency Analyst，专攻战术风格、赛程、战意、伤停、比分形态。",
+        "claude": "你是 Final Web-aware Adjudicator，负责源质量审计、交叉证据仲裁和最终推荐。",
+    }.get(ai_name, "你是足球量化 RAW-AI 分析师。")
     return (
-        "严格输出 JSON 数组。每场一个对象。必须覆盖 match=1 到 match=N，不能只输出部分场次。"
-        "不要输出 markdown，不要输出解释。对象模板："
-        '{"match":1,"final_direction":"home/draw/away","direction_probs":{"home":45,"draw":28,"away":27},'
-        '"goal_band":"0-1/2/3/4+","btts":"yes/no/unclear",'
-        '"top3":[{"score":"2-0","prob":18,"market_logic":"中文说明"}],'
-        '"reason":"中文说明","ai_confidence":0-100,"risk_level":"low/medium/high","data_missing":[],'
-        '"audit":{"odds_source":"体彩竞彩抓包赔率","web_odds_check":"searched/web_search_unavailable/european_odds_missing",'
-        '"sharp_money_direction":"home/draw/away/home_or_draw/away_or_draw/unclear","sharp_evidence":"中文说明",'
-        '"league_style":"中文说明","team_style":"中文说明","style_score_logic":"中文说明","direction_rejection":"中文说明",'
-        '"experience_review":"D01:neutral because 中文说明; X03:accepted because 中文说明"}}\n'
-        "match 字段必须是数字序号。top3[0].score 必须与 final_direction 一致。"
-        "goal_band 和 btts 必须与 top3[0].score 一致。所有说明字段必须中文。\n"
+        role_intro
+        + "只能输出严格 JSON object，顶层必须是 predictions。所有解释字段必须中文。"
+        + "禁止引用本地模型结论；允许使用原始体彩正确比分赔率 correct_score_odds。"
+        + "不要机械投票；必须给出 rejected_cases，说明为什么不选其他方向。"
     )
 
 
-def _correct_score_odds_pack(m: Dict[str, Any], limit: int = 5000) -> str:
-    pack = {sc: m.get(k) for sc, k in CRS_FULL_MAP.items() if m.get(k) not in (None, "", 0, "0")}
-    return _raw_field_line("correct_score_odds", pack, limit)
+def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> str:
+    n = len(evidence_batch)
+    p = []
+    p.append("<task>")
+    p.append(f"本批次共有 {n} 场，match 编号必须完整覆盖：" + ",".join(str(e["match"]) for e in evidence_batch))
+    p.append("你看到的是中国体彩竞彩抓包 Evidence，不是本地预测结论。本地没有 Sharp/比分/推荐裁决。")
+    p.append(_web_research_instruction(ai_name))
+    p.append("你的任务不是给空泛推荐，而是基于市场结构、资金流、比分赔率、总进球、半全场、联网情报形成可审计预测。")
+    p.append("</task>\n")
+    p.append("<output_schema>")
+    p.append(_canonical_output_schema_text())
+    p.append("</output_schema>\n")
+    p.append("<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch>")
+    return "\n".join(p)
 
 
-def build_phase1_prompt(match_analyses: List[Dict[str, Any]]) -> str:
-    total_n = len(match_analyses)
-    p = "<context>\n"
-    p += "你是竞彩足球 RAW-AI 比分预测模型。match_data 中的赔率是中国体彩竞彩抓包赔率，不是欧洲公司均赔。\n"
-    p += f"本批次一共有 {total_n} 场。你必须一次性输出完整 JSON 数组，数组必须覆盖 match=1 到 match={total_n}，不能漏场，不能只输出一场。\n"
-    p += "你需要基于原始抓包、赔率变动、散户热度、总进球、比分赔率、半全场、经验审计卡、可用联网材料，独立判断方向和比分。\n"
-    p += "必须重点识别 Sharp/聪明钱：低赔热门升水、冷门降水、平赔独降、散户未跟的降水、强强对话反向资金。\n"
-    p += "禁止引用 CRS、贝叶斯、本地矩阵、本地陷阱裁决。经验卡只作为审计问题，不是裁决。\n"
-    p += "若没有联网能力，audit.web_odds_check 写 web_search_unavailable，data_missing 加 external_european_odds，禁止假装联网。\n"
-    p += "必须输出 direction_probs、goal_band、btts、top3比分；top3[0]必须与final_direction一致。\n"
-    p += "必须逐条回应 experience_audit_cards 中每个 id，不得漏项，不得合并 id。\n"
-    p += "必须只输出 JSON 数组，不要输出 JSON 外文本。\n"
-    p += "</context>\n\n"
-    p += "<output_format>\n" + _output_format_rule() + "</output_format>\n\n"
-    p += "<match_data>\n"
-
-    for i, ma in enumerate(match_analyses, 1):
-        m = ma["match"]
-        h = m.get("home_team", m.get("home", "Home"))
-        a = m.get("away_team", m.get("guest", "Away"))
-        league = m.get("league", m.get("cup", ""))
-        p += f'<match index="{i}">\n'
-        p += f"[{i}] {h} vs {a} | {league}\n"
-        p += f"体彩竞彩1X2: 主胜={m.get('sp_home', m.get('win',''))} 平={m.get('sp_draw', m.get('same',''))} 客胜={m.get('sp_away', m.get('lose',''))}\n"
-        p += f"让球:{m.get('give_ball', m.get('handicap', m.get('rq','')))}\n"
-        p += f"change_is_direction_code:{m.get('change_is_direction_code', False)} | 若true，change=-1表示降水/下降，0表示不变，1表示升水/上升。\n"
-        p += "总进球a0-a7:" + " | ".join([f"{g}={m.get(f'a{g}','')}" for g in range(8)]) + "\n"
-        p += _correct_score_odds_pack(m, 5000)
-
-        hf_l = []
-        for k, lb in HFTF_MAP.items():
-            v = m.get(k, None)
-            if v not in (None, "", 0, "0"):
-                hf_l.append(f"{lb}={v}")
-        if hf_l:
-            p += "半全场:" + " | ".join(hf_l) + "\n"
-
-        p += _raw_field_line("change", m.get("change"), FIELD_LIMIT_CHANGE)
-        p += _raw_field_line("vote", m.get("vote"), FIELD_LIMIT_VOTE)
-        p += _raw_field_line("odds_movement", m.get("odds_movement"), 1000)
-        p += _raw_field_line("intelligence", m.get("intelligence"), FIELD_LIMIT_INFORMATION)
-        p += _raw_field_line("expert_intro", m.get("expert_intro"), 2000)
-        p += _raw_field_line("baseface", m.get("baseface"), FIELD_LIMIT_INFORMATION)
-        p += _raw_field_line("information", m.get("information"), FIELD_LIMIT_INFORMATION)
-        p += _raw_field_line("points", m.get("points"), FIELD_LIMIT_POINTS)
-
-        style_pack = {k: v for k, v in m.items() if k in (
-            "league_style", "league_profile", "team_style", "home_style", "away_style", "play_style",
-            "tactical_style", "pace_rating", "tempo", "home_form", "away_form", "weather", "injury",
-            "lineup", "news", "motivation", "schedule", "home_rank", "away_rank", "home_stats", "away_stats",
-        )}
-        p += _raw_field_line("style_and_team_core", style_pack, FIELD_LIMIT_STYLE_EXTRA)
-        p += _raw_full_packet_line(m)
-
-        exp = ma.get("experience_audit") or _experience_engine().analyze(m)
-        p += _format_experience_audit_for_prompt(exp)
-        p += "<external_context>\n" + _format_external_context_for_prompt(ma.get("external_context", {})) + "</external_context>\n"
-        p += "</match>\n\n"
-
-    p += "</match_data>\n"
-    return p
-
-
-def build_compact_claude_match_data(match_analyses: List[Dict[str, Any]]) -> str:
-    total_n = len(match_analyses)
-    p = "<compact_match_data_for_claude>\n"
-    p += f"Claude终审压缩抓包：本批次一共有 {total_n} 场，你必须输出 match=1 到 match={total_n} 的完整 JSON 数组，不能漏场。\n"
-    p += "Phase1三家已经看过完整抓包。这里保留核心原始字段、赔率结构、经验审计卡，避免prompt过大导致断流。\n"
-    p += "这些字段仍然是体彩竞彩抓包赔率，不是欧洲欧赔。Claude必须重新审计，不按票数机械裁决。\n"
-    p += "必须重点识别 Sharp/聪明钱：低赔热门升水、冷门降水、平赔独降、散户未跟的降水、强强对话反向资金。\n"
-    p += "每个经验审计卡 id 必须在 audit.experience_review 逐条回应，不得漏项。\n\n"
-
-    for i, ma in enumerate(match_analyses, 1):
-        m = ma["match"]
-        h = m.get("home_team", m.get("home", "Home"))
-        a = m.get("away_team", m.get("guest", "Away"))
-        league = m.get("league", m.get("cup", ""))
-        p += f'<match index="{i}">\n'
-        p += f"[{i}] {h} vs {a} | {league}\n"
-        p += f"match_num:{m.get('match_num','')} | time:{m.get('match_time', m.get('time',''))}\n"
-        p += f"体彩竞彩1X2: 主胜={m.get('sp_home', m.get('win',''))} 平={m.get('sp_draw', m.get('same',''))} 客胜={m.get('sp_away', m.get('lose',''))}\n"
-        p += f"让球:{m.get('give_ball', m.get('handicap', m.get('rq','')))}\n"
-        p += f"change_is_direction_code:{m.get('change_is_direction_code', False)} | 若true，-1=降水，0=不变，1=升水。\n"
-        p += "总进球a0-a7:" + " | ".join([f"{g}={m.get(f'a{g}','')}" for g in range(8)]) + "\n"
-        p += _correct_score_odds_pack(m, 3500)
-
-        hf_l = []
-        for k, lb in HFTF_MAP.items():
-            v = m.get(k, None)
-            if v not in (None, "", 0, "0"):
-                hf_l.append(f"{lb}={v}")
-        if hf_l:
-            p += "半全场:" + " | ".join(hf_l[:9]) + "\n"
-
-        p += _raw_field_line("change", m.get("change"), 1800)
-        p += _raw_field_line("vote", m.get("vote"), 1600)
-        p += _raw_field_line("odds_movement", m.get("odds_movement"), 800)
-        p += _raw_field_line("intelligence", m.get("intelligence"), CLAUDE_COMPACT_FIELD_LIMIT)
-        p += _raw_field_line("expert_intro", m.get("expert_intro"), 1200)
-        p += _raw_field_line("baseface", m.get("baseface"), CLAUDE_COMPACT_FIELD_LIMIT)
-        p += _raw_field_line("information", m.get("information"), CLAUDE_COMPACT_FIELD_LIMIT)
-        p += _raw_field_line("points", m.get("points"), CLAUDE_COMPACT_FIELD_LIMIT)
-
-        style_pack = {k: v for k, v in m.items() if k in (
-            "league_style", "league_profile", "team_style", "home_style", "away_style", "play_style",
-            "tactical_style", "pace_rating", "tempo", "home_form", "away_form", "weather", "injury",
-            "lineup", "news", "motivation", "schedule", "home_rank", "away_rank", "home_stats", "away_stats",
-        )}
-        p += _raw_field_line("style_and_team_core", style_pack, CLAUDE_COMPACT_FIELD_LIMIT)
-
-        exp = ma.get("experience_audit") or _experience_engine().analyze(m)
-        p += _format_experience_audit_for_prompt(exp)
-        p += "</match>\n\n"
-
-    p += "</compact_match_data_for_claude>\n"
-    return p
-
-
-def _short_ai_row(r: Dict[str, Any], idx: int) -> Dict[str, Any]:
-    audit = r.get("audit", {}) if isinstance(r.get("audit", {}), dict) else {}
-    keep_audit = {}
-    for k in [
-        "web_odds_check", "european_odds", "market_divergence",
-        "sharp_money_direction", "sharp_evidence",
-        "league_style", "team_style", "style_score_logic",
-        "direction_rejection", "total_goals", "money_flow",
-        "experience_review", "experience_review_inherited_from",
-        "parse_mode",
-    ]:
-        if k in audit:
-            keep_audit[k] = audit[k]
-    return {
-        "match": idx,
-        "ai_score": r.get("ai_score"),
-        "final_direction": r.get("final_direction"),
-        "direction_probs": r.get("direction_probs", {}),
-        "goal_band": r.get("goal_band", ""),
-        "btts": r.get("btts", ""),
-        "top3": r.get("top3", []),
-        "ai_confidence": r.get("ai_confidence"),
-        "risk_level": r.get("risk_level"),
-        "reason": str(r.get("reason", ""))[:AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE],
-        "audit": keep_audit,
-        "experience_review": r.get("experience_review", []),
-        "data_missing": r.get("data_missing", []),
-    }
-
-
-def build_claude_final_audit_prompt(
-    match_analyses: List[Dict[str, Any]],
-    phase1_results: Dict[str, Dict[int, Dict[str, Any]]],
-) -> str:
-    total_n = len(match_analyses)
-    p = "<final_audit_context>\n"
-    p += "你是 Claude 最终 RAW-AI 主裁。你看到的是体彩竞彩抓包核心字段和 GPT/Grok/Gemini 初审。\n"
-    p += f"本批次一共有 {total_n} 场。你必须输出完整 JSON 数组，覆盖 match=1 到 match={total_n}，不能漏场，不能只输出部分场次。\n"
-    p += "你不是反指模型，不需要为了审计而反对初审。选择证据最完整、最符合原始字段的一组。\n"
-    p += "必须输出 JSON 数组；字段同 phase1；禁止 JSON 外文本。\n"
-    p += "必须复核：方向、direction_probs、goal_band、btts、top3比分、Sharp资金方向、experience_review。\n"
-    p += "如果改动初审比分，必须指出硬依据；不能无证据从2-0改2-1或从1-1改0-0。\n"
-    p += "如果 Phase1 至少两家同比分一致，除非原始抓包存在硬反证，否则默认尊重该比分。\n"
-    p += "每个 match 的 experience_audit_cards 必须逐条回应，不能漏 id，不能写 D13/D15 合并项。\n"
-    p += "</final_audit_context>\n\n"
-
-    if AI_USE_COMPACT_CLAUDE_AUDIT:
-        p += build_compact_claude_match_data(match_analyses)
-    else:
-        p += build_phase1_prompt(match_analyses)
-
-    p += "\n<phase1_ai_results>\n"
-    for ai in PHASE1_NAMES:
-        p += f"<{ai}>\n"
-        rs = phase1_results.get(ai, {}) or {}
-        for idx in range(1, len(match_analyses) + 1):
-            r = rs.get(idx)
+def build_critic_prompt(evidence_batch: List[Dict[str, Any]], reviewer_name: str, phase1_results: Dict[str, Dict[int, Dict[str, Any]]]) -> str:
+    p = []
+    p.append("<task>")
+    p.append(f"你是 {reviewer_name.upper()} Critic。你不是重新预测主裁，只负责审查其他 AI 的漏洞。")
+    p.append("必须指出：赔率误读、联网来源不可靠、Sharp 解释不充分、比分与总进球/BTTS/方向冲突、推荐等级过高。")
+    p.append("输出严格 JSON object，顶层格式 {\"critic_reports\":[...]}，不要 markdown。")
+    p.append("每个 critic_report 格式：{\"match\":1,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"market/web/sharp/score/schema/risk\",\"severity\":\"low/medium/high\",\"comment\":\"中文\"}],\"own_revision_hint\":\"中文\"}")
+    p.append("</task>\n<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch>\n<phase1_results>")
+    for model, rows in phase1_results.items():
+        if model == reviewer_name:
+            continue
+        p.append(f"<{model}>")
+        for e in evidence_batch:
+            r = rows.get(e["match"], {})
             if r:
-                p += json.dumps(_short_ai_row(r, idx), ensure_ascii=False, separators=(",", ":")) + "\n"
+                p.append(_safe_json_line(_short_prediction_for_prompt(r)))
+        p.append(f"</{model}>")
+    p.append("</phase1_results>")
+    return "\n".join(p)
+
+
+def build_claude_final_prompt(
+    evidence_batch: List[Dict[str, Any]],
+    phase1_results: Dict[str, Dict[int, Dict[str, Any]]],
+    critic_reports: Dict[str, List[Dict[str, Any]]],
+) -> str:
+    p = []
+    p.append("<final_adjudication_protocol>")
+    p.append("你是 Claude 最终 Web-aware 主裁。你必须重新审计 raw evidence、三家初审、三家互审意见和联网来源质量。")
+    p.append("证据优先级：raw market structure > correct-score cluster > total-goals mode > money-flow/sharp interpretation > tactical/web context > Phase1 consensus。")
+    p.append("多数意见不自动成立；若多数共享同一个弱假设，你必须覆盖。")
+    p.append("如果 sharp_money_direction 与 final_direction 冲突，必须解释为什么该信号是噪音，或者主动下调 recommendation.tier。")
+    p.append("如果联网来源缺 URL/发布时间/claim，不能作为硬证据。必须输出 source_conflicts 和 final_web_audit。")
+    p.append("最终推荐等级、是否进 Top4、bet_confidence 全部由你输出；本地只排序，不会改你的足球判断。")
+    p.append("</final_adjudication_protocol>\n")
+    p.append("<output_schema>")
+    p.append(_canonical_output_schema_text())
+    p.append("额外要求：每个 prediction 增加 final_web_audit 字段：{\"web_used_by_final\":true,\"decisive_web_evidence\":[],\"ignored_web_evidence\":[],\"web_confidence\":0}")
+    p.append("</output_schema>\n")
+    p.append("<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch>\n<phase1_results>")
+    for model in PHASE1_NAMES:
+        p.append(f"<{model}>")
+        rows = phase1_results.get(model, {})
+        for e in evidence_batch:
+            r = rows.get(e["match"], {})
+            if r:
+                p.append(_safe_json_line(_short_prediction_for_prompt(r)))
             else:
-                status = AI_CALL_STATUS.get(ai, {})
-                partial_count = len(AI_PARTIAL_RESULTS.get(ai, {}) or {})
-                p += json.dumps({
-                    "match": idx,
-                    "abstain": True,
-                    "model_status": status.get("status", "missing"),
-                    "partial_rejected_count": partial_count,
-                }, ensure_ascii=False, separators=(",", ":")) + "\n"
-        p += f"</{ai}>\n"
-    p += "</phase1_ai_results>\n\n"
-    p += "<output_format>\n" + _output_format_rule() + "</output_format>\n"
-    return p
+                p.append(_safe_json_line({"match": e["match"], "missing": True}))
+        p.append(f"</{model}>")
+    p.append("</phase1_results>\n<critic_reports>")
+    p.append(_safe_json_line(critic_reports))
+    p.append("</critic_reports>")
+    return "\n".join(p)
+
+
+def build_fallback_referee_prompt(
+    evidence_batch: List[Dict[str, Any]],
+    phase1_results: Dict[str, Dict[int, Dict[str, Any]]],
+    critic_reports: Dict[str, List[Dict[str, Any]]],
+) -> str:
+    p = []
+    p.append("你是 Claude 失败后的 AI fallback referee。不要使用本地规则。基于 raw evidence、Phase1 和 critic reports 输出最终 predictions。")
+    p.append("输出 schema 与 Claude final 完全一致。")
+    p.append(_canonical_output_schema_text())
+    p.append("<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch><phase1_results>")
+    p.append(_safe_json_line({m: {str(k): _short_prediction_for_prompt(v) for k, v in rows.items()} for m, rows in phase1_results.items()}))
+    p.append("</phase1_results><critic_reports>")
+    p.append(_safe_json_line(critic_reports))
+    p.append("</critic_reports>")
+    return "\n".join(p)
+
+
+def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_predictions: Dict[int, Dict[str, Any]]) -> str:
+    p = []
+    p.append("你是 Consistency Judge，只检查结构一致性，不做足球判断，不改变预测方向/比分，除非存在字段自相矛盾时给出 repair 建议。")
+    p.append("输出严格 JSON object：{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[],\"repair\":{...}}]}。")
+    p.append("检查：predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources。")
+    p.append("不得根据足球观点改比分，只能修字段。")
+    p.append("<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch><final_predictions>")
+    for idx, r in final_predictions.items():
+        p.append(_safe_json_line(_short_prediction_for_prompt(r)))
+    p.append("</final_predictions>")
+    return "\n".join(p)
+
+
+def _short_prediction_for_prompt(r: Dict[str, Any]) -> Dict[str, Any]:
+    keep = {}
+    for k in [
+        "match", "final_direction", "predicted_score", "direction_probs", "goal_band", "btts", "top3",
+        "market_interpretation", "money_flow", "contextual_logic", "rejected_cases", "recommendation",
+        "data_quality", "reason", "web_research", "final_web_audit", "validation_warnings",
+    ]:
+        if k in r:
+            keep[k] = r[k]
+    return keep
 
 
 # ============================================================
-# URL / KEY
+# API / Mock 调用
 # ============================================================
 
 def _clean_env_key(*names: str) -> str:
@@ -1101,181 +882,191 @@ def _clean_env_url(*names: str) -> str:
 
 def get_key_for_ai(ai_name: str) -> str:
     if AI_FORCE_COMMON_GATEWAY:
-        return _clean_env_key(
-            "API_KEY",
-            "GPT_API_KEY",
-            "OPENAI_API_KEY",
-            "GROK_API_KEY",
-            "GEMINI_API_KEY",
-            "CLAUDE_API_KEY",
-        )
-    return _clean_env_key("API_KEY", f"{ai_name.upper()}_API_KEY", "OPENAI_API_KEY", "GPT_API_KEY")
+        return _clean_env_key("API_KEY", "GPT_API_KEY", "OPENAI_API_KEY", "GROK_API_KEY", "GEMINI_API_KEY", "CLAUDE_API_KEY")
+    return _clean_env_key(f"{ai_name.upper()}_API_KEY", "API_KEY", "OPENAI_API_KEY", "GPT_API_KEY")
 
 
 def get_url_for_ai(ai_name: str) -> str:
     if AI_FORCE_COMMON_GATEWAY:
-        return _clean_env_url(
-            "API_URL",
-            "GPT_API_URL",
-            "OPENAI_API_URL",
-            "BASE_URL",
-            "GROK_API_URL",
-            "GEMINI_API_URL",
-            "CLAUDE_API_URL",
-        )
-    return _clean_env_url("API_URL", f"{ai_name.upper()}_API_URL", "OPENAI_API_URL", "BASE_URL", "GPT_API_URL")
-
-
-def get_common_key() -> str:
-    return get_key_for_ai("gpt")
-
-
-def get_common_url() -> str:
-    return get_url_for_ai("gpt")
+        return _clean_env_url("API_URL", "GPT_API_URL", "OPENAI_API_URL", "BASE_URL", "GROK_API_URL", "GEMINI_API_URL", "CLAUDE_API_URL")
+    return _clean_env_url(f"{ai_name.upper()}_API_URL", "API_URL", "OPENAI_API_URL", "BASE_URL", "GPT_API_URL")
 
 
 def _model_for(ai_name: str) -> str:
     env_name = f"{ai_name.upper()}_MODEL"
-    return str(os.environ.get(env_name, DEFAULT_MODELS[ai_name])).strip() or DEFAULT_MODELS[ai_name]
+    return str(os.environ.get(env_name, DEFAULT_MODELS.get(ai_name, "model"))).strip() or DEFAULT_MODELS.get(ai_name, "model")
 
 
 def _chat_url(base_url: str) -> str:
     u = (base_url or "").rstrip("/")
     if not u:
         return ""
-    if u.endswith("/chat/completions"):
-        return u
-    if "/chat/completions" in u:
+    if u.endswith("/chat/completions") or "/chat/completions" in u:
         return u
     return u + "/chat/completions"
 
 
 def debug_ai_config() -> None:
-    key = get_common_key()
-    url = get_common_url()
-    print(f"[COMMON GATEWAY] API_URL={url or '<missing>'} API_KEY={_mask_key(key)} force_common={AI_FORCE_COMMON_GATEWAY}")
+    print(f"[AI CONFIG] mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE}")
     for n in AI_NAMES:
-        print(f"[AI CONFIG] {n.upper()} model={_model_for(n)} timeout={AI_CLAUDE_READ_TIMEOUT if n == 'claude' else AI_READ_TIMEOUT}s")
-    print(
-        f"[AI MODE] strict_one_call={STRICT_ONE_CALL_PER_MODEL} "
-        f"text_fallback={AI_ALLOW_TEXT_FALLBACK} "
-        f"claude_text_fallback={AI_ALLOW_CLAUDE_TEXT_FALLBACK} "
-        f"full_batch_required={AI_REQUIRE_FULL_BATCH_COVERAGE} "
-        f"accept_partial_phase1={AI_ACCEPT_PARTIAL_PHASE1} "
-        f"accept_partial_claude={AI_ACCEPT_PARTIAL_CLAUDE} "
-        f"run_claude_always={AI_RUN_CLAUDE_ALWAYS} "
-        f"second_repair={AI_ALLOW_SECOND_CALL_REPAIR} "
-        f"compact_claude={AI_USE_COMPACT_CLAUDE_AUDIT} "
-        f"cache_enabled={AI_ENABLE_CACHE} "
-        f"persistent_cache={AI_PERSISTENT_CACHE_ENABLED} "
-        f"phase_snapshot={AI_PHASE_SNAPSHOT_ENABLED}"
-    )
+        print(f"[AI CONFIG] {n.upper()} model={_model_for(n)} key={_mask_key(get_key_for_ai(n))} url={get_url_for_ai(n) or '<missing>'}")
 
 
-# ============================================================
-# STRICT JSON 解析器
-# ============================================================
+async def async_call_ai_json(
+    session: Optional[Any],
+    ai_name: str,
+    system_text: str,
+    prompt: str,
+    phase: str,
+    expected_matches: List[int],
+) -> Tuple[str, Any, Dict[str, Any]]:
+    t0 = time.time()
+    model = _model_for(ai_name)
+    status = {"ok": False, "ai_name": ai_name, "model": model, "phase": phase, "elapsed": 0.0}
 
-_SCORE_RE = re.compile(r"(\d{1,2})\s*[-:：]\s*(\d{1,2})")
+    if AI_MOCK_MODE:
+        raw_obj = _mock_ai_response(ai_name, phase, prompt, expected_matches)
+        status.update({"ok": True, "status": "mock_ok", "elapsed": round(time.time() - t0, 3)})
+        _update_call_status(ai_name, phase, status)
+        return ai_name, raw_obj, status
 
+    if aiohttp is None:
+        status.update({"status": "aiohttp_missing"})
+        _update_call_status(ai_name, phase, status)
+        return ai_name, {}, status
 
-def _save_debug_dump(ai_name: str, data: Any, tag: str, raw_text: Optional[str] = None) -> None:
+    key = get_key_for_ai(ai_name)
+    base_url = get_url_for_ai(ai_name)
+    if not key:
+        status.update({"status": "no_key"})
+        _update_call_status(ai_name, phase, status)
+        return ai_name, {}, status
+    if not base_url:
+        status.update({"status": "no_url"})
+        _update_call_status(ai_name, phase, status)
+        return ai_name, {}, status
+
+    url = _chat_url(base_url)
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {key}"}
+    temperature = AI_TEMPERATURE_FINAL if phase in ("final", "fallback_referee") else AI_TEMPERATURE_CRITIC if phase == "critic" else AI_TEMPERATURE_PHASE1
+    payload: Dict[str, Any] = {
+        "model": model,
+        "messages": [{"role": "system", "content": system_text}, {"role": "user", "content": prompt}],
+        "temperature": temperature,
+    }
+    if AI_USE_RESPONSE_FORMAT:
+        payload["response_format"] = {"type": "json_object"}
+
     try:
-        os.makedirs("data/debug", exist_ok=True)
+        read_timeout = AI_CLAUDE_READ_TIMEOUT if ai_name == "claude" else AI_READ_TIMEOUT
+        total_timeout = None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT
+        timeout = aiohttp.ClientTimeout(
+            total=total_timeout,
+            connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
+            sock_connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
+            sock_read=None if read_timeout <= 0 else read_timeout,
+        )
+        assert session is not None
+        async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
+            text = await r.text()
+            if r.status < 200 or r.status >= 300:
+                status.update({"status": f"http_{r.status}", "http_error": text[:800], "elapsed": round(time.time() - t0, 1)})
+                _update_call_status(ai_name, phase, status)
+                return ai_name, {}, status
+            try:
+                data = json.loads(text)
+            except Exception:
+                data = {"raw": text}
+            raw_text = _extract_response_text(data)
+            if AI_SAVE_RAW_RESPONSE:
+                _save_debug_dump(ai_name, phase, data, raw_text)
+            obj = _json_loads_best_effort_object(raw_text)
+            status.update({"ok": True, "status": "ok", "elapsed": round(time.time() - t0, 1)})
+            _update_call_status(ai_name, phase, status)
+            return ai_name, obj, status
+    except asyncio.TimeoutError:
+        status.update({"status": "timeout", "elapsed": round(time.time() - t0, 1)})
+    except Exception as e:
+        status.update({"status": "error", "error": str(e)[:500], "elapsed": round(time.time() - t0, 1)})
+
+    _update_call_status(ai_name, phase, status)
+    return ai_name, {}, status
+
+
+def _update_call_status(ai_name: str, phase: str, status: Dict[str, Any]) -> None:
+    cur = AI_CALL_STATUS.setdefault(ai_name, {})
+    cur[phase] = status
+    cur["last_status"] = status.get("status")
+    cur["model"] = status.get("model")
+
+
+def _save_debug_dump(ai_name: str, phase: str, data: Any, raw_text: str = "") -> None:
+    try:
+        _ensure_dir("data/debug_v20")
         ts = int(time.time())
-        f1 = f"data/debug/{ai_name}_{tag}_{ts}.json"
-        with open(f1, "w", encoding="utf-8") as f:
+        with open(f"data/debug_v20/{ai_name}_{phase}_{ts}.json", "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2, default=str)
-        print(f"    失败响应已保存: {f1}")
-        if raw_text is not None:
-            f2 = f"data/debug/{ai_name}_{tag}_raw_{ts}.txt"
-            with open(f2, "w", encoding="utf-8") as f:
+        if raw_text:
+            with open(f"data/debug_v20/{ai_name}_{phase}_{ts}.txt", "w", encoding="utf-8") as f:
                 f.write(raw_text)
-            print(f"    原始文本已保存: {f2}")
     except Exception:
         pass
 
 
-def _extract_response_text(data: Any, ai_name: str = "") -> str:
-    candidates: List[Tuple[int, str, str]] = []
+def _extract_response_text(data: Any) -> str:
+    candidates: List[Tuple[int, str]] = []
 
-    def add(v: Any, path: str, bonus: int = 0) -> None:
+    def add(v: Any, bonus: int = 0) -> None:
         if isinstance(v, str):
             t = v.strip()
             if t:
                 score = bonus
-                if "top3" in t or "top_3" in t or "比分" in t:
-                    score += 8
-                if "final_direction" in t or "direction_probs" in t:
-                    score += 7
-                if re.search(r"\[\s*\{", t):
-                    score += 6
-                if _SCORE_RE.search(t):
-                    score += 3
-                candidates.append((score, path, t))
+                if "predictions" in t or "critic_reports" in t or "repairs" in t:
+                    score += 10
+                if "final_direction" in t or "predicted_score" in t:
+                    score += 5
+                candidates.append((score, t))
 
-    def walk(obj: Any, path: str = "root", depth: int = 0) -> None:
+    def walk(obj: Any, depth: int = 0) -> None:
         if depth > 8:
             return
         if isinstance(obj, dict):
             for k, v in obj.items():
-                kl = str(k).lower()
-                if kl in {"reasoning", "reasoning_content", "thinking", "chain_of_thought", "thoughts"}:
+                if str(k).lower() in {"reasoning", "reasoning_content", "thinking", "chain_of_thought", "thoughts"}:
                     continue
-                if kl in {"content", "text", "output_text", "answer", "result", "response", "model_response", "final_answer"}:
-                    add(v, f"{path}.{k}", bonus=2)
-                walk(v, f"{path}.{k}", depth + 1)
+                if str(k).lower() in {"content", "text", "output_text", "answer", "result", "response"}:
+                    add(v, 3)
+                walk(v, depth + 1)
         elif isinstance(obj, list):
-            for i, v in enumerate(obj[:100]):
-                walk(v, f"{path}[{i}]", depth + 1)
-        elif isinstance(obj, str):
-            s = obj.strip()
-            if len(s) >= 2:
-                add(s, path)
+            for x in obj[:100]:
+                walk(x, depth + 1)
+        else:
+            add(obj, 0)
 
-    try:
-        if isinstance(data, dict):
-            for ch in data.get("choices", []) or []:
-                if not isinstance(ch, dict):
-                    continue
-                msg = ch.get("message", {}) or {}
+    if isinstance(data, dict):
+        for ch in data.get("choices", []) or []:
+            if isinstance(ch, dict):
+                msg = ch.get("message", {})
                 if isinstance(msg, dict):
                     content = msg.get("content")
                     if isinstance(content, str):
-                        add(content, "choices.message.content", bonus=10)
+                        add(content, 10)
                     elif isinstance(content, list):
-                        for item in content:
-                            if isinstance(item, dict):
-                                add(item.get("text"), "choices.message.content[].text", bonus=10)
-                                add(item.get("content"), "choices.message.content[].content", bonus=8)
-                    for k in ["text", "answer", "response", "output_text", "final_answer", "output", "result", "model_response"]:
-                        add(msg.get(k), f"choices.message.{k}", bonus=5)
-                add(ch.get("text"), "choices.text", bonus=5)
-
-            add(data.get("output_text"), "output_text", bonus=10)
-            add(data.get("text"), "text", bonus=5)
-            add(data.get("answer"), "answer", bonus=5)
-            add(data.get("result"), "result", bonus=5)
-
-            if isinstance(data.get("candidates"), list):
-                for cand in data["candidates"]:
-                    if isinstance(cand, dict):
-                        cont = cand.get("content", {})
-                        if isinstance(cont, dict):
-                            for part in cont.get("parts", []) or []:
-                                if isinstance(part, dict):
-                                    add(part.get("text"), "candidates.content.parts.text", bonus=10)
-
-            walk(data)
-        elif isinstance(data, str):
-            add(data, "raw", bonus=5)
-    except Exception as e:
-        print(f"    响应文本提取异常:{str(e)[:120]}")
+                        for it in content:
+                            if isinstance(it, dict):
+                                add(it.get("text"), 10)
+                                add(it.get("content"), 8)
+                add(ch.get("text"), 5)
+        add(data.get("output_text"), 10)
+        add(data.get("text"), 5)
+        walk(data)
+    elif isinstance(data, str):
+        add(data, 5)
 
     if not candidates:
         return ""
-    candidates.sort(key=lambda x: (x[0], len(x[2])), reverse=True)
-    return candidates[0][2].strip()
+    candidates.sort(key=lambda x: (x[0], len(x[1])), reverse=True)
+    return candidates[0][1]
 
 
 def _preclean_text(text: str) -> str:
@@ -1289,17 +1080,12 @@ def _preclean_text(text: str) -> str:
     return clean.strip()
 
 
-def _remove_trailing_commas(s: str) -> str:
-    return re.sub(r",\s*([}\]])", r"\1", s)
+def _json_loads_best_effort_object(text: str) -> Any:
+    clean = _preclean_text(text)
+    if not clean:
+        return {}
 
-
-def _quote_unquoted_keys(s: str) -> str:
-    return re.sub(r"([\{,]\s*)([A-Za-z_][A-Za-z0-9_]*)(\s*:)", r'\1"\2"\3', s)
-
-
-def _json_loads_best_effort(s: str) -> Any:
-    raw = s.strip()
-    variants = [raw, _remove_trailing_commas(raw), _quote_unquoted_keys(_remove_trailing_commas(raw))]
+    variants = [clean, re.sub(r",\s*([}\]])", r"\1", clean)]
     for cand in variants:
         try:
             return json.loads(cand)
@@ -1310,20 +1096,29 @@ def _json_loads_best_effort(s: str) -> Any:
             return ast.literal_eval(cand)
         except Exception:
             pass
-    raise ValueError("json_parse_failed")
+
+    # balanced fragment fallback
+    for frag in _balanced_fragments(clean):
+        for cand in [frag, re.sub(r",\s*([}\]])", r"\1", frag)]:
+            try:
+                return json.loads(cand)
+            except Exception:
+                try:
+                    return ast.literal_eval(cand)
+                except Exception:
+                    continue
+    return {}
 
 
 def _balanced_fragments(text: str) -> List[str]:
     frags: List[str] = []
     clean = _preclean_text(text)
-
-    for start in [m.start() for m in re.finditer(r"[\[\{]", clean)]:
+    for start in [m.start() for m in re.finditer(r"[\[{]", clean)]:
         stack: List[str] = []
         in_str = False
         quote = ""
         esc = False
         end = -1
-
         for i in range(start, len(clean)):
             ch = clean[i]
             if in_str:
@@ -1334,12 +1129,10 @@ def _balanced_fragments(text: str) -> List[str]:
                 elif ch == quote:
                     in_str = False
                 continue
-
             if ch in ('"', "'"):
                 in_str = True
                 quote = ch
                 continue
-
             if ch in "[{":
                 stack.append(ch)
             elif ch in "]}":
@@ -1351,93 +1144,27 @@ def _balanced_fragments(text: str) -> List[str]:
                 if not stack:
                     end = i + 1
                     break
-
         if end > start:
             frag = clean[start:end]
-            if any(k in frag for k in ["top3", "final_direction", "direction_probs", "score", "match", "比分"]):
+            if any(k in frag for k in ["predictions", "critic_reports", "repairs", "final_direction", "predicted_score"]):
                 frags.append(frag)
-
     frags.sort(key=len, reverse=True)
     return frags[:20]
 
 
-def _object_lines(text: str) -> List[Dict[str, Any]]:
-    out = []
-    clean = _preclean_text(text)
-    for line in clean.splitlines():
-        line = line.strip().rstrip(",")
-        if not (line.startswith("{") and line.endswith("}")):
-            continue
-        try:
-            obj = _json_loads_best_effort(line)
-            if isinstance(obj, dict):
-                out.append(obj)
-        except Exception:
-            continue
-    return out
+# ============================================================
+# 解析 / 标准化 AI 输出
+# ============================================================
 
-
-def _unwrap_json_result(obj: Any) -> List[Any]:
+def _unwrap_predictions(obj: Any) -> List[Any]:
     if isinstance(obj, list):
         return obj
     if isinstance(obj, dict):
-        for k in ["predictions", "results", "matches", "data", "items", "output", "prediction", "result"]:
-            v = obj.get(k)
-            if isinstance(v, list):
-                return v
-            if isinstance(v, dict) and ("match" in v or "top3" in v or "score" in v or "predicted_score" in v):
-                return [v]
-        if "match" in obj or "top3" in obj or "score" in obj or "predicted_score" in obj or "final_direction" in obj:
+        for k in ["predictions", "results", "matches", "data", "items", "output"]:
+            if isinstance(obj.get(k), list):
+                return obj[k]
+        if "match" in obj and ("predicted_score" in obj or "top3" in obj or "final_direction" in obj):
             return [obj]
-    return []
-
-
-def _extract_json_items(text: str) -> List[Any]:
-    clean = _preclean_text(text)
-    if not clean:
-        return []
-
-    try:
-        return _unwrap_json_result(_json_loads_best_effort(clean))
-    except Exception:
-        pass
-
-    best: List[Any] = []
-    for frag in _balanced_fragments(clean):
-        try:
-            arr = _unwrap_json_result(_json_loads_best_effort(frag))
-            if len(arr) > len(best):
-                best = arr
-        except Exception:
-            continue
-
-    if best:
-        return best
-
-    lines = _object_lines(clean)
-    if lines:
-        return lines
-
-    obj_frags = [f for f in _balanced_fragments(clean) if f.startswith("{")]
-    objs = []
-    for f in obj_frags:
-        try:
-            o = _json_loads_best_effort(f)
-            if isinstance(o, dict):
-                objs.append(o)
-        except Exception:
-            pass
-
-    if objs:
-        uniq = []
-        seen = set()
-        for o in objs:
-            h = _hash_obj(o)
-            if h not in seen:
-                seen.add(h)
-                uniq.append(o)
-        return uniq
-
     return []
 
 
@@ -1451,11 +1178,11 @@ def _prob_to_float(v: Any) -> float:
         if pct:
             return fv
         if 0 < fv <= 1:
-            return fv * 100
+            return fv * 100.0
         return fv
     fv = _f(v, 0.0)
     if 0 < fv <= 1:
-        return fv * 100
+        return fv * 100.0
     return fv
 
 
@@ -1465,1968 +1192,645 @@ def _score_from_candidate(obj: Any) -> str:
         if m:
             return f"{int(m.group(1))}-{int(m.group(2))}"
         return _normalize_score_text(obj)
-
     if not isinstance(obj, dict):
         return ""
-
-    for k in [
-        "score", "predicted_score", "ai_score", "final_score", "比分", "预测比分",
-        "top_score", "result_score", "correct_score", "scoreline", "prediction_score",
-        "预测", "赛果比分",
-    ]:
+    for k in ["score", "predicted_score", "ai_score", "final_score", "比分", "预测比分", "scoreline", "correct_score"]:
         if obj.get(k) not in (None, ""):
             s = _normalize_score_text(obj.get(k))
             m = _SCORE_RE.search(s)
             if m:
                 return f"{int(m.group(1))}-{int(m.group(2))}"
             return s
-
     for hk, ak in [("home_goals", "away_goals"), ("home_score", "away_score"), ("主队进球", "客队进球")]:
         if obj.get(hk) is not None and obj.get(ak) is not None:
             return f"{_i(obj.get(hk))}-{_i(obj.get(ak))}"
-
     return ""
 
 
-def _normalize_top3(item: Dict[str, Any]) -> List[Dict[str, Any]]:
-    raw_top3 = None
-    for k in [
-        "top3", "top_3", "top_scores", "scores", "score_candidates", "candidates",
-        "比分候选", "score_distribution", "correct_scores", "candidate_scores",
-        "topScore", "top_three",
-    ]:
+def _normalize_top3(item: Dict[str, Any], predicted_score: str = "") -> List[Dict[str, Any]]:
+    raw = None
+    for k in ["top3", "top_3", "top_scores", "scores", "score_candidates", "candidates", "correct_scores"]:
         if isinstance(item.get(k), list):
-            raw_top3 = item[k]
+            raw = item[k]
             break
-    if raw_top3 is None:
-        raw_top3 = []
-
-    top3: List[Dict[str, Any]] = []
+    if raw is None:
+        raw = []
+    out: List[Dict[str, Any]] = []
     seen = set()
-
-    for cand in raw_top3[:10]:
+    for cand in raw[:10]:
         sc = _score_from_candidate(cand)
-        if _parse_score(sc)[0] is None:
-            continue
-        if sc in seen:
+        if _parse_score(sc)[0] is None or sc in seen:
             continue
         seen.add(sc)
-
         if isinstance(cand, dict):
-            prob = cand.get("prob", cand.get("probability", cand.get("pct", cand.get("chance", cand.get("confidence", 0)))))
-            logic = cand.get("market_logic", cand.get("reason", cand.get("logic", cand.get("explanation", ""))))
-            top3.append({"score": sc, "prob": round(_prob_to_float(prob), 3), "market_logic": str(logic)[:600]})
+            prob = cand.get("prob", cand.get("probability", cand.get("pct", cand.get("chance", 0))))
+            logic = cand.get("logic", cand.get("market_logic", cand.get("reason", cand.get("explanation", ""))))
         else:
-            top3.append({"score": sc, "prob": 0.0, "market_logic": ""})
-
-        if len(top3) >= 3:
+            prob, logic = 0, ""
+        out.append({"score": sc, "prob": round(_prob_to_float(prob), 3), "logic": str(logic)[:900]})
+        if len(out) >= 3:
             break
-
-    if not top3:
-        sc = _score_from_candidate(item)
-        if _parse_score(sc)[0] is not None:
-            prob = item.get("prob", item.get("probability", item.get("score_probability", 0)))
-            top3 = [{"score": sc, "prob": round(_prob_to_float(prob), 3), "market_logic": ""}]
-
-    return top3
-
-
-def _normalize_direction(v: Any, top_score: str = "") -> str:
-    d = _dir_from_cn(v)
-    if d:
-        return d
-    sd = _score_direction(top_score)
-    return sd or "draw"
+    if not out and predicted_score and _parse_score(predicted_score)[0] is not None:
+        out = [{"score": predicted_score, "prob": 0.0, "logic": "top3_missing_but_predicted_score_present"}]
+    if out and predicted_score and out[0]["score"] != predicted_score and _parse_score(predicted_score)[0] is not None:
+        # protocol repair: top3[0] must equal predicted_score, not football judgement
+        out = [{"score": predicted_score, "prob": out[0].get("prob", 0.0), "logic": "protocol_repair_top3_primary_score"}] + [x for x in out if x["score"] != predicted_score]
+        out = out[:3]
+    return out
 
 
-def _normalize_ai_direction_probs(obj: Any) -> Dict[str, float]:
-    if not isinstance(obj, dict):
-        return {}
-
+def _normalize_direction_probs(item: Dict[str, Any]) -> Dict[str, float]:
     cand = None
-    for k in [
-        "direction_probs", "direction_probabilities", "probabilities",
-        "direction_probability", "方向概率", "三项概率", "win_draw_loss_probs",
-    ]:
-        if isinstance(obj.get(k), dict):
-            cand = obj.get(k)
+    for k in ["direction_probs", "direction_probabilities", "probabilities", "方向概率", "三项概率"]:
+        if isinstance(item.get(k), dict):
+            cand = item.get(k)
             break
-
-    if cand is None and isinstance(obj.get("audit"), dict):
-        for k in ["direction_probs", "direction_probabilities", "probabilities", "方向概率", "三项概率"]:
-            if isinstance(obj["audit"].get(k), dict):
-                cand = obj["audit"].get(k)
-                break
-
-    if not isinstance(cand, dict):
-        keys = ["home_win_pct", "draw_pct", "away_win_pct"]
-        if any(k in obj for k in keys):
-            cand = {"home": obj.get("home_win_pct"), "draw": obj.get("draw_pct"), "away": obj.get("away_win_pct")}
-        else:
-            return {}
-
-    raw = {"home": 0.0, "draw": 0.0, "away": 0.0}
+    if cand is None:
+        cand = {}
     alias = {
         "home": "home", "主": "home", "主胜": "home", "胜": "home", "home_win": "home", "win": "home",
         "draw": "draw", "平": "draw", "平局": "draw", "和": "draw", "same": "draw", "tie": "draw",
         "away": "away", "客": "away", "客胜": "away", "负": "away", "away_win": "away", "lose": "away",
     }
-
-    for k, v in cand.items():
-        kk = alias.get(str(k).strip().lower(), alias.get(str(k).strip()))
-        if kk in raw:
-            raw[kk] += _prob_to_float(v)
-
-    if sum(raw.values()) <= 0:
-        return {}
-
+    raw = {"home": 0.0, "draw": 0.0, "away": 0.0}
+    if isinstance(cand, dict):
+        for k, v in cand.items():
+            kk = alias.get(str(k).strip().lower(), alias.get(str(k).strip()))
+            if kk in raw:
+                raw[kk] += _prob_to_float(v)
     s = sum(raw.values())
-    return {k: round(v / s * 100, 1) for k, v in raw.items()}
+    if s <= 0:
+        return {"home": 33.3, "draw": 33.3, "away": 33.4, "_synthetic_probs": True}
+    out = {k: round(v / s * 100.0, 1) for k, v in raw.items()}
+    out["_synthetic_probs"] = False
+    return out
 
 
-def _match_index_from_item(item: Dict[str, Any], fallback_idx: int, num_matches: int) -> Optional[int]:
-    raw = item.get("match", item.get("index", item.get("match_index", item.get("id", item.get("序号")))))
-
-    if isinstance(raw, int):
-        return raw if 1 <= raw <= num_matches else None
-
-    if raw is not None:
-        s = str(raw).strip()
-        m = re.match(r"^\s*(\d+)\s*$", s) or re.match(r"^\s*\[(\d+)\]", s) or re.search(r"(?:match|场次|第)\s*(\d+)", s, re.I)
-        if m:
-            idx = int(m.group(1))
-            return idx if 1 <= idx <= num_matches else None
-
-    return fallback_idx if 1 <= fallback_idx <= num_matches else None
-
-
-def _normalize_goal_band_value(v: Any, top_score: str = "") -> str:
+def _normalize_goal_band_value(v: Any, score: str) -> str:
     s = str(v or "").strip().lower().replace(" ", "")
     aliases = {
-        "0-1": "0-1", "0_1": "0-1", "0~1": "0-1", "0至1": "0-1", "0到1": "0-1",
-        "0/1": "0-1", "low": "0-1", "小球": "0-1",
+        "0-1": "0-1", "0_1": "0-1", "0~1": "0-1", "0至1": "0-1", "0到1": "0-1", "0/1": "0-1", "low": "0-1", "小球": "0-1",
         "2": "2", "2球": "2", "two": "2",
         "3": "3", "3球": "3", "three": "3",
         "4+": "4+", "4plus": "4+", "4以上": "4+", "4球+": "4+", "high": "4+", "大球": "4+",
     }
     if s in aliases:
         return aliases[s]
-
-    total = _score_total(top_score)
-    if total is None:
-        return ""
-    if total <= 1:
-        return "0-1"
-    if total == 2:
-        return "2"
-    if total == 3:
-        return "3"
-    return "4+"
+    return _score_goal_band(score)
 
 
-def _normalize_btts_value(v: Any, top_score: str = "") -> str:
+def _normalize_btts_value(v: Any, score: str) -> str:
     s = str(v or "").strip().lower()
     if s in ("yes", "y", "true", "1", "是", "双方进球", "btts_yes"):
         return "yes"
     if s in ("no", "n", "false", "0", "否", "不是", "btts_no"):
         return "no"
-
-    h, a = _parse_score(top_score)
-    if h is not None and a is not None:
-        return "yes" if h > 0 and a > 0 else "no"
-
-    return "unclear"
+    return _score_btts(score)
 
 
-def _normalize_experience_review(item: Dict[str, Any]) -> List[Dict[str, str]]:
-    raw = item.get("experience_review")
-    if raw is None and isinstance(item.get("audit"), dict):
-        raw = item["audit"].get("experience_review")
-
-    out: List[Dict[str, str]] = []
-    seen = set()
-
-    def add_one(rid: str, dec: str, reason: str):
-        rid = str(rid).replace("EXP_", "").strip()
-        if not rid or rid in seen:
-            return
-        if dec not in ("accepted", "rejected", "neutral"):
-            dec = "neutral"
-        seen.add(rid)
-        out.append({"id": rid, "decision": dec, "reason": str(reason)[:600]})
-
-    if isinstance(raw, list):
-        for r in raw[:40]:
-            if isinstance(r, dict):
-                rid_text = str(r.get("id", r.get("rule_id", ""))).strip()
-                ids = re.findall(r"EXP_[A-Z0-9_]+|B_SHARP|B_STEAM|X\d{2}|S\d{2}|M\d{2}|[DUG]\d{2}", rid_text)
-                if not ids and rid_text:
-                    ids = [rid_text]
-                dec = str(r.get("decision", r.get("status", "neutral"))).strip().lower()
-                reason = str(r.get("reason", r.get("why", "")))[:600]
-                for rid in ids:
-                    add_one(rid, dec, reason)
-
-    elif isinstance(raw, str) and raw.strip():
-        parts = re.split(r"[;；\n]+", raw)
-        for p in parts[:40]:
-            ids = re.findall(r"EXP_[A-Z0-9_]+|B_SHARP|B_STEAM|X\d{2}|S\d{2}|M\d{2}|[DUG]\d{2}", p)
-            if not ids:
-                continue
-            dec = "neutral"
-            low = p.lower()
-            if "accepted" in low or "接受" in p or "采纳" in p:
-                dec = "accepted"
-            elif "rejected" in low or "驳回" in p or "不采纳" in p:
-                dec = "rejected"
-            for rid in ids:
-                add_one(rid, dec, p[:600])
-
-    return out
+def _normalize_web_research(item: Dict[str, Any]) -> Dict[str, Any]:
+    web = item.get("web_research")
+    if not isinstance(web, dict):
+        audit = item.get("audit") if isinstance(item.get("audit"), dict) else {}
+        web = audit.get("web_research") if isinstance(audit.get("web_research"), dict) else {}
+    sources = web.get("sources", []) if isinstance(web, dict) else []
+    if not isinstance(sources, list):
+        sources = []
+    if AI_WEB_MAX_SOURCES_PER_MATCH > 0:
+        sources = sources[:AI_WEB_MAX_SOURCES_PER_MATCH]
+    warnings = []
+    used = bool(web.get("used", False)) if isinstance(web, dict) else False
+    if used and not sources:
+        warnings.append("web_used_but_no_sources")
+    for i, src in enumerate(sources):
+        if not isinstance(src, dict):
+            warnings.append(f"source_{i}_not_object")
+            continue
+        if not src.get("title") and not src.get("url"):
+            warnings.append(f"source_{i}_missing_title_url")
+        if not src.get("claim"):
+            warnings.append(f"source_{i}_missing_claim")
+        if not src.get("published_at"):
+            warnings.append(f"source_{i}_missing_published_at")
+    return {
+        "used": used,
+        "failure_reason": str(web.get("failure_reason", "")) if isinstance(web, dict) else "web_research_missing",
+        "search_queries": web.get("search_queries", []) if isinstance(web.get("search_queries", []), list) else [],
+        "sources": sources,
+        "freshness_grade": str(web.get("freshness_grade", "missing")) if isinstance(web, dict) else "missing",
+        "key_findings": web.get("key_findings", []) if isinstance(web.get("key_findings", []), list) else [],
+        "source_conflicts": web.get("source_conflicts", []) if isinstance(web.get("source_conflicts", []), list) else [],
+        "validation_warnings": warnings,
+    }
 
 
-def _score_from_safe_text_block(part: str) -> str:
-    text = part or ""
+def _normalize_recommendation(item: Dict[str, Any]) -> Dict[str, Any]:
+    rec = item.get("recommendation") if isinstance(item.get("recommendation"), dict) else {}
+    tier = str(rec.get("tier", item.get("recommendation_tier", "D"))).strip().upper()
+    if tier not in {"S", "A", "B", "C", "D"}:
+        tier = "D"
+    risk_tags = rec.get("risk_tags", [])
+    if not isinstance(risk_tags, list):
+        risk_tags = [str(risk_tags)] if risk_tags else []
+    return {
+        "tier": tier,
+        "is_recommended": bool(rec.get("is_recommended", tier in {"S", "A", "B"})),
+        "top4_priority": _i(rec.get("top4_priority", 99), 99),
+        "bet_confidence": int(_clip(_f(rec.get("bet_confidence", item.get("ai_confidence", 0)), 0), 0, 100)),
+        "direction_stability": str(rec.get("direction_stability", "unknown")),
+        "score_stability": str(rec.get("score_stability", "unknown")),
+        "risk_level": str(rec.get("risk_level", item.get("risk_level", "medium"))),
+        "risk_tags": risk_tags[:12],
+        "why_recommended": str(rec.get("why_recommended", item.get("reason", "")))[:1500],
+    }
 
-    label_patterns = [
-        r"(?:预测比分|最终比分|首选比分|建议比分|比分预测|final_score|predicted_score|scoreline|score|top1|第一比分|主推比分)\s*[:：=为是\-]*\s*(\d{1,2})\s*[-:：]\s*(\d{1,2})",
-        r"(?:看好|倾向|预计|预测|主推|首选)\D{0,18}(\d{1,2})\s*[-:：]\s*(\d{1,2})",
-    ]
 
-    for pat in label_patterns:
-        m = re.search(pat, text, flags=re.I)
+def _match_index_from_item(item: Dict[str, Any], fallback_idx: int, expected_set: set) -> Optional[int]:
+    raw = item.get("match", item.get("index", item.get("match_index", item.get("id", item.get("序号")))))
+    if isinstance(raw, int):
+        return raw if raw in expected_set else None
+    if raw is not None:
+        s = str(raw).strip()
+        m = re.match(r"^\s*(\d+)\s*$", s) or re.match(r"^\s*\[(\d+)\]", s) or re.search(r"(?:match|场次|第)\s*(\d+)", s, re.I)
         if m:
-            return f"{int(m.group(1))}-{int(m.group(2))}"
-
-    candidates = []
-    for m in _SCORE_RE.finditer(text):
-        start, end = m.span()
-        ctx = text[max(0, start - 35): min(len(text), end + 35)]
-        if re.search(r"首回合|上轮|上一场|历史|交锋|半场|全场|总比分|比分层|赔率|@|a\d|w\d|l\d|s\d", ctx, flags=re.I):
-            continue
-        if not re.search(r"预测|最终|首选|主推|看好|倾向|score|比分", ctx, flags=re.I):
-            continue
-        candidates.append(f"{int(m.group(1))}-{int(m.group(2))}")
-
-    uniq = list(dict.fromkeys(candidates))
-    return uniq[0] if len(uniq) == 1 else ""
+            idx = int(m.group(1))
+            return idx if idx in expected_set else None
+    return fallback_idx if fallback_idx in expected_set else None
 
 
-def _extract_match_blocks_for_text_fallback(clean: str, num_matches: int) -> List[Tuple[int, str]]:
-    blocks: List[Tuple[int, str]] = []
-    if num_matches <= 0:
-        return blocks
-
-    starts = []
-    for m in re.finditer(r"(?:^|\n)\s*(?:\[\s*(\d{1,2})\s*\]|match\s*(\d{1,2})|第\s*(\d{1,2})\s*场|场次\s*(\d{1,2}))", clean, flags=re.I):
-        idx = next((int(g) for g in m.groups() if g), None)
-        if idx and 1 <= idx <= num_matches:
-            starts.append((idx, m.start()))
-
-    if starts:
-        for n, (idx, st) in enumerate(starts):
-            ed = starts[n + 1][1] if n + 1 < len(starts) else len(clean)
-            blocks.append((idx, clean[st:ed]))
-        return blocks
-
-    if num_matches == 1:
-        blocks.append((1, clean))
-
-    return blocks
-
-
-def _fallback_parse_text_blocks(raw_text: str, num_matches: int) -> Dict[int, Dict[str, Any]]:
-    clean = _preclean_text(raw_text)
-    results: Dict[int, Dict[str, Any]] = {}
-    blocks = _extract_match_blocks_for_text_fallback(clean, num_matches)
-
-    for idx, part in blocks:
-        if not part.strip() or idx in results:
-            continue
-
-        score = _score_from_safe_text_block(part) if AI_SAFE_TEXT_FALLBACK_ONLY else ""
-        if not score and not AI_SAFE_TEXT_FALLBACK_ONLY:
-            m_score = _SCORE_RE.search(part)
-            if m_score:
-                score = f"{int(m_score.group(1))}-{int(m_score.group(2))}"
-
-        if not score:
-            continue
-
-        direction = _score_direction(score) or "draw"
-        conf_match = re.search(r"(?:confidence|置信度|ai_confidence)\D{0,8}(\d{1,3})", part, flags=re.I)
-        conf = int(_clip(_f(conf_match.group(1), 60) if conf_match else 60, 0, 100))
-        reason = part[:4000]
-
-        results[idx] = {
-            "top3": [{"score": score, "prob": 0.0, "market_logic": "safe_text_fallback"}],
-            "ai_score": score,
-            "reason": reason,
-            "ai_confidence": conf,
-            "risk_level": "medium",
-            "is_score_others": False,
-            "detected_traps": [],
-            "data_missing": ["json_format_missing_safe_text_fallback"],
-            "audit": {"parse_mode": "safe_text_fallback"},
-            "direction_probs": {},
-            "goal_band": _normalize_goal_band_value("", score),
-            "btts": _normalize_btts_value("", score),
-            "score_shape_reason": "safe_text_fallback_parser",
-            "experience_review": _normalize_experience_review({"audit": {"experience_review": reason}}),
-            "final_direction": direction,
-            "raw_item": {"safe_text_fallback": part[:1000]},
-        }
-
-    return results
-
-
-def _parse_ai_json(raw_text: str, num_matches: int, ai_name: str = "") -> Dict[int, Dict[str, Any]]:
-    items = _extract_json_items(raw_text)
-    results: Dict[int, Dict[str, Any]] = {}
-
-    if not isinstance(items, list):
-        items = []
-
+def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model: str, phase: str) -> Dict[int, Dict[str, Any]]:
+    items = _unwrap_predictions(obj)
+    expected_set = set(expected_matches)
+    out: Dict[int, Dict[str, Any]] = {}
     for pos, item in enumerate(items, 1):
         if not isinstance(item, dict):
             continue
-
-        for k in ["prediction", "result", "data"]:
-            if isinstance(item.get(k), dict) and not any(x in item for x in ["top3", "score", "predicted_score", "ai_score"]):
-                inner = dict(item[k])
-                if "match" not in inner and "match" in item:
-                    inner["match"] = item["match"]
-                item = inner
-                break
-
-        top3 = _normalize_top3(item)
-        if not top3:
+        idx = _match_index_from_item(item, pos if pos in expected_set else expected_matches[min(pos - 1, len(expected_matches) - 1)], expected_set)
+        if idx is None:
             continue
-
-        top_score = top3[0]["score"]
-        mid = _match_index_from_item(item, pos, num_matches)
-        if not mid:
+        predicted_score = _score_from_candidate(item.get("predicted_score", item.get("score", item.get("ai_score", ""))))
+        if _parse_score(predicted_score)[0] is None:
+            top3_raw = item.get("top3")
+            if isinstance(top3_raw, list) and top3_raw:
+                predicted_score = _score_from_candidate(top3_raw[0])
+        if _parse_score(predicted_score)[0] is None:
             continue
-
-        final_direction = _normalize_direction(
-            item.get("final_direction", item.get("direction", item.get("result", item.get("赛果", "")))),
-            top_score,
-        )
-        score_dir = _score_direction(top_score)
-        if score_dir in VALID_DIRS:
-            final_direction = score_dir
-
-        conf = item.get("ai_confidence", item.get("confidence", item.get("conf", item.get("置信度", 60))))
-        traps = item.get("detected_traps", item.get("traps", item.get("risk_flags", [])))
-        if not isinstance(traps, list):
-            traps = [str(traps)] if traps else []
-
-        data_missing = item.get("data_missing", [])
-        if not isinstance(data_missing, list):
-            data_missing = [str(data_missing)] if data_missing else []
-
-        audit = item.get("audit", {}) if isinstance(item.get("audit", {}), dict) else {}
-        exp_review = _normalize_experience_review(item)
-
-        goal_band = _normalize_goal_band_value(
-            item.get("goal_band", item.get("goal_range", item.get("total_goals_band", item.get("goal_interval", "")))),
-            top_score,
-        )
-        btts = _normalize_btts_value(
-            item.get("btts", item.get("both_score", item.get("both_teams_score", item.get("双方进球", "")))),
-            top_score,
-        )
-
-        results[mid] = {
-            "top3": top3,
-            "ai_score": top_score,
-            "reason": str(item.get("reason", item.get("analysis", item.get("explanation", item.get("理由", "")))))[:5000],
-            "ai_confidence": int(_clip(_f(conf, 60), 0, 100)),
-            "risk_level": str(item.get("risk_level", item.get("risk", item.get("风险", "medium")))),
-            "is_score_others": _score_display_label(top_score) in ("胜其他", "平其他", "负其他"),
-            "detected_traps": traps,
-            "data_missing": data_missing,
-            "audit": audit,
-            "direction_probs": _normalize_ai_direction_probs(item),
+        score_dir = _score_direction(predicted_score)
+        raw_dir = _dir_from_any(item.get("final_direction", item.get("direction", ""))) or score_dir or "draw"
+        final_direction = score_dir or raw_dir
+        direction_conflict = bool(score_dir in VALID_DIRS and raw_dir in VALID_DIRS and score_dir != raw_dir)
+        top3 = _normalize_top3(item, predicted_score)
+        direction_probs = _normalize_direction_probs(item)
+        goal_band = _score_goal_band(predicted_score)
+        btts = _score_btts(predicted_score)
+        web = _normalize_web_research(item)
+        rec = _normalize_recommendation(item)
+        warnings = []
+        if direction_conflict:
+            warnings.append(f"dir_score_conflict_protocol_fixed:{raw_dir}->{score_dir}")
+        if direction_probs.get("_synthetic_probs"):
+            warnings.append("direction_probs_missing_synthetic")
+        warnings.extend(web.get("validation_warnings", []))
+        out[idx] = {
+            "match": idx,
+            "source_model": source_model,
+            "source_phase": phase,
+            "final_direction": final_direction,
+            "raw_ai_direction": raw_dir,
+            "predicted_score": predicted_score,
+            "direction_probs": direction_probs,
             "goal_band": goal_band,
             "btts": btts,
-            "score_shape_reason": str(item.get("score_shape_reason", item.get("score_logic", item.get("score_reason", audit.get("style_score_logic", "")))))[:1500],
-            "experience_review": exp_review,
-            "final_direction": final_direction,
+            "top3": top3,
+            "market_interpretation": item.get("market_interpretation", {}) if isinstance(item.get("market_interpretation"), dict) else {},
+            "money_flow": item.get("money_flow", {}) if isinstance(item.get("money_flow"), dict) else {},
+            "contextual_logic": item.get("contextual_logic", {}) if isinstance(item.get("contextual_logic"), dict) else {},
+            "rejected_cases": item.get("rejected_cases", {}) if isinstance(item.get("rejected_cases"), dict) else {},
+            "web_research": web,
+            "final_web_audit": item.get("final_web_audit", {}) if isinstance(item.get("final_web_audit"), dict) else {},
+            "recommendation": rec,
+            "data_quality": item.get("data_quality", {}) if isinstance(item.get("data_quality"), dict) else {},
+            "reason": str(item.get("reason", item.get("analysis", item.get("explanation", ""))))[:5000],
+            "validation_warnings": list(dict.fromkeys(warnings)),
             "raw_item": item,
         }
-
-    if not results:
-        allow_text = AI_ALLOW_TEXT_FALLBACK
-        if str(ai_name).lower().startswith("claude"):
-            allow_text = AI_ALLOW_CLAUDE_TEXT_FALLBACK
-        if allow_text:
-            results = _fallback_parse_text_blocks(raw_text, num_matches)
-        else:
-            if AI_PARSE_DEBUG:
-                print(f"    [{ai_name}] strict_json_failed: 文本兜底已关闭，该模型弃权")
-
-    if AI_PARSE_DEBUG and not results:
-        print(f"    [{ai_name}] parse empty. raw={raw_text[:500]}")
-
-    return results
-
-
-def _batch_coverage_missing(parsed: Dict[int, Dict[str, Any]], num_matches: int) -> List[int]:
-    expected = set(range(1, num_matches + 1))
-    got = set()
-    for k in parsed.keys():
-        try:
-            got.add(int(k))
-        except Exception:
-            pass
-    return sorted(expected - got)
-
-
-def _allow_partial_for_model(ai_name: str) -> bool:
-    return AI_ACCEPT_PARTIAL_CLAUDE if str(ai_name).lower() == "claude" else AI_ACCEPT_PARTIAL_PHASE1
-
-
-# ============================================================
-# 阶段结果落盘：不是缓存，不复用旧结果
-# ============================================================
-
-def _make_ai_run_id(match_analyses: List[Dict[str, Any]], cache_key: str) -> str:
-    first = ""
-    try:
-        if match_analyses:
-            m0 = match_analyses[0].get("match", {})
-            first = f"{m0.get('home_team','')}_{m0.get('away_team','')}"
-    except Exception:
-        first = ""
-    safe = re.sub(r"[^\w\u4e00-\u9fff-]+", "_", first)[:32]
-    return f"{_now_ts()}_{len(match_analyses)}m_{_short_hash(cache_key)}_{safe}".strip("_")
-
-
-def _phase_file(run_id: str, ai_name: str) -> str:
-    _ensure_dir(AI_PHASE_RESULT_DIR)
-    return os.path.join(AI_PHASE_RESULT_DIR, f"{run_id}_{ai_name}.json")
-
-
-def _aggregate_file(run_id: str, tag: str) -> str:
-    _ensure_dir(AI_PHASE_RESULT_DIR)
-    return os.path.join(AI_PHASE_RESULT_DIR, f"{run_id}_{tag}.json")
-
-
-def _save_ai_phase_snapshot(
-    run_id: str,
-    ai_name: str,
-    accepted_results: Dict[int, Dict[str, Any]],
-    status: Dict[str, Any],
-    match_count: int,
-    model: str = "",
-    partial_results: Optional[Dict[int, Dict[str, Any]]] = None,
-    extra: Optional[Dict[str, Any]] = None,
-) -> str:
-    if not AI_PHASE_SNAPSHOT_ENABLED:
-        return ""
-    path = _phase_file(run_id, ai_name)
-    try:
-        pack = {
-            "engine_version": ENGINE_VERSION,
-            "run_id": run_id,
-            "ai_name": ai_name,
-            "model": model or status.get("model", ""),
-            "saved_at": datetime.now().isoformat(timespec="seconds"),
-            "match_count": match_count,
-            "accepted_count": len(accepted_results or {}),
-            "partial_rejected_count": len(partial_results or {}),
-            "status": status,
-            "accepted_results": _to_jsonable_results(accepted_results or {}),
-            "partial_rejected_results": _to_jsonable_results(partial_results or {}) if AI_SAVE_PARTIAL_REJECTED_RESULTS else {},
-            "extra": extra or {},
-        }
-        tmp = path + ".tmp"
-        with open(tmp, "w", encoding="utf-8") as f:
-            json.dump(pack, f, ensure_ascii=False, indent=2, default=str)
-        os.replace(tmp, path)
-        AI_RESULT_FILES[ai_name] = path
-        print(f"  [AI RESULT SAVED] {ai_name.upper()} -> {path} | accepted={len(accepted_results or {})}/{match_count} | status={status.get('status')}")
-        return path
-    except Exception as e:
-        print(f"  [AI RESULT SAVE ERROR] {ai_name.upper()} | {str(e)[:160]}")
-        return ""
-
-
-def _save_ai_aggregate_snapshot(
-    run_id: str,
-    tag: str,
-    all_results: Dict[str, Dict[int, Dict[str, Any]]],
-    match_count: int,
-    extra: Optional[Dict[str, Any]] = None,
-) -> str:
-    if not AI_PHASE_SNAPSHOT_ENABLED:
-        return ""
-    path = _aggregate_file(run_id, tag)
-    try:
-        pack = {
-            "engine_version": ENGINE_VERSION,
-            "run_id": run_id,
-            "tag": tag,
-            "saved_at": datetime.now().isoformat(timespec="seconds"),
-            "match_count": match_count,
-            "status": {k: AI_CALL_STATUS.get(k, {}) for k in AI_NAMES},
-            "result_files": dict(AI_RESULT_FILES),
-            "results": {name: _to_jsonable_results(rows or {}) for name, rows in (all_results or {}).items()},
-            "partial_rejected_results": {name: _to_jsonable_results(AI_PARTIAL_RESULTS.get(name, {}) or {}) for name in AI_NAMES},
-            "extra": extra or {},
-        }
-        tmp = path + ".tmp"
-        with open(tmp, "w", encoding="utf-8") as f:
-            json.dump(pack, f, ensure_ascii=False, indent=2, default=str)
-        os.replace(tmp, path)
-        print(f"  [AI AGG SAVED] {tag} -> {path}")
-        return path
-    except Exception as e:
-        print(f"  [AI AGG SAVE ERROR] {tag} | {str(e)[:160]}")
-        return ""
-
-
-# ============================================================
-# AI 调用
-# ============================================================
-
-async def async_call_one_ai_batch(
-    session: aiohttp.ClientSession,
-    prompt: str,
-    num_matches: int,
-    ai_name: str,
-    system_text: str,
-) -> Tuple[str, Dict[int, Dict[str, Any]], str]:
-    key = get_key_for_ai(ai_name)
-    base_url = get_url_for_ai(ai_name)
-    model = _model_for(ai_name)
-
-    AI_PARTIAL_RESULTS[ai_name] = {}
-    AI_CALL_STATUS[ai_name] = {
-        "ok": False,
-        "status": "init",
-        "model": model,
-        "count": 0,
-        "requests": 0,
-        "strict_one_call": STRICT_ONE_CALL_PER_MODEL,
-        "text_fallback": AI_ALLOW_CLAUDE_TEXT_FALLBACK if ai_name == "claude" else AI_ALLOW_TEXT_FALLBACK,
-        "full_batch_required": AI_REQUIRE_FULL_BATCH_COVERAGE,
-    }
-
-    if not key:
-        print(f"  [{ai_name.upper()}] no_key: 检查 API_KEY / {ai_name.upper()}_API_KEY / GPT_API_KEY")
-        AI_CALL_STATUS[ai_name].update({"status": "no_key"})
-        return ai_name, {}, "no_key"
-
-    if not base_url:
-        print(f"  [{ai_name.upper()}] no_url: 检查 API_URL / {ai_name.upper()}_API_URL / GPT_API_URL")
-        AI_CALL_STATUS[ai_name].update({"status": "no_url"})
-        return ai_name, {}, "no_url"
-
-    url = _chat_url(base_url)
-    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {key}"}
-    payload: Dict[str, Any] = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": system_text},
-            {"role": "user", "content": prompt},
-        ],
-        "temperature": 0.10 if ai_name == "claude" else 0.16 if ai_name in ("gpt", "gemini") else 0.20,
-    }
-
-    if AI_USE_RESPONSE_FORMAT:
-        payload["response_format"] = {"type": "json_object"}
-
-    max_requests = 1 if STRICT_ONE_CALL_PER_MODEL else max(1, AI_MAX_REQUESTS_PER_AI)
-
-    for req_no in range(1, max_requests + 1):
-        AI_CALL_STATUS[ai_name]["requests"] = req_no
-        gateway = url.split("/v1")[0][:80]
-        print(f"  [连接中] {ai_name.upper()} | {model} @ {gateway} | request#{req_no}/{max_requests}")
-        t0 = time.time()
-
-        try:
-            read_timeout = AI_CLAUDE_READ_TIMEOUT if ai_name == "claude" else AI_READ_TIMEOUT
-            connect_timeout = AI_CLAUDE_CONNECT_TIMEOUT if ai_name == "claude" else AI_CONNECT_TIMEOUT
-            total_timeout = None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT
-            sock_read_timeout = None if read_timeout <= 0 else read_timeout
-            sock_connect_timeout = None if connect_timeout <= 0 else connect_timeout
-            timeout = aiohttp.ClientTimeout(
-                total=total_timeout,
-                connect=sock_connect_timeout,
-                sock_connect=sock_connect_timeout,
-                sock_read=sock_read_timeout,
-            )
-
-            async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
-                elapsed = round(time.time() - t0, 1)
-                if r.status != 200:
-                    try:
-                        text_for_error = await r.text()
-                    except Exception:
-                        text_for_error = ""
-                    print(f"    HTTP {r.status} | {elapsed}s | {text_for_error[:260]}")
-                    AI_CALL_STATUS[ai_name].update({
-                        "status": f"http_{r.status}",
-                        "http_error": text_for_error[:500],
-                        "elapsed": elapsed,
-                    })
-                    continue
-
-                try:
-                    data = await r.json(content_type=None)
-                except Exception:
-                    text = await r.text()
-                    data = {"raw": text.strip()}
-
-                raw_text = _extract_response_text(data, ai_name)
-
-                if AI_SAVE_RAW_RESPONSE:
-                    _save_debug_dump(ai_name, data, "raw_saved", raw_text)
-
-                if not raw_text:
-                    print("    空文本响应")
-                    _save_debug_dump(ai_name, data, "empty", "")
-                    AI_CALL_STATUS[ai_name].update({"status": "empty", "elapsed": elapsed})
-                    continue
-
-                parsed = _parse_ai_json(raw_text, num_matches, ai_name)
-                if parsed:
-                    missing = _batch_coverage_missing(parsed, num_matches)
-                    if AI_REQUIRE_FULL_BATCH_COVERAGE and missing and not _allow_partial_for_model(ai_name):
-                        AI_PARTIAL_RESULTS[ai_name] = parsed
-                        print(
-                            f"    {ai_name.upper()} PARTIAL失败: {len(parsed)}/{num_matches}，"
-                            f"缺失match={missing[:20]}{'...' if len(missing) > 20 else ''}；不接受半截结果"
-                        )
-                        _save_debug_dump(ai_name, data, "partial_failed", raw_text)
-                        AI_CALL_STATUS[ai_name].update({
-                            "ok": False,
-                            "status": "partial_failed",
-                            "count": len(parsed),
-                            "missing": missing[:100],
-                            "model": model,
-                            "elapsed": round(time.time() - t0, 1),
-                            "partial_saved": bool(AI_SAVE_PARTIAL_REJECTED_RESULTS),
-                        })
-                        if AI_PARTIAL_AS_FAILED:
-                            return ai_name, {}, "partial_failed"
-
-                    parse_mode = "strict_json"
-                    print(f"    {ai_name.upper()} 完成: {len(parsed)}/{num_matches} | {round(time.time()-t0,1)}s | parse={parse_mode}")
-                    AI_CALL_STATUS[ai_name].update({
-                        "ok": True,
-                        "status": "ok",
-                        "count": len(parsed),
-                        "model": model,
-                        "parse_mode": parse_mode,
-                        "elapsed": round(time.time() - t0, 1),
-                        "second_call_used": False,
-                        "missing": missing,
-                    })
-                    return ai_name, parsed, model
-
-                print(f"    严格JSON解析0条，该模型弃权。raw前260字: {raw_text[:260].replace(chr(10),' ')}")
-                _save_debug_dump(ai_name, data, "parse0_strict", raw_text)
-                AI_CALL_STATUS[ai_name].update({
-                    "status": "parse0_strict_json",
-                    "elapsed": round(time.time() - t0, 1),
-                })
-
-        except asyncio.TimeoutError:
-            print(f"    {ai_name.upper()} 读取超时")
-            AI_CALL_STATUS[ai_name].update({"status": "timeout"})
-        except Exception as e:
-            print(f"    {ai_name.upper()} 调用异常: {str(e)[:220]}")
-            AI_CALL_STATUS[ai_name].update({"status": "error", "error": str(e)[:500]})
-
-    return ai_name, {}, "all_failed"
-
-
-def _phase_system(ai_name: str) -> str:
-    base = (
-        "你必须只输出严格 JSON 数组，禁止 markdown，禁止 JSON 外说明，禁止自然语言前后缀；不要输出弃权文本。"
-        "每个对象必须包含 match、final_direction、direction_probs、goal_band、btts、top3、reason、ai_confidence、risk_level、data_missing、audit。"
-        "top3 必须是数组，元素必须包含 score、prob、market_logic。"
-        "final_direction 只能是 home/draw/away。"
-        "reason、market_logic、audit 内所有说明必须使用中文。"
-        "必须覆盖用户给出的全部 match 序号，不能只返回部分场次。"
-        "必须重点分析 Sharp/聪明钱：低赔热门升水、冷门降水、平赔独降、散户未跟的降水、强强对话反向资金。"
-        "不得引用 CRS、本地矩阵、贝叶斯或固定模板。"
-        "如果信息不足，把缺失项写入 data_missing，不得编造联网欧赔。"
-        "experience_review 必须逐条覆盖 prompt 中出现的每个审计卡 id，不能漏项，不能合并多个 id。"
-    )
-    if ai_name == "gpt":
-        return "你是 RAW 赔率结构和比分分布分析师。" + base
-    if ai_name == "grok":
-        return "你是 RAW 资金流、散户热度和变盘分析师。" + base
-    if ai_name == "gemini":
-        return "你是 RAW 多市场一致性和异常结构分析师。" + base
-    if ai_name == "claude":
-        return (
-            "你是最终 RAW-AI 主裁，不是反指模型。"
-            "你必须重新审计原始抓包和三家初审，但不能为了显示审计而无证据改比分。"
-            "如果 Phase1 多家同比分一致，只有原始抓包存在硬反证才允许改票。"
-            + base
-        )
-    return base
-
-
-# ============================================================
-# 缓存 / singleflight
-# ============================================================
-
-_VOLATILE_CACHE_KEYS = {
-    "timestamp", "ts", "now", "current_time", "server_time", "local_time",
-    "fetched_at", "fetch_time", "crawl_time", "scrape_time", "sync_time",
-    "updated_at", "update_time", "last_update", "last_updated",
-    "generated_at", "generated_time", "created_at", "request_id", "trace_id",
-    "uuid", "uid", "runtime", "elapsed", "latency", "cache_hit", "cache_ts",
-}
-
-_OUTPUT_CACHE_IGNORE_KEYS = {
-    "prediction", "predictions", "top4", "rank", "recommend_score", "is_recommended",
-    "fusion_summary", "engine_version", "engine_architecture", "validation_warnings",
-    "model_agreement", "experience_review", "experience_review_missing", "bayesian_evidences",
-    "gpt_score", "grok_score", "gemini_score", "claude_score",
-    "gpt_analysis", "grok_analysis", "gemini_analysis", "claude_analysis",
-}
-
-
-def _sanitize_for_ai_cache(obj: Any) -> Any:
-    if not AI_CACHE_STRIP_VOLATILE_KEYS:
-        return obj
-    if isinstance(obj, dict):
-        out = {}
-        for k, v in obj.items():
-            kl = str(k).strip().lower()
-            if kl in _VOLATILE_CACHE_KEYS or kl in _OUTPUT_CACHE_IGNORE_KEYS:
-                continue
-            if kl.endswith("_ts") or kl.endswith("_timestamp") or kl.endswith("_time_ms"):
-                continue
-            out[k] = _sanitize_for_ai_cache(v)
-        return out
-    if isinstance(obj, list):
-        return [_sanitize_for_ai_cache(x) for x in obj]
-    return obj
-
-
-def _stable_ai_cache_key(match_analyses: List[Dict[str, Any]], phase: str = "pure") -> str:
-    compact = []
-    for ma in match_analyses:
-        m = ma.get("match", {})
-        stable_m = _sanitize_for_ai_cache(m)
-        stable_ctx = _sanitize_for_ai_cache(ma.get("external_context", {}))
-        compact.append({
-            "home": m.get("home_team"),
-            "away": m.get("away_team"),
-            "league": m.get("league", m.get("cup", "")),
-            "match_num": m.get("match_num"),
-            "id": m.get("id"),
-            "sp_home": m.get("sp_home", m.get("win")),
-            "sp_draw": m.get("sp_draw", m.get("same")),
-            "sp_away": m.get("sp_away", m.get("lose")),
-            "give_ball": m.get("give_ball"),
-            "a": [m.get(f"a{i}") for i in range(8)],
-            "change": m.get("change"),
-            "vote": m.get("vote"),
-            "information_hash": _hash_obj(_sanitize_for_ai_cache(m.get("information"))),
-            "points_hash": _hash_obj(_sanitize_for_ai_cache(m.get("points"))),
-            "raw_match_hash": _hash_obj(stable_m),
-            "external_context_hash": _hash_obj(stable_ctx),
-        })
-    raw = json.dumps(
-        {
-            "version": ENGINE_VERSION,
-            "schema": AI_CACHE_SCHEMA_VERSION,
-            "phase": phase,
-            "matches": compact,
-        },
-        ensure_ascii=False,
-        sort_keys=True,
-        default=str,
-    )
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
-
-
-def _load_ai_memory_cache(cache_key: str) -> Optional[Dict[str, Dict[int, Dict[str, Any]]]]:
-    if AI_DISABLE_CACHE:
-        return None
-    now = time.time()
-    if cache_key in _AI_RESULT_CACHE:
-        ts, results, _ = _AI_RESULT_CACHE[cache_key]
-        if now - ts <= AI_DECISION_CACHE_TTL:
-            print(f"  [AI MEMORY CACHE] 命中 ttl={AI_DECISION_CACHE_TTL}s")
-            return results
-        _AI_RESULT_CACHE.pop(cache_key, None)
-    return None
-
-
-async def _call_phase1_model_and_save(
-    session: aiohttp.ClientSession,
-    prompt: str,
-    num_matches: int,
-    ai_name: str,
-    run_id: str,
-) -> Tuple[str, Dict[int, Dict[str, Any]], str]:
-    name, parsed, model = await async_call_one_ai_batch(session, prompt, num_matches, ai_name, _phase_system(ai_name))
-    _save_ai_phase_snapshot(
-        run_id=run_id,
-        ai_name=name,
-        accepted_results=parsed or {},
-        partial_results=AI_PARTIAL_RESULTS.get(name, {}) or {},
-        status=AI_CALL_STATUS.get(name, {}),
-        match_count=num_matches,
-        model=model,
-        extra={"phase": "phase1"},
-    )
-    return name, parsed, model
-
-
-async def _call_claude_and_save(
-    session: aiohttp.ClientSession,
-    prompt: str,
-    num_matches: int,
-    run_id: str,
-) -> Tuple[str, Dict[int, Dict[str, Any]], str]:
-    name, parsed, model = await async_call_one_ai_batch(session, prompt, num_matches, "claude", _phase_system("claude"))
-    _save_ai_phase_snapshot(
-        run_id=run_id,
-        ai_name=name,
-        accepted_results=parsed or {},
-        partial_results=AI_PARTIAL_RESULTS.get(name, {}) or {},
-        status=AI_CALL_STATUS.get(name, {}),
-        match_count=num_matches,
-        model=model,
-        extra={"phase": "claude_final"},
-    )
-    return name, parsed, model
-
-
-async def _run_ai_matrix_two_phase_inner(
-    match_analyses: List[Dict[str, Any]],
-    cache_key: str,
-) -> Dict[str, Dict[int, Dict[str, Any]]]:
-    global _LAST_AI_RUN_METADATA
-
-    if aiohttp is None:
-        print("  [AI ERROR] aiohttp 未安装，AI弃权")
-        return {n: {} for n in AI_NAMES}
-
-    run_id = _make_ai_run_id(match_analyses, cache_key)
-    AI_RESULT_FILES.clear()
-    for n in AI_NAMES:
-        AI_PARTIAL_RESULTS[n] = {}
-
-    debug_ai_config()
-    num = len(match_analyses)
-    prompt = build_phase1_prompt(match_analyses)
-    prompt_hash = _short_hash(prompt, 16)
-
-    print(f"  [{ENGINE_VERSION} AI RUN] run_id={run_id}")
-    print(f"  [{ENGINE_VERSION} Phase1 Prompt] {len(prompt):,}字符 → GPT/Grok/Gemini | hash={prompt_hash}")
-    print("  [EVENT-DRIVEN] Phase1 三家并发启动；每家一进入终态立刻落盘；三家终态齐全后触发 Claude。")
-
-    all_results: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in AI_NAMES}
-
-    connector = aiohttp.TCPConnector(limit=8, use_dns_cache=False, ttl_dns_cache=0, force_close=False)
-    t_phase1 = time.time()
-
-    async with aiohttp.ClientSession(connector=connector) as session:
-        task_map: Dict[asyncio.Task, str] = {}
-        for name in PHASE1_NAMES:
-            task = asyncio.create_task(_call_phase1_model_and_save(session, prompt, num, name, run_id))
-            task_map[task] = name
-
-        terminal_phase1 = 0
-        for task in asyncio.as_completed(list(task_map.keys())):
-            try:
-                name, parsed, model = await task
-                all_results[name] = parsed or {}
-                terminal_phase1 += 1
-                st = AI_CALL_STATUS.get(name, {})
-                print(
-                    f"  [Phase1 Terminal] {name.upper()} status={st.get('status')} "
-                    f"accepted={len(parsed or {})}/{num} elapsed={st.get('elapsed')}s "
-                    f"saved={AI_RESULT_FILES.get(name, '')}"
-                )
-            except Exception as e:
-                terminal_phase1 += 1
-                print(f"  [Phase1 Terminal ERROR] {str(e)[:260]}")
-
-        phase1_elapsed = round(time.time() - t_phase1, 1)
-        print(f"  [Phase1 Complete] 三家 Phase1 已全部进入终态 | elapsed={phase1_elapsed}s")
-
-        _save_ai_aggregate_snapshot(
-            run_id=run_id,
-            tag="phase1_all_terminal",
-            all_results=all_results,
-            match_count=num,
-            extra={"phase1_elapsed": phase1_elapsed, "prompt_hash": prompt_hash},
-        )
-
-        valid_phase1 = sum(1 for n in PHASE1_NAMES if all_results.get(n))
-        should_run_claude = True
-
-        if AI_RUN_CLAUDE_ALWAYS:
-            should_run_claude = True
-        elif AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID:
-            min_valid = AI_MIN_PHASE1_VALID_FOR_CLAUDE
-            if valid_phase1 < min_valid:
-                print(f"  [Claude Skip] Phase1有效模型不足 {valid_phase1}/{min_valid}")
-                should_run_claude = False
-
-        if should_run_claude:
-            audit_prompt = build_claude_final_audit_prompt(match_analyses, all_results)
-            audit_hash = _short_hash(audit_prompt, 16)
-            print(
-                f"  [{ENGINE_VERSION} Phase2 Claude Audit] {len(audit_prompt):,}字符 | "
-                f"compact={AI_USE_COMPACT_CLAUDE_AUDIT} | one_call=True | hash={audit_hash}"
-            )
-            t_claude = time.time()
-            _, cl_res, _ = await _call_claude_and_save(session, audit_prompt, num, run_id)
-            all_results["claude"] = cl_res or {}
-            claude_elapsed = round(time.time() - t_claude, 1)
-            print(f"  [Claude Terminal] accepted={len(cl_res or {})}/{num} elapsed={claude_elapsed}s saved={AI_RESULT_FILES.get('claude','')}")
-        else:
-            all_results["claude"] = {}
-
-    ok = sum(1 for n in AI_NAMES if all_results.get(n))
-    status = {k: AI_CALL_STATUS.get(k, {}) for k in AI_NAMES}
-    print(f"  [完成] {ok}/4 AI有数据 | status={status}")
-
-    final_agg = _save_ai_aggregate_snapshot(
-        run_id=run_id,
-        tag="final_all_models",
-        all_results=all_results,
-        match_count=num,
-        extra={"ok_models": ok, "cache_key": cache_key},
-    )
-
-    _LAST_AI_RUN_METADATA = {
-        "run_id": run_id,
-        "phase_result_dir": AI_PHASE_RESULT_DIR,
-        "result_files": dict(AI_RESULT_FILES),
-        "aggregate_file": final_agg,
-        "status": status,
-        "ok_models": ok,
-        "match_count": num,
-    }
-
-    if not AI_DISABLE_CACHE and ok > 0:
-        _AI_RESULT_CACHE[cache_key] = (time.time(), all_results, status)
-    elif ok == 0:
-        print("  [AI CACHE] 本轮 0/4 AI 有效，不写入缓存")
-
-    return all_results
-
-
-async def run_ai_matrix_two_phase(match_analyses: List[Dict[str, Any]]) -> Dict[str, Dict[int, Dict[str, Any]]]:
-    cache_key = _stable_ai_cache_key(match_analyses)
-
-    cached = _load_ai_memory_cache(cache_key)
-    if cached is not None:
-        return cached
-
-    if AI_SINGLEFLIGHT_ENABLED and cache_key in _AI_INFLIGHT_TASKS:
-        print("  [AI SINGLEFLIGHT] 同批次AI正在本进程运行，等待首个结果")
-        return await _AI_INFLIGHT_TASKS[cache_key]
-
-    task = asyncio.create_task(_run_ai_matrix_two_phase_inner(match_analyses, cache_key))
-    if AI_SINGLEFLIGHT_ENABLED:
-        _AI_INFLIGHT_TASKS[cache_key] = task
-
-    try:
-        return await task
-    finally:
-        if AI_SINGLEFLIGHT_ENABLED:
-            _AI_INFLIGHT_TASKS.pop(cache_key, None)
-
-
-def _run_async(coro):
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        return asyncio.run(coro)
-
-    if loop and loop.is_running():
-        import concurrent.futures
-
-        def runner():
-            nl = asyncio.new_event_loop()
-            try:
-                asyncio.set_event_loop(nl)
-                return nl.run_until_complete(coro)
-            finally:
-                nl.close()
-
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
-            return pool.submit(runner).result()
-
-    return asyncio.run(coro)
-
-
-# ============================================================
-# Sharp + Score Market Gate
-# ============================================================
-
-def _all_score_odds(match_obj: Dict[str, Any]) -> List[Tuple[str, float, str]]:
-    rows = []
-    for sc, key in CRS_FULL_MAP.items():
-        odd = _f(match_obj.get(key), 0.0)
-        if odd > 1.01:
-            d = _score_direction(sc) or ""
-            rows.append((sc, odd, d))
-    rows.sort(key=lambda x: x[1])
-    return rows
-
-
-def _total_goal_odds(match_obj: Dict[str, Any]) -> Dict[int, float]:
-    out = {}
-    for i in range(8):
-        v = _f(match_obj.get(f"a{i}"), 0.0)
-        if v > 1.01:
-            out[i] = v
     return out
 
 
-def _score_market_evidence(match_obj: Dict[str, Any], score: str, direction: str) -> Dict[str, Any]:
-    score = _normalize_score_text(score)
-    total = _score_total(score)
-    rows = _all_score_odds(match_obj)
-    target_odds = get_market_odds_for_score(match_obj, score)
-    dir_rows = [r for r in rows if r[2] == direction]
-
-    all_rank = None
-    dir_rank = None
-
-    for idx, (sc, odd, d) in enumerate(rows, 1):
-        if sc == score:
-            all_rank = idx
-            break
-
-    for idx, (sc, odd, d) in enumerate(dir_rows, 1):
-        if sc == score:
-            dir_rank = idx
-            break
-
-    low_dir_scores = dir_rows[:3]
-    low_all_scores = rows[:8]
-
-    totals = _total_goal_odds(match_obj)
-    total_odd = totals.get(total, 0.0) if total is not None else 0.0
-    total_rank = None
-    total_mode = None
-
-    if totals:
-        sorted_totals = sorted(totals.items(), key=lambda kv: kv[1])
-        total_mode = sorted_totals[0][0]
-        for idx, (g, odd) in enumerate(sorted_totals, 1):
-            if g == total:
-                total_rank = idx
-                break
-
-    score_odds_low = bool(target_odds > 1.01 and target_odds <= MAX_SCORE_ODDS_FOR_STRONG_SCORE)
-    dir_rank_good = bool(dir_rank is not None and dir_rank <= MAX_DIR_RANK_FOR_SCORE_GATE)
-    all_rank_good = bool(all_rank is not None and all_rank <= MAX_ALL_RANK_FOR_SCORE_GATE)
-    total_match = bool(total_rank is not None and total_rank <= 2)
-
-    alignment_score = 0.0
-    if target_odds > 1.01:
-        alignment_score += max(0.0, 28.0 - min(target_odds, 28.0))
-    if dir_rank_good:
-        alignment_score += 28.0
-    elif dir_rank is not None and dir_rank <= 5:
-        alignment_score += 16.0
-    if all_rank_good:
-        alignment_score += 16.0
-    if total_match:
-        alignment_score += 18.0
-    if score_odds_low:
-        alignment_score += 10.0
-
-    alignment_score = round(_clip(alignment_score, 0, 100), 1)
-
-    return {
-        "score": score,
-        "direction": direction,
-        "score_market_odds": target_odds,
-        "score_all_rank": all_rank,
-        "score_direction_rank": dir_rank,
-        "direction_low_scores": low_dir_scores,
-        "market_low_scores": low_all_scores,
-        "total_goals": total,
-        "total_goal_odds": total_odd,
-        "total_goal_rank": total_rank,
-        "total_goal_mode": total_mode,
-        "score_odds_low": score_odds_low,
-        "dir_rank_good": dir_rank_good,
-        "all_rank_good": all_rank_good,
-        "total_match": total_match,
-        "btts_from_score": _score_btts(score),
-        "alignment_score": alignment_score,
-        "score_market_gate_pass": bool((dir_rank_good and total_match) or (all_rank_good and score_odds_low)),
-    }
-
-
-def _has_text_explaining_sharp(final_r: Dict[str, Any], sharp_dir: str, final_direction: str) -> bool:
-    if not sharp_dir or sharp_dir in ("unclear", final_direction):
-        return True
-
-    audit = final_r.get("audit", {}) if isinstance(final_r.get("audit", {}), dict) else {}
-    text = " ".join([
-        str(final_r.get("reason", "")),
-        str(audit.get("sharp_evidence", "")),
-        str(audit.get("direction_rejection", "")),
-        str(audit.get("experience_review", "")),
-    ])
-
-    if len(text.strip()) < 20:
-        return False
-
-    keywords = [
-        "提高风险", "风险", "反向", "但", "不过", "未改", "不改",
-        "不作为改判", "硬依据", "伤病", "赛制", "战意", "赔率仍", "静态",
-    ]
-    return any(k in text for k in keywords)
-
-
-def _market_sharp_audit(match_obj: Dict[str, Any], final_direction: str, final_r: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    final_r = final_r or {}
-
-    sp_h = _f(match_obj.get("sp_home", match_obj.get("win")), 0)
-    sp_a = _f(match_obj.get("sp_away", match_obj.get("lose")), 0)
-
-    vote = match_obj.get("vote", {}) or {}
-    vh = _i(vote.get("win"), 33)
-    vd = _i(vote.get("same", vote.get("draw")), 33)
-    va = _i(vote.get("lose"), 33)
-
-    change = match_obj.get("change", {}) or {}
-    wc = _change_value(change, "win")
-    sc = _change_value(change, "same")
-    lc = _change_value(change, "lose")
-    code = _is_change_direction_code(change)
-
-    league = str(match_obj.get("league", match_obj.get("cup", "")))
-    hr = _i(match_obj.get("home_rank"), 10)
-    ar = _i(match_obj.get("away_rank"), 10)
-
-    signals: List[str] = []
-    sharp_votes: Dict[str, float] = {"home": 0.0, "draw": 0.0, "away": 0.0}
-
-    def add(direction: str, weight: float, reason: str):
-        if direction in sharp_votes:
-            sharp_votes[direction] += weight
-        signals.append(reason)
-
-    if code:
-        if wc < 0:
-            add("home", 2.0 if vh < 55 else 1.0, "主胜降水且散户未极热" if vh < 55 else "主胜降水但热度偏高")
-        if lc < 0:
-            add("away", 2.0 if va < 55 else 1.0, "客胜降水且散户未极热" if va < 55 else "客胜降水但热度偏高")
-        if sc < 0:
-            add("draw", 2.0 if vd < 45 else 1.2, "平赔降水")
-        if wc > 0 and lc < 0:
-            add("away", 2.5, "主胜升水+客胜降水，存在客向聪明钱")
-        if lc > 0 and wc < 0:
-            add("home", 2.5, "客胜升水+主胜降水，存在主向聪明钱")
-        if sc < 0 and wc >= 0 and lc >= 0:
-            add("draw", 2.5, "平赔独降，防平/诱平必须审计")
+def parse_critic_reports(obj: Any) -> List[Dict[str, Any]]:
+    if isinstance(obj, dict):
+        rows = obj.get("critic_reports", obj.get("reports", []))
+    elif isinstance(obj, list):
+        rows = obj
     else:
-        if wc < -0.02:
-            add("home", 2.0 if vh < 55 else 1.0, f"主胜降水{wc}")
-        if lc < -0.02:
-            add("away", 2.0 if va < 55 else 1.0, f"客胜降水{lc}")
-        if sc < -0.02:
-            add("draw", 2.0 if vd < 45 else 1.2, f"平赔降水{sc}")
-        if wc > 0.02 and lc < -0.02:
-            add("away", 2.5, "主胜升水+客胜降水，存在客向聪明钱")
-        if lc > 0.02 and wc < -0.02:
-            add("home", 2.5, "客胜升水+主胜降水，存在主向聪明钱")
-        if sc < -0.02 and wc >= 0 and lc >= 0:
-            add("draw", 2.5, "平赔独降，防平/诱平必须审计")
+        rows = []
+    if not isinstance(rows, list):
+        return []
+    out = []
+    for r in rows:
+        if isinstance(r, dict):
+            out.append(r)
+    return out
 
-    if sp_h and sp_h <= 1.65 and ((code and wc > 0 and lc < 0) or (not code and wc > 0.02 and lc < -0.02)):
-        add("away", 3.0, "低赔主胜升水同时客胜降水：热门方向存在Sharp反向")
 
-    if sp_a and sp_a <= 1.75 and ((code and lc > 0 and wc < 0) or (not code and lc > 0.02 and wc < -0.02)):
-        add("home", 3.0, "低赔客胜升水同时主胜降水：热门方向存在Sharp反向")
+def parse_repairs(obj: Any) -> List[Dict[str, Any]]:
+    if isinstance(obj, dict):
+        rows = obj.get("repairs", [])
+    else:
+        rows = []
+    return [r for r in rows if isinstance(r, dict)] if isinstance(rows, list) else []
 
-    if sp_h and sp_h <= 1.40 and vh >= 65:
-        add("draw", 1.2, "主胜极低赔+极热，需防平冷")
 
-    if sp_a and sp_a <= 1.40 and va >= 65:
-        add("draw", 1.2, "客胜极低赔+极热，需防平冷")
+# ============================================================
+# Mock API：只验证工程闭环，不代表真实命中率
+# ============================================================
 
-    close_strength = abs(hr - ar) <= 3
-    cup_or_knock = any(k.lower() in league.lower() for k in ["杯", "cup", "欧冠", "欧罗巴", "欧联", "解放者", "南球"])
-    if close_strength and cup_or_knock:
-        add("draw", 0.8, "强强/排名接近+杯赛属性，平局资金信号权重上调")
+def _extract_json_lines_from_prompt(prompt: str) -> List[Dict[str, Any]]:
+    rows = []
+    for line in prompt.splitlines():
+        line = line.strip()
+        if not line.startswith("{") or not line.endswith("}"):
+            continue
+        try:
+            obj = json.loads(line)
+            if isinstance(obj, dict) and "match" in obj and "identity" in obj:
+                rows.append(obj)
+        except Exception:
+            continue
+    return rows
 
-    sharp_dir = max(sharp_votes.items(), key=lambda kv: kv[1])[0] if any(v > 0 for v in sharp_votes.values()) else "unclear"
-    sharp_strength = round(max(sharp_votes.values()) if sharp_dir != "unclear" else 0.0, 2)
 
-    conflict = sharp_dir in VALID_DIRS and final_direction in VALID_DIRS and sharp_dir != final_direction and sharp_strength >= 2.5
-    explained = _has_text_explaining_sharp(final_r, sharp_dir, final_direction)
-    unresolved = bool(conflict and not explained)
+def _mock_ai_response(ai_name: str, phase: str, prompt: str, expected_matches: List[int]) -> Dict[str, Any]:
+    if phase == "critic":
+        return {"critic_reports": [{"match": idx, "critic_model": ai_name, "target_findings": [], "own_revision_hint": "mock critic: 未发现结构性硬冲突"} for idx in expected_matches]}
+    if phase == "consistency":
+        return {"repairs": [{"match": idx, "valid": True, "warnings": [], "repair": {}} for idx in expected_matches]}
 
-    clear_score = 100.0
-    if conflict:
-        clear_score -= min(55.0, sharp_strength * 14.0)
-    if unresolved:
-        clear_score -= 20.0
-    clear_score = round(_clip(clear_score, 0, 100), 1)
+    evs = _extract_json_lines_from_prompt(prompt)
+    if not evs:
+        evs = [{"match": idx, "identity": {"home_team": "Home", "away_team": "Away", "league": ""}, "lottery_market_1x2": {}, "derived_market_facts_no_judgement": {}} for idx in expected_matches]
 
+    preds = []
+    for e in evs:
+        idx = int(e.get("match"))
+        one = e.get("lottery_market_1x2", {})
+        sp_h, sp_d, sp_a = _f(one.get("home"), 2.3), _f(one.get("draw"), 3.2), _f(one.get("away"), 3.1)
+        implied = {"home": 1 / max(sp_h, 1.01), "draw": 1 / max(sp_d, 1.01), "away": 1 / max(sp_a, 1.01)}
+        # Mock 轻微区分模型，但只用于测试 schema/流程。
+        if ai_name == "grok" and idx % 5 == 0:
+            best = "draw"
+        elif ai_name == "gemini" and idx % 7 == 0:
+            best = "away" if sp_a < sp_h else "home"
+        else:
+            best = max(implied.items(), key=lambda kv: kv[1])[0]
+        if phase in ("final", "fallback_referee"):
+            # Claude mock 倾向整合市场低赔 + 防过热，仍只是可运行模拟。
+            best = max(implied.items(), key=lambda kv: kv[1])[0]
+        score_map = {
+            "home": "2-1" if idx % 3 == 0 else "1-0",
+            "draw": "1-1" if idx % 2 == 0 else "0-0",
+            "away": "1-2" if idx % 3 == 0 else "0-1",
+        }
+        score = score_map[best]
+        probs_raw = implied.copy()
+        s = sum(probs_raw.values()) or 1
+        probs = {k: round(v / s * 100, 1) for k, v in probs_raw.items()}
+        # ensure selected dir is argmax in mock final
+        if probs[best] < max(probs.values()):
+            probs[best] = max(probs.values())
+        h, a = _parse_score(score)
+        rec_tier = "A" if phase == "final" and max(probs.values()) >= 42 else "B" if max(probs.values()) >= 37 else "C"
+        preds.append({
+            "match": idx,
+            "final_direction": best,
+            "predicted_score": score,
+            "direction_probs": probs,
+            "goal_band": _score_goal_band(score),
+            "btts": _score_btts(score),
+            "top3": [
+                {"score": score, "prob": 15, "logic": f"mock {ai_name}/{phase}: 主比分与方向闭环"},
+                {"score": "2-0" if best == "home" else "1-1" if best == "draw" else "0-2", "prob": 10, "logic": "mock secondary"},
+            ],
+            "market_interpretation": {"one_x_two": "mock: 根据低赔方向生成", "handicap": "mock", "correct_score": "mock", "total_goals": "mock", "half_full_time": "mock", "external_market": "mock"},
+            "money_flow": {"public_money_direction": "unclear", "sharp_money_direction": "unclear", "sharp_confidence": 0, "reverse_line_movement": False, "steam_move": "unclear", "evidence": "mock no real web"},
+            "contextual_logic": {"league_style": "mock", "team_style": "mock", "tempo": "medium", "score_shape": "mock", "btts_likelihood": _score_btts(score), "rotation_risk": "unclear"},
+            "rejected_cases": {"home": "mock", "draw": "mock", "away": "mock"},
+            "web_research": {"used": False, "failure_reason": "AI_MOCK_MODE_no_real_web", "search_queries": [], "sources": [], "freshness_grade": "missing", "key_findings": [], "source_conflicts": []},
+            "recommendation": {"tier": rec_tier, "is_recommended": rec_tier in {"S", "A", "B"}, "top4_priority": idx, "bet_confidence": int(max(probs.values())), "direction_stability": "medium", "score_stability": "medium", "risk_level": "medium", "risk_tags": ["mock_mode"], "why_recommended": "mock 用于工程测试，不代表真实命中率"},
+            "data_quality": {"missing": ["real_web", "real_ai_reasoning"], "raw_packet_quality": "mock"},
+            "reason": f"mock {ai_name}/{phase} response for engineering test",
+            "final_web_audit": {"web_used_by_final": False, "decisive_web_evidence": [], "ignored_web_evidence": [], "web_confidence": 0},
+        })
+    return {"predictions": preds}
+
+
+# ============================================================
+# 落盘
+# ============================================================
+
+def _make_run_id(evidence_all: List[Dict[str, Any]]) -> str:
+    first = ""
+    if evidence_all:
+        ident = evidence_all[0].get("identity", {})
+        first = f"{ident.get('home_team','')}_{ident.get('away_team','')}"
+    safe = re.sub(r"[^\w\u4e00-\u9fff-]+", "_", first)[:32]
+    return f"{_now_ts()}_{len(evidence_all)}m_{_short_hash(_hash_obj(evidence_all))}_{safe}".strip("_")
+
+
+def _save_snapshot(run_id: str, tag: str, obj: Any) -> str:
+    if not AI_PHASE_SNAPSHOT_ENABLED:
+        return ""
+    try:
+        _ensure_dir(AI_PHASE_RESULT_DIR)
+        path = os.path.join(AI_PHASE_RESULT_DIR, f"{run_id}_{tag}.json")
+        tmp = path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(obj, f, ensure_ascii=False, indent=2, default=str)
+        os.replace(tmp, path)
+        return path
+    except Exception as e:
+        print(f"[SNAPSHOT ERROR] {tag}: {str(e)[:160]}")
+        return ""
+
+
+# ============================================================
+# Orchestrator
+# ============================================================
+
+def _chunk_evidence(evidence_all: List[Dict[str, Any]]) -> List[List[Dict[str, Any]]]:
+    chunks: List[List[Dict[str, Any]]] = []
+    cur: List[Dict[str, Any]] = []
+    cur_len = 0
+    for e in evidence_all:
+        s = len(_safe_json_line(e))
+        if cur and (len(cur) >= AI_CHUNK_SIZE or cur_len + s > AI_MAX_PROMPT_CHARS_PER_CHUNK):
+            chunks.append(cur)
+            cur, cur_len = [], 0
+        cur.append(e)
+        cur_len += s
+    if cur:
+        chunks.append(cur)
+    return chunks
+
+
+async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evidence_batch: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
+    expected = [int(e["match"]) for e in evidence_batch]
+    print(f"  [Chunk {chunk_id}] matches={expected} size={len(evidence_batch)}")
+
+    # Phase 1
+    phase1: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in PHASE1_NAMES}
+    tasks = []
+    for ai in PHASE1_NAMES:
+        prompt = build_phase1_prompt(evidence_batch, ai)
+        tasks.append(async_call_ai_json(session, ai, _phase1_system(ai), prompt, "phase1", expected))
+    phase1_returns = await asyncio.gather(*tasks, return_exceptions=True)
+    for ret in phase1_returns:
+        if isinstance(ret, Exception):
+            print(f"  [Chunk {chunk_id}] Phase1 exception: {ret}")
+            continue
+        ai, obj, st = ret
+        rows = normalize_ai_predictions(obj, expected, ai, "phase1")
+        phase1[ai] = rows
+        print(f"  [Chunk {chunk_id}] {ai.upper()} phase1 {len(rows)}/{len(expected)} status={st.get('status')}")
+    _save_snapshot(run_id, f"chunk{chunk_id}_phase1", {"phase1": {m: {str(k): v for k, v in rows.items()} for m, rows in phase1.items()}, "status": AI_CALL_STATUS})
+
+    # Critic stage
+    critic_reports: Dict[str, List[Dict[str, Any]]] = {}
+    if AI_ENABLE_CROSS_EXAM:
+        critic_tasks = []
+        for ai in PHASE1_NAMES:
+            prompt = build_critic_prompt(evidence_batch, ai, phase1)
+            critic_tasks.append(async_call_ai_json(session, ai, _phase1_system(ai), prompt, "critic", expected))
+        critic_returns = await asyncio.gather(*critic_tasks, return_exceptions=True)
+        for ret in critic_returns:
+            if isinstance(ret, Exception):
+                continue
+            ai, obj, st = ret
+            critic_reports[ai] = parse_critic_reports(obj)
+            print(f"  [Chunk {chunk_id}] {ai.upper()} critic reports={len(critic_reports[ai])} status={st.get('status')}")
+    _save_snapshot(run_id, f"chunk{chunk_id}_critics", {"critic_reports": critic_reports, "status": AI_CALL_STATUS})
+
+    # Claude final
+    final_rows: Dict[int, Dict[str, Any]] = {}
+    claude_prompt = build_claude_final_prompt(evidence_batch, phase1, critic_reports)
+    _, claude_obj, claude_st = await async_call_ai_json(session, "claude", _phase1_system("claude"), claude_prompt, "final", expected)
+    final_rows = normalize_ai_predictions(claude_obj, expected, "claude", "final")
+    print(f"  [Chunk {chunk_id}] CLAUDE final {len(final_rows)}/{len(expected)} status={claude_st.get('status')}")
+
+    # fallback referee if Claude incomplete
+    missing = [idx for idx in expected if idx not in final_rows]
+    if missing and AI_ENABLE_FALLBACK_REFEREE:
+        fallback_ai = AI_FALLBACK_REFEREE_MODEL if AI_FALLBACK_REFEREE_MODEL in PHASE1_NAMES else "gpt"
+        fb_prompt = build_fallback_referee_prompt([e for e in evidence_batch if e["match"] in missing], phase1, critic_reports)
+        _, fb_obj, fb_st = await async_call_ai_json(session, fallback_ai, _phase1_system(fallback_ai), fb_prompt, "fallback_referee", missing)
+        fb_rows = normalize_ai_predictions(fb_obj, missing, fallback_ai, "fallback_referee")
+        final_rows.update(fb_rows)
+        print(f"  [Chunk {chunk_id}] FALLBACK {fallback_ai.upper()} {len(fb_rows)}/{len(missing)} status={fb_st.get('status')}")
+
+    # last fallback: phase1 AI consensus, still AI output, not local football model
+    missing = [idx for idx in expected if idx not in final_rows]
+    if missing:
+        for idx in missing:
+            final_rows[idx] = _phase1_consensus_fallback(idx, phase1)
+        print(f"  [Chunk {chunk_id}] Phase1 consensus fallback filled {len(missing)}")
+
+    # Consistency judge: protocol repairs only
+    if AI_ENABLE_CONSISTENCY_JUDGE and final_rows:
+        judge_ai = AI_CONSISTENCY_JUDGE_MODEL if AI_CONSISTENCY_JUDGE_MODEL in AI_NAMES else "gpt"
+        judge_prompt = build_consistency_judge_prompt(evidence_batch, final_rows)
+        _, judge_obj, judge_st = await async_call_ai_json(session, judge_ai, _phase1_system(judge_ai), judge_prompt, "consistency", expected)
+        repairs = parse_repairs(judge_obj)
+        _apply_consistency_repairs(final_rows, repairs)
+        print(f"  [Chunk {chunk_id}] CONSISTENCY {judge_ai.upper()} repairs={len(repairs)} status={judge_st.get('status')}")
+
+    _save_snapshot(run_id, f"chunk{chunk_id}_final", {"final": {str(k): v for k, v in final_rows.items()}, "status": AI_CALL_STATUS})
+    return final_rows
+
+
+def _phase1_consensus_fallback(idx: int, phase1: Dict[str, Dict[int, Dict[str, Any]]]) -> Dict[str, Any]:
+    candidates = []
+    for ai in PHASE1_NAMES:
+        r = phase1.get(ai, {}).get(idx)
+        if not r:
+            continue
+        rec = r.get("recommendation", {})
+        candidates.append((rec.get("bet_confidence", 0), ai, r))
+    if not candidates:
+        return _abstain_ai_prediction(idx, "all_ai_failed")
+    candidates.sort(key=lambda x: (x[0], x[1]), reverse=True)
+    _, ai, r = candidates[0]
+    out = dict(r)
+    out["source_model"] = ai
+    out["source_phase"] = "phase1_consensus_fallback"
+    out.setdefault("validation_warnings", []).append("claude_missing_used_phase1_ai_fallback")
+    return out
+
+
+def _apply_consistency_repairs(final_rows: Dict[int, Dict[str, Any]], repairs: List[Dict[str, Any]]) -> None:
+    for row in repairs:
+        idx = _i(row.get("match"), 0)
+        if idx not in final_rows:
+            continue
+        warnings = row.get("warnings", [])
+        if isinstance(warnings, list):
+            final_rows[idx].setdefault("validation_warnings", []).extend([str(w) for w in warnings])
+        repair = row.get("repair")
+        if not isinstance(repair, dict):
+            continue
+        # Only protocol fields can be repaired. No new football judgement.
+        allowed = {"goal_band", "btts", "top3", "web_research", "data_quality"}
+        for k, v in repair.items():
+            if k in allowed:
+                final_rows[idx][k] = v
+        _protocol_enforce_prediction(final_rows[idx])
+
+
+def _protocol_enforce_prediction(r: Dict[str, Any]) -> Dict[str, Any]:
+    score = _score_from_candidate(r.get("predicted_score", ""))
+    if _parse_score(score)[0] is None:
+        return r
+    score_dir = _score_direction(score)
+    raw_dir = _dir_from_any(r.get("final_direction"))
+    warnings = list(r.get("validation_warnings", []))
+    if score_dir in VALID_DIRS and raw_dir in VALID_DIRS and score_dir != raw_dir:
+        warnings.append(f"protocol_direction_fixed_to_score:{raw_dir}->{score_dir}")
+    if score_dir in VALID_DIRS:
+        r["final_direction"] = score_dir
+    r["predicted_score"] = score
+    r["goal_band"] = _score_goal_band(score)
+    r["btts"] = _score_btts(score)
+    r["top3"] = _normalize_top3(r, score)
+    r["validation_warnings"] = list(dict.fromkeys(warnings))
+    return r
+
+
+async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
+    global _LAST_AI_RUN_METADATA
+    run_id = _make_run_id(evidence_all)
+    chunks = _chunk_evidence(evidence_all)
+    debug_ai_config()
+    print(f"  [{ENGINE_VERSION}] run_id={run_id} chunks={len(chunks)}")
+
+    all_final: Dict[int, Dict[str, Any]] = {}
+    connector = None
+    session = None
+    try:
+        if not AI_MOCK_MODE and aiohttp is not None:
+            connector = aiohttp.TCPConnector(limit=8, use_dns_cache=False, ttl_dns_cache=0, force_close=False)
+            session = aiohttp.ClientSession(connector=connector)
+        for i, chunk in enumerate(chunks, 1):
+            rows = await _run_one_chunk(session, run_id, i, chunk)
+            all_final.update(rows)
+    finally:
+        if session is not None:
+            await session.close()
+
+    agg_path = _save_snapshot(run_id, "final_all_chunks", {"final": {str(k): v for k, v in all_final.items()}, "status": AI_CALL_STATUS})
+    _LAST_AI_RUN_METADATA = {
+        "run_id": run_id,
+        "engine_version": ENGINE_VERSION,
+        "chunk_count": len(chunks),
+        "phase_result_dir": AI_PHASE_RESULT_DIR,
+        "aggregate_file": agg_path,
+        "ai_call_status": dict(AI_CALL_STATUS),
+        "mock_mode": AI_MOCK_MODE,
+        "native_web": AI_NATIVE_WEB,
+        "cross_exam": AI_ENABLE_CROSS_EXAM,
+        "consistency_judge": AI_ENABLE_CONSISTENCY_JUDGE,
+    }
+    return all_final
+
+
+# ============================================================
+# 前端兼容 Adapter / Top4
+# ============================================================
+
+def _abstain_ai_prediction(idx: int, reason: str) -> Dict[str, Any]:
     return {
-        "sharp_detected": sharp_dir != "unclear",
-        "sharp_dir": sharp_dir,
-        "sharp_strength": sharp_strength,
-        "sharp_votes": sharp_votes,
-        "sharp_conflict": conflict,
-        "sharp_explained_by_ai": explained,
-        "sharp_unresolved": unresolved,
-        "sharp_clearance_score": clear_score,
-        "sharp_signals": signals[:12],
+        "match": idx,
+        "source_model": "none",
+        "source_phase": "abstain",
+        "final_direction": "abstain",
+        "predicted_score": "弃权",
+        "direction_probs": {"home": 0.0, "draw": 0.0, "away": 0.0},
+        "goal_band": "",
+        "btts": "unclear",
+        "top3": [],
+        "recommendation": {"tier": "D", "is_recommended": False, "top4_priority": 999, "bet_confidence": 0, "risk_level": "high", "risk_tags": [reason], "why_recommended": "弃权"},
+        "reason": reason,
+        "validation_warnings": [reason],
     }
 
 
-# ============================================================
-# AI 结果选择 / 前端兼容
-# ============================================================
-
-def _valid_ai_score_from_response(r: Dict[str, Any]) -> str:
-    if not isinstance(r, dict):
-        return ""
-    sc = _score_from_candidate(r.get("ai_score", ""))
-    if _parse_score(sc)[0] is not None:
-        return sc
-    top3 = r.get("top3", [])
-    if isinstance(top3, list) and top3:
-        sc = _score_from_candidate(top3[0])
-        if _parse_score(sc)[0] is not None:
-            return sc
-    return ""
+def _tier_rank(tier: str) -> int:
+    return {"S": 5, "A": 4, "B": 3, "C": 2, "D": 1}.get(str(tier).upper(), 0)
 
 
-def _phase1_exact_consensus(ai_responses: Dict[str, Dict[str, Any]]) -> Tuple[str, int, List[str]]:
-    counts: Dict[str, List[str]] = {}
-    for name in PHASE1_NAMES:
-        sc = _valid_ai_score_from_response(ai_responses.get(name, {}))
-        if sc:
-            counts.setdefault(sc, []).append(name)
-
-    if not counts:
-        return "", 0, []
-
-    sc, names = sorted(counts.items(), key=lambda kv: (len(kv[1]), kv[0]), reverse=True)[0]
-    return sc, len(names), names
+def _min_tier_ok(tier: str) -> bool:
+    return _tier_rank(tier) >= _tier_rank(MIN_AI_RECOMMEND_TIER)
 
 
-def _phase1_direction_weighted_consensus(ai_responses: Dict[str, Dict[str, Any]]) -> Tuple[str, List[str], Dict[str, float]]:
-    weights = {"home": 0.0, "draw": 0.0, "away": 0.0}
-    voters = {"home": [], "draw": [], "away": []}
-    for name in PHASE1_NAMES:
-        r = ai_responses.get(name, {})
-        if not isinstance(r, dict):
-            continue
-        sc = _valid_ai_score_from_response(r)
-        d = _score_direction(sc) or _normalize_direction(r.get("final_direction", ""), sc)
-        if d not in VALID_DIRS:
-            continue
-        conf = _clip(_f(r.get("ai_confidence", 60), 60), 0, 100)
-        w = 1.0 + conf / 100.0
-        weights[d] += w
-        voters[d].append(name)
-    best = max(weights.items(), key=lambda kv: kv[1])[0]
-    if weights[best] <= 0:
-        return "", [], weights
-    return best, voters[best], weights
-
-
-def _choose_final_ai(ai_responses: Dict[str, Dict[str, Any]]) -> Tuple[str, Dict[str, Any], str]:
-    if _valid_ai_score_from_response(ai_responses.get("claude", {})):
-        return "claude", ai_responses["claude"], "claude_pure_authority"
-
-    sc, n, names = _phase1_exact_consensus(ai_responses)
-    if sc and n >= 2:
-        best_name = max(names, key=lambda nm: _f(ai_responses.get(nm, {}).get("ai_confidence", 60), 60))
-        return best_name, ai_responses[best_name], f"phase1_exact_consensus:{','.join(names)}"
-
-    wdir, voters, weight_table = _phase1_direction_weighted_consensus(ai_responses)
-    if wdir and voters:
-        aligned = []
-        for nm in voters:
-            r = ai_responses.get(nm, {})
-            if _valid_ai_score_from_response(r):
-                aligned.append((nm, r, _f(r.get("ai_confidence", 60), 60)))
-        if aligned:
-            aligned.sort(key=lambda x: (-x[2], PHASE1_NAMES.index(x[0]) if x[0] in PHASE1_NAMES else 99))
-            nm, r, _ = aligned[0]
-            r = dict(r)
-            audit = r.get("audit", {}) if isinstance(r.get("audit", {}), dict) else {}
-            audit["phase1_weighted_direction_table"] = {k: round(v, 3) for k, v in weight_table.items()}
-            r["audit"] = audit
-            return nm, r, f"phase1_weighted_direction:{wdir}:{','.join(voters)}"
-
-    valid = [(name, ai_responses.get(name, {})) for name in PHASE1_NAMES if _valid_ai_score_from_response(ai_responses.get(name, {}))]
-    if valid:
-        name, r = max(valid, key=lambda nr: _f(nr[1].get("ai_confidence", 60), 60))
-        return name, r, f"phase1_best_confidence:{name}"
-
-    return "", {}, "ai_abstain_no_valid_model"
-
-
-def _direction_pct_from_top3(top3: List[Dict[str, Any]], final_direction: str) -> Dict[str, float]:
-    mass = {"home": 0.0, "draw": 0.0, "away": 0.0}
-
-    for cand in top3 or []:
-        sc = _score_from_candidate(cand)
-        d = _score_direction(sc)
-        if d in mass:
-            mass[d] += max(0.0, _prob_to_float(cand.get("prob", 0) if isinstance(cand, dict) else 0))
-
-    if sum(mass.values()) <= 0:
-        if final_direction in mass:
-            mass[final_direction] = 50.0
-            for d in mass:
-                if d != final_direction:
-                    mass[d] = 25.0
-        else:
-            mass = {"home": 33.3, "draw": 33.3, "away": 33.4}
-
-    s = sum(mass.values())
-    return {k: round(v / s * 100, 1) for k, v in mass.items()}
+def _direction_pct_display(pct: Dict[str, Any]) -> Dict[str, float]:
+    return {k: round(_f(pct.get(k), 0.0), 1) for k in ["home", "draw", "away"]}
 
 
 def _goal_range_from_score(score: str) -> Tuple[int, int, str]:
     total = _score_total(score)
     if total is None:
-        return 0, 7, "ai_raw_unknown"
+        return 0, 0, "ai_native_unknown"
     if total <= 1:
-        return 0, 1, "ai_raw_0_1_goals"
+        return 0, 1, "ai_native_0_1_goals"
     if total == 2:
-        return 1, 2, "ai_raw_2_goals"
+        return 1, 2, "ai_native_2_goals"
     if total == 3:
-        return 2, 3, "ai_raw_3_goals"
+        return 2, 3, "ai_native_3_goals"
     if total == 4:
-        return 3, 4, "ai_raw_4_goals"
+        return 3, 4, "ai_native_4_goals"
     if total == 5:
-        return 4, 5, "ai_raw_5_goals"
-    return 5, 8, "ai_raw_6plus_goals"
-
-
-def _tier_from_score(score: float) -> str:
-    if score >= SELECTION_TIER_S:
-        return "S"
-    if score >= SELECTION_TIER_A:
-        return "A"
-    if score >= SELECTION_TIER_B:
-        return "B"
-    if score >= SELECTION_TIER_C:
-        return "C"
-    return "D"
-
-
-def _tier_max(current: str, max_tier: str) -> str:
-    order = {"S": 5, "A": 4, "B": 3, "C": 2, "D": 1}
-    inv = {v: k for k, v in order.items()}
-    cur = order.get(str(current).upper(), 1)
-    mx = order.get(str(max_tier).upper(), 5)
-    return inv[min(cur, mx)]
-
-
-def _ai_model_agreement(all_ai: Dict[str, Dict[str, Any]], score: str, direction: str) -> Dict[str, Any]:
-    valid = []
-    same_score = 0
-    same_dir = 0
-
-    for name in AI_NAMES:
-        r = all_ai.get(name, {}) if isinstance(all_ai, dict) else {}
-        sc = _valid_ai_score_from_response(r)
-        if not sc:
-            continue
-        valid.append(name)
-        if sc == score:
-            same_score += 1
-        if (_score_direction(sc) or "") == direction:
-            same_dir += 1
-
-    total = max(1, len(valid))
-    return {
-        "valid_models": valid,
-        "valid_count": len(valid),
-        "same_score": same_score,
-        "same_direction": same_dir,
-        "score_agreement": same_score / total,
-        "direction_agreement": same_dir / total,
-    }
-
-
-def _experience_review_coverage(final_r: Dict[str, Any], exp_audit: Dict[str, Any]) -> Tuple[float, List[str]]:
-    triggered = exp_audit.get("triggered", []) if isinstance(exp_audit, dict) else []
-    ids = [str(t.get("id", "")).replace("EXP_", "") for t in triggered if t.get("id")]
-
-    if not ids:
-        return 1.0, []
-
-    reviews = final_r.get("experience_review", []) if isinstance(final_r, dict) else []
-    reviewed = {str(r.get("id", "")).replace("EXP_", "") for r in reviews if isinstance(r, dict)}
-
-    for r in reviews:
-        if isinstance(r, dict):
-            txt = str(r.get("reason", ""))
-            for rid in re.findall(r"EXP_[A-Z0-9_]+|B_SHARP|B_STEAM|X\d{2}|S\d{2}|M\d{2}|[DUG]\d{2}", txt):
-                reviewed.add(rid.replace("EXP_", ""))
-
-    missing = [rid for rid in ids if rid not in reviewed]
-    return max(0.0, 1.0 - len(missing) / max(1, len(ids))), missing
-
-
-def _inherit_experience_review_if_missing(
-    final_name: str,
-    final_r: Dict[str, Any],
-    all_ai: Dict[str, Dict[str, Any]],
-    final_score: str,
-    final_direction: str,
-) -> Dict[str, Any]:
-    if not isinstance(final_r, dict):
-        return final_r
-
-    existing = final_r.get("experience_review")
-    if isinstance(existing, list) and existing:
-        return final_r
-
-    candidates = []
-    for name in PHASE1_NAMES:
-        r = all_ai.get(name, {})
-        if not isinstance(r, dict):
-            continue
-        rv = r.get("experience_review")
-        if not isinstance(rv, list) or not rv:
-            continue
-
-        sc = _valid_ai_score_from_response(r)
-        dr = _score_direction(sc) if sc else None
-        score_same = 1 if sc == final_score else 0
-        dir_same = 1 if dr == final_direction else 0
-        conf = _f(r.get("ai_confidence", 60), 60)
-        candidates.append((score_same, dir_same, conf, name, rv))
-
-    if not candidates:
-        return final_r
-
-    candidates.sort(reverse=True)
-    _, _, _, src_name, review = candidates[0]
-
-    final_r = dict(final_r)
-    final_r["experience_review"] = review
-    final_r["experience_review_inherited_from"] = src_name
-
-    audit = final_r.get("audit", {})
-    if not isinstance(audit, dict):
-        audit = {}
-    audit["experience_review_inherited_from"] = src_name
-    final_r["audit"] = audit
-
-    return final_r
-
-
-def _force_experience_review_full_coverage(final_r: Dict[str, Any], exp_audit: Dict[str, Any]) -> Dict[str, Any]:
-    if not isinstance(final_r, dict):
-        return final_r
-
-    triggered = exp_audit.get("triggered", []) if isinstance(exp_audit, dict) else []
-    if not triggered:
-        return final_r
-
-    review = final_r.get("experience_review")
-    if not isinstance(review, list):
-        review = []
-
-    reviewed = {str(r.get("id", "")).replace("EXP_", "") for r in review if isinstance(r, dict)}
-
-    for r in review:
-        if isinstance(r, dict):
-            txt = str(r.get("reason", ""))
-            for rid in re.findall(r"EXP_[A-Z0-9_]+|B_SHARP|B_STEAM|X\d{2}|S\d{2}|M\d{2}|[DUG]\d{2}", txt):
-                reviewed.add(rid.replace("EXP_", ""))
-
-    added = []
-    for t in triggered:
-        rid = str(t.get("id", "")).replace("EXP_", "").strip()
-        if not rid or rid in reviewed:
-            continue
-        added.append({
-            "id": rid,
-            "decision": "neutral",
-            "reason": f"{rid}:neutral because 本地字段闭环补齐：该审计卡未被最终模型逐条输出；仅作为覆盖标记，不改方向、不改比分。",
-        })
-        reviewed.add(rid)
-
-    if added:
-        final_r = dict(final_r)
-        final_r["experience_review"] = review + added
-        audit = final_r.get("audit", {}) if isinstance(final_r.get("audit", {}), dict) else {}
-        audit["experience_review_auto_filled"] = [x["id"] for x in added]
-        final_r["audit"] = audit
-
-    return final_r
-
-
-def _fix_shape_fields_to_score(final_r: Dict[str, Any], score: str) -> Tuple[Dict[str, Any], List[str]]:
-    final_r = dict(final_r or {})
-    warnings: List[str] = []
-
-    sg = _score_goal_band(score)
-    sb = _score_btts(score)
-    gb = _normalize_goal_band_value(final_r.get("goal_band", ""), score)
-    bt = _normalize_btts_value(final_r.get("btts", ""), score)
-
-    if sg and gb and gb != sg:
-        warnings.append(f"goal_band_auto_fixed:{gb}->{sg}")
-    if sb in ("yes", "no") and bt in ("yes", "no") and bt != sb:
-        warnings.append(f"btts_auto_fixed:{bt}->{sb}")
-
-    final_r["goal_band"] = sg or gb
-    final_r["btts"] = sb if sb in ("yes", "no") else bt
-
-    return final_r, warnings
-
-
-def _compute_recommendation_scores(
-    final_r: Dict[str, Any],
-    all_ai: Dict[str, Dict[str, Any]],
-    match_obj: Dict[str, Any],
-    exp_audit: Dict[str, Any],
-    score: str,
-    direction: str,
-    pct: Dict[str, float],
-    top_candidates: List[Tuple[str, float]],
-    final_name: str,
-    dir_score_conflict: bool = False,
-) -> Dict[str, Any]:
-    vals = sorted([_f(v, 0.0) for v in pct.values()], reverse=True)
-    top = vals[0] if vals else 33.3
-    gap = vals[0] - vals[1] if len(vals) >= 2 else 0.0
-
-    ps = [max(1e-6, _f(pct.get(k, 0.0), 0.0) / 100.0) for k in ["home", "draw", "away"]]
-    sprob = sum(ps)
-    entropy = 1.0
-    if sprob > 0:
-        ps = [p / sprob for p in ps]
-        entropy = -sum(p * math.log(p) for p in ps) / math.log(3)
-
-    agreement = _ai_model_agreement(all_ai, score, direction)
-    exp_cov, exp_missing = _experience_review_coverage(final_r, exp_audit)
-
-    audit = final_r.get("audit", {}) if isinstance(final_r.get("audit", {}), dict) else {}
-    data_missing = final_r.get("data_missing", []) if isinstance(final_r.get("data_missing", []), list) else []
-    web_missing = "external_european_odds" in data_missing or str(audit.get("web_odds_check", "")).lower() in (
-        "web_search_unavailable", "european_odds_missing", "missing"
-    )
-
-    gb = final_r.get("goal_band", "") or _score_goal_band(score)
-    bt = final_r.get("btts", "") or _score_btts(score)
-    score_gb = _score_goal_band(score)
-    score_bt = _score_btts(score)
-
-    warnings = []
-    if gb and score_gb and gb != score_gb:
-        warnings.append(f"goal_band_conflict:{gb}!={score_gb}")
-    if bt in ("yes", "no") and score_bt in ("yes", "no") and bt != score_bt:
-        warnings.append(f"btts_conflict:{bt}!={score_bt}")
-    if dir_score_conflict:
-        warnings.append("dir_score_conflict")
-
-    has_shape_reason = bool(str(final_r.get("score_shape_reason", "")).strip() or str(audit.get("style_score_logic", "")).strip())
-    top_score_prob = top_candidates[0][1] if top_candidates else 0.0
-    tsp = top_score_prob if top_score_prob <= 1 else top_score_prob / 100.0
-
-    score_ev = _score_market_evidence(match_obj, score, direction) if ENABLE_SCORE_MARKET_GATE else {
-        "alignment_score": 70.0,
-        "score_market_gate_pass": True,
-    }
-    sharp_ev = _market_sharp_audit(match_obj, direction, final_r) if ENABLE_SHARP_GATE else {
-        "sharp_clearance_score": 100.0,
-        "sharp_conflict": False,
-        "sharp_unresolved": False,
-        "sharp_detected": False,
-        "sharp_dir": "unclear",
-        "sharp_signals": [],
-    }
-
-    direction_score = (
-        18.0
-        + 0.34 * top
-        + 0.58 * gap
-        + 8.0 * (1 - entropy)
-        + 11.0 * agreement.get("direction_agreement", 0.0)
-        + 7.0 * exp_cov
-        + 0.15 * sharp_ev.get("sharp_clearance_score", 100)
-    )
-
-    shape_score = (
-        14.0
-        + 12.0 * (top / 100.0)
-        + 6.0 * (gap / 100.0)
-        + 42.0 * min(1.0, tsp)
-        + 14.0 * agreement.get("score_agreement", 0.0)
-        + 12.0 * (1.0 if not warnings else 0.0)
-        + 7.0 * (1.0 if has_shape_reason else 0.0)
-        + 5.0 * exp_cov
-        + 0.32 * score_ev.get("alignment_score", 0.0)
-    )
-
-    if web_missing:
-        direction_score -= 3
-        shape_score -= 2
-    if exp_missing:
-        direction_score -= min(12, 2.0 * len(exp_missing))
-        shape_score -= min(8, 1.2 * len(exp_missing))
-    if warnings:
-        shape_score -= 18
-        direction_score -= 3
-    if dir_score_conflict:
-        direction_score -= 8
-        shape_score -= 10
-    if sharp_ev.get("sharp_conflict"):
-        direction_score -= 10
-        shape_score -= 6
-    if sharp_ev.get("sharp_unresolved"):
-        direction_score -= 14
-        shape_score -= 8
-    if not score_ev.get("score_market_gate_pass", True):
-        shape_score -= 18
-        direction_score -= 3
-    if final_name != "claude":
-        direction_score -= 4
-        shape_score -= 4
-
-    direction_score = round(_clip(direction_score, 0, 100), 1)
-    shape_score = round(_clip(shape_score, 0, 100), 1)
-    overall = round(min(direction_score, shape_score * 1.08), 1)
-
-    recommendation_tier = _tier_from_score(overall)
-    direction_tier = _tier_from_score(direction_score)
-    score_tier = _tier_from_score(shape_score)
-
-    downgrade_reasons: List[str] = []
-
-    if sharp_ev.get("sharp_conflict"):
-        recommendation_tier = _tier_max(recommendation_tier, SHARP_CONFLICT_DEGRADE_TO_MAX_TIER)
-        direction_tier = _tier_max(direction_tier, SHARP_CONFLICT_DEGRADE_TO_MAX_TIER)
-        downgrade_reasons.append("sharp_conflict")
-
-    if final_name != "claude":
-        recommendation_tier = _tier_max(recommendation_tier, CLAUDE_MISSING_DEGRADE_TO_MAX_TIER)
-        downgrade_reasons.append("claude_missing_or_invalid")
-
-    if not score_ev.get("score_market_gate_pass", True):
-        recommendation_tier = _tier_max(recommendation_tier, SCORE_MARKET_BAD_DEGRADE_TO_MAX_TIER)
-        score_tier = _tier_max(score_tier, SCORE_MARKET_BAD_DEGRADE_TO_MAX_TIER)
-        downgrade_reasons.append("score_market_gate_failed")
-
-    if warnings:
-        recommendation_tier = _tier_max(recommendation_tier, "B")
-        score_tier = _tier_max(score_tier, "B")
-        downgrade_reasons.append("shape_conflict")
-
-    if dir_score_conflict:
-        recommendation_tier = _tier_max(recommendation_tier, "B")
-        direction_tier = _tier_max(direction_tier, "B")
-        score_tier = _tier_max(score_tier, "B")
-        downgrade_reasons.append("dir_score_conflict")
-
-    safe_top_gate_score = round(
-        0.34 * direction_score
-        + 0.36 * shape_score
-        + 0.18 * score_ev.get("alignment_score", 0.0)
-        + 0.12 * sharp_ev.get("sharp_clearance_score", 100.0),
-        1,
-    )
-
-    if dir_score_conflict:
-        safe_top_gate_score = round(max(0.0, safe_top_gate_score - 8.0), 1)
-
-    recommend_gate_pass = True
-    gate_reasons: List[str] = []
-
-    if overall < MIN_RECOMMEND_OVERALL_SCORE:
-        recommend_gate_pass = False
-        gate_reasons.append(f"overall<{MIN_RECOMMEND_OVERALL_SCORE}")
-    if safe_top_gate_score < MIN_SAFE_TOP_GATE_SCORE:
-        recommend_gate_pass = False
-        gate_reasons.append(f"safe_top_gate_score<{MIN_SAFE_TOP_GATE_SCORE}")
-    if gap < MIN_DIRECTION_GAP_FOR_RECOMMEND:
-        recommend_gate_pass = False
-        gate_reasons.append(f"dir_gap<{MIN_DIRECTION_GAP_FOR_RECOMMEND}")
-    if sharp_ev.get("sharp_unresolved"):
-        recommend_gate_pass = False
-        gate_reasons.append("sharp_unresolved")
-    if not score_ev.get("score_market_gate_pass", True):
-        recommend_gate_pass = False
-        gate_reasons.append("score_market_gate_failed")
-    if exp_missing:
-        recommend_gate_pass = False
-        gate_reasons.append("experience_review_missing")
-    if warnings:
-        recommend_gate_pass = False
-        gate_reasons.append("shape_warnings")
-    if dir_score_conflict:
-        recommend_gate_pass = False
-        gate_reasons.append("dir_score_conflict")
-
-    return {
-        "direction_selection_score": direction_score,
-        "score_shape_score": shape_score,
-        "overall_selection_score": overall,
-        "recommendation_tier": recommendation_tier,
-        "direction_tier": direction_tier,
-        "score_tier": score_tier,
-        "model_agreement": agreement,
-        "experience_review_coverage": round(exp_cov, 3),
-        "experience_review_missing": exp_missing,
-        "score_shape_warnings": warnings,
-        "web_odds_missing_penalty": bool(web_missing),
-        "score_market_evidence": score_ev,
-        "sharp_audit": sharp_ev,
-        "sharp_detected": sharp_ev.get("sharp_detected", False),
-        "sharp_dir": sharp_ev.get("sharp_dir"),
-        "sharp_conflict": sharp_ev.get("sharp_conflict", False),
-        "sharp_unresolved": sharp_ev.get("sharp_unresolved", False),
-        "sharp_clearance_score": sharp_ev.get("sharp_clearance_score", 100),
-        "score_market_alignment": score_ev.get("alignment_score", 0.0),
-        "score_market_gate_pass": score_ev.get("score_market_gate_pass", True),
-        "safe_top_gate_score": safe_top_gate_score,
-        "recommend_gate_pass": bool(recommend_gate_pass),
-        "recommend_gate_reasons": gate_reasons,
-        "recommendation_downgrade_reasons": downgrade_reasons,
-        "dir_score_conflict": bool(dir_score_conflict),
-    }
-
-
-def _abstain_prediction(reason: str = "AI全失败，PURE模式不使用本地兜底") -> Dict[str, Any]:
-    return {
-        "predicted_score": "弃权",
-        "predicted_label": "弃权",
-        "result": "弃权",
-        "display_direction": "弃权",
-        "final_direction": "abstain",
-        "is_abstain": True,
-        "is_score_others": False,
-        "home_win_pct": 0.0,
-        "draw_pct": 0.0,
-        "away_win_pct": 0.0,
-        "confidence": 0,
-        "confidence_meaning": "PURE RAW-AI 模式：AI全失败即弃权，不使用本地兜底",
-        "risk_level": "高",
-        "dir_confidence": 0,
-        "dir_gap": 0,
-        "scenario": "ai_abstain",
-        "goal_range": (0, 0),
-        "bayesian_evidences": [reason],
-        "bayesian_prior": {},
-        "override_triggered": False,
-        "traps_detected": [],
-        "trap_count": 0,
-        "trap_severity": 0,
-        "trap_details": [],
-        "trap_flags": {},
-        "fair_1x2": {},
-        "fair_1x2_method": "disabled_pure_raw_ai",
-        "market_overround": 0.0,
-        "raw_implied_1x2": {},
-        "crs_shape": "disabled_pure_raw_ai",
-        "crs_moments": {},
-        "crs_margin": 0.0,
-        "crs_coverage": 0.0,
-        "crs_implied_probs": {},
-        "crs_low_rank_info": {},
-        "top_score_candidates": [],
-        "unified_matrix_top_scores": [],
-        "unified_goal_probs": {},
-        "fair_1x2_pack": {},
-        "mixed_target_dir": {},
-        "unified_source": "disabled_pure_raw_ai",
-        "decision_source": "ai_abstain_no_local_fallback",
-        "ai_authority_mode": "pure_raw_ai",
-        "recommend_gate_pass": False,
-        "recommend_gate_reasons": ["ai_abstain"],
-        "safe_top_gate_score": 0.0,
-        "score_market_evidence": {},
-        "sharp_audit": {},
-        "sharp_conflict": False,
-        "sharp_unresolved": False,
-        "score_market_gate_pass": False,
-        "suggested_kelly": 0.0,
-        "edge_vs_market": 0.0,
-        "is_value": False,
-        "ev_note": "disabled_pure_raw_ai",
-        "score_model_prob": 0.0,
-        "score_market_odds": 0.0,
-        "score_market_implied_pct": None,
-        "smart_money_signal": "",
-        "smart_signals": [],
-        "cold_door": {
-            "is_cold_door": False,
-            "strength": 0,
-            "level": "普通",
-            "signals": [],
-            "sharp_confirmed": False,
-            "dark_verdict": "",
-        },
-        "xG_home": "?",
-        "xG_away": "?",
-        "expected_total_goals": 0,
-        "over_under_2_5": "弃权",
-        "both_score": "弃权",
-        "ai_avg_confidence": 0,
-        "ai_abstained": ["GPT", "GROK", "GEMINI", "CLAUDE"],
-        "gpt_score": "弃权",
-        "gpt_analysis": "弃权",
-        "grok_score": "弃权",
-        "grok_analysis": "弃权",
-        "gemini_score": "弃权",
-        "gemini_analysis": "弃权",
-        "claude_score": "弃权",
-        "claude_analysis": "弃权",
-        "model_consensus": 0,
-        "total_models": 4,
-        "ai_call_status": dict(AI_CALL_STATUS),
-        "ai_result_files": dict(AI_RESULT_FILES),
-        "ai_run_metadata": dict(_LAST_AI_RUN_METADATA),
-        "engine_version": ENGINE_VERSION,
-        "engine_architecture": ENGINE_ARCHITECTURE,
-    }
-
-
-def _make_ai_prediction(
-    final_name: str,
-    final_r: Dict[str, Any],
-    decision_source: str,
-    all_ai: Dict[str, Dict[str, Any]],
-    match_obj: Dict[str, Any],
-) -> Dict[str, Any]:
-    final_r = dict(final_r or {})
-    score = _valid_ai_score_from_response(final_r)
-
-    raw_direction = _normalize_direction(final_r.get("final_direction", ""), score)
-    score_direction = _score_direction(score)
-    dir_score_conflict = bool(score_direction in VALID_DIRS and raw_direction in VALID_DIRS and score_direction != raw_direction)
-    direction = score_direction or raw_direction
-
-    final_r = _inherit_experience_review_if_missing(
-        final_name=final_name,
-        final_r=final_r,
-        all_ai=all_ai,
-        final_score=score,
-        final_direction=direction,
-    )
-    final_r, shape_auto_warnings = _fix_shape_fields_to_score(final_r, score)
-
-    top3 = final_r.get("top3", []) if isinstance(final_r.get("top3", []), list) else []
+        return 4, 5, "ai_native_5_goals"
+    return 5, 8, "ai_native_6plus_goals"
+
+
+def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    if not ai_r or ai_r.get("predicted_score") == "弃权" or ai_r.get("final_direction") == "abstain":
+        return _abstain_prediction("AI全部失败或最终弃权")
+
+    _protocol_enforce_prediction(ai_r)
+    score = ai_r.get("predicted_score", "弃权")
+    direction = ai_r.get("final_direction", _score_direction(score) or "draw")
+    pct = _direction_pct_display(ai_r.get("direction_probs", {}))
+    rec = ai_r.get("recommendation", {}) if isinstance(ai_r.get("recommendation"), dict) else {}
+    tier = str(rec.get("tier", "D")).upper()
+    is_ai_recommended = bool(rec.get("is_recommended", False)) and _min_tier_ok(tier)
     top_candidates = []
-    for cand in top3[:8]:
-        sc = _score_from_candidate(cand)
-        if _parse_score(sc)[0] is not None:
-            prob = _prob_to_float(cand.get("prob", 0) if isinstance(cand, dict) else 0)
-            top_candidates.append((sc, round(prob, 3)))
-
-    if not top_candidates and score != "弃权":
-        top_candidates = [(score, 0.0)]
-
-    pct = (
-        final_r.get("direction_probs")
-        if isinstance(final_r.get("direction_probs"), dict) and final_r.get("direction_probs")
-        else _direction_pct_from_top3(top3, direction)
-    )
-
-    conf = int(_clip(_f(final_r.get("ai_confidence", 60), 60), 0, 100))
+    for cand in ai_r.get("top3", [])[:8]:
+        if isinstance(cand, dict):
+            sc = _score_from_candidate(cand)
+            if _parse_score(sc)[0] is not None:
+                top_candidates.append((sc, round(_prob_to_float(cand.get("prob", 0)), 3)))
     gmin, gmax, scenario = _goal_range_from_score(score)
-    total_goals = _score_total(score) or 0
+    h, a = _parse_score(score)
+    total_goals = (h or 0) + (a or 0) if h is not None and a is not None else 0
     final_odds = get_market_odds_for_score(match_obj, score)
     market_implied = round(100.0 / final_odds, 3) if final_odds > 1.05 else None
+    warnings = list(ai_r.get("validation_warnings", []))
 
-    ai_abstained = [n.upper() for n in AI_NAMES if not _valid_ai_score_from_response(all_ai.get(n, {}))]
-    confs = [
-        _f(r.get("ai_confidence", 60), 60)
-        for r in all_ai.values()
-        if isinstance(r, dict) and _valid_ai_score_from_response(r)
-    ]
-    avg_conf = round(sum(confs) / len(confs), 1) if confs else conf
-
-    def sc_of(name: str) -> str:
-        return _valid_ai_score_from_response(all_ai.get(name, {})) or "弃权"
-
-    def reason_of(name: str) -> str:
-        r = all_ai.get(name, {})
-        if not isinstance(r, dict) or not _valid_ai_score_from_response(r):
-            return "弃权"
-        return str(r.get("reason", ""))[:3000]
-
-    exp_audit = _experience_engine().analyze(match_obj)
-    final_r = _force_experience_review_full_coverage(final_r, exp_audit)
-
-    selection_pack = _compute_recommendation_scores(
-        final_r=final_r,
-        all_ai=all_ai,
-        match_obj=match_obj,
-        exp_audit=exp_audit,
-        score=score,
-        direction=direction,
-        pct=pct,
-        top_candidates=top_candidates,
-        final_name=final_name,
-        dir_score_conflict=dir_score_conflict,
-    )
+    web_research = ai_r.get("web_research", {}) if isinstance(ai_r.get("web_research"), dict) else {}
+    money_flow = ai_r.get("money_flow", {}) if isinstance(ai_r.get("money_flow"), dict) else {}
+    market_interpretation = ai_r.get("market_interpretation", {}) if isinstance(ai_r.get("market_interpretation"), dict) else {}
+    contextual_logic = ai_r.get("contextual_logic", {}) if isinstance(ai_r.get("contextual_logic"), dict) else {}
 
     evidences = [
-        "PURE RAW-AI：AI成功时不使用本地比分矩阵、不使用CRS、不使用本地风控兜底。",
-        "STRICT ONE-CALL：每个模型默认最多请求一次；Claude不做二次repair消费。",
-        "STRICT-FULL-BATCH：模型结果必须覆盖全部场次，半截结果不作为成功。",
-        "EVENT-DRIVEN：Phase1三家并发；每家终态即时落盘；三家终态齐全后触发Claude。",
-        "CACHE OFF BY DEFAULT：默认关闭持久化缓存，赔率变化/手动刷新会重新跑AI。",
-        "SHARP-GATE：本地不改AI比分，只判断Sharp冲突是否允许进入推荐池。",
-        "SCORE-MARKET-GATE：比分赔率低位和总进球主模态不支持时，比分评级降级。",
-        f"最终来源:{decision_source}; final_model={final_name}; score={score}; raw_direction={raw_direction}; score_direction={score_direction}; final_direction={direction}",
-        f"AI top3:{top_candidates[:5]}",
-        f"AI direction_probs:{pct} ({'AI原生direction_probs' if final_r.get('direction_probs') else 'top3_direction_share_fallback'})",
-        f"ai_result_files:{dict(AI_RESULT_FILES)}",
+        "AI-NATIVE：本地不做足球预测判断；方向、比分、Top4等级均来自 AI 输出。",
+        "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
+        "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
+        f"final_model={ai_r.get('source_model')} phase={ai_r.get('source_phase')} score={score} direction={direction}",
+        "market_interpretation:" + _json_compact(market_interpretation, 1200),
+        "money_flow:" + _json_compact(money_flow, 1200),
+        "contextual_logic:" + _json_compact(contextual_logic, 1200),
+        "web_research:" + _json_compact(web_research, 1200),
+        "recommendation:" + _json_compact(rec, 1200),
     ]
-
-    if dir_score_conflict:
-        evidences.append(f"dir_score_conflict: AI方向={raw_direction} 但比分={score} 暗示={score_direction}，本地按比分方向闭环显示，不篡改比分。")
-    if final_r.get("experience_review_inherited_from"):
-        evidences.append(f"experience_review_inherited_from:{final_r.get('experience_review_inherited_from')}")
-    if final_r.get("audit"):
-        evidences.append("AI audit:" + _json_compact(final_r.get("audit"), 1800))
-    if final_r.get("data_missing"):
-        evidences.append("data_missing:" + _json_compact(final_r.get("data_missing"), 800))
-    if exp_audit.get("triggered"):
-        evidences.append(
-            "experience_audit_cards(prompt_only):"
-            + _json_compact(
-                [{k: t.get(k) for k in ("id", "name", "reason", "ai_question")} for t in exp_audit.get("triggered", [])],
-                1800,
-            )
-        )
-
-    evidences.append("sharp_audit:" + _json_compact(selection_pack.get("sharp_audit", {}), 1400))
-    evidences.append("score_market_evidence:" + _json_compact(selection_pack.get("score_market_evidence", {}), 1400))
-
-    if selection_pack.get("score_shape_warnings"):
-        evidences.append("score_shape_warnings:" + _json_compact(selection_pack.get("score_shape_warnings"), 500))
-    if selection_pack.get("experience_review_missing"):
-        evidences.append("experience_review_missing:" + _json_compact(selection_pack.get("experience_review_missing"), 800))
-    if shape_auto_warnings:
-        evidences.append("shape_auto_fixed:" + _json_compact(shape_auto_warnings, 500))
-
-    h, a = _parse_score(score)
-    both_score_cn = "是" if h is not None and a is not None and h > 0 and a > 0 else "否"
-
-    sharp_audit = selection_pack.get("sharp_audit", {}) or {}
 
     return {
         "predicted_score": score,
@@ -3434,122 +1838,129 @@ def _make_ai_prediction(
         "result": _direction_cn(direction),
         "display_direction": _direction_cn(direction),
         "final_direction": direction,
-        "raw_ai_direction": raw_direction,
-        "score_implied_direction": score_direction,
-        "dir_score_conflict": dir_score_conflict,
-        "dir_score_conflict_note": f"AI方向={raw_direction} 但比分={score} 暗示={score_direction}" if dir_score_conflict else "",
+        "raw_ai_direction": ai_r.get("raw_ai_direction", direction),
+        "score_implied_direction": _score_direction(score),
+        "dir_score_conflict": any("dir_score_conflict" in w or "protocol_direction_fixed" in w for w in warnings),
         "is_abstain": False,
         "is_score_others": _score_display_label(score, direction) in ("胜其他", "平其他", "负其他"),
 
         "home_win_pct": pct.get("home", 0.0),
         "draw_pct": pct.get("draw", 0.0),
         "away_win_pct": pct.get("away", 0.0),
-        "confidence": conf,
-        "confidence_meaning": "AI自报置信度，非历史命中率；PURE模式不做本地概率改写",
-        "risk_level": str(final_r.get("risk_level", "medium")),
-        "goal_band": final_r.get("goal_band", _score_goal_band(score)),
-        "btts_ai": final_r.get("btts", _score_btts(score)),
-        "score_shape_reason": final_r.get("score_shape_reason", ""),
-        "experience_review": final_r.get("experience_review", []),
-        "experience_review_inherited_from": final_r.get("experience_review_inherited_from"),
-
-        **selection_pack,
-
-        "dir_confidence": pct.get(direction, 0.0),
-        "dir_gap": round(max(pct.values()) - sorted(pct.values(), reverse=True)[1], 1) if len(pct) >= 2 else 0.0,
-        "scenario": scenario,
+        "confidence": int(_clip(_f(rec.get("bet_confidence", max(pct.values()) if pct else 0), 0), 0, 100)),
+        "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
+        "risk_level": rec.get("risk_level", "medium"),
+        "goal_band": ai_r.get("goal_band", _score_goal_band(score)),
+        "btts": ai_r.get("btts", _score_btts(score)),
+        "btts_ai": ai_r.get("btts", _score_btts(score)),
+        "both_score": "是" if _score_btts(score) == "yes" else "否",
+        "over_under_2_5": "大" if total_goals >= 3 else "小",
+        "expected_total_goals": total_goals,
         "goal_range": (gmin, gmax),
+        "scenario": scenario,
 
+        "recommendation": rec,
+        "recommendation_tier": tier,
+        "recommend_gate_pass": is_ai_recommended,
+        "recommend_gate_reasons": [] if is_ai_recommended else ["ai_not_recommended_or_below_min_tier"],
+        "safe_top_gate_score": _f(rec.get("bet_confidence", 0), 0),
+        "overall_selection_score": _f(rec.get("bet_confidence", 0), 0),
+        "direction_selection_score": None,
+        "score_shape_score": None,
+        "recommendation_downgrade_reasons": [],
+
+        "top_score_candidates": top_candidates,
+        "unified_matrix_top_scores": top_candidates,
+        "score_model_prob": top_candidates[0][1] if top_candidates else 0.0,
+        "score_market_odds": final_odds,
+        "score_market_implied_pct": market_implied,
+
+        "market_interpretation": market_interpretation,
+        "money_flow": money_flow,
+        "contextual_logic": contextual_logic,
+        "rejected_cases": ai_r.get("rejected_cases", {}),
+        "web_research": web_research,
+        "final_web_audit": ai_r.get("final_web_audit", {}),
+        "data_quality": ai_r.get("data_quality", {}),
+        "ai_native_reason": ai_r.get("reason", ""),
+        "validation_warnings": list(dict.fromkeys(warnings)),
+
+        # Legacy-compatible fields retained as disabled/empty.
         "bayesian_evidences": evidences,
         "bayesian_prior": {},
         "override_triggered": False,
-
         "traps_detected": [],
         "trap_count": 0,
         "trap_severity": 0,
         "trap_details": [],
         "trap_flags": {},
-
         "fair_1x2": {},
-        "fair_1x2_method": "disabled_pure_raw_ai",
+        "fair_1x2_method": "disabled_ai_native_web",
         "market_overround": 0.0,
         "raw_implied_1x2": {},
-
-        "crs_shape": "disabled_pure_raw_ai",
+        "crs_shape": "raw_correct_score_odds_only_no_local_crs_matrix",
         "crs_moments": {},
         "crs_margin": 0.0,
         "crs_coverage": 0.0,
         "crs_implied_probs": {},
         "crs_low_rank_info": {},
-
-        "top_score_candidates": top_candidates,
-        "unified_matrix_top_scores": top_candidates,
         "unified_goal_probs": {},
         "fair_1x2_pack": {},
         "mixed_target_dir": {},
-        "unified_source": "disabled_pure_raw_ai",
-        "decision_source": decision_source,
-        "ai_authority_mode": "pure_raw_ai",
-
-        "gpt_score": sc_of("gpt"),
-        "gpt_analysis": reason_of("gpt"),
-        "grok_score": sc_of("grok"),
-        "grok_analysis": reason_of("grok"),
-        "gemini_score": sc_of("gemini"),
-        "gemini_analysis": reason_of("gemini"),
-        "claude_score": sc_of("claude"),
-        "claude_analysis": reason_of("claude"),
-
-        "ai_abstained": ai_abstained,
-        "ai_avg_confidence": avg_conf,
-        "ai_call_status": dict(AI_CALL_STATUS),
-        "ai_result_files": dict(AI_RESULT_FILES),
-        "ai_run_metadata": dict(_LAST_AI_RUN_METADATA),
-
-        "value_kill_count": 0,
+        "unified_source": "ai_native_web",
+        "decision_source": f"ai_native:{ai_r.get('source_model')}:{ai_r.get('source_phase')}",
+        "ai_authority_mode": "ai_native_web_no_local_football_judgement",
+        "ev_note": "disabled_local_ev_no_local_probability",
         "suggested_kelly": 0.0,
         "edge_vs_market": 0.0,
         "is_value": False,
-        "ev_note": "disabled_pure_raw_ai_no_local_probability",
-        "score_model_prob": top_candidates[0][1] if top_candidates else 0.0,
-        "score_market_odds": final_odds,
-        "score_market_implied_pct": market_implied,
 
-        "smart_money_signal": " | ".join((exp_audit.get("risk_signals", []) + sharp_audit.get("sharp_signals", []))[:8]),
-        "smart_signals": (
-            ["EXP_AUDIT:" + s for s in exp_audit.get("risk_signals", [])]
-            + ["SHARP:" + s for s in sharp_audit.get("sharp_signals", [])]
-        ),
+        "smart_money_signal": str(money_flow.get("evidence", ""))[:1000],
+        "smart_signals": rec.get("risk_tags", []),
+        "sharp_detected": str(money_flow.get("sharp_money_direction", "unclear")) not in ("", "unclear", "none"),
+        "sharp_dir": money_flow.get("sharp_money_direction", "unclear"),
+        "sharp_conflict": False,
+        "sharp_unresolved": False,
+        "sharp_audit": money_flow,
+        "score_market_evidence": market_interpretation,
+        "score_market_gate_pass": None,
+        "score_market_alignment": None,
+        "sharp_clearance_score": None,
 
         "cold_door": {
-            "is_cold_door": bool(sharp_audit.get("sharp_conflict", False)),
-            "strength": sharp_audit.get("sharp_strength", 0),
-            "level": "Sharp冲突" if sharp_audit.get("sharp_conflict") else "普通",
-            "signals": sharp_audit.get("sharp_signals", []),
-            "sharp_confirmed": sharp_audit.get("sharp_detected", False),
-            "dark_verdict": "存在未解释Sharp冲突" if sharp_audit.get("sharp_unresolved") else "",
+            "is_cold_door": False,
+            "strength": 0,
+            "level": "AI-native字段，不由本地判断冷门",
+            "signals": rec.get("risk_tags", []),
+            "sharp_confirmed": str(money_flow.get("sharp_money_direction", "unclear")) not in ("", "unclear", "none"),
+            "dark_verdict": "",
         },
 
         "xG_home": "?",
         "xG_away": "?",
-        "over_under_2_5": "大" if total_goals >= 3 else "小",
-        "both_score": both_score_cn,
-        "expected_total_goals": total_goals,
-        "over_2_5": None,
-        "btts": None,
         "bookmaker_implied_home_xg": "?",
         "bookmaker_implied_away_xg": "?",
-
-        "sharp_detected": sharp_audit.get("sharp_detected", False),
-        "sharp_dir": sharp_audit.get("sharp_dir"),
+        "over_2_5": None,
         "fair_dir": None,
         "shin_dir": None,
         "actual_handicap_signed": None,
         "theoretical_handicap_signed": None,
 
-        "model_consensus": len([n for n in AI_NAMES if _valid_ai_score_from_response(all_ai.get(n, {}))]),
+        "gpt_score": "见阶段快照",
+        "gpt_analysis": "见阶段快照",
+        "grok_score": "见阶段快照",
+        "grok_analysis": "见阶段快照",
+        "gemini_score": "见阶段快照",
+        "gemini_analysis": "见阶段快照",
+        "claude_score": score if ai_r.get("source_model") == "claude" else "见阶段快照",
+        "claude_analysis": ai_r.get("reason", "")[:3000] if ai_r.get("source_model") == "claude" else "见阶段快照",
+        "ai_abstained": [],
+        "ai_avg_confidence": _f(rec.get("bet_confidence", 0), 0),
+        "ai_call_status": dict(AI_CALL_STATUS),
+        "ai_result_files": dict(AI_RESULT_FILES),
+        "ai_run_metadata": dict(_LAST_AI_RUN_METADATA),
+        "model_consensus": None,
         "total_models": 4,
-        "extreme_warning": "未解释Sharp冲突，禁止强推" if sharp_audit.get("sharp_unresolved") else "",
 
         "refined_poisson": {},
         "poisson": {},
@@ -3575,140 +1986,70 @@ def _make_ai_prediction(
         "kelly_home": {},
         "kelly_away": {},
         "odds": {},
-        "experience_analysis": {"mode": "prompt_only_no_decision", **exp_audit},
+        "experience_analysis": {"mode": "removed_no_local_experience_cards"},
         "pro_odds": {},
         "asian_handicap_probs": {},
         "top_scores": [],
 
-        "validation_warnings": shape_auto_warnings[:],
         "engine_version": ENGINE_VERSION,
         "engine_architecture": ENGINE_ARCHITECTURE,
     }
 
 
-def merge_result_pure_ai(all_ai: Dict[str, Dict[int, Dict[str, Any]]], idx: int, match_obj: Dict[str, Any]) -> Dict[str, Any]:
-    per_match = {name: (all_ai.get(name, {}) or {}).get(idx, {}) for name in AI_NAMES}
-    final_name, final_r, source = _choose_final_ai(per_match)
-    if not final_name:
-        return _abstain_prediction()
-    return _make_ai_prediction(final_name, final_r, source, per_match, match_obj)
+def _abstain_prediction(reason: str = "AI全失败，AI-native模式不使用本地足球兜底") -> Dict[str, Any]:
+    return {
+        "predicted_score": "弃权",
+        "predicted_label": "弃权",
+        "result": "弃权",
+        "display_direction": "弃权",
+        "final_direction": "abstain",
+        "is_abstain": True,
+        "home_win_pct": 0.0,
+        "draw_pct": 0.0,
+        "away_win_pct": 0.0,
+        "confidence": 0,
+        "confidence_meaning": "AI-native 模式：AI失败即弃权，不使用本地预测兜底",
+        "risk_level": "高",
+        "goal_range": (0, 0),
+        "recommendation": {"tier": "D", "is_recommended": False, "top4_priority": 999, "bet_confidence": 0, "risk_level": "high", "risk_tags": [reason], "why_recommended": "弃权"},
+        "recommendation_tier": "D",
+        "recommend_gate_pass": False,
+        "recommend_gate_reasons": [reason],
+        "top_score_candidates": [],
+        "bayesian_evidences": [reason],
+        "decision_source": "ai_abstain_no_local_football_fallback",
+        "ai_authority_mode": "ai_native_web_no_local_football_judgement",
+        "ai_call_status": dict(AI_CALL_STATUS),
+        "ai_run_metadata": dict(_LAST_AI_RUN_METADATA),
+        "engine_version": ENGINE_VERSION,
+        "engine_architecture": ENGINE_ARCHITECTURE,
+    }
 
 
-# ============================================================
-# 后处理 / 推荐
-# ============================================================
-
-def _enforce_consistency(mg: Dict[str, Any]) -> Dict[str, Any]:
-    if mg.get("is_abstain") or mg.get("predicted_score") == "弃权":
-        mg["predicted_score"] = "弃权"
-        mg["predicted_label"] = "弃权"
-        mg["result"] = "弃权"
-        mg["display_direction"] = "弃权"
-        mg["final_direction"] = "abstain"
-        return mg
-
-    score = _normalize_score_text(mg.get("predicted_score", ""))
-    d = _score_direction(score) or _dir_from_cn(mg.get("result", "")) or "draw"
-
-    mg["predicted_score"] = score
-    mg["predicted_label"] = _score_display_label(score, d)
-    mg["result"] = _direction_cn(d)
-    mg["display_direction"] = _direction_cn(d)
-    mg["final_direction"] = d
-    mg["is_score_others"] = mg["predicted_label"] in ("胜其他", "平其他", "负其他")
-
-    sg = _score_goal_band(score)
-    sb = _score_btts(score)
-
-    warnings = list(mg.get("validation_warnings", []))
-    old_gb = str(mg.get("goal_band", ""))
-    old_bt = str(mg.get("btts_ai", ""))
-
-    if sg and old_gb and old_gb != sg and not any(w.startswith("goal_band_auto_fixed") for w in warnings):
-        warnings.append(f"goal_band_auto_fixed:{old_gb}->{sg}")
-
-    if sb in ("yes", "no") and old_bt in ("yes", "no") and old_bt != sb and not any(w.startswith("btts_auto_fixed") for w in warnings):
-        warnings.append(f"btts_auto_fixed:{old_bt}->{sb}")
-
-    mg["goal_band"] = sg or mg.get("goal_band", "")
-    mg["btts_ai"] = sb if sb in ("yes", "no") else mg.get("btts_ai", "unclear")
-    mg["validation_warnings"] = warnings
-
-    return mg
-
-
-def _validate_prediction_consistency(mg: Dict[str, Any]) -> Dict[str, Any]:
-    warnings = list(mg.get("validation_warnings", []))
-
-    if mg.get("is_abstain"):
-        mg["validation_warnings"] = warnings
-        return _enforce_consistency(mg)
-
-    score = _normalize_score_text(mg.get("predicted_score", ""))
-    h, a = _parse_score(score)
-
-    if h is None:
-        warnings.append("score_unparseable_in_pure_ai")
-    else:
-        total = h + a
-        gr = mg.get("goal_range")
-        if isinstance(gr, list):
-            gr = tuple(gr)
-        if isinstance(gr, tuple) and len(gr) == 2:
-            gmin, gmax = _i(gr[0]), _i(gr[1])
-            if not (gmin <= total <= gmax):
-                warnings.append(f"goal_range_adjusted_for_ai_score:{gr}->{total}")
-                mg["goal_range"] = (min(gmin, total), max(gmax, total))
-
-    mg["validation_warnings"] = list(dict.fromkeys(warnings))
-    return _enforce_consistency(mg)
-
-
-def _recommend_sort_key(p: Dict[str, Any]) -> float:
+def _recommend_sort_key(p: Dict[str, Any]) -> Tuple[int, int, int, float]:
     pr = p.get("prediction", {})
-    if pr.get("is_abstain"):
-        return -9999
-
-    s = _f(pr.get("safe_top_gate_score", 0), 0) * 0.55
-    s += _f(pr.get("overall_selection_score", 0), 0) * 0.25
-    s += _f(pr.get("dir_gap", 0), 0) * 0.20
-    s += _f(pr.get("score_market_alignment", 0), 0) * 0.18
-    s += _f(pr.get("sharp_clearance_score", 100), 100) * 0.12
-
-    if pr.get("recommend_gate_pass"):
-        s += 12
-    if pr.get("risk_level") in ("low", "低"):
-        s += 4
-    if pr.get("risk_level") in ("high", "高"):
-        s -= 8
-    if pr.get("sharp_conflict"):
-        s -= 15
-    if pr.get("sharp_unresolved"):
-        s -= 25
-    if pr.get("dir_score_conflict"):
-        s -= 18
-    if not pr.get("score_market_gate_pass", True):
-        s -= 18
-    if pr.get("experience_review_missing"):
-        s -= min(10, len(pr.get("experience_review_missing", [])) * 2)
-
-    return round(s, 2)
+    rec = pr.get("recommendation", {}) if isinstance(pr.get("recommendation"), dict) else {}
+    tier = _tier_rank(rec.get("tier", "D"))
+    is_rec = 1 if bool(rec.get("is_recommended", False)) and not pr.get("is_abstain") else 0
+    priority = -_i(rec.get("top4_priority", 999), 999)
+    conf = _f(rec.get("bet_confidence", pr.get("confidence", 0)), 0)
+    return (is_rec, tier, priority, conf)
 
 
 def select_top4(preds: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    eligible = []
     for p in preds:
         pr = p.get("prediction", {})
-        p["recommend_score"] = _recommend_sort_key(p)
-        p["strict_recommend"] = bool(pr.get("recommend_gate_pass") and not pr.get("is_abstain"))
-
-    eligible = [p for p in preds if p.get("strict_recommend")]
-    eligible = sorted(eligible, key=lambda x: x.get("recommend_score", -999), reverse=True)
-
+        rec = pr.get("recommendation", {}) if isinstance(pr.get("recommendation"), dict) else {}
+        if pr.get("is_abstain"):
+            continue
+        if bool(rec.get("is_recommended", False)) and _min_tier_ok(rec.get("tier", "D")):
+            eligible.append(p)
+    eligible = sorted(eligible, key=_recommend_sort_key, reverse=True)
     if len(eligible) >= 4 or not AI_FILL_TOP4_WITH_NON_RECOMMENDABLE:
         return eligible[:4]
-
     rest = [p for p in preds if p not in eligible]
-    rest = sorted(rest, key=lambda x: x.get("recommend_score", -999), reverse=True)
+    rest = sorted(rest, key=_recommend_sort_key, reverse=True)
     return (eligible + rest)[:4]
 
 
@@ -3719,6 +2060,25 @@ def extract_num(ms: Any) -> int:
     return base + int(nums[0]) if nums else 9999
 
 
+def _run_async(coro):
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(coro)
+    if loop and loop.is_running():
+        import concurrent.futures
+        def runner():
+            nl = asyncio.new_event_loop()
+            try:
+                asyncio.set_event_loop(nl)
+                return nl.run_until_complete(coro)
+            finally:
+                nl.close()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            return pool.submit(runner).result()
+    return asyncio.run(coro)
+
+
 # ============================================================
 # 主入口
 # ============================================================
@@ -3727,71 +2087,44 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     raw_ms = _extract_match_list(raw)
     ms = [normalize_match(m) for m in raw_ms]
 
-    print("\n" + "=" * 88)
-    print(f"  [{ENGINE_VERSION}] PURE RAW-AI 主审 | {len(ms)} 场 | STRICT ONE-CALL | STRICT-FULL-BATCH | EVENT-DRIVEN | SHARP-GATE")
-    print("=" * 88)
+    print("\n" + "=" * 92)
+    print(f"  [{ENGINE_VERSION}] AI-NATIVE WEB-AUGMENTED | {len(ms)} 场 | 本地只做协议层 | chunk={AI_CHUNK_SIZE} | mock={AI_MOCK_MODE}")
+    print("=" * 92)
 
-    match_analyses: List[Dict[str, Any]] = []
-    for i, m in enumerate(ms, 1):
-        exp_audit = _experience_engine().analyze(m)
-        match_analyses.append({
-            "match": m,
-            "index": i,
-            "experience_audit": exp_audit,
-            "external_context": {"enabled": False, "source_quality": "disabled", "items": [], "errors": []},
-        })
+    evidence_all = [build_evidence_packet(m, i) for i, m in enumerate(ms, 1)]
 
-    if ENABLE_EXTERNAL_CONTEXT and match_analyses:
-        print(f"  [{ENGINE_VERSION} External] 联网情报入口 enabled=True ...")
+    ai_final: Dict[int, Dict[str, Any]] = {}
+    if use_ai and evidence_all:
         try:
-            _run_async(enrich_external_context(match_analyses))
+            ai_final = _run_async(run_ai_native_web(evidence_all))
         except Exception as e:
-            logger.warning(f"external_context 失败: {e}")
-    else:
-        print(f"  [{ENGINE_VERSION} External] 联网情报入口 enabled=False")
-
-    all_ai: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in AI_NAMES}
-
-    if use_ai and match_analyses:
-        print(
-            f"  [{ENGINE_VERSION} AI] 启动 GPT/Grok/Gemini 初审 + Claude 终审 | "
-            f"每模型最多一次请求 | cache_enabled={AI_ENABLE_CACHE} | "
-            f"full_batch_required={AI_REQUIRE_FULL_BATCH_COVERAGE} | phase_snapshot={AI_PHASE_SNAPSHOT_ENABLED}"
-        )
-        try:
-            all_ai = _run_async(run_ai_matrix_two_phase(match_analyses))
-        except Exception as e:
-            logger.error(f"AI矩阵执行失败: {e}")
-            all_ai = {n: {} for n in AI_NAMES}
+            logger.error(f"AI-native矩阵执行失败: {e}")
+            ai_final = {}
     elif not use_ai:
-        print("  [PURE RAW-AI] use_ai=False → 全部弃权，不启用本地兜底")
+        print("  [AI-NATIVE] use_ai=False → 全部弃权，不启用本地足球兜底")
 
     res = []
-    for i, ma in enumerate(match_analyses, 1):
-        m = ma["match"]
-        mg = merge_result_pure_ai(all_ai, i, m)
-        mg = _validate_prediction_consistency(mg)
-        res.append({**m, "prediction": mg})
-
-        if mg.get("is_abstain"):
-            print(f"  [{i}] {m.get('home_team')} vs {m.get('away_team')} => 弃权 | PURE模式AI无有效结果")
+    for i, m in enumerate(ms, 1):
+        ai_r = ai_final.get(i) or _abstain_ai_prediction(i, "missing_final_ai_result")
+        pred = adapt_ai_to_frontend(ai_r, m) if not ai_r.get("final_direction") == "abstain" else _abstain_prediction(ai_r.get("reason", "abstain"))
+        res.append({**m, "prediction": pred})
+        if pred.get("is_abstain"):
+            print(f"  [{i}] {m.get('home_team')} vs {m.get('away_team')} => 弃权")
         else:
-            gate = "PASS" if mg.get("recommend_gate_pass") else "NO-GATE"
-            conflict = " | DIR_SCORE_CONFLICT" if mg.get("dir_score_conflict") else ""
+            rec = pred.get("recommendation", {})
+            gate = "PASS" if pred.get("recommend_gate_pass") else "NO-GATE"
             print(
                 f"  [{i}] {m.get('home_team')} vs {m.get('away_team')} => "
-                f"{mg['result']} ({mg['predicted_score']}={mg['predicted_label']}) | "
-                f"AI_CF:{mg['confidence']} | tier:{mg.get('recommendation_tier')} | "
-                f"gate:{gate} | 来源:{mg.get('decision_source')}{conflict}"
+                f"{pred['result']} ({pred['predicted_score']}) | tier:{rec.get('tier')} | "
+                f"AI_CF:{rec.get('bet_confidence')} | gate:{gate} | source:{pred.get('decision_source')}"
             )
 
     t4 = select_top4(res)
     t4_ids = set(id(x) for x in t4)
-    strict_ids = set(id(x) for x in t4 if x.get("strict_recommend"))
-
     for r in res:
-        r["is_recommended"] = id(r) in t4_ids
-        r["is_strict_recommended"] = id(r) in strict_ids
+        r["is_top4_candidate"] = id(r) in t4_ids
+        r["is_recommended"] = bool(id(r) in t4_ids and r.get("prediction", {}).get("recommend_gate_pass"))
+        r["is_strict_recommended"] = r["is_recommended"]
 
     res.sort(key=lambda x: extract_num(x.get("match_num", "")))
     return res, t4
@@ -3801,4 +2134,4 @@ if __name__ == "__main__":
     logger.info(f"{ENGINE_VERSION} 启动")
     print(f"✅ {ENGINE_VERSION} 加载完成")
     print(f"   架构: {ENGINE_ARCHITECTURE}")
-    print("   模式: AI成功=AI直出；AI失败=弃权；每模型最多一次请求；默认关闭缓存；默认禁用文本兜底；半截结果直接判失败；Phase1结果即时落盘")
+    print("   模式: AI判断足球；本地只做协议/分批/解析/落盘/前端兼容。")
