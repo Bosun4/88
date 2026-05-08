@@ -3,7 +3,7 @@ name: Football AI Predict
 on:
   schedule:
     # 北京时间 11:30 = UTC 03:30
-    - cron: '30 3 * * *'
+    - cron: "30 3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -16,7 +16,7 @@ concurrency:
 jobs:
   predict:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 350
 
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +35,8 @@ jobs:
       - name: Restore runtime data cache into scripts
         run: |
           mkdir -p scripts/data
+          mkdir -p scripts/data/ai_phase_results
+
           if [ -d "data" ]; then
             echo "♻️ Restoring root data/ into scripts/data/"
             rsync -a data/ scripts/data/ || true
@@ -45,6 +47,9 @@ jobs:
           echo "🧹 Clearing old AI cache to avoid stale prediction pollution"
           rm -rf scripts/data/ai_cache || true
           rm -rf data/ai_cache || true
+
+          echo "📁 Ensure AI phase result directory exists"
+          mkdir -p scripts/data/ai_phase_results
 
       - name: Run Predictions
         env:
@@ -59,8 +64,8 @@ jobs:
 
           # ============================================================
           # 四模型 API
-          # 保持旧版四模型变量，不传 API_KEY / API_URL
           # 如果四家走同一中转，四组 secrets 可填同一套 key/url
+          # 当前 FORCE_COMMON_GATEWAY_URL=true 时，代码会优先取 GPT_API_KEY/GPT_API_URL 作为统一网关
           # ============================================================
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
@@ -80,16 +85,18 @@ jobs:
           # 只跑今日竞彩业务日
           # 北京时间凌晨 00:00-10:59 仍归入前一个竞彩业务日
           # ============================================================
-          VMAX_RUN_DAYS: today
-          AI_RUN_DAYS: today
+          VMAX_RUN_DAYS: "today"
+          AI_RUN_DAYS: "today"
           VMAX_DATE_SHIFT_HOURS: "11"
 
           # ============================================================
-          # AI 超长等待
-          # 不分批，一次性全场大包，等待模型完整返回
+          # AI 等待时间
+          # Phase1 三家并发；每家终态即时落盘；三家终态齐全后触发 Claude
+          # GPT/Grok/Gemini 单模型最长等 60 分钟，避免卡死 90 分钟才进入 Claude
+          # Claude 终审最长等 120 分钟
           # ============================================================
           AI_CONNECT_TIMEOUT: "120"
-          AI_READ_TIMEOUT: "5400"
+          AI_READ_TIMEOUT: "3600"
           AI_CLAUDE_CONNECT_TIMEOUT: "120"
           AI_CLAUDE_READ_TIMEOUT: "7200"
           AI_HTTP_TOTAL_TIMEOUT: "0"
@@ -107,7 +114,7 @@ jobs:
 
           # ============================================================
           # Claude 必须终审
-          # 不再因为 Phase1 有效不足跳过 Claude
+          # 不因为 Phase1 有效不足跳过 Claude
           # ============================================================
           AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID: "false"
           AI_RUN_CLAUDE_ALWAYS: "true"
@@ -117,10 +124,11 @@ jobs:
           AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE: "350"
           CLAUDE_RAW_PACKET_CHAR_LIMIT: "4500"
           CLAUDE_MATCH_SUMMARY_CHAR_LIMIT: "2200"
+          CLAUDE_COMPACT_FIELD_LIMIT: "2500"
 
           # ============================================================
           # 禁止文本兜底
-          # 防止 Grok / Claude 自然语言残片误抓成 1/56 假完成
+          # 防止 Grok / Claude 自然语言残片误抓成 1/N 假完成
           # ============================================================
           AI_ALLOW_TEXT_FALLBACK: "false"
           AI_ALLOW_CLAUDE_TEXT_FALLBACK: "false"
@@ -139,13 +147,24 @@ jobs:
           # 关闭 AI 缓存
           # 防止手动重跑、赔率变化、临场变动被旧缓存污染
           # ============================================================
+          AI_ENABLE_CACHE: "false"
           AI_DISABLE_CACHE: "true"
           AI_PERSISTENT_CACHE_ENABLED: "false"
           AI_SINGLEFLIGHT_ENABLED: "false"
           AI_DECISION_CACHE_TTL: "0"
           AI_CACHE_DIR: "data/ai_cache"
           AI_CACHE_STRIP_VOLATILE_KEYS: "true"
-          AI_WRITE_BATCH_RESULT_IMMEDIATELY: "false"
+
+          # ============================================================
+          # v18.4.15 EVENT-DRIVEN 阶段落盘
+          # 不是缓存，不参与复用，只用于后台日志/结果追踪
+          # ============================================================
+          AI_PHASE_SNAPSHOT_ENABLED: "true"
+          AI_PHASE_RESULT_DIR: "data/ai_phase_results"
+          AI_SAVE_PARTIAL_REJECTED_RESULTS: "true"
+          AI_WRITE_BATCH_RESULT_IMMEDIATELY: "true"
+          AI_SAVE_RAW_RESPONSE: "false"
+          AI_PARSE_DEBUG: "false"
 
           # 缓存关闭后磁盘锁不参与 AI 判断，仅保留极短安全值
           AI_DISK_LOCK_WAIT_SECONDS: "30"
@@ -153,9 +172,9 @@ jobs:
 
           # ============================================================
           # main.py 运行锁
-          # job timeout 240分钟，所以 stale 给 4小时
+          # job timeout 350分钟，所以 stale 给 6小时
           # ============================================================
-          VMAX_MAIN_LOCK_STALE_SECONDS: "14400"
+          VMAX_MAIN_LOCK_STALE_SECONDS: "21600"
 
           # workflow 已经 pip install，这里让 main.py 跳过二次自动安装
           SKIP_AUTO_INSTALL: "true"
@@ -164,12 +183,28 @@ jobs:
           cd scripts
           python main.py
 
+      - name: Upload AI phase/debug artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-phase-debug-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            scripts/data/ai_phase_results/
+            scripts/data/debug/
+            scripts/predictions.json
+            scripts/data/predictions.json
+
       - name: Push data updates
+        if: success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           mkdir -p data/
+
+          git pull --rebase --autostash origin main || true
 
           if [ -d "scripts/data" ]; then
             echo "📤 Syncing scripts/data/ -> root data/"
@@ -182,11 +217,13 @@ jobs:
           echo "🧹 Ensure AI cache is not committed"
           rm -rf data/ai_cache || true
 
+          echo "📁 Keep AI phase result snapshots"
+          mkdir -p data/ai_phase_results
+
           git add data/
 
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (today-only strict-ai-no-cache)"
-            git pull --rebase --autostash origin main || true
+            git commit -m "🤖 Auto-update prediction data (today-only event-driven strict-ai-no-cache)"
             git push
           else
             echo "✅ 本次测算数据无变动，安全退出。"
