@@ -1,9 +1,6 @@
 name: Football AI Predict
 
 on:
-  schedule:
-    # 北京时间 11:30 = UTC 03:30
-    - cron: "30 3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -55,18 +52,10 @@ jobs:
         env:
           PYTHONUNBUFFERED: "1"
 
-          # ============================================================
-          # 主数据源
-          # ============================================================
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
 
-          # ============================================================
-          # 四模型 API
-          # 如果四家走同一中转，四组 secrets 可填同一套 key/url
-          # 当前 FORCE_COMMON_GATEWAY_URL=true 时，代码会优先取 GPT_API_KEY/GPT_API_URL 作为统一网关
-          # ============================================================
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
 
@@ -81,29 +70,16 @@ jobs:
 
           FORCE_COMMON_GATEWAY_URL: "true"
 
-          # ============================================================
-          # 只跑今日竞彩业务日
-          # 北京时间凌晨 00:00-10:59 仍归入前一个竞彩业务日
-          # ============================================================
           VMAX_RUN_DAYS: "today"
           AI_RUN_DAYS: "today"
           VMAX_DATE_SHIFT_HOURS: "11"
 
-          # ============================================================
-          # AI 等待时间
-          # Phase1 三家并发；每家终态即时落盘；三家终态齐全后触发 Claude
-          # GPT/Grok/Gemini 单模型最长等 60 分钟，避免卡死 90 分钟才进入 Claude
-          # Claude 终审最长等 120 分钟
-          # ============================================================
           AI_CONNECT_TIMEOUT: "120"
           AI_READ_TIMEOUT: "3600"
           AI_CLAUDE_CONNECT_TIMEOUT: "120"
           AI_CLAUDE_READ_TIMEOUT: "7200"
           AI_HTTP_TOTAL_TIMEOUT: "0"
 
-          # ============================================================
-          # 严格每模型一次请求，避免重复扣费
-          # ============================================================
           STRICT_ONE_CALL_PER_MODEL: "true"
           AI_MAX_REQUESTS_PER_AI: "1"
           AI_CLAUDE_MAX_REQUESTS: "1"
@@ -112,10 +88,6 @@ jobs:
           AI_ENABLE_ANY_MODEL_JSON_REPAIR: "false"
           AI_CLAUDE_RETRY_BACKOFF_SECONDS: "20"
 
-          # ============================================================
-          # Claude 必须终审
-          # 不因为 Phase1 有效不足跳过 Claude
-          # ============================================================
           AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID: "false"
           AI_RUN_CLAUDE_ALWAYS: "true"
           AI_MIN_PHASE1_VALID_FOR_CLAUDE: "0"
@@ -126,27 +98,15 @@ jobs:
           CLAUDE_MATCH_SUMMARY_CHAR_LIMIT: "2200"
           CLAUDE_COMPACT_FIELD_LIMIT: "2500"
 
-          # ============================================================
-          # 禁止文本兜底
-          # 防止 Grok / Claude 自然语言残片误抓成 1/N 假完成
-          # ============================================================
           AI_ALLOW_TEXT_FALLBACK: "false"
           AI_ALLOW_CLAUDE_TEXT_FALLBACK: "false"
           AI_SAFE_TEXT_FALLBACK_ONLY: "false"
 
-          # ============================================================
-          # 全批次覆盖要求
-          # partial 结果不得当成完整成功
-          # ============================================================
           AI_REQUIRE_FULL_BATCH_COVERAGE: "true"
           AI_ACCEPT_PARTIAL_PHASE1: "false"
           AI_ACCEPT_PARTIAL_CLAUDE: "false"
           AI_PARTIAL_AS_FAILED: "true"
 
-          # ============================================================
-          # 关闭 AI 缓存
-          # 防止手动重跑、赔率变化、临场变动被旧缓存污染
-          # ============================================================
           AI_ENABLE_CACHE: "false"
           AI_DISABLE_CACHE: "true"
           AI_PERSISTENT_CACHE_ENABLED: "false"
@@ -155,10 +115,6 @@ jobs:
           AI_CACHE_DIR: "data/ai_cache"
           AI_CACHE_STRIP_VOLATILE_KEYS: "true"
 
-          # ============================================================
-          # v18.4.15 EVENT-DRIVEN 阶段落盘
-          # 不是缓存，不参与复用，只用于后台日志/结果追踪
-          # ============================================================
           AI_PHASE_SNAPSHOT_ENABLED: "true"
           AI_PHASE_RESULT_DIR: "data/ai_phase_results"
           AI_SAVE_PARTIAL_REJECTED_RESULTS: "true"
@@ -166,17 +122,11 @@ jobs:
           AI_SAVE_RAW_RESPONSE: "false"
           AI_PARSE_DEBUG: "false"
 
-          # 缓存关闭后磁盘锁不参与 AI 判断，仅保留极短安全值
           AI_DISK_LOCK_WAIT_SECONDS: "30"
           AI_DISK_LOCK_POLL_SECONDS: "3"
 
-          # ============================================================
-          # main.py 运行锁
-          # job timeout 350分钟，所以 stale 给 6小时
-          # ============================================================
           VMAX_MAIN_LOCK_STALE_SECONDS: "21600"
 
-          # workflow 已经 pip install，这里让 main.py 跳过二次自动安装
           SKIP_AUTO_INSTALL: "true"
 
         run: |
@@ -223,7 +173,7 @@ jobs:
           git add data/
 
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (today-only event-driven strict-ai-no-cache)"
+            git commit -m "🤖 Auto-update prediction data (manual event-driven strict-ai-no-cache)"
             git push
           else
             echo "✅ 本次测算数据无变动，安全退出。"
