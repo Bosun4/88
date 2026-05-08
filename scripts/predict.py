@@ -62,7 +62,7 @@ except Exception:  # pragma: no cover
 # 版本常量 / 基础配置
 # ============================================================
 
-ENGINE_VERSION = "vMAX 20.1"
+ENGINE_VERSION = "vMAX 20.1.1"
 ENGINE_ARCHITECTURE = (
     "AI-NATIVE WEB-AUGMENTED: 本地只做协议层；GPT/Grok/Gemini 分工初审 + AI互审 + "
     "Claude Web-aware 终审 + 一致性审计；Top4/推荐等级由 AI 输出；本地不做 Sharp/比分/推荐裁决。"
@@ -143,6 +143,7 @@ AI_MOCK_MODE = _env_bool("AI_MOCK_MODE", False)
 AI_FORCE_COMMON_GATEWAY = _env_bool("FORCE_COMMON_GATEWAY_URL", True)
 AI_NATIVE_WEB = _env_bool("AI_NATIVE_WEB", True)
 AI_REQUIRE_WEB_SOURCES = _env_bool("AI_REQUIRE_WEB_SOURCES", True)
+AI_WARN_MISSING_PUBLISHED_AT = _env_bool("AI_WARN_MISSING_PUBLISHED_AT", False)
 AI_WEB_MAX_SOURCES_PER_MATCH = max(0, _env_int("AI_WEB_MAX_SOURCES_PER_MATCH", 8))
 AI_CHUNK_SIZE = max(1, _env_int("AI_CHUNK_SIZE", 8))
 AI_MAX_PROMPT_CHARS_PER_CHUNK = max(30000, _env_int("AI_MAX_PROMPT_CHARS_PER_CHUNK", 140000))
@@ -1310,7 +1311,7 @@ def _normalize_web_research(item: Dict[str, Any]) -> Dict[str, Any]:
             warnings.append(f"source_{i}_missing_title_url")
         if not src.get("claim"):
             warnings.append(f"source_{i}_missing_claim")
-        if not src.get("published_at"):
+        if not src.get("published_at") and AI_WARN_MISSING_PUBLISHED_AT:
             warnings.append(f"source_{i}_missing_published_at")
     return {
         "used": used,
@@ -1643,6 +1644,20 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
         _apply_consistency_repairs(final_rows, repairs)
         print(f"  [Chunk {chunk_id}] CONSISTENCY {judge_ai.upper()} repairs={len(repairs)} status={judge_st.get('status')}")
 
+    # Attach phase snapshots per match so legacy frontends can show GPT/Grok/Gemini/Claude panels
+    # without leaking placeholders like “见阶段快照”. This is metadata only; it does not alter football judgement.
+    for idx, row in final_rows.items():
+        phase1_pack = {}
+        for model_name in PHASE1_NAMES:
+            pr = phase1.get(model_name, {}).get(idx, {})
+            if pr:
+                phase1_pack[model_name] = _short_prediction_for_prompt(pr)
+        row["phase1_model_outputs"] = phase1_pack
+        row["critic_reports_by_model"] = {
+            model_name: [cr for cr in reports if _i(cr.get("match"), 0) == idx]
+            for model_name, reports in critic_reports.items()
+        }
+
     _save_snapshot(run_id, f"chunk{chunk_id}_final", {"final": {str(k): v for k, v in final_rows.items()}, "status": AI_CALL_STATUS})
     return final_rows
 
@@ -1791,6 +1806,30 @@ def _goal_range_from_score(score: str) -> Tuple[int, int, str]:
     return 5, 8, "ai_native_6plus_goals"
 
 
+def _legacy_model_score(ai_r: Dict[str, Any], model_name: str, final_score: str) -> str:
+    phase1 = ai_r.get("phase1_model_outputs", {}) if isinstance(ai_r.get("phase1_model_outputs"), dict) else {}
+    row = phase1.get(model_name, {}) if isinstance(phase1.get(model_name), dict) else {}
+    sc = _score_from_candidate(row.get("predicted_score", "")) if row else ""
+    if _parse_score(sc)[0] is not None:
+        return sc
+    # If a legacy frontend uses this field as the score slot, final_score is safer than a placeholder.
+    return final_score
+
+
+def _legacy_model_analysis(ai_r: Dict[str, Any], model_name: str) -> str:
+    phase1 = ai_r.get("phase1_model_outputs", {}) if isinstance(ai_r.get("phase1_model_outputs"), dict) else {}
+    row = phase1.get(model_name, {}) if isinstance(phase1.get(model_name), dict) else {}
+    if row:
+        reason = str(row.get("reason", "")).strip()
+        if reason:
+            return reason[:3000]
+        rec = row.get("recommendation", {}) if isinstance(row.get("recommendation"), dict) else {}
+        why = str(rec.get("why_recommended", "")).strip()
+        if why:
+            return why[:3000]
+    return "该模型本轮未返回可展示分析；最终结果以AI终审为准。"
+
+
 def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
     if not ai_r or ai_r.get("predicted_score") == "弃权" or ai_r.get("final_direction") == "abstain":
         return _abstain_prediction("AI全部失败或最终弃权")
@@ -1813,7 +1852,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
     total_goals = (h or 0) + (a or 0) if h is not None and a is not None else 0
     final_odds = get_market_odds_for_score(match_obj, score)
     market_implied = round(100.0 / final_odds, 3) if final_odds > 1.05 else None
-    warnings = list(ai_r.get("validation_warnings", []))
+    warnings = [w for w in list(ai_r.get("validation_warnings", [])) if "missing_published_at" not in str(w)]
 
     web_research = ai_r.get("web_research", {}) if isinstance(ai_r.get("web_research"), dict) else {}
     money_flow = ai_r.get("money_flow", {}) if isinstance(ai_r.get("money_flow"), dict) else {}
@@ -1865,8 +1904,11 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "recommend_gate_reasons": [] if is_ai_recommended else ["ai_not_recommended_or_below_min_tier"],
         "safe_top_gate_score": _f(rec.get("bet_confidence", 0), 0),
         "overall_selection_score": _f(rec.get("bet_confidence", 0), 0),
-        "direction_selection_score": None,
-        "score_shape_score": None,
+        # Frontend-compatible grading fields. These are AI recommendation display scores, not local football judgement.
+        "direction_selection_score": _f(rec.get("bet_confidence", 0), 0),
+        "score_shape_score": _f(rec.get("bet_confidence", 0), 0),
+        "direction_tier": tier,
+        "score_tier": tier,
         "recommendation_downgrade_reasons": [],
 
         "top_score_candidates": top_candidates,
@@ -1946,14 +1988,17 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "actual_handicap_signed": None,
         "theoretical_handicap_signed": None,
 
-        "gpt_score": "见阶段快照",
-        "gpt_analysis": "见阶段快照",
-        "grok_score": "见阶段快照",
-        "grok_analysis": "见阶段快照",
-        "gemini_score": "见阶段快照",
-        "gemini_analysis": "见阶段快照",
-        "claude_score": score if ai_r.get("source_model") == "claude" else "见阶段快照",
-        "claude_analysis": ai_r.get("reason", "")[:3000] if ai_r.get("source_model") == "claude" else "见阶段快照",
+        # Legacy panel fields. Never output placeholders as scores; old UI may use these as primary display.
+        "gpt_score": _legacy_model_score(ai_r, "gpt", score),
+        "gpt_analysis": _legacy_model_analysis(ai_r, "gpt"),
+        "grok_score": _legacy_model_score(ai_r, "grok", score),
+        "grok_analysis": _legacy_model_analysis(ai_r, "grok"),
+        "gemini_score": _legacy_model_score(ai_r, "gemini", score),
+        "gemini_analysis": _legacy_model_analysis(ai_r, "gemini"),
+        "claude_score": score,
+        "claude_analysis": ai_r.get("reason", "")[:3000] or "AI终审已给出结构化预测",
+        "final_ai_score": score,
+        "final_ai_analysis": ai_r.get("reason", "")[:3000],
         "ai_abstained": [],
         "ai_avg_confidence": _f(rec.get("bet_confidence", 0), 0),
         "ai_call_status": dict(AI_CALL_STATUS),
