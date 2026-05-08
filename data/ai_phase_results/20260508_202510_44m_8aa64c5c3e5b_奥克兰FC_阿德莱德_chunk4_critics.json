@@ -1,0 +1,62 @@
+{
+  "critic_reports": {},
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 128.8,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.4",
+      "fallback_referee": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "fallback_referee",
+        "elapsed": 104.5,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 106.5,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3"
+    },
+    "gemini": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "phase1",
+        "elapsed": 89.1,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    },
+    "claude": {
+      "final": {
+        "ok": false,
+        "ai_name": "claude",
+        "model": "claude-opus-4-7",
+        "phase": "final",
+        "elapsed": 125.3,
+        "status": "http_524",
+        "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260508204013116041592zsNeVoaw)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":null}}"
+      },
+      "last_status": "http_524",
+      "model": "claude-opus-4-7"
+    }
+  }
+}

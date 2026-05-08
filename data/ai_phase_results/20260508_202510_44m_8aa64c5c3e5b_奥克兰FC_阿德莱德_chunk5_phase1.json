@@ -1,0 +1,2150 @@
+{
+  "phase1": {
+    "gpt": {
+      "41": {
+        "match": 41,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 55.0,
+          "draw": 24.0,
+          "away": 21.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 16.0,
+            "logic": "正确比分最低赔即2比1，且总进球3球为主模态，主胜方向与半全场主/主低位一致，属于市场最核心聚集点。"
+          },
+          {
+            "score": "3-1",
+            "prob": 13.0,
+            "logic": "主胜次低比分之一，配合4球总进球低位，说明市场接受巴萨打出两球优势且双方均进球的路径。"
+          },
+          {
+            "score": "2-2",
+            "prob": 10.0,
+            "logic": "平局方向里2比2赔率最低，说明市场对皇马进攻回击能力仍有保留，高比分平局是主胜之外的重要对冲。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "1X2主胜1.51明显压低，巴萨为基础强势方，但客胜3.96并未被抬到极端，说明并非单边碾压而是主优但需防对攻波动。",
+          "handicap": "让球为主让1，结合让球投票中让负40高于让胜37，代表市场承认巴萨胜面，但对净胜2球以上信心不足，更像赢一球或小幅优势。",
+          "correct_score": "比分最低赔依次为2-1、3-1、2-2、1-1、3-2、1-2，呈现明显的开放型强强对攻结构；主胜簇集中于2-1和3-1，而非2-0、1-0，说明市场更倾向双方都进球。",
+          "total_goals": "总进球3和4同为最低，5球也不高，零封型低比分被明显排斥，比赛节奏预计偏快，至少2球以上概率较高。",
+          "half_full_time": "半全场主/主2.12显著最低，平/主4.9次低，说明市场主线是巴萨前后程都占优，但也接受上半场僵持后主胜。",
+          "external_market": "未联网且无外部盘口对照，无法验证与主流欧赔是否存在偏离，只能依据体彩内部结构判断。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 62,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众主胜投票59%明显偏向主队；同时1X2主胜低位、半全场主/主极低、比分簇主胜占优，说明资金核心仍在主队。未见明确降赔或反向拉动数据，因此不判定强烈逆向波动。"
+        },
+        "contextual_logic": {
+          "league_style": "西甲强强对话常见控球与高质量转换并存，比赛上限高，尤其国家德比容易放大进球波动。",
+          "team_style": "巴萨联赛失球控制更好，主场组织优势明显；皇马伤停较多但反击与关键球能力仍强，容易形成互破。",
+          "tempo": "high",
+          "score_shape": "更像主队掌控+客队反击得手的3到4球结构，主队一度领先后比赛继续开放。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未拒绝，因主胜赔率、半全场和主胜比分簇形成完整闭环，故选为最终方向。",
+          "draw": "平局并非不能打出，2比2和1比1赔率都低，但半全场主/主过低且主胜基础赔率明显领先，平局更像次选防范。",
+          "away": "客胜方向最高可行比分是1比2，但客胜基础赔率3.96且客队伤停更重，市场仅把其当作反击型冷门，而非主线。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 76,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "强强对话波动",
+            "双方均有进球预期",
+            "让一穿盘不稳"
+          ],
+          "why_recommended": "主胜是最完整的市场主线，且2比1兼顾主胜、让球不稳与双方进球三项信息，适合作为本组优先选择。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部赔率对照",
+            "实时变赔路径"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场内部市场结构非常清晰：主胜1.51配合主/主2.12给出巴萨主导框架，但让一盘面与比分簇又提示皇马具备进球反制能力，因此最合理落点不是单边零封，而是巴萨小胜且双方进球。正确比分2比1为全场最低赔，和总进球3球主模态完全吻合，故定主胜2比1。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 41,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 55,
+            "draw": 24,
+            "away": 21
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 16,
+              "logic": "正确比分最低赔即2比1，且总进球3球为主模态，主胜方向与半全场主/主低位一致，属于市场最核心聚集点。"
+            },
+            {
+              "score": "3-1",
+              "prob": 13,
+              "logic": "主胜次低比分之一，配合4球总进球低位，说明市场接受巴萨打出两球优势且双方均进球的路径。"
+            },
+            {
+              "score": "2-2",
+              "prob": 10,
+              "logic": "平局方向里2比2赔率最低，说明市场对皇马进攻回击能力仍有保留，高比分平局是主胜之外的重要对冲。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "1X2主胜1.51明显压低，巴萨为基础强势方，但客胜3.96并未被抬到极端，说明并非单边碾压而是主优但需防对攻波动。",
+            "handicap": "让球为主让1，结合让球投票中让负40高于让胜37，代表市场承认巴萨胜面，但对净胜2球以上信心不足，更像赢一球或小幅优势。",
+            "correct_score": "比分最低赔依次为2-1、3-1、2-2、1-1、3-2、1-2，呈现明显的开放型强强对攻结构；主胜簇集中于2-1和3-1，而非2-0、1-0，说明市场更倾向双方都进球。",
+            "total_goals": "总进球3和4同为最低，5球也不高，零封型低比分被明显排斥，比赛节奏预计偏快，至少2球以上概率较高。",
+            "half_full_time": "半全场主/主2.12显著最低，平/主4.9次低，说明市场主线是巴萨前后程都占优，但也接受上半场僵持后主胜。",
+            "external_market": "未联网且无外部盘口对照，无法验证与主流欧赔是否存在偏离，只能依据体彩内部结构判断。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 62,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众主胜投票59%明显偏向主队；同时1X2主胜低位、半全场主/主极低、比分簇主胜占优，说明资金核心仍在主队。未见明确降赔或反向拉动数据，因此不判定强烈逆向波动。"
+          },
+          "contextual_logic": {
+            "league_style": "西甲强强对话常见控球与高质量转换并存，比赛上限高，尤其国家德比容易放大进球波动。",
+            "team_style": "巴萨联赛失球控制更好，主场组织优势明显；皇马伤停较多但反击与关键球能力仍强，容易形成互破。",
+            "tempo": "high",
+            "score_shape": "更像主队掌控+客队反击得手的3到4球结构，主队一度领先后比赛继续开放。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未拒绝，因主胜赔率、半全场和主胜比分簇形成完整闭环，故选为最终方向。",
+            "draw": "平局并非不能打出，2比2和1比1赔率都低，但半全场主/主过低且主胜基础赔率明显领先，平局更像次选防范。",
+            "away": "客胜方向最高可行比分是1比2，但客胜基础赔率3.96且客队伤停更重，市场仅把其当作反击型冷门，而非主线。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 76,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "强强对话波动",
+              "双方均有进球预期",
+              "让一穿盘不稳"
+            ],
+            "why_recommended": "主胜是最完整的市场主线，且2比1兼顾主胜、让球不稳与双方进球三项信息，适合作为本组优先选择。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部赔率对照",
+              "实时变赔路径"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场内部市场结构非常清晰：主胜1.51配合主/主2.12给出巴萨主导框架，但让一盘面与比分簇又提示皇马具备进球反制能力，因此最合理落点不是单边零封，而是巴萨小胜且双方进球。正确比分2比1为全场最低赔，和总进球3球主模态完全吻合，故定主胜2比1。"
+        }
+      },
+      "42": {
+        "match": 42,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "draw",
+        "raw_ai_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 33.0,
+          "draw": 37.0,
+          "away": 30.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 19.0,
+            "logic": "1比1为全场最低赔，且总进球2球处于最低档，半全场平/平与平/负、平/主均较低，说明僵持是市场核心叙事。"
+          },
+          {
+            "score": "2-1",
+            "prob": 14.0,
+            "logic": "主胜方向最低赔是2比1，说明欧塞尔主场略有主动权，若比赛打开，主队小胜是第一备选。"
+          },
+          {
+            "score": "1-2",
+            "prob": 13.0,
+            "logic": "客胜方向最低赔为1比2，且1X2两队赔率差距很小，尼斯并未被明显看衰，小负荷反客为主仍存在。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主2.22、客2.73、平3.20，属于弱主场优势但三项接近的均衡盘，平局支付不高，显示分胜负意愿有限。",
+          "handicap": "名义主让1与实际1X2接近不完全匹配，而让球投票让负59显著偏高，说明市场更认可主队难以净胜两球，甚至存在不胜压力。",
+          "correct_score": "全场最低赔是1比1，随后才是2比1、1比0、1比2、0比1，比分簇高度集中在一球差与平局，典型中低比分五五开格局。",
+          "total_goals": "2球和3球并列最低，1球也不高，0球有一定防范，说明节奏不会太开放，最像1比1、1比0、0比1、2比1这类小比分。",
+          "half_full_time": "负/负4.5、平/平5.2、平/主5.4、平/负6.75都较低，说明市场最认可上半场胶着，终局存在三种分流，其中平/平具备核心价值。",
+          "external_market": "未联网且无外部赔率对照，无法确认体彩是否对平局进行了额外压缩。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "draw",
+          "sharp_confidence": 58,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众基础投票主胜40略高于客胜32与平28，但比分最低赔却落在1比1，且半全场平局路径密集，说明更精细的市场结构并未顺着公众主胜走，机构更像在防平。"
+        },
+        "contextual_logic": {
+          "league_style": "法甲中下游对话常见节奏断续、进球数偏中低，尤其当双方进攻效率都不高时，平局密度会提升。",
+          "team_style": "欧塞尔和尼斯都不是高产进攻型，数据上进球效率接近，失球也都不够稳定，更容易形成互有机会但难拉开差距的局面。",
+          "tempo": "medium",
+          "score_shape": "先谨慎试探，随后各入一球或一方领先后被追平，是最贴近赔率簇的过程。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "主胜赔率虽略低于客胜，但真正的最低比分是1比1而非主胜比分，说明主场优势不足以支撑成为唯一主线。",
+          "draw": "未拒绝，因1比1为全场最低赔且总进球2球最热，配合平/平低位，故选为最终方向。",
+          "away": "客胜并不弱，1比2与0比1赔率都处于前列，但客场背景材料偏负面，且客胜簇未压过1比1，因此降为次选。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 3,
+          "bet_confidence": 64,
+          "direction_stability": "weak",
+          "score_stability": "medium",
+          "risk_level": "high",
+          "risk_tags": [
+            "三项接近",
+            "主客均可一球小胜",
+            "中下游不稳定"
+          ],
+          "why_recommended": "这是典型均衡盘，但1比1作为全场最低赔具有很强审计价值，适合以平局为主结论、两头小胜为备份。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部赔率对照",
+            "实时变赔路径"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场不能机械按主队略低赔率就去主胜，因为比分市场与半全场市场都明显强化了僵持叙事。1比1是全场最低赔，2球总进球同样处于最低档，且双方实力、近况、进失球效率都相近，公众稍偏主队但未形成强共识，最稳妥的市场解释是平局优先，首选1比1。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 42,
+          "final_direction": "draw",
+          "predicted_score": "1-1",
+          "direction_probs": {
+            "home": 33,
+            "draw": 37,
+            "away": 30
+          },
+          "goal_band": "2",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-1",
+              "prob": 19,
+              "logic": "1比1为全场最低赔，且总进球2球处于最低档，半全场平/平与平/负、平/主均较低，说明僵持是市场核心叙事。"
+            },
+            {
+              "score": "2-1",
+              "prob": 14,
+              "logic": "主胜方向最低赔是2比1，说明欧塞尔主场略有主动权，若比赛打开，主队小胜是第一备选。"
+            },
+            {
+              "score": "1-2",
+              "prob": 13,
+              "logic": "客胜方向最低赔为1比2，且1X2两队赔率差距很小，尼斯并未被明显看衰，小负荷反客为主仍存在。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主2.22、客2.73、平3.20，属于弱主场优势但三项接近的均衡盘，平局支付不高，显示分胜负意愿有限。",
+            "handicap": "名义主让1与实际1X2接近不完全匹配，而让球投票让负59显著偏高，说明市场更认可主队难以净胜两球，甚至存在不胜压力。",
+            "correct_score": "全场最低赔是1比1，随后才是2比1、1比0、1比2、0比1，比分簇高度集中在一球差与平局，典型中低比分五五开格局。",
+            "total_goals": "2球和3球并列最低，1球也不高，0球有一定防范，说明节奏不会太开放，最像1比1、1比0、0比1、2比1这类小比分。",
+            "half_full_time": "负/负4.5、平/平5.2、平/主5.4、平/负6.75都较低，说明市场最认可上半场胶着，终局存在三种分流，其中平/平具备核心价值。",
+            "external_market": "未联网且无外部赔率对照，无法确认体彩是否对平局进行了额外压缩。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "draw",
+            "sharp_confidence": 58,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众基础投票主胜40略高于客胜32与平28，但比分最低赔却落在1比1，且半全场平局路径密集，说明更精细的市场结构并未顺着公众主胜走，机构更像在防平。"
+          },
+          "contextual_logic": {
+            "league_style": "法甲中下游对话常见节奏断续、进球数偏中低，尤其当双方进攻效率都不高时，平局密度会提升。",
+            "team_style": "欧塞尔和尼斯都不是高产进攻型，数据上进球效率接近，失球也都不够稳定，更容易形成互有机会但难拉开差距的局面。",
+            "tempo": "medium",
+            "score_shape": "先谨慎试探，随后各入一球或一方领先后被追平，是最贴近赔率簇的过程。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主胜赔率虽略低于客胜，但真正的最低比分是1比1而非主胜比分，说明主场优势不足以支撑成为唯一主线。",
+            "draw": "未拒绝，因1比1为全场最低赔且总进球2球最热，配合平/平低位，故选为最终方向。",
+            "away": "客胜并不弱，1比2与0比1赔率都处于前列，但客场背景材料偏负面，且客胜簇未压过1比1，因此降为次选。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 3,
+            "bet_confidence": 64,
+            "direction_stability": "weak",
+            "score_stability": "medium",
+            "risk_level": "high",
+            "risk_tags": [
+              "三项接近",
+              "主客均可一球小胜",
+              "中下游不稳定"
+            ],
+            "why_recommended": "这是典型均衡盘，但1比1作为全场最低赔具有很强审计价值，适合以平局为主结论、两头小胜为备份。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部赔率对照",
+              "实时变赔路径"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场不能机械按主队略低赔率就去主胜，因为比分市场与半全场市场都明显强化了僵持叙事。1比1是全场最低赔，2球总进球同样处于最低档，且双方实力、近况、进失球效率都相近，公众稍偏主队但未形成强共识，最稳妥的市场解释是平局优先，首选1比1。"
+        }
+      },
+      "43": {
+        "match": 43,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "3-0",
+        "direction_probs": {
+          "home": 78.0,
+          "draw": 15.0,
+          "away": 7.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "3-0",
+            "prob": 21.0,
+            "logic": "2比0与3比0同为最低赔，但结合让2盘与主/主1.4的强势半全场，3比0更符合大热主场持续压制、并达到净胜门槛的结构。"
+          },
+          {
+            "score": "2-0",
+            "prob": 19.0,
+            "logic": "2比0同为最低赔率之一，若巴黎在领先后收缩节奏，2球零封是最稳的基础版本。"
+          },
+          {
+            "score": "3-1",
+            "prob": 14.0,
+            "logic": "3比1赔率也很低，说明市场对布雷斯特进球并非完全否定，若巴黎后场轮换带来松动，主胜BTTS路径成立。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "1X2缺失，无法直接读取胜平负价格，但其他市场已足够显示主队极强优势。",
+          "handicap": "让2球是本批最深盘之一，且让球投票中让胜40、让负38接近，说明市场对巴黎大胜方向认同，但对刚好赢2球还是赢3球存在分歧。",
+          "correct_score": "最低赔集中在2比0、3比0、2比1、3比1，明显全部偏向主队；客胜比分极端高赔，平局首选1比1也明显落后于主胜簇。",
+          "total_goals": "总进球3最低，4球次低，2球和5球继续跟随，说明主流预期是巴黎至少进两到三球，全场总体在3至4球附近。",
+          "half_full_time": "主/主1.4极低，远低于其他路径，显示市场认为巴黎从开局到终场都大概率掌控主动。",
+          "external_market": "未联网且无外部赔率对照，但内部盘口深度、半全场和比分簇一致性非常高，可视作强主胜结构。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 82,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "虽无普通胜平负投票，但让球盘在让2条件下让胜仍有40%，结合主/主1.4超低、比分簇全部集中主胜，资金面明显围绕巴黎主胜与大胜展开。未见反向波动证据。"
+        },
+        "contextual_logic": {
+          "league_style": "法甲强弱分明场次中，豪门主场常通过高压和边路推进建立持续射门优势。",
+          "team_style": "巴黎进攻上限显著高于布雷斯特，布雷斯特近期连续失球且失球效率恶化，面对强攻型主队容易被早早压制。",
+          "tempo": "high",
+          "score_shape": "巴黎前段建立领先，随后持续控场扩大比分；若客队反击质量有限，零封概率高于均值。",
+          "btts_likelihood": "no",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未拒绝，深盘、主/主超低、主胜比分簇包揽最低赔率，故坚定选择主胜。",
+          "draw": "平局只有1比1相对可见，但在让2和主/主1.4背景下明显只是极端冷门防范，不足以抗衡主胜主线。",
+          "away": "客胜比分全部极高赔，市场几乎不把布雷斯特爆冷视作现实主路径，因此直接排除。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "S",
+          "is_recommended": true,
+          "top4_priority": 2,
+          "bet_confidence": 86,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "深盘赢两球与三球分歧",
+            "1X2缺失"
+          ],
+          "why_recommended": "即便缺少1X2，其他市场已经形成高一致性强主胜信号，是本批最清晰的方向之一；3比0兼顾净胜门槛、总进球主模态与零封结构。"
+        },
+        "data_quality": {
+          "missing": [
+            "1X2赔率",
+            "外部赔率对照",
+            "实时变赔路径"
+          ],
+          "raw_packet_quality": "medium"
+        },
+        "reason": "本场内部证据高度统一：让2、主/主1.4、主胜比分簇全面垄断低赔，说明巴黎胜出不是问题，问题只在赢几球。2比0与3比0同为最低赔，但总进球3球为第一模态，且客队近期防守失血严重，因此在主胜前提下，3比0比2比0更契合整体市场结构。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 43,
+          "final_direction": "home",
+          "predicted_score": "3-0",
+          "direction_probs": {
+            "home": 78,
+            "draw": 15,
+            "away": 7
+          },
+          "goal_band": "3",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "3-0",
+              "prob": 21,
+              "logic": "2比0与3比0同为最低赔，但结合让2盘与主/主1.4的强势半全场，3比0更符合大热主场持续压制、并达到净胜门槛的结构。"
+            },
+            {
+              "score": "2-0",
+              "prob": 19,
+              "logic": "2比0同为最低赔率之一，若巴黎在领先后收缩节奏，2球零封是最稳的基础版本。"
+            },
+            {
+              "score": "3-1",
+              "prob": 14,
+              "logic": "3比1赔率也很低，说明市场对布雷斯特进球并非完全否定，若巴黎后场轮换带来松动，主胜BTTS路径成立。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "1X2缺失，无法直接读取胜平负价格，但其他市场已足够显示主队极强优势。",
+            "handicap": "让2球是本批最深盘之一，且让球投票中让胜40、让负38接近，说明市场对巴黎大胜方向认同，但对刚好赢2球还是赢3球存在分歧。",
+            "correct_score": "最低赔集中在2比0、3比0、2比1、3比1，明显全部偏向主队；客胜比分极端高赔，平局首选1比1也明显落后于主胜簇。",
+            "total_goals": "总进球3最低，4球次低，2球和5球继续跟随，说明主流预期是巴黎至少进两到三球，全场总体在3至4球附近。",
+            "half_full_time": "主/主1.4极低，远低于其他路径，显示市场认为巴黎从开局到终场都大概率掌控主动。",
+            "external_market": "未联网且无外部赔率对照，但内部盘口深度、半全场和比分簇一致性非常高，可视作强主胜结构。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 82,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "虽无普通胜平负投票，但让球盘在让2条件下让胜仍有40%，结合主/主1.4超低、比分簇全部集中主胜，资金面明显围绕巴黎主胜与大胜展开。未见反向波动证据。"
+          },
+          "contextual_logic": {
+            "league_style": "法甲强弱分明场次中，豪门主场常通过高压和边路推进建立持续射门优势。",
+            "team_style": "巴黎进攻上限显著高于布雷斯特，布雷斯特近期连续失球且失球效率恶化，面对强攻型主队容易被早早压制。",
+            "tempo": "high",
+            "score_shape": "巴黎前段建立领先，随后持续控场扩大比分；若客队反击质量有限，零封概率高于均值。",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未拒绝，深盘、主/主超低、主胜比分簇包揽最低赔率，故坚定选择主胜。",
+            "draw": "平局只有1比1相对可见，但在让2和主/主1.4背景下明显只是极端冷门防范，不足以抗衡主胜主线。",
+            "away": "客胜比分全部极高赔，市场几乎不把布雷斯特爆冷视作现实主路径，因此直接排除。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "S",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 86,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "深盘赢两球与三球分歧",
+              "1X2缺失"
+            ],
+            "why_recommended": "即便缺少1X2，其他市场已经形成高一致性强主胜信号，是本批最清晰的方向之一；3比0兼顾净胜门槛、总进球主模态与零封结构。"
+          },
+          "data_quality": {
+            "missing": [
+              "1X2赔率",
+              "外部赔率对照",
+              "实时变赔路径"
+            ],
+            "raw_packet_quality": "medium"
+          },
+          "reason": "本场内部证据高度统一：让2、主/主1.4、主胜比分簇全面垄断低赔，说明巴黎胜出不是问题，问题只在赢几球。2比0与3比0同为最低赔，但总进球3球为第一模态，且客队近期防守失血严重，因此在主胜前提下，3比0比2比0更契合整体市场结构。"
+        }
+      },
+      "44": {
+        "match": 44,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "draw",
+        "raw_ai_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 35.0,
+          "draw": 36.0,
+          "away": 29.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 18.0,
+            "logic": "1比1为全场最低赔，且总进球2与3都处于低位，说明双方实力接近但首要落点仍是互进一球的平局。"
+          },
+          {
+            "score": "2-1",
+            "prob": 15.0,
+            "logic": "主胜方向最低赔是2比1，主队有主场支撑且主/主略优于负/负，若摩纳哥把握率更高则可小胜。"
+          },
+          {
+            "score": "1-2",
+            "prob": 13.0,
+            "logic": "客胜方向最低赔为1比2，里尔并未被赔率排斥，特别是在双方攻守效率接近时，客队同样具备一球制胜可能。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主2.14、客2.60、平3.60，看似主队略优，但并未形成压倒性优势，属于偏主不强的对冲盘。",
+          "handicap": "主让1下，让球投票让负58远高于让胜20，清楚说明市场不认可摩纳哥形成净胜两球格局，更多倾向一球内结果甚至不胜。",
+          "correct_score": "全场最低赔是1比1，其后才是2比1、1比2，说明实际比分市场比1X2更强调平衡，主客都存在小胜路径，但平局是最密集落点。",
+          "total_goals": "3球最低、2球次低、4球再后，比赛预期为中等偏开放但不会失控，最常见分布仍在1比1、2比1、1比2、2比2之间。",
+          "half_full_time": "主/主3.4与负/负4.3接近，平/主5.8、平/平6.5、平/负6.5均不高，表明上半场胶着概率大，终场三分流都可发生，僵持属性很强。",
+          "external_market": "未联网且无外部赔率对照，无法确认主客真实市场差值是否更小。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "draw",
+          "sharp_confidence": 56,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众基础投票主胜42略高，容易被主场标签吸引；但比分最低赔是1比1，半全场多个平局中转路径处于低位，说明更审慎资金并未追逐单边主胜。"
+        },
+        "contextual_logic": {
+          "league_style": "法甲上游直接对话通常身体对抗强、转换质量高，但双方都会控制犯错，平局率不低。",
+          "team_style": "摩纳哥与里尔攻守数据非常接近，主队稍主动、客队反击效率不差，形成典型镜像对抗。",
+          "tempo": "medium",
+          "score_shape": "大概率先僵持，再出现互有进球；任何一方领先后都未必能稳守到终场。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "主胜有一定基础，但1比1作为全场最低赔压过2比1，说明主场优势不足以完全盖过平局主线，因此不选主胜。",
+          "draw": "未拒绝，因1比1最低赔、半全场平局中转丰富、让球盘强烈否定主队穿盘，故选为最终方向。",
+          "away": "客胜1比2确实靠前，且负/负4.3不高，但1X2客胜仍略高于主胜，客队只是强备选，不足以压过1比1。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 4,
+          "bet_confidence": 62,
+          "direction_stability": "weak",
+          "score_stability": "medium",
+          "risk_level": "high",
+          "risk_tags": [
+            "强对话三向开放",
+            "1比1与一球小胜并存",
+            "公众偏主但机构未完全跟随"
+          ],
+          "why_recommended": "若必须给出单一方向，平局最能解释1比1最低赔、让球盘不看好主穿以及半全场大量平局中转路径，但需明确这是高波动场。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部赔率对照",
+            "实时变赔路径"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场是标准难盘：1X2给摩纳哥轻微优势，但比分市场最强信号却是1比1，半全场又显示上半场胶着、终场可向三方向分流。让一盘大量投向让负，进一步说明主队优势不足以被高估。综合市场结构后，最可审计的落点是平局，首选1比1。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 44,
+          "final_direction": "draw",
+          "predicted_score": "1-1",
+          "direction_probs": {
+            "home": 35,
+            "draw": 36,
+            "away": 29
+          },
+          "goal_band": "2",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-1",
+              "prob": 18,
+              "logic": "1比1为全场最低赔，且总进球2与3都处于低位，说明双方实力接近但首要落点仍是互进一球的平局。"
+            },
+            {
+              "score": "2-1",
+              "prob": 15,
+              "logic": "主胜方向最低赔是2比1，主队有主场支撑且主/主略优于负/负，若摩纳哥把握率更高则可小胜。"
+            },
+            {
+              "score": "1-2",
+              "prob": 13,
+              "logic": "客胜方向最低赔为1比2，里尔并未被赔率排斥，特别是在双方攻守效率接近时，客队同样具备一球制胜可能。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主2.14、客2.60、平3.60，看似主队略优，但并未形成压倒性优势，属于偏主不强的对冲盘。",
+            "handicap": "主让1下，让球投票让负58远高于让胜20，清楚说明市场不认可摩纳哥形成净胜两球格局，更多倾向一球内结果甚至不胜。",
+            "correct_score": "全场最低赔是1比1，其后才是2比1、1比2，说明实际比分市场比1X2更强调平衡，主客都存在小胜路径，但平局是最密集落点。",
+            "total_goals": "3球最低、2球次低、4球再后，比赛预期为中等偏开放但不会失控，最常见分布仍在1比1、2比1、1比2、2比2之间。",
+            "half_full_time": "主/主3.4与负/负4.3接近，平/主5.8、平/平6.5、平/负6.5均不高，表明上半场胶着概率大，终场三分流都可发生，僵持属性很强。",
+            "external_market": "未联网且无外部赔率对照，无法确认主客真实市场差值是否更小。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "draw",
+            "sharp_confidence": 56,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众基础投票主胜42略高，容易被主场标签吸引；但比分最低赔是1比1，半全场多个平局中转路径处于低位，说明更审慎资金并未追逐单边主胜。"
+          },
+          "contextual_logic": {
+            "league_style": "法甲上游直接对话通常身体对抗强、转换质量高，但双方都会控制犯错，平局率不低。",
+            "team_style": "摩纳哥与里尔攻守数据非常接近，主队稍主动、客队反击效率不差，形成典型镜像对抗。",
+            "tempo": "medium",
+            "score_shape": "大概率先僵持，再出现互有进球；任何一方领先后都未必能稳守到终场。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主胜有一定基础，但1比1作为全场最低赔压过2比1，说明主场优势不足以完全盖过平局主线，因此不选主胜。",
+            "draw": "未拒绝，因1比1最低赔、半全场平局中转丰富、让球盘强烈否定主队穿盘，故选为最终方向。",
+            "away": "客胜1比2确实靠前，且负/负4.3不高，但1X2客胜仍略高于主胜，客队只是强备选，不足以压过1比1。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 4,
+            "bet_confidence": 62,
+            "direction_stability": "weak",
+            "score_stability": "medium",
+            "risk_level": "high",
+            "risk_tags": [
+              "强对话三向开放",
+              "1比1与一球小胜并存",
+              "公众偏主但机构未完全跟随"
+            ],
+            "why_recommended": "若必须给出单一方向，平局最能解释1比1最低赔、让球盘不看好主穿以及半全场大量平局中转路径，但需明确这是高波动场。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部赔率对照",
+              "实时变赔路径"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场是标准难盘：1X2给摩纳哥轻微优势，但比分市场最强信号却是1比1，半全场又显示上半场胶着、终场可向三方向分流。让一盘大量投向让负，进一步说明主队优势不足以被高估。综合市场结构后，最可审计的落点是平局，首选1比1。"
+        }
+      }
+    },
+    "grok": {
+      "41": {
+        "match": 41,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 52.0,
+          "draw": 25.0,
+          "away": 23.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 16.0,
+            "logic": "巴萨主场赔率1.51极低，2-1为正确比分最低赔率8.0且方向排名第一，半全场主/主2.12支持主队取胜"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜赔率1.51远低于客胜，市场明显看好巴萨主场取胜",
+          "handicap": "让球-1.0下主胜平稳，资金未见明显偏移",
+          "correct_score": "2-1赔率最低且总进球3球符合模式进球数",
+          "total_goals": "3球和4球赔率同为4.1最低，模式进球3球",
+          "half_full_time": "主/主2.12最低，支持巴萨半场领先全场取胜",
+          "external_market": "公众投票主胜59%高企，客胜仅22%"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 65,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "主胜赔率平稳，公众与专业投注一致流向主队"
+        },
+        "contextual_logic": {
+          "league_style": "西甲强强对话，巴萨主场进攻效率高",
+          "team_style": "巴萨本季主场丢球少，皇马客场防守不稳",
+          "tempo": "medium",
+          "score_shape": "巴萨近况WWDWW，皇马客场易丢球",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "无明显拒绝理由，数据最支持主胜",
+          "draw": "平局赔率4.65过高且半全场平/平9.55不支持",
+          "away": "客胜赔率3.96偏高，皇马客场状态差"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 68,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "low",
+          "risk_tags": [],
+          "why_recommended": "主胜赔率极低且正确比分2-1支持，半全场主/主最优"
+        },
+        "data_quality": {
+          "missing": [],
+          "raw_packet_quality": "high"
+        },
+        "reason": "巴萨主场优势明显，2-1为最优比分，拒绝平局与客胜因赔率过高",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 41,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 52,
+            "draw": 25,
+            "away": 23
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 16,
+              "logic": "巴萨主场赔率1.51极低，2-1为正确比分最低赔率8.0且方向排名第一，半全场主/主2.12支持主队取胜"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜赔率1.51远低于客胜，市场明显看好巴萨主场取胜",
+            "handicap": "让球-1.0下主胜平稳，资金未见明显偏移",
+            "correct_score": "2-1赔率最低且总进球3球符合模式进球数",
+            "total_goals": "3球和4球赔率同为4.1最低，模式进球3球",
+            "half_full_time": "主/主2.12最低，支持巴萨半场领先全场取胜",
+            "external_market": "公众投票主胜59%高企，客胜仅22%"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 65,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "主胜赔率平稳，公众与专业投注一致流向主队"
+          },
+          "contextual_logic": {
+            "league_style": "西甲强强对话，巴萨主场进攻效率高",
+            "team_style": "巴萨本季主场丢球少，皇马客场防守不稳",
+            "tempo": "medium",
+            "score_shape": "巴萨近况WWDWW，皇马客场易丢球",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "无明显拒绝理由，数据最支持主胜",
+            "draw": "平局赔率4.65过高且半全场平/平9.55不支持",
+            "away": "客胜赔率3.96偏高，皇马客场状态差"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 68,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "主胜赔率极低且正确比分2-1支持，半全场主/主最优"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "巴萨主场优势明显，2-1为最优比分，拒绝平局与客胜因赔率过高"
+        }
+      },
+      "42": {
+        "match": 42,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "draw",
+        "raw_ai_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 35.0,
+          "draw": 38.0,
+          "away": 27.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 18.0,
+            "logic": "1-1为正确比分最低赔率6.0，模式进球2球，半全场平/平5.2支持"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜2.22、客胜2.73，平局3.2相对均衡",
+          "handicap": "让球-1.0下平局赔率支持",
+          "correct_score": "1-1赔率最低且总进球2球最优",
+          "total_goals": "2球和3球赔率同为3.5最低",
+          "half_full_time": "平/平5.2最低，支持双方均无法取胜",
+          "external_market": "公众投票平局28%与主胜接近"
+        },
+        "money_flow": {
+          "public_money_direction": "unclear",
+          "sharp_money_direction": "draw",
+          "sharp_confidence": 55,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "平局赔率与半全场支持，公众投注分散"
+        },
+        "contextual_logic": {
+          "league_style": "法甲中下游对决，平局率高",
+          "team_style": "欧塞尔近10场5平，尼斯客场3平10负",
+          "tempo": "low",
+          "score_shape": "双方场均进球低，防守为主",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "主胜赔率2.22但近况多平不支持",
+          "draw": "无明显拒绝理由，数据支持平局",
+          "away": "客胜赔率2.73但尼斯客场极差"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 2,
+          "bet_confidence": 52,
+          "direction_stability": "medium",
+          "score_stability": "strong",
+          "risk_level": "medium",
+          "risk_tags": [
+            "low_scoring"
+          ],
+          "why_recommended": "1-1为最低赔率正确比分，双方近期平局倾向明显"
+        },
+        "data_quality": {
+          "missing": [],
+          "raw_packet_quality": "high"
+        },
+        "reason": "1-1赔率最低且模式进球2球，拒绝主客胜因近期平局率高",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 42,
+          "final_direction": "draw",
+          "predicted_score": "1-1",
+          "direction_probs": {
+            "home": 35,
+            "draw": 38,
+            "away": 27
+          },
+          "goal_band": "2",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-1",
+              "prob": 18,
+              "logic": "1-1为正确比分最低赔率6.0，模式进球2球，半全场平/平5.2支持"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜2.22、客胜2.73，平局3.2相对均衡",
+            "handicap": "让球-1.0下平局赔率支持",
+            "correct_score": "1-1赔率最低且总进球2球最优",
+            "total_goals": "2球和3球赔率同为3.5最低",
+            "half_full_time": "平/平5.2最低，支持双方均无法取胜",
+            "external_market": "公众投票平局28%与主胜接近"
+          },
+          "money_flow": {
+            "public_money_direction": "unclear",
+            "sharp_money_direction": "draw",
+            "sharp_confidence": 55,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "平局赔率与半全场支持，公众投注分散"
+          },
+          "contextual_logic": {
+            "league_style": "法甲中下游对决，平局率高",
+            "team_style": "欧塞尔近10场5平，尼斯客场3平10负",
+            "tempo": "low",
+            "score_shape": "双方场均进球低，防守为主",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主胜赔率2.22但近况多平不支持",
+            "draw": "无明显拒绝理由，数据支持平局",
+            "away": "客胜赔率2.73但尼斯客场极差"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 52,
+            "direction_stability": "medium",
+            "score_stability": "strong",
+            "risk_level": "medium",
+            "risk_tags": [
+              "low_scoring"
+            ],
+            "why_recommended": "1-1为最低赔率正确比分，双方近期平局倾向明显"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "1-1赔率最低且模式进球2球，拒绝主客胜因近期平局率高"
+        }
+      },
+      "43": {
+        "match": 43,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-0",
+        "direction_probs": {
+          "home": 78.0,
+          "draw": 15.0,
+          "away": 7.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 22.0,
+            "logic": "2-0为正确比分最低赔率7.5，半全场主/主1.4极低支持大胜"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "巴黎圣日耳曼主场碾压，赔率极低",
+          "handicap": "让球-2.0下主胜极稳",
+          "correct_score": "2-0和3-0赔率同为7.5最低",
+          "total_goals": "3球赔率3.8最低，2球次之",
+          "half_full_time": "主/主1.4最低，支持半场领先全胜",
+          "external_market": "公众投票主胜40%高企"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 82,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "主胜赔率极低，半全场主/主1.4支持大胜"
+        },
+        "contextual_logic": {
+          "league_style": "法甲巴黎主场统治力强",
+          "team_style": "巴黎进攻火力50球，布雷斯特客场丢球多",
+          "tempo": "high",
+          "score_shape": "巴黎WWDWW，布雷斯特客场全负",
+          "btts_likelihood": "no",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "无明显拒绝理由，数据最支持主胜",
+          "draw": "平局赔率过高且半全场不支持",
+          "away": "客胜赔率极高，布雷斯特客场0胜"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "S",
+          "is_recommended": true,
+          "top4_priority": 3,
+          "bet_confidence": 80,
+          "direction_stability": "strong",
+          "score_stability": "strong",
+          "risk_level": "low",
+          "risk_tags": [],
+          "why_recommended": "2-0为最低赔率，半全场主/主1.4极优，布雷斯特客场极弱"
+        },
+        "data_quality": {
+          "missing": [
+            "1x2"
+          ],
+          "raw_packet_quality": "medium"
+        },
+        "reason": "巴黎主场碾压，2-0最优比分，拒绝平局客胜因赔率与数据不支持",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 43,
+          "final_direction": "home",
+          "predicted_score": "2-0",
+          "direction_probs": {
+            "home": 78,
+            "draw": 15,
+            "away": 7
+          },
+          "goal_band": "2",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "2-0",
+              "prob": 22,
+              "logic": "2-0为正确比分最低赔率7.5，半全场主/主1.4极低支持大胜"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "巴黎圣日耳曼主场碾压，赔率极低",
+            "handicap": "让球-2.0下主胜极稳",
+            "correct_score": "2-0和3-0赔率同为7.5最低",
+            "total_goals": "3球赔率3.8最低，2球次之",
+            "half_full_time": "主/主1.4最低，支持半场领先全胜",
+            "external_market": "公众投票主胜40%高企"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 82,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "主胜赔率极低，半全场主/主1.4支持大胜"
+          },
+          "contextual_logic": {
+            "league_style": "法甲巴黎主场统治力强",
+            "team_style": "巴黎进攻火力50球，布雷斯特客场丢球多",
+            "tempo": "high",
+            "score_shape": "巴黎WWDWW，布雷斯特客场全负",
+            "btts_likelihood": "no",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "无明显拒绝理由，数据最支持主胜",
+            "draw": "平局赔率过高且半全场不支持",
+            "away": "客胜赔率极高，布雷斯特客场0胜"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "S",
+            "is_recommended": true,
+            "top4_priority": 3,
+            "bet_confidence": 80,
+            "direction_stability": "strong",
+            "score_stability": "strong",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "2-0为最低赔率，半全场主/主1.4极优，布雷斯特客场极弱"
+          },
+          "data_quality": {
+            "missing": [
+              "1x2"
+            ],
+            "raw_packet_quality": "medium"
+          },
+          "reason": "巴黎主场碾压，2-0最优比分，拒绝平局客胜因赔率与数据不支持"
+        }
+      },
+      "44": {
+        "match": 44,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 42.0,
+          "draw": 30.0,
+          "away": 28.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 17.0,
+            "logic": "2-1为正确比分最低赔率7.2，模式进球3球，半全场主/主3.4支持"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜2.14略优于客胜2.6",
+          "handicap": "让球-1.0下主胜平稳",
+          "correct_score": "2-1赔率最低且总进球3球最优",
+          "total_goals": "3球赔率3.4最低",
+          "half_full_time": "主/主3.4最低，支持主队取胜",
+          "external_market": "公众投票主胜42%领先"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 58,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "主胜赔率2.14支持，半全场主/主最优"
+        },
+        "contextual_logic": {
+          "league_style": "法甲中游对决，进球3球常见",
+          "team_style": "摩纳哥进攻34球，里尔防守稳但客场易丢",
+          "tempo": "medium",
+          "score_shape": "双方近况WWDWW，进球效率接近",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "无明显拒绝理由，数据支持主胜",
+          "draw": "平局赔率3.6较高且1-1虽低但方向不支持",
+          "away": "客胜赔率2.6但里尔客场状态一般"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 4,
+          "bet_confidence": 55,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [],
+          "why_recommended": "2-1为最低赔率正确比分，3球模式最优"
+        },
+        "data_quality": {
+          "missing": [],
+          "raw_packet_quality": "high"
+        },
+        "reason": "2-1赔率最低且模式进球3球，拒绝平局因赔率较高",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 44,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 42,
+            "draw": 30,
+            "away": 28
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 17,
+              "logic": "2-1为正确比分最低赔率7.2，模式进球3球，半全场主/主3.4支持"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜2.14略优于客胜2.6",
+            "handicap": "让球-1.0下主胜平稳",
+            "correct_score": "2-1赔率最低且总进球3球最优",
+            "total_goals": "3球赔率3.4最低",
+            "half_full_time": "主/主3.4最低，支持主队取胜",
+            "external_market": "公众投票主胜42%领先"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 58,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "主胜赔率2.14支持，半全场主/主最优"
+          },
+          "contextual_logic": {
+            "league_style": "法甲中游对决，进球3球常见",
+            "team_style": "摩纳哥进攻34球，里尔防守稳但客场易丢",
+            "tempo": "medium",
+            "score_shape": "双方近况WWDWW，进球效率接近",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "无明显拒绝理由，数据支持主胜",
+            "draw": "平局赔率3.6较高且1-1虽低但方向不支持",
+            "away": "客胜赔率2.6但里尔客场状态一般"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 4,
+            "bet_confidence": 55,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [],
+            "why_recommended": "2-1为最低赔率正确比分，3球模式最优"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "2-1赔率最低且模式进球3球，拒绝平局因赔率较高"
+        }
+      }
+    },
+    "gemini": {
+      "41": {
+        "match": 41,
+        "source_model": "gemini",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 60.0,
+          "draw": 25.0,
+          "away": 15.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 16.0,
+            "logic": "比分赔率最低的主胜选项，符合两队交锋多进球的特点"
+          },
+          {
+            "score": "3-1",
+            "prob": 12.0,
+            "logic": "皇马伤停严重，防线不稳，巴萨主场火力强劲"
+          },
+          {
+            "score": "2-0",
+            "prob": 10.0,
+            "logic": "若皇马进攻端受损严重未能破门，巴萨有望完胜"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜赔率1.51处于低位，机构对巴萨主场取胜给予充分防范",
+          "handicap": "让球盘主队让步合理，体现了双方目前的实力和伤停差距",
+          "correct_score": "2-1和3-1处于低赔区间，防范主队打出且双方进球",
+          "total_goals": "3球和4球赔率最低，预示进球数不会太少",
+          "half_full_time": "主/主赔率极低，机构看好巴萨半场即建立优势",
+          "external_market": "无"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 80,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "主胜投票率达59%，且赔率支持主队，资金流向与机构意图一致"
+        },
+        "contextual_logic": {
+          "league_style": "西甲注重技术与控球，强强对话中细节决定成败",
+          "team_style": "巴萨主场压迫力强，皇马目前伤兵满营反击受限",
+          "tempo": "high",
+          "score_shape": "主队进球数2-3个，客队0-1个",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "不拒绝，主胜为首选",
+          "draw": "皇马伤停过多，客场保平难度极大",
+          "away": "皇马多名绝对主力缺阵，客胜概率极低"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 80,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "low",
+          "risk_tags": [
+            "伤停影响大"
+          ],
+          "why_recommended": "皇马遭遇严重伤病潮，巴萨主场作战且赔率支持力度大"
+        },
+        "data_quality": {
+          "missing": [],
+          "raw_packet_quality": "high"
+        },
+        "reason": "巴萨主场作战，且皇马包括库尔图瓦、罗德里戈、米利唐等在内的多名核心球员伤停，实力大打折扣。赔率方面主胜1.51防范力度足，比分2-1和3-1受捧，看好巴萨主场全取三分。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 41,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 60,
+            "draw": 25,
+            "away": 15
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 16,
+              "logic": "比分赔率最低的主胜选项，符合两队交锋多进球的特点"
+            },
+            {
+              "score": "3-1",
+              "prob": 12,
+              "logic": "皇马伤停严重，防线不稳，巴萨主场火力强劲"
+            },
+            {
+              "score": "2-0",
+              "prob": 10,
+              "logic": "若皇马进攻端受损严重未能破门，巴萨有望完胜"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜赔率1.51处于低位，机构对巴萨主场取胜给予充分防范",
+            "handicap": "让球盘主队让步合理，体现了双方目前的实力和伤停差距",
+            "correct_score": "2-1和3-1处于低赔区间，防范主队打出且双方进球",
+            "total_goals": "3球和4球赔率最低，预示进球数不会太少",
+            "half_full_time": "主/主赔率极低，机构看好巴萨半场即建立优势",
+            "external_market": "无"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 80,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "主胜投票率达59%，且赔率支持主队，资金流向与机构意图一致"
+          },
+          "contextual_logic": {
+            "league_style": "西甲注重技术与控球，强强对话中细节决定成败",
+            "team_style": "巴萨主场压迫力强，皇马目前伤兵满营反击受限",
+            "tempo": "high",
+            "score_shape": "主队进球数2-3个，客队0-1个",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "不拒绝，主胜为首选",
+            "draw": "皇马伤停过多，客场保平难度极大",
+            "away": "皇马多名绝对主力缺阵，客胜概率极低"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 80,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [
+              "伤停影响大"
+            ],
+            "why_recommended": "皇马遭遇严重伤病潮，巴萨主场作战且赔率支持力度大"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "巴萨主场作战，且皇马包括库尔图瓦、罗德里戈、米利唐等在内的多名核心球员伤停，实力大打折扣。赔率方面主胜1.51防范力度足，比分2-1和3-1受捧，看好巴萨主场全取三分。"
+        }
+      },
+      "42": {
+        "match": 42,
+        "source_model": "gemini",
+        "source_phase": "phase1",
+        "final_direction": "draw",
+        "raw_ai_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 35.0,
+          "draw": 35.0,
+          "away": 30.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 18.0,
+            "logic": "比分赔率6.0全场最低，两队近期平局率极高"
+          },
+          {
+            "score": "2-1",
+            "prob": 14.0,
+            "logic": "欧塞尔主场具备一定拉力，尼斯客场战绩糟糕"
+          },
+          {
+            "score": "1-0",
+            "prob": 12.0,
+            "logic": "尼斯进攻乏力，欧塞尔可能小胜"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "2-3-2阵型，平赔3.20处于相对低位，防范平局",
+          "handicap": "让球盘无明显倾向，符合两队胶着态势",
+          "correct_score": "1-1赔率断崖式领先，机构极度防范平局打出",
+          "total_goals": "2球和3球赔率最低，符合法甲中下游球队交手特征",
+          "half_full_time": "平/平赔率5.2处于低位，半场沉闷概率大",
+          "external_market": "无"
+        },
+        "money_flow": {
+          "public_money_direction": "unclear",
+          "sharp_money_direction": "draw",
+          "sharp_confidence": 70,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "投票分布较为均匀，但比分市场极度倾斜于1-1"
+        },
+        "contextual_logic": {
+          "league_style": "法甲中下游球队交手往往场面胶着，进球数偏少",
+          "team_style": "欧塞尔主场防守尚可，尼斯客场进攻极度乏力",
+          "tempo": "low",
+          "score_shape": "双方各进1球或互交白卷",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "欧塞尔制胜能力不足，平局过多",
+          "draw": "不拒绝，平局为首选",
+          "away": "尼斯客场表现低迷，场均进球少，难有胜算"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 3,
+          "bet_confidence": 70,
+          "direction_stability": "medium",
+          "score_stability": "strong",
+          "risk_level": "medium",
+          "risk_tags": [
+            "平局大师"
+          ],
+          "why_recommended": "两队近期平局属性极强，比分赔率1-1极低，平局打出概率大"
+        },
+        "data_quality": {
+          "missing": [],
+          "raw_packet_quality": "high"
+        },
+        "reason": "欧塞尔和尼斯近期平局率都非常高，尼斯客场进攻乏力，欧塞尔制胜能力也有限。比分市场1-1赔率仅为6.0，机构对平局防范意图明显，首选平局。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 42,
+          "final_direction": "draw",
+          "predicted_score": "1-1",
+          "direction_probs": {
+            "home": 35,
+            "draw": 35,
+            "away": 30
+          },
+          "goal_band": "2",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-1",
+              "prob": 18,
+              "logic": "比分赔率6.0全场最低，两队近期平局率极高"
+            },
+            {
+              "score": "2-1",
+              "prob": 14,
+              "logic": "欧塞尔主场具备一定拉力，尼斯客场战绩糟糕"
+            },
+            {
+              "score": "1-0",
+              "prob": 12,
+              "logic": "尼斯进攻乏力，欧塞尔可能小胜"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "2-3-2阵型，平赔3.20处于相对低位，防范平局",
+            "handicap": "让球盘无明显倾向，符合两队胶着态势",
+            "correct_score": "1-1赔率断崖式领先，机构极度防范平局打出",
+            "total_goals": "2球和3球赔率最低，符合法甲中下游球队交手特征",
+            "half_full_time": "平/平赔率5.2处于低位，半场沉闷概率大",
+            "external_market": "无"
+          },
+          "money_flow": {
+            "public_money_direction": "unclear",
+            "sharp_money_direction": "draw",
+            "sharp_confidence": 70,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "投票分布较为均匀，但比分市场极度倾斜于1-1"
+          },
+          "contextual_logic": {
+            "league_style": "法甲中下游球队交手往往场面胶着，进球数偏少",
+            "team_style": "欧塞尔主场防守尚可，尼斯客场进攻极度乏力",
+            "tempo": "low",
+            "score_shape": "双方各进1球或互交白卷",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "欧塞尔制胜能力不足，平局过多",
+            "draw": "不拒绝，平局为首选",
+            "away": "尼斯客场表现低迷，场均进球少，难有胜算"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 3,
+            "bet_confidence": 70,
+            "direction_stability": "medium",
+            "score_stability": "strong",
+            "risk_level": "medium",
+            "risk_tags": [
+              "平局大师"
+            ],
+            "why_recommended": "两队近期平局属性极强，比分赔率1-1极低，平局打出概率大"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "欧塞尔和尼斯近期平局率都非常高，尼斯客场进攻乏力，欧塞尔制胜能力也有限。比分市场1-1赔率仅为6.0，机构对平局防范意图明显，首选平局。"
+        }
+      },
+      "43": {
+        "match": 43,
+        "source_model": "gemini",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "3-0",
+        "direction_probs": {
+          "home": 85.0,
+          "draw": 10.0,
+          "away": 5.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "3-0",
+            "prob": 20.0,
+            "logic": "大巴黎主场火力全开，布雷斯特防线脆弱"
+          },
+          {
+            "score": "2-0",
+            "prob": 18.0,
+            "logic": "最低比分赔率之一，大巴黎稳健取胜"
+          },
+          {
+            "score": "3-1",
+            "prob": 12.0,
+            "logic": "防范客队偷得一球，但主队大胜格局不改"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "未开售胜平负，说明主队优势极大",
+          "handicap": "让2球盘，体现了双方巨大的实力鸿沟",
+          "correct_score": "2-0和3-0赔率并列最低，机构看好主队零封大胜",
+          "total_goals": "3球和4球赔率最低，预示大比分",
+          "half_full_time": "主/主赔率低至1.4，毫无悬念",
+          "external_market": "无"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 90,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "让球胜平负主胜投票率依然达到40%，市场对大巴黎大胜信心足"
+        },
+        "contextual_logic": {
+          "league_style": "法甲霸主对阵弱旅，往往呈现半场攻防演练",
+          "team_style": "大巴黎进攻多点开花，布雷斯特近期连续惨败",
+          "tempo": "high",
+          "score_shape": "主队进球2-4个，客队0球",
+          "btts_likelihood": "no",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "不拒绝，主胜为唯一选择",
+          "draw": "实力差距过大，大巴黎主场不可能爆冷",
+          "away": "布雷斯特毫无爆冷资本"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "S",
+          "is_recommended": true,
+          "top4_priority": 2,
+          "bet_confidence": 90,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "low",
+          "risk_tags": [
+            "让球深盘"
+          ],
+          "why_recommended": "实力悬殊，大巴黎主场作战，布雷斯特近期防线崩盘，看好大胜"
+        },
+        "data_quality": {
+          "missing": [
+            "1x2"
+          ],
+          "raw_packet_quality": "medium"
+        },
+        "reason": "大巴黎实力碾压，且布雷斯特近期状态极差，连续大比分输球。比分赔率2-0和3-0最低，半全场主/主仅1.4，大巴黎主场大胜毫无悬念。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 43,
+          "final_direction": "home",
+          "predicted_score": "3-0",
+          "direction_probs": {
+            "home": 85,
+            "draw": 10,
+            "away": 5
+          },
+          "goal_band": "3",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "3-0",
+              "prob": 20,
+              "logic": "大巴黎主场火力全开，布雷斯特防线脆弱"
+            },
+            {
+              "score": "2-0",
+              "prob": 18,
+              "logic": "最低比分赔率之一，大巴黎稳健取胜"
+            },
+            {
+              "score": "3-1",
+              "prob": 12,
+              "logic": "防范客队偷得一球，但主队大胜格局不改"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "未开售胜平负，说明主队优势极大",
+            "handicap": "让2球盘，体现了双方巨大的实力鸿沟",
+            "correct_score": "2-0和3-0赔率并列最低，机构看好主队零封大胜",
+            "total_goals": "3球和4球赔率最低，预示大比分",
+            "half_full_time": "主/主赔率低至1.4，毫无悬念",
+            "external_market": "无"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 90,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "让球胜平负主胜投票率依然达到40%，市场对大巴黎大胜信心足"
+          },
+          "contextual_logic": {
+            "league_style": "法甲霸主对阵弱旅，往往呈现半场攻防演练",
+            "team_style": "大巴黎进攻多点开花，布雷斯特近期连续惨败",
+            "tempo": "high",
+            "score_shape": "主队进球2-4个，客队0球",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "不拒绝，主胜为唯一选择",
+            "draw": "实力差距过大，大巴黎主场不可能爆冷",
+            "away": "布雷斯特毫无爆冷资本"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "S",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 90,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [
+              "让球深盘"
+            ],
+            "why_recommended": "实力悬殊，大巴黎主场作战，布雷斯特近期防线崩盘，看好大胜"
+          },
+          "data_quality": {
+            "missing": [
+              "1x2"
+            ],
+            "raw_packet_quality": "medium"
+          },
+          "reason": "大巴黎实力碾压，且布雷斯特近期状态极差，连续大比分输球。比分赔率2-0和3-0最低，半全场主/主仅1.4，大巴黎主场大胜毫无悬念。"
+        }
+      },
+      "44": {
+        "match": 44,
+        "source_model": "gemini",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 45.0,
+          "draw": 30.0,
+          "away": 25.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 15.0,
+            "logic": "主胜比分中赔率最低，符合两队实力接近但主队占优的预期"
+          },
+          {
+            "score": "1-1",
+            "prob": 14.0,
+            "logic": "全场最低比分赔率，需防范平局"
+          },
+          {
+            "score": "1-2",
+            "prob": 10.0,
+            "logic": "里尔具备一定客战能力，客胜比分赔率不高"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "2-3-2格局，主胜2.14略占优势",
+          "handicap": "让球盘无明显倾向",
+          "correct_score": "1-1和2-1赔率接近，市场在平局和主胜之间摇摆",
+          "total_goals": "3球赔率最低，2球次之，预计进球数在2-3个",
+          "half_full_time": "主/主和负/负赔率都不高，比赛可能较为开放",
+          "external_market": "无"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 60,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "主胜投票率42%，略高于其他选项，资金略微倾向主队"
+        },
+        "contextual_logic": {
+          "league_style": "法甲强强对话，主场优势较为明显",
+          "team_style": "摩纳哥主场进攻稳定，里尔客场防守有隐患",
+          "tempo": "medium",
+          "score_shape": "主队进球1-2个，客队进球1个",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "不拒绝，主胜为首选",
+          "draw": "两队分胜负能力较强，平局为次选",
+          "away": "里尔客场面对强队胜率不高"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_capability_or_disabled",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "C",
+          "is_recommended": true,
+          "top4_priority": 4,
+          "bet_confidence": 60,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "high",
+          "risk_tags": [
+            "强强对话",
+            "平局隐患"
+          ],
+          "why_recommended": "摩纳哥主场战绩稳定，里尔客场表现稍逊，主胜赔率有一定支持"
+        },
+        "data_quality": {
+          "missing": [],
+          "raw_packet_quality": "high"
+        },
+        "reason": "摩纳哥与里尔实力接近，但摩纳哥占据主场之利。比分赔率中1-1和2-1最低，考虑到里尔客场面对强队时往往处于劣势，倾向于摩纳哥主场小胜，2-1是合理预期。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 44,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 45,
+            "draw": 30,
+            "away": 25
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 15,
+              "logic": "主胜比分中赔率最低，符合两队实力接近但主队占优的预期"
+            },
+            {
+              "score": "1-1",
+              "prob": 14,
+              "logic": "全场最低比分赔率，需防范平局"
+            },
+            {
+              "score": "1-2",
+              "prob": 10,
+              "logic": "里尔具备一定客战能力，客胜比分赔率不高"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "2-3-2格局，主胜2.14略占优势",
+            "handicap": "让球盘无明显倾向",
+            "correct_score": "1-1和2-1赔率接近，市场在平局和主胜之间摇摆",
+            "total_goals": "3球赔率最低，2球次之，预计进球数在2-3个",
+            "half_full_time": "主/主和负/负赔率都不高，比赛可能较为开放",
+            "external_market": "无"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 60,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "主胜投票率42%，略高于其他选项，资金略微倾向主队"
+          },
+          "contextual_logic": {
+            "league_style": "法甲强强对话，主场优势较为明显",
+            "team_style": "摩纳哥主场进攻稳定，里尔客场防守有隐患",
+            "tempo": "medium",
+            "score_shape": "主队进球1-2个，客队进球1个",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "不拒绝，主胜为首选",
+            "draw": "两队分胜负能力较强，平局为次选",
+            "away": "里尔客场面对强队胜率不高"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_capability_or_disabled",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "C",
+            "is_recommended": true,
+            "top4_priority": 4,
+            "bet_confidence": 60,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "high",
+            "risk_tags": [
+              "强强对话",
+              "平局隐患"
+            ],
+            "why_recommended": "摩纳哥主场战绩稳定，里尔客场表现稍逊，主胜赔率有一定支持"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "摩纳哥与里尔实力接近，但摩纳哥占据主场之利。比分赔率中1-1和2-1最低，考虑到里尔客场面对强队时往往处于劣势，倾向于摩纳哥主场小胜，2-1是合理预期。"
+        }
+      }
+    }
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 70.3,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.4",
+      "fallback_referee": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "fallback_referee",
+        "elapsed": 104.5,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 100.9,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3"
+    },
+    "gemini": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "phase1",
+        "elapsed": 67.2,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    },
+    "claude": {
+      "final": {
+        "ok": true,
+        "ai_name": "claude",
+        "model": "claude-opus-4-7",
+        "phase": "final",
+        "elapsed": 130.7,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "claude-opus-4-7"
+    }
+  }
+}
