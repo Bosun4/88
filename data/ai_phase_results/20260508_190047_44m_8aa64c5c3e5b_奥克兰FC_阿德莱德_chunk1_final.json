@@ -1,0 +1,2151 @@
+{
+  "final": {
+    "1": {
+      "match": 1,
+      "source_model": "gpt",
+      "source_phase": "fallback_referee",
+      "final_direction": "draw",
+      "raw_ai_direction": "draw",
+      "predicted_score": "1-1",
+      "direction_probs": {
+        "home": 32.0,
+        "draw": 37.0,
+        "away": 31.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 18.0,
+          "logic": "正确比分最低赔就是1-1，且总进球2球为模态，半决赛首回合背景下市场更偏向先求不败的均衡赛果。"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "logic": "主胜方向里2-1最低，说明主队仍有主场名义优势，但强度不足以压倒平局中心。"
+        },
+        {
+          "score": "1-2",
+          "prob": 14.0,
+          "logic": "客队状态更稳且赔率走势偏向客队不败，若反击兑现，1-2是最自然的客胜路径。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "竞彩主胜1.95只是轻微占优，平赔3.35与客胜3.15并未被明显拉开，属于主队名义领先但三向都可落点的结构。",
+        "handicap": "名义上主让1球，但让球负投票达到53%，说明市场并不相信主队能稳定打穿，实际强度更像浅主盘。",
+        "correct_score": "1-1全场最低，2-1次低，1-2也处在前列，比分簇显示双方都有进球能力，且胜负差更像一球以内。",
+        "total_goals": "2球最低、3球次低，说明主流预期落在中低进球区间，不支持极端大比分。",
+        "half_full_time": "主/主最低，但平/主和平/平都很低，说明比赛大概率先僵持，再决定最终方向。",
+        "external_market": "原始证据明确写到主胜上调、客胜下调，外部市场对客队不败更有防范，与竞彩名义主让形成一定背离。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "away",
+        "sharp_confidence": 69,
+        "reverse_line_movement": true,
+        "steam_move": "away",
+        "evidence": "公众投票46%在主胜，但赔率变化是主胜升水、客胜降水，且外部文字也强调主胜抬升客胜下调，这是典型的主热但资金真实更偏客队不败的特征。"
+      },
+      "contextual_logic": {
+        "league_style": "澳超常规赛偏开放，但淘汰赛首回合普遍更克制，风险管理优先。",
+        "team_style": "主队主场近况偏弱且伤停较多，客队连续不败但锋线也有停赛缺口，双方都不算满编。",
+        "tempo": "medium",
+        "score_shape": "更像上半场谨慎试探，下半场各自找到一次破门窗口的形态。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "medium"
+      },
+      "rejected_cases": {
+        "home": "虽然有主场与名义让球，但主胜升水、主场5场不胜、伤病较重，主胜支撑不够硬。",
+        "draw": "已选；因为1-1是赔率中心，且首回合赛制天然强化平局价值。",
+        "away": "客队状态与资金流更强，但锋线停赛削弱了客场直接带走比赛的确定性，因此更偏客队不败中的平局落点。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+        "search_queries": [],
+        "sources": [
+          {
+            "title": "用户提供的原始证据包",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "odds",
+            "reliability": "high",
+            "claim": "主胜升水、客胜降水；正确比分1-1最低赔。",
+            "impact": "direction"
+          },
+          {
+            "title": "用户提供的背景与伤停文本",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "news",
+            "reliability": "medium",
+            "claim": "主队主场低迷且伤停较多，客队近期状态更好但有锋线停赛。",
+            "impact": "risk"
+          }
+        ],
+        "freshness_grade": "missing",
+        "key_findings": [
+          "赔率结构更支持客队不败而非单边主胜。",
+          "正确比分簇以1-1为核心。",
+          "首回合淘汰赛语境强化谨慎与平局黏性。"
+        ],
+        "source_conflicts": [
+          "名义让球偏主，但赔率走势与外部说明偏向客队不败。"
+        ],
+        "validation_warnings": [
+          "source_0_missing_published_at",
+          "source_1_missing_published_at"
+        ]
+      },
+      "final_web_audit": {},
+      "recommendation": {
+        "tier": "B",
+        "is_recommended": true,
+        "top4_priority": 4,
+        "bet_confidence": 65,
+        "direction_stability": "medium",
+        "score_stability": "medium",
+        "risk_level": "medium",
+        "risk_tags": [
+          "首回合谨慎博弈",
+          "主队热度偏高",
+          "外部走势与名义让球背离"
+        ],
+        "why_recommended": "平局是本场最符合赔率中心与赛制逻辑的选择，但客胜干扰不低，因此属于中等信心推荐。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部实时欧赔时间戳",
+          "官方首发",
+          "交易所数据"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "本场不能机械看成主让就主胜。正确比分最低赔是1-1，总进球模态是2球，且外部赔率描述为主胜上调、客胜下调，说明市场真实态度在削弱主胜。结合主队主场低迷、伤停偏多，以及客队状态更好但锋线也有缺口，最稳妥的终局仍是1-1。",
+      "validation_warnings": [
+        "source_0_missing_published_at",
+        "source_1_missing_published_at"
+      ],
+      "raw_item": {
+        "match": 1,
+        "final_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 32,
+          "draw": 37,
+          "away": 31
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 18,
+            "logic": "正确比分最低赔就是1-1，且总进球2球为模态，半决赛首回合背景下市场更偏向先求不败的均衡赛果。"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "logic": "主胜方向里2-1最低，说明主队仍有主场名义优势，但强度不足以压倒平局中心。"
+          },
+          {
+            "score": "1-2",
+            "prob": 14,
+            "logic": "客队状态更稳且赔率走势偏向客队不败，若反击兑现，1-2是最自然的客胜路径。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩主胜1.95只是轻微占优，平赔3.35与客胜3.15并未被明显拉开，属于主队名义领先但三向都可落点的结构。",
+          "handicap": "名义上主让1球，但让球负投票达到53%，说明市场并不相信主队能稳定打穿，实际强度更像浅主盘。",
+          "correct_score": "1-1全场最低，2-1次低，1-2也处在前列，比分簇显示双方都有进球能力，且胜负差更像一球以内。",
+          "total_goals": "2球最低、3球次低，说明主流预期落在中低进球区间，不支持极端大比分。",
+          "half_full_time": "主/主最低，但平/主和平/平都很低，说明比赛大概率先僵持，再决定最终方向。",
+          "external_market": "原始证据明确写到主胜上调、客胜下调，外部市场对客队不败更有防范，与竞彩名义主让形成一定背离。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "away",
+          "sharp_confidence": 69,
+          "reverse_line_movement": true,
+          "steam_move": "away",
+          "evidence": "公众投票46%在主胜，但赔率变化是主胜升水、客胜降水，且外部文字也强调主胜抬升客胜下调，这是典型的主热但资金真实更偏客队不败的特征。"
+        },
+        "contextual_logic": {
+          "league_style": "澳超常规赛偏开放，但淘汰赛首回合普遍更克制，风险管理优先。",
+          "team_style": "主队主场近况偏弱且伤停较多，客队连续不败但锋线也有停赛缺口，双方都不算满编。",
+          "tempo": "medium",
+          "score_shape": "更像上半场谨慎试探，下半场各自找到一次破门窗口的形态。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "虽然有主场与名义让球，但主胜升水、主场5场不胜、伤病较重，主胜支撑不够硬。",
+          "draw": "已选；因为1-1是赔率中心，且首回合赛制天然强化平局价值。",
+          "away": "客队状态与资金流更强，但锋线停赛削弱了客场直接带走比赛的确定性，因此更偏客队不败中的平局落点。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+          "search_queries": [],
+          "sources": [
+            {
+              "title": "用户提供的原始证据包",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "odds",
+              "reliability": "high",
+              "claim": "主胜升水、客胜降水；正确比分1-1最低赔。",
+              "impact": "direction"
+            },
+            {
+              "title": "用户提供的背景与伤停文本",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "news",
+              "reliability": "medium",
+              "claim": "主队主场低迷且伤停较多，客队近期状态更好但有锋线停赛。",
+              "impact": "risk"
+            }
+          ],
+          "freshness_grade": "missing",
+          "key_findings": [
+            "赔率结构更支持客队不败而非单边主胜。",
+            "正确比分簇以1-1为核心。",
+            "首回合淘汰赛语境强化谨慎与平局黏性。"
+          ],
+          "source_conflicts": [
+            "名义让球偏主，但赔率走势与外部说明偏向客队不败。"
+          ]
+        },
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 4,
+          "bet_confidence": 65,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "首回合谨慎博弈",
+            "主队热度偏高",
+            "外部走势与名义让球背离"
+          ],
+          "why_recommended": "平局是本场最符合赔率中心与赛制逻辑的选择，但客胜干扰不低，因此属于中等信心推荐。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部实时欧赔时间戳",
+            "官方首发",
+            "交易所数据"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场不能机械看成主让就主胜。正确比分最低赔是1-1，总进球模态是2球，且外部赔率描述为主胜上调、客胜下调，说明市场真实态度在削弱主胜。结合主队主场低迷、伤停偏多，以及客队状态更好但锋线也有缺口，最稳妥的终局仍是1-1。"
+      }
+    },
+    "2": {
+      "match": 2,
+      "source_model": "gpt",
+      "source_phase": "fallback_referee",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "2-1",
+      "direction_probs": {
+        "home": 52.0,
+        "draw": 27.0,
+        "away": 21.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "logic": "主胜方向中2-1最低赔，且与总进球2到3球的主流分布吻合，体现主队优势但非碾压。"
+        },
+        {
+          "score": "1-1",
+          "prob": 16.0,
+          "logic": "全场最低赔仍是1-1，说明主队近期连续平局的惯性仍被市场重点防范。"
+        },
+        {
+          "score": "2-0",
+          "prob": 14.0,
+          "logic": "若主队率先破局，客队客场防守连续失球的问题可能导致比赛落到更干净的主胜。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "主胜1.65已经是比较明确的主优盘，平负赔率被有效拉开，市场基础倾向清楚。",
+        "handicap": "主让1球下，让球负仍高于让球胜，说明市场承认主队赢面更大，但净胜两球并不被高看。",
+        "correct_score": "1-1最低赔是主要干扰项，但2-1、1-0、2-0连续压低，主胜比分簇更厚。",
+        "total_goals": "2球与3球几乎并列最低，最像2到3球区间，适合主队一球小胜模型。",
+        "half_full_time": "主/主2.55明显最低，平/主4.5次低，说明主队无论半场领先还是半场僵持，最终赢球概率都居首。",
+        "external_market": "原始证据写明主流机构主胜集中在1.83-1.87低位，外部市场与竞彩方向一致，没有明显逆向警报。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "home",
+        "sharp_confidence": 60,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众54%支持主胜，赔率未出现主热反向抬升；外部市场同样维持主胜低位，说明热度与真实支持基本一致。"
+      },
+      "contextual_logic": {
+        "league_style": "日职整体节奏中等，主场更强的一方常通过控球和边路反复施压建立优势。",
+        "team_style": "大阪樱花主场更稳，长崎客场防线持续失球，容易在后程被压穿。",
+        "tempo": "medium",
+        "score_shape": "前段僵持概率不低，但中后段主队兑现质量更高，客队仍有回击一球的可能。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "medium"
+      },
+      "rejected_cases": {
+        "home": "已选；1X2、半全场与主胜比分簇整体都站在主队一侧。",
+        "draw": "1-1是全场最低赔，也是最主要的风险来源，若主队进攻效率继续平庸，平局会兑现。",
+        "away": "客胜赔率与比分簇都没有形成足够强的独立支撑，除非主队继续陷入平局惯性，否则客胜优先级最低。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+        "search_queries": [],
+        "sources": [
+          {
+            "title": "用户提供的原始赔率与比分包",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "odds",
+            "reliability": "high",
+            "claim": "主胜1.65，2-1为主胜最低赔，主/主半全场最低。",
+            "impact": "direction"
+          },
+          {
+            "title": "用户提供的背景文本",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "stats",
+            "reliability": "medium",
+            "claim": "主队连续平局但客队客场防守不稳。",
+            "impact": "score"
+          }
+        ],
+        "freshness_grade": "missing",
+        "key_findings": [
+          "主胜是主市场方向。",
+          "平局是最大的反向扰动。",
+          "净胜空间有限，更像一球胜。"
+        ],
+        "source_conflicts": [
+          "1X2明显偏主，但正确比分最低赔是1-1，显示主胜并非无风险穿透。"
+        ],
+        "validation_warnings": [
+          "source_0_missing_published_at",
+          "source_1_missing_published_at"
+        ]
+      },
+      "final_web_audit": {},
+      "recommendation": {
+        "tier": "A",
+        "is_recommended": true,
+        "top4_priority": 2,
+        "bet_confidence": 73,
+        "direction_stability": "medium",
+        "score_stability": "medium",
+        "risk_level": "medium",
+        "risk_tags": [
+          "1-1最低赔干扰",
+          "主队近期平局偏多"
+        ],
+        "why_recommended": "整体盘面仍是偏标准的主胜结构，虽然平局干扰存在，但主胜仍是更合理主线。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部临场盘口变化",
+          "官方首发"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "本场不是假强盘，主胜1.65与外部低位主胜相互印证。虽然1-1是全场最低赔，但2-1、1-0、2-0形成完整主胜簇，显示市场认为大阪樱花更可能赢球，只是难以大胜。综合后，2-1是最平衡的终局。",
+      "validation_warnings": [
+        "source_0_missing_published_at",
+        "source_1_missing_published_at"
+      ],
+      "raw_item": {
+        "match": 2,
+        "final_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 52,
+          "draw": 27,
+          "away": 21
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "logic": "主胜方向中2-1最低赔，且与总进球2到3球的主流分布吻合，体现主队优势但非碾压。"
+          },
+          {
+            "score": "1-1",
+            "prob": 16,
+            "logic": "全场最低赔仍是1-1，说明主队近期连续平局的惯性仍被市场重点防范。"
+          },
+          {
+            "score": "2-0",
+            "prob": 14,
+            "logic": "若主队率先破局，客队客场防守连续失球的问题可能导致比赛落到更干净的主胜。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜1.65已经是比较明确的主优盘，平负赔率被有效拉开，市场基础倾向清楚。",
+          "handicap": "主让1球下，让球负仍高于让球胜，说明市场承认主队赢面更大，但净胜两球并不被高看。",
+          "correct_score": "1-1最低赔是主要干扰项，但2-1、1-0、2-0连续压低，主胜比分簇更厚。",
+          "total_goals": "2球与3球几乎并列最低，最像2到3球区间，适合主队一球小胜模型。",
+          "half_full_time": "主/主2.55明显最低，平/主4.5次低，说明主队无论半场领先还是半场僵持，最终赢球概率都居首。",
+          "external_market": "原始证据写明主流机构主胜集中在1.83-1.87低位，外部市场与竞彩方向一致，没有明显逆向警报。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 60,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众54%支持主胜，赔率未出现主热反向抬升；外部市场同样维持主胜低位，说明热度与真实支持基本一致。"
+        },
+        "contextual_logic": {
+          "league_style": "日职整体节奏中等，主场更强的一方常通过控球和边路反复施压建立优势。",
+          "team_style": "大阪樱花主场更稳，长崎客场防线持续失球，容易在后程被压穿。",
+          "tempo": "medium",
+          "score_shape": "前段僵持概率不低，但中后段主队兑现质量更高，客队仍有回击一球的可能。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "已选；1X2、半全场与主胜比分簇整体都站在主队一侧。",
+          "draw": "1-1是全场最低赔，也是最主要的风险来源，若主队进攻效率继续平庸，平局会兑现。",
+          "away": "客胜赔率与比分簇都没有形成足够强的独立支撑，除非主队继续陷入平局惯性，否则客胜优先级最低。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+          "search_queries": [],
+          "sources": [
+            {
+              "title": "用户提供的原始赔率与比分包",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "odds",
+              "reliability": "high",
+              "claim": "主胜1.65，2-1为主胜最低赔，主/主半全场最低。",
+              "impact": "direction"
+            },
+            {
+              "title": "用户提供的背景文本",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "stats",
+              "reliability": "medium",
+              "claim": "主队连续平局但客队客场防守不稳。",
+              "impact": "score"
+            }
+          ],
+          "freshness_grade": "missing",
+          "key_findings": [
+            "主胜是主市场方向。",
+            "平局是最大的反向扰动。",
+            "净胜空间有限，更像一球胜。"
+          ],
+          "source_conflicts": [
+            "1X2明显偏主，但正确比分最低赔是1-1，显示主胜并非无风险穿透。"
+          ]
+        },
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 2,
+          "bet_confidence": 73,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "1-1最低赔干扰",
+            "主队近期平局偏多"
+          ],
+          "why_recommended": "整体盘面仍是偏标准的主胜结构，虽然平局干扰存在，但主胜仍是更合理主线。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部临场盘口变化",
+            "官方首发"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场不是假强盘，主胜1.65与外部低位主胜相互印证。虽然1-1是全场最低赔，但2-1、1-0、2-0形成完整主胜簇，显示市场认为大阪樱花更可能赢球，只是难以大胜。综合后，2-1是最平衡的终局。"
+      }
+    },
+    "3": {
+      "match": 3,
+      "source_model": "gpt",
+      "source_phase": "fallback_referee",
+      "final_direction": "away",
+      "raw_ai_direction": "away",
+      "predicted_score": "0-2",
+      "direction_probs": {
+        "home": 10.0,
+        "draw": 19.0,
+        "away": 71.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "top3": [
+        {
+          "score": "0-2",
+          "prob": 22.0,
+          "logic": "0-2仅次于0-1的低赔，但更符合客队实力优势、主队防线失控与总进球2球模态的组合结构。"
+        },
+        {
+          "score": "0-1",
+          "prob": 21.0,
+          "logic": "全场最低赔就是0-1，说明市场也严防客队以最低成本拿走三分。"
+        },
+        {
+          "score": "1-2",
+          "prob": 15.0,
+          "logic": "如果主队借主场搏命打入一球，1-2是客胜簇里最自然的放大分支。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "客胜1.32属于极强客胜盘，主胜7.5已经接近被市场排除。",
+        "handicap": "主受让1球的背景下，市场仍然高度倾向客队，说明不仅是赢面大，连打穿一球门槛都被认真定价。",
+        "correct_score": "0-1、0-2、1-2、0-3连续低赔，客胜比分簇极其集中，是本批中最清晰的结构之一。",
+        "total_goals": "2球最低、3球次低、1球第三，支持客队主导下的中低比分赢球。",
+        "half_full_time": "负/负1.9极低，平/负3.6次低，说明客队从半场到全场保持控制的预期很强。",
+        "external_market": "原始证据明确写到客胜指数持续走低，看好客胜，内外市场没有明显冲突。"
+      },
+      "money_flow": {
+        "public_money_direction": "away",
+        "sharp_money_direction": "away",
+        "sharp_confidence": 82,
+        "reverse_line_movement": false,
+        "steam_move": "away",
+        "evidence": "公众67%押客胜，而且赔率没有因过热而逆向修正，配合外部文字的客胜持续走低，说明这是市场共识而不是单纯散户热。"
+      },
+      "contextual_logic": {
+        "league_style": "韩职通常不算极度开放，强弱分明时更容易打出强队控局的小中比分。",
+        "team_style": "主队近期攻弱守崩，客队攻守平衡且客场稳定，上半场控制力明显更强。",
+        "tempo": "medium",
+        "score_shape": "客队更可能上半场建立优势，下半场控节奏并补进第二球。",
+        "btts_likelihood": "no",
+        "rotation_risk": "low"
+      },
+      "rejected_cases": {
+        "home": "主胜赔率与比分赔率均严重不支持，除非出现红牌或极端偶发事件，否则难成立。",
+        "draw": "1-1虽有一定赔率存在感，但在如此低的客胜主盘之下只是防冷项，不足以推翻客胜主线。",
+        "away": "已选；1X2、正确比分、半全场三大市场同向支持客胜。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+        "search_queries": [],
+        "sources": [
+          {
+            "title": "用户提供的赔率包",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "odds",
+            "reliability": "high",
+            "claim": "客胜1.32，0-1与0-2为最低比分簇，负/负1.9。",
+            "impact": "direction"
+          },
+          {
+            "title": "用户提供的背景文本",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "stats",
+            "reliability": "high",
+            "claim": "主队连续低迷且失球严重，客队状态与交锋占优。",
+            "impact": "score"
+          },
+          {
+            "title": "critic report",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "stats",
+            "reliability": "medium",
+            "claim": "需注意极端低比分冷门与过高评级风险。",
+            "impact": "risk"
+          }
+        ],
+        "freshness_grade": "missing",
+        "key_findings": [
+          "客胜方向高度一致。",
+          "0-1与0-2是最核心的比分分布。",
+          "需防极端保守局面，但不足以改变主方向。"
+        ],
+        "source_conflicts": [
+          "Phase1中0-1与0-2存在轻微分歧，但都指向同一客胜主线。"
+        ],
+        "validation_warnings": [
+          "source_0_missing_published_at",
+          "source_1_missing_published_at",
+          "source_2_missing_published_at"
+        ]
+      },
+      "final_web_audit": {},
+      "recommendation": {
+        "tier": "S",
+        "is_recommended": true,
+        "top4_priority": 1,
+        "bet_confidence": 85,
+        "direction_stability": "strong",
+        "score_stability": "strong",
+        "risk_level": "low",
+        "risk_tags": [
+          "热门客胜",
+          "需防经济型小胜"
+        ],
+        "why_recommended": "这是本批方向一致性最强的场次之一，市场、状态与比分簇都高度支持客胜。"
+      },
+      "data_quality": {
+        "missing": [
+          "官方首发",
+          "临场交易数据"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "光州FC近期连续低迷且防线崩坏，江原FC在实力、状态、客场表现和交锋层面全面占优。盘口层面客胜1.32、负/负1.9、客胜比分簇密集，是标准的强客胜结构。考虑总进球模态为2球，0-2比0-1更能反映双方当前实力差。",
+      "validation_warnings": [
+        "source_0_missing_published_at",
+        "source_1_missing_published_at",
+        "source_2_missing_published_at"
+      ],
+      "raw_item": {
+        "match": 3,
+        "final_direction": "away",
+        "predicted_score": "0-2",
+        "direction_probs": {
+          "home": 10,
+          "draw": 19,
+          "away": 71
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 22,
+            "logic": "0-2仅次于0-1的低赔，但更符合客队实力优势、主队防线失控与总进球2球模态的组合结构。"
+          },
+          {
+            "score": "0-1",
+            "prob": 21,
+            "logic": "全场最低赔就是0-1，说明市场也严防客队以最低成本拿走三分。"
+          },
+          {
+            "score": "1-2",
+            "prob": 15,
+            "logic": "如果主队借主场搏命打入一球，1-2是客胜簇里最自然的放大分支。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "客胜1.32属于极强客胜盘，主胜7.5已经接近被市场排除。",
+          "handicap": "主受让1球的背景下，市场仍然高度倾向客队，说明不仅是赢面大，连打穿一球门槛都被认真定价。",
+          "correct_score": "0-1、0-2、1-2、0-3连续低赔，客胜比分簇极其集中，是本批中最清晰的结构之一。",
+          "total_goals": "2球最低、3球次低、1球第三，支持客队主导下的中低比分赢球。",
+          "half_full_time": "负/负1.9极低，平/负3.6次低，说明客队从半场到全场保持控制的预期很强。",
+          "external_market": "原始证据明确写到客胜指数持续走低，看好客胜，内外市场没有明显冲突。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "away",
+          "sharp_confidence": 82,
+          "reverse_line_movement": false,
+          "steam_move": "away",
+          "evidence": "公众67%押客胜，而且赔率没有因过热而逆向修正，配合外部文字的客胜持续走低，说明这是市场共识而不是单纯散户热。"
+        },
+        "contextual_logic": {
+          "league_style": "韩职通常不算极度开放，强弱分明时更容易打出强队控局的小中比分。",
+          "team_style": "主队近期攻弱守崩，客队攻守平衡且客场稳定，上半场控制力明显更强。",
+          "tempo": "medium",
+          "score_shape": "客队更可能上半场建立优势，下半场控节奏并补进第二球。",
+          "btts_likelihood": "no",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "主胜赔率与比分赔率均严重不支持，除非出现红牌或极端偶发事件，否则难成立。",
+          "draw": "1-1虽有一定赔率存在感，但在如此低的客胜主盘之下只是防冷项，不足以推翻客胜主线。",
+          "away": "已选；1X2、正确比分、半全场三大市场同向支持客胜。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+          "search_queries": [],
+          "sources": [
+            {
+              "title": "用户提供的赔率包",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "odds",
+              "reliability": "high",
+              "claim": "客胜1.32，0-1与0-2为最低比分簇，负/负1.9。",
+              "impact": "direction"
+            },
+            {
+              "title": "用户提供的背景文本",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "stats",
+              "reliability": "high",
+              "claim": "主队连续低迷且失球严重，客队状态与交锋占优。",
+              "impact": "score"
+            },
+            {
+              "title": "critic report",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "stats",
+              "reliability": "medium",
+              "claim": "需注意极端低比分冷门与过高评级风险。",
+              "impact": "risk"
+            }
+          ],
+          "freshness_grade": "missing",
+          "key_findings": [
+            "客胜方向高度一致。",
+            "0-1与0-2是最核心的比分分布。",
+            "需防极端保守局面，但不足以改变主方向。"
+          ],
+          "source_conflicts": [
+            "Phase1中0-1与0-2存在轻微分歧，但都指向同一客胜主线。"
+          ]
+        },
+        "recommendation": {
+          "tier": "S",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 85,
+          "direction_stability": "strong",
+          "score_stability": "strong",
+          "risk_level": "low",
+          "risk_tags": [
+            "热门客胜",
+            "需防经济型小胜"
+          ],
+          "why_recommended": "这是本批方向一致性最强的场次之一，市场、状态与比分簇都高度支持客胜。"
+        },
+        "data_quality": {
+          "missing": [
+            "官方首发",
+            "临场交易数据"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "光州FC近期连续低迷且防线崩坏，江原FC在实力、状态、客场表现和交锋层面全面占优。盘口层面客胜1.32、负/负1.9、客胜比分簇密集，是标准的强客胜结构。考虑总进球模态为2球，0-2比0-1更能反映双方当前实力差。"
+      }
+    },
+    "4": {
+      "match": 4,
+      "source_model": "gpt",
+      "source_phase": "fallback_referee",
+      "final_direction": "draw",
+      "raw_ai_direction": "draw",
+      "predicted_score": "1-1",
+      "direction_probs": {
+        "home": 36.0,
+        "draw": 35.0,
+        "away": 29.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 20.0,
+          "logic": "1-1是全场最低赔，且总进球2球为模态，双方积分接近、实力接近，这是一组非常标准的平衡型比分信号。"
+        },
+        {
+          "score": "1-0",
+          "prob": 16.0,
+          "logic": "主队方向里1-0最低，说明大田仍有一定主场基础定价，但强度不足以压倒平局。"
+        },
+        {
+          "score": "0-1",
+          "prob": 13.0,
+          "logic": "客队若先通过反击得分，也具备把比赛拖入低比分的能力，因此客胜不能完全排除。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "主胜1.99低于客胜3.42，但并未形成强主态势，更像五五开偏主。",
+        "handicap": "名义主让1球与1X2真实强度不完全匹配，让球负投票54%说明市场不看好主队打穿。",
+        "correct_score": "1-1最低，1-0次低，0-1也不高，三向都留有空间，但平局是结构中心。",
+        "total_goals": "2球最低，1球和3球紧随其后，整体明显偏向低比分。",
+        "half_full_time": "主/主、平/平、平/主、负/负都不算远，表明比赛过程不够单边，更容易长期胶着。",
+        "external_market": "原始证据称主流机构支持主队不败而非强主胜，这与平局黏性很一致。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 42,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众45%偏主，但没有明确赔率异动支撑单边资金流；更像市场对主队略有好感，但真实共识并不强。"
+      },
+      "contextual_logic": {
+        "league_style": "韩职同档球队碰撞通常节奏不高，优先控制失误与站位。",
+        "team_style": "主队主场低迷，客队客场也不算强，双方都更像先求不败。",
+        "tempo": "low",
+        "score_shape": "上半场大概率谨慎，中后段各取一球是最常见的展开。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "low"
+      },
+      "rejected_cases": {
+        "home": "主胜赔率虽然略优，但1-1是最低比分，且主队主场持续不胜，单挑主胜容错不足。",
+        "draw": "已选；因为比分簇中心、总进球模态与双方基本面均指向均势。",
+        "away": "客胜在1X2与比分赔率中都不是主轴，只适合防冷，不适合作为首选。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+        "search_queries": [],
+        "sources": [
+          {
+            "title": "用户提供的赔率与比分证据",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "odds",
+            "reliability": "high",
+            "claim": "1-1为全场最低赔，总进球2球最低。",
+            "impact": "score"
+          },
+          {
+            "title": "critic report",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "stats",
+            "reliability": "medium",
+            "claim": "需统一推荐逻辑并解释主胜/平局概率拉扯。",
+            "impact": "risk"
+          }
+        ],
+        "freshness_grade": "missing",
+        "key_findings": [
+          "平局是赔率中心。",
+          "主队只是轻微占优而非强主。",
+          "比赛更像低比分均势盘。"
+        ],
+        "source_conflicts": [
+          "主胜1X2略优，但正确比分与总进球分布更偏向平局中心。"
+        ],
+        "validation_warnings": [
+          "source_0_missing_published_at",
+          "source_1_missing_published_at"
+        ]
+      },
+      "final_web_audit": {},
+      "recommendation": {
+        "tier": "B",
+        "is_recommended": false,
+        "top4_priority": 0,
+        "bet_confidence": 58,
+        "direction_stability": "weak",
+        "score_stability": "medium",
+        "risk_level": "high",
+        "risk_tags": [
+          "韩职均衡盘",
+          "三向接近",
+          "主让与真实强度不匹配"
+        ],
+        "why_recommended": "本场更适合防平而非强推，平局虽是首选，但方向拉扯仍然明显。"
+      },
+      "data_quality": {
+        "missing": [
+          "临场盘口",
+          "官方首发"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "这是典型的韩职均势盘。大田市民有名义主场优势，但正确比分最低赔是1-1，总进球模态是2球，让球市场又不支持主队打穿，说明市场真正相信的是低比分胶着。综合主客双方近期主客场表现都不强，1-1是最合理终局。",
+      "validation_warnings": [
+        "source_0_missing_published_at",
+        "source_1_missing_published_at"
+      ],
+      "raw_item": {
+        "match": 4,
+        "final_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 36,
+          "draw": 35,
+          "away": 29
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 20,
+            "logic": "1-1是全场最低赔，且总进球2球为模态，双方积分接近、实力接近，这是一组非常标准的平衡型比分信号。"
+          },
+          {
+            "score": "1-0",
+            "prob": 16,
+            "logic": "主队方向里1-0最低，说明大田仍有一定主场基础定价，但强度不足以压倒平局。"
+          },
+          {
+            "score": "0-1",
+            "prob": 13,
+            "logic": "客队若先通过反击得分，也具备把比赛拖入低比分的能力，因此客胜不能完全排除。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜1.99低于客胜3.42，但并未形成强主态势，更像五五开偏主。",
+          "handicap": "名义主让1球与1X2真实强度不完全匹配，让球负投票54%说明市场不看好主队打穿。",
+          "correct_score": "1-1最低，1-0次低，0-1也不高，三向都留有空间，但平局是结构中心。",
+          "total_goals": "2球最低，1球和3球紧随其后，整体明显偏向低比分。",
+          "half_full_time": "主/主、平/平、平/主、负/负都不算远，表明比赛过程不够单边，更容易长期胶着。",
+          "external_market": "原始证据称主流机构支持主队不败而非强主胜，这与平局黏性很一致。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 42,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众45%偏主，但没有明确赔率异动支撑单边资金流；更像市场对主队略有好感，但真实共识并不强。"
+        },
+        "contextual_logic": {
+          "league_style": "韩职同档球队碰撞通常节奏不高，优先控制失误与站位。",
+          "team_style": "主队主场低迷，客队客场也不算强，双方都更像先求不败。",
+          "tempo": "low",
+          "score_shape": "上半场大概率谨慎，中后段各取一球是最常见的展开。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "主胜赔率虽然略优，但1-1是最低比分，且主队主场持续不胜，单挑主胜容错不足。",
+          "draw": "已选；因为比分簇中心、总进球模态与双方基本面均指向均势。",
+          "away": "客胜在1X2与比分赔率中都不是主轴，只适合防冷，不适合作为首选。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+          "search_queries": [],
+          "sources": [
+            {
+              "title": "用户提供的赔率与比分证据",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "odds",
+              "reliability": "high",
+              "claim": "1-1为全场最低赔，总进球2球最低。",
+              "impact": "score"
+            },
+            {
+              "title": "critic report",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "stats",
+              "reliability": "medium",
+              "claim": "需统一推荐逻辑并解释主胜/平局概率拉扯。",
+              "impact": "risk"
+            }
+          ],
+          "freshness_grade": "missing",
+          "key_findings": [
+            "平局是赔率中心。",
+            "主队只是轻微占优而非强主。",
+            "比赛更像低比分均势盘。"
+          ],
+          "source_conflicts": [
+            "主胜1X2略优，但正确比分与总进球分布更偏向平局中心。"
+          ]
+        },
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": false,
+          "top4_priority": 0,
+          "bet_confidence": 58,
+          "direction_stability": "weak",
+          "score_stability": "medium",
+          "risk_level": "high",
+          "risk_tags": [
+            "韩职均衡盘",
+            "三向接近",
+            "主让与真实强度不匹配"
+          ],
+          "why_recommended": "本场更适合防平而非强推，平局虽是首选，但方向拉扯仍然明显。"
+        },
+        "data_quality": {
+          "missing": [
+            "临场盘口",
+            "官方首发"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "这是典型的韩职均势盘。大田市民有名义主场优势，但正确比分最低赔是1-1，总进球模态是2球，让球市场又不支持主队打穿，说明市场真正相信的是低比分胶着。综合主客双方近期主客场表现都不强，1-1是最合理终局。"
+      }
+    },
+    "5": {
+      "match": 5,
+      "source_model": "gpt",
+      "source_phase": "fallback_referee",
+      "final_direction": "away",
+      "raw_ai_direction": "away",
+      "predicted_score": "1-2",
+      "direction_probs": {
+        "home": 23.0,
+        "draw": 25.0,
+        "away": 52.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "logic": "1-2是全场最低赔，且德乙总进球3球为模态，完美匹配客队升级战意与主队防线隐患。"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "logic": "1-1是第二低的平局信号，说明客胜虽主导，但仍有被拖入平局的风险。"
+        },
+        {
+          "score": "0-2",
+          "prob": 13.0,
+          "logic": "若主队伤停导致后防更早失守，客队也有机会用更稳的零封方式拿下。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "客胜1.84在客场属于较强定价，主胜3.13被明显压住，市场基础方向偏客。",
+        "handicap": "主受让1球而让球胜投票51%，说明市场预期更接近客队小胜，而不是客队横扫。",
+        "correct_score": "1-2最低，随后0-1、0-2、1-3等客胜比分也较密集，客胜簇清晰。",
+        "total_goals": "3球最低、4球次低、2球第三，符合德乙偏开放、客队更强但主队也能参与进球的结构。",
+        "half_full_time": "负/负2.85最低，平/负5.1次低，说明客队赢球路径从过程到终局都较顺。",
+        "external_market": "原始证据指出客胜集中在2.05-2.15，主胜抬升至3.0附近，外部市场同样支持客队方向。"
+      },
+      "money_flow": {
+        "public_money_direction": "away",
+        "sharp_money_direction": "away",
+        "sharp_confidence": 75,
+        "reverse_line_movement": false,
+        "steam_move": "away",
+        "evidence": "公众48%支持客胜并不夸张，但外部机构同步压低客胜、抬升主胜，说明资金与基本面共振，客队是真实受捧方向。"
+      },
+      "contextual_logic": {
+        "league_style": "德乙节奏通常偏快，比赛后段空间大，强战意方更容易放大优势。",
+        "team_style": "波鸿防线伤病严重且失球偏多，汉诺威客场表现佳、目标明确。",
+        "tempo": "high",
+        "score_shape": "客队整体效率更高，主队可借主场打一球，但难阻客队完成反超或扩大。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "medium"
+      },
+      "rejected_cases": {
+        "home": "主队中游无欲无求且防线残缺，赔率与战意都不支持主胜。",
+        "draw": "1-1确实是重要风险项，但客队升级目标明确、客胜比分簇更厚，平局仍低于客胜。",
+        "away": "已选；方向、比分簇和总进球结构高度一致。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+        "search_queries": [],
+        "sources": [
+          {
+            "title": "用户提供的赔率包",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "odds",
+            "reliability": "high",
+            "claim": "1-2为全场最低赔，负/负最低。",
+            "impact": "direction"
+          },
+          {
+            "title": "用户提供的背景文本",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "news",
+            "reliability": "medium",
+            "claim": "客队升级战意强，主队伤病较重。",
+            "impact": "direction"
+          }
+        ],
+        "freshness_grade": "missing",
+        "key_findings": [
+          "客胜是主线。",
+          "比分更像一球客胜。",
+          "德乙环境放大三球区间概率。"
+        ],
+        "source_conflicts": [
+          "平局赔率不低但仍具威胁，说明客胜不是无风险强穿。"
+        ],
+        "validation_warnings": [
+          "source_0_missing_published_at",
+          "source_1_missing_published_at"
+        ]
+      },
+      "final_web_audit": {},
+      "recommendation": {
+        "tier": "A",
+        "is_recommended": true,
+        "top4_priority": 3,
+        "bet_confidence": 76,
+        "direction_stability": "medium",
+        "score_stability": "medium",
+        "risk_level": "medium",
+        "risk_tags": [
+          "德乙波动偏大",
+          "平局次低赔",
+          "客队升级压力可能带来保守期"
+        ],
+        "why_recommended": "客胜是结构主线，且1-2直接是正确比分最低赔，具备较好的市场一致性。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部亚盘细节",
+          "官方首发"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "这是典型的战意、状态与赔率同向的客胜盘。波鸿并非毫无主场反抗，但其防线伤病与持续失球在德乙这种高节奏联赛中很难长期兜住。汉诺威升级目标清晰，客胜比分簇围绕1-2、0-1、0-2展开，首选1-2。",
+      "validation_warnings": [
+        "source_0_missing_published_at",
+        "source_1_missing_published_at"
+      ],
+      "raw_item": {
+        "match": 5,
+        "final_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 23,
+          "draw": 25,
+          "away": 52
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18,
+            "logic": "1-2是全场最低赔，且德乙总进球3球为模态，完美匹配客队升级战意与主队防线隐患。"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "logic": "1-1是第二低的平局信号，说明客胜虽主导，但仍有被拖入平局的风险。"
+          },
+          {
+            "score": "0-2",
+            "prob": 13,
+            "logic": "若主队伤停导致后防更早失守，客队也有机会用更稳的零封方式拿下。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "客胜1.84在客场属于较强定价，主胜3.13被明显压住，市场基础方向偏客。",
+          "handicap": "主受让1球而让球胜投票51%，说明市场预期更接近客队小胜，而不是客队横扫。",
+          "correct_score": "1-2最低，随后0-1、0-2、1-3等客胜比分也较密集，客胜簇清晰。",
+          "total_goals": "3球最低、4球次低、2球第三，符合德乙偏开放、客队更强但主队也能参与进球的结构。",
+          "half_full_time": "负/负2.85最低，平/负5.1次低，说明客队赢球路径从过程到终局都较顺。",
+          "external_market": "原始证据指出客胜集中在2.05-2.15，主胜抬升至3.0附近，外部市场同样支持客队方向。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "away",
+          "sharp_confidence": 75,
+          "reverse_line_movement": false,
+          "steam_move": "away",
+          "evidence": "公众48%支持客胜并不夸张，但外部机构同步压低客胜、抬升主胜，说明资金与基本面共振，客队是真实受捧方向。"
+        },
+        "contextual_logic": {
+          "league_style": "德乙节奏通常偏快，比赛后段空间大，强战意方更容易放大优势。",
+          "team_style": "波鸿防线伤病严重且失球偏多，汉诺威客场表现佳、目标明确。",
+          "tempo": "high",
+          "score_shape": "客队整体效率更高，主队可借主场打一球，但难阻客队完成反超或扩大。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "主队中游无欲无求且防线残缺，赔率与战意都不支持主胜。",
+          "draw": "1-1确实是重要风险项，但客队升级目标明确、客胜比分簇更厚，平局仍低于客胜。",
+          "away": "已选；方向、比分簇和总进球结构高度一致。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+          "search_queries": [],
+          "sources": [
+            {
+              "title": "用户提供的赔率包",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "odds",
+              "reliability": "high",
+              "claim": "1-2为全场最低赔，负/负最低。",
+              "impact": "direction"
+            },
+            {
+              "title": "用户提供的背景文本",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "news",
+              "reliability": "medium",
+              "claim": "客队升级战意强，主队伤病较重。",
+              "impact": "direction"
+            }
+          ],
+          "freshness_grade": "missing",
+          "key_findings": [
+            "客胜是主线。",
+            "比分更像一球客胜。",
+            "德乙环境放大三球区间概率。"
+          ],
+          "source_conflicts": [
+            "平局赔率不低但仍具威胁，说明客胜不是无风险强穿。"
+          ]
+        },
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 3,
+          "bet_confidence": 76,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "德乙波动偏大",
+            "平局次低赔",
+            "客队升级压力可能带来保守期"
+          ],
+          "why_recommended": "客胜是结构主线，且1-2直接是正确比分最低赔，具备较好的市场一致性。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部亚盘细节",
+            "官方首发"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "这是典型的战意、状态与赔率同向的客胜盘。波鸿并非毫无主场反抗，但其防线伤病与持续失球在德乙这种高节奏联赛中很难长期兜住。汉诺威升级目标清晰，客胜比分簇围绕1-2、0-1、0-2展开，首选1-2。"
+      }
+    },
+    "6": {
+      "match": 6,
+      "source_model": "gpt",
+      "source_phase": "fallback_referee",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "2-1",
+      "direction_probs": {
+        "home": 55.0,
+        "draw": 25.0,
+        "away": 20.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 17.0,
+          "logic": "2-1是全场最低赔，主胜比分簇最核心，且3球为总进球模态，符合强强对话下主队赢球但难完全封死对手的结构。"
+        },
+        {
+          "score": "1-1",
+          "prob": 14.0,
+          "logic": "若利物浦伤停影响实际强度，1-1会是最主要的反向风险。"
+        },
+        {
+          "score": "3-1",
+          "prob": 12.0,
+          "logic": "若主队高压与主场节奏完全打出来，切尔西防线可能在后程继续崩。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "主胜1.72在对切尔西这种名气球队时仍属明确主优，市场对利物浦有较强认可。",
+        "handicap": "主让1球下，让球负更热，说明市场接受主队赢球，但担心只赢一球。",
+        "correct_score": "2-1最低，3-1、1-0、2-0随后，主胜比分簇密集且层次清晰。",
+        "total_goals": "3球最低、4球次低、5球也不高，整体更偏向中高比分。",
+        "half_full_time": "主/主最低，平/主次低，说明利物浦掌控比赛节奏的概率较高。",
+        "external_market": "原始证据明确写到主胜降水、客胜升水，且欧赔普遍下调主胜、抬升平负，内外走势一致支持主胜。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "home",
+        "sharp_confidence": 75,
+        "reverse_line_movement": false,
+        "steam_move": "home",
+        "evidence": "公众52%在主胜并不过热，但主胜继续降水、客胜升水，说明资金对主队是真实强化而非被动跟热。"
+      },
+      "contextual_logic": {
+        "league_style": "英超强强对话节奏高、转换快，3球窗口常见。",
+        "team_style": "利物浦主场压迫能力强，切尔西客场防线波动大，但个人能力仍支持其打入一球。",
+        "tempo": "high",
+        "score_shape": "更像主队先取得优势，客队阶段性追近，再由主队完成锁定。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "high"
+      },
+      "rejected_cases": {
+        "home": "已选；赔率变化、比分簇与半全场都更支持主胜。",
+        "draw": "1-1确实需要防，尤其考虑主队伤停偏多；但切尔西近期客场与联赛走势不足以把平局抬到主胜之上。",
+        "away": "客胜更多停留在名气和个体爆点层面，市场价格没有给出实质支撑。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+        "search_queries": [],
+        "sources": [
+          {
+            "title": "用户提供的赔率包",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "odds",
+            "reliability": "high",
+            "claim": "主胜降水、客胜升水，2-1为全场最低赔。",
+            "impact": "direction"
+          },
+          {
+            "title": "用户提供的伤停与背景文本",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "injury",
+            "reliability": "medium",
+            "claim": "利物浦伤停较多，切尔西近期联赛持续低迷。",
+            "impact": "risk"
+          },
+          {
+            "title": "critic report",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "injury",
+            "reliability": "medium",
+            "claim": "需提高主队伤停风险权重。",
+            "impact": "risk"
+          }
+        ],
+        "freshness_grade": "missing",
+        "key_findings": [
+          "主胜方向获得赔率动作确认。",
+          "2-1是正确比分核心。",
+          "伤停风险真实存在，降低了推荐绝对值。"
+        ],
+        "source_conflicts": [
+          "主队市场走势强，但伤停名单较长，导致方向稳于比分、胜于穿盘。"
+        ],
+        "validation_warnings": [
+          "source_0_missing_published_at",
+          "source_1_missing_published_at",
+          "source_2_missing_published_at"
+        ]
+      },
+      "final_web_audit": {},
+      "recommendation": {
+        "tier": "A",
+        "is_recommended": true,
+        "top4_priority": 4,
+        "bet_confidence": 74,
+        "direction_stability": "strong",
+        "score_stability": "medium",
+        "risk_level": "medium",
+        "risk_tags": [
+          "主队伤停较多",
+          "强强对话波动",
+          "客队具备进球能力"
+        ],
+        "why_recommended": "主胜方向有明确降水支持，且2-1是比分中心，但伤停过多使其不适合上调到更高等级。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部最新首发核验",
+          "交易所数据"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "虽然利物浦伤停名单很长，但市场并未因此削弱主胜，反而出现主胜降水、客胜升水，说明资金更重视主场强势与切尔西的持续低迷。正确比分以2-1为中心，总进球偏3到4球，最合理结论仍是利物浦主胜且双方进球。",
+      "validation_warnings": [
+        "source_0_missing_published_at",
+        "source_1_missing_published_at",
+        "source_2_missing_published_at"
+      ],
+      "raw_item": {
+        "match": 6,
+        "final_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 55,
+          "draw": 25,
+          "away": 20
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 17,
+            "logic": "2-1是全场最低赔，主胜比分簇最核心，且3球为总进球模态，符合强强对话下主队赢球但难完全封死对手的结构。"
+          },
+          {
+            "score": "1-1",
+            "prob": 14,
+            "logic": "若利物浦伤停影响实际强度，1-1会是最主要的反向风险。"
+          },
+          {
+            "score": "3-1",
+            "prob": 12,
+            "logic": "若主队高压与主场节奏完全打出来，切尔西防线可能在后程继续崩。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜1.72在对切尔西这种名气球队时仍属明确主优，市场对利物浦有较强认可。",
+          "handicap": "主让1球下，让球负更热，说明市场接受主队赢球，但担心只赢一球。",
+          "correct_score": "2-1最低，3-1、1-0、2-0随后，主胜比分簇密集且层次清晰。",
+          "total_goals": "3球最低、4球次低、5球也不高，整体更偏向中高比分。",
+          "half_full_time": "主/主最低，平/主次低，说明利物浦掌控比赛节奏的概率较高。",
+          "external_market": "原始证据明确写到主胜降水、客胜升水，且欧赔普遍下调主胜、抬升平负，内外走势一致支持主胜。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 75,
+          "reverse_line_movement": false,
+          "steam_move": "home",
+          "evidence": "公众52%在主胜并不过热，但主胜继续降水、客胜升水，说明资金对主队是真实强化而非被动跟热。"
+        },
+        "contextual_logic": {
+          "league_style": "英超强强对话节奏高、转换快，3球窗口常见。",
+          "team_style": "利物浦主场压迫能力强，切尔西客场防线波动大，但个人能力仍支持其打入一球。",
+          "tempo": "high",
+          "score_shape": "更像主队先取得优势，客队阶段性追近，再由主队完成锁定。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "high"
+        },
+        "rejected_cases": {
+          "home": "已选；赔率变化、比分簇与半全场都更支持主胜。",
+          "draw": "1-1确实需要防，尤其考虑主队伤停偏多；但切尔西近期客场与联赛走势不足以把平局抬到主胜之上。",
+          "away": "客胜更多停留在名气和个体爆点层面，市场价格没有给出实质支撑。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+          "search_queries": [],
+          "sources": [
+            {
+              "title": "用户提供的赔率包",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "odds",
+              "reliability": "high",
+              "claim": "主胜降水、客胜升水，2-1为全场最低赔。",
+              "impact": "direction"
+            },
+            {
+              "title": "用户提供的伤停与背景文本",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "injury",
+              "reliability": "medium",
+              "claim": "利物浦伤停较多，切尔西近期联赛持续低迷。",
+              "impact": "risk"
+            },
+            {
+              "title": "critic report",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "injury",
+              "reliability": "medium",
+              "claim": "需提高主队伤停风险权重。",
+              "impact": "risk"
+            }
+          ],
+          "freshness_grade": "missing",
+          "key_findings": [
+            "主胜方向获得赔率动作确认。",
+            "2-1是正确比分核心。",
+            "伤停风险真实存在，降低了推荐绝对值。"
+          ],
+          "source_conflicts": [
+            "主队市场走势强，但伤停名单较长，导致方向稳于比分、胜于穿盘。"
+          ]
+        },
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 4,
+          "bet_confidence": 74,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "主队伤停较多",
+            "强强对话波动",
+            "客队具备进球能力"
+          ],
+          "why_recommended": "主胜方向有明确降水支持，且2-1是比分中心，但伤停过多使其不适合上调到更高等级。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部最新首发核验",
+            "交易所数据"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "虽然利物浦伤停名单很长，但市场并未因此削弱主胜，反而出现主胜降水、客胜升水，说明资金更重视主场强势与切尔西的持续低迷。正确比分以2-1为中心，总进球偏3到4球，最合理结论仍是利物浦主胜且双方进球。"
+      }
+    },
+    "7": {
+      "match": 7,
+      "source_model": "gpt",
+      "source_phase": "fallback_referee",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "2-1",
+      "direction_probs": {
+        "home": 44.0,
+        "draw": 30.0,
+        "away": 26.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 17.0,
+          "logic": "2-1是主胜方向最低赔，且总进球3球略优于2球，符合保级战里主场更主动但防线难完全稳固的结构。"
+        },
+        {
+          "score": "1-1",
+          "prob": 16.0,
+          "logic": "1-1是全场最低赔，说明平局黏性极强，是主胜最大的对冲风险。"
+        },
+        {
+          "score": "1-0",
+          "prob": 14.0,
+          "logic": "若主队下半场才打开局面，1-0这种保级战典型小胜也完全可成立。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "主胜2.10、客胜2.90，主队只是中度优势，不是强势主盘。",
+        "handicap": "名义主让1球且让球负57%，说明市场认为主队即便赢球，多半也只是一球以内。",
+        "correct_score": "1-1最低、2-1次低、1-0第三，主胜与平局都很浓，但主胜略占结构优势。",
+        "total_goals": "3球略低于2球，说明比赛不是传统极小球，更像保级压力下的2到3球。",
+        "half_full_time": "主/主最低，但平/主、平/平、平/负差距不大，说明上半场僵持概率很高。",
+        "external_market": "原始文字强调主队不败而不是主胜穿透，说明这是轻主格局，不是稳胆主胜。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 47,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众42%支持主胜并不拥挤，赔率也没有给出明确反向动作，资金层面更接近均衡下的轻主倾向。"
+      },
+      "contextual_logic": {
+        "league_style": "西甲保级战往往前谨后烈，主场情绪容易在下半场放大。",
+        "team_style": "埃尔切主场连续不败更敢压上，阿拉维斯客场持续丢球但仍有反击偷袭能力。",
+        "tempo": "medium",
+        "score_shape": "上半场胶着概率较高，下半场比赛开放度提升，主队小胜更像主线。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "medium"
+      },
+      "rejected_cases": {
+        "home": "已选；主场状态与客队客场表现给了主胜更高优先级。",
+        "draw": "1-1是最低赔，也是最重要的风险项，若主队迟迟打不开局面，平局极易成立。",
+        "away": "客队客场数据与防线表现都偏差，赔率也未把客胜抬升为主轴，只能算防冷。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+        "search_queries": [],
+        "sources": [
+          {
+            "title": "用户提供的赔率与比分包",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "odds",
+            "reliability": "high",
+            "claim": "1-1最低赔，2-1为主胜最低赔。",
+            "impact": "score"
+          },
+          {
+            "title": "用户提供的背景文本",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "stats",
+            "reliability": "medium",
+            "claim": "主队主场走势更好，客队客场低迷且持续失球。",
+            "impact": "direction"
+          }
+        ],
+        "freshness_grade": "missing",
+        "key_findings": [
+          "主队轻微占优。",
+          "平局黏性很强。",
+          "最像主队艰难一球胜。"
+        ],
+        "source_conflicts": [
+          "基本面更偏主，但比分市场首先防平。"
+        ],
+        "validation_warnings": [
+          "source_0_missing_published_at",
+          "source_1_missing_published_at"
+        ]
+      },
+      "final_web_audit": {},
+      "recommendation": {
+        "tier": "B",
+        "is_recommended": false,
+        "top4_priority": 0,
+        "bet_confidence": 62,
+        "direction_stability": "weak",
+        "score_stability": "weak",
+        "risk_level": "high",
+        "risk_tags": [
+          "1-1最低赔",
+          "保级战波动",
+          "轻主非强主"
+        ],
+        "why_recommended": "主胜可以作为倾向，但平局牵制很强，不适合作为高优先级推荐。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部临场盘口变化",
+          "官方首发"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "这是一个典型的轻主保级盘。埃尔切主场更强、阿拉维斯客场更差，基本面确实偏主；但正确比分最低赔却是1-1，说明市场非常忌惮平局。综合权衡后，仍然略偏向主队艰难拿下，2-1是最符合赔率簇与比赛情境的落点。",
+      "validation_warnings": [
+        "source_0_missing_published_at",
+        "source_1_missing_published_at"
+      ],
+      "raw_item": {
+        "match": 7,
+        "final_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 44,
+          "draw": 30,
+          "away": 26
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 17,
+            "logic": "2-1是主胜方向最低赔，且总进球3球略优于2球，符合保级战里主场更主动但防线难完全稳固的结构。"
+          },
+          {
+            "score": "1-1",
+            "prob": 16,
+            "logic": "1-1是全场最低赔，说明平局黏性极强，是主胜最大的对冲风险。"
+          },
+          {
+            "score": "1-0",
+            "prob": 14,
+            "logic": "若主队下半场才打开局面，1-0这种保级战典型小胜也完全可成立。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜2.10、客胜2.90，主队只是中度优势，不是强势主盘。",
+          "handicap": "名义主让1球且让球负57%，说明市场认为主队即便赢球，多半也只是一球以内。",
+          "correct_score": "1-1最低、2-1次低、1-0第三，主胜与平局都很浓，但主胜略占结构优势。",
+          "total_goals": "3球略低于2球，说明比赛不是传统极小球，更像保级压力下的2到3球。",
+          "half_full_time": "主/主最低，但平/主、平/平、平/负差距不大，说明上半场僵持概率很高。",
+          "external_market": "原始文字强调主队不败而不是主胜穿透，说明这是轻主格局，不是稳胆主胜。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 47,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众42%支持主胜并不拥挤，赔率也没有给出明确反向动作，资金层面更接近均衡下的轻主倾向。"
+        },
+        "contextual_logic": {
+          "league_style": "西甲保级战往往前谨后烈，主场情绪容易在下半场放大。",
+          "team_style": "埃尔切主场连续不败更敢压上，阿拉维斯客场持续丢球但仍有反击偷袭能力。",
+          "tempo": "medium",
+          "score_shape": "上半场胶着概率较高，下半场比赛开放度提升，主队小胜更像主线。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "已选；主场状态与客队客场表现给了主胜更高优先级。",
+          "draw": "1-1是最低赔，也是最重要的风险项，若主队迟迟打不开局面，平局极易成立。",
+          "away": "客队客场数据与防线表现都偏差，赔率也未把客胜抬升为主轴，只能算防冷。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+          "search_queries": [],
+          "sources": [
+            {
+              "title": "用户提供的赔率与比分包",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "odds",
+              "reliability": "high",
+              "claim": "1-1最低赔，2-1为主胜最低赔。",
+              "impact": "score"
+            },
+            {
+              "title": "用户提供的背景文本",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "stats",
+              "reliability": "medium",
+              "claim": "主队主场走势更好，客队客场低迷且持续失球。",
+              "impact": "direction"
+            }
+          ],
+          "freshness_grade": "missing",
+          "key_findings": [
+            "主队轻微占优。",
+            "平局黏性很强。",
+            "最像主队艰难一球胜。"
+          ],
+          "source_conflicts": [
+            "基本面更偏主，但比分市场首先防平。"
+          ]
+        },
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": false,
+          "top4_priority": 0,
+          "bet_confidence": 62,
+          "direction_stability": "weak",
+          "score_stability": "weak",
+          "risk_level": "high",
+          "risk_tags": [
+            "1-1最低赔",
+            "保级战波动",
+            "轻主非强主"
+          ],
+          "why_recommended": "主胜可以作为倾向，但平局牵制很强，不适合作为高优先级推荐。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部临场盘口变化",
+            "官方首发"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "这是一个典型的轻主保级盘。埃尔切主场更强、阿拉维斯客场更差，基本面确实偏主；但正确比分最低赔却是1-1，说明市场非常忌惮平局。综合权衡后，仍然略偏向主队艰难拿下，2-1是最符合赔率簇与比赛情境的落点。"
+      }
+    },
+    "8": {
+      "match": 8,
+      "source_model": "gpt",
+      "source_phase": "fallback_referee",
+      "final_direction": "draw",
+      "raw_ai_direction": "draw",
+      "predicted_score": "1-1",
+      "direction_probs": {
+        "home": 31.0,
+        "draw": 38.0,
+        "away": 31.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 21.0,
+          "logic": "1-1是全场最低赔，而且明显压过两边一球胜，说明市场首先承认平局为中心结果。"
+        },
+        {
+          "score": "1-0",
+          "prob": 13.0,
+          "logic": "主队保级战意更强，若先开纪录，低节奏守住一球也有现实基础。"
+        },
+        {
+          "score": "0-1",
+          "prob": 13.0,
+          "logic": "外部市场倾向客队不败，乌迪内斯若利用更稳的防守与转换效率，偷一球带走并不意外。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "2.35/2.90/2.80是非常接近的均衡盘，主场只带来轻微倾斜。",
+        "handicap": "名义主让1球，但让球负61%，说明市场几乎不相信主队能打穿，真实强度远低于表面让步。",
+        "correct_score": "1-1最低，1-0与0-1极为接近，主客胜一球小胜基本对称，是典型胶着结构。",
+        "total_goals": "2球最低、1球与3球接近，整体偏低比分。",
+        "half_full_time": "平/平4.5接近主/主4.0与负/负4.3，说明比赛过程大概率长期均衡。",
+        "external_market": "原始证据指出主胜上调、客胜下调，外部市场更偏向客队不败，这与竞彩主场轻让形成背离，强化平/客思路。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "away",
+        "sharp_confidence": 64,
+        "reverse_line_movement": true,
+        "steam_move": "away",
+        "evidence": "公众38%偏主，而外部描述却是主胜上调、客胜下调，说明真实资金更偏向客队不败。"
+      },
+      "contextual_logic": {
+        "league_style": "意甲中下游对决普遍偏慢，优先控制风险，先求不败。",
+        "team_style": "卡利亚里战意更强但伤病很多，乌迪内斯状态更稳却动力一般，双方优势互相抵消。",
+        "tempo": "low",
+        "score_shape": "长期拉锯、机会不多，但双方都具备打进一球的能力。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "high"
+      },
+      "rejected_cases": {
+        "home": "主队保级战意是最大支撑，但严重伤病和外部赔率逆向变化削弱了主胜可信度。",
+        "draw": "已选；均衡盘、1-1最低赔、外部客不败修正三者叠加后，平局最稳。",
+        "away": "客队市场支持不差，但无欲无求限制了其全取三分的确定性，因此客胜不如平局稳。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+        "search_queries": [],
+        "sources": [
+          {
+            "title": "用户提供的赔率包",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "odds",
+            "reliability": "high",
+            "claim": "1-1为最低赔，主胜上调、客胜下调。",
+            "impact": "direction"
+          },
+          {
+            "title": "用户提供的背景与伤停文本",
+            "url": "",
+            "publisher": "用户输入",
+            "published_at": "",
+            "accessed_at": "2026-05-08",
+            "source_type": "injury",
+            "reliability": "medium",
+            "claim": "主队伤病严重，客队近期防守稳健但战意一般。",
+            "impact": "risk"
+          }
+        ],
+        "freshness_grade": "missing",
+        "key_findings": [
+          "这是均衡型低比分盘。",
+          "外部市场更支持客队不败。",
+          "主队战意与客队稳健度相互抵消。"
+        ],
+        "source_conflicts": [
+          "主队有更强战意，但外部赔率变化不支持主胜强化。"
+        ],
+        "validation_warnings": [
+          "source_0_missing_published_at",
+          "source_1_missing_published_at"
+        ]
+      },
+      "final_web_audit": {},
+      "recommendation": {
+        "tier": "B",
+        "is_recommended": false,
+        "top4_priority": 0,
+        "bet_confidence": 60,
+        "direction_stability": "medium",
+        "score_stability": "medium",
+        "risk_level": "high",
+        "risk_tags": [
+          "均衡盘",
+          "主队伤病较多",
+          "外部客不败修正"
+        ],
+        "why_recommended": "更适合作为防守型平局思路，不适合高等级强推。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部即时盘口明细",
+          "官方首发",
+          "交易所数据"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "本场是本批最均衡的盘型之一。正确比分1-1最低，主胜与客胜一球小胜赔率非常接近，外部市场又通过主胜上调、客胜下调表达了对客队不败的认可。考虑到主队战意更强但伤病严重，客队状态更稳但动力一般，1-1最符合各类证据的交集。",
+      "validation_warnings": [
+        "source_0_missing_published_at",
+        "source_1_missing_published_at"
+      ],
+      "raw_item": {
+        "match": 8,
+        "final_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 31,
+          "draw": 38,
+          "away": 31
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 21,
+            "logic": "1-1是全场最低赔，而且明显压过两边一球胜，说明市场首先承认平局为中心结果。"
+          },
+          {
+            "score": "1-0",
+            "prob": 13,
+            "logic": "主队保级战意更强，若先开纪录，低节奏守住一球也有现实基础。"
+          },
+          {
+            "score": "0-1",
+            "prob": 13,
+            "logic": "外部市场倾向客队不败，乌迪内斯若利用更稳的防守与转换效率，偷一球带走并不意外。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "2.35/2.90/2.80是非常接近的均衡盘，主场只带来轻微倾斜。",
+          "handicap": "名义主让1球，但让球负61%，说明市场几乎不相信主队能打穿，真实强度远低于表面让步。",
+          "correct_score": "1-1最低，1-0与0-1极为接近，主客胜一球小胜基本对称，是典型胶着结构。",
+          "total_goals": "2球最低、1球与3球接近，整体偏低比分。",
+          "half_full_time": "平/平4.5接近主/主4.0与负/负4.3，说明比赛过程大概率长期均衡。",
+          "external_market": "原始证据指出主胜上调、客胜下调，外部市场更偏向客队不败，这与竞彩主场轻让形成背离，强化平/客思路。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "away",
+          "sharp_confidence": 64,
+          "reverse_line_movement": true,
+          "steam_move": "away",
+          "evidence": "公众38%偏主，而外部描述却是主胜上调、客胜下调，说明真实资金更偏向客队不败。"
+        },
+        "contextual_logic": {
+          "league_style": "意甲中下游对决普遍偏慢，优先控制风险，先求不败。",
+          "team_style": "卡利亚里战意更强但伤病很多，乌迪内斯状态更稳却动力一般，双方优势互相抵消。",
+          "tempo": "low",
+          "score_shape": "长期拉锯、机会不多，但双方都具备打进一球的能力。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "high"
+        },
+        "rejected_cases": {
+          "home": "主队保级战意是最大支撑，但严重伤病和外部赔率逆向变化削弱了主胜可信度。",
+          "draw": "已选；均衡盘、1-1最低赔、外部客不败修正三者叠加后，平局最稳。",
+          "away": "客队市场支持不差，但无欲无求限制了其全取三分的确定性，因此客胜不如平局稳。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "未接入实时联网工具，本次仅依据用户提供的raw evidence、Phase1与critic reports完成汇总。",
+          "search_queries": [],
+          "sources": [
+            {
+              "title": "用户提供的赔率包",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "odds",
+              "reliability": "high",
+              "claim": "1-1为最低赔，主胜上调、客胜下调。",
+              "impact": "direction"
+            },
+            {
+              "title": "用户提供的背景与伤停文本",
+              "url": "",
+              "publisher": "用户输入",
+              "published_at": "",
+              "accessed_at": "2026-05-08",
+              "source_type": "injury",
+              "reliability": "medium",
+              "claim": "主队伤病严重，客队近期防守稳健但战意一般。",
+              "impact": "risk"
+            }
+          ],
+          "freshness_grade": "missing",
+          "key_findings": [
+            "这是均衡型低比分盘。",
+            "外部市场更支持客队不败。",
+            "主队战意与客队稳健度相互抵消。"
+          ],
+          "source_conflicts": [
+            "主队有更强战意，但外部赔率变化不支持主胜强化。"
+          ]
+        },
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": false,
+          "top4_priority": 0,
+          "bet_confidence": 60,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "high",
+          "risk_tags": [
+            "均衡盘",
+            "主队伤病较多",
+            "外部客不败修正"
+          ],
+          "why_recommended": "更适合作为防守型平局思路，不适合高等级强推。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部即时盘口明细",
+            "官方首发",
+            "交易所数据"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场是本批最均衡的盘型之一。正确比分1-1最低，主胜与客胜一球小胜赔率非常接近，外部市场又通过主胜上调、客胜下调表达了对客队不败的认可。考虑到主队战意更强但伤病严重，客队状态更稳但动力一般，1-1最符合各类证据的交集。"
+      }
+    }
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 97.9,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 39.1,
+        "status": "ok"
+      },
+      "fallback_referee": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "fallback_referee",
+        "elapsed": 110.9,
+        "status": "ok"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 3.4,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 84.9,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 25.4,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "phase1",
+        "elapsed": 93.5,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high",
+      "critic": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "critic",
+        "elapsed": 38.8,
+        "status": "ok"
+      }
+    },
+    "claude": {
+      "final": {
+        "ok": false,
+        "ai_name": "claude",
+        "model": "claude-opus-4-7",
+        "phase": "final",
+        "elapsed": 259.3,
+        "status": "error",
+        "error": "[Errno 104] Connection reset by peer"
+      },
+      "last_status": "error",
+      "model": "claude-opus-4-7"
+    }
+  }
+}

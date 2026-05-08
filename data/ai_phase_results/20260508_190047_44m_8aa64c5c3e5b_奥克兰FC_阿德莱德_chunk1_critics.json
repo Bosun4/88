@@ -1,0 +1,147 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": [
+      {
+        "match": 1,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "sharp",
+            "severity": "medium",
+            "comment": "Sharp方向与reverse line movement解释充分，但未说明change编码下主胜升水与客胜降水的幅度量化，易导致用户误判资金强度。"
+          },
+          {
+            "target_model": "gemini",
+            "issue_type": "score",
+            "severity": "low",
+            "comment": "1-1与总进球模态2球一致，但BTTS yes与客队锋线停赛的外部情报存在轻微冲突，未充分解释。"
+          }
+        ],
+        "own_revision_hint": "建议补充change具体水位变动数值，并明确停赛对BTTS概率的压制作用。"
+      },
+      {
+        "match": 3,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "S级推荐等级过高，客胜1.32虽强但主队保级压力下可能出现极端防守，0-2预测与总进球模态2球匹配度好，但未考虑红牌或极端低比分冷门。"
+          },
+          {
+            "target_model": "gemini",
+            "issue_type": "market",
+            "severity": "low",
+            "comment": "客胜赔率解读正确，但handicap深盘描述与实际让球1.0存在轻微偏差。"
+          }
+        ],
+        "own_revision_hint": "将推荐降为A级，增加极端防守情景下的平局或0-1备选。"
+      },
+      {
+        "match": 4,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "score",
+            "severity": "medium",
+            "comment": "1-1与总进球2球模态一致，但方向概率home 37/draw 35接近，推荐B级却is_recommended=false，内部逻辑与输出推荐等级存在冲突。"
+          },
+          {
+            "target_model": "gemini",
+            "issue_type": "sharp",
+            "severity": "low",
+            "comment": "sharp_money_direction标为draw但证据不足，公众投票与赔率未显示明确平局资金流。"
+          }
+        ],
+        "own_revision_hint": "统一推荐逻辑，明确标注是否推荐并解释home/draw概率拉扯原因。"
+      },
+      {
+        "match": 6,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "risk",
+            "severity": "high",
+            "comment": "A级推荐但伤停信息显示利物浦多达8人缺阵，risk_tags仅轻描淡写，未充分评估阵容危机对2-1预测的冲击。"
+          },
+          {
+            "target_model": "gemini",
+            "issue_type": "market",
+            "severity": "low",
+            "comment": "主胜降水解读正确，但未与correct_score 2-1最低赔形成交叉验证。"
+          }
+        ],
+        "own_revision_hint": "提升伤停风险权重，考虑将推荐降级或增加0-0/1-1备选。"
+      }
+    ],
+    "gemini": []
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 97.9,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 39.1,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 84.9,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 25.4,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "phase1",
+        "elapsed": 93.5,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high",
+      "critic": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "critic",
+        "elapsed": 38.8,
+        "status": "ok"
+      }
+    },
+    "claude": {}
+  }
+}

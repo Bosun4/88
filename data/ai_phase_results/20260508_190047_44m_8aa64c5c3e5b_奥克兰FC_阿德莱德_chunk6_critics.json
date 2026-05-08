@@ -1,0 +1,174 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": [
+      {
+        "match": 41,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "sharp",
+            "severity": "medium",
+            "comment": "sharp_money_direction标为unclear但未解释为何缺少外部盘口时间序列数据即直接下结论，Sharp解释不充分。"
+          },
+          {
+            "target_model": "gemini",
+            "issue_type": "score",
+            "severity": "low",
+            "comment": "2-1与总进球3球模态吻合，但未指出1X2主胜1.51与让球-1之间可能存在的穿盘分歧。"
+          }
+        ],
+        "own_revision_hint": "建议补充外部欧赔或亚盘时间序列以确认Sharp方向，否则仅凭体彩内部投票无法支撑sharp_confidence。"
+      },
+      {
+        "match": 42,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "market",
+            "severity": "medium",
+            "comment": "让球投票让负59%与1X2主胜2.22存在明显结构错位，gpt未充分解释此赔率误读风险。"
+          },
+          {
+            "target_model": "gemini",
+            "issue_type": "risk",
+            "severity": "low",
+            "comment": "推荐等级C但bet_confidence仅65，方向稳定性medium却仍列为推荐，推荐等级略高。"
+          }
+        ],
+        "own_revision_hint": "优先强调让球与胜平负错位，平局1-1仍是中枢但需降低方向稳定性评级。"
+      },
+      {
+        "match": 43,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "schema",
+            "severity": "high",
+            "comment": "1X2赔率全部0.0属于数据缺失，gpt却直接用让球-2与主/主1.4反推主胜78%，逻辑跳跃且未标注schema风险。"
+          },
+          {
+            "target_model": "gemini",
+            "issue_type": "score",
+            "severity": "medium",
+            "comment": "3-0与总进球3球最低赔吻合，但BTTS=no与布雷斯特客场失球率高存在潜在冲突，未充分说明。"
+          }
+        ],
+        "own_revision_hint": "必须先声明1X2缺失导致方向概率为推导值，推荐等级S需降为A以反映数据不完整。"
+      },
+      {
+        "match": 44,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "推荐B但risk_level标high，方向稳定性weak却仍输出is_recommended=true，内部矛盾。"
+          },
+          {
+            "target_model": "gemini",
+            "issue_type": "sharp",
+            "severity": "low",
+            "comment": "sharp_money_direction标home但证据仅为大众投票42%，Sharp解释不足且未提及让负58%的对冲信号。"
+          }
+        ],
+        "own_revision_hint": "将推荐等级降为C或取消is_recommended，强调均势盘下1-1为唯一稳定选项。"
+      }
+    ],
+    "gemini": []
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 64.6,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 25.9,
+        "status": "ok"
+      },
+      "fallback_referee": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "fallback_referee",
+        "elapsed": 117.5,
+        "status": "ok"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 6.2,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 26.1,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 12.1,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "phase1",
+        "elapsed": 59.9,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high",
+      "critic": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "critic",
+        "elapsed": 35.8,
+        "status": "ok"
+      }
+    },
+    "claude": {
+      "final": {
+        "ok": true,
+        "ai_name": "claude",
+        "model": "claude-opus-4-7",
+        "phase": "final",
+        "elapsed": 252.1,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "claude-opus-4-7"
+    }
+  }
+}
