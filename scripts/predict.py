@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-vMAX 20.1 — AI-Native Web-Augmented Multi-Agent Adjudication Engine
+vMAX 20.2 — 3AI Gemini-Referee Web-Augmented Adjudication Engine
 =====================================================================
 
 设计边界：
 1. 本地不做足球预测判断：不判断 Sharp 真伪、不判断比分是否应该推荐、不用经验规则改方向/比分。
 2. 本地只做协议层：抓包整理、Evidence 编译、动态分批、AI 调用、JSON 解析、Schema 校验、落盘、前端字段兼容。
-3. 四 AI 分工：
-   - GPT：市场结构 + 外部赔率/盘口对照。
-   - Grok：资金流/热度/临场新闻。
-   - Gemini：战术/赛程/风格一致性。
-   - Claude：最终 Web-aware 仲裁。
+3. 三 AI 分工：
+   - GPT：市场结构 + 外部赔率/盘口对照初审。
+   - Grok：资金流/热度/临场新闻初审。
+   - Gemini：最终 Web-aware 裁判，负责战术/来源审计、交叉证据仲裁和最终推荐。
 4. 支持 AI 原生联网：Prompt 强制输出 web_research / sources / freshness / source_conflicts。
-5. 支持 AI 互审：Phase1 三家初审后，可进入 critic 阶段，互相指出漏洞。
+5. 支持低成本互审：Phase1 GPT/Grok 初审后，可选进入 critic 阶段；production 默认关闭以控制成本。
 6. 支持一致性审计：Final Judge 只检查 JSON、方向/比分/goal_band/BTTS/source 格式，不做足球判断。
-7. Top4 / 推荐等级由 AI 输出；本地只根据 AI 的 recommendation 字段排序。
-8. Claude 失败时可启用 AI fallback referee；若仍失败才使用 Phase1 AI 共识兜底。
+7. Top4 / 推荐等级由 Gemini 输出；本地只根据 AI 的 recommendation 字段排序。
+8. Gemini 终审失败时可启用 GPT/Grok fallback referee；若仍失败才使用 Phase1 AI 共识兜底。
 9. 提供 AI_MOCK_MODE，可在无真实 API 时做闭环测试。Mock 只用于工程可行性，不代表真实命中率。
 
 入口：
@@ -25,9 +24,9 @@ vMAX 20.1 — AI-Native Web-Augmented Multi-Agent Adjudication Engine
     API_URL / API_KEY 或各模型单独 *_API_URL / *_API_KEY
     AI_MOCK_MODE=true       # 沙盒/本地闭环测试
     AI_CHUNK_SIZE=8         # 小批次
-    AI_ENABLE_CROSS_EXAM=true
-    AI_ENABLE_CONSISTENCY_JUDGE=true
-    AI_NATIVE_WEB=true
+    AI_ENABLE_CROSS_EXAM=false      # 生产默认关闭，控制成本
+    AI_ENABLE_CONSISTENCY_JUDGE=false
+    AI_NATIVE_WEB=false             # 重点场次再打开
 """
 
 from __future__ import annotations
@@ -62,21 +61,20 @@ except Exception:  # pragma: no cover
 # 版本常量 / 基础配置
 # ============================================================
 
-ENGINE_VERSION = "vMAX 20.1.2"
+ENGINE_VERSION = "vMAX 20.2.0"
 ENGINE_ARCHITECTURE = (
-    "AI-NATIVE WEB-AUGMENTED: 本地只做协议层；GPT/Grok/Gemini 分工初审 + AI互审 + "
-    "Claude Web-aware 终审 + 一致性审计；Top4/推荐等级由 AI 输出；本地不做 Sharp/比分/推荐裁决。"
+    "AI-NATIVE WEB-AUGMENTED 3AI: 本地只做协议层；GPT/Grok 初审 + Gemini Web-aware 终审；"
+    "Top4/推荐等级由 Gemini 输出；本地不做 Sharp/比分/推荐裁决。"
 )
 
 VALID_DIRS = {"home", "draw", "away"}
-AI_NAMES = ["gpt", "grok", "gemini", "claude"]
-PHASE1_NAMES = ["gpt", "grok", "gemini"]
+AI_NAMES = ["gpt", "grok", "gemini"]
+PHASE1_NAMES = ["gpt", "grok"]
 
 DEFAULT_MODELS = {
     "gpt": "gpt-5.4",
     "grok": "grok-4.3",
     "gemini": "gemini-3.1-pro-preview-thinking-high",
-    "claude": "claude-opus-4-7",
 }
 
 CRS_FULL_MAP = {
@@ -111,7 +109,7 @@ PROMPT_STRIP_KEYS = {
     "raw_ai_direction", "score_implied_direction", "home_win_pct", "draw_pct", "away_win_pct",
     "confidence", "is_recommended", "is_strict_recommended", "is_top4_candidate",
     "gpt_score", "gpt_analysis", "grok_score", "grok_analysis", "gemini_score", "gemini_analysis",
-    "claude_score", "claude_analysis", "bayesian_evidences", "score_market_evidence", "sharp_audit",
+    "claude_score", "claude_analysis", "final_referee_score", "final_referee_analysis", "bayesian_evidences", "score_market_evidence", "sharp_audit",
     "model_agreement", "experience_review", "recommendation", "ai_run_metadata", "ai_call_status",
 }
 
@@ -174,10 +172,11 @@ AI_ENABLE_CROSS_EXAM = _env_bool("AI_ENABLE_CROSS_EXAM", _default_cross_exam)
 AI_ENABLE_CONSISTENCY_JUDGE = _env_bool("AI_ENABLE_CONSISTENCY_JUDGE", _default_consistency)
 AI_ENABLE_FALLBACK_REFEREE = _env_bool("AI_ENABLE_FALLBACK_REFEREE", True)
 AI_CONSISTENCY_JUDGE_MODEL = str(os.environ.get("AI_CONSISTENCY_JUDGE_MODEL", "gpt")).strip().lower()
+AI_FINAL_REFEREE_MODEL = str(os.environ.get("AI_FINAL_REFEREE_MODEL", "gemini")).strip().lower() or "gemini"
 AI_FALLBACK_REFEREE_MODEL = str(os.environ.get("AI_FALLBACK_REFEREE_MODEL", "gpt")).strip().lower()
 
 AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 5400)
-AI_CLAUDE_READ_TIMEOUT = _env_int("AI_CLAUDE_READ_TIMEOUT", 7200)
+AI_FINAL_READ_TIMEOUT = _env_int("AI_FINAL_READ_TIMEOUT", _env_int("AI_CLAUDE_READ_TIMEOUT", 7200))
 AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 120)
 AI_HTTP_TOTAL_TIMEOUT = _env_int("AI_HTTP_TOTAL_TIMEOUT", 0)
 AI_TEMPERATURE_PHASE1 = _env_float("AI_TEMPERATURE_PHASE1", 0.18)
@@ -742,8 +741,7 @@ def _phase1_system(ai_name: str) -> str:
     role_intro = {
         "gpt": "你是 Probabilistic Market Structure Analyst，专攻 1X2、让球、正确比分赔率簇、总进球模态、外部赔率对照。",
         "grok": "你是 Money Flow / Sharp Movement Analyst，专攻 change、vote、热度、Sharp/Steam/Reverse Line Movement、临场新闻。",
-        "gemini": "你是 Tactical & Contextual Consistency Analyst，专攻战术风格、赛程、战意、伤停、比分形态。",
-        "claude": "你是 Final Web-aware Adjudicator，负责源质量审计、交叉证据仲裁和最终推荐。",
+        "gemini": "你是 Gemini Final Web-aware Referee，负责战术/来源质量审计、交叉证据仲裁和最终推荐。",
     }.get(ai_name, "你是足球量化 RAW-AI 分析师。")
     return (
         role_intro
@@ -796,16 +794,19 @@ def build_critic_prompt(evidence_batch: List[Dict[str, Any]], reviewer_name: str
     return "\n".join(p)
 
 
-def build_claude_final_prompt(
+def build_gemini_final_prompt(
     evidence_batch: List[Dict[str, Any]],
     phase1_results: Dict[str, Dict[int, Dict[str, Any]]],
     critic_reports: Dict[str, List[Dict[str, Any]]],
 ) -> str:
     p = []
     p.append("<final_adjudication_protocol>")
-    p.append("你是 Claude 最终 Web-aware 主裁。你必须重新审计 raw evidence、三家初审、三家互审意见和联网来源质量。")
+    p.append("你是 Gemini 最终 Web-aware 裁判。你必须重新审计 raw evidence、GPT/Grok 初审、互审意见和联网来源质量。")
     p.append("证据优先级：raw market structure > correct-score cluster > total-goals mode > money-flow/sharp interpretation > tactical/web context > Phase1 consensus。")
-    p.append("多数意见不自动成立；若多数共享同一个弱假设，你必须覆盖。")
+    p.append("多数意见不自动成立；若 GPT/Grok 基于同一低赔/单边市场理由一致，这属于相关证据，不是独立证据。")
+    p.append("S级必须至少有两个独立证据族同时支持：市场结构、正确比分赔率簇、总进球模态、资金流/Sharp、联网阵容伤停、战术/赛程背景。仅赔率低赔或单边市场最多给A；无联网且依赖阵容/战意/实力碾压，最高给B。")
+    p.append("强客低赔审计：若客胜<=1.50，必须显式比较0-0/0-1/1-1/0-2/1-2与总进球模态；不能机械给0-2或S级。")
+    p.append("高比分尾部审计：若首选2-1/1-2且BTTS=yes，必须检查3-2/2-2/3-1尾部是否被低估。")
     p.append("如果 sharp_money_direction 与 final_direction 冲突，必须解释为什么该信号是噪音，或者主动下调 recommendation.tier。")
     p.append("如果联网来源缺 URL/发布时间/claim，不能作为硬证据。必须输出 source_conflicts 和 final_web_audit。")
     p.append("最终推荐等级、是否进 Top4、bet_confidence 全部由你输出；本地只排序，不会改你的足球判断。")
@@ -840,8 +841,8 @@ def build_fallback_referee_prompt(
     critic_reports: Dict[str, List[Dict[str, Any]]],
 ) -> str:
     p = []
-    p.append("你是 Claude 失败后的 AI fallback referee。不要使用本地规则。基于 raw evidence、Phase1 和 critic reports 输出最终 predictions。")
-    p.append("输出 schema 与 Claude final 完全一致。")
+    p.append("你是 Gemini 终审失败后的 AI fallback referee。不要使用本地规则。基于 raw evidence、Phase1 和 critic reports 输出最终 predictions。")
+    p.append("输出 schema 与 Gemini final 完全一致。")
     p.append(_canonical_output_schema_text())
     p.append("<evidence_batch>")
     for e in evidence_batch:
@@ -906,13 +907,13 @@ def _clean_env_url(*names: str) -> str:
 
 def get_key_for_ai(ai_name: str) -> str:
     if AI_FORCE_COMMON_GATEWAY:
-        return _clean_env_key("API_KEY", "GPT_API_KEY", "OPENAI_API_KEY", "GROK_API_KEY", "GEMINI_API_KEY", "CLAUDE_API_KEY")
+        return _clean_env_key("API_KEY", "GPT_API_KEY", "OPENAI_API_KEY", "GROK_API_KEY", "GEMINI_API_KEY")
     return _clean_env_key(f"{ai_name.upper()}_API_KEY", "API_KEY", "OPENAI_API_KEY", "GPT_API_KEY")
 
 
 def get_url_for_ai(ai_name: str) -> str:
     if AI_FORCE_COMMON_GATEWAY:
-        return _clean_env_url("API_URL", "GPT_API_URL", "OPENAI_API_URL", "BASE_URL", "GROK_API_URL", "GEMINI_API_URL", "CLAUDE_API_URL")
+        return _clean_env_url("API_URL", "GPT_API_URL", "OPENAI_API_URL", "BASE_URL", "GROK_API_URL", "GEMINI_API_URL")
     return _clean_env_url(f"{ai_name.upper()}_API_URL", "API_URL", "OPENAI_API_URL", "BASE_URL", "GPT_API_URL")
 
 
@@ -982,7 +983,7 @@ async def async_call_ai_json(
         payload["response_format"] = {"type": "json_object"}
 
     try:
-        read_timeout = AI_CLAUDE_READ_TIMEOUT if ai_name == "claude" else AI_READ_TIMEOUT
+        read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "fallback_referee") else AI_READ_TIMEOUT
         total_timeout = None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT
         timeout = aiohttp.ClientTimeout(
             total=total_timeout,
@@ -1508,7 +1509,7 @@ def _mock_ai_response(ai_name: str, phase: str, prompt: str, expected_matches: L
         else:
             best = max(implied.items(), key=lambda kv: kv[1])[0]
         if phase in ("final", "fallback_referee"):
-            # Claude mock 倾向整合市场低赔 + 防过热，仍只是可运行模拟。
+            # Gemini final mock 倾向整合市场低赔 + 防过热，仍只是可运行模拟。
             best = max(implied.items(), key=lambda kv: kv[1])[0]
         score_map = {
             "home": "2-1" if idx % 3 == 0 else "1-0",
@@ -1634,14 +1635,15 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
             print(f"  [Chunk {chunk_id}] {ai.upper()} critic reports={len(critic_reports[ai])} status={st.get('status')}")
     _save_snapshot(run_id, f"chunk{chunk_id}_critics", {"critic_reports": critic_reports, "status": AI_CALL_STATUS})
 
-    # Claude final
+    # Gemini final referee
     final_rows: Dict[int, Dict[str, Any]] = {}
-    claude_prompt = build_claude_final_prompt(evidence_batch, phase1, critic_reports)
-    _, claude_obj, claude_st = await async_call_ai_json(session, "claude", _phase1_system("claude"), claude_prompt, "final", expected)
-    final_rows = normalize_ai_predictions(claude_obj, expected, "claude", "final")
-    print(f"  [Chunk {chunk_id}] CLAUDE final {len(final_rows)}/{len(expected)} status={claude_st.get('status')}")
+    final_ai = AI_FINAL_REFEREE_MODEL if AI_FINAL_REFEREE_MODEL in AI_NAMES else "gemini"
+    final_prompt = build_gemini_final_prompt(evidence_batch, phase1, critic_reports)
+    _, final_obj, final_st = await async_call_ai_json(session, final_ai, _phase1_system("gemini"), final_prompt, "final", expected)
+    final_rows = normalize_ai_predictions(final_obj, expected, final_ai, "final")
+    print(f"  [Chunk {chunk_id}] {final_ai.upper()} final {len(final_rows)}/{len(expected)} status={final_st.get('status')}")
 
-    # fallback referee if Claude incomplete
+    # fallback referee if Gemini incomplete
     missing = [idx for idx in expected if idx not in final_rows]
     if missing and AI_ENABLE_FALLBACK_REFEREE:
         fallback_ai = AI_FALLBACK_REFEREE_MODEL if AI_FALLBACK_REFEREE_MODEL in PHASE1_NAMES else "gpt"
@@ -1667,7 +1669,7 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
         _apply_consistency_repairs(final_rows, repairs)
         print(f"  [Chunk {chunk_id}] CONSISTENCY {judge_ai.upper()} repairs={len(repairs)} status={judge_st.get('status')}")
 
-    # Attach phase snapshots per match so legacy frontends can show GPT/Grok/Gemini/Claude panels
+    # Attach phase snapshots per match so legacy frontends can show GPT/Grok/Gemini panels
     # without leaking placeholders like “见阶段快照”. This is metadata only; it does not alter football judgement.
     for idx, row in final_rows.items():
         phase1_pack = {}
@@ -1700,7 +1702,7 @@ def _phase1_consensus_fallback(idx: int, phase1: Dict[str, Dict[int, Dict[str, A
     out = dict(r)
     out["source_model"] = ai
     out["source_phase"] = "phase1_consensus_fallback"
-    out.setdefault("validation_warnings", []).append("claude_missing_used_phase1_ai_fallback")
+    out.setdefault("validation_warnings", []).append("gemini_final_missing_used_phase1_ai_fallback")
     return out
 
 
@@ -2023,10 +2025,12 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "gpt_analysis": _legacy_model_analysis(ai_r, "gpt"),
         "grok_score": _legacy_model_score(ai_r, "grok", score),
         "grok_analysis": _legacy_model_analysis(ai_r, "grok"),
-        "gemini_score": _legacy_model_score(ai_r, "gemini", score),
-        "gemini_analysis": _legacy_model_analysis(ai_r, "gemini"),
-        "claude_score": score,
-        "claude_analysis": ai_r.get("reason", "")[:3000] or "AI终审已给出结构化预测",
+        "gemini_score": score,
+        "gemini_analysis": ai_r.get("reason", "")[:3000] or "Gemini终审已给出结构化预测",
+        "final_referee_score": score,
+        "final_referee_analysis": ai_r.get("reason", "")[:3000],
+        "claude_score": "弃用",
+        "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
         "final_ai_score": score,
         "final_ai_analysis": ai_r.get("reason", "")[:3000],
         "ai_abstained": [],
@@ -2035,7 +2039,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "ai_result_files": dict(AI_RESULT_FILES),
         "ai_run_metadata": dict(_LAST_AI_RUN_METADATA),
         "model_consensus": None,
-        "total_models": 4,
+        "total_models": 3,
 
         "refined_poisson": {},
         "poisson": {},
