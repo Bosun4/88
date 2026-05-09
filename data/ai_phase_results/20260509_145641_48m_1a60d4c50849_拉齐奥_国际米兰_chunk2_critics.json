@@ -1,0 +1,126 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": [
+      {
+        "match": 7,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "sharp",
+            "severity": "medium",
+            "comment": "sharp_money_direction直接标注unclear却仍给出B级推荐，Sharp解释不足且与客胜升水、让球负57%投票的矛盾未充分剖析。"
+          },
+          {
+            "target_model": "gpt",
+            "issue_type": "score",
+            "severity": "low",
+            "comment": "2-1与总进球3球模态一致，但1-1最低赔率6.75与主队多达7人伤停的冲突未被充分量化。"
+          }
+        ],
+        "own_revision_hint": "建议将推荐降为C级，并明确指出客队不败属性与主队轮休的赔率保护作用。"
+      },
+      {
+        "match": 8,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "risk",
+            "severity": "high",
+            "comment": "A级推荐与74置信度过高，莱切保级战意+尤文可能控节奏的risk_tags未被充分折价，0-2零封假设过于乐观。"
+          },
+          {
+            "target_model": "gpt",
+            "issue_type": "market",
+            "severity": "medium",
+            "comment": "竞彩客胜1.33被解读为强信号，但未对比让球客胜仅41%投票与半全场负/负1.90的真实强度。"
+          }
+        ],
+        "own_revision_hint": "将tier改为B，置信度下调至65，并增加莱切主场反扑导致1-2或0-1的备选路径。"
+      },
+      {
+        "match": 9,
+        "critic_model": "grok",
+        "target_findings": [
+          {
+            "target_model": "gpt",
+            "issue_type": "score",
+            "severity": "medium",
+            "comment": "1-2、1-1、2-1三者赔率极度接近却仍选away，方向稳定性被高估，schema冲突明显。"
+          },
+          {
+            "target_model": "gpt",
+            "issue_type": "risk",
+            "severity": "high",
+            "comment": "C级却仍列为不推荐却给出51置信度，推荐等级与实际风险不匹配。"
+          }
+        ],
+        "own_revision_hint": "直接标记为不推荐场次，强调三项赔率接近导致的任意性。"
+      }
+    ]
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "phase1",
+        "elapsed": 96.1,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.5",
+      "critic": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "critic",
+        "elapsed": 41.7,
+        "status": "ok"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "consistency",
+        "elapsed": 11.8,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 35.9,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 15.6,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 89.3,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

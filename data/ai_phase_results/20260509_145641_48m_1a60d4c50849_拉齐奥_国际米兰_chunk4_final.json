@@ -1,0 +1,2533 @@
+{
+  "final": {
+    "19": {
+      "match": 19,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "draw",
+      "raw_ai_direction": "draw",
+      "predicted_score": "1-1",
+      "direction_probs": {
+        "home": 32.0,
+        "draw": 35.0,
+        "away": 33.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "2",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-1",
+          "prob": 25.0,
+          "logic": "1-1赔率6.0全场最低，且总进球2球赔率3.3最低，完美契合市场模态，平局保护极强。"
+        },
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "logic": "客胜最低比分7.75，若客队发挥交锋优势可能一球小胜。"
+        },
+        {
+          "score": "0-1",
+          "prob": 15.0,
+          "logic": "客队防守反击打出的次优比分，赔率8.0排在第三。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "竞彩2.55-3.12-2.40，三项极度接近，客队微弱优势，平赔3.12防范力度极大。",
+        "handicap": "主队受让1球，受让方热度较高，市场对主队不败有一定期待。",
+        "correct_score": "1-1赔率6.0独占最低，1-2(7.75)和0-1(8.0)紧随其后，比分结构呈收敛态势。",
+        "total_goals": "2球3.3最低，3球3.55次低，进球数预期在2-3球之间。",
+        "half_full_time": "负/负4.0与主/主4.1接近，平/平4.8，半全场未给出明确单边指向。",
+        "external_market": "缺乏外部数据，仅依靠体彩内部结构判断。"
+      },
+      "money_flow": {
+        "public_money_direction": "unclear",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 10,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "胜平负投票分布均匀，无明显资金倾斜，赔率平稳。"
+      },
+      "contextual_logic": {
+        "league_style": "英超中下游球队交锋，往往在僵持中消耗，平局概率不低。",
+        "team_style": "水晶宫主场近期回暖，埃弗顿客场一般但交锋占优，双方实力均衡。",
+        "tempo": "medium",
+        "score_shape": "1-1是核心防范比分，符合双方基本面和赔率结构。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "low"
+      },
+      "rejected_cases": {
+        "home": "主胜2.55略高于客胜，且主胜比分2-1(8.25)排在客胜比分之后，主胜支撑不足。",
+        "draw": "平局为最终首选方向，1-1赔率全场最低且符合2球模态。",
+        "away": "客胜2.40优势极微，且1-2比分与2球主模态存在一定冲突，不如1-1稳妥。"
+      },
+      "web_research": {
+        "used": false,
+        "failure_reason": "no_web_tool_available",
+        "search_queries": [],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": []
+      },
+      "final_web_audit": {
+        "web_used_by_final": false,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "C",
+        "is_recommended": false,
+        "top4_priority": 0,
+        "bet_confidence": 45,
+        "direction_stability": "weak",
+        "score_stability": "medium",
+        "risk_level": "high",
+        "risk_tags": [
+          "胜平负赔率过近",
+          "缺乏外部盘口验证"
+        ],
+        "why_recommended": "三项赔率过于接近，1-1平局保护极强，不建议作为重点推荐。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部欧赔实时对照",
+          "亚盘即时水位"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "本场比赛胜平负赔率极度接近，客队仅有微弱优势。正确比分中1-1赔率6.0全场最低，且总进球2球赔率3.3最低，完美契合市场模态。在缺乏外部数据验证的情况下，平局是最稳妥的防范方向。",
+      "validation_warnings": [],
+      "raw_item": {
+        "match": 19,
+        "final_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 32,
+          "draw": 35,
+          "away": 33
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 25,
+            "logic": "1-1赔率6.0全场最低，且总进球2球赔率3.3最低，完美契合市场模态，平局保护极强。"
+          },
+          {
+            "score": "1-2",
+            "prob": 18,
+            "logic": "客胜最低比分7.75，若客队发挥交锋优势可能一球小胜。"
+          },
+          {
+            "score": "0-1",
+            "prob": 15,
+            "logic": "客队防守反击打出的次优比分，赔率8.0排在第三。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩2.55-3.12-2.40，三项极度接近，客队微弱优势，平赔3.12防范力度极大。",
+          "handicap": "主队受让1球，受让方热度较高，市场对主队不败有一定期待。",
+          "correct_score": "1-1赔率6.0独占最低，1-2(7.75)和0-1(8.0)紧随其后，比分结构呈收敛态势。",
+          "total_goals": "2球3.3最低，3球3.55次低，进球数预期在2-3球之间。",
+          "half_full_time": "负/负4.0与主/主4.1接近，平/平4.8，半全场未给出明确单边指向。",
+          "external_market": "缺乏外部数据，仅依靠体彩内部结构判断。"
+        },
+        "money_flow": {
+          "public_money_direction": "unclear",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 10,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "胜平负投票分布均匀，无明显资金倾斜，赔率平稳。"
+        },
+        "contextual_logic": {
+          "league_style": "英超中下游球队交锋，往往在僵持中消耗，平局概率不低。",
+          "team_style": "水晶宫主场近期回暖，埃弗顿客场一般但交锋占优，双方实力均衡。",
+          "tempo": "medium",
+          "score_shape": "1-1是核心防范比分，符合双方基本面和赔率结构。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "主胜2.55略高于客胜，且主胜比分2-1(8.25)排在客胜比分之后，主胜支撑不足。",
+          "draw": "平局为最终首选方向，1-1赔率全场最低且符合2球模态。",
+          "away": "客胜2.40优势极微，且1-2比分与2球主模态存在一定冲突，不如1-1稳妥。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": false,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "C",
+          "is_recommended": false,
+          "top4_priority": 0,
+          "bet_confidence": 45,
+          "direction_stability": "weak",
+          "score_stability": "medium",
+          "risk_level": "high",
+          "risk_tags": [
+            "胜平负赔率过近",
+            "缺乏外部盘口验证"
+          ],
+          "why_recommended": "三项赔率过于接近，1-1平局保护极强，不建议作为重点推荐。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部欧赔实时对照",
+            "亚盘即时水位"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场比赛胜平负赔率极度接近，客队仅有微弱优势。正确比分中1-1赔率6.0全场最低，且总进球2球赔率3.3最低，完美契合市场模态。在缺乏外部数据验证的情况下，平局是最稳妥的防范方向。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 19,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 34.0,
+            "draw": 30.0,
+            "away": 36.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 13.0,
+              "logic": "客胜方向在胜平负端仅以2.40略低于主胜2.55，优势很薄；但正确比分中1-2为客胜最低赔7.75，且低于主胜最低的2-1赔8.25，说明客队小胜被压在更前位置。"
+            },
+            {
+              "score": "1-1",
+              "prob": 15.0,
+              "logic": "1-1为全场最低比分赔率6.00，平局保护非常强，反映两队实力接近且总进球主模态为2球。"
+            },
+            {
+              "score": "0-1",
+              "prob": 12.0,
+              "logic": "0-1为全场第三低赔8.00，配合负/负半全场4.00略低于主/主4.10，显示市场对埃弗顿先手小胜有轻微倾斜。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "竞彩主胜2.55、平3.12、客胜2.40，三项非常接近但客胜最低，属于客队微弱优势盘，不是强客格局。平局赔率不高，说明胜负方向并不稳定。",
+            "handicap": "让球原始为主队受让1球，受让方热度较高，公众让球主胜62%，说明大众更认可水晶宫不败或小负；但这也意味着客胜正路并未形成过热。",
+            "correct_score": "1-1最低赔6.00是最大风险点；但客胜比分1-2赔7.75、0-1赔8.00均排在主胜比分之前，客胜小比分簇更靠前。",
+            "total_goals": "总进球2球赔率3.30最低，3球3.55次低，结构落在2到3球之间；选择1-2顺应3球次模态，但需防1-1。",
+            "half_full_time": "负/负4.00略低于主/主4.10，平/负5.80也低于平/主6.10，半全场端对客队持续领先或下半场带走比赛有轻微倾斜。",
+            "external_market": "无法联网核验外部欧赔、亚盘或交易所价格，不能把外部市场分歧作为硬证据；本判断仅基于体彩胜平负、比分、总进球和半全场结构。"
+          },
+          "money_flow": {
+            "public_money_direction": "unclear",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 18,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众胜平负投票主35%、平29%、客36%几乎均衡；让球端主队受让方向明显更热。抓包显示主胜、客胜均平稳，没有降赔或升赔轨迹，因此不能确认锐利资金，只能判断客胜没有明显公众过热。"
+          },
+          "contextual_logic": {
+            "league_style": "英超中下游对话通常转换速度不低，但两队积分压力有限，比赛更可能在均衡中由定位球或反击决定。",
+            "team_style": "水晶宫主场近期较稳，埃弗顿历史交锋优势明显；双方进攻效率都不算高，客队若占优更可能是一球小胜而非大胜。",
+            "tempo": "medium",
+            "score_shape": "客队微弱优势叠加1-1强保护，比分形态偏1-1与1-2之间，最终取客队2比1小胜。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "unclear"
+          },
+          "rejected_cases": {
+            "home": "主胜最低比分2-1仅排全场第四，主胜赔率也高于客胜，主队主场强势不足以覆盖长期交锋劣势；因此不取主胜为首选。",
+            "draw": "1-1是最大单一比分风险，但胜平负平赔3.12并未压到最低，半全场也更偏负/负与平/负，平局更适合作为防范而非主方向。",
+            "away": "客胜是最终选择，但优势很窄；若水晶宫主场防守延续或比赛节奏被压低，客胜容易被1-1吞掉。"
+          },
+          "recommendation": {
+            "tier": "C",
+            "is_recommended": false,
+            "top4_priority": 0,
+            "bet_confidence": 43,
+            "direction_stability": "weak",
+            "score_stability": "weak",
+            "risk_level": "high",
+            "risk_tags": [
+              "胜平负赔率过近",
+              "1-1最低赔强干扰",
+              "缺少外部盘口验证"
+            ],
+            "why_recommended": "不列为重点推荐；客胜只是市场簇的微弱倾斜，平局保护过强，适合谨慎观察而非重注。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔实时对照",
+              "亚盘即时水位",
+              "交易所成交信息",
+              "可验证首发伤停来源",
+              "赔率时间点"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场核心是均衡盘中的客队微倾。竞彩客胜2.40低于主胜2.55，正确比分客胜簇1-2与0-1排位靠前，半全场负/负也略低于主/主，形成轻微客队市场结构。但1-1全场最低赔且总进球2球为主模态，使平局风险很高，因此预测埃弗顿1-2小胜，推荐等级降为C。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网检索外部欧赔、亚盘、交易所成交或最新伤停，所有方向判断未使用任何未验证外部消息。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 19,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 32.0,
+            "draw": 30.0,
+            "away": 38.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 15.0,
+              "logic": "客胜赔率最低且正确比分中1-2赔率最低，客队积分排名更高"
+            },
+            {
+              "score": "0-1",
+              "prob": 13.0,
+              "logic": "0-1为客队第二低赔率，防守反击概率高"
+            },
+            {
+              "score": "1-1",
+              "prob": 12.0,
+              "logic": "平局赔率最低但主队进球能力弱"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "客胜赔率2.4低于主胜，机构略倾向客队不败",
+            "handicap": "让球盘1.0下客队受让但赔率支持客队",
+            "correct_score": "1-2和0-1为客队最低赔率组合",
+            "total_goals": "2球和3球赔率最低，预计小球",
+            "half_full_time": "负/负赔率最低，客队全场领先概率高",
+            "external_market": "无明显资金异动，客队历史交锋占优"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票客胜36%略高，赔率平稳无明显异动"
+          },
+          "contextual_logic": {
+            "league_style": "英超防守反击为主",
+            "team_style": "水晶宫主场强但进球少，埃弗顿客场稳健",
+            "tempo": "medium",
+            "score_shape": "1-2或0-1客队小胜",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "主队近10场进球少且历史对埃弗顿主场劣势",
+            "draw": "平局赔率较高且两队均需积分",
+            "away": "无拒绝理由，客队数据更优"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 62,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "low_scoring"
+            ],
+            "why_recommended": "客队排名积分占优且正确比分支持1-2"
+          },
+          "data_quality": {
+            "missing": [
+              "sharp_movement"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "客队积分更高、历史交锋占优、正确比分1-2赔率最低，推荐客胜1-2",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 19,
+            "critic_model": "grok",
+            "target_findings": [
+              {
+                "target_model": "gpt",
+                "issue_type": "score",
+                "severity": "medium",
+                "comment": "预测1-2与总进球主模态2球冲突，1-1最低赔6.0被低估为仅防范风险，实际应作为主要冲突点"
+              },
+              {
+                "target_model": "gpt",
+                "issue_type": "risk",
+                "severity": "high",
+                "comment": "推荐等级C但仍输出away方向，胜平负赔率过近且无外部盘口验证，风险标签不足以覆盖方向稳定性弱的问题"
+              }
+            ],
+            "own_revision_hint": "应明确指出1-2与2球模态的矛盾，降低away优先级或改为观察平局保护"
+          }
+        ]
+      }
+    },
+    "20": {
+      "match": 20,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "away",
+      "raw_ai_direction": "away",
+      "predicted_score": "1-2",
+      "direction_probs": {
+        "home": 33.0,
+        "draw": 29.0,
+        "away": 38.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 20.0,
+          "logic": "1-2赔率7.75为客胜最低，且符合总进球3球主模态。"
+        },
+        {
+          "score": "1-1",
+          "prob": 18.0,
+          "logic": "1-1赔率6.45全场最低，是最大的平局防范点。"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "logic": "主队近期状态好，2-1赔率8.0也有防范价值。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "竞彩2.49-3.32-2.35，客队在状态低迷背景下依然维持微弱低赔，机构对客队有防范。",
+        "handicap": "主队受让1球，公众热度在主队，市场大众更看好主队不败。",
+        "correct_score": "1-1(6.45)最低，1-2(7.75)次之，2-1(8.0)第三，比分集中在双方进球的小分差。",
+        "total_goals": "3球3.45最低，2球3.7次低，支持分胜负且双方进球。",
+        "half_full_time": "负/负3.8最低，主/主4.05次低，客队半全场占优。",
+        "external_market": "缺乏外部数据。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "away",
+        "sharp_confidence": 40,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "主队状态大好且受让，公众资金偏向主队，但客胜赔率依然压低，存在机构阻盘或锐利资金支持客队的可能。"
+      },
+      "contextual_logic": {
+        "league_style": "英超高强度对抗，纽卡斯尔具备较强反击能力。",
+        "team_style": "诺丁汉主场强势，纽卡客场低迷，但赔率反向支持纽卡。",
+        "tempo": "high",
+        "score_shape": "3球模态下，1-2是最合理的客胜比分。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "medium"
+      },
+      "rejected_cases": {
+        "home": "主队状态火热但赔率未获支持，2-1赔率高于1-2，存在诱主嫌疑。",
+        "draw": "1-1虽为最低赔，但总进球3球模态更倾向于分胜负。",
+        "away": "客胜为最终首选，赔率结构反向支持客队。"
+      },
+      "web_research": {
+        "used": false,
+        "failure_reason": "no_web_tool_available",
+        "search_queries": [],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": []
+      },
+      "final_web_audit": {
+        "web_used_by_final": false,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "C",
+        "is_recommended": false,
+        "top4_priority": 0,
+        "bet_confidence": 48,
+        "direction_stability": "weak",
+        "score_stability": "weak",
+        "risk_level": "high",
+        "risk_tags": [
+          "主队状态题材与市场方向冲突",
+          "1-1最低赔"
+        ],
+        "why_recommended": "客胜由1X2、半全场和1-2比分簇共同支持，但主队2-1与1-1价格过近，容错很低。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部欧赔实时对照",
+          "亚盘即时水位"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "尽管诺丁汉状态题材更强，竞彩仍让纽卡斯尔客胜维持最低，半全场负/负最低，且正确比分1-2略低于2-1。总进球主模态为3球，支持双方进球的一球差客胜。市场在抵抗主队热度，倾向客队打出。",
+      "validation_warnings": [],
+      "raw_item": {
+        "match": 20,
+        "final_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 33,
+          "draw": 29,
+          "away": 38
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 20,
+            "logic": "1-2赔率7.75为客胜最低，且符合总进球3球主模态。"
+          },
+          {
+            "score": "1-1",
+            "prob": 18,
+            "logic": "1-1赔率6.45全场最低，是最大的平局防范点。"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "logic": "主队近期状态好，2-1赔率8.0也有防范价值。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩2.49-3.32-2.35，客队在状态低迷背景下依然维持微弱低赔，机构对客队有防范。",
+          "handicap": "主队受让1球，公众热度在主队，市场大众更看好主队不败。",
+          "correct_score": "1-1(6.45)最低，1-2(7.75)次之，2-1(8.0)第三，比分集中在双方进球的小分差。",
+          "total_goals": "3球3.45最低，2球3.7次低，支持分胜负且双方进球。",
+          "half_full_time": "负/负3.8最低，主/主4.05次低，客队半全场占优。",
+          "external_market": "缺乏外部数据。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "away",
+          "sharp_confidence": 40,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "主队状态大好且受让，公众资金偏向主队，但客胜赔率依然压低，存在机构阻盘或锐利资金支持客队的可能。"
+        },
+        "contextual_logic": {
+          "league_style": "英超高强度对抗，纽卡斯尔具备较强反击能力。",
+          "team_style": "诺丁汉主场强势，纽卡客场低迷，但赔率反向支持纽卡。",
+          "tempo": "high",
+          "score_shape": "3球模态下，1-2是最合理的客胜比分。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "主队状态火热但赔率未获支持，2-1赔率高于1-2，存在诱主嫌疑。",
+          "draw": "1-1虽为最低赔，但总进球3球模态更倾向于分胜负。",
+          "away": "客胜为最终首选，赔率结构反向支持客队。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": false,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "C",
+          "is_recommended": false,
+          "top4_priority": 0,
+          "bet_confidence": 48,
+          "direction_stability": "weak",
+          "score_stability": "weak",
+          "risk_level": "high",
+          "risk_tags": [
+            "主队状态题材与市场方向冲突",
+            "1-1最低赔"
+          ],
+          "why_recommended": "客胜由1X2、半全场和1-2比分簇共同支持，但主队2-1与1-1价格过近，容错很低。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部欧赔实时对照",
+            "亚盘即时水位"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "尽管诺丁汉状态题材更强，竞彩仍让纽卡斯尔客胜维持最低，半全场负/负最低，且正确比分1-2略低于2-1。总进球主模态为3球，支持双方进球的一球差客胜。市场在抵抗主队热度，倾向客队打出。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 20,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 34.0,
+            "draw": 29.0,
+            "away": 37.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 14.0,
+              "logic": "客胜方向在1X2中为最低赔2.35，正确比分1-2赔7.75亦是客胜最低且排全场第二，和3球总进球主模态一致。"
+            },
+            {
+              "score": "1-1",
+              "prob": 15.0,
+              "logic": "1-1赔6.45为全场最低，说明平局仍是单比分最强防线，特别适合解释双方实力接近与上半场可能胶着。"
+            },
+            {
+              "score": "2-1",
+              "prob": 13.0,
+              "logic": "2-1赔8.00与1-2仅差0.25，主胜反打空间明显，反映诺丁汉主场状态因素已被比分盘保留。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "竞彩主胜2.49、平3.32、客胜2.35，客队仅小幅领先，属于分胜负倾向而非强势客胜。",
+            "handicap": "主队受让1球，公众让球主胜62%，说明市场大众更愿意买主队不大败；这会削弱客胜穿透力，但不直接否定客胜正路。",
+            "correct_score": "1-1最低，随后是1-2、2-1，三个核心比分集中在双方都有进球的小差距赛果；客队1-2略压主队2-1，是选择客胜的关键。",
+            "total_goals": "总进球3球赔率3.45最低，2球3.70次低，4球4.90也不高，比赛比普通保级盘更开放，1-2符合主模态。",
+            "half_full_time": "负/负3.80为最低，主/主4.05紧随，其后平/负和平/平均5.60，说明客队从领先到胜出的路径略优，但主队直接领先路径也有价格支撑。",
+            "external_market": "无法联网核对外部欧赔、亚盘或交易所是否与竞彩客胜低赔一致，外部市场分歧不能作为本场硬依据。"
+          },
+          "money_flow": {
+            "public_money_direction": "unclear",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 16,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "胜平负公众投票主36%、客37%几乎相同，抓包显示主胜与客胜平稳，没有可观察的反向降赔；客胜低赔更像基础定价优势，而非可确认的锐利资金介入。"
+          },
+          "contextual_logic": {
+            "league_style": "英超中下游球队对抗强度高，若一方先失球，比赛容易进入拉开空间的反击形态。",
+            "team_style": "诺丁汉近期状态与主场题材强，但纽卡斯尔在竞彩端仍保持最低客胜，说明基本面利好主队未完全压倒客队名义实力。",
+            "tempo": "medium",
+            "score_shape": "市场更支持3球、双方进球和一球差胜负；客队1-2比主队2-1略优，但差距极小。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "诺丁汉状态题材明显，2-1赔率也很低，但1X2仍未给到主队最低，且半全场最低为负/负，主胜没有形成价格优势。",
+            "draw": "1-1是单一最低比分，但平赔3.32相对不低，总进球3球为主模态，市场更倾向分胜负而非锁死平局。",
+            "away": "客胜是最终选择，不过与主胜只差0.14，且诺丁汉主场题材强，客胜稳定性不足。"
+          },
+          "recommendation": {
+            "tier": "C",
+            "is_recommended": false,
+            "top4_priority": 0,
+            "bet_confidence": 44,
+            "direction_stability": "weak",
+            "score_stability": "weak",
+            "risk_level": "high",
+            "risk_tags": [
+              "主客胜赔率接近",
+              "主队状态题材与市场方向冲突",
+              "1-1最低赔"
+            ],
+            "why_recommended": "不作为重点。客胜由1X2、半全场和1-2比分簇共同支持，但主队2-1与1-1价格过近，容错很低。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔实时对照",
+              "亚盘即时水位",
+              "交易所成交信息",
+              "可验证体能与首发来源",
+              "赔率时间点"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场不是简单看近期状态。尽管诺丁汉状态题材更强，竞彩仍让纽卡斯尔客胜维持最低，半全场负/负最低，且正确比分1-2略低于2-1。总进球主模态为3球，支持双方进球的一球差客胜。但1-1最低赔和主队题材使方向很脆，预测1-2，低等级处理。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网核验纽卡斯尔客场即时盘口、诺丁汉体能新闻或外部交易价格，未使用任何编造来源。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 20,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 41.0,
+            "draw": 27.0,
+            "away": 32.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 16.0,
+              "logic": "主队状态火热且主场不败，2-1为最低赔率主胜比分"
+            },
+            {
+              "score": "1-1",
+              "prob": 13.0,
+              "logic": "平局赔率最低但主队近期胜率高"
+            },
+            {
+              "score": "1-2",
+              "prob": 12.0,
+              "logic": "客队状态低迷但反击威胁存在"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜2.49低于客胜，机构支持主队",
+            "handicap": "让球盘下主队占优",
+            "correct_score": "2-1为主队最低赔率",
+            "total_goals": "3球赔率最低",
+            "half_full_time": "主/主赔率低",
+            "external_market": "主队状态明显占优"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票主胜36%且主队近10场7胜"
+          },
+          "contextual_logic": {
+            "league_style": "英超高强度",
+            "team_style": "诺丁汉森林主场强势，纽卡斯尔客场崩盘",
+            "tempo": "high",
+            "score_shape": "2-1主队小胜",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "无拒绝理由，主队状态火热",
+            "draw": "客队状态低迷平局概率低",
+            "away": "客队客场4连败"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 68,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "主队状态出色且主场不败，2-1为最优比分"
+          },
+          "data_quality": {
+            "missing": [
+              "sharp_movement"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "主队近10场7胜2平1负状态火热，主场强势，推荐2-1",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 20,
+            "critic_model": "grok",
+            "target_findings": [
+              {
+                "target_model": "gpt",
+                "issue_type": "sharp",
+                "severity": "medium",
+                "comment": "sharp_money_direction与reverse_line_movement均标注unclear，但未解释为何公众投票接近却仍选away，Sharp解释不充分"
+              },
+              {
+                "target_model": "gpt",
+                "issue_type": "score",
+                "severity": "medium",
+                "comment": "1-2与总进球3球模态一致，但1-1最低赔6.45与主队状态题材冲突未被充分量化"
+              }
+            ],
+            "own_revision_hint": "需补充sharp资金无变化的理由，并降低away置信度"
+          }
+        ]
+      }
+    },
+    "21": {
+      "match": 21,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "1-0",
+      "direction_probs": {
+        "home": 60.0,
+        "draw": 25.0,
+        "away": 15.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "0-1",
+      "btts": "no",
+      "top3": [
+        {
+          "score": "1-0",
+          "prob": 25.0,
+          "logic": "1-0赔率5.8全场最低，主胜1.56强力支撑。"
+        },
+        {
+          "score": "2-0",
+          "prob": 20.0,
+          "logic": "2-0赔率6.7，符合2球主模态。"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "logic": "1-1赔率6.5，保级战需防平局。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "竞彩1.56-3.55-4.85，主胜优势明显。",
+        "handicap": "主队让1球，客队方向有一定热度，说明市场对主队大胜存疑。",
+        "correct_score": "1-0(5.8)最低，2-0(6.7)次低，主队零封获胜是主旋律。",
+        "total_goals": "2球3.3最低，1球4.1，进球数偏少。",
+        "half_full_time": "主/主2.35绝对优势。",
+        "external_market": "缺乏外部数据。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 20,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众投票主胜57%，符合赔率形态。"
+      },
+      "contextual_logic": {
+        "league_style": "意甲保级战通常保守，进球数偏低。",
+        "team_style": "克雷莫纳主场抢分，比萨客场连败且零进球。",
+        "tempo": "low",
+        "score_shape": "1-0或2-0是最可能的结果。",
+        "btts_likelihood": "no",
+        "rotation_risk": "low"
+      },
+      "rejected_cases": {
+        "home": "主胜为最终首选，优势明显。",
+        "draw": "客队状态极差，平局赔率3.55偏高，打出概率低。",
+        "away": "客队客场5连败，4.85客胜赔率无支撑。"
+      },
+      "web_research": {
+        "used": false,
+        "failure_reason": "no_web_tool_available",
+        "search_queries": [],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": []
+      },
+      "final_web_audit": {
+        "web_used_by_final": false,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "B",
+        "is_recommended": true,
+        "top4_priority": 3,
+        "bet_confidence": 65,
+        "direction_stability": "strong",
+        "score_stability": "medium",
+        "risk_level": "medium",
+        "risk_tags": [
+          "让一球穿盘不稳",
+          "保级战心理波动"
+        ],
+        "why_recommended": "主胜得到胜平负、正确比分和半全场三端一致支持，但比分更偏小胜，不宜过度追求大胜。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部欧赔实时对照",
+          "亚盘即时水位"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "克雷莫纳主胜1.56形成明确低赔锚点，正确比分1-0为全场最低，2-0和2-1也连续靠前，半全场主/主2.35进一步强化主队胜出路径。结合保级战谨慎属性和客队攻击弱势，预测1-0主胜。",
+      "validation_warnings": [],
+      "raw_item": {
+        "match": 21,
+        "final_direction": "home",
+        "predicted_score": "1-0",
+        "direction_probs": {
+          "home": 60,
+          "draw": 25,
+          "away": 15
+        },
+        "goal_band": "0-1",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "1-0",
+            "prob": 25,
+            "logic": "1-0赔率5.8全场最低，主胜1.56强力支撑。"
+          },
+          {
+            "score": "2-0",
+            "prob": 20,
+            "logic": "2-0赔率6.7，符合2球主模态。"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "logic": "1-1赔率6.5，保级战需防平局。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩1.56-3.55-4.85，主胜优势明显。",
+          "handicap": "主队让1球，客队方向有一定热度，说明市场对主队大胜存疑。",
+          "correct_score": "1-0(5.8)最低，2-0(6.7)次低，主队零封获胜是主旋律。",
+          "total_goals": "2球3.3最低，1球4.1，进球数偏少。",
+          "half_full_time": "主/主2.35绝对优势。",
+          "external_market": "缺乏外部数据。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 20,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票主胜57%，符合赔率形态。"
+        },
+        "contextual_logic": {
+          "league_style": "意甲保级战通常保守，进球数偏低。",
+          "team_style": "克雷莫纳主场抢分，比萨客场连败且零进球。",
+          "tempo": "low",
+          "score_shape": "1-0或2-0是最可能的结果。",
+          "btts_likelihood": "no",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "主胜为最终首选，优势明显。",
+          "draw": "客队状态极差，平局赔率3.55偏高，打出概率低。",
+          "away": "客队客场5连败，4.85客胜赔率无支撑。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": false,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 3,
+          "bet_confidence": 65,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "让一球穿盘不稳",
+            "保级战心理波动"
+          ],
+          "why_recommended": "主胜得到胜平负、正确比分和半全场三端一致支持，但比分更偏小胜，不宜过度追求大胜。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部欧赔实时对照",
+            "亚盘即时水位"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "克雷莫纳主胜1.56形成明确低赔锚点，正确比分1-0为全场最低，2-0和2-1也连续靠前，半全场主/主2.35进一步强化主队胜出路径。结合保级战谨慎属性和客队攻击弱势，预测1-0主胜。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 21,
+          "final_direction": "home",
+          "predicted_score": "1-0",
+          "direction_probs": {
+            "home": 59.0,
+            "draw": 25.0,
+            "away": 16.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "0-1",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "1-0",
+              "prob": 18.0,
+              "logic": "1-0赔5.80为全场最低正确比分，且主胜1.56形成明确低赔优势，市场最核心路径是克雷莫纳小胜。"
+            },
+            {
+              "score": "2-0",
+              "prob": 16.0,
+              "logic": "2-0赔6.70为主胜第二低比分，配合比萨进攻疲弱信息，主队零封赢球是主胜簇的重要分支。"
+            },
+            {
+              "score": "2-1",
+              "prob": 14.0,
+              "logic": "2-1赔7.00紧随其后，若保级战拉高节奏或主队防线出现失误，主胜但丢球是次优形态。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "竞彩主胜1.56显著低于平3.55和客4.85，是本批次中方向较清晰的强主胜盘。",
+            "handicap": "主队让1球，公众让球客队方向占42%，说明大众对主队穿盘有疑虑；但胜平负主胜57%与低主赔一致，主胜本身仍稳。",
+            "correct_score": "主胜比分1-0、2-0、2-1连续占据低赔区，客胜最低0-1只有11.00且排位靠后，比分盘对主胜支撑明确。",
+            "total_goals": "总进球2球3.30最低，3球3.75、1球4.10随后，进球数集中在1到3球；选择1-0是因为单比分最低且客队攻击端支撑弱。",
+            "half_full_time": "主/主2.35显著最低，平/主4.20次低，说明市场认为主队无论早早领先还是下半场发力，最终胜出概率都较高。",
+            "external_market": "无法联网验证外部欧赔是否同样压低主胜，也无法确认外部亚盘让步深浅；因此外部一致性未纳入硬证据。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 22,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众胜平负主胜57%偏热，竞彩主胜仍处1.56低位且抓包显示平稳；缺少赔率时间序列，不能确认主队热度是否被机构主动承接，也不能判定锐利资金。"
+          },
+          "contextual_logic": {
+            "league_style": "意甲保级区对话通常谨慎，领先方会更重视控风险，比分容易收敛在一球或两球差。",
+            "team_style": "克雷莫纳近期差但仍有保级动力和主场条件，比萨垫底且客场、进攻端题材弱，客队更像被动防守方。",
+            "tempo": "low",
+            "score_shape": "主胜明确，但让一球穿盘并不稳，最合理是1-0或2-0，首选1-0。",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主胜是最终选择；唯一需要保留的是主队状态同样低迷，导致大胜和穿盘不宜高估。",
+            "draw": "1-1赔6.50排全场第二，保级战有拖成平局的风险；但1X2平赔3.55明显高于主胜，半全场平/平也不如主/主和平/主，故不取平。",
+            "away": "客胜赔率4.85处于明显高位，客胜比分簇排位靠后，且0-2、0-3等扩展比分赔率被大幅拉高，客胜缺少市场支撑。"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 66,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "主队状态低迷",
+              "保级战心理波动",
+              "让一球穿盘不稳"
+            ],
+            "why_recommended": "本场主胜得到胜平负、正确比分和半全场三端一致支持，是批次中方向稳定性较高的选择；但比分更偏小胜，不宜过度追求大胜。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔实时对照",
+              "亚盘即时水位",
+              "交易所成交信息",
+              "可验证降级与伤停来源",
+              "赔率时间点"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "克雷莫纳主胜1.56形成明确低赔锚点，正确比分1-0为全场最低，2-0和2-1也连续靠前，半全场主/主2.35进一步强化主队胜出路径。总进球主模态虽为2球，但1球价格也很接近，结合保级战谨慎属性和客队攻击弱势，预测1-0主胜。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网确认比萨是否已降级、最新伤停和外部盘口变化；相关方向只使用抓包中的结构化赔率与原始情报字段。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 21,
+          "final_direction": "home",
+          "predicted_score": "1-0",
+          "direction_probs": {
+            "home": 58.0,
+            "draw": 25.0,
+            "away": 17.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "0-1",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "1-0",
+              "prob": 22.0,
+              "logic": "主胜赔率1.56极低，1-0为最低赔率"
+            },
+            {
+              "score": "2-0",
+              "prob": 15.0,
+              "logic": "2-0为主队第二低赔率"
+            },
+            {
+              "score": "2-1",
+              "prob": 12.0,
+              "logic": "小胜概率高"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜1.56极低支持主胜",
+            "handicap": "让球盘-1.0主队大热",
+            "correct_score": "1-0和2-0最低",
+            "total_goals": "1球和2球最低",
+            "half_full_time": "主/主最低",
+            "external_market": "主队排名优势明显"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票主胜57%极高"
+          },
+          "contextual_logic": {
+            "league_style": "意甲防守",
+            "team_style": "克雷莫纳主场抢分，比萨已降级",
+            "tempo": "low",
+            "score_shape": "1-0主队小胜",
+            "btts_likelihood": "no",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "无拒绝理由，主队优势大",
+            "draw": "客队已降级战意低",
+            "away": "客队客场5连败零进球"
+          },
+          "recommendation": {
+            "tier": "S",
+            "is_recommended": true,
+            "top4_priority": 3,
+            "bet_confidence": 75,
+            "direction_stability": "strong",
+            "score_stability": "strong",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "主队排名优势大且客队已降级，1-0最优"
+          },
+          "data_quality": {
+            "missing": [
+              "sharp_movement"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "主队主场占优且客队状态极差，推荐1-0",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 21,
+            "critic_model": "grok",
+            "target_findings": [
+              {
+                "target_model": "gpt",
+                "issue_type": "market",
+                "severity": "low",
+                "comment": "主胜1.56低赔与1-0最低比分一致，但让球公众客队42%热度被忽略，市场解读偏乐观"
+              },
+              {
+                "target_model": "gpt",
+                "issue_type": "risk",
+                "severity": "medium",
+                "comment": "A级推荐置信度66偏高，保级战心理波动与让一球穿盘风险未充分体现在risk_tags中"
+              }
+            ],
+            "own_revision_hint": "降低推荐等级至B，并增加让球分歧风险标签"
+          }
+        ]
+      }
+    },
+    "22": {
+      "match": 22,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "1-0",
+      "direction_probs": {
+        "home": 48.0,
+        "draw": 30.0,
+        "away": 22.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "0-1",
+      "btts": "no",
+      "top3": [
+        {
+          "score": "1-0",
+          "prob": 22.0,
+          "logic": "1-0赔率6.25，主胜最低比分，符合主队小胜预期。"
+        },
+        {
+          "score": "1-1",
+          "prob": 20.0,
+          "logic": "1-1赔率6.0全场最低，平局防范极强。"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "logic": "2-1赔率7.0，若客队进球主队仍有胜算。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "竞彩1.89-3.15-3.55，主队有一定优势但并非稳胜。",
+        "handicap": "主队让1球，客队方向受热，市场不看好主队穿盘。",
+        "correct_score": "1-1(6.0)最低，1-0(6.25)紧随，比分极度收敛。",
+        "total_goals": "2球3.2最低，1球4.15，预期进球少。",
+        "half_full_time": "主/主3.05最低，平/主5.0。",
+        "external_market": "缺乏外部数据。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 15,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众投票主胜47%，让球端客队受热，资金对主队大胜信心不足。"
+      },
+      "contextual_logic": {
+        "league_style": "意甲中下游交锋，节奏偏慢。",
+        "team_style": "佛罗伦萨主场稳健但有伤停，热那亚客场一般。",
+        "tempo": "low",
+        "score_shape": "1-0是最稳妥的主胜比分，同时需高度防范1-1。",
+        "btts_likelihood": "no",
+        "rotation_risk": "medium"
+      },
+      "rejected_cases": {
+        "home": "主胜为最终首选，但需防范平局。",
+        "draw": "1-1是最大风险，但主胜1.89及半全场主/主3.05仍将主胜作为第一概率。",
+        "away": "客胜3.55偏高，客队历史交锋劣势明显。"
+      },
+      "web_research": {
+        "used": false,
+        "failure_reason": "no_web_tool_available",
+        "search_queries": [],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": []
+      },
+      "final_web_audit": {
+        "web_used_by_final": false,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "B",
+        "is_recommended": true,
+        "top4_priority": 4,
+        "bet_confidence": 55,
+        "direction_stability": "medium",
+        "score_stability": "weak",
+        "risk_level": "medium",
+        "risk_tags": [
+          "1-1最低赔",
+          "主队让一球热度不足"
+        ],
+        "why_recommended": "主胜方向有1X2和半全场支持，但正确比分强烈提示小胜或平局，适合主胜方向谨慎使用。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部欧赔实时对照",
+          "亚盘即时水位"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "佛罗伦萨具备主场和交锋优势，竞彩主胜1.89与半全场主/主最低支持主队方向。但1-1是全场最低比分，让球端也显示市场不看好主队穿盘，说明主胜若出更可能是一球低比分。综合取1-0主胜。",
+      "validation_warnings": [],
+      "raw_item": {
+        "match": 22,
+        "final_direction": "home",
+        "predicted_score": "1-0",
+        "direction_probs": {
+          "home": 48,
+          "draw": 30,
+          "away": 22
+        },
+        "goal_band": "0-1",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "1-0",
+            "prob": 22,
+            "logic": "1-0赔率6.25，主胜最低比分，符合主队小胜预期。"
+          },
+          {
+            "score": "1-1",
+            "prob": 20,
+            "logic": "1-1赔率6.0全场最低，平局防范极强。"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "logic": "2-1赔率7.0，若客队进球主队仍有胜算。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩1.89-3.15-3.55，主队有一定优势但并非稳胜。",
+          "handicap": "主队让1球，客队方向受热，市场不看好主队穿盘。",
+          "correct_score": "1-1(6.0)最低，1-0(6.25)紧随，比分极度收敛。",
+          "total_goals": "2球3.2最低，1球4.15，预期进球少。",
+          "half_full_time": "主/主3.05最低，平/主5.0。",
+          "external_market": "缺乏外部数据。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 15,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票主胜47%，让球端客队受热，资金对主队大胜信心不足。"
+        },
+        "contextual_logic": {
+          "league_style": "意甲中下游交锋，节奏偏慢。",
+          "team_style": "佛罗伦萨主场稳健但有伤停，热那亚客场一般。",
+          "tempo": "low",
+          "score_shape": "1-0是最稳妥的主胜比分，同时需高度防范1-1。",
+          "btts_likelihood": "no",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "主胜为最终首选，但需防范平局。",
+          "draw": "1-1是最大风险，但主胜1.89及半全场主/主3.05仍将主胜作为第一概率。",
+          "away": "客胜3.55偏高，客队历史交锋劣势明显。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": false,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 4,
+          "bet_confidence": 55,
+          "direction_stability": "medium",
+          "score_stability": "weak",
+          "risk_level": "medium",
+          "risk_tags": [
+            "1-1最低赔",
+            "主队让一球热度不足"
+          ],
+          "why_recommended": "主胜方向有1X2和半全场支持，但正确比分强烈提示小胜或平局，适合主胜方向谨慎使用。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部欧赔实时对照",
+            "亚盘即时水位"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "佛罗伦萨具备主场和交锋优势，竞彩主胜1.89与半全场主/主最低支持主队方向。但1-1是全场最低比分，让球端也显示市场不看好主队穿盘，说明主胜若出更可能是一球低比分。综合取1-0主胜。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 22,
+          "final_direction": "home",
+          "predicted_score": "1-0",
+          "direction_probs": {
+            "home": 46.0,
+            "draw": 30.0,
+            "away": 24.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "0-1",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "1-0",
+              "prob": 16.0,
+              "logic": "1-0赔6.25是主胜最低比分，紧贴全场最低的1-1赔6.00，说明佛罗伦萨赢球更可能是低比分一球小胜。"
+            },
+            {
+              "score": "1-1",
+              "prob": 17.0,
+              "logic": "1-1为全场最低比分，平局风险很突出，尤其在两队保级压力和主队进攻伤停背景下需要重点防范。"
+            },
+            {
+              "score": "2-1",
+              "prob": 14.0,
+              "logic": "2-1赔7.00是主胜第二低比分，若热那亚能够反击破门，主队仍有小胜路径。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "竞彩主胜1.89低于平3.15和客3.55，主队有优势但不是强势主盘；主胜低赔与1-1最低比分之间存在一定张力。",
+            "handicap": "主队让1球，公众让球客胜方向53%，说明多数人不看好佛罗伦萨净胜两球，市场更像主队小胜或不胜。",
+            "correct_score": "1-1最低，1-0第二，2-1第三，前三比分高度集中在平局与主队一球胜，客胜最高优先只到0-1赔9.00，客胜支撑较弱。",
+            "total_goals": "总进球2球3.20最低，3球3.70、1球4.15随后，比赛预期偏低到中低比分。1-0符合小比分主胜和让球不穿的结构。",
+            "half_full_time": "主/主3.05最低，平/主和平/平均5.00，显示主队最终胜出略占优，但平局路径也被明显压低。",
+            "external_market": "无法联网获得外部主胜是否抬升、亚盘是否退盘等信息；因此只能说明体彩内部结构偏主队不败并略倾主胜。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 20,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "胜平负公众主胜47%为最高，但让球端客队方向53%较热，说明资金心理是主胜不稳、难穿盘。抓包无有效变化数据，不能识别反向移动或锐利资金。"
+          },
+          "contextual_logic": {
+            "league_style": "意甲中下游保级压力下常见先稳后攻，低比分和一球差结果较多。",
+            "team_style": "佛罗伦萨交锋与主场题材占优，但伤停和近期进攻效率限制胜幅；热那亚客场不差但面对佛罗伦萨历史劣势明显。",
+            "tempo": "low",
+            "score_shape": "主队小胜与1-1并列为主要形态，若主队先进球，比赛可能收缩到1-0。",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主胜是最终选择，但属于小胜型主胜，受1-1最低赔压制，稳定性不如低赔强主盘。",
+            "draw": "1-1是全场最低比分，平局必须重点防；但主胜1.89和半全场主/主最低说明主队仍有更强的方向权重。",
+            "away": "客胜赔率3.55偏高，客胜比分0-1、1-2均落在主胜和平局核心比分之后，且半全场负/负5.60不如主/主，客胜不作为首选。"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 4,
+            "bet_confidence": 55,
+            "direction_stability": "medium",
+            "score_stability": "weak",
+            "risk_level": "medium",
+            "risk_tags": [
+              "1-1最低赔",
+              "主队让一球热度不足",
+              "伤停信息未联网验证"
+            ],
+            "why_recommended": "主胜方向有1X2和半全场支持，但正确比分强烈提示小胜或平局，因此只列低优先级推荐，适合主胜方向谨慎使用。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔实时对照",
+              "亚盘即时水位",
+              "交易所成交信息",
+              "可验证伤停来源",
+              "赔率时间点"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "佛罗伦萨具备主场和交锋优势，竞彩主胜1.89与半全场主/主最低支持主队方向。但1-1是全场最低比分，让球端也显示市场不看好主队穿盘，说明主胜若出更可能是一球低比分。综合取1-0主胜，同时把1-1列为最大反方向风险。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网确认佛罗伦萨伤停名单、热那亚客场盘口和外部赔率变化，未将任何无来源最新消息作为硬证据。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 22,
+          "final_direction": "home",
+          "predicted_score": "1-0",
+          "direction_probs": {
+            "home": 48.0,
+            "draw": 30.0,
+            "away": 22.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "0-1",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "1-0",
+              "prob": 18.0,
+              "logic": "主胜1.89支持，1-0为最低赔率"
+            },
+            {
+              "score": "2-1",
+              "prob": 14.0,
+              "logic": "2-1次低"
+            },
+            {
+              "score": "1-1",
+              "prob": 13.0,
+              "logic": "平局赔率低但主队占优"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜1.89支持主队不败",
+            "handicap": "让球盘-1.0主队",
+            "correct_score": "1-0和2-1最低",
+            "total_goals": "2球最低",
+            "half_full_time": "主/主最低",
+            "external_market": "主队历史交锋占优"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票主胜47%"
+          },
+          "contextual_logic": {
+            "league_style": "意甲",
+            "team_style": "佛罗伦萨主场稳健",
+            "tempo": "medium",
+            "score_shape": "1-0主队小胜",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "无拒绝理由",
+            "draw": "两队保级战意但主队更强",
+            "away": "客队历史交锋劣势"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 4,
+            "bet_confidence": 65,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "主队主场历史占优，1-0最优比分"
+          },
+          "data_quality": {
+            "missing": [
+              "sharp_movement"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "主队主场优势明显，推荐1-0",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 22,
+            "critic_model": "grok",
+            "target_findings": [
+              {
+                "target_model": "gpt",
+                "issue_type": "score",
+                "severity": "high",
+                "comment": "1-0预测与1-1最低赔6.0冲突明显，半全场主/主支持不足以覆盖平局保护强度"
+              },
+              {
+                "target_model": "gpt",
+                "issue_type": "risk",
+                "severity": "medium",
+                "comment": "B级推荐但方向稳定性medium，伤停与进攻效率未联网验证却直接用于逻辑"
+              }
+            ],
+            "own_revision_hint": "优先强调1-1风险，建议将预测调整为观察或降低home置信度"
+          }
+        ]
+      }
+    },
+    "23": {
+      "match": 23,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "away",
+      "raw_ai_direction": "away",
+      "predicted_score": "1-2",
+      "direction_probs": {
+        "home": 33.0,
+        "draw": 28.0,
+        "away": 39.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 20.0,
+          "logic": "1-2赔率8.0，客胜最低比分，符合3球主模态。"
+        },
+        {
+          "score": "1-1",
+          "prob": 18.0,
+          "logic": "1-1赔率6.5全场最低，平局防范强。"
+        },
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "logic": "2-1赔率8.25，主队主场反打的可能。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "竞彩2.46-3.45-2.31，客队微弱优势，平赔较高。",
+        "handicap": "主队受让1球，主队方向受热。",
+        "correct_score": "1-1(6.5)最低，1-2(8.0)次之，2-1(8.25)第三。",
+        "total_goals": "3球3.45最低，2球3.85次低，德甲大球属性。",
+        "half_full_time": "负/负3.85最低，主/主4.0次低。",
+        "external_market": "缺乏外部数据。"
+      },
+      "money_flow": {
+        "public_money_direction": "away",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 10,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众投票客胜38%略高，资金分布相对均衡。"
+      },
+      "contextual_logic": {
+        "league_style": "德甲节奏快，进球多。",
+        "team_style": "弗赖堡实力占优但有体能隐患，汉堡主场有一定抵抗力。",
+        "tempo": "high",
+        "score_shape": "3球模态下1-2最合理。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "high"
+      },
+      "rejected_cases": {
+        "home": "主胜2.46略高，半全场主/主也不如负/负，主胜非首选。",
+        "draw": "1-1虽为最低赔，但德甲平赔3.45偏高，分胜负概率更大。",
+        "away": "客胜为最终首选，符合3球模态。"
+      },
+      "web_research": {
+        "used": false,
+        "failure_reason": "no_web_tool_available",
+        "search_queries": [],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": []
+      },
+      "final_web_audit": {
+        "web_used_by_final": false,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "C",
+        "is_recommended": false,
+        "top4_priority": 0,
+        "bet_confidence": 45,
+        "direction_stability": "weak",
+        "score_stability": "weak",
+        "risk_level": "high",
+        "risk_tags": [
+          "客胜优势很小",
+          "1-1最低赔",
+          "客队体能题材未验证"
+        ],
+        "why_recommended": "市场略偏弗赖堡，但主胜和平局比分都贴得很近，高波动下不适合高信心推荐。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部欧赔实时对照",
+          "亚盘即时水位"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "弗赖堡在竞彩胜平负和半全场端均有轻微优势，1-2也是最靠前的客胜比分；总进球主模态为3球，支持双方进球的客队小胜。不过1-1为全场最低，2-1与1-2只差0.25，说明方向并不稳。",
+      "validation_warnings": [],
+      "raw_item": {
+        "match": 23,
+        "final_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 33,
+          "draw": 28,
+          "away": 39
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 20,
+            "logic": "1-2赔率8.0，客胜最低比分，符合3球主模态。"
+          },
+          {
+            "score": "1-1",
+            "prob": 18,
+            "logic": "1-1赔率6.5全场最低，平局防范强。"
+          },
+          {
+            "score": "2-1",
+            "prob": 15,
+            "logic": "2-1赔率8.25，主队主场反打的可能。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩2.46-3.45-2.31，客队微弱优势，平赔较高。",
+          "handicap": "主队受让1球，主队方向受热。",
+          "correct_score": "1-1(6.5)最低，1-2(8.0)次之，2-1(8.25)第三。",
+          "total_goals": "3球3.45最低，2球3.85次低，德甲大球属性。",
+          "half_full_time": "负/负3.85最低，主/主4.0次低。",
+          "external_market": "缺乏外部数据。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 10,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票客胜38%略高，资金分布相对均衡。"
+        },
+        "contextual_logic": {
+          "league_style": "德甲节奏快，进球多。",
+          "team_style": "弗赖堡实力占优但有体能隐患，汉堡主场有一定抵抗力。",
+          "tempo": "high",
+          "score_shape": "3球模态下1-2最合理。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "high"
+        },
+        "rejected_cases": {
+          "home": "主胜2.46略高，半全场主/主也不如负/负，主胜非首选。",
+          "draw": "1-1虽为最低赔，但德甲平赔3.45偏高，分胜负概率更大。",
+          "away": "客胜为最终首选，符合3球模态。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": false,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "C",
+          "is_recommended": false,
+          "top4_priority": 0,
+          "bet_confidence": 45,
+          "direction_stability": "weak",
+          "score_stability": "weak",
+          "risk_level": "high",
+          "risk_tags": [
+            "客胜优势很小",
+            "1-1最低赔",
+            "客队体能题材未验证"
+          ],
+          "why_recommended": "市场略偏弗赖堡，但主胜和平局比分都贴得很近，高波动下不适合高信心推荐。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部欧赔实时对照",
+            "亚盘即时水位"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "弗赖堡在竞彩胜平负和半全场端均有轻微优势，1-2也是最靠前的客胜比分；总进球主模态为3球，支持双方进球的客队小胜。不过1-1为全场最低，2-1与1-2只差0.25，说明方向并不稳。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 23,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 34.0,
+            "draw": 28.0,
+            "away": 38.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 14.0,
+              "logic": "1-2赔8.00是客胜最低比分且排全场第二，配合客胜2.31为1X2最低，弗赖堡一球客胜是市场主线。"
+            },
+            {
+              "score": "1-1",
+              "prob": 14.0,
+              "logic": "1-1赔6.50为全场最低，说明平局防线强，特别是在客队存在体能和轮换题材时需要防范。"
+            },
+            {
+              "score": "2-1",
+              "prob": 13.0,
+              "logic": "2-1赔8.25与1-2非常接近，汉堡主场反打并非冷门，只是1X2和半全场端略不如客队。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "竞彩主胜2.46、平3.45、客胜2.31，客队轻微低赔，分胜负属性较强，平赔相对被抬高。",
+            "handicap": "主队受让1球，公众让球主胜61%，说明大众更认可汉堡受让保护；但胜平负客胜仍最低，显示客队基础面仍占一点优势。",
+            "correct_score": "1-1最低，1-2和2-1紧随，且2-2也只有10.00；比分盘显示双方进球概率高，胜负差距小。",
+            "total_goals": "总进球3球3.45最低，2球3.85次低，4球4.60也较低，德甲开放属性明显，1-2符合主模态。",
+            "half_full_time": "负/负3.85最低，主/主4.00紧随，平/负5.70略低于平/主6.00，半全场端对客队略有倾斜但并不压倒。",
+            "external_market": "无法联网对照外部德甲欧赔、亚盘或交易所成交，不能确认竞彩客胜低赔是否与国际市场同步。"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 17,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "胜平负公众客胜38%略高于主胜36%，让球端主队受让明显更热；赔率抓包显示主客均平稳，缺少时间序列，无法判断客胜低赔是否由专业资金推动。"
+          },
+          "contextual_logic": {
+            "league_style": "德甲比赛节奏通常较开放，尤其在赛季末压力相对释放时，双方进球和3球以上概率上升。",
+            "team_style": "汉堡防线近期失球偏多，弗赖堡排名和整体能力占优；但弗赖堡若存在欧战后体能消耗，客胜幅度会被限制。",
+            "tempo": "high",
+            "score_shape": "客队小胜、1-1、2-1形成三角，比分更偏双方进球的一球差。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "汉堡受让热度和主场题材存在，2-1赔率也仅略高于1-2；但1X2客胜最低、半全场负/负最低，主胜不占市场主轴。",
+            "draw": "1-1为全场最低，2-2也不高，平局风险明确；但平赔3.45高于两端胜赔，总进球3球主模态更支持分胜负。",
+            "away": "客胜是最终选择，但并非强客；客队体能和客场防守风险会显著降低方向稳定性。"
+          },
+          "recommendation": {
+            "tier": "C",
+            "is_recommended": false,
+            "top4_priority": 0,
+            "bet_confidence": 45,
+            "direction_stability": "weak",
+            "score_stability": "weak",
+            "risk_level": "high",
+            "risk_tags": [
+              "客胜优势很小",
+              "1-1最低赔",
+              "德甲高波动",
+              "客队体能题材未验证"
+            ],
+            "why_recommended": "不列重点。市场略偏弗赖堡，但主胜和平局比分都贴得很近，高波动下不适合高信心推荐。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔实时对照",
+              "亚盘即时水位",
+              "交易所成交信息",
+              "可验证欧战体能与伤停来源",
+              "赔率时间点"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "弗赖堡在竞彩胜平负和半全场端均有轻微优势，1-2也是最靠前的客胜比分；总进球主模态为3球，支持双方进球的客队小胜。不过1-1为全场最低，2-1与1-2只差0.25，说明方向并不稳，最终预测1-2但不推荐重心。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网核验弗赖堡欧战赛程、轮换可能和外部盘口变化；本场未使用任何无来源外部消息。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 23,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 33.0,
+            "draw": 28.0,
+            "away": 39.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 15.0,
+              "logic": "客胜2.31最低，1-2为客队最低赔率"
+            },
+            {
+              "score": "0-1",
+              "prob": 13.0,
+              "logic": "0-1次低"
+            },
+            {
+              "score": "2-1",
+              "prob": 12.0,
+              "logic": "主队主场有威胁"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "客胜2.31支持客队",
+            "handicap": "让球盘1.0客队",
+            "correct_score": "1-2和0-1最低",
+            "total_goals": "3球最低",
+            "half_full_time": "负/负最低",
+            "external_market": "客队积分排名占优"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票客胜38%"
+          },
+          "contextual_logic": {
+            "league_style": "德甲",
+            "team_style": "弗赖堡客场稳健",
+            "tempo": "medium",
+            "score_shape": "1-2客队小胜",
+            "btts_likelihood": "yes",
+            "rotation_risk": "high"
+          },
+          "rejected_cases": {
+            "home": "主队主场状态差",
+            "draw": "客队积分领先",
+            "away": "无拒绝理由"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 5,
+            "bet_confidence": 60,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "rotation_risk"
+            ],
+            "why_recommended": "客队积分领先且主队状态差"
+          },
+          "data_quality": {
+            "missing": [
+              "sharp_movement"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "客队排名积分占优，推荐1-2",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 23,
+            "critic_model": "grok",
+            "target_findings": [
+              {
+                "target_model": "gpt",
+                "issue_type": "sharp",
+                "severity": "medium",
+                "comment": "away方向被选但sharp_confidence仅17，体能题材未验证却用于contextual_logic，Sharp解释不充分"
+              },
+              {
+                "target_model": "gpt",
+                "issue_type": "score",
+                "severity": "low",
+                "comment": "1-2与3球模态一致，但2-1与1-2赔率仅差0.25的接近未被充分作为rejected理由"
+              }
+            ],
+            "own_revision_hint": "增加体能验证缺失的风险标签，并考虑平局作为主要防范"
+          }
+        ]
+      }
+    },
+    "24": {
+      "match": 24,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "2-0",
+      "direction_probs": {
+        "home": 58.0,
+        "draw": 25.0,
+        "away": 17.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "top3": [
+        {
+          "score": "2-0",
+          "prob": 22.0,
+          "logic": "2-0赔率7.1，完美契合2球主模态。"
+        },
+        {
+          "score": "1-0",
+          "prob": 20.0,
+          "logic": "1-0赔率6.1全场最低，主胜最稳防线。"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "logic": "1-1赔率6.2，平局防范。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "竞彩1.63-3.45-4.42，主胜优势明显。",
+        "handicap": "主队让1球，客队方向受热，市场对主队穿盘存疑。",
+        "correct_score": "1-0(6.1)最低，1-1(6.2)次低，2-0(7.1)第三。",
+        "total_goals": "2球3.3最低，3球3.55次低。",
+        "half_full_time": "主/主2.57绝对优势。",
+        "external_market": "缺乏外部数据。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 20,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众投票主胜55%，符合基本面。"
+      },
+      "contextual_logic": {
+        "league_style": "西甲中上游对中游，主场优势大。",
+        "team_style": "毕尔巴鄂战意足，瓦伦西亚客场弱且伤病多。",
+        "tempo": "medium",
+        "score_shape": "2-0既符合主胜又符合2球模态。",
+        "btts_likelihood": "no",
+        "rotation_risk": "low"
+      },
+      "rejected_cases": {
+        "home": "主胜为最终首选，优势明显。",
+        "draw": "1-1赔率6.2需防范，但主胜1.63优势太大，平局仅为次选。",
+        "away": "客胜4.42偏高，客队战意不足且伤病多，打出概率极低。"
+      },
+      "web_research": {
+        "used": false,
+        "failure_reason": "no_web_tool_available",
+        "search_queries": [],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": []
+      },
+      "final_web_audit": {
+        "web_used_by_final": false,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "A",
+        "is_recommended": true,
+        "top4_priority": 2,
+        "bet_confidence": 64,
+        "direction_stability": "strong",
+        "score_stability": "medium",
+        "risk_level": "medium",
+        "risk_tags": [
+          "主胜热度偏高",
+          "让一球穿盘存在分歧"
+        ],
+        "why_recommended": "主胜得到1X2、主胜比分簇和半全场三端支持，方向稳定性较好；推荐重点在主胜方向，比分以2-0、1-0防守型胜出为主。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部欧赔实时对照",
+          "亚盘即时水位"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "毕尔巴鄂主胜1.63提供强方向锚，半全场主/主2.57也明显领先，正确比分中主胜低赔数量密集。总进球2球为主模态，结合瓦伦西亚客场和防线题材，选择2-0主胜更符合方向与进球结构。",
+      "validation_warnings": [],
+      "raw_item": {
+        "match": 24,
+        "final_direction": "home",
+        "predicted_score": "2-0",
+        "direction_probs": {
+          "home": 58,
+          "draw": 25,
+          "away": 17
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 22,
+            "logic": "2-0赔率7.1，完美契合2球主模态。"
+          },
+          {
+            "score": "1-0",
+            "prob": 20,
+            "logic": "1-0赔率6.1全场最低，主胜最稳防线。"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "logic": "1-1赔率6.2，平局防范。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩1.63-3.45-4.42，主胜优势明显。",
+          "handicap": "主队让1球，客队方向受热，市场对主队穿盘存疑。",
+          "correct_score": "1-0(6.1)最低，1-1(6.2)次低，2-0(7.1)第三。",
+          "total_goals": "2球3.3最低，3球3.55次低。",
+          "half_full_time": "主/主2.57绝对优势。",
+          "external_market": "缺乏外部数据。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 20,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票主胜55%，符合基本面。"
+        },
+        "contextual_logic": {
+          "league_style": "西甲中上游对中游，主场优势大。",
+          "team_style": "毕尔巴鄂战意足，瓦伦西亚客场弱且伤病多。",
+          "tempo": "medium",
+          "score_shape": "2-0既符合主胜又符合2球模态。",
+          "btts_likelihood": "no",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "主胜为最终首选，优势明显。",
+          "draw": "1-1赔率6.2需防范，但主胜1.63优势太大，平局仅为次选。",
+          "away": "客胜4.42偏高，客队战意不足且伤病多，打出概率极低。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": false,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 2,
+          "bet_confidence": 64,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "主胜热度偏高",
+            "让一球穿盘存在分歧"
+          ],
+          "why_recommended": "主胜得到1X2、主胜比分簇和半全场三端支持，方向稳定性较好；推荐重点在主胜方向，比分以2-0、1-0防守型胜出为主。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部欧赔实时对照",
+            "亚盘即时水位"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "毕尔巴鄂主胜1.63提供强方向锚，半全场主/主2.57也明显领先，正确比分中主胜低赔数量密集。总进球2球为主模态，结合瓦伦西亚客场和防线题材，选择2-0主胜更符合方向与进球结构。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 24,
+          "final_direction": "home",
+          "predicted_score": "2-0",
+          "direction_probs": {
+            "home": 58.0,
+            "draw": 25.0,
+            "away": 17.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "2",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "2-0",
+              "prob": 16.0,
+              "logic": "2-0赔7.10虽略高于1-0和2-1，但与总进球2球主模态完全吻合，也更能体现主队让一球盘下的优势。"
+            },
+            {
+              "score": "1-0",
+              "prob": 17.0,
+              "logic": "1-0赔6.10为全场最低比分，说明毕尔巴鄂小胜是最稳的主胜底座，但胜幅可能偏保守。"
+            },
+            {
+              "score": "1-1",
+              "prob": 15.0,
+              "logic": "1-1赔6.20仅次于1-0，是本场最大冷却点；若主队进攻效率不足，平局会成为主要威胁。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "竞彩主胜1.63明显低于平3.45和客4.42，主队方向清晰，是本批次较强主胜之一。",
+            "handicap": "主队让1球，公众让球客胜44%高于让球主胜29%，说明市场对毕尔巴鄂净胜两球以上有疑虑；因此方向看主胜，比分不宜过度放大。",
+            "correct_score": "1-0、1-1、2-1、2-0四个低赔集中，主胜簇密度明显高于客胜簇；客胜最低0-1已到11.00，客胜缺乏优先级。",
+            "total_goals": "总进球2球3.30最低，3球3.55次低，1球4.50；2-0与2球主模态一致，同时规避瓦伦西亚客场进攻弱势。",
+            "half_full_time": "主/主2.57明显最低，平/主4.40次低，说明主队无论早段建立优势还是下半场解决战斗，最终胜出路径都很清楚。",
+            "external_market": "无法联网核验外部欧赔是否同样降主胜，也无法确认亚盘是否维持半一或一球；外部市场分歧未被纳入。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 24,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众胜平负主胜55%偏热，竞彩主胜仍保持1.63低位；让球端反而更多投向客队，显示大众认可主胜但怀疑大胜。无赔率变化数据，不能确认锐利资金或蒸汽盘。"
+          },
+          "contextual_logic": {
+            "league_style": "西甲中上游主场面对中游客队时，常见控球压制与低中比分胜出，节奏通常不如德甲开放。",
+            "team_style": "毕尔巴鄂主场、战意和交锋优势明显，瓦伦西亚客场攻击与防线完整性题材较弱，主队更可能掌控比赛。",
+            "tempo": "medium",
+            "score_shape": "主胜稳定性较好，比分在1-0、2-0、2-1之间；考虑总进球2球主模态和客队进攻受限，取2-0。",
+            "btts_likelihood": "no",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "主胜是最终选择；风险在于1-0和1-1赔率过近，若主队临门一脚效率不足，赢球可能变成小胜甚至平局。",
+            "draw": "1-1赔6.20非常低，平局具备真实防范价值；但主胜1.63和半全场主/主2.57形成强方向锚，平局只能作次选风险。",
+            "away": "客胜4.42高位，客胜比分0-1、1-2均明显落后于主胜核心比分，且半全场负/负7.50不具备优先支撑，故不取客胜。"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 64,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "主胜热度偏高",
+              "1-1比分贴近",
+              "让一球穿盘存在分歧"
+            ],
+            "why_recommended": "主胜得到1X2、主胜比分簇和半全场三端支持，方向稳定性较好；推荐重点在主胜方向，比分以2-0、1-0防守型胜出为主。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔实时对照",
+              "亚盘即时水位",
+              "交易所成交信息",
+              "可验证伤停来源",
+              "赔率时间点"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "毕尔巴鄂主胜1.63提供强方向锚，半全场主/主2.57也明显领先，正确比分中主胜低赔数量密集。虽然1-0是最低单比分，1-1也极近，但总进球2球为主模态，结合瓦伦西亚客场和防线题材，选择2-0主胜更符合方向与进球结构。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网确认瓦伦西亚防线伤停、毕尔巴鄂欧战战意和外部赔率降赔情况；未编造任何来源。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 24,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 55.0,
+            "draw": 26.0,
+            "away": 19.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 17.0,
+              "logic": "主胜1.63极低，2-1为主队最低赔率"
+            },
+            {
+              "score": "1-0",
+              "prob": 15.0,
+              "logic": "1-0次低"
+            },
+            {
+              "score": "2-0",
+              "prob": 13.0,
+              "logic": "主队主场强势"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜1.63支持主胜",
+            "handicap": "让球盘-1.0主队",
+            "correct_score": "2-1和1-0最低",
+            "total_goals": "2球和3球最低",
+            "half_full_time": "主/主最低",
+            "external_market": "主队欧战资格战意高"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票主胜55%"
+          },
+          "contextual_logic": {
+            "league_style": "西甲",
+            "team_style": "毕尔巴鄂主场强势",
+            "tempo": "high",
+            "score_shape": "2-1主队小胜",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "无拒绝理由",
+            "draw": "客队无欲无求",
+            "away": "客队伤病严重"
+          },
+          "recommendation": {
+            "tier": "S",
+            "is_recommended": true,
+            "top4_priority": 6,
+            "bet_confidence": 72,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "主队战意高且客队伤病多，2-1最优"
+          },
+          "data_quality": {
+            "missing": [
+              "sharp_movement"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "主队主场优势大且客队伤病严重，推荐2-1",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 24,
+            "critic_model": "grok",
+            "target_findings": [
+              {
+                "target_model": "gpt",
+                "issue_type": "market",
+                "severity": "medium",
+                "comment": "2-0预测与总进球2球模态吻合，但让球公众客队44%热度与1-1赔率6.2接近未被充分冲突处理"
+              },
+              {
+                "target_model": "gpt",
+                "issue_type": "risk",
+                "severity": "low",
+                "comment": "A级推荐置信64合理，但主胜热度偏高与瓦伦西亚伤停题材的结合缺乏外部验证"
+              }
+            ],
+            "own_revision_hint": "补充让球分歧说明，保持2-0但降低top4_priority"
+          }
+        ]
+      }
+    }
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "phase1",
+        "elapsed": 95.0,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.5",
+      "critic": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "critic",
+        "elapsed": 34.8,
+        "status": "ok"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "consistency",
+        "elapsed": 9.9,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 47.1,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 15.1,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 108.4,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

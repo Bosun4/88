@@ -1,0 +1,170 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": [
+      {
+        "match": 1,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "high",
+            "comment": "预测1-1与半全场负/负2.7最低赔及客胜1X2低赔结构冲突，客队实力碾压下平局权重被过度高估。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "medium",
+            "comment": "sharp_money_direction标unclear且reverse_line_movement仅凭抓包变化，未提供外部盘口时间序列支撑，解释不充分。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "high",
+            "comment": "推荐等级C仍保留1-1作为防冷思路，但客队提前夺冠轮换风险与主胜降水冲突未被充分量化。"
+          }
+        ],
+        "own_revision_hint": "应直接拒绝1-1，优先考虑客胜小胜或完全不推荐，需补充外部欧赔验证。"
+      },
+      {
+        "match": 2,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "market",
+            "severity": "medium",
+            "comment": "主胜升水被解释为让球风险，但未说明与总进球3球模态及2-1最低赔的兼容性，市场解读存在偏差。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "tier B推荐等级偏高，公众72%主胜热度与主胜升水冲突未被充分降级。"
+          }
+        ],
+        "own_revision_hint": "将推荐降为C或仅方向推荐，强调2-1而非3-0的理由需更严谨。"
+      },
+      {
+        "match": 3,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "high",
+            "comment": "1-2与2-2同时列为top3，但2-2平局赔率与客胜低赔结构冲突，拜仁轮换风险被低估。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "medium",
+            "comment": "reverse_line_movement指向home但sharp_confidence仅35，缺乏外部盘口证据。"
+          }
+        ],
+        "own_revision_hint": "优先1-2或1-3，2-2应移出top3。"
+      },
+      {
+        "match": 4,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "high",
+            "comment": "2-1与1-1同时高权重，但1-1为全场最低赔，方向与比分冲突未被明确量化。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "tier B推荐等级过高，马竞近期状态波动与让球保护未充分反映在风险标签中。"
+          }
+        ],
+        "own_revision_hint": "将1-1列为主要rejected case，推荐强度降至C。"
+      },
+      {
+        "match": 5,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "high",
+            "comment": "tier A推荐等级过高，美职联高方差与客场旅行变量未被充分降级，1-2虽结构顺但稳定性不足。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "market",
+            "severity": "low",
+            "comment": "客胜降水与负/负最低赔一致，但受让方向投票保护未被充分解释。"
+          }
+        ],
+        "own_revision_hint": "降为B级，增加美职联特有波动风险标签。"
+      },
+      {
+        "match": 6,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "schema",
+            "severity": "medium",
+            "comment": "队名译名不一致（迈季宽广/费哈）未被充分标注为data_quality缺失，影响可信度。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "tier A推荐等级偏高，沙职透明度低与外部盘口缺失风险未被充分体现。"
+          }
+        ],
+        "own_revision_hint": "添加队名一致性警告，推荐降为B。"
+      }
+    ]
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "phase1",
+        "elapsed": 101.9,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.5",
+      "critic": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "critic",
+        "elapsed": 36.4,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 25.5,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 14.5,
+        "status": "ok"
+      }
+    },
+    "gemini": {}
+  }
+}

@@ -1,0 +1,2600 @@
+{
+  "final": {
+    "25": {
+      "match": 25,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "2-1",
+      "direction_probs": {
+        "home": 55.0,
+        "draw": 25.0,
+        "away": 20.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "logic": "2-1为全场最低正确比分(7.0)，且完美契合总进球3球的最低模态(3.6)，主队一球小胜路径最清晰。"
+        },
+        {
+          "score": "1-1",
+          "prob": 14.0,
+          "logic": "1-1赔率为8.0，是主胜之外防范力度最大的比分，反映了客队具备一定的进球能力。"
+        },
+        {
+          "score": "2-0",
+          "prob": 12.0,
+          "logic": "主胜次低比分(11.0)，若主队防守端发挥出色完成零封，此比分为最合理结果。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "竞彩主胜1.65处于合理优势区间，平赔3.95与客胜3.70未完全拉开，显示主队有优势但非绝对碾压。",
+        "handicap": "主让一球下，公众让球负投票高达45%，说明市场对主队净胜两球以上存在较大疑虑，穿盘阻力明显。",
+        "correct_score": "比分簇以2-1(7.0)为核心，1-1(8.0)紧随其后，呈现主队小胜优先、平局次之的结构。",
+        "total_goals": "3球赔率3.6最低，2球4.5次之，比赛形态偏向中等进球数，2-1是最符合该模态的比分。",
+        "half_full_time": "主/主2.55显著最低，平/主5.1次低，市场预期主队能够较早建立优势并保持到终场。",
+        "external_market": "缺乏外部欧赔和亚盘的即时水位变化数据，仅依靠竞彩初始结构进行判断。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 0,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众主胜投票54%占据主流，但让球负投票同样较高，未见明显的异常资金拉升或降水迹象。"
+      },
+      "contextual_logic": {
+        "league_style": "荷甲联赛整体球风开放，强队主场作战时通常能掌控局面，但防线也容易出现漏洞。",
+        "team_style": "费耶诺德主场战绩强势，阿尔克马尔客场表现低迷但具备反击能力，主攻客守格局明显。",
+        "tempo": "high",
+        "score_shape": "主队依靠主场气势率先破门，客队通过反击扳回一城，最终主队再次超出，2-1最符合逻辑。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "low"
+      },
+      "rejected_cases": {
+        "home": "未拒绝主胜，但拒绝主队大胜（如3-0或穿盘），因为让球负热度高且1-1赔率较低，客队有进球能力。",
+        "draw": "1-1虽然赔率较低，但主胜1.65和主/主2.55的结构更支持主队全取三分，平局仅作为次选防范。",
+        "away": "客胜1-2赔率达10.5，且客队近期客场状态低迷，历史交锋处于绝对下风，爆冷概率极低。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "",
+        "search_queries": [
+          "Feyenoord AZ Alkmaar injuries lineups"
+        ],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": [
+          "web_used_but_no_sources"
+        ]
+      },
+      "final_web_audit": {
+        "web_used_by_final": true,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "B",
+        "is_recommended": true,
+        "top4_priority": 4,
+        "bet_confidence": 65,
+        "direction_stability": "medium",
+        "score_stability": "medium",
+        "risk_level": "medium",
+        "risk_tags": [
+          "让球穿盘阻力大",
+          "客队进球风险"
+        ],
+        "why_recommended": "主胜赔率、2-1最低比分与3球总进球模态高度共振，但让球负热度较高，推荐主胜小比分，评级定为B。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部盘口变化",
+          "即时伤停核实"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "本场比赛各项市场数据（1X2、比分、总进球、半全场）均指向主队获胜，且2-1为最优解。考虑到让球盘的阻力及1-1的低赔防范，主队一球小胜是最稳妥的判断。",
+      "validation_warnings": [
+        "web_used_but_no_sources"
+      ],
+      "raw_item": {
+        "match": 25,
+        "final_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 55,
+          "draw": 25,
+          "away": 20
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "logic": "2-1为全场最低正确比分(7.0)，且完美契合总进球3球的最低模态(3.6)，主队一球小胜路径最清晰。"
+          },
+          {
+            "score": "1-1",
+            "prob": 14,
+            "logic": "1-1赔率为8.0，是主胜之外防范力度最大的比分，反映了客队具备一定的进球能力。"
+          },
+          {
+            "score": "2-0",
+            "prob": 12,
+            "logic": "主胜次低比分(11.0)，若主队防守端发挥出色完成零封，此比分为最合理结果。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩主胜1.65处于合理优势区间，平赔3.95与客胜3.70未完全拉开，显示主队有优势但非绝对碾压。",
+          "handicap": "主让一球下，公众让球负投票高达45%，说明市场对主队净胜两球以上存在较大疑虑，穿盘阻力明显。",
+          "correct_score": "比分簇以2-1(7.0)为核心，1-1(8.0)紧随其后，呈现主队小胜优先、平局次之的结构。",
+          "total_goals": "3球赔率3.6最低，2球4.5次之，比赛形态偏向中等进球数，2-1是最符合该模态的比分。",
+          "half_full_time": "主/主2.55显著最低，平/主5.1次低，市场预期主队能够较早建立优势并保持到终场。",
+          "external_market": "缺乏外部欧赔和亚盘的即时水位变化数据，仅依靠竞彩初始结构进行判断。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 0,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众主胜投票54%占据主流，但让球负投票同样较高，未见明显的异常资金拉升或降水迹象。"
+        },
+        "contextual_logic": {
+          "league_style": "荷甲联赛整体球风开放，强队主场作战时通常能掌控局面，但防线也容易出现漏洞。",
+          "team_style": "费耶诺德主场战绩强势，阿尔克马尔客场表现低迷但具备反击能力，主攻客守格局明显。",
+          "tempo": "high",
+          "score_shape": "主队依靠主场气势率先破门，客队通过反击扳回一城，最终主队再次超出，2-1最符合逻辑。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "未拒绝主胜，但拒绝主队大胜（如3-0或穿盘），因为让球负热度高且1-1赔率较低，客队有进球能力。",
+          "draw": "1-1虽然赔率较低，但主胜1.65和主/主2.55的结构更支持主队全取三分，平局仅作为次选防范。",
+          "away": "客胜1-2赔率达10.5，且客队近期客场状态低迷，历史交锋处于绝对下风，爆冷概率极低。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "",
+          "search_queries": [
+            "Feyenoord AZ Alkmaar injuries lineups"
+          ],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": true,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 4,
+          "bet_confidence": 65,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "让球穿盘阻力大",
+            "客队进球风险"
+          ],
+          "why_recommended": "主胜赔率、2-1最低比分与3球总进球模态高度共振，但让球负热度较高，推荐主胜小比分，评级定为B。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部盘口变化",
+            "即时伤停核实"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场比赛各项市场数据（1X2、比分、总进球、半全场）均指向主队获胜，且2-1为最优解。考虑到让球盘的阻力及1-1的低赔防范，主队一球小胜是最稳妥的判断。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 25,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 52.0,
+            "draw": 25.0,
+            "away": 23.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 16.0,
+              "logic": "正确比分最低赔率为2-1，且总进球3球为总进球赔率最低模态，方向与主胜低赔一致。"
+            },
+            {
+              "score": "1-1",
+              "prob": 12.0,
+              "logic": "平局比分中1-1赔率较低，说明市场保留阿尔克马尔进球与费耶诺德不穿盘风险。"
+            },
+            {
+              "score": "2-0",
+              "prob": 10.0,
+              "logic": "主胜次低比分之一，符合费耶诺德主场优势，但与双方进球倾向相比略次。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "竞彩主胜1.65处于低位，平赔3.95、客胜3.70并未完全拉开，表示主队优势明确但不是碾压盘。",
+            "handicap": "让球为主让一球，公众让球负占45%，说明主胜与赢两球以上被市场明显区分，主胜可取但穿盘阻力较大。",
+            "correct_score": "2-1以7.0为最低，1-1为8.0，1-2为10.5，比分簇呈现主队小胜优先、平局次之、客队也有进球空间。",
+            "total_goals": "3球赔率3.6最低，4球和2球紧随，比赛形态偏中高节奏，最合理为2-1或3-1。",
+            "half_full_time": "主/主2.55最低，平/主5.1次低，市场认为费耶诺德可持续压制，但也存在上半场僵持后下半场解决比赛的路径。",
+            "external_market": "无法联网核验外部欧赔、亚盘或交易所价格；本场外部市场分歧不作为硬证据，只依据竞彩抓包结构判断。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众主胜票54%，主胜赔率描述为平稳，未见降赔或升赔数据；主胜热度与低赔方向一致，但缺少盘口时间序列，不能识别锐利资金。"
+          },
+          "contextual_logic": {
+            "league_style": "荷甲整体进球开放，强队主场面对欧战区附近球队时常出现双方进球。",
+            "team_style": "费耶诺德主场强势，阿尔克马尔客场较弱但进攻并非完全失效，适合主队控场、客队反击得分。",
+            "tempo": "high",
+            "score_shape": "主队优势更集中在2-1、2-0、3-1，结合3球模态，2-1最贴合市场中心。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未否定主胜；主胜是最终方向，但不选择大胜，因为让球支持不足且1-1赔率过低。",
+            "draw": "平局1-1具备保护价值，但1X2主胜低位、主/主半全场最低，平局只能作为次选风险。",
+            "away": "客胜比分1-2赔率不算极高，但客胜1X2位置与历史客场劣势不支持反客为主。"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 67,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "主胜热度偏高",
+              "让一球穿盘阻力",
+              "荷甲开放导致比分波动"
+            ],
+            "why_recommended": "主胜低赔、2-1最低比分、3球总进球模态和主/主半全场共同指向费耶诺德小胜，结构一致性较好。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔时间序列",
+              "亚盘水位变化",
+              "交易所成交",
+              "可核验最新伤停来源"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场核心不是简单追主胜，而是主胜方向与正确比分、总进球、半全场均出现同向凝聚：2-1最低、3球最低、主/主最低。风险在于阿尔克马尔进球能力和1-1低赔，因此选择主胜2-1而非主让穿盘。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [
+              "费耶诺德 阿尔克马尔 外部欧赔 亚盘 赔率 赛前",
+              "Feyenoord AZ Alkmaar odds movement Asian handicap",
+              "Feyenoord AZ Alkmaar injuries lineups latest"
+            ],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网，未获取外部欧赔、亚盘、交易所成交或最新伤停来源；方向仅基于竞彩抓包赔率簇和给定上下文。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 25,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 58.0,
+            "draw": 24.0,
+            "away": 18.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 16.0,
+              "logic": "主队主场强势，客队客场防守疲软，2-1为最优赔率比分"
+            },
+            {
+              "score": "2-0",
+              "prob": 12.0,
+              "logic": "主队控场能力强，零封概率较高"
+            },
+            {
+              "score": "3-1",
+              "prob": 11.0,
+              "logic": "主队进攻端有一定火力，客队易丢球"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜赔率1.65凝聚，机构明显支持主胜",
+            "handicap": "让球-1主胜平稳，资金倾向主队不败",
+            "correct_score": "2-1赔率最低7.0，市场最热比分",
+            "total_goals": "3球赔率3.6最低，进球数偏中高",
+            "half_full_time": "主/主2.55最低，半场主队领先概率高",
+            "external_market": "无明显异动，体彩抓包数据稳定"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 65,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "主胜投注比例54%，客胜仅23%，无反向线移动迹象"
+          },
+          "contextual_logic": {
+            "league_style": "荷甲进攻节奏较快，进球数偏高",
+            "team_style": "主队主场强势，客队客场低迷",
+            "tempo": "medium",
+            "score_shape": "主队2-1领先概率最高",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "无需拒绝，主队数据全面占优",
+            "draw": "平局赔率3.95过高，历史交锋主队全胜",
+            "away": "客队客场近5场仅1胜，实力差距明显"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 62,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "主队主场不败，赔率与数据高度一致，2-1为最优选择"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "主队费耶诺德主场11胜2平，客队阿尔克马尔客场疲软，2-1为市场最优解",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 25,
+            "critic_model": "gpt",
+            "target_findings": [
+              {
+                "target_model": "grok",
+                "issue_type": "score",
+                "severity": "medium",
+                "comment": "2-1预测与让球负公众45%高投票冲突，市场明显怀疑主队净胜两球以上"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "sharp",
+                "severity": "high",
+                "comment": "sharp_money_direction直接标unclear却仍给A级推荐，锐利资金解释不足"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "risk",
+                "severity": "medium",
+                "comment": "推荐等级A过高，荷甲开放+让一球穿盘阻力被低估"
+              }
+            ],
+            "own_revision_hint": "应降为B级，强调1-1与让球负风险，2-1仅作为次选"
+          }
+        ]
+      }
+    },
+    "26": {
+      "match": 26,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "2-1",
+      "direction_probs": {
+        "home": 60.0,
+        "draw": 22.0,
+        "away": 18.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 18.0,
+          "logic": "2-1为全场最低比分(7.0)，且对应3球总进球最低模态(3.6)，是主胜方向的最优解。"
+        },
+        {
+          "score": "2-0",
+          "prob": 14.0,
+          "logic": "2-0赔率为10.0，若阿贾克斯防守端表现稳健，零封对手取胜的概率同样不低。"
+        },
+        {
+          "score": "1-1",
+          "prob": 12.0,
+          "logic": "1-1赔率为8.5，反映了阿贾克斯本赛季防守不稳，乌德勒支有偷得一分的潜在可能。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "主胜1.49处于明显低位，机构对阿贾克斯主场取胜给予了强有力的支持。",
+        "handicap": "主让一球，公众让球负40%略高于让球胜36%，说明市场对阿贾克斯能否大胜存在分歧。",
+        "correct_score": "2-1(7.0)独占鳌头，1-1(8.5)次之，2-0和3-1同为10.0，比分结构清晰指向主队胜出且伴随双方进球。",
+        "total_goals": "3球(3.6)最低，4球(4.15)次低，预示着本场比赛进球数不会太少，符合荷甲特征。",
+        "half_full_time": "主/主2.1显著偏低，平/主4.8次之，市场极度看好阿贾克斯从上半场便确立领先优势。",
+        "external_market": "无外部实时数据，但竞彩内部结构已形成强烈的逻辑闭环。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 0,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "主胜公众投票达60%，属于正常的热门方向，无异常资金流向证据。"
+      },
+      "contextual_logic": {
+        "league_style": "荷甲强队在主场通常具备压倒性优势，但重攻轻守的特点容易导致丢球。",
+        "team_style": "阿贾克斯实力占优但本赛季防守糟糕（失39球），乌德勒支客场防守同样存在漏洞。",
+        "tempo": "high",
+        "score_shape": "阿贾克斯凭借实力优势压制对手并取得进球，但防线失误可能送给客队一球，2-1最为合理。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "medium"
+      },
+      "rejected_cases": {
+        "home": "未拒绝主胜，但考虑到阿贾克斯防线不稳及让球负的较高支持率，不倾向于推荐穿盘大胜。",
+        "draw": "1-1虽有防范，但主胜1.49的低赔及主/主2.1的半全场赔率使得平局难以成为首选。",
+        "away": "客胜赔率高达4.5，且乌德勒支客场战绩平平，爆冷击败阿贾克斯的条件不成熟。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "",
+        "search_queries": [
+          "Ajax Utrecht odds movement"
+        ],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": [
+          "web_used_but_no_sources"
+        ]
+      },
+      "final_web_audit": {
+        "web_used_by_final": true,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "A",
+        "is_recommended": true,
+        "top4_priority": 2,
+        "bet_confidence": 70,
+        "direction_stability": "strong",
+        "score_stability": "medium",
+        "risk_level": "low",
+        "risk_tags": [
+          "主队防守隐患"
+        ],
+        "why_recommended": "主胜1.49低赔、2-1最低比分、3球模态及主/主半全场形成多维共振，主胜逻辑坚实，评级为A。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部盘口",
+          "临场阵容"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "阿贾克斯虽然本赛季表现起伏，但面对实力稍逊的乌德勒支，1.49的主胜赔率和2-1的最低比分赔率给出了明确的方向指引，主胜值得信赖。",
+      "validation_warnings": [
+        "web_used_but_no_sources"
+      ],
+      "raw_item": {
+        "match": 26,
+        "final_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 60,
+          "draw": 22,
+          "away": 18
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18,
+            "logic": "2-1为全场最低比分(7.0)，且对应3球总进球最低模态(3.6)，是主胜方向的最优解。"
+          },
+          {
+            "score": "2-0",
+            "prob": 14,
+            "logic": "2-0赔率为10.0，若阿贾克斯防守端表现稳健，零封对手取胜的概率同样不低。"
+          },
+          {
+            "score": "1-1",
+            "prob": 12,
+            "logic": "1-1赔率为8.5，反映了阿贾克斯本赛季防守不稳，乌德勒支有偷得一分的潜在可能。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜1.49处于明显低位，机构对阿贾克斯主场取胜给予了强有力的支持。",
+          "handicap": "主让一球，公众让球负40%略高于让球胜36%，说明市场对阿贾克斯能否大胜存在分歧。",
+          "correct_score": "2-1(7.0)独占鳌头，1-1(8.5)次之，2-0和3-1同为10.0，比分结构清晰指向主队胜出且伴随双方进球。",
+          "total_goals": "3球(3.6)最低，4球(4.15)次低，预示着本场比赛进球数不会太少，符合荷甲特征。",
+          "half_full_time": "主/主2.1显著偏低，平/主4.8次之，市场极度看好阿贾克斯从上半场便确立领先优势。",
+          "external_market": "无外部实时数据，但竞彩内部结构已形成强烈的逻辑闭环。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 0,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "主胜公众投票达60%，属于正常的热门方向，无异常资金流向证据。"
+        },
+        "contextual_logic": {
+          "league_style": "荷甲强队在主场通常具备压倒性优势，但重攻轻守的特点容易导致丢球。",
+          "team_style": "阿贾克斯实力占优但本赛季防守糟糕（失39球），乌德勒支客场防守同样存在漏洞。",
+          "tempo": "high",
+          "score_shape": "阿贾克斯凭借实力优势压制对手并取得进球，但防线失误可能送给客队一球，2-1最为合理。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未拒绝主胜，但考虑到阿贾克斯防线不稳及让球负的较高支持率，不倾向于推荐穿盘大胜。",
+          "draw": "1-1虽有防范，但主胜1.49的低赔及主/主2.1的半全场赔率使得平局难以成为首选。",
+          "away": "客胜赔率高达4.5，且乌德勒支客场战绩平平，爆冷击败阿贾克斯的条件不成熟。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "",
+          "search_queries": [
+            "Ajax Utrecht odds movement"
+          ],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": true,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 2,
+          "bet_confidence": 70,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "low",
+          "risk_tags": [
+            "主队防守隐患"
+          ],
+          "why_recommended": "主胜1.49低赔、2-1最低比分、3球模态及主/主半全场形成多维共振，主胜逻辑坚实，评级为A。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部盘口",
+            "临场阵容"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "阿贾克斯虽然本赛季表现起伏，但面对实力稍逊的乌德勒支，1.49的主胜赔率和2-1的最低比分赔率给出了明确的方向指引，主胜值得信赖。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 26,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 55.0,
+            "draw": 24.0,
+            "away": 21.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 17.0,
+              "logic": "2-1为全场最低正确比分，且对应3球总进球最低模态，主胜路径最清晰。"
+            },
+            {
+              "score": "1-1",
+              "prob": 12.0,
+              "logic": "阿贾克斯主场近期稳定性一般，1-1低赔体现市场对乌德勒支抢分的防范。"
+            },
+            {
+              "score": "3-1",
+              "prob": 10.0,
+              "logic": "3-1与2-0同为10.0，若阿贾克斯早段领先，比赛可被拉向4球区间。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜1.49为明显优势位，平4.25、客4.5显示阿贾克斯被强定价，但主胜并非无风险。",
+            "handicap": "主让一球下，公众让球负40%高于让球胜36%，说明市场认可阿贾克斯赢球，但对净胜两球以上持保留。",
+            "correct_score": "2-1最低，1-1第二低，2-0和3-1并列随后，显示主队小胜优先，客队进球概率不低。",
+            "total_goals": "3球最低、4球次低、2球第三，荷甲比赛倾向中高总进球。",
+            "half_full_time": "主/主2.1显著最低，平/主4.8次低，市场倾向阿贾克斯全场胜，领先路径强于逆转路径。",
+            "external_market": "无法联网核验外部市场；不能确认竞彩与欧赔、亚盘或交易所是否存在分歧。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "主胜公众票60%，赔率描述平稳；热门方向没有可见降赔强化，也没有反向升赔证据，锐利资金不可判定。"
+          },
+          "contextual_logic": {
+            "league_style": "荷甲强队主场低赔时通常具备较高进球预期，但防线开放会提高双方进球和小胜概率。",
+            "team_style": "阿贾克斯控球进攻能力更强，乌德勒支近期状态不差，客队反击或定位球有机会制造进球。",
+            "tempo": "high",
+            "score_shape": "最可能是阿贾克斯先建立优势，乌德勒支取得一球回应，形成2-1或3-1。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未否定主胜；主胜为最终方向，但不选择3-0或大胜，因为1-1与1-2赔率不高，客队进球风险存在。",
+            "draw": "1-1是强风险比分，但主胜1.49和主/主2.1的强压制结构使平局不宜作为主方向。",
+            "away": "乌德勒支有爆冷历史和状态支撑，但客胜4.5且半全场负/负7.0，客胜路径不如主胜稳定。"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 3,
+            "bet_confidence": 66,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "主胜大众热度高",
+              "阿贾克斯主场近期不稳",
+              "客队具备进球风险"
+            ],
+            "why_recommended": "1X2、比分最低项、总进球模态与半全场均支持主胜，且最优比分集中在2-1，方向结构较完整。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部盘口源",
+              "即时阵容",
+              "赔率变化时间点"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "阿贾克斯胜面来自1.49主胜、2-1最低比分和主/主最低半全场。由于让一球下公众更偏让负，说明市场对赢两球有怀疑，因此推荐主胜小比分而非强穿。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [
+              "阿贾克斯 乌德勒支 欧赔 亚盘 即时赔率",
+              "Ajax Utrecht odds movement Asian handicap",
+              "Ajax Utrecht team news injuries lineups"
+            ],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网，缺少外部盘口、即时伤停和交易所价格，不能将任何所谓最新消息作为硬证据。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 26,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 62.0,
+            "draw": 22.0,
+            "away": 16.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 17.0,
+              "logic": "主队主场虽一般但实力占优，2-1赔率最低"
+            },
+            {
+              "score": "2-0",
+              "prob": 13.0,
+              "logic": "主队控场能力较强"
+            },
+            {
+              "score": "3-1",
+              "prob": 10.0,
+              "logic": "客队客场防守漏洞明显"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜1.49极低，机构强烈看好主胜",
+            "handicap": "让球-1主胜平稳",
+            "correct_score": "2-1赔率7.0最优",
+            "total_goals": "3球赔率3.6最低",
+            "half_full_time": "主/主2.1最低",
+            "external_market": "无异动"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 70,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "主胜投注60%，客胜19%"
+          },
+          "contextual_logic": {
+            "league_style": "荷甲中高节奏",
+            "team_style": "主队整体占优",
+            "tempo": "medium",
+            "score_shape": "2-1最优",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "无需拒绝",
+            "draw": "平局赔率过高",
+            "away": "客队客场仅1胜"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 65,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "主胜赔率极低且数据支持，2-1为最佳"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "阿贾克斯主场虽状态一般但实力占优，2-1最优解",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 26,
+            "critic_model": "gpt",
+            "target_findings": [
+              {
+                "target_model": "grok",
+                "issue_type": "market",
+                "severity": "medium",
+                "comment": "1.49主胜低赔与让球负40%公众投票存在明显分歧，未充分解释"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "sharp",
+                "severity": "high",
+                "comment": "sharp资金完全缺失却给出66置信度，缺乏外部盘口验证"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "risk",
+                "severity": "medium",
+                "comment": "A级推荐过高，阿贾克斯主场近期不稳与客队抢分动机被低估"
+              }
+            ],
+            "own_revision_hint": "改为B级，突出1-1保护价值，2-1仅作小概率首选"
+          }
+        ]
+      }
+    },
+    "27": {
+      "match": 27,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "away",
+      "raw_ai_direction": "away",
+      "predicted_score": "1-2",
+      "direction_probs": {
+        "home": 25.0,
+        "draw": 30.0,
+        "away": 45.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 16.0,
+          "logic": "1-2(7.5)为客胜最低比分，且与3球总进球最低模态(3.55)完美对应，符合客队实力占优的背景。"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "logic": "1-1(7.4)为全场最低比分，显示市场对平局的极强防范，是本场最大的风险点。"
+        },
+        {
+          "score": "0-1",
+          "prob": 11.0,
+          "logic": "0-1(12.0)赔率尚可，若客队采取保守策略，一球小胜也是合理赛果。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "客胜2.09低于主胜2.65，客队被设定为优势方，但平赔3.65处于敏感区间，平局拉力极大。",
+        "handicap": "主受让一球，公众让球胜高达57%，说明大众普遍认为主队能在主场保平争胜，客胜穿盘极难。",
+        "correct_score": "1-1(7.4)与1-2(7.5)赔率极度接近，市场在平局与客队一球小胜之间剧烈摇摆。",
+        "total_goals": "3球(3.55)最低，2球(4.4)次之，比赛大概率在2-3球之间决出胜负。",
+        "half_full_time": "负/负3.25最低，平/负5.8次低，半全场数据依然倾向于客队最终拿下比赛。",
+        "external_market": "无外部数据，内部数据呈现出典型的分歧盘特征。"
+      },
+      "money_flow": {
+        "public_money_direction": "away",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 0,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "普通胜平负客胜投票42%最高，但让球胜57%表明资金在受让盘面上更青睐主队。"
+      },
+      "contextual_logic": {
+        "league_style": "荷甲中游球队交手往往互有攻守，实力稍强的一方容易在僵持中把握机会。",
+        "team_style": "奈梅亨排名高且战意足，但客场防守并非滴水不漏；格罗宁根主场有一定抵抗力。",
+        "tempo": "medium",
+        "score_shape": "双方可能在上半场或大部分时间陷入僵局(1-1)，随后客队凭借实力优势打入制胜球(1-2)。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "medium"
+      },
+      "rejected_cases": {
+        "home": "主胜2.65赔率偏高，且半全场数据不支持主队取胜，主队近期状态低迷，不予考虑。",
+        "draw": "1-1是全场最低比分，平局风险极高，但综合1X2客胜占优及负/负半全场最低，最终博取客胜。",
+        "away": "未拒绝客胜，但明确拒绝客队大胜，受让盘口的大众倾向及1-1的低赔决定了客队最多赢一球。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "",
+        "search_queries": [
+          "Groningen NEC Nijmegen injuries"
+        ],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": [
+          "web_used_but_no_sources"
+        ]
+      },
+      "final_web_audit": {
+        "web_used_by_final": true,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "C",
+        "is_recommended": true,
+        "top4_priority": 5,
+        "bet_confidence": 55,
+        "direction_stability": "weak",
+        "score_stability": "medium",
+        "risk_level": "high",
+        "risk_tags": [
+          "1-1全场最低比分",
+          "受让方热度高"
+        ],
+        "why_recommended": "虽然1-1赔率最低带来巨大平局风险，但1-2紧随其后且总进球3球模态支持分胜负，结合客队实力优势，谨慎推荐客胜，评级降为C。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部赔率",
+          "伤停确认"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "本场是典型的平局与客胜分歧盘。1-1与1-2赔率几乎持平，但半全场负/负最低及总进球3球模态为客胜提供了微弱的逻辑支撑，适合博取客队一球小胜。",
+      "validation_warnings": [
+        "web_used_but_no_sources"
+      ],
+      "raw_item": {
+        "match": 27,
+        "final_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 25,
+          "draw": 30,
+          "away": 45
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 16,
+            "logic": "1-2(7.5)为客胜最低比分，且与3球总进球最低模态(3.55)完美对应，符合客队实力占优的背景。"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "logic": "1-1(7.4)为全场最低比分，显示市场对平局的极强防范，是本场最大的风险点。"
+          },
+          {
+            "score": "0-1",
+            "prob": 11,
+            "logic": "0-1(12.0)赔率尚可，若客队采取保守策略，一球小胜也是合理赛果。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "客胜2.09低于主胜2.65，客队被设定为优势方，但平赔3.65处于敏感区间，平局拉力极大。",
+          "handicap": "主受让一球，公众让球胜高达57%，说明大众普遍认为主队能在主场保平争胜，客胜穿盘极难。",
+          "correct_score": "1-1(7.4)与1-2(7.5)赔率极度接近，市场在平局与客队一球小胜之间剧烈摇摆。",
+          "total_goals": "3球(3.55)最低，2球(4.4)次之，比赛大概率在2-3球之间决出胜负。",
+          "half_full_time": "负/负3.25最低，平/负5.8次低，半全场数据依然倾向于客队最终拿下比赛。",
+          "external_market": "无外部数据，内部数据呈现出典型的分歧盘特征。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 0,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "普通胜平负客胜投票42%最高，但让球胜57%表明资金在受让盘面上更青睐主队。"
+        },
+        "contextual_logic": {
+          "league_style": "荷甲中游球队交手往往互有攻守，实力稍强的一方容易在僵持中把握机会。",
+          "team_style": "奈梅亨排名高且战意足，但客场防守并非滴水不漏；格罗宁根主场有一定抵抗力。",
+          "tempo": "medium",
+          "score_shape": "双方可能在上半场或大部分时间陷入僵局(1-1)，随后客队凭借实力优势打入制胜球(1-2)。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "主胜2.65赔率偏高，且半全场数据不支持主队取胜，主队近期状态低迷，不予考虑。",
+          "draw": "1-1是全场最低比分，平局风险极高，但综合1X2客胜占优及负/负半全场最低，最终博取客胜。",
+          "away": "未拒绝客胜，但明确拒绝客队大胜，受让盘口的大众倾向及1-1的低赔决定了客队最多赢一球。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "",
+          "search_queries": [
+            "Groningen NEC Nijmegen injuries"
+          ],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": true,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "C",
+          "is_recommended": true,
+          "top4_priority": 5,
+          "bet_confidence": 55,
+          "direction_stability": "weak",
+          "score_stability": "medium",
+          "risk_level": "high",
+          "risk_tags": [
+            "1-1全场最低比分",
+            "受让方热度高"
+          ],
+          "why_recommended": "虽然1-1赔率最低带来巨大平局风险，但1-2紧随其后且总进球3球模态支持分胜负，结合客队实力优势，谨慎推荐客胜，评级降为C。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部赔率",
+            "伤停确认"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场是典型的平局与客胜分歧盘。1-1与1-2赔率几乎持平，但半全场负/负最低及总进球3球模态为客胜提供了微弱的逻辑支撑，适合博取客队一球小胜。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 27,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 28.0,
+            "draw": 29.0,
+            "away": 43.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 15.0,
+              "logic": "1-2为客胜最低比分，仅略高于1-1，且贴合3球总进球最低模态。"
+            },
+            {
+              "score": "1-1",
+              "prob": 14.0,
+              "logic": "1-1为全场最低正确比分，说明平局阻力很强，是客胜方向的最大风险。"
+            },
+            {
+              "score": "0-1",
+              "prob": 10.0,
+              "logic": "若奈梅亨控制节奏并限制主队反击，0-1是客胜保守路径。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "竞彩客胜2.09低于主胜2.65，客队被定为优势方，但平赔3.65不低，倾向客队不败偏胜。",
+            "handicap": "主队受让一球，公众让球胜57%，说明很多资金认为主队最多小负或不败，客胜穿盘并不稳。",
+            "correct_score": "1-1为7.4最低，1-2为7.5几乎并列，显示市场在平局与客胜之间高度摇摆，客胜只略占优势。",
+            "total_goals": "3球最低，4球和2球接近，说明比赛并非低节奏死守，更像双方都有进球的2-1或1-2。",
+            "half_full_time": "负/负3.25最低，平/负5.8次低，半全场支持奈梅亨最终取胜，但上半场可能有僵持。",
+            "external_market": "无法联网检查外部欧赔或亚盘是否同步支持客胜；外部市场分歧未知。"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "普通胜平负投票客胜42%最高，但让球主胜57%说明公众更愿买主队受让；赔率平稳，无可审计锐利资金信号。"
+          },
+          "contextual_logic": {
+            "league_style": "荷甲中游对欧战竞争队比赛容易出现开放对攻，客队实力优势可转化为一球胜。",
+            "team_style": "格罗宁根主场并非完全无抵抗，奈梅亨排名和近期稳定性更好，但防线伤停使零封不稳。",
+            "tempo": "medium",
+            "score_shape": "客队优势有限，最像1-1僵持后由客队把握质量机会完成1-2。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主胜2-1赔率9.0并不离谱，但1X2客胜低位、负/负半全场最低，主胜缺乏主轴支持。",
+            "draw": "1-1是非常强的拒绝风险，甚至为最低比分；但客胜1X2与半全场均更偏奈梅亨，最终不选平。",
+            "away": "未否定客胜；客胜为最终方向，但只能定义为一球小胜，不支持大胜或穿盘。"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 5,
+            "bet_confidence": 58,
+            "direction_stability": "weak",
+            "score_stability": "medium",
+            "risk_level": "high",
+            "risk_tags": [
+              "1-1最低比分",
+              "受让方向公众支持强",
+              "客胜优势较薄"
+            ],
+            "why_recommended": "客胜在1X2和半全场中占优，1-2与1-1几乎同价，适合谨慎选择客胜小胜，风险明显高于强热门场。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔亚盘",
+              "赔率时间序列",
+              "确认伤停名单"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场是客胜与平局的典型分歧盘：1-1最低但1-2仅差0.1，半全场负/负最低增强客胜解释力。最终取奈梅亨1-2，但信心不高。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [
+              "格罗宁根 奈梅亨 欧赔 亚盘 即时赔率",
+              "Groningen NEC Nijmegen odds movement",
+              "Groningen NEC Nijmegen injuries lineups"
+            ],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网核对外部盘口与最新阵容，客胜判断仅来自竞彩赔率簇、比分簇和给定基本面。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 27,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 28.0,
+            "draw": 25.0,
+            "away": 47.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 15.0,
+              "logic": "客队实力占优，1-2赔率7.5最低"
+            },
+            {
+              "score": "0-1",
+              "prob": 12.0,
+              "logic": "客队客场防守稳健"
+            },
+            {
+              "score": "0-2",
+              "prob": 11.0,
+              "logic": "客队控场能力较强"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "客胜2.09最优",
+            "handicap": "让球1客胜平稳",
+            "correct_score": "1-2最优",
+            "total_goals": "3球最优",
+            "half_full_time": "负/负3.25最低",
+            "external_market": "无异动"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "away",
+            "sharp_confidence": 55,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "客胜投注42%，主胜34%"
+          },
+          "contextual_logic": {
+            "league_style": "荷甲中速",
+            "team_style": "客队排名高战意足",
+            "tempo": "medium",
+            "score_shape": "1-2最优",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主队状态低迷排名中游",
+            "draw": "平局赔率高且客队不败率高",
+            "away": "无需拒绝"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 3,
+            "bet_confidence": 48,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "客队主力伤停"
+            ],
+            "why_recommended": "客队排名与数据占优，1-2为最优解"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "奈梅亨排名第3战意足，格罗宁根状态低迷，1-2最优",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 27,
+            "critic_model": "gpt",
+            "target_findings": [
+              {
+                "target_model": "grok",
+                "issue_type": "score",
+                "severity": "high",
+                "comment": "1-2预测与1-1全场最低赔率7.4直接冲突，平局拦截力被严重低估"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "market",
+                "severity": "medium",
+                "comment": "客胜2.09低赔与让球胜57%公众投票方向相反，未做合理解释"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "risk",
+                "severity": "high",
+                "comment": "B级仍偏高，1-1与受让方向公众支持被低估，置信度58过乐观"
+              }
+            ],
+            "own_revision_hint": "建议降为C级或不推荐，优先考虑1-1保护或直接放弃"
+          }
+        ]
+      }
+    },
+    "28": {
+      "match": 28,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "away",
+      "raw_ai_direction": "away",
+      "predicted_score": "1-2",
+      "direction_probs": {
+        "home": 12.0,
+        "draw": 20.0,
+        "away": 68.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 18.0,
+          "logic": "1-2(6.25)为全场最低比分，既体现了阿森纳的实力碾压，又兼顾了西汉姆联保级战意下的主场进球可能。"
+        },
+        {
+          "score": "0-2",
+          "prob": 16.0,
+          "logic": "0-2(7.0)为次低比分，若阿森纳防守端专注度高，零封对手取胜是常规剧本。"
+        },
+        {
+          "score": "0-1",
+          "prob": 13.0,
+          "logic": "0-1(7.25)赔率同样较低，考虑到阿森纳可能存在的体能问题，经济实惠的小胜也在情理之中。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "客胜1.43处于绝对低位，主胜5.4与平4.1高企，市场对阿森纳取胜毫无疑义。",
+        "handicap": "主受让一球，让球胜与让球负同为37%，说明市场对阿森纳能否净胜两球存在分歧。",
+        "correct_score": "客胜比分1-2、0-2、0-1包揽前三低，方向性极强，且集中在小比分区间。",
+        "total_goals": "3球(3.45)最低，2球(3.6)紧随其后，进球数不会呈现一边倒的屠杀局面。",
+        "half_full_time": "负/负2.06极低，平/负4.1次之，阿森纳全场压制取胜是大概率事件。",
+        "external_market": "无外部数据，但竞彩内部数据已形成极强的客胜指向。"
+      },
+      "money_flow": {
+        "public_money_direction": "away",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 0,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众客胜投票高达62%，属于正路热门，无异常资金信号。"
+      },
+      "contextual_logic": {
+        "league_style": "英超争冠球队面对保级球队，通常能掌控比赛，但保级队的困兽犹斗常能制造进球。",
+        "team_style": "阿森纳攻防俱佳且争冠战意拉满，西汉姆联主场作战且急需保级分数，反击会有一定威胁。",
+        "tempo": "medium",
+        "score_shape": "阿森纳通过传控占据主动并取得领先，西汉姆联利用定位球或反击扳回一城，最终阿森纳1-2带走胜利。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "high"
+      },
+      "rejected_cases": {
+        "home": "主胜赔率高达5.4，双方实力差距悬殊，西汉姆联爆冷取胜的概率微乎其微。",
+        "draw": "1-1赔率7.75虽有一定防范，但阿森纳争冠不容有失，客胜1.43的低赔不支持平局打出。",
+        "away": "未拒绝客胜，但考虑到阿森纳的体能消耗及西汉姆联的保级战意，拒绝推荐大比分穿盘。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "",
+        "search_queries": [
+          "West Ham Arsenal injuries rotation"
+        ],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": [
+          "web_used_but_no_sources"
+        ]
+      },
+      "final_web_audit": {
+        "web_used_by_final": true,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "A",
+        "is_recommended": true,
+        "top4_priority": 1,
+        "bet_confidence": 75,
+        "direction_stability": "strong",
+        "score_stability": "medium",
+        "risk_level": "low",
+        "risk_tags": [
+          "阿森纳体能隐患",
+          "西汉姆保级反扑"
+        ],
+        "why_recommended": "客胜1.43低赔、1-2全场最低比分及负/负半全场形成强共振，阿森纳取胜毫无悬念，1-2是最兼顾双方战意的比分，评级为A。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部盘口",
+          "临场轮换信息"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "阿森纳在实力和战意上均呈碾压态势，各项市场数据高度统一指向客胜。考虑到西汉姆联的保级压力，1-2比0-2更符合比赛的潜在剧本。",
+      "validation_warnings": [
+        "web_used_but_no_sources"
+      ],
+      "raw_item": {
+        "match": 28,
+        "final_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 12,
+          "draw": 20,
+          "away": 68
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18,
+            "logic": "1-2(6.25)为全场最低比分，既体现了阿森纳的实力碾压，又兼顾了西汉姆联保级战意下的主场进球可能。"
+          },
+          {
+            "score": "0-2",
+            "prob": 16,
+            "logic": "0-2(7.0)为次低比分，若阿森纳防守端专注度高，零封对手取胜是常规剧本。"
+          },
+          {
+            "score": "0-1",
+            "prob": 13,
+            "logic": "0-1(7.25)赔率同样较低，考虑到阿森纳可能存在的体能问题，经济实惠的小胜也在情理之中。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "客胜1.43处于绝对低位，主胜5.4与平4.1高企，市场对阿森纳取胜毫无疑义。",
+          "handicap": "主受让一球，让球胜与让球负同为37%，说明市场对阿森纳能否净胜两球存在分歧。",
+          "correct_score": "客胜比分1-2、0-2、0-1包揽前三低，方向性极强，且集中在小比分区间。",
+          "total_goals": "3球(3.45)最低，2球(3.6)紧随其后，进球数不会呈现一边倒的屠杀局面。",
+          "half_full_time": "负/负2.06极低，平/负4.1次之，阿森纳全场压制取胜是大概率事件。",
+          "external_market": "无外部数据，但竞彩内部数据已形成极强的客胜指向。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 0,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众客胜投票高达62%，属于正路热门，无异常资金信号。"
+        },
+        "contextual_logic": {
+          "league_style": "英超争冠球队面对保级球队，通常能掌控比赛，但保级队的困兽犹斗常能制造进球。",
+          "team_style": "阿森纳攻防俱佳且争冠战意拉满，西汉姆联主场作战且急需保级分数，反击会有一定威胁。",
+          "tempo": "medium",
+          "score_shape": "阿森纳通过传控占据主动并取得领先，西汉姆联利用定位球或反击扳回一城，最终阿森纳1-2带走胜利。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "high"
+        },
+        "rejected_cases": {
+          "home": "主胜赔率高达5.4，双方实力差距悬殊，西汉姆联爆冷取胜的概率微乎其微。",
+          "draw": "1-1赔率7.75虽有一定防范，但阿森纳争冠不容有失，客胜1.43的低赔不支持平局打出。",
+          "away": "未拒绝客胜，但考虑到阿森纳的体能消耗及西汉姆联的保级战意，拒绝推荐大比分穿盘。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "",
+          "search_queries": [
+            "West Ham Arsenal injuries rotation"
+          ],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": true,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 75,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "low",
+          "risk_tags": [
+            "阿森纳体能隐患",
+            "西汉姆保级反扑"
+          ],
+          "why_recommended": "客胜1.43低赔、1-2全场最低比分及负/负半全场形成强共振，阿森纳取胜毫无悬念，1-2是最兼顾双方战意的比分，评级为A。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部盘口",
+            "临场轮换信息"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "阿森纳在实力和战意上均呈碾压态势，各项市场数据高度统一指向客胜。考虑到西汉姆联的保级压力，1-2比0-2更符合比赛的潜在剧本。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 28,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 14.0,
+            "draw": 22.0,
+            "away": 64.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 18.0,
+              "logic": "1-2为全场最低比分，既体现阿森纳客胜，又吸收西汉姆联保级战意带来的主队进球。"
+            },
+            {
+              "score": "0-2",
+              "prob": 16.0,
+              "logic": "0-2赔率7.0为客胜第二低，符合强弱差距和阿森纳控制比赛的常规路径。"
+            },
+            {
+              "score": "0-1",
+              "prob": 13.0,
+              "logic": "0-1赔率7.25，说明若赛程体能或客场谨慎影响进攻，阿森纳小胜也很合理。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "客胜1.43显著低位，主胜5.4与平4.1均处高位，市场强烈倾向阿森纳。",
+            "handicap": "西汉姆受让一球，公众让球胜与让球负均37%，表示阿森纳赢球方向强，但是否净胜两球存在分歧。",
+            "correct_score": "客胜比分包揽前3低位：1-2、0-2、0-1，主胜最低也到14.5，方向优势非常清晰。",
+            "total_goals": "3球3.45最低，2球3.6接近，说明最优解在1-2、0-2、0-1之间，不是无脑大球。",
+            "half_full_time": "负/负2.06最低，平/负4.1次低，支持阿森纳领先或下半场发力取胜。",
+            "external_market": "无法联网确认外部欧赔、亚盘和交易所成交；不能验证竞彩客胜1.43是否相对外盘偏低或偏高。"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众客胜62%，赔率平稳；热门方向与低赔一致，但无实时变化和外部成交数据，不能推断锐利资金。"
+          },
+          "contextual_logic": {
+            "league_style": "英超争冠队客战保级队常出现强队控球、弱队反击抢一球的形态。",
+            "team_style": "阿森纳整体攻防质量明显更高，西汉姆主场保级压力会提高对抗和反击投入。",
+            "tempo": "medium",
+            "score_shape": "阿森纳主导球权，西汉姆依靠定位球或转换进一球，最终客队2-1带走三分。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主胜赔率和比分簇均明显靠后，虽然保级战意强，但市场没有给出主胜结构支撑。",
+            "draw": "1-1赔率7.75是主要防范项，且西汉姆主场不败信息增加平局风险；但客胜比分簇过于集中，不选平。",
+            "away": "未否定客胜；客胜为最终方向，但体能与保级对抗使大胜不如1-2稳。"
+          },
+          "recommendation": {
+            "tier": "S",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 74,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "客胜大众热门",
+              "阿森纳赛程体能风险",
+              "西汉姆保级战意"
+            ],
+            "why_recommended": "客胜在1X2、正确比分前列和半全场中形成强一致，且总进球集中在2至3球，1-2为最优比分。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部亚盘水位",
+              "交易所资金",
+              "赛前首发轮换"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "阿森纳客胜结构最强：1.43低赔、客胜比分占据前3、负/负半全场最低。考虑西汉姆保级主场有进球可能，选择1-2而非0-2。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [
+              "西汉姆联 阿森纳 外部欧赔 亚盘 即时赔率",
+              "West Ham Arsenal odds movement exchange odds",
+              "West Ham Arsenal injuries rotation latest"
+            ],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网获取阿森纳欧战后轮换、外部盘口或交易所资金流；所有最新信息不可作为硬证据。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 28,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 15.0,
+            "draw": 22.0,
+            "away": 63.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 18.0,
+              "logic": "阿森纳实力碾压，1-2赔率6.25最低"
+            },
+            {
+              "score": "0-2",
+              "prob": 15.0,
+              "logic": "阿森纳客场零封概率高"
+            },
+            {
+              "score": "0-1",
+              "prob": 12.0,
+              "logic": "客队控场能力强"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "客胜1.43极低",
+            "handicap": "让球1客胜平稳",
+            "correct_score": "1-2最优",
+            "total_goals": "3球最优",
+            "half_full_time": "负/负2.06最低",
+            "external_market": "无异动"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "away",
+            "sharp_confidence": 75,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "客胜投注62%，主胜仅16%"
+          },
+          "contextual_logic": {
+            "league_style": "英超高强度",
+            "team_style": "客队争冠战意足",
+            "tempo": "high",
+            "score_shape": "1-2最优",
+            "btts_likelihood": "yes",
+            "rotation_risk": "high"
+          },
+          "rejected_cases": {
+            "home": "西汉姆保级但实力差距大",
+            "draw": "平局赔率高且阿森纳不败率高",
+            "away": "无需拒绝"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 4,
+            "bet_confidence": 68,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "阿森纳争冠战意强，1-2为最优解"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "阿森纳争冠，阿森纳客场虽一般但实力碾压，1-2最优",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 28,
+            "critic_model": "gpt",
+            "target_findings": [
+              {
+                "target_model": "grok",
+                "issue_type": "score",
+                "severity": "low",
+                "comment": "1-2与0-2、0-1簇合理，但体能风险与保级战意导致大胜概率被低估"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "risk",
+                "severity": "medium",
+                "comment": "S级推荐过高，阿森纳欧战后轮换与西汉姆保级反扑未充分量化"
+              }
+            ],
+            "own_revision_hint": "降为A级，0-2与1-2并列，增加体能风险标签"
+          }
+        ]
+      }
+    },
+    "29": {
+      "match": 29,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "2-1",
+      "direction_probs": {
+        "home": 45.0,
+        "draw": 30.0,
+        "away": 25.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 15.0,
+          "logic": "2-1(7.25)为全场最低比分，且契合3球总进球最低模态(3.55)，是主胜方向的最优表达。"
+        },
+        {
+          "score": "1-1",
+          "prob": 14.0,
+          "logic": "1-1(8.0)赔率极低，反映了科隆近期平局偏多以及海登海姆强烈的保级抢分意愿。"
+        },
+        {
+          "score": "2-2",
+          "prob": 11.0,
+          "logic": "2-2(9.75)赔率低于客胜比分，进一步凸显了本场比赛极高的平局风险和双方防线的脆弱。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "主胜1.82具备一定优势，但平赔3.85和客胜3.12并未完全封死客队拿分的可能。",
+        "handicap": "主让一球，公众让球负高达49%，市场对科隆净胜两球极度不看好，主胜只能是小胜。",
+        "correct_score": "2-1(7.25)最低，但1-1(8.0)和2-2(9.75)的低赔率形成了强大的平局牵制力。",
+        "total_goals": "3球(3.55)最低，4球(4.1)次之，预示着双方防线都难以保持清白，进球数偏多。",
+        "half_full_time": "主/主2.9最低，但负/负5.0和平/主5.15相距不远，比赛进程可能一波三折。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 0,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众主胜投票49%，但让球负同样49%，资金在盘口上存在巨大分歧，无明确锐利资金信号。"
+      },
+      "contextual_logic": {
+        "league_style": "德甲保级战往往伴随着高强度的对抗和较多的进球，防线失误率高。",
+        "team_style": "科隆主场作战但伤兵满营，海登海姆客场防守极差但保级战意爆棚。",
+        "tempo": "medium",
+        "score_shape": "双方互有攻守且均有失球，科隆凭借主场微弱优势在乱战中2-1险胜。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "high"
+      },
+      "rejected_cases": {
+        "home": "未拒绝主胜，但坚决拒绝主队大胜，科隆的伤停情况及让球负的高热度不支持穿盘。",
+        "draw": "平局风险极大（1-1和2-2赔率极低），但2-1作为全场最低比分及主/主半全场最低，使得主胜略占上风，平局作为首选防范。",
+        "away": "海登海姆客场战绩过于糟糕，且客胜比分赔率偏高，直接客胜难度较大。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "",
+        "search_queries": [
+          "Koln Heidenheim injuries"
+        ],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": [
+          "web_used_but_no_sources"
+        ]
+      },
+      "final_web_audit": {
+        "web_used_by_final": true,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "C",
+        "is_recommended": true,
+        "top4_priority": 6,
+        "bet_confidence": 50,
+        "direction_stability": "weak",
+        "score_stability": "medium",
+        "risk_level": "high",
+        "risk_tags": [
+          "平局赔率极低",
+          "主队伤停严重",
+          "保级队抢分拉力"
+        ],
+        "why_recommended": "虽然2-1是最低比分，但1-1和2-2的低赔率揭示了巨大的平局风险，结合科隆的伤停问题，本场主胜极不稳妥，评级降为C。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部赔率",
+          "伤停确切影响"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "本场比赛平局拉力极强，1-1和2-2的赔率对主胜构成了严重威胁。仅凭借2-1的微弱赔率优势博取主胜，风险较高，需谨慎对待。",
+      "validation_warnings": [
+        "web_used_but_no_sources"
+      ],
+      "raw_item": {
+        "match": 29,
+        "final_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 45,
+          "draw": 30,
+          "away": 25
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 15,
+            "logic": "2-1(7.25)为全场最低比分，且契合3球总进球最低模态(3.55)，是主胜方向的最优表达。"
+          },
+          {
+            "score": "1-1",
+            "prob": 14,
+            "logic": "1-1(8.0)赔率极低，反映了科隆近期平局偏多以及海登海姆强烈的保级抢分意愿。"
+          },
+          {
+            "score": "2-2",
+            "prob": 11,
+            "logic": "2-2(9.75)赔率低于客胜比分，进一步凸显了本场比赛极高的平局风险和双方防线的脆弱。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "主胜1.82具备一定优势，但平赔3.85和客胜3.12并未完全封死客队拿分的可能。",
+          "handicap": "主让一球，公众让球负高达49%，市场对科隆净胜两球极度不看好，主胜只能是小胜。",
+          "correct_score": "2-1(7.25)最低，但1-1(8.0)和2-2(9.75)的低赔率形成了强大的平局牵制力。",
+          "total_goals": "3球(3.55)最低，4球(4.1)次之，预示着双方防线都难以保持清白，进球数偏多。",
+          "half_full_time": "主/主2.9最低，但负/负5.0和平/主5.15相距不远，比赛进程可能一波三折。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 0,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众主胜投票49%，但让球负同样49%，资金在盘口上存在巨大分歧，无明确锐利资金信号。"
+        },
+        "contextual_logic": {
+          "league_style": "德甲保级战往往伴随着高强度的对抗和较多的进球，防线失误率高。",
+          "team_style": "科隆主场作战但伤兵满营，海登海姆客场防守极差但保级战意爆棚。",
+          "tempo": "medium",
+          "score_shape": "双方互有攻守且均有失球，科隆凭借主场微弱优势在乱战中2-1险胜。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "high"
+        },
+        "rejected_cases": {
+          "home": "未拒绝主胜，但坚决拒绝主队大胜，科隆的伤停情况及让球负的高热度不支持穿盘。",
+          "draw": "平局风险极大（1-1和2-2赔率极低），但2-1作为全场最低比分及主/主半全场最低，使得主胜略占上风，平局作为首选防范。",
+          "away": "海登海姆客场战绩过于糟糕，且客胜比分赔率偏高，直接客胜难度较大。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "",
+          "search_queries": [
+            "Koln Heidenheim injuries"
+          ],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": true,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "C",
+          "is_recommended": true,
+          "top4_priority": 6,
+          "bet_confidence": 50,
+          "direction_stability": "weak",
+          "score_stability": "medium",
+          "risk_level": "high",
+          "risk_tags": [
+            "平局赔率极低",
+            "主队伤停严重",
+            "保级队抢分拉力"
+          ],
+          "why_recommended": "虽然2-1是最低比分，但1-1和2-2的低赔率揭示了巨大的平局风险，结合科隆的伤停问题，本场主胜极不稳妥，评级降为C。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部赔率",
+            "伤停确切影响"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场比赛平局拉力极强，1-1和2-2的赔率对主胜构成了严重威胁。仅凭借2-1的微弱赔率优势博取主胜，风险较高，需谨慎对待。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 29,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 44.0,
+            "draw": 29.0,
+            "away": 27.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 15.0,
+              "logic": "2-1为最低正确比分，且与3球总进球最低模态一致，体现科隆主场一球优势。"
+            },
+            {
+              "score": "1-1",
+              "prob": 13.0,
+              "logic": "科隆平局属性强，1-1赔率8.0为第二低，是主胜方向最大拦截。"
+            },
+            {
+              "score": "2-2",
+              "prob": 10.0,
+              "logic": "2-2赔率9.75低于客胜1-2，反映双方防线问题和保级战意下的拉锯。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜1.82为优势位，但不算深盘；平3.85、客3.12显示海登海姆仍有抢分可能。",
+            "handicap": "科隆主让一球，公众让球负49%，说明市场普遍怀疑科隆净胜两球，主胜更多是小胜而非强胜。",
+            "correct_score": "2-1最低，1-1和2-2紧随，比分簇显示主胜倾向被平局强烈牵制。",
+            "total_goals": "3球最低、4球次低、2球第三，双方防线问题使比赛更容易落在3球附近。",
+            "half_full_time": "主/主2.9最低，但负/负5.0和平/主5.15接近，说明主胜路径有优势但不排除客队阶段性压制。",
+            "external_market": "无法联网核验题面提到的主胜升至1.9和客胜下调；不能将外部变动作为已验证硬证据。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "unclear",
+            "evidence": "公众主胜49%，但让球负49%显示对主队穿盘信心不足；题面有主胜走高描述但无可审计时间序列，因此不判定反向资金。"
+          },
+          "contextual_logic": {
+            "league_style": "德甲保级相关比赛对抗强、节奏可被战意拉高，防线失误常带来双方进球。",
+            "team_style": "科隆主场实力和排名占优但近期平局多，海登海姆保级急迫、客场防守差。",
+            "tempo": "medium",
+            "score_shape": "主队凭主场和客队客场防守漏洞占优，但自身伤停与制胜能力不足导致一球胜最合理。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未否定主胜；主胜为最终方向，但赔率不深且平局簇强，不支持高置信。",
+            "draw": "科隆近况多平且1-1、2-2都很低，平局非常接近；但2-1最低与主/主最低让主胜略优。",
+            "away": "海登海姆战意强且客胜赔率不算极高，但客场长期低迷、防守失球多，客胜不宜置顶。"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 4,
+            "bet_confidence": 57,
+            "direction_stability": "weak",
+            "score_stability": "medium",
+            "risk_level": "high",
+            "risk_tags": [
+              "平局簇强",
+              "主队伤停风险",
+              "保级队抢分动机",
+              "让球负热"
+            ],
+            "why_recommended": "2-1最低比分与3球模态支持科隆小胜，但平局风险非常实质，推荐等级只能为B。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部赔率时间点",
+              "伤停来源核验",
+              "临场首发"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "科隆主胜并非稳胆，关键在于2-1成为最低比分且主/主最低；但1-1、2-2价格很低，说明市场对科隆赢球能力有怀疑，最终只取小胜。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [
+              "科隆 海登海姆 欧赔 亚盘 赔率变化",
+              "Koln Heidenheim odds movement Asian handicap",
+              "Koln Heidenheim injuries lineups latest"
+            ],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网验证外部赔率变化、伤停严重程度和盘口分歧；仅使用竞彩抓包和题面上下文。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 29,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 52.0,
+            "draw": 26.0,
+            "away": 22.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 16.0,
+              "logic": "主队主场略占优，2-1赔率7.25最低"
+            },
+            {
+              "score": "1-1",
+              "prob": 13.0,
+              "logic": "双方均易丢球"
+            },
+            {
+              "score": "2-0",
+              "prob": 11.0,
+              "logic": "主队控场能力较强"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜1.82支持主队不败",
+            "handicap": "让球-1主胜平稳",
+            "correct_score": "2-1最优",
+            "total_goals": "3球最优",
+            "half_full_time": "主/主2.9最低",
+            "external_market": "无异动"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 50,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "主胜投注49%，客胜28%"
+          },
+          "contextual_logic": {
+            "league_style": "德甲中高节奏",
+            "team_style": "主队略占优但伤停多",
+            "tempo": "medium",
+            "score_shape": "2-1最优",
+            "btts_likelihood": "yes",
+            "rotation_risk": "high"
+          },
+          "rejected_cases": {
+            "home": "无需拒绝",
+            "draw": "平局概率高但主队略优",
+            "away": "客队客场极差"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 5,
+            "bet_confidence": 45,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "主队伤停严重"
+            ],
+            "why_recommended": "主队主场略优，2-1为最优解"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "科隆主场略占优，海登海姆客场极差，2-1最优",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 29,
+            "critic_model": "gpt",
+            "target_findings": [
+              {
+                "target_model": "grok",
+                "issue_type": "score",
+                "severity": "high",
+                "comment": "2-1预测与1-1、2-2低赔率簇冲突，平局与双方进球风险被低估"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "market",
+                "severity": "medium",
+                "comment": "主胜1.82与让球负49%高投票矛盾，伤停严重未在赔率结构中体现"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "risk",
+                "severity": "high",
+                "comment": "B级仍偏高，平局拦截力与保级队抢分动机未充分反映"
+              }
+            ],
+            "own_revision_hint": "改为C级，优先1-1或2-2保护，2-1仅作边缘选项"
+          }
+        ]
+      }
+    },
+    "30": {
+      "match": 30,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "away",
+      "raw_ai_direction": "away",
+      "predicted_score": "0-2",
+      "direction_probs": {
+        "home": 15.0,
+        "draw": 25.0,
+        "away": 60.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "2",
+      "btts": "no",
+      "top3": [
+        {
+          "score": "0-2",
+          "prob": 17.0,
+          "logic": "0-2(6.5)为客胜次低比分，且完美契合总进球2球的最低模态(3.35)，是罗马客胜的最均衡表达。"
+        },
+        {
+          "score": "0-1",
+          "prob": 16.0,
+          "logic": "0-1(5.5)为全场最低比分，反映了意甲典型的低进球节奏及罗马可能采取的保守策略。"
+        },
+        {
+          "score": "1-1",
+          "prob": 13.0,
+          "logic": "1-1(7.0)赔率较低，是本场最大的防范点，体现了帕尔马的主场韧性及罗马客场的不稳定性。"
+        }
+      ],
+      "market_interpretation": {
+        "one_x_two": "客胜1.40处于绝对低位，主胜6.05和平4.0高企，机构对罗马取胜给予了极高信任。",
+        "handicap": "主受让一球，让球胜36%与让球负37%势均力敌，市场对罗马能否净胜两球存在分歧。",
+        "correct_score": "0-1(5.5)和0-2(6.5)占据前两低，比分结构高度集中于客队零封小胜。",
+        "total_goals": "2球(3.35)最低，3球(3.65)次之，比赛大概率在低进球区间内决出胜负。",
+        "half_full_time": "负/负1.95极低，平/负3.95次之，罗马全场掌控比赛的概率极大。"
+      },
+      "money_flow": {
+        "public_money_direction": "away",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 0,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众客胜投票63%，属于正常的热门追捧，无外部数据佐证锐利资金动向。"
+      },
+      "contextual_logic": {
+        "league_style": "意甲强弱对话中，强队领先后往往会降低节奏控制比赛，导致总进球数偏低。",
+        "team_style": "罗马争夺欧战资格战意强烈，但锋线有伤停隐患；帕尔马保级无忧，主场以防守反击为主。",
+        "tempo": "low",
+        "score_shape": "罗马通过实力优势打破僵局，随后控制节奏，最终以0-2的比分稳妥带走三分。",
+        "btts_likelihood": "no",
+        "rotation_risk": "medium"
+      },
+      "rejected_cases": {
+        "home": "主胜赔率高达6.05，帕尔马缺乏足够的战意和实力去爆冷击败急需抢分的罗马。",
+        "draw": "1-1(7.0)存在一定风险，但客胜1.40的低赔及负/负1.95的半全场数据使得平局只能作为次选防范。",
+        "away": "未拒绝客胜，但拒绝客队大比分获胜（如0-3），因为总进球2球模态及罗马的伤停情况不支持大胜。"
+      },
+      "web_research": {
+        "used": true,
+        "failure_reason": "",
+        "search_queries": [
+          "Parma Roma injuries"
+        ],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": [
+          "web_used_but_no_sources"
+        ]
+      },
+      "final_web_audit": {
+        "web_used_by_final": true,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "A",
+        "is_recommended": true,
+        "top4_priority": 3,
+        "bet_confidence": 72,
+        "direction_stability": "strong",
+        "score_stability": "medium",
+        "risk_level": "low",
+        "risk_tags": [
+          "罗马客场不稳",
+          "1-1平局防范"
+        ],
+        "why_recommended": "客胜1.40低赔、负/负半全场极低，结合总进球2球模态，0-2是最符合各项数据共振点的比分，客胜逻辑坚实，评级为A。"
+      },
+      "data_quality": {
+        "missing": [
+          "外部盘口",
+          "伤停确切名单"
+        ],
+        "raw_packet_quality": "high"
+      },
+      "reason": "罗马在实力和战意上均占据明显优势，1.40的客胜赔率给出了强力支撑。考虑到意甲的低进球特征及2球总进球模态，0-2比0-1更具均衡性，是本场的最优解。",
+      "validation_warnings": [
+        "web_used_but_no_sources"
+      ],
+      "raw_item": {
+        "match": 30,
+        "final_direction": "away",
+        "predicted_score": "0-2",
+        "direction_probs": {
+          "home": 15,
+          "draw": 25,
+          "away": 60
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 17,
+            "logic": "0-2(6.5)为客胜次低比分，且完美契合总进球2球的最低模态(3.35)，是罗马客胜的最均衡表达。"
+          },
+          {
+            "score": "0-1",
+            "prob": 16,
+            "logic": "0-1(5.5)为全场最低比分，反映了意甲典型的低进球节奏及罗马可能采取的保守策略。"
+          },
+          {
+            "score": "1-1",
+            "prob": 13,
+            "logic": "1-1(7.0)赔率较低，是本场最大的防范点，体现了帕尔马的主场韧性及罗马客场的不稳定性。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "客胜1.40处于绝对低位，主胜6.05和平4.0高企，机构对罗马取胜给予了极高信任。",
+          "handicap": "主受让一球，让球胜36%与让球负37%势均力敌，市场对罗马能否净胜两球存在分歧。",
+          "correct_score": "0-1(5.5)和0-2(6.5)占据前两低，比分结构高度集中于客队零封小胜。",
+          "total_goals": "2球(3.35)最低，3球(3.65)次之，比赛大概率在低进球区间内决出胜负。",
+          "half_full_time": "负/负1.95极低，平/负3.95次之，罗马全场掌控比赛的概率极大。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 0,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众客胜投票63%，属于正常的热门追捧，无外部数据佐证锐利资金动向。"
+        },
+        "contextual_logic": {
+          "league_style": "意甲强弱对话中，强队领先后往往会降低节奏控制比赛，导致总进球数偏低。",
+          "team_style": "罗马争夺欧战资格战意强烈，但锋线有伤停隐患；帕尔马保级无忧，主场以防守反击为主。",
+          "tempo": "low",
+          "score_shape": "罗马通过实力优势打破僵局，随后控制节奏，最终以0-2的比分稳妥带走三分。",
+          "btts_likelihood": "no",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "主胜赔率高达6.05，帕尔马缺乏足够的战意和实力去爆冷击败急需抢分的罗马。",
+          "draw": "1-1(7.0)存在一定风险，但客胜1.40的低赔及负/负1.95的半全场数据使得平局只能作为次选防范。",
+          "away": "未拒绝客胜，但拒绝客队大比分获胜（如0-3），因为总进球2球模态及罗马的伤停情况不支持大胜。"
+        },
+        "web_research": {
+          "used": true,
+          "failure_reason": "",
+          "search_queries": [
+            "Parma Roma injuries"
+          ],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "final_web_audit": {
+          "web_used_by_final": true,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        },
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 3,
+          "bet_confidence": 72,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "low",
+          "risk_tags": [
+            "罗马客场不稳",
+            "1-1平局防范"
+          ],
+          "why_recommended": "客胜1.40低赔、负/负半全场极低，结合总进球2球模态，0-2是最符合各项数据共振点的比分，客胜逻辑坚实，评级为A。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部盘口",
+            "伤停确切名单"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "罗马在实力和战意上均占据明显优势，1.40的客胜赔率给出了强力支撑。考虑到意甲的低进球特征及2球总进球模态，0-2比0-1更具均衡性，是本场的最优解。"
+      },
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 30,
+          "final_direction": "away",
+          "predicted_score": "0-2",
+          "direction_probs": {
+            "home": 13.0,
+            "draw": 25.0,
+            "away": 62.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "2",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "0-2",
+              "prob": 17.0,
+              "logic": "0-2为客胜第二低比分，且总进球2球为最低模态，比0-1更符合罗马优势与进球分布。"
+            },
+            {
+              "score": "0-1",
+              "prob": 16.0,
+              "logic": "0-1为全场最低正确比分，体现罗马客胜但节奏偏低的意甲形态。"
+            },
+            {
+              "score": "1-1",
+              "prob": 12.0,
+              "logic": "1-1与1-2同为7.0，显示帕尔马主场韧性和罗马客场不稳带来的平局风险。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "客胜1.40为强低赔，主胜6.05、平4.0均处高位，罗马方向优势明显。",
+            "handicap": "帕尔马受让一球，让球胜36%、让球负37%接近，说明市场对罗马是否净胜两球分歧较大。",
+            "correct_score": "0-1最低、0-2次低，1-1和1-2并列随后，客胜集中但低比分特征明显。",
+            "total_goals": "2球赔率3.35最低，3球3.65次之，意甲节奏和罗马伤病背景使2球区间更优。",
+            "half_full_time": "负/负1.95最低，平/负3.95次低，市场明显支持罗马全场取胜，且存在上半场僵持后客胜。",
+            "external_market": "无法联网核对外部欧赔、亚盘、交易所或伤停新闻；不使用未经来源确认的最新消息。"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众客胜63%，竞彩客胜低位且平稳；缺少外部水位与成交，无法判断是否有锐利资金或反向拉升。"
+          },
+          "contextual_logic": {
+            "league_style": "意甲强弱分明场常呈低总进球控制局，领先方会降低节奏。",
+            "team_style": "罗马整体实力和战意占优，帕尔马主场韧性较强但进攻效率有限，客队更可能零封或小胜。",
+            "tempo": "low",
+            "score_shape": "罗马通过控场和定位球/阵地战取得优势，2球总量下0-2比1-1更符合客胜低赔。",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主胜6.05且主胜比分整体靠后，帕尔马主场韧性不足以覆盖方向劣势。",
+            "draw": "1-1赔率7.0是显著风险，罗马客场不稳也支持防平；但客胜1.40、负/负1.95使平局只能作为保护项。",
+            "away": "未否定客胜；客胜为最终方向，但因罗马进攻伤病和意甲节奏，不选择大比分。"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 6,
+            "bet_confidence": 68,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "客胜热度高",
+              "罗马客场不稳",
+              "低比分容错较低"
+            ],
+            "why_recommended": "客胜方向在1X2、半全场、正确比分簇中一致性较强；总进球2球模态明确，0-2为方向与总量的均衡点。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部赔率对照",
+              "交易所资金流",
+              "赛前首发与伤停来源"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "罗马客胜是主轴，但比分不宜拉大。0-1最低显示保守胜，2球总进球最低则把0-2推为更均衡的预测比分；平局1-1是主要拒绝风险。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [
+              "帕尔马 罗马 欧赔 亚盘 即时赔率",
+              "Parma Roma odds movement Asian handicap",
+              "Parma Roma injuries lineups latest"
+            ],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网确认罗马锋线伤停、外部盘口和临场阵容；本预测只依据竞彩抓包赔率簇与给定文本。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 30,
+          "final_direction": "away",
+          "predicted_score": "0-1",
+          "direction_probs": {
+            "home": 14.0,
+            "draw": 23.0,
+            "away": 63.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "0-1",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "0-1",
+              "prob": 19.0,
+              "logic": "罗马客场防守稳，0-1赔率5.5最低"
+            },
+            {
+              "score": "0-2",
+              "prob": 15.0,
+              "logic": "罗马控场能力强"
+            },
+            {
+              "score": "1-2",
+              "prob": 12.0,
+              "logic": "帕尔马主场有反击可能"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "客胜1.4极低",
+            "handicap": "让球1客胜平稳",
+            "correct_score": "0-1最优",
+            "total_goals": "2球最优",
+            "half_full_time": "负/负1.95最低",
+            "external_market": "无异动"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "away",
+            "sharp_confidence": 72,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "客胜投注63%，主胜仅15%"
+          },
+          "contextual_logic": {
+            "league_style": "意甲低节奏",
+            "team_style": "客队争欧战战意足",
+            "tempo": "low",
+            "score_shape": "0-1最优",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "帕尔马实力差距大",
+            "draw": "平局赔率高且罗马不败率高",
+            "away": "无需拒绝"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 6,
+            "bet_confidence": 66,
+            "direction_stability": "strong",
+            "score_stability": "strong",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "罗马客场防守稳，0-1为最优解"
+          },
+          "data_quality": {
+            "missing": [],
+            "raw_packet_quality": "high"
+          },
+          "reason": "罗马争欧战，帕尔马保级无忧，0-1最优",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": [
+          {
+            "match": 30,
+            "critic_model": "gpt",
+            "target_findings": [
+              {
+                "target_model": "grok",
+                "issue_type": "score",
+                "severity": "medium",
+                "comment": "0-2与总进球2球最低模态一致，但罗马锋线伤停与客场不稳未在比分中体现"
+              },
+              {
+                "target_model": "grok",
+                "issue_type": "risk",
+                "severity": "medium",
+                "comment": "A级推荐偏高，1-1与1-2同为7.0的平局风险被低估"
+              }
+            ],
+            "own_revision_hint": "降为B级，0-1与0-2并列，增加罗马伤停导致低进球风险标签"
+          }
+        ]
+      }
+    }
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "phase1",
+        "elapsed": 94.7,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.5",
+      "critic": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "critic",
+        "elapsed": 39.2,
+        "status": "ok"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.5",
+        "phase": "consistency",
+        "elapsed": 20.8,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 55.1,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 16.6,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 103.0,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}
