@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿量化足球 vMAX 20.2.0</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>小鱼儿量化足球 vMAX 20.2.1-FULL</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -12,155 +12,178 @@
   --red:#ff4d5a;--gn:#00e08e;--bl:#4d8aff;--am:#ffb020;--pr:#b366ff;--cy:#00d4e0;--pk:#ff5ca0;--or:#ff8030;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;font-size:13px}
+html{background:var(--bg)}
+body{
+  font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;
+  background:var(--bg);color:var(--tx);
+  -webkit-font-smoothing:antialiased;
+  font-size:13px;
+  padding-bottom:env(safe-area-inset-bottom);
+}
 .m{font-family:'IBM Plex Mono',monospace}
 
-.hdr{position:sticky;top:0;z-index:99;background:rgba(8,9,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);height:46px;display:flex;align-items:center;padding:0 16px}
-.hdr-w{max-width:1280px;margin:0 auto;width:100%;display:flex;justify-content:space-between;align-items:center}
-.hdr-l{display:flex;align-items:center;gap:8px}
-.hdr-logo{width:6px;height:22px;background:linear-gradient(180deg,var(--gn),var(--bl));border-radius:1px}
-.hdr-t{font-family:'IBM Plex Sans';font-size:14px;font-weight:800;color:var(--w);letter-spacing:1px}
-.hdr-v{font-size:9px;color:var(--gn);background:#00e08e15;padding:2px 6px;border-radius:3px;font-family:'IBM Plex Mono';border:1px solid #00e08e30;font-weight:700}
-.live{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t2)}
-.live-d{width:5px;height:5px;border-radius:50%;background:var(--gn);animation:p 2s infinite}
+.hdr{
+  position:sticky;top:0;z-index:99;
+  background:rgba(8,9,14,.96);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--bd);
+  min-height:58px;display:flex;align-items:center;
+  padding:0 14px;padding-top:env(safe-area-inset-top);
+}
+.hdr-w{max-width:1280px;margin:0 auto;width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hdr-l{display:flex;align-items:center;gap:8px;min-width:0}
+.hdr-logo{width:6px;height:28px;background:linear-gradient(180deg,var(--gn),var(--bl));border-radius:1px;flex:0 0 auto}
+.hdr-t{font-family:'IBM Plex Sans';font-size:18px;font-weight:900;color:var(--w);letter-spacing:2px;white-space:nowrap}
+.hdr-v{font-size:10px;color:var(--gn);background:#00e08e15;padding:4px 8px;border-radius:4px;font-family:'IBM Plex Mono';border:1px solid #00e08e30;font-weight:800;white-space:nowrap}
+.live{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t2);white-space:nowrap}
+.live-d{width:6px;height:6px;border-radius:50%;background:var(--gn);animation:p 2s infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.2}}
 
-.wrap{max-width:1280px;margin:0 auto;padding:10px 12px}
+.wrap{max-width:1280px;margin:0 auto;padding:12px 12px}
 
-.dash{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:14px}
-.dc{background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:8px 10px;position:relative;overflow:hidden}
+.dash{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:14px}
+.dc{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;position:relative;overflow:hidden}
 .dc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gn)}
 .dc.t::before{background:var(--am)}.dc.r::before{background:var(--red)}.dc.b::before{background:var(--bl)}.dc.p::before{background:var(--pr)}.dc.c::before{background:var(--cy)}
-.dc-v{font-family:'IBM Plex Mono';font-size:20px;font-weight:700;line-height:1}
-.dc-l{font-size:8px;color:var(--t3);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.dc-v{font-family:'IBM Plex Mono';font-size:22px;font-weight:800;line-height:1}
+.dc-l{font-size:8px;color:var(--t3);margin-top:5px;text-transform:uppercase;letter-spacing:.5px}
 
-.sec{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.sec-t{font-size:13px;font-weight:800;color:var(--w)}
-.sec-b{background:var(--am);color:#000;font-size:7px;font-weight:800;padding:2px 5px;border-radius:2px}
-.sec-i{font-size:9px;color:var(--t2);margin-left:auto}
+.sec{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.sec-t{font-size:14px;font-weight:900;color:var(--w)}
+.sec-b{background:var(--am);color:#000;font-size:8px;font-weight:900;padding:2px 6px;border-radius:3px}
+.sec-i{font-size:10px;color:var(--t2);margin-left:auto}
 
-.today-pill{display:flex;align-items:center;gap:6px;justify-content:center;margin:0 auto 14px;background:var(--s1);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;max-width:520px;flex-wrap:wrap}
+.today-pill{
+  display:flex;align-items:center;gap:6px;justify-content:center;
+  margin:0 auto 14px;background:var(--s1);border:1px solid var(--bd);
+  border-radius:7px;padding:8px 10px;max-width:520px
+}
 .today-pill strong{color:var(--gn);font-size:11px}
 .today-pill span{font-size:9px;color:var(--t2)}
 
-.t4g{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:5px;margin-bottom:14px}
-.t4{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:12px;position:relative;cursor:pointer;transition:.15s;overflow:hidden}
+.t4g{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:7px;margin-bottom:14px}
+.t4{background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:12px;position:relative;cursor:pointer;transition:.15s;overflow:hidden}
 .t4:hover{border-color:var(--am);transform:translateY(-1px)}
 .t4-bar{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--am),var(--red))}
-.t4-rank{position:absolute;top:8px;right:8px;font-family:'IBM Plex Mono';font-size:18px;font-weight:700;color:var(--am);opacity:.3}
-.t4-lg{font-size:9px;color:var(--am);font-weight:700;margin-bottom:4px;max-width:85%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.t4-teams{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.t4-tn{font-size:12px;font-weight:700;color:var(--w);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t4-rank{position:absolute;top:8px;right:8px;font-family:'IBM Plex Mono';font-size:20px;font-weight:800;color:var(--am);opacity:.28}
+.t4-lg{font-size:10px;color:var(--am);font-weight:800;margin-bottom:5px}
+.t4-teams{display:flex;align-items:center;gap:6px;margin-bottom:9px}
+.t4-tn{font-size:13px;font-weight:800;color:var(--w);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .t4-tn:last-child{text-align:right}
-.t4-vs{font-size:8px;color:var(--t3);font-weight:800}
-.t4-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px}
-.t4-c{text-align:center;background:var(--bg);border-radius:3px;padding:4px;min-width:0}
+.t4-vs{font-size:8px;color:var(--t3);font-weight:900}
+.t4-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
+.t4-c{text-align:center;background:var(--bg);border-radius:4px;padding:5px}
 .t4-cl{font-size:7px;color:var(--t3)}
-.t4-cv{font-family:'IBM Plex Mono';font-size:11px;font-weight:700;color:var(--w);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.t4-ft{font-size:9px;color:var(--or);margin-top:6px;font-weight:600;display:flex;flex-wrap:wrap;gap:3px}
-.t4-ftag{padding:1px 4px;border-radius:2px;font-size:8px}
+.t4-cv{font-family:'IBM Plex Mono';font-size:12px;font-weight:800;color:var(--w)}
+.t4-ft{font-size:9px;color:var(--or);margin-top:7px;font-weight:700;display:flex;flex-wrap:wrap;gap:4px}
+.t4-ftag{padding:2px 5px;border-radius:3px;font-size:8px}
 
-.mc{background:var(--s1);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:7px}
-.mc.rec{border-color:var(--am);box-shadow:0 0 0 1px #ffb02020}
-.mc.s{border-color:var(--gn);box-shadow:0 0 0 1px #00e08e18}
+.mc{background:var(--s1);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.mc.rec{border-color:var(--am);box-shadow:0 0 0 1px #ffb02025}
+.mc.s{border-color:var(--gn);box-shadow:0 0 0 1px #00e08e22}
 .mc.a{border-color:var(--am)}
-.mc-h{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;background:var(--bg);border-bottom:1px solid var(--bd);gap:6px;flex-wrap:wrap}
-.mc-lg{font-size:10px;color:var(--bl);font-weight:700}
-.mc-badge{background:var(--am);color:#000;font-size:7px;font-weight:800;padding:1px 4px;border-radius:2px;margin-left:4px}
-.mc-eng{font-size:8px;color:var(--gn);background:#00e08e10;padding:2px 5px;border-radius:2px;font-family:'IBM Plex Mono';border:1px solid #00e08e25}
-.mc-b{padding:12px}
+.mc-h{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--bd);gap:8px;flex-wrap:wrap}
+.mc-lg{font-size:11px;color:var(--bl);font-weight:900}
+.mc-badge{background:var(--am);color:#000;font-size:8px;font-weight:900;padding:2px 5px;border-radius:3px;margin-left:5px}
+.mc-eng{font-size:9px;color:var(--gn);background:#00e08e10;padding:3px 6px;border-radius:3px;font-family:'IBM Plex Mono';border:1px solid #00e08e25;font-weight:700}
+.mc-b{padding:14px 12px}
 
-.teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .tm{width:35%;text-align:center;min-width:0}
-.tm-n{font-size:13px;font-weight:700;color:var(--w);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sc-c{text-align:center;width:30%;min-width:96px}
-.sc-big{font-family:'IBM Plex Mono';font-size:28px;font-weight:700;color:var(--gn);line-height:1;white-space:nowrap}
-.sc-sub{font-family:'IBM Plex Mono';font-size:9px;color:var(--t3);margin-top:2px}
-.res-tag{display:inline-block;font-size:8px;padding:2px 6px;border-radius:2px;font-weight:700;margin-top:3px}
+.tm-n{font-size:15px;font-weight:900;color:var(--w);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc-c{text-align:center}
+.sc-big{font-family:'IBM Plex Mono';font-size:38px;font-weight:900;color:var(--gn);line-height:1}
+.sc-sub{font-family:'IBM Plex Mono';font-size:10px;color:var(--t3);margin-top:2px}
+.res-tag{display:inline-block;font-size:9px;padding:3px 7px;border-radius:3px;font-weight:900;margin-top:5px}
 .res-tag.h{background:#ff4d5a18;color:var(--red)}
 .res-tag.d{background:#ffb02018;color:var(--am)}
 .res-tag.a{background:#4d8aff18;color:var(--bl)}
-.res-tag.x{background:#64748b18;color:var(--t2)}
 
-.sr{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:8px}
-.sb{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:5px;text-align:center;min-width:0}
-.sb-l{font-size:7px;color:var(--t3);text-transform:uppercase;white-space:nowrap}
-.sb-v{font-family:'IBM Plex Mono';font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sr{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:10px}
+.sb{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:8px 6px;text-align:center}
+.sb-l{font-size:8px;color:var(--t3);text-transform:uppercase}
+.sb-v{font-family:'IBM Plex Mono';font-size:15px;font-weight:900;margin-top:3px}
 
-.prob{margin-bottom:8px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px 10px}
-.prob-h{display:flex;justify-content:space-between;font-size:9px;font-weight:700;margin-bottom:3px}
-.prob-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;background:var(--s2)}
+.prob{margin-bottom:12px;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:8px 10px}
+.prob-h{display:flex;justify-content:space-between;font-size:10px;font-weight:900;margin-bottom:5px}
+.prob-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--s2)}
 .prob-bar .h{background:var(--red)}.prob-bar .d{background:#64748b}.prob-bar .a{background:var(--bl)}
 
-.block{margin-bottom:10px;border-radius:8px;overflow:hidden;background:linear-gradient(135deg,#0e1118,#0a0d14);border:1px solid var(--bd2)}
-.block-h{padding:6px 10px;background:linear-gradient(90deg,#00e08e15,#4d8aff10);border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
-.block-t{font-size:10px;font-weight:800;color:var(--gn);letter-spacing:.5px}
+.block{margin-bottom:12px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#0e1118,#0a0d14);border:1px solid var(--bd2)}
+.block-h{padding:8px 10px;background:linear-gradient(90deg,#00e08e15,#4d8aff10);border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px}
+.block-t{font-size:12px;font-weight:900;color:var(--gn);letter-spacing:.4px}
 .block-meta{font-family:'IBM Plex Mono';font-size:9px;color:var(--t2)}
-.block-b{padding:8px 10px}
+.block-b{padding:10px}
 
-.sel-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:8px}
-.sel{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px;text-align:center;min-width:0}
-.sel-l{font-size:7px;color:var(--t3);text-transform:uppercase;white-space:nowrap}
-.sel-v{font-family:'IBM Plex Mono';font-size:12px;font-weight:800;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sel-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px}
+.sel{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:8px;text-align:center}
+.sel-l{font-size:8px;color:var(--t3);text-transform:uppercase}
+.sel-v{font-family:'IBM Plex Mono';font-size:15px;font-weight:900;margin-top:3px}
 .tier-S{color:var(--gn)}.tier-A{color:var(--am)}.tier-B{color:var(--bl)}.tier-C{color:var(--cy)}.tier-D{color:var(--red)}
 
-.sl{font-size:8px;color:var(--t3);font-weight:700;margin:6px 0 3px;padding-bottom:2px;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px}
+.sl{font-size:9px;color:var(--t3);font-weight:900;margin:8px 0 5px;padding-bottom:3px;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px}
 
-.warn{padding:5px 8px;border-radius:4px;font-size:9px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:4px;background:#ff4d5a0a;border:1px solid #ff4d5a20;color:var(--red)}
-.sig{padding:5px 8px;border-radius:4px;font-size:9px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:4px;line-height:1.45}
+.warn{padding:7px 9px;border-radius:5px;font-size:10px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:4px;background:#ff4d5a0a;border:1px solid #ff4d5a20;color:var(--red)}
+.sig{padding:7px 9px;border-radius:5px;font-size:10px;font-weight:800;margin-bottom:5px;display:flex;align-items:center;gap:4px;line-height:1.45;word-break:break-word}
 .sig-r{background:#ff4d5a0a;border:1px solid #ff4d5a20;color:var(--red)}
 .sig-a{background:#ffb0200a;border:1px solid #ffb02020;color:var(--am)}
 .sig-g{background:#00e08e0a;border:1px solid #00e08e20;color:var(--gn)}
 .sig-b{background:#4d8aff0a;border:1px solid #4d8aff20;color:var(--bl)}
 .sig-p{background:#b366ff0a;border:1px solid #b366ff20;color:var(--pr)}
+.sig-c{background:#00d4e00a;border:1px solid #00d4e020;color:var(--cy)}
 
-.ai-box{border:1px solid var(--am);border-radius:6px;overflow:hidden;margin-bottom:5px;background:linear-gradient(135deg,rgba(255,176,32,.04),rgba(255,80,48,.02))}
-.ai-h{padding:6px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,176,32,.15)}
-.ai-t{font-size:11px;font-weight:800;color:var(--am)}
-.ai-s{font-family:'IBM Plex Mono';font-size:14px;font-weight:700;color:var(--w);background:var(--s2);padding:1px 6px;border-radius:3px}
-.ai-x{font-size:11px;color:var(--tx);line-height:1.6;padding:10px;letter-spacing:0.3px;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow:auto}
+.ai-box{border:1px solid var(--am);border-radius:8px;overflow:hidden;margin-bottom:8px;background:linear-gradient(135deg,rgba(255,176,32,.04),rgba(255,80,48,.02))}
+.ai-h{padding:8px 10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,176,32,.15)}
+.ai-t{font-size:13px;font-weight:900;color:var(--am)}
+.ai-s{font-family:'IBM Plex Mono';font-size:17px;font-weight:900;color:var(--w);background:var(--s2);padding:2px 8px;border-radius:4px}
+.ai-x{font-size:13px;color:var(--tx);line-height:1.65;padding:12px;letter-spacing:.2px;white-space:pre-wrap;word-break:break-word}
 
-.ai3{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:5px}
-.ai3.ai2{grid-template-columns:1fr 1fr}
-.ai3-c{padding:7px;background:var(--bg);border-right:1px solid var(--bd);min-width:0}
-.ai3-c:last-child{border:none}
-.ai3-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:4px}
-.ai3-t{font-size:9px;font-weight:800;white-space:nowrap}
-.ai3-t.gpt{color:var(--gn)}.ai3-t.grk{color:var(--cy)}.ai3-t.gem{color:var(--bl)}
-.ai3-s{font-family:'IBM Plex Mono';font-size:10px;font-weight:700;color:var(--w);background:var(--s2);padding:2px 4px;border-radius:2px;white-space:nowrap}
-.ai3-x{font-size:8px;color:var(--t2);line-height:1.4;white-space:pre-wrap;word-break:break-word;max-height:130px;overflow:auto}
+.ai2{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:8px}
+.ai2-c{padding:9px;background:var(--bg);border-right:1px solid var(--bd)}
+.ai2-c:last-child{border:none}
+.ai2-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.ai2-t{font-size:10px;font-weight:900}
+.ai2-t.gpt{color:var(--gn)}.ai2-t.grk{color:var(--cy)}
+.ai2-s{font-family:'IBM Plex Mono';font-size:12px;font-weight:900;color:var(--w);background:var(--s2);padding:2px 5px;border-radius:3px}
+.ai2-x{font-size:9px;color:var(--t2);line-height:1.5;white-space:pre-wrap;word-break:break-word}
 
-.tbtn{width:100%;padding:5px;background:none;border:1px solid var(--bd);border-radius:4px;color:var(--t2);font-size:10px;cursor:pointer;font-weight:600;transition:.15s;font-family:'IBM Plex Sans','Noto Sans SC'}
+.tbtn{width:100%;padding:8px;background:none;border:1px solid var(--bd);border-radius:6px;color:var(--t2);font-size:11px;cursor:pointer;font-weight:800;transition:.15s;font-family:'IBM Plex Sans','Noto Sans SC'}
 .tbtn:hover{background:var(--s2);color:var(--w)}
-.det{display:none;padding:0 12px 12px}
+.det{display:none;padding:0 12px 14px}
 .det.open{display:block}
 
-.mg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:6px}
-.mb{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:6px;position:relative;overflow:hidden}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.mb{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:8px;position:relative;overflow:hidden}
 .mb::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gn)}
-.mb-t{font-size:8px;font-weight:700;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px;color:var(--gn)}
-.mb-r{display:flex;justify-content:space-between;font-size:8px;padding:1px 0;gap:8px}
-.mb-l{color:var(--t3);white-space:nowrap}
-.mb-v{font-family:'IBM Plex Mono';font-weight:600;color:var(--w);font-size:8px;text-align:right;word-break:break-word}
-.chip{display:inline-block;background:var(--s2);border:1px solid var(--bd);padding:1px 4px;border-radius:2px;font-size:7px;font-family:'IBM Plex Mono';color:var(--t2);margin:1px;word-break:break-all}
+.mb-t{font-size:10px;font-weight:900;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px;color:var(--gn)}
+.mb-r{display:flex;justify-content:space-between;font-size:9px;padding:2px 0;gap:10px}
+.mb-l{color:var(--t3)}
+.mb-v{font-family:'IBM Plex Mono';font-weight:800;color:var(--w);font-size:9px;text-align:right;word-break:break-word}
+.chip{display:inline-block;background:var(--s2);border:1px solid var(--bd);padding:3px 6px;border-radius:4px;font-size:9px;font-family:'IBM Plex Mono';color:var(--t2);margin:2px}
 .chip.top{border-color:var(--gn);color:var(--gn)}
 
-.foot{text-align:center;padding:14px;color:var(--t3);font-size:7px;border-top:1px solid var(--bd);margin-top:16px;line-height:1.6}
-.empty{text-align:center;padding:40px;color:var(--t3)}
+.json-box{background:#0b101a;border:1px solid #20304a;color:#5792ff;border-radius:6px;padding:9px;margin-bottom:7px;font-family:'IBM Plex Mono';font-size:10px;line-height:1.45;white-space:pre-wrap;word-break:break-word;max-height:260px;overflow:auto}
+.foot{text-align:center;padding:16px;color:var(--t3);font-size:8px;border-top:1px solid var(--bd);margin-top:16px;line-height:1.7}
+.empty{text-align:center;padding:42px 14px;color:var(--t3)}
 
 @media(max-width:760px){
+  .hdr{min-height:56px}
+  .hdr-t{font-size:17px;letter-spacing:1px}
+  .live{font-size:10px}
   .dash{grid-template-columns:repeat(3,1fr)}
-  .sr{grid-template-columns:repeat(3,1fr)}
+  .sr{grid-template-columns:repeat(2,1fr)}
   .sel-grid{grid-template-columns:repeat(2,1fr)}
   .mg{grid-template-columns:1fr}
-  .ai3{grid-template-columns:1fr}
-  .ai3-c{border-right:none;border-bottom:1px solid var(--bd)}
+  .ai2{grid-template-columns:1fr}
+  .ai2-c{border-right:none;border-bottom:1px solid var(--bd)}
+  .ai2-c:last-child{border-bottom:none}
   .t4g{grid-template-columns:1fr}
 }
 @media(max-width:480px){
+  .wrap{padding:12px 10px}
   .dash{grid-template-columns:repeat(2,1fr)}
-  .sr{grid-template-columns:repeat(2,1fr)}
-  .sc-big{font-size:24px}
+  .tm-n{font-size:14px}
+  .sc-big{font-size:35px}
+  .sel-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -171,7 +194,7 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
     <div class="hdr-l">
       <div class="hdr-logo"></div>
       <div class="hdr-t">小鱼儿量化足球 vMAX</div>
-      <div class="hdr-v" id="ver">vMAX 20.2.0</div>
+      <div class="hdr-v" id="ver">20.2.1-FULL</div>
     </div>
     <div class="live"><div class="live-d"></div><span class="m" id="ut">…</span></div>
   </div>
@@ -182,22 +205,22 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 
   <div class="sec">
     <div class="sec-t">今日精选推荐</div>
-    <div class="sec-b">3AI Gemini裁判</div>
+    <div class="sec-b">GPT/GROK 初审 · GEMINI 终审</div>
     <div class="sec-i" id="t4ic"></div>
   </div>
   <div class="t4g" id="t4"></div>
 
   <div class="today-pill">
     <strong>今日竞彩业务日</strong>
-    <span id="scopeInfo">今天</span>
+    <span id="scopeInfo">today only</span>
   </div>
 
   <div id="ms"></div>
 
   <div class="foot">
-    vMAX 20.2.0 · AI-NATIVE WEB-AUGMENTED · GPT/Grok 初审 · Gemini 终审<br>
-    本地只做协议层、分批、解析、字段闭环和前端兼容；方向、比分、推荐等级均由 AI 输出<br>
-    默认 production 低成本模式：GPT/Grok 初审 + Gemini 裁判，batch=10；重点场次可单独增强复核
+    vMAX 20.2.1-FULL · AI-NATIVE 三AI架构 · GPT/Grok 初审 · Gemini 终审裁判<br>
+    Claude 已移除 · 本地只做抓包 / 调用 / JSON解析 / 字段闭环 / 前端展示，不篡改最终比分<br>
+    总进球锚点 · CRS正确比分 · 让球形态 · 联赛风格 · 资金流 / Sharp / Web Research 审计
   </div>
 </div>
 
@@ -206,11 +229,11 @@ var D=null;
 
 function esc(s){
   if(s===null||s===undefined)return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function V(v, fallback='?'){
-  return (v!==null&&v!==undefined&&v!==''&&v!=='None'&&v!=='null') ? v : fallback;
+  return (v!==null&&v!==undefined&&v!==''&&v!=='None') ? v : fallback;
 }
 
 function num(v, d=0){
@@ -224,21 +247,9 @@ function fmt1(v){
 }
 
 function validScore(s){
-  if(s===null||s===undefined)return false;
-  s=String(s).trim();
   if(!s)return false;
-
-  var bad=[
-    '-','?','弃权','N/A','None','null','undefined',
-    '见阶段快照','阶段快照','暂无','暂无解析',
-    '该模型本轮未返回可展示分析','AI终审已给出结构化预测'
-  ];
-  if(bad.indexOf(s)>=0)return false;
-  if(/见阶段|快照|placeholder|stage/i.test(s))return false;
-
-  if(/^\d{1,2}\s*[-:：]\s*\d{1,2}$/.test(s))return true;
-  if(/^(胜其他|平其他|负其他)$/.test(s))return true;
-  return false;
+  s=String(s).trim();
+  return !(s===''||s==='-'||s==='?'||s==='弃权'||s==='N/A'||s==='None'||s==='移除');
 }
 
 function cl(t){
@@ -247,12 +258,12 @@ function cl(t){
 }
 
 function resultClass(r){
-  return r==='主胜'?'h':r==='平局'?'d':r==='客胜'?'a':'x';
+  return r==='主胜'?'h':r==='平局'?'d':'a';
 }
 
 function confidenceColor(c){
   c=num(c,0);
-  return c>=70?'color:var(--gn)':c>=55?'color:var(--am)':'color:var(--red)';
+  return c>=75?'color:var(--gn)':c>=60?'color:var(--am)':'color:var(--red)';
 }
 
 function tierClass(t){
@@ -261,23 +272,9 @@ function tierClass(t){
   return 'tier-'+t;
 }
 
-function tierValue(t){
+function tierScore(t){
   t=String(t||'D').toUpperCase();
   return {S:5,A:4,B:3,C:2,D:1}[t]||1;
-}
-
-function getRec(p){
-  return (p && p.recommendation && typeof p.recommendation==='object') ? p.recommendation : {};
-}
-
-function getTier(p){
-  var r=getRec(p);
-  return String(r.tier || p.recommendation_tier || p.direction_tier || 'D').toUpperCase();
-}
-
-function getBetConfidence(p){
-  var r=getRec(p);
-  return num(r.bet_confidence!==undefined ? r.bet_confidence : (p.overall_selection_score!==undefined ? p.overall_selection_score : p.confidence), 0);
 }
 
 function matchKey(m){
@@ -287,39 +284,26 @@ function matchKey(m){
 
 function getTodayMatches(d){
   if(!d)return [];
-  if(d.matches){
-    if(Array.isArray(d.matches.today))return d.matches.today;
-    if(Array.isArray(d.matches.list))return d.matches.list;
-    if(Array.isArray(d.matches.data))return d.matches.data;
-    if(Array.isArray(d.matches.items))return d.matches.items;
-    if(Array.isArray(d.matches))return d.matches;
-  }
+  if(d.matches && Array.isArray(d.matches.today))return d.matches.today;
   if(Array.isArray(d.today))return d.today;
-  if(Array.isArray(d.results))return d.results;
-  if(Array.isArray(d.res))return d.res;
-  if(Array.isArray(d.data))return d.data;
-  if(Array.isArray(d.items))return d.items;
+  if(Array.isArray(d.matches))return d.matches;
   return [];
 }
 
 function DS(p){
-  var candidates=[p.predicted_score,p.final_referee_score,p.final_ai_score,p.gemini_score,p.predicted_label];
-  for(var i=0;i<candidates.length;i++){
-    if(validScore(candidates[i]))return String(candidates[i]).trim();
-  }
-  return '弃权';
+  if(validScore(p.predicted_score))return p.predicted_score;
+  if(validScore(p.gemini_score))return p.gemini_score;
+  if(validScore(p.predicted_label))return p.predicted_label;
+  return '?';
+}
+
+function finalReason(p){
+  return p.final_audit_reason || p.reason || p.gemini_analysis || '';
 }
 
 function getBttsLabel(p){
-  var v = p.btts_ai || p.btts || p.ai_btts || p.btts_label || p.btts_decision;
-  if(v===true)return 'yes';
-  if(v===false)return 'no';
-  if(v!==undefined && v!==null){
-    v=String(v).trim();
-    if(v==='是')return 'yes';
-    if(v==='否')return 'no';
-    if(['yes','no','unclear'].indexOf(v)>=0)return v;
-  }
+  var v = p.btts_ai || p.ai_btts || p.btts_label || p.btts_decision || p.btts;
+  if(v!==undefined && v!==null && String(v).trim()!=='')return String(v);
   return '?';
 }
 
@@ -335,71 +319,29 @@ function getProb(p){
   return {h:Math.max(0,hp),d:Math.max(0,dp),a:Math.max(0,ap)};
 }
 
-function displayWarning(w){
-  if(w===null||w===undefined)return '';
-  var s=String(w).trim();
-  if(!s)return '';
-  if(/missing_published_at/i.test(s))return '';
-  if(/^source_\d+_/i.test(s))return '';
-  if(/web_research.*source/i.test(s))return '';
-  if(/no_web_capability|no_web_tool|AI_MOCK_MODE/i.test(s))return '';
-  if(/stage_snapshot|phase_snapshot|raw_saved/i.test(s))return '';
-  return s;
-}
-
 function getWarnings(p){
   var arr=[];
-  [
-    'score_shape_warnings',
-    'selection_warnings',
-    'validation_warnings',
-    'postprocess_warnings',
-    'recommend_gate_reasons',
-    'recommendation_downgrade_reasons'
-  ].forEach(function(k){
-    var v=p[k];
-    if(Array.isArray(v)){
-      v.forEach(function(x){var s=displayWarning(x); if(s)arr.push(s);});
-    }else{
-      var s=displayWarning(v); if(s)arr.push(s);
-    }
+  ['risk_flags','score_shape_warnings','selection_warnings','validation_warnings','postprocess_warnings'].forEach(function(k){
+    if(Array.isArray(p[k]))arr=arr.concat(p[k]);
+    else if(p[k])arr.push(p[k]);
   });
-
-  if(Array.isArray(p.experience_review_missing) && p.experience_review_missing.length){
-    arr.push('experience_review_missing: '+p.experience_review_missing.join(','));
-  }else if(typeof p.experience_review_missing==='string' && p.experience_review_missing.trim()){
-    arr.push('experience_review_missing: '+p.experience_review_missing);
-  }
-
-  return Array.from(new Set(arr));
+  return arr.filter(function(x,i,a){return x && a.indexOf(x)===i;});
 }
 
 function aiOk(p){
-  return validScore(p.predicted_score)
-      || validScore(p.final_ai_score)
-      || validScore(p.gpt_score)
-      || validScore(p.grok_score)
-      || validScore(p.gemini_score);
+  return validScore(p.gpt_score)||validScore(p.grok_score)||validScore(p.gemini_score)||validScore(p.predicted_score);
 }
 
-function getModelScore(p, name){
-  var v=p[name+'_score'];
-  return validScore(v)?v:'弃权';
+function objText(o){
+  if(o===null||o===undefined||o==='')return '';
+  if(typeof o==='string')return o;
+  try{return JSON.stringify(o,null,2);}catch(e){return String(o);}
 }
 
-function getModelAnalysis(p, name){
-  var v=p[name+'_analysis'];
-  if(v && !/见阶段|快照|placeholder/i.test(String(v)))return v;
-  return '该模型本轮无可展示分析，或已由 Gemini 终审吸收。';
-}
-
-function getRuntimeValue(keys, fallback){
-  var rt=(D&&D.runtime)||{};
-  for(var i=0;i<keys.length;i++){
-    if(rt[keys[i]]!==undefined && rt[keys[i]]!==null && rt[keys[i]]!=='')return rt[keys[i]];
-    if(D && D[keys[i]]!==undefined && D[keys[i]]!==null && D[keys[i]]!=='')return D[keys[i]];
-  }
-  return fallback;
+function getRecommendation(p){
+  var r=p.recommendation||{};
+  if(!r || typeof r!=='object')r={};
+  return r;
 }
 
 fetch('data/predictions.json?t='+Date.now())
@@ -409,48 +351,49 @@ fetch('data/predictions.json?t='+Date.now())
   })
   .then(function(d){
     D=d;
-    document.getElementById('ut').textContent=d.update_time||d.updated_at||'数据已最新';
-    document.getElementById('ver').textContent=d.engine_version||d.version||'vMAX 20.2.0';
-    var mode=getRuntimeValue(['ai_research_mode','research_mode'],'production');
-    var batch=getRuntimeValue(['ai_batch_size','chunk_size'],'10');
-    var conc=getRuntimeValue(['ai_model_concurrency','model_concurrency'],'1');
-    var web=getRuntimeValue(['ai_native_web','web_mode'],'false');
-    document.getElementById('scopeInfo').textContent='mode='+mode+' · batch='+batch+' · model_concurrency='+conc+' · web='+web;
+    document.getElementById('ut').textContent=d.update_time||'数据已最新';
+    document.getElementById('ver').textContent=d.version||'20.2.1-FULL';
+    var rt=d.runtime||{};
+    document.getElementById('scopeInfo').textContent=
+      'batch='+V(rt.ai_batch_size,'?')+
+      ' · model_concurrency='+V(rt.ai_model_concurrency,'?')+
+      ' · final=Gemini';
     renderDashboard();
-    renderTop4(d.top4||d.recommendations||[]);
+    renderTop4(d.top4||[]);
     renderMatches();
   })
   .catch(function(e){
     console.error('加载失败:',e);
-    document.getElementById('ms').innerHTML='<div class="empty">等待数据同步或解析失败<br><span style="font-size:10px;opacity:.5">'+esc(e.message)+'</span></div>';
+    document.getElementById('ms').innerHTML='<div class="empty">等待数据同步或解析失败<br><span style="font-size:10px;opacity:.55">'+esc(e.message)+'</span></div>';
   });
 
 function renderDashboard(){
   var ms=getTodayMatches(D);
   var total=ms.length;
-  var cf=0, recCount=0, webCount=0, sTier=0, abTier=0;
+  var cf=0, ds=0, ss=0, aiCount=0, sTier=0, abTier=0;
 
   ms.forEach(function(m){
     var p=m.prediction||{};
-    var r=getRec(p);
-    cf+=getBetConfidence(p);
-    if(aiOk(p))recCount++;
-    if(p.web_research && p.web_research.used)webCount++;
-    var tier=getTier(p);
+    cf+=num(p.ai_avg_confidence||p.confidence,0);
+    ds+=num(p.direction_selection_score||p.ai_avg_confidence,0);
+    ss+=num(p.score_shape_score||p.ai_avg_confidence,0);
+    if(aiOk(p))aiCount++;
+    var tier=String(p.recommendation_tier||p.direction_tier||'').toUpperCase();
     if(tier==='S')sTier++;
     if(tier==='A'||tier==='B')abTier++;
   });
 
   var avgCf=total?Math.round(cf/total):0;
-  var t4n=(D.top4||D.recommendations||[]).length;
+  var avgDs=total?Math.round(ds/total):0;
+  var avgSs=total?Math.round(ss/total):0;
 
   document.getElementById('db').innerHTML=
     '<div class="dc"><div class="dc-v" style="color:var(--am)">'+total+'</div><div class="dc-l">今日赛事</div></div>'+
-    '<div class="dc t"><div class="dc-v" style="color:var(--gn)">'+t4n+'</div><div class="dc-l">精选</div></div>'+
+    '<div class="dc t"><div class="dc-v" style="color:var(--gn)">'+(D.top4?D.top4.length:0)+'</div><div class="dc-l">精选</div></div>'+
     '<div class="dc r"><div class="dc-v" style="color:var(--gn)">'+sTier+'</div><div class="dc-l">S级</div></div>'+
     '<div class="dc p"><div class="dc-v" style="color:var(--am)">'+abTier+'</div><div class="dc-l">A/B级</div></div>'+
-    '<div class="dc c"><div class="dc-v" style="color:var(--cy)">'+avgCf+'</div><div class="dc-l">AI推荐均分</div></div>'+
-    '<div class="dc b"><div class="dc-v" style="color:var(--bl)">'+webCount+'</div><div class="dc-l">联网资料</div></div>';
+    '<div class="dc c"><div class="dc-v" style="color:var(--cy)">'+avgDs+'</div><div class="dc-l">方向分</div></div>'+
+    '<div class="dc b"><div class="dc-v" style="color:var(--bl)">'+avgSs+'</div><div class="dc-l">比分形态</div></div>';
 }
 
 function renderTop4(t4){
@@ -465,18 +408,16 @@ function renderTop4(t4){
 
   el.innerHTML=t4.map(function(m,i){
     var p=m.prediction||{};
-    var rec=getRec(p);
     var key=matchKey(m);
-    var tier=getTier(p);
-    var conf=getBetConfidence(p);
+    var tier=String(p.recommendation_tier||p.direction_tier||'D').toUpperCase();
+    var rec=getRecommendation(p);
     var ft='';
 
-    ft+='<span class="t4-ftag" style="background:#00e08e15;color:var(--gn)">评级 '+esc(tier)+'</span>';
-    ft+='<span class="t4-ftag" style="background:#4d8aff15;color:var(--bl)">AI分 '+fmt1(conf)+'</span>';
-    if(rec.direction_stability)ft+='<span class="t4-ftag" style="background:#00d4e015;color:var(--cy)">方向 '+esc(rec.direction_stability)+'</span>';
-    if(rec.score_stability)ft+='<span class="t4-ftag" style="background:#b366ff15;color:var(--pr)">比分 '+esc(rec.score_stability)+'</span>';
-    if(Array.isArray(rec.risk_tags)&&rec.risk_tags.length)ft+='<span class="t4-ftag" style="background:#ffb02015;color:var(--am)">风险 '+rec.risk_tags.length+'</span>';
-    if(getWarnings(p).length)ft+='<span class="t4-ftag" style="background:#ff4d5a15;color:var(--red)">警告 '+getWarnings(p).length+'</span>';
+    if(tier)ft+='<span class="t4-ftag" style="background:#00e08e15;color:var(--gn)">评级 '+esc(tier)+'</span>';
+    if(p.ai_avg_confidence!==undefined)ft+='<span class="t4-ftag" style="background:#4d8aff15;color:var(--bl)">AI '+fmt1(p.ai_avg_confidence)+'</span>';
+    if(p.direction_stability)ft+='<span class="t4-ftag" style="background:#b366ff15;color:var(--pr)">方向 '+esc(p.direction_stability)+'</span>';
+    if(p.score_stability)ft+='<span class="t4-ftag" style="background:#00d4e015;color:var(--cy)">比分 '+esc(p.score_stability)+'</span>';
+    if(getWarnings(p).length)ft+='<span class="t4-ftag" style="background:#ff4d5a15;color:var(--red)">风险 '+getWarnings(p).length+'</span>';
 
     return '<div class="t4" onclick="go(\'m-'+key+'\')">'+
       '<div class="t4-bar"></div>'+
@@ -488,44 +429,41 @@ function renderTop4(t4){
         '<div class="t4-c"><div class="t4-cl">结果</div><div class="t4-cv">'+esc(p.result||'?')+'</div></div>'+
         '<div class="t4-c"><div class="t4-cl">推荐层</div><div class="t4-cv '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
       '</div>'+
+      (rec.why_recommended?'<div class="t4-ft"><span class="t4-ftag" style="background:#4d8aff15;color:var(--bl)">'+esc(rec.why_recommended).slice(0,80)+'</span></div>':'')+
       (ft?'<div class="t4-ft">'+ft+'</div>':'')+
     '</div>';
   }).join('');
 }
 
 function renderSelectionBlock(p){
-  var rec=getRec(p);
-  var tier=getTier(p);
-  var conf=getBetConfidence(p);
+  var tier=String(p.recommendation_tier||p.direction_tier||'D').toUpperCase();
+  var dt=String(p.direction_stability||p.direction_tier||'medium');
+  var st=String(p.score_stability||p.score_tier||'medium');
+  var rec=getRecommendation(p);
   var warnings=getWarnings(p);
-  var riskTags=Array.isArray(rec.risk_tags)?rec.risk_tags:[];
-  var why=rec.why_recommended || p.ai_native_reason || p.score_shape_reason || '';
 
   var warnHtml='';
   if(warnings.length){
-    warnHtml='<div class="sl">⚠️ 需要注意</div>'+warnings.slice(0,8).map(function(w){return '<div class="warn">'+esc(w)+'</div>';}).join('');
-  }
-
-  var riskHtml='';
-  if(riskTags.length){
-    riskHtml='<div class="sl">风险标签</div>'+riskTags.slice(0,10).map(function(x){return '<span class="chip">'+esc(x)+'</span>';}).join('');
+    warnHtml='<div class="sl">⚠️ 风险标签 / 降级原因</div>'+
+      warnings.slice(0,12).map(function(w){return '<div class="warn">'+esc(w)+'</div>';}).join('');
   }
 
   return '<div class="block">'+
     '<div class="block-h">'+
       '<div class="block-t">🎯 AI-NATIVE 推荐结论</div>'+
-      '<div class="block-meta">推荐等级由AI输出，本地只做展示</div>'+
+      '<div class="block-meta">Gemini终审输出 · 本地只做展示</div>'+
     '</div>'+
     '<div class="block-b">'+
       '<div class="sel-grid">'+
-        '<div class="sel"><div class="sel-l">推荐层</div><div class="sel-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
-        '<div class="sel"><div class="sel-l">AI推荐分</div><div class="sel-v '+tierClass(tier)+'">'+fmt1(conf)+'</div></div>'+
-        '<div class="sel"><div class="sel-l">方向稳定</div><div class="sel-v">'+esc(V(rec.direction_stability,'?'))+'</div></div>'+
-        '<div class="sel"><div class="sel-l">比分稳定</div><div class="sel-v">'+esc(V(rec.score_stability,'?'))+'</div></div>'+
+        '<div class="sel"><div class="sel-l">综合推荐</div><div class="sel-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">AI推荐分</div><div class="sel-v '+tierClass(tier)+'">'+fmt1(p.ai_avg_confidence||p.confidence)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">方向稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(dt)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">比分稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(st)+'</div></div>'+
         '<div class="sel"><div class="sel-l">形态</div><div class="sel-v">'+esc(V(p.goal_band,'?'))+' · '+esc(getBttsLabel(p))+'</div></div>'+
       '</div>'+
-      (why?'<div class="sig sig-b">推荐理由：'+esc(why)+'</div>':'')+
-      riskHtml+
+      (rec.why_recommended?'<div class="sig sig-b">推荐理由：'+esc(rec.why_recommended)+'</div>':'')+
+      (rec.stake_style?'<div class="sig sig-a">仓位风格：'+esc(rec.stake_style)+'</div>':'')+
+      (p.why_recommended?'<div class="sig sig-b">推荐说明：'+esc(p.why_recommended)+'</div>':'')+
       warnHtml+
     '</div>'+
   '</div>';
@@ -533,64 +471,74 @@ function renderSelectionBlock(p){
 
 function renderAiBlock(p){
   return '<div class="ai-box">'+
-    '<div class="ai-h"><div class="ai-t">👑 GEMINI 终审裁判</div><div class="ai-s">'+esc(getModelScore(p,'gemini'))+'</div></div>'+
-    '<div class="ai-x">'+cl(p.gemini_analysis||p.final_referee_analysis||p.final_ai_analysis||p.reason||getRec(p).why_recommended)+'</div>'+
+    '<div class="ai-h"><div class="ai-t">👑 GEMINI 终审裁判</div><div class="ai-s">'+esc(p.gemini_score||p.predicted_score||'弃权')+'</div></div>'+
+    '<div class="ai-x">'+cl(finalReason(p))+'</div>'+
   '</div>'+
-  '<div class="ai3 ai2">'+
-    '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT初审</span><span class="ai3-s">'+esc(getModelScore(p,'gpt'))+'</span></div><div class="ai3-x">'+cl(getModelAnalysis(p,'gpt'))+'</div></div>'+
-    '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">GROK初审</span><span class="ai3-s">'+esc(getModelScore(p,'grok'))+'</span></div><div class="ai3-x">'+cl(getModelAnalysis(p,'grok'))+'</div></div>'+
+  '<div class="ai2">'+
+    '<div class="ai2-c"><div class="ai2-h"><span class="ai2-t gpt">GPT 初审</span><span class="ai2-s">'+esc(p.gpt_score||'弃权')+'</span></div><div class="ai2-x">'+cl(p.gpt_analysis)+'</div></div>'+
+    '<div class="ai2-c"><div class="ai2-h"><span class="ai2-t grk">GROK 初审</span><span class="ai2-s">'+esc(p.grok_score||'弃权')+'</span></div><div class="ai2-x">'+cl(p.grok_analysis)+'</div></div>'+
   '</div>';
 }
 
 function renderSignals(p){
   var html='';
-  var rec=getRec(p);
-  var money=(p.money_flow && typeof p.money_flow==='object') ? p.money_flow : {};
-  var market=(p.market_interpretation && typeof p.market_interpretation==='object') ? p.market_interpretation : {};
-  var web=(p.web_research && typeof p.web_research==='object') ? p.web_research : {};
-  var finalWeb=(p.final_web_audit && typeof p.final_web_audit==='object') ? p.final_web_audit : {};
+  var mi=p.market_interpretation||{};
+  var aa=p.anchor_audit||{};
+  var web=p.web_research||{};
+  var sigs=p.smart_signals||[];
 
-  if(money.sharp_money_direction){
-    html+='<div class="sig sig-g">Sharp方向：'+esc(money.sharp_money_direction)+' '+esc(money.evidence||'')+'</div>';
-  }else if(p.sharp_money_direction){
-    html+='<div class="sig sig-g">Sharp方向：'+esc(p.sharp_money_direction)+' '+esc(p.sharp_evidence||'')+'</div>';
-  }
+  if(mi.sharp_money_direction)html+='<div class="sig sig-g">Sharp方向：'+esc(mi.sharp_money_direction)+' '+esc(mi.external_market||'')+'</div>';
+  if(mi.public_money_direction)html+='<div class="sig sig-a">散户方向：'+esc(mi.public_money_direction)+'</div>';
+  if(mi.heat_risk)html+='<div class="sig sig-a">热度风险：'+esc(mi.heat_risk)+'</div>';
 
-  if(money.public_money_direction){
-    html+='<div class="sig sig-a">散户方向：'+esc(money.public_money_direction)+'</div>';
-  }
-  if(market.one_x_two){html+='<div class="sig sig-b">1X2结构：'+esc(market.one_x_two)+'</div>';}
-  if(market.correct_score){html+='<div class="sig sig-b">比分赔率结构：'+esc(market.correct_score)+'</div>';}
-  if(market.total_goals){html+='<div class="sig sig-b">总进球结构：'+esc(market.total_goals)+'</div>';}
+  if(aa.one_x_two)html+='<div class="sig sig-b">1X2结构：'+esc(aa.one_x_two)+'</div>';
+  if(aa.handicap)html+='<div class="sig sig-b">让球结构：'+esc(aa.handicap)+'</div>';
+  if(aa.total_goals)html+='<div class="sig sig-b">总进球结构：'+esc(aa.total_goals)+'</div>';
+  if(aa.correct_score)html+='<div class="sig sig-b">比分赔率结构：'+esc(aa.correct_score)+'</div>';
+  if(aa.league_style)html+='<div class="sig sig-c">联赛/球队风格：'+esc(aa.league_style)+'</div>';
+  if(aa.exclusion)html+='<div class="sig sig-p">排除法：'+esc(aa.exclusion)+'</div>';
 
-  if(web.used){
-    var cnt=Array.isArray(web.sources)?web.sources.length:0;
-    html+='<div class="sig sig-p">联网资料：已使用 · sources='+cnt+' · freshness='+esc(web.freshness_grade||'?')+'</div>';
-  }else if(web.failure_reason){
-    html+='<div class="sig sig-a">联网状态：'+esc(web.failure_reason)+'</div>';
-  }
-  if(finalWeb.web_used_by_final!==undefined){
-    html+='<div class="sig sig-p">终审联网采纳：'+esc(finalWeb.web_used_by_final?'yes':'no')+' · confidence='+esc(V(finalWeb.web_confidence,'?'))+'</div>';
+  if(web.used===false){
+    html+='<div class="sig sig-a">联网状态：'+esc(web.failure_reason||'no_live_web_access')+'</div>';
+  }else if(web.used===true){
+    html+='<div class="sig sig-g">联网核验：'+esc((web.key_findings||[]).join('；')||'已使用')+'</div>';
   }
 
-  if(Array.isArray(rec.risk_tags)){
-    rec.risk_tags.slice(0,8).forEach(function(s){html+='<div class="sig sig-a">风险：'+esc(s)+'</div>';});
-  }
+  var seen={};
+  sigs.forEach(function(s){
+    if(!s||seen[s])return;
+    seen[s]=1;
+    var cls='sig-a';
+    var txt=String(s);
+    if(txt.indexOf('FINAL_SOURCE')>=0)cls='sig-p';
+    if(txt.indexOf('Sharp')>=0||txt.indexOf('Steam')>=0||txt.indexOf('聪明钱')>=0)cls='sig-g';
+    if(txt.indexOf('价值')>=0||txt.indexOf('EV')>=0)cls='sig-p';
+    if(txt.indexOf('警')>=0||txt.indexOf('🚨')>=0||txt.indexOf('冲突')>=0||txt.indexOf('风险')>=0)cls='sig-r';
+    html+='<div class="sig '+cls+'">'+esc(txt)+'</div>';
+  });
 
   return html;
 }
 
 function renderDetails(m,p){
-  var top=p.top_score_candidates||p.unified_matrix_top_scores||p.top3||[];
-  var ev=p.bayesian_evidences||p.ai_evidences||p.evidences||[];
-  var web=(p.web_research && typeof p.web_research==='object') ? p.web_research : {};
+  var top=p.top_score_candidates||p.unified_matrix_top_scores||[];
+  var aa=p.anchor_audit||{};
+  var mi=p.market_interpretation||{};
+  var web=p.web_research||{};
+  var rec=p.recommendation||{};
   var odds=[
     ['体彩主胜',m.sp_home||m.win],
     ['体彩平局',m.sp_draw||m.same],
     ['体彩客胜',m.sp_away||m.lose],
     ['让球',m.give_ball||m.handicap||m.rq],
-    ['总进球0',m.a0],['总进球1',m.a1],['总进球2',m.a2],['总进球3',m.a3],
-    ['总进球4',m.a4],['总进球5',m.a5],['总进球6',m.a6],['总进球7+',m.a7]
+    ['总进球0',m.a0],
+    ['总进球1',m.a1],
+    ['总进球2',m.a2],
+    ['总进球3',m.a3],
+    ['总进球4',m.a4],
+    ['总进球5',m.a5],
+    ['总进球6',m.a6],
+    ['总进球7+',m.a7]
   ];
 
   var html='<div class="sl">抓包赔率 / 结构字段</div><div class="mg">';
@@ -600,35 +548,37 @@ function renderDetails(m,p){
 
   html+='<div class="mb"><div class="mb-t">AI结构输出</div>'+
     '<div class="mb-r"><span class="mb-l">goal_band</span><span class="mb-v">'+esc(V(p.goal_band))+'</span></div>'+
-    '<div class="mb-r"><span class="mb-l">btts</span><span class="mb-v">'+esc(getBttsLabel(p))+'</span></div>'+
-    '<div class="mb-r"><span class="mb-l">AI推荐分</span><span class="mb-v">'+esc(fmt1(getBetConfidence(p)))+'</span></div>'+
-    '<div class="mb-r"><span class="mb-l">方向gap</span><span class="mb-v">'+esc(V(p.dir_gap))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">btts_ai</span><span class="mb-v">'+esc(getBttsLabel(p))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">AI置信</span><span class="mb-v">'+esc(V(p.ai_avg_confidence||p.confidence))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">方向稳定</span><span class="mb-v">'+esc(V(p.direction_stability))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">比分稳定</span><span class="mb-v">'+esc(V(p.score_stability))+'</span></div>'+
     '<div class="mb-r"><span class="mb-l">expected_total_goals</span><span class="mb-v">'+esc(V(p.expected_total_goals))+'</span></div>'+
-    '<div class="mb-r"><span class="mb-l">engine</span><span class="mb-v">'+esc(V(p.engine_version, D.engine_version||D.version||'vMAX 20.2.0'))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">engine</span><span class="mb-v">'+esc(V(p.engine_version))+'</span></div>'+
   '</div>';
   html+='</div>';
 
   if(top&&top.length){
     html+='<div class="sl">候选比分</div><div>';
-    top.slice(0,10).forEach(function(c,i){
-      var sc=Array.isArray(c)?c[0]:(c.score||c.predicted_score||'?');
-      var pr=Array.isArray(c)?c[1]:(c.prob||c.p||c.probability||'');
-      html+='<span class="chip '+(i===0?'top':'')+'">'+esc(sc)+' '+esc(pr)+'</span>';
+    top.slice(0,12).forEach(function(c,i){
+      var sc=Array.isArray(c)?c[0]:(c.score||'?');
+      var pr=Array.isArray(c)?c[1]:(c.prob||c.p||'');
+      var why=Array.isArray(c)?'':(c.why||'');
+      html+='<span class="chip '+(i===0?'top':'')+'">'+esc(sc)+' '+esc(pr)+(why?' · '+esc(why).slice(0,30):'')+'</span>';
     });
     html+='</div>';
   }
 
-  if(web && Array.isArray(web.sources) && web.sources.length){
-    html+='<div class="sl">联网来源</div>';
-    web.sources.slice(0,8).forEach(function(s){
-      html+='<div class="sig sig-p">'+esc(s.source_type||'source')+' · '+esc(s.publisher||'')+' · '+esc(s.title||s.url||'')+' · '+esc(s.claim||'')+'</div>';
-    });
-  }
+  html+='<div class="sl">Anchor Audit</div>';
+  html+='<div class="json-box">'+esc(objText(aa)||'无 anchor_audit')+'</div>';
 
-  if(ev&&ev.length){
-    html+='<div class="sl">证据链 / 审计摘要</div>';
-    ev.slice(0,10).forEach(function(e){html+='<div class="sig sig-b">'+esc(e)+'</div>';});
-  }
+  html+='<div class="sl">Market Interpretation</div>';
+  html+='<div class="json-box">'+esc(objText(mi)||'无 market_interpretation')+'</div>';
+
+  html+='<div class="sl">Web Research</div>';
+  html+='<div class="json-box">'+esc(objText(web)||'无 web_research')+'</div>';
+
+  html+='<div class="sl">Recommendation</div>';
+  html+='<div class="json-box">'+esc(objText(rec)||'无 recommendation')+'</div>';
 
   return html;
 }
@@ -644,34 +594,33 @@ function renderMatches(){
 
   el.innerHTML=ms.map(function(m,idx){
     var p=m.prediction||{};
-    var rec=getRec(p);
     var key=matchKey(m);
     var prob=getProb(p);
     var score=DS(p);
     var rc=resultClass(p.result);
-    var tier=getTier(p);
-    var cls=(m.is_recommended||m.is_strict_recommended?'rec ':'')+(tier==='S'?'s ':tier==='A'?'a ':'');
-    var aiConf=getBetConfidence(p);
+    var tier=String(p.recommendation_tier||p.direction_tier||'D').toUpperCase();
+    var cls=(m.is_recommended?'rec ':'')+(tier==='S'?'s ':tier==='A'?'a ':'');
+    var aiConf=V(p.ai_avg_confidence||p.ai_confidence||p.confidence,0);
 
     return '<div class="mc '+cls+'" id="m-'+key+'">'+
       '<div class="mc-h">'+
-        '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(m.is_recommended||m.is_strict_recommended?'<span class="mc-badge">精选</span>':'')+'</div>'+
-        '<div class="mc-eng">'+esc(p.engine_version||D.engine_version||D.version||'vMAX 20.2.0')+'</div>'+
+        '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mc-badge">精选</span>':'')+'</div>'+
+        '<div class="mc-eng">'+esc(p.engine_version||D.version||'vMAX 20.2.1-FULL')+'</div>'+
       '</div>'+
       '<div class="mc-b">'+
         '<div class="teams">'+
           '<div class="tm"><div class="tm-n">'+esc(m.home_team||m.home||'')+'</div></div>'+
-          '<div class="sc-c"><div class="sc-big">'+esc(score)+'</div><div class="sc-sub">AI终审比分</div><span class="res-tag '+rc+'">'+esc(p.result||'?')+'</span></div>'+
+          '<div class="sc-c"><div class="sc-big">'+esc(score)+'</div><div class="sc-sub">Gemini终审比分</div><span class="res-tag '+rc+'">'+esc(p.result||'?')+'</span></div>'+
           '<div class="tm"><div class="tm-n">'+esc(m.away_team||m.guest||'')+'</div></div>'+
         '</div>'+
 
         '<div class="sr">'+
           '<div class="sb"><div class="sb-l">推荐层</div><div class="sb-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
-          '<div class="sb"><div class="sb-l">AI推荐分</div><div class="sb-v" style="color:var(--cy)">'+fmt1(aiConf)+'</div></div>'+
-          '<div class="sb"><div class="sb-l">方向稳定</div><div class="sb-v" style="color:var(--pr)">'+esc(V(rec.direction_stability,'?'))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">方向稳定</div><div class="sb-v" style="color:var(--cy)">'+esc(V(p.direction_stability,'medium'))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">比分稳定</div><div class="sb-v" style="color:var(--pr)">'+esc(V(p.score_stability,'medium'))+'</div></div>'+
           '<div class="sb"><div class="sb-l">Goal Band</div><div class="sb-v" style="color:var(--am)">'+esc(V(p.goal_band))+'</div></div>'+
           '<div class="sb"><div class="sb-l">BTTS</div><div class="sb-v" style="color:var(--bl)">'+esc(getBttsLabel(p))+'</div></div>'+
-          '<div class="sb"><div class="sb-l">比分稳定</div><div class="sb-v" style="'+confidenceColor(aiConf)+'">'+esc(V(rec.score_stability,'?'))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">AI信心</div><div class="sb-v" style="'+confidenceColor(aiConf)+'">'+esc(aiConf)+'</div></div>'+
         '</div>'+
 
         '<div class="prob">'+
