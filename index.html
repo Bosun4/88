@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>小鱼儿量化足球 vMAX 20.1.2</title>
+<title>小鱼儿量化足球 vMAX 20.2.0</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -121,6 +121,7 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 .ai-x{font-size:11px;color:var(--tx);line-height:1.6;padding:10px;letter-spacing:0.3px;white-space:pre-wrap;word-break:break-word;max-height:240px;overflow:auto}
 
 .ai3{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:5px}
+.ai3.ai2{grid-template-columns:1fr 1fr}
 .ai3-c{padding:7px;background:var(--bg);border-right:1px solid var(--bd);min-width:0}
 .ai3-c:last-child{border:none}
 .ai3-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:4px}
@@ -170,7 +171,7 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
     <div class="hdr-l">
       <div class="hdr-logo"></div>
       <div class="hdr-t">小鱼儿量化足球 vMAX</div>
-      <div class="hdr-v" id="ver">vMAX 20.1.2</div>
+      <div class="hdr-v" id="ver">vMAX 20.2.0</div>
     </div>
     <div class="live"><div class="live-d"></div><span class="m" id="ut">…</span></div>
   </div>
@@ -181,7 +182,7 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
 
   <div class="sec">
     <div class="sec-t">今日精选推荐</div>
-    <div class="sec-b">AI-NATIVE 生产模式</div>
+    <div class="sec-b">3AI Gemini裁判</div>
     <div class="sec-i" id="t4ic"></div>
   </div>
   <div class="t4g" id="t4"></div>
@@ -194,9 +195,9 @@ body{font-family:'Noto Sans SC','IBM Plex Sans',sans-serif;background:var(--bg);
   <div id="ms"></div>
 
   <div class="foot">
-    vMAX 20.1.2 · AI-NATIVE WEB-AUGMENTED · GPT/Grok/Gemini 初审 · Claude 终审<br>
+    vMAX 20.2.0 · AI-NATIVE WEB-AUGMENTED · GPT/Grok 初审 · Gemini 终审<br>
     本地只做协议层、分批、解析、字段闭环和前端兼容；方向、比分、推荐等级均由 AI 输出<br>
-    默认 production 低成本模式：batch=10，关闭互审与一致性审计；重点场次可单独增强复核
+    默认 production 低成本模式：GPT/Grok 初审 + Gemini 裁判，batch=10；重点场次可单独增强复核
   </div>
 </div>
 
@@ -302,7 +303,7 @@ function getTodayMatches(d){
 }
 
 function DS(p){
-  var candidates=[p.predicted_score,p.final_ai_score,p.claude_score,p.predicted_label];
+  var candidates=[p.predicted_score,p.final_referee_score,p.final_ai_score,p.gemini_score,p.predicted_label];
   for(var i=0;i<candidates.length;i++){
     if(validScore(candidates[i]))return String(candidates[i]).trim();
   }
@@ -376,7 +377,6 @@ function getWarnings(p){
 function aiOk(p){
   return validScore(p.predicted_score)
       || validScore(p.final_ai_score)
-      || validScore(p.claude_score)
       || validScore(p.gpt_score)
       || validScore(p.grok_score)
       || validScore(p.gemini_score);
@@ -390,7 +390,7 @@ function getModelScore(p, name){
 function getModelAnalysis(p, name){
   var v=p[name+'_analysis'];
   if(v && !/见阶段|快照|placeholder/i.test(String(v)))return v;
-  return '该模型本轮无可展示分析，或已由 Claude 终审吸收。';
+  return '该模型本轮无可展示分析，或已由 Gemini 终审吸收。';
 }
 
 function getRuntimeValue(keys, fallback){
@@ -410,7 +410,7 @@ fetch('data/predictions.json?t='+Date.now())
   .then(function(d){
     D=d;
     document.getElementById('ut').textContent=d.update_time||d.updated_at||'数据已最新';
-    document.getElementById('ver').textContent=d.version||d.engine_version||'vMAX 20.1.2';
+    document.getElementById('ver').textContent=d.engine_version||d.version||'vMAX 20.2.0';
     var mode=getRuntimeValue(['ai_research_mode','research_mode'],'production');
     var batch=getRuntimeValue(['ai_batch_size','chunk_size'],'10');
     var conc=getRuntimeValue(['ai_model_concurrency','model_concurrency'],'1');
@@ -533,13 +533,12 @@ function renderSelectionBlock(p){
 
 function renderAiBlock(p){
   return '<div class="ai-box">'+
-    '<div class="ai-h"><div class="ai-t">👑 CLAUDE 终审</div><div class="ai-s">'+esc(getModelScore(p,'claude'))+'</div></div>'+
-    '<div class="ai-x">'+cl(p.claude_analysis||p.final_audit_reason||p.reason||getRec(p).why_recommended)+'</div>'+
+    '<div class="ai-h"><div class="ai-t">👑 GEMINI 终审裁判</div><div class="ai-s">'+esc(getModelScore(p,'gemini'))+'</div></div>'+
+    '<div class="ai-x">'+cl(p.gemini_analysis||p.final_referee_analysis||p.final_ai_analysis||p.reason||getRec(p).why_recommended)+'</div>'+
   '</div>'+
-  '<div class="ai3">'+
+  '<div class="ai3 ai2">'+
     '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t gpt">GPT初审</span><span class="ai3-s">'+esc(getModelScore(p,'gpt'))+'</span></div><div class="ai3-x">'+cl(getModelAnalysis(p,'gpt'))+'</div></div>'+
     '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t grk">GROK初审</span><span class="ai3-s">'+esc(getModelScore(p,'grok'))+'</span></div><div class="ai3-x">'+cl(getModelAnalysis(p,'grok'))+'</div></div>'+
-    '<div class="ai3-c"><div class="ai3-h"><span class="ai3-t gem">GEMINI初审</span><span class="ai3-s">'+esc(getModelScore(p,'gemini'))+'</span></div><div class="ai3-x">'+cl(getModelAnalysis(p,'gemini'))+'</div></div>'+
   '</div>';
 }
 
@@ -599,13 +598,13 @@ function renderDetails(m,p){
   odds.forEach(function(o){html+='<div class="mb-r"><span class="mb-l">'+esc(o[0])+'</span><span class="mb-v">'+esc(V(o[1]))+'</span></div>';});
   html+='</div>';
 
-  html+='<div class="mb"><div class="mb-t">AI结构输出</div>'+ 
-    '<div class="mb-r"><span class="mb-l">goal_band</span><span class="mb-v">'+esc(V(p.goal_band))+'</span></div>'+ 
-    '<div class="mb-r"><span class="mb-l">btts</span><span class="mb-v">'+esc(getBttsLabel(p))+'</span></div>'+ 
-    '<div class="mb-r"><span class="mb-l">AI推荐分</span><span class="mb-v">'+esc(fmt1(getBetConfidence(p)))+'</span></div>'+ 
-    '<div class="mb-r"><span class="mb-l">方向gap</span><span class="mb-v">'+esc(V(p.dir_gap))+'</span></div>'+ 
-    '<div class="mb-r"><span class="mb-l">expected_total_goals</span><span class="mb-v">'+esc(V(p.expected_total_goals))+'</span></div>'+ 
-    '<div class="mb-r"><span class="mb-l">engine</span><span class="mb-v">'+esc(V(p.engine_version, D.version||'vMAX 20.1.2'))+'</span></div>'+ 
+  html+='<div class="mb"><div class="mb-t">AI结构输出</div>'+
+    '<div class="mb-r"><span class="mb-l">goal_band</span><span class="mb-v">'+esc(V(p.goal_band))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">btts</span><span class="mb-v">'+esc(getBttsLabel(p))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">AI推荐分</span><span class="mb-v">'+esc(fmt1(getBetConfidence(p)))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">方向gap</span><span class="mb-v">'+esc(V(p.dir_gap))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">expected_total_goals</span><span class="mb-v">'+esc(V(p.expected_total_goals))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">engine</span><span class="mb-v">'+esc(V(p.engine_version, D.engine_version||D.version||'vMAX 20.2.0'))+'</span></div>'+
   '</div>';
   html+='</div>';
 
@@ -656,37 +655,37 @@ function renderMatches(){
 
     return '<div class="mc '+cls+'" id="m-'+key+'">'+
       '<div class="mc-h">'+
-        '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(m.is_recommended||m.is_strict_recommended?'<span class="mc-badge">精选</span>':'')+'</div>'+ 
-        '<div class="mc-eng">'+esc(p.engine_version||D.version||'vMAX 20.1.2')+'</div>'+ 
-      '</div>'+ 
+        '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(m.is_recommended||m.is_strict_recommended?'<span class="mc-badge">精选</span>':'')+'</div>'+
+        '<div class="mc-eng">'+esc(p.engine_version||D.engine_version||D.version||'vMAX 20.2.0')+'</div>'+
+      '</div>'+
       '<div class="mc-b">'+
         '<div class="teams">'+
-          '<div class="tm"><div class="tm-n">'+esc(m.home_team||m.home||'')+'</div></div>'+ 
-          '<div class="sc-c"><div class="sc-big">'+esc(score)+'</div><div class="sc-sub">AI终审比分</div><span class="res-tag '+rc+'">'+esc(p.result||'?')+'</span></div>'+ 
-          '<div class="tm"><div class="tm-n">'+esc(m.away_team||m.guest||'')+'</div></div>'+ 
-        '</div>'+ 
+          '<div class="tm"><div class="tm-n">'+esc(m.home_team||m.home||'')+'</div></div>'+
+          '<div class="sc-c"><div class="sc-big">'+esc(score)+'</div><div class="sc-sub">AI终审比分</div><span class="res-tag '+rc+'">'+esc(p.result||'?')+'</span></div>'+
+          '<div class="tm"><div class="tm-n">'+esc(m.away_team||m.guest||'')+'</div></div>'+
+        '</div>'+
 
         '<div class="sr">'+
-          '<div class="sb"><div class="sb-l">推荐层</div><div class="sb-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+ 
-          '<div class="sb"><div class="sb-l">AI推荐分</div><div class="sb-v" style="color:var(--cy)">'+fmt1(aiConf)+'</div></div>'+ 
-          '<div class="sb"><div class="sb-l">方向稳定</div><div class="sb-v" style="color:var(--pr)">'+esc(V(rec.direction_stability,'?'))+'</div></div>'+ 
-          '<div class="sb"><div class="sb-l">Goal Band</div><div class="sb-v" style="color:var(--am)">'+esc(V(p.goal_band))+'</div></div>'+ 
-          '<div class="sb"><div class="sb-l">BTTS</div><div class="sb-v" style="color:var(--bl)">'+esc(getBttsLabel(p))+'</div></div>'+ 
-          '<div class="sb"><div class="sb-l">比分稳定</div><div class="sb-v" style="'+confidenceColor(aiConf)+'">'+esc(V(rec.score_stability,'?'))+'</div></div>'+ 
-        '</div>'+ 
+          '<div class="sb"><div class="sb-l">推荐层</div><div class="sb-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
+          '<div class="sb"><div class="sb-l">AI推荐分</div><div class="sb-v" style="color:var(--cy)">'+fmt1(aiConf)+'</div></div>'+
+          '<div class="sb"><div class="sb-l">方向稳定</div><div class="sb-v" style="color:var(--pr)">'+esc(V(rec.direction_stability,'?'))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">Goal Band</div><div class="sb-v" style="color:var(--am)">'+esc(V(p.goal_band))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">BTTS</div><div class="sb-v" style="color:var(--bl)">'+esc(getBttsLabel(p))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">比分稳定</div><div class="sb-v" style="'+confidenceColor(aiConf)+'">'+esc(V(rec.score_stability,'?'))+'</div></div>'+
+        '</div>'+
 
         '<div class="prob">'+
-          '<div class="prob-h"><span style="color:var(--red)">主 '+fmt1(prob.h)+'%</span><span style="color:var(--t2)">平 '+fmt1(prob.d)+'%</span><span style="color:var(--bl)">客 '+fmt1(prob.a)+'%</span></div>'+ 
-          '<div class="prob-bar"><div class="h" style="width:'+prob.h+'%"></div><div class="d" style="width:'+prob.d+'%"></div><div class="a" style="width:'+prob.a+'%"></div></div>'+ 
-        '</div>'+ 
+          '<div class="prob-h"><span style="color:var(--red)">主 '+fmt1(prob.h)+'%</span><span style="color:var(--t2)">平 '+fmt1(prob.d)+'%</span><span style="color:var(--bl)">客 '+fmt1(prob.a)+'%</span></div>'+
+          '<div class="prob-bar"><div class="h" style="width:'+prob.h+'%"></div><div class="d" style="width:'+prob.d+'%"></div><div class="a" style="width:'+prob.a+'%"></div></div>'+
+        '</div>'+
 
         renderSelectionBlock(p)+
         renderAiBlock(p)+
         renderSignals(p)+
 
-        '<button class="tbtn" onclick="tg(this,\'d-'+key+'\')">展开抓包与底层字段 ▼</button>'+ 
-      '</div>'+ 
-      '<div class="det" id="d-'+key+'">'+renderDetails(m,p)+'</div>'+ 
+        '<button class="tbtn" onclick="tg(this,\'d-'+key+'\')">展开抓包与底层字段 ▼</button>'+
+      '</div>'+
+      '<div class="det" id="d-'+key+'">'+renderDetails(m,p)+'</div>'+
     '</div>';
   }).join('');
 }
