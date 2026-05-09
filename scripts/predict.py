@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-vMAX 20.2 — 3AI Gemini-Referee Web-Augmented Adjudication Engine
+vMAX 20.2.1 — 3AI Gemini-Referee FULL-RESEARCH Web-Augmented Engine
 =====================================================================
 
 设计边界：
@@ -23,10 +23,10 @@ vMAX 20.2 — 3AI Gemini-Referee Web-Augmented Adjudication Engine
 环境变量要点：
     API_URL / API_KEY 或各模型单独 *_API_URL / *_API_KEY
     AI_MOCK_MODE=true       # 沙盒/本地闭环测试
-    AI_CHUNK_SIZE=8         # 小批次
-    AI_ENABLE_CROSS_EXAM=false      # 生产默认关闭，控制成本
-    AI_ENABLE_CONSISTENCY_JUDGE=false
-    AI_NATIVE_WEB=false             # 重点场次再打开
+    AI_CHUNK_SIZE=6         # 满血小批次
+    AI_ENABLE_CROSS_EXAM=true       # 满血开启互审
+    AI_ENABLE_CONSISTENCY_JUDGE=true
+    AI_NATIVE_WEB=true              # 满血开启 AI 原生联网协议
 """
 
 from __future__ import annotations
@@ -61,9 +61,9 @@ except Exception:  # pragma: no cover
 # 版本常量 / 基础配置
 # ============================================================
 
-ENGINE_VERSION = "vMAX 20.2.0"
+ENGINE_VERSION = "vMAX 20.2.1-FULL"
 ENGINE_ARCHITECTURE = (
-    "AI-NATIVE WEB-AUGMENTED 3AI: 本地只做协议层；GPT/Grok 初审 + Gemini Web-aware 终审；"
+    "AI-NATIVE WEB-AUGMENTED 3AI FULL-RESEARCH: 本地只做协议层；GPT/Grok 初审 + 互审 + Gemini Web-aware 终审 + 一致性审计；"
     "Top4/推荐等级由 Gemini 输出；本地不做 Sharp/比分/推荐裁决。"
 )
 
@@ -140,11 +140,11 @@ def _env_float(name: str, default: float) -> float:
 AI_MOCK_MODE = _env_bool("AI_MOCK_MODE", False)
 AI_FORCE_COMMON_GATEWAY = _env_bool("FORCE_COMMON_GATEWAY_URL", True)
 
-# 成本模式：production 默认用于日常全量跑；enhanced 用于精选复核；research 才是满血互审。
-# 关键原则：默认不能再用高成本 research 配置，避免 40+ 场批量时成本爆炸。
-AI_RESEARCH_MODE = str(os.environ.get("AI_RESEARCH_MODE", "production")).strip().lower()
+# 成本模式：当前文件为 FULL 版，默认直接 research 满血。
+# 注意：这会显著增加 API 成本。需要省钱时，显式设置 AI_RESEARCH_MODE=production。
+AI_RESEARCH_MODE = str(os.environ.get("AI_RESEARCH_MODE", "research")).strip().lower()
 if AI_RESEARCH_MODE not in {"production", "enhanced", "research"}:
-    AI_RESEARCH_MODE = "production"
+    AI_RESEARCH_MODE = "research"
 
 if AI_RESEARCH_MODE == "production":
     _default_native_web = False
