@@ -712,7 +712,7 @@ def _score_anchor_facts(match_obj: Dict[str, Any]) -> Dict[str, Any]:
     s12 = odds_by_score.get("1-2", 0.0)
 
     if 0 < s00 <= 11.0:
-        observations.append({"anchor": "low_0_0_odds", "value": s00, "meaning_for_ai": "0-0赔率低于或接近11，必须严肃审计闷局/低比分；不能默认1-1或2-1。"})
+        observations.append({"anchor": "low_0_0_odds", "value": s00, "meaning_for_ai": "0-0赔率低于或接近9.5，必须严肃审计闷局/低比分；不能默认1-1或2-1。"})
     if 0 < s11 <= 7.5:
         observations.append({"anchor": "low_1_1_odds", "value": s11, "meaning_for_ai": "1-1赔率较低，双方进球但低总进球路径需要重点比较。"})
     if 0 < s10 <= 9.5 or 0 < s01 <= 9.5:
@@ -820,7 +820,7 @@ def _cross_anchor_questions(match_obj: Dict[str, Any]) -> List[str]:
     a4 = total_f.get("specific_odds", {}).get("4", 0)
     mode_g = total_f.get("mode_goals")
     if 0 < s00 <= 11:
-        qs.append("0-0赔率≤11：为什么不是0-0？如果选其他比分，必须解释突破闷局的证据。")
+        qs.append("0-0赔率≤9.5：为什么不是0-0？如果选其他比分，必须解释突破闷局的证据。")
     if 0 < s11 <= 7.5:
         qs.append("1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。")
     if a4 > 6:
@@ -1010,7 +1010,7 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append(_web_research_instruction(ai_name))
     p.append("你的任务不是给空泛推荐，而是基于市场结构、资金流、比分赔率、总进球、半全场、联网情报形成可审计预测。")
     p.append("强制审计：每场必须读取 ai_anchor_facts_no_judgement，并在 anchor_audit 中逐项回答 mandatory_cross_anchor_questions。")
-    p.append("禁止懒惰比分：不要因为常见就默认1-1或2-1；当0-0赔率≤11、1-1低赔、4球赔率>6或总进球主模态偏低时，必须严肃审计低比分。")
+    p.append("禁止懒惰比分：不要因为常见就默认1-1或2-1；当0-0赔率≤9.5、1-1低赔、4球赔率>6或总进球主模态偏低时，必须严肃审计低比分。")
     p.append("</task>\n")
     p.append("<output_schema>")
     p.append(_canonical_output_schema_text())
@@ -1065,9 +1065,9 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("证据优先级：raw market structure > correct-score cluster > total-goals mode > handicap score-shape > money-flow/sharp interpretation > tactical/web context > Phase1 consensus。")
     p.append("多数意见不自动成立；若 GPT/Grok 基于同一低赔/单边市场理由一致，这属于相关证据，不是独立证据。")
     p.append("S级必须至少有两个独立证据族同时支持：市场结构、正确比分赔率簇、总进球模态、让球盘形态、资金流/Sharp、联网阵容伤停、战术/赛程背景。仅赔率低赔或单边市场最多给A；无联网且依赖阵容/战意/实力碾压，最高给B。")
-    p.append("低比分锚点审计：若0-0赔率≤11或1-1赔率偏低，必须显式比较0-0/1-1/1-0/0-1/2-0/0-2，不能机械给2-1。")
+    p.append("低比分锚点审计：若0-0赔率≤9.5或1-1赔率偏低，必须显式比较0-0/1-1/1-0/0-1/2-0/0-2，不能机械给2-1。")
     p.append("4球锚点审计：若4球赔率>6，选择3-1/2-2/3-2必须有强证据；否则优先压回0-3球比分带。")
-    p.append("高比分尾部审计：若5球≤8、6球≤16或7+≤30，必须检查3-2/4-1/4-2/胜其他。")
+    p.append("高比分尾部审计：若5球≤8、6球≤14或7+≤16，必须检查3-2/4-1/4-2/胜其他。")
     p.append("强客低赔审计：若客胜<=1.50，必须比较0-0/0-1/1-1/0-2/1-2与总进球模态；不能机械给0-2或S级。")
     p.append("如果 sharp_money_direction 与 final_direction 冲突，必须解释为什么该信号是噪音，或者主动下调 recommendation.tier。")
     p.append("如果联网来源缺 URL/发布时间/claim，不能作为硬证据。必须输出 source_conflicts 和 final_web_audit。")
