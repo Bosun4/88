@@ -1,0 +1,2608 @@
+{
+  "phase1": {
+    "gpt": {
+      "7": {
+        "match": 7,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 40.0,
+          "draw": 30.0,
+          "away": 30.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 16.0,
+            "logic": "主胜方向在1X2上仅略占优，但正确比分里2-1是主队方向最低赔，且总进球主模态为3球，和该比分直接共振。"
+          },
+          {
+            "score": "1-1",
+            "prob": 15.0,
+            "logic": "1-1为全场最低赔，说明平局与双方进球路径被市场严肃定价，若主队保级战意兑现不足则容易落在此路径。"
+          },
+          {
+            "score": "1-2",
+            "prob": 14.0,
+            "logic": "客队实力面更强，1-2是客胜最低赔，说明客队反客为主仍是强反例，不能低估。"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+            "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+          ],
+          "zero_zero_case": "不选0-0。0-0赔率15.0，明显高于1-1的6.5，也高于2-1的7.0；总进球主模态为3球，0球总进球赔率也到15.0，市场并未把闷局列为主路径。结合主队保级抢分与客队后场伤停，破门概率高于纯闷战。",
+          "one_one_case": "1-1赔率6.5为全场最低，确实是关键反例。之所以不取1-1，是因为总进球3球赔率3.4低于2球3.75，且主/主3.45为半全场最低，说明市场略更倾向主队最终完成超出平局的一步。BTTS有共振，但更像2-1而非1-1。",
+          "one_goal_margin_case": "重点比较后，1-0赔率9.0、2-0赔率12.0、2-1赔率7.0、3-1赔率15.0、1-1赔率6.5。2-1在主胜路径中最低赔，且比1-0更受支持，说明市场不只看主队小胜且更接受双方进球；3-1虽可行，但4球尾部需要更多支撑。",
+          "four_plus_case": "压低4球以上尾部但不完全排除。4球赔率4.9、5球7.5有压缩，说明3-1、2-2、3-2等要审计；不过正确比分中3-1仅15.0、3-2达20.0，尚未压到足以推翻2-1。故保留高比分风险，但主选仍落在3球主模态。",
+          "handicap_score_shape_case": "让球模板要求审计1-0/2-0/2-1/3-1/1-1。由于竞彩1X2主胜仅2.15并非强碾压，无法支持2球以上大胜为主线；在这些候选里，2-1最符合'主队略优+双方都有得分窗口'。",
+          "league_style_case": "西甲常见1-0/1-1/2-1这类中低比分结构，本场又是保级主场对实力更强但客场一般的客队，最像紧张但不封闭的2-1或1-1，而非极端大开大合。",
+          "final_score_vs_anchor_summary": "综合1X2轻主、半全场偏主/主、总进球主模态3球、正确比分主胜最低赔为2-1，以及1-1作为强反例但被3球模态略压制，最终2-1从锚点中胜出。"
+        },
+        "market_interpretation": {
+          "one_x_two": "竞彩主胜2.15、客胜2.7，主队只有轻度优势，不是强主格局，更像三向接近中的主队略热。",
+          "handicap": "让球原始值为-1.0，但与1X2并不完全一致，说明盘口结构存在分歧，不能机械解读为主队强让，只能当作一球分差形态模板使用。",
+          "correct_score": "最低赔簇集中在1-1、2-1、1-2、1-0、0-1，典型的中低比分摇摆盘，主队与客队都有清晰赢法。",
+          "total_goals": "3球3.4最低，2球3.75次低，说明主流是2-3球；4球4.9和5球7.5压缩，提示不能完全忽视拉高节奏。",
+          "half_full_time": "主/主3.45最低，负/负4.4第二低，平/主5.6与平/负6.6也不高，说明上半场僵持、下半场分胜负是合理结构。",
+          "external_market": "无联网工具，无法对照外部欧赔、亚盘与交易所分歧，只能依据抓包内生结构判断。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 35,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票主胜41%略高于客胜33%，但幅度不大；赔率平稳，缺少临场逆向变动证据，无法确认明显尖锐资金方向。"
+        },
+        "contextual_logic": {
+          "league_style": "西甲中下游与欧战队交锋常呈现中低比分、边际胜负结构。",
+          "team_style": "主队保级战意强、主场回暖；客队实力更强但客场一般，且有一定战意疑问。",
+          "tempo": "medium",
+          "score_shape": "更像主队先入球后被追平，再由主场环境推动完成一球险胜。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未选1-0或2-0，因为1-1与2-1赔率都更低，说明零封主胜并非最稳主线路径。",
+          "draw": "未选平局，核心反例是1-1最低赔，但3球模态与主/主半全场略把结果推向主队险胜。",
+          "away": "未选客胜，因为虽然客队实力更强且1-2低赔，但竞彩1X2仍给主队轻优势，主场战意因素被市场计入。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 4,
+          "bet_confidence": 62,
+          "direction_stability": "weak",
+          "score_stability": "weak",
+          "risk_level": "high",
+          "risk_tags": [
+            "三向接近",
+            "1-1强反例",
+            "客胜路径清晰",
+            "高比分尾部压缩"
+          ],
+          "why_recommended": "可作偏主方向参考，但市场分歧大，且1-1与1-2都构成强反例，更适合放在靠后优先级。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部市场赔率对照",
+            "临场变盘细节"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场不是纯实力盘，而是战意与实力交叉的结构盘。正确比分最低赔簇把1-1、2-1、1-2同时压低，说明主胜、平局、客胜都有像样路径；但总进球主模态在3球，半全场又略偏主/主，使2-1比1-1多出一层兑现主场优势的逻辑，因此主选马洛卡2-1。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 7,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 40,
+            "draw": 30,
+            "away": 30
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 16,
+              "logic": "主胜方向在1X2上仅略占优，但正确比分里2-1是主队方向最低赔，且总进球主模态为3球，和该比分直接共振。"
+            },
+            {
+              "score": "1-1",
+              "prob": 15,
+              "logic": "1-1为全场最低赔，说明平局与双方进球路径被市场严肃定价，若主队保级战意兑现不足则容易落在此路径。"
+            },
+            {
+              "score": "1-2",
+              "prob": 14,
+              "logic": "客队实力面更强，1-2是客胜最低赔，说明客队反客为主仍是强反例，不能低估。"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+              "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+            ],
+            "zero_zero_case": "不选0-0。0-0赔率15.0，明显高于1-1的6.5，也高于2-1的7.0；总进球主模态为3球，0球总进球赔率也到15.0，市场并未把闷局列为主路径。结合主队保级抢分与客队后场伤停，破门概率高于纯闷战。",
+            "one_one_case": "1-1赔率6.5为全场最低，确实是关键反例。之所以不取1-1，是因为总进球3球赔率3.4低于2球3.75，且主/主3.45为半全场最低，说明市场略更倾向主队最终完成超出平局的一步。BTTS有共振，但更像2-1而非1-1。",
+            "one_goal_margin_case": "重点比较后，1-0赔率9.0、2-0赔率12.0、2-1赔率7.0、3-1赔率15.0、1-1赔率6.5。2-1在主胜路径中最低赔，且比1-0更受支持，说明市场不只看主队小胜且更接受双方进球；3-1虽可行，但4球尾部需要更多支撑。",
+            "four_plus_case": "压低4球以上尾部但不完全排除。4球赔率4.9、5球7.5有压缩，说明3-1、2-2、3-2等要审计；不过正确比分中3-1仅15.0、3-2达20.0，尚未压到足以推翻2-1。故保留高比分风险，但主选仍落在3球主模态。",
+            "handicap_score_shape_case": "让球模板要求审计1-0/2-0/2-1/3-1/1-1。由于竞彩1X2主胜仅2.15并非强碾压，无法支持2球以上大胜为主线；在这些候选里，2-1最符合'主队略优+双方都有得分窗口'。",
+            "league_style_case": "西甲常见1-0/1-1/2-1这类中低比分结构，本场又是保级主场对实力更强但客场一般的客队，最像紧张但不封闭的2-1或1-1，而非极端大开大合。",
+            "final_score_vs_anchor_summary": "综合1X2轻主、半全场偏主/主、总进球主模态3球、正确比分主胜最低赔为2-1，以及1-1作为强反例但被3球模态略压制，最终2-1从锚点中胜出。"
+          },
+          "market_interpretation": {
+            "one_x_two": "竞彩主胜2.15、客胜2.7，主队只有轻度优势，不是强主格局，更像三向接近中的主队略热。",
+            "handicap": "让球原始值为-1.0，但与1X2并不完全一致，说明盘口结构存在分歧，不能机械解读为主队强让，只能当作一球分差形态模板使用。",
+            "correct_score": "最低赔簇集中在1-1、2-1、1-2、1-0、0-1，典型的中低比分摇摆盘，主队与客队都有清晰赢法。",
+            "total_goals": "3球3.4最低，2球3.75次低，说明主流是2-3球；4球4.9和5球7.5压缩，提示不能完全忽视拉高节奏。",
+            "half_full_time": "主/主3.45最低，负/负4.4第二低，平/主5.6与平/负6.6也不高，说明上半场僵持、下半场分胜负是合理结构。",
+            "external_market": "无联网工具，无法对照外部欧赔、亚盘与交易所分歧，只能依据抓包内生结构判断。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 35,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票主胜41%略高于客胜33%，但幅度不大；赔率平稳，缺少临场逆向变动证据，无法确认明显尖锐资金方向。"
+          },
+          "contextual_logic": {
+            "league_style": "西甲中下游与欧战队交锋常呈现中低比分、边际胜负结构。",
+            "team_style": "主队保级战意强、主场回暖；客队实力更强但客场一般，且有一定战意疑问。",
+            "tempo": "medium",
+            "score_shape": "更像主队先入球后被追平，再由主场环境推动完成一球险胜。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未选1-0或2-0，因为1-1与2-1赔率都更低，说明零封主胜并非最稳主线路径。",
+            "draw": "未选平局，核心反例是1-1最低赔，但3球模态与主/主半全场略把结果推向主队险胜。",
+            "away": "未选客胜，因为虽然客队实力更强且1-2低赔，但竞彩1X2仍给主队轻优势，主场战意因素被市场计入。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 4,
+            "bet_confidence": 62,
+            "direction_stability": "weak",
+            "score_stability": "weak",
+            "risk_level": "high",
+            "risk_tags": [
+              "三向接近",
+              "1-1强反例",
+              "客胜路径清晰",
+              "高比分尾部压缩"
+            ],
+            "why_recommended": "可作偏主方向参考，但市场分歧大，且1-1与1-2都构成强反例，更适合放在靠后优先级。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部市场赔率对照",
+              "临场变盘细节"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场不是纯实力盘，而是战意与实力交叉的结构盘。正确比分最低赔簇把1-1、2-1、1-2同时压低，说明主胜、平局、客胜都有像样路径；但总进球主模态在3球，半全场又略偏主/主，使2-1比1-1多出一层兑现主场优势的逻辑，因此主选马洛卡2-1。"
+        }
+      },
+      "8": {
+        "match": 8,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "away",
+        "raw_ai_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 28.0,
+          "draw": 29.0,
+          "away": 43.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18.0,
+            "logic": "客胜是1X2最低项，且1-2为客队方向最低赔，正好匹配总进球3球主模态。"
+          },
+          {
+            "score": "1-1",
+            "prob": 15.0,
+            "logic": "1-1为全场最低赔，说明平局尤其是双方进球平局被市场高度重视。"
+          },
+          {
+            "score": "0-1",
+            "prob": 11.0,
+            "logic": "若天气与客队客战保守风格强化，0-1是客胜次低赔的低比分替代路径。"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+            "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+          ],
+          "zero_zero_case": "不选0-0。0-0赔率16.0偏高，总进球主模态3球，且1-2、2-1、1-1集中压低，说明市场预期不是无球闷战。",
+          "one_one_case": "1-1赔率6.5最低，是最大反例。之所以不取1-1，是因为客胜1X2 2.26低于主胜2.52，半全场负/负3.7也是最低，说明市场在平衡格局中更给客队终局优势。BTTS共振存在，但更偏1-2而非1-1。",
+          "one_goal_margin_case": "1-0 10.5、2-0 15.0、2-1 8.25、3-1 18.0、1-1 6.5中，若站主队模板2-1并非不成立；但结合整体1X2和负/负半全场，客队镜像的1-2赔率7.5更低，因此一球客胜更优先。",
+          "four_plus_case": "4球赔率4.65、5球7.7都压缩，说明2-2和1-3要审计；但正确比分上1-3仅15.0，并未低到取代1-2，说明高比分是风险尾部而非主线。",
+          "handicap_score_shape_case": "让球模板虽然列出主队1-0/2-0/2-1等，但这里只能作为一球盘形态参考。真正方向仍以1X2和比分赔率为准，而它们更偏客队一球胜。",
+          "league_style_case": "挪超整体节奏不慢，3球模式常见；本场两队防守都非铁板，1-2与2-1都自然，但排名与状态优势在客队一侧。",
+          "final_score_vs_anchor_summary": "在1-1强反例存在的前提下，客胜1X2最低、1-2为客向最低赔、负/负半全场最低、总进球主模态3球，四项共同把结果推向1-2。"
+        },
+        "market_interpretation": {
+          "one_x_two": "竞彩客胜2.26低于主胜2.52，客队是轻优势一方，但不是绝对强势。",
+          "handicap": "原始让球为1.0与1X2存在结构错位，说明不能把该字段直接当方向结论，只适合审计一球胜负形态。",
+          "correct_score": "1-1最低，1-2次低，2-1第三低，典型分胜负与平局都要防的开放型中庸盘。",
+          "total_goals": "3球3.4最低、4球4.65不高，说明3-4球有较强存在感。",
+          "half_full_time": "负/负3.7最低，平/负5.8次低，说明客队从中后程发力带走比赛的市场想象更强。",
+          "external_market": "无联网能力，无法核对外部欧赔与交易所是否同步偏客。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 38,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票客胜39%高于主胜35%，但赔率未显示明显对冲式变化；缺乏外部盘和时间序列，不能确认尖锐资金。"
+        },
+        "contextual_logic": {
+          "league_style": "挪超常见3球附近分布，节奏通常比南欧联赛更直接。",
+          "team_style": "主队近况低迷且防线有伤，客队状态和排名明显更好，但客场并非稳定碾压。",
+          "tempo": "medium",
+          "score_shape": "更像上半场谨慎、下半场双方都能制造机会，最终客队把握效率更高。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未选主胜，因为2-1虽然不高，但整体1X2与半全场更偏客，主队只是在主场保有一定反扑空间。",
+          "draw": "未选1-1，原因是平局赔率虽低，但客胜终局信号更多，尤其负/负最低削弱平局终局。",
+          "away": "未选0-1或1-3，前者略保守、后者偏高尾部；1-2更平衡地匹配3球主模态。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 3,
+          "bet_confidence": 66,
+          "direction_stability": "medium",
+          "score_stability": "weak",
+          "risk_level": "medium",
+          "risk_tags": [
+            "1-1强反例",
+            "盘口结构错位",
+            "主场反扑风险"
+          ],
+          "why_recommended": "客胜方向有多重市场锚点支持，但平局强反例仍在，适合作为中等把握的客不败偏客参考。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部盘口与交易所数据"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场最关键的是把1-1与1-2区分开。虽然1-1全场最低赔，但1X2、半全场和客向最低比分共同偏向客队终局优势；再叠加总进球主模态3球，1-2比0-1更贴合赔率簇结构，因此主选利勒斯特1-2客胜。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 8,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 28,
+            "draw": 29,
+            "away": 43
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 18,
+              "logic": "客胜是1X2最低项，且1-2为客队方向最低赔，正好匹配总进球3球主模态。"
+            },
+            {
+              "score": "1-1",
+              "prob": 15,
+              "logic": "1-1为全场最低赔，说明平局尤其是双方进球平局被市场高度重视。"
+            },
+            {
+              "score": "0-1",
+              "prob": 11,
+              "logic": "若天气与客队客战保守风格强化，0-1是客胜次低赔的低比分替代路径。"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+              "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+            ],
+            "zero_zero_case": "不选0-0。0-0赔率16.0偏高，总进球主模态3球，且1-2、2-1、1-1集中压低，说明市场预期不是无球闷战。",
+            "one_one_case": "1-1赔率6.5最低，是最大反例。之所以不取1-1，是因为客胜1X2 2.26低于主胜2.52，半全场负/负3.7也是最低，说明市场在平衡格局中更给客队终局优势。BTTS共振存在，但更偏1-2而非1-1。",
+            "one_goal_margin_case": "1-0 10.5、2-0 15.0、2-1 8.25、3-1 18.0、1-1 6.5中，若站主队模板2-1并非不成立；但结合整体1X2和负/负半全场，客队镜像的1-2赔率7.5更低，因此一球客胜更优先。",
+            "four_plus_case": "4球赔率4.65、5球7.7都压缩，说明2-2和1-3要审计；但正确比分上1-3仅15.0，并未低到取代1-2，说明高比分是风险尾部而非主线。",
+            "handicap_score_shape_case": "让球模板虽然列出主队1-0/2-0/2-1等，但这里只能作为一球盘形态参考。真正方向仍以1X2和比分赔率为准，而它们更偏客队一球胜。",
+            "league_style_case": "挪超整体节奏不慢，3球模式常见；本场两队防守都非铁板，1-2与2-1都自然，但排名与状态优势在客队一侧。",
+            "final_score_vs_anchor_summary": "在1-1强反例存在的前提下，客胜1X2最低、1-2为客向最低赔、负/负半全场最低、总进球主模态3球，四项共同把结果推向1-2。"
+          },
+          "market_interpretation": {
+            "one_x_two": "竞彩客胜2.26低于主胜2.52，客队是轻优势一方，但不是绝对强势。",
+            "handicap": "原始让球为1.0与1X2存在结构错位，说明不能把该字段直接当方向结论，只适合审计一球胜负形态。",
+            "correct_score": "1-1最低，1-2次低，2-1第三低，典型分胜负与平局都要防的开放型中庸盘。",
+            "total_goals": "3球3.4最低、4球4.65不高，说明3-4球有较强存在感。",
+            "half_full_time": "负/负3.7最低，平/负5.8次低，说明客队从中后程发力带走比赛的市场想象更强。",
+            "external_market": "无联网能力，无法核对外部欧赔与交易所是否同步偏客。"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 38,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票客胜39%高于主胜35%，但赔率未显示明显对冲式变化；缺乏外部盘和时间序列，不能确认尖锐资金。"
+          },
+          "contextual_logic": {
+            "league_style": "挪超常见3球附近分布，节奏通常比南欧联赛更直接。",
+            "team_style": "主队近况低迷且防线有伤，客队状态和排名明显更好，但客场并非稳定碾压。",
+            "tempo": "medium",
+            "score_shape": "更像上半场谨慎、下半场双方都能制造机会，最终客队把握效率更高。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未选主胜，因为2-1虽然不高，但整体1X2与半全场更偏客，主队只是在主场保有一定反扑空间。",
+            "draw": "未选1-1，原因是平局赔率虽低，但客胜终局信号更多，尤其负/负最低削弱平局终局。",
+            "away": "未选0-1或1-3，前者略保守、后者偏高尾部；1-2更平衡地匹配3球主模态。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 3,
+            "bet_confidence": 66,
+            "direction_stability": "medium",
+            "score_stability": "weak",
+            "risk_level": "medium",
+            "risk_tags": [
+              "1-1强反例",
+              "盘口结构错位",
+              "主场反扑风险"
+            ],
+            "why_recommended": "客胜方向有多重市场锚点支持，但平局强反例仍在，适合作为中等把握的客不败偏客参考。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部盘口与交易所数据"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场最关键的是把1-1与1-2区分开。虽然1-1全场最低赔，但1X2、半全场和客向最低比分共同偏向客队终局优势；再叠加总进球主模态3球，1-2比0-1更贴合赔率簇结构，因此主选利勒斯特1-2客胜。"
+        }
+      },
+      "9": {
+        "match": 9,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "away",
+        "raw_ai_direction": "away",
+        "predicted_score": "0-2",
+        "direction_probs": {
+          "home": 14.0,
+          "draw": 22.0,
+          "away": 64.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "0-2",
+            "prob": 20.0,
+            "logic": "客胜是显著主方向，0-2为客胜次低赔且更贴合维拉客场近10战多数总进球不超2球的已知信息。"
+          },
+          {
+            "score": "1-2",
+            "prob": 18.0,
+            "logic": "1-2是全场最低赔，说明市场承认伯恩利主场仍有破门窗口。"
+          },
+          {
+            "score": "0-1",
+            "prob": 14.0,
+            "logic": "0-1赔率也低，若维拉受欧战体能影响、比赛节奏被压低，则可能只赢一球。"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+            "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+          ],
+          "zero_zero_case": "不选0-0。0-0赔率15.0明显高于0-2的7.25和1-2的6.5，且客胜1X2仅1.49，说明市场清晰预期维拉至少更可能打破僵局。",
+          "one_one_case": "1-1赔率7.0很低，说明平局与BTTS不能忽视。但伯恩利已提前降级且近10场0胜2平8负，维拉整体实力优势明显；更关键是客胜低赔非常集中在0-2、0-1、1-2，市场更像在审计伯恩利是否进球，而不是是否能守成平局。",
+          "one_goal_margin_case": "按模板比较1-0、2-0、2-1、3-1、1-1时，主队赢球路径赔率都很高，不具现实主线意义；对强客盘更应看客队镜像的0-1/0-2/1-2。0-2比0-1更符合客队强弱差和两球净胜空间。",
+          "four_plus_case": "4球赔率4.8、5球7.75有压缩，1-3与0-3都需审计；但维拉周中高强度欧战后，客队大开杀戒的确定性不足，因此将4球以上列为风险尾部，不作为主选。",
+          "handicap_score_shape_case": "让球模板来自一球盘形态，但真实1X2是客胜强势。结合强客定位，比分应优先在0-1、0-2、1-2、0-3中选择。考虑维拉客场近10场有8场总进球不超2，0-2比1-2更稳。",
+          "league_style_case": "英超虽可快节奏，但保级队遇强队、强队又有赛程压力时，常转为控制型低中比分。0-2正好符合强队做实结果而非无限拉开。",
+          "final_score_vs_anchor_summary": "1-2是全场最低赔，但0-2兼容客胜强势、2球主模态、维拉客场小比分特征与伯恩利火力不足，因此在比分选择上略优于1-2。"
+        },
+        "market_interpretation": {
+          "one_x_two": "客胜1.49属于明显优势盘，竞彩层面方向相对清晰。",
+          "handicap": "原始让球1.0与客强1X2相结合，实际更像客队至少净胜一球的结构。",
+          "correct_score": "客胜比分簇高度集中，1-2、0-2、0-1、0-3、1-3形成连续压缩，体现客队优势非常明确。",
+          "total_goals": "3球3.4略低于2球3.8，但2球仍处核心区；这允许0-2与1-2同时成为主候选。",
+          "half_full_time": "负/负2.1极低，平/负4.35次低，说明维拉从头领先或下半场接管都很受支持。",
+          "external_market": "无法联网，缺少外部欧赔和交易所进一步验证客胜是否被持续压低。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "away",
+          "sharp_confidence": 63,
+          "reverse_line_movement": false,
+          "steam_move": "away",
+          "evidence": "公众客胜59%明显集中，且竞彩赔率仍维持低位未明显抬高，通常意味着市场对客胜容忍度较高；但无时间序列，只能给中高置信。"
+        },
+        "contextual_logic": {
+          "league_style": "英超强弱分明对局，若强队目标明确，常见0-1、0-2、1-2。",
+          "team_style": "伯恩利防线脆弱且已降级，维拉争分动力更足，但受欧战体能拖累，可能降低净胜球上限。",
+          "tempo": "medium",
+          "score_shape": "维拉控制比赛、伯恩利机会有限，若先失球后很难扭转。",
+          "btts_likelihood": "no",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未选主胜，因为主胜赔率与正确比分都处于高赔区，不符合当前市场结构。",
+          "draw": "未选1-1，虽然赔率低，但强客1X2与负/负半全场压制了平局主线。",
+          "away": "未选1-2作为主选，是因其虽最低赔但隐含伯恩利进球；综合伯恩利火力与维拉客场小比分特征，0-2更整合。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 78,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "维拉欧战后体能",
+            "1-2强反例"
+          ],
+          "why_recommended": "客胜方向是本批次较清晰的一场，主要不确定仅在于伯恩利是否取得安慰性进球。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部欧赔/亚盘/交易所",
+            "临场阵容确认"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "这是强客结构最清楚的一场之一。竞彩1X2、半全场、正确比分簇都明显向维拉倾斜，而总进球又未走向极端大球，故更适合锁定客队低中比分赢球。1-2虽是最低赔，但0-2更符合伯恩利攻击力不足与维拉客场收着赢的轮廓。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 9,
+          "final_direction": "away",
+          "predicted_score": "0-2",
+          "direction_probs": {
+            "home": 14,
+            "draw": 22,
+            "away": 64
+          },
+          "goal_band": "2",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "0-2",
+              "prob": 20,
+              "logic": "客胜是显著主方向，0-2为客胜次低赔且更贴合维拉客场近10战多数总进球不超2球的已知信息。"
+            },
+            {
+              "score": "1-2",
+              "prob": 18,
+              "logic": "1-2是全场最低赔，说明市场承认伯恩利主场仍有破门窗口。"
+            },
+            {
+              "score": "0-1",
+              "prob": 14,
+              "logic": "0-1赔率也低，若维拉受欧战体能影响、比赛节奏被压低，则可能只赢一球。"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+              "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+            ],
+            "zero_zero_case": "不选0-0。0-0赔率15.0明显高于0-2的7.25和1-2的6.5，且客胜1X2仅1.49，说明市场清晰预期维拉至少更可能打破僵局。",
+            "one_one_case": "1-1赔率7.0很低，说明平局与BTTS不能忽视。但伯恩利已提前降级且近10场0胜2平8负，维拉整体实力优势明显；更关键是客胜低赔非常集中在0-2、0-1、1-2，市场更像在审计伯恩利是否进球，而不是是否能守成平局。",
+            "one_goal_margin_case": "按模板比较1-0、2-0、2-1、3-1、1-1时，主队赢球路径赔率都很高，不具现实主线意义；对强客盘更应看客队镜像的0-1/0-2/1-2。0-2比0-1更符合客队强弱差和两球净胜空间。",
+            "four_plus_case": "4球赔率4.8、5球7.75有压缩，1-3与0-3都需审计；但维拉周中高强度欧战后，客队大开杀戒的确定性不足，因此将4球以上列为风险尾部，不作为主选。",
+            "handicap_score_shape_case": "让球模板来自一球盘形态，但真实1X2是客胜强势。结合强客定位，比分应优先在0-1、0-2、1-2、0-3中选择。考虑维拉客场近10场有8场总进球不超2，0-2比1-2更稳。",
+            "league_style_case": "英超虽可快节奏，但保级队遇强队、强队又有赛程压力时，常转为控制型低中比分。0-2正好符合强队做实结果而非无限拉开。",
+            "final_score_vs_anchor_summary": "1-2是全场最低赔，但0-2兼容客胜强势、2球主模态、维拉客场小比分特征与伯恩利火力不足，因此在比分选择上略优于1-2。"
+          },
+          "market_interpretation": {
+            "one_x_two": "客胜1.49属于明显优势盘，竞彩层面方向相对清晰。",
+            "handicap": "原始让球1.0与客强1X2相结合，实际更像客队至少净胜一球的结构。",
+            "correct_score": "客胜比分簇高度集中，1-2、0-2、0-1、0-3、1-3形成连续压缩，体现客队优势非常明确。",
+            "total_goals": "3球3.4略低于2球3.8，但2球仍处核心区；这允许0-2与1-2同时成为主候选。",
+            "half_full_time": "负/负2.1极低，平/负4.35次低，说明维拉从头领先或下半场接管都很受支持。",
+            "external_market": "无法联网，缺少外部欧赔和交易所进一步验证客胜是否被持续压低。"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "away",
+            "sharp_confidence": 63,
+            "reverse_line_movement": false,
+            "steam_move": "away",
+            "evidence": "公众客胜59%明显集中，且竞彩赔率仍维持低位未明显抬高，通常意味着市场对客胜容忍度较高；但无时间序列，只能给中高置信。"
+          },
+          "contextual_logic": {
+            "league_style": "英超强弱分明对局，若强队目标明确，常见0-1、0-2、1-2。",
+            "team_style": "伯恩利防线脆弱且已降级，维拉争分动力更足，但受欧战体能拖累，可能降低净胜球上限。",
+            "tempo": "medium",
+            "score_shape": "维拉控制比赛、伯恩利机会有限，若先失球后很难扭转。",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未选主胜，因为主胜赔率与正确比分都处于高赔区，不符合当前市场结构。",
+            "draw": "未选1-1，虽然赔率低，但强客1X2与负/负半全场压制了平局主线。",
+            "away": "未选1-2作为主选，是因其虽最低赔但隐含伯恩利进球；综合伯恩利火力与维拉客场小比分特征，0-2更整合。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 78,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "维拉欧战后体能",
+              "1-2强反例"
+            ],
+            "why_recommended": "客胜方向是本批次较清晰的一场，主要不确定仅在于伯恩利是否取得安慰性进球。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔/亚盘/交易所",
+              "临场阵容确认"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "这是强客结构最清楚的一场之一。竞彩1X2、半全场、正确比分簇都明显向维拉倾斜，而总进球又未走向极端大球，故更适合锁定客队低中比分赢球。1-2虽是最低赔，但0-2更符合伯恩利攻击力不足与维拉客场收着赢的轮廓。"
+        }
+      },
+      "10": {
+        "match": 10,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "draw",
+        "raw_ai_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 32.0,
+          "draw": 35.0,
+          "away": 33.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 19.0,
+            "logic": "1-1为全场最低赔，总进球主模态为2球，且0-0、1-0、0-1都不高，明显是低比分平衡盘。"
+          },
+          {
+            "score": "0-1",
+            "prob": 13.0,
+            "logic": "客队略受1X2与历史交锋支撑，若比赛继续保守且先手成功，0-1是强备选。"
+          },
+          {
+            "score": "2-1",
+            "prob": 12.0,
+            "logic": "主队主场状态强势，2-1作为主向最低赔仍有兑现空间，但需突破低比分主模态。"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "0-0赔率≤9.5：为什么不是0-0？如果选其他比分，必须解释突破闷局的证据。",
+            "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+            "总进球主模态在0-2球：不能机械输出2-1，必须审计0-0/1-0/0-1/1-1/2-0/0-2。",
+            "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+          ],
+          "zero_zero_case": "0-0赔率11.0并不高，总进球0球也11.0，确实要严肃审计。但1-1赔率更低至6.0，说明市场认为低比分成立的同时，双方各入一球比全场闷平更主流。两队近期主客场都有一定失球记录，故不取0-0。",
+          "one_one_case": "选择1-1。其一，1-1是全场最低赔；其二，总进球2球3.3为最低，和1-1完全贴合；其三，半全场平/平4.8处于低位，说明从均势开场走向平局终局的路径被强力支持。BTTS与低总进球明显共振。",
+          "one_goal_margin_case": "1-0 8.5、0-1 8.0、2-1 8.25、1-2 7.75都很低，说明分胜负的一球盘极强。但总进球主模态仅2球，且1-1赔率压在所有这些之上，因此市场更先承认'谁都可能赢一球'，但最终最稳形态仍是打平。",
+          "four_plus_case": "4球赔率5.7不算离谱，但明显弱于2球3.3与3球3.55；正确比分中2-2虽12.0可防，1-3和3-1都接近20上下，说明高比分只是次级风险，不宜上提为主选。",
+          "handicap_score_shape_case": "模板要求审计1-0/2-0/2-1/3-1/1-1。由于本场让球与1X2都显示均势，而且总进球模式偏低，1-1在这些候选中最符合低波动约束；2-0和3-1需要更强单边性，证据不足。",
+          "league_style_case": "英超并非所有比赛都开放，赛季尾声中游对决常见谨慎对抗。本场双方战意中等、历史交锋客队占优但主队主场硬，1-1是很典型的收敛形态。",
+          "final_score_vs_anchor_summary": "本场必须先审计0-0/1-0/0-1/1-1，而1-1同时得到最低比分赔率、2球主模态、平/平半全场的三重支持，因此不是偷懒选择，而是锚点最完整的结果。"
+        },
+        "market_interpretation": {
+          "one_x_two": "主胜2.55、客胜2.4、平3.12，三向非常接近，客队只有极轻微优势。",
+          "handicap": "原始让球1.0与均势1X2并存，说明让球字段不宜直接定方向，只能帮助识别一球分差常见。",
+          "correct_score": "1-1最低，随后是1-2、0-1、2-1、1-0，典型低比分分胜负与平局并举。",
+          "total_goals": "2球最低、3球次低、1球第三低，市场明确偏小。",
+          "half_full_time": "平/平4.8较低，主/主4.1与负/负4.0接近，说明任何单边路线都不够强，平稳推进到平局较合理。",
+          "external_market": "无联网能力，无法验证外部市场是否也把平局压在主线。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 30,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票客胜36%、主胜35%几乎持平，资金分散；缺乏变盘与外部盘支持，无法识别尖锐方向。"
+        },
+        "contextual_logic": {
+          "league_style": "英超尾声中游队对碰，经常节奏下降、重视不败。",
+          "team_style": "主队主场稳、客队交锋优势强，但双方进攻上限都有限。",
+          "tempo": "low",
+          "score_shape": "比赛大概率在均势中展开，双方都有破门条件但难持续压制对手。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未选主胜，因为虽有主场状态支撑，但历史交锋与1X2没有给予明确主导。",
+          "draw": "选择平局，未选0-0是因1-1赔率明显更低，说明市场认为至少各有一次有效进攻。",
+          "away": "未选客胜，因为客队略倾斜不足以压过平局锚点，0-1/1-2只是次优备选。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 2,
+          "bet_confidence": 74,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "均势盘",
+            "一球分胜负候选多",
+            "0-0需防"
+          ],
+          "why_recommended": "这是本批次少数平局锚点极强且低比分结构清晰的比赛，适合做平局方向重点关注。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部赔率时间序列",
+            "首发确认"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场不能机械给2-1，因为0-0赔率不高、1-1更是全场最低，而总进球主模态就在2球。综合低比分簇、平/平半全场和双方实力接近的背景，1-1是最符合市场结构的结果。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 10,
+          "final_direction": "draw",
+          "predicted_score": "1-1",
+          "direction_probs": {
+            "home": 32,
+            "draw": 35,
+            "away": 33
+          },
+          "goal_band": "2",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-1",
+              "prob": 19,
+              "logic": "1-1为全场最低赔，总进球主模态为2球，且0-0、1-0、0-1都不高，明显是低比分平衡盘。"
+            },
+            {
+              "score": "0-1",
+              "prob": 13,
+              "logic": "客队略受1X2与历史交锋支撑，若比赛继续保守且先手成功，0-1是强备选。"
+            },
+            {
+              "score": "2-1",
+              "prob": 12,
+              "logic": "主队主场状态强势，2-1作为主向最低赔仍有兑现空间，但需突破低比分主模态。"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "0-0赔率≤9.5：为什么不是0-0？如果选其他比分，必须解释突破闷局的证据。",
+              "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+              "总进球主模态在0-2球：不能机械输出2-1，必须审计0-0/1-0/0-1/1-1/2-0/0-2。",
+              "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+            ],
+            "zero_zero_case": "0-0赔率11.0并不高，总进球0球也11.0，确实要严肃审计。但1-1赔率更低至6.0，说明市场认为低比分成立的同时，双方各入一球比全场闷平更主流。两队近期主客场都有一定失球记录，故不取0-0。",
+            "one_one_case": "选择1-1。其一，1-1是全场最低赔；其二，总进球2球3.3为最低，和1-1完全贴合；其三，半全场平/平4.8处于低位，说明从均势开场走向平局终局的路径被强力支持。BTTS与低总进球明显共振。",
+            "one_goal_margin_case": "1-0 8.5、0-1 8.0、2-1 8.25、1-2 7.75都很低，说明分胜负的一球盘极强。但总进球主模态仅2球，且1-1赔率压在所有这些之上，因此市场更先承认'谁都可能赢一球'，但最终最稳形态仍是打平。",
+            "four_plus_case": "4球赔率5.7不算离谱，但明显弱于2球3.3与3球3.55；正确比分中2-2虽12.0可防，1-3和3-1都接近20上下，说明高比分只是次级风险，不宜上提为主选。",
+            "handicap_score_shape_case": "模板要求审计1-0/2-0/2-1/3-1/1-1。由于本场让球与1X2都显示均势，而且总进球模式偏低，1-1在这些候选中最符合低波动约束；2-0和3-1需要更强单边性，证据不足。",
+            "league_style_case": "英超并非所有比赛都开放，赛季尾声中游对决常见谨慎对抗。本场双方战意中等、历史交锋客队占优但主队主场硬，1-1是很典型的收敛形态。",
+            "final_score_vs_anchor_summary": "本场必须先审计0-0/1-0/0-1/1-1，而1-1同时得到最低比分赔率、2球主模态、平/平半全场的三重支持，因此不是偷懒选择，而是锚点最完整的结果。"
+          },
+          "market_interpretation": {
+            "one_x_two": "主胜2.55、客胜2.4、平3.12，三向非常接近，客队只有极轻微优势。",
+            "handicap": "原始让球1.0与均势1X2并存，说明让球字段不宜直接定方向，只能帮助识别一球分差常见。",
+            "correct_score": "1-1最低，随后是1-2、0-1、2-1、1-0，典型低比分分胜负与平局并举。",
+            "total_goals": "2球最低、3球次低、1球第三低，市场明确偏小。",
+            "half_full_time": "平/平4.8较低，主/主4.1与负/负4.0接近，说明任何单边路线都不够强，平稳推进到平局较合理。",
+            "external_market": "无联网能力，无法验证外部市场是否也把平局压在主线。"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 30,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票客胜36%、主胜35%几乎持平，资金分散；缺乏变盘与外部盘支持，无法识别尖锐方向。"
+          },
+          "contextual_logic": {
+            "league_style": "英超尾声中游队对碰，经常节奏下降、重视不败。",
+            "team_style": "主队主场稳、客队交锋优势强，但双方进攻上限都有限。",
+            "tempo": "low",
+            "score_shape": "比赛大概率在均势中展开，双方都有破门条件但难持续压制对手。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未选主胜，因为虽有主场状态支撑，但历史交锋与1X2没有给予明确主导。",
+            "draw": "选择平局，未选0-0是因1-1赔率明显更低，说明市场认为至少各有一次有效进攻。",
+            "away": "未选客胜，因为客队略倾斜不足以压过平局锚点，0-1/1-2只是次优备选。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 74,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "均势盘",
+              "一球分胜负候选多",
+              "0-0需防"
+            ],
+            "why_recommended": "这是本批次少数平局锚点极强且低比分结构清晰的比赛，适合做平局方向重点关注。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部赔率时间序列",
+              "首发确认"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场不能机械给2-1，因为0-0赔率不高、1-1更是全场最低，而总进球主模态就在2球。综合低比分簇、平/平半全场和双方实力接近的背景，1-1是最符合市场结构的结果。"
+        }
+      },
+      "11": {
+        "match": 11,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "away",
+        "raw_ai_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 31.0,
+          "draw": 28.0,
+          "away": 41.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 17.0,
+            "logic": "客胜1X2略低于主胜，1-2也是客向最低赔，且匹配3球主模态。"
+          },
+          {
+            "score": "1-1",
+            "prob": 16.0,
+            "logic": "1-1为全场最低赔，说明平局仍是最强反例，尤其在双方都可能谨慎开局时。"
+          },
+          {
+            "score": "2-1",
+            "prob": 15.0,
+            "logic": "主队状态与主场表现更好，2-1只是略高于1-2，主胜并未被排除。"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+            "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+          ],
+          "zero_zero_case": "不选0-0。0-0赔率14.0不算低，明显落后于1-1、1-2、2-1；总进球主模态是3球，说明比赛有进球比无球更符合市场。",
+          "one_one_case": "1-1赔率6.45全场最低，是非常强的反例。之所以不选，是因为客胜1X2 2.35略优于主胜2.49，且平/负5.6、负/负3.8都支持纽卡更容易把均势打成客胜终局。BTTS共振存在，但更偏1-2。",
+          "one_goal_margin_case": "1-0 10.0、2-0 14.0、2-1 8.0、3-1 18.0、1-1 6.45需与客队镜像比较。客向1-2 7.75比主向2-1 8.0还低，说明在一球分差路径中客队略占上风。",
+          "four_plus_case": "4球赔率4.9、5球8.0压缩，1-3和2-2都需审计；但考虑双方近期数据与赛季尾声背景，4球以上有风险但不够压倒性。1-2在3球模态内更稳。",
+          "handicap_score_shape_case": "模板中的1-0/2-0/2-1/3-1/1-1主要偏向主队形态，但本场必须镜像到客队0-1/0-2/1-2/1-3。结合1X2轻客和客队方向最低比分，1-2更符合一球盘约束。",
+          "league_style_case": "英超可开放也可收缩，本场两队排名接近但赛季定位摇摆，3球附近最自然。主队状态热但伤停与赛程风险存在，给了客队偷走比赛的空间。",
+          "final_score_vs_anchor_summary": "主队状态面占优，客队赔率面略优。最终以赔率结构优先：1-2低于2-1，客胜略低于主胜，半全场也更支持客队终局，因此1-2险胜。"
+        },
+        "market_interpretation": {
+          "one_x_two": "客胜2.35略低于主胜2.49，属于极窄客倾斜。",
+          "handicap": "原始让球1.0与1X2不完全一致，说明此战更多是一球胜负模板，而非单边强盘。",
+          "correct_score": "1-1、1-2、2-1三者最核心，市场直观告诉我们这是'平或一球分胜负'结构。",
+          "total_goals": "3球3.45最低，2球3.7次低，属于典型的2-3球分布。",
+          "half_full_time": "负/负3.8、主/主4.05接近，平/负与平/主都在6上下，说明两边都能赢，但客队终局略占优。",
+          "external_market": "无法联网，缺乏外部市场对纽卡客胜是否同步支持的验证。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 34,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票客胜37%、主胜36%几乎均衡，赔率也无明确移动信息，市场分歧较大，难识别真正尖锐资金。"
+        },
+        "contextual_logic": {
+          "league_style": "英超中游接近对决，常见3球附近的1-2/2-1/1-1。",
+          "team_style": "主队近况更佳、主场更强；客队客场差但历史与纸面实力尚存，不至于完全失衡。",
+          "tempo": "medium",
+          "score_shape": "更像主队先施压但无法持续，客队凭转换效率完成反超。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未选主胜，因为虽然状态和主场面支持，但赔率上客队略优，2-1并未压过1-2。",
+          "draw": "未选1-1，是因平局虽为最低赔，但客胜终局信号稍多，尤其平/负和负/负支撑客队后程占优。",
+          "away": "未选0-1，是因总进球主模态更偏3球，1-2比0-1更自然。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "C",
+          "is_recommended": false,
+          "top4_priority": 4,
+          "bet_confidence": 56,
+          "direction_stability": "weak",
+          "score_stability": "weak",
+          "risk_level": "high",
+          "risk_tags": [
+            "1-1强反例",
+            "主队状态更优",
+            "赔率仅轻微客倾斜"
+          ],
+          "why_recommended": "不属于优选场次，主客胜与平局三路都很接近，市场容错低。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部市场对照",
+            "临场首发和赛程真伪核验"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "这场最难点在于状态面与赔率面冲突。主队近况更好，但市场在1X2与比分簇上给了纽卡极轻微优势。由于1-2低于2-1且3球是总进球主模态，最终微倾客胜1-2，但属于高风险分歧盘。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 11,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 31,
+            "draw": 28,
+            "away": 41
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 17,
+              "logic": "客胜1X2略低于主胜，1-2也是客向最低赔，且匹配3球主模态。"
+            },
+            {
+              "score": "1-1",
+              "prob": 16,
+              "logic": "1-1为全场最低赔，说明平局仍是最强反例，尤其在双方都可能谨慎开局时。"
+            },
+            {
+              "score": "2-1",
+              "prob": 15,
+              "logic": "主队状态与主场表现更好，2-1只是略高于1-2，主胜并未被排除。"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+              "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+            ],
+            "zero_zero_case": "不选0-0。0-0赔率14.0不算低，明显落后于1-1、1-2、2-1；总进球主模态是3球，说明比赛有进球比无球更符合市场。",
+            "one_one_case": "1-1赔率6.45全场最低，是非常强的反例。之所以不选，是因为客胜1X2 2.35略优于主胜2.49，且平/负5.6、负/负3.8都支持纽卡更容易把均势打成客胜终局。BTTS共振存在，但更偏1-2。",
+            "one_goal_margin_case": "1-0 10.0、2-0 14.0、2-1 8.0、3-1 18.0、1-1 6.45需与客队镜像比较。客向1-2 7.75比主向2-1 8.0还低，说明在一球分差路径中客队略占上风。",
+            "four_plus_case": "4球赔率4.9、5球8.0压缩，1-3和2-2都需审计；但考虑双方近期数据与赛季尾声背景，4球以上有风险但不够压倒性。1-2在3球模态内更稳。",
+            "handicap_score_shape_case": "模板中的1-0/2-0/2-1/3-1/1-1主要偏向主队形态，但本场必须镜像到客队0-1/0-2/1-2/1-3。结合1X2轻客和客队方向最低比分，1-2更符合一球盘约束。",
+            "league_style_case": "英超可开放也可收缩，本场两队排名接近但赛季定位摇摆，3球附近最自然。主队状态热但伤停与赛程风险存在，给了客队偷走比赛的空间。",
+            "final_score_vs_anchor_summary": "主队状态面占优，客队赔率面略优。最终以赔率结构优先：1-2低于2-1，客胜略低于主胜，半全场也更支持客队终局，因此1-2险胜。"
+          },
+          "market_interpretation": {
+            "one_x_two": "客胜2.35略低于主胜2.49，属于极窄客倾斜。",
+            "handicap": "原始让球1.0与1X2不完全一致，说明此战更多是一球胜负模板，而非单边强盘。",
+            "correct_score": "1-1、1-2、2-1三者最核心，市场直观告诉我们这是'平或一球分胜负'结构。",
+            "total_goals": "3球3.45最低，2球3.7次低，属于典型的2-3球分布。",
+            "half_full_time": "负/负3.8、主/主4.05接近，平/负与平/主都在6上下，说明两边都能赢，但客队终局略占优。",
+            "external_market": "无法联网，缺乏外部市场对纽卡客胜是否同步支持的验证。"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 34,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票客胜37%、主胜36%几乎均衡，赔率也无明确移动信息，市场分歧较大，难识别真正尖锐资金。"
+          },
+          "contextual_logic": {
+            "league_style": "英超中游接近对决，常见3球附近的1-2/2-1/1-1。",
+            "team_style": "主队近况更佳、主场更强；客队客场差但历史与纸面实力尚存，不至于完全失衡。",
+            "tempo": "medium",
+            "score_shape": "更像主队先施压但无法持续，客队凭转换效率完成反超。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未选主胜，因为虽然状态和主场面支持，但赔率上客队略优，2-1并未压过1-2。",
+            "draw": "未选1-1，是因平局虽为最低赔，但客胜终局信号稍多，尤其平/负和负/负支撑客队后程占优。",
+            "away": "未选0-1，是因总进球主模态更偏3球，1-2比0-1更自然。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "C",
+            "is_recommended": false,
+            "top4_priority": 4,
+            "bet_confidence": 56,
+            "direction_stability": "weak",
+            "score_stability": "weak",
+            "risk_level": "high",
+            "risk_tags": [
+              "1-1强反例",
+              "主队状态更优",
+              "赔率仅轻微客倾斜"
+            ],
+            "why_recommended": "不属于优选场次，主客胜与平局三路都很接近，市场容错低。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部市场对照",
+              "临场首发和赛程真伪核验"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "这场最难点在于状态面与赔率面冲突。主队近况更好，但市场在1X2与比分簇上给了纽卡极轻微优势。由于1-2低于2-1且3球是总进球主模态，最终微倾客胜1-2，但属于高风险分歧盘。"
+        }
+      },
+      "12": {
+        "match": 12,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-0",
+        "direction_probs": {
+          "home": 61.0,
+          "draw": 24.0,
+          "away": 15.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 22.0,
+            "logic": "主胜强势下，2-0兼顾1X2主胜低赔、总进球2球主模态以及客队客场火力极弱。"
+          },
+          {
+            "score": "1-0",
+            "prob": 20.0,
+            "logic": "1-0是全场最低赔，说明低比分主胜是市场最核心路径之一。"
+          },
+          {
+            "score": "2-1",
+            "prob": 15.0,
+            "logic": "2-1作为主向第三低赔，若主队防线问题兑现则存在失球后仍拿下比赛的可能。"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "0-0赔率≤9.5：为什么不是0-0？如果选其他比分，必须解释突破闷局的证据。",
+            "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+            "总进球主模态在0-2球：不能机械输出2-1，必须审计0-0/1-0/0-1/1-1/2-0/0-2。",
+            "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+          ],
+          "zero_zero_case": "0-0赔率9.5，必须严肃审计。之所以不选0-0，是因为主胜1X2仅1.56，主/主半全场2.35极低，同时1-0 5.8、2-0 6.7、2-1 7.0连续压缩，市场明确预期主队更可能先破局并带走比赛，而不是长期僵持。",
+          "one_one_case": "1-1赔率6.5也很低，是强反例。但客队近5个客场全败且客场进攻极弱，0-1虽有11.0但远高于主胜主线。BTTS的市场支持不如主队零封胜，尤其1-0与2-0都比1-1更低或接近。",
+          "one_goal_margin_case": "模板要求比较1-0/2-0/2-1/3-1/1-1。1-0最低、2-0第三低、2-1第四低、1-1第二低，说明低比分主胜与平局拉锯明显。最终选2-0，是因为总进球2球3.3最低，且客队客场攻击面最弱，2-0比1-0多一层主队兑现优势的空间。",
+          "four_plus_case": "4球赔率6.0、5球11.5，尾部虽不算完全关闭，但远弱于2球3.3与3球3.75。正确比分中3-1 13.0、4-0 26.0，支持有限，因此压低高比分尾部，不主选3球以上。",
+          "handicap_score_shape_case": "让球模板提示一球盘常见1-0/2-0/2-1。结合本场主胜1.56的明显优势，但总进球又不高，最自然的是1-0或2-0；考虑主/主半全场极低，主队持续压制更像形成2-0而非被追成2-1。",
+          "league_style_case": "意甲风格更谨慎，低比分主胜非常常见。尤其降级区对决中，领先一方会优先保住结构，2-0是比3-1更贴近联赛气质的结果。",
+          "final_score_vs_anchor_summary": "虽然1-0是全场最低赔，但2球总进球主模态、主队更强的胜面、客队客场持续零进球背景，使2-0比1-0更能体现市场对主队优势的完整兑现；同时它又比2-1更符合低比分与客队弱攻约束。"
+        },
+        "market_interpretation": {
+          "one_x_two": "主胜1.56是本批次少数较明确的强主盘。",
+          "handicap": "原始让球-1.0配合低主胜，说明至少存在主队净胜一球甚至两球的形态预期。",
+          "correct_score": "1-0、2-0、2-1、1-1、0-0集中在低赔区，说明主胜主线清晰但闷局与小平也需防。",
+          "total_goals": "2球最低、1球次低、3球第三低，典型小球主导结构。",
+          "half_full_time": "主/主2.35极低，平/主4.2次低，说明主队从比赛中段起掌控比赛的预期很强。",
+          "external_market": "无法联网，不能对照外部欧赔是否同样支持主队零封。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 68,
+          "reverse_line_movement": false,
+          "steam_move": "home",
+          "evidence": "公众主胜57%集中，且竞彩主胜仍维持1.56低位，说明市场对主胜承接意愿较强；虽无外部盘和时间序列，但内生结构足够偏主。"
+        },
+        "contextual_logic": {
+          "league_style": "意甲保级战常见谨慎但结果导向明确的低比分主胜。",
+          "team_style": "两队状态都差，但客队已提前降级且客场连败零进球，主队至少具备更稳定的破门条件。",
+          "tempo": "low",
+          "score_shape": "主队先手后控制节奏，客队反扑效率不足，比赛逐步沉到2球以内。",
+          "btts_likelihood": "no",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未选1-0，是因2球主模态更强，且客队后程继续丢第二球的概率不低。",
+          "draw": "未选0-0或1-1，虽然赔率不高，但强主1X2与主/主半全场共同提供了突破闷局的硬证据。",
+          "away": "未选客胜，因为客胜路径赔率高且客队近期状态、客场表现均不足以支撑。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "S",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 82,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "low",
+          "risk_tags": [
+            "低比分闷局需防",
+            "1-0与2-0分流"
+          ],
+          "why_recommended": "主胜方向清晰，且比分形态集中在1-0/2-0/2-1的小范围内，可审计性强，是本批次最稳方向之一。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部盘口时间点",
+            "首发确认"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "本场必须认真审计0-0与1-1，因为赔率并不高；但强主1X2、主/主半全场、客队持续低迷且客场火力不足，最终把结果推向低比分主胜。相比1-0，2-0更贴合总进球2球主模态；相比2-1，又更符合客队弱攻现实，因此主选克雷莫纳2-0。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 12,
+          "final_direction": "home",
+          "predicted_score": "2-0",
+          "direction_probs": {
+            "home": 61,
+            "draw": 24,
+            "away": 15
+          },
+          "goal_band": "2",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "2-0",
+              "prob": 22,
+              "logic": "主胜强势下，2-0兼顾1X2主胜低赔、总进球2球主模态以及客队客场火力极弱。"
+            },
+            {
+              "score": "1-0",
+              "prob": 20,
+              "logic": "1-0是全场最低赔，说明低比分主胜是市场最核心路径之一。"
+            },
+            {
+              "score": "2-1",
+              "prob": 15,
+              "logic": "2-1作为主向第三低赔，若主队防线问题兑现则存在失球后仍拿下比赛的可能。"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "0-0赔率≤9.5：为什么不是0-0？如果选其他比分，必须解释突破闷局的证据。",
+              "1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。",
+              "总进球主模态在0-2球：不能机械输出2-1，必须审计0-0/1-0/0-1/1-1/2-0/0-2。",
+              "让球盘形态模板要求重点比较：1-0,2-0,2-1,3-1,1-1。AI必须说明最终比分如何从这些候选中胜出。"
+            ],
+            "zero_zero_case": "0-0赔率9.5，必须严肃审计。之所以不选0-0，是因为主胜1X2仅1.56，主/主半全场2.35极低，同时1-0 5.8、2-0 6.7、2-1 7.0连续压缩，市场明确预期主队更可能先破局并带走比赛，而不是长期僵持。",
+            "one_one_case": "1-1赔率6.5也很低，是强反例。但客队近5个客场全败且客场进攻极弱，0-1虽有11.0但远高于主胜主线。BTTS的市场支持不如主队零封胜，尤其1-0与2-0都比1-1更低或接近。",
+            "one_goal_margin_case": "模板要求比较1-0/2-0/2-1/3-1/1-1。1-0最低、2-0第三低、2-1第四低、1-1第二低，说明低比分主胜与平局拉锯明显。最终选2-0，是因为总进球2球3.3最低，且客队客场攻击面最弱，2-0比1-0多一层主队兑现优势的空间。",
+            "four_plus_case": "4球赔率6.0、5球11.5，尾部虽不算完全关闭，但远弱于2球3.3与3球3.75。正确比分中3-1 13.0、4-0 26.0，支持有限，因此压低高比分尾部，不主选3球以上。",
+            "handicap_score_shape_case": "让球模板提示一球盘常见1-0/2-0/2-1。结合本场主胜1.56的明显优势，但总进球又不高，最自然的是1-0或2-0；考虑主/主半全场极低，主队持续压制更像形成2-0而非被追成2-1。",
+            "league_style_case": "意甲风格更谨慎，低比分主胜非常常见。尤其降级区对决中，领先一方会优先保住结构，2-0是比3-1更贴近联赛气质的结果。",
+            "final_score_vs_anchor_summary": "虽然1-0是全场最低赔，但2球总进球主模态、主队更强的胜面、客队客场持续零进球背景，使2-0比1-0更能体现市场对主队优势的完整兑现；同时它又比2-1更符合低比分与客队弱攻约束。"
+          },
+          "market_interpretation": {
+            "one_x_two": "主胜1.56是本批次少数较明确的强主盘。",
+            "handicap": "原始让球-1.0配合低主胜，说明至少存在主队净胜一球甚至两球的形态预期。",
+            "correct_score": "1-0、2-0、2-1、1-1、0-0集中在低赔区，说明主胜主线清晰但闷局与小平也需防。",
+            "total_goals": "2球最低、1球次低、3球第三低，典型小球主导结构。",
+            "half_full_time": "主/主2.35极低，平/主4.2次低，说明主队从比赛中段起掌控比赛的预期很强。",
+            "external_market": "无法联网，不能对照外部欧赔是否同样支持主队零封。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 68,
+            "reverse_line_movement": false,
+            "steam_move": "home",
+            "evidence": "公众主胜57%集中，且竞彩主胜仍维持1.56低位，说明市场对主胜承接意愿较强；虽无外部盘和时间序列，但内生结构足够偏主。"
+          },
+          "contextual_logic": {
+            "league_style": "意甲保级战常见谨慎但结果导向明确的低比分主胜。",
+            "team_style": "两队状态都差，但客队已提前降级且客场连败零进球，主队至少具备更稳定的破门条件。",
+            "tempo": "low",
+            "score_shape": "主队先手后控制节奏，客队反扑效率不足，比赛逐步沉到2球以内。",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未选1-0，是因2球主模态更强，且客队后程继续丢第二球的概率不低。",
+            "draw": "未选0-0或1-1，虽然赔率不高，但强主1X2与主/主半全场共同提供了突破闷局的硬证据。",
+            "away": "未选客胜，因为客胜路径赔率高且客队近期状态、客场表现均不足以支撑。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "S",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 82,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [
+              "低比分闷局需防",
+              "1-0与2-0分流"
+            ],
+            "why_recommended": "主胜方向清晰，且比分形态集中在1-0/2-0/2-1的小范围内，可审计性强，是本批次最稳方向之一。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部盘口时间点",
+              "首发确认"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "本场必须认真审计0-0与1-1，因为赔率并不高；但强主1X2、主/主半全场、客队持续低迷且客场火力不足，最终把结果推向低比分主胜。相比1-0，2-0更贴合总进球2球主模态；相比2-1，又更符合客队弱攻现实，因此主选克雷莫纳2-0。"
+        }
+      }
+    },
+    "grok": {
+      "7": {
+        "match": 7,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "away",
+        "raw_ai_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 28.0,
+          "draw": 27.0,
+          "away": 45.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 18.0,
+            "logic": "1-2路径赔率8.5为客胜最低，结合客队实力占优与总进球模态3球共振"
+          },
+          {
+            "score": "2-1",
+            "prob": 15.0,
+            "logic": "主队保级战意下可能1球反超但客队整体更稳"
+          },
+          {
+            "score": "1-1",
+            "prob": 14.0,
+            "logic": "1-1赔率最低但客队客场防守隐患限制平局概率"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "1-1赔率6.5偏低但BTTS共振下客队实力差距使1-2胜出",
+            "让球盘一球形态下1-0/2-0/2-1/3-1/1-1中1-2通过客队反击路径胜出"
+          ],
+          "zero_zero_case": "0-0赔率15.0高位，总进球模态主模态3球且客队状态出色不支持0-0",
+          "one_one_case": "1-1赔率6.5最低但客队近客场防守不稳且主队保级需进球，1-2更匹配",
+          "one_goal_margin_case": "1-0/0-1/2-1/1-2中1-2赔率8.5最低且客队实力支持",
+          "four_plus_case": "4球以上赔率压缩但模式3球为主，尾部3-2/4-1不支持",
+          "handicap_score_shape_case": "一球盘形态要求1-0/2-0/2-1/3-1/1-1，1-2通过客让反击胜出",
+          "league_style_case": "西甲控球分化，客队比利亚雷状态好于主队保级肉搏",
+          "final_score_vs_anchor_summary": "1-2从1-1/2-1/1-0等锚点中通过客队实力与总进球3球胜出"
+        },
+        "market_interpretation": {
+          "one_x_two": "客胜2.7低于主胜，支持客队不败",
+          "handicap": "客让一球盘，客队实力占优",
+          "correct_score": "1-2为客胜最低赔率路径",
+          "total_goals": "3球赔率3.4最低",
+          "half_full_time": "负/负4.4支持客胜",
+          "external_market": "客队锁定欧冠战意一般但实力仍占优"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "away",
+          "sharp_confidence": 55,
+          "reverse_line_movement": false,
+          "steam_move": "away",
+          "evidence": "客胜赔率平稳，公众投票客胜33%但hhad客胜58%集中"
+        },
+        "contextual_logic": {
+          "league_style": "西甲节奏分化明显",
+          "team_style": "主队保级肉搏，客队控球反击",
+          "tempo": "medium",
+          "score_shape": "1-2客胜一球边际",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "主队伤停多且客队实力高，主胜2.15不稳",
+          "draw": "1-1虽赔率低但客队状态不支持平局",
+          "away": "无拒绝，客胜最匹配"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 2,
+          "bet_confidence": 52,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "injury",
+            "motivation"
+          ],
+          "why_recommended": "客队实力与赔率形态匹配，1-2路径清晰"
+        },
+        "data_quality": {
+          "missing": [
+            "change",
+            "news"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "客队比利亚雷状态出色，主队马洛卡伤停严重，1-2最匹配市场锚点",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 7,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 28,
+            "draw": 27,
+            "away": 45
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 18,
+              "logic": "1-2路径赔率8.5为客胜最低，结合客队实力占优与总进球模态3球共振"
+            },
+            {
+              "score": "2-1",
+              "prob": 15,
+              "logic": "主队保级战意下可能1球反超但客队整体更稳"
+            },
+            {
+              "score": "1-1",
+              "prob": 14,
+              "logic": "1-1赔率最低但客队客场防守隐患限制平局概率"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "1-1赔率6.5偏低但BTTS共振下客队实力差距使1-2胜出",
+              "让球盘一球形态下1-0/2-0/2-1/3-1/1-1中1-2通过客队反击路径胜出"
+            ],
+            "zero_zero_case": "0-0赔率15.0高位，总进球模态主模态3球且客队状态出色不支持0-0",
+            "one_one_case": "1-1赔率6.5最低但客队近客场防守不稳且主队保级需进球，1-2更匹配",
+            "one_goal_margin_case": "1-0/0-1/2-1/1-2中1-2赔率8.5最低且客队实力支持",
+            "four_plus_case": "4球以上赔率压缩但模式3球为主，尾部3-2/4-1不支持",
+            "handicap_score_shape_case": "一球盘形态要求1-0/2-0/2-1/3-1/1-1，1-2通过客让反击胜出",
+            "league_style_case": "西甲控球分化，客队比利亚雷状态好于主队保级肉搏",
+            "final_score_vs_anchor_summary": "1-2从1-1/2-1/1-0等锚点中通过客队实力与总进球3球胜出"
+          },
+          "market_interpretation": {
+            "one_x_two": "客胜2.7低于主胜，支持客队不败",
+            "handicap": "客让一球盘，客队实力占优",
+            "correct_score": "1-2为客胜最低赔率路径",
+            "total_goals": "3球赔率3.4最低",
+            "half_full_time": "负/负4.4支持客胜",
+            "external_market": "客队锁定欧冠战意一般但实力仍占优"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "away",
+            "sharp_confidence": 55,
+            "reverse_line_movement": false,
+            "steam_move": "away",
+            "evidence": "客胜赔率平稳，公众投票客胜33%但hhad客胜58%集中"
+          },
+          "contextual_logic": {
+            "league_style": "西甲节奏分化明显",
+            "team_style": "主队保级肉搏，客队控球反击",
+            "tempo": "medium",
+            "score_shape": "1-2客胜一球边际",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主队伤停多且客队实力高，主胜2.15不稳",
+            "draw": "1-1虽赔率低但客队状态不支持平局",
+            "away": "无拒绝，客胜最匹配"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 52,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "injury",
+              "motivation"
+            ],
+            "why_recommended": "客队实力与赔率形态匹配，1-2路径清晰"
+          },
+          "data_quality": {
+            "missing": [
+              "change",
+              "news"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "客队比利亚雷状态出色，主队马洛卡伤停严重，1-2最匹配市场锚点"
+        }
+      },
+      "8": {
+        "match": 8,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "away",
+        "raw_ai_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 30.0,
+          "draw": 25.0,
+          "away": 45.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 19.0,
+            "logic": "1-2赔率7.5最低客胜路径，客队排名高且状态好"
+          },
+          {
+            "score": "0-1",
+            "prob": 16.0,
+            "logic": "0-1赔率10.0支持低比分客胜"
+          },
+          {
+            "score": "2-1",
+            "prob": 14.0,
+            "logic": "主队主场有抢分可能但客队更稳"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "1-1赔率6.5低但客队客场防守支持1-2",
+            "让球盘一球形态下1-2通过客反击胜出"
+          ],
+          "zero_zero_case": "0-0赔率16.0高位，总进球模态3球不支持0-0",
+          "one_one_case": "1-1虽低赔但客队排名第3状态好，1-2更优",
+          "one_goal_margin_case": "1-2赔率7.5为客胜最低，胜出1-0/2-1",
+          "four_plus_case": "4球赔率压缩但主模态3球，尾部不支持",
+          "handicap_score_shape_case": "一球盘1-0/2-0/2-1/3-1/1-1中1-2客让反击胜出",
+          "league_style_case": "挪超客队利勒斯特罗姆状态优于主队",
+          "final_score_vs_anchor_summary": "1-2从1-1/1-2/2-1锚点中胜出"
+        },
+        "market_interpretation": {
+          "one_x_two": "客胜2.26支持客队",
+          "handicap": "主让一球，客队占优",
+          "correct_score": "1-2客胜最低",
+          "total_goals": "3球3.4最低",
+          "half_full_time": "负/负3.7支持客胜",
+          "external_market": "客队排名高主队降级区"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "away",
+          "sharp_confidence": 50,
+          "reverse_line_movement": false,
+          "steam_move": "away",
+          "evidence": "客胜赔率低，公众lose 39%"
+        },
+        "contextual_logic": {
+          "league_style": "挪超攻防转换快",
+          "team_style": "客队状态好主队降级挣扎",
+          "tempo": "high",
+          "score_shape": "1-2",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "主队状态低迷排名倒数",
+          "draw": "客队实力占优平局概率低",
+          "away": "无拒绝"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 3,
+          "bet_confidence": 48,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "form"
+          ],
+          "why_recommended": "客队状态与赔率匹配"
+        },
+        "data_quality": {
+          "missing": [
+            "change",
+            "news"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "客队利勒斯特罗姆排名高状态好，1-2路径清晰",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 8,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 30,
+            "draw": 25,
+            "away": 45
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 19,
+              "logic": "1-2赔率7.5最低客胜路径，客队排名高且状态好"
+            },
+            {
+              "score": "0-1",
+              "prob": 16,
+              "logic": "0-1赔率10.0支持低比分客胜"
+            },
+            {
+              "score": "2-1",
+              "prob": 14,
+              "logic": "主队主场有抢分可能但客队更稳"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "1-1赔率6.5低但客队客场防守支持1-2",
+              "让球盘一球形态下1-2通过客反击胜出"
+            ],
+            "zero_zero_case": "0-0赔率16.0高位，总进球模态3球不支持0-0",
+            "one_one_case": "1-1虽低赔但客队排名第3状态好，1-2更优",
+            "one_goal_margin_case": "1-2赔率7.5为客胜最低，胜出1-0/2-1",
+            "four_plus_case": "4球赔率压缩但主模态3球，尾部不支持",
+            "handicap_score_shape_case": "一球盘1-0/2-0/2-1/3-1/1-1中1-2客让反击胜出",
+            "league_style_case": "挪超客队利勒斯特罗姆状态优于主队",
+            "final_score_vs_anchor_summary": "1-2从1-1/1-2/2-1锚点中胜出"
+          },
+          "market_interpretation": {
+            "one_x_two": "客胜2.26支持客队",
+            "handicap": "主让一球，客队占优",
+            "correct_score": "1-2客胜最低",
+            "total_goals": "3球3.4最低",
+            "half_full_time": "负/负3.7支持客胜",
+            "external_market": "客队排名高主队降级区"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "away",
+            "sharp_confidence": 50,
+            "reverse_line_movement": false,
+            "steam_move": "away",
+            "evidence": "客胜赔率低，公众lose 39%"
+          },
+          "contextual_logic": {
+            "league_style": "挪超攻防转换快",
+            "team_style": "客队状态好主队降级挣扎",
+            "tempo": "high",
+            "score_shape": "1-2",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "主队状态低迷排名倒数",
+            "draw": "客队实力占优平局概率低",
+            "away": "无拒绝"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 3,
+            "bet_confidence": 48,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "form"
+            ],
+            "why_recommended": "客队状态与赔率匹配"
+          },
+          "data_quality": {
+            "missing": [
+              "change",
+              "news"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "客队利勒斯特罗姆排名高状态好，1-2路径清晰"
+        }
+      },
+      "9": {
+        "match": 9,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "away",
+        "raw_ai_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 20.0,
+          "draw": 22.0,
+          "away": 58.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 22.0,
+            "logic": "1-2赔率6.5客胜最低，客队实力碾压"
+          },
+          {
+            "score": "0-2",
+            "prob": 18.0,
+            "logic": "0-2赔率7.25支持客胜两球"
+          },
+          {
+            "score": "0-1",
+            "prob": 15.0,
+            "logic": "客队客场防守稳健"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "1-1赔率7.0低但客队强主队弱不支持平",
+            "让球盘一球形态下1-2客胜路径胜出"
+          ],
+          "zero_zero_case": "0-0赔率15.0高，主队状态差客队强",
+          "one_one_case": "1-1虽低但客队近10场客场强势不支持",
+          "one_goal_margin_case": "1-2赔率6.5最低客胜，胜1-0/0-1/2-1",
+          "four_plus_case": "4球以上压缩但主模态3球",
+          "handicap_score_shape_case": "一球盘客让反击1-2胜出",
+          "league_style_case": "英超分层明显，客队维拉强于保级伯恩利",
+          "final_score_vs_anchor_summary": "1-2从1-2/0-2/1-1中胜出"
+        },
+        "market_interpretation": {
+          "one_x_two": "客胜1.49极低支持客胜",
+          "handicap": "主让一球客强",
+          "correct_score": "1-2客胜最低",
+          "total_goals": "3球3.4最低",
+          "half_full_time": "负/负2.1极低支持客胜",
+          "external_market": "客队争欧战主队已降级"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "away",
+          "sharp_confidence": 65,
+          "reverse_line_movement": false,
+          "steam_move": "away",
+          "evidence": "客胜赔率1.49极低，公众lose59%"
+        },
+        "contextual_logic": {
+          "league_style": "英超强弱分明",
+          "team_style": "客队争欧战主队保级失败",
+          "tempo": "medium",
+          "score_shape": "1-2",
+          "btts_likelihood": "yes",
+          "rotation_risk": "high"
+        },
+        "rejected_cases": {
+          "home": "主队已降级状态差",
+          "draw": "实力差距大平局低",
+          "away": "无拒绝"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 60,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "low",
+          "risk_tags": [],
+          "why_recommended": "客队实力与赔率极度匹配"
+        },
+        "data_quality": {
+          "missing": [
+            "change",
+            "news"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "维拉实力远胜已降级伯恩利，1-2最优",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 9,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 20,
+            "draw": 22,
+            "away": 58
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 22,
+              "logic": "1-2赔率6.5客胜最低，客队实力碾压"
+            },
+            {
+              "score": "0-2",
+              "prob": 18,
+              "logic": "0-2赔率7.25支持客胜两球"
+            },
+            {
+              "score": "0-1",
+              "prob": 15,
+              "logic": "客队客场防守稳健"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "1-1赔率7.0低但客队强主队弱不支持平",
+              "让球盘一球形态下1-2客胜路径胜出"
+            ],
+            "zero_zero_case": "0-0赔率15.0高，主队状态差客队强",
+            "one_one_case": "1-1虽低但客队近10场客场强势不支持",
+            "one_goal_margin_case": "1-2赔率6.5最低客胜，胜1-0/0-1/2-1",
+            "four_plus_case": "4球以上压缩但主模态3球",
+            "handicap_score_shape_case": "一球盘客让反击1-2胜出",
+            "league_style_case": "英超分层明显，客队维拉强于保级伯恩利",
+            "final_score_vs_anchor_summary": "1-2从1-2/0-2/1-1中胜出"
+          },
+          "market_interpretation": {
+            "one_x_two": "客胜1.49极低支持客胜",
+            "handicap": "主让一球客强",
+            "correct_score": "1-2客胜最低",
+            "total_goals": "3球3.4最低",
+            "half_full_time": "负/负2.1极低支持客胜",
+            "external_market": "客队争欧战主队已降级"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "away",
+            "sharp_confidence": 65,
+            "reverse_line_movement": false,
+            "steam_move": "away",
+            "evidence": "客胜赔率1.49极低，公众lose59%"
+          },
+          "contextual_logic": {
+            "league_style": "英超强弱分明",
+            "team_style": "客队争欧战主队保级失败",
+            "tempo": "medium",
+            "score_shape": "1-2",
+            "btts_likelihood": "yes",
+            "rotation_risk": "high"
+          },
+          "rejected_cases": {
+            "home": "主队已降级状态差",
+            "draw": "实力差距大平局低",
+            "away": "无拒绝"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 60,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "客队实力与赔率极度匹配"
+          },
+          "data_quality": {
+            "missing": [
+              "change",
+              "news"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "维拉实力远胜已降级伯恩利，1-2最优"
+        }
+      },
+      "10": {
+        "match": 10,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "draw",
+        "raw_ai_direction": "draw",
+        "predicted_score": "1-1",
+        "direction_probs": {
+          "home": 35.0,
+          "draw": 32.0,
+          "away": 33.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "1-1",
+            "prob": 20.0,
+            "logic": "1-1赔率6.0最低且总进球模态2球共振"
+          },
+          {
+            "score": "1-2",
+            "prob": 16.0,
+            "logic": "客队略占优但主场水晶宫稳"
+          },
+          {
+            "score": "2-1",
+            "prob": 14.0,
+            "logic": "主队主场强势可能反超"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "0-0赔率11.0接近9.5但总进球2球模态不支持闷局",
+            "1-1赔率6.0最低BTTS共振胜出",
+            "总进球模态2球优先审计1-1/0-0/1-0",
+            "让球盘一球形态下1-1通过BTTS胜出"
+          ],
+          "zero_zero_case": "0-0赔率11.0虽低但总进球模态2球且双方均需积分不支持0-0",
+          "one_one_case": "1-1赔率6.0最低，BTTS与2球模态共振胜出",
+          "one_goal_margin_case": "1-0/0-1/2-1/1-2中1-1通过平局路径胜出",
+          "four_plus_case": "4球以上压缩不支持",
+          "handicap_score_shape_case": "一球盘1-1通过双方稳健胜出",
+          "league_style_case": "英超中下游均衡战多1-1",
+          "final_score_vs_anchor_summary": "1-1从0-0/1-1/2-1锚点中胜出"
+        },
+        "market_interpretation": {
+          "one_x_two": "主胜2.55略高，均衡",
+          "handicap": "主让一球均衡",
+          "correct_score": "1-1最低",
+          "total_goals": "2球3.3最低",
+          "half_full_time": "平/平4.8支持平局",
+          "external_market": "双方积分接近状态一般"
+        },
+        "money_flow": {
+          "public_money_direction": "unclear",
+          "sharp_money_direction": "draw",
+          "sharp_confidence": 40,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众lose36%略高但hhad主胜62%"
+        },
+        "contextual_logic": {
+          "league_style": "英超中下游防守稳",
+          "team_style": "双方状态一般主场略优",
+          "tempo": "low",
+          "score_shape": "1-1",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "客队历史占优不支持主胜",
+          "draw": "无拒绝，1-1最匹配",
+          "away": "主场水晶宫强势不支持客胜"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "C",
+          "is_recommended": true,
+          "top4_priority": 4,
+          "bet_confidence": 42,
+          "direction_stability": "weak",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "low_goal"
+          ],
+          "why_recommended": "总进球2球模态与1-1共振"
+        },
+        "data_quality": {
+          "missing": [
+            "change",
+            "news"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "双方均衡，0-0/1-1低赔共振下1-1胜出",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 10,
+          "final_direction": "draw",
+          "predicted_score": "1-1",
+          "direction_probs": {
+            "home": 35,
+            "draw": 32,
+            "away": 33
+          },
+          "goal_band": "2",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-1",
+              "prob": 20,
+              "logic": "1-1赔率6.0最低且总进球模态2球共振"
+            },
+            {
+              "score": "1-2",
+              "prob": 16,
+              "logic": "客队略占优但主场水晶宫稳"
+            },
+            {
+              "score": "2-1",
+              "prob": 14,
+              "logic": "主队主场强势可能反超"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "0-0赔率11.0接近9.5但总进球2球模态不支持闷局",
+              "1-1赔率6.0最低BTTS共振胜出",
+              "总进球模态2球优先审计1-1/0-0/1-0",
+              "让球盘一球形态下1-1通过BTTS胜出"
+            ],
+            "zero_zero_case": "0-0赔率11.0虽低但总进球模态2球且双方均需积分不支持0-0",
+            "one_one_case": "1-1赔率6.0最低，BTTS与2球模态共振胜出",
+            "one_goal_margin_case": "1-0/0-1/2-1/1-2中1-1通过平局路径胜出",
+            "four_plus_case": "4球以上压缩不支持",
+            "handicap_score_shape_case": "一球盘1-1通过双方稳健胜出",
+            "league_style_case": "英超中下游均衡战多1-1",
+            "final_score_vs_anchor_summary": "1-1从0-0/1-1/2-1锚点中胜出"
+          },
+          "market_interpretation": {
+            "one_x_two": "主胜2.55略高，均衡",
+            "handicap": "主让一球均衡",
+            "correct_score": "1-1最低",
+            "total_goals": "2球3.3最低",
+            "half_full_time": "平/平4.8支持平局",
+            "external_market": "双方积分接近状态一般"
+          },
+          "money_flow": {
+            "public_money_direction": "unclear",
+            "sharp_money_direction": "draw",
+            "sharp_confidence": 40,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众lose36%略高但hhad主胜62%"
+          },
+          "contextual_logic": {
+            "league_style": "英超中下游防守稳",
+            "team_style": "双方状态一般主场略优",
+            "tempo": "low",
+            "score_shape": "1-1",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "客队历史占优不支持主胜",
+            "draw": "无拒绝，1-1最匹配",
+            "away": "主场水晶宫强势不支持客胜"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "C",
+            "is_recommended": true,
+            "top4_priority": 4,
+            "bet_confidence": 42,
+            "direction_stability": "weak",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "low_goal"
+            ],
+            "why_recommended": "总进球2球模态与1-1共振"
+          },
+          "data_quality": {
+            "missing": [
+              "change",
+              "news"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "双方均衡，0-0/1-1低赔共振下1-1胜出"
+        }
+      },
+      "11": {
+        "match": 11,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 42.0,
+          "draw": 28.0,
+          "away": 30.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 17.0,
+            "logic": "2-1赔率8.0主胜最低路径，主队状态火热"
+          },
+          {
+            "score": "1-1",
+            "prob": 15.0,
+            "logic": "1-1赔率6.45低但主队主场强势"
+          },
+          {
+            "score": "1-2",
+            "prob": 14.0,
+            "logic": "客队状态差可能被反超"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "1-1赔率6.45低但主队状态火热2-1胜出",
+            "让球盘一球形态下2-1主胜路径胜出"
+          ],
+          "zero_zero_case": "0-0赔率14.0高，主队状态好不支持",
+          "one_one_case": "1-1虽低但主队近10场7胜不支持平",
+          "one_goal_margin_case": "2-1赔率8.0主胜最低胜1-0/1-2",
+          "four_plus_case": "4球压缩不支持",
+          "handicap_score_shape_case": "一球盘2-1主让反击胜出",
+          "league_style_case": "英超主队诺丁汉状态优客队低迷",
+          "final_score_vs_anchor_summary": "2-1从2-1/1-1/1-2中胜出"
+        },
+        "market_interpretation": {
+          "one_x_two": "主胜2.49支持主队",
+          "handicap": "主让一球主场优势",
+          "correct_score": "2-1主胜最低",
+          "total_goals": "3球3.45最低",
+          "half_full_time": "主/主4.05支持主胜",
+          "external_market": "主队状态出色客队低迷"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 48,
+          "reverse_line_movement": false,
+          "steam_move": "home",
+          "evidence": "主胜赔率平稳，hhad主胜62%"
+        },
+        "contextual_logic": {
+          "league_style": "英超状态主导",
+          "team_style": "主队火热客队4连败",
+          "tempo": "medium",
+          "score_shape": "2-1",
+          "btts_likelihood": "yes",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "无拒绝，主队状态支持",
+          "draw": "主队状态火热不支持平",
+          "away": "客队状态低迷不支持"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 5,
+          "bet_confidence": 50,
+          "direction_stability": "medium",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "form"
+          ],
+          "why_recommended": "主队状态与2-1路径匹配"
+        },
+        "data_quality": {
+          "missing": [
+            "change",
+            "news"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "诺丁汉状态火热，2-1最匹配",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 11,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 42,
+            "draw": 28,
+            "away": 30
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 17,
+              "logic": "2-1赔率8.0主胜最低路径，主队状态火热"
+            },
+            {
+              "score": "1-1",
+              "prob": 15,
+              "logic": "1-1赔率6.45低但主队主场强势"
+            },
+            {
+              "score": "1-2",
+              "prob": 14,
+              "logic": "客队状态差可能被反超"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "1-1赔率6.45低但主队状态火热2-1胜出",
+              "让球盘一球形态下2-1主胜路径胜出"
+            ],
+            "zero_zero_case": "0-0赔率14.0高，主队状态好不支持",
+            "one_one_case": "1-1虽低但主队近10场7胜不支持平",
+            "one_goal_margin_case": "2-1赔率8.0主胜最低胜1-0/1-2",
+            "four_plus_case": "4球压缩不支持",
+            "handicap_score_shape_case": "一球盘2-1主让反击胜出",
+            "league_style_case": "英超主队诺丁汉状态优客队低迷",
+            "final_score_vs_anchor_summary": "2-1从2-1/1-1/1-2中胜出"
+          },
+          "market_interpretation": {
+            "one_x_two": "主胜2.49支持主队",
+            "handicap": "主让一球主场优势",
+            "correct_score": "2-1主胜最低",
+            "total_goals": "3球3.45最低",
+            "half_full_time": "主/主4.05支持主胜",
+            "external_market": "主队状态出色客队低迷"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 48,
+            "reverse_line_movement": false,
+            "steam_move": "home",
+            "evidence": "主胜赔率平稳，hhad主胜62%"
+          },
+          "contextual_logic": {
+            "league_style": "英超状态主导",
+            "team_style": "主队火热客队4连败",
+            "tempo": "medium",
+            "score_shape": "2-1",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "无拒绝，主队状态支持",
+            "draw": "主队状态火热不支持平",
+            "away": "客队状态低迷不支持"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 5,
+            "bet_confidence": 50,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "form"
+            ],
+            "why_recommended": "主队状态与2-1路径匹配"
+          },
+          "data_quality": {
+            "missing": [
+              "change",
+              "news"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "诺丁汉状态火热，2-1最匹配"
+        }
+      },
+      "12": {
+        "match": 12,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-0",
+        "direction_probs": {
+          "home": 55.0,
+          "draw": 25.0,
+          "away": 20.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "2",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "2-0",
+            "prob": 21.0,
+            "logic": "2-0赔率6.7主胜第二低，主队主场占优"
+          },
+          {
+            "score": "1-0",
+            "prob": 20.0,
+            "logic": "1-0赔率5.8最低主胜路径"
+          },
+          {
+            "score": "2-1",
+            "prob": 15.0,
+            "logic": "主队可能多进一球"
+          }
+        ],
+        "anchor_audit": {
+          "answered_cross_anchor_questions": [
+            "0-0赔率9.5=9.5需审计但主队主场强势不支持",
+            "1-1赔率6.5低但主队排名高不支持平",
+            "总进球模态2球优先1-0/2-0",
+            "让球盘一球形态下2-0/1-0胜出"
+          ],
+          "zero_zero_case": "0-0赔率9.5虽低但主队主场不败概率高不支持",
+          "one_one_case": "1-1虽低但主队实力占优2-0胜出",
+          "one_goal_margin_case": "2-0/1-0赔率低胜2-1/1-2",
+          "four_plus_case": "4球压缩不支持",
+          "handicap_score_shape_case": "一球盘2-0主让两球胜出",
+          "league_style_case": "意甲谨慎，主队克雷莫纳主场占优",
+          "final_score_vs_anchor_summary": "2-0从1-0/2-0/1-1中胜出"
+        },
+        "market_interpretation": {
+          "one_x_two": "主胜1.56极低支持主胜",
+          "handicap": "客让一球主强",
+          "correct_score": "1-0/2-0最低",
+          "total_goals": "2球3.3最低",
+          "half_full_time": "主/主2.35极低",
+          "external_market": "主队排名高客队垫底"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "home",
+          "sharp_confidence": 60,
+          "reverse_line_movement": false,
+          "steam_move": "home",
+          "evidence": "主胜1.56极低，公众win57%"
+        },
+        "contextual_logic": {
+          "league_style": "意甲低比分",
+          "team_style": "主队主场占优客队6连败",
+          "tempo": "low",
+          "score_shape": "2-0",
+          "btts_likelihood": "no",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "无拒绝，主队主场强势",
+          "draw": "客队状态差不支持平",
+          "away": "客队6连败零进球不支持"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "A",
+          "is_recommended": true,
+          "top4_priority": 6,
+          "bet_confidence": 58,
+          "direction_stability": "strong",
+          "score_stability": "strong",
+          "risk_level": "low",
+          "risk_tags": [],
+          "why_recommended": "主队主场与低总进球2球匹配"
+        },
+        "data_quality": {
+          "missing": [
+            "change",
+            "news"
+          ],
+          "raw_packet_quality": "high"
+        },
+        "reason": "克雷莫纳主场对垫底比萨，2-0最匹配",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 12,
+          "final_direction": "home",
+          "predicted_score": "2-0",
+          "direction_probs": {
+            "home": 55,
+            "draw": 25,
+            "away": 20
+          },
+          "goal_band": "2",
+          "btts": "no",
+          "top3": [
+            {
+              "score": "2-0",
+              "prob": 21,
+              "logic": "2-0赔率6.7主胜第二低，主队主场占优"
+            },
+            {
+              "score": "1-0",
+              "prob": 20,
+              "logic": "1-0赔率5.8最低主胜路径"
+            },
+            {
+              "score": "2-1",
+              "prob": 15,
+              "logic": "主队可能多进一球"
+            }
+          ],
+          "anchor_audit": {
+            "answered_cross_anchor_questions": [
+              "0-0赔率9.5=9.5需审计但主队主场强势不支持",
+              "1-1赔率6.5低但主队排名高不支持平",
+              "总进球模态2球优先1-0/2-0",
+              "让球盘一球形态下2-0/1-0胜出"
+            ],
+            "zero_zero_case": "0-0赔率9.5虽低但主队主场不败概率高不支持",
+            "one_one_case": "1-1虽低但主队实力占优2-0胜出",
+            "one_goal_margin_case": "2-0/1-0赔率低胜2-1/1-2",
+            "four_plus_case": "4球压缩不支持",
+            "handicap_score_shape_case": "一球盘2-0主让两球胜出",
+            "league_style_case": "意甲谨慎，主队克雷莫纳主场占优",
+            "final_score_vs_anchor_summary": "2-0从1-0/2-0/1-1中胜出"
+          },
+          "market_interpretation": {
+            "one_x_two": "主胜1.56极低支持主胜",
+            "handicap": "客让一球主强",
+            "correct_score": "1-0/2-0最低",
+            "total_goals": "2球3.3最低",
+            "half_full_time": "主/主2.35极低",
+            "external_market": "主队排名高客队垫底"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "home",
+            "sharp_confidence": 60,
+            "reverse_line_movement": false,
+            "steam_move": "home",
+            "evidence": "主胜1.56极低，公众win57%"
+          },
+          "contextual_logic": {
+            "league_style": "意甲低比分",
+            "team_style": "主队主场占优客队6连败",
+            "tempo": "low",
+            "score_shape": "2-0",
+            "btts_likelihood": "no",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "无拒绝，主队主场强势",
+            "draw": "客队状态差不支持平",
+            "away": "客队6连败零进球不支持"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 6,
+            "bet_confidence": 58,
+            "direction_stability": "strong",
+            "score_stability": "strong",
+            "risk_level": "low",
+            "risk_tags": [],
+            "why_recommended": "主队主场与低总进球2球匹配"
+          },
+          "data_quality": {
+            "missing": [
+              "change",
+              "news"
+            ],
+            "raw_packet_quality": "high"
+          },
+          "reason": "克雷莫纳主场对垫底比萨，2-0最匹配"
+        }
+      }
+    }
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 120.6,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 41.3,
+        "status": "ok"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 4.3,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 72.7,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 20.6,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 126.0,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}
