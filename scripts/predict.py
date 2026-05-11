@@ -891,6 +891,34 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
             "has_context_news": any(_exists(m.get(k)) for k in ["information", "points", "injury", "lineup", "news"]),
         },
     }
+
+    if evidence["data_quality"]["has_1x2"]:
+        h = _f(m.get("sp_home"))
+        d = _f(m.get("sp_draw"))
+        a = _f(m.get("sp_away"))
+        if h > 0 and d > 0 and a > 0:
+            raw_h = 1 / h
+            raw_d = 1 / d
+            raw_a = 1 / a
+            sum_raw = raw_h + raw_d + raw_a
+            
+            fair_h = raw_h / sum_raw
+            fair_d = raw_d / sum_raw
+            fair_a = raw_a / sum_raw
+
+            evidence["market_implied"] = {
+                "home_raw_prob": round(raw_h, 4),
+                "draw_raw_prob": round(raw_d, 4),
+                "away_raw_prob": round(raw_a, 4),
+                "overround": round(sum_raw - 1, 4),
+                "home_fair_prob": round(fair_h, 4),
+                "draw_fair_prob": round(fair_d, 4),
+                "away_fair_prob": round(fair_a, 4),
+                "home_fair_odds": round(1 / fair_h, 4),
+                "draw_fair_odds": round(1 / fair_d, 4),
+                "away_fair_odds": round(1 / fair_a, 4)
+            }
+
     return evidence
 
 
