@@ -712,7 +712,7 @@ def _score_anchor_facts(match_obj: Dict[str, Any]) -> Dict[str, Any]:
     s12 = odds_by_score.get("1-2", 0.0)
 
     if 0 < s00 <= 11.0:
-        observations.append({"anchor": "low_0_0_odds", "value": s00, "meaning_for_ai": "0-0赔率低于或接近9.5，必须严肃审计闷局/低比分；不能默认1-1或2-1。"})
+        observations.append({"anchor": "low_0_0_odds", "value": s00, "meaning_for_ai": "0-0赔率低于或接近11，必须严肃审计闷局/低比分；不能默认1-1或2-1。"})
     if 0 < s11 <= 7.5:
         observations.append({"anchor": "low_1_1_odds", "value": s11, "meaning_for_ai": "1-1赔率较低，双方进球但低总进球路径需要重点比较。"})
     if 0 < s10 <= 9.5 or 0 < s01 <= 9.5:
@@ -820,7 +820,7 @@ def _cross_anchor_questions(match_obj: Dict[str, Any]) -> List[str]:
     a4 = total_f.get("specific_odds", {}).get("4", 0)
     mode_g = total_f.get("mode_goals")
     if 0 < s00 <= 11:
-        qs.append("0-0赔率≤9.5：为什么不是0-0？如果选其他比分，必须解释突破闷局的证据。")
+        qs.append("0-0赔率≤11：为什么不是0-0？如果选其他比分，必须解释突破闷局的证据。")
     if 0 < s11 <= 7.5:
         qs.append("1-1赔率偏低：为什么不是1-1？必须比较BTTS与低总进球是否共振。")
     if a4 > 6:
@@ -1010,7 +1010,7 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append(_web_research_instruction(ai_name))
     p.append("你的任务不是给空泛推荐，而是基于市场结构、资金流、比分赔率、总进球、半全场、联网情报形成可审计预测。")
     p.append("强制审计：每场必须读取 ai_anchor_facts_no_judgement，并在 anchor_audit 中逐项回答 mandatory_cross_anchor_questions。")
-    p.append("禁止懒惰比分：不要因为常见就默认1-1或2-1；当0-0赔率≤9.5、1-1低赔、4球赔率>6或总进球主模态偏低时，必须严肃审计低比分。")
+    p.append("禁止懒惰比分：不要因为常见就默认1-1或2-1；当0-0赔率≤11、1-1低赔、4球赔率>6或总进球主模态偏低时，必须严肃审计低比分。")
     p.append("</task>\n")
     p.append("<output_schema>")
     p.append(_canonical_output_schema_text())
@@ -1065,9 +1065,9 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("证据优先级：raw market structure > correct-score cluster > total-goals mode > handicap score-shape > money-flow/sharp interpretation > tactical/web context > Phase1 consensus。")
     p.append("多数意见不自动成立；若 GPT/Grok 基于同一低赔/单边市场理由一致，这属于相关证据，不是独立证据。")
     p.append("S级必须至少有两个独立证据族同时支持：市场结构、正确比分赔率簇、总进球模态、让球盘形态、资金流/Sharp、联网阵容伤停、战术/赛程背景。仅赔率低赔或单边市场最多给A；无联网且依赖阵容/战意/实力碾压，最高给B。")
-    p.append("低比分锚点审计：若0-0赔率≤9.5或1-1赔率偏低，必须显式比较0-0/1-1/1-0/0-1/2-0/0-2，不能机械给2-1。")
+    p.append("低比分锚点审计：若0-0赔率≤11或1-1赔率偏低，必须显式比较0-0/1-1/1-0/0-1/2-0/0-2，不能机械给2-1。")
     p.append("4球锚点审计：若4球赔率>6，选择3-1/2-2/3-2必须有强证据；否则优先压回0-3球比分带。")
-    p.append("高比分尾部审计：若5球≤8、6球≤14或7+≤16，必须检查3-2/4-1/4-2/胜其他。")
+    p.append("高比分尾部审计：若5球≤8、6球≤16或7+≤30，必须检查3-2/4-1/4-2/胜其他。")
     p.append("强客低赔审计：若客胜<=1.50，必须比较0-0/0-1/1-1/0-2/1-2与总进球模态；不能机械给0-2或S级。")
     p.append("如果 sharp_money_direction 与 final_direction 冲突，必须解释为什么该信号是噪音，或者主动下调 recommendation.tier。")
     p.append("如果联网来源缺 URL/发布时间/claim，不能作为硬证据。必须输出 source_conflicts 和 final_web_audit。")
@@ -2414,8 +2414,1051 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     return res, t4
 
 
+# ============================================================
+# vMAX 20.3.0 FULL-SHARP-CLUSTER 增强层
+# ============================================================
+# 说明：下面是完整内嵌版，不依赖外部 patch 文件。
+# 保留 20.2.1-FULL-ANCHOR 的 API 调用链/分批/解析/前端兼容，只增强 Evidence 与 Prompt。
+
+# 保存 20.2.1 基础函数，避免增强模块覆盖原来的比分/JSON/工具行为。
+_BASE_BUILD_EVIDENCE_PACKET_V2021 = build_evidence_packet
+_BASE_ADAPT_AI_TO_FRONTEND_V2021 = adapt_ai_to_frontend
+_BASE_NORMALIZE_AI_PREDICTIONS_V2021 = normalize_ai_predictions
+_BASE_SHORT_PREDICTION_FOR_PROMPT_V2021 = _short_prediction_for_prompt
+_BASE_F = _f
+_BASE_I = _i
+_BASE_EXISTS = _exists
+_BASE_JSON_COMPACT = _json_compact
+_BASE_NORMALIZE_SCORE_TEXT = _normalize_score_text
+_BASE_PARSE_SCORE = _parse_score
+_BASE_SCORE_DIRECTION = _score_direction
+_BASE_SCORE_TOTAL = _score_total
+_BASE_SCORE_BTTS = _score_btts
+_BASE_SCORE_GOAL_BAND = _score_goal_band
+
+VALID_DIRS = {"home", "draw", "away"}
+
+CRS_FULL_MAP = {
+    "1-0": "w10", "2-0": "w20", "2-1": "w21", "3-0": "w30", "3-1": "w31",
+    "3-2": "w32", "4-0": "w40", "4-1": "w41", "4-2": "w42", "5-0": "w50",
+    "5-1": "w51", "5-2": "w52",
+    "0-0": "s00", "1-1": "s11", "2-2": "s22", "3-3": "s33",
+    "0-1": "l01", "0-2": "l02", "1-2": "l12", "0-3": "l03", "1-3": "l13",
+    "2-3": "l23", "0-4": "l04", "1-4": "l14", "2-4": "l24",
+    "0-5": "l05", "1-5": "l15", "2-5": "l25",
+}
+
+HFTF_MAP = {
+    "ss": "主/主", "sp": "主/平", "sf": "主/负",
+    "ps": "平/主", "pp": "平/平", "pf": "平/负",
+    "fs": "负/主", "fp": "负/平", "ff": "负/负",
+}
+
+_SCORE_RE = re.compile(r"(\d{1,2})\s*[-:：]\s*(\d{1,2})")
+
+# ------------------------------------------------------------
+# 基础工具
+# ------------------------------------------------------------
+
+def _f(v: Any, default: float = 0.0) -> float:
+    try:
+        if v is None:
+            return default
+        s = str(v).strip()
+        if s == "" or s.lower() in {"none", "nan", "null", "-", "n/a"}:
+            return default
+        return float(s.replace("%", "").replace("％", ""))
+    except Exception:
+        return default
+
+
+def _i(v: Any, default: int = 0) -> int:
+    try:
+        return int(float(v))
+    except Exception:
+        return default
+
+
+def _exists(v: Any) -> bool:
+    return v not in (None, "", "-", "N/A", "n/a", "None", "none", "null", {}, [])
+
+
+def _as_dict(v: Any) -> Dict[str, Any]:
+    return v if isinstance(v, dict) else {}
+
+
+def _as_list(v: Any) -> List[Any]:
+    return v if isinstance(v, list) else []
+
+
+def _json_compact(obj: Any, max_len: int = 12000) -> str:
+    try:
+        s = json.dumps(obj, ensure_ascii=False, separators=(",", ":"), default=str)
+    except Exception:
+        s = str(obj)
+    return s[:max_len] if max_len else s
+
+
+def _normalize_score_text(s: Any) -> str:
+    return str(s).strip().replace(" ", "").replace("：", "-").replace(":", "-").replace("–", "-").replace("—", "-")
+
+
+def _parse_score(s: Any) -> Tuple[Optional[int], Optional[int]]:
+    ss = _normalize_score_text(s)
+    if not ss:
+        return None, None
+    m = _SCORE_RE.search(ss)
+    if not m:
+        return None, None
+    return int(m.group(1)), int(m.group(2))
+
+
+def _score_direction(score: Any) -> Optional[str]:
+    h, a = _parse_score(score)
+    if h is None or a is None:
+        return None
+    if h > a:
+        return "home"
+    if h < a:
+        return "away"
+    return "draw"
+
+
+def _score_total(score: Any) -> Optional[int]:
+    h, a = _parse_score(score)
+    if h is None or a is None:
+        return None
+    return h + a
+
+
+def _score_btts(score: Any) -> str:
+    h, a = _parse_score(score)
+    if h is None or a is None:
+        return "unclear"
+    return "yes" if h > 0 and a > 0 else "no"
+
+
+def _score_goal_band(score: Any) -> str:
+    total = _score_total(score)
+    if total is None:
+        return ""
+    if total <= 1:
+        return "0-1"
+    if total == 2:
+        return "2"
+    if total == 3:
+        return "3"
+    return "4+"
+
+
+def _safe_pct_from_odds(odds: float) -> float:
+    return 100.0 / odds if odds and odds > 1.0001 else 0.0
+
+
+def _devig_3way(odds: Dict[str, Any]) -> Dict[str, float]:
+    raw = {k: _safe_pct_from_odds(_f(v, 0.0)) for k, v in odds.items()}
+    s = sum(raw.values())
+    if s <= 0:
+        return {k: 0.0 for k in odds}
+    return {k: round(v / s * 100.0, 2) for k, v in raw.items()}
+
+
+def _rank_rows_by_odds(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    out = sorted([r for r in rows if _f(r.get("odds"), 0) > 1.01], key=lambda r: _f(r.get("odds"), 9999))
+    for n, r in enumerate(out, 1):
+        r["rank"] = n
+    return out
+
+
+def _movement_label(code: Any) -> str:
+    """竞彩抓包常见 change 方向码：-1=赔率下降/压低，0=无变化，1=赔率上升/抬高。"""
+    c = _i(code, 99)
+    if c == -1:
+        return "odds_down_market_support_up"
+    if c == 1:
+        return "odds_up_market_support_down"
+    if c == 0:
+        return "unchanged"
+    return "unknown"
+
+# ------------------------------------------------------------
+# 抓包标准化：只补齐顶层，不做预测
+# ------------------------------------------------------------
+
+def normalize_match_v203(raw_m: Dict[str, Any]) -> Dict[str, Any]:
+    m = dict(raw_m or {})
+    home = m.get("home_team") or m.get("home") or m.get("host") or m.get("team_home") or m.get("homeName") or "Home"
+    away = m.get("away_team") or m.get("guest") or m.get("away") or m.get("team_away") or m.get("awayName") or "Away"
+    m["home_team"] = home
+    m["away_team"] = away
+    m["home"] = home
+    m["guest"] = away
+
+    # 竞彩 1X2
+    m["sp_home"] = m.get("sp_home", m.get("win"))
+    m["sp_draw"] = m.get("sp_draw", m.get("same"))
+    m["sp_away"] = m.get("sp_away", m.get("lose"))
+
+    # 原代码常把 [] 当 dict 处理，这里统一包一层 safe dict。
+    for k in ["change", "hhad_change", "ttg_change", "crs_change", "hafu_change", "vote"]:
+        if not isinstance(m.get(k), dict):
+            m[k] = {}
+    return m
+
+# ------------------------------------------------------------
+# 市场事实编译：1X2 / HHAD / TTG / HFTF / CRS
+# ------------------------------------------------------------
+
+def compile_1x2_facts(m: Dict[str, Any]) -> Dict[str, Any]:
+    odds = {"home": m.get("sp_home", m.get("win")), "draw": m.get("sp_draw", m.get("same")), "away": m.get("sp_away", m.get("lose"))}
+    rows = _rank_rows_by_odds([{"direction": k, "odds": _f(v, 0.0)} for k, v in odds.items()])
+    fair = _devig_3way(odds)
+    return {
+        "available": all(_f(v, 0.0) > 1.01 for v in odds.values()),
+        "odds": odds,
+        "fair_no_margin_pct": fair,
+        "lowest_direction": rows[0]["direction"] if rows else "unknown",
+        "ranked": rows,
+        "market_gap": {
+            "home_vs_away_odds_ratio": round(_f(odds.get("away"), 0.0) / max(_f(odds.get("home"), 0.0), 1e-9), 3) if _f(odds.get("home"), 0.0) else None,
+            "favorite_fair_pct": max(fair.values()) if fair else 0.0,
+        },
+    }
+
+
+def compile_hhad_facts(m: Dict[str, Any]) -> Dict[str, Any]:
+    rq = _f(m.get("give_ball", m.get("handicap", m.get("rq", 0))), 0.0)
+    odds = {
+        "hhad_win": _f(m.get("hhad_win"), 0.0),
+        "hhad_same": _f(m.get("hhad_same"), 0.0),
+        "hhad_lose": _f(m.get("hhad_lose"), 0.0),
+    }
+    rows = _rank_rows_by_odds([{"code": k, "odds": v} for k, v in odds.items()])
+    fair = _devig_3way(odds)
+
+    # 竞彩让球语义。rq=-1 表示主让1；rq=+1 表示主受让1。
+    if rq < 0:
+        n = abs(int(rq)) if float(rq).is_integer() else abs(rq)
+        semantic = {
+            "hhad_win": f"home_cover_win_by_more_than_{n}",
+            "hhad_same": f"home_exact_win_by_{n}",
+            "hhad_lose": f"home_no_cover_draw_or_away_or_win_by_less_than_{n}",
+        }
+    elif rq > 0:
+        n = int(rq) if float(rq).is_integer() else rq
+        semantic = {
+            "hhad_win": f"home_plus_{n}_wins_home_win_or_draw_or_lose_by_less_than_{n}",
+            "hhad_same": f"home_exact_lose_by_{n}",
+            "hhad_lose": f"home_plus_{n}_loses_by_more_than_{n}",
+        }
+    else:
+        semantic = {"hhad_win": "home_win", "hhad_same": "draw", "hhad_lose": "away_win"}
+
+    return {
+        "available": all(v > 1.01 for v in odds.values()),
+        "rq": rq,
+        "odds": odds,
+        "fair_no_margin_pct": fair,
+        "ranked": rows,
+        "lowest_hhad_code": rows[0]["code"] if rows else "unknown",
+        "semantic_map": semantic,
+        "interpretation_rule": "事实映射，不代表本地推荐。Gemini 必须结合 1X2/CRS/TTG 审计让球是否支持穿盘、赢一球或不胜。",
+    }
+
+
+def compile_ttg_facts(m: Dict[str, Any]) -> Dict[str, Any]:
+    rows = []
+    for i in range(8):
+        odd = _f(m.get(f"a{i}"), 0.0)
+        if odd > 1.01:
+            rows.append({"goals": i, "odds": odd, "change_code": _as_dict(m.get("ttg_change")).get(f"a{i}"), "change_label": _movement_label(_as_dict(m.get("ttg_change")).get(f"a{i}"))})
+    rows = _rank_rows_by_odds(rows)
+    # goal-band pressure by implied odds, not a prediction.
+    band_map = {"0-1": [0, 1], "2": [2], "3": [3], "4+": [4, 5, 6, 7]}
+    band_pressure = []
+    for band, goals in band_map.items():
+        vals = [r for r in rows if r["goals"] in goals]
+        implied_sum = sum(_safe_pct_from_odds(_f(r.get("odds"), 0.0)) for r in vals)
+        min_odd = min([_f(r.get("odds"), 9999) for r in vals], default=0.0)
+        band_pressure.append({"goal_band": band, "goals": goals, "min_odds": round(min_odd, 3), "raw_implied_sum": round(implied_sum, 3)})
+    band_pressure.sort(key=lambda r: (-r["raw_implied_sum"], r["min_odds"] if r["min_odds"] else 9999))
+    return {
+        "available": bool(rows),
+        "lowest_total_goals": rows[:8],
+        "mode_goals": rows[0]["goals"] if rows else None,
+        "goal_band_pressure": band_pressure,
+        "movement_summary": [r for r in rows if r.get("change_label") not in ("unknown", "unchanged")],
+    }
+
+
+def compile_hftf_facts(m: Dict[str, Any]) -> Dict[str, Any]:
+    rows = []
+    for code, label in HFTF_MAP.items():
+        odd = _f(m.get(code), 0.0)
+        if odd > 1.01:
+            rows.append({"code": code, "label": label, "odds": odd, "change_code": _as_dict(m.get("hafu_change")).get(code), "change_label": _movement_label(_as_dict(m.get("hafu_change")).get(code))})
+    rows = _rank_rows_by_odds(rows)
+    return {"available": bool(rows), "lowest": rows[:9], "movement_summary": [r for r in rows if r.get("change_label") not in ("unknown", "unchanged")]} 
+
+
+def compile_crs_rows(m: Dict[str, Any]) -> List[Dict[str, Any]]:
+    chg = _as_dict(m.get("crs_change"))
+    rows = []
+    for score, key in CRS_FULL_MAP.items():
+        odd = _f(m.get(key), 0.0)
+        if odd > 1.01:
+            rows.append({
+                "score": score,
+                "key": key,
+                "odds": odd,
+                "direction": _score_direction(score),
+                "total_goals": _score_total(score),
+                "goal_band": _score_goal_band(score),
+                "btts": _score_btts(score),
+                "change_code": chg.get(key),
+                "change_label": _movement_label(chg.get(key)),
+            })
+    rows = _rank_rows_by_odds(rows)
+    # direction ranks
+    by_dir = {"home": [], "draw": [], "away": []}
+    for r in rows:
+        by_dir.setdefault(r.get("direction"), []).append(r)
+    for arr in by_dir.values():
+        for n, r in enumerate(arr, 1):
+            r["direction_rank"] = n
+    return rows
+
+# ------------------------------------------------------------
+# 比分簇诊断：核心升级
+# ------------------------------------------------------------
+
+SCORE_CLUSTERS = {
+    "low_score_draw_cluster": ["0-0", "1-1", "1-0", "0-1"],
+    "home_narrow_win_cluster": ["1-0", "2-0", "2-1"],
+    "away_narrow_win_cluster": ["0-1", "0-2", "1-2"],
+    "high_btts_tail_cluster": ["2-2", "3-1", "1-3", "3-2", "2-3"],
+    "home_cover_cluster": ["2-0", "3-0", "3-1", "4-0", "4-1"],
+    "away_cover_cluster": ["0-2", "0-3", "1-3", "0-4", "1-4"],
+}
+
+ADJACENT_AUDIT_MAP = {
+    "2-1": ["1-1", "1-0", "2-0", "1-2", "2-2", "3-1"],
+    "1-2": ["1-1", "0-1", "0-2", "2-1", "2-2", "1-3"],
+    "2-0": ["1-0", "3-0", "2-1", "0-0", "1-1"],
+    "0-2": ["0-1", "0-3", "1-2", "0-0", "1-1"],
+    "1-0": ["0-0", "1-1", "2-0", "2-1", "0-1"],
+    "0-1": ["0-0", "1-1", "0-2", "1-2", "1-0"],
+    "1-1": ["0-0", "1-0", "0-1", "2-1", "1-2", "2-2"],
+    "3-1": ["2-1", "2-0", "3-0", "2-2", "4-1"],
+    "1-3": ["1-2", "0-2", "0-3", "2-2", "1-4"],
+    "3-0": ["2-0", "3-1", "4-0", "2-1"],
+    "0-3": ["0-2", "1-3", "0-4", "1-2"],
+}
+
+
+def compile_score_cluster_diagnostics(m: Dict[str, Any]) -> Dict[str, Any]:
+    rows = compile_crs_rows(m)
+    odds_by_score = {r["score"]: _f(r["odds"], 0.0) for r in rows}
+
+    clusters = []
+    for name, scores in SCORE_CLUSTERS.items():
+        present = [s for s in scores if s in odds_by_score]
+        implied_sum = sum(_safe_pct_from_odds(odds_by_score[s]) for s in present)
+        min_odd = min([odds_by_score[s] for s in present], default=0.0)
+        mean_odd = sum([odds_by_score[s] for s in present]) / max(len(present), 1) if present else 0.0
+        lowest_scores = sorted([{"score": s, "odds": odds_by_score[s]} for s in present], key=lambda x: x["odds"])[:4]
+        clusters.append({
+            "cluster": name,
+            "scores": present,
+            "min_odds": round(min_odd, 3),
+            "mean_odds": round(mean_odd, 3),
+            "raw_implied_sum": round(implied_sum, 3),
+            "lowest_scores": lowest_scores,
+        })
+    clusters.sort(key=lambda r: (-r["raw_implied_sum"], r["min_odds"] if r["min_odds"] else 9999))
+
+    adjacent = {}
+    for base, rivals in ADJACENT_AUDIT_MAP.items():
+        if base not in odds_by_score:
+            continue
+        base_odd = odds_by_score[base]
+        rival_rows = []
+        for rv in rivals:
+            if rv not in odds_by_score:
+                continue
+            rv_odd = odds_by_score[rv]
+            rival_rows.append({
+                "rival": rv,
+                "rival_odds": rv_odd,
+                "lower_than_base": rv_odd < base_odd,
+                "near_base": abs(rv_odd - base_odd) / max(base_odd, 1e-9) <= 0.18,
+            })
+        adjacent[base] = {"base_odds": base_odd, "rivals": sorted(rival_rows, key=lambda x: x["rival_odds"])}
+
+    by_dir = {"home": [], "draw": [], "away": []}
+    for r in rows:
+        by_dir[r["direction"]].append(r)
+
+    return {
+        "available": bool(rows),
+        "lowest_scores_overall": rows[:12],
+        "lowest_scores_by_direction": {d: arr[:6] for d, arr in by_dir.items()},
+        "cluster_ranking": clusters,
+        "adjacent_score_audit_table": adjacent,
+        "movement_summary": [r for r in rows if r.get("change_label") not in ("unknown", "unchanged")],
+        "required_gemini_rule": "Gemini 输出 predicted_score 前必须先读取 adjacent_score_audit_table；若 rival_odds 更低或接近但不选，必须解释。解释不足时 recommendation.tier 最高 B。",
+    }
+
+# ------------------------------------------------------------
+# Public / Sharp facts：只产事实，不直接裁决
+# ------------------------------------------------------------
+
+def compile_public_vote_facts(m: Dict[str, Any]) -> Dict[str, Any]:
+    vote = _as_dict(m.get("vote"))
+    three = {"home": _f(vote.get("win"), 0.0), "draw": _f(vote.get("same"), 0.0), "away": _f(vote.get("lose"), 0.0)}
+    hhad = {"hhad_win": _f(vote.get("hhad_win"), 0.0), "hhad_same": _f(vote.get("hhad_same"), 0.0), "hhad_lose": _f(vote.get("hhad_lose"), 0.0)}
+    dom = max(three.items(), key=lambda kv: kv[1])[0] if any(three.values()) else "unknown"
+    return {
+        "available": bool(vote),
+        "vote_pct_1x2": three,
+        "dominant_public_1x2": dom,
+        "public_skew_strength": max(three.values()) if any(three.values()) else 0.0,
+        "vote_pct_hhad": hhad,
+    }
+
+
+def compile_sharp_money_facts(m: Dict[str, Any]) -> Dict[str, Any]:
+    one = compile_1x2_facts(m)
+    hhad = compile_hhad_facts(m)
+    vote = compile_public_vote_facts(m)
+    ttg = compile_ttg_facts(m)
+    crs_diag = compile_score_cluster_diagnostics(m)
+
+    warnings: List[str] = []
+    candidates: List[Dict[str, Any]] = []
+
+    public_side = vote.get("dominant_public_1x2", "unknown")
+    public_strength = _f(vote.get("public_skew_strength"), 0.0)
+    market_side = one.get("lowest_direction", "unknown")
+
+    # 只有 1X2 change 缺失时，不准声称真实 RLM。只能标记 public-vs-market contradiction。
+    had_change = _as_dict(m.get("change"))
+    if not had_change:
+        warnings.append("had_change_missing_cannot_confirm_true_rlm")
+
+    if public_side in VALID_DIRS and market_side in VALID_DIRS:
+        if public_strength >= 58 and public_side != market_side:
+            candidates.append({
+                "side": market_side,
+                "reason": "public_vote_dominant_but_1x2_lowest_market_on_other_side",
+                "strength": "medium" if public_strength >= 65 else "weak",
+                "public_side": public_side,
+                "market_side": market_side,
+            })
+
+    # CRS 降赔项：-1 是压低，说明该比分市场支持上升。
+    crs_down = [r for r in crs_diag.get("movement_summary", []) if r.get("change_label") == "odds_down_market_support_up"]
+    for r in crs_down[:8]:
+        candidates.append({
+            "side": r.get("direction"),
+            "reason": f"crs_score_odds_down:{r.get('score')}",
+            "strength": "medium" if r.get("rank", 99) <= 8 else "weak",
+            "score": r.get("score"),
+            "odds": r.get("odds"),
+        })
+
+    # TTG 降赔：只说明总进球形态支持增强。
+    ttg_down = [r for r in ttg.get("movement_summary", []) if r.get("change_label") == "odds_down_market_support_up"]
+    goal_shape_candidates = [{"goals": r.get("goals"), "odds": r.get("odds"), "reason": "ttg_odds_down"} for r in ttg_down[:5]]
+
+    # HHAD 最低项可作为穿盘/不穿盘事实，但不是方向裁决。
+    hhad_low = hhad.get("lowest_hhad_code", "unknown")
+    if hhad_low != "unknown":
+        candidates.append({
+            "side": "handicap_structure",
+            "reason": f"lowest_hhad={hhad_low}:{hhad.get('semantic_map', {}).get(hhad_low, '')}",
+            "strength": "medium",
+            "hhad_lowest_code": hhad_low,
+        })
+
+    strong_count = sum(1 for c in candidates if c.get("strength") == "medium")
+    confidence = "strong" if strong_count >= 3 else "medium" if strong_count >= 1 else "weak"
+
+    return {
+        "public_side": public_side,
+        "public_strength": public_strength,
+        "market_lowest_side": market_side,
+        "reverse_line_movement": {
+            "detected": False if not had_change else None,
+            "status": "unavailable_without_had_change" if not had_change else "requires_open_current_odds",
+            "note": "当前抓包大多只有 change 方向码或空数组；没有开盘/即时赔率序列时不能硬判真实 RLM。",
+        },
+        "sharp_side_candidates": candidates[:12],
+        "goal_shape_candidates": goal_shape_candidates,
+        "confidence": confidence,
+        "warnings": warnings,
+        "hard_rule_for_ai": "AI 可以使用 sharp_side_candidates 作为资金/市场异动事实，但不得把 warnings 缺失的数据当成已确认聪明钱。",
+    }
+
+# ------------------------------------------------------------
+# 情报源审计：抓包文字不是实时 web source
+# ------------------------------------------------------------
+
+def compile_packet_context_facts(m: Dict[str, Any]) -> Dict[str, Any]:
+    analyse = _as_dict(m.get("analyse"))
+    information = _as_dict(m.get("information"))
+    points = _as_dict(m.get("points"))
+
+    injury = {
+        "home_injury": information.get("home_injury", ""),
+        "guest_injury": information.get("guest_injury", ""),
+    }
+    news_blocks = {
+        "intro": m.get("intro", ""),
+        "analyse_intro": analyse.get("intro", ""),
+        "analyse_baseface": analyse.get("baseface", ""),
+        "information_home_good": information.get("home_good_news", ""),
+        "information_guest_good": information.get("guest_good_news", ""),
+        "information_home_bad": information.get("home_bad_news", ""),
+        "information_guest_bad": information.get("guest_bad_news", ""),
+        "points_deep": points.get("deep", ""),
+        "points_match_points": points.get("match_points", ""),
+    }
+    nonempty_news = {k: v for k, v in news_blocks.items() if _exists(v)}
+
+    third_party_picks = {
+        "predict_array": _as_list(m.get("predict")),
+        "analyse_had": analyse.get("had_analyse", []),
+        "analyse_ttg": analyse.get("ttg_analyse", []),
+        "analyse_hafu": analyse.get("hafu_analyse", []),
+        "analyse_crs": analyse.get("crs_analyse", []),
+        "analyse_odds_refs": {
+            "had_odds": analyse.get("had_odds", ""),
+            "ttg_odds": analyse.get("ttg_odds", ""),
+            "hafu_odds": analyse.get("hafu_odds", ""),
+            "crs_odds": analyse.get("crs_odds", ""),
+        }
+    }
+
+    return {
+        "available": bool(nonempty_news or injury or third_party_picks.get("predict_array")),
+        "packet_news_blocks": nonempty_news,
+        "injury_blocks": injury,
+        "team_lists": {
+            "home_first_team": information.get("home_first_team", ""),
+            "guest_first_team": information.get("guest_first_team", ""),
+        },
+        "third_party_packet_picks": third_party_picks,
+        "source_reliability_note": "这些是抓包内置情报/推荐，不等于实时外部 Web sources。若 AI_NATIVE_WEB=false 或 no_web_tool_available，不能把它们包装成联网来源。",
+    }
+
+# ------------------------------------------------------------
+# 联赛波动 profile：风险先验，不做方向裁决
+# ------------------------------------------------------------
+
+def compile_league_volatility_profile(m: Dict[str, Any]) -> Dict[str, Any]:
+    league = str(m.get("cup", m.get("league", "")))
+    high_goal = any(x in league for x in ["德甲", "德乙", "荷甲", "挪超", "瑞典", "美职", "澳超"])
+    low_goal = any(x in league for x in ["意甲", "西甲", "法甲", "芬超", "日职", "韩职"])
+    drawish = any(x in league for x in ["法甲", "西甲", "意甲", "芬超", "韩职", "日职"])
+    return {
+        "league": league,
+        "goal_volatility": "high" if high_goal else "low" if low_goal else "medium",
+        "draw_baseline": "high" if drawish else "medium",
+        "tail_risk": "high" if high_goal else "medium",
+        "note": "联赛 profile 只作为 Gemini 风险审计提醒；不能直接覆盖 AI 比分。",
+    }
+
+# ------------------------------------------------------------
+# Enhanced Evidence 汇总
+# ------------------------------------------------------------
+
+def build_enhanced_market_modules(match_obj: Dict[str, Any], index: int) -> Dict[str, Any]:
+    m = normalize_match_v203(match_obj)
+    return {
+        "market_microstructure_v203": {
+            "one_x_two": compile_1x2_facts(m),
+            "handicap_hhad": compile_hhad_facts(m),
+            "total_goals_ttg": compile_ttg_facts(m),
+            "half_full_time": compile_hftf_facts(m),
+        },
+        "score_cluster_diagnostics_v203": compile_score_cluster_diagnostics(m),
+        "sharp_money_facts_v203": compile_sharp_money_facts(m),
+        "packet_context_facts_v203": compile_packet_context_facts(m),
+        "league_volatility_profile_v203": compile_league_volatility_profile(m),
+    }
+
+
+def build_evidence_packet_v203(match_obj: Dict[str, Any], index: int) -> Dict[str, Any]:
+    """
+    可直接替换 v20.2.1 的 build_evidence_packet。
+    注意：此函数只编译事实，不输出 predicted_score，不做本地预测判断。
+    """
+    m = normalize_match_v203(match_obj)
+
+    correct_score_odds = {sc: m.get(key) for sc, key in CRS_FULL_MAP.items() if m.get(key) not in (None, "", 0, "0")}
+    total_goals_odds = {str(i): m.get(f"a{i}") for i in range(8) if m.get(f"a{i}") not in (None, "", 0, "0")}
+    hftf_odds = {HFTF_MAP[k]: m.get(k) for k in HFTF_MAP if m.get(k) not in (None, "", 0, "0")}
+
+    evidence = {
+        "match": index,
+        "identity": {
+            "home_team": m.get("home_team", "Home"),
+            "away_team": m.get("away_team", "Away"),
+            "league": m.get("cup", m.get("league", "")),
+            "match_num": m.get("week_no", m.get("match_num", "")),
+            "week": m.get("week", ""),
+            "match_time_ts": m.get("stime", ""),
+            "wtime_ts": m.get("wtime", ""),
+        },
+        "lottery_market_1x2": {
+            "home": m.get("sp_home"),
+            "draw": m.get("sp_draw"),
+            "away": m.get("sp_away"),
+            "note": "中国体彩竞彩 HAD 赔率，不是欧洲均赔。",
+        },
+        "handicap": {
+            "raw": m.get("give_ball", m.get("handicap", m.get("rq", ""))),
+            "hhad_win": m.get("hhad_win"),
+            "hhad_same": m.get("hhad_same"),
+            "hhad_lose": m.get("hhad_lose"),
+            "note": "中国竞彩让球胜平负 HHAD；give_ball=-1 表示主让1，hhad_same 通常对应主队刚好赢1球。",
+        },
+        "movement": {
+            "had_change": _as_dict(m.get("change")),
+            "hhad_change": _as_dict(m.get("hhad_change")),
+            "ttg_change": _as_dict(m.get("ttg_change")),
+            "crs_change": _as_dict(m.get("crs_change")),
+            "hafu_change": _as_dict(m.get("hafu_change")),
+            "coding_note": "-1=赔率下降/压低，0=不变，1=赔率上升/抬高。空数组/空对象表示无可用变化数据，不能硬判 RLM。",
+        },
+        "public_vote": _as_dict(m.get("vote")),
+        "total_goals_odds": total_goals_odds,
+        "correct_score_odds": correct_score_odds,
+        "half_full_time_odds": hftf_odds,
+        "data_quality": {
+            "has_1x2": all(_f(m.get(k), 0.0) > 1.01 for k in ["sp_home", "sp_draw", "sp_away"]),
+            "has_hhad": all(_f(m.get(k), 0.0) > 1.01 for k in ["hhad_win", "hhad_same", "hhad_lose"]),
+            "has_total_goals": bool(total_goals_odds),
+            "has_correct_score": bool(correct_score_odds),
+            "has_hftf": bool(hftf_odds),
+            "has_vote": bool(_as_dict(m.get("vote"))),
+            "has_market_change": any(bool(_as_dict(m.get(k))) for k in ["change", "hhad_change", "ttg_change", "crs_change", "hafu_change"]),
+            "has_packet_context": any(_exists(m.get(k)) for k in ["intro", "analyse", "information", "points"]),
+        },
+    }
+    evidence.update(build_enhanced_market_modules(m, index))
+    return evidence
+
+# ------------------------------------------------------------
+# Prompt addendum：把 20.2.1 的自由发挥改成审计表
+# ------------------------------------------------------------
+
+PHASE1_ROLE_SPLIT_ADDENDUM = """
+【v20.3 强制分工】
+GPT 不再扮演最终预测员，只输出 market_audit / score_cluster_audit / goal_market_audit / market_conflicts / candidate_scores。
+Grok 不再扮演最终预测员，只输出 sharp_money_audit / public_heat_audit / packet_news_risk_audit / risk_tags / trap_candidates。
+Gemini 才能输出 final_direction / predicted_score / top3 / recommendation。
+若 GPT/Grok 仍输出最终比分，Gemini 可以参考但必须重新审计，不得机械照抄。
+""".strip()
+
+GEMINI_FINAL_AUDIT_ADDENDUM = """
+【v20.3 Gemini 终审硬约束】
+1. 必须读取 score_cluster_diagnostics_v203.cluster_ranking 与 adjacent_score_audit_table。
+2. 输出 predicted_score 前必须完成相邻比分审计：
+   - 2-1 必须比较 1-1/1-0/2-0/1-2/2-2/3-1。
+   - 1-2 必须比较 1-1/0-1/0-2/2-1/2-2/1-3。
+   - 2-0 必须比较 1-0/3-0/2-1/0-0/1-1。
+   - 0-2 必须比较 0-1/0-3/1-2/0-0/1-1。
+   - 1-0 必须比较 0-0/1-1/2-0/2-1/0-1。
+   - 0-1 必须比较 0-0/1-1/0-2/1-2/1-0。
+   - 1-1 必须比较 0-0/1-0/0-1/2-1/1-2/2-2。
+3. 若相邻比分赔率更低或接近但最终不选，必须在 rejected_cases 或 reason 中解释；解释不足时 recommendation.tier 最高 B。
+4. 必须读取 sharp_money_facts_v203。若 had_change 缺失，只能说 RLM 不可确认，不能声称“聪明钱已确认”。
+5. 若 no_web_tool_available，不能把抓包里的 injury/news/points 包装成实时联网来源；这些只能算 packet_context，最高 reliability=medium。
+6. 推荐等级必须拆分：direction_edge、score_cluster_strength、goal_band_strength、btts_alignment、sharp_alignment、web_source_quality、market_conflict_penalty。
+7. 本地不会改你的比分，但若组件分不足，本地可只做推荐降级。
+""".strip()
+
+RECOMMENDATION_COMPONENT_SCHEMA = {
+    "recommendation_components": {
+        "direction_edge": "0-100，方向市场优势，不等于比分命中率",
+        "score_cluster_strength": "0-100，正确比分簇支持强度",
+        "goal_band_strength": "0-100，总进球带支持强度",
+        "btts_alignment": "0-100，BTTS 与比分/总球/联赛形态的一致度",
+        "sharp_alignment": "0-100，sharp_money_facts_v203 与最终方向的一致度；缺数据不能高分",
+        "web_source_quality": "0-100，无真实联网来源时为0或很低",
+        "market_conflict_penalty": "0到-40，冲突越大越负",
+        "final_grade_reason": "中文说明为什么给 S/A/B/C/D",
+    }
+}
+
+# ------------------------------------------------------------
+# 可选：本地只做推荐降级，不改比分/方向
+# ------------------------------------------------------------
+
+def protocol_downgrade_recommendation_only(pred: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    只降推荐等级，不改 predicted_score / final_direction。
+    可在 adapt_ai_to_frontend 后或前端排序前调用。
+    """
+    rec = pred.setdefault("recommendation", {}) if isinstance(pred, dict) else {}
+    comps = pred.get("recommendation_components", {}) if isinstance(pred.get("recommendation_components"), dict) else {}
+    tier = str(rec.get("tier", "D")).upper()
+    reasons: List[str] = []
+
+    def cap(max_tier: str, reason: str) -> None:
+        nonlocal tier
+        order = {"S": 5, "A": 4, "B": 3, "C": 2, "D": 1}
+        if order.get(tier, 1) > order.get(max_tier, 1):
+            tier = max_tier
+            reasons.append(reason)
+
+    if _f(comps.get("score_cluster_strength"), 0) < 55:
+        cap("B", "score_cluster_strength_below_55")
+    if _f(comps.get("sharp_alignment"), 0) < 40 and _f(comps.get("direction_edge"), 0) < 70:
+        cap("C", "sharp_alignment_low_and_direction_edge_not_strong")
+    if _f(comps.get("web_source_quality"), 0) <= 0 and any(k in str(pred.get("reason", "")) for k in ["伤停", "首发", "战意", "体能"]):
+        cap("B", "reason_uses_context_without_verified_web_sources")
+    if _f(comps.get("direction_edge"), 0) < 55:
+        cap("C", "direction_edge_below_55")
+
+    rec["tier"] = tier if tier in {"S", "A", "B", "C", "D"} else "D"
+    rec["is_recommended"] = rec["tier"] in {"S", "A", "B"}
+    pred.setdefault("recommendation_downgrade_reasons", []).extend(reasons)
+    return pred
+
+
+# 恢复基础工具函数，增强模块内部会使用这些已恢复的全局函数。
+_f = _BASE_F
+_i = _BASE_I
+_exists = _BASE_EXISTS
+_json_compact = _BASE_JSON_COMPACT
+_normalize_score_text = _BASE_NORMALIZE_SCORE_TEXT
+_parse_score = _BASE_PARSE_SCORE
+_score_direction = _BASE_SCORE_DIRECTION
+_score_total = _BASE_SCORE_TOTAL
+_score_btts = _BASE_SCORE_BTTS
+_score_goal_band = _BASE_SCORE_GOAL_BAND
+
+ENGINE_VERSION = "vMAX 20.3.0-FULL-SHARP-CLUSTER"
+ENGINE_ARCHITECTURE = (
+    "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；"
+    "新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；"
+    "本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。"
+)
+
+
+def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, Any]:
+    """
+    v20.3 完整版 Evidence Compiler。
+    基于 20.2.1-FULL-ANCHOR 原始证据 + v20.3 Sharp/Score-Cluster 模块合并。
+    本函数只编译事实，不输出 predicted_score，不做本地足球裁决。
+    """
+    evidence = _BASE_BUILD_EVIDENCE_PACKET_V2021(match_obj, index)
+    try:
+        evidence.update(build_enhanced_market_modules(match_obj, index))
+        evidence["evidence_compiler_version"] = "v20.3.0_sharp_cluster_full"
+        evidence.setdefault("protocol_notes", []).extend([
+            "v20.3: sharp_money_facts_v203 是事实编译，不是本地判断Sharp真伪。",
+            "v20.3: score_cluster_diagnostics_v203 只描述赔率簇和相邻比分关系，不替AI选比分。",
+            "v20.3: Gemini 必须基于相邻比分审计给出最终 predicted_score。",
+        ])
+    except Exception as e:
+        evidence.setdefault("data_quality", {})["v203_enhancement_error"] = str(e)[:300]
+    return evidence
+
+
+def _canonical_output_schema_text() -> str:
+    return r"""
+必须输出严格 JSON object，顶层格式：{"predictions":[...]}。不要输出 markdown，不要输出 JSON 外文本。
+每个 prediction 必须包含：
+{
+  "match": 1,
+  "final_direction": "home/draw/away",
+  "predicted_score": "2-1",
+  "direction_probs": {"home": 45, "draw": 28, "away": 27},
+  "goal_band": "0-1/2/3/4+",
+  "btts": "yes/no/unclear",
+  "top3": [
+    {"score":"2-1", "prob":16, "logic":"中文专业说明"}
+  ],
+  "market_interpretation": {
+    "one_x_two":"中文说明", "handicap":"中文说明", "correct_score":"中文说明",
+    "total_goals":"中文说明", "half_full_time":"中文说明", "external_market":"中文说明"
+  },
+  "money_flow": {
+    "public_money_direction":"home/draw/away/unclear",
+    "sharp_money_direction":"home/draw/away/unclear",
+    "sharp_confidence":0,
+    "reverse_line_movement":false,
+    "steam_move":"home/draw/away/none/unclear",
+    "evidence":"中文说明"
+  },
+  "score_cluster_audit": {
+    "selected_cluster":"home_narrow/draw_low/away_narrow/home_cover/away_cover/high_btts/other",
+    "why_selected_score":"中文说明",
+    "adjacent_scores_checked":[{"score":"1-1","odds":0,"verdict":"reject/keep/near_miss","reason":"中文"}],
+    "lowest_score_not_selected_reason":"中文说明"
+  },
+  "sharp_money_audit": {
+    "available":true,
+    "confirmed_sharp_direction":"home/draw/away/unclear",
+    "rlm_confirmed":false,
+    "vote_vs_odds_conflict":"中文说明",
+    "crs_change_impact":"中文说明",
+    "ttg_change_impact":"中文说明"
+  },
+  "anchor_audit": {
+    "zero_zero":"中文说明", "one_one":"中文说明", "one_zero":"中文说明", "zero_one":"中文说明",
+    "two_one":"中文说明", "one_two":"中文说明", "high_score_tail":"中文说明", "handicap_cover":"中文说明"
+  },
+  "contextual_logic": {
+    "league_style":"中文说明", "team_style":"中文说明", "tempo":"low/medium/high/unclear",
+    "score_shape":"中文说明", "btts_likelihood":"yes/no/unclear", "rotation_risk":"low/medium/high/unclear"
+  },
+  "rejected_cases": {"home":"中文说明", "draw":"中文说明", "away":"中文说明"},
+  "web_research": {
+    "used": true,
+    "failure_reason": "",
+    "search_queries": [],
+    "sources": [
+      {"title":"", "url":"", "publisher":"", "published_at":"", "accessed_at":"", "source_type":"injury/lineup/odds/news/stats/tactical", "reliability":"high/medium/low", "claim":"", "impact":"direction/score/risk/no_impact"}
+    ],
+    "freshness_grade":"live/recent/stale/missing",
+    "key_findings": [],
+    "source_conflicts": []
+  },
+  "recommendation_components": {
+    "direction_edge":0,
+    "score_cluster_strength":0,
+    "goal_band_strength":0,
+    "btts_alignment":0,
+    "sharp_alignment":0,
+    "web_source_quality":0,
+    "market_conflict_penalty":0,
+    "final_grade_reason":"中文说明"
+  },
+  "recommendation": {
+    "tier":"S/A/B/C/D",
+    "is_recommended":true,
+    "top4_priority":1,
+    "bet_confidence":0,
+    "direction_stability":"strong/medium/weak",
+    "score_stability":"strong/medium/weak",
+    "risk_level":"low/medium/high",
+    "risk_tags":[],
+    "why_recommended":"中文说明"
+  },
+  "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
+  "reason":"中文综合理由"
+}
+硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。
+""".strip()
+
+
+def _phase1_system(ai_name: str) -> str:
+    role_intro = {
+        "gpt": "你是 Probabilistic Market Structure Analyst，专攻 1X2、HHAD让球、正确比分赔率簇、总进球模态、外部赔率对照。你不是最终裁判。",
+        "grok": "你是 Money Flow / Sharp Movement Analyst，专攻 vote、change、CRS/TTG压赔抬赔、热度、Sharp/Steam/RLM、临场新闻。你不是最终裁判。",
+        "gemini": "你是 Gemini Final Web-aware Referee，负责战术/来源质量审计、相邻比分审计、交叉证据仲裁和最终推荐。",
+    }.get(ai_name, "你是足球量化 RAW-AI 分析师。")
+    return (
+        role_intro
+        + "只能输出严格 JSON object，顶层必须是 predictions。所有解释字段必须中文。"
+        + "禁止引用本地模型结论；允许使用 raw evidence、ai_anchor_facts_no_judgement、market_microstructure_v203、score_cluster_diagnostics_v203、sharp_money_facts_v203。"
+        + "不要机械投票；不要默认1-1/2-1/0-2；必须完成 score_cluster_audit、sharp_money_audit、anchor_audit。"
+    )
+
+
+def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> str:
+    n = len(evidence_batch)
+    p = []
+    p.append("<task>")
+    p.append(f"本批次共有 {n} 场，match 编号必须完整覆盖：" + ",".join(str(e["match"]) for e in evidence_batch))
+    p.append("你看到的是中国体彩竞彩抓包 Evidence，不是本地预测结论。本地没有 Sharp 真伪裁决、没有比分裁决、没有推荐裁决。")
+    p.append(_web_research_instruction(ai_name))
+    p.append(PHASE1_ROLE_SPLIT_ADDENDUM)
+    if ai_name == "gpt":
+        p.append("GPT重点：读取 market_microstructure_v203 与 score_cluster_diagnostics_v203，输出市场结构审计、比分簇审计、相邻比分表。不要把资金流当主任务。")
+    elif ai_name == "grok":
+        p.append("Grok重点：读取 sharp_money_facts_v203、movement、vote、packet_context_facts_v203，判断热度/压赔/反向移动是否可确认；缺少change时必须写不可确认。")
+    else:
+        p.append("Gemini若参与初审，也必须按最终裁判标准完成相邻比分和来源审计。")
+    p.append("强制：每场必须显式读取 score_cluster_diagnostics_v203.adjacent_score_audit_table；不能只看最低赔率。")
+    p.append("强制：若 web_research.used=false，不得把抓包 information/points 伪装成联网来源；只能作为 packet_context。")
+    p.append("</task>\n")
+    p.append("<output_schema>")
+    p.append(_canonical_output_schema_text())
+    p.append("</output_schema>\n")
+    p.append("<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch>")
+    return "\n".join(p)
+
+
+def _short_prediction_for_prompt(r: Dict[str, Any]) -> Dict[str, Any]:
+    keep = {}
+    for k in [
+        "match", "final_direction", "predicted_score", "direction_probs", "goal_band", "btts", "top3",
+        "score_cluster_audit", "sharp_money_audit", "anchor_audit", "market_interpretation", "money_flow",
+        "contextual_logic", "rejected_cases", "recommendation_components", "recommendation",
+        "data_quality", "reason", "web_research", "final_web_audit", "validation_warnings",
+    ]:
+        if k in r:
+            keep[k] = r[k]
+    return keep
+
+
+def build_critic_prompt(evidence_batch: List[Dict[str, Any]], reviewer_name: str, phase1_results: Dict[str, Dict[int, Dict[str, Any]]]) -> str:
+    p = []
+    p.append("<task>")
+    p.append(f"你是 {reviewer_name.upper()} Critic。你不是重新预测主裁，只负责审查其他 AI 的漏洞。")
+    p.append("必须指出：赔率误读、HHAD语义误读、联网来源不可靠、Sharp证据不足、CRS相邻比分未审、TTG/BTTS冲突、推荐等级过高。")
+    p.append("尤其审查：是否把 no_web_tool_available 当成真实联网；是否把抓包文字当实时新闻；是否机械选2-1/1-2/0-2。")
+    p.append("输出严格 JSON object，顶层格式 {\"critic_reports\":[...]}，不要 markdown。")
+    p.append("每个 critic_report 格式：{\"match\":1,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"market/web/sharp/score/schema/risk/cluster/hhad\",\"severity\":\"low/medium/high\",\"comment\":\"中文\"}],\"own_revision_hint\":\"中文\"}")
+    p.append("</task>\n<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch>\n<phase1_results>")
+    for model, rows in phase1_results.items():
+        if model == reviewer_name:
+            continue
+        p.append(f"<{model}>")
+        for e in evidence_batch:
+            r = rows.get(e["match"], {})
+            if r:
+                p.append(_safe_json_line(_short_prediction_for_prompt(r)))
+        p.append(f"</{model}>")
+    p.append("</phase1_results>")
+    return "\n".join(p)
+
+
+def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_results: Dict[str, Dict[int, Dict[str, Any]]], critic_reports: Dict[str, List[Dict[str, Any]]]) -> str:
+    p = []
+    p.append("<final_adjudication_protocol>")
+    p.append("你是 Gemini 最终 Web-aware 裁判。你必须重新审计 raw evidence、GPT/Grok 初审、互审意见、v20.3市场簇和联网来源质量。")
+    p.append("证据优先级：raw market structure > score_cluster_diagnostics_v203 > HHAD让球语义 > total-goals mode > sharp_money_facts_v203 > tactical/web context > Phase1 consensus。")
+    p.append("多数意见不自动成立；若 GPT/Grok 基于同一低赔/单边市场理由一致，这属于相关证据，不是独立证据。")
+    p.append(GEMINI_FINAL_AUDIT_ADDENDUM)
+    p.append("S级必须同时满足：方向边际强、比分簇强、总进球带强、相邻比分解释完整、Sharp/热度不冲突、推荐组件分数透明。仅赔率低赔最多A；无真实联网且依赖阵容/战意/伤停，最高B。")
+    p.append("强制输出 recommendation_components，不能只给 tier 和 bet_confidence。")
+    p.append("最终推荐等级、是否进 Top4、bet_confidence 全部由你输出；本地只排序，不会改你的足球判断。")
+    p.append("</final_adjudication_protocol>\n")
+    p.append("<output_schema>")
+    p.append(_canonical_output_schema_text())
+    p.append("额外要求：每个 prediction 增加 final_web_audit 字段：{\"web_used_by_final\":true,\"decisive_web_evidence\":[],\"ignored_web_evidence\":[],\"web_confidence\":0}")
+    p.append("</output_schema>\n")
+    p.append("<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch>\n<phase1_results>")
+    for model in PHASE1_NAMES:
+        p.append(f"<{model}>")
+        rows = phase1_results.get(model, {})
+        for e in evidence_batch:
+            r = rows.get(e["match"], {})
+            if r:
+                p.append(_safe_json_line(_short_prediction_for_prompt(r)))
+            else:
+                p.append(_safe_json_line({"match": e["match"], "missing": True}))
+        p.append(f"</{model}>")
+    p.append("</phase1_results>\n<critic_reports>")
+    p.append(_safe_json_line(critic_reports))
+    p.append("</critic_reports>")
+    return "\n".join(p)
+
+
+def build_fallback_referee_prompt(evidence_batch: List[Dict[str, Any]], phase1_results: Dict[str, Dict[int, Dict[str, Any]]], critic_reports: Dict[str, List[Dict[str, Any]]]) -> str:
+    p = []
+    p.append("你是 Gemini 终审失败后的 AI fallback referee。不要使用本地规则。基于 raw evidence、v20.3市场簇、Sharp事实、Phase1 和 critic reports 输出最终 predictions。")
+    p.append("输出 schema 与 Gemini final 完全一致。必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。")
+    p.append(_canonical_output_schema_text())
+    p.append("<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch><phase1_results>")
+    p.append(_safe_json_line({m: {str(k): _short_prediction_for_prompt(v) for k, v in rows.items()} for m, rows in phase1_results.items()}))
+    p.append("</phase1_results><critic_reports>")
+    p.append(_safe_json_line(critic_reports))
+    p.append("</critic_reports>")
+    return "\n".join(p)
+
+
+def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_predictions: Dict[int, Dict[str, Any]]) -> str:
+    p = []
+    p.append("你是 Consistency Judge，只检查结构一致性，不做足球判断，不改变预测方向/比分，除非存在字段自相矛盾时给出 repair 建议。")
+    p.append("输出严格 JSON object：{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[],\"repair\":{...}}]}。")
+    p.append("检查：predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components 必须存在。")
+    p.append("不得根据足球观点改比分，只能修字段。")
+    p.append("<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch><final_predictions>")
+    for idx, r in final_predictions.items():
+        p.append(_safe_json_line(_short_prediction_for_prompt(r)))
+    p.append("</final_predictions>")
+    return "\n".join(p)
+
+
+def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model: str, phase: str) -> Dict[int, Dict[str, Any]]:
+    out = _BASE_NORMALIZE_AI_PREDICTIONS_V2021(obj, expected_matches, source_model, phase)
+    for idx, row in out.items():
+        raw_item = row.get("raw_item", {}) if isinstance(row.get("raw_item"), dict) else {}
+        for k in [
+            "score_cluster_audit", "sharp_money_audit", "recommendation_components",
+            "market_audit", "score_cluster_audit", "goal_market_audit", "market_conflicts", "candidate_scores",
+            "public_heat_audit", "packet_news_risk_audit", "trap_candidates", "final_score_audit",
+        ]:
+            if isinstance(raw_item.get(k), (dict, list)):
+                row[k] = raw_item.get(k)
+        warnings = list(row.get("validation_warnings", []))
+        if not isinstance(raw_item.get("score_cluster_audit"), dict):
+            warnings.append("score_cluster_audit_missing_or_invalid")
+        if not isinstance(raw_item.get("sharp_money_audit"), dict):
+            warnings.append("sharp_money_audit_missing_or_invalid")
+        if not isinstance(raw_item.get("recommendation_components"), dict):
+            warnings.append("recommendation_components_missing_or_invalid")
+        row["validation_warnings"] = list(dict.fromkeys(warnings))
+    return out
+
+
+def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    pred = _BASE_ADAPT_AI_TO_FRONTEND_V2021(ai_r, match_obj)
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    raw_item = ai_r.get("raw_item", {}) if isinstance(ai_r.get("raw_item"), dict) else {}
+    for k in [
+        "score_cluster_audit", "sharp_money_audit", "recommendation_components", "market_audit",
+        "goal_market_audit", "market_conflicts", "candidate_scores", "public_heat_audit",
+        "packet_news_risk_audit", "trap_candidates", "final_score_audit",
+    ]:
+        v = ai_r.get(k, None)
+        if v in (None, {}, []):
+            v = raw_item.get(k, None)
+        if v not in (None, {}, []):
+            pred[k] = v
+    # 本地只做推荐风控展示/降级，不改方向和比分。
+    try:
+        protocol_downgrade_recommendation_only(pred)
+        rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+        tier = str(rec.get("tier", "D")).upper()
+        pred["recommendation_tier"] = tier
+        pred["recommend_gate_pass"] = bool(rec.get("is_recommended", False)) and _min_tier_ok(tier)
+        pred["recommend_gate_reasons"] = [] if pred["recommend_gate_pass"] else ["ai_not_recommended_or_below_min_tier_or_v203_component_downgrade"]
+        pred["direction_tier"] = tier
+        pred["score_tier"] = tier
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"v203_recommendation_component_downgrade_error:{str(e)[:120]}")
+    pred["engine_version"] = ENGINE_VERSION
+    pred["engine_architecture"] = ENGINE_ARCHITECTURE
+    return pred
+
+
 if __name__ == "__main__":
     logger.info(f"{ENGINE_VERSION} 启动")
     print(f"✅ {ENGINE_VERSION} 加载完成")
     print(f"   架构: {ENGINE_ARCHITECTURE}")
-    print("   模式: AI判断足球；本地只做协议/分批/解析/落盘/前端兼容；新增锚点审计。")
+    print("   模式: 完整版；保留AI模块调用链；新增Sharp/CRS簇/HHAD/相邻比分审计；本地不改最终足球判断。")
