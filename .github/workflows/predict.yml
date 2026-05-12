@@ -155,29 +155,44 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          mkdir -p data/
+          DATA_BRANCH="data"
+          git fetch origin "$DATA_BRANCH" || true
+          if git show-ref --verify --quiet "refs/remotes/origin/$DATA_BRANCH"; then
+            git worktree add /tmp/repo88-data-branch "origin/$DATA_BRANCH"
+          else
+            git worktree add --detach /tmp/repo88-data-branch
+            cd /tmp/repo88-data-branch
+            git checkout --orphan "$DATA_BRANCH"
+            git rm -rf . || true
+            cd -
+          fi
 
-          git pull --rebase --autostash origin main
+          mkdir -p /tmp/repo88-data-branch/data
 
           if [ -d "scripts/data" ]; then
-            echo "📤 Syncing scripts/data/ -> root data/"
+            echo "📤 Syncing scripts/data/ -> isolated data branch"
             rsync -a --delete \
               --exclude "debug/" \
               --exclude "debug_v20/" \
               --exclude "ai_cache/" \
               --exclude "ai_phase_results/" \
               --exclude "ai_phase_results_v20/" \
-              scripts/data/ data/
+              scripts/data/ /tmp/repo88-data-branch/data/
           fi
 
           echo "🧹 Ensure AI cache/debug/phase result snapshots are not committed"
-          rm -rf data/ai_cache data/debug data/debug_v20 data/ai_phase_results data/ai_phase_results_v20 || true
+          rm -rf /tmp/repo88-data-branch/data/ai_cache \
+                 /tmp/repo88-data-branch/data/debug \
+                 /tmp/repo88-data-branch/data/debug_v20 \
+                 /tmp/repo88-data-branch/data/ai_phase_results \
+                 /tmp/repo88-data-branch/data/ai_phase_results_v20 || true
 
+          cd /tmp/repo88-data-branch
           git add data/
 
           if ! git diff-index --quiet HEAD; then
-            git commit -m "🤖 Auto-update prediction data (manual event-driven strict-ai-no-cache)"
-            git push
+            git commit -m "🤖 Auto-update prediction data (isolated data branch)"
+            git push origin HEAD:"$DATA_BRANCH"
           else
             echo "✅ 本次测算数据无变动，安全退出。"
           fi
