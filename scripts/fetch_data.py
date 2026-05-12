@@ -5,6 +5,7 @@ import asyncio
 import aiohttp
 from datetime import datetime, timedelta, timezone
 from config import *
+from odds_quota import can_spend, record_spend, quota_summary
 
 TEAM_NAME_MAPPING = {
     "西汉姆联":"West Ham","布伦特":"Brentford","阿森纳":"Arsenal",
@@ -47,6 +48,71 @@ def season_from_date(date_str):
     d = datetime.strptime(date_str, "%Y-%m-%d")
     return d.year if d.month >= 8 else d.year - 1
 
+
+
+def _norm_team_key(name):
+    return re.sub(r"[^a-z0-9]", "", str(name or "").lower())
+
+
+async def fetch_the_odds_api_snapshot(session, date_str):
+    """Budgeted The Odds API snapshot: max one quota unit per run."""
+    if not ODDS_API_KEY:
+        print("  [ODDS] ODDS_API_KEY missing, skip The Odds API")
+        return {"events": [], "quota": quota_summary(), "skipped_reason": "missing_key"}
+    ok, reason, _state = can_spend(1)
+    if not ok:
+        print(f"  [ODDS] skip The Odds API: {reason}")
+        return {"events": [], "quota": quota_summary(), "skipped_reason": reason}
+    params = {
+        "apiKey": ODDS_API_KEY,
+        "regions": os.environ.get("ODDS_API_REGIONS", "eu,us,uk"),
+        "markets": os.environ.get("ODDS_API_MARKETS", "h2h,totals,spreads"),
+        "oddsFormat": os.environ.get("ODDS_API_FORMAT", "decimal"),
+        "dateFormat": "iso",
+    }
+    sport = os.environ.get("ODDS_API_SPORT", "soccer")
+    url = f"{ODDS_API_BASE}/sports/{sport}/odds"
+    try:
+        async with session.get(url, params=params, timeout=20) as r:
+            headers = {k: v for k, v in r.headers.items()}
+            if r.status != 200:
+                text = await r.text()
+                print(f"  [ODDS] HTTP {r.status}: {text[:120]}")
+                return {"events": [], "quota": quota_summary(), "skipped_reason": f"http_{r.status}"}
+            data = await r.json()
+            record_spend(1, response_headers=headers)
+            print(f"  [ODDS] The Odds API events={len(data)} quota={quota_summary()}")
+            return {"events": data if isinstance(data, list) else [], "quota": quota_summary(), "skipped_reason": None}
+    except Exception as e:
+        print(f"  [ODDS] request failed: {e}")
+        return {"events": [], "quota": quota_summary(), "skipped_reason": str(e)[:120]}
+
+
+def attach_odds_api_to_matches(matches, odds_snapshot):
+    events = odds_snapshot.get("events") or []
+    index = {}
+    for ev in events:
+        home = _norm_team_key(ev.get("home_team"))
+        away = _norm_team_key(ev.get("away_team"))
+        if home and away:
+            index[(home, away)] = ev
+    for m in matches:
+        hk = _norm_team_key(translate_team_name(m.get("home_team")))
+        ak = _norm_team_key(translate_team_name(m.get("away_team")))
+        ev = index.get((hk, ak))
+        if ev:
+            m["odds_api"] = {
+                "id": ev.get("id"),
+                "sport_key": ev.get("sport_key"),
+                "commence_time": ev.get("commence_time"),
+                "home_team": ev.get("home_team"),
+                "away_team": ev.get("away_team"),
+                "bookmakers_count": len(ev.get("bookmakers") or []),
+                "bookmakers": ev.get("bookmakers", [])[:5],
+            }
+        else:
+            m["odds_api"] = None
+    return matches
 
 def generate_stats_from_context(match, side):
     """API未命中时，通过赔率+排名反推统计数据（容灾方案）"""
@@ -270,10 +336,13 @@ async def async_collect_all(date_str):
 
     async with aiohttp.ClientSession() as session:
         matches = await scrape_wencai_jczq_async(session, date_str)
-        if not matches: return {"date": date_str, "matches": []}
+        if not matches: return {"date": date_str, "matches": [], "odds_quota": quota_summary()}
+
+        odds_snapshot = await fetch_the_odds_api_snapshot(session, date_str)
+        attach_odds_api_to_matches(matches, odds_snapshot)
 
         print(f"  API-Football 并发补充数据中...")
         tasks = [enrich_match_data(session, m, i, date_str, sema) for i, m in enumerate(matches)]
         enriched = await asyncio.gather(*tasks)
 
-    return {"date": date_str, "matches": enriched}
+    return {"date": date_str, "matches": enriched, "odds_quota": quota_summary()}

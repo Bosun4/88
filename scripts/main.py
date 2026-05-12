@@ -9,6 +9,11 @@ import asyncio
 import time
 from datetime import datetime, timedelta, timezone
 
+from run_context import make_run_context
+from data_quality import attach_quality, summarize_quality
+from validators import attach_prediction_validation
+from pipeline_modes import forbid_backtest_context_in_prediction
+
 # ============================================================
 # 依赖检查（安全模式：只提示，不自动安装）
 # ============================================================
@@ -284,7 +289,10 @@ def main():
 
         target_path = os.path.join(data_dir, "predictions.json")
 
+        run_context = make_run_context(engine_version="MAX-v1.1")
+
         final_output = {
+            **run_context,
             "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
             "version": "MAX-v1.1",
             "scope": "today_only",
@@ -337,6 +345,8 @@ def main():
             print(f"  [SKIP] {target_date} 暂无比赛数据，跳过 AI 推理。")
 
             final_output["matches"]["today"] = []
+            final_output["quality_summary"] = summarize_quality([])
+            final_output["odds_quota"] = raw_data.get("odds_quota", {}) if raw_data else {}
             final_output["update_time"] = datetime.now(beijing_tz).strftime("%Y-%m-%d %H:%M:%S")
 
             with open(target_path, "w", encoding="utf-8") as f:
@@ -352,7 +362,12 @@ def main():
             print("✅ 已落盘空 today 结构。")
             return
 
-        # 保留下游兼容字段 information
+        # 保留下游兼容字段 information，并附加数据质量字段
+        attach_quality(raw_data.get("matches", []))
+        leakage_warnings = forbid_backtest_context_in_prediction(raw_data.get("matches", []))
+        if leakage_warnings:
+            print(f"  [LEAKAGE-GUARD] 发现疑似回测/赛果字段进入预测输入: {leakage_warnings[:8]}")
+            raw_data["leakage_guard_warnings"] = leakage_warnings
         for match in raw_data.get("matches", []):
             match["information"] = match.get("information") or {}
 
@@ -360,7 +375,11 @@ def main():
         print(f"  [AI ENABLED] today 将启用 AI 推理 | 比赛数={len(raw_data.get('matches', []))}")
 
         results, top4 = run_predictions(raw_data, use_ai=use_ai)
+        attach_prediction_validation(results)
 
+        final_output["quality_summary"] = summarize_quality(results)
+        final_output["odds_quota"] = raw_data.get("odds_quota", {})
+        final_output["leakage_guard_warnings"] = raw_data.get("leakage_guard_warnings", [])
         final_output["matches"]["today"] = json.loads(
             json.dumps(results, ensure_ascii=False, default=str)
         )
