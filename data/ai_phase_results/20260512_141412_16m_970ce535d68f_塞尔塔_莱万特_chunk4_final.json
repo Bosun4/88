@@ -1,0 +1,117 @@
+{
+  "final": {
+    "16": {
+      "match": 16,
+      "source_model": "none",
+      "source_phase": "abstain",
+      "final_direction": "abstain",
+      "predicted_score": "弃权",
+      "direction_probs": {
+        "home": 0.0,
+        "draw": 0.0,
+        "away": 0.0
+      },
+      "goal_band": "",
+      "btts": "unclear",
+      "top3": [],
+      "anchor_audit": {},
+      "recommendation": {
+        "tier": "D",
+        "is_recommended": false,
+        "top4_priority": 999,
+        "bet_confidence": 0,
+        "risk_level": "high",
+        "risk_tags": [
+          "all_ai_failed"
+        ],
+        "why_recommended": "弃权"
+      },
+      "reason": "all_ai_failed",
+      "validation_warnings": [
+        "all_ai_failed"
+      ],
+      "phase1_model_outputs": {},
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": []
+      }
+    }
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426267809671768268d9d68qxCj3cN)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "last_status": "http_403",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426268590013958268d9d6rrWHZq6f)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "fallback_referee": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "fallback_referee",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426269964074198268d9d6qXoOXSua)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "consistency": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 20260512142627690533068268d9d6cb3v1SrC)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426267864836698268d9d6Dcb0tfdl)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "last_status": "http_403",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426268589599778268d9d6yBNs7DdU)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": false,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426269318847008268d9d6tvuyVvJM)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "last_status": "http_403",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": []
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426267809671768268d9d68qxCj3cN)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "last_status": "http_403",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426268590013958268d9d6rrWHZq6f)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "fallback_referee": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "fallback_referee",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426266011382808268d9d6t1R1KYGw)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "consistency": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426266945236998268d9d6JP8EMpxL)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426267864836698268d9d6Dcb0tfdl)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "last_status": "http_403",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426268589599778268d9d6yBNs7DdU)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": false,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 0.1,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426265290003818268d9d6uNZ5fudZ)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "last_status": "http_403",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

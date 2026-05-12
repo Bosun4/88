@@ -1,0 +1,80 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": []
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 142.7,
+        "status": "ok"
+      },
+      "last_status": "http_403",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 0.3,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426256414235238268d9d6zBo2ApOx)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "fallback_referee": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "fallback_referee",
+        "elapsed": 122.0,
+        "status": "ok"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 8.8,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 1.3,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"预扣费额度失败, 用户剩余额度: ＄0.021352, 需要预扣费额度: ＄0.331812 (request id: 202605121424038852671158268d9d66t8tC1zy)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      },
+      "last_status": "http_403",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 0.5,
+        "status": "http_403",
+        "http_error": "{\"error\":{\"message\":\"用户额度不足, 剩余额度: ＄-0.233678 (request id: 202605121426258707781588268d9d6KMtBQ9rj)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"insufficient_user_quota\"}}"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": false,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 286.6,
+        "status": "error",
+        "error": "[Errno 104] Connection reset by peer"
+      },
+      "last_status": "error",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}
