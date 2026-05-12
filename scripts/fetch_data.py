@@ -41,6 +41,13 @@ def _get_float(val, default=0.0):
     try: return float(val) if val is not None else default
     except: return default
 
+
+def season_from_date(date_str):
+    """按足球赛季归属推导 season：8月及以后用当年，否则用上一年。"""
+    d = datetime.strptime(date_str, "%Y-%m-%d")
+    return d.year if d.month >= 8 else d.year - 1
+
+
 def generate_stats_from_context(match, side):
     """API未命中时，通过赔率+排名反推统计数据（容灾方案）"""
     rank = int(match.get("home_rank" if side=="home" else "away_rank", 10) or 10)
@@ -197,10 +204,13 @@ async def enrich_match_data(session, m, i, date_str, sema):
     m["home_id"] = h_res[0]["team"]["id"] if h_res else 0
     m["away_id"] = a_res[0]["team"]["id"] if a_res else 0
 
+    stats_season = season_from_date(date_str)
+    m["stats_season"] = stats_season
+
     tasks = []
-    if m["home_id"]: tasks.append(async_fetch_api(session,"/teams/statistics",{"team":m["home_id"],"season":2024},sema))
+    if m["home_id"]: tasks.append(async_fetch_api(session,"/teams/statistics",{"team":m["home_id"],"season":stats_season},sema))
     else: tasks.append(asyncio.sleep(0))
-    if m["away_id"]: tasks.append(async_fetch_api(session,"/teams/statistics",{"team":m["away_id"],"season":2024},sema))
+    if m["away_id"]: tasks.append(async_fetch_api(session,"/teams/statistics",{"team":m["away_id"],"season":stats_season},sema))
     else: tasks.append(asyncio.sleep(0))
     if m["home_id"] and m["away_id"]: tasks.append(async_fetch_api(session,"/fixtures/headtohead",{"h2h":f"{m['home_id']}-{m['away_id']}","last":5},sema))
     else: tasks.append(asyncio.sleep(0))

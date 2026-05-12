@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 import requests
@@ -9,6 +10,28 @@ from config import *
 def get_yesterday():
     from zoneinfo import ZoneInfo
     return (datetime.now(ZoneInfo(TIMEZONE)) - timedelta(days=1)).strftime("%Y-%m-%d")
+
+
+def find_prediction_history(yesterday):
+    """查找 main.py 当前格式的明确历史文件。
+
+    main.py 写入: data/history_{YYYY-MM-DD}_today_{session}.json
+    不再 fallback 到 data/predictions.json，避免把今日预测误当历史复盘。
+    """
+    data_dir = "data"
+    sessions = ("morning", "evening")
+    candidates = [
+        os.path.join(data_dir, f"history_{yesterday}_today_{session}.json")
+        for session in sessions
+    ]
+    existing = [p for p in candidates if os.path.exists(p)]
+
+    if not existing:
+        pattern = os.path.join(data_dir, f"history_{yesterday}_today_*.json")
+        existing = sorted(glob.glob(pattern), key=os.path.getmtime, reverse=True)
+
+    return existing[0] if existing else None
+
 
 def fetch_actual_results(target_date):
     h = {"x-apisports-key": API_FOOTBALL_KEY}
@@ -46,12 +69,9 @@ def verify_and_learn():
     yesterday = get_yesterday()
     print(f"\n🧠 [AI 自我复盘引擎] 启动... 对账日期: {yesterday}")
     
-    pred_file = f"data/history_{yesterday.replace('-','')}_evening.json" 
-    if not os.path.exists(pred_file):
-        pred_file = "data/predictions.json"
-        
-    if not os.path.exists(pred_file):
-        print("  ⚠️ 无预测记录，跳过对账。")
+    pred_file = find_prediction_history(yesterday)
+    if not pred_file:
+        print(f"  ⚠️ 未找到明确历史预测文件 data/history_{yesterday}_today_*.json，跳过对账。")
         return
         
     with open(pred_file, "r", encoding="utf-8") as f:

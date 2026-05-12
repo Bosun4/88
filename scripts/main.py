@@ -4,14 +4,13 @@
 import json
 import os
 import sys
-import subprocess
 import traceback
 import asyncio
 import time
 from datetime import datetime, timedelta, timezone
 
 # ============================================================
-# 自动安装依赖
+# 依赖检查（安全模式：只提示，不自动安装）
 # ============================================================
 
 REQUIRED_PACKAGES = [
@@ -28,6 +27,13 @@ REQUIRED_PACKAGES = [
     "deep-translator>=1.11.4",
 ]
 
+PACKAGE_IMPORT_NAMES = {
+    "Requests": "requests",
+    "beautifulsoup4": "bs4",
+    "scikit-learn": "sklearn",
+    "deep-translator": "deep_translator",
+}
+
 
 def env_bool(name: str, default: bool = False) -> bool:
     v = os.environ.get(name)
@@ -43,43 +49,48 @@ def env_int(name: str, default: int = 0) -> int:
         return default
 
 
-def auto_install():
-    if env_bool("SKIP_AUTO_INSTALL", False):
-        print("📦 SKIP_AUTO_INSTALL=true，跳过依赖自动安装")
-        return
+def _package_name(req: str) -> str:
+    for sep in (">=", "==", "<=", "~=", ">", "<"):
+        if sep in req:
+            return req.split(sep, 1)[0].strip()
+    return req.strip()
 
+
+def check_dependencies():
+    """安全依赖检查：不安装、不升级、不使用系统级强制安装参数。"""
     missing = []
-
-    try:
-        import pkg_resources
-
-        for pkg in REQUIRED_PACKAGES:
-            try:
-                pkg_resources.require(pkg)
-            except (pkg_resources.DistributionNotFound, pkg_resources.VersionConflict):
-                missing.append(pkg)
-    except ImportError:
-        missing = REQUIRED_PACKAGES
+    for req in REQUIRED_PACKAGES:
+        pkg_name = _package_name(req)
+        import_name = PACKAGE_IMPORT_NAMES.get(pkg_name, pkg_name).replace("-", "_").lower()
+        try:
+            __import__(import_name)
+        except ImportError:
+            missing.append(req)
 
     if missing:
-        print("📦 正在同步并升级核心量化依赖 (严格校验版本):")
-        print("   " + ", ".join(missing))
+        print("\n" + "!" * 80)
+        print("🚨 缺少运行依赖，已按安全策略停止。")
+        print("   本程序不会自动安装或升级依赖，也不会使用系统级强制安装参数。")
+        print("   请在受控环境中手动安装，例如：")
+        print("   python -m pip install -r requirements.txt")
+        print("   缺失/不可导入依赖: " + ", ".join(missing))
+        print("!" * 80 + "\n")
+        raise RuntimeError("Missing required dependencies: " + ", ".join(missing))
 
-        try:
-            subprocess.check_call([
-                sys.executable,
-                "-m",
-                "pip",
-                "install",
-                *missing,
-                "--break-system-packages",
-                "-q",
-            ])
-            print("  ✅ 所有依赖环境已同步至最新/指定版本")
-        except subprocess.CalledProcessError:
-            print("  ⚠️ 部分依赖安装或升级失败，系统将尝试降级运行")
 
-        print()
+def auto_install():
+    """兼容旧入口名称；安全语义下不执行安装。
+
+    默认 SKIP_AUTO_INSTALL=true：完全跳过运行时依赖检查，避免导入 main.py
+    时因可选依赖缺失而失败；CI 在工作流中通过 requirements.txt 安装依赖。
+    若显式设置 SKIP_AUTO_INSTALL=false，则只检查并报错，不自动安装。
+    """
+    if env_bool("SKIP_AUTO_INSTALL", True):
+        print("📦 SKIP_AUTO_INSTALL=true（默认安全模式）：跳过运行时依赖检查/安装。")
+        return
+
+    print("📦 自动安装已禁用：仅检查依赖，不会触发依赖安装。")
+    check_dependencies()
 
 
 auto_install()

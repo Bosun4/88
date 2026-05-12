@@ -6,6 +6,7 @@
 """
 
 import json
+import re
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,8 +16,8 @@ from tqdm import tqdm
 
 # ====================== 原有模块导入 ======================
 # 注意：请确保这些模块在你的项目根目录下
-from main import run_predictions
-from predict import KellyCriterion
+from predict import run_predictions
+from models import KellyCriterion
 
 # 实例化 Kelly 计算器
 kelly_calc = KellyCriterion()
@@ -25,6 +26,41 @@ def calculate_value_bet(prob_pct, odds):
     """提取的辅助函数，适配你的 KellyCriterion 返回格式"""
     prob = prob_pct / 100.0
     return kelly_calc.calculate(prob, odds, fraction=1.0) # 这里取全凯利，下面再打折
+
+
+RESULT_ALIASES = {
+    "home": "home", "h": "home", "主胜": "home", "胜": "home", "home_win": "home",
+    "draw": "draw", "d": "draw", "平局": "draw", "平": "draw", "tie": "draw",
+    "away": "away", "a": "away", "客胜": "away", "负": "away", "away_win": "away",
+}
+
+
+def parse_score(score):
+    """解析 2-1 / 2:1 / 2：1 等比分，失败返回 None。"""
+    if score is None:
+        return None
+    text = str(score).strip()
+    m = re.match(r"^\s*(\d+)\s*[-:：]\s*(\d+)\s*$", text)
+    if not m:
+        return None
+    return int(m.group(1)), int(m.group(2))
+
+
+def normalize_result(value, score=None):
+    """统一胜平负枚举为 home/draw/away，兼容中文与英文。"""
+    parsed = parse_score(score)
+    if parsed:
+        home_goals, away_goals = parsed
+        if home_goals > away_goals:
+            return "home"
+        if home_goals == away_goals:
+            return "draw"
+        return "away"
+
+    if value is None:
+        return None
+    key = str(value).strip().lower()
+    return RESULT_ALIASES.get(key)
 
 
 # ====================== 回测核心函数 ======================
@@ -58,13 +94,14 @@ def run_backtest(
         match_id = m.get("id", m.get("match_num", "未知"))
         home, away = m.get("home_team"), m.get("away_team")
         # ★ 强制字符串转换防御 KeyError/TypeError
-        actual_score = str(m.get("actual_score", "0-0")) 
-        actual_result = m.get("actual_result")        
+        actual_score = str(m.get("actual_score", "")).strip()
+        parsed_actual_score = parse_score(actual_score)
+        actual_result = normalize_result(m.get("actual_result"), actual_score)
         sp_h = float(m.get("sp_home", 0) or 0)
         sp_d = float(m.get("sp_draw", 0) or 0)
         sp_a = float(m.get("sp_away", 0) or 0)
 
-        if not actual_score or actual_score == "0-0" and not actual_result:
+        if not actual_result and not parsed_actual_score:
             continue
 
         # 运行完整预测引擎
@@ -76,8 +113,9 @@ def run_backtest(
             continue
 
         pred_score = str(pred.get("predicted_score", "0-0"))
+        parsed_pred_score = parse_score(pred_score)
         conf = pred.get("confidence", 0)
-        result_pred = pred.get("result")
+        result_pred = normalize_result(pred.get("result"), pred_score)
         fused_hp = pred.get("home_win_pct", 33)
         fused_dp = pred.get("draw_pct", 33)
         fused_ap = pred.get("away_win_pct", 33)
@@ -97,19 +135,20 @@ def run_backtest(
                 (val_h, "home", sp_h, fused_hp),
                 (val_d, "draw", sp_d, fused_dp),
                 (val_a, "away", sp_a, fused_ap),
-                key=lambda x: x[0].get("ev", 0) if x[0] else 0
+                key=lambda x: x[0].get("ev", x[0].get("edge", 0)) if x[0] else 0
             )
 
-            if best_val[0] and best_val[0].get("is_value") and best_val[2] >= min_odds:
+            if best_val[0] and (best_val[0].get("is_value") or best_val[0].get("value")) and best_val[2] >= min_odds:
                 bet_type = best_val[1]
                 odds = best_val[2]
                 prob = best_val[3] / 100.0
-                ev = best_val[0]["ev"]
+                ev = best_val[0].get("ev", best_val[0].get("edge", 0))
 
                 # Quarter Kelly 动态仓位管理
                 kelly = max(0.0, best_val[0]["kelly"] / 100 * kelly_fraction)
                 stake = equity * kelly
-                if stake < 10: stake = 0  
+                if stake < 10:
+                    stake = 0
 
                 if stake > 0:
                     # 结算利润
@@ -136,10 +175,12 @@ def run_backtest(
                     })
 
         # ====================== 记录每场比赛指标 ======================
-        exact_hit = (pred_score == actual_score)
-        win_hit = (result_pred == actual_result) if result_pred else False
-        total_goals_pred = sum(int(x) for x in pred_score.split("-")) if "-" in pred_score else 2
-        total_goals_actual = sum(int(x) for x in actual_score.split("-")) if "-" in actual_score else 2
+        exact_hit = (parsed_pred_score is not None and parsed_actual_score is not None and parsed_pred_score == parsed_actual_score)
+        win_hit = (result_pred == actual_result) if result_pred and actual_result else False
+        total_goals_pred = sum(parsed_pred_score) if parsed_pred_score else 2
+        total_goals_actual = sum(parsed_actual_score) if parsed_actual_score else 2
+        pred_btts = (parsed_pred_score[0] > 0 and parsed_pred_score[1] > 0) if parsed_pred_score else False
+        actual_btts = (parsed_actual_score[0] > 0 and parsed_actual_score[1] > 0) if parsed_actual_score else False
         over_hit = (total_goals_actual > 2.5) == (pred.get("over_under_2_5") == "大")
 
         results.append({
@@ -155,7 +196,7 @@ def run_backtest(
             "exact_hit": exact_hit,
             "win_hit": win_hit,
             "over_hit": over_hit,
-            "btts_hit": (min(total_goals_actual,1) and min(total_goals_pred,1)) == (pred.get("both_score") == "是"),
+            "btts_hit": pred_btts == actual_btts,
             "equity_after": round(equity, 2),
             "stake": round(stake, 2),
             "profit": round(profit, 2),

@@ -2,3 +2,11 @@ __pycache__/
 *.pyc
 .env
 data/raw_data.json
+data/ai_cache
+data/debug
+scripts/data/ai_cache
+scripts/data/debug
+backtest_results
+*.log
+.pytest_cache
+.venv

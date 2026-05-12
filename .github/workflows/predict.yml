@@ -68,7 +68,7 @@ jobs:
           CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
           CLAUDE_API_URL: ${{ secrets.CLAUDE_API_URL }}
 
-          FORCE_COMMON_GATEWAY_URL: "true"
+          FORCE_COMMON_GATEWAY_URL: "false"
 
           VMAX_RUN_DAYS: "today"
           AI_RUN_DAYS: "today"
@@ -154,21 +154,21 @@ jobs:
 
           mkdir -p data/
 
-          git pull --rebase --autostash origin main || true
+          git pull --rebase --autostash origin main
 
           if [ -d "scripts/data" ]; then
             echo "📤 Syncing scripts/data/ -> root data/"
             rsync -a --delete \
               --exclude "debug/" \
+              --exclude "debug_v20/" \
               --exclude "ai_cache/" \
+              --exclude "ai_phase_results/" \
+              --exclude "ai_phase_results_v20/" \
               scripts/data/ data/
           fi
 
-          echo "🧹 Ensure AI cache is not committed"
-          rm -rf data/ai_cache || true
-
-          echo "📁 Keep AI phase result snapshots"
-          mkdir -p data/ai_phase_results
+          echo "🧹 Ensure AI cache/debug/phase result snapshots are not committed"
+          rm -rf data/ai_cache data/debug data/debug_v20 data/ai_phase_results data/ai_phase_results_v20 || true
 
           git add data/
 
