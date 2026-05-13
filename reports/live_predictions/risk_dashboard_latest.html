@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>vMAX Risk Dashboard</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; background: #f4f5f7; margin: 0; padding: 20px; }
+  .container { max-width: 1200px; margin: auto; }
+  h1 { text-align: center; color: #333; }
+  .card { background: #fff; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; position: relative; }
+  .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.9em; margin-right: 10px; color: #fff; }
+  .sev-1 { background: #dc3545; }
+  .sev-2 { background: #fd7e14; }
+  .sev-3 { background: #ffc107; color: #000; }
+  .sev-4 { background: #6c757d; }
+  .normal { background: #28a745; }
+  .flex-row { display: flex; justify-content: space-between; gap: 20px; }
+  .col-final { flex: 1; border-right: 1px solid #eee; padding-right: 20px; }
+  .col-matrix { flex: 1; padding-left: 20px; background: #fdfdfd; }
+  .tag { background: #e2e3e5; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; margin-right: 5px; color: #333; display: inline-block; margin-bottom: 4px; }
+  .matrix-warning { font-size: 0.85em; color: #856404; background: #fff3cd; padding: 6px; border-radius: 4px; margin-bottom: 10px; border: 1px solid #ffeeba; }
+  .title-row { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>vMAX Risk Severity Dashboard</h1>
+<p style="text-align:center; color:#555;">注意：Matrix Shadow 是旁路诊断，不接管最终预测。</p>
+
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-3">SEV-3</span> 比利亚雷 vs 塞维利亚
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">2-1</span> (主胜)</p>
+            <p><strong>置信度:</strong> 60</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 主胜概率不足52%且客胜概率大于23%，1-1赔率全场最低，存在较强的平局与客队反打尾部风险。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-1, 1-2, 2-2, 2-3</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 2-1(12.555%) | 1-1(11.365%) | 1-0(9.237%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-2">SEV-2</span> 西班牙人 vs 毕尔巴鄂
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">0-1</span> (客胜)</p>
+            <p><strong>置信度:</strong> 55</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 1-1为全场最低赔率比分，且1X2三向概率极度接近，客胜优势微弱，平局风险极高。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-1, 1-0, 0-0, 1-2</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 1-1(16.195%) | 0-1(10.247%) | 1-2(10.246%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">方向强对抗</span><span class="tag">平局风险抛高</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-1">SEV-1</span> 布雷斯特 vs 斯特拉斯
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">1-1</span> (平局)</p>
+            <p><strong>置信度:</strong> 45</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 1X2三向极度均衡，1-2与2-1紧逼1-1，且3球为总进球模态，比分容错率低。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-2, 2-1, 2-2</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 1-1(13.065%) | 1-2(10.306%) | 2-1(9.181%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">客队反打尾部</span><span class="tag">诊断置信低</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-2">SEV-2</span> 曼城 vs 水晶宫
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">3-0</span> (主胜)</p>
+            <p><strong>置信度:</strong> 75</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 缺少竞彩1X2与外部联网核验，无法对主胜强度做跨市场确认。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">2-0, 3-1, 4-0</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 2-2(12.468%) | 1-2(10.733%) | 1-1(10.077%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">方向强对抗</span><span class="tag">客队反打尾部</span><span class="tag">平局风险抛高</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-3">SEV-3</span> 拉齐奥 vs 国际米兰
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">0-2</span> (客胜)</p>
+            <p><strong>置信度:</strong> 65</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 缺乏外部实时盘口与交易所序列，无法确认是否存在真实的聪明钱推动或RLM。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">0-1, 1-2, 1-1</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 1-2(13.183%) | 0-1(12.661%) | 0-2(12.255%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-3">SEV-3</span> 朗斯 vs 巴黎圣曼
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">1-2</span> (客胜)</p>
+            <p><strong>置信度:</strong> 60</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 客胜仅为弱热门，1-1和2-1阻力极大，且无联网验证，无法确认市场是否进一步倾向开放大球。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">2-1, 1-1, 2-2, 2-3</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 1-2(12.713%) | 1-3(9.206%) | 1-1(7.627%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-3">SEV-3</span> 阿拉维斯 vs 巴萨
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">1-2</span> (客胜)</p>
+            <p><strong>置信度:</strong> 62</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 巴萨已提前夺冠且面临轮换，战意存疑；1-1平局赔率极低，且无法联网核验外部欧赔/亚盘与最新伤停首发，降低置信度。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-1, 2-2, 0-2, 1-3</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 1-2(12.795%) | 1-1(8.428%) | 1-3(8.205%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-2">SEV-2</span> 赫塔费 vs 马洛卡
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">1-0</span> (主胜)</p>
+            <p><strong>置信度:</strong> 66</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 主胜概率不足50%，1-1与0-0赔率极低，平局牵制力强；且无法联网验证外部欧赔/亚盘与最新伤停首发。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-1, 0-0, 2-0, 0-1, 1-2, 2-2, 2-3</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 1-1(14.485%) | 1-0(13.48%) | 0-0(12.833%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">方向强对抗</span><span class="tag">客队反打尾部</span><span class="tag">平局风险抛高</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-3">SEV-3</span> 辛辛那提 vs 迈国际
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">1-2</span> (客胜)</p>
+            <p><strong>置信度:</strong> 60</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 无外部实时盘口验证，且1-1与2-2相邻比分赔率极近，客胜并非绝对稳固。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-1, 2-2, 1-3</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 1-2(11.214%) | 2-3(9.04%) | 1-3(8.917%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-3">SEV-3</span> 西雅图 vs 圣何塞
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">2-1</span> (主胜)</p>
+            <p><strong>置信度:</strong> 65</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 无外部实时盘口验证，且1-1赔率7.5极度逼近2-1，主胜存在被逼平的高风险。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-1, 1-0, 1-2</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 2-1(11.346%) | 1-1(9.624%) | 1-0(7.818%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-1">SEV-1</span> 巴伦西亚 vs 巴列卡诺
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">1-1</span> (平局)</p>
+            <p><strong>置信度:</strong> 60</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 无真实联网且依赖阵容/战意/伤停，最高B。缺少资金流向确认，且1-0/2-1赔率极近。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-0, 2-1, 1-2, 2-2</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 1-1(13.552%) | 1-0(10.423%) | 2-1(10.218%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-3">SEV-3</span> 达曼协定 vs 吉达联合
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">1-2</span> (客胜)</p>
+            <p><strong>置信度:</strong> 65</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 无真实联网且依赖阵容/战意/伤停，最高B。缺少资金流向确认，且1-1赔率极近。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-1, 0-1, 2-1, 2-2, 1-3</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 1-2(12.622%) | 1-1(8.579%) | 1-3(8.399%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-4">SEV-4</span> 胡巴卡德 vs 拉斯决心
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">3-0</span> (主胜)</p>
+            <p><strong>置信度:</strong> 75</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 缺少真实外部盘口与时间序列，无法确认是否存在临场穿盘资金共振，且2-0赔率低于3-0。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">2-0, 3-1, 4-0</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 2-0(11.666%) | 3-0(11.049%) | 2-1(10.269%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-3">SEV-3</span> 赫罗纳 vs 皇家社会
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">2-1</span> (主胜)</p>
+            <p><strong>置信度:</strong> 55</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 主胜概率不足50%，1-1与2-1同赔，客胜路径1-2较近，市场分歧明显，置信度下调。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">1-1, 1-2, 2-2, 2-3</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 2-1(10.801%) | 1-1(10.767%) | 1-0(8.296%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <div class="title-row">
+         <span class="badge sev-4">SEV-4</span> 皇马 vs 奥维耶多
+      </div>
+      <div class="flex-row">
+         <div class="col-final">
+            <h3>Final 主预测</h3>
+            <p><strong>预测比分:</strong> <span style="font-size:1.2em;color:#0056b3;">3-0</span> (主胜)</p>
+            <p><strong>置信度:</strong> 75</p>
+            <p><strong>降级原因 (HIGH_RISK):</strong> 缺少外部即时欧赔/亚盘/交易所验证，且抓包没有真实赔率时序，无法确认是否存在临场聪明钱或反向波动。</p>
+            <p><strong>风险候选 (risk_score_candidates):</strong> <span style="color:#d39e00;">2-0, 2-1, 3-1</span></p>
+         </div>
+         <div class="col-matrix">
+            <h3>Matrix Shadow 诊断区</h3>
+            <div class="matrix-warning">【提醒】Matrix仅为旁路诊断参考，非最终预测结论</div>
+            <p><strong>Top3 候选 (matrix_top_scores):</strong> 2-0(12.18%) | 2-1(10.975%) | 3-0(10.569%)</p>
+            <p><strong>诊断标签 (matrix_disagreement_flags):</strong></p>
+            <div>
+               <span class="tag">无显著分歧</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    
+
+</div>
+</body>
+</html>
