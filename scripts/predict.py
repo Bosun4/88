@@ -209,7 +209,9 @@ AI_REQUIRE_WEB_SOURCES = _env_bool("AI_REQUIRE_WEB_SOURCES", AI_NATIVE_WEB)
 AI_WARN_MISSING_PUBLISHED_AT = _env_bool("AI_WARN_MISSING_PUBLISHED_AT", False)
 AI_WEB_MAX_SOURCES_PER_MATCH = max(0, _env_int("AI_WEB_MAX_SOURCES_PER_MATCH", 8))
 AI_CHUNK_SIZE = max(1, _env_int("AI_CHUNK_SIZE", _default_chunk_size))
-AI_MAX_PROMPT_CHARS_PER_CHUNK = max(30000, _env_int("AI_MAX_PROMPT_CHARS_PER_CHUNK", 140000))
+# Keep the default prompt budget below the historical 3-4万 token range while
+# still allowing explicit environment overrides for larger research runs.
+AI_MAX_PROMPT_CHARS_PER_CHUNK = max(30000, _env_int("AI_MAX_PROMPT_CHARS_PER_CHUNK", 60000))
 AI_ENABLE_CROSS_EXAM = _env_bool("AI_ENABLE_CROSS_EXAM", _default_cross_exam)
 AI_ENABLE_CONSISTENCY_JUDGE = _env_bool("AI_ENABLE_CONSISTENCY_JUDGE", _default_consistency)
 AI_ENABLE_FALLBACK_REFEREE = _env_bool("AI_ENABLE_FALLBACK_REFEREE", True)
@@ -1273,6 +1275,16 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
             if AI_SAVE_RAW_RESPONSE:
                 _save_debug_dump(ai_name, phase, data, raw_text)
             obj = _json_loads_best_effort_object(raw_text)
+            if not isinstance(obj, (dict, list)) or not obj:
+                status.update({
+                    "ok": False,
+                    "status": "parse_failed",
+                    "parse_error": "empty_or_invalid_json_object",
+                    "raw_excerpt": raw_text[:300],
+                    "elapsed": round(time.time() - t0, 1),
+                })
+                _update_call_status(ai_name, phase, status)
+                return ai_name, {}, status
             status.update({"ok": True, "status": "ok", "elapsed": round(time.time() - t0, 1)})
             _update_call_status(ai_name, phase, status)
             return ai_name, obj, status
