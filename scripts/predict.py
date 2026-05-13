@@ -3220,6 +3220,11 @@ def _canonical_output_schema_text() -> str:
   "direction_probs": {"home": 45, "draw": 28, "away": 27},
   "goal_band": "0-1/2/3/4+",
   "btts": "yes/no/unclear",
+  "risk_score_candidates": [
+    {"score":"1-2", "risk_type":"away_fightback/high_btts_tail", "reason":"中文说明"}
+  ],
+  "tail_risk_flags": ["weak_home_favorite_btts_tail"],
+  "confidence_downgrade_reason": "",
   "top3": [
     {"score":"2-1", "prob":16, "logic":"中文专业说明"}
   ],
@@ -3293,7 +3298,7 @@ def _canonical_output_schema_text() -> str:
   "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
   "reason":"中文综合理由"
 }
-硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。
+硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+ 尾部，并填充 risk_score_candidates / tail_risk_flags。
 """.strip()
 
 
@@ -3326,6 +3331,7 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     else:
         p.append("Gemini若参与初审，也必须按最终裁判标准完成相邻比分和来源审计。")
     p.append("强制：每场必须显式读取 score_cluster_diagnostics_v203.adjacent_score_audit_table；不能只看最低赔率。")
+    p.append("弱主胜尾部约束：如果主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部。如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+ 尾部，并在 risk_score_candidates 或 tail_risk_flags 中体现这些风险。")
     p.append("强制：若 web_research.used=false，不得把抓包 information/points 伪装成联网来源；只能作为 packet_context。")
     p.append("</task>\n")
     p.append("<output_schema>")
@@ -3344,7 +3350,8 @@ def _short_prediction_for_prompt(r: Dict[str, Any]) -> Dict[str, Any]:
         "match", "final_direction", "predicted_score", "direction_probs", "goal_band", "btts", "top3",
         "score_cluster_audit", "sharp_money_audit", "anchor_audit", "market_interpretation", "money_flow",
         "contextual_logic", "rejected_cases", "recommendation_components", "recommendation",
-        "data_quality", "reason", "web_research", "final_web_audit", "validation_warnings",
+        "data_quality", "reason", "web_research", "final_web_audit", "risk_score_candidates",
+        "tail_risk_flags", "confidence_downgrade_reason", "validation_warnings",
     ]:
         if k in r:
             keep[k] = r[k]
@@ -3383,6 +3390,7 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("证据优先级：raw market structure > score_cluster_diagnostics_v203 > HHAD让球语义 > total-goals mode > sharp_money_facts_v203 > tactical/web context > Phase1 consensus。")
     p.append("多数意见不自动成立；若 GPT/Grok 基于同一低赔/单边市场理由一致，这属于相关证据，不是独立证据。")
     p.append(GEMINI_FINAL_AUDIT_ADDENDUM)
+    p.append("弱主胜尾部约束：如果主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部。如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+ 尾部，并在 risk_score_candidates 或 tail_risk_flags 中体现这些风险；若置信度不足以支撑单一比分，主动下调 recommendation.bet_confidence。")
     p.append("S级必须同时满足：方向边际强、比分簇强、总进球带强、相邻比分解释完整、Sharp/热度不冲突、推荐组件分数透明。仅赔率低赔最多A；无真实联网且依赖阵容/战意/伤停，最高B。")
     p.append("强制输出 recommendation_components，不能只给 tier 和 bet_confidence。")
     p.append("最终推荐等级、是否进 Top4、bet_confidence 全部由你输出；本地只排序，不会改你的足球判断。")
@@ -3431,7 +3439,7 @@ def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_p
     p = []
     p.append("你是 Consistency Judge，只检查结构一致性，不做足球判断，不改变预测方向/比分，除非存在字段自相矛盾时给出 repair 建议。")
     p.append("输出严格 JSON object：{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[],\"repair\":{...}}]}。")
-    p.append("检查：predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components 必须存在。")
+    p.append("检查：predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components 必须存在；risk_score_candidates/tail_risk_flags/confidence_downgrade_reason 若存在必须保持数组/字符串结构。")
     p.append("不得根据足球观点改比分，只能修字段。")
     p.append("<evidence_batch>")
     for e in evidence_batch:
@@ -3443,12 +3451,148 @@ def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_p
     return "\n".join(p)
 
 
+TAIL_RISK_PROTECTION_SCORES = ["1-2", "2-2", "2-3"]
+TAIL_RISK_DOWNGRADE_REASON = "Weak home favorite with BTTS tail risk"
+
+
+def _normalize_risk_score_candidates(value: Any) -> List[Dict[str, Any]]:
+    rows = value if isinstance(value, list) else []
+    out: List[Dict[str, Any]] = []
+    seen = set()
+    for cand in rows[:12]:
+        sc = _score_from_candidate(cand)
+        if _parse_score(sc)[0] is None or sc in seen:
+            continue
+        seen.add(sc)
+        if isinstance(cand, dict):
+            risk_type = str(cand.get("risk_type", cand.get("type", "ai_supplied_tail_risk")))[:120]
+            reason = str(cand.get("reason", cand.get("logic", cand.get("explanation", ""))))[:900]
+            prob = cand.get("prob", cand.get("probability", cand.get("pct", None)))
+        else:
+            risk_type = "ai_supplied_tail_risk"
+            reason = ""
+            prob = None
+        row = {"score": sc, "risk_type": risk_type, "reason": reason}
+        if prob is not None:
+            row["prob"] = round(_prob_to_float(prob), 3)
+        out.append(row)
+    return out
+
+
+def _append_risk_candidate(candidates: List[Dict[str, Any]], score: str, risk_type: str, reason: str) -> None:
+    if any(c.get("score") == score for c in candidates):
+        return
+    candidates.append({"score": score, "risk_type": risk_type, "reason": reason})
+
+
+def _listify_strs(value: Any) -> List[str]:
+    if isinstance(value, list):
+        return [str(v)[:160] for v in value if str(v).strip()]
+    if value in (None, "", {}, []):
+        return []
+    return [str(value)[:160]]
+
+
+def _raw_btts_yes_signal(row: Dict[str, Any], raw_item: Dict[str, Any]) -> bool:
+    if str(row.get("btts", "")).strip().lower() == "yes":
+        return True
+    for v in [raw_item.get("btts"), raw_item.get("btts_likelihood")]:
+        if str(v).strip().lower() in {"yes", "y", "true", "是", "双方进球"}:
+            return True
+    ctx = raw_item.get("contextual_logic") if isinstance(raw_item.get("contextual_logic"), dict) else {}
+    if str(ctx.get("btts_likelihood", "")).strip().lower() in {"yes", "y", "true", "是", "双方进球"}:
+        return True
+    return False
+
+
+def _contains_tail_risk_signal(row: Dict[str, Any], raw_item: Dict[str, Any], risk_candidates: List[Dict[str, Any]]) -> bool:
+    if str(row.get("goal_band", "")).strip() == "4+":
+        return True
+    scores = {c.get("score") for c in risk_candidates if isinstance(c, dict)}
+    scores.update(c.get("score") for c in row.get("top3", []) if isinstance(c, dict))
+    for key in ["candidate_scores", "top3", "risk_score_candidates"]:
+        for cand in raw_item.get(key, []) if isinstance(raw_item.get(key), list) else []:
+            sc = _score_from_candidate(cand)
+            if sc:
+                scores.add(sc)
+    if any(sc in {"2-2", "2-3", "3-2"} for sc in scores):
+        return True
+    text = _json_compact({
+        "tail_risk_flags": raw_item.get("tail_risk_flags"),
+        "risk_tags": _as_dict(raw_item.get("recommendation")).get("risk_tags"),
+        "reason": raw_item.get("reason"),
+        "score_cluster_audit": raw_item.get("score_cluster_audit"),
+    }, 3000).lower()
+    return any(token in text for token in ["4+", "high_btts", "tail", "尾部", "高比分", "2-3"])
+
+
+def apply_weak_home_tail_risk_protection(row: Dict[str, Any]) -> Dict[str, Any]:
+    """Protocol-level risk display/downgrade; never changes final_direction or predicted_score."""
+    if not isinstance(row, dict):
+        return row
+    raw_item = row.get("raw_item", {}) if isinstance(row.get("raw_item"), dict) else {}
+    risk_candidates = _normalize_risk_score_candidates(raw_item.get("risk_score_candidates", row.get("risk_score_candidates", [])))
+    tail_flags = _listify_strs(raw_item.get("tail_risk_flags", row.get("tail_risk_flags", [])))
+
+    probs = row.get("direction_probs", {}) if isinstance(row.get("direction_probs"), dict) else {}
+    home_pct = _f(probs.get("home"), 0.0)
+    away_pct = _f(probs.get("away"), 0.0)
+    btts_or_tail = _raw_btts_yes_signal(row, raw_item) or _contains_tail_risk_signal(row, raw_item, risk_candidates)
+    weak_home_tail = (
+        row.get("final_direction") == "home"
+        and home_pct <= 52.0
+        and away_pct >= 23.0
+        and btts_or_tail
+    )
+
+    if weak_home_tail:
+        for sc in TAIL_RISK_PROTECTION_SCORES:
+            _append_risk_candidate(
+                risk_candidates,
+                sc,
+                "weak_home_favorite_btts_tail",
+                "home_win_pct<=52 and away_win_pct>=23 with BTTS/tail risk; keep away fight-back and 4+ draw/away tails visible",
+            )
+        tail_flags.extend([
+            "weak_home_favorite_btts_tail",
+            "away_win_not_negligible",
+            "protect_1_2_2_2_2_3_tail",
+        ])
+        rec = row.setdefault("recommendation", {}) if isinstance(row.get("recommendation"), dict) else {}
+        if not isinstance(row.get("recommendation"), dict):
+            row["recommendation"] = rec
+        old_conf = int(_clip(_f(rec.get("bet_confidence", 0), 0), 0, 100))
+        if old_conf >= 70:
+            rec["bet_confidence"] = min(old_conf, 60)
+            row["confidence_downgrade_reason"] = TAIL_RISK_DOWNGRADE_REASON
+        elif raw_item.get("confidence_downgrade_reason"):
+            row["confidence_downgrade_reason"] = str(raw_item.get("confidence_downgrade_reason"))[:300]
+        else:
+            row.setdefault("confidence_downgrade_reason", "")
+        risk_tags = rec.get("risk_tags", [])
+        if not isinstance(risk_tags, list):
+            risk_tags = [str(risk_tags)] if risk_tags else []
+        risk_tags.extend(["weak_home_favorite_btts_tail", "away_fightback_tail"])
+        rec["risk_tags"] = list(dict.fromkeys(str(x) for x in risk_tags if str(x).strip()))[:12]
+        if rec.get("risk_level") in (None, "", "low"):
+            rec["risk_level"] = "medium"
+        row.setdefault("validation_warnings", []).append("weak_home_favorite_btts_tail_protection_applied")
+    else:
+        row["confidence_downgrade_reason"] = str(raw_item.get("confidence_downgrade_reason", row.get("confidence_downgrade_reason", "")))[:300]
+
+    row["risk_score_candidates"] = risk_candidates[:12]
+    row["tail_risk_flags"] = list(dict.fromkeys(tail_flags))[:20]
+    row["validation_warnings"] = list(dict.fromkeys(row.get("validation_warnings", [])))
+    return row
+
+
 def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model: str, phase: str) -> Dict[int, Dict[str, Any]]:
     out = _BASE_NORMALIZE_AI_PREDICTIONS_V2021(obj, expected_matches, source_model, phase)
     for idx, row in out.items():
         raw_item = row.get("raw_item", {}) if isinstance(row.get("raw_item"), dict) else {}
         for k in [
             "score_cluster_audit", "sharp_money_audit", "recommendation_components",
+            "risk_score_candidates", "tail_risk_flags", "confidence_downgrade_reason",
             "market_audit", "score_cluster_audit", "goal_market_audit", "market_conflicts", "candidate_scores",
             "public_heat_audit", "packet_news_risk_audit", "trap_candidates", "final_score_audit",
         ]:
@@ -3462,16 +3606,19 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
         if not isinstance(raw_item.get("recommendation_components"), dict):
             warnings.append("recommendation_components_missing_or_invalid")
         row["validation_warnings"] = list(dict.fromkeys(warnings))
+        apply_weak_home_tail_risk_protection(row)
     return out
 
 
 def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    apply_weak_home_tail_risk_protection(ai_r)
     pred = _BASE_ADAPT_AI_TO_FRONTEND_V2021(ai_r, match_obj)
     if not isinstance(pred, dict) or pred.get("is_abstain"):
         return pred
     raw_item = ai_r.get("raw_item", {}) if isinstance(ai_r.get("raw_item"), dict) else {}
     for k in [
-        "score_cluster_audit", "sharp_money_audit", "recommendation_components", "market_audit",
+        "score_cluster_audit", "sharp_money_audit", "recommendation_components", "risk_score_candidates",
+        "tail_risk_flags", "confidence_downgrade_reason", "market_audit",
         "goal_market_audit", "market_conflicts", "candidate_scores", "public_heat_audit",
         "packet_news_risk_audit", "trap_candidates", "final_score_audit",
     ]:
