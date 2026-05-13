@@ -1,0 +1,794 @@
+{
+  "phase1": {
+    "gpt": {
+      "15": {
+        "match": 15,
+        "source_model": "gpt",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "3-0",
+        "direction_probs": {
+          "home": 77.0,
+          "draw": 14.0,
+          "away": 9.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "no",
+        "top3": [
+          {
+            "score": "3-0",
+            "prob": 18.0,
+            "logic": "1X2主胜极强，-2形态模板要求重点审计2-0/3-0/3-1/4-1/4-2；在这些候选中，3球总进球为模态，且3-0与2-0、2-1同处最低赔率核心圈，兼顾强弱差与零封路径。"
+          },
+          {
+            "score": "2-0",
+            "prob": 17.0,
+            "logic": "这是全场最低正确比分赔率，若皇马主导但比赛节奏不被继续拉高，2-0是最稳健的主胜零封分支。"
+          },
+          {
+            "score": "2-1",
+            "prob": 14.0,
+            "logic": "2-1赔率与2-0、3-0极近，说明市场保留客队偷一球可能；不过客队进攻基线偏弱，因此排在3-0与2-0之后。"
+          }
+        ],
+        "anchor_audit": {
+          "zero_zero": "0-0赔率27，位置很靠后，和主胜1X2强压及主/主半全场明显冲突，低开局僵局不是主路径。",
+          "one_one": "1-1赔率11，已进入低赔簇，说明市场承认皇马若效率不高可能被拖平；但在-2模板下它更像需解释的对冲项，而非首选。",
+          "one_zero": "1-0赔率9不算高，说明低节奏小胜并未被完全排除；但总进球1仅排第5，不如3球形态有力。",
+          "zero_one": "0-1赔率27，远高于1-0，显示客队爆冷零封皇马缺乏赔率支撑。",
+          "two_one": "2-1赔率7.75非常低，是必须严肃审计的主流候选；不过其依赖奥维耶多破门，而客队进攻基线偏弱，因此最终让位于3-0。",
+          "one_two": "1-2赔率25，是客胜中最低但仍明显高于主流主胜比分，说明客队反打只是冷门尾部。",
+          "high_score_tail": "3-1、4-0、4-1、3-2等高比分尾部压缩明显，说明皇马若早早拉开分差，4+并非虚设；因此需要降低对单一中比分的置信。",
+          "handicap_cover": "两球盘模板要求审计2-0、3-0、3-1、4-1、4-2。当前3-0在这些模板内兼顾最强模态与零封逻辑，是较完整的穿盘表达。"
+        },
+        "market_interpretation": {
+          "one_x_two": "竞彩1.17/5.8/9.75显示主胜为压倒性主方向，去水后主胜公平概率约75.66%，平局与客胜均被显著压低，基础方向明确倾向皇马主场拿下。",
+          "handicap": "让球为-2.0，说明市场并不只要求主胜，而是要求审计两球以上差距。结合比分簇，2-0、3-0、3-1、4-0、4-1均被明显纳入主流，显示穿盘与恰赢两球都存在现实权重。",
+          "correct_score": "正确比分最低区集中在2-0、2-1、3-0、1-0、3-1，说明主胜无疑，但市场对零封与BTTS两条分支并存。由于3球总进球模态最强，而3-0又紧贴最低赔率组，因此其相较1-0更符合整体盘面。",
+          "total_goals": "总进球3最低，4次低，2第三低，同时5球也被明显压缩，代表主流不是极低节奏，而是偏向皇马主导下的中高进球环境。0球与1球赔率偏高，不支持沉闷低比分主路径。",
+          "half_full_time": "半全场主/主1.54远低于平/主4.0，显示市场认为皇马较大概率从上半场就建立优势；这与3-0、2-0、3-1等强势主胜比分相互印证。",
+          "external_market": "未能执行联网核验，无法将竞彩与外部欧赔、亚盘、交易所做最新时点比对，因此只能基于抓包内部市场结构解释，外部市场分歧保持未验证状态。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 19,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票主胜76%，与1X2最低方向一致，属于明显主队热度；但sharp_money_facts仅给出数据不足警告，且无开即时序列，不能确认真实聪明钱方向，也不能确认RLM。"
+        },
+        "contextual_logic": {
+          "league_style": "西甲整体平局基线不低，但强弱分明对阵中，豪门主场常从1-0/2-0扩展到3-0；本场赔率结构更偏强主胜放大。",
+          "team_style": "皇马具备控球和压制能力，主场面对降级区弱旅更易形成半场压制；奥维耶多客场攻击力与承压能力都偏弱，更像防反求生。",
+          "tempo": "medium",
+          "score_shape": "更像皇马先手建立优势后持续控制，主线是主胜零封，分歧只在赢两球还是赢三球以上。",
+          "btts_likelihood": "no",
+          "rotation_risk": "medium"
+        },
+        "rejected_cases": {
+          "home": "未选2-0而选3-0，是因为三球模态和主/主半全场更支持再多进一球；未选2-1，是因为客队破门证据弱于零封路径。",
+          "draw": "1-1虽在低赔簇，但1X2主胜强度、让球-2模板以及半全场主/主共同压制平局场景。",
+          "away": "客胜最低仅到1-2且赔率25，和主胜主流比分差距过大，缺乏足够市场支撑。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 71,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "no_web_validation",
+            "favorite_hot",
+            "score_adjacent_competition"
+          ],
+          "why_recommended": "方向层面皇马主胜高度稳定，且3-0处于让球模板与总进球模态的交集位置；但2-0、2-1、3-1均构成紧邻竞争，外部市场又未核验，故适合作为中等把握推荐而非最高级别。"
+        },
+        "data_quality": {
+          "missing": [
+            "外部欧赔即时序列",
+            "外部亚盘即时序列",
+            "交易所数据",
+            "正确比分变化时序"
+          ],
+          "raw_packet_quality": "medium"
+        },
+        "reason": "本场抓包市场给出非常清晰的主胜底色：1X2主胜1.17、去水后主胜约75.66%，半全场主/主1.54，说明皇马大概率从上半场就掌控比赛。比分层面不能只看最低赔率2-0，必须结合adjacent_score_audit_table与总进球模态交叉：2-0、2-1、3-0三者构成核心低赔簇，其中3球总进球是最强模态，且客队攻击力偏弱，因此3-0比2-1更能解释主胜强度与零封逻辑，也比2-0更贴近总进球主形态。与此同时，4球与5球赔率压缩提醒我们大胜尾部真实存在，所以对3-1、4-1保留风险提示。综合判断，最合理的市场解读是皇马主场强势取胜，首选3-0。",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 15,
+          "final_direction": "home",
+          "predicted_score": "3-0",
+          "direction_probs": {
+            "home": 77,
+            "draw": 14,
+            "away": 9
+          },
+          "goal_band": "3",
+          "btts": "no",
+          "risk_score_candidates": [
+            {
+              "score": "2-0",
+              "risk_type": "adjacent_lower_odds/mainline_rival",
+              "reason": "2-0是全场最低正确比分赔率，且与3-0处于同一主胜零封强势簇，若皇马领先后节奏保守，三球上限可能回落为两球。"
+            },
+            {
+              "score": "2-1",
+              "risk_type": "btts_branch",
+              "reason": "2-1与3-0同为接近低赔，若皇马防线轮换或比赛后段松动，奥维耶多取得安慰球会把零封路径改写为BTTS。"
+            },
+            {
+              "score": "3-1",
+              "risk_type": "high_tail_btts",
+              "reason": "4球赔率被压缩，3-1是主胜高比分且双方进球的最近邻之一，若比赛开放度高于预期，该尾部不能忽略。"
+            },
+            {
+              "score": "4-1",
+              "risk_type": "favorite_overrun_tail",
+              "reason": "总进球4与5压缩明显，若皇马早早建立优势并继续压制，比赛可能溢出到4-1这类高比分尾部。"
+            }
+          ],
+          "tail_risk_flags": [
+            "favorite_cover_cluster_dense",
+            "high_goal_tail_compressed"
+          ],
+          "confidence_downgrade_reason": "缺少外部即时欧赔/亚盘/交易所验证，且抓包没有真实赔率时序，无法确认是否存在临场聪明钱或反向波动。",
+          "top3": [
+            {
+              "score": "3-0",
+              "prob": 18,
+              "logic": "1X2主胜极强，-2形态模板要求重点审计2-0/3-0/3-1/4-1/4-2；在这些候选中，3球总进球为模态，且3-0与2-0、2-1同处最低赔率核心圈，兼顾强弱差与零封路径。"
+            },
+            {
+              "score": "2-0",
+              "prob": 17,
+              "logic": "这是全场最低正确比分赔率，若皇马主导但比赛节奏不被继续拉高，2-0是最稳健的主胜零封分支。"
+            },
+            {
+              "score": "2-1",
+              "prob": 14,
+              "logic": "2-1赔率与2-0、3-0极近，说明市场保留客队偷一球可能；不过客队进攻基线偏弱，因此排在3-0与2-0之后。"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "竞彩1.17/5.8/9.75显示主胜为压倒性主方向，去水后主胜公平概率约75.66%，平局与客胜均被显著压低，基础方向明确倾向皇马主场拿下。",
+            "handicap": "让球为-2.0，说明市场并不只要求主胜，而是要求审计两球以上差距。结合比分簇，2-0、3-0、3-1、4-0、4-1均被明显纳入主流，显示穿盘与恰赢两球都存在现实权重。",
+            "correct_score": "正确比分最低区集中在2-0、2-1、3-0、1-0、3-1，说明主胜无疑，但市场对零封与BTTS两条分支并存。由于3球总进球模态最强，而3-0又紧贴最低赔率组，因此其相较1-0更符合整体盘面。",
+            "total_goals": "总进球3最低，4次低，2第三低，同时5球也被明显压缩，代表主流不是极低节奏，而是偏向皇马主导下的中高进球环境。0球与1球赔率偏高，不支持沉闷低比分主路径。",
+            "half_full_time": "半全场主/主1.54远低于平/主4.0，显示市场认为皇马较大概率从上半场就建立优势；这与3-0、2-0、3-1等强势主胜比分相互印证。",
+            "external_market": "未能执行联网核验，无法将竞彩与外部欧赔、亚盘、交易所做最新时点比对，因此只能基于抓包内部市场结构解释，外部市场分歧保持未验证状态。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 19,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票主胜76%，与1X2最低方向一致，属于明显主队热度；但sharp_money_facts仅给出数据不足警告，且无开即时序列，不能确认真实聪明钱方向，也不能确认RLM。"
+          },
+          "score_cluster_audit": {
+            "selected_cluster": "home_cover",
+            "why_selected_score": "我先显式读取adjacent_score_audit_table中的3-0行：其相邻对手为2-0(7.25，略低且接近)、2-1(7.75，完全接近)、3-1(9.0，接近)、4-0(11.5，次近)。这意味着3-0不是孤立选择，而是位于皇马强势赢球簇中央。之所以在2-0与3-0之间取3-0，是因为总进球模态明确落在3，半全场主/主极低，且客队进攻面弱，3-0比2-1更能同时解释强主胜、零封、三球模态三者共振。",
+            "adjacent_scores_checked": [
+              {
+                "score": "2-0",
+                "odds": 7.25,
+                "verdict": "near_miss",
+                "reason": "赔率比3-0更低，是最强竞争者；未选它的原因是总进球3为模态，3-0比2-0更贴合总进球锚点。"
+              },
+              {
+                "score": "2-1",
+                "odds": 7.75,
+                "verdict": "reject",
+                "reason": "虽与3-0同价位接近，但客队赛季进攻均值低，且0-1、1-2等客胜路径都很弱，BTTS分支不如零封分支稳。"
+              },
+              {
+                "score": "3-1",
+                "odds": 9,
+                "verdict": "keep",
+                "reason": "属于主胜高比分且BTTS的直接邻居，若皇马防线轮换影响零封，3-1会迅速上位，因此保留为重要尾部。"
+              },
+              {
+                "score": "4-0",
+                "odds": 11.5,
+                "verdict": "near_miss",
+                "reason": "高比分尾部存在压缩，但4-0仍较3-0高出一档，说明市场认可大胜却未把四球零封列为主路径。"
+              },
+              {
+                "score": "1-1",
+                "odds": 11,
+                "verdict": "reject",
+                "reason": "平局最低分虽然进入低赔簇，但与1X2超强主胜、主/主极低及-2模板并不一致，只能作为冷门防范。"
+              }
+            ],
+            "lowest_score_not_selected_reason": "最低赔率是2-0而非3-0，未机械跟随的原因在于总进球市场明确把3球放在首位，3-0正好把主胜强度、零封倾向与总进球模态统一起来；2-0更像节奏保守版本，因此列第二。"
+          },
+          "sharp_money_audit": {
+            "available": true,
+            "confirmed_sharp_direction": "unclear",
+            "rlm_confirmed": false,
+            "vote_vs_odds_conflict": "公众主胜76%且市场最低方向也是主胜，说明热门方向与赔率主方向一致，不存在明显投票逆向支持客队或平局的冲突。",
+            "crs_change_impact": "正确比分只有静态赔率，无变化序列，无法确认2-0、3-0、2-1之间谁是临场被重点打压的真实资金焦点，只能做静态簇审计。",
+            "ttg_change_impact": "总进球同样缺少变化过程，因此只能确认3球与4+有静态压缩，不能确认临场是否进一步向大球或中球倾斜。"
+          },
+          "anchor_audit": {
+            "zero_zero": "0-0赔率27，位置很靠后，和主胜1X2强压及主/主半全场明显冲突，低开局僵局不是主路径。",
+            "one_one": "1-1赔率11，已进入低赔簇，说明市场承认皇马若效率不高可能被拖平；但在-2模板下它更像需解释的对冲项，而非首选。",
+            "one_zero": "1-0赔率9不算高，说明低节奏小胜并未被完全排除；但总进球1仅排第5，不如3球形态有力。",
+            "zero_one": "0-1赔率27，远高于1-0，显示客队爆冷零封皇马缺乏赔率支撑。",
+            "two_one": "2-1赔率7.75非常低，是必须严肃审计的主流候选；不过其依赖奥维耶多破门，而客队进攻基线偏弱，因此最终让位于3-0。",
+            "one_two": "1-2赔率25，是客胜中最低但仍明显高于主流主胜比分，说明客队反打只是冷门尾部。",
+            "high_score_tail": "3-1、4-0、4-1、3-2等高比分尾部压缩明显，说明皇马若早早拉开分差，4+并非虚设；因此需要降低对单一中比分的置信。",
+            "handicap_cover": "两球盘模板要求审计2-0、3-0、3-1、4-1、4-2。当前3-0在这些模板内兼顾最强模态与零封逻辑，是较完整的穿盘表达。"
+          },
+          "contextual_logic": {
+            "league_style": "西甲整体平局基线不低，但强弱分明对阵中，豪门主场常从1-0/2-0扩展到3-0；本场赔率结构更偏强主胜放大。",
+            "team_style": "皇马具备控球和压制能力，主场面对降级区弱旅更易形成半场压制；奥维耶多客场攻击力与承压能力都偏弱，更像防反求生。",
+            "tempo": "medium",
+            "score_shape": "更像皇马先手建立优势后持续控制，主线是主胜零封，分歧只在赢两球还是赢三球以上。",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "未选2-0而选3-0，是因为三球模态和主/主半全场更支持再多进一球；未选2-1，是因为客队破门证据弱于零封路径。",
+            "draw": "1-1虽在低赔簇，但1X2主胜强度、让球-2模板以及半全场主/主共同压制平局场景。",
+            "away": "客胜最低仅到1-2且赔率25，和主胜主流比分差距过大，缺乏足够市场支撑。"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation_components": {
+            "direction_edge": 24,
+            "score_cluster_strength": 22,
+            "goal_band_strength": 20,
+            "btts_alignment": 16,
+            "sharp_alignment": 6,
+            "web_source_quality": 0,
+            "market_conflict_penalty": 8,
+            "final_grade_reason": "主胜方向优势非常大，比分簇与总进球模态对3-0有较好支撑，但缺乏外部联网赔率校验与真实资金流时序，因此整体推荐强度被下调。"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 71,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "no_web_validation",
+              "favorite_hot",
+              "score_adjacent_competition"
+            ],
+            "why_recommended": "方向层面皇马主胜高度稳定，且3-0处于让球模板与总进球模态的交集位置；但2-0、2-1、3-1均构成紧邻竞争，外部市场又未核验，故适合作为中等把握推荐而非最高级别。"
+          },
+          "data_quality": {
+            "missing": [
+              "外部欧赔即时序列",
+              "外部亚盘即时序列",
+              "交易所数据",
+              "正确比分变化时序"
+            ],
+            "raw_packet_quality": "medium"
+          },
+          "reason": "本场抓包市场给出非常清晰的主胜底色：1X2主胜1.17、去水后主胜约75.66%，半全场主/主1.54，说明皇马大概率从上半场就掌控比赛。比分层面不能只看最低赔率2-0，必须结合adjacent_score_audit_table与总进球模态交叉：2-0、2-1、3-0三者构成核心低赔簇，其中3球总进球是最强模态，且客队攻击力偏弱，因此3-0比2-1更能解释主胜强度与零封逻辑，也比2-0更贴近总进球主形态。与此同时，4球与5球赔率压缩提醒我们大胜尾部真实存在，所以对3-1、4-1保留风险提示。综合判断，最合理的市场解读是皇马主场强势取胜，首选3-0。"
+        },
+        "score_cluster_audit": {
+          "selected_cluster": "home_cover",
+          "why_selected_score": "我先显式读取adjacent_score_audit_table中的3-0行：其相邻对手为2-0(7.25，略低且接近)、2-1(7.75，完全接近)、3-1(9.0，接近)、4-0(11.5，次近)。这意味着3-0不是孤立选择，而是位于皇马强势赢球簇中央。之所以在2-0与3-0之间取3-0，是因为总进球模态明确落在3，半全场主/主极低，且客队进攻面弱，3-0比2-1更能同时解释强主胜、零封、三球模态三者共振。",
+          "adjacent_scores_checked": [
+            {
+              "score": "2-0",
+              "odds": 7.25,
+              "verdict": "near_miss",
+              "reason": "赔率比3-0更低，是最强竞争者；未选它的原因是总进球3为模态，3-0比2-0更贴合总进球锚点。"
+            },
+            {
+              "score": "2-1",
+              "odds": 7.75,
+              "verdict": "reject",
+              "reason": "虽与3-0同价位接近，但客队赛季进攻均值低，且0-1、1-2等客胜路径都很弱，BTTS分支不如零封分支稳。"
+            },
+            {
+              "score": "3-1",
+              "odds": 9,
+              "verdict": "keep",
+              "reason": "属于主胜高比分且BTTS的直接邻居，若皇马防线轮换影响零封，3-1会迅速上位，因此保留为重要尾部。"
+            },
+            {
+              "score": "4-0",
+              "odds": 11.5,
+              "verdict": "near_miss",
+              "reason": "高比分尾部存在压缩，但4-0仍较3-0高出一档，说明市场认可大胜却未把四球零封列为主路径。"
+            },
+            {
+              "score": "1-1",
+              "odds": 11,
+              "verdict": "reject",
+              "reason": "平局最低分虽然进入低赔簇，但与1X2超强主胜、主/主极低及-2模板并不一致，只能作为冷门防范。"
+            }
+          ],
+          "lowest_score_not_selected_reason": "最低赔率是2-0而非3-0，未机械跟随的原因在于总进球市场明确把3球放在首位，3-0正好把主胜强度、零封倾向与总进球模态统一起来；2-0更像节奏保守版本，因此列第二。"
+        },
+        "sharp_money_audit": {
+          "available": true,
+          "confirmed_sharp_direction": "unclear",
+          "rlm_confirmed": false,
+          "vote_vs_odds_conflict": "公众主胜76%且市场最低方向也是主胜，说明热门方向与赔率主方向一致，不存在明显投票逆向支持客队或平局的冲突。",
+          "crs_change_impact": "正确比分只有静态赔率，无变化序列，无法确认2-0、3-0、2-1之间谁是临场被重点打压的真实资金焦点，只能做静态簇审计。",
+          "ttg_change_impact": "总进球同样缺少变化过程，因此只能确认3球与4+有静态压缩，不能确认临场是否进一步向大球或中球倾斜。"
+        },
+        "recommendation_components": {
+          "direction_edge": 24,
+          "score_cluster_strength": 22,
+          "goal_band_strength": 20,
+          "btts_alignment": 16,
+          "sharp_alignment": 6,
+          "web_source_quality": 0,
+          "market_conflict_penalty": 8,
+          "final_grade_reason": "主胜方向优势非常大，比分簇与总进球模态对3-0有较好支撑，但缺乏外部联网赔率校验与真实资金流时序，因此整体推荐强度被下调。"
+        },
+        "risk_score_candidates": [
+          {
+            "score": "2-0",
+            "risk_type": "adjacent_lower_odds/mainline_rival",
+            "reason": "2-0是全场最低正确比分赔率，且与3-0处于同一主胜零封强势簇，若皇马领先后节奏保守，三球上限可能回落为两球。"
+          },
+          {
+            "score": "2-1",
+            "risk_type": "btts_branch",
+            "reason": "2-1与3-0同为接近低赔，若皇马防线轮换或比赛后段松动，奥维耶多取得安慰球会把零封路径改写为BTTS。"
+          },
+          {
+            "score": "3-1",
+            "risk_type": "high_tail_btts",
+            "reason": "4球赔率被压缩，3-1是主胜高比分且双方进球的最近邻之一，若比赛开放度高于预期，该尾部不能忽略。"
+          },
+          {
+            "score": "4-1",
+            "risk_type": "favorite_overrun_tail",
+            "reason": "总进球4与5压缩明显，若皇马早早建立优势并继续压制，比赛可能溢出到4-1这类高比分尾部。"
+          }
+        ],
+        "tail_risk_flags": [
+          "favorite_cover_cluster_dense",
+          "high_goal_tail_compressed"
+        ],
+        "confidence_downgrade_reason": "缺少外部即时欧赔/亚盘/交易所验证，且抓包没有真实赔率时序，无法确认是否存在临场聪明钱或反向波动。"
+      }
+    },
+    "grok": {
+      "15": {
+        "match": 15,
+        "source_model": "grok",
+        "source_phase": "phase1",
+        "final_direction": "home",
+        "raw_ai_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 76.0,
+          "draw": 15.0,
+          "away": 9.0,
+          "_synthetic_probs": false
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 18.0,
+            "logic": "2-1为最低赔率簇中BTTS路径，结合皇马主场控场与客队反击可能"
+          },
+          {
+            "score": "2-0",
+            "prob": 15.0,
+            "logic": "2-0为最低赔率纯主胜路径，符合让球盘两球形态"
+          },
+          {
+            "score": "3-0",
+            "prob": 14.0,
+            "logic": "3-0为次低赔率路径，皇马主场可扩展比分"
+          }
+        ],
+        "anchor_audit": {
+          "zero_zero": "0-0赔率27.0高，拒绝",
+          "one_one": "1-1赔率11.0中等，拒绝",
+          "one_zero": "1-0赔率9.0可接受但总进球低",
+          "zero_one": "0-1赔率27.0高，拒绝",
+          "two_one": "2-1赔率7.75低且BTTS，选中",
+          "one_two": "1-2赔率25.0高，拒绝",
+          "high_score_tail": "3-2/4-1赔率压缩但未选中，风险可控",
+          "handicap_cover": "2-0/3-0支持-2让球覆盖"
+        },
+        "market_interpretation": {
+          "one_x_two": "主胜赔率1.17极低，市场明确支持皇马主胜",
+          "handicap": "-2.0让球盘指向皇马两球以上覆盖",
+          "correct_score": "2-1与2-0为最低赔率簇，BTTS路径被压缩",
+          "total_goals": "3球为最低赔率，4球次之，指向中低总进球",
+          "half_full_time": "主/主1.54最低，支持半场领先全场胜",
+          "external_market": "无外部盘口异动证据"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 0,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "change字段为空，无法确认RLM或sharp移动，仅公投76%支持主胜"
+        },
+        "contextual_logic": {
+          "league_style": "西甲控球分化明显，强队主场多2-0/2-1",
+          "team_style": "皇马主场控场，奥维耶多客场低迷",
+          "tempo": "medium",
+          "score_shape": "主队窄胜带BTTS",
+          "btts_likelihood": "yes",
+          "rotation_risk": "low"
+        },
+        "rejected_cases": {
+          "home": "无",
+          "draw": "平局赔率高且公投低",
+          "away": "客胜赔率9.75过高"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": [],
+          "validation_warnings": []
+        },
+        "final_web_audit": {},
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 1,
+          "bet_confidence": 65,
+          "direction_stability": "strong",
+          "score_stability": "medium",
+          "risk_level": "medium",
+          "risk_tags": [
+            "btts_tail"
+          ],
+          "why_recommended": "皇马主场优势明显，2-1匹配最低赔率簇与BTTS形态"
+        },
+        "data_quality": {
+          "missing": [
+            "change",
+            "web_sources"
+          ],
+          "raw_packet_quality": "medium"
+        },
+        "reason": "皇马主场碾压，2-1为赔率支持的BTTS路径，sharp与change缺失导致置信度中等",
+        "validation_warnings": [],
+        "raw_item": {
+          "match": 15,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 76,
+            "draw": 15,
+            "away": 9
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "risk_score_candidates": [
+            {
+              "score": "1-2",
+              "risk_type": "away_fightback/high_btts_tail",
+              "reason": "客队虽实力差距大但保级战意存在，需审计1-2尾部风险"
+            }
+          ],
+          "tail_risk_flags": [
+            "high_btts_tail"
+          ],
+          "confidence_downgrade_reason": "",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 18,
+              "logic": "2-1为最低赔率簇中BTTS路径，结合皇马主场控场与客队反击可能"
+            },
+            {
+              "score": "2-0",
+              "prob": 15,
+              "logic": "2-0为最低赔率纯主胜路径，符合让球盘两球形态"
+            },
+            {
+              "score": "3-0",
+              "prob": 14,
+              "logic": "3-0为次低赔率路径，皇马主场可扩展比分"
+            }
+          ],
+          "market_interpretation": {
+            "one_x_two": "主胜赔率1.17极低，市场明确支持皇马主胜",
+            "handicap": "-2.0让球盘指向皇马两球以上覆盖",
+            "correct_score": "2-1与2-0为最低赔率簇，BTTS路径被压缩",
+            "total_goals": "3球为最低赔率，4球次之，指向中低总进球",
+            "half_full_time": "主/主1.54最低，支持半场领先全场胜",
+            "external_market": "无外部盘口异动证据"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "change字段为空，无法确认RLM或sharp移动，仅公投76%支持主胜"
+          },
+          "score_cluster_audit": {
+            "selected_cluster": "home_narrow_win_cluster",
+            "why_selected_score": "2-1在相邻比分审计中与2-0、3-0接近且BTTS支持，符合主队控场形态",
+            "adjacent_scores_checked": [
+              {
+                "score": "2-0",
+                "odds": 7.25,
+                "verdict": "keep",
+                "reason": "赔率更低但纯主胜路径，2-1更均衡"
+              },
+              {
+                "score": "1-0",
+                "odds": 9.0,
+                "verdict": "near_miss",
+                "reason": "低总进球路径但BTTS不符"
+              },
+              {
+                "score": "3-1",
+                "odds": 9.0,
+                "verdict": "keep",
+                "reason": "高BTTS尾部接近"
+              },
+              {
+                "score": "1-1",
+                "odds": 11.0,
+                "verdict": "reject",
+                "reason": "平局路径赔率较高"
+              },
+              {
+                "score": "2-2",
+                "odds": 18.0,
+                "verdict": "reject",
+                "reason": "高总进球平局尾部"
+              },
+              {
+                "score": "1-2",
+                "odds": 25.0,
+                "verdict": "reject",
+                "reason": "客胜路径赔率过高"
+              }
+            ],
+            "lowest_score_not_selected_reason": "2-0虽最低但未包含BTTS，2-1更匹配总进球模态3"
+          },
+          "sharp_money_audit": {
+            "available": false,
+            "confirmed_sharp_direction": "unclear",
+            "rlm_confirmed": false,
+            "vote_vs_odds_conflict": "公投76%与赔率1.17一致，无冲突",
+            "crs_change_impact": "change缺失，无法审计CRS变化",
+            "ttg_change_impact": "change缺失，无法审计TTG变化"
+          },
+          "anchor_audit": {
+            "zero_zero": "0-0赔率27.0高，拒绝",
+            "one_one": "1-1赔率11.0中等，拒绝",
+            "one_zero": "1-0赔率9.0可接受但总进球低",
+            "zero_one": "0-1赔率27.0高，拒绝",
+            "two_one": "2-1赔率7.75低且BTTS，选中",
+            "one_two": "1-2赔率25.0高，拒绝",
+            "high_score_tail": "3-2/4-1赔率压缩但未选中，风险可控",
+            "handicap_cover": "2-0/3-0支持-2让球覆盖"
+          },
+          "contextual_logic": {
+            "league_style": "西甲控球分化明显，强队主场多2-0/2-1",
+            "team_style": "皇马主场控场，奥维耶多客场低迷",
+            "tempo": "medium",
+            "score_shape": "主队窄胜带BTTS",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "无",
+            "draw": "平局赔率高且公投低",
+            "away": "客胜赔率9.75过高"
+          },
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": []
+          },
+          "recommendation_components": {
+            "direction_edge": 75,
+            "score_cluster_strength": 65,
+            "goal_band_strength": 70,
+            "btts_alignment": 60,
+            "sharp_alignment": 0,
+            "web_source_quality": 0,
+            "market_conflict_penalty": 0,
+            "final_grade_reason": "主胜方向明确，2-1为最低赔率BTTS路径，sharp数据缺失降权"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 65,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "btts_tail"
+            ],
+            "why_recommended": "皇马主场优势明显，2-1匹配最低赔率簇与BTTS形态"
+          },
+          "data_quality": {
+            "missing": [
+              "change",
+              "web_sources"
+            ],
+            "raw_packet_quality": "medium"
+          },
+          "reason": "皇马主场碾压，2-1为赔率支持的BTTS路径，sharp与change缺失导致置信度中等"
+        },
+        "score_cluster_audit": {
+          "selected_cluster": "home_narrow_win_cluster",
+          "why_selected_score": "2-1在相邻比分审计中与2-0、3-0接近且BTTS支持，符合主队控场形态",
+          "adjacent_scores_checked": [
+            {
+              "score": "2-0",
+              "odds": 7.25,
+              "verdict": "keep",
+              "reason": "赔率更低但纯主胜路径，2-1更均衡"
+            },
+            {
+              "score": "1-0",
+              "odds": 9.0,
+              "verdict": "near_miss",
+              "reason": "低总进球路径但BTTS不符"
+            },
+            {
+              "score": "3-1",
+              "odds": 9.0,
+              "verdict": "keep",
+              "reason": "高BTTS尾部接近"
+            },
+            {
+              "score": "1-1",
+              "odds": 11.0,
+              "verdict": "reject",
+              "reason": "平局路径赔率较高"
+            },
+            {
+              "score": "2-2",
+              "odds": 18.0,
+              "verdict": "reject",
+              "reason": "高总进球平局尾部"
+            },
+            {
+              "score": "1-2",
+              "odds": 25.0,
+              "verdict": "reject",
+              "reason": "客胜路径赔率过高"
+            }
+          ],
+          "lowest_score_not_selected_reason": "2-0虽最低但未包含BTTS，2-1更匹配总进球模态3"
+        },
+        "sharp_money_audit": {
+          "available": false,
+          "confirmed_sharp_direction": "unclear",
+          "rlm_confirmed": false,
+          "vote_vs_odds_conflict": "公投76%与赔率1.17一致，无冲突",
+          "crs_change_impact": "change缺失，无法审计CRS变化",
+          "ttg_change_impact": "change缺失，无法审计TTG变化"
+        },
+        "recommendation_components": {
+          "direction_edge": 75,
+          "score_cluster_strength": 65,
+          "goal_band_strength": 70,
+          "btts_alignment": 60,
+          "sharp_alignment": 0,
+          "web_source_quality": 0,
+          "market_conflict_penalty": 0,
+          "final_grade_reason": "主胜方向明确，2-1为最低赔率BTTS路径，sharp数据缺失降权"
+        },
+        "risk_score_candidates": [
+          {
+            "score": "1-2",
+            "risk_type": "away_fightback/high_btts_tail",
+            "reason": "客队虽实力差距大但保级战意存在，需审计1-2尾部风险"
+          }
+        ],
+        "tail_risk_flags": [
+          "high_btts_tail"
+        ],
+        "confidence_downgrade_reason": ""
+      }
+    }
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 54.1,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 23.7,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"critic_reports\":[{\"match\":13,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"hhad\",\"severity\":\"high\",\"comment\":\"将“让球-2.0”直接表述为‘指向主队大胜/支持主队大胜’，存在HHAD语义误读风险。证据里handicap_hhad明确available=false，且语义映射只说明若有让球胜平负时的结果定义，不代表已给出可验证的HHAD赔率与方向，不能把裸线值当成已确认穿盘结论。\"},{\"target_model\":\"gr"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 4.8,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 39.0,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 44.3,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 205.7,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}
