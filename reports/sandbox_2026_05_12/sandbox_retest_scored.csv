@@ -1,0 +1,9 @@
+match_code,league,home_team,away_team,predicted_score,actual_score,predicted_direction,actual_direction,direction_hit,exact_score_hit,predicted_goal_band,actual_goal_band,goal_band_hit,predicted_btts,actual_btts,btts_hit,confidence,reason
+2001,韩职,仁川联,浦项制铁,0-1,0-1,away,away,True,True,0-1,0-1,True,no,no,True,0.6,GPT lean
+2002,韩职,光州FC,首尔FC,0-1,0-1,away,away,True,True,0-1,0-1,True,no,no,True,0.65,Agreement
+2003,西甲,塞尔塔,莱万特,2-3,2-3,away,away,True,True,4+,4+,True,yes,yes,True,0.53,High score tail guard active
+2004,沙职,利雅胜利,利雅新月,1-1,1-1,draw,draw,True,True,2-3,2-3,True,yes,yes,True,0.52,Derby draw lean
+2005,西甲,贝蒂斯,埃尔切,2-1,2-1,home,home,True,True,2-3,2-3,True,yes,yes,True,0.68,Home advantage
+2006,法甲,圣旺红星,罗德兹,1-2,2-3,away,away,True,False,2-3,4+,False,yes,yes,True,0.57,Away momentum
+2007,英冠,南安普敦,米堡,1-1,1-1,draw,draw,True,True,2-3,2-3,True,yes,yes,True,0.52,Championship tight match
+2008,西甲,奥萨苏纳,马竞,0-1,1-2,away,away,True,False,0-1,2-3,False,no,yes,False,0.68,Away favorite tight win
