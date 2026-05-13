@@ -1,0 +1,9 @@
+﻿match_code,league,home_team,away_team,predicted_score,actual_score,predicted_direction,actual_direction,direction_hit,exact_score_hit,predicted_total_goals,actual_total_goals,goal_band_hit,predicted_btts,actual_btts,btts_hit,home_win_pct,draw_pct,away_win_pct,confidence,model_used,reason_excerpt
+2001,韩职,仁川联,浦项制铁,1-1,0-1,平局,客胜,False,False,2,1,False,yes,no,False,35.0,34.0,31.0,60,gemini,胜平负极度接近，主胜2.49仅是轻微最低值，不能视作强主。
+2002,韩职,光州FC,首尔FC,0-2,0-1,客胜,客胜,True,False,2,1,False,no,no,True,11.0,20.0,69.0,80,gemini,客胜1.3为绝对低位，公平概率约68%，是本批最明确方向之一。
+2003,西甲,塞尔塔,莱万特,2-1,2-3,主胜,客胜,False,False,3,5,False,yes,yes,True,48.0,28.0,24.0,63,ai_native:gpt:fallback_referee,综合1X2主胜优势、正确比分最低赔2-1、总进球3球主模态以及让球盘更像赢一球结构，最合理终判仍是塞尔塔2-1取胜；但1-1干扰非常强，属于中等风险结论。
+2004,沙职,利雅胜利,利雅新月,1-1,1-1,平局,平局,True,True,2,2,True,yes,yes,True,35.0,31.0,34.0,52,ai_native:gpt:fallback_referee,本场最核心的市场事实是1-1为最低赔，而2-1与1-2分列两侧紧追，说明这是典型均势强强局。结合主胜升水、客胜降水但无确认聪明钱证据，最终采用最中心的1-1。
+2005,西甲,贝蒂斯,埃尔切,2-1,2-1,主胜,主胜,True,True,3,3,True,yes,yes,True,59.0,24.0,17.0,73,ai_native:gpt:fallback_referee,贝蒂斯在1X2、赔率变动和半全场上都获得明显支持，2-1又是正确比分最低赔；结合主队防线缺员与客队保级压力，最终不选零封而选更平衡的2-1主胜。
+2006,法甲,圣旺红星,罗德兹,1-1,2-3,平局,客胜,False,False,2,5,False,yes,yes,True,37.0,34.0,29.0,67,ai_native:gpt:fallback_referee,本场最突出的市场信号不是主队轻优，而是低比分平局被集体压缩：1-1全场最低、2球总进球最低、平/平半全场靠前。结合附加赛环境，1-1仍是最顺终局。
+2007,英冠,南安普敦,米堡,2-1,1-1,主胜,平局,False,False,3,2,False,yes,yes,True,40.0,31.0,29.0,54,ai_native:gpt:fallback_referee,本场是典型浅主优势附加赛：1X2和赔率变动略偏主队，但1-1是全场最低赔，1-2也非常接近。综合主场面、主胜降水与3球主模态后，最终仍小幅倾向南安普敦2-1险胜，但这是高风险判断。
+2008,西甲,奥萨苏纳,马竞,1-1,1-2,平局,客胜,False,False,2,3,False,yes,yes,True,35.0,31.0,34.0,61,ai_native:gpt:phase1_consensus_fallback,本场最关键不是谁更强，而是市场把主胜、客胜、平局压得非常接近。正确比分中1-1最低，且2-1、1-2、1-0、0-1全在近邻区域，显示典型的均衡低比分盘。总进球2/3最低、半全场平局链路也不差，使1-1比任何单边一球胜都更自然。
