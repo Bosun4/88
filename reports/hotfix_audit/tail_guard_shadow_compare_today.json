@@ -1,0 +1,105 @@
+{
+  "source_file": "reports/live_predictions/live_predictions_9999_github_actions.json",
+  "mode": "tail_guard_threshold_shadow_compare_forward_only",
+  "old_threshold": "home<=52 and away>=23",
+  "new_threshold": "home<=55 and away>=22",
+  "match_count": 15,
+  "old_trigger_count": 3,
+  "new_trigger_count": 4,
+  "new_only_count": 1,
+  "old_hits": [
+    {
+      "idx": 1,
+      "home": "比利亚雷",
+      "away": "塞维利亚",
+      "predicted_score": "2-1",
+      "final_direction": "home",
+      "home_win_pct": 49.0,
+      "away_win_pct": 25.0,
+      "old_trigger": true,
+      "new_trigger": true
+    },
+    {
+      "idx": 8,
+      "home": "赫塔费",
+      "away": "马洛卡",
+      "predicted_score": "1-0",
+      "final_direction": "home",
+      "home_win_pct": 41.0,
+      "away_win_pct": 27.0,
+      "old_trigger": true,
+      "new_trigger": true
+    },
+    {
+      "idx": 14,
+      "home": "赫罗纳",
+      "away": "皇家社会",
+      "predicted_score": "2-1",
+      "final_direction": "home",
+      "home_win_pct": 48.0,
+      "away_win_pct": 27.0,
+      "old_trigger": true,
+      "new_trigger": true
+    }
+  ],
+  "new_hits": [
+    {
+      "idx": 1,
+      "home": "比利亚雷",
+      "away": "塞维利亚",
+      "predicted_score": "2-1",
+      "final_direction": "home",
+      "home_win_pct": 49.0,
+      "away_win_pct": 25.0,
+      "old_trigger": true,
+      "new_trigger": true
+    },
+    {
+      "idx": 8,
+      "home": "赫塔费",
+      "away": "马洛卡",
+      "predicted_score": "1-0",
+      "final_direction": "home",
+      "home_win_pct": 41.0,
+      "away_win_pct": 27.0,
+      "old_trigger": true,
+      "new_trigger": true
+    },
+    {
+      "idx": 10,
+      "home": "西雅图",
+      "away": "圣何塞",
+      "predicted_score": "2-1",
+      "final_direction": "home",
+      "home_win_pct": 53.0,
+      "away_win_pct": 22.0,
+      "old_trigger": false,
+      "new_trigger": true
+    },
+    {
+      "idx": 14,
+      "home": "赫罗纳",
+      "away": "皇家社会",
+      "predicted_score": "2-1",
+      "final_direction": "home",
+      "home_win_pct": 48.0,
+      "away_win_pct": 27.0,
+      "old_trigger": true,
+      "new_trigger": true
+    }
+  ],
+  "new_only": [
+    {
+      "idx": 10,
+      "home": "西雅图",
+      "away": "圣何塞",
+      "predicted_score": "2-1",
+      "final_direction": "home",
+      "home_win_pct": 53.0,
+      "away_win_pct": 22.0,
+      "old_trigger": false,
+      "new_trigger": true
+    }
+  ],
+  "note": "This is true forward-only shadow validation on the latest live prediction file."
+}
