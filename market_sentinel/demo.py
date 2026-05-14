@@ -1,4 +1,3 @@
-import json
 import os
 from datetime import datetime, timezone
 from market_sentinel.fair_probs import fair_probs_from_1x2

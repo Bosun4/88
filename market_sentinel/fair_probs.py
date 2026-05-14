@@ -1,5 +1,3 @@
-import math
-
 def fair_probs_from_1x2(odds: dict, method: str = "power") -> dict:
     """
     Computes fair probabilities from 1X2 odds.

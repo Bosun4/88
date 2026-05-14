@@ -9,8 +9,6 @@ def test_fair_probs():
     assert abs(total - 1.0) < 0.01
 
 def test_divergence():
-    # 0.5 - (-0.5*0.15) = 0.575. margin ~ 1.05. ah_fair_h ~ 0.5/1.05 = 0.476 -> proxy ~ 0.575-0.024 = 0.551
-    # fair_h = 0.65 -> DI = 0.099 -> warning
     di, di_abs = euro_asian_divergence_index(0.65, -0.5, 2.0, 1.9)
     sev = classify_divergence(di_abs)
     assert sev in ["watch", "warning", "critical"]
