@@ -3857,6 +3857,41 @@ def build_unified_score_matrix_shadow(match_obj: Dict[str, Any], max_goals: int 
     }
 
 
+
+def apply_sub50_weak_home_tiebreaker_transparency(pred: Dict[str, Any]) -> Dict[str, Any]:
+    hp = float(pred.get("home_win_pct") or 0)
+    dp = float(pred.get("draw_pct") or 0)
+    ap = float(pred.get("away_win_pct") or 0)
+    score = pred.get("predicted_score")
+    dir_ = pred.get("final_direction")
+    
+    import json
+    txt = json.dumps({
+        "top": pred.get("top_score_candidates"),
+        "risk": pred.get("risk_score_candidates"),
+        "matrix": pred.get("matrix_top_scores"),
+    }, ensure_ascii=False)
+    has_draw = ("1-1" in txt) or ("2-2" in txt)
+    
+    if dir_ == "home" and hp > 0 and hp < 50.0 and (dp + ap) > hp and str(score) in ["1-0", "2-1", "3-2"] and has_draw:
+        flags = pred.get("decision_quality_flags", [])
+        if "SUB50_WEAK_HOME_TIEBREAKER" not in flags:
+            flags.append("SUB50_WEAK_HOME_TIEBREAKER")
+        pred["decision_quality_flags"] = flags
+        pred["sub50_tiebreaker_warning"] = True
+        pred["no_bet_reason"] = "主胜概率低于50%，且平/客合计概率高于主胜；1-1 与主胜小胜候选接近，禁止作为强推单比分。"
+        pred["hedge_recommendation"] = "防 1-1 / 防 X2 / 不建议强推主胜单比分"
+        
+        cluster = [str(score)]
+        if "1-1" in txt and "1-1" not in cluster: cluster.append("1-1")
+        if "2-2" in txt and "2-2" not in cluster: cluster.append("2-2")
+        pred["score_cluster"] = cluster
+        
+        reason_txt = pred.get("ai_native_reason", "")
+        pred["narrative_override_warning"] = any(w in reason_txt for w in ["战意", "保级", "必须赢", "抢分", "斗志"])
+    
+    return pred
+
 def attach_matrix_shadow_fields(prediction: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
     """Attach matrix diagnostics without modifying final_direction, score, confidence, result, or display fields."""
     protected = {k: prediction.get(k) for k in ["predicted_score", "final_direction", "confidence", "result", "display_direction", "home_win_pct", "draw_pct", "away_win_pct"]}
