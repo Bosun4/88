@@ -1100,6 +1100,7 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("4球锚点审计：若4球赔率>6，选择3-1/2-2/3-2必须有强证据；否则优先压回0-3球比分带。")
     p.append("高比分尾部审计：若5球≤8、6球≤16或7+≤30，必须检查3-2/4-1/4-2/胜其他。")
     p.append("强客低赔审计：若客胜<=1.50，必须比较0-0/0-1/1-1/0-2/1-2与总进球模态；不能机械给0-2或S级。")
+    p.append("赛季末战意倒挂预警：如果强队已经提前夺冠或无欲无求（面临大面积轮换/伤停），而弱队处于降级区死磕保级，必须极度重视下盘（包括弱队主胜或平局）。即使强队硬实力碾压、机构依然给出客胜低赔，也应主动下调强队的推荐等级，并在比分上重点防范保级队爆冷（如1-1, 1-0, 2-1）。不可无视战意倒挂给客胜高信心。")
     p.append("如果 sharp_money_direction 与 final_direction 冲突，必须解释为什么该信号是噪音，或者主动下调 recommendation.tier。")
     p.append("如果联网来源缺 URL/发布时间/claim，不能作为硬证据。必须输出 source_conflicts 和 final_web_audit。")
     p.append("最终推荐等级、是否进 Top4、bet_confidence 全部由你输出；本地只排序，不会改你的足球判断。")
