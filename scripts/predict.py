@@ -3541,8 +3541,8 @@ def apply_weak_home_tail_risk_protection(row: Dict[str, Any]) -> Dict[str, Any]:
     btts_or_tail = _raw_btts_yes_signal(row, raw_item) or _contains_tail_risk_signal(row, raw_item, risk_candidates)
     weak_home_tail = (
         row.get("final_direction") == "home"
-        and home_pct <= 52.0
-        and away_pct >= 23.0
+        and home_pct <= 55.0
+        and away_pct >= 22.0
         and btts_or_tail
     )
 

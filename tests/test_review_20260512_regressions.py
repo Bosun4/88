@@ -297,3 +297,37 @@ def test_matrix_shadow_source_has_no_team_date_or_result_hardcoding():
     )
     forbidden_tokens = ["塞尔塔", "莱万特", "2026", "2025", "周二003", "2-1命中", "赛果"]
     assert not any(token in source for token in forbidden_tokens)
+import sys
+import os
+
+sys.path.append(os.path.abspath("/root/.openclaw/workspace/repos/88"))
+from scripts.predict import apply_weak_home_tail_risk_protection
+
+def test_tail_guard_threshold_expands_weak_home_shadow_candidates_without_overriding_final():
+    # home_pct=54.5, away_pct=22.5 => should trigger the new <=55.0 / >=22.0 threshold
+    row = {
+        "final_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {"home": 54.5, "draw": 23.0, "away": 22.5},
+        "raw_item": {"btts": "yes"}
+    }
+    
+    # Run the protection
+    res = apply_weak_home_tail_risk_protection(row)
+    
+    candidates = [c.get("score") for c in res.get("risk_score_candidates", [])]
+    flags = res.get("tail_risk_flags", [])
+    
+    # Check flags and candidates
+    assert "weak_home_favorite_btts_tail" in flags, "Missing weak_home_favorite_btts_tail flag"
+    
+    matched_candidates = set(candidates).intersection({"1-2", "2-2", "2-3"})
+    assert len(matched_candidates) >= 2, f"Expected at least two of 1-2/2-2/2-3, got {candidates}"
+    
+    # Check it didn't modify final_direction or predicted_score
+    assert res.get("final_direction") == "home", "final_direction was modified!"
+    assert res.get("predicted_score") == "2-1", "predicted_score was modified!"
+
+if __name__ == "__main__":
+    test_tail_guard_threshold_expands_weak_home_shadow_candidates_without_overriding_final()
+    print("test_tail_guard_threshold_expands_weak_home_shadow_candidates_without_overriding_final passed")
