@@ -1,0 +1,133 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": [
+      {
+        "match": 33,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "high",
+            "comment": "sharp_money_facts_v203明确标注RLM不可判、had_change_missing，gpt仍将公众50%客胜解读为方向支撑，属于Sharp证据不足却过度使用。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "medium",
+            "comment": "adjacent_score_audit_table已显示1-1(9.0)与1-2(7.5)接近，gpt却未充分解释为何不优先1-1而机械落于1-2，CRS相邻比分审计不彻底。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "web",
+            "severity": "high",
+            "comment": "web_research明确failure_reason=no_web_tool_available，却仍输出market_interpretation与external_market结论，属于把无联网当真实来源。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "推荐等级B但risk_tags包含draw_nearby与no_web_confirmation，置信度64%与实际数据缺失程度不匹配，推荐等级过高。"
+          }
+        ],
+        "own_revision_hint": "应先明确标注Sharp与web数据缺失，再把1-1列为同级候选而非仅把1-2作为主选；最终tier建议降为C。"
+      },
+      {
+        "match": 34,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "high",
+            "comment": "1-1与1-2赔率完全同为6.5，gpt却优先1-2，属于机械选1-2而未充分处理平局低赔簇与BTTS冲突。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "cluster",
+            "severity": "medium",
+            "comment": "score_cluster_diagnostics_v203显示low_score_draw_cluster与away_narrow_win_cluster并列最低，gpt未在cluster_ranking中显式说明为何放弃draw_cluster。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "high",
+            "comment": "sharp_confidence仅16且RLM不可判，gpt仍输出direction_stability=medium，Sharp证据不足却给出方向判断。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "risk_tags已列draw_pressure与hot_away_consensus，但bet_confidence仍给60，推荐等级与数据缺失程度不符。"
+          }
+        ],
+        "own_revision_hint": "必须把1-1与1-2并列为同级主候选，tier降为C，并强调无外部盘口序列下的方向稳定性仅为low。"
+      }
+    ]
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 67.5,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 20.4,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"critic_reports\":[{\"match\":33,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"market\",\"severity\":\"high\",\"comment\":\"把handicap.raw=1.0直接说成“客队覆盖概率较高”“一球盘支持客队窄胜”，属于HHAD/让球语义误读。现有证据里handicap_hhad.available=false，且semantic_map明确是主队+1语义模板，不存在可直接下结论的客队穿盘证据。\"},{\"target_model\":\"g"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 3.5,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 26.2,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 14.9,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 81.1,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

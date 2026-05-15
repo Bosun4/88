@@ -1,0 +1,151 @@
+{
+  "critic_reports": {
+    "gpt": [
+      {
+        "match": 29,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "hhad",
+            "severity": "high",
+            "comment": "HHAD语义明显误读。该场handicap raw=1.0，按给定semantic_map属于主队受让+1，不是通常意义的'一球盘客胜赢盘'。你在anchor_audit写'一球盘下0-1为客胜赢盘路径，符合'，这是把受让+1和让球胜负概念混淆了。0-1对应的是home_exact_lose_by_1，即HHAD平，不是你表述的客胜赢盘路径。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "market",
+            "severity": "medium",
+            "comment": "手球盘形态解释与1X2方向混用。evidence已注明lottery_market_1x2是中国竞彩抓包赔率，不是欧洲均赔；你虽未直接说成欧赔，但在'外部市场/handicap'处把raw=1.0直接解释成客队赢盘支持，存在盘口语义过度延伸。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "medium",
+            "comment": "Sharp证据不足。你给出money_flow、sharp_money_audit并称'public与odds一致指向away，无冲突'，但sharp_money_facts_v203已明确confidence=weak、sharp_side_candidates为空、无change无法确认RLM。这里最多只能说没有sharp证据，不能把'无冲突'包装成资金面支持。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "cluster",
+            "severity": "medium",
+            "comment": "相邻比分审计不完整。0-1在adjacent_score_audit_table中的最关键对手是1-1，且near_base=true；你虽提到1-1和0-0，但未对1-0这一同属低比分簇且赔率7.0的对手做明确剔除，CRS相邻比分未审完整。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "推荐等级偏高倾向存在。虽然最终给了B，但正文多处使用'最优、风险可控、客队全场控制概率高'等较强措辞；在0-0赔率6.5、1-1赔率5.0同时压低，且half/full还存在平/平3.8、平/负4.8的情况下，比分稳定性并不支持过强语气。"
+          }
+        ],
+        "own_revision_hint": "应明确说明raw=+1是主队受让一球，0-1对应HHAD平；若仍保留0-1，只能基于1X2+CRS+TTG低比分客胜簇，不得把其说成让球赢盘证据。并补审1-0与1-1的相邻替代关系，降低措辞强度。"
+      },
+      {
+        "match": 30,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "hhad",
+            "severity": "high",
+            "comment": "HHAD语义误读。该场raw=-1.0，按semantic_map应为主队让1球：hhad_win=主胜至少2球，hhad_same=主队恰好赢1球，hhad_lose=主队不穿盘。你在anchor_audit写'一球盘下2-1为赢一球路径，符合'，如果讨论HHAD，这其实对应hhad_same而非'赢盘/符合穿盘'。语义不精确，容易把让一球的'走向平'说成支持主队让胜。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "cluster",
+            "severity": "high",
+            "comment": "机械选2-1倾向明显。该场2-1虽是最低比分赔率，但evidence明确要求不能机械停留在2-1，必须检查高比分尾部。TTG中4球4.5、5球7.2、6球12、7+17均显著压缩，你只用一句'4+尾部与3球模态次优'排除3-1，明显低估了高尾压缩。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "high",
+            "comment": "CRS相邻比分审计不足。2-1的adjacent表里至少应认真比较2-0、1-1、3-1；尤其3-1赔率10.0并不远，且与4球压缩共振。你把3-1简单以'4+尾部与3球模态次优'否掉，但没有回应总进球4球被压低、5球极低的事实。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "cluster",
+            "severity": "medium",
+            "comment": "TTG/BTTS结构审计不充分。你给出BTTS=yes与2-1，但总进球市场对4+球段压力很强，高比分BTTS尾部并不弱；同时2-0、1-0也都在低赔簇。结论并非错误，但没有解释为何BTTS路径胜过非BTTS主胜路径，也没有解释为何3-1不比2-1更受高尾压缩支持。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "medium",
+            "comment": "Sharp证据仍然不足。sharp_money_facts_v203明确confidence=weak且无sharp_side_candidates，你虽写unclear，但整体推荐A级、risk_level=low，没有把'无RLM、无sharp'转化为等级约束，资金面对推荐加分依据不足。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "high",
+            "comment": "推荐等级过高。依据required_gemini_rule的精神，若相邻低赔或接近比分解释不足，recommendation.tier最高应控制在B。你对1-1、2-0、3-1的排除都不充分，却直接给A、risk_level=low，明显高估确定性。"
+          }
+        ],
+        "own_revision_hint": "应把2-1降为候选之一而非强推主选，至少补充比较2-0、1-1、3-1，并明确raw=-1下2-1只是HHAD平型而非让胜型。若解释仍不足，推荐等级应下调至B，风险至少中等。"
+      }
+    ],
+    "grok": []
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 72.5,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 23.9,
+        "status": "ok"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 2.6,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 31.5,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 13.4,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\n  \"critic_reports\": [\n    {\n      \"match\": 29,\n      \"critic_model\": \"gpt\",\n      \"target_findings\": [\n        {\n          \"target_model\": \"grok\",\n          \"issue_type\": \"sharp\",\n          \"severity\": \"high\",\n          \"comment\": \"sharp_money_facts_v203明确标注had_change_missing且RLM无法确认，模型却仍输出directi"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 89.6,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

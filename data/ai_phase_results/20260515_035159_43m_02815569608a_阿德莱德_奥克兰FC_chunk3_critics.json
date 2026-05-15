@@ -1,0 +1,127 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": [
+      {
+        "match": 5,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "web",
+            "severity": "high",
+            "comment": "明确标注no_web_tool_available却仍把抓包context_raw_fields中的伤停、轮换、欧战留力等内容当作准实时情报，未做外部验证风险提示。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "medium",
+            "comment": "sharp_money_facts_v203已标注confidence weak、rlm_confirmed false，仍把公众40%客胜与change方向解读为steam_move，Sharp证据不足。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "medium",
+            "comment": "adjacent_score_audit_table已列出1-1(6.5)低于1-2(7.5)，却仍把1-2设为首选，未充分解释为何放弃最低赔率平局锚点。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "hhad",
+            "severity": "low",
+            "comment": "handicap raw=1.0与1X2客胜最低方向明显冲突，未在market_interpretation中做语义误读澄清。"
+          }
+        ],
+        "own_revision_hint": "应先把1-1列为最高风险对冲，再把1-2降为B级备选；所有packet内伤停与轮换必须标记为unverified。"
+      },
+      {
+        "match": 6,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "web",
+            "severity": "high",
+            "comment": "同样使用no_web_tool_available，却把packet_context_facts中的历史交锋、近况描述直接当作有效情报，未标注来源可靠性。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "cluster",
+            "severity": "medium",
+            "comment": "1-0/0-1/1-1三项同为5.5最低赔率，机械把1-1设为首选，未充分审计0-0(6.5)与低总进球模态的真实冲突。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "recommendation tier B且bet_confidence 55，但three_way_balance与zero_zero_risk同时存在，推荐等级偏高。"
+          }
+        ],
+        "own_revision_hint": "1-1可保留但需同时把0-0与1-0列为同级风险；所有packet情报必须加unverified标签。"
+      }
+    ]
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 75.8,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 24.5,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"critic_reports\":[{\"match\":5,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"hhad\",\"severity\":\"high\",\"comment\":\"把 handicap.raw=1.0 直接说成“客队需赢一球或以上”“一球盘需客队至少赢一球”，这是 HHAD 语义误读。证据里明确给出 semantic_map：raw=1.0 表示主队受让+1，hhad_same 是主队恰好输1球，hhad_win 是主队赢/平/只输不足1球。不能把它当成客让一球。\"},{\"t"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 4.2,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 33.6,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 16.9,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 99.7,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": []
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 74.7,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 31.1,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"critic_reports\":[{\"match\":21,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"sharp\",\"severity\":\"high\",\"comment\":\"sharp_money_audit把available写成false不符合证据。sharp_money_facts_v203明示存在且confidence为weak，只是不能确认真实聪明钱，不等于数据不可用。\"},{\"target_model\":\"grok\",\"issue_type\":\"market\",\"sev"
+      },
+      "consistency": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 7.0,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[],\"repair\":{}},{\"match\":19,\"valid\":true,\"warnings\":[],\"repair\":{}},{\"match\":20,\"valid\":false,\"warnings\":[\"top3[0] 必须等于 predicted_score，当前 predicted_score=1-2 但 top3[0]=1-2 已一致；该项无问题。\",\"goal_band 与 predicted_score 一致，btts 与 predicted_score 一致。\",\"web_res"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 36.8,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 16.1,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\n  \"critic_reports\": [\n    {\n      \"match\": 21,\n      \"critic_model\": \"gpt\",\n      \"target_findings\": [\n        {\n          \"target_model\": \"grok\",\n          \"issue_type\": \"sharp\",\n          \"severity\": \"medium\",\n          \"comment\": \"sharp_money_facts明确提示RLM与聪明钱方向unclear且缺少变盘序列，却仍将公众56%与抓包降水直接等同于市"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 80.4,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": []
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 70.4,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 19.9,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"critic_reports\":[{\"match\":31,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"hhad\",\"severity\":\"high\",\"comment\":\"把 HHAD 一球盘语义读反了。证据里 handicap.raw=1.0 且 semantic_map 明确是“主队受让+1”，hhad_win 对应主队不败或仅输不足1球，hhad_same 对应主队恰好输1球，hhad_lose 才是主队净负2+。目标模型却多次写成“一球盘支持客队窄胜/客队覆盖概率较高”，这"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 3.1,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 22.2,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 16.8,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\n  \"critic_reports\": [\n    {\n      \"match\": 31,\n      \"critic_model\": \"grok\",\n      \"target_findings\": [\n        {\n          \"target_model\": \"grok\",\n          \"issue_type\": \"sharp\",\n          \"severity\": \"high\",\n          \"comment\": \"sharp_money_facts_v203明确标注had_change_missing，无法确认RLM或聪明钱方向，但模型仍将公"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 68.5,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

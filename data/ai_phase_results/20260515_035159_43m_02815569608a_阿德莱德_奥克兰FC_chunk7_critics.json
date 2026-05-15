@@ -1,0 +1,135 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": [
+      {
+        "match": 13,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "high",
+            "comment": "sharp_money_facts明确标注RLM unavailable、无change序列，sharp_side_candidates为空，却仍将主胜高比分结构视为强共振，sharp证据不足。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "web",
+            "severity": "high",
+            "comment": "明确no_web_tool_available，却把抓包静态赔率与context_raw_fields当作市场事实，未标注外部验证缺失风险。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "medium",
+            "comment": "adjacent_score_audit_table已列出3-1/4-1/3-0，但未充分解释为何排除2-2等BTTS高尾部与科隆保级反击路径的冲突。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "high",
+            "comment": "rotation_uncertainty与ceremony_rotation风险已识别，但仍给出tier A，推荐等级过高。"
+          }
+        ],
+        "own_revision_hint": "将tier降至B，明确标注sharp与web数据缺失；优先审计2-2/4-2等BTTS尾部是否被总进球7+压缩过度支持。"
+      },
+      {
+        "match": 14,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "high",
+            "comment": "sharp_confidence仅18且RLM unavailable，仍把2-1作为首选，sharp证据不足。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "cluster",
+            "severity": "medium",
+            "comment": "1-1与2-2在相邻比分表中贴近2-1，但cluster_ranking中high_btts_tail_cluster权重被低估。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "已列出weak_home_favorite_btts_tail与away_fightback_tail，但tier B仍偏乐观，需进一步降级。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "web",
+            "severity": "high",
+            "comment": "同样使用no_web_tool_available抓包数据，未区分packet_context_facts与实时新闻。"
+          }
+        ],
+        "own_revision_hint": "将tier降至C，强调必须同时保留1-1与1-2作为主要风险池；补充说明保级战意下2-1的稳定性低于市场最低赔率所显示。"
+      }
+    ]
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 72.3,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 26.1,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"critic_reports\":[{\"match\":13,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"hhad\",\"severity\":\"high\",\"comment\":\"让球语义存在明显误读。证据里 HHAD 语义为 -2 时 hhad_same=主队刚好赢2球，hhad_win=主队赢3球或以上；3-1 只是净胜2球，应对应 hhad_same，不是你写的“handicap_cover/两球盘支持3-1覆盖”。这属于让球穿盘与走水概念混淆。\"},{\"target_model\":"
+      },
+      "consistency": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 5.2,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[\"未发现结构自相矛盾；仅注意该场让球解释文字中“favorite_side_by_line_sign”源数据异常不影响最终字段一致性。\"],\"repair\":{}},{\"match\":2,\"valid\":false,\"warnings\":[\"predicted_score=3-1 对应净胜2球，但 anchor_audit.handicap_cover 与 score_cluster_audit.why_selected_score 中写成“3-1能走盘或赢盘/符合赢盘预期”，与 -2 盘口语义不一"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 44.0,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 21.4,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 75.0,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

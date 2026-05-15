@@ -1,0 +1,1602 @@
+{
+  "final": {
+    "9": {
+      "match": 9,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "away",
+      "raw_ai_direction": "away",
+      "predicted_score": "1-2",
+      "direction_probs": {
+        "home": 29.0,
+        "draw": 27.0,
+        "away": 44.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "1-2",
+          "prob": 17.0,
+          "logic": "1X2客胜最低，半全场负/负与平/负居前，正确比分中1-2是客胜方向最低赔，兼容客队占优但横滨失球与主场仍有进攻回应的结构。"
+        },
+        {
+          "score": "1-1",
+          "prob": 16.0,
+          "logic": "全场最低比分赔，且总进球2球为主模态，若柏太阳神进攻效率不足或领先后回收，平局最容易形成。"
+        },
+        {
+          "score": "0-1",
+          "prob": 14.0,
+          "logic": "客队窄胜簇强，0-1赔率接近1-2；结合抓包文字中的上半场平局倾向，慢热后一击制胜是合理分支。"
+        }
+      ],
+      "anchor_audit": {
+        "zero_zero": "0-0赔率12.0不算主流，但在日职高平基线下仍是低速闷局备选；因客胜主线更强，未列入前三。",
+        "one_one": "1-1为最强锚点，必须正视；之所以不选，是因为客胜方向在1X2和半全场上都有更完整支撑。",
+        "one_zero": "1-0赔率9.5并不高，说明主队偷一个并非幻想；但横滨近期防守持续漏球，零封难度偏大。",
+        "zero_one": "0-1赔率7.25极具威胁，是1-2最直接替代项，代表客队低节奏胜出路径明确存在。",
+        "two_one": "2-1赔率9.5显示主队反打存在，但其周边支撑弱于1-2，且客胜基本面更统一。",
+        "one_two": "1-2是客胜最低比分，兼容BTTS与3球模态，最符合客优但非碾压的市场形态。",
+        "high_score_tail": "2-2、1-3、2-3均有压缩，说明4+尾部不能删去；但总进球主模态仍在2-3球，所以尾部只列为风险。",
+        "handicap_cover": "客队若真兑现基础优势，更像赢一球而非稳定穿深盘，因此1-2、0-1优先于0-3类覆盖比分。"
+      },
+      "market_interpretation": {
+        "one_x_two": "竞彩1X2中客胜1.99为最低，公平化后客胜约44.53%，是明确但不算极强的客优结构；主胜与平局仍保留较大空间。",
+        "handicap": "原始让球显示为主队受让一球语义，但HHAD缺少有效赔率，不能据此确认主队受让面是否被真实支持，只能作为客队基础优势存在的形态参考。",
+        "correct_score": "最低比分依次为1-1、1-2、0-1，说明市场并非单边碾压，而是客队窄胜与低比分平局并存。主队最佳比分1-0和2-1同为9.5，意味着主队并未被完全排除。",
+        "total_goals": "总进球2球3.4最低、3球3.5次低，说明核心区间在2-3球；4球5.5并不高，高比分尾部需保留但不能盖过主模态。",
+        "half_full_time": "负/负3.1最低、平/负4.9次低，强化客队赢球路径；但平/平5.7也不远，说明平局过渡概率高，客队更像后程兑现优势。",
+        "external_market": "无法联网核对外部欧赔、亚盘与交易所，因此不能确认竞彩是否相对外部市场高估或低估客胜；此项只能保留缺口风险。"
+      },
+      "money_flow": {
+        "public_money_direction": "away",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 0,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众投票客胜44%与市场最低方向一致，但sharp_money_facts_v203明确提示缺少变盘序列，不能把顺向热度当作已确认聪明钱。"
+      },
+      "contextual_logic": {
+        "league_style": "日职整体平局基线偏高、节奏波动中等，低比分与窄胜并存较常见。",
+        "team_style": "横滨近期防线漏洞明显但仍有主场回应能力；柏太阳神进攻产量不高，更像通过反击和比赛管理赢球。",
+        "tempo": "medium",
+        "score_shape": "上半场更可能胶着，后程由客队抓主队失误形成一球到两球输出，主队有望回敬一球。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "unclear"
+      },
+      "rejected_cases": {
+        "home": "主胜被排除，因1X2客胜最低且交锋、近况与半全场更支持柏太阳神占优，主队最佳路径仅限1-0或2-1偷袭，非主场景。",
+        "draw": "平局未选主要因负/负与平/负序列较强，市场更像预期柏太阳神最终兑现；但1-1过低导致平局仍是最大单点风险。",
+        "away": "未拒绝away，而是在away内部放弃0-1与0-2，选择1-2，是因为横滨持续失球同时仍具一定主场进球回应能力。"
+      },
+      "web_research": {
+        "used": false,
+        "failure_reason": "no_web_tool_available",
+        "search_queries": [],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": []
+      },
+      "final_web_audit": {
+        "web_used_by_final": false,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "B",
+        "is_recommended": true,
+        "top4_priority": 2,
+        "bet_confidence": 62,
+        "direction_stability": "medium",
+        "score_stability": "weak",
+        "risk_level": "high",
+        "risk_tags": [
+          "draw_anchor_strong",
+          "no_web_verification",
+          "sharp_unconfirmed",
+          "high_score_tail_present"
+        ],
+        "why_recommended": "客胜在1X2、半全场与客队窄胜簇中仍是最完整主线，但平局锚点过强，适合作为中等优先级方向参考，不宜高信单挑比分。"
+      },
+      "data_quality": {
+        "missing": [
+          "external_odds",
+          "exchange_data",
+          "line_movement_timeline",
+          "verified_lineups"
+        ],
+        "raw_packet_quality": "medium"
+      },
+      "reason": "本场市场核心不是单边客碾，而是'客队略优+平局顽固'。1X2给出柏太阳神明确优势，半全场负/负与平/负进一步支持其后程兑现；正确比分里1-2、0-1、1-1三点挤压最明显。综合相邻比分审计后，1-2比0-1更能吸收横滨持续失球与主场回敬一球的双重特征，但必须承认1-1与2-2是重要风险支路。",
+      "validation_warnings": [],
+      "raw_item": {
+        "match": 9,
+        "final_direction": "away",
+        "predicted_score": "1-2",
+        "direction_probs": {
+          "home": 29,
+          "draw": 27,
+          "away": 44
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "risk_score_candidates": [
+          {
+            "score": "1-1",
+            "risk_type": "draw_anchor",
+            "reason": "1-1为全场最低比分赔率，且与1-2在相邻比分表中属于近邻，说明客胜优势并未强到可以完全压制平局路径。"
+          },
+          {
+            "score": "0-1",
+            "risk_type": "away_low_margin",
+            "reason": "0-1赔率仅略高于1-2，若比赛节奏偏慢、柏太阳神延续稳守反击，客队一球小胜完全可能。"
+          },
+          {
+            "score": "2-2",
+            "risk_type": "high_btts_tail",
+            "reason": "在客胜不低且BTTS=yes框架下，2-2属于必须保留的反打尾部，高比分平局不能忽略。"
+          }
+        ],
+        "tail_risk_flags": [
+          "btts_draw_anchor",
+          "away_narrow_vs_draw_conflict",
+          "high_score_tail_present"
+        ],
+        "confidence_downgrade_reason": "缺少真实开盘到即时盘序列，无法确认是否存在可靠聪明钱与真实逆向走势；同时1-1比分锚点压得比1-2更低，削弱客胜比分稳定度。",
+        "top3": [
+          {
+            "score": "1-2",
+            "prob": 17,
+            "logic": "1X2客胜最低，半全场负/负与平/负居前，正确比分中1-2是客胜方向最低赔，兼容客队占优但横滨失球与主场仍有进攻回应的结构。"
+          },
+          {
+            "score": "1-1",
+            "prob": 16,
+            "logic": "全场最低比分赔，且总进球2球为主模态，若柏太阳神进攻效率不足或领先后回收，平局最容易形成。"
+          },
+          {
+            "score": "0-1",
+            "prob": 14,
+            "logic": "客队窄胜簇强，0-1赔率接近1-2；结合抓包文字中的上半场平局倾向，慢热后一击制胜是合理分支。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩1X2中客胜1.99为最低，公平化后客胜约44.53%，是明确但不算极强的客优结构；主胜与平局仍保留较大空间。",
+          "handicap": "原始让球显示为主队受让一球语义，但HHAD缺少有效赔率，不能据此确认主队受让面是否被真实支持，只能作为客队基础优势存在的形态参考。",
+          "correct_score": "最低比分依次为1-1、1-2、0-1，说明市场并非单边碾压，而是客队窄胜与低比分平局并存。主队最佳比分1-0和2-1同为9.5，意味着主队并未被完全排除。",
+          "total_goals": "总进球2球3.4最低、3球3.5次低，说明核心区间在2-3球；4球5.5并不高，高比分尾部需保留但不能盖过主模态。",
+          "half_full_time": "负/负3.1最低、平/负4.9次低，强化客队赢球路径；但平/平5.7也不远，说明平局过渡概率高，客队更像后程兑现优势。",
+          "external_market": "无法联网核对外部欧赔、亚盘与交易所，因此不能确认竞彩是否相对外部市场高估或低估客胜；此项只能保留缺口风险。"
+        },
+        "money_flow": {
+          "public_money_direction": "away",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 0,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众投票客胜44%与市场最低方向一致，但sharp_money_facts_v203明确提示缺少变盘序列，不能把顺向热度当作已确认聪明钱。"
+        },
+        "score_cluster_audit": {
+          "selected_cluster": "away_narrow",
+          "why_selected_score": "必须先读取adjacent_score_audit_table。1-2基准赔率7.0，其相邻对手1-1为6.5且更低，0-1为7.25且近邻，说明1-2不是压倒性独立点，而是客队窄胜簇中最活跃的一支。结合1X2客优、半全场负/负与平/负靠前，以及横滨连续失球背景，最终在客队窄胜簇中选1-2而非0-1。",
+          "adjacent_scores_checked": [
+            {
+              "score": "1-1",
+              "odds": 6.5,
+              "verdict": "near_miss",
+              "reason": "比1-2更低，说明平局锚点很强；但半全场更偏向客队最终兑现，故保留为首要风险而非主选。"
+            },
+            {
+              "score": "0-1",
+              "odds": 7.25,
+              "verdict": "keep",
+              "reason": "与1-2非常接近，代表客队低比分小胜路径真实存在，若比赛更保守则可能替代主选。"
+            },
+            {
+              "score": "2-1",
+              "odds": 9.5,
+              "verdict": "reject",
+              "reason": "虽是主队第二低主胜比分，但1X2与半全场主线均不支持主队成为主场景。"
+            },
+            {
+              "score": "0-2",
+              "odds": 10.0,
+              "verdict": "reject",
+              "reason": "客队两球零封需要更强控制力，而抓包信息显示柏进攻端场均效率并不高，1-2更贴合双方都可能失球。"
+            },
+            {
+              "score": "2-2",
+              "odds": 12.5,
+              "verdict": "keep",
+              "reason": "BTTS与4+尾部被压缩，若横滨比赛被带快，2-2是必须留存的高比分平局尾部。"
+            },
+            {
+              "score": "1-3",
+              "odds": 15.0,
+              "verdict": "keep",
+              "reason": "4+尾部存在压缩，保留客队大胜风险。"
+            }
+          ],
+          "lowest_score_not_selected_reason": "全场最低比分1-1未被选择，核心原因是1X2客胜为最低方向，且半全场负/负、平/负双重领先，市场更像倾向柏太阳神在僵持后完成窄胜，而非整场停留平局。"
+        },
+        "sharp_money_audit": {
+          "available": true,
+          "confirmed_sharp_direction": "unclear",
+          "rlm_confirmed": false,
+          "vote_vs_odds_conflict": "公众投票与赔率最低方向同为客队，不存在明显逆向分歧；但这更像顺热而非聪明钱确认。",
+          "crs_change_impact": "正确比分缺少时间序列变化，只能看到1-1、1-2、0-1形成紧密簇，说明客胜与平局竞争激烈。",
+          "ttg_change_impact": "总进球2与3接近，且4球不算太高，说明若临场外部盘偏向大球，本场尾部风险会被放大。"
+        },
+        "anchor_audit": {
+          "zero_zero": "0-0赔率12.0不算主流，但在日职高平基线下仍是低速闷局备选；因客胜主线更强，未列入前三。",
+          "one_one": "1-1为最强锚点，必须正视；之所以不选，是因为客胜方向在1X2和半全场上都有更完整支撑。",
+          "one_zero": "1-0赔率9.5并不高，说明主队偷一个并非幻想；但横滨近期防守持续漏球，零封难度偏大。",
+          "zero_one": "0-1赔率7.25极具威胁，是1-2最直接替代项，代表客队低节奏胜出路径明确存在。",
+          "two_one": "2-1赔率9.5显示主队反打存在，但其周边支撑弱于1-2，且客胜基本面更统一。",
+          "one_two": "1-2是客胜最低比分，兼容BTTS与3球模态，最符合客优但非碾压的市场形态。",
+          "high_score_tail": "2-2、1-3、2-3均有压缩，说明4+尾部不能删去；但总进球主模态仍在2-3球，所以尾部只列为风险。",
+          "handicap_cover": "客队若真兑现基础优势，更像赢一球而非稳定穿深盘，因此1-2、0-1优先于0-3类覆盖比分。"
+        },
+        "contextual_logic": {
+          "league_style": "日职整体平局基线偏高、节奏波动中等，低比分与窄胜并存较常见。",
+          "team_style": "横滨近期防线漏洞明显但仍有主场回应能力；柏太阳神进攻产量不高，更像通过反击和比赛管理赢球。",
+          "tempo": "medium",
+          "score_shape": "上半场更可能胶着，后程由客队抓主队失误形成一球到两球输出，主队有望回敬一球。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "unclear"
+        },
+        "rejected_cases": {
+          "home": "主胜被排除，因1X2客胜最低且交锋、近况与半全场更支持柏太阳神占优，主队最佳路径仅限1-0或2-1偷袭，非主场景。",
+          "draw": "平局未选主要因负/负与平/负序列较强，市场更像预期柏太阳神最终兑现；但1-1过低导致平局仍是最大单点风险。",
+          "away": "未拒绝away，而是在away内部放弃0-1与0-2，选择1-2，是因为横滨持续失球同时仍具一定主场进球回应能力。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "recommendation_components": {
+          "direction_edge": 16,
+          "score_cluster_strength": 18,
+          "goal_band_strength": 17,
+          "btts_alignment": 15,
+          "sharp_alignment": 4,
+          "web_source_quality": 0,
+          "market_conflict_penalty": 12,
+          "final_grade_reason": "客胜主线存在，但1-1低赔锚点与缺失外部市场验证显著压低信心，属于可用但不高配的中风险场。"
+        },
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 2,
+          "bet_confidence": 62,
+          "direction_stability": "medium",
+          "score_stability": "weak",
+          "risk_level": "high",
+          "risk_tags": [
+            "draw_anchor_strong",
+            "no_web_verification",
+            "sharp_unconfirmed",
+            "high_score_tail_present"
+          ],
+          "why_recommended": "客胜在1X2、半全场与客队窄胜簇中仍是最完整主线，但平局锚点过强，适合作为中等优先级方向参考，不宜高信单挑比分。"
+        },
+        "data_quality": {
+          "missing": [
+            "external_odds",
+            "exchange_data",
+            "line_movement_timeline",
+            "verified_lineups"
+          ],
+          "raw_packet_quality": "medium"
+        },
+        "reason": "本场市场核心不是单边客碾，而是'客队略优+平局顽固'。1X2给出柏太阳神明确优势，半全场负/负与平/负进一步支持其后程兑现；正确比分里1-2、0-1、1-1三点挤压最明显。综合相邻比分审计后，1-2比0-1更能吸收横滨持续失球与主场回敬一球的双重特征，但必须承认1-1与2-2是重要风险支路。",
+        "final_web_audit": {
+          "web_used_by_final": false,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        }
+      },
+      "score_cluster_audit": {
+        "selected_cluster": "away_narrow",
+        "why_selected_score": "必须先读取adjacent_score_audit_table。1-2基准赔率7.0，其相邻对手1-1为6.5且更低，0-1为7.25且近邻，说明1-2不是压倒性独立点，而是客队窄胜簇中最活跃的一支。结合1X2客优、半全场负/负与平/负靠前，以及横滨连续失球背景，最终在客队窄胜簇中选1-2而非0-1。",
+        "adjacent_scores_checked": [
+          {
+            "score": "1-1",
+            "odds": 6.5,
+            "verdict": "near_miss",
+            "reason": "比1-2更低，说明平局锚点很强；但半全场更偏向客队最终兑现，故保留为首要风险而非主选。"
+          },
+          {
+            "score": "0-1",
+            "odds": 7.25,
+            "verdict": "keep",
+            "reason": "与1-2非常接近，代表客队低比分小胜路径真实存在，若比赛更保守则可能替代主选。"
+          },
+          {
+            "score": "2-1",
+            "odds": 9.5,
+            "verdict": "reject",
+            "reason": "虽是主队第二低主胜比分，但1X2与半全场主线均不支持主队成为主场景。"
+          },
+          {
+            "score": "0-2",
+            "odds": 10.0,
+            "verdict": "reject",
+            "reason": "客队两球零封需要更强控制力，而抓包信息显示柏进攻端场均效率并不高，1-2更贴合双方都可能失球。"
+          },
+          {
+            "score": "2-2",
+            "odds": 12.5,
+            "verdict": "keep",
+            "reason": "BTTS与4+尾部被压缩，若横滨比赛被带快，2-2是必须留存的高比分平局尾部。"
+          },
+          {
+            "score": "1-3",
+            "odds": 15.0,
+            "verdict": "keep",
+            "reason": "4+尾部存在压缩，保留客队大胜风险。"
+          }
+        ],
+        "lowest_score_not_selected_reason": "全场最低比分1-1未被选择，核心原因是1X2客胜为最低方向，且半全场负/负、平/负双重领先，市场更像倾向柏太阳神在僵持后完成窄胜，而非整场停留平局。"
+      },
+      "sharp_money_audit": {
+        "available": true,
+        "confirmed_sharp_direction": "unclear",
+        "rlm_confirmed": false,
+        "vote_vs_odds_conflict": "公众投票与赔率最低方向同为客队，不存在明显逆向分歧；但这更像顺热而非聪明钱确认。",
+        "crs_change_impact": "正确比分缺少时间序列变化，只能看到1-1、1-2、0-1形成紧密簇，说明客胜与平局竞争激烈。",
+        "ttg_change_impact": "总进球2与3接近，且4球不算太高，说明若临场外部盘偏向大球，本场尾部风险会被放大。"
+      },
+      "recommendation_components": {
+        "direction_edge": 16,
+        "score_cluster_strength": 18,
+        "goal_band_strength": 17,
+        "btts_alignment": 15,
+        "sharp_alignment": 4,
+        "web_source_quality": 0,
+        "market_conflict_penalty": 12,
+        "final_grade_reason": "客胜主线存在，但1-1低赔锚点与缺失外部市场验证显著压低信心，属于可用但不高配的中风险场。"
+      },
+      "risk_score_candidates": [
+        {
+          "score": "1-1",
+          "risk_type": "draw_anchor",
+          "reason": "1-1为全场最低比分赔率，且与1-2在相邻比分表中属于近邻，说明客胜优势并未强到可以完全压制平局路径。"
+        },
+        {
+          "score": "0-1",
+          "risk_type": "away_low_margin",
+          "reason": "0-1赔率仅略高于1-2，若比赛节奏偏慢、柏太阳神延续稳守反击，客队一球小胜完全可能。"
+        },
+        {
+          "score": "2-2",
+          "risk_type": "high_btts_tail",
+          "reason": "在客胜不低且BTTS=yes框架下，2-2属于必须保留的反打尾部，高比分平局不能忽略。"
+        }
+      ],
+      "tail_risk_flags": [
+        "btts_draw_anchor",
+        "away_narrow_vs_draw_conflict",
+        "high_score_tail_present"
+      ],
+      "confidence_downgrade_reason": "缺少真实开盘到即时盘序列，无法确认是否存在可靠聪明钱与真实逆向走势；同时1-1比分锚点压得比1-2更低，削弱客胜比分稳定度。",
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 9,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 29.0,
+            "draw": 27.0,
+            "away": 44.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 17.0,
+              "logic": "1X2客胜最低，半全场负/负与平/负居前，正确比分中1-2是客胜方向最低赔，兼容客队占优但横滨失球与主场仍有进攻回应的结构。"
+            },
+            {
+              "score": "1-1",
+              "prob": 16.0,
+              "logic": "全场最低比分赔，且总进球2球为主模态，若柏太阳神进攻效率不足或领先后回收，平局最容易形成。"
+            },
+            {
+              "score": "0-1",
+              "prob": 14.0,
+              "logic": "客队窄胜簇强，0-1赔率接近1-2；结合抓包文字中的上半场平局倾向，慢热后一击制胜是合理分支。"
+            }
+          ],
+          "score_cluster_audit": {
+            "selected_cluster": "away_narrow",
+            "why_selected_score": "必须先读取adjacent_score_audit_table。1-2基准赔率7.0，其相邻对手1-1为6.5且更低，0-1为7.25且近邻，说明1-2不是压倒性独立点，而是客队窄胜簇中最活跃的一支。结合1X2客优、半全场负/负与平/负靠前，以及横滨连续失球背景，最终在客队窄胜簇中选1-2而非0-1。",
+            "adjacent_scores_checked": [
+              {
+                "score": "1-1",
+                "odds": 6.5,
+                "verdict": "near_miss",
+                "reason": "比1-2更低，说明平局锚点很强；但半全场更偏向客队最终兑现，故保留为首要风险而非主选。"
+              },
+              {
+                "score": "0-1",
+                "odds": 7.25,
+                "verdict": "keep",
+                "reason": "与1-2非常接近，代表客队低比分小胜路径真实存在，若比赛更保守则可能替代主选。"
+              },
+              {
+                "score": "2-1",
+                "odds": 9.5,
+                "verdict": "reject",
+                "reason": "虽是主队第二低主胜比分，但1X2与半全场主线均不支持主队成为主场景。"
+              },
+              {
+                "score": "0-2",
+                "odds": 10,
+                "verdict": "reject",
+                "reason": "客队两球零封需要更强控制力，而抓包信息显示柏进攻端场均效率并不高，1-2更贴合双方都可能失球。"
+              },
+              {
+                "score": "2-2",
+                "odds": 12.5,
+                "verdict": "keep",
+                "reason": "BTTS与4+尾部被压缩，若横滨比赛被带快，2-2是必须留存的高比分平局尾部。"
+              }
+            ],
+            "lowest_score_not_selected_reason": "全场最低比分1-1未被选择，核心原因是1X2客胜为最低方向，且半全场负/负、平/负双重领先，市场更像倾向柏太阳神在僵持后完成窄胜，而非整场停留平局。"
+          },
+          "sharp_money_audit": {
+            "available": true,
+            "confirmed_sharp_direction": "unclear",
+            "rlm_confirmed": false,
+            "vote_vs_odds_conflict": "公众投票与赔率最低方向同为客队，不存在明显逆向分歧；但这更像顺热而非聪明钱确认。",
+            "crs_change_impact": "正确比分缺少时间序列变化，只能看到1-1、1-2、0-1形成紧密簇，说明客胜与平局竞争激烈。",
+            "ttg_change_impact": "总进球2与3接近，且4球不算太高，说明若临场外部盘偏向大球，本场尾部风险会被放大。"
+          },
+          "anchor_audit": {
+            "zero_zero": "0-0赔率12.0不算主流，但在日职高平基线下仍是低速闷局备选；因客胜主线更强，未列入前三。",
+            "one_one": "1-1为最强锚点，必须正视；之所以不选，是因为客胜方向在1X2和半全场上都有更完整支撑。",
+            "one_zero": "1-0赔率9.5并不高，说明主队偷一个并非幻想；但横滨近期防守持续漏球，零封难度偏大。",
+            "zero_one": "0-1赔率7.25极具威胁，是1-2最直接替代项，代表客队低节奏胜出路径明确存在。",
+            "two_one": "2-1赔率9.5显示主队反打存在，但其周边支撑弱于1-2，且客胜基本面更统一。",
+            "one_two": "1-2是客胜最低比分，兼容BTTS与3球模态，最符合客优但非碾压的市场形态。",
+            "high_score_tail": "2-2、1-3、2-3均有压缩，说明4+尾部不能删去；但总进球主模态仍在2-3球，所以尾部只列为风险。",
+            "handicap_cover": "客队若真兑现基础优势，更像赢一球而非稳定穿深盘，因此1-2、0-1优先于0-3类覆盖比分。"
+          },
+          "market_interpretation": {
+            "one_x_two": "竞彩1X2中客胜1.99为最低，公平化后客胜约44.53%，是明确但不算极强的客优结构；主胜与平局仍保留较大空间。",
+            "handicap": "原始让球显示为主队受让一球语义，但HHAD缺少有效赔率，不能据此确认主队受让面是否被真实支持，只能作为客队基础优势存在的形态参考。",
+            "correct_score": "最低比分依次为1-1、1-2、0-1，说明市场并非单边碾压，而是客队窄胜与低比分平局并存。主队最佳比分1-0和2-1同为9.5，意味着主队并未被完全排除，但优先级弱于客队主线。",
+            "total_goals": "总进球2球3.4最低、3球3.5次低，说明核心区间在2-3球；4球5.5并不高，高比分尾部需保留但不能盖过主模态。",
+            "half_full_time": "负/负3.1最低、平/负4.9次低，强化客队赢球路径；但平/平5.7也不远，说明平局过渡概率高，客队更像后程兑现优势。",
+            "external_market": "无法联网核对外部欧赔、亚盘与交易所，因此不能确认竞彩是否相对外部市场高估或低估客胜；此项只能保留缺口风险。"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 17,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众投票客胜44%与市场最低方向一致，但sharp_money_facts_v203明确提示缺少变盘序列，不能把顺向热度当作已确认聪明钱。"
+          },
+          "contextual_logic": {
+            "league_style": "日职整体平局基线偏高、节奏波动中等，低比分与窄胜并存较常见。",
+            "team_style": "横滨近期防线漏洞明显但仍有主场回应能力；柏太阳神进攻产量不高，更像通过反击和比赛管理赢球。",
+            "tempo": "medium",
+            "score_shape": "上半场更可能胶着，后程由客队抓主队失误形成一球到两球输出，主队有望回敬一球。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "unclear"
+          },
+          "rejected_cases": {
+            "home": "主胜被排除，因1X2客胜最低且交锋、近况与半全场更支持柏太阳神占优，主队最佳路径仅限1-0或2-1偷袭，非主场景。",
+            "draw": "平局未选主要因负/负与平/负序列较强，市场更像预期柏太阳神最终兑现；但1-1过低导致平局仍是最大单点风险。",
+            "away": "未拒绝away，而是在away内部放弃0-1与0-2，选择1-2，是因为横滨持续失球同时仍具一定主场进球回应能力。"
+          },
+          "recommendation_components": {
+            "direction_edge": 16,
+            "score_cluster_strength": 18,
+            "goal_band_strength": 17,
+            "btts_alignment": 15,
+            "sharp_alignment": 4,
+            "web_source_quality": 0,
+            "market_conflict_penalty": 12,
+            "final_grade_reason": "客胜主线存在，但1-1低赔锚点与缺失外部市场验证显著压低信心，属于可用但不高配的中风险场。"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 62,
+            "direction_stability": "medium",
+            "score_stability": "weak",
+            "risk_level": "high",
+            "risk_tags": [
+              "draw_anchor_strong",
+              "no_web_verification",
+              "sharp_unconfirmed",
+              "high_score_tail_present"
+            ],
+            "why_recommended": "客胜在1X2、半全场与客队窄胜簇中仍是最完整主线，但平局锚点过强，适合作为中等优先级方向参考，不宜高信单挑比分。"
+          },
+          "data_quality": {
+            "missing": [
+              "external_odds",
+              "exchange_data",
+              "line_movement_timeline",
+              "verified_lineups"
+            ],
+            "raw_packet_quality": "medium"
+          },
+          "reason": "本场市场核心不是单边客碾，而是'客队略优+平局顽固'。1X2给出柏太阳神明确优势，半全场负/负与平/负进一步支持其后程兑现；正确比分里1-2、0-1、1-1三点挤压最明显。综合相邻比分审计后，1-2比0-1更能吸收横滨持续失球与主场回敬一球的双重特征，但必须承认1-1与2-2是重要风险支路。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网核对外部欧赔、亚盘、交易所与实时阵容，因此所有方向判断仅基于抓包证据与赔率簇审计。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "risk_score_candidates": [
+            {
+              "score": "1-1",
+              "risk_type": "draw_anchor/low_score_btts",
+              "reason": "1-1为全场最低比分赔，且与1-2在相邻比分表中属于近邻，说明客胜优势并未强到可以压制平局路径。"
+            },
+            {
+              "score": "0-1",
+              "risk_type": "away_low_margin",
+              "reason": "0-1赔率仅略高于1-2，若比赛节奏偏慢、柏太阳神延续稳守反击，客队一球小胜完全可能。"
+            },
+            {
+              "score": "2-2",
+              "risk_type": "high_btts_tail",
+              "reason": "在主胜概率不高、客胜不低且BTTS=yes框架下，2-2属于必须保留的反打尾部，高比分平局不能忽略。"
+            },
+            {
+              "score": "2-3",
+              "risk_type": "away_fightback/high_btts_tail",
+              "reason": "总进球4+尾部存在压缩，若横滨防线继续失误且比赛开放，客队反击升级到2-3并非无关尾部。"
+            }
+          ],
+          "tail_risk_flags": [
+            "btts_draw_anchor",
+            "away_narrow_vs_draw_conflict",
+            "high_score_tail_present"
+          ],
+          "confidence_downgrade_reason": "缺少真实开盘到即时盘序列，无法确认是否存在可靠聪明钱与真实逆向走势；同时1-1比分锚点压得比1-2更低，削弱客胜比分稳定度。",
+          "validation_warnings": []
+        },
+        "grok": {
+          "match": 9,
+          "final_direction": "away",
+          "predicted_score": "1-2",
+          "direction_probs": {
+            "home": 29.0,
+            "draw": 27.0,
+            "away": 44.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "1-2",
+              "prob": 18.0,
+              "logic": "1-2赔率7.0为客胜最低，结合总进球模态3球与BTTS共振，优于2-1"
+            }
+          ],
+          "score_cluster_audit": {
+            "selected_cluster": "away_narrow_win_cluster",
+            "why_selected_score": "1-2在客胜簇中赔率最低且与1-1、0-1相邻，BTTS共振",
+            "adjacent_scores_checked": [
+              {
+                "score": "1-1",
+                "odds": 6.5,
+                "verdict": "near_miss",
+                "reason": "平局最低但方向不符"
+              },
+              {
+                "score": "0-1",
+                "odds": 7.25,
+                "verdict": "keep",
+                "reason": "客胜低总进球备选"
+              },
+              {
+                "score": "2-1",
+                "odds": 9.5,
+                "verdict": "reject",
+                "reason": "主胜路径赔率更高且与客胜簇冲突"
+              }
+            ],
+            "lowest_score_not_selected_reason": "1-1虽最低但方向为平，排除"
+          },
+          "sharp_money_audit": {
+            "available": true,
+            "confirmed_sharp_direction": "unclear",
+            "rlm_confirmed": false,
+            "vote_vs_odds_conflict": "公众与赔率一致指向客胜，无冲突",
+            "crs_change_impact": "无change数据",
+            "ttg_change_impact": "无change数据"
+          },
+          "anchor_audit": {
+            "zero_zero": "赔率12.0较高，排除",
+            "one_one": "赔率6.5最低但方向平，需与客胜比较",
+            "one_zero": "主胜低分路径，客队占优下排除",
+            "zero_one": "客胜低分备选，保持",
+            "two_one": "主胜路径，排除",
+            "one_two": "客胜主流，选中",
+            "high_score_tail": "4+压缩但无支撑，排除",
+            "handicap_cover": "一球盘支持客队小胜"
+          },
+          "market_interpretation": {
+            "one_x_two": "客胜赔率1.99最低，市场隐含概率偏向客队不败",
+            "handicap": "一球盘形态指向客队赢一球或小胜",
+            "correct_score": "1-2与1-1、0-1形成低赔簇，客胜路径优先",
+            "total_goals": "2-3球模态最低，3球压力明显",
+            "half_full_time": "负/负最低支持客队全场领先",
+            "external_market": "无外部盘口变动数据"
+          },
+          "money_flow": {
+            "public_money_direction": "away",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "change缺失，无法确认聪明钱方向，公众票44%支持客胜"
+          },
+          "contextual_logic": {
+            "league_style": "日职攻防转换快但本场状态低迷",
+            "team_style": "横滨主场防守差，柏太阳神反击占优",
+            "tempo": "medium",
+            "score_shape": "低总进球客胜窄胜",
+            "btts_likelihood": "yes",
+            "rotation_risk": "medium"
+          },
+          "rejected_cases": {
+            "home": "主队状态低迷且历史交锋劣势",
+            "draw": "1-1虽低但客胜赔率更优",
+            "away": "无"
+          },
+          "recommendation_components": {
+            "direction_edge": 15,
+            "score_cluster_strength": 12,
+            "goal_band_strength": 10,
+            "btts_alignment": 8,
+            "sharp_alignment": 0,
+            "web_source_quality": 0,
+            "market_conflict_penalty": 0,
+            "final_grade_reason": "客胜方向清晰但sharp与change缺失降级"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 2,
+            "bet_confidence": 55,
+            "direction_stability": "medium",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "btts_tail",
+              "no_change_data"
+            ],
+            "why_recommended": "1-2路径与市场低赔共振，BTTS支持"
+          },
+          "data_quality": {
+            "missing": [
+              "change",
+              "web_news"
+            ],
+            "raw_packet_quality": "medium"
+          },
+          "reason": "客胜赔率最低，1-2为客胜簇最优，BTTS与总进球3球匹配",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "risk_score_candidates": [
+            {
+              "score": "1-2",
+              "risk_type": "away_fightback/high_btts_tail",
+              "reason": "客队历史交锋占优且赔率最低，1-2路径与1-1/0-1接近需审计尾部风险"
+            }
+          ],
+          "tail_risk_flags": [
+            "weak_home_favorite_btts_tail"
+          ],
+          "confidence_downgrade_reason": "change数据缺失无法确认RLM，sharp方向弱",
+          "validation_warnings": []
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": []
+      }
+    },
+    "10": {
+      "match": 10,
+      "source_model": "gemini",
+      "source_phase": "final",
+      "final_direction": "home",
+      "raw_ai_direction": "home",
+      "predicted_score": "2-1",
+      "direction_probs": {
+        "home": 44.0,
+        "draw": 25.0,
+        "away": 31.0,
+        "_synthetic_probs": false
+      },
+      "goal_band": "3",
+      "btts": "yes",
+      "top3": [
+        {
+          "score": "2-1",
+          "prob": 16.0,
+          "logic": "1X2主胜最低，主/主为最低半全场，且2-1是主胜方向最低比分，兼容主队略优、BTTS、总进球3球主模态。"
+        },
+        {
+          "score": "1-1",
+          "prob": 15.0,
+          "logic": "全场最低比分赔且相邻于2-1，说明主队优势不足以完全脱离平局；若淘汰赛次回合双方谨慎，1-1依然很强。"
+        },
+        {
+          "score": "1-2",
+          "prob": 12.0,
+          "logic": "弱主热门且BTTS，客队反打必须保留，1-2是客胜方向最低比分。"
+        }
+      ],
+      "anchor_audit": {
+        "zero_zero": "0-0赔率18较高，说明完全闷局不是主流；淘汰赛背景也提升后程进球概率。",
+        "one_one": "1-1是最强锚点，必须充分解释不选：主要因为主/主最低与主胜1X2领先，使主队终局胜出略优于整场平。",
+        "one_zero": "1-0赔率10.5可行，但低于2-1的优先级，说明市场更接受双方均有进球。",
+        "zero_one": "0-1赔率13.0不低但仍有存在感；悉尼若先入球，主队会被迫拉快节奏。",
+        "two_one": "2-1是主胜最低比分，兼容弱主热门、3球模态、BTTS与淘汰赛主场主动性，因此成为主选。",
+        "one_two": "1-2赔率9.5不高，在本场约束下必须视为真实尾部，说明客胜反打绝不能忽略。",
+        "high_score_tail": "2-2、3-1、3-2、2-3全部处于压缩区，澳超高比分尾部具真实威胁，因此不能只停留在2-1。",
+        "handicap_cover": "-1语义要求审视赢一球与穿盘。当前更像主队赢一球主线，不足以强挺两球以上覆盖，因此2-1优于2-0和3-0。"
+      },
+      "market_interpretation": {
+        "one_x_two": "竞彩1X2主胜2.0最低，公平化后主胜约44.27%，属于弱主热门而非强让级别；客胜30.43%不低，方向稳定性有限。",
+        "handicap": "原始让球-1对主队提出至少赢一球甚至争两球的审计要求，但HHAD缺少实际赔率，无法确认穿盘是否被市场真实支持。由于主胜公平概率不足五成，更像赢一球与不穿盘结构。",
+        "correct_score": "1-1最低、2-1次低、1-2第三低，形成典型三向咬合。主胜首选确实存在，但并不能压制平局和客队反打。",
+        "total_goals": "总进球3球为最低，4球4.5、5球7.25压缩明显，说明比赛基础模态在3球附近，但高比分尾部在澳超语境下非常真实。",
+        "half_full_time": "主/主3.25最低，平/主5.25次低，支持主队最终胜出；但负/负4.7也不高，显示悉尼FC并未被完全排除。",
+        "external_market": "无法联网核对外部市场，不能确认竞彩主胜2.0是否偏浅或偏深，也无法检查交易所对平局/客胜的真实对冲力度。"
+      },
+      "money_flow": {
+        "public_money_direction": "home",
+        "sharp_money_direction": "unclear",
+        "sharp_confidence": 0,
+        "reverse_line_movement": false,
+        "steam_move": "none",
+        "evidence": "公众44%投主胜，和市场最低方向一致；sharp_money_facts_v203未给出有效sharp_side_candidates，且RLM不可确认，因此只能视为顺向热度。"
+      },
+      "contextual_logic": {
+        "league_style": "澳超高波动、高转换，高比分尾部天然更活跃。",
+        "team_style": "主队主场主动性更强，客队具反击能力，次回合淘汰赛会放大双方后程对攻可能。",
+        "tempo": "high",
+        "score_shape": "主队主动压上争先，客队反击回应，比赛更像互有进球后由主队以一球优势收束，而非全场压制。",
+        "btts_likelihood": "yes",
+        "rotation_risk": "unclear"
+      },
+      "rejected_cases": {
+        "home": "未拒绝home，但在home内部排除1-0与2-0，是因为BTTS与总进球3球模态更贴近2-1，且澳超高波动削弱零封路径。",
+        "draw": "平局被排除仅因主胜在1X2和半全场略占优，不是因为平局弱；1-1和2-2都被保留为主要风险。",
+        "away": "客胜未成主选，因主队主场与半全场结构更完整；但1-2被明确保留为关键反打尾部，并未被排除。"
+      },
+      "web_research": {
+        "used": false,
+        "failure_reason": "no_web_tool_available",
+        "search_queries": [],
+        "sources": [],
+        "freshness_grade": "missing",
+        "key_findings": [],
+        "source_conflicts": [],
+        "validation_warnings": []
+      },
+      "final_web_audit": {
+        "web_used_by_final": false,
+        "decisive_web_evidence": [],
+        "ignored_web_evidence": [],
+        "web_confidence": 0
+      },
+      "recommendation": {
+        "tier": "B",
+        "is_recommended": true,
+        "top4_priority": 3,
+        "bet_confidence": 58,
+        "direction_stability": "weak",
+        "score_stability": "weak",
+        "risk_level": "high",
+        "risk_tags": [
+          "weak_home_favorite_btts_tail",
+          "draw_anchor_strong",
+          "away_fightback_risk",
+          "no_web_verification",
+          "a_league_high_variance",
+          "away_fightback_tail"
+        ],
+        "why_recommended": "主胜方向仍有1X2、半全场和主胜最低比分的三重支撑，但由于弱主热门条件下BTTS尾部和1-1锚点太强，只适合作为谨慎参考，需防平防客。"
+      },
+      "data_quality": {
+        "missing": [
+          "external_odds",
+          "exchange_data",
+          "line_movement_timeline",
+          "verified_lineups"
+        ],
+        "raw_packet_quality": "medium"
+      },
+      "reason": "本场是典型弱主热门结构。市场并未把纽喷气机做成强势碾压，反而让1-1、2-1、1-2三点形成紧密竞争。读取相邻比分表后，2-1虽然不是最低全场比分，但它是主胜方向最低比分，同时与总进球3球主模态、主/主半全场最低、澳超高节奏且双方都有进球的形态最吻合。由于主胜概率仅44%、客胜仍达30%，1-2、2-2、2-3必须被纳入真实风险，而不能视作噪音，因此本场只给出中等偏低置信的主胜2-1。",
+      "validation_warnings": [
+        "weak_home_favorite_btts_tail_protection_applied"
+      ],
+      "raw_item": {
+        "match": 10,
+        "final_direction": "home",
+        "predicted_score": "2-1",
+        "direction_probs": {
+          "home": 44,
+          "draw": 25,
+          "away": 31
+        },
+        "goal_band": "3",
+        "btts": "yes",
+        "risk_score_candidates": [
+          {
+            "score": "1-2",
+            "risk_type": "away_fightback",
+            "reason": "主胜概率仅44%、客胜仍有30%，且BTTS=yes，按约束1-2必须列为有效反打尾部；悉尼FC若反击效率更高可直接翻转。"
+          },
+          {
+            "score": "2-2",
+            "risk_type": "high_btts_tail",
+            "reason": "1-1与2-2都处于低赔簇，尤其4球压缩明显，若双方对攻升级，2-2是高频风险尾部。"
+          },
+          {
+            "score": "1-1",
+            "risk_type": "draw_anchor",
+            "reason": "1-1为全场最低比分赔，且与2-1在相邻比分表中属于近邻，是主选最大阻力。"
+          },
+          {
+            "score": "2-3",
+            "risk_type": "away_fightback/high_btts_tail",
+            "reason": "弱主热门且BTTS，客队反打与高比分尾部不能视为无关尾部，必须保留。"
+          }
+        ],
+        "tail_risk_flags": [
+          "weak_home_favorite_btts_tail",
+          "away_fightback_live",
+          "four_plus_compressed",
+          "away_win_not_negligible",
+          "protect_1_2_2_2_2_3_tail"
+        ],
+        "confidence_downgrade_reason": "主队只是弱热门，1-1比分锚点比2-1更低；同时澳超高波动、4+与5球赔率压缩明显，使2-1成为可选主线但不是稳定终局。",
+        "top3": [
+          {
+            "score": "2-1",
+            "prob": 16,
+            "logic": "1X2主胜最低，主/主为最低半全场，且2-1是主胜方向最低比分，兼容主队略优、BTTS、总进球3球主模态。"
+          },
+          {
+            "score": "1-1",
+            "prob": 15,
+            "logic": "全场最低比分赔且相邻于2-1，说明主队优势不足以完全脱离平局；若淘汰赛次回合双方谨慎，1-1依然很强。"
+          },
+          {
+            "score": "1-2",
+            "prob": 12,
+            "logic": "弱主热门且BTTS，客队反打必须保留，1-2是客胜方向最低比分。"
+          }
+        ],
+        "market_interpretation": {
+          "one_x_two": "竞彩1X2主胜2.0最低，公平化后主胜约44.27%，属于弱主热门而非强让级别；客胜30.43%不低，方向稳定性有限。",
+          "handicap": "原始让球-1对主队提出至少赢一球甚至争两球的审计要求，但HHAD缺少实际赔率，无法确认穿盘是否被市场真实支持。由于主胜公平概率不足五成，更像赢一球与不穿盘结构。",
+          "correct_score": "1-1最低、2-1次低、1-2第三低，形成典型三向咬合。主胜首选确实存在，但并不能压制平局和客队反打。",
+          "total_goals": "总进球3球为最低，4球4.5、5球7.25压缩明显，说明比赛基础模态在3球附近，但高比分尾部在澳超语境下非常真实。",
+          "half_full_time": "主/主3.25最低，平/主5.25次低，支持主队最终胜出；但负/负4.7也不高，显示悉尼FC并未被完全排除。",
+          "external_market": "无法联网核对外部市场，不能确认竞彩主胜2.0是否偏浅或偏深，也无法检查交易所对平局/客胜的真实对冲力度。"
+        },
+        "money_flow": {
+          "public_money_direction": "home",
+          "sharp_money_direction": "unclear",
+          "sharp_confidence": 0,
+          "reverse_line_movement": false,
+          "steam_move": "none",
+          "evidence": "公众44%投主胜，和市场最低方向一致；sharp_money_facts_v203未给出有效sharp_side_candidates，且RLM不可确认，因此只能视为顺向热度。"
+        },
+        "score_cluster_audit": {
+          "selected_cluster": "home_narrow",
+          "why_selected_score": "已显式读取adjacent_score_audit_table：2-1基准7.25，1-1为7.0且更低并且near_base=true，说明2-1只是略胜于平局锚点的主胜分支，不具压倒性。之所以仍选2-1，是因为1X2主胜最低、半全场主/主最低、总进球3球为主模态，且2-1是主胜方向最低比分，能最好地统一弱主热门+BTTS+三球形态。",
+          "adjacent_scores_checked": [
+            {
+              "score": "1-1",
+              "odds": 7.0,
+              "verdict": "near_miss",
+              "reason": "比2-1更低且非常接近，是最大竞争项；若比赛谨慎或客队防线站住，平局很容易出现。"
+            },
+            {
+              "score": "1-2",
+              "odds": 9.5,
+              "verdict": "keep",
+              "reason": "在弱主热门+BTTS框架下，客队反打必须保留，不能因主胜最低就排除。"
+            },
+            {
+              "score": "2-2",
+              "odds": 10.0,
+              "verdict": "keep",
+              "reason": "4球被压缩，2-2是高比分平局的核心尾部。"
+            },
+            {
+              "score": "1-0",
+              "odds": 10.5,
+              "verdict": "reject",
+              "reason": "主队若取胜，市场更偏好双方都有球的2-1而非零封；且澳超高波动不利于保守1-0。"
+            },
+            {
+              "score": "2-0",
+              "odds": 12.5,
+              "verdict": "reject",
+              "reason": "相比2-1和3-1，2-0对客队进攻抑制要求更高，但BTTS与总进球结构都不优先支持零封。"
+            },
+            {
+              "score": "3-1",
+              "odds": 13.5,
+              "verdict": "keep",
+              "reason": "4球压缩明显，若主队前压成功并放大转换，3-1是升级版主胜路径。"
+            }
+          ],
+          "lowest_score_not_selected_reason": "最低比分1-1未被选，原因是主胜在1X2与半全场上仍占首位，且2-1作为主胜最强比分与总进球3球主模态高度一致；但由于1-1更低，推荐等级被严格下调。"
+        },
+        "sharp_money_audit": {
+          "available": true,
+          "confirmed_sharp_direction": "unclear",
+          "rlm_confirmed": false,
+          "vote_vs_odds_conflict": "公众与赔率同向支持主队，没有形成逆向冲突，也因此难以从中提炼真实聪明钱。",
+          "crs_change_impact": "正确比分无变化序列，仅能看出1-1、2-1、1-2密集分布，代表主胜并不稳固。",
+          "ttg_change_impact": "3球最低且4-5球压缩，若外部盘临场继续向大球倾斜，2-2、3-2等尾部会进一步抬升风险。"
+        },
+        "anchor_audit": {
+          "zero_zero": "0-0赔率18较高，说明完全闷局不是主流；淘汰赛背景也提升后程进球概率。",
+          "one_one": "1-1是最强锚点，必须充分解释不选：主要因为主/主最低与主胜1X2领先，使主队终局胜出略优于整场平。",
+          "one_zero": "1-0赔率10.5可行，但低于2-1的优先级，说明市场更接受双方均有进球。",
+          "zero_one": "0-1赔率13.0不低但仍有存在感；悉尼若先入球，主队会被迫拉快节奏。",
+          "two_one": "2-1是主胜最低比分，兼容弱主热门、3球模态、BTTS与淘汰赛主场主动性，因此成为主选。",
+          "one_two": "1-2赔率9.5不高，在本场约束下必须视为真实尾部，说明客胜反打绝不能忽略。",
+          "high_score_tail": "2-2、3-1、3-2、2-3全部处于压缩区，澳超高比分尾部具真实威胁，因此不能只停留在2-1。",
+          "handicap_cover": "-1语义要求审视赢一球与穿盘。当前更像主队赢一球主线，不足以强挺两球以上覆盖，因此2-1优于2-0和3-0。"
+        },
+        "contextual_logic": {
+          "league_style": "澳超高波动、高转换，高比分尾部天然更活跃。",
+          "team_style": "主队主场主动性更强，客队具反击能力，次回合淘汰赛会放大双方后程对攻可能。",
+          "tempo": "high",
+          "score_shape": "主队主动压上争先，客队反击回应，比赛更像互有进球后由主队以一球优势收束，而非全场压制。",
+          "btts_likelihood": "yes",
+          "rotation_risk": "unclear"
+        },
+        "rejected_cases": {
+          "home": "未拒绝home，但在home内部排除1-0与2-0，是因为BTTS与总进球3球模态更贴近2-1，且澳超高波动削弱零封路径。",
+          "draw": "平局被排除仅因主胜在1X2和半全场略占优，不是因为平局弱；1-1和2-2都被保留为主要风险。",
+          "away": "客胜未成主选，因主队主场与半全场结构更完整；但1-2被明确保留为关键反打尾部，并未被排除。"
+        },
+        "web_research": {
+          "used": false,
+          "failure_reason": "no_web_tool_available",
+          "search_queries": [],
+          "sources": [],
+          "freshness_grade": "missing",
+          "key_findings": [],
+          "source_conflicts": []
+        },
+        "recommendation_components": {
+          "direction_edge": 14,
+          "score_cluster_strength": 15,
+          "goal_band_strength": 18,
+          "btts_alignment": 17,
+          "sharp_alignment": 3,
+          "web_source_quality": 0,
+          "market_conflict_penalty": 14,
+          "final_grade_reason": "主胜是可解释主线，但弱热门、1-1低赔、客队反打与高比分尾部同时存在，故仅能给中低档推荐。"
+        },
+        "recommendation": {
+          "tier": "B",
+          "is_recommended": true,
+          "top4_priority": 3,
+          "bet_confidence": 58,
+          "direction_stability": "weak",
+          "score_stability": "weak",
+          "risk_level": "high",
+          "risk_tags": [
+            "weak_home_favorite_btts_tail",
+            "draw_anchor_strong",
+            "away_fightback_risk",
+            "no_web_verification",
+            "a_league_high_variance",
+            "away_fightback_tail"
+          ],
+          "why_recommended": "主胜方向仍有1X2、半全场和主胜最低比分的三重支撑，但由于弱主热门条件下BTTS尾部和1-1锚点太强，只适合作为谨慎参考，需防平防客。"
+        },
+        "data_quality": {
+          "missing": [
+            "external_odds",
+            "exchange_data",
+            "line_movement_timeline",
+            "verified_lineups"
+          ],
+          "raw_packet_quality": "medium"
+        },
+        "reason": "本场是典型弱主热门结构。市场并未把纽喷气机做成强势碾压，反而让1-1、2-1、1-2三点形成紧密竞争。读取相邻比分表后，2-1虽然不是最低全场比分，但它是主胜方向最低比分，同时与总进球3球主模态、主/主半全场最低、澳超高节奏且双方都有进球的形态最吻合。由于主胜概率仅44%、客胜仍达30%，1-2、2-2、2-3必须被纳入真实风险，而不能视作噪音，因此本场只给出中等偏低置信的主胜2-1。",
+        "final_web_audit": {
+          "web_used_by_final": false,
+          "decisive_web_evidence": [],
+          "ignored_web_evidence": [],
+          "web_confidence": 0
+        }
+      },
+      "score_cluster_audit": {
+        "selected_cluster": "home_narrow",
+        "why_selected_score": "已显式读取adjacent_score_audit_table：2-1基准7.25，1-1为7.0且更低并且near_base=true，说明2-1只是略胜于平局锚点的主胜分支，不具压倒性。之所以仍选2-1，是因为1X2主胜最低、半全场主/主最低、总进球3球为主模态，且2-1是主胜方向最低比分，能最好地统一弱主热门+BTTS+三球形态。",
+        "adjacent_scores_checked": [
+          {
+            "score": "1-1",
+            "odds": 7.0,
+            "verdict": "near_miss",
+            "reason": "比2-1更低且非常接近，是最大竞争项；若比赛谨慎或客队防线站住，平局很容易出现。"
+          },
+          {
+            "score": "1-2",
+            "odds": 9.5,
+            "verdict": "keep",
+            "reason": "在弱主热门+BTTS框架下，客队反打必须保留，不能因主胜最低就排除。"
+          },
+          {
+            "score": "2-2",
+            "odds": 10.0,
+            "verdict": "keep",
+            "reason": "4球被压缩，2-2是高比分平局的核心尾部。"
+          },
+          {
+            "score": "1-0",
+            "odds": 10.5,
+            "verdict": "reject",
+            "reason": "主队若取胜，市场更偏好双方都有球的2-1而非零封；且澳超高波动不利于保守1-0。"
+          },
+          {
+            "score": "2-0",
+            "odds": 12.5,
+            "verdict": "reject",
+            "reason": "相比2-1和3-1，2-0对客队进攻抑制要求更高，但BTTS与总进球结构都不优先支持零封。"
+          },
+          {
+            "score": "3-1",
+            "odds": 13.5,
+            "verdict": "keep",
+            "reason": "4球压缩明显，若主队前压成功并放大转换，3-1是升级版主胜路径。"
+          }
+        ],
+        "lowest_score_not_selected_reason": "最低比分1-1未被选，原因是主胜在1X2与半全场上仍占首位，且2-1作为主胜最强比分与总进球3球主模态高度一致；但由于1-1更低，推荐等级被严格下调。"
+      },
+      "sharp_money_audit": {
+        "available": true,
+        "confirmed_sharp_direction": "unclear",
+        "rlm_confirmed": false,
+        "vote_vs_odds_conflict": "公众与赔率同向支持主队，没有形成逆向冲突，也因此难以从中提炼真实聪明钱。",
+        "crs_change_impact": "正确比分无变化序列，仅能看出1-1、2-1、1-2密集分布，代表主胜并不稳固。",
+        "ttg_change_impact": "3球最低且4-5球压缩，若外部盘临场继续向大球倾斜，2-2、3-2等尾部会进一步抬升风险。"
+      },
+      "recommendation_components": {
+        "direction_edge": 14,
+        "score_cluster_strength": 15,
+        "goal_band_strength": 18,
+        "btts_alignment": 17,
+        "sharp_alignment": 3,
+        "web_source_quality": 0,
+        "market_conflict_penalty": 14,
+        "final_grade_reason": "主胜是可解释主线，但弱热门、1-1低赔、客队反打与高比分尾部同时存在，故仅能给中低档推荐。"
+      },
+      "risk_score_candidates": [
+        {
+          "score": "1-2",
+          "risk_type": "away_fightback",
+          "reason": "主胜概率仅44%、客胜仍有30%，且BTTS=yes，按约束1-2必须列为有效反打尾部；悉尼FC若反击效率更高可直接翻转。"
+        },
+        {
+          "score": "2-2",
+          "risk_type": "high_btts_tail",
+          "reason": "1-1与2-2都处于低赔簇，尤其4球压缩明显，若双方对攻升级，2-2是高频风险尾部。"
+        },
+        {
+          "score": "1-1",
+          "risk_type": "draw_anchor",
+          "reason": "1-1为全场最低比分赔，且与2-1在相邻比分表中属于近邻，是主选最大阻力。"
+        },
+        {
+          "score": "2-3",
+          "risk_type": "away_fightback/high_btts_tail",
+          "reason": "弱主热门且BTTS，客队反打与高比分尾部不能视为无关尾部，必须保留。"
+        }
+      ],
+      "tail_risk_flags": [
+        "weak_home_favorite_btts_tail",
+        "away_fightback_live",
+        "four_plus_compressed",
+        "away_win_not_negligible",
+        "protect_1_2_2_2_2_3_tail"
+      ],
+      "confidence_downgrade_reason": "主队只是弱热门，1-1比分锚点比2-1更低；同时澳超高波动、4+与5球赔率压缩明显，使2-1成为可选主线但不是稳定终局。",
+      "phase1_model_outputs": {
+        "gpt": {
+          "match": 10,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 45.0,
+            "draw": 25.0,
+            "away": 30.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 16.0,
+              "logic": "1X2主胜最低，主/主为最低半全场，且2-1是主胜方向最低比分，兼容主队略优、BTTS、总进球3球主模态。"
+            },
+            {
+              "score": "1-1",
+              "prob": 15.0,
+              "logic": "全场最低比分赔且相邻于2-1，说明主队优势不足以完全脱离平局；若淘汰赛次回合双方谨慎，1-1依然很强。"
+            },
+            {
+              "score": "2-2",
+              "prob": 12.0,
+              "logic": "4球赔率4.5被压低，2-2又是第二低平局比分，符合澳超高波动与淘汰赛后段拉开节奏的情景。"
+            }
+          ],
+          "score_cluster_audit": {
+            "selected_cluster": "home_narrow",
+            "why_selected_score": "已显式读取adjacent_score_audit_table：2-1基准7.25，1-1为7.0且更低并且near_base=true，说明2-1只是略胜于平局锚点的主胜分支，不具压倒性。之所以仍选2-1，是因为1X2主胜最低、半全场主/主最低、总进球3球为主模态，且2-1是主胜方向最低比分，能最好地统一弱主热门+BTTS+三球形态。",
+            "adjacent_scores_checked": [
+              {
+                "score": "1-1",
+                "odds": 7,
+                "verdict": "near_miss",
+                "reason": "比2-1更低且非常接近，是最大竞争项；若比赛谨慎或客队防线站住，平局很容易出现。"
+              },
+              {
+                "score": "1-2",
+                "odds": 9.5,
+                "verdict": "keep",
+                "reason": "在弱主热门+BTTS框架下，客队反打必须保留，不能因主胜最低就排除。"
+              },
+              {
+                "score": "2-2",
+                "odds": 10,
+                "verdict": "keep",
+                "reason": "4球被压缩，2-2是高比分平局的核心尾部。"
+              },
+              {
+                "score": "1-0",
+                "odds": 10.5,
+                "verdict": "reject",
+                "reason": "主队若取胜，市场更偏好双方都有球的2-1而非零封；且澳超高波动不利于保守1-0。"
+              },
+              {
+                "score": "2-0",
+                "odds": 12.5,
+                "verdict": "reject",
+                "reason": "相比2-1和3-1，2-0对客队进攻抑制要求更高，但BTTS与总进球结构都不优先支持零封。"
+              },
+              {
+                "score": "3-1",
+                "odds": 13.5,
+                "verdict": "keep",
+                "reason": "4球压缩明显，若主队前压成功并放大转换，3-1是升级版主胜路径。"
+              }
+            ],
+            "lowest_score_not_selected_reason": "最低比分1-1未被选，原因是主胜在1X2与半全场上仍占首位，且2-1作为主胜最强比分与总进球3球主模态高度一致；但由于1-1更低，推荐等级被严格下调。"
+          },
+          "sharp_money_audit": {
+            "available": true,
+            "confirmed_sharp_direction": "unclear",
+            "rlm_confirmed": false,
+            "vote_vs_odds_conflict": "公众与赔率同向支持主队，没有形成逆向冲突，也因此难以从中提炼真实聪明钱。",
+            "crs_change_impact": "正确比分无变化序列，仅能看出1-1、2-1、1-2密集分布，代表主胜并不稳固。",
+            "ttg_change_impact": "3球最低且4-5球压缩，若外部盘临场继续向大球倾斜，2-2、3-2等尾部会进一步抬升风险。"
+          },
+          "anchor_audit": {
+            "zero_zero": "0-0赔率18较高，说明完全闷局不是主流；淘汰赛背景也提升后程进球概率。",
+            "one_one": "1-1是最强锚点，必须充分解释不选：主要因为主/主最低与主胜1X2领先，使主队终局胜出略优于整场平。",
+            "one_zero": "1-0赔率10.5可行，但低于2-1的优先级，说明市场更接受双方均有进球。",
+            "zero_one": "0-1赔率13.0不低但仍有存在感；悉尼若先入球，主队会被迫拉快节奏。",
+            "two_one": "2-1是主胜最低比分，兼容弱主热门、3球模态、BTTS与淘汰赛主场主动性，因此成为主选。",
+            "one_two": "1-2赔率9.5不高，在本场约束下必须视为真实尾部，说明客胜反打绝不能忽略。",
+            "high_score_tail": "2-2、3-1、3-2、2-3全部处于压缩区，澳超高比分尾部具真实威胁，因此不能只停留在2-1。",
+            "handicap_cover": "-1语义要求审视赢一球与穿盘。当前更像主队赢一球主线，不足以强挺两球以上覆盖，因此2-1优于2-0和3-0。"
+          },
+          "market_interpretation": {
+            "one_x_two": "竞彩1X2主胜2.0最低，公平化后主胜约44.27%，属于弱主热门而非强让级别；客胜30.43%不低，方向稳定性有限。",
+            "handicap": "原始让球-1对主队提出至少赢一球甚至争两球的审计要求，但HHAD缺少实际赔率，无法确认穿盘是否被市场真实支持。由于主胜公平概率不足五成，更像赢一球与不穿盘结构。",
+            "correct_score": "1-1最低、2-1次低、1-2第三低，形成典型三向咬合。主胜首选确实存在，但并不能压制平局和客队反打。",
+            "total_goals": "总进球3球为最低，4球4.5、5球7.25压缩明显，说明比赛基础模态在3球附近，但高比分尾部在澳超语境下非常真实。",
+            "half_full_time": "主/主3.25最低，平/主5.25次低，支持主队最终胜出；但负/负4.7也不高，显示悉尼FC并未被完全排除。",
+            "external_market": "无法联网核对外部市场，不能确认竞彩主胜2.0是否偏浅或偏深，也无法检查交易所对平局/客胜的真实对冲力度。"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 16,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众44%投主胜，和市场最低方向一致；sharp_money_facts_v203未给出有效sharp_side_candidates，且RLM不可确认，因此只能视为顺向热度。"
+          },
+          "contextual_logic": {
+            "league_style": "澳超高波动、高转换，高比分尾部天然更活跃。",
+            "team_style": "主队主场主动性更强，客队具反击能力，次回合淘汰赛会放大双方后程对攻可能。",
+            "tempo": "high",
+            "score_shape": "主队主动压上争先，客队反击回应，比赛更像互有进球后由主队以一球优势收束，而非全场压制。",
+            "btts_likelihood": "yes",
+            "rotation_risk": "unclear"
+          },
+          "rejected_cases": {
+            "home": "未拒绝home，但在home内部排除1-0与2-0，是因为BTTS与总进球3球模态更贴近2-1，且澳超高波动削弱零封路径。",
+            "draw": "平局被排除仅因主胜在1X2和半全场略占优，不是因为平局弱；1-1和2-2都被保留为主要风险。",
+            "away": "客胜未成主选，因主队主场与半全场结构更完整；但1-2被明确保留为关键反打尾部。"
+          },
+          "recommendation_components": {
+            "direction_edge": 14,
+            "score_cluster_strength": 15,
+            "goal_band_strength": 18,
+            "btts_alignment": 17,
+            "sharp_alignment": 3,
+            "web_source_quality": 0,
+            "market_conflict_penalty": 14,
+            "final_grade_reason": "主胜是可解释主线，但弱热门、1-1低赔、客队反打与高比分尾部同时存在，故仅能给中低档推荐。"
+          },
+          "recommendation": {
+            "tier": "B",
+            "is_recommended": true,
+            "top4_priority": 3,
+            "bet_confidence": 58,
+            "direction_stability": "weak",
+            "score_stability": "weak",
+            "risk_level": "high",
+            "risk_tags": [
+              "weak_home_favorite_btts_tail",
+              "draw_anchor_strong",
+              "away_fightback_risk",
+              "no_web_verification",
+              "a_league_high_variance",
+              "away_fightback_tail"
+            ],
+            "why_recommended": "主胜方向仍有1X2、半全场和主胜最低比分的三重支撑，但由于弱主热门条件下BTTS尾部和1-1锚点太强，只适合作为谨慎参考，需防平防客。"
+          },
+          "data_quality": {
+            "missing": [
+              "external_odds",
+              "exchange_data",
+              "line_movement_timeline",
+              "verified_lineups"
+            ],
+            "raw_packet_quality": "medium"
+          },
+          "reason": "本场是典型弱主热门结构。市场并未把纽喷气机做成强势碾压，反而让1-1、2-1、1-2三点形成紧密竞争。读取相邻比分表后，2-1虽然不是最低全场比分，但它是主胜方向最低比分，同时与总进球3球主模态、主/主半全场最低、澳超高节奏且双方都有进球的形态最吻合。由于主胜概率仅45%、客胜仍达30%，1-2、2-2、3-2必须被纳入真实风险，而不能视作噪音，因此本场只给出中等偏低置信的主胜2-1。",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [
+              "无法联网验证外部欧赔、亚盘、交易所与最新阵容，因此不能确认竞彩主胜是否与外部市场存在偏差。"
+            ],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "risk_score_candidates": [
+            {
+              "score": "1-2",
+              "risk_type": "away_fightback/high_btts_tail",
+              "reason": "主胜概率仅45%、客胜仍有30%，且BTTS=yes，按约束1-2必须列为有效反打尾部；悉尼FC若反击效率更高可直接翻转。"
+            },
+            {
+              "score": "2-2",
+              "risk_type": "draw_btts_tail",
+              "reason": "1-1与2-2都处于低赔簇，尤其4球压缩明显，若双方对攻升级，2-2是高频风险尾部。"
+            },
+            {
+              "score": "3-2",
+              "risk_type": "high_score_tail",
+              "reason": "5球赔率7.25显著压缩，说明3-2这类澳超式开放尾部不能被视作噪音。"
+            },
+            {
+              "score": "1-1",
+              "risk_type": "draw_anchor",
+              "reason": "1-1为全场最低比分赔，且与2-1在相邻比分表中属于近邻，是主选最大阻力。"
+            },
+            {
+              "score": "2-3",
+              "risk_type": "weak_home_favorite_btts_tail",
+              "reason": "home_win_pct<=52 and away_win_pct>=23 with BTTS/tail risk; keep away fight-back and 4+ draw/away tails visible"
+            }
+          ],
+          "tail_risk_flags": [
+            "weak_home_favorite_btts_tail",
+            "away_fightback_live",
+            "four_plus_compressed",
+            "five_goal_tail_compressed",
+            "away_win_not_negligible",
+            "protect_1_2_2_2_2_3_tail"
+          ],
+          "confidence_downgrade_reason": "主队只是弱热门，1-1比分锚点比2-1更低；同时澳超高波动、4+与5球赔率压缩明显，使2-1成为可选主线但不是稳定终局。",
+          "validation_warnings": [
+            "weak_home_favorite_btts_tail_protection_applied"
+          ]
+        },
+        "grok": {
+          "match": 10,
+          "final_direction": "home",
+          "predicted_score": "2-1",
+          "direction_probs": {
+            "home": 44.0,
+            "draw": 25.0,
+            "away": 31.0,
+            "_synthetic_probs": false
+          },
+          "goal_band": "3",
+          "btts": "yes",
+          "top3": [
+            {
+              "score": "2-1",
+              "prob": 19.0,
+              "logic": "2-1赔率7.25为最低主胜，3球模态与BTTS共振"
+            }
+          ],
+          "score_cluster_audit": {
+            "selected_cluster": "home_narrow_win_cluster",
+            "why_selected_score": "2-1在主胜簇赔率最低且与1-1、1-2相邻",
+            "adjacent_scores_checked": [
+              {
+                "score": "1-1",
+                "odds": 7.0,
+                "verdict": "near_miss",
+                "reason": "平局最低但方向不符"
+              },
+              {
+                "score": "1-2",
+                "odds": 9.5,
+                "verdict": "reject",
+                "reason": "客胜路径"
+              },
+              {
+                "score": "1-0",
+                "odds": 10.5,
+                "verdict": "keep",
+                "reason": "主胜低分备选"
+              }
+            ],
+            "lowest_score_not_selected_reason": "1-1虽最低但方向平，排除"
+          },
+          "sharp_money_audit": {
+            "available": true,
+            "confirmed_sharp_direction": "unclear",
+            "rlm_confirmed": false,
+            "vote_vs_odds_conflict": "公众与赔率一致指向主胜",
+            "crs_change_impact": "无change数据",
+            "ttg_change_impact": "无change数据"
+          },
+          "anchor_audit": {
+            "zero_zero": "赔率18.0高，排除",
+            "one_one": "赔率7.0最低但方向平，需比较",
+            "one_zero": "主胜低分，保持",
+            "zero_one": "客胜低分，排除",
+            "two_one": "主胜主流，选中",
+            "one_two": "客胜路径，排除",
+            "high_score_tail": "4+有压缩但2-1优先",
+            "handicap_cover": "让球支持主队赢一球"
+          },
+          "market_interpretation": {
+            "one_x_two": "主胜2.0最低，市场偏主队不败",
+            "handicap": "让球-1指向主队赢一球",
+            "correct_score": "2-1为主胜最低，优于1-0",
+            "total_goals": "3球最低，4+压缩",
+            "half_full_time": "主/主最低支持主队领先",
+            "external_market": "无外部数据"
+          },
+          "money_flow": {
+            "public_money_direction": "home",
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
+            "reverse_line_movement": false,
+            "steam_move": "none",
+            "evidence": "公众44%支持主胜，change缺失无法确认sharp"
+          },
+          "contextual_logic": {
+            "league_style": "澳超进攻开放",
+            "team_style": "纽卡斯尔主场进攻强",
+            "tempo": "high",
+            "score_shape": "3球BTTS",
+            "btts_likelihood": "yes",
+            "rotation_risk": "low"
+          },
+          "rejected_cases": {
+            "home": "无",
+            "draw": "1-1虽低但主胜更优",
+            "away": "客队状态一般"
+          },
+          "recommendation_components": {
+            "direction_edge": 13,
+            "score_cluster_strength": 14,
+            "goal_band_strength": 11,
+            "btts_alignment": 9,
+            "sharp_alignment": 0,
+            "web_source_quality": 0,
+            "market_conflict_penalty": 0,
+            "final_grade_reason": "主胜方向清晰，2-1路径最优"
+          },
+          "recommendation": {
+            "tier": "A",
+            "is_recommended": true,
+            "top4_priority": 1,
+            "bet_confidence": 62,
+            "direction_stability": "strong",
+            "score_stability": "medium",
+            "risk_level": "medium",
+            "risk_tags": [
+              "btts",
+              "weak_home_favorite_btts_tail",
+              "away_fightback_tail"
+            ],
+            "why_recommended": "2-1与市场低赔共振，主场优势明显"
+          },
+          "data_quality": {
+            "missing": [
+              "change",
+              "web_news"
+            ],
+            "raw_packet_quality": "medium"
+          },
+          "reason": "主胜赔率最低，2-1为3球BTTS最优路径",
+          "web_research": {
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
+            "key_findings": [],
+            "source_conflicts": [],
+            "validation_warnings": []
+          },
+          "final_web_audit": {},
+          "risk_score_candidates": [
+            {
+              "score": "2-1",
+              "risk_type": "home_cover_btts",
+              "reason": "主队主场进攻强，2-1与1-1、1-2接近需审计"
+            },
+            {
+              "score": "1-2",
+              "risk_type": "weak_home_favorite_btts_tail",
+              "reason": "home_win_pct<=52 and away_win_pct>=23 with BTTS/tail risk; keep away fight-back and 4+ draw/away tails visible"
+            },
+            {
+              "score": "2-2",
+              "risk_type": "weak_home_favorite_btts_tail",
+              "reason": "home_win_pct<=52 and away_win_pct>=23 with BTTS/tail risk; keep away fight-back and 4+ draw/away tails visible"
+            },
+            {
+              "score": "2-3",
+              "risk_type": "weak_home_favorite_btts_tail",
+              "reason": "home_win_pct<=52 and away_win_pct>=23 with BTTS/tail risk; keep away fight-back and 4+ draw/away tails visible"
+            }
+          ],
+          "tail_risk_flags": [
+            "weak_home_favorite_btts_tail",
+            "away_win_not_negligible",
+            "protect_1_2_2_2_2_3_tail"
+          ],
+          "confidence_downgrade_reason": "",
+          "validation_warnings": [
+            "weak_home_favorite_btts_tail_protection_applied"
+          ]
+        }
+      },
+      "critic_reports_by_model": {
+        "gpt": [],
+        "grok": []
+      }
+    }
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 75.8,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 26.3,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"critic_reports\":[{\"match\":9,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"hhad\",\"severity\":\"medium\",\"comment\":\"让球语义有误。该场 raw=1.0，按给定 semantic_map 属于主队受让+1，hhad_same 表示主队恰好输1球，hhad_lose 表示主队输2球及以上。目标模型写成“handicap_cover: 一球盘支持客队小胜”，表述过于笼统，容易把受让+1误读成客队让1球。\"},{\"target_mo"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 3.1,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 39.4,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": false,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 13.7,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\n  \"critic_reports\": [\n    {\n      \"match\": 9,\n      \"critic_model\": \"gpt\",\n      \"target_findings\": [\n        {\n          \"target_model\": \"grok\",\n          \"issue_type\": \"sharp\",\n          \"severity\": \"high\",\n          \"comment\": \"sharp_money_facts_v203明确标注RLM不可确认、had_change_missing，但gpt仍将公众投票44%客"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 65.1,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": [
+      {
+        "match": 15,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "high",
+            "comment": "sharp_money_facts_v203明确标注RLM unavailable且无change序列，gpt仍输出sharp_confidence=18并声称unclear，属于对Sharp证据不足的误判。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "web",
+            "severity": "high",
+            "comment": "明确标注no_web_tool_available，却把抓包内'客胜指数持续走低'当作外部情境使用，违反联网来源不可靠规则。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "hhad",
+            "severity": "medium",
+            "comment": "handicap raw=-1.0但HHAD无实价，gpt未严格按semantic_map解释一球盘形态模板，反而直接用于审计1-0/2-1，存在HHAD语义误读。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "medium",
+            "comment": "adjacent_score_audit_table已列出1-1被2-1/1-2近邻压制，gpt仍把1-1定为唯一中心锚且tier=C，推荐等级偏高。"
+          }
+        ],
+        "own_revision_hint": "必须先确认change_is_direction_code=false且无时序数据，再决定是否输出sharp_confidence；HHAD无实价时仅用作形态审计模板，不得直接映射方向。"
+      },
+      {
+        "match": 16,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "high",
+            "comment": "sharp_side_candidates为空且RLM unavailable，gpt却输出sharp_confidence=22并声称公众与赔率同向，Sharp证据不足。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "web",
+            "severity": "high",
+            "comment": "同样使用no_web_tool_available下的抓包情报当作'客胜方向在1X2与HT/FT均略强'的外部依据，属于把抓包文字当实时新闻。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "cluster",
+            "severity": "medium",
+            "comment": "1-2虽为最低正确比分，但adjacent_score_audit_table显示1-1、2-1仅差0.5-0.75赔率，gpt直接把tier升至B，推荐等级过高。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "ttg",
+            "severity": "low",
+            "comment": "TTG 3球模态与BTTS yes存在轻微冲突，gpt未在risk_tags中充分标注高尾部压缩对1-2的升级风险。"
+          }
+        ],
+        "own_revision_hint": "当1-2与1-1/2-1赔率接近且sharp证据缺失时，tier最高只能给C；必须在anchor_audit中逐条回答mandatory_cross_anchor_questions。"
+      }
+    ]
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 69.1,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 26.2,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"critic_reports\":[{\"match\":15,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"market\",\"severity\":\"medium\",\"comment\":\"将“平局赔率偏高但公平概率显示平局仍有空间”写成偏支持平局，表述不严谨。1X2 主客公平概率同为37.67%，平仅24.66%，市场主结构并不直接偏向平，只能说正确比分1-1是低赔锚点，不能把比分锚点外推成胜平负主结论。\"},{\"target_model\":\"grok\",\"issue_type\":\"hha"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 37.7,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 82.7,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 16.0,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 61.7,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "critic_reports": {
+    "gpt": [],
+    "grok": [
+      {
+        "match": 27,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "high",
+            "comment": "sharp_money_audit明确标注unclear且RLM未确认，却仍输出direction_edge 11分，夸大资金流支持力度。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "medium",
+            "comment": "adjacent_score_audit_table已列1-1为全场最低且near_miss，却最终选1-0，未充分解释为何1-1的BTTS与低总进球共振被忽略。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "web",
+            "severity": "high",
+            "comment": "web_research明确failure_reason为no_web_tool_available，仍标记external_market缺失而非直接判定不可靠，存在包装风险。"
+          }
+        ],
+        "own_revision_hint": "需把sharp_confidence降至0-5区间，并把1-1列为首选风险而非次要对冲；推荐等级最高B。"
+      },
+      {
+        "match": 28,
+        "critic_model": "gpt",
+        "target_findings": [
+          {
+            "target_model": "grok",
+            "issue_type": "sharp",
+            "severity": "high",
+            "comment": "sharp_side_candidates为空且RLM未确认，却给出direction_edge 12分，同样夸大客胜资金支持。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "score",
+            "severity": "medium",
+            "comment": "1-2与0-1同价且1-1更低，机械选择1-2而未优先解释BTTS与总进球2/3模态冲突。"
+          },
+          {
+            "target_model": "grok",
+            "issue_type": "risk",
+            "severity": "medium",
+            "comment": "risk_tags已列draw_anchor_strong与weak_favorite_btts_tail，但最终bet_confidence仍给58，推荐等级偏高。"
+          }
+        ],
+        "own_revision_hint": "把1-1或0-1设为首选风险，sharp_confidence归零，推荐等级最高B。"
+      }
+    ]
+  },
+  "status": {
+    "gpt": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "phase1",
+        "elapsed": 69.4,
+        "status": "ok"
+      },
+      "last_status": "parse_failed",
+      "model": "gpt-5.4",
+      "critic": {
+        "ok": false,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "critic",
+        "elapsed": 23.3,
+        "status": "parse_failed",
+        "parse_error": "empty_or_invalid_json_object",
+        "raw_excerpt": "{\"critic_reports\":[{\"match\":27,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"hhad\",\"severity\":\"high\",\"comment\":\"让球语义存在明显误读。该场原始让球为-1.0，但证据中的 handicap_anchor_facts 明确标注 favorite_side_by_line_sign 为 away，仅说明符号本身不能直接当主队让一球。grok 直接写成“-1球盘指向1-0/2-0/2-1形态”，等于把 HHAD/让球模板按主队让一"
+      },
+      "consistency": {
+        "ok": true,
+        "ai_name": "gpt",
+        "model": "gpt-5.4",
+        "phase": "consistency",
+        "elapsed": 3.2,
+        "status": "ok"
+      }
+    },
+    "grok": {
+      "phase1": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "phase1",
+        "elapsed": 27.6,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "grok-4.3",
+      "critic": {
+        "ok": true,
+        "ai_name": "grok",
+        "model": "grok-4.3",
+        "phase": "critic",
+        "elapsed": 10.5,
+        "status": "ok"
+      }
+    },
+    "gemini": {
+      "final": {
+        "ok": true,
+        "ai_name": "gemini",
+        "model": "gemini-3.1-pro-preview-thinking-high",
+        "phase": "final",
+        "elapsed": 57.9,
+        "status": "ok"
+      },
+      "last_status": "ok",
+      "model": "gemini-3.1-pro-preview-thinking-high"
+    }
+  }
+}
