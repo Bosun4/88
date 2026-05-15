@@ -1,0 +1,10 @@
+[
+  {
+    "alert_type": "EuroAsianDivergence",
+    "severity": "watch",
+    "direction": "away",
+    "evidence": "Match mock_match_123: DI_abs=0.050. 1x2_home_fair=0.499, AH_line=-0.5",
+    "source": "the_odds_api_adapter",
+    "timestamp_utc": "2026-05-15T02:30:43.010308+00:00"
+  }
+]
