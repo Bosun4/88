@@ -3942,3 +3942,49 @@ if __name__ == "__main__":
     print(f"✅ {ENGINE_VERSION} 加载完成")
     print(f"   架构: {ENGINE_ARCHITECTURE}")
     print("   模式: 完整版；保留AI模块调用链；新增Sharp/CRS簇/HHAD/相邻比分审计；本地不改最终足球判断。")
+
+
+def apply_deep_favorite_score_moderation(final_direction, predicted_score, probabilities, score_candidates, total_goal_probs, logic_reasoning):
+    '''
+    Moderates 3-0 or 0-3 predictions to 2-0 or 0-2 for deep favorites if the goal band or candidate proximity doesn't strongly support a blowout.
+    '''
+    if final_direction not in ["home", "away"]:
+        return False, predicted_score, []
+
+    is_home_fav = (final_direction == "home" and probabilities.get("home", 0) >= 0.58 and (probabilities.get("draw", 0) + probabilities.get("away", 0)) <= 0.42)
+    is_away_fav = (final_direction == "away" and probabilities.get("away", 0) >= 0.58 and (probabilities.get("draw", 0) + probabilities.get("home", 0)) <= 0.42)
+
+    if not (is_home_fav or is_away_fav):
+        return False, predicted_score, []
+
+    candidates_dict = {sc["score"]: sc.get("probability", 0) for sc in score_candidates} if isinstance(score_candidates, list) else {}
+
+    moderated = False
+    new_score = predicted_score
+    cluster = []
+
+    if predicted_score == "3-0" and is_home_fav:
+        prob_3_0 = candidates_dict.get("3-0", 0)
+        prob_2_0 = candidates_dict.get("2-0", 0)
+        prob_tg_3 = total_goal_probs.get(3, 0)
+        prob_tg_4 = total_goal_probs.get(4, 0)
+        prob_tg_2 = total_goal_probs.get(2, 0)
+        
+        if abs(prob_3_0 - prob_2_0) <= 0.05 and prob_tg_4 < max(prob_tg_2, prob_tg_3):
+            moderated = True
+            new_score = "2-0"
+            cluster = ["2-0", "3-0", "3-1"]
+
+    elif predicted_score == "0-3" and is_away_fav:
+        prob_0_3 = candidates_dict.get("0-3", 0)
+        prob_0_2 = candidates_dict.get("0-2", 0)
+        prob_tg_3 = total_goal_probs.get(3, 0)
+        prob_tg_4 = total_goal_probs.get(4, 0)
+        prob_tg_2 = total_goal_probs.get(2, 0)
+        
+        if abs(prob_0_3 - prob_0_2) <= 0.05 and prob_tg_4 < max(prob_tg_2, prob_tg_3):
+            moderated = True
+            new_score = "0-2"
+            cluster = ["0-2", "0-3", "1-3"]
+
+    return moderated, new_score, cluster

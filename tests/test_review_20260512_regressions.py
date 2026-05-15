@@ -297,3 +297,33 @@ def test_matrix_shadow_source_has_no_team_date_or_result_hardcoding():
     )
     forbidden_tokens = ["塞尔塔", "莱万特", "2026", "2025", "周二003", "2-1命中", "赛果"]
     assert not any(token in source for token in forbidden_tokens)
+from scripts.predict import apply_deep_favorite_score_moderation
+
+def test_deep_favorite_score_moderation_downgrades_3_0_to_2_0_without_changing_direction():
+    probs = {"home": 0.70, "draw": 0.20, "away": 0.10}
+    candidates = [{"score": "3-0", "probability": 0.12}, {"score": "2-0", "probability": 0.11}]
+    tg = {2: 0.30, 3: 0.25, 4: 0.10}
+    
+    moderated, new_score, cluster = apply_deep_favorite_score_moderation("home", "3-0", probs, candidates, tg, "")
+    assert moderated is True
+    assert new_score == "2-0"
+    assert "2-0" in cluster
+    assert "3-0" in cluster
+
+def test_deep_favorite_score_moderation_does_not_apply_to_non_favorite():
+    probs = {"home": 0.50, "draw": 0.30, "away": 0.20} # not deep fav
+    candidates = [{"score": "3-0", "probability": 0.12}, {"score": "2-0", "probability": 0.11}]
+    tg = {2: 0.30, 3: 0.25, 4: 0.10}
+    
+    moderated, new_score, cluster = apply_deep_favorite_score_moderation("home", "3-0", probs, candidates, tg, "")
+    assert moderated is False
+    assert new_score == "3-0"
+
+def test_deep_favorite_score_moderation_does_not_apply_when_matrix_supports_blowout():
+    probs = {"home": 0.70, "draw": 0.20, "away": 0.10}
+    candidates = [{"score": "3-0", "probability": 0.15}, {"score": "2-0", "probability": 0.05}] # gap > 0.05
+    tg = {2: 0.10, 3: 0.20, 4: 0.30} # 4+ goals dominant
+    
+    moderated, new_score, cluster = apply_deep_favorite_score_moderation("home", "3-0", probs, candidates, tg, "")
+    assert moderated is False
+    assert new_score == "3-0"
