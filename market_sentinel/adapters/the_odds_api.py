@@ -11,16 +11,27 @@ from market_sentinel.fair_probs import fair_probs_from_1x2
 from market_sentinel.divergence import euro_asian_divergence_index, classify_divergence
 from market_sentinel.alerts import MarketAlert, generate_alert_json
 
+DEFAULT_ODDS_API_BASE = "https://api.the-odds-api.com"
+
 def load_api_key() -> Optional[str]:
-    return os.environ.get("THE_ODDS_API_KEY")
+    return (
+        os.environ.get("THE_ODDS_API_KEY") or
+        os.environ.get("ODDS_API_KEY") or
+        os.environ.get("OODS_API_KEY")
+    )
+
+def load_api_base() -> str:
+    return os.environ.get("ODDS_API_BASE", DEFAULT_ODDS_API_BASE).rstrip("/")
+
 
 def fetch_odds(sport_key: str, regions: str, markets: str, api_key: Optional[str] = None) -> List[Dict]:
     if not api_key:
         api_key = load_api_key()
     if not api_key:
-        raise ValueError("THE_ODDS_API_KEY not found in environment and not provided.")
+        raise ValueError("API Key not found (checked THE_ODDS_API_KEY, ODDS_API_KEY, OODS_API_KEY).")
         
-    url = f"https://api.the-odds-api.com/v4/sports/{sport_key}/odds/?apiKey={api_key}&regions={regions}&markets={markets}&oddsFormat=decimal"
+    base_url = load_api_base()
+    url = f"{base_url}/v4/sports/{sport_key}/odds/?apiKey={api_key}&regions={regions}&markets={markets}&oddsFormat=decimal"
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     
     try:

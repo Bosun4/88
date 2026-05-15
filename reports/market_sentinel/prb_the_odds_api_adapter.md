@@ -11,7 +11,8 @@
 ## 3. 设置 API Key
 程序不会在代码或日志中打印 Key。运行时会自动从环境变量中读取：
 ```bash
-export THE_ODDS_API_KEY="your_api_key_here"
+export ODDS_API_KEY="your_api_key_here"
+# Also supports ODDS_API_BASE for custom endpoints, and THE_ODDS_API_KEY / OODS_API_KEY as fallbacks.
 ```
 
 ## 4. 运行 Mock 模式
