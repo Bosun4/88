@@ -5,6 +5,6 @@
     "direction": "away",
     "evidence": "Match mock_match_123: DI_abs=0.050. 1x2_home_fair=0.499, AH_line=-0.5",
     "source": "the_odds_api_adapter",
-    "timestamp_utc": "2026-05-15T02:47:34.308527+00:00"
+    "timestamp_utc": "2026-05-15T03:26:40.669183+00:00"
   }
 ]
