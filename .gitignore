@@ -27,3 +27,11 @@ run_pytest.py
 run_test.py
 run_tests.py
 today_matches.py
+
+# Local Python environments
+.venv/
+venv/
+
+# Local data/download caches
+.cache/
+reports/sandbox/*.json
