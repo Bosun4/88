@@ -3550,7 +3550,6 @@ def _collect_score_candidates_for_gate(pred: Dict[str, Any], raw_item: Dict[str,
         ("raw_top3", raw_item.get("top3")),
         ("raw_candidate_scores", raw_item.get("candidate_scores")),
         ("raw_risk_score_candidates", raw_item.get("risk_score_candidates")),
-        ("matrix_top_scores", pred.get("matrix_top_scores")),
     ]:
         if not isinstance(container, list):
             continue
@@ -3596,6 +3595,11 @@ def apply_two_one_home_hard_no_bet_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
 
     candidates = _collect_score_candidates_for_gate(pred, raw_item)
     risk_scores = {c["score"] for c in candidates if c.get("score")}
+    # Candidate tail probability is reserved for explicit AI risk/candidate lists.
+    # Matrix top-score distributions are handled separately through matrix flags
+    # and direction probabilities; summing all matrix away/draw top scores here
+    # can incorrectly turn a clean strong-home 2-1 into NO_BET simply because a
+    # calibrated probability distribution contains normal low-probability tails.
     away_tail_prob = sum(_f(c.get("prob"), 0.0) for c in candidates if _score_direction(c.get("score")) == "away")
     draw_tail_prob = sum(_f(c.get("prob"), 0.0) for c in candidates if _score_direction(c.get("score")) == "draw")
     tail_scores_present = bool({"1-2", "2-2", "2-3", "3-2"} & risk_scores)
