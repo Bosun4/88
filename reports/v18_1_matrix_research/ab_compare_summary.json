@@ -1,0 +1,27 @@
+{
+  "original_prediction": {
+    "direction_hit_pct": 37.5,
+    "exact_score_hit_pct": 0.0,
+    "goal_band_hit_pct": 25.0,
+    "btts_hit_pct": 37.5
+  },
+  "current_main_d7575c6": {
+    "direction_hit_pct": 25.0,
+    "exact_score_hit_pct": 0.0,
+    "goal_band_hit_pct": 37.5,
+    "btts_hit_pct": 50.0
+  },
+  "v18_1_matrix_only_use_ai_false": {
+    "direction_hit_pct": 25.0,
+    "exact_score_hit_pct": 0.0,
+    "goal_band_hit_pct": 50.0,
+    "btts_hit_pct": 37.5
+  },
+  "conclusion": {
+    "v18_1_direction_superior": false,
+    "v18_1_exact_score_superior": false,
+    "v18_1_goal_band_potential": true,
+    "recommend_direct_rollback": false,
+    "recommend_pr3_shadow_matrix_layer": true
+  }
+}

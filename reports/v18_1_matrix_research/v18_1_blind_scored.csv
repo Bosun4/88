@@ -1,0 +1,9 @@
+match_code,league,home_team,away_team,predicted_score,actual_score,predicted_direction,actual_direction,direction_hit,exact_score_hit,predicted_goal_band,actual_goal_band,goal_band_hit,predicted_btts,actual_btts,btts_hit,confidence,scenario
+2005,西甲,贝蒂斯,埃尔切,2-0,2-1,home,home,True,False,2-3,2-3,True,no,yes,False,73,normal
+2008,西甲,奥萨苏纳,马竞,0-2,1-2,away,away,True,False,2-3,2-3,True,no,yes,False,73,normal
+2007,英冠,南安普敦,米堡,2-0,1-1,home,draw,False,False,2-3,2-3,True,no,yes,False,72,normal
+2003,西甲,塞尔塔,莱万特,2-1,2-3,home,away,False,False,2-3,4+,False,yes,yes,True,65,normal
+2004,沙职,利雅胜利,利雅新月,1-2,1-1,away,draw,False,False,2-3,2-3,True,yes,yes,True,61,normal
+2002,韩职,光州FC,首尔FC,2-1,0-1,home,away,False,False,2-3,0-1,False,yes,no,False,54,normal
+2006,法甲,圣旺红星,罗德兹,2-1,2-3,home,away,False,False,2-3,4+,False,yes,yes,True,50,normal
+2001,韩职,仁川联,浦项制铁,2-1,0-1,home,away,False,False,2-3,0-1,False,yes,no,False,46,normal

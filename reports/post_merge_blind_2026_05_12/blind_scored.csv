@@ -1,0 +1,9 @@
+match_code,home_team,away_team,predicted_score,actual_score,predicted_direction,actual_direction,direction_hit,exact_score_hit,predicted_goal_band,actual_goal_band,goal_band_hit,predicted_btts,actual_btts,btts_hit,confidence,risk_score_candidates,tail_risk_flags,confidence_downgrade_reason
+2001,仁川联,浦项制铁,1-1,0-1,draw,away,False,False,2-3,0-1,False,yes,no,False,0.48,"[{""score"": ""1-2""}, {""score"": ""0-1""}]",[],
+2002,光州FC,首尔FC,1-1,0-1,draw,away,False,False,2-3,0-1,False,yes,no,False,0.5,"[{""score"": ""1-0""}, {""score"": ""0-1""}]",[],
+2003,塞尔塔,莱万特,2-1,2-3,home,away,False,False,2-3,4+,False,yes,yes,True,60,"[{""score"": ""1-2""}, {""score"": ""2-2""}, {""score"": ""2-3""}]","[""weak_home_favorite_btts_tail"", ""away_win_not_negligible"", ""protect_1_2_2_2_2_3_tail""]",Weak home favorite with BTTS tail risk
+2004,利雅胜利,利雅新月,1-2,1-1,away,draw,False,False,2-3,2-3,True,yes,yes,True,0.62,"[{""score"": ""0-2""}]",[],
+2005,贝蒂斯,埃尔切,2-0,2-1,home,home,True,False,2-3,2-3,True,no,yes,False,0.72,"[{""score"": ""3-0""}, {""score"": ""2-1""}]",[],
+2006,圣旺红星,罗德兹,1-1,2-3,draw,away,False,False,2-3,4+,False,yes,yes,True,0.52,"[{""score"": ""1-0""}, {""score"": ""0-1""}]",[],
+2007,南安普敦,米堡,2-1,1-1,home,draw,False,False,2-3,2-3,True,yes,yes,True,0.62,"[{""score"": ""1-0""}, {""score"": ""1-1""}]",[],
+2008,奥萨苏纳,马竞,0-1,1-2,away,away,True,False,0-1,2-3,False,no,yes,False,0.68,"[{""score"": ""0-2""}, {""score"": ""1-2""}]",[],

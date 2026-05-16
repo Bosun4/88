@@ -1,0 +1,85 @@
+{
+  "generated_at": "2026-05-13T20:46:00Z",
+  "matches": [
+    {
+      "match_code": "2001",
+      "league": "韩职",
+      "home_team": "仁川联",
+      "away_team": "浦项制铁",
+      "kickoff_time": "2026-05-12T18:00:00Z",
+      "sp_home": 2.50,
+      "sp_draw": 3.10,
+      "sp_away": 2.50
+    },
+    {
+      "match_code": "2002",
+      "league": "韩职",
+      "home_team": "光州FC",
+      "away_team": "首尔FC",
+      "kickoff_time": "2026-05-12T18:00:00Z",
+      "sp_home": 2.30,
+      "sp_draw": 3.20,
+      "sp_away": 2.65
+    },
+    {
+      "match_code": "2003",
+      "league": "西甲",
+      "home_team": "塞尔塔",
+      "away_team": "莱万特",
+      "kickoff_time": "2026-05-12T20:00:00Z",
+      "sp_home": 2.10,
+      "sp_draw": 3.40,
+      "sp_away": 3.00
+    },
+    {
+      "match_code": "2004",
+      "league": "沙职",
+      "home_team": "利雅胜利",
+      "away_team": "利雅新月",
+      "kickoff_time": "2026-05-12T20:30:00Z",
+      "sp_home": 2.80,
+      "sp_draw": 3.50,
+      "sp_away": 2.15
+    },
+    {
+      "match_code": "2005",
+      "league": "西甲",
+      "home_team": "贝蒂斯",
+      "away_team": "埃尔切",
+      "kickoff_time": "2026-05-12T21:00:00Z",
+      "sp_home": 1.55,
+      "sp_draw": 3.80,
+      "sp_away": 5.00
+    },
+    {
+      "match_code": "2006",
+      "league": "法甲",
+      "home_team": "圣旺红星",
+      "away_team": "罗德兹",
+      "kickoff_time": "2026-05-12T21:30:00Z",
+      "sp_home": 2.45,
+      "sp_draw": 3.10,
+      "sp_away": 2.65
+    },
+    {
+      "match_code": "2007",
+      "league": "英冠",
+      "home_team": "南安普敦",
+      "away_team": "米堡",
+      "kickoff_time": "2026-05-12T21:30:00Z",
+      "sp_home": 1.95,
+      "sp_draw": 3.30,
+      "sp_away": 3.40
+    },
+    {
+      "match_code": "2008",
+      "league": "西甲",
+      "home_team": "奥萨苏纳",
+      "away_team": "马竞",
+      "kickoff_time": "2026-05-12T22:00:00Z",
+      "sp_home": 4.50,
+      "sp_draw": 3.40,
+      "sp_away": 1.70
+    }
+  ]
+}

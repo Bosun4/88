@@ -1,0 +1,9 @@
+match_code,league,home_team,away_team,actual_score,home_goals,away_goals,actual_direction,total_goals,actual_btts,half_time_score
+2001,韩职,仁川联,浦项制铁,0-1,0,1,away,1,no,0-1
+2002,韩职,光州FC,首尔FC,0-1,0,1,away,1,no,0-0
+2003,西甲,塞尔塔,莱万特,2-3,2,3,away,5,yes,1-1
+2004,沙职,利雅胜利,利雅新月,1-1,1,1,draw,2,yes,1-0
+2005,西甲,贝蒂斯,埃尔切,2-1,2,1,home,3,yes,1-1
+2006,法甲,圣旺红星,罗德兹,2-3,2,3,away,5,yes,1-1
+2007,英冠,南安普敦,米堡,1-1,1,1,draw,2,yes,1-1
+2008,西甲,奥萨苏纳,马竞,1-2,1,2,away,3,yes,0-1
