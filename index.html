@@ -369,12 +369,14 @@ function getRecommendation(p){
   return r;
 }
 
-function isRecommendedMatch(m,p){
+function isTopPickMatch(m,p){
+  return m.is_recommended===true || m.is_strict_recommended===true || m.is_top4_candidate===true;
+}
+
+function isGatePass(p){
   p=p||{};
   var rec=getRecommendation(p);
-  return m.is_recommended===true || m.is_strict_recommended===true ||
-    m.is_top4_candidate===true || rec.is_recommended===true ||
-    p.recommend_gate_pass===true;
+  return rec.is_recommended===true || p.recommend_gate_pass===true;
 }
 
 function effectiveTier(p){
@@ -655,13 +657,14 @@ function renderMatches(){
     var rc=resultClass(displayDir);
     var tier=effectiveTier(p);
     var rec=getRecommendation(p);
-    var isRec=isRecommendedMatch(m,p);
-    var cls=(isRec?'rec ':'')+(tier==='S'?'s ':tier==='A'?'a ':'');
+    var isTopPick=isTopPickMatch(m,p);
+    var gatePass=isGatePass(p);
+    var cls=(isTopPick?'rec ':'')+(gatePass?'a ':'')+(tier==='S'?'s ':tier==='A'?'a ':'');
     var aiConf=V(p.ai_avg_confidence||p.ai_confidence||rec.bet_confidence||p.confidence,0);
 
     return '<div class="mc '+cls+'" id="m-'+key+'">'+
       '<div class="mc-h">'+
-        '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(isRec?'<span class="mc-badge">精选</span>':'')+'</div>'+
+        '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(isTopPick?'<span class="mc-badge">精选</span>':(gatePass?'<span class="mc-badge">可关注</span>':''))+'</div>'+
         '<div class="mc-eng">'+esc(p.engine_version||D.version||'vMAX 20.2.1-FULL')+'</div>'+
       '</div>'+
       '<div class="mc-b">'+
