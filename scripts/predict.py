@@ -3166,9 +3166,18 @@ def protocol_downgrade_recommendation_only(pred: Dict[str, Any]) -> Dict[str, An
     if _f(comps.get("direction_edge"), 0) < 55:
         cap("C", "direction_edge_below_55")
 
+    pred = apply_two_one_home_hard_no_bet_gate(pred)
+    rec = pred.setdefault("recommendation", {}) if isinstance(pred, dict) else {}
+    if pred.get("recommend_gate_pass") is False and "two_one_home_hard_no_bet" in pred.get("recommendation_downgrade_reasons", []):
+        tier = "D"
     rec["tier"] = tier if tier in {"S", "A", "B", "C", "D"} else "D"
-    rec["is_recommended"] = rec["tier"] in {"S", "A", "B"}
+    if "two_one_home_hard_no_bet" in pred.get("recommendation_downgrade_reasons", []):
+        rec["tier"] = "D"
+        rec["is_recommended"] = False
+    else:
+        rec["is_recommended"] = rec["tier"] in {"S", "A", "B"}
     pred.setdefault("recommendation_downgrade_reasons", []).extend(reasons)
+    pred["recommendation_downgrade_reasons"] = list(dict.fromkeys(pred.get("recommendation_downgrade_reasons", [])))
     return pred
 
 
@@ -3456,6 +3465,7 @@ def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_p
 
 TAIL_RISK_PROTECTION_SCORES = ["1-2", "2-2", "2-3"]
 TAIL_RISK_DOWNGRADE_REASON = "Weak home favorite with BTTS tail risk"
+TWO_ONE_NO_BET_REASON = "2-1 home score blocked by draw/away/tail risk hard gate"
 
 
 def _normalize_risk_score_candidates(value: Any) -> List[Dict[str, Any]]:
@@ -3506,6 +3516,144 @@ def _raw_btts_yes_signal(row: Dict[str, Any], raw_item: Dict[str, Any]) -> bool:
     if str(ctx.get("btts_likelihood", "")).strip().lower() in {"yes", "y", "true", "是", "双方进球"}:
         return True
     return False
+
+
+def _extract_prob_map_0_100(value: Any) -> Dict[str, float]:
+    if not isinstance(value, dict):
+        return {}
+    out: Dict[str, float] = {}
+    for key in ["home", "draw", "away"]:
+        raw = value.get(key)
+        pct = _f(raw, 0.0)
+        if 0 < pct <= 1.0:
+            pct *= 100.0
+        out[key] = pct
+    return out
+
+
+def _candidate_score_prob(cand: Dict[str, Any]) -> float:
+    if not isinstance(cand, dict):
+        return 0.0
+    for key in ["prob", "probability", "pct", "percent", "score_prob"]:
+        if key in cand:
+            val = _f(cand.get(key), 0.0)
+            return val * 100.0 if 0 < val <= 1.0 else val
+    return 0.0
+
+
+def _collect_score_candidates_for_gate(pred: Dict[str, Any], raw_item: Dict[str, Any]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for source_name, container in [
+        ("top3", pred.get("top3")),
+        ("risk_score_candidates", pred.get("risk_score_candidates")),
+        ("candidate_scores", pred.get("candidate_scores")),
+        ("raw_top3", raw_item.get("top3")),
+        ("raw_candidate_scores", raw_item.get("candidate_scores")),
+        ("raw_risk_score_candidates", raw_item.get("risk_score_candidates")),
+        ("matrix_top_scores", pred.get("matrix_top_scores")),
+    ]:
+        if not isinstance(container, list):
+            continue
+        for cand in container:
+            if not isinstance(cand, dict):
+                continue
+            score = _score_from_candidate(cand)
+            if not score:
+                score = str(cand.get("score", "")).strip()
+            if not score:
+                continue
+            rows.append({
+                "score": score,
+                "prob": _candidate_score_prob(cand),
+                "source": source_name,
+                "risk_type": cand.get("risk_type", cand.get("type", "")),
+            })
+    return rows
+
+
+def apply_two_one_home_hard_no_bet_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
+    """Hard recommendation gate for fragile home 2-1 calls; never changes score/direction."""
+    if not isinstance(pred, dict):
+        return pred
+    if pred.get("final_direction") != "home" or _score_from_candidate(pred.get("predicted_score")) != "2-1":
+        return pred
+
+    raw_item = pred.get("raw_item", {}) if isinstance(pred.get("raw_item"), dict) else {}
+    probs = _extract_prob_map_0_100(pred.get("direction_probs")) or {
+        "home": _f(pred.get("home_win_pct"), 0.0),
+        "draw": _f(pred.get("draw_pct"), 0.0),
+        "away": _f(pred.get("away_win_pct"), 0.0),
+    }
+    home_pct = _f(probs.get("home"), 0.0)
+    draw_pct = _f(probs.get("draw"), 0.0)
+    away_pct = _f(probs.get("away"), 0.0)
+    non_home_pct = draw_pct + away_pct
+
+    matrix_probs = _extract_prob_map_0_100(pred.get("matrix_direction_probs"))
+    matrix_flags = pred.get("matrix_disagreement_flags", {}) if isinstance(pred.get("matrix_disagreement_flags"), dict) else {}
+    matrix_draw = _f(matrix_probs.get("draw"), 0.0)
+    matrix_away = _f(matrix_probs.get("away"), 0.0)
+
+    candidates = _collect_score_candidates_for_gate(pred, raw_item)
+    risk_scores = {c["score"] for c in candidates if c.get("score")}
+    away_tail_prob = sum(_f(c.get("prob"), 0.0) for c in candidates if _score_direction(c.get("score")) == "away")
+    draw_tail_prob = sum(_f(c.get("prob"), 0.0) for c in candidates if _score_direction(c.get("score")) == "draw")
+    tail_scores_present = bool({"1-2", "2-2", "2-3", "3-2"} & risk_scores)
+    btts_or_tail = _raw_btts_yes_signal(pred, raw_item) or str(pred.get("btts", "")).lower() == "yes" or tail_scores_present
+
+    reasons: List[str] = []
+    if home_pct and home_pct <= 52.0 and away_pct >= 23.0 and btts_or_tail:
+        reasons.append("weak_home_2_1_btts_away_pct_gate")
+    if home_pct and non_home_pct >= 47.0 and btts_or_tail:
+        reasons.append("non_home_mass_too_high_for_home_2_1")
+    if draw_pct >= 29.0 or away_pct >= 26.0:
+        reasons.append("draw_or_away_probability_too_high_for_home_2_1")
+    if bool(matrix_flags.get("matrix_vs_final_direction_conflict")):
+        reasons.append("matrix_direction_conflicts_with_home_2_1")
+    if bool(matrix_flags.get("matrix_away_tail_warning")) or bool(matrix_flags.get("matrix_draw_risk_warning")):
+        reasons.append("matrix_draw_or_away_tail_warning")
+    if bool(matrix_flags.get("matrix_high_goal_tail_conflict")):
+        reasons.append("matrix_high_goal_tail_conflict_with_2_1")
+    if matrix_away >= 32.0 or matrix_draw >= 30.0:
+        reasons.append("matrix_non_home_probability_too_high")
+    if away_tail_prob >= 16.0 or draw_tail_prob >= 18.0:
+        reasons.append("candidate_tail_probability_too_high")
+    if tail_scores_present and (away_pct >= 22.0 or draw_pct >= 26.0):
+        reasons.append("explicit_1_2_2_2_2_3_tail_present")
+
+    if not reasons:
+        return pred
+
+    rec = pred.setdefault("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    if not isinstance(pred.get("recommendation"), dict):
+        pred["recommendation"] = rec
+    rec["tier"] = "D"
+    rec["is_recommended"] = False
+    rec["bet_confidence"] = min(int(_clip(_f(rec.get("bet_confidence", pred.get("confidence", 0)), 0), 0, 100)), 49)
+    rec["risk_level"] = "high"
+    tags = rec.get("risk_tags", [])
+    if not isinstance(tags, list):
+        tags = [str(tags)] if tags else []
+    tags.extend(["two_one_home_hard_no_bet", *reasons])
+    rec["risk_tags"] = list(dict.fromkeys(str(x) for x in tags if str(x).strip()))[:20]
+
+    pred["recommendation_tier"] = "D"
+    pred["recommend_gate_pass"] = False
+    gate_reasons = pred.get("recommend_gate_reasons", [])
+    if not isinstance(gate_reasons, list):
+        gate_reasons = [str(gate_reasons)] if gate_reasons else []
+    gate_reasons.extend([TWO_ONE_NO_BET_REASON, *reasons])
+    pred["recommend_gate_reasons"] = list(dict.fromkeys(str(x) for x in gate_reasons if str(x).strip()))[:24]
+    pred["direction_tier"] = "D"
+    pred["score_tier"] = "D"
+    pred["confidence"] = min(int(_clip(_f(pred.get("confidence", rec.get("bet_confidence", 0)), 0), 0, 100)), 49)
+    pred["confidence_downgrade_reason"] = TWO_ONE_NO_BET_REASON
+    pred["no_bet_reason"] = TWO_ONE_NO_BET_REASON + ": " + ",".join(reasons)
+    pred["sub50_tiebreaker_warning"] = bool(home_pct <= 52.0 or non_home_pct >= 47.0)
+    pred.setdefault("recommendation_downgrade_reasons", []).extend(["two_one_home_hard_no_bet", *reasons])
+    pred.setdefault("validation_warnings", []).extend(["two_one_home_hard_no_bet_gate_applied", *reasons])
+    pred["validation_warnings"] = list(dict.fromkeys(pred.get("validation_warnings", [])))
+    return pred
 
 
 def _contains_tail_risk_signal(row: Dict[str, Any], raw_item: Dict[str, Any], risk_candidates: List[Dict[str, Any]]) -> bool:
@@ -3577,7 +3725,15 @@ def apply_weak_home_tail_risk_protection(row: Dict[str, Any]) -> Dict[str, Any]:
             risk_tags = [str(risk_tags)] if risk_tags else []
         risk_tags.extend(["weak_home_favorite_btts_tail", "away_fightback_tail"])
         rec["risk_tags"] = list(dict.fromkeys(str(x) for x in risk_tags if str(x).strip()))[:12]
-        if rec.get("risk_level") in (None, "", "low"):
+        if home_pct <= 50.0 or away_pct >= 24.0:
+            rec["tier"] = "D"
+            rec["is_recommended"] = False
+            rec["bet_confidence"] = min(int(_clip(_f(rec.get("bet_confidence", old_conf), 0), 0, 100)), 49)
+            rec["risk_level"] = "high"
+            row["confidence_downgrade_reason"] = TWO_ONE_NO_BET_REASON
+            row.setdefault("recommendation_downgrade_reasons", []).append("weak_home_tail_forced_no_bet")
+            row.setdefault("validation_warnings", []).append("weak_home_tail_forced_no_bet")
+        elif rec.get("risk_level") in (None, "", "low"):
             rec["risk_level"] = "medium"
         row.setdefault("validation_warnings", []).append("weak_home_favorite_btts_tail_protection_applied")
     else:
@@ -3932,6 +4088,19 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         attach_matrix_shadow_fields(pred, match_obj)
     except Exception as e:
         pred["matrix_shadow_error"] = str(e)[:300]
+    try:
+        apply_two_one_home_hard_no_bet_gate(pred)
+        rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+        tier = str(rec.get("tier", "D")).upper()
+        pred["recommendation_tier"] = tier
+        pred["recommend_gate_pass"] = bool(rec.get("is_recommended", False)) and _min_tier_ok(tier)
+        if not pred["recommend_gate_pass"]:
+            pred.setdefault("recommend_gate_reasons", []).append("ai_not_recommended_or_two_one_tail_gate")
+            pred["recommend_gate_reasons"] = list(dict.fromkeys(pred.get("recommend_gate_reasons", [])))
+        pred["direction_tier"] = tier
+        pred["score_tier"] = tier
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"two_one_hard_gate_error:{str(e)[:120]}")
     pred["engine_version"] = ENGINE_VERSION
     pred["engine_architecture"] = ENGINE_ARCHITECTURE
     return pred

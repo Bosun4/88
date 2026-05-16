@@ -19,15 +19,29 @@ def create_ledger_from_prediction(prediction_json: str, output_jsonl: str):
     entries = []
     for p in preds:
         matrix = p.get("matrix_shadow_layer", {})
+        if not isinstance(matrix, dict):
+            matrix = {}
         
-        # safely extract candidates
-        risk_cands = p.get("risk_score_candidates", [])
-        if not isinstance(risk_cands, list): risk_cands = []
+        # safely extract candidates; predict.py emits List[Dict] while older ledgers used List[str]
+        risk_cands_raw = p.get("risk_score_candidates", [])
+        if not isinstance(risk_cands_raw, list):
+            risk_cands_raw = []
+        risk_cands = []
+        for cand in risk_cands_raw:
+            if isinstance(cand, dict) and cand.get("score"):
+                risk_cands.append(str(cand.get("score")))
+            elif isinstance(cand, str):
+                risk_cands.append(cand)
+        risk_cands = list(dict.fromkeys(risk_cands))
         
         flags = p.get("tail_risk_flags", [])
         if not isinstance(flags, list): flags = []
         
-        top_matrix = [m.get("score") for m in matrix.get("matrix_top_scores", []) if isinstance(m, dict)]
+        matrix_top_raw = matrix.get("matrix_top_scores", p.get("matrix_top_scores", []))
+        if not isinstance(matrix_top_raw, list):
+            matrix_top_raw = []
+        top_matrix = [m.get("score") for m in matrix_top_raw if isinstance(m, dict) and m.get("score")]
+        matrix_flags = matrix.get("disagreement_flags", p.get("matrix_disagreement_flags", []))
         
         entry = LedgerEntry(
             prediction_file=os.path.basename(prediction_json),
@@ -48,10 +62,10 @@ def create_ledger_from_prediction(prediction_json: str, output_jsonl: str):
             risk_score_candidates=risk_cands,
             tail_risk_flags=flags,
             
-            matrix_recommended_score=matrix.get("recommended_score"),
-            matrix_recommended_direction=matrix.get("recommended_direction"),
+            matrix_recommended_score=matrix.get("recommended_score", p.get("matrix_recommended_score")),
+            matrix_recommended_direction=matrix.get("recommended_direction", p.get("matrix_recommended_direction")),
             matrix_top_scores=top_matrix,
-            matrix_disagreement_flags=matrix.get("disagreement_flags", []),
+            matrix_disagreement_flags=matrix_flags,
             
             sub50_tiebreaker_warning=p.get("sub50_tiebreaker_warning", False),
             no_bet_reason=p.get("no_bet_reason"),

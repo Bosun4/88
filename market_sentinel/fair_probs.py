@@ -26,19 +26,20 @@ def fair_probs_from_1x2(odds: dict, method: str = "power") -> dict:
         }
         
     elif method == "power":
-        # Solve for exponent k such that p_h^k + p_d^k + p_a^k = 1
-        # Simple iterative approximation
-        k = 1.0
-        step = 0.01
-        for _ in range(100):
+        # Solve for exponent k such that p_h^k + p_d^k + p_a^k = 1.
+        # Binary search avoids the old fixed-step oscillation near the target.
+        lo, hi = 0.01, 10.0
+        for _ in range(80):
+            k = (lo + hi) / 2.0
             sm = (p_h**k) + (p_d**k) + (p_a**k)
-            if abs(sm - 1.0) < 0.001:
-                break
             if sm > 1.0:
-                k += step
+                lo = k
             else:
-                k -= step
-        return {"h": p_h**k, "d": p_d**k, "a": p_a**k}
+                hi = k
+        k = (lo + hi) / 2.0
+        out = {"h": p_h**k, "d": p_d**k, "a": p_a**k}
+        total = sum(out.values())
+        return {kk: vv / total for kk, vv in out.items()} if total > 0 else out
         
     else:
         # Default fallback to multiplicative

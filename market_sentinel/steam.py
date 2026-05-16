@@ -29,7 +29,7 @@ def detect_late_steam(fair_prob_t: float, fair_prob_t_minus: float, volume_t: fl
     elif flags and vol_vel <= 1000:
         flags.append("fake_steam_suspected")
         
-    direction = "home" if prob_vel > 0 else "away"
+    direction = "home" if prob_vel > 0 else "away" if prob_vel < 0 else "none"
     
     return {
         "late_steam_flags": flags,
