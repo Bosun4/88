@@ -35,3 +35,7 @@ venv/
 # Local data/download caches
 .cache/
 reports/sandbox/*.json
+scripts/data/
+data/debug/
+data/debug_v20/
+*.log

@@ -229,8 +229,9 @@ def main():
     now_time = datetime.now(beijing_tz)
     session = "morning" if now_time.hour < 15 else "evening"
 
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(base_dir, "data")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_dir = os.path.dirname(script_dir)
+    data_dir = os.path.join(repo_dir, "data")
     os.makedirs(data_dir, exist_ok=True)
 
     lock_path = os.path.join(data_dir, ".vmax_main_today.lock")

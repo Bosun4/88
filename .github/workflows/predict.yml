@@ -29,24 +29,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Restore runtime data cache into scripts
+      - name: Prepare runtime data directories
         run: |
-          mkdir -p scripts/data
-          mkdir -p scripts/data/ai_phase_results
-
-          if [ -d "data" ]; then
-            echo "♻️ Restoring root data/ into scripts/data/"
-            rsync -a data/ scripts/data/ || true
-          else
-            echo "ℹ️ No root data/ directory found, start clean."
-          fi
+          mkdir -p data
+          mkdir -p data/ai_phase_results
 
           echo "🧹 Clearing old AI cache to avoid stale prediction pollution"
-          rm -rf scripts/data/ai_cache || true
           rm -rf data/ai_cache || true
 
           echo "📁 Ensure AI phase result directory exists"
-          mkdir -p scripts/data/ai_phase_results
+          mkdir -p data/ai_phase_results
 
       - name: Run Predictions
         env:
@@ -130,8 +122,7 @@ jobs:
           SKIP_AUTO_INSTALL: "true"
 
         run: |
-          cd scripts
-          python main.py
+          python scripts/main.py
 
       - name: Upload AI phase/debug artifacts
         if: always()
@@ -141,10 +132,10 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
           path: |
-            scripts/data/ai_phase_results/
-            scripts/data/debug/
-            scripts/predictions.json
-            scripts/data/predictions.json
+            data/ai_phase_results/
+            data/debug/
+            data/debug_v20/
+            data/predictions.json
 
       - name: Push data updates
         if: success()
@@ -154,25 +145,19 @@ jobs:
 
           mkdir -p data/
 
-          git pull --rebase --autostash origin main || true
+          git pull --rebase --autostash origin main
 
-          if [ -d "scripts/data" ]; then
-            echo "📤 Syncing scripts/data/ -> root data/"
-            rsync -a --delete \
-              --exclude "debug/" \
-              --exclude "ai_cache/" \
-              scripts/data/ data/
+          echo "🧹 Ensure runtime debug/cache artifacts are not committed"
+          rm -rf data/ai_cache data/debug data/debug_v20 || true
+
+          latest_history="$(find data -maxdepth 1 -type f -name 'history_*_today_*.json' -printf '%T@ %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)"
+
+          git add data/predictions.json
+          if [ -n "$latest_history" ]; then
+            git add "$latest_history"
           fi
 
-          echo "🧹 Ensure AI cache is not committed"
-          rm -rf data/ai_cache || true
-
-          echo "📁 Keep AI phase result snapshots"
-          mkdir -p data/ai_phase_results
-
-          git add data/
-
-          if ! git diff-index --quiet HEAD; then
+          if ! git diff --cached --quiet; then
             git commit -m "🤖 Auto-update prediction data (manual event-driven strict-ai-no-cache)"
             git push
           else
