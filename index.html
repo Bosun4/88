@@ -258,7 +258,27 @@ function cl(t){
 }
 
 function resultClass(r){
-  return r==='主胜'?'h':r==='平局'?'d':'a';
+  var v=String(r||'');
+  if(v==='home'||v==='主胜'||v==='胜')return 'h';
+  if(v==='draw'||v==='平局'||v==='平')return 'd';
+  if(v==='away'||v==='客胜'||v==='负')return 'a';
+  return 'd';
+}
+
+function directionLabel(v){
+  v=String(v||'').trim();
+  if(v==='home'||v==='主胜'||v==='胜')return '主胜';
+  if(v==='draw'||v==='平局'||v==='平')return '平局';
+  if(v==='away'||v==='客胜'||v==='负')return '客胜';
+  return v||'?';
+}
+
+function pick(){
+  for(var i=0;i<arguments.length;i++){
+    var v=arguments[i];
+    if(v!==null&&v!==undefined&&v!==''&&v!=='None')return v;
+  }
+  return undefined;
 }
 
 function confidenceColor(c){
@@ -321,10 +341,15 @@ function getProb(p){
 
 function getWarnings(p){
   var arr=[];
-  ['risk_flags','score_shape_warnings','selection_warnings','validation_warnings','postprocess_warnings'].forEach(function(k){
+  [
+    'risk_flags','score_shape_warnings','selection_warnings','validation_warnings','postprocess_warnings',
+    'tail_risk_flags','recommend_gate_reasons','recommendation_downgrade_reasons','smart_signals'
+  ].forEach(function(k){
     if(Array.isArray(p[k]))arr=arr.concat(p[k]);
     else if(p[k])arr.push(p[k]);
   });
+  var rec=getRecommendation(p);
+  if(Array.isArray(rec.risk_tags))arr=arr.concat(rec.risk_tags);
   return arr.filter(function(x,i,a){return x && a.indexOf(x)===i;});
 }
 
@@ -342,6 +367,35 @@ function getRecommendation(p){
   var r=p.recommendation||{};
   if(!r || typeof r!=='object')r={};
   return r;
+}
+
+function isRecommendedMatch(m,p){
+  p=p||{};
+  var rec=getRecommendation(p);
+  return m.is_recommended===true || m.is_strict_recommended===true ||
+    m.is_top4_candidate===true || rec.is_recommended===true ||
+    p.recommend_gate_pass===true;
+}
+
+function effectiveTier(p){
+  var rec=getRecommendation(p||{});
+  return String(p.recommendation_tier || rec.tier || p.direction_tier || 'D').toUpperCase();
+}
+
+function stableText(v){
+  v=String(v||'').toLowerCase();
+  if(v==='strong')return '强';
+  if(v==='medium')return '中';
+  if(v==='weak')return '弱';
+  return v||'?';
+}
+
+function riskLabel(v){
+  v=String(v||'').toLowerCase();
+  if(v==='low')return '低';
+  if(v==='medium')return '中';
+  if(v==='high')return '高';
+  return v||'?';
 }
 
 fetch('data/predictions.json?t='+Date.now())
@@ -378,7 +432,7 @@ function renderDashboard(){
     ds+=num(p.direction_selection_score||p.ai_avg_confidence,0);
     ss+=num(p.score_shape_score||p.ai_avg_confidence,0);
     if(aiOk(p))aiCount++;
-    var tier=String(p.recommendation_tier||p.direction_tier||'').toUpperCase();
+    var tier=effectiveTier(p);
     if(tier==='S')sTier++;
     if(tier==='A'||tier==='B')abTier++;
   });
@@ -409,14 +463,14 @@ function renderTop4(t4){
   el.innerHTML=t4.map(function(m,i){
     var p=m.prediction||{};
     var key=matchKey(m);
-    var tier=String(p.recommendation_tier||p.direction_tier||'D').toUpperCase();
+    var tier=effectiveTier(p);
     var rec=getRecommendation(p);
     var ft='';
 
     if(tier)ft+='<span class="t4-ftag" style="background:#00e08e15;color:var(--gn)">评级 '+esc(tier)+'</span>';
     if(p.ai_avg_confidence!==undefined)ft+='<span class="t4-ftag" style="background:#4d8aff15;color:var(--bl)">AI '+fmt1(p.ai_avg_confidence)+'</span>';
-    if(p.direction_stability)ft+='<span class="t4-ftag" style="background:#b366ff15;color:var(--pr)">方向 '+esc(p.direction_stability)+'</span>';
-    if(p.score_stability)ft+='<span class="t4-ftag" style="background:#00d4e015;color:var(--cy)">比分 '+esc(p.score_stability)+'</span>';
+    if(p.direction_stability||rec.direction_stability)ft+='<span class="t4-ftag" style="background:#b366ff15;color:var(--pr)">方向 '+esc(stableText(p.direction_stability||rec.direction_stability))+'</span>';
+    if(p.score_stability||rec.score_stability)ft+='<span class="t4-ftag" style="background:#00d4e015;color:var(--cy)">比分 '+esc(stableText(p.score_stability||rec.score_stability))+'</span>';
     if(getWarnings(p).length)ft+='<span class="t4-ftag" style="background:#ff4d5a15;color:var(--red)">风险 '+getWarnings(p).length+'</span>';
 
     return '<div class="t4" onclick="go(\'m-'+key+'\')">'+
@@ -426,7 +480,7 @@ function renderTop4(t4){
       '<div class="t4-teams"><span class="t4-tn">'+esc(m.home_team||m.home||'')+'</span><span class="t4-vs">VS</span><span class="t4-tn">'+esc(m.away_team||m.guest||'')+'</span></div>'+
       '<div class="t4-grid">'+
         '<div class="t4-c"><div class="t4-cl">比分</div><div class="t4-cv" style="color:var(--gn)">'+esc(DS(p))+'</div></div>'+
-        '<div class="t4-c"><div class="t4-cl">结果</div><div class="t4-cv">'+esc(p.result||'?')+'</div></div>'+
+        '<div class="t4-c"><div class="t4-cl">结果</div><div class="t4-cv">'+esc(directionLabel(p.display_direction||p.result||p.final_direction))+'</div></div>'+
         '<div class="t4-c"><div class="t4-cl">推荐层</div><div class="t4-cv '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
       '</div>'+
       (rec.why_recommended?'<div class="t4-ft"><span class="t4-ftag" style="background:#4d8aff15;color:var(--bl)">'+esc(rec.why_recommended).slice(0,80)+'</span></div>':'')+
@@ -436,10 +490,10 @@ function renderTop4(t4){
 }
 
 function renderSelectionBlock(p){
-  var tier=String(p.recommendation_tier||p.direction_tier||'D').toUpperCase();
-  var dt=String(p.direction_stability||p.direction_tier||'medium');
-  var st=String(p.score_stability||p.score_tier||'medium');
   var rec=getRecommendation(p);
+  var tier=effectiveTier(p);
+  var dt=String(p.direction_stability||rec.direction_stability||p.direction_tier||'medium');
+  var st=String(p.score_stability||rec.score_stability||p.score_tier||'medium');
   var warnings=getWarnings(p);
 
   var warnHtml='';
@@ -456,9 +510,9 @@ function renderSelectionBlock(p){
     '<div class="block-b">'+
       '<div class="sel-grid">'+
         '<div class="sel"><div class="sel-l">综合推荐</div><div class="sel-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
-        '<div class="sel"><div class="sel-l">AI推荐分</div><div class="sel-v '+tierClass(tier)+'">'+fmt1(p.ai_avg_confidence||p.confidence)+'</div></div>'+
-        '<div class="sel"><div class="sel-l">方向稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(dt)+'</div></div>'+
-        '<div class="sel"><div class="sel-l">比分稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(st)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">AI推荐分</div><div class="sel-v '+tierClass(tier)+'">'+fmt1(p.ai_avg_confidence||rec.bet_confidence||p.confidence)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">方向稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(stableText(dt))+'</div></div>'+
+        '<div class="sel"><div class="sel-l">比分稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(stableText(st))+'</div></div>'+
         '<div class="sel"><div class="sel-l">形态</div><div class="sel-v">'+esc(V(p.goal_band,'?'))+' · '+esc(getBttsLabel(p))+'</div></div>'+
       '</div>'+
       (rec.why_recommended?'<div class="sig sig-b">推荐理由：'+esc(rec.why_recommended)+'</div>':'')+
@@ -527,10 +581,10 @@ function renderDetails(m,p){
   var web=p.web_research||{};
   var rec=p.recommendation||{};
   var odds=[
-    ['体彩主胜',m.sp_home||m.win],
-    ['体彩平局',m.sp_draw||m.same],
-    ['体彩客胜',m.sp_away||m.lose],
-    ['让球',m.give_ball||m.handicap||m.rq],
+    ['体彩主胜',pick(m.sp_home,m.win)],
+    ['体彩平局',pick(m.sp_draw,m.same)],
+    ['体彩客胜',pick(m.sp_away,m.lose)],
+    ['让球',pick(m.give_ball,m.handicap,m.rq)],
     ['总进球0',m.a0],
     ['总进球1',m.a1],
     ['总进球2',m.a2],
@@ -549,9 +603,9 @@ function renderDetails(m,p){
   html+='<div class="mb"><div class="mb-t">AI结构输出</div>'+
     '<div class="mb-r"><span class="mb-l">goal_band</span><span class="mb-v">'+esc(V(p.goal_band))+'</span></div>'+
     '<div class="mb-r"><span class="mb-l">btts_ai</span><span class="mb-v">'+esc(getBttsLabel(p))+'</span></div>'+
-    '<div class="mb-r"><span class="mb-l">AI置信</span><span class="mb-v">'+esc(V(p.ai_avg_confidence||p.confidence))+'</span></div>'+
-    '<div class="mb-r"><span class="mb-l">方向稳定</span><span class="mb-v">'+esc(V(p.direction_stability))+'</span></div>'+
-    '<div class="mb-r"><span class="mb-l">比分稳定</span><span class="mb-v">'+esc(V(p.score_stability))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">AI置信</span><span class="mb-v">'+esc(V(p.ai_avg_confidence||rec.bet_confidence||p.confidence))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">方向稳定</span><span class="mb-v">'+esc(stableText(V(p.direction_stability||rec.direction_stability)))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">比分稳定</span><span class="mb-v">'+esc(stableText(V(p.score_stability||rec.score_stability)))+'</span></div>'+
     '<div class="mb-r"><span class="mb-l">expected_total_goals</span><span class="mb-v">'+esc(V(p.expected_total_goals))+'</span></div>'+
     '<div class="mb-r"><span class="mb-l">engine</span><span class="mb-v">'+esc(V(p.engine_version))+'</span></div>'+
   '</div>';
@@ -597,27 +651,30 @@ function renderMatches(){
     var key=matchKey(m);
     var prob=getProb(p);
     var score=DS(p);
-    var rc=resultClass(p.result);
-    var tier=String(p.recommendation_tier||p.direction_tier||'D').toUpperCase();
-    var cls=(m.is_recommended?'rec ':'')+(tier==='S'?'s ':tier==='A'?'a ':'');
-    var aiConf=V(p.ai_avg_confidence||p.ai_confidence||p.confidence,0);
+    var displayDir=directionLabel(p.display_direction||p.result||p.final_direction);
+    var rc=resultClass(displayDir);
+    var tier=effectiveTier(p);
+    var rec=getRecommendation(p);
+    var isRec=isRecommendedMatch(m,p);
+    var cls=(isRec?'rec ':'')+(tier==='S'?'s ':tier==='A'?'a ':'');
+    var aiConf=V(p.ai_avg_confidence||p.ai_confidence||rec.bet_confidence||p.confidence,0);
 
     return '<div class="mc '+cls+'" id="m-'+key+'">'+
       '<div class="mc-h">'+
-        '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(m.is_recommended?'<span class="mc-badge">精选</span>':'')+'</div>'+
+        '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(isRec?'<span class="mc-badge">精选</span>':'')+'</div>'+
         '<div class="mc-eng">'+esc(p.engine_version||D.version||'vMAX 20.2.1-FULL')+'</div>'+
       '</div>'+
       '<div class="mc-b">'+
         '<div class="teams">'+
           '<div class="tm"><div class="tm-n">'+esc(m.home_team||m.home||'')+'</div></div>'+
-          '<div class="sc-c"><div class="sc-big">'+esc(score)+'</div><div class="sc-sub">Gemini终审比分</div><span class="res-tag '+rc+'">'+esc(p.result||'?')+'</span></div>'+
+          '<div class="sc-c"><div class="sc-big">'+esc(score)+'</div><div class="sc-sub">Gemini终审比分</div><span class="res-tag '+rc+'">'+esc(displayDir)+'</span></div>'+
           '<div class="tm"><div class="tm-n">'+esc(m.away_team||m.guest||'')+'</div></div>'+
         '</div>'+
 
         '<div class="sr">'+
           '<div class="sb"><div class="sb-l">推荐层</div><div class="sb-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
-          '<div class="sb"><div class="sb-l">方向稳定</div><div class="sb-v" style="color:var(--cy)">'+esc(V(p.direction_stability,'medium'))+'</div></div>'+
-          '<div class="sb"><div class="sb-l">比分稳定</div><div class="sb-v" style="color:var(--pr)">'+esc(V(p.score_stability,'medium'))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">方向稳定</div><div class="sb-v" style="color:var(--cy)">'+esc(stableText(V(p.direction_stability||rec.direction_stability,'medium')))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">比分稳定</div><div class="sb-v" style="color:var(--pr)">'+esc(stableText(V(p.score_stability||rec.score_stability,'medium')))+'</div></div>'+
           '<div class="sb"><div class="sb-l">Goal Band</div><div class="sb-v" style="color:var(--am)">'+esc(V(p.goal_band))+'</div></div>'+
           '<div class="sb"><div class="sb-l">BTTS</div><div class="sb-v" style="color:var(--bl)">'+esc(getBttsLabel(p))+'</div></div>'+
           '<div class="sb"><div class="sb-l">AI信心</div><div class="sb-v" style="'+confidenceColor(aiConf)+'">'+esc(aiConf)+'</div></div>'+
