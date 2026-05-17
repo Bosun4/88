@@ -3193,10 +3193,11 @@ _score_total = _BASE_SCORE_TOTAL
 _score_btts = _BASE_SCORE_BTTS
 _score_goal_band = _BASE_SCORE_GOAL_BAND
 
-ENGINE_VERSION = "vMAX 20.3.0-FULL-SHARP-CLUSTER"
+ENGINE_VERSION = "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE"
 ENGINE_ARCHITECTURE = (
     "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；"
     "新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；"
+    "新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；"
     "本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。"
 )
 
@@ -4059,6 +4060,498 @@ def attach_matrix_shadow_fields(prediction: Dict[str, Any], match_obj: Dict[str,
     return prediction
 
 
+
+PREMATCH_V2_VERSION = "v20.4_pre_match_factor_gate"
+
+LEAGUE_DNA_PROFILES = {
+    "德甲": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "高节奏/高BTTS/末段波动，客胜与小胜比分需降权复核"},
+    "瑞超": {"volatility": "medium", "draw_risk": "high", "btts": "medium", "away_penalty": 1, "notes": "北欧联赛平局与1球差较多，弱优势必须防1-1/2-2"},
+    "芬超": {"volatility": "medium", "draw_risk": "high", "btts": "medium", "away_penalty": 1, "notes": "低比分和平局权重偏高，客胜需市场确认"},
+    "挪超": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "节奏与大球尾部较强，比分需用簇而非单点"},
+    "美职": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 2, "notes": "主客差/旅行/反转波动大，客胜默认高风险"},
+    "葡超": {"volatility": "medium", "draw_risk": "medium", "btts": "medium", "away_penalty": 0, "notes": "强弱分化明显，但中下游/保级题材需防平"},
+}
+
+
+def _tier_cap_value(tier: str) -> int:
+    return {"S": 5, "A": 4, "B": 3, "C": 2, "D": 1}.get(str(tier).upper(), 1)
+
+
+def _cap_recommendation_tier(pred: Dict[str, Any], max_tier: str, reason: str, tag: str = "") -> None:
+    rec = pred.setdefault("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    if not isinstance(pred.get("recommendation"), dict):
+        pred["recommendation"] = rec
+    cur = str(rec.get("tier", pred.get("recommendation_tier", "D"))).upper()
+    max_tier = str(max_tier).upper()
+    if _tier_cap_value(cur) > _tier_cap_value(max_tier):
+        rec["tier"] = max_tier
+        pred["recommendation_tier"] = max_tier
+        pred.setdefault("recommendation_downgrade_reasons", []).append(reason)
+    else:
+        rec["tier"] = cur if cur in {"S", "A", "B", "C", "D"} else "D"
+        pred["recommendation_tier"] = rec["tier"]
+    if tag:
+        tags = rec.get("risk_tags", [])
+        if not isinstance(tags, list):
+            tags = [str(tags)] if tags else []
+        tags.append(tag)
+        rec["risk_tags"] = list(dict.fromkeys(str(x) for x in tags if str(x).strip()))[:24]
+    if rec.get("tier") not in {"S", "A", "B"}:
+        rec["is_recommended"] = False
+        pred["recommend_gate_pass"] = False
+        pred.setdefault("recommend_gate_reasons", []).append(reason)
+    else:
+        rec["is_recommended"] = bool(rec.get("is_recommended", True))
+
+
+def _league_dna_profile(league: str) -> Dict[str, Any]:
+    league_s = str(league or "")
+    for key, profile in LEAGUE_DNA_PROFILES.items():
+        if key in league_s:
+            return {"key": key, **profile}
+    if any(x in league_s for x in ["杯", "Cup", "欧冠", "欧联", "亚冠", "世俱杯"]):
+        return {"key": "cup_or_cross_context", "volatility": "high", "draw_risk": "medium", "btts": "medium", "away_penalty": 1, "notes": "杯赛/跨赛制比赛轮换、战意、旅行和首发不确定性更高"}
+    return {"key": "generic", "volatility": "medium", "draw_risk": "medium", "btts": "medium", "away_penalty": 0, "notes": "未配置专属联赛DNA，按通用风险处理"}
+
+
+def _has_confirmed_web_or_lineup(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> Tuple[bool, bool]:
+    web = pred.get("web_research", {}) if isinstance(pred.get("web_research"), dict) else {}
+    web_used = bool(web.get("used")) and bool(web.get("sources"))
+    dq = pred.get("data_quality", {}) if isinstance(pred.get("data_quality"), dict) else {}
+    text = _json_compact({"data_quality": dq, "information": match_obj.get("information"), "intelligence": match_obj.get("intelligence")}, 3000).lower()
+    lineup_tokens = ["official_lineup", "confirmed_lineup", "lineup_confirmed", "首发已确认", "官方首发"]
+    lineup_confirmed = any(t.lower() in text for t in lineup_tokens)
+    return web_used, lineup_confirmed
+
+
+def _draw_cluster_present(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> bool:
+    scores = set()
+    for key in ["top_score_candidates", "unified_matrix_top_scores", "matrix_top_scores", "top3", "risk_score_candidates"]:
+        rows = pred.get(key, [])
+        if isinstance(rows, list):
+            for x in rows[:12]:
+                if isinstance(x, dict):
+                    sc = _score_from_candidate(x.get("score", x))
+                elif isinstance(x, (list, tuple)) and x:
+                    sc = _score_from_candidate(x[0])
+                else:
+                    sc = _score_from_candidate(x)
+                if sc:
+                    scores.add(sc)
+    s11 = _f(match_obj.get("s11", 0), 0)
+    s22 = _f(match_obj.get("s22", 0), 0)
+    return bool({"0-0", "1-1", "2-2", "3-3"} & scores) or (0 < s11 <= 7.2) or (0 < s22 <= 13.5)
+
+
+def _money_flow_state(pred: Dict[str, Any]) -> Dict[str, Any]:
+    mf = pred.get("money_flow", {}) if isinstance(pred.get("money_flow"), dict) else {}
+    sharp = str(mf.get("sharp_money_direction", "unclear") or "unclear").lower()
+    public = str(mf.get("public_money_direction", "unclear") or "unclear").lower()
+    final_dir = str(pred.get("final_direction", ""))
+    sharp_clear = sharp in VALID_DIRS
+    public_clear = public in VALID_DIRS
+    conflict = bool(sharp_clear and final_dir in VALID_DIRS and sharp != final_dir)
+    reverse = bool(mf.get("reverse_line_movement"))
+    return {"sharp": sharp, "public": public, "sharp_clear": sharp_clear, "public_clear": public_clear, "conflict": conflict, "reverse": reverse}
+
+
+
+
+
+
+def extract_structured_prematch_factors(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    """Best-effort structured prematch factors from existing packet fields; no external calls."""
+    intelligence = match_obj.get("intelligence", {}) if isinstance(match_obj.get("intelligence"), dict) else {}
+    information = match_obj.get("information", {}) if isinstance(match_obj.get("information"), dict) else {}
+    web = pred.get("web_research", {}) if isinstance(pred.get("web_research"), dict) else {}
+    money = _money_flow_state(pred) if "_money_flow_state" in globals() else {}
+    text = _json_compact({
+        "league": match_obj.get("league"),
+        "intelligence": intelligence,
+        "information": information,
+        "expert_intro": match_obj.get("expert_intro"),
+        "baseface": match_obj.get("baseface"),
+        "contextual_logic": pred.get("contextual_logic"),
+        "reason": pred.get("ai_native_reason", pred.get("reason", "")),
+        "web_key_findings": web.get("key_findings") if isinstance(web, dict) else [],
+    }, 10000).lower()
+
+    def has_any(words: List[str]) -> bool:
+        return any(str(w).lower() in text for w in words)
+
+    h_inj = str(intelligence.get("h_inj", ""))
+    a_inj = str(intelligence.get("g_inj", intelligence.get("away_inj", "")))
+    injury_text = f"{h_inj} {a_inj}".lower()
+    critical_words = ["门将", "中卫", "后腰", "队长", "头号", "核心", "射手"]
+    critical_absence = any(w in injury_text for w in critical_words) or (any(w in injury_text for w in ["停赛", "受伤"]) and any(w in injury_text for w in ["主力", "核心", "队长", "头号"]))
+
+    lineup_confirmed = has_any(["official_lineup", "confirmed_lineup", "lineup_confirmed", "首发已确认", "官方首发"])
+    lineup_predicted = has_any(["预计首发", "预测首发", "probable lineup", "expected lineup"])
+    lineup_unclear = not lineup_confirmed and not lineup_predicted
+
+    rotation_risk = has_any(["轮换", "替补阵容", "二队", "青年队", "大幅轮休", "主力轮休", "rotation", "rotate", "rested"])
+    fatigue_risk = has_any(["一周双赛", "连续客场", "短休", "加时", "刚踢完", "欧战后", "travel", "疲劳", "远征", "时差"])
+    motivation_clear = has_any(["争冠", "保级", "争四", "欧战资格", "升级", "晋级", "决赛", "半决赛", "必须", "主场告别", "战意明确", "motivation"])
+    motivation_unclear = has_any(["无欲无求", "锁定", "提前", "战意不足", "排名已定"]) or not motivation_clear
+    weather_risk = has_any(["大雨", "暴雨", "大风", "雪", "高温", "低温", "人工草", "草皮", "湿滑", "weather", "pitch"])
+    referee_risk = has_any(["红牌", "黄牌", "点球", "裁判", "严哨", "referee", "penalty"])
+    market_confirmed = bool(money.get("sharp_clear")) or has_any(["升盘", "降水", "盘口支持", "资金支持", "sharp", "steam"])
+    market_conflict = bool(money.get("conflict") or money.get("reverse")) or has_any(["资金分歧", "盘口反向", "反向资金", "退盘", "热门不升盘", "热度过高但不升盘"])
+    web_sources = web.get("sources", []) if isinstance(web, dict) else []
+    web_source_count = len(web_sources) if isinstance(web_sources, list) else 0
+
+    score = 100
+    penalties = []
+    if lineup_unclear:
+        score -= 22; penalties.append("lineup_unclear")
+    if rotation_risk:
+        score -= 16; penalties.append("rotation_risk")
+    if fatigue_risk:
+        score -= 10; penalties.append("fatigue_or_travel")
+    if critical_absence:
+        score -= 12; penalties.append("critical_absence")
+    if motivation_unclear:
+        score -= 10; penalties.append("motivation_unclear")
+    if market_conflict:
+        score -= 22; penalties.append("market_conflict")
+    elif not market_confirmed:
+        score -= 12; penalties.append("market_unconfirmed")
+    if web_source_count <= 0:
+        score -= 14; penalties.append("no_web_sources")
+    if weather_risk:
+        score -= 6; penalties.append("weather_pitch_risk")
+    if referee_risk:
+        score -= 4; penalties.append("referee_risk")
+
+    return {
+        "version": "prematch_structured_v1",
+        "lineup_confirmed": lineup_confirmed,
+        "lineup_predicted": lineup_predicted,
+        "lineup_unclear": lineup_unclear,
+        "rotation_risk": rotation_risk,
+        "fatigue_risk": fatigue_risk,
+        "motivation_clear": motivation_clear,
+        "motivation_unclear": motivation_unclear,
+        "critical_absence": critical_absence,
+        "weather_risk": weather_risk,
+        "referee_risk": referee_risk,
+        "market_confirmed": market_confirmed,
+        "market_conflict": market_conflict,
+        "web_source_count": web_source_count,
+        "structured_quality_score": max(0, min(100, score)),
+        "penalties": penalties,
+        "injury_summary": {"home": h_inj[:300], "away": a_inj[:300]},
+    }
+
+
+def _structured_confirmation_bonus(factors: Dict[str, Any], final_dir: str) -> int:
+    bonus = 0
+    if factors.get("lineup_confirmed"):
+        bonus += 18
+    if factors.get("market_confirmed"):
+        bonus += 16
+    if factors.get("motivation_clear"):
+        bonus += 10
+    if factors.get("web_source_count", 0) >= 2:
+        bonus += 8
+    if final_dir == "away" and not factors.get("market_confirmed"):
+        bonus -= 20
+    return bonus
+def _context_text_for_gate(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> str:
+    return _json_compact({
+        "league": match_obj.get("league"),
+        "match_num": match_obj.get("match_num"),
+        "intelligence": match_obj.get("intelligence"),
+        "information": match_obj.get("information"),
+        "expert_intro": match_obj.get("expert_intro"),
+        "baseface": match_obj.get("baseface"),
+        "contextual_logic": pred.get("contextual_logic"),
+        "reason": pred.get("ai_native_reason", pred.get("reason", "")),
+    }, 6000).lower()
+
+
+def _match_context_flags(pred: Dict[str, Any], match_obj: Dict[str, Any], dna: Dict[str, Any]) -> Dict[str, Any]:
+    league = str(match_obj.get("league", ""))
+    text = _context_text_for_gate(pred, match_obj)
+    cup_like = dna.get("key") == "cup_or_cross_context" or any(x in league for x in ["杯", "亚冠", "欧冠", "欧联", "世俱杯", "Cup"])
+    cross_region = any(x in league for x in ["亚冠", "世俱杯", "解放者", "南球杯"]) or any(t in text for t in ["跨洲", "中立场", "neutral", "远征", "长途", "旅行", "时差"])
+    rotation_risk = any(t in text for t in ["轮休", "轮换", "替补", "二队", "青年", "休息", "rotation", "rotate", "rested"])
+    importance_unclear = cup_like and not any(t in text for t in ["争冠", "保级", "必须", "晋级", "决赛", "半决赛", "主场告别", "战意", "motivation"])
+    name_favorite = False
+    sp_h = _f(match_obj.get("sp_home"), 0)
+    sp_a = _f(match_obj.get("sp_away"), 0)
+    if sp_h > 1.01 and sp_a > 1.01:
+        name_favorite = min(sp_h, sp_a) <= 1.75
+    return {
+        "cup_like": cup_like,
+        "cross_region": cross_region,
+        "rotation_risk": rotation_risk,
+        "importance_unclear": importance_unclear,
+        "name_favorite": name_favorite,
+    }
+
+
+def _weak_home_win_context(pred: Dict[str, Any], match_obj: Dict[str, Any], draw_prob: float, edge_gap: float, draw_cluster: bool) -> bool:
+    if pred.get("final_direction") != "home":
+        return False
+    score = _score_from_candidate(pred.get("predicted_score"))
+    total = _score_total(score)
+    home_pct = _f(pred.get("home_win_pct"), 0)
+    sp_h = _f(match_obj.get("sp_home"), 0)
+    return bool(
+        (home_pct and home_pct <= 47.0)
+        or edge_gap <= 9.0
+        or (draw_prob >= 27.0 and draw_cluster)
+        or score in {"1-0", "2-1"}
+        or (total is not None and total <= 2 and 1.70 <= sp_h <= 2.35)
+    )
+
+
+def assign_selection_layer(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    """Assign user-facing selection layer after gates; never changes score/direction."""
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    audit = pred.get("pre_match_factor_audit", {}) if isinstance(pred.get("pre_match_factor_audit"), dict) else {}
+    rules = set(str(x) for x in audit.get("rules_applied", []) if str(x))
+    tier = str(rec.get("tier", pred.get("recommendation_tier", "D"))).upper()
+    final_dir = str(pred.get("final_direction", ""))
+    conf = int(_clip(_f(rec.get("bet_confidence", pred.get("confidence", 0)), 0), 0, 100))
+    draw_prob = _f(audit.get("draw_probability_watch", pred.get("draw_pct", 0)), 0)
+    edge_gap = _f(audit.get("edge_gap", 0), 0)
+    dq = _f(audit.get("data_quality_score", 0), 0)
+    high_tail = _f(audit.get("high_goal_tail_pct", 0), 0)
+    structured_factors = audit.get("structured_factors", {}) if isinstance(audit.get("structured_factors"), dict) else {}
+    confirmation_bonus = _structured_confirmation_bonus(structured_factors, final_dir)
+    gate_pass = bool(pred.get("recommend_gate_pass"))
+
+    hard_no_bet_rules = {
+        "prematch_v2_money_flow_conflict_no_bet",
+        "prematch_v2_strong_draw_cluster_no_bet",
+        "prematch_v2_structured_market_conflict_no_bet",
+    }
+    away_unconfirmed = "prematch_v2_away_win_without_external_market_confirmation" in rules
+    cup_context = any(r in rules for r in [
+        "prematch_v2_cup_cross_context_lineup_motivation_required",
+        "prematch_v2_cross_region_requires_external_confirmation",
+    ])
+    weak_home_draw = "prematch_v2_weak_home_win_draw_guard" in rules
+    draw_defense = "prematch_v2_draw_defense_gate" in rules or "prematch_v2_high_draw_league_non_draw_cap" in rules
+    high_vol = "prematch_v2_high_volatility_league_requires_confirmation" in rules
+
+    layer = "观察"
+    stake = 0.0
+    hedge = []
+    reasons = []
+
+    if hard_no_bet_rules & rules:
+        layer, stake = "放弃", 0.0
+        reasons.append("硬闸门触发")
+    elif pred.get("recommendation_tier") == "D" and final_dir == "away" and confirmation_bonus >= 24 and away_unconfirmed and not (cup_context or high_vol):
+        layer, stake = "观察", 0.0
+        hedge.append("临场确认后客不败")
+        reasons.append("客胜缺确认被硬降D，但结构化信息有一定支持，保留观察")
+    elif pred.get("recommendation_tier") == "D":
+        layer, stake = "放弃", 0.0
+        reasons.append("等级为D")
+    elif gate_pass and tier in {"S", "A"} and (conf + confirmation_bonus) >= 72 and dq >= 55 and not rules:
+        layer, stake = "主推", 1.0
+        reasons.append("推荐闸门通过且结构化因子确认充分")
+    elif gate_pass and tier in {"A", "B"} and (conf + confirmation_bonus) >= 64 and not (away_unconfirmed or cup_context or weak_home_draw):
+        layer, stake = "小注", 0.5
+        reasons.append("推荐闸门通过但存在轻中度风险")
+    elif (not gate_pass) and tier == "C" and final_dir == "away" and confirmation_bonus >= 22 and not (cup_context or hard_no_bet_rules & rules):
+        layer, stake = "小注", 0.25
+        hedge.append("客不败/临场水位确认")
+        reasons.append("客胜原被降级，但结构化首发/市场/web确认足够，恢复为小注观察")
+    elif (not gate_pass) and tier == "D" and final_dir == "away" and confirmation_bonus >= 24 and away_unconfirmed and not (cup_context or hard_no_bet_rules & rules or high_vol):
+        layer, stake = "观察", 0.0
+        hedge.append("临场确认后客不败")
+        reasons.append("客胜缺确认被硬降D，但结构化信息有一定支持，保留观察")
+    elif weak_home_draw or (draw_defense and final_dir != "draw"):
+        layer, stake = "防平", 0.25
+        hedge.append("平局")
+        if draw_prob >= 29 or edge_gap <= 8:
+            hedge.append("双选/不败优先")
+        reasons.append("平局防线触发，胜负方向只能防平观察")
+    elif away_unconfirmed and final_dir == "away":
+        layer, stake = "观察", 0.0
+        hedge.append("临场确认后小注客队/客不败")
+        reasons.append("客胜缺少外部市场或sharp确认")
+    elif cup_context:
+        layer, stake = "观察", 0.0
+        hedge.append("等待官方首发/战意/临场盘口")
+        reasons.append("杯赛或跨洲场景需要临场确认")
+    elif high_vol or high_tail >= 45:
+        layer, stake = "观察", 0.0
+        hedge.append("比分簇替代单点")
+        reasons.append("高波动/高比分尾部，不适合单点重注")
+    elif tier == "C":
+        layer, stake = "观察", 0.0
+        reasons.append("C级仅观察，不进入投注池")
+    else:
+        layer, stake = "观察", 0.0
+        reasons.append("默认观察")
+
+    if layer == "放弃":
+        stake = 0.0
+    pred["selection_layer"] = layer
+    pred["selection_stake_unit"] = stake
+    pred["selection_hedge_suggestions"] = list(dict.fromkeys(hedge))[:6]
+    pred["selection_layer_reasons"] = list(dict.fromkeys(reasons))[:8]
+    pred["selection_confirmation_bonus"] = confirmation_bonus
+    # Backward-compatible Chinese summary for frontends that prefer one field.
+    pred["final_action"] = layer
+    return pred
+
+def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    """综合赛前因子风控闸门：只降推荐/补风险标签，不改比分和方向。"""
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    protected = {k: pred.get(k) for k in ["predicted_score", "final_direction", "result", "display_direction", "home_win_pct", "draw_pct", "away_win_pct"]}
+    rec = pred.setdefault("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    if not isinstance(pred.get("recommendation"), dict):
+        pred["recommendation"] = rec
+
+    league = str(match_obj.get("league", ""))
+    dna = _league_dna_profile(league)
+    context_flags = _match_context_flags(pred, match_obj, dna)
+    structured_factors = extract_structured_prematch_factors(pred, match_obj)
+    web_used, lineup_confirmed = _has_confirmed_web_or_lineup(pred, match_obj)
+    lineup_confirmed = bool(lineup_confirmed or structured_factors.get("lineup_confirmed"))
+    mf = _money_flow_state(pred)
+    probs = _extract_prob_map_0_100(pred.get("direction_probs")) or {
+        "home": _f(pred.get("home_win_pct"), 0), "draw": _f(pred.get("draw_pct"), 0), "away": _f(pred.get("away_win_pct"), 0)
+    }
+    final_dir = str(pred.get("final_direction", ""))
+    final_prob = _f(probs.get(final_dir), 0)
+    draw_prob = max(_f(probs.get("draw"), 0), _f((pred.get("matrix_direction_probs") or {}).get("draw"), 0))
+    away_prob = max(_f(probs.get("away"), 0), _f((pred.get("matrix_direction_probs") or {}).get("away"), 0))
+    home_prob = max(_f(probs.get("home"), 0), _f((pred.get("matrix_direction_probs") or {}).get("home"), 0))
+    sorted_probs = sorted([_f(v, 0) for k, v in probs.items() if k in VALID_DIRS], reverse=True)
+    edge_gap = sorted_probs[0] - sorted_probs[1] if len(sorted_probs) >= 2 else 0
+    high_tail = sum(_f(v, 0.0) for k, v in (pred.get("matrix_goal_probs") or {}).items() if _i(k, 0) >= 4)
+    draw_cluster = _draw_cluster_present(pred, match_obj)
+
+    data_quality_score = 100
+    if not web_used:
+        data_quality_score -= 28
+    if not lineup_confirmed:
+        data_quality_score -= 22
+    if not mf["sharp_clear"]:
+        data_quality_score -= 18
+    if not match_obj.get("change"):
+        data_quality_score -= 8
+    structured_score = _f(structured_factors.get("structured_quality_score"), data_quality_score)
+    data_quality_score = round((max(0, min(100, data_quality_score)) * 0.55) + (structured_score * 0.45), 1)
+
+    audit = {
+        "version": PREMATCH_V2_VERSION,
+        "league_dna": dna,
+        "match_context_flags": context_flags,
+        "structured_factors": structured_factors,
+        "web_used_with_sources": web_used,
+        "lineup_confirmed": lineup_confirmed,
+        "money_flow": mf,
+        "data_quality_score": data_quality_score,
+        "edge_gap": round(edge_gap, 2),
+        "draw_probability_watch": round(draw_prob, 2),
+        "draw_cluster_present": draw_cluster,
+        "high_goal_tail_pct": round(high_tail, 2),
+        "rules_applied": [],
+    }
+
+    def apply(max_tier: str, reason: str, tag: str) -> None:
+        audit["rules_applied"].append(reason)
+        _cap_recommendation_tier(pred, max_tier, reason, tag)
+
+    # P0 结构化因子硬风险：轮换/战意/关键伤停/市场冲突必须进入推荐层。
+    if structured_factors.get("market_conflict"):
+        apply("D", "prematch_v2_structured_market_conflict_no_bet", "prematch_v2_structured_market_conflict")
+    if structured_factors.get("critical_absence") and not lineup_confirmed:
+        apply("C", "prematch_v2_critical_absence_without_lineup_confirmation", "prematch_v2_critical_absence")
+    if structured_factors.get("rotation_risk") and not lineup_confirmed:
+        apply("C", "prematch_v2_rotation_risk_requires_lineup", "prematch_v2_rotation_risk")
+    if structured_factors.get("fatigue_risk") and final_dir == "away":
+        apply("C", "prematch_v2_away_fatigue_travel_risk", "prematch_v2_away_fatigue")
+
+    # P0 数据质量：无外部来源/无首发时，不能把上下文判断包装成高置信精选。
+    data_quality_hard_context = final_dir == "away" or (final_dir != "draw" and bool(draw_cluster)) or dna.get("volatility") == "high" or high_tail >= 45.0
+    if data_quality_score < 35 and data_quality_hard_context and str(rec.get("tier", "D")).upper() in {"S", "A"}:
+        apply("B", "prematch_v2_data_quality_below_35_no_high_grade", "prematch_v2_low_data_quality")
+    elif data_quality_score < 55 and str(rec.get("tier", "D")).upper() in {"S", "A"} and data_quality_hard_context:
+        apply("B", "prematch_v2_data_quality_below_55_caps_to_B", "prematch_v2_medium_data_quality")
+    elif (not web_used or not lineup_confirmed) and str(rec.get("tier", "D")).upper() in {"S", "A"} and data_quality_hard_context:
+        apply("B", "prematch_v2_missing_web_or_lineup_caps_to_B", "prematch_v2_missing_web_or_lineup")
+
+    # P0 平局防线：弱优势/平赔簇/矩阵平局高时，胜负方向不进强推。
+    if final_dir != "draw" and (draw_prob >= 31.0 or (draw_cluster and edge_gap <= 10.0) or edge_gap <= 6.0):
+        apply("C", "prematch_v2_draw_defense_gate", "prematch_v2_draw_defense")
+        if draw_prob >= 34.0 or (draw_cluster and edge_gap <= 5.0):
+            apply("D", "prematch_v2_strong_draw_cluster_no_bet", "prematch_v2_strong_draw_cluster")
+
+    # P0 弱主胜防平：主胜小比分/弱边际/高平局联赛，不能直接进主推。
+    if _weak_home_win_context(pred, match_obj, draw_prob, edge_gap, draw_cluster):
+        if dna.get("draw_risk") == "high" or draw_prob >= 30.0 or not web_used:
+            apply("C", "prematch_v2_weak_home_win_draw_guard", "prematch_v2_weak_home_win_draw_guard")
+        else:
+            apply("B", "prematch_v2_weak_home_win_needs_confirmation", "prematch_v2_weak_home_win")
+
+    # P0 杯赛/跨洲/名气强队：未确认首发和战意时，不追名气强队。
+    if context_flags.get("cup_like") or context_flags.get("cross_region"):
+        if context_flags.get("rotation_risk") or context_flags.get("importance_unclear") or not lineup_confirmed:
+            if context_flags.get("name_favorite") or final_dir in {"home", "away"}:
+                apply("C", "prematch_v2_cup_cross_context_lineup_motivation_required", "prematch_v2_cup_cross_context")
+        if context_flags.get("cross_region") and not web_used:
+            apply("C", "prematch_v2_cross_region_requires_external_confirmation", "prematch_v2_cross_region")
+
+    # P0 客胜二次审核：无sharp/无web/高波动联赛下的客胜不作主推。
+    if final_dir == "away":
+        if dna.get("away_penalty", 0) >= 2 or (not web_used and not mf["sharp_clear"]):
+            apply("D", "prematch_v2_away_win_without_external_market_confirmation", "prematch_v2_away_win_second_review")
+        elif dna.get("away_penalty", 0) >= 1 or final_prob <= 46 or away_prob <= home_prob + 6:
+            apply("C", "prematch_v2_away_win_context_risk", "prematch_v2_away_win_context_risk")
+
+    # 联赛DNA：德甲/美职/北欧等高波动，尤其末段/无web时降级。
+    if dna.get("volatility") == "high" and (not web_used or high_tail >= 34.0):
+        if final_dir == "away":
+            apply("C", "prematch_v2_high_volatility_league_requires_confirmation", "prematch_v2_high_volatility_league")
+        else:
+            apply("B", "prematch_v2_high_volatility_league_requires_confirmation", "prematch_v2_high_volatility_league")
+    if dna.get("draw_risk") == "high" and final_dir != "draw" and draw_prob >= 27.0:
+        apply("C", "prematch_v2_high_draw_league_non_draw_cap", "prematch_v2_high_draw_league")
+
+    # 资金流：sharp反向/反向盘口未解释，直接放弃；sharp不明则限制高等级。
+    if mf["conflict"] or mf["reverse"]:
+        apply("D", "prematch_v2_money_flow_conflict_no_bet", "prematch_v2_money_flow_conflict")
+    elif not mf["sharp_clear"] and str(rec.get("tier", "D")).upper() in {"S", "A"}:
+        apply("B", "prematch_v2_sharp_unclear_no_A_or_S", "prematch_v2_sharp_unclear")
+
+    # high_btts_tail / 高比分尾部：不是自动反向，但会压低单点胜负信心。
+    if high_tail >= 45.0 and final_dir != "draw":
+        if final_dir == "away" or edge_gap <= 8.0:
+            apply("C", "prematch_v2_high_goal_tail_direction_instability", "prematch_v2_high_goal_tail")
+        else:
+            apply("B", "prematch_v2_high_goal_tail_direction_instability", "prematch_v2_high_goal_tail")
+
+    pred["pre_match_factor_audit"] = audit
+    pred.setdefault("validation_warnings", []).extend([f"prematch_v2:{r}" for r in audit["rules_applied"]])
+    pred["validation_warnings"] = list(dict.fromkeys(str(x) for x in pred.get("validation_warnings", []) if str(x).strip()))[:80]
+    pred["recommendation_downgrade_reasons"] = list(dict.fromkeys(str(x) for x in pred.get("recommendation_downgrade_reasons", []) if str(x).strip()))[:80]
+    pred["recommend_gate_reasons"] = list(dict.fromkeys(str(x) for x in pred.get("recommend_gate_reasons", []) if str(x).strip()))[:80]
+
+    rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    tier = str(rec.get("tier", pred.get("recommendation_tier", "D"))).upper()
+    pred["recommendation_tier"] = tier
+    pred["recommend_gate_pass"] = bool(rec.get("is_recommended", False)) and _min_tier_ok(tier)
+    pred["direction_tier"] = tier
+    pred["score_tier"] = tier
+    if not pred["recommend_gate_pass"] and "prematch_v2_gate" not in pred.get("recommend_gate_reasons", []):
+        pred.setdefault("recommend_gate_reasons", []).append("prematch_v2_gate")
+    for key, value in protected.items():
+        pred[key] = value
+    return pred
+
 def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
     apply_weak_home_tail_risk_protection(ai_r)
     pred = _BASE_ADAPT_AI_TO_FRONTEND_V2021(ai_r, match_obj)
@@ -4105,6 +4598,14 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         pred["score_tier"] = tier
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"two_one_hard_gate_error:{str(e)[:120]}")
+    try:
+        apply_pre_match_factor_v2_gate(pred, match_obj)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"prematch_v2_gate_error:{str(e)[:120]}")
+    try:
+        assign_selection_layer(pred, match_obj)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"selection_layer_error:{str(e)[:120]}")
     pred["engine_version"] = ENGINE_VERSION
     pred["engine_architecture"] = ENGINE_ARCHITECTURE
     return pred

@@ -1,0 +1,69 @@
+import os
+import sys
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+from scripts import predict
+from tests.test_prematch_factor_gate import _base_ai_row
+
+
+def test_weak_home_low_score_in_high_draw_league_is_capped_to_c():
+    row = _base_ai_row(
+        final_direction="home",
+        predicted_score="1-0",
+        direction_probs={"home": 46, "draw": 29, "away": 25},
+        top3=[{"score": "1-0", "prob": 18}, {"score": "1-1", "prob": 16}],
+        recommendation={"tier": "B", "is_recommended": True, "bet_confidence": 66, "risk_level": "medium", "risk_tags": []},
+        money_flow={"sharp_money_direction": "home", "reverse_line_movement": False},
+        web_research={"used": False, "sources": []},
+    )
+    front = predict.adapt_ai_to_frontend(row, {"league": "瑞超", "s11": 6.8, "sp_home": 2.05})
+
+    assert front["predicted_score"] == "1-0"
+    assert front["final_direction"] == "home"
+    assert front["recommend_gate_pass"] is False
+    assert front["recommendation"]["tier"] == "C"
+    assert "prematch_v2_weak_home_win_draw_guard" in front["recommendation_downgrade_reasons"]
+
+
+def test_cup_cross_context_favorite_requires_lineup_and_motivation_confirmation():
+    row = _base_ai_row(
+        final_direction="home",
+        predicted_score="2-0",
+        direction_probs={"home": 58, "draw": 24, "away": 18},
+        top3=[{"score": "2-0", "prob": 17}, {"score": "1-0", "prob": 14}],
+        recommendation={"tier": "B", "is_recommended": True, "bet_confidence": 68, "risk_level": "medium", "risk_tags": []},
+        money_flow={"sharp_money_direction": "home", "reverse_line_movement": False},
+        web_research={"used": False, "sources": []},
+    )
+    match = {"league": "亚冠乙", "sp_home": 1.55, "s11": 9.0, "information": {}, "intelligence": {}}
+    front = predict.adapt_ai_to_frontend(row, match)
+
+    assert front["predicted_score"] == "2-0"
+    assert front["final_direction"] == "home"
+    assert front["recommend_gate_pass"] is False
+    assert front["recommendation"]["tier"] == "C"
+    assert "prematch_v2_cup_cross_context_lineup_motivation_required" in front["recommendation_downgrade_reasons"]
+    assert "prematch_v2_cross_region_requires_external_confirmation" in front["recommendation_downgrade_reasons"]
+
+
+def test_cup_favorite_with_web_lineup_and_motivation_can_pass():
+    row = _base_ai_row(
+        final_direction="home",
+        predicted_score="2-0",
+        direction_probs={"home": 62, "draw": 21, "away": 17},
+        top3=[{"score": "2-0", "prob": 19}, {"score": "3-0", "prob": 12}],
+        recommendation={"tier": "B", "is_recommended": True, "bet_confidence": 70, "risk_level": "medium", "risk_tags": []},
+        money_flow={"sharp_money_direction": "home", "reverse_line_movement": False},
+        web_research={"used": True, "sources": [{"title": "lineup", "url": "https://example.com", "claim": "官方首发与战意确认"}]},
+        reason="晋级战意明确，官方首发确认。",
+    )
+    match = {"league": "亚冠乙", "sp_home": 1.55, "s11": 10.5, "information": {"official_lineup": True}, "intelligence": {"note": "必须晋级"}}
+    front = predict.adapt_ai_to_frontend(row, match)
+
+    assert front["predicted_score"] == "2-0"
+    assert front["final_direction"] == "home"
+    assert front["recommend_gate_pass"] is True
+    assert "prematch_v2_cup_cross_context_lineup_motivation_required" not in front.get("recommendation_downgrade_reasons", [])
