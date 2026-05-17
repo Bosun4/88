@@ -990,12 +990,15 @@ def _canonical_output_schema_text() -> str:
     "score_stability":"strong/medium/weak",
     "risk_level":"low/medium/high",
     "risk_tags":[],
+    "bet_action":"main/small/hedge/observe/no_bet",
+    "why_this_can_fail":[],
+    "minimum_evidence_needed":[],
     "why_recommended":"中文说明"
   },
   "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
   "reason":"中文综合理由"
 }
-硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；anchor_audit 必须逐项回答本场 mandatory_cross_anchor_questions。
+硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；anchor_audit 必须逐项回答本场 mandatory_cross_anchor_questions。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
 '''.strip()
 
 
@@ -1622,6 +1625,9 @@ def _normalize_recommendation(item: Dict[str, Any]) -> Dict[str, Any]:
         "score_stability": str(rec.get("score_stability", "unknown")),
         "risk_level": str(rec.get("risk_level", item.get("risk_level", "medium"))),
         "risk_tags": risk_tags[:12],
+        "bet_action": str(rec.get("bet_action", "")),
+        "why_this_can_fail": rec.get("why_this_can_fail", []) if isinstance(rec.get("why_this_can_fail", []), list) else [],
+        "minimum_evidence_needed": rec.get("minimum_evidence_needed", []) if isinstance(rec.get("minimum_evidence_needed", []), list) else [],
         "why_recommended": str(rec.get("why_recommended", item.get("reason", "")))[:1500],
     }
 
@@ -3098,15 +3104,17 @@ def build_evidence_packet_v203(match_obj: Dict[str, Any], index: int) -> Dict[st
 # ------------------------------------------------------------
 
 PHASE1_ROLE_SPLIT_ADDENDUM = """
-【v20.3 强制分工】
-GPT 不再扮演最终预测员，只输出 market_audit / score_cluster_audit / goal_market_audit / market_conflicts / candidate_scores。
-Grok 不再扮演最终预测员，只输出 sharp_money_audit / public_heat_audit / packet_news_risk_audit / risk_tags / trap_candidates。
-Gemini 才能输出 final_direction / predicted_score / top3 / recommendation。
+【v20.6 AI 主导分工】
+你不是比分生成器，而是风险控制型赛前分析师；目标不是每场硬推，而是避免把低质量比赛包装成高信心推荐。
+GPT：正方市场结构师，重点输出 market_audit / score_cluster_audit / goal_market_audit / candidate_scores / 可买条件；若证据不足必须说 observe/no_bet。
+Grok：反方审判员，重点寻找 favorite_trap / draw_trap / away_win_overreach / rotation_or_motivation_risk / source_hallucination；不要顺着热门结论。
+Gemini：终审裁判，必须综合正方、反方、raw evidence 和来源质量，允许 final_direction=abstain/no_bet；若证据不足，recommendation.is_recommended=false。
+三方都必须列出 why_this_can_fail；不能把“名气强、低赔、常见比分模板”当成独立充分证据。
 若 GPT/Grok 仍输出最终比分，Gemini 可以参考但必须重新审计，不得机械照抄。
 """.strip()
 
 GEMINI_FINAL_AUDIT_ADDENDUM = """
-【v20.3 Gemini 终审硬约束】
+【v20.6 Gemini 终审硬约束：AI 自主、反幻觉、可放弃】
 1. 必须读取 score_cluster_diagnostics_v203.cluster_ranking 与 adjacent_score_audit_table。
 2. 输出 predicted_score 前必须完成相邻比分审计：
    - 2-1 必须比较 1-1/1-0/2-0/1-2/2-2/3-1。
@@ -3120,7 +3128,8 @@ GEMINI_FINAL_AUDIT_ADDENDUM = """
 4. 必须读取 sharp_money_facts_v203。若 had_change 缺失，只能说 RLM 不可确认，不能声称“聪明钱已确认”。
 5. 若 no_web_tool_available，不能把抓包里的 injury/news/points 包装成实时联网来源；这些只能算 packet_context，最高 reliability=medium。
 6. 推荐等级必须拆分：direction_edge、score_cluster_strength、goal_band_strength、btts_alignment、sharp_alignment、web_source_quality、market_conflict_penalty。
-7. 本地不会改你的比分，但若组件分不足，本地可只做推荐降级。
+7. 你必须输出 bet_action：main/small/hedge/observe/no_bet；本地不会替你改足球方向、比分或原始 confidence，只会展示风险提示。
+8. 你必须输出 why_this_can_fail 与 minimum_evidence_needed；若关键证据缺失且无法覆盖失败路径，应主动 no_bet/observe，而不是硬给 A/B 推荐。
 """.strip()
 
 RECOMMENDATION_COMPONENT_SCHEMA = {
@@ -3142,42 +3151,36 @@ RECOMMENDATION_COMPONENT_SCHEMA = {
 
 def protocol_downgrade_recommendation_only(pred: Dict[str, Any]) -> Dict[str, Any]:
     """
-    只降推荐等级，不改 predicted_score / final_direction。
-    可在 adapt_ai_to_frontend 后或前端排序前调用。
+    v20.6: no longer locally caps AI recommendation tiers from component heuristics.
+    This layer only records protocol risk hints and lets the AI final referee own
+    tier / is_recommended / bet_confidence. Hard local football decisions were
+    moved out of the main path to avoid becoming a fourth pseudo-referee.
     """
-    rec = pred.setdefault("recommendation", {}) if isinstance(pred, dict) else {}
+    if not isinstance(pred, dict):
+        return pred
+    rec = pred.setdefault("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
     comps = pred.get("recommendation_components", {}) if isinstance(pred.get("recommendation_components"), dict) else {}
-    tier = str(rec.get("tier", "D")).upper()
     reasons: List[str] = []
 
-    def cap(max_tier: str, reason: str) -> None:
-        nonlocal tier
-        order = {"S": 5, "A": 4, "B": 3, "C": 2, "D": 1}
-        if order.get(tier, 1) > order.get(max_tier, 1):
-            tier = max_tier
-            reasons.append(reason)
-
     if _f(comps.get("score_cluster_strength"), 0) < 55:
-        cap("B", "score_cluster_strength_below_55")
+        reasons.append("score_cluster_strength_below_55")
     if _f(comps.get("sharp_alignment"), 0) < 40 and _f(comps.get("direction_edge"), 0) < 70:
-        cap("C", "sharp_alignment_low_and_direction_edge_not_strong")
+        reasons.append("sharp_alignment_low_and_direction_edge_not_strong")
     if _f(comps.get("web_source_quality"), 0) <= 0 and any(k in str(pred.get("reason", "")) for k in ["伤停", "首发", "战意", "体能"]):
-        cap("B", "reason_uses_context_without_verified_web_sources")
+        reasons.append("reason_uses_context_without_verified_web_sources")
     if _f(comps.get("direction_edge"), 0) < 55:
-        cap("C", "direction_edge_below_55")
+        reasons.append("direction_edge_below_55")
 
-    pred = apply_two_one_home_hard_no_bet_gate(pred)
-    rec = pred.setdefault("recommendation", {}) if isinstance(pred, dict) else {}
-    if pred.get("recommend_gate_pass") is False and "two_one_home_hard_no_bet" in pred.get("recommendation_downgrade_reasons", []):
-        tier = "D"
+    if reasons:
+        pred.setdefault("protocol_risk_hints", []).extend(reasons)
+        pred["protocol_risk_hints"] = list(dict.fromkeys(str(x) for x in pred.get("protocol_risk_hints", []) if str(x).strip()))[:24]
+        pred.setdefault("validation_warnings", []).extend([f"protocol_risk_hint:{r}" for r in reasons])
+        pred["validation_warnings"] = list(dict.fromkeys(str(x) for x in pred.get("validation_warnings", []) if str(x).strip()))[:80]
+
+    tier = str(rec.get("tier", pred.get("recommendation_tier", "D"))).upper()
     rec["tier"] = tier if tier in {"S", "A", "B", "C", "D"} else "D"
-    if "two_one_home_hard_no_bet" in pred.get("recommendation_downgrade_reasons", []):
-        rec["tier"] = "D"
-        rec["is_recommended"] = False
-    else:
-        rec["is_recommended"] = rec["tier"] in {"S", "A", "B"}
-    pred.setdefault("recommendation_downgrade_reasons", []).extend(reasons)
-    pred["recommendation_downgrade_reasons"] = list(dict.fromkeys(pred.get("recommendation_downgrade_reasons", [])))
+    pred["recommendation_tier"] = rec["tier"]
+    pred["recommend_gate_pass"] = bool(rec.get("is_recommended", False)) and _min_tier_ok(rec["tier"])
     return pred
 
 
@@ -3306,12 +3309,15 @@ def _canonical_output_schema_text() -> str:
     "score_stability":"strong/medium/weak",
     "risk_level":"low/medium/high",
     "risk_tags":[],
+    "bet_action":"main/small/hedge/observe/no_bet",
+    "why_this_can_fail":[],
+    "minimum_evidence_needed":[],
     "why_recommended":"中文说明"
   },
   "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
   "reason":"中文综合理由"
 }
-硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+ 尾部，并填充 risk_score_candidates / tail_risk_flags。
+硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
 """.strip()
 
 
@@ -3634,7 +3640,10 @@ def apply_two_one_home_hard_no_bet_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
         pred["recommendation"] = rec
     rec["tier"] = "D"
     rec["is_recommended"] = False
-    rec["bet_confidence"] = min(int(_clip(_f(rec.get("bet_confidence", pred.get("confidence", 0)), 0), 0, 100)), 49)
+    original_bet_confidence = int(_clip(_f(rec.get("bet_confidence", pred.get("confidence", 0)), 0), 0, 100))
+    rec.setdefault("original_bet_confidence", original_bet_confidence)
+    rec["risk_adjusted_bet_confidence"] = min(original_bet_confidence, 49)
+    rec["display_bet_confidence"] = min(original_bet_confidence, 49)
     rec["risk_level"] = "high"
     tags = rec.get("risk_tags", [])
     if not isinstance(tags, list):
@@ -3651,7 +3660,10 @@ def apply_two_one_home_hard_no_bet_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
     pred["recommend_gate_reasons"] = list(dict.fromkeys(str(x) for x in gate_reasons if str(x).strip()))[:24]
     pred["direction_tier"] = "D"
     pred["score_tier"] = "D"
-    pred["confidence"] = min(int(_clip(_f(pred.get("confidence", rec.get("bet_confidence", 0)), 0), 0, 100)), 49)
+    original_confidence = int(_clip(_f(pred.get("confidence", rec.get("bet_confidence", 0)), 0), 0, 100))
+    pred.setdefault("original_confidence", original_confidence)
+    pred["risk_adjusted_confidence"] = min(original_confidence, 49)
+    pred["display_confidence"] = min(original_confidence, 49)
     pred["confidence_downgrade_reason"] = TWO_ONE_NO_BET_REASON
     pred["no_bet_reason"] = TWO_ONE_NO_BET_REASON + ": " + ",".join(reasons)
     pred["sub50_tiebreaker_warning"] = bool(home_pct <= 52.0 or non_home_pct >= 47.0)
@@ -3719,7 +3731,9 @@ def apply_weak_home_tail_risk_protection(row: Dict[str, Any]) -> Dict[str, Any]:
             row["recommendation"] = rec
         old_conf = int(_clip(_f(rec.get("bet_confidence", 0), 0), 0, 100))
         if old_conf >= 70:
-            rec["bet_confidence"] = min(old_conf, 60)
+            rec.setdefault("original_bet_confidence", old_conf)
+            rec["risk_adjusted_bet_confidence"] = min(old_conf, 60)
+            rec["display_bet_confidence"] = min(old_conf, 60)
             row["confidence_downgrade_reason"] = TAIL_RISK_DOWNGRADE_REASON
         elif raw_item.get("confidence_downgrade_reason"):
             row["confidence_downgrade_reason"] = str(raw_item.get("confidence_downgrade_reason"))[:300]
@@ -3733,7 +3747,10 @@ def apply_weak_home_tail_risk_protection(row: Dict[str, Any]) -> Dict[str, Any]:
         if home_pct <= 50.0 or away_pct >= 24.0:
             rec["tier"] = "D"
             rec["is_recommended"] = False
-            rec["bet_confidence"] = min(int(_clip(_f(rec.get("bet_confidence", old_conf), 0), 0, 100)), 49)
+            rec.setdefault("original_bet_confidence", old_conf)
+            risk_conf = min(int(_clip(_f(rec.get("bet_confidence", old_conf), 0), 0, 100)), 49)
+            rec["risk_adjusted_bet_confidence"] = risk_conf
+            rec["display_bet_confidence"] = risk_conf
             rec["risk_level"] = "high"
             row["confidence_downgrade_reason"] = TWO_ONE_NO_BET_REASON
             row.setdefault("recommendation_downgrade_reasons", []).append("weak_home_tail_forced_no_bet")
@@ -4463,7 +4480,9 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
 
     def apply(max_tier: str, reason: str, tag: str) -> None:
         audit["rules_applied"].append(reason)
-        _cap_recommendation_tier(pred, max_tier, reason, tag)
+        audit.setdefault("risk_hints", []).append({"max_tier": max_tier, "reason": reason, "tag": tag})
+        # v20.6: prematch 本地层只记录 risk hints，避免成为第四个足球裁判。
+        # 硬降级交给 AI 终审 prompt 的 bet_action / recommendation，或前端展示 final_action 风险。
 
     # P0 结构化因子硬风险：轮换/战意/关键伤停/市场冲突必须进入推荐层。
     if structured_factors.get("market_conflict"):
@@ -4546,8 +4565,8 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
     pred["recommend_gate_pass"] = bool(rec.get("is_recommended", False)) and _min_tier_ok(tier)
     pred["direction_tier"] = tier
     pred["score_tier"] = tier
-    if not pred["recommend_gate_pass"] and "prematch_v2_gate" not in pred.get("recommend_gate_reasons", []):
-        pred.setdefault("recommend_gate_reasons", []).append("prematch_v2_gate")
+    if audit["rules_applied"] and not pred.get("recommend_gate_pass"):
+        pred.setdefault("recommend_gate_reasons", []).append("prematch_v2_risk_hints_present")
     for key, value in protected.items():
         pred[key] = value
     return pred

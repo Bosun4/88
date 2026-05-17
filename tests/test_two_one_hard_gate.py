@@ -44,7 +44,9 @@ def test_home_2_1_with_weak_home_btts_tail_is_forced_no_bet_without_changing_sco
     assert front["recommend_gate_pass"] is False
     assert front["recommendation"]["tier"] == "D"
     assert front["recommendation"]["is_recommended"] is False
-    assert front["confidence"] <= 49
+    assert front["confidence"] == 78
+    assert front["display_confidence"] <= 49
+    assert front["risk_adjusted_confidence"] <= 49
     assert "two_one_home_hard_no_bet" in front["recommendation_downgrade_reasons"]
     assert "two_one_home_hard_no_bet_gate_applied" in front["validation_warnings"]
     assert front["no_bet_reason"]

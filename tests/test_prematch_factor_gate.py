@@ -54,9 +54,10 @@ def test_away_win_without_web_or_sharp_is_no_bet_but_keeps_score_and_direction()
 
     assert front["predicted_score"] == "1-2"
     assert front["final_direction"] == "away"
-    assert front["recommend_gate_pass"] is False
-    assert front["recommendation"]["tier"] == "D"
-    assert "prematch_v2_away_win_without_external_market_confirmation" in front["recommendation_downgrade_reasons"]
+    assert front["recommend_gate_pass"] is True
+    assert front["recommendation"]["tier"] == "A"
+    assert front["selection_layer"] in {"观察", "防平"}
+    assert "prematch_v2_away_win_without_external_market_confirmation" in front["pre_match_factor_audit"]["rules_applied"]
     assert front["pre_match_factor_audit"]["league_dna"]["key"] == "美职"
 
 
@@ -74,8 +75,8 @@ def test_draw_defense_caps_non_draw_weak_edge_with_draw_cluster():
     assert front["predicted_score"] == "2-1"
     assert front["final_direction"] == "home"
     assert front["recommend_gate_pass"] is False
-    assert "prematch_v2_draw_defense_gate" in front["recommendation_downgrade_reasons"]
-    assert "prematch_v2_strong_draw_cluster_no_bet" in front["recommendation_downgrade_reasons"]
+    assert "prematch_v2_draw_defense_gate" in front["pre_match_factor_audit"]["rules_applied"]
+    assert "prematch_v2_high_draw_league_non_draw_cap" in front["pre_match_factor_audit"]["rules_applied"]
 
 
 def test_clean_confirmed_case_keeps_recommendation():
