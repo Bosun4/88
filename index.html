@@ -370,12 +370,18 @@ function getRecommendation(p){
 }
 
 function isTopPickMatch(m,p){
-  return m.is_recommended===true || m.is_strict_recommended===true || m.is_top4_candidate===true;
+  p=p||{};
+  var action=String(p.final_action||p.selection_layer||'').trim();
+  if(action==='放弃'||action==='观察'||action==='防平')return false;
+  // v20.6: Top4 只是候选展示，不再覆盖 Gemini/AI 的最终行动层。
+  return (m.is_recommended===true || m.is_strict_recommended===true || m.is_top4_candidate===true) && isGatePass(p);
 }
 
 function isGatePass(p){
   p=p||{};
   var rec=getRecommendation(p);
+  var action=String(p.final_action||p.selection_layer||rec.bet_action||'').trim().toLowerCase();
+  if(action==='放弃'||action==='观察'||action==='防平'||action==='no_bet'||action==='observe')return false;
   return rec.is_recommended===true || p.recommend_gate_pass===true;
 }
 
@@ -504,6 +510,7 @@ function renderSelectionBlock(p){
       warnings.slice(0,12).map(function(w){return '<div class="warn">'+esc(w)+'</div>';}).join('');
   }
 
+  var displayConf=(rec.display_bet_confidence!==undefined?rec.display_bet_confidence:(p.display_confidence!==undefined?p.display_confidence:(p.ai_avg_confidence||rec.bet_confidence||p.confidence)));
   return '<div class="block">'+
     '<div class="block-h">'+
       '<div class="block-t">🎯 AI-NATIVE 推荐结论</div>'+
@@ -512,10 +519,11 @@ function renderSelectionBlock(p){
     '<div class="block-b">'+
       '<div class="sel-grid">'+
         '<div class="sel"><div class="sel-l">综合推荐</div><div class="sel-v '+tierClass(tier)+'">'+esc(tier)+'</div></div>'+
-        '<div class="sel"><div class="sel-l">AI推荐分</div><div class="sel-v '+tierClass(tier)+'">'+fmt1(p.ai_avg_confidence||rec.bet_confidence||p.confidence)+'</div></div>'+
+        '<div class="sel"><div class="sel-l">AI推荐分</div><div class="sel-v '+tierClass(tier)+'">'+fmt1(displayConf)+'</div></div>'+
         '<div class="sel"><div class="sel-l">方向稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(stableText(dt))+'</div></div>'+
         '<div class="sel"><div class="sel-l">比分稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(stableText(st))+'</div></div>'+
         '<div class="sel"><div class="sel-l">形态</div><div class="sel-v">'+esc(V(p.goal_band,'?'))+' · '+esc(getBttsLabel(p))+'</div></div>'+
+        '<div class="sel"><div class="sel-l">行动层</div><div class="sel-v">'+esc(V(p.final_action||p.selection_layer||rec.bet_action,'观察'))+'</div></div>'+
       '</div>'+
       (rec.why_recommended?'<div class="sig sig-b">推荐理由：'+esc(rec.why_recommended)+'</div>':'')+
       (rec.stake_style?'<div class="sig sig-a">仓位风格：'+esc(rec.stake_style)+'</div>':'')+

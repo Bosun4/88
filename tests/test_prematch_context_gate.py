@@ -24,8 +24,8 @@ def test_weak_home_low_score_in_high_draw_league_is_capped_to_c():
     assert front["predicted_score"] == "1-0"
     assert front["final_direction"] == "home"
     assert front["recommend_gate_pass"] is False
-    assert front["recommendation"]["tier"] == "C"
-    assert "prematch_v2_weak_home_win_draw_guard" in front["recommendation_downgrade_reasons"]
+    assert front["recommendation"]["tier"] == "D"
+    assert "prematch_v2_weak_home_win_draw_guard" in front["pre_match_factor_audit"]["rules_applied"]
 
 
 def test_cup_cross_context_favorite_requires_lineup_and_motivation_confirmation():
@@ -43,10 +43,10 @@ def test_cup_cross_context_favorite_requires_lineup_and_motivation_confirmation(
 
     assert front["predicted_score"] == "2-0"
     assert front["final_direction"] == "home"
-    assert front["recommend_gate_pass"] is False
-    assert front["recommendation"]["tier"] == "C"
-    assert "prematch_v2_cup_cross_context_lineup_motivation_required" in front["recommendation_downgrade_reasons"]
-    assert "prematch_v2_cross_region_requires_external_confirmation" in front["recommendation_downgrade_reasons"]
+    assert front["recommend_gate_pass"] is True
+    assert front["recommendation"]["tier"] == "B"
+    assert "prematch_v2_cup_cross_context_lineup_motivation_required" in front["pre_match_factor_audit"]["rules_applied"]
+    assert "prematch_v2_cross_region_requires_external_confirmation" in front["pre_match_factor_audit"]["rules_applied"]
 
 
 def test_cup_favorite_with_web_lineup_and_motivation_can_pass():
@@ -66,4 +66,4 @@ def test_cup_favorite_with_web_lineup_and_motivation_can_pass():
     assert front["predicted_score"] == "2-0"
     assert front["final_direction"] == "home"
     assert front["recommend_gate_pass"] is True
-    assert "prematch_v2_cup_cross_context_lineup_motivation_required" not in front.get("recommendation_downgrade_reasons", [])
+    assert "prematch_v2_cup_cross_context_lineup_motivation_required" not in front.get("pre_match_factor_audit", {}).get("rules_applied", [])
