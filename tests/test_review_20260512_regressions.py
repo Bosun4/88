@@ -43,7 +43,7 @@ def test_build_evidence_packet_runtime_function_has_no_prediction_leakage():
     assert packet["identity"]["home_team"] == "塞尔塔"
     assert "prediction" not in packet
     assert "predicted_score" not in packet.get("context_raw_fields", {})
-    assert packet.get("evidence_compiler_version") in {"v20.3.0_sharp_cluster_full", "v20.6.0_shadow_pre_injected"}
+    assert packet.get("evidence_compiler_version") in {"v20.3.0_sharp_cluster_full", "v20.6.0_shadow_pre_injected", "v20.6.0_shadow_pre_injected_with_quant"}
 
 
 def test_predicted_score_and_final_direction_are_closed_by_score():
