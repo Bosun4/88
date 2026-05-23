@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-05-23 13:36:10",
+  "update_time": "2026-05-23 14:21:33",
   "version": "MAX-v1.1",
   "scope": "today_only",
   "top4": [],
@@ -252,11 +252,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -587,11 +587,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -922,11 +922,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -1257,11 +1257,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -1592,11 +1592,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -1927,11 +1927,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -2262,11 +2262,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -2597,11 +2597,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -2936,11 +2936,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -3039,12 +3039,12 @@
           "lose": 0
         },
         "vote": {
-          "win": "42",
-          "same": "31",
-          "lose": "27",
-          "hhad_win": "19",
-          "hhad_same": "25",
-          "hhad_lose": "56"
+          "win": "41",
+          "same": "33",
+          "lose": "26",
+          "hhad_win": "18",
+          "hhad_same": "24",
+          "hhad_lose": "58"
         },
         "odds_movement": "主胜升水，客胜平稳",
         "intelligence": {
@@ -3061,31 +3061,31 @@
         "home_rank": 3,
         "away_rank": 5,
         "v2_odds_dict": {
-          "a0": 10.0,
-          "a1": 4.4,
-          "a2": 3.25,
-          "a3": 3.6,
-          "a4": 5.8,
-          "a5": 11.5,
-          "a6": 21.0,
+          "a0": 9.5,
+          "a1": 4.25,
+          "a2": 3.15,
+          "a3": 3.65,
+          "a4": 6.0,
+          "a5": 12.5,
+          "a6": 24.0,
           "a7": 30.0,
-          "s00": 10.0,
-          "s11": 5.5,
+          "s00": 9.5,
+          "s11": 5.0,
           "s22": 11.0,
           "s33": 50.0,
           "w10": 7.0,
           "w20": 10.5,
-          "w21": 7.75,
+          "w21": 8.0,
           "w30": 21.0,
-          "w31": 16.0,
-          "w32": 27.0,
-          "w40": 50.0,
-          "w41": 45.0,
+          "w31": 18.0,
+          "w32": 30.0,
+          "w40": 65.0,
+          "w41": 50.0,
           "w42": 80.0,
           "l01": 9.0,
           "l02": 16.0,
           "l12": 10.0,
-          "l03": 36.0,
+          "l03": 38.0,
           "l13": 26.0,
           "l23": 35.0,
           "ss": 3.7,
@@ -3128,31 +3128,31 @@
         },
         "h2h": [],
         "information": {},
-        "a0": 10.0,
-        "a1": 4.4,
-        "a2": 3.25,
-        "a3": 3.6,
-        "a4": 5.8,
-        "a5": 11.5,
-        "a6": 21.0,
+        "a0": 9.5,
+        "a1": 4.25,
+        "a2": 3.15,
+        "a3": 3.65,
+        "a4": 6.0,
+        "a5": 12.5,
+        "a6": 24.0,
         "a7": 30.0,
-        "s00": 10.0,
-        "s11": 5.5,
+        "s00": 9.5,
+        "s11": 5.0,
         "s22": 11.0,
         "s33": 50.0,
         "w10": 7.0,
         "w20": 10.5,
-        "w21": 7.75,
+        "w21": 8.0,
         "w30": 21.0,
-        "w31": 16.0,
-        "w32": 27.0,
-        "w40": 50.0,
-        "w41": 45.0,
+        "w31": 18.0,
+        "w32": 30.0,
+        "w40": 65.0,
+        "w41": 50.0,
         "w42": 80.0,
         "l01": 9.0,
         "l02": 16.0,
         "l12": 10.0,
-        "l03": 36.0,
+        "l03": 38.0,
         "l13": 26.0,
         "l23": 35.0,
         "ss": 3.7,
@@ -3277,11 +3277,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -3379,9 +3379,9 @@
           "win": "63",
           "same": "23",
           "lose": "14",
-          "hhad_win": "36",
-          "hhad_same": "29",
-          "hhad_lose": "35"
+          "hhad_win": "34",
+          "hhad_same": "30",
+          "hhad_lose": "36"
         },
         "odds_movement": "主胜平稳，客胜平稳",
         "intelligence": {
@@ -3614,11 +3614,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -3720,9 +3720,9 @@
           "win": "48",
           "same": "27",
           "lose": "25",
-          "hhad_win": "24",
+          "hhad_win": "23",
           "hhad_same": "25",
-          "hhad_lose": "51"
+          "hhad_lose": "52"
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
@@ -3956,11 +3956,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -4293,11 +4293,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -4631,11 +4631,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -4724,20 +4724,24 @@
         "away_team": "代格福什",
         "league": "瑞超",
         "match_num": "周六007",
-        "sp_home": 1.8,
-        "sp_draw": 3.2,
-        "sp_away": 3.82,
+        "sp_home": 1.78,
+        "sp_draw": 3.15,
+        "sp_away": 4.0,
         "give_ball": -1.0,
-        "change": {},
-        "vote": {
-          "win": "49",
-          "same": "28",
-          "lose": "23",
-          "hhad_win": "24",
-          "hhad_same": "27",
-          "hhad_lose": "49"
+        "change": {
+          "win": -1,
+          "same": -1,
+          "lose": 1
         },
-        "odds_movement": "主胜平稳，客胜平稳",
+        "vote": {
+          "win": "50",
+          "same": "28",
+          "lose": "22",
+          "hhad_win": "25",
+          "hhad_same": "27",
+          "hhad_lose": "48"
+        },
+        "odds_movement": "主胜降水，客胜升水",
         "intelligence": {
           "h_inj": "阿布巴卡尔·凯塔 受伤 跟腱受伤 索迪克·拉瓦尔 停赛 轮休 马尔科姆·斯托尔特 轮休 阿卜迪·萨布利耶 轮休 埃利昂·伊梅里 轮休",
           "g_inj": "马玛杜巴·迪亚比 停赛 轮休 威利·雅各布森 停赛 轮休 比拉尔·侯赛因 停赛 轮休",
@@ -4798,10 +4802,10 @@
           "wins": 12,
           "draws": 6,
           "losses": 7,
-          "goals_for": 33,
-          "goals_against": 26,
-          "avg_goals_for": "1.34",
-          "avg_goals_against": "1.02",
+          "goals_for": 34,
+          "goals_against": 25,
+          "avg_goals_for": "1.35",
+          "avg_goals_against": "1.01",
           "clean_sheets": 4,
           "form": "WDLWD"
         },
@@ -4810,10 +4814,10 @@
           "wins": 9,
           "draws": 6,
           "losses": 10,
-          "goals_for": 25,
+          "goals_for": 24,
           "goals_against": 34,
-          "avg_goals_for": "0.99",
-          "avg_goals_against": "1.35",
+          "avg_goals_for": "0.97",
+          "avg_goals_against": "1.36",
           "clean_sheets": 3,
           "form": "LDWDL"
         },
@@ -4857,7 +4861,7 @@
         "ff": 7.0,
         "home": "卡尔马",
         "guest": "代格福什",
-        "change_is_direction_code": false,
+        "change_is_direction_code": true,
         "prediction": {
           "predicted_score": "弃权",
           "predicted_label": "弃权",
@@ -4968,11 +4972,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -5305,11 +5309,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -5643,11 +5647,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -5980,11 +5984,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -6318,11 +6322,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -6422,10 +6426,10 @@
         },
         "vote": {
           "win": "21",
-          "same": "27",
-          "lose": "52",
-          "hhad_win": "47",
-          "hhad_same": "26",
+          "same": "28",
+          "lose": "51",
+          "hhad_win": "48",
+          "hhad_same": "25",
           "hhad_lose": "27"
         },
         "odds_movement": "主胜降水，客胜升水",
@@ -6659,11 +6663,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -6752,22 +6756,22 @@
         "away_team": "国际米兰",
         "league": "意甲",
         "match_num": "周六013",
-        "sp_home": 2.98,
+        "sp_home": 3.18,
         "sp_draw": 3.5,
-        "sp_away": 1.97,
+        "sp_away": 1.89,
         "give_ball": 1.0,
         "change": {
           "win": 1,
-          "same": -1,
+          "same": 0,
           "lose": -1
         },
         "vote": {
-          "win": "31",
+          "win": "29",
           "same": "25",
-          "lose": "44",
-          "hhad_win": "55",
+          "lose": "46",
+          "hhad_win": "54",
           "hhad_same": "23",
-          "hhad_lose": "22"
+          "hhad_lose": "23"
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
@@ -6795,31 +6799,31 @@
           "s00": 17.0,
           "s11": 6.75,
           "s22": 11.0,
-          "s33": 50.0,
-          "w10": 11.0,
-          "w20": 16.0,
-          "w21": 9.0,
-          "w30": 35.0,
-          "w31": 21.0,
-          "w32": 22.0,
-          "w40": 100.0,
-          "w41": 60.0,
-          "w42": 75.0,
-          "l01": 9.0,
-          "l02": 11.0,
+          "s33": 45.0,
+          "w10": 13.0,
+          "w20": 18.0,
+          "w21": 9.5,
+          "w30": 42.0,
+          "w31": 22.0,
+          "w32": 23.0,
+          "w40": 125.0,
+          "w41": 65.0,
+          "w42": 80.0,
+          "l01": 8.75,
+          "l02": 10.5,
           "l12": 7.5,
-          "l03": 19.0,
-          "l13": 14.0,
+          "l03": 17.0,
+          "l13": 12.5,
           "l23": 18.0,
-          "ss": 4.75,
+          "ss": 5.0,
           "sp": 13.0,
           "sf": 21.0,
-          "ps": 7.0,
+          "ps": 7.5,
           "pp": 6.0,
-          "pf": 5.5,
-          "fs": 27.0,
+          "pf": 5.25,
+          "fs": 29.0,
           "fp": 13.0,
-          "ff": 3.2
+          "ff": 3.05
         },
         "id": 12,
         "date": "2026-05-23",
@@ -6830,10 +6834,10 @@
           "wins": 10,
           "draws": 6,
           "losses": 9,
-          "goals_for": 29,
-          "goals_against": 30,
-          "avg_goals_for": "1.15",
-          "avg_goals_against": "1.2",
+          "goals_for": 28,
+          "goals_against": 31,
+          "avg_goals_for": "1.12",
+          "avg_goals_against": "1.22",
           "clean_sheets": 3,
           "form": "WDLWD"
         },
@@ -6842,10 +6846,10 @@
           "wins": 14,
           "draws": 6,
           "losses": 5,
-          "goals_for": 39,
+          "goals_for": 40,
           "goals_against": 20,
-          "avg_goals_for": "1.55",
-          "avg_goals_against": "0.82",
+          "avg_goals_for": "1.58",
+          "avg_goals_against": "0.79",
           "clean_sheets": 4,
           "form": "WWDWW"
         },
@@ -6862,31 +6866,31 @@
         "s00": 17.0,
         "s11": 6.75,
         "s22": 11.0,
-        "s33": 50.0,
-        "w10": 11.0,
-        "w20": 16.0,
-        "w21": 9.0,
-        "w30": 35.0,
-        "w31": 21.0,
-        "w32": 22.0,
-        "w40": 100.0,
-        "w41": 60.0,
-        "w42": 75.0,
-        "l01": 9.0,
-        "l02": 11.0,
+        "s33": 45.0,
+        "w10": 13.0,
+        "w20": 18.0,
+        "w21": 9.5,
+        "w30": 42.0,
+        "w31": 22.0,
+        "w32": 23.0,
+        "w40": 125.0,
+        "w41": 65.0,
+        "w42": 80.0,
+        "l01": 8.75,
+        "l02": 10.5,
         "l12": 7.5,
-        "l03": 19.0,
-        "l13": 14.0,
+        "l03": 17.0,
+        "l13": 12.5,
         "l23": 18.0,
-        "ss": 4.75,
+        "ss": 5.0,
         "sp": 13.0,
         "sf": 21.0,
-        "ps": 7.0,
+        "ps": 7.5,
         "pp": 6.0,
-        "pf": 5.5,
-        "fs": 27.0,
+        "pf": 5.25,
+        "fs": 29.0,
         "fp": 13.0,
-        "ff": 3.2,
+        "ff": 3.05,
         "home": "博洛尼亚",
         "guest": "国际米兰",
         "change_is_direction_code": true,
@@ -7000,11 +7004,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -7093,9 +7097,9 @@
         "away_team": "斯图加特",
         "league": "德国杯",
         "match_num": "周六014",
-        "sp_home": 1.27,
-        "sp_draw": 5.3,
-        "sp_away": 6.5,
+        "sp_home": 1.26,
+        "sp_draw": 5.4,
+        "sp_away": 6.65,
         "give_ball": -1.0,
         "change": {
           "win": -1,
@@ -7171,7 +7175,7 @@
           "wins": 16,
           "draws": 6,
           "losses": 3,
-          "goals_for": 45,
+          "goals_for": 46,
           "goals_against": 14,
           "avg_goals_for": "1.82",
           "avg_goals_against": "0.57",
@@ -7185,7 +7189,7 @@
           "losses": 10,
           "goals_for": 25,
           "goals_against": 34,
-          "avg_goals_for": "0.99",
+          "avg_goals_for": "0.98",
           "avg_goals_against": "1.35",
           "clean_sheets": 3,
           "form": "LDWDL"
@@ -7341,11 +7345,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -7434,11 +7438,15 @@
         "away_team": "威廉二世",
         "league": "荷乙",
         "match_num": "周六015",
-        "sp_home": 2.0,
-        "sp_draw": 3.45,
-        "sp_away": 2.95,
+        "sp_home": 2.03,
+        "sp_draw": 3.42,
+        "sp_away": 2.9,
         "give_ball": -1.0,
-        "change": {},
+        "change": {
+          "win": 1,
+          "same": -1,
+          "lose": -1
+        },
         "vote": {
           "win": "44",
           "same": "26",
@@ -7447,7 +7455,7 @@
           "hhad_same": "24",
           "hhad_lose": "55"
         },
-        "odds_movement": "主胜平稳，客胜平稳",
+        "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
           "h_inj": "凯恩·欧维伦 受伤 踝关节受伤 儒尼尼奥·巴库纳 受伤",
           "g_inj": "拉克卡尔 受伤 腹股沟受伤 贾里·斯舒尔曼 受伤 撞伤 阿纳斯·扎鲁克 受伤 卡尔文·特维特 受伤",
@@ -7509,9 +7517,9 @@
           "draws": 6,
           "losses": 9,
           "goals_for": 29,
-          "goals_against": 29,
-          "avg_goals_for": "1.17",
-          "avg_goals_against": "1.18",
+          "goals_against": 30,
+          "avg_goals_for": "1.16",
+          "avg_goals_against": "1.19",
           "clean_sheets": 3,
           "form": "WDLWD"
         },
@@ -7522,7 +7530,7 @@
           "losses": 8,
           "goals_for": 32,
           "goals_against": 27,
-          "avg_goals_for": "1.28",
+          "avg_goals_for": "1.29",
           "avg_goals_against": "1.07",
           "clean_sheets": 4,
           "form": "WDLWD"
@@ -7567,7 +7575,7 @@
         "ff": 4.7,
         "home": "福伦丹",
         "guest": "威廉二世",
-        "change_is_direction_code": false,
+        "change_is_direction_code": true,
         "prediction": {
           "predicted_score": "弃权",
           "predicted_label": "弃权",
@@ -7678,11 +7686,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -7771,9 +7779,9 @@
         "away_team": "比萨",
         "league": "意甲",
         "match_num": "周六016",
-        "sp_home": 1.5,
-        "sp_draw": 3.9,
-        "sp_away": 4.85,
+        "sp_home": 1.53,
+        "sp_draw": 3.85,
+        "sp_away": 4.65,
         "give_ball": -1.0,
         "change": {
           "win": 1,
@@ -7781,12 +7789,12 @@
           "lose": -1
         },
         "vote": {
-          "win": "61",
-          "same": "22",
-          "lose": "17",
-          "hhad_win": "36",
+          "win": "59",
+          "same": "23",
+          "lose": "18",
+          "hhad_win": "35",
           "hhad_same": "25",
-          "hhad_lose": "39"
+          "hhad_lose": "40"
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
@@ -7803,33 +7811,33 @@
         "home_rank": 9,
         "away_rank": 20,
         "v2_odds_dict": {
-          "a0": 15.0,
-          "a1": 5.2,
-          "a2": 3.65,
+          "a0": 13.5,
+          "a1": 5.0,
+          "a2": 3.6,
           "a3": 3.55,
           "a4": 5.0,
-          "a5": 8.25,
-          "a6": 14.0,
-          "a7": 21.0,
-          "s00": 15.0,
-          "s11": 7.0,
-          "s22": 15.0,
+          "a5": 8.6,
+          "a6": 16.0,
+          "a7": 24.0,
+          "s00": 13.5,
+          "s11": 6.75,
+          "s22": 14.5,
           "s33": 60.0,
-          "w10": 7.5,
+          "w10": 7.25,
           "w20": 7.5,
           "w21": 7.0,
           "w30": 11.0,
-          "w31": 11.0,
-          "w32": 20.0,
+          "w31": 11.5,
+          "w32": 22.0,
           "w40": 23.0,
-          "w41": 23.0,
+          "w41": 24.0,
           "w42": 50.0,
-          "l01": 13.0,
+          "l01": 12.5,
           "l02": 26.0,
-          "l12": 12.5,
-          "l03": 75.0,
+          "l12": 13.0,
+          "l03": 80.0,
           "l13": 40.0,
-          "l23": 35.0,
+          "l23": 40.0,
           "ss": 2.2,
           "sp": 16.0,
           "sf": 35.0,
@@ -7851,8 +7859,8 @@
           "losses": 6,
           "goals_for": 38,
           "goals_against": 21,
-          "avg_goals_for": "1.53",
-          "avg_goals_against": "0.84",
+          "avg_goals_for": "1.52",
+          "avg_goals_against": "0.85",
           "clean_sheets": 4,
           "form": "WWDWW"
         },
@@ -7863,40 +7871,40 @@
           "losses": 13,
           "goals_for": 17,
           "goals_against": 41,
-          "avg_goals_for": "0.66",
-          "avg_goals_against": "1.65",
+          "avg_goals_for": "0.68",
+          "avg_goals_against": "1.64",
           "clean_sheets": 2,
           "form": "LLDLL"
         },
         "h2h": [],
         "information": {},
-        "a0": 15.0,
-        "a1": 5.2,
-        "a2": 3.65,
+        "a0": 13.5,
+        "a1": 5.0,
+        "a2": 3.6,
         "a3": 3.55,
         "a4": 5.0,
-        "a5": 8.25,
-        "a6": 14.0,
-        "a7": 21.0,
-        "s00": 15.0,
-        "s11": 7.0,
-        "s22": 15.0,
+        "a5": 8.6,
+        "a6": 16.0,
+        "a7": 24.0,
+        "s00": 13.5,
+        "s11": 6.75,
+        "s22": 14.5,
         "s33": 60.0,
-        "w10": 7.5,
+        "w10": 7.25,
         "w20": 7.5,
         "w21": 7.0,
         "w30": 11.0,
-        "w31": 11.0,
-        "w32": 20.0,
+        "w31": 11.5,
+        "w32": 22.0,
         "w40": 23.0,
-        "w41": 23.0,
+        "w41": 24.0,
         "w42": 50.0,
-        "l01": 13.0,
+        "l01": 12.5,
         "l02": 26.0,
-        "l12": 12.5,
-        "l03": 75.0,
+        "l12": 13.0,
+        "l03": 80.0,
         "l13": 40.0,
-        "l23": 35.0,
+        "l23": 40.0,
         "ss": 2.2,
         "sp": 16.0,
         "sf": 35.0,
@@ -8019,11 +8027,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -8122,12 +8130,12 @@
           "lose": 1
         },
         "vote": {
-          "win": "53",
-          "same": "25",
+          "win": "54",
+          "same": "24",
           "lose": "22",
           "hhad_win": "28",
-          "hhad_same": "26",
-          "hhad_lose": "46"
+          "hhad_same": "27",
+          "hhad_lose": "45"
         },
         "odds_movement": "主胜降水，客胜升水",
         "intelligence": {
@@ -8361,11 +8369,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -8698,11 +8706,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -8791,24 +8799,24 @@
         "away_team": "皇家社会",
         "league": "西甲",
         "match_num": "周六019",
-        "sp_home": 2.18,
+        "sp_home": 2.1,
         "sp_draw": 3.1,
-        "sp_away": 2.88,
+        "sp_away": 3.02,
         "give_ball": -1.0,
         "change": {
-          "win": 0,
-          "same": -1,
+          "win": -1,
+          "same": 0,
           "lose": 1
         },
         "vote": {
           "win": "41",
-          "same": "28",
-          "lose": "31",
-          "hhad_win": "19",
+          "same": "29",
+          "lose": "30",
+          "hhad_win": "20",
           "hhad_same": "22",
-          "hhad_lose": "59"
+          "hhad_lose": "58"
         },
-        "odds_movement": "主胜平稳，客胜升水",
+        "odds_movement": "主胜降水，客胜升水",
         "intelligence": {
           "h_inj": "哈维·普阿多 受伤 膝关节损伤 波尔·罗扎诺 停赛 累计黄牌停赛 塞里尔·恩功捷 受伤 膝关节损伤",
           "g_inj": "阿尔瓦罗·奥德里奥索拉 受伤 膝关节损伤 安德尔·巴雷内切亚 受伤 肌肉受伤 乔恩·戈罗特沙泰吉 受伤 受伤 贡萨洛·格德斯 受伤 踝关节受伤",
@@ -8839,27 +8847,27 @@
           "w10": 8.5,
           "w20": 11.0,
           "w21": 7.75,
-          "w30": 23.0,
-          "w31": 17.0,
-          "w32": 23.0,
-          "w40": 60.0,
-          "w41": 50.0,
-          "w42": 75.0,
-          "l01": 9.0,
-          "l02": 13.0,
-          "l12": 8.5,
+          "w30": 22.0,
+          "w31": 16.0,
+          "w32": 21.0,
+          "w40": 55.0,
+          "w41": 45.0,
+          "w42": 70.0,
+          "l01": 9.25,
+          "l02": 15.0,
+          "l12": 8.75,
           "l03": 30.0,
-          "l13": 21.0,
+          "l13": 22.0,
           "l23": 25.0,
-          "ss": 3.6,
+          "ss": 3.5,
           "sp": 14.0,
           "sf": 28.0,
-          "ps": 5.5,
+          "ps": 5.25,
           "pp": 5.15,
           "pf": 6.5,
           "fs": 23.0,
           "fp": 14.0,
-          "ff": 4.45
+          "ff": 4.8
         },
         "id": 18,
         "date": "2026-05-23",
@@ -8872,8 +8880,8 @@
           "losses": 8,
           "goals_for": 32,
           "goals_against": 27,
-          "avg_goals_for": "1.26",
-          "avg_goals_against": "1.09",
+          "avg_goals_for": "1.29",
+          "avg_goals_against": "1.07",
           "clean_sheets": 4,
           "form": "WDLWD"
         },
@@ -8883,9 +8891,9 @@
           "draws": 6,
           "losses": 9,
           "goals_for": 28,
-          "goals_against": 30,
-          "avg_goals_for": "1.14",
-          "avg_goals_against": "1.21",
+          "goals_against": 31,
+          "avg_goals_for": "1.11",
+          "avg_goals_against": "1.23",
           "clean_sheets": 3,
           "form": "WDLWD"
         },
@@ -8906,27 +8914,27 @@
         "w10": 8.5,
         "w20": 11.0,
         "w21": 7.75,
-        "w30": 23.0,
-        "w31": 17.0,
-        "w32": 23.0,
-        "w40": 60.0,
-        "w41": 50.0,
-        "w42": 75.0,
-        "l01": 9.0,
-        "l02": 13.0,
-        "l12": 8.5,
+        "w30": 22.0,
+        "w31": 16.0,
+        "w32": 21.0,
+        "w40": 55.0,
+        "w41": 45.0,
+        "w42": 70.0,
+        "l01": 9.25,
+        "l02": 15.0,
+        "l12": 8.75,
         "l03": 30.0,
-        "l13": 21.0,
+        "l13": 22.0,
         "l23": 25.0,
-        "ss": 3.6,
+        "ss": 3.5,
         "sp": 14.0,
         "sf": 28.0,
-        "ps": 5.5,
+        "ps": 5.25,
         "pp": 5.15,
         "pf": 6.5,
         "fs": 23.0,
         "fp": 14.0,
-        "ff": 4.45,
+        "ff": 4.8,
         "home": "西班牙人",
         "guest": "皇家社会",
         "change_is_direction_code": true,
@@ -9040,11 +9048,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -9143,12 +9151,12 @@
           "lose": 1
         },
         "vote": {
-          "win": "67",
+          "win": "68",
           "same": "19",
-          "lose": "14",
-          "hhad_win": "43",
+          "lose": "13",
+          "hhad_win": "44",
           "hhad_same": "24",
-          "hhad_lose": "33"
+          "hhad_lose": "32"
         },
         "odds_movement": "主胜降水，客胜升水",
         "intelligence": {
@@ -9381,11 +9389,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -9484,12 +9492,12 @@
           "lose": 0
         },
         "vote": {
-          "win": "39",
-          "same": "34",
-          "lose": "27",
-          "hhad_win": "16",
-          "hhad_same": "24",
-          "hhad_lose": "60"
+          "win": "37",
+          "same": "35",
+          "lose": "28",
+          "hhad_win": "15",
+          "hhad_same": "23",
+          "hhad_lose": "62"
         },
         "odds_movement": "主胜升水，客胜平稳",
         "intelligence": {
@@ -9723,11 +9731,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -9816,11 +9824,15 @@
         "away_team": "塞维利亚",
         "league": "西甲",
         "match_num": "周六022",
-        "sp_home": 1.6,
-        "sp_draw": 3.5,
+        "sp_home": 1.62,
+        "sp_draw": 3.4,
         "sp_away": 4.6,
         "give_ball": -1.0,
-        "change": {},
+        "change": {
+          "win": 1,
+          "same": -1,
+          "lose": 0
+        },
         "vote": {
           "win": "56",
           "same": "25",
@@ -9829,7 +9841,7 @@
           "hhad_same": "27",
           "hhad_lose": "43"
         },
-        "odds_movement": "主胜平稳，客胜平稳",
+        "odds_movement": "主胜升水，客胜平稳",
         "intelligence": {
           "h_inj": "卡尔·斯塔费尔特 受伤 后背受伤 米格尔·罗曼 受伤 足部受伤 曼努埃尔·费尔南德斯 受伤 肌肉受伤",
           "g_inj": "马科斯·特谢拉 受伤 足部受伤 胡安·桑切斯 停赛 累计黄牌停赛 阿德南·贾努扎伊 受伤 患病 曼努埃尔·布埃诺 受伤 膝关节损伤 巴蒂斯塔·门迪 受伤 腿部受伤 安德烈斯·卡斯特林 停赛 轮休",
@@ -9950,7 +9962,7 @@
         "ff": 8.0,
         "home": "塞尔塔",
         "guest": "塞维利亚",
-        "change_is_direction_code": false,
+        "change_is_direction_code": true,
         "prediction": {
           "predicted_score": "弃权",
           "predicted_label": "弃权",
@@ -10061,11 +10073,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -10154,11 +10166,15 @@
         "away_team": "巴列卡诺",
         "league": "西甲",
         "match_num": "周六023",
-        "sp_home": 2.32,
-        "sp_draw": 3.05,
+        "sp_home": 2.38,
+        "sp_draw": 2.95,
         "sp_away": 2.7,
         "give_ball": -1.0,
-        "change": {},
+        "change": {
+          "win": 1,
+          "same": -1,
+          "lose": 0
+        },
         "vote": {
           "win": "38",
           "same": "29",
@@ -10167,7 +10183,7 @@
           "hhad_same": "23",
           "hhad_lose": "60"
         },
-        "odds_movement": "主胜平稳，客胜平稳",
+        "odds_movement": "主胜升水，客胜平稳",
         "intelligence": {
           "h_inj": "法昆多·加尔塞斯 停赛 停赛 乔恩·帕切科 受伤 踝关节扭伤",
           "g_inj": "迭戈·门德斯·莫莱罗 膝关节损伤 伊利亚斯·阿霍马奇 受伤 肌肉受伤 路易斯·费利佩 受伤 腿筋受伤 伊西·帕拉松 停赛 红牌停赛 乌奈·洛佩兹 停赛 累计黄牌停赛",
@@ -10232,7 +10248,7 @@
           "goals_for": 29,
           "goals_against": 30,
           "avg_goals_for": "1.15",
-          "avg_goals_against": "1.19",
+          "avg_goals_against": "1.2",
           "clean_sheets": 3,
           "form": "WDLWD"
         },
@@ -10243,8 +10259,8 @@
           "losses": 8,
           "goals_for": 31,
           "goals_against": 28,
-          "avg_goals_for": "1.22",
-          "avg_goals_against": "1.13",
+          "avg_goals_for": "1.23",
+          "avg_goals_against": "1.12",
           "clean_sheets": 3,
           "form": "WDLWD"
         },
@@ -10288,7 +10304,7 @@
         "ff": 4.7,
         "home": "阿拉维斯",
         "guest": "巴列卡诺",
-        "change_is_direction_code": false,
+        "change_is_direction_code": true,
         "prediction": {
           "predicted_score": "弃权",
           "predicted_label": "弃权",
@@ -10399,11 +10415,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -10740,11 +10756,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -11078,11 +11094,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -11190,8 +11206,8 @@
         },
         "odds_movement": "主胜升水，客胜降水",
         "intelligence": {
-          "h_inj": "彼得·斯特劳德 腿部受伤 朱利安·格雷塞尔 受伤 脚趾受伤 卡洛斯·哈维 腿部受伤 哈梅斯·罗德里格斯 停赛 国家队征召",
-          "g_inj": "埃梅卡·埃内利 受伤 膝关节受伤 胡安·阿里亚斯 腹股沟受伤 阿里亚斯·皮奥尔 受伤 跟腱受伤 赫苏斯·巴雷亚 膝关节受伤 迭戈·卢纳 肌肉挫伤",
+          "h_inj": "彼得·斯特劳德 受伤 腿部受伤 朱利安·格雷塞尔 受伤 脚趾受伤 卡洛斯·哈维 腿部受伤 哈梅斯·罗德里格斯 停赛 国家队征召 开尔文·叶波亚 轮休",
+          "g_inj": "埃梅卡·埃内利 受伤 膝关节损伤 胡安·阿里亚斯 腹股沟受伤 阿里亚斯·皮奥尔 受伤 跟腱受伤 赫苏斯·巴雷亚 受伤 膝关节损伤 迭戈·卢纳 肌肉受伤",
           "home_bad_news": "1.在近10场美职联比赛中，明尼苏达联取得了5胜2平3负的出色战绩，整体状态值得肯定。不过需要注意的是，球队近期状态有所下滑，已经遭遇两连败，急需调整找回赢球感觉。 2.明尼苏达联在近6场美职联比赛中的表现可谓喜忧参半。进攻方面，球队共打入7球，展现出了一定的得分能力；然而防守端同样丢掉8球，表现起",
           "guest_bad_news": ""
         },
@@ -11420,11 +11436,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -11757,11 +11773,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -11866,7 +11882,7 @@
         "odds_movement": "主胜平稳，客胜平稳",
         "intelligence": {
           "h_inj": "卡拉莫科 患病 西格尔 受伤 腿部受伤 塞恩·尼尔斯 受伤 锁骨骨折",
-          "g_inj": "易卜拉欣·苏努西 后背受伤 博德·戴维斯 腹股沟受伤 法比安·赫博斯 腿部受伤",
+          "g_inj": "易卜拉欣·苏努西 后背受伤 博德·戴维斯 受伤 腹股沟受伤 法比安·赫博斯 受伤 腿部受伤",
           "home_bad_news": "1.华盛顿联在最近10场美职联联赛中的整体状态只能算一般，交出了2胜5平3负的成绩单。但球队近期的走势令人担忧，已经连续3场比赛未能取胜，状态出现明显下滑。 2.华盛顿联在近6场美职联比赛中的表现可谓喜忧参半。进攻方面，球队共打入13球，展现出了犀利的得分能力；然而防守端却漏洞百出，累计失球达到12",
           "guest_bad_news": "1.在近10场美职联比赛中，蒙特利尔CF取得了3胜1平6负的战绩，整体表现中规中矩。不过需要注意的是，球队近期状态有所下滑，已经连续2场比赛未尝胜绩，急需调整找回赢球感觉。"
         },
@@ -12095,11 +12111,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -12207,8 +12223,8 @@
         },
         "odds_movement": "主胜降水，客胜升水",
         "intelligence": {
-          "h_inj": "山姆·苏里奇 受伤 后背受伤 克里斯托弗·阿普尔怀特 腿部受伤 埃德瓦德·桑特维克·塔格塞斯 受伤 受伤 帕特里克·亚兹别克 受伤 受伤 安迪·纳加尔 受伤 受伤",
-          "g_inj": "阿隆索·马丁内斯 受伤 膝关节受伤 安德鲁·拜拉 受伤 膝关节受伤 凯文·奥图尔 受伤 腿部受伤 塔莱斯·马尼奥 受伤 受伤 埃登·奥尼尔 受伤 踝关节扭伤",
+          "h_inj": "山姆·苏里奇 后背受伤 克里斯托弗·阿普尔怀特 腿部受伤 埃德瓦德·桑特维克·塔格塞斯 受伤 受伤 帕特里克·亚兹别克 受伤 受伤 安迪·纳加尔 受伤 受伤",
+          "g_inj": "阿隆索·马丁内斯 受伤 膝关节损伤 安德鲁·拜拉 受伤 膝关节损伤 凯文·奥图尔 受伤 腿部受伤 塔莱斯·马尼奥 受伤 受伤 埃登·奥尼尔 受伤 踝关节受伤 基顿·帕克斯 受伤 腹股沟受伤",
           "home_bad_news": "",
           "guest_bad_news": ""
         },
@@ -12436,11 +12452,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -12774,11 +12790,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -12889,19 +12905,22 @@
         },
         "expert_intro": "水户蜀葵遭遇3连败且场均失2.2球，防线漏洞明显；川崎前锋客场3连败且近5个客场仅1胜，客场作战能力堪忧。双方伤病名单冗长，阵容完整性均受影响。",
         "baseface": "本场为J1百年构想联赛东区第18轮。目前主队17场积18分，排在第7位。客队17场积25分，位列第6位。客队实力略占上风。\n\n主队水户蜀葵近10场赛事1胜4平5负，状态低迷；近5个主场1胜2平2负，主场状态较差。\n\n客队川崎前锋近10场赛事4胜2平4负，状态一般；近5个客场1胜1平3负，客场状态低迷。\n\n综合来看双方实力差距不大。\n\n双方最近一次交锋中，川崎前锋主场2:2战平水户蜀葵。双方近4次交锋水户蜀葵取得1胜2平1负，不落下风；在水户蜀葵的主场，近0次交锋，暂无数据。\n\n主流机构客胜指数集中在2.15-2.25区间，支持客队不败方向。\n\n双方上半场打平的可能性为 50%\n主队近5场赛事主场的上半场: \n领先1，打平2，落后2丨1场有进球，2场有失球 \n客队近5场赛事客场的上半场: \n领先0，打平3，落后2丨1场有进球，3场有失球\n\n两队同处东区，积分接近，均有争夺季后赛排名需求。主队主场渴望止颓，客队客场表现疲软，双方或采取稳健战术，重视防守反击。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win",
+          "same"
+        ],
         "home_rank": 7,
         "away_rank": 6,
         "v2_odds_dict": {
-          "a0": 12.0,
+          "a0": 11.0,
           "a1": 4.6,
           "a2": 3.4,
-          "a3": 3.5,
+          "a3": 3.6,
           "a4": 5.5,
           "a5": 10.0,
           "a6": 18.0,
           "a7": 28.0,
-          "s00": 12.0,
+          "s00": 11.0,
           "s11": 6.0,
           "s22": 12.0,
           "s33": 60.0,
@@ -12909,7 +12928,7 @@
           "w20": 15.0,
           "w21": 9.0,
           "w30": 33.0,
-          "w31": 22.0,
+          "w31": 23.0,
           "w32": 29.0,
           "w40": 120.0,
           "w41": 70.0,
@@ -12917,8 +12936,8 @@
           "l01": 7.5,
           "l02": 11.0,
           "l12": 7.0,
-          "l03": 21.0,
-          "l13": 16.0,
+          "l03": 22.0,
+          "l13": 17.0,
           "l23": 24.0,
           "ss": 4.75,
           "sp": 14.0,
@@ -12960,15 +12979,15 @@
         },
         "h2h": [],
         "information": {},
-        "a0": 12.0,
+        "a0": 11.0,
         "a1": 4.6,
         "a2": 3.4,
-        "a3": 3.5,
+        "a3": 3.6,
         "a4": 5.5,
         "a5": 10.0,
         "a6": 18.0,
         "a7": 28.0,
-        "s00": 12.0,
+        "s00": 11.0,
         "s11": 6.0,
         "s22": 12.0,
         "s33": 60.0,
@@ -12976,7 +12995,7 @@
         "w20": 15.0,
         "w21": 9.0,
         "w30": 33.0,
-        "w31": 22.0,
+        "w31": 23.0,
         "w32": 29.0,
         "w40": 120.0,
         "w41": 70.0,
@@ -12984,8 +13003,8 @@
         "l01": 7.5,
         "l02": 11.0,
         "l12": 7.0,
-        "l03": 21.0,
-        "l13": 16.0,
+        "l03": 22.0,
+        "l13": 17.0,
         "l23": 24.0,
         "ss": 4.75,
         "sp": 14.0,
@@ -13109,11 +13128,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -13224,7 +13243,10 @@
         },
         "expert_intro": "大阪钢巴近5个客场2胜2平1负，拿分能力稳健；清水心跳主场近期1胜2平2负状态低迷。双方历史交锋大阪钢巴近10次4胜4平2负占据优势，且客队阵容身价更高，整体实力稍占上风。",
         "baseface": "本场为J1百年构想联赛西区第18轮。目前主队17场积24分，排名第7位；客队17场积25分，排名第6位。两队积分仅差1分，实力在伯仲之间。\n\n主队清水心跳近10场赛事3胜3平4负，状态一般；近5个主场1胜2平2负，主场状态低迷。\n\n客队大阪钢巴近10场赛事3胜3平4负，状态一般；近5个客场2胜2平1负，客场状态尚可。\n\n综合来看，双方实力差距不大，客队整体稍占上风。\n\n双方最近一次交锋中，大阪钢巴主场2:2战平清水心跳。双方近6次交锋清水心跳取得1胜2平3负，略处下风；在清水心跳的主场，近3次交锋，清水心跳取得0胜2平1负，处于下风。\n\n机构指数倾向客胜，支持客队不败方向。\n\n双方上半场打平的可能性为40%\n主队近5场赛事主场的上半场:\n领先1，打平2，落后2丨2场有进球，3场有失球\n客队近5场赛事客场的上半场:\n领先2，打平2，落后1丨2场有进球，1场有失球\n\n两队积分相近均处中游，清水心跳需扭转主场颓势，大阪钢巴希望延续客场良好势头抢分冲击季后赛，双方战意充足，预计战术博弈激烈。",
-        "had_analyse": [],
+        "had_analyse": [
+          "same",
+          "lose"
+        ],
         "home_rank": 7,
         "away_rank": 6,
         "v2_odds_dict": {
@@ -13444,11 +13466,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -13559,7 +13581,9 @@
         },
         "expert_intro": "斯托克港近期3连胜状态火热，凯尔-伍顿20球坐镇锋线；博尔顿虽市值占优但伤病较多，且历史交锋近9次仅1胜。升级附加赛决赛双方战意拉满，中立场作战预计场面胶着。",
         "baseface": "本场为英格兰甲级联赛升级附加赛决赛，采用单场决胜制，比赛在中立场进行。主队博尔顿世界排名第397位，客队斯托克港本赛季联赛48场积83分排名第3位。双方整体实力接近，客队联赛表现更为优异。\n\n主队博尔顿近10场赛事4胜3平3负，状态一般；近5个主场2胜2平1负，主场状态尚可。\n\n客队斯托克港近10场赛事5胜2平3负，状态良好；近5个客场3胜2平0负，客场状态出色。\n\n综合来看，双方实力差距不大，客队近期竞技状态更佳。\n\n双方最近一次交锋中，博尔顿主场2:2战平斯托克港。双方近9次交锋博尔顿取得1胜5平3负，略处下风；在博尔顿的主场，近3次交锋，博尔顿取得0胜2平1负，处于下风。\n\n主流机构开出2.40-3.30-2.70左右的指数组合，胜负指数接近持平，机构态度倾向均势，稍看好主队方向。\n\n主队上半场领先的可能性为60%\n主队近5场赛事主场的上半场: \n领先3，打平2，落后0丨4场有进球，2场有失球 \n客队近5场赛事客场的上半场: \n领先2，打平3，落后0丨3场有进球，2场有失球\n\n升级附加赛决赛关乎英冠资格，双方战意毋庸置疑。博尔顿本赛季主场进攻火力凶猛，擅长顺风球作战；斯托克港携3连胜之势且拥有联赛第2射手凯尔-伍顿，反击效率极高。中立场作战削弱主场优势，预计双方将先稳守试探，随后展开对攻。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 5,
         "away_rank": 3,
         "v2_odds_dict": {
@@ -13779,11 +13803,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -13894,7 +13918,9 @@
         },
         "expert_intro": "哈马比主场战绩彪悍，近10个主场9胜1平且进球占比达90%；索尔纳客场5场不胜且防线连续5场失球，阵容伤缺严重。主队争冠战意强烈，客队客场挑战艰巨。",
         "baseface": "本场为瑞典超级联赛第9轮。目前主队9场积17分，排在第2位。客队8场积9分，排在第10位。主队实力明显高出一筹。\n\n主队哈马比近10场赛事5胜2平3负，状态良好；近5个主场4胜1平0负，主场状态出色。\n\n客队索尔纳近10场赛事3胜3平4负，状态一般；近5个客场0胜3平2负，客场状态低迷。\n\n综合来看，双方实力差距明显。\n\n双方最近一次交锋中，哈马比主场2-1击败索尔纳。双方近6次交锋哈马比取得3胜2平1负，占据优势；在哈马比的主场，近3次交锋，哈马比取得3胜0平0负，优势明显。\n\n主流机构普遍下调主胜指数至1.45附近，支持主胜方向。\n\n主队上半场领先的可能性为60%\n主队近5场赛事主场的上半场: 领先3，打平1，落后1丨3场有进球，3场有失球\n客队近5场赛事客场的上半场: 领先0，打平5，落后0丨4场有进球，4场有失球\n\n哈马比争冠战意强烈，主场火力凶猛；索尔纳客场疲软，防线不稳，需立足防守寻求反击机会。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 2,
         "away_rank": 10,
         "v2_odds_dict": {
@@ -14114,11 +14140,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -14229,7 +14255,9 @@
         },
         "expert_intro": "天狼星联赛8轮不败高居榜首，主场4连胜且比耶克博8球领跑射手榜；哥德堡盖斯客场5战3负且7名主力伤缺，历史交锋客场5年全败。",
         "baseface": "本场为瑞典超级联赛第9轮。目前主队8场积22分，排在第1位。客队9场积12分，排在第8位。主队实力明显高出一筹。\n\n主队天狼星近10场赛事7胜2平1负，状态极佳;近5个主场4胜0平1负，主场状态上佳。\n\n客队哥德堡盖斯近10场赛事4胜3平3负，状态一般;近5个客场1胜1平3负，客场状态低迷。\n\n综合来看，主队实力占优。\n\n双方最近一次交锋中，天狼星主场3:0击败哥德堡盖斯。双方近6次交锋天狼星取得3胜2平1负，占据优势;在天狼星的主场，近3次交锋，天狼星取得2胜1平，优势明显。\n\n机构降主胜升客胜，支持主队方向\n\n主队上半场领先的可能性为 60% \n主队近5场赛事主场的上半场: \n领先3，打平1，落后1丨3场有进球，1场有失球 \n客队近5场赛事客场的上半场: \n落后3，打平2，领先0丨3场有失球，0场有进球\n\n天狼星作为联赛领头羊，主场作战且状态正佳，志在延续连胜巩固榜首；哥德堡盖斯虽欲抢分，但伤兵满营且客场疲软，需立足防守。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 1,
         "away_rank": 8,
         "v2_odds_dict": {
@@ -14449,11 +14477,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -14564,7 +14592,10 @@
         },
         "expert_intro": "帕尔马遭遇联赛三连败且伤兵满营，但主场收官战意不减；萨索洛提前保级后两连败，近5个客场未尝胜绩，客场虫属性明显。双方防守均有重大缺失，或以保守姿态完成赛季谢幕。",
         "baseface": "本场为意甲第38轮收官战。目前主队37场积42分排在第13位，客队37场积49分位列第11位。双方均已保级成功，整体实力在伯仲之间。\n\n主队帕尔马近10场赛事2胜3平5负，状态低迷；近5个主场1胜2平2负，主场状态一般。\n\n客队萨索洛近10场赛事3胜2平5负，状态一般；近5个客场0胜2平3负，客场状态低迷。\n\n综合来看，双方实力差距不大，主队坐拥主场之利但状态堪忧，客队排名稍高但客场乏力。\n\n双方最近一次交锋中，萨索洛主场1:1战平帕尔马。双方近6次交锋帕尔马取得3胜2平1负，占据优势；在帕尔马的主场，近3次交锋，帕尔马取得1胜0平2负，处于下风。\n\n机构胜平负指数分析：主流机构调整后主胜指数微升，平赔持续压低，客胜波动不大，倾向支持主队不败方向。\n\n双方上半场打平的可能性为60%\n主队近5场赛事主场的上半场：\n领先1，打平3，落后1丨1场有进球，1场有失球\n客队近5场赛事客场的上半场：\n落后2，打平3，领先0丨1场有进球，3场有失球\n\n战意与策略分析：作为赛季收官战，帕尔马坐镇主场力争避免四连败，为球迷奉献告别演出；萨索洛提前保级后状态松懈，客场战力堪忧，双方更可能以保守姿态完成赛季谢幕。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win",
+          "same"
+        ],
         "home_rank": 13,
         "away_rank": 11,
         "v2_odds_dict": {
@@ -14784,11 +14815,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -14899,7 +14930,9 @@
         },
         "expert_intro": "博德闪耀主场作战且阵容相对齐整，争冠战意明确；布兰伤兵满营达10人之多，客场防守脆弱，近期状态起伏不定。",
         "baseface": "本场为挪威超级联赛第10轮。目前主队博德闪耀9场积19分，排名第3位。客队布兰10场积13分，排在第6位。主队实力明显高出一筹。\n\n主队博德闪耀近10场赛事5胜3平2负，状态良好;近5个主场2胜2平1负，主场状态尚可。\n\n客队布兰近10场赛事5胜2平3负，状态一般;近5个客场1胜2平2负，客场状态低迷。\n\n综合来看，主队实力占优且主场作战，整体竞争力强于客队。\n\n双方最近一次交锋中，博德闪耀主场2:2战平布兰。双方近10次交锋博德闪耀取得5胜3平2负，占据上风;在博德闪耀的主场，近3次交锋，博德闪耀取得2胜1平，优势明显。\n\n主流机构普遍下调主胜指数至1.33左右，平负指数大幅抬升，看好主队取胜。\n\n双方上半场打平的可能性为50%\n主队近5场赛事主场的上半场: \n领先2，打平0，落后3丨3场有进球，3场有失球 \n客队近5场赛事客场的上半场: \n领先2，打平1，落后2丨4场有进球，4场有失球\n\n博德闪耀主场作战且争冠形势紧迫，需巩固欧战资格；布兰虽有一定反击能力，但伤兵满营影响排兵布阵，客场恐以稳守为主。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 3,
         "away_rank": 6,
         "v2_odds_dict": {
@@ -15119,11 +15152,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -15234,7 +15267,9 @@
         },
         "expert_intro": "马尔默遭遇3连败状态低迷但主场对瓦斯特拉斯保持5年全胜，历史交锋心理优势明显；瓦斯特拉斯有保级压力但客场挑战强敌难度较大，双方均需分数提振士气。",
         "baseface": "本场为瑞典超级联赛第9轮。目前主队8场积10分，排在第9位。客队8场积9分，排在第12位。双方积分接近，但主队阵容实力明显占优。\n\n主队马尔默近10场赛事4胜2平4负，状态低迷；近5个主场2胜1平2负，主场状态一般。\n客队瓦斯特拉斯近10场赛事3胜4平3负，状态一般；近5个客场2胜1平2负，客场状态一般。\n\n综合来看，双方实力存在一定差距，主队阵容身价约为客队3倍以上。\n\n双方最近一次交锋中，马尔默主场3:0击败瓦斯特拉斯。双方近4次交锋马尔默取得2胜1平1负，略占上风;在马尔默的主场，近3次交锋，马尔默取得2胜1负，略占上风。\n\n机构胜平负指数显示主胜指数在1.51-1.67区间，普遍看好主胜。\n支持方向：主胜可期\n\n双方上半场打平的可能性为 40%\n主队近5场赛事主场的上半场: \n领先2，打平1，落后2丨2场有进球，2场有失球 \n客队近5场赛事客场的上半场: \n领先2，打平2，落后1丨3场有进球，3场有失球\n\n马尔默虽遭遇3连败但主场对赛历史占优，瓦斯特拉斯保级压力大于主队，双方均需分数提振士气，预计主队将依托主场优势主动进攻，客队或采取稳守反击策略。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 9,
         "away_rank": 12,
         "v2_odds_dict": {
@@ -15454,11 +15489,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -15565,11 +15600,13 @@
           "h_inj": "乔纳·库西·阿萨雷 受伤 膝关节损伤 瑞安·塞塞尼翁 腿筋受伤 约阿希姆·安诺森 停赛 红牌停赛",
           "g_inj": "乔林顿 受伤 大腿受伤 法比安·舍尔 受伤 踝关节扭伤 埃米尔·克拉夫特 受伤 膝关节受伤 桑德罗·托纳利 受伤 瓦伦蒂诺·利夫拉门托 受伤 大腿受伤 刘易斯·麦利 受伤 腿部骨折",
           "home_bad_news": "1.富勒姆10场正赛场均进球小于1球，其中7场未能取得进球。 2.富勒姆近5年面对纽卡斯尔联主场输球率达到80%。 3.富勒姆近10场比赛得失球不超过2球的场次达到8场。 4.富勒姆本赛季联赛37场比赛，在落后的情况下最终输球的场次占总负场的81%。 5.富勒姆近期状态持续低迷，上轮联赛客场1-1战",
-          "guest_bad_news": "1.纽卡斯尔联本赛季近10个客场比赛，在落后的情况下最终客场输球率达80%。"
+          "guest_bad_news": "1.纽卡斯尔联本赛季近10个客场比赛，在落后的情况下最终客场输球率达80%。 2.纽卡斯尔联客场战力堪忧，近4个正赛客场仅取得1平3负，未尝胜绩。防线在异地作战时更是漏洞频出，近10场正赛客场狂丢19球，场均失球高达1.9个，且仅有1场完成零封。客场防守端的持续疲软，已成为制约球队抢分的关键短板。 "
         },
         "expert_intro": "富勒姆近10场仅2胜进攻乏力，纽卡斯尔虽历史交锋碾压但遭遇严重伤病潮且客场战绩低迷，末轮同分对决双方皆欲抢分提升排名。",
         "baseface": "本场为英格兰超级联赛第38轮收官战。目前主队37场积49分，排在第13位。客队37场积49分，排在第11位。客队净胜球占优，阵容身价更高。\n\n主队富勒姆近10场赛事2胜3平5负，状态低迷;近5个主场2胜0平3负，主场状态较差。\n\n客队纽卡斯尔联近10场赛事3胜2平5负，状态一般;近5个客场1胜1平3负，客场状态低迷。\n\n综合来看双方差距不大，客队身价占优但近期状态起伏明显。\n\n本赛季两次交锋中，纽卡斯尔联主场分别以2-1和2-1击败富勒姆。双方近10次交锋富勒姆取得2胜0平8负，处于绝对下风;在富勒姆的主场，近3次交锋，富勒姆取得1胜0平2负，处于下风。\n\n客胜指数普遍上调，机构对客胜信心减弱，倾向主队不败。\n\n主队上半场打平概率为80% \n主队近5场赛事主场的上半场: \n领先1，打平4，落后0丨1场有进球，0场有失球 \n客队近5场赛事客场的上半场: \n领先2，打平1，落后2丨3场有进球，2场有失球\n\n英超末轮收官战，两队同积49分，纽卡斯尔净胜球占优排名靠前，富勒姆主场力争提升排名；客队虽交锋占优但遭遇严重伤病危机，6名主力伤缺影响轮换深度，双方皆希望以胜利结束赛季。",
-        "had_analyse": [],
+        "had_analyse": [
+          "lose"
+        ],
         "home_rank": 13,
         "away_rank": 11,
         "v2_odds_dict": {
@@ -15789,11 +15826,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -15904,7 +15941,9 @@
         },
         "expert_intro": "利物浦近10场仅3胜状态低迷，但主场对布伦特福德历史交锋全胜；布伦特福德近10场7平平局率极高，客场近5场0胜，双方战意与主场优势将成为关键变量。",
         "baseface": "本场为英超第38轮收官战。目前主队利物浦37场积59分，排名第5位，已确保欧冠资格；客队布伦特福德37场积52分，位列第9，处于联赛中游。\n\n主队利物浦近10场赛事3胜1平6负，状态低迷；近5个主场3胜1平1负，主场表现尚可。\n\n客队布伦特福德近10场赛事1胜7平2负，平局率高；近5个客场0胜3平2负，客场状态低迷。\n\n综合来看，利物浦整体实力占优但近期起伏较大，布伦特福德以稳守为主，双方存在一定差距。\n\n双方最近一次交锋中，布伦特福德主场3:2击败利物浦。双方近9次交锋利物浦取得6胜1平2负，占据优势；在利物浦的主场，近3次交锋，利物浦取得3胜0平0负，优势明显。\n\n机构普遍开出主胜1.75左右.平局4.0.客胜4.0的指数组合，支持主队方向。\n\n主队上半场领先的可能性为60%。\n主队近5场赛事主场的上半场:\n领先3，打平2，落后0丨4场有进球，1场有失球\n客队近5场赛事客场的上半场:\n落后2，打平3，领先0丨1场有进球，2场有失球\n\n战意与策略分析：利物浦虽已锁定欧冠席位但仍需为荣誉而战，主场收官战意不减；布伦特福德无欲无求但求善始善终，预计采取稳守反击策略避免大败。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 5,
         "away_rank": 9,
         "v2_odds_dict": {
@@ -16124,11 +16163,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -16239,7 +16278,9 @@
         },
         "expert_intro": "曼城主场豪取5连胜且历史交锋主场全胜，主场统治力极强；维拉主力门将马丁内斯与中场卡马拉伤停，防线实力受损，客场作战能力有限。",
         "baseface": "本场为英超联赛第38轮收官之战。目前主队37场积78分，排名第2位；客队37场积62分，位列第4位。主队实力明显高出一筹。\n\n主队曼彻斯特城近10场赛事8胜2平0负，状态火热；近5个主场5胜0平0负，主场状态极佳。\n\n客队阿斯顿维拉近10场赛事5胜2平3负，状态一般；近5个客场1胜2平2负，客场状态平平。\n\n综合来看，双方实力差距明显。\n\n双方本赛季最近一次交锋中，阿斯顿维拉主场1-0击败曼彻斯特城（2025-10-26）。双方近10次交锋曼彻斯特城取得6胜1平3负，占据优势；在曼彻斯特城的主场，近3次交锋，曼彻斯特城取得3胜0平0负，处于上风。\n\n机构普遍开出主胜1.25-1.30低赔，平赔6.0左右，客胜8.5以上，明显支持主队取胜。\n\n半全场分析：\n主队上半场领先的可能性为60%\n主队近5场赛事主场的上半场：\n领先2，打平3，落后0丨3场有进球，1场有失球\n客队近5场赛事客场的上半场：\n领先1，打平3，落后1丨3场有进球，3场有失球\n\n战意与策略分析：曼城虽已确定联赛亚军，但主场收官战力求完美谢幕；维拉基本锁定欧冠资格，但防线伤停严重，客场或以稳为主。双方主帅瓜迪奥拉与埃梅里的战术博弈值得关注。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 2,
         "away_rank": 4,
         "v2_odds_dict": {
@@ -16459,11 +16500,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -16574,7 +16615,9 @@
         },
         "expert_intro": "切尔西近10场仅3胜状态低迷，但阵容身价为对手3倍实力占优；桑德兰进攻端联赛第3少且防线伤停严重，双方均渴望以胜利收官。",
         "baseface": "本场为英超第38轮收官战。目前主队桑德兰37场积51分排在第10位，客队切尔西37场积52分位列第8。双方仅差1分，实力接近。\n\n主队桑德兰近10场赛事4胜2平4负，状态一般；近5个主场1胜1平3负，主场状态较差。\n\n客队切尔西近10场赛事3胜1平6负，状态低迷；近5个客场0胜2平3负，客场状态低迷。\n\n综合来看双方实力差距不大，但客队阵容配置更优。\n\n双方最近一次交锋中，桑德兰客场2:1击败切尔西。双方近10次交锋桑德兰取得3胜2平5负，略处下风；在桑德兰的主场，近3次交锋，桑德兰取得1胜1平1负，不落下风。\n\n主流机构客胜指数维持在2.00左右，支持切尔西不败方向。\n\n双方上半场打平的可能性为60%\n主队近5场赛事主场的上半场:\n领先0，打平4，落后1丨0场有进球，1场有失球\n客队近5场赛事客场的上半场:\n落后3，打平2，领先0丨3场有进球，5场有失球\n\n赛季末轮双方排名相邻，切尔西力争提升名次争取欧战资格，桑德兰则希望以胜利结束赛季，但两队近期状态均起伏较大，战术执行稳定性存疑。",
-        "had_analyse": [],
+        "had_analyse": [
+          "lose"
+        ],
         "home_rank": 10,
         "away_rank": 8,
         "v2_odds_dict": {
@@ -16794,11 +16837,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -16903,13 +16946,15 @@
         "odds_movement": "主胜平稳，客胜平稳",
         "intelligence": {
           "h_inj": "路易斯·拜尔 受伤 腿筋受伤 乔希·卡伦 受伤 膝关节受伤",
-          "g_inj": "莱昂·奇沃梅 受伤 膝关节损伤 马特·多尔蒂 受伤 肌肉受伤 山姆·约翰斯通 受伤 撞伤 恩索·冈萨雷斯 受伤 膝关节损伤",
+          "g_inj": "莱昂·奇沃梅 受伤 膝关节受伤 马特·多尔蒂 受伤 肌肉挫伤 山姆·约翰斯通 受伤 撞伤 恩索·冈萨雷斯 受伤 膝关节受伤",
           "home_bad_news": "1.伯恩利6场比赛1平5负，难求一胜。 2.伯恩利近5场正赛连续失球，且场均丢球达2.2球。 3.伯恩利10场正赛场均进球小于1球，其中5场未能取得进球。 4.伯恩利本赛季联赛37场进37球，是联赛进球数第2少的球队。 5.伯恩利本赛季联赛37场失74球，是联赛失球数第1多的球队。 6.伯恩利本赛季",
           "guest_bad_news": "1.狼队6场比赛2平4负，难求一胜。 2.本赛季联赛狼队3客场连续输球，表现糟糕。 3.狼队近5场正赛连续失球，且场均丢球达1.8球。 4.狼队10场正赛场均进球小于1球，其中4场未能取得进球。 5.狼队本赛季联赛37场进26球，是联赛进球数第1少的球队。 6.狼队本赛季联赛37场失67球，是联赛失"
         },
         "expert_intro": "伯恩利近10场未尝一胜且主场5场不胜，状态陷入谷底；狼队同样6场不胜且客场3连败，双方皆已降级但主队坐拥主场交锋优势，伯恩利力求避免垫底。",
         "baseface": "本场为英格兰超级联赛第38轮收官战。目前主队37场积21分，排在第19位；客队37场积19分，位列第20位。双方均已确定降级，整体实力接近，主队略占主场之利。\n\n主队伯恩利近10场赛事0胜2平8负，状态低迷；近5个主场0胜2平3负，主场表现较差。\n\n客队狼队近10场赛事2胜3平5负，状态一般；近5个客场0胜1平4负，客场状态低迷。\n\n综合来看，双方实力差距不大，主队坐拥主场之利且历史交锋占优，整体稍占上风。\n\n双方最近一次交锋中，伯恩利客场3:2击败狼队。双方近6次交锋伯恩利取得2胜2平2负，势均力敌；在伯恩利的主场，近3次交锋，伯恩利取得2胜1平，占据优势。\n\n机构胜平负指数走势下调主胜指数，抬升客胜指数，整体支持主队不败。\n\n双方上半场打平的可能性为 60%\n主队近5场赛事主场的上半场:\n领先0，打平2，落后3丨2场有进球，4场有失球\n客队近5场赛事客场的上半场:\n领先0，打平1，落后4丨1场有进球，4场有失球\n\n伯恩利虽已定降级但主场谢幕战意犹存，狼队客场收官且伤病较多；双方均盼避免垫底，主队力求主场体面告别，客队则需为荣誉而战，预计比赛开放但缺乏保级紧迫感。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 19,
         "away_rank": 20,
         "v2_odds_dict": {
@@ -17129,11 +17174,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -17244,7 +17289,9 @@
         },
         "expert_intro": "阿森纳已提前夺冠，战意存疑且可能轮换阵容；水晶宫主场近期3胜2平不败，收官战或借助主场之利给冠军制造麻烦。",
         "baseface": "本场为英超联赛第38轮收官战。目前主队37轮积45分，排在第15位。客队37轮积82分，高居第1位且已提前夺冠，客队实力明显高出一筹。\n\n主队水晶宫近10场赛事3胜3平4负，状态一般；近5个主场3胜2平0负，主场状态不俗。\n\n客队阿森纳近10场赛事6胜2平2负，状态极佳；近5个客场2胜1平2负，客场状态一般。\n\n综合来看，双方实力存在明显差距，但客队战意成疑。双方最近一次交锋中，阿森纳主场1-1战平水晶宫。双方近10次交锋水晶宫取得1胜2平7负，处于绝对下风；在水晶宫的主场，近3次交锋，水晶宫取得0胜0平3负，处于下风。\n\n机构大幅下调主胜指数，抬高客胜指数，对阿森纳大胜信心减弱，但仍倾向客队不败。\n\n双方上半场打平的可能性为60%\n主队近5场赛事主场的上半场: \n领先1，打平3，落后1丨3场有进球，3场有失球 \n客队近5场赛事客场的上半场: \n领先1，打平3，落后1丨2场有进球，2场有失球\n\n阿森纳已提前夺冠，本场或轮换练兵以备战欧冠决赛；水晶宫赛季收官主场作战，力求体面结束赛季。",
-        "had_analyse": [],
+        "had_analyse": [
+          "lose"
+        ],
         "home_rank": 15,
         "away_rank": 1,
         "v2_odds_dict": {
@@ -17464,11 +17511,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -17579,7 +17626,10 @@
         },
         "expert_intro": "西汉姆联身处降级区背水一战，保级战意强烈；利兹联已提前保级成功且多达8名主力伤停，客场作战缺乏争胜动力。主队虽近期三连败，但生死战加持下士气有望反弹。",
         "baseface": "本场为英格兰超级联赛第38轮收官战。目前主队37场积36分，排在第18位，身处降级区。客队37场积47分，排在第14位，已提前保级成功。主队保级战意强烈，客队无欲无求。\n\n主队西汉姆联近10场赛事2胜4平4负，状态低迷；近5个主场2胜2平1负，主场表现尚可。\n\n客队利兹联近10场赛事4胜5平1负，状态良好；近5个客场1胜3平1负，客场表现一般。\n\n综合来看，西汉姆联保级压力巨大战意强烈，利兹联阵容伤兵满营且缺乏争胜动力，主队占据明显优势。\n\n历史交锋方面，双方最近一次交锋中，2026年4月5日西汉姆联主场2:2战平利兹联。双方近6次交锋西汉姆联取得3胜2平1负，占据优势；在西汉姆联的主场，近3次交锋1胜1平1负，互有胜负。\n\n机构胜平负指数分析：主流机构普遍大幅下调主胜指数至1.75-1.82区间，支持主胜方向。\n\n半全场分析：双方上半场打平的可能性为60%\n\n主队近5场赛事主场的上半场:\n领先1，打平3，落后1丨2场有进球，2场有失球\n\n客队近5场赛事客场的上半场:\n领先2，打平2，落后1丨2场有进球，1场有失球\n\n战意与策略分析：西汉姆联必须取胜才有保级希望，预计开场即高强度压迫；利兹联多名主力伤缺且赛季任务完成，可能采取保守轮换策略。高温30°C环境下，主队需尽早进球避免体能劣势。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win",
+          "same"
+        ],
         "home_rank": 18,
         "away_rank": 14,
         "v2_odds_dict": {
@@ -17799,11 +17849,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -17914,7 +17964,10 @@
         },
         "expert_intro": "热刺近5年主场对埃弗顿保持全胜且全部零封，交锋心理碾压；球队仍有保级理论风险，末轮主场战意浓烈。埃弗顿近况6场不胜且客场交锋处于绝对劣势。",
         "baseface": "本场为英格兰超级联赛第38轮收官战。目前主队37场积38分，排在第17位，仅领先降级区2分，保级压力尚存。客队37场积49分，位列第12，已无欲无求。\n\n主队热刺近10场赛事3胜3平4负，状态一般；近5个主场1胜2平2负，主场状态较差。\n\n客队埃弗顿近10场赛事3胜3平4负，状态一般；近5个客场1胜2平2负，客场状态较差。\n\n综合来看，双方近期状态相当，但主队战意与交锋优势明显。\n\n双方最近一次交锋中，热刺客场3:0击败埃弗顿。双方近6次交锋热刺取得3胜2平1负，占据优势；在热刺的主场，近3次交锋，热刺取得3胜0平0负，拥有绝对优势。\n\n机构胜平负指数普遍下调主胜指数，支持方向：主胜。\n\n半全场分析：双方上半场打平的可能性为 40%\n主队近5场赛事主场的上半场: \n领先1，打平2，落后2丨3场有进球，3场有失球 \n客队近5场赛事客场的上半场: \n领先1，打平4，落后0丨3场有失球，3场有进球\n\n战意与策略分析：热刺末轮需确保保级安全，主场作战势必全力争胜；埃弗顿排名中游无心恋战，且历史客场交锋劣势明显，预计主队掌控比赛节奏。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win",
+          "same"
+        ],
         "home_rank": 17,
         "away_rank": 12,
         "v2_odds_dict": {
@@ -18134,11 +18187,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -18249,7 +18302,9 @@
         },
         "expert_intro": "伯恩茅斯近10场不败且首回合2球完胜，历史交锋心理优势明显；诺丁汉森林虽已保级但主场5场不败，防线伤缺严重或影响防守稳定性。",
         "baseface": "本场为英超联赛第38轮收官战。目前主队诺丁汉森林37场积43分，排在第16位，已提前保级；客队伯恩茅斯37场积56分，高居第6位，需保住欧联杯资格。客队实力与战意明显占优。\n\n主队诺丁汉森林近10场赛事5胜3平2负，状态尚可；近5个主场3胜2平0负，主场状态稳健。\n\n客队伯恩茅斯近10场赛事4胜6平0负，状态出色；近5个客场3胜2平0负，客场状态稳健。\n\n综合来看，客队整体实力与联赛排名更胜一筹，但主队主场具备一定抗衡能力。\n\n双方最近一次交锋中，伯恩茅斯客场2:0击败诺丁汉森林。双方近6次交锋伯恩茅斯取得4胜2平0负，占据绝对优势；在诺丁汉森林的主场，近3次交锋，诺丁汉森林取得0胜1平2负，处于下风。\n\n机构胜平负指数分析，客胜指数持续走低，支持伯恩茅斯不败。\n\n双方上半场打平的可能性为60%\n主队近5场赛事主场的上半场: 领先1，打平3，落后1丨2场有进球，2场有失球\n客队近5场赛事客场的上半场: 领先1，打平4，落后0丨2场有进球，1场有失球\n\n伯恩茅斯需保住第6名确保欧联杯资格，战意充足；诺丁汉森林虽已保级，但主场收官力求体面结果。双方均倾向稳健开局，主队或借助主场气势寻求反击机会，但防线伤缺隐患较大。",
-        "had_analyse": [],
+        "had_analyse": [
+          "lose"
+        ],
         "home_rank": 16,
         "away_rank": 6,
         "v2_odds_dict": {
@@ -18469,11 +18524,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -18584,7 +18639,9 @@
         },
         "expert_intro": "那不勒斯已锁定联赛亚军，战意存疑且主力前锋卢卡库伤缺；乌迪内斯位列中游无欲无求，但客场近期3胜2平保持不败，防守稳健。",
         "baseface": "本场为意甲第38轮收官战。目前主队37场积73分排在第2位，客队37场积50分位列第10位。主队实力明显高出一筹。\n\n主队那不勒斯近10场赛事6胜2平2负，状态良好；近5个主场3胜2负，主场状态尚可。\n\n客队乌迪内斯近10场赛事4胜3平3负，状态一般；近5个客场3胜2平，客场状态稳健。\n\n综合来看，双方实力差距明显。\n\n双方最近一次交锋中，乌迪内斯主场1:0击败那不勒斯。双方近6次交锋那不勒斯取得3胜2平1负，占据优势；在那不勒斯的主场，近3次交锋，那不勒斯取得2胜1平，保持不败。\n\n机构一致看好主胜。\n\n主队上半场落后的可能性为 50%\n主队近5场赛事主场的上半场: \n领先1，打平1，落后3丨2场有进球，3场有失球 \n客队近5场赛事客场的上半场: \n领先3，打平2，落后0丨3场有进球，0场有失球\n\n那不勒斯已锁定联赛亚军及欧冠资格，末轮或为荣誉而战；乌迪内斯位列中游无欲无求，但客场近期不败率较高，或延续稳健防守姿态。双方或踢得较为开放。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 2,
         "away_rank": 10,
         "v2_odds_dict": {
@@ -18804,11 +18861,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -18919,7 +18976,9 @@
         },
         "expert_intro": "维京近10场9胜1负状态火热，历史交锋5连胜心理优势明显，但克里斯蒂安松主场近5场3胜1平1负具备抵抗力，且主队7人伤停阵容受损严重。",
         "baseface": "本场为挪威超级联赛第10轮。目前主队9场积11分，排在第10位。客队9场积24分，高居第1位。客队实力明显高出一筹。\n\n主队克里斯蒂安松近10场赛事4胜2平4负，状态一般;近5个主场3胜1平1负，主场状态尚可。\n\n客队维京近10场赛事9胜0平1负，状态火热;近5个客场4胜0平1负，客场状态出色。\n\n综合来看，双方实力差距明显。\n\n双方最近一次交锋中，维京主场3-1击败克里斯蒂安松。双方近6次交锋克里斯蒂安松取得1胜0平5负，处于下风;在克里斯蒂安松的主场，近3次交锋，克里斯蒂安松取得1胜0平2负，处于下风。\n\n主流机构客胜指数维持在1.35-1.45区间，明显支持客胜。\n\n双方上半场打平的可能性为60%\n主队近5场赛事主场的上半场:\n领先1，打平3，落后1丨2场有进球，2场有失球\n客队近5场赛事客场的上半场:\n领先4，打平0，落后1丨5场有进球，1场有失球\n\n维京领跑积分榜需巩固优势，克里斯蒂安松中游徘徊需抢分保级，考虑到双方实力差距和交锋记录，主队或采取稳守反击策略，但7人伤停影响阵容深度。",
-        "had_analyse": [],
+        "had_analyse": [
+          "lose"
+        ],
         "home_rank": 10,
         "away_rank": 1,
         "v2_odds_dict": {
@@ -19139,11 +19198,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -19254,7 +19313,10 @@
         },
         "expert_intro": "莱切仅领先降级区1分，末轮必须抢分保级，战意浓烈；热那亚已保级成功，近5客场虽不败但阵容伤停多达5人。",
         "baseface": "本场为意甲第38轮收官战。目前主队37场积35分，排在第17位，仅领先降级区1分。客队37场积41分，位列第15，已提前保级。主队实力稍逊但战意更强。\n\n主队莱切近10场赛事3胜2平5负，状态低迷;近5个主场1胜1平3负，主场状态较差。\n\n客队热那亚近10场赛事4胜2平4负，状态一般;近5个客场2胜2平1负，客场状态稳定。\n\n综合来看双方实力差距不大，主队战意明显更强。\n\n双方最近一次交锋中，莱切客场0:0战平热那亚。双方近6次交锋莱切取得1胜2平3负，略处下风;在莱切的主场，近3次交锋，莱切取得1胜2平，保持不败。\n\n主流机构下调主胜指数，倾向主胜。\n\n双方上半场打平的可能性为45%\n主队近5场赛事主场的上半场:\n领先1，打平1，落后3丨1场有进球，3场有失球\n客队近5场赛事客场的上半场:\n落后1，打平4，领先0丨1场有进球，2场有失球\n\n莱切仅领先降级区1分，末轮必须拿分确保保级，战意强烈；热那亚已保级成功，客场或轮换阵容。主队虽主场战绩不佳，但生死战必全力进攻，比赛可能呈现主队主攻态势。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win",
+          "same"
+        ],
         "home_rank": 17,
         "away_rank": 15,
         "v2_odds_dict": {
@@ -19474,11 +19536,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -19589,7 +19651,9 @@
         },
         "expert_intro": "维罗纳深陷降级区且伤病满营，主场5场不胜且零进球，进攻乏力；罗马实力占优且近期4连胜，但已锁定欧冠资格战意存疑，阵容深度足以应对收官战。",
         "baseface": "本场为意甲联赛第38轮收官战。目前主队37场积21分，排在第19位，已确定降级。客队37场积70分，位列第4，已锁定欧冠资格。客队实力明显高出一筹。\n\n主队维罗纳近10场赛事1胜3平6负，状态低迷；近5个主场0胜1平4负，主场状态极差。\n\n客队罗马近10场赛事6胜2平2负，状态上佳；近5个客场2胜1平2负，客场表现一般。\n\n综合来看，双方实力差距悬殊。\n\n双方本赛季首回合交锋中，罗马主场2:0击败维罗纳。双方近6次交锋维罗纳取得2胜1平3负，略处下风；在维罗纳的主场，近3次交锋，维罗纳取得2胜1负，占据优势。\n\n主流机构客胜指数维持在1.3左右，支持方向为客胜。\n\n双方上半场打平的可能性为60%\n主队近5场赛事主场的上半场: \n领先0，打平4，落后1丨0场有进球，1场有失球 \n客队近5场赛事客场的上半场: \n领先3，打平1，落后1丨4场有进球，1场有失球\n\n维罗纳虽已定降级但主场谢幕战需为荣誉而战；罗马已稳获欧冠资格，收官战或轮换阵容，但阵容深度仍占优。",
-        "had_analyse": [],
+        "had_analyse": [
+          "lose"
+        ],
         "home_rank": 19,
         "away_rank": 4,
         "v2_odds_dict": {
@@ -19809,11 +19873,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -19928,7 +19992,9 @@
         },
         "expert_intro": "尤文图斯为巩固欧战席位战意更浓，整体实力与近期状态均占优；都灵虽主场近期表现强势，但防线伤停严重且实力差距明显，收官战恐难抵挡客队攻势。",
         "baseface": "本场为意甲第38轮收官战。目前主队37场积44分，排在第12位。客队37场积68分，位列第6。客队实力明显高出一筹。\n\n主队都灵近10场赛事4胜2平4负，状态一般；近5个主场4胜1平0负，主场状态出色。\n\n客队尤文图斯近10场赛事6胜3平1负，状态不俗；近5个客场3胜2平0负，客场状态稳定。\n\n综合来看，双方实力差距明显。\n\n双方最近一次交锋中，都灵主场0:0逼平尤文图斯。双方近6次交锋都灵取得0胜3平3负，处于下风；在都灵的主场，近3次交锋，都灵取得0胜2平1负，处于下风。\n\n机构指数走势支持客胜。\n\n双方上半场打平的可能性为60%\n主队近5场赛事主场的上半场: \n领先1，打平3，落后1丨3场有进球，3场有失球 \n客队近5场赛事客场的上半场: \n领先2，打平2，落后1丨2场有进球，1场有失球\n\n尤文为巩固欧战资格战意明确，都灵收官战主场力求体面；预计双方将展开对攻，尤文掌控节奏。",
-        "had_analyse": [],
+        "had_analyse": [
+          "lose"
+        ],
         "home_rank": 12,
         "away_rank": 6,
         "v2_odds_dict": {
@@ -20148,11 +20214,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -20263,7 +20329,9 @@
         },
         "expert_intro": "克雷莫纳主场对赛科莫3连胜，交锋心理占优；科莫近期两连胜状态正佳，且阵容身价远超对手，双方为各自目标全力一搏。",
         "baseface": "本场为意甲第38轮收官战。目前主队37场积34分，排在第18位，身处降级区。客队37场积68分，位列第5，争夺欧联杯资格。客队实力明显高出一筹。\n\n主队克雷莫纳近10场赛事3胜1平6负，状态低迷；近5个主场1胜1平3负，主场状态较差。\n\n客队科莫近10场赛事5胜2平3负，状态一般；近5个客场2胜1平2负，客场状态一般。\n\n综合来看，双方实力存在明显差距。\n\n双方最近一次交锋中，克雷莫纳客场1:1战平科莫。双方近6次交锋克雷莫纳取得4胜1平1负，占据优势；在克雷莫纳的主场，近3次交锋，克雷莫纳取得3胜0平0负，优势明显。\n\n主流机构客胜指数持续走低，支持客队方向。\n\n双方上半场打平的可能性为40%\n主队近5场赛事主场的上半场：\n领先2，打平1，落后2丨2场有进球，2场有失球\n客队近5场赛事客场的上半场：\n领先2，打平2，落后1丨3场有进球，1场有失球\n\n主队尚存保级理论可能，需全力争胜；客队需巩固欧战资格，同样渴望胜利。双方皆具强烈战意，预计展开对攻。",
-        "had_analyse": [],
+        "had_analyse": [
+          "lose"
+        ],
         "home_rank": 18,
         "away_rank": 5,
         "v2_odds_dict": {
@@ -20483,11 +20551,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -20598,7 +20666,9 @@
         },
         "expert_intro": "AC米兰近10次交锋7胜3平未尝败绩，主场对赛优势明显；卡利亚里近期状态低迷且伤兵满营，客场挑战艰难。",
         "baseface": "本场为意大利甲级联赛第38轮。目前主队37场积70分，排在第3位。客队37场积40分，排在第16位。主队实力明显高出一筹。\n\n主队AC米兰近10场赛事4胜1平5负，状态一般;近5个主场2胜1平2负，主场状态一般。\n\n客队卡利亚里近10场赛事3胜1平6负，状态低迷;近5个客场0胜2平3负，客场状态低迷。\n\n综合来看，双方实力差距较大。\n\n双方最近一次交锋中，AC米兰客场1:0击败卡利亚里。双方近6次交锋AC米兰取得4胜2平0负，占据绝对优势;在AC米兰的主场，近3次交锋，AC米兰取得2胜1平0负，处于上风。\n\n机构普遍开出主胜1.25-1.30低赔，明显支持主队取胜。\n\n双方上半场打平的可能性为 40%\n主队近5场赛事主场的上半场: \n领先1，打平2，落后2丨2场有进球，3场有失球 \n客队近5场赛事客场的上半场: \n领先1，打平3，落后1丨1场有失球，1场有进球\n\nAC米兰需巩固欧冠资格，末轮主场必全力争胜；卡利亚里虽保级成功但客场战绩糟糕且多名主力伤缺，难有作为。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 3,
         "away_rank": 16,
         "v2_odds_dict": {
@@ -20818,11 +20888,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -20928,12 +20998,15 @@
         "intelligence": {
           "h_inj": "保罗·卡巴内斯 手术 胡安·弗伊斯 受伤 跟腱受伤 桑蒂·科梅萨尼亚 受伤 肌肉挫伤 赫拉德·莫雷诺 受伤",
           "g_inj": "何塞·马里亚·希门尼斯 受伤 踝关节扭伤 乔·卡多索 受伤 撞伤 尼科拉斯·伊万·冈萨雷斯 受伤 肌肉挫伤 巴勃罗·巴里奥斯·里瓦斯 受伤 肌肉挫伤 罗德里戈·门多萨 肌肉挫伤 胡利安·阿尔瓦雷斯 受伤 踝关节扭伤 纳韦尔·莫利纳 受伤 肌肉挫伤 罗宾·勒诺尔芒 停赛 累计黄牌停赛",
-          "home_bad_news": "1.比利亚雷亚尔近5场正赛连续失球，且场均丢球达1.6球。 2.比利亚雷亚尔本赛季联赛37场比赛，在落后的情况下最终输球的场次占总负场的90%。",
+          "home_bad_news": "1.比利亚雷亚尔近5场正赛连续失球，且场均丢球达1.6球。 2.比利亚雷亚尔本赛季联赛37场比赛，在落后的情况下最终输球的场次占总负场的90%。 3.比利亚雷亚尔在上一轮客场挑战中0比2负于巴列卡诺，近期竞技状态出现明显回落。球队在近三轮比赛中仅取得1平2负的战绩，尚未收获一场胜利。防守体系也暴露出",
           "guest_bad_news": "1.马竞本赛季联赛37场比赛，在领先的情况下最终输球的场次占总负场的50%。"
         },
         "expert_intro": "双方均已锁定欧冠资格，战意更多关乎荣誉排名。比利亚雷亚尔主场火力凶猛，近5个主场4胜打入14球；马竞客场表现不稳且伤兵满营，防线面临重组压力。",
         "baseface": "本场为西甲第38轮收官战。目前主队37场积69分排在第3位，客队37场积69分位列第4位，双方积分相同实力接近。\n\n主队比利亚雷亚尔近10场赛事4胜3平3负，状态一般；近5个主场4胜1负，主场状态出色。\n\n客队马竞近10场赛事4胜2平4负，状态一般；近5个客场2胜3负，客场状态欠佳。\n\n综合来看双方实力差距不大。\n\n双方最近一次交锋中，马竞主场2:0击败比利亚雷亚尔。双方近6次交锋比利亚雷亚尔取得1胜2平3负，略处下风；在比利亚雷亚尔的主场，近3次交锋，比利亚雷亚尔取得0胜2平1负，处于下风。\n\n欧*主胜2.4.平局3.5.客胜2.7，机构调整略微倾向主队，支持方向为\"主队不败\"。\n\n双方上半场有进球的可能性为85%\n主队近5场赛事主场的上半场: \n领先4，打平1，落后0丨5场有进球，1场有失球 \n客队近5场赛事客场的上半场: \n领先1，打平2，落后2丨3场有失球，3场有进球\n\n双方均已锁定欧冠正赛资格，末轮更多关乎排名荣誉与主场收官尊严。主队主场进攻火力联赛顶级，客队防守体系稳固但遭遇严重伤停危机，本场或成攻防演练与阵容深度考验。",
-        "had_analyse": [],
+        "had_analyse": [
+          "same",
+          "lose"
+        ],
         "home_rank": 3,
         "away_rank": 4,
         "v2_odds_dict": {
@@ -21153,11 +21226,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -21268,7 +21341,9 @@
         },
         "expert_intro": "迈阿密国际近10场6胜3平1负状态火热，主场对赛费城联合3连胜；费城联伤兵满营且赛季仅1胜，攻防数据全面落后，客场挑战难度极大。",
         "baseface": "本场为美职联第15轮。目前主队14场积28分，排在第2位。客队14场积7分，位列第15位。主队实力明显高出一筹。\n\n主队迈阿密国际近10场赛事6胜3平1负，状态火热；近5个主场1胜3平1负，主场状态一般。\n\n客队费城联合近10场赛事1胜4平5负，状态低迷；近5个客场1胜1平3负，客场状态低迷。\n\n综合来看，双方实力差距明显。\n\n双方最近一次交锋中，迈阿密国际客场3:3战平费城联合。双方近10次交锋迈阿密国际取得5胜3平2负，占据优势；在迈阿密国际的主场，近3次交锋，迈阿密国际取得3胜0平0负，占据绝对优势。\n\n机构胜平负指数分析，主流机构主胜指数1.40左右，支持主胜方向。\n\n双方上半场打平的可能性为 60%\n主队近5场赛事主场的上半场: \n领先2，打平3，落后0丨4场有进球，3场有失球 \n客队近5场赛事客场的上半场: \n领先2，打平0，落后3丨2场有进球，3场有失球\n\n战意与策略分析：迈阿密国际争夺季后赛有利排名，战意充足；费城联合深陷榜尾急需抢分，但阵容残缺。主队控球进攻，客队或采取防守反击策略。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 2,
         "away_rank": 15,
         "v2_odds_dict": {
@@ -21488,11 +21563,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -21603,7 +21678,9 @@
         },
         "expert_intro": "洛杉矶FC历史交锋10场7胜2平1负碾压对手且主场不败，但近期10场仅2胜状态低迷且5名主力伤停防线堪忧；西雅图海湾人排名更高状态稳定但历史客场心理处于下风。",
         "baseface": "本场为美国职业大联盟联赛季后赛1/8决赛。目前主队14场积21分，排在西部第7位。客队12场积24分，高居西部第4位。双方积分接近，实力在伯仲之间。\n\n主队洛杉矶FC近10场赛事2胜3平5负，状态低迷；近5个主场2胜1平2负，主场状态一般。\n\n客队西雅图海湾人近10场赛事5胜3平2负，状态良好；近5个客场2胜2平1负，客场状态稳定。\n\n综合来看，双方实力差距不大，但主队历史交锋占据绝对优势。\n\n双方最近一次交锋中，洛杉矶FC主场4:0大胜西雅图海湾人。双方近6次交锋洛杉矶FC取得5胜1平0负，占据绝对优势；在洛杉矶FC的主场，近3次交锋，洛杉矶FC取得2胜1平，保持不败。\n\n欧*主胜数据集中在1.83-1.97区间，机构略微倾向主队不败方向。\n\n双方上半场打平的可能性为50%\n主队近5场赛事主场的上半场:\n领先1，打平3，落后1丨2场有进球，1场有失球\n客队近5场赛事客场的上半场:\n领先1，打平4，落后0丨2场有进球，1场有失球\n\n季后赛1/8决赛双方战意强烈；主队需克服近期防守不稳及多名主力伤停困扰，客队依托稳固防守体系寻求客场突破，战术博弈关键在于中场控制与防线稳定性。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 7,
         "away_rank": 4,
         "v2_odds_dict": {
@@ -21823,11 +21900,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -21938,7 +22015,9 @@
         },
         "expert_intro": "阿贾克斯近期交锋处于劣势，连续3次不敌乌德勒支；客队状态正佳近10场7胜，但主队阵容身价占优且拥有主场之利，双方伤停均较严重。",
         "baseface": "本场为荷兰甲级联赛欧协联资格赛决赛。目前主队世界排名第115位，积1618分；客队世界排名第183位，积1566分。主队身价1.87亿欧元远超客队7915万欧元，实力优势明显。\n\n主队阿贾克斯近10场赛事4胜4平2负，状态一般；近5个主场1胜2平2负，主场状态较差。\n\n客队乌德勒支近10场赛事7胜1平2负，状态出色；近5个客场2胜1平2负，客场状态一般。\n\n综合来看，主队纸面实力更强但近期状态不如对手，双方差距缩小。\n\n双方最近一次交锋中，乌德勒支客场2:1击败阿贾克斯。双方近6次交锋阿贾克斯取得2胜1平3负，略处下风；在阿贾克斯的主场，近3次交锋，阿贾克斯取得1胜1平1负，不落下风。\n\n欧*主流机构开出主胜1.70-1.80区间， latest odds显示主胜略有上调，机构谨慎支持主队。\n\n双方上半场打平的可能性为 60%\n主队近5场赛事主场的上半场: \n领先1，打平3，落后1丨3场有进球，3场有失球\n客队近5场赛事客场的上半场: \n领先2，打平2，落后1丨3场有进球，3场有失球\n\n战意与策略分析：阿贾克斯虽坐拥主场且身价占优，但近期交锋三连败心理承压，加之多名主力伤缺；乌德勒支状态正佳但客场防守漏洞明显，双方皆需为欧战资格全力一搏，预计比赛将呈现激烈对攻态势。",
-        "had_analyse": [],
+        "had_analyse": [
+          "win"
+        ],
         "home_rank": 5,
         "away_rank": 6,
         "v2_odds_dict": {
@@ -22158,11 +22237,11 @@
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC",
+            "run_id": "20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 33,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260523_053610_66m_8bea803f6101_奥克兰FC_悉尼FC_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260523_062133_66m_249bbdfd02a5_奥克兰FC_悉尼FC_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
