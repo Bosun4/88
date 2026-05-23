@@ -1195,8 +1195,8 @@ def get_key_for_ai(ai_name: str) -> str:
 
 def get_url_for_ai(ai_name: str) -> str:
     if AI_FORCE_COMMON_GATEWAY:
-        return _clean_env_url("API_URL", "GPT_API_URL", "OPENAI_API_URL", "BASE_URL", "GROK_API_URL", "GEMINI_API_URL")
-    return _clean_env_url(f"{ai_name.upper()}_API_URL", "API_URL", "OPENAI_API_URL", "BASE_URL", "GPT_API_URL")
+        return _clean_env_url("API_URL")
+    return _clean_env_url(f"{ai_name.upper()}_API_URL", "API_URL")
 
 
 def _model_for(ai_name: str) -> str:
