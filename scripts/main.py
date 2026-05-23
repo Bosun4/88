@@ -170,8 +170,14 @@ def configure_ai_defaults():
     os.environ.setdefault("AI_RUN_DAYS", "today")
     os.environ.setdefault("VMAX_RUN_DAYS", "today")
 
-    # 每个模型最多请求一次，避免失败后重复扣费
-    os.environ.setdefault("AI_MAX_REQUESTS_PER_AI", "1")
+    # 每个模型最大请求数按运行模式给安全默认值：fast_batch 负责全量初筛，deep_research 保持保守。
+    if os.environ.get("AI_RUN_MODE", "").strip().lower() == "fast_batch":
+        os.environ.setdefault("AI_MAX_REQUESTS_PER_AI", "3")
+        os.environ.setdefault("AI_CHUNK_CONCURRENCY", "3")
+        os.environ.setdefault("AI_MODEL_CONCURRENCY", "4")
+        os.environ.setdefault("AI_PHASE1_PARALLEL", "true")
+    else:
+        os.environ.setdefault("AI_MAX_REQUESTS_PER_AI", "1")
 
     # Claude 条件触发：如果 predict.py 支持，就会生效；不支持也不会影响 main.py
     os.environ.setdefault("AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID", "true")
@@ -197,6 +203,10 @@ def print_runtime_config():
     print(f"   VMAX_RUN_DAYS={os.environ.get('VMAX_RUN_DAYS', 'today')}")
     print(f"   AI_RUN_DAYS={os.environ.get('AI_RUN_DAYS', 'today')}")
     print(f"   AI_MAX_REQUESTS_PER_AI={os.environ.get('AI_MAX_REQUESTS_PER_AI', '1')}")
+    print(f"   AI_RUN_MODE={os.environ.get('AI_RUN_MODE', '')}")
+    print(f"   AI_CHUNK_CONCURRENCY={os.environ.get('AI_CHUNK_CONCURRENCY', '')}")
+    print(f"   AI_MODEL_CONCURRENCY={os.environ.get('AI_MODEL_CONCURRENCY', '')}")
+    print(f"   AI_PHASE1_PARALLEL={os.environ.get('AI_PHASE1_PARALLEL', '')}")
     print(f"   AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID={os.environ.get('AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID', 'true')}")
     print(f"   AI_MIN_PHASE1_VALID_FOR_CLAUDE={os.environ.get('AI_MIN_PHASE1_VALID_FOR_CLAUDE', '2')}")
     print(f"   AI_USE_COMPACT_CLAUDE_AUDIT={os.environ.get('AI_USE_COMPACT_CLAUDE_AUDIT', 'true')}")
@@ -286,7 +296,9 @@ def main():
                 "session": session,
                 "target_mode": "today_only",
                 "date_shift_hours": os.environ.get("VMAX_DATE_SHIFT_HOURS", "11"),
+                "ai_run_mode": os.environ.get("AI_RUN_MODE", ""),
                 "ai_batch_size": os.environ.get("AI_BATCH_SIZE", ""),
+                "ai_chunk_concurrency": os.environ.get("AI_CHUNK_CONCURRENCY", ""),
                 "ai_model_concurrency": os.environ.get("AI_MODEL_CONCURRENCY", ""),
                 "ai_phase1_parallel": os.environ.get("AI_PHASE1_PARALLEL", ""),
                 "ai_max_requests_per_ai": os.environ.get("AI_MAX_REQUESTS_PER_AI", "1"),

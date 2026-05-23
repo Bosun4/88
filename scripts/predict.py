@@ -189,7 +189,27 @@ AI_RESEARCH_MODE = str(os.environ.get("AI_RESEARCH_MODE", "research")).strip().l
 if AI_RESEARCH_MODE not in {"production", "enhanced", "research"}:
     AI_RESEARCH_MODE = "research"
 
-if AI_RESEARCH_MODE == "production":
+AI_RUN_MODE = str(os.environ.get("AI_RUN_MODE", "")).strip().lower()
+if AI_RUN_MODE not in {"", "fast_batch", "deep_research", "post_review"}:
+    AI_RUN_MODE = ""
+if not AI_RUN_MODE:
+    AI_RUN_MODE = {
+        "production": "fast_batch",
+        "enhanced": "deep_research",
+        "research": "deep_research",
+    }.get(AI_RESEARCH_MODE, "deep_research")
+
+if AI_RUN_MODE == "fast_batch":
+    _default_native_web = True
+    _default_cross_exam = False
+    _default_consistency = True
+    _default_chunk_size = 12
+elif AI_RUN_MODE == "post_review":
+    _default_native_web = False
+    _default_cross_exam = False
+    _default_consistency = False
+    _default_chunk_size = 30
+elif AI_RESEARCH_MODE == "production":
     _default_native_web = False
     _default_cross_exam = False
     _default_consistency = False
@@ -210,6 +230,9 @@ AI_REQUIRE_WEB_SOURCES = _env_bool("AI_REQUIRE_WEB_SOURCES", AI_NATIVE_WEB)
 AI_WARN_MISSING_PUBLISHED_AT = _env_bool("AI_WARN_MISSING_PUBLISHED_AT", False)
 AI_WEB_MAX_SOURCES_PER_MATCH = max(0, _env_int("AI_WEB_MAX_SOURCES_PER_MATCH", 8))
 AI_CHUNK_SIZE = max(1, _env_int("AI_CHUNK_SIZE", _default_chunk_size))
+AI_CHUNK_CONCURRENCY = max(1, _env_int("AI_CHUNK_CONCURRENCY", _env_int("AI_BATCH_SIZE", 1)))
+AI_MODEL_CONCURRENCY = max(1, _env_int("AI_MODEL_CONCURRENCY", AI_CHUNK_CONCURRENCY))
+AI_PHASE1_PARALLEL = _env_bool("AI_PHASE1_PARALLEL", True)
 # Keep the default prompt budget below the historical 3-4万 token range while
 # still allowing explicit environment overrides for larger research runs.
 AI_MAX_PROMPT_CHARS_PER_CHUNK = max(30000, _env_int("AI_MAX_PROMPT_CHARS_PER_CHUNK", 60000))
@@ -1214,7 +1237,7 @@ def _chat_url(base_url: str) -> str:
 
 
 def debug_ai_config() -> None:
-    print(f"[AI CONFIG] mode={AI_RESEARCH_MODE} mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE}")
+    print(f"[AI CONFIG] mode={AI_RESEARCH_MODE} run_mode={AI_RUN_MODE} mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} chunk_concurrency={AI_CHUNK_CONCURRENCY} model_concurrency={AI_MODEL_CONCURRENCY} phase1_parallel={AI_PHASE1_PARALLEL} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE}")
     for n in AI_NAMES:
         print(f"[AI CONFIG] {n.upper()} model={_model_for(n)} key={_mask_key(get_key_for_ai(n))} url={get_url_for_ai(n) or '<missing>'}")
 
@@ -1885,11 +1908,20 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
     print(f"  [Chunk {chunk_id}] matches={expected} size={len(evidence_batch)}")
 
     phase1: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in PHASE1_NAMES}
-    tasks = []
-    for ai in PHASE1_NAMES:
-        prompt = build_phase1_prompt(evidence_batch, ai)
-        tasks.append(async_call_ai_json(session, ai, _phase1_system(ai), prompt, "phase1", expected))
-    phase1_returns = await asyncio.gather(*tasks, return_exceptions=True)
+    phase1_returns = []
+    if AI_PHASE1_PARALLEL:
+        tasks = []
+        for ai in PHASE1_NAMES:
+            prompt = build_phase1_prompt(evidence_batch, ai)
+            tasks.append(async_call_ai_json(session, ai, _phase1_system(ai), prompt, "phase1", expected))
+        phase1_returns = await asyncio.gather(*tasks, return_exceptions=True)
+    else:
+        for ai in PHASE1_NAMES:
+            prompt = build_phase1_prompt(evidence_batch, ai)
+            try:
+                phase1_returns.append(await async_call_ai_json(session, ai, _phase1_system(ai), prompt, "phase1", expected))
+            except Exception as exc:
+                phase1_returns.append(exc)
     for ret in phase1_returns:
         if isinstance(ret, Exception):
             print(f"  [Chunk {chunk_id}] Phase1 exception: {ret}")
@@ -1902,11 +1934,20 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
 
     critic_reports: Dict[str, List[Dict[str, Any]]] = {}
     if AI_ENABLE_CROSS_EXAM:
-        critic_tasks = []
-        for ai in PHASE1_NAMES:
-            prompt = build_critic_prompt(evidence_batch, ai, phase1)
-            critic_tasks.append(async_call_ai_json(session, ai, _phase1_system(ai), prompt, "critic", expected))
-        critic_returns = await asyncio.gather(*critic_tasks, return_exceptions=True)
+        if AI_PHASE1_PARALLEL:
+            critic_tasks = []
+            for ai in PHASE1_NAMES:
+                prompt = build_critic_prompt(evidence_batch, ai, phase1)
+                critic_tasks.append(async_call_ai_json(session, ai, _phase1_system(ai), prompt, "critic", expected))
+            critic_returns = await asyncio.gather(*critic_tasks, return_exceptions=True)
+        else:
+            critic_returns = []
+            for ai in PHASE1_NAMES:
+                prompt = build_critic_prompt(evidence_batch, ai, phase1)
+                try:
+                    critic_returns.append(await async_call_ai_json(session, ai, _phase1_system(ai), prompt, "critic", expected))
+                except Exception as exc:
+                    critic_returns.append(exc)
         for ret in critic_returns:
             if isinstance(ret, Exception):
                 continue
@@ -2033,11 +2074,26 @@ async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dic
     session = None
     try:
         if not AI_MOCK_MODE and aiohttp is not None:
-            connector = aiohttp.TCPConnector(limit=8, use_dns_cache=False, ttl_dns_cache=0, force_close=False)
+            connector = aiohttp.TCPConnector(limit=max(8, AI_MODEL_CONCURRENCY * 4), use_dns_cache=False, ttl_dns_cache=0, force_close=False)
             session = aiohttp.ClientSession(connector=connector)
-        for i, chunk in enumerate(chunks, 1):
-            rows = await _run_one_chunk(session, run_id, i, chunk)
-            all_final.update(rows)
+        if AI_CHUNK_CONCURRENCY <= 1 or len(chunks) <= 1:
+            for i, chunk in enumerate(chunks, 1):
+                rows = await _run_one_chunk(session, run_id, i, chunk)
+                all_final.update(rows)
+        else:
+            semaphore = asyncio.Semaphore(AI_CHUNK_CONCURRENCY)
+
+            async def _run_limited_chunk(i: int, chunk: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
+                async with semaphore:
+                    return await _run_one_chunk(session, run_id, i, chunk)
+
+            tasks = [_run_limited_chunk(i, chunk) for i, chunk in enumerate(chunks, 1)]
+            chunk_returns = await asyncio.gather(*tasks, return_exceptions=True)
+            for i, ret in enumerate(chunk_returns, 1):
+                if isinstance(ret, Exception):
+                    print(f"  [Chunk {i}] failed under chunk concurrency: {ret}")
+                    continue
+                all_final.update(ret)
     finally:
         if session is not None:
             await session.close()
@@ -2051,8 +2107,13 @@ async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dic
         "aggregate_file": agg_path,
         "ai_call_status": dict(AI_CALL_STATUS),
         "mock_mode": AI_MOCK_MODE,
+        "run_mode": AI_RUN_MODE,
         "research_mode": AI_RESEARCH_MODE,
         "native_web": AI_NATIVE_WEB,
+        "effective_chunk_size": AI_CHUNK_SIZE,
+        "effective_chunk_concurrency": AI_CHUNK_CONCURRENCY,
+        "effective_model_concurrency": AI_MODEL_CONCURRENCY,
+        "effective_phase1_parallel": AI_PHASE1_PARALLEL,
         "cross_exam": AI_ENABLE_CROSS_EXAM,
         "consistency_judge": AI_ENABLE_CONSISTENCY_JUDGE,
     }
@@ -3207,21 +3268,41 @@ ENGINE_ARCHITECTURE = (
 
 def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, Any]:
     """
-    v20.3 完整版 Evidence Compiler。
-    基于 20.2.1-FULL-ANCHOR 原始证据 + v20.3 Sharp/Score-Cluster 模块合并。
-    本函数只编译事实，不输出 predicted_score，不做本地足球裁决。
+    v20.6.0 升级版 Evidence Compiler。
+    【核心改动】：影子矩阵数据流向掉头，提前计算并将数理客观概率注入 AI 事实层，
+    避免 AI 在错误的道路上盲目推理。
     """
     evidence = _BASE_BUILD_EVIDENCE_PACKET_V2021(match_obj, index)
     try:
+        # 1. 提前调用影子矩阵计算（泊松分布、全盘口 Devig 等数理边际概率）
+        matrix_pack = build_unified_score_matrix_shadow(match_obj)
+        top_scores = matrix_pack.get("top_scores", [])
+        recommended_score = top_scores[0]["score"] if top_scores else ""
+        recommended_direction = _score_direction(recommended_score) if recommended_score else None
+        
+        # 2. 将数理概率注入事实层，让 AI 带着数学约束跳舞
+        evidence["matrix_shadow_facts"] = {
+            "lambda_home": matrix_pack.get("lambda_h"),
+            "lambda_away": matrix_pack.get("lambda_a"),
+            "shape_verdict": matrix_pack.get("shape_verdict", "unknown"),
+            "fair_probabilities": matrix_pack.get("direction_probs", {}),
+            "top_mathematical_scores": top_scores[:5],  # 概率最高的前5个影子比分
+            "shadow_recommended_score": recommended_score,
+            "shadow_recommended_direction": recommended_direction,
+            "note": "这是本地算法利用泊松分布与 Devig 赔率反推得到的数理客观无偏差概率。AI 必须将其作为核心事实参考。如果最终你的预测（方向或比分）与影子矩阵测算的数理方向存在严重冲突，你必须在 reason/why_recommended 中极力论证冲突原因，否则会被判定为幻觉。"
+        }
+        
+        # 3. 增强原有的市场模块并合并
         evidence.update(build_enhanced_market_modules(match_obj, index))
-        evidence["evidence_compiler_version"] = "v20.3.0_sharp_cluster_full"
+        evidence["evidence_compiler_version"] = "v20.6.0_shadow_pre_injected"
         evidence.setdefault("protocol_notes", []).extend([
-            "v20.3: sharp_money_facts_v203 是事实编译，不是本地判断Sharp真伪。",
-            "v20.3: score_cluster_diagnostics_v203 只描述赔率簇和相邻比分关系，不替AI选比分。",
-            "v20.3: Gemini 必须基于相邻比分审计给出最终 predicted_score。",
+            "v20.6: matrix_shadow_facts 已经预先注入。这是硬数理事实支撑，不得视而不见。",
+            "v20.6: sharp_money_facts_v203 是事实编译，不是本地判断Sharp真伪。",
+            "v20.6: score_cluster_diagnostics_v203 只描述赔率簇 and 相邻比分关系，不替AI选比分。",
+            "v20.6: Gemini 必须基于相邻比分审计给出最终 predicted_score并回答 mandatory_cross_anchor_questions。",
         ])
     except Exception as e:
-        evidence.setdefault("data_quality", {})["v203_enhancement_error"] = str(e)[:300]
+        evidence.setdefault("data_quality", {})["v206_shadow_pre_inject_error"] = str(e)[:300]
     return evidence
 
 
@@ -4590,6 +4671,17 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
             pred[k] = v
     # 本地只做推荐风控展示/降级，不改方向和比分。
     try:
+        # 兼容旧版本回归测试中，如果传入 apply_weak_home_tail_risk_protection 处理过的 row
+        # 它的 row["recommendation"] 已经修改过，但 _BASE_ADAPT_AI_TO_FRONTEND_V2021 底层（即 adapt_ai_to_frontend）
+        # 它是基于最原始的 raw_item 重新取 rec = ai_r.get("recommendation")。
+        # 因此，我们需要确保这里的 pred (即 _BASE_ADAPT_AI_TO_FRONTEND_V2021 返回的 dict) 
+        # 中的 recommendation、confidence、display_confidence 等指标能完美体现被 weak_home_tail 降级之后的值！
+        if ai_r.get("recommendation", {}).get("original_bet_confidence") is not None:
+            pred["recommendation"] = ai_r.get("recommendation")
+            pred["confidence"] = int(_clip(_f(ai_r.get("recommendation", {}).get("original_bet_confidence", pred.get("confidence", 0)), 0), 0, 100))
+            pred["display_confidence"] = ai_r.get("recommendation", {}).get("display_bet_confidence", pred.get("display_confidence", pred["confidence"]))
+            pred["risk_adjusted_confidence"] = ai_r.get("recommendation", {}).get("risk_adjusted_bet_confidence", pred.get("risk_adjusted_confidence", pred["confidence"]))
+            
         protocol_downgrade_recommendation_only(pred)
         rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
         tier = str(rec.get("tier", "D")).upper()
