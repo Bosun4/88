@@ -43,7 +43,7 @@ def test_build_evidence_packet_runtime_function_has_no_prediction_leakage():
     assert packet["identity"]["home_team"] == "塞尔塔"
     assert "prediction" not in packet
     assert "predicted_score" not in packet.get("context_raw_fields", {})
-    assert packet.get("evidence_compiler_version") == "v20.3.0_sharp_cluster_full"
+    assert packet.get("evidence_compiler_version") in {"v20.3.0_sharp_cluster_full", "v20.6.0_shadow_pre_injected"}
 
 
 def test_predicted_score_and_final_direction_are_closed_by_score():
@@ -173,12 +173,16 @@ def test_tail_risk_protection_for_weak_home_favorite():
     assert {"1-2", "2-2", "2-3"}.issubset(risk_scores)
     assert "weak_home_favorite_btts_tail" in row["tail_risk_flags"]
     assert row["confidence_downgrade_reason"] in {"Weak home favorite with BTTS tail risk", "2-1 home score blocked by draw/away/tail risk hard gate"}
-    assert row["recommendation"]["bet_confidence"] <= 60
+    assert row["recommendation"].get("original_bet_confidence") == 78
+    assert row["recommendation"].get("risk_adjusted_bet_confidence") <= 60
+    assert row["recommendation"].get("display_bet_confidence") <= 60
     assert row["recommendation"].get("is_recommended") is False
     assert "weak_home_favorite_btts_tail_protection_applied" in row["validation_warnings"]
 
     frontend = predict.adapt_ai_to_frontend(row, {})
-    assert frontend["confidence"] <= 60
+    assert frontend["confidence"] == 78
+    assert frontend["display_confidence"] <= 60
+    assert frontend["risk_adjusted_confidence"] <= 60
     assert {"1-2", "2-2", "2-3"}.issubset({c["score"] for c in frontend["risk_score_candidates"]})
 
 

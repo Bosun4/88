@@ -62,6 +62,12 @@ jobs:
 
           FORCE_COMMON_GATEWAY_URL: "true"
 
+          AI_RUN_MODE: "fast_batch"
+          AI_CHUNK_SIZE: "12"
+          AI_CHUNK_CONCURRENCY: "3"
+          AI_MODEL_CONCURRENCY: "4"
+          AI_PHASE1_PARALLEL: "true"
+
           VMAX_RUN_DAYS: "today"
           AI_RUN_DAYS: "today"
           VMAX_DATE_SHIFT_HOURS: "11"
@@ -73,7 +79,7 @@ jobs:
           AI_HTTP_TOTAL_TIMEOUT: "0"
 
           STRICT_ONE_CALL_PER_MODEL: "true"
-          AI_MAX_REQUESTS_PER_AI: "1"
+          AI_MAX_REQUESTS_PER_AI: "3"
           AI_CLAUDE_MAX_REQUESTS: "1"
           AI_ALLOW_SECOND_CALL_REPAIR: "false"
           AI_ENABLE_CLAUDE_JSON_REPAIR: "false"
