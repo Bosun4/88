@@ -120,6 +120,8 @@ body{
 .sel-v{font-family:'IBM Plex Mono';font-size:15px;font-weight:900;margin-top:3px}
 .tier-S{color:var(--gn)}.tier-A{color:var(--am)}.tier-B{color:var(--bl)}.tier-C{color:var(--cy)}.tier-D{color:var(--red)}
 
+.mc-warn{font-size:10px;font-weight:900;padding:2px 6px;border-radius:4px;border:1px solid;background:rgba(0,0,0,0.2)}
+
 .sl{font-size:9px;color:var(--t3);font-weight:900;margin:8px 0 5px;padding-bottom:3px;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.5px}
 
 .warn{padding:7px 9px;border-radius:5px;font-size:10px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:4px;background:#ff4d5a0a;border:1px solid #ff4d5a20;color:var(--red)}
@@ -675,6 +677,23 @@ function renderMatches(){
         '<div class="mc-lg">'+esc(m.league||'')+' <span class="m">'+esc(m.match_num||'')+'</span>'+(isTopPick?'<span class="mc-badge">精选</span>':(gatePass?'<span class="mc-badge">可关注</span>':''))+'</div>'+
         '<div class="mc-eng">'+esc(p.engine_version||D.version||'vMAX 20.2.1-FULL')+'</div>'+
       '</div>'+
+      (function(){
+        var wHTML='';
+        var rItem = p.raw_item || {};
+        var pM = rItem.public_money_direction || p.public_money_direction;
+        var sM = rItem.sharp_money_direction || p.sharp_money_direction;
+        if(prob.h>65 && String(m.league).match(/瑞超|瑞典超|挪超/)){
+           wHTML+='<span class="mc-warn" style="color:var(--red);border-color:var(--red)">🚨 北欧大热必死(>65%)</span>';
+        }
+        if(pM==='home' && sM==='unclear'){
+           wHTML+='<span class="mc-warn" style="color:var(--am);border-color:var(--am)">⚠️ 聪明钱背离</span>';
+        }
+        var wStr = (p.validation_warnings||[]).join('');
+        if(wStr.indexOf('weak_home_tail')>=0){
+           wHTML+='<span class="mc-warn" style="color:var(--pr);border-color:var(--pr)">⛔ 防冷·深盘/客不败保护</span>';
+        }
+        return wHTML ? '<div style="padding:10px 16px 0;display:flex;gap:8px;flex-wrap:wrap;">'+wHTML+'</div>' : '';
+      })()+
       '<div class="mc-b">'+
         '<div class="teams">'+
           '<div class="tm"><div class="tm-n">'+esc(m.home_team||m.home||'')+'</div></div>'+
