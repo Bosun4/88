@@ -564,6 +564,17 @@ function renderSignals(p){
   if(aa.league_style)html+='<div class="sig sig-c">联赛/球队风格：'+esc(aa.league_style)+'</div>';
   if(aa.exclusion)html+='<div class="sig sig-p">排除法：'+esc(aa.exclusion)+'</div>';
 
+  if(p.risk_score_candidates && p.risk_score_candidates.length){
+    p.risk_score_candidates.forEach(function(c){
+      html+='<div class="sig sig-p">⚠️ 比分风险 ['+esc(c.score)+']: '+esc(c.risk_type)+' - '+esc(c.reason)+'</div>';
+    });
+  }
+
+  if(p.score_cluster_audit){
+    var sc = p.score_cluster_audit;
+    if(sc.why_selected_score) html+='<div class="sig sig-b">🧠 比分簇选择逻辑: '+esc(sc.why_selected_score)+'</div>';
+    if(sc.lowest_score_not_selected_reason) html+='<div class="sig sig-a">🚫 弃用最低赔理由: '+esc(sc.lowest_score_not_selected_reason)+'</div>';
+  }
   if(web.used===false){
     html+='<div class="sig sig-a">联网状态：'+esc(web.failure_reason||'no_live_web_access')+'</div>';
   }else if(web.used===true){
