@@ -3366,7 +3366,7 @@ def _canonical_output_schema_text() -> str:
   "goal_band": "0-1/2/3/4+",
   "btts": "yes/no/unclear",
   "risk_score_candidates": [
-    {"score":"1-2", "risk_type":"away_fightback/high_btts_tail", "reason":"中文说明"}
+    {"score":"1-2", "risk_type":"中文短语(如:客队反击尾部/高分平局等)", "reason":"中文说明"}
   ],
   "tail_risk_flags": ["weak_home_favorite_btts_tail"],
   "confidence_downgrade_reason": "",
