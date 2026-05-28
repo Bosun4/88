@@ -789,8 +789,8 @@ def _total_goal_anchor_facts(match_obj: Dict[str, Any]) -> Dict[str, Any]:
 
     if a4 > 6.0:
         observations.append({"anchor": "four_goals_odds_above_6", "value": a4, "meaning_for_ai": "4球赔率高于6，4球不是强压缩主模态；AI must prioritize auditing 0-3 goal band, cannot mechanically push 3-1/2-2."})
-    elif 0 < a4 <= 5.5:
-        observations.append({"anchor": "four_goals_odds_compressed", "value": a4, "meaning_for_ai": "4球赔率极低（<=5.5），大球路径（3-1/2-2/1-3等4+进球）已被市场和聪明钱极度防范，必须解除小球与1-1/2-1等常规低分锚定，调高4+比分在top3/候选中的排位与权重。"})
+    elif 0 < a4 <= 5.3:
+        observations.append({"anchor": "four_goals_odds_compressed", "value": a4, "meaning_for_ai": "4球赔率极低（<=5.3），大球路径（3-1/2-2/1-3等4+进球）已被市场和聪明钱极度防范，必须解除小球与1-1/2-1等常规低分锚定，调高4+比分在top3/候选中的排位与权重。"})
 
     if 0 < a5 <= 8.0:
         observations.append({"anchor": "five_goals_extreme_compressed", "value": a5, "meaning_for_ai": "5球赔率极低，必须审计3-2/4-1/4-2/胜其他路径。"})
@@ -1122,8 +1122,8 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("证据优先级：raw market structure > correct-score cluster > total-goals mode > handicap score-shape > money-flow/sharp interpretation > tactical/web context > Phase1 consensus。")
     p.append("多数意见不自动成立；若 GPT/Grok 基于同一低赔/单边市场理由一致，这属于相关证据，不是独立证据。")
     p.append("S级必须至少有两个独立证据族同时支持：市场结构、正确比分赔率簇、总进球模态、让球盘形态、资金流/Sharp、联网阵容伤停、战术/赛程背景。仅赔率低赔或单边市场最多给A；无联网且依赖阵容/战意/实力碾压，最高给B。")
-    p.append("低比分锚点审计：若0-0赔率≤11或1-1赔率偏低，必须显式比较0-0/1-1/1-0/0-1/2-0/0-2，不能机械给2-1。同时注意，当4球赔率被深度压缩（如4球赔率<=5.5）时，说明总进球市场大球/多球主线极为强劲，这可能彻底覆盖1-1的常规比分锚定。你不得机械偏向保守的1-1，必须主动释放到大球比分带，将1-3、3-1、2-2、2-3/3-2等4+比分提入最终top3/主选候选，否则视为严重失职。")
-    p.append("4球锚点审计：若4球赔率>6，选择3-1/2-2/3-2必须有强证据；否则优先压回0-3球比分带。若4球赔率<=5.5，属于高进球大比分强警示！必须将4球比分簇（1-3、3-1、2-2等）优先纳入考虑，若同时存在明显的聪明钱客胜大降水（如昨天1-3）或弱保级战意/进攻对攻大局，必须果断主推或备选1-3/3-1，打破保守的1-1与2-1平局束缚。")
+    p.append("低比分锚点审计：若0-0赔率≤11或1-1赔率偏低，必须显式比较0-0/1-1/1-0/0-1/2-0/0-2，不能机械给2-1。同时注意，当4球赔率被深度压缩（如4球赔率<=5.3）时，说明总进球市场大球/多球主线极为强劲，这可能彻底覆盖1-1的常规比分锚定。你不得机械偏向保守的1-1，必须主动释放到大球比分带，将1-3、3-1、2-2、2-3/3-2等4+比分提入最终top3/主选候选，否则视为严重失职。")
+    p.append("4球锚点审计：若4球赔率>6，选择3-1/2-2/3-2必须有强证据；否则优先压回0-3球比分带。若4球赔率<=5.3，属于高进球大比分强警示！必须将4球比分簇（1-3、3-1、2-2等）优先纳入考虑，若同时存在明显的聪明钱客胜大降水（如昨天1-3）或弱保级战意/进攻对攻大局，必须果断主推或备选1-3/3-1，打破保守的1-1与2-1平局束缚。")
     p.append("高比分尾部审计：若5球≤8、6球≤16或7+≤30，必须检查3-2/4-1/4-2/胜其他。")
     p.append("强客低赔审计：若客胜<=1.50，必须比较0-0/0-1/1-1/0-2/1-2与总进球模态；不能机械给0-2或S级。")
     p.append("赛季末战意倒挂预警：如果强队已经提前夺冠或无欲无求（面临大面积轮换/伤停），而弱队处于降级区死磕保级，必须极度重视下盘（包括弱队主胜或平局）。即使强队硬实力碾压、机构依然给出客胜低赔，也应主动下调强队的推荐等级，并在比分上重点防范保级队爆冷（如1-1, 1-0, 2-1）。不可无视战意倒挂给客胜高信心。")
@@ -1413,11 +1413,85 @@ def _preclean_text(text: str) -> str:
     return clean.strip()
 
 
+def _repair_truncated_json(text: str) -> str:
+    """
+    Attempts to repair a truncated JSON string by closing unclosed brackets, braces,
+    and quotes. Handles trailing commas gracefully.
+    """
+    text = text.strip()
+    if not text:
+        return ""
+    
+    in_str = False
+    quote_char = None
+    esc = False
+    
+    for i, ch in enumerate(text):
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == '\\':
+                esc = True
+            elif ch == quote_char:
+                in_str = False
+                quote_char = None
+        else:
+            if ch in ('"', "'"):
+                in_str = True
+                quote_char = ch
+    
+    if in_str:
+        text += '"' if quote_char == '"' else "'"
+    
+    stack = []
+    in_str = False
+    esc = False
+    quote_char = None
+    
+    for i, ch in enumerate(text):
+        if in_str:
+            if esc:
+                esc = False
+            elif ch == '\\':
+                esc = True
+            elif ch == quote_char:
+                in_str = False
+                quote_char = None
+        else:
+            if ch in ('"', "'"):
+                in_str = True
+                quote_char = ch
+            elif ch in ('[', '{'):
+                stack.append(ch)
+            elif ch in (']', '}'):
+                if stack:
+                    last = stack[-1]
+                    if (last == '[' and ch == ']') or (last == '{' and ch == '}'):
+                        stack.pop()
+    
+    text = re.sub(r',\s*$', '', text)
+    text = re.sub(r':\s*$', ': null', text)
+    
+    while stack:
+        last = stack.pop()
+        if last == '[':
+            text += ']'
+        elif last == '{':
+            text += '}'
+            
+    return text
+
+
 def _json_loads_best_effort_object(text: str) -> Any:
     clean = _preclean_text(text)
     if not clean:
         return {}
-    variants = [clean, re.sub(r",\s*([}\]])", r"\1", clean)]
+    variants = [
+        clean, 
+        re.sub(r",\s*([}\]])", r"\1", clean),
+        _repair_truncated_json(clean),
+        re.sub(r",\s*([}\]])", r"\1", _repair_truncated_json(clean))
+    ]
     for cand in variants:
         try:
             return json.loads(cand)
@@ -1429,7 +1503,7 @@ def _json_loads_best_effort_object(text: str) -> Any:
         except Exception:
             pass
     for frag in _balanced_fragments(clean):
-        for cand in [frag, re.sub(r",\s*([}\]])", r"\1", frag)]:
+        for cand in [frag, re.sub(r",\s*([}\]])", r"\1", frag), _repair_truncated_json(frag)]:
             try:
                 return json.loads(cand)
             except Exception:
@@ -3481,7 +3555,7 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append("强制：每场必须显式读取 score_cluster_diagnostics_v203.adjacent_score_audit_table；不能只看最低赔率。")
     p.append("")
     p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
-    p.append("1. 进攻高波或高进球异动压缩（如德甲、荷甲、美职、挪超、解放者杯等，或当前 4球/5球赔率显示被深度压低，例如4球赔率<=5.5）：防守往往让位于进攻，不得机械保守。不要机械拘泥于 2-1、1-1 等常规最低赔率。若双方战术开放或市场总进球异动支持（例如 4球赔率极低），必须敢于将 3-1、1-3、2-2 甚至 3-2 这种极端高比分作为主推首选，不要仅仅把它们当做风险尾部藏起来！")
+    p.append("1. 进攻高波或高进球异动压缩（如德甲、荷甲、美职、挪超、解放者杯等，或当前 4球/5球赔率显示被深度压低，例如4球赔率<=5.3）：防守往往让位于进攻，不得机械保守。不要机械拘泥于 2-1、1-1 等常规最低赔率。若双方战术开放或市场总进球异动支持（例如 4球赔率极低），必须敢于将 3-1、1-3、2-2 甚至 3-2 这种极端高比分作为主推首选，不要仅仅把它们当做风险尾部藏起来！")
     p.append("2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。")
     p.append("3. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。")
     p.append("请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！")
