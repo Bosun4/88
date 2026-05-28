@@ -25,7 +25,7 @@ def test_weak_home_low_score_in_high_draw_league_is_capped_to_c():
     assert front["final_direction"] == "home"
     assert front["recommend_gate_pass"] is False
     assert front["recommendation"]["tier"] == "D"
-    assert "prematch_v2_weak_home_win_draw_guard" in front["pre_match_factor_audit"]["rules_applied"]
+    assert "prematch_v2_weak_home_win_needs_confirmation" in front["pre_match_factor_audit"]["rules_applied"]
 
 
 def test_cup_cross_context_favorite_requires_lineup_and_motivation_confirmation():
