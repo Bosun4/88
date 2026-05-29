@@ -2739,12 +2739,51 @@ def _safe_pct_from_odds(odds: float) -> float:
     return 100.0 / odds if odds and odds > 1.0001 else 0.0
 
 
+def _shin_devig_3way(odds: Dict[str, Any], max_iter: int = 1000, tol: float = 1e-12) -> Tuple[Dict[str, float], float]:
+    """
+    基于 Jullien & Salanié (1994) 论文的 Shin Method 不动点迭代实现。
+    精准剥离庄家抽水并求解 insider trading 暴露指数 z-value。
+    """
+    raw_odds = {k: _f(v, 0.0) for k, v in odds.items()}
+    if any(v <= 1.01 for v in raw_odds.values()):
+        return {k: 33.33 for k in odds}, 0.0
+        
+    pi = {k: 1.0 / v for k, v in raw_odds.items()}
+    sum_pi = sum(pi.values())
+    n = len(odds)
+    
+    zz_prev = 0.0
+    zz_tmp = 0.0
+    for _ in range(max_iter):
+        zz_prev = zz_tmp
+        s_terms = sum(math.sqrt(zz_prev**2 + 4.0 * (1.0 - zz_prev) * ((val**2) / sum_pi)) for val in pi.values())
+        zz_tmp = (s_terms - 2.0) / (n - 2) if n > 2 else 0.0
+        if abs(zz_tmp - zz_prev) <= tol:
+            break
+            
+    z = zz_tmp
+    probs = {}
+    denom = 2 * (1.0 - z) if z < 1.0 else 1.0
+    for k, p_val in pi.items():
+        if z >= 1.0:
+            probs[k] = 0.0
+        else:
+            term = z**2 + 4.0 * (1.0 - z) * ((p_val**2) / sum_pi)
+            probs[k] = (math.sqrt(term) - z) / denom
+            
+    s_probs = sum(probs.values())
+    if s_probs > 0:
+        fair_probs = {k: round(v / s_probs * 100.0, 3) for k, v in probs.items()}
+    else:
+        fair_probs = {k: round(100.0 / n, 3) for k in odds}
+        
+    return fair_probs, round(z, 5)
+
+
 def _devig_3way(odds: Dict[str, Any]) -> Dict[str, float]:
-    raw = {k: _safe_pct_from_odds(_f(v, 0.0)) for k, v in odds.items()}
-    s = sum(raw.values())
-    if s <= 0:
-        return {k: 0.0 for k in odds}
-    return {k: round(v / s * 100.0, 2) for k, v in raw.items()}
+    fair, _ = _shin_devig_3way(odds)
+    return fair
+
 
 
 def _rank_rows_by_odds(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -2796,11 +2835,15 @@ def normalize_match_v203(raw_m: Dict[str, Any]) -> Dict[str, Any]:
 def compile_1x2_facts(m: Dict[str, Any]) -> Dict[str, Any]:
     odds = {"home": m.get("sp_home", m.get("win")), "draw": m.get("sp_draw", m.get("same")), "away": m.get("sp_away", m.get("lose"))}
     rows = _rank_rows_by_odds([{"direction": k, "odds": _f(v, 0.0)} for k, v in odds.items()])
-    fair = _devig_3way(odds)
+    
+    # 采用高精度 Shin Method 剥离 1X2 抽水并求出 z-value
+    fair, z_val = _shin_devig_3way(odds)
+    
     return {
         "available": all(_f(v, 0.0) > 1.01 for v in odds.values()),
         "odds": odds,
         "fair_no_margin_pct": fair,
+        "insider_trading_z_index": z_val, # 物理注入 z-value 事实
         "lowest_direction": rows[0]["direction"] if rows else "unknown",
         "ranked": rows,
         "market_gap": {
@@ -3415,9 +3458,55 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         
         # 6. 增强原有的市场模块并合并
         evidence.update(build_enhanced_market_modules(match_obj, index))
+        
+        # ============================================================
+        # 升级：双轨市场背离校准（Dual-Market Divergence Calibration）
+        # ============================================================
+        # 提取全球基准低抽水欧赔 (如 Pinnacle/Bet365 收盘欧赔，数据源已支持抓取)
+        global_odds = {
+            "home": match_obj.get("global_home", match_obj.get("b365_h", match_obj.get("pinnacle_h"))),
+            "draw": match_obj.get("global_draw", match_obj.get("b365_d", match_obj.get("pinnacle_d"))),
+            "away": match_obj.get("global_away", match_obj.get("b365_a", match_obj.get("pinnacle_a")))
+        }
+        
+        has_global_1x2 = all(_f(global_odds[k]) > 1.01 for k in ["home", "draw", "away"])
+        
+        if has_global_1x2 and evidence["data_quality"]["has_1x2"]:
+            # 1. 计算国内竞彩的去抽水 Shin 概率
+            local_probs, local_z = _shin_devig_3way(evidence["lottery_market_1x2"]["odds"])
+            # 2. 计算国际低抽水的去抽水 Shin 概率
+            global_probs, global_z = _shin_devig_3way(global_odds)
+            
+            # 3. 测算偏斜度: Skew = (Local Prob / Global Prob) - 1.0
+            skew_home = (local_probs["home"] / global_probs["home"]) - 1.0
+            skew_draw = (local_probs["draw"] / global_probs["draw"]) - 1.0
+            skew_away = (local_probs["away"] / global_probs["away"]) - 1.0
+            
+            evidence["dual_market_divergence_calibration"] = {
+                "available": True,
+                "local_shin_probabilities": local_probs,
+                "global_shin_probabilities": global_probs,
+                "skew_metrics_pct": {
+                    "skew_home_pct": round(skew_home * 100, 2),
+                    "skew_draw_pct": round(skew_draw * 100, 2),
+                    "skew_away_pct": round(skew_away * 100, 2),
+                },
+                "insider_z_gap": round(local_z - global_z, 5),
+                "interpretation": (
+                    "skew_pct > 5.0% 且 z_gap 显著正值：代表国内体彩强行低开该方向赔率避险（诱盘/大热风险，赔率无博弈性价比）；"
+                    "skew_pct < -5.0% 且 z_gap 显著：代表国内体彩对该方向赔率给出了超额宽裕度（国际清算已破防，国内滞后，属于核心价值洼地）。"
+                )
+            }
+        else:
+            evidence["dual_market_divergence_calibration"] = {
+                "available": False,
+                "note": "缺少国际欧赔基准或体彩赔率，无法计算防守偏斜度。自动退回单轨博弈。"
+            }
+
         evidence["evidence_compiler_version"] = "v20.6.0_shadow_pre_injected_with_quant"
         evidence.setdefault("protocol_notes", []).extend([
             "v20.6: matrix_shadow_facts 与 local_quantitative_intelligence 已经预先注入。",
+            "v20.6: dual_market_divergence_calibration 已注入高精度 Shin 偏斜度与 z-value，AI 必须检测风控背离。",
             "v20.6: 竞彩高抽水及风控背离探测（Divergence Detection）已启用。AI 必须积极识破静态数理与变盘背离之间的庄家陷阱。",
             "v20.6: sharp_money_facts_v203 是事实编译，不是本地判断Sharp真伪。",
             "v20.6: score_cluster_diagnostics_v203 只描述赔率簇 and 相邻比分关系，不替AI选比分。",
