@@ -46,7 +46,9 @@ def verify_and_learn():
     yesterday = get_yesterday()
     print(f"\n🧠 [AI 自我复盘引擎] 启动... 对账日期: {yesterday}")
     
-    pred_file = f"data/history_{yesterday.replace('-','')}_evening.json" 
+    pred_file = f"data/history_{yesterday}_today_evening.json"
+    if not os.path.exists(pred_file):
+        pred_file = f"data/history_{yesterday}_today_morning.json"
     if not os.path.exists(pred_file):
         pred_file = "data/predictions.json"
         

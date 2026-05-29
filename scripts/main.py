@@ -44,8 +44,9 @@ def env_int(name: str, default: int = 0) -> int:
 
 
 def auto_install():
-    if env_bool("SKIP_AUTO_INSTALL", False):
-        print("📦 SKIP_AUTO_INSTALL=true，跳过依赖自动安装")
+    # 默认不在运行时自动安装/升级依赖（CI 用 pip install -r requirements.txt，本地用 .venv）。
+    # 运行时 pip 会污染系统环境且结果不确定；仅在显式 opt-in 时才执行。
+    if not env_bool("VMAX_ALLOW_AUTO_INSTALL", False):
         return
 
     missing = []
@@ -72,7 +73,6 @@ def auto_install():
                 "pip",
                 "install",
                 *missing,
-                "--break-system-packages",
                 "-q",
             ])
             print("  ✅ 所有依赖环境已同步至最新/指定版本")
