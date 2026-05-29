@@ -266,4 +266,11 @@ async def async_collect_all(date_str):
         tasks = [enrich_match_data(session, m, i, date_str, sema) for i, m in enumerate(matches)]
         enriched = await asyncio.gather(*tasks)
 
+    # 注入国际低抽水欧赔(点亮双轨市场背离防线);fail-safe,失败自动降级单轨
+    try:
+        from global_odds import enrich_with_global_odds_async
+        await enrich_with_global_odds_async(enriched)
+    except Exception as e:
+        print(f"  [global_odds] 模块加载/执行失败,降级单轨: {type(e).__name__}: {str(e)[:80]}")
+
     return {"date": date_str, "matches": enriched}

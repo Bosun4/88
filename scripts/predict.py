@@ -1035,7 +1035,7 @@ def _web_research_instruction(role: str) -> str:
         "没有来源的所谓最新消息不能作为硬证据。"
     )
     if role == "gpt":
-        return common + "你的联网重点：外部欧赔/亚盘/交易所、赔率时间点、竞彩与外部市场分歧。"
+        return common + "你的联网重点：外部欧赔/亚盘/交易所、赔率时间点。注意：evidence 里的 dual_market_divergence_calibration 已经用 Shin 法算出国内竞彩 vs 国际清算盘的 skew 偏斜度与 z_gap，这是已成事实，你必须直接解读该结果（不要重复联网去算一遍分歧），联网仅用于验证/补充该偏斜是否有基本面支撑。"
     if role == "grok":
         return common + "你的联网重点：最新伤停、预计首发、临场新闻、资金流/热度/市场异动。"
     if role == "gemini":
@@ -1130,6 +1130,7 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("超低赔豪门信任预警：当皇马等豪门胜赔极低（<=1.20），且自身丢冠后无欲无求大面积轮换，而对手处于降级状态时，虽然可能取胜，但极易输掉盘口甚至爆出冷平。如果预测净胜球>=2（如3-0, 2-0），必须在 recommendation 中明确防范赢球输盘风险，并将该比赛的 risk_level 直接锁定为 high，confidence 不得超过 65。")
     p.append("如果 sharp_money_direction 与 final_direction 冲突，必须解释为什么该信号是噪音，或者主动下调 recommendation.tier。")
     p.append("如果联网来源缺 URL/发布时间/claim，不能作为硬证据。必须输出 source_conflicts 和 final_web_audit。")
+    p.append("如果联网来源缺 URL/发布时间/claim，不能作为硬证据。必须输出 source_conflicts 和 final_web_audit。")
     p.append("最终推荐等级、是否进 Top4、bet_confidence 全部由你输出；本地只排序，不会改你的足球判断。")
     p.append("</final_adjudication_protocol>\n")
     p.append("<output_schema>")
@@ -1159,6 +1160,7 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
 def build_fallback_referee_prompt(evidence_batch: List[Dict[str, Any]], phase1_results: Dict[str, Dict[int, Dict[str, Any]]], critic_reports: Dict[str, List[Dict[str, Any]]]) -> str:
     p = []
     p.append("你是 Gemini 终审失败后的 AI fallback referee。不要使用本地规则。基于 raw evidence、ai_anchor_facts_no_judgement、Phase1 和 critic reports 输出最终 predictions。")
+    p.append("输出 schema 与 Gemini final 完全一致。必须完成 anchor_audit。")
     p.append("输出 schema 与 Gemini final 完全一致。必须完成 anchor_audit。")
     p.append(_canonical_output_schema_text())
     p.append("<evidence_batch>")
@@ -3304,6 +3306,11 @@ GEMINI_FINAL_AUDIT_ADDENDUM = """
    - 2-1 比较 1-1/1-0/2-0/1-2/2-2/3-1
    - 1-2 比较 1-1/0-1/0-2/2-1/2-2/1-3
 6. 你必须输出 bet_action：main/small/hedge/observe/no_bet。若证据冲突导致你无法覆盖失败路径，主动选择 no_bet，不要硬给高等级。
+7. 【双轨国际盘背离硬审计】：若 dual_market_divergence_calibration.available=true，你必须在判决中显式引用 skew_metrics_pct 与 insider_z_gap，不得忽略：
+   - 某方向 skew_pct > +5% 且 z_gap 显著正值：国内体彩将该方向赔率强行低开避险（诱盘/大热风险，赔率无博弈性价比），必须下调该方向 tier 与 bet_confidence；
+   - 某方向 skew_pct < -5% 且 z_gap 显著：国际清算盘已破防、国内滞后给出超额宽裕度（价值洼地），可适度上调该方向优先级；
+   - 若 final_direction 恰好落在被强行低开(正 skew)的方向上，必须在 final_referee_analysis 解释为何仍坚持，否则视为追热失职。
+   该国际盘 Shin 偏斜度为已成事实，优先级高于 Phase1 consensus，与 sharp_money 信号互相印证时可提级，互相冲突时以偏斜度为准并说明理由。
 """.strip()
 
 RECOMMENDATION_COMPONENT_SCHEMA = {
@@ -3473,14 +3480,24 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         
         if has_global_1x2 and evidence["data_quality"]["has_1x2"]:
             # 1. 计算国内竞彩的去抽水 Shin 概率
-            local_probs, local_z = _shin_devig_3way(evidence["lottery_market_1x2"]["odds"])
+            # 注意:base evidence 的 lottery_market_1x2 结构为 {home,draw,away,note},无 odds 子键,
+            # 因此显式抽取三向赔率(含 note 会污染 devig 入参)。
+            _lm = evidence.get("lottery_market_1x2", {}) or {}
+            local_1x2_odds = {
+                "home": _lm.get("home", match_obj.get("sp_home")),
+                "draw": _lm.get("draw", match_obj.get("sp_draw")),
+                "away": _lm.get("away", match_obj.get("sp_away")),
+            }
+            local_probs, local_z = _shin_devig_3way(local_1x2_odds)
             # 2. 计算国际低抽水的去抽水 Shin 概率
             global_probs, global_z = _shin_devig_3way(global_odds)
-            
-            # 3. 测算偏斜度: Skew = (Local Prob / Global Prob) - 1.0
-            skew_home = (local_probs["home"] / global_probs["home"]) - 1.0
-            skew_draw = (local_probs["draw"] / global_probs["draw"]) - 1.0
-            skew_away = (local_probs["away"] / global_probs["away"]) - 1.0
+
+            # 3. 测算偏斜度: Skew = (Local Prob / Global Prob) - 1.0(守护除零)
+            def _safe_skew(loc, glob):
+                return (loc / glob - 1.0) if glob and glob > 0 else 0.0
+            skew_home = _safe_skew(local_probs["home"], global_probs["home"])
+            skew_draw = _safe_skew(local_probs["draw"], global_probs["draw"])
+            skew_away = _safe_skew(local_probs["away"], global_probs["away"])
             
             evidence["dual_market_divergence_calibration"] = {
                 "available": True,
@@ -3744,6 +3761,7 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
 def build_fallback_referee_prompt(evidence_batch: List[Dict[str, Any]], phase1_results: Dict[str, Dict[int, Dict[str, Any]]], critic_reports: Dict[str, List[Dict[str, Any]]]) -> str:
     p = []
     p.append("你是 Gemini 终审失败后的 AI fallback referee。不要使用本地规则。基于 raw evidence、v20.3市场簇、Sharp事实、Phase1 和 critic reports 输出最终 predictions。")
+    p.append("若 dual_market_divergence_calibration.available=true，同样必须应用双轨背离规则：skew_pct > +5% 且 z_gap 正=该方向被诱盘低开，下调 tier/confidence；skew_pct < -5%=价值洼地，可上调优先级。")
     p.append("输出 schema 与 Gemini final 完全一致。必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。")
     p.append(_canonical_output_schema_text())
     p.append("<evidence_batch>")
