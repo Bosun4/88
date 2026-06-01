@@ -852,25 +852,34 @@ def _handicap_anchor_facts(match_obj: Dict[str, Any]) -> Dict[str, Any]:
         return {"raw": raw, "parsed_line": None, "favorite_side_by_line_sign": "unclear", "score_shape_template": {}, "ai_instruction": "盘口无法解析，AI需自行从原始字段判断。"}
     fav = "home" if val > 0 else "away" if val < 0 else "unclear"
     tpl = _handicap_score_shape_templates(abs(val))
-    # 【大球曲线塌缩注入·读盘范式v2】：当 a5/a4 斜率<=1.45（5球跟4球一起被压=整簇上移真信号）时，
-    # 必须把对称大球带强制并入审计候选，杜绝盘口档模板漏列4球比分导致AI机械压回小球。
+    # 【大球曲线塌缩注入·读盘范式v2.1 / 175场回归校准 20260602】触发条件与观察层 _total_goal_anchor_facts 严格同源：
+    #   ① 曲线塌缩: a5/a4 斜率 <= BIG_GOAL_SLOPE_THRESHOLD(1.70)  （5球跟4球一起被压=整簇上移真信号）
+    #   ② 尾部共振豁免: a6<=11 或 a7<=14（市场对整条超大球带防范极深=碾压型大球真信号，专治巴西6-2/大阪6-1被单点诱盘误杀）
+    # a4>5.3 是排除线不注入；不看 a4 单点。常量单一真相来源，杜绝执行层与观察层阈值撕裂。
     a4 = _f(match_obj.get("a4"), 0.0)
     a5 = _f(match_obj.get("a5"), 0.0)
-    # 【读盘范式 v2】触发大球注入看曲线塌缩（a5/a4<=1.45），不再看 a4 单点；a4>5.3 是排除线不注入。
+    a6 = _f(match_obj.get("a6"), 0.0)
+    a7 = _f(match_obj.get("a7"), 0.0)
     _slope = (a5 / a4) if (a4 > 0 and a5 > 0) else None
-    if (a4 > 0 and a4 <= 5.3) and (_slope is not None and _slope <= 1.45):
+    _tail_resonance = (a6 > 0 and a6 <= BIG_GOAL_TAIL_A6_MAX) or (a7 > 0 and a7 <= BIG_GOAL_TAIL_A7_MAX)
+    _slope_collapse = (_slope is not None and _slope <= BIG_GOAL_SLOPE_THRESHOLD)
+    if (a4 > 0 and a4 <= 5.3) and (_slope_collapse or _tail_resonance):
         must = list(tpl.get("must_audit_scores", []))
         for sc in BIG_GOAL_PRIMARY:
             if sc not in must:
                 must.append(sc)
         tpl = dict(tpl)
         tpl["must_audit_scores"] = must
+        _trigger = "曲线塌缩(a5/a4<=%.2f)" % BIG_GOAL_SLOPE_THRESHOLD if _slope_collapse else "超大球尾部共振(a6<=%g或a7<=%g)" % (BIG_GOAL_TAIL_A6_MAX, BIG_GOAL_TAIL_A7_MAX)
         tpl["big_goal_injection"] = {
             "triggered": True,
             "a4": a4,
             "a5": a5,
+            "a6": a6,
+            "a7": a7,
+            "trigger": _trigger,
             "injected_cluster": BIG_GOAL_PRIMARY,
-            "reason": "大球曲线塌缩(a5/a4<=1.45)，5球跟4球一起被压=整簇上移真信号(非单点诱盘)，强制将对称大球带并入must_audit_scores；AI必须主客对称审计，不得机械压回2-1/1-1。",
+            "reason": "大球%s=整簇上移真信号(非单点诱盘)，强制将对称大球带并入must_audit_scores；AI必须主客对称审计，不得机械压回2-1/1-1。" % _trigger,
         }
     return {"raw": raw, "parsed_line": val, "favorite_side_by_line_sign": fav, "score_shape_template": tpl, "ai_instruction": "让球盘只提供比分形态审计模板，不代表本地预测方向。AI必须结合1X2、正确比分、总进球和外部盘口验证。"}
 
@@ -884,7 +893,10 @@ def _cross_anchor_questions(match_obj: Dict[str, Any]) -> List[str]:
     s11 = score_f.get("specific_odds", {}).get("1-1", 0)
     a4 = total_f.get("specific_odds", {}).get("4", 0)
     a5 = total_f.get("specific_odds", {}).get("5", 0)
+    a6 = total_f.get("specific_odds", {}).get("6", 0)
+    a7 = total_f.get("specific_odds", {}).get("7+", 0)
     _slope = (a5 / a4) if (a4 and a5 and a4 > 0) else None
+    _tail_reson = (a6 and a6 <= BIG_GOAL_TAIL_A6_MAX) or (a7 and a7 <= BIG_GOAL_TAIL_A7_MAX)
     mode_g = total_f.get("mode_goals")
     if 0 < s00 <= 11:
         qs.append("0-0赔率≤11：为什么不是0-0？如果选其他比分，必须解释突破闷局的证据。注意：0-0属LOW档(0-1球)，1-1属MID档(2-3球)，两者不同档，禁止拿0-0与1-1直接比赔率；必须先定LOW/MID再档内选。")
@@ -892,10 +904,12 @@ def _cross_anchor_questions(match_obj: Dict[str, Any]) -> List[str]:
         qs.append("1-1赔率偏低：为什么不是1-1？1-1是MID档众数比分，选它不需额外理由；若要偏离到1-2/2-1等须写出可证伪的背离理由，否则回落1-1。")
     if a4 > 5.3:
         qs.append("4球赔率>5.3（排除线）：实证真实大球率仅约13%，若选择3-1/2-2/3-2等4+比分，必须解释为何能突破4球高赔阻力；否则压回0-3球带。")
-    elif (a4 and a4 <= 5.3) and (_slope is not None and _slope <= 1.45):
-        qs.append(f"⚠大球曲线塌缩确认（a4={a4}, a5={a5}, a5/a4={round(_slope,2)}<=1.45）：5球跟着4球一起被压，是整簇上移的真信号。定档HIGH(4+)，主客对称审计大球带：3-1/1-3/2-2/3-2/2-3/4-1/1-4。若最终仍选≤三球，top3必须至少含1个4+大球比分并说明为何不主推。")
+    elif (a4 and a4 <= 5.3) and (_slope is not None and _slope <= BIG_GOAL_SLOPE_THRESHOLD):
+        qs.append(f"⚠大球曲线塌缩确认（a4={a4}, a5={a5}, a5/a4={round(_slope,2)}<={BIG_GOAL_SLOPE_THRESHOLD}）：5球跟着4球一起被压，是整簇上移的真信号。定档HIGH(4+)，主客对称审计大球带：3-1/1-3/2-2/3-2/2-3/4-1/1-4。【HIGH档弃精确】HIGH档无任何比分超过16%概率(175场实证)，不要勉强押准某个4+精确比分，主推“大球方向+主/客大胜方向”即可。")
+    elif (a4 and a4 <= 5.3) and _tail_reson:
+        qs.append(f"⚠超大球尾部共振（a4={a4}, a6={a6}, a7={a7}：a6<={BIG_GOAL_TAIL_A6_MAX}或a7<={BIG_GOAL_TAIL_A7_MAX}）：市场对整条超大球带防范极深，是碾压型大球真信号（实证巴西6-2/大阪6-1被旧单点诱盘误杀）。定档HIGH(4+)，主客对称审计大球带并向上审计4-2/5+尾部；【HIGH档弃精确】不押精确比分，主推大球/大胜方向。")
     elif a4 and a4 <= 5.3:
-        qs.append(f"4球赔率偏低(a4={a4})但5球未同步压(a5={a5}, a5/a4>1.45)：疑似单点诱盘，不可仅凭a4低就释放大球。优先审计MID(2-3球)平衡带，除非联赛风格偏大球或资金强推一方。")
+        qs.append(f"4球赔率偏低(a4={a4})但5球未同步压(a5={a5}, a5/a4>{BIG_GOAL_SLOPE_THRESHOLD})且无超大球尾部共振：疑似单点诱盘，不可仅凭a4低就释放大球。优先审计MID(2-3球)平衡带，除非联赛风格偏大球或资金强推一方。")
     if mode_g in (0, 1, 2):
         qs.append("总进球主模态在0-2球：不能机械输出2-1，必须审计0-0/1-0/0-1/1-1/2-0/0-2。")
     if mode_g in (4, 5, 6, 7):
@@ -1169,7 +1183,7 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("S级必须至少有两个独立证据族同时支持：市场结构、正确比分赔率簇、总进球模态、让球盘形态、资金流/Sharp、联网阵容伤停、战术/赛程背景。仅赔率低赔或单边市场最多给A；无联网且依赖阵容/战意/实力碾压，最高给B。")
     p.append("【两段式读盘决策，强制】第一段先定进球档位 goal_band∈{0-1(LOW)/2-3(MID)/4+(HIGH)}+把握度，禁止跳过定档直接报比分；第二段才在档内选比分。档内默认落众数比分：LOW→实证众数1-0(非0-0)，MID→1-1，HIGH→不押精确比分只押大小方向(2-2/3-1/2-3三分天下)。选非众数比分必须写出可证伪的背离理由，否则回落众数并下调 confidence。")
     p.append("【读盘闸1—大小球线移动方向，分联赛赋权】看ttg_change/盘口位移：线下行=往小球，线上行=往大球（1674场实证：强烈下行→真实over2.5仅44%，强烈上行→64%，单调）。有效性分联赛：法甲/英超/西甲/意甲等中小球联赛线移动是强信号(+9~15pp)，重看；德甲及大球联赛(挪/瑞/芬/荷/沙/MLS)开盘已打满大球预期，线移动是弱信号(德甲仅+2.6pp)，改靠绝对大球先验，别把线没动当小球证据。")
-    p.append("【读盘闸2—判大球看曲线塌缩不看单点】禁止用a4<=5.3单点判大球（实证a4<=5.3真实大球仅37.5%，近基础率32%，几乎无效）。真信号=整条大球曲线塌缩a5/a4斜率：<=1.3→67%大球，<=1.45→52%；a4被压但a5没跟=单点诱盘假信号。叠加联赛相对分位：同样a4，德甲(中位4.20)是常态、意甲(中位5.30)压到4.2才是异动。a4>5.3=排除线（真实大球仅12.8%，按小球处理），不是纳入线。")
+    p.append("【读盘闸2—判大球看曲线塌缩不看单点】禁止用a4<=5.3单点判大球（实证a4<=5.3真实大球仅37.5%，近基础率32%，几乎无效）。真信号=整条大球曲线塌缩a5/a4斜率：<=1.3→67%大球，<=1.45→52%，<=1.70→42%(175场回归校准后的采纳阈值，远高于32%基础率)；a4被压但a5没跟=单点诱盘假信号。另：超大球尾部共振(a6<=11或a7<=14)即使slope略高也是碾压大球真信号。叠加联赛相对分位：同样a4，德甲(中位4.20)是常态、意甲(中位5.30)压到4.2才是异动。a4>5.3=排除线（真实大球仅12.8%，按小球处理），不是纳入线。")
     p.append("【读盘闸3—盘口+资金定形状（档内选子）】让球盘平/平半+资金平和负→无一边倒→排除2-0/0-2单边比分，偏对称比分(1-1/2-2)；明显受让+资金压强队→偏强队赢球比分。进球赔率曲线峰值(最低赔率档)=最可能总进球数，作模数档参考(非直接抄比分)。")
     p.append("【读盘范例·巴黎对阿森纳】盘：大小球线3→2.25下行，平半，0球10/1球4.45/2球3.5/3球4.2/4球5.8。读：①线下行→定档不超3球小球[闸1]②曲线峰值2球=3.5→模数2球[闸2排除大球]③平半+资金平和负→无单边→对称[闸3]④双方能进+2球位舒服→落1-1。这是说得出理由的众数，不是抄最低赔率。小球与大球是同一套读法反向结论，必须双向对称，不可只找大球。")
     p.append("高比分尾部审计：若5球≤8、6球≤16或7+≤30，必须检查3-2/4-1/4-2/胜其他。")
@@ -3728,7 +3742,7 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append("强制：每场必须显式读取 score_cluster_diagnostics_v203.adjacent_score_audit_table；不能只看最低赔率。")
     p.append("")
     p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
-    p.append("1. 进攻高波或高进球异动压缩（如德甲、荷甲、美职、挪超、解放者杯等大球联赛；判大球看曲线塌缩 a5/a4<=1.45 而非 a4 单点低，因为 a4 被压但 a5 没跟是单点诱盘假信号）：防守往往让位于进攻，不得机械保守。不要机械拘泥于 2-1、1-1 等常规最低赔率。若联赛偏大球+曲线整簇塌缩+资金推强队共振，必须敢于将大球带（3-1、1-3、2-2、3-2、2-3、4-1、1-4、4-2 等主客对称比分）作为主推首选，不要仅仅把它们当做风险尾部藏起来！注意 a4>5.3 是排除线（真实大球仅约13%），按小球处理。【对称强制】考虑任一主队大胜比分时，必须同时列出客队镜像比分（3-1↔1-3、4-1↔1-4、3-2↔2-3）。")
+    p.append("1. 进攻高波或高进球异动压缩（如德甲、荷甲、美职、挪超、解放者杯等大球联赛；判大球看曲线塌缩 a5/a4<=1.70 或超大球尾部共振(a6<=11/a7<=14) 而非 a4 单点低，因为 a4 被压但 a5 没跟是单点诱盘假信号）：防守往往让位于进攻，不得机械保守。不要机械拘泥于 2-1、1-1 等常规最低赔率。若联赛偏大球+曲线整簇塌缩+资金推强队共振，必须敢于将大球带（3-1、1-3、2-2、3-2、2-3、4-1、1-4、4-2 等主客对称比分）作为主推首选，不要仅仅把它们当做风险尾部藏起来！注意 a4>5.3 是排除线（真实大球仅约13%），按小球处理。【对称强制】考虑任一主队大胜比分时，必须同时列出客队镜像比分（3-1↔1-3、4-1↔1-4、3-2↔2-3）。")
     p.append("2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。")
     p.append("3. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。")
     p.append("请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！")
