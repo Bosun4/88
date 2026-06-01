@@ -64,6 +64,14 @@ ENGINE_ARCHITECTURE = (
 
 VALID_DIRS = {"home", "draw", "away"}
 AI_NAMES = ["gpt", "grok", "gemini"]
+
+# 【读盘范式 v2.1 大球判据阈值 / 175场回归校准 20260601】
+# 单一真相来源：判大球的曲线塌缩斜率阈值与超大球尾部豁免阈值。
+# 实证：阈值1.45是全表最差召回(28.6%)；放宽到1.70后召回75%/F1 53.8%。
+# 尾部豁免(a6<=11 或 a7<=14)专治巴西6-2/大阪6-1此类被单点诱盘逻辑误杀的碾压大球。
+BIG_GOAL_SLOPE_THRESHOLD = 1.70
+BIG_GOAL_TAIL_A6_MAX = 11.0
+BIG_GOAL_TAIL_A7_MAX = 14.0
 PHASE1_NAMES = ["gpt", "grok"]
 
 DEFAULT_MODELS = {
@@ -787,16 +795,21 @@ def _total_goal_anchor_facts(match_obj: Dict[str, Any]) -> Dict[str, Any]:
     a6 = odds_by_goal.get(6, 0.0)
     a7 = odds_by_goal.get(7, 0.0)
 
-    # 【读盘范式 v2 / 实证 1674+175 场】判大球看整条曲线塌缩，不看 a4 单点。
+    # 【读盘范式 v2.1 / 实证 175 场回归校准 20260601】判大球看整条曲线塌缩，不看 a4 单点。
     # a4>5.3 → 排除线（真实大球率仅 12.8%，按小球处理）；a4<=5.3 不再单点定大球。
-    # 真正的大球信号 = 曲线斜率 a5/a4（5球是否跟着4球一起被压）+ 联赛相对分位。
+    # 真信号 = 曲线斜率 a5/a4 + 超大球尾部共振（a6/a7 同步压低）。
+    # 阈值校准: 1.45→1.70（175场: 召回28.6%→75%, F1 36.8%→53.8%；1.45是全表最差召回）。
+    # 尾部共振豁免: a6<=11 或 a7<=14 时即使 slope 略高也释放（专治巴西6-2 a7=12 被单点诱盘误杀）。
     curve_slope = (a5 / a4) if (a4 and a5 and a4 > 0) else None
+    _tail_resonance = (a6 > 0 and a6 <= BIG_GOAL_TAIL_A6_MAX) or (a7 > 0 and a7 <= BIG_GOAL_TAIL_A7_MAX)
     if a4 > 5.3:
         observations.append({"anchor": "four_goals_exclusion_line", "value": a4, "meaning_for_ai": "4球赔率>5.3（排除线）：实证真实4+大球率仅约13%，本场大球路径阻力大，AI应以0-3球小球带为主审，除非有联赛风格/资金流强反证，不要主推4+大比分。"})
-    elif curve_slope is not None and curve_slope <= 1.45:
-        observations.append({"anchor": "big_goal_curve_collapse", "value": {"a4": a4, "a5": a5, "a5_over_a4": round(curve_slope, 2)}, "meaning_for_ai": "大球曲线塌缩确认：5球赔率随4球一起被压（a5/a4<=1.45，实证真实大球率约52%；<=1.3约67%），这是整条大球簇上移的真信号，而非单点诱盘。应解除1-1/2-1小球锚定，主客对称释放大球带3-1/1-3/2-2/2-3/3-2/4-1/1-4，并结合联赛相对分位定档。"})
+    elif curve_slope is not None and curve_slope <= BIG_GOAL_SLOPE_THRESHOLD:
+        observations.append({"anchor": "big_goal_curve_collapse", "value": {"a4": a4, "a5": a5, "a5_over_a4": round(curve_slope, 2)}, "meaning_for_ai": "大球曲线塌缩确认：5球赔率随4球一起被压（a5/a4<=1.70，175场实证此带真实大球率约42%，远高于32%基础率），这是整条大球簇上移的真信号，而非单点诱盘。应解除1-1/2-1小球锚定，主客对称释放大球带3-1/1-3/2-2/2-3/3-2/4-1/1-4，并结合联赛相对分位定档。"})
+    elif (0 < a4 <= 5.3) and _tail_resonance:
+        observations.append({"anchor": "big_goal_tail_resonance", "value": {"a4": a4, "a5": a5, "a6": a6, "a7": a7, "a5_over_a4": round(curve_slope, 2) if curve_slope else None}, "meaning_for_ai": "超大球尾部共振：a4偏低且6球/7+尾部同步被压（a6<=11 或 a7<=14），说明市场对整条超大球带防范极深，是碾压型大球的真信号（实证巴西6-2/大阪6-1此类被旧单点诱盘逻辑误杀）。应释放大球带3-1/1-3/2-2/2-3/3-2/4-1/1-4并向上审计4-2/5+尾部。"})
     elif 0 < a4 <= 5.3:
-        observations.append({"anchor": "four_goals_single_point_low_caution", "value": {"a4": a4, "a5": a5}, "meaning_for_ai": "4球赔率偏低（<=5.3）但5球未同步压缩（a5/a4>1.45）：疑似单点诱盘，市场只压了4球这一点。不可仅凭a4低就判大球，应优先审计2-3球平衡带，只有出现联赛偏大球或资金推强队等额外共振时才谨慎释放大球。"})
+        observations.append({"anchor": "four_goals_single_point_low_caution", "value": {"a4": a4, "a5": a5}, "meaning_for_ai": "4球赔率偏低（<=5.3）但5球未同步压缩（a5/a4>1.70）且无超大球尾部共振：疑似单点诱盘，市场只压了4球这一点。不可仅凭a4低就判大球，应优先审计2-3球平衡带，只有出现联赛偏大球或资金推强队等额外共振时才谨慎释放大球。"})
 
     if 0 < a5 <= 8.0:
         observations.append({"anchor": "five_goals_extreme_compressed", "value": a5, "meaning_for_ai": "5球赔率极低，必须审计3-2/4-1/4-2/胜其他路径。"})
