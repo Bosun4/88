@@ -1,842 +1,8 @@
 {
-  "update_time": "2026-06-02 03:13:56",
+  "update_time": "2026-06-02 03:44:44",
   "version": "MAX-v1.1",
   "scope": "today_only",
-  "top4": [
-    {
-      "rank": 1,
-      "home_team": "哥伦比亚",
-      "away_team": "哥斯达",
-      "league": "国际赛",
-      "match_num": "周一005",
-      "sp_home": 0.0,
-      "sp_draw": 0.0,
-      "sp_away": 0.0,
-      "give_ball": -2.0,
-      "change": {},
-      "vote": {
-        "hhad_win": "45",
-        "hhad_same": "22",
-        "hhad_lose": "33"
-      },
-      "odds_movement": "主胜平稳，客胜平稳",
-      "intelligence": {
-        "h_inj": "无",
-        "g_inj": "吉列尔莫·维拉罗伯斯 受伤 十字韧带撕裂",
-        "home_bad_news": "1.哥伦比亚队在上一场友谊赛中以1比3的比分不敌法国队，此前已连续两场遭遇失利，整体竞技状态呈现下滑趋势。特别是在防守端表现令人担忧，近两场比赛累计失球数达到5个，场均丢球高达2.5个，防守效率明显不足，防线漏洞频出，急需尽快调整状态以应对接下来的挑战。 2.哥伦比亚锋线新星杜兰在近一年经历光速陨落",
-        "guest_bad_news": "1.哥斯达黎加队在上一场友谊赛中主场以0-5惨败给伊朗队，近4场各项赛事仅取得2场平局和2场失利，连续未能取胜，整体竞技状态陷入低谷。此外，该队在客场的竞争力也显得十分有限，回顾其近10场客场作战记录，仅收获1场胜利、5场平局以及4场失利，胜率仅为10%，客场作战能力亟待提升。 2.哥斯达黎加队在攻"
-      },
-      "expert_intro": "哥伦比亚备战世界杯战意浓厚且实力碾压，哥斯达黎加已无缘正赛且刚遭0-5惨败，双方战意与实力差距悬殊；主队主场火力凶猛，客队防线漏洞百出。",
-      "baseface": "本场为国际友谊赛，系2026年世界杯前热身较量。目前主队哥伦比亚FIFA排名13，客队哥斯达黎加排名51，双方实力差距显著。\n\n主队哥伦比亚近10场赛事5胜3平2负，状态尚可；近5个主场3胜0平2负，主场表现稳健。\n\n客队哥斯达黎加近10场赛事1胜7平2负，状态一般；近5个客场0胜4平1负，客场状态低迷。\n\n综合来看，主队实力明显高出一筹。\n\n双方最近一次交锋中，哥伦比亚客场3-0击败哥斯达黎加。双方近6次交锋哥伦比亚取得5胜0平1负，占据绝对优势；在哥伦比亚的主场，近3次交锋，哥伦比亚取得2胜0平1负，处于上风。\n\n机构胜平负指数普遍开出主胜1.12-1.18超低水，客胜高达13-20，一致看好主胜。\n\n双方上半场打平的可能性为 60%\n主队近5场赛事主场的上半场:\n领先2，打平1，落后2丨3场有进球，2场有失球\n客队近5场赛事客场的上半场:\n领先0，打平4，落后1丨1场有进球，2场有失球\n\n战意与策略分析：哥伦比亚世界杯在即需磨合阵容战意饱满，哥斯达黎加已无缘正赛练兵动力不足；主队虽近两连败但主场火力凶猛，客队刚遭0-5惨败防线漏洞百出，双方战意与实力落差明显。",
-      "had_analyse": [],
-      "home_rank": 13,
-      "away_rank": 51,
-      "v2_odds_dict": {
-        "a0": 21.0,
-        "a1": 6.85,
-        "a2": 4.55,
-        "a3": 3.5,
-        "a4": 3.95,
-        "a5": 6.8,
-        "a6": 12.0,
-        "a7": 14.0,
-        "s00": 21.0,
-        "s11": 17.0,
-        "s22": 40.0,
-        "s33": 250.0,
-        "w10": 7.0,
-        "w20": 4.75,
-        "w21": 10.0,
-        "w30": 5.25,
-        "w31": 11.5,
-        "w32": 45.0,
-        "w40": 7.0,
-        "w41": 17.0,
-        "w42": 65.0,
-        "l01": 45.0,
-        "l02": 175.0,
-        "l12": 60.0,
-        "l03": 650.0,
-        "l13": 300.0,
-        "l23": 300.0,
-        "ss": 1.28,
-        "sp": 40.0,
-        "sf": 175.0,
-        "ps": 3.85,
-        "pp": 13.0,
-        "pf": 45.0,
-        "fs": 29.0,
-        "fp": 40.0,
-        "ff": 42.0
-      },
-      "id": 1,
-      "date": "2026-06-01",
-      "home_id": 0,
-      "away_id": 0,
-      "home_stats": {
-        "played": 25,
-        "wins": 9,
-        "draws": 6,
-        "losses": 10,
-        "goals_for": 25,
-        "goals_against": 34,
-        "avg_goals_for": "0.99",
-        "avg_goals_against": "1.35",
-        "clean_sheets": 3,
-        "form": "LDWDL"
-      },
-      "away_stats": {
-        "played": 25,
-        "wins": 4,
-        "draws": 6,
-        "losses": 15,
-        "goals_for": 15,
-        "goals_against": 48,
-        "avg_goals_for": "0.6",
-        "avg_goals_against": "1.9",
-        "clean_sheets": 2,
-        "form": "LLDLL"
-      },
-      "h2h": [],
-      "information": {},
-      "a0": 21.0,
-      "a1": 6.85,
-      "a2": 4.55,
-      "a3": 3.5,
-      "a4": 3.95,
-      "a5": 6.8,
-      "a6": 12.0,
-      "a7": 14.0,
-      "s00": 21.0,
-      "s11": 17.0,
-      "s22": 40.0,
-      "s33": 250.0,
-      "w10": 7.0,
-      "w20": 4.75,
-      "w21": 10.0,
-      "w30": 5.25,
-      "w31": 11.5,
-      "w32": 45.0,
-      "w40": 7.0,
-      "w41": 17.0,
-      "w42": 65.0,
-      "l01": 45.0,
-      "l02": 175.0,
-      "l12": 60.0,
-      "l03": 650.0,
-      "l13": 300.0,
-      "l23": 300.0,
-      "ss": 1.28,
-      "sp": 40.0,
-      "sf": 175.0,
-      "ps": 3.85,
-      "pp": 13.0,
-      "pf": 45.0,
-      "fs": 29.0,
-      "fp": 40.0,
-      "ff": 42.0,
-      "home": "哥伦比亚",
-      "guest": "哥斯达",
-      "change_is_direction_code": false,
-      "prediction": {
-        "predicted_score": "3-0",
-        "predicted_label": "3-0",
-        "result": "主胜",
-        "display_direction": "主胜",
-        "final_direction": "home",
-        "raw_ai_direction": "home",
-        "score_implied_direction": "home",
-        "dir_score_conflict": false,
-        "is_abstain": false,
-        "is_score_others": false,
-        "home_win_pct": 75.0,
-        "draw_pct": 15.0,
-        "away_win_pct": 10.0,
-        "confidence": 70,
-        "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
-        "risk_level": "medium",
-        "goal_band": "3",
-        "btts": "no",
-        "btts_ai": "no",
-        "both_score": "否",
-        "over_under_2_5": "大",
-        "expected_total_goals": 3,
-        "goal_range": [
-          2,
-          3
-        ],
-        "scenario": "ai_native_3_goals",
-        "recommendation": {
-          "tier": "B",
-          "is_recommended": true,
-          "top4_priority": 2,
-          "bet_confidence": 70,
-          "direction_stability": "strong",
-          "score_stability": "medium",
-          "risk_level": "medium",
-          "risk_tags": [
-            "友谊赛轮换风险",
-            "大球尾部防范"
-          ],
-          "bet_action": "small",
-          "why_this_can_fail": [
-            "友谊赛大规模轮换导致默契度下降",
-            "主队领先后主动降速控场"
-          ],
-          "minimum_evidence_needed": [
-            "双方临场首发名单",
-            "外部即时让球盘口变化"
-          ],
-          "why_recommended": "哥伦比亚实力碾压，市场大球尾部极度压缩，3-0完美契合总进球与半全场赔率结构。"
-        },
-        "recommendation_tier": "B",
-        "recommend_gate_pass": true,
-        "recommend_gate_reasons": [],
-        "safe_top_gate_score": 70.0,
-        "overall_selection_score": 70.0,
-        "direction_selection_score": 70.0,
-        "score_shape_score": 70.0,
-        "direction_tier": "B",
-        "score_tier": "B",
-        "recommendation_downgrade_reasons": [],
-        "top_score_candidates": [
-          [
-            "3-0",
-            20.0
-          ],
-          [
-            "2-0",
-            18.0
-          ],
-          [
-            "4-0",
-            15.0
-          ]
-        ],
-        "unified_matrix_top_scores": [
-          [
-            "3-0",
-            20.0
-          ],
-          [
-            "2-0",
-            18.0
-          ],
-          [
-            "4-0",
-            15.0
-          ]
-        ],
-        "score_model_prob": 20.0,
-        "score_market_odds": 5.25,
-        "score_market_implied_pct": 19.048,
-        "anchor_audit": {
-          "zero_zero": "0-0赔率21.0，处于极高位，市场基本排除了双方闷平的可能。",
-          "one_one": "1-1赔率17.0，虽然是平局最低，但在主胜低赔簇面前毫无竞争力，仅作为极低概率的防守退路。",
-          "one_zero": "1-0赔率7.0，对于让两球盘来说过于保守，且1球总进球赔率6.85偏高，不符合大球趋势。",
-          "zero_one": "0-1赔率45.0，客胜通道被完全关闭，客队爆冷赢球概率极低。",
-          "two_one": "2-1赔率10.0，虽然是主胜中低赔，但由于客队进攻乏力且主队防守稳健，BTTS属性不强，2-1空间被零封比分挤压。",
-          "one_two": "1-2赔率60.0，属于极深尾部，无实际资金支持。",
-          "high_score_tail": "4-0（7.0）、3-1（11.5）、4-1（17.0）等高分比分赔率极低，配合7+球14.0的超低赔率，大球尾部共振极其强烈，必须重点防范4-0和3-1。",
-          "handicap_cover": "让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。鉴于大球尾部的极度压缩，主队穿盘（3-0/4-0）的概率显著高于窄胜。"
-        },
-        "market_interpretation": {
-          "one_x_two": "虽然1X2赔率未直接给出，但从半全场主/主（1.28）和正确比分极低的主胜赔率来看，主胜是绝对主流。",
-          "handicap": "让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。大球尾部的极度压缩表明市场更倾向于主队穿盘。",
-          "correct_score": "2-0（4.75）、3-0（5.25）、4-0（7.0）占据前三低赔，主胜簇高度集中，客胜比分赔率极高，呈现极端不对称。",
-          "total_goals": "3球（3.5）和4球（3.95）赔率极低，5球（6.8）和7+球（14.0）同样被严重压缩，大球趋势非常明显。",
-          "half_full_time": "主/主（1.28）极低，平/主（3.85）次之，表明主队大概率在上半场就能确立优势并保持到终场。",
-          "external_market": "缺少外部即时数据，但国内竞彩的防范力度已经极其明显，主胜大球方向资金沉淀深厚。"
-        },
-        "money_flow": {
-          "public_money_direction": "home",
-          "sharp_money_direction": "home",
-          "sharp_confidence": 65,
-          "reverse_line_movement": false,
-          "steam_move": "home",
-          "evidence": "公众投票让胜占比45%，在让两球的深盘下仍有较高支持率；正确比分和总进球的超低赔率印证了机构和聪明钱对大胜方向的严密防范。"
-        },
-        "contextual_logic": {
-          "league_style": "国际友谊赛，战术相对开放，尤其是强弱悬殊时，强队容易打出大比分，且换人可能导致比赛后段节奏失控。",
-          "team_style": "哥伦比亚整体实力强劲，主场火力凶猛；哥斯达黎加防线漏洞百出，刚遭遇0-5惨败，且客场战斗力极弱。",
-          "tempo": "high",
-          "score_shape": "哥伦比亚单方面碾压，控球率和射门数绝对占优，早早取得领先并持续扩大战果。",
-          "btts_likelihood": "no",
-          "rotation_risk": "medium"
-        },
-        "rejected_cases": {
-          "home": "未拒绝。主胜是绝对核心方向，各项赔率指标均呈碾压态势。",
-          "draw": "拒绝。平局赔率极高，0-0和1-1均未受到实质性防范，不符合双方实力与战意对比。",
-          "away": "拒绝。客队实力、状态、战意均处于绝对劣势，客胜赔率极高，无任何爆冷支撑。"
-        },
-        "web_research": {
-          "used": false,
-          "failure_reason": "未提供外部来源，按未使用联网处理。",
-          "search_queries": [],
-          "sources": [],
-          "freshness_grade": "missing",
-          "key_findings": [],
-          "source_conflicts": [],
-          "validation_warnings": [
-            "web_sources_missing_repaired_to_no_web"
-          ]
-        },
-        "final_web_audit": {
-          "web_used_by_final": true,
-          "decisive_web_evidence": [],
-          "ignored_web_evidence": [],
-          "web_confidence": 0
-        },
-        "data_quality": {
-          "missing": [
-            "中国竞彩1X2赔率",
-            "即时赔率变化序列"
-          ],
-          "raw_packet_quality": "medium"
-        },
-        "ai_native_reason": "本场比赛哥伦比亚实力与战意均占绝对优势。市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深（7+球仅14.0，6球仅12.0）。在让两球盘口下，3-0作为大胜的起点，完美契合3球总进球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。虽然友谊赛存在轮换风险，但哥斯达黎加防线漏洞百出且客战极弱，看好哥伦比亚至少净胜三球，首选3-0，防范4-0和2-0。",
-        "validation_warnings": [
-          "web_used_but_no_sources",
-          "web_research.used=true时sources不能为空；当前sources为空，存在结构不一致。",
-          "final_web_audit.web_used_by_final=true但web_research.sources为空，联网证据结构不成立。",
-          "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
-          "prematch_v2:prematch_v2_draw_defense_gate"
-        ],
-        "bayesian_evidences": [
-          "AI-NATIVE：本地不做足球预测判断；方向、比分、Top4等级均来自 AI 输出。",
-          "ANCHOR-AUDIT：本地只提供0-0/1-1/总进球/让球盘/联赛风格事实锚点，AI必须在anchor_audit中解释。",
-          "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
-          "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
-          "final_model=gemini phase=final score=3-0 direction=home",
-          "anchor_audit:{\"zero_zero\":\"0-0赔率21.0，处于极高位，市场基本排除了双方闷平的可能。\",\"one_one\":\"1-1赔率17.0，虽然是平局最低，但在主胜低赔簇面前毫无竞争力，仅作为极低概率的防守退路。\",\"one_zero\":\"1-0赔率7.0，对于让两球盘来说过于保守，且1球总进球赔率6.85偏高，不符合大球趋势。\",\"zero_one\":\"0-1赔率45.0，客胜通道被完全关闭，客队爆冷赢球概率极低。\",\"two_one\":\"2-1赔率10.0，虽然是主胜中低赔，但由于客队进攻乏力且主队防守稳健，BTTS属性不强，2-1空间被零封比分挤压。\",\"one_two\":\"1-2赔率60.0，属于极深尾部，无实际资金支持。\",\"high_score_tail\":\"4-0（7.0）、3-1（11.5）、4-1（17.0）等高分比分赔率极低，配合7+球14.0的超低赔率，大球尾部共振极其强烈，必须重点防范4-0和3-1。\",\"handicap_cover\":\"让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。鉴于大球尾部的极度压缩，主队穿盘（3-0/4-0）的概率显著高于窄胜。\"}",
-          "market_interpretation:{\"one_x_two\":\"虽然1X2赔率未直接给出，但从半全场主/主（1.28）和正确比分极低的主胜赔率来看，主胜是绝对主流。\",\"handicap\":\"让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。大球尾部的极度压缩表明市场更倾向于主队穿盘。\",\"correct_score\":\"2-0（4.75）、3-0（5.25）、4-0（7.0）占据前三低赔，主胜簇高度集中，客胜比分赔率极高，呈现极端不对称。\",\"total_goals\":\"3球（3.5）和4球（3.95）赔率极低，5球（6.8）和7+球（14.0）同样被严重压缩，大球趋势非常明显。\",\"half_full_time\":\"主/主（1.28）极低，平/主（3.85）次之，表明主队大概率在上半场就能确立优势并保持到终场。\",\"external_market\":\"缺少外部即时数据，但国内竞彩的防范力度已经极其明显，主胜大球方向资金沉淀深厚。\"}",
-          "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"home\",\"sharp_confidence\":65,\"reverse_line_movement\":false,\"steam_move\":\"home\",\"evidence\":\"公众投票让胜占比45%，在让两球的深盘下仍有较高支持率；正确比分和总进球的超低赔率印证了机构和聪明钱对大胜方向的严密防范。\"}",
-          "contextual_logic:{\"league_style\":\"国际友谊赛，战术相对开放，尤其是强弱悬殊时，强队容易打出大比分，且换人可能导致比赛后段节奏失控。\",\"team_style\":\"哥伦比亚整体实力强劲，主场火力凶猛；哥斯达黎加防线漏洞百出，刚遭遇0-5惨败，且客场战斗力极弱。\",\"tempo\":\"high\",\"score_shape\":\"哥伦比亚单方面碾压，控球率和射门数绝对占优，早早取得领先并持续扩大战果。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"medium\"}",
-          "web_research:{\"used\":false,\"failure_reason\":\"未提供外部来源，按未使用联网处理。\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[\"web_sources_missing_repaired_to_no_web\"]}",
-          "recommendation:{\"tier\":\"B\",\"is_recommended\":true,\"top4_priority\":2,\"bet_confidence\":70,\"direction_stability\":\"strong\",\"score_stability\":\"medium\",\"risk_level\":\"medium\",\"risk_tags\":[\"友谊赛轮换风险\",\"大球尾部防范\"],\"bet_action\":\"small\",\"why_this_can_fail\":[\"友谊赛大规模轮换导致默契度下降\",\"主队领先后主动降速控场\"],\"minimum_evidence_needed\":[\"双方临场首发名单\",\"外部即时让球盘口变化\"],\"why_recommended\":\"哥伦比亚实力碾压，市场大球尾部极度压缩，3-0完美契合总进球与半全场赔率结构。\"}"
-        ],
-        "bayesian_prior": {},
-        "override_triggered": false,
-        "traps_detected": [],
-        "trap_count": 0,
-        "trap_severity": 0,
-        "trap_details": [],
-        "trap_flags": {},
-        "fair_1x2": {},
-        "fair_1x2_method": "disabled_ai_native_web",
-        "market_overround": 0.0,
-        "raw_implied_1x2": {},
-        "crs_shape": "raw_correct_score_odds_only_no_local_crs_matrix",
-        "crs_moments": {},
-        "crs_margin": 0.0,
-        "crs_coverage": 0.0,
-        "crs_implied_probs": {},
-        "crs_low_rank_info": {},
-        "unified_goal_probs": {},
-        "fair_1x2_pack": {},
-        "mixed_target_dir": {},
-        "unified_source": "ai_native_web_anchor_audit",
-        "decision_source": "ai_native:gemini:final",
-        "ai_authority_mode": "ai_native_web_no_local_football_judgement",
-        "ev_note": "disabled_local_ev_no_local_probability",
-        "suggested_kelly": 0.0,
-        "edge_vs_market": 0.0,
-        "is_value": false,
-        "smart_money_signal": "公众投票让胜占比45%，在让两球的深盘下仍有较高支持率；正确比分和总进球的超低赔率印证了机构和聪明钱对大胜方向的严密防范。",
-        "smart_signals": [
-          "友谊赛轮换风险",
-          "大球尾部防范"
-        ],
-        "sharp_detected": true,
-        "sharp_dir": "home",
-        "sharp_conflict": false,
-        "sharp_unresolved": false,
-        "sharp_audit": {
-          "public_money_direction": "home",
-          "sharp_money_direction": "home",
-          "sharp_confidence": 65,
-          "reverse_line_movement": false,
-          "steam_move": "home",
-          "evidence": "公众投票让胜占比45%，在让两球的深盘下仍有较高支持率；正确比分和总进球的超低赔率印证了机构和聪明钱对大胜方向的严密防范。"
-        },
-        "score_market_evidence": {
-          "one_x_two": "虽然1X2赔率未直接给出，但从半全场主/主（1.28）和正确比分极低的主胜赔率来看，主胜是绝对主流。",
-          "handicap": "让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。大球尾部的极度压缩表明市场更倾向于主队穿盘。",
-          "correct_score": "2-0（4.75）、3-0（5.25）、4-0（7.0）占据前三低赔，主胜簇高度集中，客胜比分赔率极高，呈现极端不对称。",
-          "total_goals": "3球（3.5）和4球（3.95）赔率极低，5球（6.8）和7+球（14.0）同样被严重压缩，大球趋势非常明显。",
-          "half_full_time": "主/主（1.28）极低，平/主（3.85）次之，表明主队大概率在上半场就能确立优势并保持到终场。",
-          "external_market": "缺少外部即时数据，但国内竞彩的防范力度已经极其明显，主胜大球方向资金沉淀深厚。"
-        },
-        "score_market_gate_pass": null,
-        "score_market_alignment": null,
-        "sharp_clearance_score": null,
-        "cold_door": {
-          "is_cold_door": false,
-          "strength": 0,
-          "level": "AI-native字段，不由本地判断冷门",
-          "signals": [
-            "友谊赛轮换风险",
-            "大球尾部防范"
-          ],
-          "sharp_confirmed": true,
-          "dark_verdict": ""
-        },
-        "xG_home": "?",
-        "xG_away": "?",
-        "bookmaker_implied_home_xg": "?",
-        "bookmaker_implied_away_xg": "?",
-        "over_2_5": null,
-        "fair_dir": null,
-        "shin_dir": null,
-        "actual_handicap_signed": null,
-        "theoretical_handicap_signed": null,
-        "gpt_score": "3-0",
-        "gpt_analysis": "本场抓包市场的核心不是普通主胜，而是主队零封大胜簇：2-0最低、3-0紧随、4-0同样低位，总进球3球最低且4球、5球、7+尾部被压缩，半全场主/主极低，整体支持哥伦比亚掌控比赛。最终选3-0，是因为它同时贴合正确比分第二低与总进球3球模态；但2-0是最低锚点，4-0和3-1受大球尾部支撑，友谊赛轮换又会削弱精确比分稳定性。因此方向判断偏主胜，投注层面因缺少联网外部盘口与阵容证据而建议观察。",
-        "grok_score": "2-1",
-        "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
-        "gemini_score": "3-0",
-        "gemini_analysis": "本场比赛哥伦比亚实力与战意均占绝对优势。市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深（7+球仅14.0，6球仅12.0）。在让两球盘口下，3-0作为大胜的起点，完美契合3球总进球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。虽然友谊赛存在轮换风险，但哥斯达黎加防线漏洞百出且客战极弱，看好哥伦比亚至少净胜三球，首选3-0，防范4-0和2-0。",
-        "final_referee_score": "3-0",
-        "final_referee_analysis": "本场比赛哥伦比亚实力与战意均占绝对优势。市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深（7+球仅14.0，6球仅12.0）。在让两球盘口下，3-0作为大胜的起点，完美契合3球总进球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。虽然友谊赛存在轮换风险，但哥斯达黎加防线漏洞百出且客战极弱，看好哥伦比亚至少净胜三球，首选3-0，防范4-0和2-0。",
-        "claude_score": "弃用",
-        "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
-        "final_ai_score": "3-0",
-        "final_ai_analysis": "本场比赛哥伦比亚实力与战意均占绝对优势。市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深（7+球仅14.0，6球仅12.0）。在让两球盘口下，3-0作为大胜的起点，完美契合3球总进球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。虽然友谊赛存在轮换风险，但哥斯达黎加防线漏洞百出且客战极弱，看好哥伦比亚至少净胜三球，首选3-0，防范4-0和2-0。",
-        "ai_abstained": [],
-        "ai_avg_confidence": 70.0,
-        "ai_call_status": {
-          "gpt": {
-            "phase1": {
-              "ok": true,
-              "ai_name": "gpt",
-              "model": "熊猫-特供-X-10-gpt-5.5",
-              "phase": "phase1",
-              "elapsed": 80.2,
-              "status": "ok"
-            },
-            "last_status": "ok",
-            "model": "熊猫-特供-X-10-gpt-5.5",
-            "consistency": {
-              "ok": true,
-              "ai_name": "gpt",
-              "model": "熊猫-特供-X-10-gpt-5.5",
-              "phase": "consistency",
-              "elapsed": 4.5,
-              "status": "ok"
-            }
-          },
-          "grok": {
-            "phase1": {
-              "ok": false,
-              "ai_name": "grok",
-              "model": "熊猫-A-5-grok-4.2-fast-200w上下文",
-              "phase": "phase1",
-              "elapsed": 62.3,
-              "status": "parse_failed",
-              "parse_error": "empty_or_invalid_json_object",
-              "raw_excerpt": "<think>**Thinking about your request**"
-            },
-            "last_status": "parse_failed",
-            "model": "熊猫-A-5-grok-4.2-fast-200w上下文"
-          },
-          "gemini": {
-            "final": {
-              "ok": true,
-              "ai_name": "gemini",
-              "model": "熊猫-8-AS正向-gemini-3.5-flash",
-              "phase": "final",
-              "elapsed": 149.1,
-              "status": "ok"
-            },
-            "last_status": "ok",
-            "model": "熊猫-8-AS正向-gemini-3.5-flash"
-          }
-        },
-        "ai_result_files": {},
-        "ai_run_metadata": {
-          "run_id": "20260601_191013_2m_4b633f9fbf12_哥伦比亚_哥斯达",
-          "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
-          "chunk_count": 2,
-          "phase_result_dir": "data/ai_phase_results",
-          "aggregate_file": "data/ai_phase_results/20260601_191013_2m_4b633f9fbf12_哥伦比亚_哥斯达_final_all_chunks.json",
-          "ai_call_status": {
-            "gpt": {
-              "phase1": {
-                "ok": true,
-                "ai_name": "gpt",
-                "model": "熊猫-特供-X-10-gpt-5.5",
-                "phase": "phase1",
-                "elapsed": 80.2,
-                "status": "ok"
-              },
-              "last_status": "ok",
-              "model": "熊猫-特供-X-10-gpt-5.5",
-              "consistency": {
-                "ok": true,
-                "ai_name": "gpt",
-                "model": "熊猫-特供-X-10-gpt-5.5",
-                "phase": "consistency",
-                "elapsed": 4.5,
-                "status": "ok"
-              }
-            },
-            "grok": {
-              "phase1": {
-                "ok": false,
-                "ai_name": "grok",
-                "model": "熊猫-A-5-grok-4.2-fast-200w上下文",
-                "phase": "phase1",
-                "elapsed": 62.3,
-                "status": "parse_failed",
-                "parse_error": "empty_or_invalid_json_object",
-                "raw_excerpt": "<think>**Thinking about your request**"
-              },
-              "last_status": "parse_failed",
-              "model": "熊猫-A-5-grok-4.2-fast-200w上下文"
-            },
-            "gemini": {
-              "final": {
-                "ok": true,
-                "ai_name": "gemini",
-                "model": "熊猫-8-AS正向-gemini-3.5-flash",
-                "phase": "final",
-                "elapsed": 149.1,
-                "status": "ok"
-              },
-              "last_status": "ok",
-              "model": "熊猫-8-AS正向-gemini-3.5-flash"
-            }
-          },
-          "mock_mode": false,
-          "run_mode": "fast_batch",
-          "research_mode": "research",
-          "native_web": true,
-          "effective_chunk_size": 12,
-          "effective_chunk_concurrency": 3,
-          "effective_model_concurrency": 4,
-          "effective_phase1_parallel": true,
-          "cross_exam": false,
-          "consistency_judge": true
-        },
-        "model_consensus": null,
-        "total_models": 3,
-        "refined_poisson": {},
-        "poisson": {},
-        "elo": {},
-        "random_forest": {},
-        "gradient_boost": {},
-        "neural_net": {},
-        "logistic": {},
-        "svm": {},
-        "knn": {},
-        "dixon_coles": {},
-        "bradley_terry": {},
-        "home_form": {},
-        "away_form": {},
-        "handicap_signal": "",
-        "odds_movement": {},
-        "vote_analysis": {},
-        "h2h_blood": {},
-        "crs_analysis": {},
-        "ttg_analysis": {},
-        "halftime": {},
-        "pace_rating": "",
-        "kelly_home": {},
-        "kelly_away": {},
-        "odds": {},
-        "experience_analysis": {
-          "mode": "removed_no_local_experience_cards"
-        },
-        "pro_odds": {},
-        "asian_handicap_probs": {},
-        "top_scores": [],
-        "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
-        "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
-        "score_cluster_audit": {
-          "selected_cluster": "home_cover",
-          "why_selected_score": "3-0是主队大胜且零封的代表性比分，完美契合总进球3球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。在超大球尾部共振的背景下，3-0作为大胜的起点，具备极高的打出概率。",
-          "adjacent_scores_checked": [
-            {
-              "score": "2-0",
-              "odds": 4.75,
-              "verdict": "near_miss",
-              "reason": "全场最低赔率，但总进球2球赔率（4.55）高于3球（3.5），且大球尾部极度压缩，3-0更具穿盘想象力。"
-            },
-            {
-              "score": "3-0",
-              "odds": 5.25,
-              "verdict": "keep",
-              "reason": "首选比分，完美契合3球总进球模态与主队零封大胜的战术面。"
-            },
-            {
-              "score": "4-0",
-              "odds": 7.0,
-              "verdict": "near_miss",
-              "reason": "4球总进球赔率3.95极低，4-0赔率7.0同样被严重防范，是强烈的上行风险比分。"
-            },
-            {
-              "score": "3-1",
-              "odds": 11.5,
-              "verdict": "near_miss",
-              "reason": "若主队防线在换人后出现松懈导致丢球，3-1是首要防范的BTTS大球比分。"
-            },
-            {
-              "score": "2-1",
-              "odds": 10.0,
-              "verdict": "reject",
-              "reason": "赔率偏高，且不满足让两球盘的穿盘或走盘要求，在客队进攻极弱的背景下不作为首选。"
-            },
-            {
-              "score": "1-1",
-              "odds": 17.0,
-              "verdict": "reject",
-              "reason": "平局最低赔率，但主胜簇赔率极低，平局空间被严重挤压。"
-            }
-          ],
-          "lowest_score_not_selected_reason": "最低赔率比分为2-0（4.75），未选择是因为总进球3球（3.5）和4球（3.95）的赔率明显低于2球（4.55），且大球尾部存在强烈的压缩共振，表明市场对主队打入3球及以上的防范力度远超2球，因此向上微调至3-0。"
-        },
-        "sharp_money_audit": {
-          "available": true,
-          "confirmed_sharp_direction": "home",
-          "rlm_confirmed": false,
-          "vote_vs_odds_conflict": "公众投票让球盘偏向主队，与正确比分极度倾斜主队的态势一致，无明显背离。",
-          "crs_change_impact": "正确比分静态分布中，2-0、3-0、4-0等低赔极度密集，显示资金对主队大胜的绝对防范。",
-          "ttg_change_impact": "总进球4球（3.95）、5球（6.8）、7+球（14.0）的极低赔率，显示大球方向有持续的资金沉淀与防范。"
-        },
-        "recommendation_components": {
-          "direction_edge": 85,
-          "score_cluster_strength": 80,
-          "goal_band_strength": 85,
-          "btts_alignment": 75,
-          "sharp_alignment": 60,
-          "web_source_quality": 50,
-          "market_conflict_penalty": 10,
-          "final_grade_reason": "哥伦比亚实力与战意均占绝对优势，市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深。虽然缺少部分即时赔率变化，但静态结构极其稳固，支持主队大胜穿盘。"
-        },
-        "risk_score_candidates": [
-          {
-            "score": "4-0",
-            "risk_type": "主队碾压尾部",
-            "reason": "4-0赔率仅7.0，大球尾部极度压缩，主队完全有能力打出4球及以上的零封大胜。"
-          },
-          {
-            "score": "2-0",
-            "risk_type": "赢球走盘回落",
-            "reason": "若主队在取得两球领先后主动降速或进行大规模轮换，比分可能停留在2-0。"
-          },
-          {
-            "score": "3-1",
-            "risk_type": "大胜丢球尾部",
-            "reason": "若主队防线在下半场因轮换出现松懈，客队可能通过反击或定位球扳回一球。"
-          }
-        ],
-        "tail_risk_flags": [
-          "home_cover_cluster_dominant",
-          "four_plus_goal_tail_compressed",
-          "friendly_rotation_risk"
-        ],
-        "confidence_downgrade_reason": "由于是友谊赛，存在较大的轮换和战术试阵风险，且缺少临场即时赔率变化序列，故小幅下调置信度。",
-        "matrix_direction_probs": {
-          "home": 33.35,
-          "draw": 33.11,
-          "away": 33.54
-        },
-        "matrix_top_scores": [
-          {
-            "score": "1-1",
-            "prob": 13.067
-          },
-          {
-            "score": "1-2",
-            "prob": 12.15
-          },
-          {
-            "score": "2-2",
-            "prob": 11.49
-          },
-          {
-            "score": "0-1",
-            "prob": 8.447
-          },
-          {
-            "score": "3-0",
-            "prob": 7.11
-          },
-          {
-            "score": "2-3",
-            "prob": 5.083
-          },
-          {
-            "score": "3-3",
-            "prob": 4.627
-          },
-          {
-            "score": "4-1",
-            "prob": 4.547
-          },
-          {
-            "score": "4-0",
-            "prob": 4.512
-          },
-          {
-            "score": "2-1",
-            "prob": 3.901
-          },
-          {
-            "score": "0-0",
-            "prob": 3.169
-          },
-          {
-            "score": "2-0",
-            "prob": 3.161
-          },
-          {
-            "score": "3-1",
-            "prob": 3.012
-          },
-          {
-            "score": "1-0",
-            "prob": 2.838
-          },
-          {
-            "score": "1-3",
-            "prob": 2.052
-          },
-          {
-            "score": "3-2",
-            "prob": 1.749
-          },
-          {
-            "score": "0-2",
-            "prob": 1.718
-          },
-          {
-            "score": "4-2",
-            "prob": 1.349
-          },
-          {
-            "score": "0-3",
-            "prob": 1.001
-          },
-          {
-            "score": "3-4",
-            "prob": 0.834
-          }
-        ],
-        "matrix_goal_probs": {
-          "0": 3.17,
-          "1": 11.28,
-          "2": 17.95,
-          "3": 24.16,
-          "4": 21.07,
-          "5": 11.38,
-          "6": 5.98,
-          "7": 5.01
-        },
-        "matrix_lambda_home": 2.312,
-        "matrix_lambda_away": 0.46,
-        "matrix_shape_verdict": "balanced",
-        "matrix_recommended_score": "1-1",
-        "matrix_recommended_direction": "draw",
-        "matrix_disagreement_flags": {
-          "matrix_vs_final_direction_conflict": true,
-          "matrix_high_goal_tail_conflict": false,
-          "matrix_away_tail_warning": true,
-          "matrix_draw_risk_warning": true,
-          "matrix_low_confidence_warning": false
-        },
-        "matrix_shadow_error": "",
-        "pre_match_factor_audit": {
-          "version": "v20.4_pre_match_factor_gate",
-          "league_dna": {
-            "key": "generic",
-            "volatility": "medium",
-            "draw_risk": "medium",
-            "btts": "medium",
-            "away_penalty": 0,
-            "notes": "未配置专属联赛DNA，按通用风险处理"
-          },
-          "match_context_flags": {
-            "cup_like": false,
-            "cross_region": false,
-            "rotation_risk": true,
-            "importance_unclear": false,
-            "name_favorite": false
-          },
-          "structured_factors": {
-            "version": "prematch_structured_v1",
-            "lineup_confirmed": false,
-            "lineup_predicted": false,
-            "lineup_unclear": true,
-            "rotation_risk": true,
-            "fatigue_risk": false,
-            "motivation_clear": false,
-            "motivation_unclear": true,
-            "critical_absence": false,
-            "weather_risk": false,
-            "referee_risk": false,
-            "market_confirmed": true,
-            "market_conflict": false,
-            "web_source_count": 0,
-            "structured_quality_score": 38,
-            "penalties": [
-              "lineup_unclear",
-              "rotation_risk",
-              "motivation_unclear",
-              "no_web_sources"
-            ],
-            "injury_summary": {
-              "home": "无",
-              "away": "吉列尔莫·维拉罗伯斯 受伤 十字韧带撕裂"
-            }
-          },
-          "web_used_with_sources": false,
-          "lineup_confirmed": false,
-          "money_flow": {
-            "sharp": "home",
-            "public": "home",
-            "sharp_clear": true,
-            "public_clear": true,
-            "conflict": false,
-            "reverse": false
-          },
-          "data_quality_score": 40.2,
-          "edge_gap": 60.0,
-          "draw_probability_watch": 33.11,
-          "draw_cluster_present": true,
-          "high_goal_tail_pct": 43.44,
-          "rules_applied": [
-            "prematch_v2_rotation_risk_requires_lineup",
-            "prematch_v2_draw_defense_gate"
-          ],
-          "risk_hints": [
-            {
-              "max_tier": "C",
-              "reason": "prematch_v2_rotation_risk_requires_lineup",
-              "tag": "prematch_v2_rotation_risk"
-            },
-            {
-              "max_tier": "C",
-              "reason": "prematch_v2_draw_defense_gate",
-              "tag": "prematch_v2_draw_defense"
-            }
-          ]
-        },
-        "selection_layer": "小注",
-        "selection_stake_unit": 0.5,
-        "selection_hedge_suggestions": [],
-        "selection_layer_reasons": [
-          "推荐闸门通过但存在轻中度风险"
-        ],
-        "selection_confirmation_bonus": 16,
-        "final_action": "小注"
-      },
-      "is_top4_candidate": true,
-      "is_recommended": true,
-      "is_strict_recommended": true,
-      "fusion_summary": "vMAX-Dynamic-Hybrid"
-    }
-  ],
+  "top4": [],
   "matches": {
     "today": [
       {
@@ -984,10 +150,10 @@
           "dir_score_conflict": false,
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 75.0,
+          "home_win_pct": 78.0,
           "draw_pct": 15.0,
-          "away_win_pct": 10.0,
-          "confidence": 70,
+          "away_win_pct": 7.0,
+          "confidence": 35,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
           "risk_level": "medium",
           "goal_band": "3",
@@ -1002,138 +168,142 @@
           ],
           "scenario": "ai_native_3_goals",
           "recommendation": {
-            "tier": "B",
-            "is_recommended": true,
-            "top4_priority": 2,
-            "bet_confidence": 70,
-            "direction_stability": "strong",
-            "score_stability": "medium",
+            "tier": "C",
+            "is_recommended": false,
+            "top4_priority": 0,
+            "bet_confidence": 35,
+            "direction_stability": "medium",
+            "score_stability": "weak",
             "risk_level": "medium",
             "risk_tags": [
+              "缺少关键赔率",
               "友谊赛轮换风险",
-              "大球尾部防范"
+              "大球尾部偏差"
             ],
-            "bet_action": "small",
+            "bet_action": "observe",
             "why_this_can_fail": [
-              "友谊赛大规模轮换导致默契度下降",
-              "主队领先后主动降速控场"
+              "友谊赛大范围轮换导致默契度下降",
+              "主队领先后换下主力收兵卡盘2-0",
+              "客队偷袭进球导致比分走向3-1"
             ],
             "minimum_evidence_needed": [
-              "双方临场首发名单",
-              "外部即时让球盘口变化"
+              "即时竞彩1X2及让球赔率",
+              "外部主流亚盘及大小球临场盘口",
+              "双方首发阵容及伤停更新"
             ],
-            "why_recommended": "哥伦比亚实力碾压，市场大球尾部极度压缩，3-0完美契合总进球与半全场赔率结构。"
+            "why_recommended": "市场比分及总进球结构极度防范哥伦比亚大胜，3-0及4-0为核心防范区域。但因数据缺失严重，建议仅作赛前观察。"
           },
-          "recommendation_tier": "B",
-          "recommend_gate_pass": true,
-          "recommend_gate_reasons": [],
-          "safe_top_gate_score": 70.0,
-          "overall_selection_score": 70.0,
-          "direction_selection_score": 70.0,
-          "score_shape_score": 70.0,
-          "direction_tier": "B",
-          "score_tier": "B",
+          "recommendation_tier": "C",
+          "recommend_gate_pass": false,
+          "recommend_gate_reasons": [
+            "ai_not_recommended_or_below_min_tier_or_v203_component_downgrade",
+            "ai_not_recommended_or_two_one_tail_gate",
+            "prematch_v2_risk_hints_present"
+          ],
+          "safe_top_gate_score": 35.0,
+          "overall_selection_score": 35.0,
+          "direction_selection_score": 35.0,
+          "score_shape_score": 35.0,
+          "direction_tier": "C",
+          "score_tier": "C",
           "recommendation_downgrade_reasons": [],
           "top_score_candidates": [
             [
               "3-0",
-              20.0
-            ],
-            [
-              "2-0",
               18.0
             ],
             [
+              "2-0",
+              17.0
+            ],
+            [
               "4-0",
-              15.0
+              13.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
               "3-0",
-              20.0
-            ],
-            [
-              "2-0",
               18.0
             ],
             [
+              "2-0",
+              17.0
+            ],
+            [
               "4-0",
-              15.0
+              13.0
             ]
           ],
-          "score_model_prob": 20.0,
+          "score_model_prob": 18.0,
           "score_market_odds": 5.25,
           "score_market_implied_pct": 19.048,
           "anchor_audit": {
-            "zero_zero": "0-0赔率21.0，处于极高位，市场基本排除了双方闷平的可能。",
-            "one_one": "1-1赔率17.0，虽然是平局最低，但在主胜低赔簇面前毫无竞争力，仅作为极低概率的防守退路。",
-            "one_zero": "1-0赔率7.0，对于让两球盘来说过于保守，且1球总进球赔率6.85偏高，不符合大球趋势。",
-            "zero_one": "0-1赔率45.0，客胜通道被完全关闭，客队爆冷赢球概率极低。",
-            "two_one": "2-1赔率10.0，虽然是主胜中低赔，但由于客队进攻乏力且主队防守稳健，BTTS属性不强，2-1空间被零封比分挤压。",
-            "one_two": "1-2赔率60.0，属于极深尾部，无实际资金支持。",
-            "high_score_tail": "4-0（7.0）、3-1（11.5）、4-1（17.0）等高分比分赔率极低，配合7+球14.0的超低赔率，大球尾部共振极其强烈，必须重点防范4-0和3-1。",
-            "handicap_cover": "让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。鉴于大球尾部的极度压缩，主队穿盘（3-0/4-0）的概率显著高于窄胜。"
+            "zero_zero": "0-0赔率21.0，处于极高位，基本排除。",
+            "one_one": "1-1赔率17.0，虽为平局首选但无足够支撑。",
+            "one_zero": "1-0赔率7.0，在主胜中偏高，不符合大球趋势。",
+            "zero_one": "0-1赔率45.0，客胜概率极低。",
+            "two_one": "2-1赔率10.0，低于零封比分，说明客队进球难。",
+            "one_two": "1-2赔率60.0，客胜无望。",
+            "high_score_tail": "4-0（7.0）、3-1（11.5）等4+比分极低，且6球（12.0）和7+（14.0）严重压缩，触发超大球尾部共振。虽然这提示了4+大球的极高风险，但考虑到友谊赛轮换及控节奏可能，首选仍落在3-0，同时将4-0和3-1列为高危防范比分。",
+            "handicap_cover": "让球-2.0下，主队穿盘空间被2-0、3-0、4-0等低赔牢牢封锁，穿盘概率高。"
           },
           "market_interpretation": {
-            "one_x_two": "虽然1X2赔率未直接给出，但从半全场主/主（1.28）和正确比分极低的主胜赔率来看，主胜是绝对主流。",
-            "handicap": "让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。大球尾部的极度压缩表明市场更倾向于主队穿盘。",
-            "correct_score": "2-0（4.75）、3-0（5.25）、4-0（7.0）占据前三低赔，主胜簇高度集中，客胜比分赔率极高，呈现极端不对称。",
-            "total_goals": "3球（3.5）和4球（3.95）赔率极低，5球（6.8）和7+球（14.0）同样被严重压缩，大球趋势非常明显。",
-            "half_full_time": "主/主（1.28）极低，平/主（3.85）次之，表明主队大概率在上半场就能确立优势并保持到终场。",
-            "external_market": "缺少外部即时数据，但国内竞彩的防范力度已经极其明显，主胜大球方向资金沉淀深厚。"
+            "one_x_two": "竞彩1X2赔率缺失，但从比分和半全场看主胜处于超低赔区间。",
+            "handicap": "让球-2.0，要求重点审计两球及以上大胜，比分盘2-0、3-0、4-0极低，支持穿盘或走水。",
+            "correct_score": "主胜零封比分极低，2-0（4.75）、3-0（5.25）、4-0（7.0）包揽前三，呈现极强单边压制。",
+            "total_goals": "3球（3.5）为众数，4球（3.95）紧随其后，6球（12.0）和7+（14.0）严重压缩，大球倾向极强。",
+            "half_full_time": "主/主（1.28）极低，平/主（3.85）次低，显示主队半场奠定胜局概率高。",
+            "external_market": "无外部盘口数据，无法进行双轨偏斜度校准。"
           },
           "money_flow": {
             "public_money_direction": "home",
-            "sharp_money_direction": "home",
-            "sharp_confidence": 65,
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 10,
             "reverse_line_movement": false,
-            "steam_move": "home",
-            "evidence": "公众投票让胜占比45%，在让两球的深盘下仍有较高支持率；正确比分和总进球的超低赔率印证了机构和聪明钱对大胜方向的严密防范。"
+            "steam_move": "unclear",
+            "evidence": "大众投票偏向主队穿盘，但由于缺少赔率变动序列，无法确认聪明钱真实动向。"
           },
           "contextual_logic": {
-            "league_style": "国际友谊赛，战术相对开放，尤其是强弱悬殊时，强队容易打出大比分，且换人可能导致比赛后段节奏失控。",
-            "team_style": "哥伦比亚整体实力强劲，主场火力凶猛；哥斯达黎加防线漏洞百出，刚遭遇0-5惨败，且客场战斗力极弱。",
-            "tempo": "high",
-            "score_shape": "哥伦比亚单方面碾压，控球率和射门数绝对占优，早早取得领先并持续扩大战果。",
+            "league_style": "国际友谊赛，战术实验多，防守强度可能下降，易出大球。",
+            "team_style": "哥伦比亚实力碾压，客队防线漏洞百出且刚遭惨败。",
+            "tempo": "medium",
+            "score_shape": "主队单边控场并大胜，客队无还手之力。",
             "btts_likelihood": "no",
-            "rotation_risk": "medium"
+            "rotation_risk": "high"
           },
           "rejected_cases": {
-            "home": "未拒绝。主胜是绝对核心方向，各项赔率指标均呈碾压态势。",
-            "draw": "拒绝。平局赔率极高，0-0和1-1均未受到实质性防范，不符合双方实力与战意对比。",
-            "away": "拒绝。客队实力、状态、战意均处于绝对劣势，客胜赔率极高，无任何爆冷支撑。"
+            "home": "未拒绝主胜，主胜为绝对核心方向。",
+            "draw": "平局赔率过高，且半全场主/主极低，排除平局。",
+            "away": "客胜赔率极高，实力差距悬殊，排除客胜。"
           },
           "web_research": {
             "used": false,
-            "failure_reason": "未提供外部来源，按未使用联网处理。",
+            "failure_reason": "no_web_tool_available",
             "search_queries": [],
             "sources": [],
             "freshness_grade": "missing",
             "key_findings": [],
             "source_conflicts": [],
-            "validation_warnings": [
-              "web_sources_missing_repaired_to_no_web"
-            ]
+            "validation_warnings": []
           },
           "final_web_audit": {
-            "web_used_by_final": true,
+            "web_used_by_final": false,
             "decisive_web_evidence": [],
             "ignored_web_evidence": [],
             "web_confidence": 0
           },
           "data_quality": {
             "missing": [
-              "中国竞彩1X2赔率",
-              "即时赔率变化序列"
+              "竞彩1X2赔率",
+              "让球胜平负赔率",
+              "外部欧亚盘口",
+              "临场伤停与首发"
             ],
             "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "本场比赛哥伦比亚实力与战意均占绝对优势。市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深（7+球仅14.0，6球仅12.0）。在让两球盘口下，3-0作为大胜的起点，完美契合3球总进球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。虽然友谊赛存在轮换风险，但哥斯达黎加防线漏洞百出且客战极弱，看好哥伦比亚至少净胜三球，首选3-0，防范4-0和2-0。",
+          "ai_native_reason": "本场哥伦比亚实力与战意均占绝对优势。比分盘中2-0（4.75）、3-0（5.25）、4-0（7.0）极低，且总进球3球（3.5）与4球（3.95）极热，6球及7+尾部严重压缩，呈现强烈的大球大胜趋势。结合相邻比分审计，3-0比最低的2-0更契合3/4球的大球模态，且符合让球-2.0的穿盘方向。然而，由于竞彩1X2及让球赔率缺失，且无外部盘口和实时阵容验证，整体证据链不完整，故定档C级，建议观察。",
           "validation_warnings": [
-            "web_used_but_no_sources",
-            "web_research.used=true时sources不能为空；当前sources为空，存在结构不一致。",
-            "final_web_audit.web_used_by_final=true但web_research.sources为空，联网证据结构不成立。",
             "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
             "prematch_v2:prematch_v2_draw_defense_gate"
           ],
@@ -1143,12 +313,12 @@
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
             "final_model=gemini phase=final score=3-0 direction=home",
-            "anchor_audit:{\"zero_zero\":\"0-0赔率21.0，处于极高位，市场基本排除了双方闷平的可能。\",\"one_one\":\"1-1赔率17.0，虽然是平局最低，但在主胜低赔簇面前毫无竞争力，仅作为极低概率的防守退路。\",\"one_zero\":\"1-0赔率7.0，对于让两球盘来说过于保守，且1球总进球赔率6.85偏高，不符合大球趋势。\",\"zero_one\":\"0-1赔率45.0，客胜通道被完全关闭，客队爆冷赢球概率极低。\",\"two_one\":\"2-1赔率10.0，虽然是主胜中低赔，但由于客队进攻乏力且主队防守稳健，BTTS属性不强，2-1空间被零封比分挤压。\",\"one_two\":\"1-2赔率60.0，属于极深尾部，无实际资金支持。\",\"high_score_tail\":\"4-0（7.0）、3-1（11.5）、4-1（17.0）等高分比分赔率极低，配合7+球14.0的超低赔率，大球尾部共振极其强烈，必须重点防范4-0和3-1。\",\"handicap_cover\":\"让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。鉴于大球尾部的极度压缩，主队穿盘（3-0/4-0）的概率显著高于窄胜。\"}",
-            "market_interpretation:{\"one_x_two\":\"虽然1X2赔率未直接给出，但从半全场主/主（1.28）和正确比分极低的主胜赔率来看，主胜是绝对主流。\",\"handicap\":\"让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。大球尾部的极度压缩表明市场更倾向于主队穿盘。\",\"correct_score\":\"2-0（4.75）、3-0（5.25）、4-0（7.0）占据前三低赔，主胜簇高度集中，客胜比分赔率极高，呈现极端不对称。\",\"total_goals\":\"3球（3.5）和4球（3.95）赔率极低，5球（6.8）和7+球（14.0）同样被严重压缩，大球趋势非常明显。\",\"half_full_time\":\"主/主（1.28）极低，平/主（3.85）次之，表明主队大概率在上半场就能确立优势并保持到终场。\",\"external_market\":\"缺少外部即时数据，但国内竞彩的防范力度已经极其明显，主胜大球方向资金沉淀深厚。\"}",
-            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"home\",\"sharp_confidence\":65,\"reverse_line_movement\":false,\"steam_move\":\"home\",\"evidence\":\"公众投票让胜占比45%，在让两球的深盘下仍有较高支持率；正确比分和总进球的超低赔率印证了机构和聪明钱对大胜方向的严密防范。\"}",
-            "contextual_logic:{\"league_style\":\"国际友谊赛，战术相对开放，尤其是强弱悬殊时，强队容易打出大比分，且换人可能导致比赛后段节奏失控。\",\"team_style\":\"哥伦比亚整体实力强劲，主场火力凶猛；哥斯达黎加防线漏洞百出，刚遭遇0-5惨败，且客场战斗力极弱。\",\"tempo\":\"high\",\"score_shape\":\"哥伦比亚单方面碾压，控球率和射门数绝对占优，早早取得领先并持续扩大战果。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"medium\"}",
-            "web_research:{\"used\":false,\"failure_reason\":\"未提供外部来源，按未使用联网处理。\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[\"web_sources_missing_repaired_to_no_web\"]}",
-            "recommendation:{\"tier\":\"B\",\"is_recommended\":true,\"top4_priority\":2,\"bet_confidence\":70,\"direction_stability\":\"strong\",\"score_stability\":\"medium\",\"risk_level\":\"medium\",\"risk_tags\":[\"友谊赛轮换风险\",\"大球尾部防范\"],\"bet_action\":\"small\",\"why_this_can_fail\":[\"友谊赛大规模轮换导致默契度下降\",\"主队领先后主动降速控场\"],\"minimum_evidence_needed\":[\"双方临场首发名单\",\"外部即时让球盘口变化\"],\"why_recommended\":\"哥伦比亚实力碾压，市场大球尾部极度压缩，3-0完美契合总进球与半全场赔率结构。\"}"
+            "anchor_audit:{\"zero_zero\":\"0-0赔率21.0，处于极高位，基本排除。\",\"one_one\":\"1-1赔率17.0，虽为平局首选但无足够支撑。\",\"one_zero\":\"1-0赔率7.0，在主胜中偏高，不符合大球趋势。\",\"zero_one\":\"0-1赔率45.0，客胜概率极低。\",\"two_one\":\"2-1赔率10.0，低于零封比分，说明客队进球难。\",\"one_two\":\"1-2赔率60.0，客胜无望。\",\"high_score_tail\":\"4-0（7.0）、3-1（11.5）等4+比分极低，且6球（12.0）和7+（14.0）严重压缩，触发超大球尾部共振。虽然这提示了4+大球的极高风险，但考虑到友谊赛轮换及控节奏可能，首选仍落在3-0，同时将4-0和3-1列为高危防范比分。\",\"handicap_cover\":\"让球-2.0下，主队穿盘空间被2-0、3-0、4-0等低赔牢牢封锁，穿盘概率高。\"}",
+            "market_interpretation:{\"one_x_two\":\"竞彩1X2赔率缺失，但从比分和半全场看主胜处于超低赔区间。\",\"handicap\":\"让球-2.0，要求重点审计两球及以上大胜，比分盘2-0、3-0、4-0极低，支持穿盘或走水。\",\"correct_score\":\"主胜零封比分极低，2-0（4.75）、3-0（5.25）、4-0（7.0）包揽前三，呈现极强单边压制。\",\"total_goals\":\"3球（3.5）为众数，4球（3.95）紧随其后，6球（12.0）和7+（14.0）严重压缩，大球倾向极强。\",\"half_full_time\":\"主/主（1.28）极低，平/主（3.85）次低，显示主队半场奠定胜局概率高。\",\"external_market\":\"无外部盘口数据，无法进行双轨偏斜度校准。\"}",
+            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":10,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"大众投票偏向主队穿盘，但由于缺少赔率变动序列，无法确认聪明钱真实动向。\"}",
+            "contextual_logic:{\"league_style\":\"国际友谊赛，战术实验多，防守强度可能下降，易出大球。\",\"team_style\":\"哥伦比亚实力碾压，客队防线漏洞百出且刚遭惨败。\",\"tempo\":\"medium\",\"score_shape\":\"主队单边控场并大胜，客队无还手之力。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"high\"}",
+            "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
+            "recommendation:{\"tier\":\"C\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":35,\"direction_stability\":\"medium\",\"score_stability\":\"weak\",\"risk_level\":\"medium\",\"risk_tags\":[\"缺少关键赔率\",\"友谊赛轮换风险\",\"大球尾部偏差\"],\"bet_action\":\"observe\",\"why_this_can_fail\":[\"友谊赛大范围轮换导致默契度下降\",\"主队领先后换下主力收兵卡盘2-0\",\"客队偷袭进球导致比分走向3-1\"],\"minimum_evidence_needed\":[\"即时竞彩1X2及让球赔率\",\"外部主流亚盘及大小球临场盘口\",\"双方首发阵容及伤停更新\"],\"why_recommended\":\"市场比分及总进球结构极度防范哥伦比亚大胜，3-0及4-0为核心防范区域。但因数据缺失严重，建议仅作赛前观察。\"}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -1177,30 +347,31 @@
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "公众投票让胜占比45%，在让两球的深盘下仍有较高支持率；正确比分和总进球的超低赔率印证了机构和聪明钱对大胜方向的严密防范。",
+          "smart_money_signal": "大众投票偏向主队穿盘，但由于缺少赔率变动序列，无法确认聪明钱真实动向。",
           "smart_signals": [
+            "缺少关键赔率",
             "友谊赛轮换风险",
-            "大球尾部防范"
+            "大球尾部偏差"
           ],
-          "sharp_detected": true,
-          "sharp_dir": "home",
+          "sharp_detected": false,
+          "sharp_dir": "unclear",
           "sharp_conflict": false,
           "sharp_unresolved": false,
           "sharp_audit": {
             "public_money_direction": "home",
-            "sharp_money_direction": "home",
-            "sharp_confidence": 65,
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 10,
             "reverse_line_movement": false,
-            "steam_move": "home",
-            "evidence": "公众投票让胜占比45%，在让两球的深盘下仍有较高支持率；正确比分和总进球的超低赔率印证了机构和聪明钱对大胜方向的严密防范。"
+            "steam_move": "unclear",
+            "evidence": "大众投票偏向主队穿盘，但由于缺少赔率变动序列，无法确认聪明钱真实动向。"
           },
           "score_market_evidence": {
-            "one_x_two": "虽然1X2赔率未直接给出，但从半全场主/主（1.28）和正确比分极低的主胜赔率来看，主胜是绝对主流。",
-            "handicap": "让球-2.0盘口下，2-0为走盘线，3-0和4-0为穿盘线。大球尾部的极度压缩表明市场更倾向于主队穿盘。",
-            "correct_score": "2-0（4.75）、3-0（5.25）、4-0（7.0）占据前三低赔，主胜簇高度集中，客胜比分赔率极高，呈现极端不对称。",
-            "total_goals": "3球（3.5）和4球（3.95）赔率极低，5球（6.8）和7+球（14.0）同样被严重压缩，大球趋势非常明显。",
-            "half_full_time": "主/主（1.28）极低，平/主（3.85）次之，表明主队大概率在上半场就能确立优势并保持到终场。",
-            "external_market": "缺少外部即时数据，但国内竞彩的防范力度已经极其明显，主胜大球方向资金沉淀深厚。"
+            "one_x_two": "竞彩1X2赔率缺失，但从比分和半全场看主胜处于超低赔区间。",
+            "handicap": "让球-2.0，要求重点审计两球及以上大胜，比分盘2-0、3-0、4-0极低，支持穿盘或走水。",
+            "correct_score": "主胜零封比分极低，2-0（4.75）、3-0（5.25）、4-0（7.0）包揽前三，呈现极强单边压制。",
+            "total_goals": "3球（3.5）为众数，4球（3.95）紧随其后，6球（12.0）和7+（14.0）严重压缩，大球倾向极强。",
+            "half_full_time": "主/主（1.28）极低，平/主（3.85）次低，显示主队半场奠定胜局概率高。",
+            "external_market": "无外部盘口数据，无法进行双轨偏斜度校准。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -1210,10 +381,11 @@
             "strength": 0,
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
+              "缺少关键赔率",
               "友谊赛轮换风险",
-              "大球尾部防范"
+              "大球尾部偏差"
             ],
-            "sharp_confirmed": true,
+            "sharp_confirmed": false,
             "dark_verdict": ""
           },
           "xG_home": "?",
@@ -1226,19 +398,19 @@
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
           "gpt_score": "3-0",
-          "gpt_analysis": "本场抓包市场的核心不是普通主胜，而是主队零封大胜簇：2-0最低、3-0紧随、4-0同样低位，总进球3球最低且4球、5球、7+尾部被压缩，半全场主/主极低，整体支持哥伦比亚掌控比赛。最终选3-0，是因为它同时贴合正确比分第二低与总进球3球模态；但2-0是最低锚点，4-0和3-1受大球尾部支撑，友谊赛轮换又会削弱精确比分稳定性。因此方向判断偏主胜，投注层面因缺少联网外部盘口与阵容证据而建议观察。",
-          "grok_score": "2-1",
+          "gpt_analysis": "本场国内比分盘呈现高度集中的哥伦比亚优势：2-0、3-0、1-0、4-0为前四低赔，home_cover_cluster强于其他簇；总进球则以3球为众数，并且4、5、6、7+连续被压，提示不是单纯小胜，而是存在一边倒大胜和高球上沿。综合相邻比分审计，3-0比最低的2-0更符合3球模态和穿-2方向，同时比3-1更贴合零封低赔簇。因此方向取主胜、比分取3-0。不过由于无法联网核验外部盘口和阵容，且sharp_money不可确认，最终只给观察级别，不做高信心推荐。",
+          "grok_score": "3-0",
           "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
           "gemini_score": "3-0",
-          "gemini_analysis": "本场比赛哥伦比亚实力与战意均占绝对优势。市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深（7+球仅14.0，6球仅12.0）。在让两球盘口下，3-0作为大胜的起点，完美契合3球总进球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。虽然友谊赛存在轮换风险，但哥斯达黎加防线漏洞百出且客战极弱，看好哥伦比亚至少净胜三球，首选3-0，防范4-0和2-0。",
+          "gemini_analysis": "本场哥伦比亚实力与战意均占绝对优势。比分盘中2-0（4.75）、3-0（5.25）、4-0（7.0）极低，且总进球3球（3.5）与4球（3.95）极热，6球及7+尾部严重压缩，呈现强烈的大球大胜趋势。结合相邻比分审计，3-0比最低的2-0更契合3/4球的大球模态，且符合让球-2.0的穿盘方向。然而，由于竞彩1X2及让球赔率缺失，且无外部盘口和实时阵容验证，整体证据链不完整，故定档C级，建议观察。",
           "final_referee_score": "3-0",
-          "final_referee_analysis": "本场比赛哥伦比亚实力与战意均占绝对优势。市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深（7+球仅14.0，6球仅12.0）。在让两球盘口下，3-0作为大胜的起点，完美契合3球总进球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。虽然友谊赛存在轮换风险，但哥斯达黎加防线漏洞百出且客战极弱，看好哥伦比亚至少净胜三球，首选3-0，防范4-0和2-0。",
+          "final_referee_analysis": "本场哥伦比亚实力与战意均占绝对优势。比分盘中2-0（4.75）、3-0（5.25）、4-0（7.0）极低，且总进球3球（3.5）与4球（3.95）极热，6球及7+尾部严重压缩，呈现强烈的大球大胜趋势。结合相邻比分审计，3-0比最低的2-0更契合3/4球的大球模态，且符合让球-2.0的穿盘方向。然而，由于竞彩1X2及让球赔率缺失，且无外部盘口和实时阵容验证，整体证据链不完整，故定档C级，建议观察。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
           "final_ai_score": "3-0",
-          "final_ai_analysis": "本场比赛哥伦比亚实力与战意均占绝对优势。市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深（7+球仅14.0，6球仅12.0）。在让两球盘口下，3-0作为大胜的起点，完美契合3球总进球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。虽然友谊赛存在轮换风险，但哥斯达黎加防线漏洞百出且客战极弱，看好哥伦比亚至少净胜三球，首选3-0，防范4-0和2-0。",
+          "final_ai_analysis": "本场哥伦比亚实力与战意均占绝对优势。比分盘中2-0（4.75）、3-0（5.25）、4-0（7.0）极低，且总进球3球（3.5）与4球（3.95）极热，6球及7+尾部严重压缩，呈现强烈的大球大胜趋势。结合相邻比分审计，3-0比最低的2-0更契合3/4球的大球模态，且符合让球-2.0的穿盘方向。然而，由于竞彩1X2及让球赔率缺失，且无外部盘口和实时阵容验证，整体证据链不完整，故定档C级，建议观察。",
           "ai_abstained": [],
-          "ai_avg_confidence": 70.0,
+          "ai_avg_confidence": 35.0,
           "ai_call_status": {
             "gpt": {
               "phase1": {
@@ -1246,18 +418,20 @@
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 80.2,
+                "elapsed": 80.3,
                 "status": "ok"
               },
-              "last_status": "ok",
+              "last_status": "parse_failed",
               "model": "熊猫-特供-X-10-gpt-5.5",
               "consistency": {
-                "ok": true,
+                "ok": false,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "consistency",
-                "elapsed": 4.5,
-                "status": "ok"
+                "elapsed": 14.1,
+                "status": "parse_failed",
+                "parse_error": "empty_or_invalid_json_object",
+                "raw_excerpt": "{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[\"结构一致性检查通过：predicted_score=3-0 与 final_direction=home 一致；goal_band=3 与比分总进球3一致；btts=no 与3-0一致；top3[0]为 predicted_score；web_research.used=false，不要求外部sources；score_cluster_audit、sharp_money_audit、anchor_audit、recommendation_components 均存在；risk_score_cand"
               }
             },
             "grok": {
@@ -1266,10 +440,10 @@
                 "ai_name": "grok",
                 "model": "熊猫-A-5-grok-4.2-fast-200w上下文",
                 "phase": "phase1",
-                "elapsed": 62.3,
+                "elapsed": 23.5,
                 "status": "parse_failed",
                 "parse_error": "empty_or_invalid_json_object",
-                "raw_excerpt": "<think>**Thinking about your request**"
+                "raw_excerpt": "```json\n{\"predictions\":[{\"match\":1,\"final_direction\":\"home\",\"predicted_score\":\"2-1\",\"direction_probs\":{\"home\":52,\"draw\":28,\"away\":20},\"goal_band\":\"3\",\"btts\":\"yes\",\"risk_score_candidates\":[{\"score\":\"1-2\",\"reason\":\"客队反击尾部\",\"reason\":\"客队状态低迷且防线漏洞，潜在反击机会，但赔率60.0高位压制；\",\"score\":\"3-2\",\"reason\":\"高分平局\",\"reaso"
               },
               "last_status": "parse_failed",
               "model": "熊猫-A-5-grok-4.2-fast-200w上下文"
@@ -1280,7 +454,7 @@
                 "ai_name": "gemini",
                 "model": "熊猫-8-AS正向-gemini-3.5-flash",
                 "phase": "final",
-                "elapsed": 149.1,
+                "elapsed": 59.6,
                 "status": "ok"
               },
               "last_status": "ok",
@@ -1289,11 +463,11 @@
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260601_191013_2m_4b633f9fbf12_哥伦比亚_哥斯达",
+            "run_id": "20260601_194210_2m_4b633f9fbf12_哥伦比亚_哥斯达",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 2,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260601_191013_2m_4b633f9fbf12_哥伦比亚_哥斯达_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260601_194210_2m_4b633f9fbf12_哥伦比亚_哥斯达_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -1301,18 +475,20 @@
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 80.2,
+                  "elapsed": 80.3,
                   "status": "ok"
                 },
-                "last_status": "ok",
+                "last_status": "parse_failed",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "consistency": {
-                  "ok": true,
+                  "ok": false,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "consistency",
-                  "elapsed": 4.5,
-                  "status": "ok"
+                  "elapsed": 14.1,
+                  "status": "parse_failed",
+                  "parse_error": "empty_or_invalid_json_object",
+                  "raw_excerpt": "{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[\"结构一致性检查通过：predicted_score=3-0 与 final_direction=home 一致；goal_band=3 与比分总进球3一致；btts=no 与3-0一致；top3[0]为 predicted_score；web_research.used=false，不要求外部sources；score_cluster_audit、sharp_money_audit、anchor_audit、recommendation_components 均存在；risk_score_cand"
                 }
               },
               "grok": {
@@ -1321,10 +497,10 @@
                   "ai_name": "grok",
                   "model": "熊猫-A-5-grok-4.2-fast-200w上下文",
                   "phase": "phase1",
-                  "elapsed": 62.3,
+                  "elapsed": 23.5,
                   "status": "parse_failed",
                   "parse_error": "empty_or_invalid_json_object",
-                  "raw_excerpt": "<think>**Thinking about your request**"
+                  "raw_excerpt": "```json\n{\"predictions\":[{\"match\":1,\"final_direction\":\"home\",\"predicted_score\":\"2-1\",\"direction_probs\":{\"home\":52,\"draw\":28,\"away\":20},\"goal_band\":\"3\",\"btts\":\"yes\",\"risk_score_candidates\":[{\"score\":\"1-2\",\"reason\":\"客队反击尾部\",\"reason\":\"客队状态低迷且防线漏洞，潜在反击机会，但赔率60.0高位压制；\",\"score\":\"3-2\",\"reason\":\"高分平局\",\"reaso"
                 },
                 "last_status": "parse_failed",
                 "model": "熊猫-A-5-grok-4.2-fast-200w上下文"
@@ -1335,7 +511,7 @@
                   "ai_name": "gemini",
                   "model": "熊猫-8-AS正向-gemini-3.5-flash",
                   "phase": "final",
-                  "elapsed": 149.1,
+                  "elapsed": 59.6,
                   "status": "ok"
                 },
                 "last_status": "ok",
@@ -1389,88 +565,88 @@
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
             "selected_cluster": "home_cover",
-            "why_selected_score": "3-0是主队大胜且零封的代表性比分，完美契合总进球3球的最低赔率（3.5）以及半全场主/主极低赔率（1.28）。在超大球尾部共振的背景下，3-0作为大胜的起点，具备极高的打出概率。",
+            "why_selected_score": "3-0在总进球3球（众数3.5）中赔率最低（5.25），且完美契合让球-2.0的穿盘方向，比2-0更具大球支撑，比3-1更符合客队进攻乏力的零封预期。在让球-2.0的模板要求下，重点比较了2-0、3-0、3-1、4-1等比分。2-0（4.75）虽为最低赔，但卡盘风险高且不符3球众数；3-1（11.5）和4-1（17.0）受大球尾部压缩影响有一定机会，但客队进攻极弱（0-1高达45.0），零封大胜的3-0（5.25）和4-0（7.0）更具市场防范，因此3-0最终胜出。",
             "adjacent_scores_checked": [
               {
                 "score": "2-0",
                 "odds": 4.75,
                 "verdict": "near_miss",
-                "reason": "全场最低赔率，但总进球2球赔率（4.55）高于3球（3.5），且大球尾部极度压缩，3-0更具穿盘想象力。"
+                "reason": "全场最低赔，但总进球2球（4.55）不如3球（3.5）和4球（3.95）受防范，存在卡盘风险。"
               },
               {
                 "score": "3-0",
                 "odds": 5.25,
                 "verdict": "keep",
-                "reason": "首选比分，完美契合3球总进球模态与主队零封大胜的战术面。"
+                "reason": "首选，符合3球众数且赔率极低，支持穿盘。"
               },
               {
                 "score": "4-0",
                 "odds": 7.0,
                 "verdict": "near_miss",
-                "reason": "4球总进球赔率3.95极低，4-0赔率7.0同样被严重防范，是强烈的上行风险比分。"
+                "reason": "4球总进球极热，4-0赔率异常偏低，是强力备选。"
               },
               {
                 "score": "3-1",
                 "odds": 11.5,
                 "verdict": "near_miss",
-                "reason": "若主队防线在换人后出现松懈导致丢球，3-1是首要防范的BTTS大球比分。"
-              },
-              {
-                "score": "2-1",
-                "odds": 10.0,
-                "verdict": "reject",
-                "reason": "赔率偏高，且不满足让两球盘的穿盘或走盘要求，在客队进攻极弱的背景下不作为首选。"
+                "reason": "若主队防线失误丢球，此比分为大球丢球首选。"
               },
               {
                 "score": "1-1",
                 "odds": 17.0,
                 "verdict": "reject",
-                "reason": "平局最低赔率，但主胜簇赔率极低，平局空间被严重挤压。"
+                "reason": "平局最低赔，但远高于主胜低赔簇，不予考虑。"
               }
             ],
-            "lowest_score_not_selected_reason": "最低赔率比分为2-0（4.75），未选择是因为总进球3球（3.5）和4球（3.95）的赔率明显低于2球（4.55），且大球尾部存在强烈的压缩共振，表明市场对主队打入3球及以上的防范力度远超2球，因此向上微调至3-0。"
+            "lowest_score_not_selected_reason": "最低赔率2-0（4.75）对应总进球2，而总进球市场中3球（3.5）和4球（3.95）明显更受防范，说明3球及以上的穿盘比分（3-0/4-0）比2-0更符合大球趋势。"
           },
           "sharp_money_audit": {
-            "available": true,
-            "confirmed_sharp_direction": "home",
+            "available": false,
+            "confirmed_sharp_direction": "unclear",
             "rlm_confirmed": false,
-            "vote_vs_odds_conflict": "公众投票让球盘偏向主队，与正确比分极度倾斜主队的态势一致，无明显背离。",
-            "crs_change_impact": "正确比分静态分布中，2-0、3-0、4-0等低赔极度密集，显示资金对主队大胜的绝对防范。",
-            "ttg_change_impact": "总进球4球（3.95）、5球（6.8）、7+球（14.0）的极低赔率，显示大球方向有持续的资金沉淀与防范。"
+            "vote_vs_odds_conflict": "无1X2赔率，无法对比投票与赔率合理性。",
+            "crs_change_impact": "比分赔率无动态变化数据。",
+            "ttg_change_impact": "总进球赔率无动态变化数据。"
           },
           "recommendation_components": {
-            "direction_edge": 85,
-            "score_cluster_strength": 80,
-            "goal_band_strength": 85,
-            "btts_alignment": 75,
-            "sharp_alignment": 60,
-            "web_source_quality": 50,
-            "market_conflict_penalty": 10,
-            "final_grade_reason": "哥伦比亚实力与战意均占绝对优势，市场正确比分与总进球赔率呈现极强的主胜大球共振，大球尾部防范极深。虽然缺少部分即时赔率变化，但静态结构极其稳固，支持主队大胜穿盘。"
+            "direction_edge": 75,
+            "score_cluster_strength": 70,
+            "goal_band_strength": 75,
+            "btts_alignment": 65,
+            "sharp_alignment": 10,
+            "web_source_quality": 0,
+            "market_conflict_penalty": 30,
+            "final_grade_reason": "主胜及大球形态极其清晰，但由于关键赔率数据缺失、无外部盘口及伤停信息，无法达到高等级推荐标准。"
           },
           "risk_score_candidates": [
             {
-              "score": "4-0",
-              "risk_type": "主队碾压尾部",
-              "reason": "4-0赔率仅7.0，大球尾部极度压缩，主队完全有能力打出4球及以上的零封大胜。"
+              "score": "2-0",
+              "risk_type": "卡盘/低标赢球",
+              "reason": "若哥伦比亚领先后收力，可能停留在2-0，导致让球-2.0走水。"
             },
             {
-              "score": "2-0",
-              "risk_type": "赢球走盘回落",
-              "reason": "若主队在取得两球领先后主动降速或进行大规模轮换，比分可能停留在2-0。"
+              "score": "4-0",
+              "risk_type": "超大球穿盘",
+              "reason": "总进球4+及大球尾部严重压缩，若客队防线崩溃可能打出4-0。"
             },
             {
               "score": "3-1",
-              "risk_type": "大胜丢球尾部",
-              "reason": "若主队防线在下半场因轮换出现松懈，客队可能通过反击或定位球扳回一球。"
+              "risk_type": "大胜丢球",
+              "reason": "哥伦比亚防线近期有失球，若客队偷得一球则走向3-1。"
+            },
+            {
+              "score": "1-1",
+              "risk_type": "友谊赛冷平",
+              "reason": "友谊赛战意不足或大轮换导致的低迷平局。"
             }
           ],
           "tail_risk_flags": [
             "home_cover_cluster_dominant",
-            "four_plus_goal_tail_compressed",
-            "friendly_rotation_risk"
+            "big_goal_tail_resonance",
+            "two_nil_lowest_score_risk",
+            "friendly_rotation_intensity_risk"
           ],
-          "confidence_downgrade_reason": "由于是友谊赛，存在较大的轮换和战术试阵风险，且缺少临场即时赔率变化序列，故小幅下调置信度。",
+          "confidence_downgrade_reason": "缺少竞彩1X2与让球赔率，且无外部欧亚盘口及实时伤停阵容数据，无法进行双轨偏斜度审计，故下调信心。",
           "matrix_direction_probs": {
             "home": 33.35,
             "draw": 33.11,
@@ -1578,7 +754,7 @@
             "matrix_high_goal_tail_conflict": false,
             "matrix_away_tail_warning": true,
             "matrix_draw_risk_warning": true,
-            "matrix_low_confidence_warning": false
+            "matrix_low_confidence_warning": true
           },
           "matrix_shadow_error": "",
           "pre_match_factor_audit": {
@@ -1610,14 +786,15 @@
               "critical_absence": false,
               "weather_risk": false,
               "referee_risk": false,
-              "market_confirmed": true,
+              "market_confirmed": false,
               "market_conflict": false,
               "web_source_count": 0,
-              "structured_quality_score": 38,
+              "structured_quality_score": 26,
               "penalties": [
                 "lineup_unclear",
                 "rotation_risk",
                 "motivation_unclear",
+                "market_unconfirmed",
                 "no_web_sources"
               ],
               "injury_summary": {
@@ -1628,15 +805,15 @@
             "web_used_with_sources": false,
             "lineup_confirmed": false,
             "money_flow": {
-              "sharp": "home",
+              "sharp": "unclear",
               "public": "home",
-              "sharp_clear": true,
+              "sharp_clear": false,
               "public_clear": true,
               "conflict": false,
               "reverse": false
             },
-            "data_quality_score": 40.2,
-            "edge_gap": 60.0,
+            "data_quality_score": 24.9,
+            "edge_gap": 63.0,
             "draw_probability_watch": 33.11,
             "draw_cluster_present": true,
             "high_goal_tail_pct": 43.44,
@@ -1657,18 +834,21 @@
               }
             ]
           },
-          "selection_layer": "小注",
-          "selection_stake_unit": 0.5,
-          "selection_hedge_suggestions": [],
-          "selection_layer_reasons": [
-            "推荐闸门通过但存在轻中度风险"
+          "selection_layer": "防平",
+          "selection_stake_unit": 0.25,
+          "selection_hedge_suggestions": [
+            "平局",
+            "双选/不败优先"
           ],
-          "selection_confirmation_bonus": 16,
-          "final_action": "小注"
+          "selection_layer_reasons": [
+            "平局防线触发，胜负方向只能防平观察"
+          ],
+          "selection_confirmation_bonus": 0,
+          "final_action": "防平"
         },
-        "is_top4_candidate": true,
-        "is_recommended": true,
-        "is_strict_recommended": true
+        "is_top4_candidate": false,
+        "is_recommended": false,
+        "is_strict_recommended": false
       },
       {
         "home_team": "加拿大",
@@ -1824,9 +1004,9 @@
           "dir_score_conflict": false,
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 55.0,
-          "draw_pct": 27.0,
-          "away_win_pct": 18.0,
+          "home_win_pct": 58.0,
+          "draw_pct": 25.0,
+          "away_win_pct": 17.0,
           "confidence": 40,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
           "risk_level": "medium",
@@ -1851,22 +1031,19 @@
             "risk_level": "medium",
             "risk_tags": [
               "友谊赛轮换风险",
-              "伤停影响",
               "低分平局威胁",
-              "缺乏外部盘口数据"
+              "大球受阻"
             ],
             "bet_action": "observe",
             "why_this_can_fail": [
-              "加拿大因试阵或核心缺阵导致进攻乏力，被乌兹别克1-1逼平或0-0闷平",
-              "乌兹别克战意更足，反击得手打出0-1或1-2冷门",
-              "加拿大早早进球并打出反击，比分走向2-0或2-1"
+              "加拿大如果大范围轮换且战意松懈，可能被乌兹别克斯坦逼平（0-0或1-1）。",
+              "乌兹别克斯坦若反击效率超预期，可能反客为主取得进球，导致比分走向2-1或1-2。"
             ],
             "minimum_evidence_needed": [
-              "赛前双方确切的首发阵容和伤停名单",
-              "外部主流博彩公司的即时让球盘口及水位变化",
-              "临场资金流向和交易所成交数据"
+              "双方临场首发阵容，特别是加拿大核心球员的登场情况。",
+              "外部主流博彩公司的即时亚盘及独赢赔率变动趋势。"
             ],
-            "why_recommended": "由于是友谊赛且缺乏关键的外部即时数据和首发信息，不建议实买，建议临场观察。"
+            "why_recommended": "本场为友谊赛，主队加拿大虽实力占优但面临试阵和伤停，客队状态不俗。市场赔率和总进球模态指向低比分，1-0为主胜最合理落点，但平局风险极大，建议仅作观察，不宜重注。"
           },
           "recommendation_tier": "C",
           "recommend_gate_pass": false,
@@ -1889,7 +1066,7 @@
             ],
             [
               "2-0",
-              13.0
+              14.0
             ],
             [
               "1-1",
@@ -1903,7 +1080,7 @@
             ],
             [
               "2-0",
-              13.0
+              14.0
             ],
             [
               "1-1",
@@ -1914,43 +1091,43 @@
           "score_market_odds": 5.5,
           "score_market_implied_pct": 18.182,
           "anchor_audit": {
-            "zero_zero": "0-0赔率10.5，低于11，属于LOW档。由于加拿大实力占优且主场稳健，0-0作为次级防范，不作为首选。",
-            "one_one": "1-1赔率7.5，是MID档平局首选，友谊赛试阵极易导致1-1，必须作为核心防范。",
-            "one_zero": "1-0赔率5.5全场最低，符合加拿大一球小胜且不穿深盘的形态，是首选。",
-            "zero_one": "0-1赔率12.5，客胜最低，但与主胜低赔簇差距大，仅作为极小概率冷门防范。",
-            "two_one": "2-1赔率6.75，与2-0接近，但总进球2球（3.15）低于3球（3.5），且乌兹别克客场进球率一般，2-1略后置于1-0和2-0。",
-            "one_two": "1-2赔率15.0，客队反打路径，概率较低，不予主推。",
-            "high_score_tail": "3-1 (12.5) 和 2-2 (17.0) 有一定压缩，但4球赔率5.9高于排除线，大球受阻，不予考虑。",
-            "handicap_cover": "让球-1.0，1-0和2-1等赢一球比分赔率极低，说明穿盘（2-0/3-0）阻力大，更倾向于赢一球或不胜。"
+            "zero_zero": "0-0赔率10.5，处于警戒线内。未选原因为加拿大整体实力和主场优势仍占上风，且半全场主/主、平/主赔率更低，倾向于有进球产生。",
+            "one_one": "1-1赔率7.5，是平局的核心防范点。未选原因为主胜赔率1.50优势较明显，但该比分是首要风险对冲项。",
+            "one_zero": "1-0赔率5.5为全场最低，完美契合总进球小球带和友谊赛主队小胜不穿盘的逻辑。",
+            "zero_one": "0-1赔率12.5，是客胜最低比分，说明客队有偷袭可能，但客胜整体赔率断层严重，不作为主线。",
+            "two_one": "2-1赔率6.75，虽是主胜热门，但由于总进球4+受阻且BTTS达成需要客队进球，其优先级排在1-0和2-0之后。",
+            "one_two": "1-2赔率15.0，属于客胜冷门尾部，在加拿大防线大意时可能发生，但概率较低。",
+            "high_score_tail": "3-1（12.5）和2-2（17.0）有一定压缩，但4球总进球赔率5.9高于排除线，大球尾部缺乏实质支撑。",
+            "handicap_cover": "让球-1下，主队赢一球（1-0、2-1）或不胜（1-1、0-0）的概率较高，穿盘（2-0、3-0）难度较大。"
           },
           "market_interpretation": {
-            "one_x_two": "竞彩主胜1.50，市场给予加拿大一定支持，但平赔3.58未完全拉高，防范平局意图明显。",
-            "handicap": "让球-1.0，结合比分簇，1-0和2-0、2-1均低，说明市场倾向于加拿大最多赢一到两球，穿盘信心一般。",
-            "correct_score": "1-0 (5.5) 全场最低，2-0 (6.5) 和 2-1 (6.75) 紧随其后，1-1 (7.5) 同样处于低赔区，呈现典型的小胜与低分平局并存格局。",
-            "total_goals": "2球最低（3.15），3球次之（3.5），4球（5.9）高于排除线，大球概率低，锁定0-3球区间。",
-            "half_full_time": "主/主（2.19）和平/主（3.65）靠前，说明主队全场赢球概率高，但平/平（5.6）也具备防范价值。",
-            "external_market": "缺少外部即时欧亚盘口和交易所数据，仅能依据竞彩静态微结构进行研判。"
+            "one_x_two": "主胜1.50处于低位，加拿大作为明确热门，但平局3.58和客胜5.45并未完全排除冷门空间。",
+            "handicap": "主让一球，公众投票中让负比例达40%，表明市场对主队穿盘信心不足，倾向于一球窄胜或不胜。",
+            "correct_score": "1-0（5.5）、2-0（6.5）、2-1（6.75）构成主胜低赔簇，1-1（7.5）紧随其后，整体偏向低比分。",
+            "total_goals": "2球赔率3.15为最底，4球赔率5.9高于排除线，预示本场为0-3球的小球格局。",
+            "half_full_time": "主/主（2.19）和平/主（3.65）赔率最低，支持加拿大最终取胜，但前半场可能存在僵持。",
+            "external_market": "暂无外部国际盘口及交易所成交数据，无法进行双轨偏斜度校准。"
           },
           "money_flow": {
             "public_money_direction": "home",
             "sharp_money_direction": "unclear",
-            "sharp_confidence": 10,
+            "sharp_confidence": 0,
             "reverse_line_movement": false,
-            "steam_move": "none",
-            "evidence": "大众投票偏向主胜（59%），竞彩主胜降水，但缺乏聪明钱确凿流入证据，且无即时赔率序列，无法确认RLM。"
+            "steam_move": "home",
+            "evidence": "公众投票主胜比例59%，竞彩赔率主胜降水，资金与赔率变动一致，但缺乏职业资金（Sharp）确认信号。"
           },
           "contextual_logic": {
-            "league_style": "国际友谊赛，战意和阵容轮换影响大，进球生态偏保守和不稳定。",
-            "team_style": "加拿大整体实力和身价占优，但锋线新星受伤，核心可能保留；乌兹别克近期状态火热，防守较好且战意足。",
+            "league_style": "国际友谊赛，战术开放度中等，试阵和轮换较多，进球数通常偏向保守。",
+            "team_style": "加拿大主场稳健但面临核心伤停和阵容磨合；乌兹别克斯坦近期状态火热且战意更浓，防守端有一定韧性。",
             "tempo": "medium",
-            "score_shape": "加拿大一球小胜或平局，低比分主导。",
+            "score_shape": "加拿大掌控主动但进攻效率受限，乌兹别克斯坦顽强抵抗，最终加拿大一球小胜或双方握手言和。",
             "btts_likelihood": "no",
             "rotation_risk": "high"
           },
           "rejected_cases": {
-            "home": "拒绝大胜或穿盘（如3-0/3-1），因为大球受阻且加拿大有保留。",
-            "draw": "未完全拒绝平局，1-1和0-0是极强的防范路径，但因加拿大实力优势，平局暂列次选。",
-            "away": "拒绝客胜，乌兹别克虽状态好，但客场硬实力与加拿大仍有差距，0-1和1-2仅为尾部风险。"
+            "home": "未拒绝主胜，但拒绝了主队大胜或穿盘（如3-0、3-1），因大球阻力大且主队战意存疑。",
+            "draw": "未完全拒绝，1-1和0-0作为核心防范，但因1X2主胜赔率1.50仍具一定倾向性，故未将其列为首选。",
+            "away": "拒绝客胜方向，乌兹别克斯坦虽状态好，但客胜赔率5.45且客胜比分簇断层严重，爆冷赢球难度极大。"
           },
           "web_research": {
             "used": false,
@@ -1970,16 +1147,15 @@
           },
           "data_quality": {
             "missing": [
-              "外部即时欧亚赔率",
-              "首发阵容",
-              "临场资金流"
+              "external_odds_live_sequence",
+              "confirmed_lineups",
+              "sharp_money_flow_details"
             ],
             "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "加拿大整体实力占优，1-0为全场最低赔率比分，且总进球主模态在2球，大球受阻，故首选1-0。但鉴于友谊赛性质、加拿大伤停及乌兹别克不败状态，1-1平局和0-0闷平风险极大，且缺乏外部即时数据支持，故不作实买推荐，建议观察。",
+          "ai_native_reason": "综合分析，加拿大实力占优且主场作战，1X2主胜赔率1.50给予了合理支持。然而，考虑到本场为国际友谊赛，主队面临阵容磨合与核心伤停，战意可能有所保留；而乌兹别克斯坦近期状态火热，具备较强的抗衡能力。总进球市场模态为2球，且4球赔率高于排除线，强烈暗示这是一场低比分赛事。在正确比分中，1-0以5.5的赔率位列全场最低，且符合主队小胜不穿盘的逻辑，因此将其作为首选。但鉴于1-1和0-0的平局赔率同样被压低，且缺乏临场首发和资金流数据，本场存在较大的平局风险，故推荐等级设为C，建议以观察为主。",
           "validation_warnings": [
             "protocol_risk_hint:sharp_alignment_low_and_direction_edge_not_strong",
-            "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
             "prematch_v2:prematch_v2_weak_home_win_draw_guard"
           ],
           "bayesian_evidences": [
@@ -1988,12 +1164,12 @@
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
             "final_model=gemini phase=final score=1-0 direction=home",
-            "anchor_audit:{\"zero_zero\":\"0-0赔率10.5，低于11，属于LOW档。由于加拿大实力占优且主场稳健，0-0作为次级防范，不作为首选。\",\"one_one\":\"1-1赔率7.5，是MID档平局首选，友谊赛试阵极易导致1-1，必须作为核心防范。\",\"one_zero\":\"1-0赔率5.5全场最低，符合加拿大一球小胜且不穿深盘的形态，是首选。\",\"zero_one\":\"0-1赔率12.5，客胜最低，但与主胜低赔簇差距大，仅作为极小概率冷门防范。\",\"two_one\":\"2-1赔率6.75，与2-0接近，但总进球2球（3.15）低于3球（3.5），且乌兹别克客场进球率一般，2-1略后置于1-0和2-0。\",\"one_two\":\"1-2赔率15.0，客队反打路径，概率较低，不予主推。\",\"high_score_tail\":\"3-1 (12.5) 和 2-2 (17.0) 有一定压缩，但4球赔率5.9高于排除线，大球受阻，不予考虑。\",\"handicap_cover\":\"让球-1.0，1-0和2-1等赢一球比分赔率极低，说明穿盘（2-0/3-0）阻力大，更倾向于赢一球或不胜。\"}",
-            "market_interpretation:{\"one_x_two\":\"竞彩主胜1.50，市场给予加拿大一定支持，但平赔3.58未完全拉高，防范平局意图明显。\",\"handicap\":\"让球-1.0，结合比分簇，1-0和2-0、2-1均低，说明市场倾向于加拿大最多赢一到两球，穿盘信心一般。\",\"correct_score\":\"1-0 (5.5) 全场最低，2-0 (6.5) 和 2-1 (6.75) 紧随其后，1-1 (7.5) 同样处于低赔区，呈现典型的小胜与低分平局并存格局。\",\"total_goals\":\"2球最低（3.15），3球次之（3.5），4球（5.9）高于排除线，大球概率低，锁定0-3球区间。\",\"half_full_time\":\"主/主（2.19）和平/主（3.65）靠前，说明主队全场赢球概率高，但平/平（5.6）也具备防范价值。\",\"external_market\":\"缺少外部即时欧亚盘口和交易所数据，仅能依据竞彩静态微结构进行研判。\"}",
-            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":10,\"reverse_line_movement\":false,\"steam_move\":\"none\",\"evidence\":\"大众投票偏向主胜（59%），竞彩主胜降水，但缺乏聪明钱确凿流入证据，且无即时赔率序列，无法确认RLM。\"}",
-            "contextual_logic:{\"league_style\":\"国际友谊赛，战意和阵容轮换影响大，进球生态偏保守和不稳定。\",\"team_style\":\"加拿大整体实力和身价占优，但锋线新星受伤，核心可能保留；乌兹别克近期状态火热，防守较好且战意足。\",\"tempo\":\"medium\",\"score_shape\":\"加拿大一球小胜或平局，低比分主导。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"high\"}",
+            "anchor_audit:{\"zero_zero\":\"0-0赔率10.5，处于警戒线内。未选原因为加拿大整体实力和主场优势仍占上风，且半全场主/主、平/主赔率更低，倾向于有进球产生。\",\"one_one\":\"1-1赔率7.5，是平局的核心防范点。未选原因为主胜赔率1.50优势较明显，但该比分是首要风险对冲项。\",\"one_zero\":\"1-0赔率5.5为全场最低，完美契合总进球小球带和友谊赛主队小胜不穿盘的逻辑。\",\"zero_one\":\"0-1赔率12.5，是客胜最低比分，说明客队有偷袭可能，但客胜整体赔率断层严重，不作为主线。\",\"two_one\":\"2-1赔率6.75，虽是主胜热门，但由于总进球4+受阻且BTTS达成需要客队进球，其优先级排在1-0和2-0之后。\",\"one_two\":\"1-2赔率15.0，属于客胜冷门尾部，在加拿大防线大意时可能发生，但概率较低。\",\"high_score_tail\":\"3-1（12.5）和2-2（17.0）有一定压缩，但4球总进球赔率5.9高于排除线，大球尾部缺乏实质支撑。\",\"handicap_cover\":\"让球-1下，主队赢一球（1-0、2-1）或不胜（1-1、0-0）的概率较高，穿盘（2-0、3-0）难度较大。\"}",
+            "market_interpretation:{\"one_x_two\":\"主胜1.50处于低位，加拿大作为明确热门，但平局3.58和客胜5.45并未完全排除冷门空间。\",\"handicap\":\"主让一球，公众投票中让负比例达40%，表明市场对主队穿盘信心不足，倾向于一球窄胜或不胜。\",\"correct_score\":\"1-0（5.5）、2-0（6.5）、2-1（6.75）构成主胜低赔簇，1-1（7.5）紧随其后，整体偏向低比分。\",\"total_goals\":\"2球赔率3.15为最底，4球赔率5.9高于排除线，预示本场为0-3球的小球格局。\",\"half_full_time\":\"主/主（2.19）和平/主（3.65）赔率最低，支持加拿大最终取胜，但前半场可能存在僵持。\",\"external_market\":\"暂无外部国际盘口及交易所成交数据，无法进行双轨偏斜度校准。\"}",
+            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"home\",\"evidence\":\"公众投票主胜比例59%，竞彩赔率主胜降水，资金与赔率变动一致，但缺乏职业资金（Sharp）确认信号。\"}",
+            "contextual_logic:{\"league_style\":\"国际友谊赛，战术开放度中等，试阵和轮换较多，进球数通常偏向保守。\",\"team_style\":\"加拿大主场稳健但面临核心伤停和阵容磨合；乌兹别克斯坦近期状态火热且战意更浓，防守端有一定韧性。\",\"tempo\":\"medium\",\"score_shape\":\"加拿大掌控主动但进攻效率受限，乌兹别克斯坦顽强抵抗，最终加拿大一球小胜或双方握手言和。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"high\"}",
             "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
-            "recommendation:{\"tier\":\"C\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":40,\"direction_stability\":\"medium\",\"score_stability\":\"weak\",\"risk_level\":\"medium\",\"risk_tags\":[\"友谊赛轮换风险\",\"伤停影响\",\"低分平局威胁\",\"缺乏外部盘口数据\"],\"bet_action\":\"observe\",\"why_this_can_fail\":[\"加拿大因试阵或核心缺阵导致进攻乏力，被乌兹别克1-1逼平或0-0闷平\",\"乌兹别克战意更足，反击得手打出0-1或1-2冷门\",\"加拿大早早进球并打出反击，比分走向2-0或2-1\"],\"minimum_evidence_needed\":[\"赛前双方确切的首发阵容和伤停名单\",\"外部主流博彩公司的即时让球盘口及水位变化\",\"临场资金流向和交易所成交数据\"],\"why_recommended\":\"由于是友谊赛且缺乏关键的外部即时数据和首发信息，不建议实买，建议临场观察。\"}"
+            "recommendation:{\"tier\":\"C\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":40,\"direction_stability\":\"medium\",\"score_stability\":\"weak\",\"risk_level\":\"medium\",\"risk_tags\":[\"友谊赛轮换风险\",\"低分平局威胁\",\"大球受阻\"],\"bet_action\":\"observe\",\"why_this_can_fail\":[\"加拿大如果大范围轮换且战意松懈，可能被乌兹别克斯坦逼平（0-0或1-1）。\",\"乌兹别克斯坦若反击效率超预期，可能反客为主取得进球，导致比分走向2-1或1-2。\"],\"minimum_evidence_needed\":[\"双方临场首发阵容，特别是加拿大核心球员的登场情况。\",\"外部主流博彩公司的即时亚盘及独赢赔率变动趋势。\"],\"why_recommended\":\"本场为友谊赛，主队加拿大虽实力占优但面临试阵和伤停，客队状态不俗。市场赔率和总进球模态指向低比分，1-0为主胜最合理落点，但平局风险极大，建议仅作观察，不宜重注。\"}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -2022,12 +1198,11 @@
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "大众投票偏向主胜（59%），竞彩主胜降水，但缺乏聪明钱确凿流入证据，且无即时赔率序列，无法确认RLM。",
+          "smart_money_signal": "公众投票主胜比例59%，竞彩赔率主胜降水，资金与赔率变动一致，但缺乏职业资金（Sharp）确认信号。",
           "smart_signals": [
             "友谊赛轮换风险",
-            "伤停影响",
             "低分平局威胁",
-            "缺乏外部盘口数据"
+            "大球受阻"
           ],
           "sharp_detected": false,
           "sharp_dir": "unclear",
@@ -2036,18 +1211,18 @@
           "sharp_audit": {
             "public_money_direction": "home",
             "sharp_money_direction": "unclear",
-            "sharp_confidence": 10,
+            "sharp_confidence": 0,
             "reverse_line_movement": false,
-            "steam_move": "none",
-            "evidence": "大众投票偏向主胜（59%），竞彩主胜降水，但缺乏聪明钱确凿流入证据，且无即时赔率序列，无法确认RLM。"
+            "steam_move": "home",
+            "evidence": "公众投票主胜比例59%，竞彩赔率主胜降水，资金与赔率变动一致，但缺乏职业资金（Sharp）确认信号。"
           },
           "score_market_evidence": {
-            "one_x_two": "竞彩主胜1.50，市场给予加拿大一定支持，但平赔3.58未完全拉高，防范平局意图明显。",
-            "handicap": "让球-1.0，结合比分簇，1-0和2-0、2-1均低，说明市场倾向于加拿大最多赢一到两球，穿盘信心一般。",
-            "correct_score": "1-0 (5.5) 全场最低，2-0 (6.5) 和 2-1 (6.75) 紧随其后，1-1 (7.5) 同样处于低赔区，呈现典型的小胜与低分平局并存格局。",
-            "total_goals": "2球最低（3.15），3球次之（3.5），4球（5.9）高于排除线，大球概率低，锁定0-3球区间。",
-            "half_full_time": "主/主（2.19）和平/主（3.65）靠前，说明主队全场赢球概率高，但平/平（5.6）也具备防范价值。",
-            "external_market": "缺少外部即时欧亚盘口和交易所数据，仅能依据竞彩静态微结构进行研判。"
+            "one_x_two": "主胜1.50处于低位，加拿大作为明确热门，但平局3.58和客胜5.45并未完全排除冷门空间。",
+            "handicap": "主让一球，公众投票中让负比例达40%，表明市场对主队穿盘信心不足，倾向于一球窄胜或不胜。",
+            "correct_score": "1-0（5.5）、2-0（6.5）、2-1（6.75）构成主胜低赔簇，1-1（7.5）紧随其后，整体偏向低比分。",
+            "total_goals": "2球赔率3.15为最底，4球赔率5.9高于排除线，预示本场为0-3球的小球格局。",
+            "half_full_time": "主/主（2.19）和平/主（3.65）赔率最低，支持加拿大最终取胜，但前半场可能存在僵持。",
+            "external_market": "暂无外部国际盘口及交易所成交数据，无法进行双轨偏斜度校准。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -2058,9 +1233,8 @@
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
               "友谊赛轮换风险",
-              "伤停影响",
               "低分平局威胁",
-              "缺乏外部盘口数据"
+              "大球受阻"
             ],
             "sharp_confirmed": false,
             "dark_verdict": ""
@@ -2075,17 +1249,17 @@
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
           "gpt_score": "1-0",
-          "gpt_analysis": "综合竞彩1X2、正确比分簇、总进球模态与半全场，市场主线是加拿大占优，但不是开放式大胜。1-0为全场最低比分，2-0、2-1和1-1紧随，显示主胜窄胜与低分平局并存；总进球4球赔率5.9高于大球排除线，压制4+主推。由于无法联网核验外部盘口和阵容，且国际友谊赛轮换风险较高，最终只给加拿大1-0的审计倾向，不给实买推荐。",
-          "grok_score": "1-0",
+          "gpt_analysis": "本场市场主线是加拿大主胜，但不是强穿盘结构。1X2主胜最低且主胜降水，正确比分前三位均为加拿大1-0、2-0、2-1，说明主胜方向成立；同时总进球模态为2球，4球赔率5.9高于排除线，压制了3-1、2-2、3-2等大球尾部。综合相邻比分审计，1-0作为全场最低比分且符合友谊赛低强度、小胜不穿盘逻辑，优先于2-0和2-1。但1-1、0-0处于低赔区，且无联网来源确认阵容与外部盘口，因此最终仅给出主胜1-0倾向，投注层面观察。",
+          "grok_score": "2-1",
           "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
           "gemini_score": "1-0",
-          "gemini_analysis": "加拿大整体实力占优，1-0为全场最低赔率比分，且总进球主模态在2球，大球受阻，故首选1-0。但鉴于友谊赛性质、加拿大伤停及乌兹别克不败状态，1-1平局和0-0闷平风险极大，且缺乏外部即时数据支持，故不作实买推荐，建议观察。",
+          "gemini_analysis": "综合分析，加拿大实力占优且主场作战，1X2主胜赔率1.50给予了合理支持。然而，考虑到本场为国际友谊赛，主队面临阵容磨合与核心伤停，战意可能有所保留；而乌兹别克斯坦近期状态火热，具备较强的抗衡能力。总进球市场模态为2球，且4球赔率高于排除线，强烈暗示这是一场低比分赛事。在正确比分中，1-0以5.5的赔率位列全场最低，且符合主队小胜不穿盘的逻辑，因此将其作为首选。但鉴于1-1和0-0的平局赔率同样被压低，且缺乏临场首发和资金流数据，本场存在较大的平局风险，故推荐等级设为C，建议以观察为主。",
           "final_referee_score": "1-0",
-          "final_referee_analysis": "加拿大整体实力占优，1-0为全场最低赔率比分，且总进球主模态在2球，大球受阻，故首选1-0。但鉴于友谊赛性质、加拿大伤停及乌兹别克不败状态，1-1平局和0-0闷平风险极大，且缺乏外部即时数据支持，故不作实买推荐，建议观察。",
+          "final_referee_analysis": "综合分析，加拿大实力占优且主场作战，1X2主胜赔率1.50给予了合理支持。然而，考虑到本场为国际友谊赛，主队面临阵容磨合与核心伤停，战意可能有所保留；而乌兹别克斯坦近期状态火热，具备较强的抗衡能力。总进球市场模态为2球，且4球赔率高于排除线，强烈暗示这是一场低比分赛事。在正确比分中，1-0以5.5的赔率位列全场最低，且符合主队小胜不穿盘的逻辑，因此将其作为首选。但鉴于1-1和0-0的平局赔率同样被压低，且缺乏临场首发和资金流数据，本场存在较大的平局风险，故推荐等级设为C，建议以观察为主。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
           "final_ai_score": "1-0",
-          "final_ai_analysis": "加拿大整体实力占优，1-0为全场最低赔率比分，且总进球主模态在2球，大球受阻，故首选1-0。但鉴于友谊赛性质、加拿大伤停及乌兹别克不败状态，1-1平局和0-0闷平风险极大，且缺乏外部即时数据支持，故不作实买推荐，建议观察。",
+          "final_ai_analysis": "综合分析，加拿大实力占优且主场作战，1X2主胜赔率1.50给予了合理支持。然而，考虑到本场为国际友谊赛，主队面临阵容磨合与核心伤停，战意可能有所保留；而乌兹别克斯坦近期状态火热，具备较强的抗衡能力。总进球市场模态为2球，且4球赔率高于排除线，强烈暗示这是一场低比分赛事。在正确比分中，1-0以5.5的赔率位列全场最低，且符合主队小胜不穿盘的逻辑，因此将其作为首选。但鉴于1-1和0-0的平局赔率同样被压低，且缺乏临场首发和资金流数据，本场存在较大的平局风险，故推荐等级设为C，建议以观察为主。",
           "ai_abstained": [],
           "ai_avg_confidence": 40.0,
           "ai_call_status": {
@@ -2095,18 +1269,20 @@
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 80.2,
+                "elapsed": 80.3,
                 "status": "ok"
               },
-              "last_status": "ok",
+              "last_status": "parse_failed",
               "model": "熊猫-特供-X-10-gpt-5.5",
               "consistency": {
-                "ok": true,
+                "ok": false,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "consistency",
-                "elapsed": 4.5,
-                "status": "ok"
+                "elapsed": 14.1,
+                "status": "parse_failed",
+                "parse_error": "empty_or_invalid_json_object",
+                "raw_excerpt": "{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[\"结构一致性检查通过：predicted_score=3-0 与 final_direction=home 一致；goal_band=3 与比分总进球3一致；btts=no 与3-0一致；top3[0]为 predicted_score；web_research.used=false，不要求外部sources；score_cluster_audit、sharp_money_audit、anchor_audit、recommendation_components 均存在；risk_score_cand"
               }
             },
             "grok": {
@@ -2115,10 +1291,10 @@
                 "ai_name": "grok",
                 "model": "熊猫-A-5-grok-4.2-fast-200w上下文",
                 "phase": "phase1",
-                "elapsed": 62.3,
+                "elapsed": 23.5,
                 "status": "parse_failed",
                 "parse_error": "empty_or_invalid_json_object",
-                "raw_excerpt": "<think>**Thinking about your request**"
+                "raw_excerpt": "```json\n{\"predictions\":[{\"match\":1,\"final_direction\":\"home\",\"predicted_score\":\"2-1\",\"direction_probs\":{\"home\":52,\"draw\":28,\"away\":20},\"goal_band\":\"3\",\"btts\":\"yes\",\"risk_score_candidates\":[{\"score\":\"1-2\",\"reason\":\"客队反击尾部\",\"reason\":\"客队状态低迷且防线漏洞，潜在反击机会，但赔率60.0高位压制；\",\"score\":\"3-2\",\"reason\":\"高分平局\",\"reaso"
               },
               "last_status": "parse_failed",
               "model": "熊猫-A-5-grok-4.2-fast-200w上下文"
@@ -2129,7 +1305,7 @@
                 "ai_name": "gemini",
                 "model": "熊猫-8-AS正向-gemini-3.5-flash",
                 "phase": "final",
-                "elapsed": 149.1,
+                "elapsed": 59.6,
                 "status": "ok"
               },
               "last_status": "ok",
@@ -2138,11 +1314,11 @@
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260601_191013_2m_4b633f9fbf12_哥伦比亚_哥斯达",
+            "run_id": "20260601_194210_2m_4b633f9fbf12_哥伦比亚_哥斯达",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 2,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260601_191013_2m_4b633f9fbf12_哥伦比亚_哥斯达_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260601_194210_2m_4b633f9fbf12_哥伦比亚_哥斯达_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -2150,18 +1326,20 @@
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 80.2,
+                  "elapsed": 80.3,
                   "status": "ok"
                 },
-                "last_status": "ok",
+                "last_status": "parse_failed",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "consistency": {
-                  "ok": true,
+                  "ok": false,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "consistency",
-                  "elapsed": 4.5,
-                  "status": "ok"
+                  "elapsed": 14.1,
+                  "status": "parse_failed",
+                  "parse_error": "empty_or_invalid_json_object",
+                  "raw_excerpt": "{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[\"结构一致性检查通过：predicted_score=3-0 与 final_direction=home 一致；goal_band=3 与比分总进球3一致；btts=no 与3-0一致；top3[0]为 predicted_score；web_research.used=false，不要求外部sources；score_cluster_audit、sharp_money_audit、anchor_audit、recommendation_components 均存在；risk_score_cand"
                 }
               },
               "grok": {
@@ -2170,10 +1348,10 @@
                   "ai_name": "grok",
                   "model": "熊猫-A-5-grok-4.2-fast-200w上下文",
                   "phase": "phase1",
-                  "elapsed": 62.3,
+                  "elapsed": 23.5,
                   "status": "parse_failed",
                   "parse_error": "empty_or_invalid_json_object",
-                  "raw_excerpt": "<think>**Thinking about your request**"
+                  "raw_excerpt": "```json\n{\"predictions\":[{\"match\":1,\"final_direction\":\"home\",\"predicted_score\":\"2-1\",\"direction_probs\":{\"home\":52,\"draw\":28,\"away\":20},\"goal_band\":\"3\",\"btts\":\"yes\",\"risk_score_candidates\":[{\"score\":\"1-2\",\"reason\":\"客队反击尾部\",\"reason\":\"客队状态低迷且防线漏洞，潜在反击机会，但赔率60.0高位压制；\",\"score\":\"3-2\",\"reason\":\"高分平局\",\"reaso"
                 },
                 "last_status": "parse_failed",
                 "model": "熊猫-A-5-grok-4.2-fast-200w上下文"
@@ -2184,7 +1362,7 @@
                   "ai_name": "gemini",
                   "model": "熊猫-8-AS正向-gemini-3.5-flash",
                   "phase": "final",
-                  "elapsed": 149.1,
+                  "elapsed": 59.6,
                   "status": "ok"
                 },
                 "last_status": "ok",
@@ -2238,76 +1416,81 @@
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
             "selected_cluster": "home_narrow",
-            "why_selected_score": "1-0是全场最低赔率比分，且总进球主模态在2球，4球大球受阻。在加拿大有伤停且友谊赛战意可能保留的背景下，一球窄胜最符合市场微结构。",
+            "why_selected_score": "1-0是全场最低赔率比分，且总进球市场强烈指向0-2球区间，在4+大球受阻的背景下，选择最稳健的主胜一球路径。",
             "adjacent_scores_checked": [
-              {
-                "score": "1-1",
-                "odds": 7.5,
-                "verdict": "keep",
-                "reason": "平局最低赔，友谊赛最大防范点"
-              },
               {
                 "score": "2-0",
                 "odds": 6.5,
                 "verdict": "near_miss",
-                "reason": "主胜第二低赔，若加拿大防守稳健则可能打出"
+                "reason": "赔率极低且符合2球模态，是主胜的强力备选。"
               },
               {
                 "score": "2-1",
                 "odds": 6.75,
                 "verdict": "near_miss",
-                "reason": "主胜第三低赔，若双方均有进球则此比分成立"
+                "reason": "虽然赔率低，但需要双方建功，在小球格局下优先级低于1-0和2-0。"
+              },
+              {
+                "score": "1-1",
+                "odds": 7.5,
+                "verdict": "keep",
+                "reason": "平局首选，作为主要防范路径保留。"
               },
               {
                 "score": "0-0",
                 "odds": 10.5,
                 "verdict": "keep",
-                "reason": "低于11的审计阈值，需防范闷平"
+                "reason": "闷平赔率较低，友谊赛节奏下必须防范。"
               }
             ],
-            "lowest_score_not_selected_reason": "最低比分1-0已被选为首选。"
+            "lowest_score_not_selected_reason": "1-0本身就是全场最低赔率比分，已被选为首选。"
           },
           "sharp_money_audit": {
             "available": false,
             "confirmed_sharp_direction": "unclear",
             "rlm_confirmed": false,
-            "vote_vs_odds_conflict": "大众投票主胜59%与赔率方向一致，无明显背离。",
-            "crs_change_impact": "无正确比分变动数据。",
-            "ttg_change_impact": "无总进球变动数据。"
+            "vote_vs_odds_conflict": "公众投票主胜59%与主胜降水方向一致，无明显反向走盘或诱盘特征。",
+            "crs_change_impact": "正确比分赔率无即时变动序列，静态上1-0、2-0、2-1形成主胜低赔簇。",
+            "ttg_change_impact": "总进球无即时变动序列，静态上2球模态最强，压制大球路径。"
           },
           "recommendation_components": {
             "direction_edge": 55,
-            "score_cluster_strength": 60,
-            "goal_band_strength": 65,
+            "score_cluster_strength": 65,
+            "goal_band_strength": 60,
             "btts_alignment": 55,
             "sharp_alignment": 10,
             "web_source_quality": 0,
-            "market_conflict_penalty": 20,
-            "final_grade_reason": "主胜方向和1-0比分有静态赔率支持，但友谊赛轮换风险极高，且加拿大有伤停，缺乏外部即时盘口和首发数据，故降为C级观察。"
+            "market_conflict_penalty": 25,
+            "final_grade_reason": "主胜窄胜簇和低总进球形态较为清晰，但由于是友谊赛且缺乏外部即时盘口、首发阵容及聪明钱数据，整体不确定性较高，故下调推荐等级。"
           },
           "risk_score_candidates": [
             {
               "score": "1-1",
-              "risk_type": "低分平局红灯",
-              "reason": "1-1赔率仅7.5，为平局最低。友谊赛试阵和轮换极易导致热门方进攻受阻，乌兹别克近期10场不败且战意充足，极易通过反击或定位球扳平。"
-            },
-            {
-              "score": "0-0",
-              "risk_type": "闷局红灯",
-              "reason": "0-0赔率10.5低于审计阈值。若加拿大锋线新星弗洛雷斯伤缺及核心戴维斯保留实力导致进攻乏力，双方可能闷平。"
+              "risk_type": "低分平局风险",
+              "reason": "1-1赔率7.5，是平局中的首选，若加拿大进攻受阻或进行大范围轮换，极易被逼平。"
             },
             {
               "score": "2-1",
               "risk_type": "主胜但丢球",
-              "reason": "2-1赔率6.75与2-0非常接近，若乌兹别克展现出较强战意并攻破加拿大防线，1-0将向2-1转化。"
+              "reason": "2-1赔率6.75，若乌兹别克斯坦利用反击打入一球，加拿大需要攻入两球才能取胜。"
+            },
+            {
+              "score": "0-0",
+              "risk_type": "闷平风险",
+              "reason": "0-0赔率10.5，友谊赛试阵可能导致双方节奏缓慢，缺乏破门良机。"
+            },
+            {
+              "score": "0-1",
+              "risk_type": "客队偷袭窄胜",
+              "reason": "0-1赔率12.5，乌兹别克斯坦战意充足，若加拿大防线大意可能遭遇冷门。"
             }
           ],
           "tail_risk_flags": [
-            "friendly_rotation_uncertainty",
-            "low_score_draw_cluster_pressure",
-            "home_favorite_one_goal_margin"
+            "friendly_rotation_risk",
+            "low_score_draw_cluster_compressed",
+            "home_favorite_no_cover_risk"
           ],
-          "confidence_downgrade_reason": "国际友谊赛战意和阵容轮换不确定性极高，且加拿大有核心伤停隐患，缺乏外部即时盘口和首发数据支持。",
+          "confidence_downgrade_reason": "国际友谊赛战意模糊，主队存在轮换和核心伤病隐患，且缺乏外部即时盘口和聪明钱资金流的有力支撑。",
           "protocol_risk_hints": [
             "sharp_alignment_low_and_direction_edge_not_strong"
           ],
@@ -2466,7 +1649,7 @@
               }
             },
             "web_used_with_sources": false,
-            "lineup_confirmed": false,
+            "lineup_confirmed": true,
             "money_flow": {
               "sharp": "unclear",
               "public": "home",
@@ -2475,21 +1658,15 @@
               "conflict": false,
               "reverse": false
             },
-            "data_quality_score": 33.8,
-            "edge_gap": 28.0,
-            "draw_probability_watch": 27.0,
+            "data_quality_score": 45.9,
+            "edge_gap": 33.0,
+            "draw_probability_watch": 25.0,
             "draw_cluster_present": true,
             "high_goal_tail_pct": 23.35,
             "rules_applied": [
-              "prematch_v2_rotation_risk_requires_lineup",
               "prematch_v2_weak_home_win_draw_guard"
             ],
             "risk_hints": [
-              {
-                "max_tier": "C",
-                "reason": "prematch_v2_rotation_risk_requires_lineup",
-                "tag": "prematch_v2_rotation_risk"
-              },
               {
                 "max_tier": "C",
                 "reason": "prematch_v2_weak_home_win_draw_guard",
