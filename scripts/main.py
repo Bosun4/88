@@ -15,8 +15,6 @@ from datetime import datetime, timedelta, timezone
 # ============================================================
 
 REQUIRED_PACKAGES = [
-    "penaltyblog",
-    "soccerdata",
     "aiohttp",
     "Requests>=2.32.0",
     "beautifulsoup4>=4.12.0",
