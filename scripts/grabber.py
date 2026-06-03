@@ -1,6 +1,6 @@
 """
 足球历史比赛数据抓取器 v1.0（专为你的 Ensemble 回测设计）
-直接生成 historical_matches.json，完全兼容 run_predictions + backtest_framework.py
+直接生成 historical_matches.json，供 run_predictions 使用
 
 来源：football-data.co.uk（完全免费、无API Key、稳定更新）
 支持：
@@ -63,7 +63,7 @@ def fetch_historical_matches():
     
     print(f"\n✅ 抓取完成！共 {len(all_matches)} 场历史比赛")
     print(f"   文件已保存：{output_file}")
-    print(f"   直接把这个文件路径丢给你的 backtest_framework.py 即可回测！")
+    print(f"   文件已生成，可供后续回溯审计脚本使用！")
     return all_matches
 
 
