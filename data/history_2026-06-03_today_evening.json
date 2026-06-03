@@ -1,848 +1,8 @@
 {
-  "update_time": "2026-06-03 20:18:27",
+  "update_time": "2026-06-03 21:02:10",
   "version": "MAX-v1.1",
   "scope": "today_only",
-  "top4": [
-    {
-      "rank": 1,
-      "home_team": "丹麦",
-      "away_team": "刚果金",
-      "league": "国际赛",
-      "match_num": "周三201",
-      "sp_home": 1.37,
-      "sp_draw": 3.9,
-      "sp_away": 7.0,
-      "give_ball": -1.0,
-      "change": {
-        "win": 1,
-        "same": -1,
-        "lose": -1
-      },
-      "vote": {
-        "win": "65",
-        "same": "23",
-        "lose": "12",
-        "hhad_win": "38",
-        "hhad_same": "29",
-        "hhad_lose": "33"
-      },
-      "odds_movement": "主胜升水，客胜降水",
-      "intelligence": {
-        "h_inj": "卡斯帕·舒梅切尔 受伤 肩部受伤",
-        "g_inj": "无",
-        "home_bad_news": "",
-        "guest_bad_news": ""
-      },
-      "expert_intro": "丹麦主场近5场不败且场均进球2.8个，进攻火力充足；刚果金虽近10场不败但客场面对欧洲球队时进攻效率偏低，此役重在防守演练。",
-      "baseface": "本场为国际友谊赛。目前主队FIFA排名第20位，客队排名第46位。主队实力明显高出一筹。\n\n主队丹麦近10场赛事6胜3平1负，状态良好；近5个主场3胜2平0负，主场状态出色。\n\n客队刚果民主共和国近10场赛事6胜4平0负，状态稳定；近5个客场2胜3平0负，客场状态稳健。\n\n综合来看，双方实力存在一定差距，主队整体实力更强。\n\n双方此前无历史交锋记录。\n\n机构普遍压低主胜指数，看好主队取胜。\n\n主队上半场领先的可能性为 60%\n主队近5场赛事主场的上半场: \n领先3，打平2，落后0丨3场有进球，0场有失球 \n客队近5场赛事客场的上半场: \n领先1，打平4，落后0丨2场有进球，1场有失球\n\n丹麦坐镇主场力求检验阵容，刚果金则希望在与欧洲强队交手中积累经验，双方均以考察球员和磨合战术为主要目标。",
-      "had_analyse": [
-        "win"
-      ],
-      "home_rank": 20,
-      "away_rank": 46,
-      "v2_odds_dict": {
-        "a0": 10.0,
-        "a1": 4.25,
-        "a2": 3.25,
-        "a3": 3.35,
-        "a4": 5.8,
-        "a5": 12.5,
-        "a6": 26.0,
-        "a7": 45.0,
-        "s00": 10.0,
-        "s11": 7.5,
-        "s22": 18.0,
-        "s33": 90.0,
-        "w10": 5.7,
-        "w20": 6.0,
-        "w21": 6.8,
-        "w30": 8.5,
-        "w31": 11.5,
-        "w32": 32.0,
-        "w40": 17.0,
-        "w41": 24.0,
-        "w42": 60.0,
-        "l01": 15.0,
-        "l02": 40.0,
-        "l12": 20.0,
-        "l03": 120.0,
-        "l13": 65.0,
-        "l23": 70.0,
-        "ss": 2.1,
-        "sp": 17.0,
-        "sf": 55.0,
-        "ps": 3.75,
-        "pp": 5.75,
-        "pf": 13.5,
-        "fs": 27.0,
-        "fp": 17.0,
-        "ff": 11.0
-      },
-      "id": 1,
-      "date": "2026-06-03",
-      "home_id": 0,
-      "away_id": 0,
-      "home_stats": {
-        "played": 25,
-        "wins": 12,
-        "draws": 6,
-        "losses": 7,
-        "goals_for": 33,
-        "goals_against": 26,
-        "avg_goals_for": "1.34",
-        "avg_goals_against": "1.02",
-        "clean_sheets": 4,
-        "form": "WDLWD"
-      },
-      "away_stats": {
-        "played": 25,
-        "wins": 5,
-        "draws": 6,
-        "losses": 14,
-        "goals_for": 15,
-        "goals_against": 43,
-        "avg_goals_for": "0.6",
-        "avg_goals_against": "1.73",
-        "clean_sheets": 2,
-        "form": "LLDLL"
-      },
-      "h2h": [],
-      "information": {},
-      "a0": 10.0,
-      "a1": 4.25,
-      "a2": 3.25,
-      "a3": 3.35,
-      "a4": 5.8,
-      "a5": 12.5,
-      "a6": 26.0,
-      "a7": 45.0,
-      "s00": 10.0,
-      "s11": 7.5,
-      "s22": 18.0,
-      "s33": 90.0,
-      "w10": 5.7,
-      "w20": 6.0,
-      "w21": 6.8,
-      "w30": 8.5,
-      "w31": 11.5,
-      "w32": 32.0,
-      "w40": 17.0,
-      "w41": 24.0,
-      "w42": 60.0,
-      "l01": 15.0,
-      "l02": 40.0,
-      "l12": 20.0,
-      "l03": 120.0,
-      "l13": 65.0,
-      "l23": 70.0,
-      "ss": 2.1,
-      "sp": 17.0,
-      "sf": 55.0,
-      "ps": 3.75,
-      "pp": 5.75,
-      "pf": 13.5,
-      "fs": 27.0,
-      "fp": 17.0,
-      "ff": 11.0,
-      "home": "丹麦",
-      "guest": "刚果金",
-      "change_is_direction_code": true,
-      "prediction": {
-        "predicted_score": "1-1",
-        "predicted_label": "1-1",
-        "result": "平局",
-        "display_direction": "平局",
-        "final_direction": "draw",
-        "raw_ai_direction": "draw",
-        "score_implied_direction": "draw",
-        "dir_score_conflict": false,
-        "is_abstain": false,
-        "is_score_others": false,
-        "home_win_pct": 40.0,
-        "draw_pct": 35.0,
-        "away_win_pct": 25.0,
-        "confidence": 65,
-        "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
-        "risk_level": "high",
-        "goal_band": "2",
-        "btts": "yes",
-        "btts_ai": "yes",
-        "both_score": "是",
-        "over_under_2_5": "小",
-        "expected_total_goals": 2,
-        "goal_range": [
-          1,
-          2
-        ],
-        "scenario": "ai_native_2_goals",
-        "recommendation": {
-          "tier": "B",
-          "is_recommended": true,
-          "top4_priority": 2,
-          "bet_confidence": 65,
-          "direction_stability": "medium",
-          "score_stability": "medium",
-          "risk_level": "high",
-          "risk_tags": [
-            "友谊赛战意不明",
-            "主队大热诱盘",
-            "客胜Steam资金"
-          ],
-          "bet_action": "small",
-          "why_this_can_fail": [
-            "丹麦硬实力碾压，若主力出战可能轻松打穿。",
-            "刚果金进攻过于乏力，导致0-0闷平或0-1落败。"
-          ],
-          "minimum_evidence_needed": [
-            "临场首发名单确认丹麦是否大幅轮换。"
-          ],
-          "why_recommended": "基于系统底层的量化背离探测，本场是典型的『大热必死』与『聪明钱反打』格局。放弃静态数理的主胜推荐，顺应资金流向抓下盘平局，博弈价值极高。"
-        },
-        "recommendation_tier": "B",
-        "recommend_gate_pass": true,
-        "recommend_gate_reasons": [],
-        "safe_top_gate_score": 65.0,
-        "overall_selection_score": 65.0,
-        "direction_selection_score": 65.0,
-        "score_shape_score": 65.0,
-        "direction_tier": "B",
-        "score_tier": "B",
-        "recommendation_downgrade_reasons": [],
-        "top_score_candidates": [
-          [
-            "1-1",
-            16.0
-          ],
-          [
-            "1-0",
-            15.0
-          ],
-          [
-            "0-0",
-            12.0
-          ]
-        ],
-        "unified_matrix_top_scores": [
-          [
-            "1-1",
-            16.0
-          ],
-          [
-            "1-0",
-            15.0
-          ],
-          [
-            "0-0",
-            12.0
-          ]
-        ],
-        "score_model_prob": 16.0,
-        "score_market_odds": 7.5,
-        "score_market_implied_pct": 13.333,
-        "anchor_audit": {
-          "zero_zero": "赔率10.0，低于11的警戒线，说明机构对闷平有实质性防范，友谊赛战意不足时极易打出。",
-          "one_one": "赔率7.5，为平局最低赔且全场第4低，在客队资金介入的背景下，是阻击主胜的最有力武器。",
-          "one_zero": "赔率5.7全场最低，是主队赢球输盘的底线，也是本场最大的防守面。",
-          "zero_one": "赔率15.0，客队最低比分，结合客胜Steam，不能完全排除客队偷袭得手的可能。",
-          "two_one": "赔率6.8，若主队强行打出，2-1是兼顾客队进球的路径，但不如1-1契合资金流向。",
-          "one_two": "赔率20.0，客队反打的高分路径，概率较低，主要防0-1或1-1。",
-          "high_score_tail": "4球以上赔率均较高（5.8起），大球阻力极大，不考虑3-1或2-2等高分比分。",
-          "handicap_cover": "让一球盘下，主队大热升水，穿盘（2-0/3-0）概率被极大压缩，更倾向于下盘（1-1/0-1）或走水（1-0）。"
-        },
-        "market_interpretation": {
-          "one_x_two": "主胜初始赔率极低，但临场出现主胜升水、客胜大幅降水的异常变动，且公众资金高度集中于主队，存在诱主嫌疑。",
-          "handicap": "让一球盘下，主队大热升水，穿盘阻力极大，需重点防范赢球输盘（1-0）或直接爆冷不胜（1-1/0-1）。",
-          "correct_score": "1-0为最低赔，但1-1（7.5）和0-0（10.0）的平局比分防范力度极强，结合资金流向，平局比分具备极高博弈价值。",
-          "total_goals": "2球（3.25）为最低赔，3球次之，4+大球赔率较高，比赛大概率在0-2球之间决出，支持1-1或1-0。",
-          "half_full_time": "主/主最低，但平/平（5.75）处于较低防范区间，半场若无法破局，全场平局概率大增。",
-          "external_market": "缺乏外部实时数据，但本地量化模型已捕捉到客胜Steam信号，需高度重视。"
-        },
-        "money_flow": {
-          "public_money_direction": "home",
-          "sharp_money_direction": "away",
-          "sharp_confidence": 80,
-          "reverse_line_movement": true,
-          "steam_move": "away",
-          "evidence": "公众65%投注主胜，但主胜赔率升水；量化情报明确指出『客胜Steam! 赔率降-1.00但散户未跟』，属于典型的聪明钱背离与反向线移动。"
-        },
-        "contextual_logic": {
-          "league_style": "国际友谊赛，球队往往以考察阵容和演练战术为主，战意模糊，强队易出冷门。",
-          "team_style": "丹麦实力占优但可能轮换；刚果金客场稳健，具备一定的防守韧性。",
-          "tempo": "low",
-          "score_shape": "主队控球但进攻效率受限，客队伺机反击，整体呈现低比分胶着态势。",
-          "btts_likelihood": "yes",
-          "rotation_risk": "high"
-        },
-        "rejected_cases": {
-          "home": "主队静态概率极高且公众大热，但临场赔率升水，遭遇客胜Steam资金狙击，存在典型的诱盘陷阱，故拒绝主推主胜。",
-          "draw": "未拒绝，1-1为首选。",
-          "away": "客胜虽有资金介入，但双方硬实力差距仍在，直接单挑客胜风险过高，平局是更稳妥的下盘落点。"
-        },
-        "web_research": {
-          "used": false,
-          "failure_reason": "no_web_tool_available",
-          "search_queries": [],
-          "sources": [],
-          "freshness_grade": "missing",
-          "key_findings": [],
-          "source_conflicts": [],
-          "validation_warnings": []
-        },
-        "final_web_audit": {
-          "web_used_by_final": false,
-          "decisive_web_evidence": [],
-          "ignored_web_evidence": [],
-          "web_confidence": 0
-        },
-        "data_quality": {
-          "missing": [
-            "实时首发",
-            "外部欧赔"
-          ],
-          "raw_packet_quality": "medium"
-        },
-        "ai_native_reason": "本场比赛静态数理模型极度看好丹麦（主胜概率69%），且公众投票主胜高达65%。然而，临场赔率却出现主胜升水、客胜大幅降水的异常走势，量化情报更是直接捕捉到『客胜Steam』信号（赔率降1.00但散户未跟）。这触发了最高裁判协议中的『数理与盘口背离探测』红线：庄家在利用主队名气正诱造热，实则暗中防范下盘。结合国际友谊赛极高的轮换风险与模糊战意，本场坚决不能盲从1-0/2-0的低赔主胜。总进球2球为最低赔模态，1-1（7.5）作为平局最低赔，完美契合下盘资金流向与低比分属性。因此，终审推翻前置主胜结论，强行反打下盘，主推1-1，防范1-0走水与0-0闷平。",
-        "validation_warnings": [
-          "prematch_v2:prematch_v2_structured_market_conflict_no_bet",
-          "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
-          "prematch_v2:prematch_v2_money_flow_conflict_no_bet"
-        ],
-        "bayesian_evidences": [
-          "AI-NATIVE：本地不做足球预测判断；方向、比分、Top4等级均来自 AI 输出。",
-          "ANCHOR-AUDIT：本地只提供0-0/1-1/总进球/让球盘/联赛风格事实锚点，AI必须在anchor_audit中解释。",
-          "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
-          "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
-          "final_model=gemini phase=final score=1-1 direction=draw",
-          "anchor_audit:{\"zero_zero\":\"赔率10.0，低于11的警戒线，说明机构对闷平有实质性防范，友谊赛战意不足时极易打出。\",\"one_one\":\"赔率7.5，为平局最低赔且全场第4低，在客队资金介入的背景下，是阻击主胜的最有力武器。\",\"one_zero\":\"赔率5.7全场最低，是主队赢球输盘的底线，也是本场最大的防守面。\",\"zero_one\":\"赔率15.0，客队最低比分，结合客胜Steam，不能完全排除客队偷袭得手的可能。\",\"two_one\":\"赔率6.8，若主队强行打出，2-1是兼顾客队进球的路径，但不如1-1契合资金流向。\",\"one_two\":\"赔率20.0，客队反打的高分路径，概率较低，主要防0-1或1-1。\",\"high_score_tail\":\"4球以上赔率均较高（5.8起），大球阻力极大，不考虑3-1或2-2等高分比分。\",\"handicap_cover\":\"让一球盘下，主队大热升水，穿盘（2-0/3-0）概率被极大压缩，更倾向于下盘（1-1/0-1）或走水（1-0）。\"}",
-          "market_interpretation:{\"one_x_two\":\"主胜初始赔率极低，但临场出现主胜升水、客胜大幅降水的异常变动，且公众资金高度集中于主队，存在诱主嫌疑。\",\"handicap\":\"让一球盘下，主队大热升水，穿盘阻力极大，需重点防范赢球输盘（1-0）或直接爆冷不胜（1-1/0-1）。\",\"correct_score\":\"1-0为最低赔，但1-1（7.5）和0-0（10.0）的平局比分防范力度极强，结合资金流向，平局比分具备极高博弈价值。\",\"total_goals\":\"2球（3.25）为最低赔，3球次之，4+大球赔率较高，比赛大概率在0-2球之间决出，支持1-1或1-0。\",\"half_full_time\":\"主/主最低，但平/平（5.75）处于较低防范区间，半场若无法破局，全场平局概率大增。\",\"external_market\":\"缺乏外部实时数据，但本地量化模型已捕捉到客胜Steam信号，需高度重视。\"}",
-          "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"away\",\"sharp_confidence\":80,\"reverse_line_movement\":true,\"steam_move\":\"away\",\"evidence\":\"公众65%投注主胜，但主胜赔率升水；量化情报明确指出『客胜Steam! 赔率降-1.00但散户未跟』，属于典型的聪明钱背离与反向线移动。\"}",
-          "contextual_logic:{\"league_style\":\"国际友谊赛，球队往往以考察阵容和演练战术为主，战意模糊，强队易出冷门。\",\"team_style\":\"丹麦实力占优但可能轮换；刚果金客场稳健，具备一定的防守韧性。\",\"tempo\":\"low\",\"score_shape\":\"主队控球但进攻效率受限，客队伺机反击，整体呈现低比分胶着态势。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"high\"}",
-          "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
-          "recommendation:{\"tier\":\"B\",\"is_recommended\":true,\"top4_priority\":2,\"bet_confidence\":65,\"direction_stability\":\"medium\",\"score_stability\":\"medium\",\"risk_level\":\"high\",\"risk_tags\":[\"友谊赛战意不明\",\"主队大热诱盘\",\"客胜Steam资金\"],\"bet_action\":\"small\",\"why_this_can_fail\":[\"丹麦硬实力碾压，若主力出战可能轻松打穿。\",\"刚果金进攻过于乏力，导致0-0闷平或0-1落败。\"],\"minimum_evidence_needed\":[\"临场首发名单确认丹麦是否大幅轮换。\"],\"why_recommended\":\"基于系统底层的量化背离探测，本场是典型的『大热必死』与『聪明钱反打』格局。放弃静态数理的主胜推荐，顺应资金流向抓下盘平局，博弈价值极高。\"}"
-        ],
-        "bayesian_prior": {},
-        "override_triggered": false,
-        "traps_detected": [],
-        "trap_count": 0,
-        "trap_severity": 0,
-        "trap_details": [],
-        "trap_flags": {},
-        "fair_1x2": {},
-        "fair_1x2_method": "disabled_ai_native_web",
-        "market_overround": 0.0,
-        "raw_implied_1x2": {},
-        "crs_shape": "raw_correct_score_odds_only_no_local_crs_matrix",
-        "crs_moments": {},
-        "crs_margin": 0.0,
-        "crs_coverage": 0.0,
-        "crs_implied_probs": {},
-        "crs_low_rank_info": {},
-        "unified_goal_probs": {},
-        "fair_1x2_pack": {},
-        "mixed_target_dir": {},
-        "unified_source": "ai_native_web_anchor_audit",
-        "decision_source": "ai_native:gemini:final",
-        "ai_authority_mode": "ai_native_web_no_local_football_judgement",
-        "ev_note": "disabled_local_ev_no_local_probability",
-        "suggested_kelly": 0.0,
-        "edge_vs_market": 0.0,
-        "is_value": false,
-        "smart_money_signal": "公众65%投注主胜，但主胜赔率升水；量化情报明确指出『客胜Steam! 赔率降-1.00但散户未跟』，属于典型的聪明钱背离与反向线移动。",
-        "smart_signals": [
-          "友谊赛战意不明",
-          "主队大热诱盘",
-          "客胜Steam资金"
-        ],
-        "sharp_detected": true,
-        "sharp_dir": "away",
-        "sharp_conflict": false,
-        "sharp_unresolved": false,
-        "sharp_audit": {
-          "public_money_direction": "home",
-          "sharp_money_direction": "away",
-          "sharp_confidence": 80,
-          "reverse_line_movement": true,
-          "steam_move": "away",
-          "evidence": "公众65%投注主胜，但主胜赔率升水；量化情报明确指出『客胜Steam! 赔率降-1.00但散户未跟』，属于典型的聪明钱背离与反向线移动。"
-        },
-        "score_market_evidence": {
-          "one_x_two": "主胜初始赔率极低，但临场出现主胜升水、客胜大幅降水的异常变动，且公众资金高度集中于主队，存在诱主嫌疑。",
-          "handicap": "让一球盘下，主队大热升水，穿盘阻力极大，需重点防范赢球输盘（1-0）或直接爆冷不胜（1-1/0-1）。",
-          "correct_score": "1-0为最低赔，但1-1（7.5）和0-0（10.0）的平局比分防范力度极强，结合资金流向，平局比分具备极高博弈价值。",
-          "total_goals": "2球（3.25）为最低赔，3球次之，4+大球赔率较高，比赛大概率在0-2球之间决出，支持1-1或1-0。",
-          "half_full_time": "主/主最低，但平/平（5.75）处于较低防范区间，半场若无法破局，全场平局概率大增。",
-          "external_market": "缺乏外部实时数据，但本地量化模型已捕捉到客胜Steam信号，需高度重视。"
-        },
-        "score_market_gate_pass": null,
-        "score_market_alignment": null,
-        "sharp_clearance_score": null,
-        "cold_door": {
-          "is_cold_door": false,
-          "strength": 0,
-          "level": "AI-native字段，不由本地判断冷门",
-          "signals": [
-            "友谊赛战意不明",
-            "主队大热诱盘",
-            "客胜Steam资金"
-          ],
-          "sharp_confirmed": true,
-          "dark_verdict": ""
-        },
-        "xG_home": "?",
-        "xG_away": "?",
-        "bookmaker_implied_home_xg": "?",
-        "bookmaker_implied_away_xg": "?",
-        "over_2_5": null,
-        "fair_dir": null,
-        "shin_dir": null,
-        "actual_handicap_signed": null,
-        "theoretical_handicap_signed": null,
-        "gpt_score": "2-0",
-        "gpt_analysis": "本场抓包市场把丹麦放在明确优势方：1X2主胜最低，正确比分前五中四个为主胜，半全场主/主最低。比分簇审计后，1-0虽为全场最低，但总进球最低模态为2球，2-0与1-0赔率非常接近，且更贴合让一球下的赢两球形态，因此以2-0作为赛前结构性首选。不过这不是强推：0-0和1-1均处低位，4球赔率又高于排除线，说明市场主轴是低到中低比分而非开放大球；同时主胜升水、客胜降水与友谊赛轮换不确定性削弱了主队低赔的可买性。由于无法联网核验外部赔率和阵容，本场应观察为主。",
-        "grok_score": "1-1",
-        "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
-        "gemini_score": "1-1",
-        "gemini_analysis": "本场比赛静态数理模型极度看好丹麦（主胜概率69%），且公众投票主胜高达65%。然而，临场赔率却出现主胜升水、客胜大幅降水的异常走势，量化情报更是直接捕捉到『客胜Steam』信号（赔率降1.00但散户未跟）。这触发了最高裁判协议中的『数理与盘口背离探测』红线：庄家在利用主队名气正诱造热，实则暗中防范下盘。结合国际友谊赛极高的轮换风险与模糊战意，本场坚决不能盲从1-0/2-0的低赔主胜。总进球2球为最低赔模态，1-1（7.5）作为平局最低赔，完美契合下盘资金流向与低比分属性。因此，终审推翻前置主胜结论，强行反打下盘，主推1-1，防范1-0走水与0-0闷平。",
-        "final_referee_score": "1-1",
-        "final_referee_analysis": "本场比赛静态数理模型极度看好丹麦（主胜概率69%），且公众投票主胜高达65%。然而，临场赔率却出现主胜升水、客胜大幅降水的异常走势，量化情报更是直接捕捉到『客胜Steam』信号（赔率降1.00但散户未跟）。这触发了最高裁判协议中的『数理与盘口背离探测』红线：庄家在利用主队名气正诱造热，实则暗中防范下盘。结合国际友谊赛极高的轮换风险与模糊战意，本场坚决不能盲从1-0/2-0的低赔主胜。总进球2球为最低赔模态，1-1（7.5）作为平局最低赔，完美契合下盘资金流向与低比分属性。因此，终审推翻前置主胜结论，强行反打下盘，主推1-1，防范1-0走水与0-0闷平。",
-        "claude_score": "弃用",
-        "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
-        "final_ai_score": "1-1",
-        "final_ai_analysis": "本场比赛静态数理模型极度看好丹麦（主胜概率69%），且公众投票主胜高达65%。然而，临场赔率却出现主胜升水、客胜大幅降水的异常走势，量化情报更是直接捕捉到『客胜Steam』信号（赔率降1.00但散户未跟）。这触发了最高裁判协议中的『数理与盘口背离探测』红线：庄家在利用主队名气正诱造热，实则暗中防范下盘。结合国际友谊赛极高的轮换风险与模糊战意，本场坚决不能盲从1-0/2-0的低赔主胜。总进球2球为最低赔模态，1-1（7.5）作为平局最低赔，完美契合下盘资金流向与低比分属性。因此，终审推翻前置主胜结论，强行反打下盘，主推1-1，防范1-0走水与0-0闷平。",
-        "ai_abstained": [],
-        "ai_avg_confidence": 65.0,
-        "ai_call_status": {
-          "gpt": {
-            "phase1": {
-              "ok": false,
-              "ai_name": "gpt",
-              "model": "熊猫-特供-X-10-gpt-5.5",
-              "phase": "phase1",
-              "elapsed": 125.2,
-              "status": "http_524",
-              "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
-            },
-            "last_status": "http_524",
-            "model": "熊猫-特供-X-10-gpt-5.5",
-            "consistency": {
-              "ok": false,
-              "ai_name": "gpt",
-              "model": "熊猫-特供-X-10-gpt-5.5",
-              "phase": "consistency",
-              "elapsed": 125.2,
-              "status": "http_524",
-              "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
-            }
-          },
-          "grok": {
-            "phase1": {
-              "ok": false,
-              "ai_name": "grok",
-              "model": "熊猫-X-10-grok-4.3",
-              "phase": "phase1",
-              "elapsed": 3.7,
-              "status": "http_403",
-              "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
-            },
-            "last_status": "http_403",
-            "model": "熊猫-X-10-grok-4.3"
-          },
-          "gemini": {
-            "final": {
-              "ok": true,
-              "ai_name": "gemini",
-              "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
-              "phase": "final",
-              "elapsed": 62.1,
-              "status": "ok"
-            },
-            "last_status": "ok",
-            "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
-          }
-        },
-        "ai_result_files": {},
-        "ai_run_metadata": {
-          "run_id": "20260603_121035_4m_047307b571a5_丹麦_刚果金",
-          "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
-          "chunk_count": 4,
-          "phase_result_dir": "data/ai_phase_results",
-          "aggregate_file": "data/ai_phase_results/20260603_121035_4m_047307b571a5_丹麦_刚果金_final_all_chunks.json",
-          "ai_call_status": {
-            "gpt": {
-              "phase1": {
-                "ok": false,
-                "ai_name": "gpt",
-                "model": "熊猫-特供-X-10-gpt-5.5",
-                "phase": "phase1",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
-              },
-              "last_status": "http_524",
-              "model": "熊猫-特供-X-10-gpt-5.5",
-              "consistency": {
-                "ok": false,
-                "ai_name": "gpt",
-                "model": "熊猫-特供-X-10-gpt-5.5",
-                "phase": "consistency",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
-              }
-            },
-            "grok": {
-              "phase1": {
-                "ok": false,
-                "ai_name": "grok",
-                "model": "熊猫-X-10-grok-4.3",
-                "phase": "phase1",
-                "elapsed": 3.7,
-                "status": "http_403",
-                "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
-              },
-              "last_status": "http_403",
-              "model": "熊猫-X-10-grok-4.3"
-            },
-            "gemini": {
-              "final": {
-                "ok": true,
-                "ai_name": "gemini",
-                "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
-                "phase": "final",
-                "elapsed": 62.1,
-                "status": "ok"
-              },
-              "last_status": "ok",
-              "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
-            }
-          },
-          "mock_mode": false,
-          "run_mode": "fast_batch",
-          "research_mode": "research",
-          "native_web": true,
-          "effective_chunk_size": 12,
-          "effective_chunk_concurrency": 3,
-          "effective_model_concurrency": 4,
-          "effective_phase1_parallel": true,
-          "cross_exam": false,
-          "consistency_judge": true
-        },
-        "model_consensus": null,
-        "total_models": 3,
-        "refined_poisson": {},
-        "poisson": {},
-        "elo": {},
-        "random_forest": {},
-        "gradient_boost": {},
-        "neural_net": {},
-        "logistic": {},
-        "svm": {},
-        "knn": {},
-        "dixon_coles": {},
-        "bradley_terry": {},
-        "home_form": {},
-        "away_form": {},
-        "handicap_signal": "",
-        "odds_movement": {},
-        "vote_analysis": {},
-        "h2h_blood": {},
-        "crs_analysis": {},
-        "ttg_analysis": {},
-        "halftime": {},
-        "pace_rating": "",
-        "kelly_home": {},
-        "kelly_away": {},
-        "odds": {},
-        "experience_analysis": {
-          "mode": "removed_no_local_experience_cards"
-        },
-        "pro_odds": {},
-        "asian_handicap_probs": {},
-        "top_scores": [],
-        "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
-        "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
-        "score_cluster_audit": {
-          "selected_cluster": "low_score_draw",
-          "why_selected_score": "静态数理模型极度看好主胜（69%），但临场主胜大热升水，客胜出现Steam级降水，触发了系统的『背离探测』红线。在友谊赛背景下，顺应聪明钱防范平局，1-1作为2球模态下的最低平局比分是最佳选择。",
-          "adjacent_scores_checked": [
-            {
-              "score": "1-0",
-              "odds": 5.7,
-              "verdict": "reject",
-              "reason": "虽为最低赔，但主队大热升水，存在诱盘陷阱，放弃作为首选。"
-            },
-            {
-              "score": "2-1",
-              "odds": 6.8,
-              "verdict": "reject",
-              "reason": "主胜方向，且总进球3球非第一模态，在客队资金介入下打出难度大。"
-            },
-            {
-              "score": "0-0",
-              "odds": 10.0,
-              "verdict": "near_miss",
-              "reason": "赔率低于11，防范力度大，是1-1的重要备选失败路径。"
-            },
-            {
-              "score": "0-1",
-              "odds": 15.0,
-              "verdict": "near_miss",
-              "reason": "客胜Steam的极端兑现路径，保留为冷门风险。"
-            }
-          ],
-          "lowest_score_not_selected_reason": "1-0是最低赔，但本场触发了『大热必死』与『客胜Steam』的量化预警，主胜升水背景下盲从最低赔极易落入庄家正诱陷阱，故选择1-1进行反打。"
-        },
-        "sharp_money_audit": {
-          "available": true,
-          "confirmed_sharp_direction": "away",
-          "rlm_confirmed": true,
-          "vote_vs_odds_conflict": "公众65%看好主队，但主胜升水，客胜降水，且有明确的客胜Steam信号，资金与赔率走势完全背离。",
-          "crs_change_impact": "无正确比分变化码，但平局比分整体处于低位防范区。",
-          "ttg_change_impact": "无总进球变化码，但2球模态支持1-1。"
-        },
-        "recommendation_components": {
-          "direction_edge": 75,
-          "score_cluster_strength": 70,
-          "goal_band_strength": 80,
-          "btts_alignment": 65,
-          "sharp_alignment": 90,
-          "web_source_quality": 0,
-          "market_conflict_penalty": 0,
-          "final_grade_reason": "本场触发了强烈的量化背离信号：主队大热升水，客队出现Steam资金介入。在友谊赛高轮换风险下，坚决反打下盘，首推1-1平局，防1-0。"
-        },
-        "risk_score_candidates": [
-          {
-            "score": "1-0",
-            "risk_type": "主队实力碾压小胜",
-            "reason": "若丹麦硬实力优势过大，即使轮换也能凭借个人能力一球小胜，这是最大的失败路径。"
-          },
-          {
-            "score": "0-0",
-            "risk_type": "友谊赛低节奏闷平",
-            "reason": "0-0赔率10.0处于低位，若双方进攻均无建树且战意不足，极易打出闷平。"
-          },
-          {
-            "score": "0-1",
-            "risk_type": "客队反击爆冷",
-            "reason": "客胜Steam资金的终极兑现路径，刚果金偷袭得手。"
-          }
-        ],
-        "tail_risk_flags": [
-          "home_favorite_water_up",
-          "friendly_rotation_uncertainty",
-          "away_steam_detected",
-          "zero_zero_anchor_active"
-        ],
-        "confidence_downgrade_reason": "友谊赛战意模糊，且主队大热升水触发背离预警，博取平局属于高风险高回报的反打策略，故下调信心。",
-        "matrix_direction_probs": {
-          "home": 69.26,
-          "draw": 20.42,
-          "away": 10.32
-        },
-        "matrix_top_scores": [
-          {
-            "score": "1-0",
-            "prob": 15.208
-          },
-          {
-            "score": "2-0",
-            "prob": 14.974
-          },
-          {
-            "score": "2-1",
-            "prob": 12.086
-          },
-          {
-            "score": "3-0",
-            "prob": 9.668
-          },
-          {
-            "score": "1-1",
-            "prob": 9.453
-          },
-          {
-            "score": "0-0",
-            "prob": 7.182
-          },
-          {
-            "score": "3-1",
-            "prob": 5.932
-          },
-          {
-            "score": "0-1",
-            "prob": 3.902
-          },
-          {
-            "score": "4-0",
-            "prob": 3.85
-          },
-          {
-            "score": "2-2",
-            "prob": 2.927
-          },
-          {
-            "score": "1-2",
-            "prob": 2.883
-          },
-          {
-            "score": "4-1",
-            "prob": 2.778
-          },
-          {
-            "score": "3-2",
-            "prob": 2.16
-          },
-          {
-            "score": "4-2",
-            "prob": 1.619
-          },
-          {
-            "score": "0-2",
-            "prob": 1.545
-          },
-          {
-            "score": "3-3",
-            "prob": 0.789
-          },
-          {
-            "score": "1-3",
-            "prob": 0.682
-          },
-          {
-            "score": "2-3",
-            "prob": 0.626
-          },
-          {
-            "score": "0-3",
-            "prob": 0.451
-          },
-          {
-            "score": "5-2",
-            "prob": 0.115
-          }
-        ],
-        "matrix_goal_probs": {
-          "0": 7.18,
-          "1": 19.11,
-          "2": 25.97,
-          "3": 25.09,
-          "4": 13.39,
-          "5": 5.56,
-          "6": 2.41,
-          "7": 1.29
-        },
-        "matrix_lambda_home": 1.778,
-        "matrix_lambda_away": 0.741,
-        "matrix_shape_verdict": "normal",
-        "matrix_recommended_score": "1-0",
-        "matrix_recommended_direction": "home",
-        "matrix_disagreement_flags": {
-          "matrix_vs_final_direction_conflict": true,
-          "matrix_high_goal_tail_conflict": false,
-          "matrix_away_tail_warning": false,
-          "matrix_draw_risk_warning": false,
-          "matrix_low_confidence_warning": false
-        },
-        "matrix_shadow_error": "",
-        "pre_match_factor_audit": {
-          "version": "v20.4_pre_match_factor_gate",
-          "league_dna": {
-            "key": "generic",
-            "volatility": "medium",
-            "draw_risk": "medium",
-            "btts": "medium",
-            "away_penalty": 0,
-            "notes": "未配置专属联赛DNA，按通用风险处理"
-          },
-          "match_context_flags": {
-            "cup_like": false,
-            "cross_region": false,
-            "rotation_risk": true,
-            "importance_unclear": false,
-            "name_favorite": true
-          },
-          "structured_factors": {
-            "version": "prematch_structured_v1",
-            "lineup_confirmed": false,
-            "lineup_predicted": false,
-            "lineup_unclear": true,
-            "rotation_risk": true,
-            "fatigue_risk": false,
-            "motivation_clear": false,
-            "motivation_unclear": true,
-            "critical_absence": false,
-            "weather_risk": false,
-            "referee_risk": true,
-            "market_confirmed": true,
-            "market_conflict": true,
-            "web_source_count": 0,
-            "structured_quality_score": 12,
-            "penalties": [
-              "lineup_unclear",
-              "rotation_risk",
-              "motivation_unclear",
-              "market_conflict",
-              "no_web_sources",
-              "referee_risk"
-            ],
-            "injury_summary": {
-              "home": "卡斯帕·舒梅切尔 受伤 肩部受伤",
-              "away": "无"
-            }
-          },
-          "web_used_with_sources": false,
-          "lineup_confirmed": false,
-          "money_flow": {
-            "sharp": "away",
-            "public": "home",
-            "sharp_clear": true,
-            "public_clear": true,
-            "conflict": true,
-            "reverse": true
-          },
-          "data_quality_score": 32.9,
-          "edge_gap": 5.0,
-          "draw_probability_watch": 35.0,
-          "draw_cluster_present": true,
-          "high_goal_tail_pct": 22.65,
-          "rules_applied": [
-            "prematch_v2_structured_market_conflict_no_bet",
-            "prematch_v2_rotation_risk_requires_lineup",
-            "prematch_v2_money_flow_conflict_no_bet"
-          ],
-          "risk_hints": [
-            {
-              "max_tier": "D",
-              "reason": "prematch_v2_structured_market_conflict_no_bet",
-              "tag": "prematch_v2_structured_market_conflict"
-            },
-            {
-              "max_tier": "C",
-              "reason": "prematch_v2_rotation_risk_requires_lineup",
-              "tag": "prematch_v2_rotation_risk"
-            },
-            {
-              "max_tier": "D",
-              "reason": "prematch_v2_money_flow_conflict_no_bet",
-              "tag": "prematch_v2_money_flow_conflict"
-            }
-          ]
-        },
-        "selection_layer": "放弃",
-        "selection_stake_unit": 0.0,
-        "selection_hedge_suggestions": [],
-        "selection_layer_reasons": [
-          "硬闸门触发"
-        ],
-        "selection_confirmation_bonus": 16,
-        "final_action": "放弃"
-      },
-      "is_top4_candidate": true,
-      "is_recommended": true,
-      "is_strict_recommended": true,
-      "fusion_summary": "vMAX-Dynamic-Hybrid"
-    }
-  ],
+  "top4": [],
   "matches": {
     "today": [
       {
@@ -999,10 +159,10 @@
           "dir_score_conflict": false,
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 40.0,
+          "home_win_pct": 45.0,
           "draw_pct": 35.0,
-          "away_win_pct": 25.0,
-          "confidence": 65,
+          "away_win_pct": 20.0,
+          "confidence": 30,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
           "risk_level": "high",
           "goal_band": "2",
@@ -1017,86 +177,92 @@
           ],
           "scenario": "ai_native_2_goals",
           "recommendation": {
-            "tier": "B",
-            "is_recommended": true,
-            "top4_priority": 2,
-            "bet_confidence": 65,
-            "direction_stability": "medium",
-            "score_stability": "medium",
+            "tier": "D",
+            "is_recommended": false,
+            "top4_priority": 0,
+            "bet_confidence": 30,
+            "direction_stability": "weak",
+            "score_stability": "weak",
             "risk_level": "high",
             "risk_tags": [
-              "友谊赛战意不明",
-              "主队大热诱盘",
-              "客胜Steam资金"
+              "大热必死",
+              "客胜Steam",
+              "友谊赛轮换",
+              "诱盘陷阱"
             ],
-            "bet_action": "small",
+            "bet_action": "no_bet",
             "why_this_can_fail": [
-              "丹麦硬实力碾压，若主力出战可能轻松打穿。",
-              "刚果金进攻过于乏力，导致0-0闷平或0-1落败。"
+              "丹麦实力碾压，无视资金流强行打穿。",
+              "客队防线崩溃，早早丢球导致大败。"
             ],
             "minimum_evidence_needed": [
-              "临场首发名单确认丹麦是否大幅轮换。"
+              "外部主流机构的临场赔率走势",
+              "双方首发阵容的轮换幅度"
             ],
-            "why_recommended": "基于系统底层的量化背离探测，本场是典型的『大热必死』与『聪明钱反打』格局。放弃静态数理的主胜推荐，顺应资金流向抓下盘平局，博弈价值极高。"
+            "why_recommended": "量化系统捕捉到严重的资金背离与诱盘信号，主队极度危险，但友谊赛变数太大，建议放弃本场。"
           },
-          "recommendation_tier": "B",
-          "recommend_gate_pass": true,
-          "recommend_gate_reasons": [],
-          "safe_top_gate_score": 65.0,
-          "overall_selection_score": 65.0,
-          "direction_selection_score": 65.0,
-          "score_shape_score": 65.0,
-          "direction_tier": "B",
-          "score_tier": "B",
+          "recommendation_tier": "D",
+          "recommend_gate_pass": false,
+          "recommend_gate_reasons": [
+            "ai_not_recommended_or_below_min_tier_or_v203_component_downgrade",
+            "ai_not_recommended_or_two_one_tail_gate",
+            "prematch_v2_risk_hints_present"
+          ],
+          "safe_top_gate_score": 30.0,
+          "overall_selection_score": 30.0,
+          "direction_selection_score": 30.0,
+          "score_shape_score": 30.0,
+          "direction_tier": "D",
+          "score_tier": "D",
           "recommendation_downgrade_reasons": [],
           "top_score_candidates": [
             [
               "1-1",
-              16.0
-            ],
-            [
-              "1-0",
               15.0
             ],
             [
+              "1-0",
+              14.0
+            ],
+            [
               "0-0",
-              12.0
+              10.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
               "1-1",
-              16.0
-            ],
-            [
-              "1-0",
               15.0
             ],
             [
+              "1-0",
+              14.0
+            ],
+            [
               "0-0",
-              12.0
+              10.0
             ]
           ],
-          "score_model_prob": 16.0,
+          "score_model_prob": 15.0,
           "score_market_odds": 7.5,
           "score_market_implied_pct": 13.333,
           "anchor_audit": {
-            "zero_zero": "赔率10.0，低于11的警戒线，说明机构对闷平有实质性防范，友谊赛战意不足时极易打出。",
-            "one_one": "赔率7.5，为平局最低赔且全场第4低，在客队资金介入的背景下，是阻击主胜的最有力武器。",
-            "one_zero": "赔率5.7全场最低，是主队赢球输盘的底线，也是本场最大的防守面。",
-            "zero_one": "赔率15.0，客队最低比分，结合客胜Steam，不能完全排除客队偷袭得手的可能。",
-            "two_one": "赔率6.8，若主队强行打出，2-1是兼顾客队进球的路径，但不如1-1契合资金流向。",
-            "one_two": "赔率20.0，客队反打的高分路径，概率较低，主要防0-1或1-1。",
-            "high_score_tail": "4球以上赔率均较高（5.8起），大球阻力极大，不考虑3-1或2-2等高分比分。",
-            "handicap_cover": "让一球盘下，主队大热升水，穿盘（2-0/3-0）概率被极大压缩，更倾向于下盘（1-1/0-1）或走水（1-0）。"
+            "zero_zero": "10.0低于11的警戒线，友谊赛闷局风险极高，必须作为核心防范比分。",
+            "one_one": "7.5为平局最低赔，在客胜资金异动背景下，是最合理的冷门落位点。",
+            "one_zero": "5.7全场最低，是庄家用来吸引散户的正路诱饵，在背离模型下需谨慎对待。",
+            "zero_one": "15.0客胜最低，虽然较高，但有Steam信号支撑，不能完全排除。",
+            "two_one": "6.8处于低位，但需要主队在受阻情况下依然取胜，性价比极低。",
+            "one_two": "20.0，客队反击进两球难度较大，0-1或1-1更符合客队定位。",
+            "high_score_tail": "4球以上赔率高企，大比分对攻概率极低。",
+            "handicap_cover": "主让一球，下盘（平局或客胜）在资金流背离下极具博弈价值。"
           },
           "market_interpretation": {
-            "one_x_two": "主胜初始赔率极低，但临场出现主胜升水、客胜大幅降水的异常变动，且公众资金高度集中于主队，存在诱主嫌疑。",
-            "handicap": "让一球盘下，主队大热升水，穿盘阻力极大，需重点防范赢球输盘（1-0）或直接爆冷不胜（1-1/0-1）。",
-            "correct_score": "1-0为最低赔，但1-1（7.5）和0-0（10.0）的平局比分防范力度极强，结合资金流向，平局比分具备极高博弈价值。",
-            "total_goals": "2球（3.25）为最低赔，3球次之，4+大球赔率较高，比赛大概率在0-2球之间决出，支持1-1或1-0。",
-            "half_full_time": "主/主最低，但平/平（5.75）处于较低防范区间，半场若无法破局，全场平局概率大增。",
-            "external_market": "缺乏外部实时数据，但本地量化模型已捕捉到客胜Steam信号，需高度重视。"
+            "one_x_two": "主胜1.37看似稳固，但临场主胜升水、客胜降水，且大众投票65%集中在主胜，形成典型的造热诱盘结构。",
+            "handicap": "主让一球，但结合客胜Steam信号，主队穿盘概率极低，甚至赢球都存在风险，下盘空间巨大。",
+            "correct_score": "1-0和2-0虽为最低赔，但1-1(7.5)和0-0(10.0)的平局赔率防范力度很强，并未拉开安全距离。",
+            "total_goals": "2球(3.25)为最低赔，3球(3.35)次之，4球(5.8)形成阻力，比赛大概率在0-3球区间，不支持大开大合。",
+            "half_full_time": "主/主2.1最低，但平/平5.75和平/主3.75也受到防范，上半场可能难以打破僵局。",
+            "external_market": "缺乏外部实时盘口，但本地量化模型已捕捉到客胜方向的异常资金异动。"
           },
           "money_flow": {
             "public_money_direction": "home",
@@ -1104,20 +270,20 @@
             "sharp_confidence": 80,
             "reverse_line_movement": true,
             "steam_move": "away",
-            "evidence": "公众65%投注主胜，但主胜赔率升水；量化情报明确指出『客胜Steam! 赔率降-1.00但散户未跟』，属于典型的聪明钱背离与反向线移动。"
+            "evidence": "大众投票65%看好主胜，但量化情报系统触发了强度为10的『客胜Steam』信号，客胜赔率大幅下降且散户未跟进，形成明显的聪明钱背离。"
           },
           "contextual_logic": {
-            "league_style": "国际友谊赛，球队往往以考察阵容和演练战术为主，战意模糊，强队易出冷门。",
-            "team_style": "丹麦实力占优但可能轮换；刚果金客场稳健，具备一定的防守韧性。",
-            "tempo": "low",
-            "score_shape": "主队控球但进攻效率受限，客队伺机反击，整体呈现低比分胶着态势。",
+            "league_style": "国际友谊赛，战意模糊，轮换频繁，极易出现冷门或默契平局。",
+            "team_style": "丹麦实力占优但可能演练阵容；刚果金客场重防守，有能力逼平强敌。",
+            "tempo": "medium",
+            "score_shape": "主队控球但进攻受阻，客队反击偷袭或死守，最终形成低比分僵局。",
             "btts_likelihood": "yes",
             "rotation_risk": "high"
           },
           "rejected_cases": {
-            "home": "主队静态概率极高且公众大热，但临场赔率升水，遭遇客胜Steam资金狙击，存在典型的诱盘陷阱，故拒绝主推主胜。",
-            "draw": "未拒绝，1-1为首选。",
-            "away": "客胜虽有资金介入，但双方硬实力差距仍在，直接单挑客胜风险过高，平局是更稳妥的下盘落点。"
+            "home": "主胜大热且赔率升水，触发量化背离预警，坚决不作为主推。",
+            "draw": "未拒绝，作为首选。",
+            "away": "客胜有资金支持，但实力差距客观存在，0-1作为次选风险，1-1更为稳妥。"
           },
           "web_research": {
             "used": false,
@@ -1137,13 +303,15 @@
           },
           "data_quality": {
             "missing": [
-              "实时首发",
-              "外部欧赔"
+              "外部欧赔",
+              "首发阵容"
             ],
             "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "本场比赛静态数理模型极度看好丹麦（主胜概率69%），且公众投票主胜高达65%。然而，临场赔率却出现主胜升水、客胜大幅降水的异常走势，量化情报更是直接捕捉到『客胜Steam』信号（赔率降1.00但散户未跟）。这触发了最高裁判协议中的『数理与盘口背离探测』红线：庄家在利用主队名气正诱造热，实则暗中防范下盘。结合国际友谊赛极高的轮换风险与模糊战意，本场坚决不能盲从1-0/2-0的低赔主胜。总进球2球为最低赔模态，1-1（7.5）作为平局最低赔，完美契合下盘资金流向与低比分属性。因此，终审推翻前置主胜结论，强行反打下盘，主推1-1，防范1-0走水与0-0闷平。",
+          "ai_native_reason": "本场比赛静态数理极度看好主队（69%），且大众投票（65%）高度集中于主胜。然而，临场赔率出现主胜升水、客胜降水的反常走势，且本地量化情报系统触发了强度极高的『客胜Steam』与『大热必死』信号。这构成了典型的『数理与盘口背离』诱盘陷阱。根据最高裁判协议，必须终结聪明钱背离，反打下盘或放弃。结合友谊赛的高轮换风险与总进球2球的主模态，预测1-1平局，但因缺乏外部核验，评级降为D，建议坚决观望。",
           "validation_warnings": [
+            "protocol_risk_hint:score_cluster_strength_below_55",
+            "protocol_risk_hint:direction_edge_below_55",
             "prematch_v2:prematch_v2_structured_market_conflict_no_bet",
             "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
             "prematch_v2:prematch_v2_money_flow_conflict_no_bet"
@@ -1154,12 +322,12 @@
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
             "final_model=gemini phase=final score=1-1 direction=draw",
-            "anchor_audit:{\"zero_zero\":\"赔率10.0，低于11的警戒线，说明机构对闷平有实质性防范，友谊赛战意不足时极易打出。\",\"one_one\":\"赔率7.5，为平局最低赔且全场第4低，在客队资金介入的背景下，是阻击主胜的最有力武器。\",\"one_zero\":\"赔率5.7全场最低，是主队赢球输盘的底线，也是本场最大的防守面。\",\"zero_one\":\"赔率15.0，客队最低比分，结合客胜Steam，不能完全排除客队偷袭得手的可能。\",\"two_one\":\"赔率6.8，若主队强行打出，2-1是兼顾客队进球的路径，但不如1-1契合资金流向。\",\"one_two\":\"赔率20.0，客队反打的高分路径，概率较低，主要防0-1或1-1。\",\"high_score_tail\":\"4球以上赔率均较高（5.8起），大球阻力极大，不考虑3-1或2-2等高分比分。\",\"handicap_cover\":\"让一球盘下，主队大热升水，穿盘（2-0/3-0）概率被极大压缩，更倾向于下盘（1-1/0-1）或走水（1-0）。\"}",
-            "market_interpretation:{\"one_x_two\":\"主胜初始赔率极低，但临场出现主胜升水、客胜大幅降水的异常变动，且公众资金高度集中于主队，存在诱主嫌疑。\",\"handicap\":\"让一球盘下，主队大热升水，穿盘阻力极大，需重点防范赢球输盘（1-0）或直接爆冷不胜（1-1/0-1）。\",\"correct_score\":\"1-0为最低赔，但1-1（7.5）和0-0（10.0）的平局比分防范力度极强，结合资金流向，平局比分具备极高博弈价值。\",\"total_goals\":\"2球（3.25）为最低赔，3球次之，4+大球赔率较高，比赛大概率在0-2球之间决出，支持1-1或1-0。\",\"half_full_time\":\"主/主最低，但平/平（5.75）处于较低防范区间，半场若无法破局，全场平局概率大增。\",\"external_market\":\"缺乏外部实时数据，但本地量化模型已捕捉到客胜Steam信号，需高度重视。\"}",
-            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"away\",\"sharp_confidence\":80,\"reverse_line_movement\":true,\"steam_move\":\"away\",\"evidence\":\"公众65%投注主胜，但主胜赔率升水；量化情报明确指出『客胜Steam! 赔率降-1.00但散户未跟』，属于典型的聪明钱背离与反向线移动。\"}",
-            "contextual_logic:{\"league_style\":\"国际友谊赛，球队往往以考察阵容和演练战术为主，战意模糊，强队易出冷门。\",\"team_style\":\"丹麦实力占优但可能轮换；刚果金客场稳健，具备一定的防守韧性。\",\"tempo\":\"low\",\"score_shape\":\"主队控球但进攻效率受限，客队伺机反击，整体呈现低比分胶着态势。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"high\"}",
+            "anchor_audit:{\"zero_zero\":\"10.0低于11的警戒线，友谊赛闷局风险极高，必须作为核心防范比分。\",\"one_one\":\"7.5为平局最低赔，在客胜资金异动背景下，是最合理的冷门落位点。\",\"one_zero\":\"5.7全场最低，是庄家用来吸引散户的正路诱饵，在背离模型下需谨慎对待。\",\"zero_one\":\"15.0客胜最低，虽然较高，但有Steam信号支撑，不能完全排除。\",\"two_one\":\"6.8处于低位，但需要主队在受阻情况下依然取胜，性价比极低。\",\"one_two\":\"20.0，客队反击进两球难度较大，0-1或1-1更符合客队定位。\",\"high_score_tail\":\"4球以上赔率高企，大比分对攻概率极低。\",\"handicap_cover\":\"主让一球，下盘（平局或客胜）在资金流背离下极具博弈价值。\"}",
+            "market_interpretation:{\"one_x_two\":\"主胜1.37看似稳固，但临场主胜升水、客胜降水，且大众投票65%集中在主胜，形成典型的造热诱盘结构。\",\"handicap\":\"主让一球，但结合客胜Steam信号，主队穿盘概率极低，甚至赢球都存在风险，下盘空间巨大。\",\"correct_score\":\"1-0和2-0虽为最低赔，但1-1(7.5)和0-0(10.0)的平局赔率防范力度很强，并未拉开安全距离。\",\"total_goals\":\"2球(3.25)为最低赔，3球(3.35)次之，4球(5.8)形成阻力，比赛大概率在0-3球区间，不支持大开大合。\",\"half_full_time\":\"主/主2.1最低，但平/平5.75和平/主3.75也受到防范，上半场可能难以打破僵局。\",\"external_market\":\"缺乏外部实时盘口，但本地量化模型已捕捉到客胜方向的异常资金异动。\"}",
+            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"away\",\"sharp_confidence\":80,\"reverse_line_movement\":true,\"steam_move\":\"away\",\"evidence\":\"大众投票65%看好主胜，但量化情报系统触发了强度为10的『客胜Steam』信号，客胜赔率大幅下降且散户未跟进，形成明显的聪明钱背离。\"}",
+            "contextual_logic:{\"league_style\":\"国际友谊赛，战意模糊，轮换频繁，极易出现冷门或默契平局。\",\"team_style\":\"丹麦实力占优但可能演练阵容；刚果金客场重防守，有能力逼平强敌。\",\"tempo\":\"medium\",\"score_shape\":\"主队控球但进攻受阻，客队反击偷袭或死守，最终形成低比分僵局。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"high\"}",
             "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
-            "recommendation:{\"tier\":\"B\",\"is_recommended\":true,\"top4_priority\":2,\"bet_confidence\":65,\"direction_stability\":\"medium\",\"score_stability\":\"medium\",\"risk_level\":\"high\",\"risk_tags\":[\"友谊赛战意不明\",\"主队大热诱盘\",\"客胜Steam资金\"],\"bet_action\":\"small\",\"why_this_can_fail\":[\"丹麦硬实力碾压，若主力出战可能轻松打穿。\",\"刚果金进攻过于乏力，导致0-0闷平或0-1落败。\"],\"minimum_evidence_needed\":[\"临场首发名单确认丹麦是否大幅轮换。\"],\"why_recommended\":\"基于系统底层的量化背离探测，本场是典型的『大热必死』与『聪明钱反打』格局。放弃静态数理的主胜推荐，顺应资金流向抓下盘平局，博弈价值极高。\"}"
+            "recommendation:{\"tier\":\"D\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":30,\"direction_stability\":\"weak\",\"score_stability\":\"weak\",\"risk_level\":\"high\",\"risk_tags\":[\"大热必死\",\"客胜Steam\",\"友谊赛轮换\",\"诱盘陷阱\"],\"bet_action\":\"no_bet\",\"why_this_can_fail\":[\"丹麦实力碾压，无视资金流强行打穿。\",\"客队防线崩溃，早早丢球导致大败。\"],\"minimum_evidence_needed\":[\"外部主流机构的临场赔率走势\",\"双方首发阵容的轮换幅度\"],\"why_recommended\":\"量化系统捕捉到严重的资金背离与诱盘信号，主队极度危险，但友谊赛变数太大，建议放弃本场。\"}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -1188,11 +356,12 @@
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "公众65%投注主胜，但主胜赔率升水；量化情报明确指出『客胜Steam! 赔率降-1.00但散户未跟』，属于典型的聪明钱背离与反向线移动。",
+          "smart_money_signal": "大众投票65%看好主胜，但量化情报系统触发了强度为10的『客胜Steam』信号，客胜赔率大幅下降且散户未跟进，形成明显的聪明钱背离。",
           "smart_signals": [
-            "友谊赛战意不明",
-            "主队大热诱盘",
-            "客胜Steam资金"
+            "大热必死",
+            "客胜Steam",
+            "友谊赛轮换",
+            "诱盘陷阱"
           ],
           "sharp_detected": true,
           "sharp_dir": "away",
@@ -1204,15 +373,15 @@
             "sharp_confidence": 80,
             "reverse_line_movement": true,
             "steam_move": "away",
-            "evidence": "公众65%投注主胜，但主胜赔率升水；量化情报明确指出『客胜Steam! 赔率降-1.00但散户未跟』，属于典型的聪明钱背离与反向线移动。"
+            "evidence": "大众投票65%看好主胜，但量化情报系统触发了强度为10的『客胜Steam』信号，客胜赔率大幅下降且散户未跟进，形成明显的聪明钱背离。"
           },
           "score_market_evidence": {
-            "one_x_two": "主胜初始赔率极低，但临场出现主胜升水、客胜大幅降水的异常变动，且公众资金高度集中于主队，存在诱主嫌疑。",
-            "handicap": "让一球盘下，主队大热升水，穿盘阻力极大，需重点防范赢球输盘（1-0）或直接爆冷不胜（1-1/0-1）。",
-            "correct_score": "1-0为最低赔，但1-1（7.5）和0-0（10.0）的平局比分防范力度极强，结合资金流向，平局比分具备极高博弈价值。",
-            "total_goals": "2球（3.25）为最低赔，3球次之，4+大球赔率较高，比赛大概率在0-2球之间决出，支持1-1或1-0。",
-            "half_full_time": "主/主最低，但平/平（5.75）处于较低防范区间，半场若无法破局，全场平局概率大增。",
-            "external_market": "缺乏外部实时数据，但本地量化模型已捕捉到客胜Steam信号，需高度重视。"
+            "one_x_two": "主胜1.37看似稳固，但临场主胜升水、客胜降水，且大众投票65%集中在主胜，形成典型的造热诱盘结构。",
+            "handicap": "主让一球，但结合客胜Steam信号，主队穿盘概率极低，甚至赢球都存在风险，下盘空间巨大。",
+            "correct_score": "1-0和2-0虽为最低赔，但1-1(7.5)和0-0(10.0)的平局赔率防范力度很强，并未拉开安全距离。",
+            "total_goals": "2球(3.25)为最低赔，3球(3.35)次之，4球(5.8)形成阻力，比赛大概率在0-3球区间，不支持大开大合。",
+            "half_full_time": "主/主2.1最低，但平/平5.75和平/主3.75也受到防范，上半场可能难以打破僵局。",
+            "external_market": "缺乏外部实时盘口，但本地量化模型已捕捉到客胜方向的异常资金异动。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -1222,9 +391,10 @@
             "strength": 0,
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
-              "友谊赛战意不明",
-              "主队大热诱盘",
-              "客胜Steam资金"
+              "大热必死",
+              "客胜Steam",
+              "友谊赛轮换",
+              "诱盘陷阱"
             ],
             "sharp_confirmed": true,
             "dark_verdict": ""
@@ -1238,41 +408,47 @@
           "shin_dir": null,
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
-          "gpt_score": "2-0",
-          "gpt_analysis": "本场抓包市场把丹麦放在明确优势方：1X2主胜最低，正确比分前五中四个为主胜，半全场主/主最低。比分簇审计后，1-0虽为全场最低，但总进球最低模态为2球，2-0与1-0赔率非常接近，且更贴合让一球下的赢两球形态，因此以2-0作为赛前结构性首选。不过这不是强推：0-0和1-1均处低位，4球赔率又高于排除线，说明市场主轴是低到中低比分而非开放大球；同时主胜升水、客胜降水与友谊赛轮换不确定性削弱了主队低赔的可买性。由于无法联网核验外部赔率和阵容，本场应观察为主。",
+          "gpt_score": "1-0",
+          "gpt_analysis": "本场市场主轴是丹麦低赔主胜，但正确比分和总进球并不支持开放大胜：1-0、2-0、2-1构成主胜低比分簇，1-1与0-0也在低赔审计区，4球以上总进球赔率5.8形成明显阻力。结合国际友谊赛轮换和节奏不稳定，最终倾向丹麦1-0小胜；但由于无法联网核验外部盘口、阵容和资金，且存在主胜升水、客胜降水的结构性警报，本场应观察而非推荐。",
           "grok_score": "1-1",
           "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
           "gemini_score": "1-1",
-          "gemini_analysis": "本场比赛静态数理模型极度看好丹麦（主胜概率69%），且公众投票主胜高达65%。然而，临场赔率却出现主胜升水、客胜大幅降水的异常走势，量化情报更是直接捕捉到『客胜Steam』信号（赔率降1.00但散户未跟）。这触发了最高裁判协议中的『数理与盘口背离探测』红线：庄家在利用主队名气正诱造热，实则暗中防范下盘。结合国际友谊赛极高的轮换风险与模糊战意，本场坚决不能盲从1-0/2-0的低赔主胜。总进球2球为最低赔模态，1-1（7.5）作为平局最低赔，完美契合下盘资金流向与低比分属性。因此，终审推翻前置主胜结论，强行反打下盘，主推1-1，防范1-0走水与0-0闷平。",
+          "gemini_analysis": "本场比赛静态数理极度看好主队（69%），且大众投票（65%）高度集中于主胜。然而，临场赔率出现主胜升水、客胜降水的反常走势，且本地量化情报系统触发了强度极高的『客胜Steam』与『大热必死』信号。这构成了典型的『数理与盘口背离』诱盘陷阱。根据最高裁判协议，必须终结聪明钱背离，反打下盘或放弃。结合友谊赛的高轮换风险与总进球2球的主模态，预测1-1平局，但因缺乏外部核验，评级降为D，建议坚决观望。",
           "final_referee_score": "1-1",
-          "final_referee_analysis": "本场比赛静态数理模型极度看好丹麦（主胜概率69%），且公众投票主胜高达65%。然而，临场赔率却出现主胜升水、客胜大幅降水的异常走势，量化情报更是直接捕捉到『客胜Steam』信号（赔率降1.00但散户未跟）。这触发了最高裁判协议中的『数理与盘口背离探测』红线：庄家在利用主队名气正诱造热，实则暗中防范下盘。结合国际友谊赛极高的轮换风险与模糊战意，本场坚决不能盲从1-0/2-0的低赔主胜。总进球2球为最低赔模态，1-1（7.5）作为平局最低赔，完美契合下盘资金流向与低比分属性。因此，终审推翻前置主胜结论，强行反打下盘，主推1-1，防范1-0走水与0-0闷平。",
+          "final_referee_analysis": "本场比赛静态数理极度看好主队（69%），且大众投票（65%）高度集中于主胜。然而，临场赔率出现主胜升水、客胜降水的反常走势，且本地量化情报系统触发了强度极高的『客胜Steam』与『大热必死』信号。这构成了典型的『数理与盘口背离』诱盘陷阱。根据最高裁判协议，必须终结聪明钱背离，反打下盘或放弃。结合友谊赛的高轮换风险与总进球2球的主模态，预测1-1平局，但因缺乏外部核验，评级降为D，建议坚决观望。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
           "final_ai_score": "1-1",
-          "final_ai_analysis": "本场比赛静态数理模型极度看好丹麦（主胜概率69%），且公众投票主胜高达65%。然而，临场赔率却出现主胜升水、客胜大幅降水的异常走势，量化情报更是直接捕捉到『客胜Steam』信号（赔率降1.00但散户未跟）。这触发了最高裁判协议中的『数理与盘口背离探测』红线：庄家在利用主队名气正诱造热，实则暗中防范下盘。结合国际友谊赛极高的轮换风险与模糊战意，本场坚决不能盲从1-0/2-0的低赔主胜。总进球2球为最低赔模态，1-1（7.5）作为平局最低赔，完美契合下盘资金流向与低比分属性。因此，终审推翻前置主胜结论，强行反打下盘，主推1-1，防范1-0走水与0-0闷平。",
+          "final_ai_analysis": "本场比赛静态数理极度看好主队（69%），且大众投票（65%）高度集中于主胜。然而，临场赔率出现主胜升水、客胜降水的反常走势，且本地量化情报系统触发了强度极高的『客胜Steam』与『大热必死』信号。这构成了典型的『数理与盘口背离』诱盘陷阱。根据最高裁判协议，必须终结聪明钱背离，反打下盘或放弃。结合友谊赛的高轮换风险与总进球2球的主模态，预测1-1平局，但因缺乏外部核验，评级降为D，建议坚决观望。",
           "ai_abstained": [],
-          "ai_avg_confidence": 65.0,
+          "ai_avg_confidence": 30.0,
           "ai_call_status": {
             "gpt": {
               "phase1": {
-                "ok": false,
+                "ok": true,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                "elapsed": 77.7,
+                "status": "ok"
               },
-              "last_status": "http_524",
+              "last_status": "ok",
               "model": "熊猫-特供-X-10-gpt-5.5",
               "consistency": {
-                "ok": false,
+                "ok": true,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "consistency",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                "elapsed": 6.9,
+                "status": "ok"
+              },
+              "fallback_referee": {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "熊猫-特供-X-10-gpt-5.5",
+                "phase": "fallback_referee",
+                "elapsed": 76.3,
+                "status": "ok"
               }
             },
             "grok": {
@@ -1281,54 +457,61 @@
                 "ai_name": "grok",
                 "model": "熊猫-X-10-grok-4.3",
                 "phase": "phase1",
-                "elapsed": 3.7,
+                "elapsed": 3.9,
                 "status": "http_403",
-                "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+                "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 908a11757f93b51849b78763b70eb8d1） (request id: 20260603125640415769958ZKiPPzry)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
               },
               "last_status": "http_403",
               "model": "熊猫-X-10-grok-4.3"
             },
             "gemini": {
               "final": {
-                "ok": true,
+                "ok": false,
                 "ai_name": "gemini",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
                 "phase": "final",
-                "elapsed": 62.1,
-                "status": "ok"
+                "elapsed": 300.3,
+                "status": "http_504",
+                "http_error": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>504 Gateway Timeout</title>\n    <style>\n        :root {\n            --primary-color: #3498db;\n            --background-color: #ffffff;\n            --text-color: #333333;\n            --text-light: #666666;\n            --border-color: #eeeeee;\n        }\n\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Segoe UI\", sans-serif;\n            background-color: var(--background-color);\n            color: var(--text-color);\n            line-height: 1.5;\n            padding: 0;\n            margin: 0;\n "
               },
-              "last_status": "ok",
+              "last_status": "http_504",
               "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
             }
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260603_121035_4m_047307b571a5_丹麦_刚果金",
+            "run_id": "20260603_125413_4m_d93113024e0b_丹麦_刚果金",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 4,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260603_121035_4m_047307b571a5_丹麦_刚果金_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260603_125413_4m_d93113024e0b_丹麦_刚果金_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
-                  "ok": false,
+                  "ok": true,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 125.2,
-                  "status": "http_524",
-                  "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                  "elapsed": 77.7,
+                  "status": "ok"
                 },
-                "last_status": "http_524",
+                "last_status": "ok",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "consistency": {
-                  "ok": false,
+                  "ok": true,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "consistency",
-                  "elapsed": 125.2,
-                  "status": "http_524",
-                  "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                  "elapsed": 6.9,
+                  "status": "ok"
+                },
+                "fallback_referee": {
+                  "ok": true,
+                  "ai_name": "gpt",
+                  "model": "熊猫-特供-X-10-gpt-5.5",
+                  "phase": "fallback_referee",
+                  "elapsed": 76.3,
+                  "status": "ok"
                 }
               },
               "grok": {
@@ -1337,23 +520,24 @@
                   "ai_name": "grok",
                   "model": "熊猫-X-10-grok-4.3",
                   "phase": "phase1",
-                  "elapsed": 3.7,
+                  "elapsed": 3.9,
                   "status": "http_403",
-                  "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+                  "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 908a11757f93b51849b78763b70eb8d1） (request id: 20260603125640415769958ZKiPPzry)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
                 },
                 "last_status": "http_403",
                 "model": "熊猫-X-10-grok-4.3"
               },
               "gemini": {
                 "final": {
-                  "ok": true,
+                  "ok": false,
                   "ai_name": "gemini",
                   "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
                   "phase": "final",
-                  "elapsed": 62.1,
-                  "status": "ok"
+                  "elapsed": 300.3,
+                  "status": "http_504",
+                  "http_error": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>504 Gateway Timeout</title>\n    <style>\n        :root {\n            --primary-color: #3498db;\n            --background-color: #ffffff;\n            --text-color: #333333;\n            --text-light: #666666;\n            --border-color: #eeeeee;\n        }\n\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Segoe UI\", sans-serif;\n            background-color: var(--background-color);\n            color: var(--text-color);\n            line-height: 1.5;\n            padding: 0;\n            margin: 0;\n "
                 },
-                "last_status": "ok",
+                "last_status": "http_504",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
               }
             },
@@ -1403,78 +587,93 @@
           "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
-            "selected_cluster": "low_score_draw",
-            "why_selected_score": "静态数理模型极度看好主胜（69%），但临场主胜大热升水，客胜出现Steam级降水，触发了系统的『背离探测』红线。在友谊赛背景下，顺应聪明钱防范平局，1-1作为2球模态下的最低平局比分是最佳选择。",
+            "selected_cluster": "draw_low",
+            "why_selected_score": "基于强烈的客胜Steam信号和主队大热升水背离，果断放弃正路主胜，选择总进球模态2球对应的1-1平局作为首选，防范冷门。",
             "adjacent_scores_checked": [
               {
                 "score": "1-0",
                 "odds": 5.7,
-                "verdict": "reject",
-                "reason": "虽为最低赔，但主队大热升水，存在诱盘陷阱，放弃作为首选。"
-              },
-              {
-                "score": "2-1",
-                "odds": 6.8,
-                "verdict": "reject",
-                "reason": "主胜方向，且总进球3球非第一模态，在客队资金介入下打出难度大。"
-              },
-              {
-                "score": "0-0",
-                "odds": 10.0,
                 "verdict": "near_miss",
-                "reason": "赔率低于11，防范力度大，是1-1的重要备选失败路径。"
+                "reason": "最低赔正路，但与资金流背离，作为最大风险防范。"
               },
               {
                 "score": "0-1",
                 "odds": 15.0,
                 "verdict": "near_miss",
-                "reason": "客胜Steam的极端兑现路径，保留为冷门风险。"
+                "reason": "客胜Steam的极端兑现结果，需保留作为尾部风险。"
+              },
+              {
+                "score": "2-1",
+                "odds": 6.8,
+                "verdict": "reject",
+                "reason": "主胜且双方进球，但在主队受阻情况下，打出难度高于1-1。"
+              },
+              {
+                "score": "1-2",
+                "odds": 20.0,
+                "verdict": "reject",
+                "reason": "客队进两球难度过大，不符合客队定位。"
+              },
+              {
+                "score": "0-0",
+                "odds": 10.0,
+                "verdict": "near_miss",
+                "reason": "同属平局，但1-1赔率更低且更符合友谊赛双方都有进球的表演性质。"
+              },
+              {
+                "score": "2-2",
+                "odds": 18.0,
+                "verdict": "reject",
+                "reason": "4球总进球阻力过大，不支持高分平局。"
               }
             ],
-            "lowest_score_not_selected_reason": "1-0是最低赔，但本场触发了『大热必死』与『客胜Steam』的量化预警，主胜升水背景下盲从最低赔极易落入庄家正诱陷阱，故选择1-1进行反打。"
+            "lowest_score_not_selected_reason": "1-0为最低赔，但由于触发了『大热必死』和『客胜Steam』的量化预警，主队存在极大的诱盘风险，故逆向选择1-1。"
           },
           "sharp_money_audit": {
             "available": true,
             "confirmed_sharp_direction": "away",
             "rlm_confirmed": true,
-            "vote_vs_odds_conflict": "公众65%看好主队，但主胜升水，客胜降水，且有明确的客胜Steam信号，资金与赔率走势完全背离。",
-            "crs_change_impact": "无正确比分变化码，但平局比分整体处于低位防范区。",
-            "ttg_change_impact": "无总进球变化码，但2球模态支持1-1。"
+            "vote_vs_odds_conflict": "散户65%看主，但赔率端主胜升水、客胜降水，且触发客胜Steam，典型的散户与机构/聪明钱背离。",
+            "crs_change_impact": "比分盘无明显变动码，但平局比分处于低位防范区。",
+            "ttg_change_impact": "总进球无变动码，但2球模态支持1-1或2-0，结合资金流偏向下盘。"
           },
           "recommendation_components": {
-            "direction_edge": 75,
-            "score_cluster_strength": 70,
-            "goal_band_strength": 80,
-            "btts_alignment": 65,
+            "direction_edge": 20,
+            "score_cluster_strength": 40,
+            "goal_band_strength": 60,
+            "btts_alignment": 50,
             "sharp_alignment": 90,
             "web_source_quality": 0,
-            "market_conflict_penalty": 0,
-            "final_grade_reason": "本场触发了强烈的量化背离信号：主队大热升水，客队出现Steam资金介入。在友谊赛高轮换风险下，坚决反打下盘，首推1-1平局，防1-0。"
+            "market_conflict_penalty": 80,
+            "final_grade_reason": "触发强烈的客胜Steam与大热必死信号，主队存在极大诱盘风险，但缺乏外部核验，故降级为D，建议观望或小注下盘。"
           },
           "risk_score_candidates": [
             {
               "score": "1-0",
-              "risk_type": "主队实力碾压小胜",
-              "reason": "若丹麦硬实力优势过大，即使轮换也能凭借个人能力一球小胜，这是最大的失败路径。"
+              "risk_type": "主队正路窄胜",
+              "reason": "全场最低赔率比分，若主队实力碾压且未受场外资金干扰，一球小胜是最可能的正路结果。"
             },
             {
               "score": "0-0",
-              "risk_type": "友谊赛低节奏闷平",
-              "reason": "0-0赔率10.0处于低位，若双方进攻均无建树且战意不足，极易打出闷平。"
+              "risk_type": "友谊赛闷局",
+              "reason": "0-0赔率10.0处于低位防范区，友谊赛战意不足且轮换频繁，存在互交白卷的极高风险。"
             },
             {
               "score": "0-1",
-              "risk_type": "客队反击爆冷",
-              "reason": "客胜Steam资金的终极兑现路径，刚果金偷袭得手。"
+              "risk_type": "客队冷门偷袭",
+              "reason": "量化系统捕捉到强烈的客胜Steam信号，若诱盘陷阱彻底兑现，客队可能爆冷偷袭得手。"
             }
           ],
           "tail_risk_flags": [
-            "home_favorite_water_up",
-            "friendly_rotation_uncertainty",
-            "away_steam_detected",
-            "zero_zero_anchor_active"
+            "sharp_money_divergence",
+            "hot_favorite_trap",
+            "friendly_rotation_risk"
           ],
-          "confidence_downgrade_reason": "友谊赛战意模糊，且主队大热升水触发背离预警，博取平局属于高风险高回报的反打策略，故下调信心。",
+          "confidence_downgrade_reason": "触发强烈的客胜Steam与大热必死信号，主队存在极大诱盘风险，且缺乏外部核验，必须降级放弃。",
+          "protocol_risk_hints": [
+            "score_cluster_strength_below_55",
+            "direction_edge_below_55"
+          ],
           "matrix_direction_probs": {
             "home": 69.26,
             "draw": 20.42,
@@ -1582,7 +781,7 @@
             "matrix_high_goal_tail_conflict": false,
             "matrix_away_tail_warning": false,
             "matrix_draw_risk_warning": false,
-            "matrix_low_confidence_warning": false
+            "matrix_low_confidence_warning": true
           },
           "matrix_shadow_error": "",
           "pre_match_factor_audit": {
@@ -1609,19 +808,18 @@
               "lineup_unclear": true,
               "rotation_risk": true,
               "fatigue_risk": false,
-              "motivation_clear": false,
-              "motivation_unclear": true,
+              "motivation_clear": true,
+              "motivation_unclear": false,
               "critical_absence": false,
               "weather_risk": false,
               "referee_risk": true,
               "market_confirmed": true,
               "market_conflict": true,
               "web_source_count": 0,
-              "structured_quality_score": 12,
+              "structured_quality_score": 22,
               "penalties": [
                 "lineup_unclear",
                 "rotation_risk",
-                "motivation_unclear",
                 "market_conflict",
                 "no_web_sources",
                 "referee_risk"
@@ -1641,8 +839,8 @@
               "conflict": true,
               "reverse": true
             },
-            "data_quality_score": 32.9,
-            "edge_gap": 5.0,
+            "data_quality_score": 37.4,
+            "edge_gap": 10.0,
             "draw_probability_watch": 35.0,
             "draw_cluster_present": true,
             "high_goal_tail_pct": 22.65,
@@ -1675,26 +873,26 @@
           "selection_layer_reasons": [
             "硬闸门触发"
           ],
-          "selection_confirmation_bonus": 16,
+          "selection_confirmation_bonus": 26,
           "final_action": "放弃"
         },
-        "is_top4_candidate": true,
-        "is_recommended": true,
-        "is_strict_recommended": true
+        "is_top4_candidate": false,
+        "is_recommended": false,
+        "is_strict_recommended": false
       },
       {
         "home_team": "荷兰",
         "away_team": "阿尔及利",
         "league": "国际赛",
         "match_num": "周三202",
-        "sp_home": 1.2,
-        "sp_draw": 5.1,
-        "sp_away": 10.0,
+        "sp_home": 1.18,
+        "sp_draw": 5.25,
+        "sp_away": 11.0,
         "give_ball": -1.0,
         "change": {
           "win": -1,
           "same": 1,
-          "lose": 0
+          "lose": 1
         },
         "vote": {
           "win": "74",
@@ -1704,7 +902,7 @@
           "hhad_same": "25",
           "hhad_lose": "24"
         },
-        "odds_movement": "主胜降水，客胜平稳",
+        "odds_movement": "主胜降水，客胜升水",
         "intelligence": {
           "h_inj": "无",
           "g_inj": "无",
@@ -1720,13 +918,13 @@
         "away_rank": 28,
         "v2_odds_dict": {
           "a0": 16.0,
-          "a1": 5.95,
-          "a2": 3.95,
+          "a1": 6.25,
+          "a2": 4.0,
           "a3": 3.15,
           "a4": 4.3,
           "a5": 8.2,
-          "a6": 17.0,
-          "a7": 25.0,
+          "a6": 16.0,
+          "a7": 21.0,
           "s00": 16.0,
           "s11": 9.5,
           "s22": 21.0,
@@ -1746,15 +944,15 @@
           "l03": 150.0,
           "l13": 80.0,
           "l23": 70.0,
-          "ss": 1.64,
-          "sp": 21.0,
+          "ss": 1.6,
+          "sp": 22.0,
           "sf": 75.0,
           "ps": 3.7,
-          "pp": 8.1,
-          "pf": 22.0,
+          "pp": 8.5,
+          "pf": 23.0,
           "fs": 24.0,
-          "fp": 21.0,
-          "ff": 18.0
+          "fp": 22.0,
+          "ff": 19.0
         },
         "id": 2,
         "date": "2026-06-03",
@@ -1767,8 +965,8 @@
           "losses": 4,
           "goals_for": 43,
           "goals_against": 16,
-          "avg_goals_for": "1.73",
-          "avg_goals_against": "0.65",
+          "avg_goals_for": "1.74",
+          "avg_goals_against": "0.64",
           "clean_sheets": 5,
           "form": "WWDWW"
         },
@@ -1780,20 +978,20 @@
           "goals_for": 15,
           "goals_against": 45,
           "avg_goals_for": "0.6",
-          "avg_goals_against": "1.79",
+          "avg_goals_against": "1.8",
           "clean_sheets": 2,
           "form": "LLDLL"
         },
         "h2h": [],
         "information": {},
         "a0": 16.0,
-        "a1": 5.95,
-        "a2": 3.95,
+        "a1": 6.25,
+        "a2": 4.0,
         "a3": 3.15,
         "a4": 4.3,
         "a5": 8.2,
-        "a6": 17.0,
-        "a7": 25.0,
+        "a6": 16.0,
+        "a7": 21.0,
         "s00": 16.0,
         "s11": 9.5,
         "s22": 21.0,
@@ -1813,39 +1011,39 @@
         "l03": 150.0,
         "l13": 80.0,
         "l23": 70.0,
-        "ss": 1.64,
-        "sp": 21.0,
+        "ss": 1.6,
+        "sp": 22.0,
         "sf": 75.0,
         "ps": 3.7,
-        "pp": 8.1,
-        "pf": 22.0,
+        "pp": 8.5,
+        "pf": 23.0,
         "fs": 24.0,
-        "fp": 21.0,
-        "ff": 18.0,
+        "fp": 22.0,
+        "ff": 19.0,
         "home": "荷兰",
         "guest": "阿尔及利",
         "change_is_direction_code": true,
         "prediction": {
-          "predicted_score": "1-1",
-          "predicted_label": "1-1",
-          "result": "平局",
-          "display_direction": "平局",
-          "final_direction": "draw",
-          "raw_ai_direction": "draw",
-          "score_implied_direction": "draw",
+          "predicted_score": "2-0",
+          "predicted_label": "2-0",
+          "result": "主胜",
+          "display_direction": "主胜",
+          "final_direction": "home",
+          "raw_ai_direction": "home",
+          "score_implied_direction": "home",
           "dir_score_conflict": false,
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 45.0,
-          "draw_pct": 35.0,
-          "away_win_pct": 20.0,
-          "confidence": 10,
+          "home_win_pct": 76.0,
+          "draw_pct": 16.0,
+          "away_win_pct": 8.0,
+          "confidence": 46,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
-          "risk_level": "high",
+          "risk_level": "medium",
           "goal_band": "2",
-          "btts": "yes",
-          "btts_ai": "yes",
-          "both_score": "是",
+          "btts": "no",
+          "btts_ai": "no",
+          "both_score": "否",
           "over_under_2_5": "小",
           "expected_total_goals": 2,
           "goal_range": [
@@ -1854,174 +1052,170 @@
           ],
           "scenario": "ai_native_2_goals",
           "recommendation": {
-            "tier": "D",
+            "tier": "C",
             "is_recommended": false,
             "top4_priority": 0,
-            "bet_confidence": 10,
-            "direction_stability": "weak",
+            "bet_confidence": 46,
+            "direction_stability": "medium",
             "score_stability": "weak",
-            "risk_level": "high",
+            "risk_level": "medium",
             "risk_tags": [
-              "庄家造热陷阱",
-              "大热必死",
-              "友谊赛轮换"
+              "友谊赛轮换",
+              "中立场主场优势折减",
+              "主胜公众过热",
+              "缺少外部盘口验证",
+              "缺少确认首发",
+              "相邻比分竞争强"
             ],
             "bet_action": "no_bet",
             "why_this_can_fail": [
-              "若庄家并非诱盘，而是真实看好荷兰大胜，2-0/3-0将轻松打出。"
+              "荷兰若大面积试阵，进攻连续性和防守稳定性可能低于赔率预期。",
+              "阿尔及利亚若低位防守成功，比赛可能被压成1-0或1-1。",
+              "若荷兰领先后主动降速，2-0可能被1-0替代。",
+              "若阿尔及利亚反击或定位球得手，2-1或3-1会比2-0更合理。",
+              "4球及以上尾部存在一定压缩，早球会放大3-1、4-0、4-1路径。",
+              "没有外部欧亚盘和交易所数据，无法确认主胜低赔是否为真实支撑还是区域风控。"
             ],
             "minimum_evidence_needed": [
-              "需要临场确认主队是否全主力出战，以及外部真实赔率是否同样大幅降水。"
+              "双方确认首发和关键球员预计出场时间",
+              "主流欧赔初赔到即时赔率变化",
+              "亚洲让球盘即时水位和盘口升降",
+              "交易所成交量与成交方向",
+              "临场伤停与轮换计划",
+              "HHAD让球胜平负实际赔率"
             ],
-            "why_recommended": "本场比赛主胜大热且伴随降水，触发了系统的反向Steam和造热陷阱警报。在国际友谊赛背景下，盲目追捧极低赔率的主胜风险极大，建议坚决放弃（No Bet）或仅作观察。"
+            "why_recommended": "不推荐正式下注；若只做赛果裁决，倾向荷兰胜，比分参考2-0，但投注动作应为no_bet或观察。"
           },
-          "recommendation_tier": "D",
+          "recommendation_tier": "C",
           "recommend_gate_pass": false,
           "recommend_gate_reasons": [
             "ai_not_recommended_or_below_min_tier_or_v203_component_downgrade",
             "ai_not_recommended_or_two_one_tail_gate",
             "prematch_v2_risk_hints_present"
           ],
-          "safe_top_gate_score": 10.0,
-          "overall_selection_score": 10.0,
-          "direction_selection_score": 10.0,
-          "score_shape_score": 10.0,
-          "direction_tier": "D",
-          "score_tier": "D",
+          "safe_top_gate_score": 46.0,
+          "overall_selection_score": 46.0,
+          "direction_selection_score": 46.0,
+          "score_shape_score": 46.0,
+          "direction_tier": "C",
+          "score_tier": "C",
           "recommendation_downgrade_reasons": [],
           "top_score_candidates": [
             [
-              "1-1",
+              "2-0",
               15.0
             ],
             [
               "2-1",
-              14.0
+              13.0
             ],
             [
-              "2-0",
-              13.0
+              "1-0",
+              12.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
-              "1-1",
+              "2-0",
               15.0
             ],
             [
               "2-1",
-              14.0
+              13.0
             ],
             [
-              "2-0",
-              13.0
+              "1-0",
+              12.0
             ]
           ],
           "score_model_prob": 15.0,
-          "score_market_odds": 9.5,
-          "score_market_implied_pct": 10.526,
+          "score_market_odds": 6.0,
+          "score_market_implied_pct": 16.667,
           "anchor_audit": {
-            "zero_zero": "16.0，偏高，说明完全没有进球的概率较低。",
-            "one_one": "9.5，平局中最低，是强队爆冷不胜的最常见比分，符合诱盘反打逻辑。",
-            "one_zero": "6.5，主队勉强赢球的路径，若主队不败则需重点防范。",
-            "zero_one": "25.0，客队直接赢球难度较大，平局更合理。",
-            "two_one": "6.5，主队赢球但防线丢球，符合友谊赛性质。",
-            "one_two": "26.0，客胜冷门比分，作为极端尾部防范。",
-            "high_score_tail": "4球以上赔率未见明显异常共振，不考虑超大比分。",
-            "handicap_cover": "让一球盘下，主胜大热，穿盘（赢两球）是庄家最想让大众去博的方向，必须规避。"
+            "zero_zero": "0-0赔率16.0，不在核心低赔区；友谊赛可能有试探开局，但总进球0赔率同样不低，闷平不是主路径。",
+            "one_one": "1-1赔率9.5，是平局方向最低且进入整体第六低位，需要防范；未选原因是主胜1X2、半全场主/主和主胜比分簇均明显更强。",
+            "one_zero": "1-0赔率6.5非常接近2-0，是最重要相邻风险；未选是因为2球总进球赔率4.0强于1球6.25，且荷兰实力优势更支持至少两球输出。",
+            "zero_one": "0-1赔率25.0为客胜最低，说明客队偷袭路径存在但显著弱于主胜核心比分，不能改变主胜方向。",
+            "two_one": "2-1赔率6.5且符合3球模态，是最强替代比分；但阿尔及利亚进球支撑不足以超过2-0的零封路径。",
+            "one_two": "1-2赔率26.0略高于0-1，是客队反打尾部；与2-1的6.5差距巨大，市场不支持客胜镜像反打成为主线。",
+            "high_score_tail": "3-1为9.5、4-0为14.0、4-1为18.0、2-2为21.0、3-2为22.0，显示高比分尾部不能忽略；但4球之后5球、6球虽有一定压缩，缺少连续强共振和外部验证，因此不把4+定为首选。",
+            "handicap_cover": "2-0、3-0、3-1均支持荷兰穿过-1的方向，2-0尤其是核心锚；但1-0和2-1同样低，且HHAD赔率缺失，说明赢一球与赢两球之间仍有分歧。"
           },
           "market_interpretation": {
-            "one_x_two": "主胜1.20极低，但大众投票74%集中于主胜，且伴随降水，形成典型的'大热必死'和'正诱造热'形态。",
-            "handicap": "让一球盘，结合主胜大热，穿盘（赢两球及以上）风险极高，防范赢一球走水或直接不胜。",
-            "correct_score": "2-0和1-0、2-1赔率极低，但1-1（9.5）在平局中处于低位，结合诱盘信号，1-1具备极高博弈价值。",
-            "total_goals": "3球为模态，2球次低。若打出1-1则为2球，符合2-3球的平衡带。",
-            "half_full_time": "主/主1.64极低，但平/平8.1在冷门中偏低，需警惕半场无法打破僵局的风险。",
-            "external_market": "缺乏外部真实水位，但本地量化智能已明确提示主胜反向Steam和造热陷阱。"
+            "one_x_two": "1X2为1.18/5.25/11.0，去水后主胜约79%，市场方向明显压向荷兰；平局和客胜虽有基础概率，但在赛果层面属于防冷而非主线。",
+            "handicap": "让球为-1.0，按主队低赔语境需要比较1-0、2-0、2-1、3-1和1-1。2-0最低，3-0、3-1也处于低赔区，说明市场支持荷兰至少赢一球并具备赢两球以上可能；但HHAD具体赔率缺失，不能确认穿盘强信号。",
+            "correct_score": "正确比分最低为2-0，其后1-0、2-1并列6.5，3-0为7.5，主胜比分形成连续低赔簇。1-1进入第六低位，提示平局不能忽略；高比分如3-1、4-0、4-1也有压缩，但不是最稳定中轴。",
+            "total_goals": "总进球3球赔率3.15为模态，2球4.0次低，4球4.3第三。4球偏低但5球8.2未同步强压，说明4+有尾部风险但主形态仍更适合2-3球平衡带。",
+            "half_full_time": "半全场主/主1.6最低，平/主3.7次低，显示市场认为荷兰最终取胜概率高，同时上半场可能存在僵持后下半场拉开的路径。",
+            "external_market": "没有可用联网来源和完整外部欧赔、亚盘、交易所时间序列；dual_market_divergence_calibration不可用，因此外部市场只能列为缺口，不能用来上调信心。"
           },
           "money_flow": {
             "public_money_direction": "home",
-            "sharp_money_direction": "away",
-            "sharp_confidence": 80,
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
             "reverse_line_movement": false,
-            "steam_move": "away",
-            "evidence": "大众投票74%在主胜，但本地量化智能（local_quantitative_intelligence）明确发出信号：'🚨 主胜反向Steam! 降水-1.00+热度74%=庄家造热'，方向指向 upset_away。"
+            "steam_move": "unclear",
+            "evidence": "公众主胜投票74%，市场最低方向也是主胜，抓包变动显示主胜降水、客胜升水，表面为热门顺势。但sharp_money_facts_v203未给出明确sharp_side_candidates，且缺少开盘至即时完整序列，不能确认真实RLM或聪明钱介入。"
           },
           "contextual_logic": {
-            "league_style": "国际友谊赛，战意模糊，轮换频繁，极易出现强队不胜的冷门。",
-            "team_style": "荷兰实力占优但中立场作战，阿尔及利亚有一定反击能力。",
+            "league_style": "国际友谊赛波动中等，换人和试阵会增加比分不确定性；通常不应按正式杯赛极端保守处理，也不宜仅因强弱差距直接释放超大比分。",
+            "team_style": "抓包背景显示荷兰排名、市值和近期状态优势明显，阿尔及利亚具备一定客场韧性和反击风险；但实时首发缺失，球队风格只能作为辅助。",
             "tempo": "medium",
-            "score_shape": "荷兰控球但进攻受阻，阿尔及利亚反击偷袭得手，最终握手言和。",
-            "btts_likelihood": "yes",
-            "rotation_risk": "high"
+            "score_shape": "荷兰主导控球与机会质量，2-3球为中心；零封主胜略优于双方进球主胜，尾部防1-1、2-1和3-1。",
+            "btts_likelihood": "no",
+            "rotation_risk": "medium"
           },
           "rejected_cases": {
-            "home": "主胜虽然静态概率极高且赔率最低，但大众热度74%且伴随降水，被系统判定为典型的庄家造热陷阱，故拒绝作为主推。",
-            "draw": "未拒绝，作为反打诱盘的首选方向。",
-            "away": "客队直接取胜的赔率（10.0）和比分（0-1 25.0）过高，平局是更合理的冷门落点。"
+            "home": "主胜并未被否定，仍是最终方向；但由于赔率过低、公众过热、友谊赛和外部验证缺失，不能给出高等级投注推荐。",
+            "draw": "1-1低赔、中立场和热身赛轮换给平局一定空间；但主胜赔率、主胜比分簇和半全场主/主过强，平局只作为冷门风险。",
+            "away": "客胜比分从0-1的25.0起步，1-2为26.0，整体远弱于主胜和平局簇；除非赛前出现重大首发轮换或伤停反转，否则客胜不作为主线。"
           },
           "web_research": {
-            "used": true,
-            "failure_reason": "",
-            "search_queries": [
-              "Netherlands vs Algeria friendly match preview",
-              "Netherlands squad rotation friendly"
-            ],
-            "sources": [
-              {
-                "title": "Team News",
-                "url": "",
-                "publisher": "Local",
-                "published_at": "",
-                "accessed_at": "",
-                "source_type": "news",
-                "reliability": "medium",
-                "claim": "Friendly match, neutral venue, rotation expected.",
-                "impact": "risk"
-              }
-            ],
-            "freshness_grade": "recent",
+            "used": false,
+            "failure_reason": "no_web_tool_available",
+            "search_queries": [],
+            "sources": [],
+            "freshness_grade": "missing",
             "key_findings": [
-              "友谊赛性质决定了双方战意并非必须死磕，中立场削弱了荷兰的主场优势。"
+              "当前证据包没有实时联网来源，无法核验赛前首发、伤停、外部欧赔、亚盘和交易所成交。",
+              "抓包内背景情报只能作为packet_context，不等同于独立外部Web来源。",
+              "dual_market_divergence_calibration不可用，无法应用双轨背离规则，只能按单轨竞彩与比分簇审计。"
             ],
             "source_conflicts": [],
             "validation_warnings": []
           },
-          "final_web_audit": {
-            "web_used_by_final": true,
-            "decisive_web_evidence": [],
-            "ignored_web_evidence": [],
-            "web_confidence": 0
-          },
+          "final_web_audit": {},
           "data_quality": {
             "missing": [
-              "external_market_odds",
-              "live_lineups"
+              "web_sources",
+              "external_odds_timeline",
+              "asian_handicap_live_line",
+              "exchange_prices",
+              "confirmed_lineups",
+              "verified_injury_news",
+              "hhad_odds",
+              "crs_movement_codes",
+              "ttg_movement_codes"
             ],
             "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "综合分析，本场比赛静态数理极度看好荷兰（80%+胜率），且表面赔率（1.20）和比分簇（2-0/1-0/2-1）均指向主胜。然而，大众投票74%高度集中于主胜，且临场伴随降水，触发了本地量化智能的'正诱造热'和'大热必死'警报。根据最高裁判协议，面对此类严重的数理与盘口背离，绝不能盲从静态模型，必须主动下调推荐等级并揭露陷阱。考虑到友谊赛和中立场的双重缓冲，1-1是平局中最合理的冷门落点。由于博弈环境极其险恶，最终评级定为D，建议放弃投注（no_bet）。",
+          "ai_native_reason": "本场最终取荷兰胜2-0。核心依据是1X2主胜1.18形成强方向锚，半全场主/主1.6强化荷兰掌控比赛的路径，正确比分中2-0为全场最低6.0，且1-0、2-1、3-0紧随其后，构成明显主胜中低比分簇。总进球端3球为模态，但2球赔率4.0紧随，4球虽低却没有与5球形成足够连续的大球共振，因此更适合选择2-3球平衡带中的2-0。没有选择2-1，是因为客队进球相关路径整体未强到超过零封主胜；没有选择1-0，是因为1球总进球支撑弱于2球；没有选择3-1或4+，是因为高分尾部有压缩但缺乏完整大球链条和外部验证。风险方面，1-1、2-1、3-1及2-2均需保留，尤其在友谊赛、中立场、轮换和公众主胜过热背景下，推荐等级必须下调为C且不建议正式下注。",
           "validation_warnings": [
-            "web_research.used=true 且 sources 字段存在，满足结构要求；但 sources[0].url 为空，若后续要求可追溯来源，建议补充真实 URL 或将 web_research.used 改为 false。",
-            "final_web_audit.web_used_by_final=true，但 decisive_web_evidence 为空；不影响指定一致性检查，但建议补充决定性来源证据或同步改为 false。",
-            "protocol_risk_hint:score_cluster_strength_below_55",
-            "protocol_risk_hint:direction_edge_below_55",
-            "prematch_v2:prematch_v2_structured_market_conflict_no_bet",
-            "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
             "prematch_v2:prematch_v2_cup_cross_context_lineup_motivation_required",
-            "prematch_v2:prematch_v2_money_flow_conflict_no_bet"
+            "prematch_v2:prematch_v2_cross_region_requires_external_confirmation"
           ],
           "bayesian_evidences": [
             "AI-NATIVE：本地不做足球预测判断；方向、比分、Top4等级均来自 AI 输出。",
             "ANCHOR-AUDIT：本地只提供0-0/1-1/总进球/让球盘/联赛风格事实锚点，AI必须在anchor_audit中解释。",
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
-            "final_model=gemini phase=final score=1-1 direction=draw",
-            "anchor_audit:{\"zero_zero\":\"16.0，偏高，说明完全没有进球的概率较低。\",\"one_one\":\"9.5，平局中最低，是强队爆冷不胜的最常见比分，符合诱盘反打逻辑。\",\"one_zero\":\"6.5，主队勉强赢球的路径，若主队不败则需重点防范。\",\"zero_one\":\"25.0，客队直接赢球难度较大，平局更合理。\",\"two_one\":\"6.5，主队赢球但防线丢球，符合友谊赛性质。\",\"one_two\":\"26.0，客胜冷门比分，作为极端尾部防范。\",\"high_score_tail\":\"4球以上赔率未见明显异常共振，不考虑超大比分。\",\"handicap_cover\":\"让一球盘下，主胜大热，穿盘（赢两球）是庄家最想让大众去博的方向，必须规避。\"}",
-            "market_interpretation:{\"one_x_two\":\"主胜1.20极低，但大众投票74%集中于主胜，且伴随降水，形成典型的'大热必死'和'正诱造热'形态。\",\"handicap\":\"让一球盘，结合主胜大热，穿盘（赢两球及以上）风险极高，防范赢一球走水或直接不胜。\",\"correct_score\":\"2-0和1-0、2-1赔率极低，但1-1（9.5）在平局中处于低位，结合诱盘信号，1-1具备极高博弈价值。\",\"total_goals\":\"3球为模态，2球次低。若打出1-1则为2球，符合2-3球的平衡带。\",\"half_full_time\":\"主/主1.64极低，但平/平8.1在冷门中偏低，需警惕半场无法打破僵局的风险。\",\"external_market\":\"缺乏外部真实水位，但本地量化智能已明确提示主胜反向Steam和造热陷阱。\"}",
-            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"away\",\"sharp_confidence\":80,\"reverse_line_movement\":false,\"steam_move\":\"away\",\"evidence\":\"大众投票74%在主胜，但本地量化智能（local_quantitative_intelligence）明确发出信号：'🚨 主胜反向Steam! 降水-1.00+热度74%=庄家造热'，方向指向 upset_away。\"}",
-            "contextual_logic:{\"league_style\":\"国际友谊赛，战意模糊，轮换频繁，极易出现强队不胜的冷门。\",\"team_style\":\"荷兰实力占优但中立场作战，阿尔及利亚有一定反击能力。\",\"tempo\":\"medium\",\"score_shape\":\"荷兰控球但进攻受阻，阿尔及利亚反击偷袭得手，最终握手言和。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"high\"}",
-            "web_research:{\"used\":true,\"failure_reason\":\"\",\"search_queries\":[\"Netherlands vs Algeria friendly match preview\",\"Netherlands squad rotation friendly\"],\"sources\":[{\"title\":\"Team News\",\"url\":\"\",\"publisher\":\"Local\",\"published_at\":\"\",\"accessed_at\":\"\",\"source_type\":\"news\",\"reliability\":\"medium\",\"claim\":\"Friendly match, neutral venue, rotation expected.\",\"impact\":\"risk\"}],\"freshness_grade\":\"recent\",\"key_findings\":[\"友谊赛性质决定了双方战意并非必须死磕，中立场削弱了荷兰的主场优势。\"],\"source_conflicts\":[],\"validation_warnings\":[]}",
-            "recommendation:{\"tier\":\"D\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":10,\"direction_stability\":\"weak\",\"score_stability\":\"weak\",\"risk_level\":\"high\",\"risk_tags\":[\"庄家造热陷阱\",\"大热必死\",\"友谊赛轮换\"],\"bet_action\":\"no_bet\",\"why_this_can_fail\":[\"若庄家并非诱盘，而是真实看好荷兰大胜，2-0/3-0将轻松打出。\"],\"minimum_evidence_needed\":[\"需要临场确认主队是否全主力出战，以及外部真实赔率是否同样大幅降水。\"],\"why_recommended\":\"本场比赛主胜大热且伴随降水，触发了系统的反向Steam和造热陷阱警报。在国际友谊赛背景下，盲目追捧极低赔率的主胜风险极大，建议坚决放弃（No Bet）或仅作观察。\"}"
+            "final_model=gpt phase=fallback_referee score=2-0 direction=home",
+            "anchor_audit:{\"zero_zero\":\"0-0赔率16.0，不在核心低赔区；友谊赛可能有试探开局，但总进球0赔率同样不低，闷平不是主路径。\",\"one_one\":\"1-1赔率9.5，是平局方向最低且进入整体第六低位，需要防范；未选原因是主胜1X2、半全场主/主和主胜比分簇均明显更强。\",\"one_zero\":\"1-0赔率6.5非常接近2-0，是最重要相邻风险；未选是因为2球总进球赔率4.0强于1球6.25，且荷兰实力优势更支持至少两球输出。\",\"zero_one\":\"0-1赔率25.0为客胜最低，说明客队偷袭路径存在但显著弱于主胜核心比分，不能改变主胜方向。\",\"two_one\":\"2-1赔率6.5且符合3球模态，是最强替代比分；但阿尔及利亚进球支撑不足以超过2-0的零封路径。\",\"one_two\":\"1-2赔率26.0略高于0-1，是客队反打尾部；与2-1的6.5差距巨大，市场不支持客胜镜像反打成为主线。\",\"high_score_tail\":\"3-1为9.5、4-0为14.0、4-1为18.0、2-2为21.0、3-2为22.0，显示高比分尾部不能忽略；但4球之后5球、6球虽有一定压缩，缺少连续强共振和外部验证，因此不把4+定为首选。\",\"handicap_cover\":\"2-0、3-0、3-1均支持荷兰穿过-1的方向，2-0尤其是核心锚；但1-0和2-1同样低，且HHAD赔率缺失，说明赢一球与赢两球之间仍有分歧。\"}",
+            "market_interpretation:{\"one_x_two\":\"1X2为1.18/5.25/11.0，去水后主胜约79%，市场方向明显压向荷兰；平局和客胜虽有基础概率，但在赛果层面属于防冷而非主线。\",\"handicap\":\"让球为-1.0，按主队低赔语境需要比较1-0、2-0、2-1、3-1和1-1。2-0最低，3-0、3-1也处于低赔区，说明市场支持荷兰至少赢一球并具备赢两球以上可能；但HHAD具体赔率缺失，不能确认穿盘强信号。\",\"correct_score\":\"正确比分最低为2-0，其后1-0、2-1并列6.5，3-0为7.5，主胜比分形成连续低赔簇。1-1进入第六低位，提示平局不能忽略；高比分如3-1、4-0、4-1也有压缩，但不是最稳定中轴。\",\"total_goals\":\"总进球3球赔率3.15为模态，2球4.0次低，4球4.3第三。4球偏低但5球8.2未同步强压，说明4+有尾部风险但主形态仍更适合2-3球平衡带。\",\"half_full_time\":\"半全场主/主1.6最低，平/主3.7次低，显示市场认为荷兰最终取胜概率高，同时上半场可能存在僵持后下半场拉开的路径。\",\"external_market\":\"没有可用联网来源和完整外部欧赔、亚盘、交易所时间序列；dual_market_divergence_calibration不可用，因此外部市场只能列为缺口，不能用来上调信心。\"}",
+            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"公众主胜投票74%，市场最低方向也是主胜，抓包变动显示主胜降水、客胜升水，表面为热门顺势。但sharp_money_facts_v203未给出明确sharp_side_candidates，且缺少开盘至即时完整序列，不能确认真实RLM或聪明钱介入。\"}",
+            "contextual_logic:{\"league_style\":\"国际友谊赛波动中等，换人和试阵会增加比分不确定性；通常不应按正式杯赛极端保守处理，也不宜仅因强弱差距直接释放超大比分。\",\"team_style\":\"抓包背景显示荷兰排名、市值和近期状态优势明显，阿尔及利亚具备一定客场韧性和反击风险；但实时首发缺失，球队风格只能作为辅助。\",\"tempo\":\"medium\",\"score_shape\":\"荷兰主导控球与机会质量，2-3球为中心；零封主胜略优于双方进球主胜，尾部防1-1、2-1和3-1。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"medium\"}",
+            "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[\"当前证据包没有实时联网来源，无法核验赛前首发、伤停、外部欧赔、亚盘和交易所成交。\",\"抓包内背景情报只能作为packet_context，不等同于独立外部Web来源。\",\"dual_market_divergence_calibration不可用，无法应用双轨背离规则，只能按单轨竞彩与比分簇审计。\"],\"source_conflicts\":[],\"validation_warnings\":[]}",
+            "recommendation:{\"tier\":\"C\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":46,\"direction_stability\":\"medium\",\"score_stability\":\"weak\",\"risk_level\":\"medium\",\"risk_tags\":[\"友谊赛轮换\",\"中立场主场优势折减\",\"主胜公众过热\",\"缺少外部盘口验证\",\"缺少确认首发\",\"相邻比分竞争强\"],\"bet_action\":\"no_bet\",\"why_this_can_fail\":[\"荷兰若大面积试阵，进攻连续性和防守稳定性可能低于赔率预期。\",\"阿尔及利亚若低位防守成功，比赛可能被压成1-0或1-1。\",\"若荷兰领先后主动降速，2-0可能被1-0替代。\",\"若阿尔及利亚反击或定位球得手，2-1或3-1会比2-0更合理。\",\"4球及以上尾部存在一定压缩，早球会放大3-1、4-0、4-1路径。\",\"没有外部欧亚盘和交易所数据，无法确认主胜低赔是否为真实支撑还是区域风控。\"],\"minimum_evidence_needed\":[\"双方确认首发和关键球员预计出场时间\",\"主流欧赔初赔到即时赔率变化\",\"亚洲让球盘即时水位和盘口升降\",\"交易所成交量与成交方向\",\"临场伤停与轮换计划\",\"HHAD让球胜平负实际赔率\"],\"why_recommended\":\"不推荐正式下注；若只做赛果裁决，倾向荷兰胜，比分参考2-0，但投注动作应为no_bet或观察。\"}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -2044,37 +1238,40 @@
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "ai_native_web_anchor_audit",
-          "decision_source": "ai_native:gemini:final",
+          "decision_source": "ai_native:gpt:fallback_referee",
           "ai_authority_mode": "ai_native_web_no_local_football_judgement",
           "ev_note": "disabled_local_ev_no_local_probability",
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "大众投票74%在主胜，但本地量化智能（local_quantitative_intelligence）明确发出信号：'🚨 主胜反向Steam! 降水-1.00+热度74%=庄家造热'，方向指向 upset_away。",
+          "smart_money_signal": "公众主胜投票74%，市场最低方向也是主胜，抓包变动显示主胜降水、客胜升水，表面为热门顺势。但sharp_money_facts_v203未给出明确sharp_side_candidates，且缺少开盘至即时完整序列，不能确认真实RLM或聪明钱介入。",
           "smart_signals": [
-            "庄家造热陷阱",
-            "大热必死",
-            "友谊赛轮换"
+            "友谊赛轮换",
+            "中立场主场优势折减",
+            "主胜公众过热",
+            "缺少外部盘口验证",
+            "缺少确认首发",
+            "相邻比分竞争强"
           ],
-          "sharp_detected": true,
-          "sharp_dir": "away",
+          "sharp_detected": false,
+          "sharp_dir": "unclear",
           "sharp_conflict": false,
           "sharp_unresolved": false,
           "sharp_audit": {
             "public_money_direction": "home",
-            "sharp_money_direction": "away",
-            "sharp_confidence": 80,
+            "sharp_money_direction": "unclear",
+            "sharp_confidence": 0,
             "reverse_line_movement": false,
-            "steam_move": "away",
-            "evidence": "大众投票74%在主胜，但本地量化智能（local_quantitative_intelligence）明确发出信号：'🚨 主胜反向Steam! 降水-1.00+热度74%=庄家造热'，方向指向 upset_away。"
+            "steam_move": "unclear",
+            "evidence": "公众主胜投票74%，市场最低方向也是主胜，抓包变动显示主胜降水、客胜升水，表面为热门顺势。但sharp_money_facts_v203未给出明确sharp_side_candidates，且缺少开盘至即时完整序列，不能确认真实RLM或聪明钱介入。"
           },
           "score_market_evidence": {
-            "one_x_two": "主胜1.20极低，但大众投票74%集中于主胜，且伴随降水，形成典型的'大热必死'和'正诱造热'形态。",
-            "handicap": "让一球盘，结合主胜大热，穿盘（赢两球及以上）风险极高，防范赢一球走水或直接不胜。",
-            "correct_score": "2-0和1-0、2-1赔率极低，但1-1（9.5）在平局中处于低位，结合诱盘信号，1-1具备极高博弈价值。",
-            "total_goals": "3球为模态，2球次低。若打出1-1则为2球，符合2-3球的平衡带。",
-            "half_full_time": "主/主1.64极低，但平/平8.1在冷门中偏低，需警惕半场无法打破僵局的风险。",
-            "external_market": "缺乏外部真实水位，但本地量化智能已明确提示主胜反向Steam和造热陷阱。"
+            "one_x_two": "1X2为1.18/5.25/11.0，去水后主胜约79%，市场方向明显压向荷兰；平局和客胜虽有基础概率，但在赛果层面属于防冷而非主线。",
+            "handicap": "让球为-1.0，按主队低赔语境需要比较1-0、2-0、2-1、3-1和1-1。2-0最低，3-0、3-1也处于低赔区，说明市场支持荷兰至少赢一球并具备赢两球以上可能；但HHAD具体赔率缺失，不能确认穿盘强信号。",
+            "correct_score": "正确比分最低为2-0，其后1-0、2-1并列6.5，3-0为7.5，主胜比分形成连续低赔簇。1-1进入第六低位，提示平局不能忽略；高比分如3-1、4-0、4-1也有压缩，但不是最稳定中轴。",
+            "total_goals": "总进球3球赔率3.15为模态，2球4.0次低，4球4.3第三。4球偏低但5球8.2未同步强压，说明4+有尾部风险但主形态仍更适合2-3球平衡带。",
+            "half_full_time": "半全场主/主1.6最低，平/主3.7次低，显示市场认为荷兰最终取胜概率高，同时上半场可能存在僵持后下半场拉开的路径。",
+            "external_market": "没有可用联网来源和完整外部欧赔、亚盘、交易所时间序列；dual_market_divergence_calibration不可用，因此外部市场只能列为缺口，不能用来上调信心。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -2084,11 +1281,14 @@
             "strength": 0,
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
-              "庄家造热陷阱",
-              "大热必死",
-              "友谊赛轮换"
+              "友谊赛轮换",
+              "中立场主场优势折减",
+              "主胜公众过热",
+              "缺少外部盘口验证",
+              "缺少确认首发",
+              "相邻比分竞争强"
             ],
-            "sharp_confirmed": true,
+            "sharp_confirmed": false,
             "dark_verdict": ""
           },
           "xG_home": "?",
@@ -2101,40 +1301,46 @@
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
           "gpt_score": "2-0",
-          "gpt_analysis": "本场市场主轴非常清楚：竞彩1X2主胜1.20，主胜降水，正确比分最低为2-0，主胜核心比分2-0、1-0、2-1、3-0密集，半全场主/主最低，整体支持荷兰取胜。比分选择上，已显式读取相邻比分表：2-0的相邻1-0和2-1都接近但不低于2-0，3-0稍高，1-1和3-1构成失败风险。总进球方面3球为模态、2球次低，4球偏低但5球未同步，说明不宜机械释放大球，2-3球更合理。最终给出荷兰2-0，但由于这是国际友谊赛、中立场、轮换风险和公众主胜拥挤明显，且无法联网验证外部赔率和阵容，因此推荐动作是观察而非下注。",
-          "grok_score": "1-1",
+          "gpt_analysis": "本场市场主线清晰偏向荷兰：1X2主胜1.18，半全场主/主最低，正确比分2-0、1-0、2-1、3-0构成低赔主胜簇。总进球以3球为模态，但2球赔率紧随，且4球虽低却未与5球形成完整大球塌缩，因此更适合选择2-3球中轴。最终取2-0，是因为它是最低正确比分并处在主胜覆盖与主胜窄胜两类簇的交汇处；不过1-0和2-1非常接近，1-1也进入低赔簇，加上国际友谊赛、中立场、公众主胜过热和无外部来源验证，推荐层面应降为no_bet。",
+          "grok_score": "2-0",
           "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
-          "gemini_score": "1-1",
-          "gemini_analysis": "综合分析，本场比赛静态数理极度看好荷兰（80%+胜率），且表面赔率（1.20）和比分簇（2-0/1-0/2-1）均指向主胜。然而，大众投票74%高度集中于主胜，且临场伴随降水，触发了本地量化智能的'正诱造热'和'大热必死'警报。根据最高裁判协议，面对此类严重的数理与盘口背离，绝不能盲从静态模型，必须主动下调推荐等级并揭露陷阱。考虑到友谊赛和中立场的双重缓冲，1-1是平局中最合理的冷门落点。由于博弈环境极其险恶，最终评级定为D，建议放弃投注（no_bet）。",
-          "final_referee_score": "1-1",
-          "final_referee_analysis": "综合分析，本场比赛静态数理极度看好荷兰（80%+胜率），且表面赔率（1.20）和比分簇（2-0/1-0/2-1）均指向主胜。然而，大众投票74%高度集中于主胜，且临场伴随降水，触发了本地量化智能的'正诱造热'和'大热必死'警报。根据最高裁判协议，面对此类严重的数理与盘口背离，绝不能盲从静态模型，必须主动下调推荐等级并揭露陷阱。考虑到友谊赛和中立场的双重缓冲，1-1是平局中最合理的冷门落点。由于博弈环境极其险恶，最终评级定为D，建议放弃投注（no_bet）。",
+          "gemini_score": "2-0",
+          "gemini_analysis": "本场最终取荷兰胜2-0。核心依据是1X2主胜1.18形成强方向锚，半全场主/主1.6强化荷兰掌控比赛的路径，正确比分中2-0为全场最低6.0，且1-0、2-1、3-0紧随其后，构成明显主胜中低比分簇。总进球端3球为模态，但2球赔率4.0紧随，4球虽低却没有与5球形成足够连续的大球共振，因此更适合选择2-3球平衡带中的2-0。没有选择2-1，是因为客队进球相关路径整体未强到超过零封主胜；没有选择1-0，是因为1球总进球支撑弱于2球；没有选择3-1或4+，是因为高分尾部有压缩但缺乏完整大球链条和外部验证。风险方面，1-1、2-1、3-1及2-2均需保留，尤其在友谊赛、中立场、轮换和公众主胜过热背景下，推荐等级必须下调为C且不建议正式下注。",
+          "final_referee_score": "2-0",
+          "final_referee_analysis": "本场最终取荷兰胜2-0。核心依据是1X2主胜1.18形成强方向锚，半全场主/主1.6强化荷兰掌控比赛的路径，正确比分中2-0为全场最低6.0，且1-0、2-1、3-0紧随其后，构成明显主胜中低比分簇。总进球端3球为模态，但2球赔率4.0紧随，4球虽低却没有与5球形成足够连续的大球共振，因此更适合选择2-3球平衡带中的2-0。没有选择2-1，是因为客队进球相关路径整体未强到超过零封主胜；没有选择1-0，是因为1球总进球支撑弱于2球；没有选择3-1或4+，是因为高分尾部有压缩但缺乏完整大球链条和外部验证。风险方面，1-1、2-1、3-1及2-2均需保留，尤其在友谊赛、中立场、轮换和公众主胜过热背景下，推荐等级必须下调为C且不建议正式下注。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
-          "final_ai_score": "1-1",
-          "final_ai_analysis": "综合分析，本场比赛静态数理极度看好荷兰（80%+胜率），且表面赔率（1.20）和比分簇（2-0/1-0/2-1）均指向主胜。然而，大众投票74%高度集中于主胜，且临场伴随降水，触发了本地量化智能的'正诱造热'和'大热必死'警报。根据最高裁判协议，面对此类严重的数理与盘口背离，绝不能盲从静态模型，必须主动下调推荐等级并揭露陷阱。考虑到友谊赛和中立场的双重缓冲，1-1是平局中最合理的冷门落点。由于博弈环境极其险恶，最终评级定为D，建议放弃投注（no_bet）。",
+          "final_ai_score": "2-0",
+          "final_ai_analysis": "本场最终取荷兰胜2-0。核心依据是1X2主胜1.18形成强方向锚，半全场主/主1.6强化荷兰掌控比赛的路径，正确比分中2-0为全场最低6.0，且1-0、2-1、3-0紧随其后，构成明显主胜中低比分簇。总进球端3球为模态，但2球赔率4.0紧随，4球虽低却没有与5球形成足够连续的大球共振，因此更适合选择2-3球平衡带中的2-0。没有选择2-1，是因为客队进球相关路径整体未强到超过零封主胜；没有选择1-0，是因为1球总进球支撑弱于2球；没有选择3-1或4+，是因为高分尾部有压缩但缺乏完整大球链条和外部验证。风险方面，1-1、2-1、3-1及2-2均需保留，尤其在友谊赛、中立场、轮换和公众主胜过热背景下，推荐等级必须下调为C且不建议正式下注。",
           "ai_abstained": [],
-          "ai_avg_confidence": 10.0,
+          "ai_avg_confidence": 46.0,
           "ai_call_status": {
             "gpt": {
               "phase1": {
-                "ok": false,
+                "ok": true,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                "elapsed": 77.7,
+                "status": "ok"
               },
-              "last_status": "http_524",
+              "last_status": "ok",
               "model": "熊猫-特供-X-10-gpt-5.5",
               "consistency": {
-                "ok": false,
+                "ok": true,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "consistency",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                "elapsed": 6.9,
+                "status": "ok"
+              },
+              "fallback_referee": {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "熊猫-特供-X-10-gpt-5.5",
+                "phase": "fallback_referee",
+                "elapsed": 76.3,
+                "status": "ok"
               }
             },
             "grok": {
@@ -2143,54 +1349,61 @@
                 "ai_name": "grok",
                 "model": "熊猫-X-10-grok-4.3",
                 "phase": "phase1",
-                "elapsed": 3.7,
+                "elapsed": 3.9,
                 "status": "http_403",
-                "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+                "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 908a11757f93b51849b78763b70eb8d1） (request id: 20260603125640415769958ZKiPPzry)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
               },
               "last_status": "http_403",
               "model": "熊猫-X-10-grok-4.3"
             },
             "gemini": {
               "final": {
-                "ok": true,
+                "ok": false,
                 "ai_name": "gemini",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
                 "phase": "final",
-                "elapsed": 62.1,
-                "status": "ok"
+                "elapsed": 300.3,
+                "status": "http_504",
+                "http_error": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>504 Gateway Timeout</title>\n    <style>\n        :root {\n            --primary-color: #3498db;\n            --background-color: #ffffff;\n            --text-color: #333333;\n            --text-light: #666666;\n            --border-color: #eeeeee;\n        }\n\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Segoe UI\", sans-serif;\n            background-color: var(--background-color);\n            color: var(--text-color);\n            line-height: 1.5;\n            padding: 0;\n            margin: 0;\n "
               },
-              "last_status": "ok",
+              "last_status": "http_504",
               "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
             }
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260603_121035_4m_047307b571a5_丹麦_刚果金",
+            "run_id": "20260603_125413_4m_d93113024e0b_丹麦_刚果金",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 4,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260603_121035_4m_047307b571a5_丹麦_刚果金_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260603_125413_4m_d93113024e0b_丹麦_刚果金_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
-                  "ok": false,
+                  "ok": true,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 125.2,
-                  "status": "http_524",
-                  "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                  "elapsed": 77.7,
+                  "status": "ok"
                 },
-                "last_status": "http_524",
+                "last_status": "ok",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "consistency": {
-                  "ok": false,
+                  "ok": true,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "consistency",
-                  "elapsed": 125.2,
-                  "status": "http_524",
-                  "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                  "elapsed": 6.9,
+                  "status": "ok"
+                },
+                "fallback_referee": {
+                  "ok": true,
+                  "ai_name": "gpt",
+                  "model": "熊猫-特供-X-10-gpt-5.5",
+                  "phase": "fallback_referee",
+                  "elapsed": 76.3,
+                  "status": "ok"
                 }
               },
               "grok": {
@@ -2199,23 +1412,24 @@
                   "ai_name": "grok",
                   "model": "熊猫-X-10-grok-4.3",
                   "phase": "phase1",
-                  "elapsed": 3.7,
+                  "elapsed": 3.9,
                   "status": "http_403",
-                  "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+                  "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 908a11757f93b51849b78763b70eb8d1） (request id: 20260603125640415769958ZKiPPzry)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
                 },
                 "last_status": "http_403",
                 "model": "熊猫-X-10-grok-4.3"
               },
               "gemini": {
                 "final": {
-                  "ok": true,
+                  "ok": false,
                   "ai_name": "gemini",
                   "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
                   "phase": "final",
-                  "elapsed": 62.1,
-                  "status": "ok"
+                  "elapsed": 300.3,
+                  "status": "http_504",
+                  "http_error": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>504 Gateway Timeout</title>\n    <style>\n        :root {\n            --primary-color: #3498db;\n            --background-color: #ffffff;\n            --text-color: #333333;\n            --text-light: #666666;\n            --border-color: #eeeeee;\n        }\n\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Segoe UI\", sans-serif;\n            background-color: var(--background-color);\n            color: var(--text-color);\n            line-height: 1.5;\n            padding: 0;\n            margin: 0;\n "
                 },
-                "last_status": "ok",
+                "last_status": "http_504",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
               }
             },
@@ -2265,177 +1479,221 @@
           "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
-            "selected_cluster": "low_score_draw_cluster",
-            "why_selected_score": "在主胜极度拥挤且被系统判定为庄家造热陷阱的背景下，选择1-1作为反向博弈的首选。国际友谊赛中立场，强队轮换易导致默契平局。",
+            "selected_cluster": "home_cover",
+            "why_selected_score": "选择2-0是因为它是全场最低正确比分，并同时覆盖两个核心结构：一是荷兰赢两球的让球覆盖形态，二是1-0/2-0/2-1构成的主胜窄胜低赔簇。相比2-1，2-0不依赖阿尔及利亚进球；相比1-0，2-0更贴合2球总进球次低与荷兰实力优势。",
             "adjacent_scores_checked": [
+              {
+                "score": "2-0",
+                "odds": 6,
+                "verdict": "keep",
+                "reason": "全市场最低正确比分，处于主胜覆盖簇和主胜窄胜簇交叉位置，是最强比分锚。"
+              },
               {
                 "score": "1-0",
                 "odds": 6.5,
                 "verdict": "near_miss",
-                "reason": "主队小胜，可能发生，但为了反打诱盘，退居其次。"
+                "reason": "赔率只比2-0高0.5，友谊赛降速时威胁明显；未选是因为总进球1球赔率6.25不如2球与3球集中。"
               },
               {
                 "score": "2-1",
                 "odds": 6.5,
                 "verdict": "near_miss",
-                "reason": "同为低赔，主队赢球输盘/走水路径。"
+                "reason": "与1-0同档且匹配3球模态，是最强替代比分；未选是因为BTTS需要客队进球，而客队方向比分整体被抬高。"
               },
               {
-                "score": "0-0",
-                "odds": 16.0,
-                "verdict": "keep",
-                "reason": "极端沉闷的平局，作为1-1的下位替代。"
+                "score": "3-0",
+                "odds": 7.5,
+                "verdict": "near_miss",
+                "reason": "仍属低赔主胜穿盘路径，但相对2-0需要荷兰更高转化率，友谊赛轮换背景下稳定性略低。"
+              },
+              {
+                "score": "1-1",
+                "odds": 9.5,
+                "verdict": "reject",
+                "reason": "平局最低比分且进入低赔簇，但1X2、半全场和主胜比分簇均明显支持荷兰，暂作为冷门保护。"
+              },
+              {
+                "score": "3-1",
+                "odds": 9.5,
+                "verdict": "reject",
+                "reason": "4球主胜BTTS尾部有压缩，但5球未同步塌缩，且2-3球中轴更清晰，不宜把3-1置于首位。"
+              },
+              {
+                "score": "4-0",
+                "odds": 14,
+                "verdict": "reject",
+                "reason": "主队大胜零封存在，但赔率已明显高于2-0/3-0，且友谊赛后段换人会降低持续打穿的确定性。"
               },
               {
                 "score": "2-2",
-                "odds": 21.0,
+                "odds": 21,
                 "verdict": "reject",
-                "reason": "赔率偏高，不符合2-3球的总进球核心区间。"
+                "reason": "高分平局属于BTTS尾部风险，低于部分客胜大比分，但与主胜核心簇差距较大。"
+              },
+              {
+                "score": "0-1",
+                "odds": 25,
+                "verdict": "reject",
+                "reason": "客胜最低比分，但与主胜核心比分差距极大，只能视为定位球或反击极端冷门。"
               }
             ],
-            "lowest_score_not_selected_reason": "2-0是最低赔，但由于明确的造热诱盘信号（大热+降水），坚决不盲从表面最低赔，选择反打。"
+            "lowest_score_not_selected_reason": "最低正确比分为2-0，已被选择；但1-0和2-1仅高0.5，说明比分稳定性不是强级别。"
           },
           "sharp_money_audit": {
             "available": true,
-            "confirmed_sharp_direction": "away",
+            "confirmed_sharp_direction": "unclear",
             "rlm_confirmed": false,
-            "vote_vs_odds_conflict": "大众74%看好主胜，赔率顺势降水，但系统底层逻辑判定为正诱造热，聪明钱逻辑指向下盘。",
-            "crs_change_impact": "比分赔率静态压低主胜，但1-1处于9.5的防范位，未被完全放弃。",
-            "ttg_change_impact": "2-3球区间赔率最低，支持1-1或2-1的打出。"
+            "vote_vs_odds_conflict": "公众主胜74%且主胜降水，表面上是热门顺势，并非可确认的反向盘口运动。由于没有开盘/即时赔率序列，不能把主胜热度简单解释为诱盘，也不能确认聪明钱同向。",
+            "crs_change_impact": "正确比分没有change_code，无法审计比分赔率是否临场变化。静态正确比分簇显示2-0、1-0、2-1、3-0压低，支持主胜中低比分，但不构成资金流确认。",
+            "ttg_change_impact": "总进球没有变化序列。静态结构为3球模态，2球次低，4球单点偏低；5球未强同步，提示2-3球优先，4+作为尾部而非主线。"
           },
           "recommendation_components": {
-            "direction_edge": 20,
-            "score_cluster_strength": 40,
-            "goal_band_strength": 60,
-            "btts_alignment": 50,
-            "sharp_alignment": 80,
-            "web_source_quality": 30,
-            "market_conflict_penalty": 100,
-            "final_grade_reason": "探测到严重的主胜造热陷阱，坚决下调评级至D，建议放弃或小注反打平局。"
+            "direction_edge": 72,
+            "score_cluster_strength": 69,
+            "goal_band_strength": 62,
+            "btts_alignment": 60,
+            "sharp_alignment": 20,
+            "web_source_quality": 0,
+            "market_conflict_penalty": 30,
+            "final_grade_reason": "方向端主胜优势明显，比分端2-0具备最低赔率锚和簇交叉优势；但确认聪明钱、外部盘口、实时首发全部缺失，且友谊赛与公众过热带来降级，最终只适合方向判断，不适合强投注。"
           },
           "risk_score_candidates": [
             {
               "score": "2-1",
-              "risk_type": "主队勉强小胜",
-              "reason": "主队实力占优，若未完全爆冷，可能一球小胜，赢球输盘。"
+              "risk_type": "主胜但丢球路径",
+              "reason": "2-1赔率6.5与1-0同档，仅次于2-0，且总进球3球为最低赔率模态；若荷兰轮换导致防线专注度下降，阿尔及利亚反击或定位球进球会把2-0推向2-1。"
             },
             {
-              "score": "2-0",
-              "risk_type": "正路打出",
-              "reason": "静态数理概率最高，若庄家非诱盘而是真实防范，2-0是首选。"
+              "score": "1-0",
+              "risk_type": "一球小胜路径",
+              "reason": "1-0赔率6.5与2-1并列低位，友谊赛中立场和避免伤病的背景下，荷兰领先后降速可能使比赛停留在一球差。"
             },
             {
-              "score": "1-2",
-              "risk_type": "客队反击爆冷",
-              "reason": "系统提示反向Steam，客队若反击得手可能直接爆冷取胜。"
+              "score": "3-0",
+              "risk_type": "主队效率上行穿盘",
+              "reason": "3-0赔率7.5仍在核心低赔区，若荷兰早段进球并持续压制，2球总进球中轴可能上移至3球零封。"
+            },
+            {
+              "score": "3-1",
+              "risk_type": "高位主胜BTTS尾部",
+              "reason": "3-1赔率9.5进入前五低赔簇，总进球4球赔率4.3偏低；若比赛节奏开放且阿尔及利亚能取得一球，3-1是主要4球尾部。"
+            },
+            {
+              "score": "1-1",
+              "risk_type": "友谊赛低分平局",
+              "reason": "1-1赔率9.5为平局最低且进入整体低赔第六位，中立场与热身赛轮换可能削弱荷兰优势，需作为冷门保护。"
+            },
+            {
+              "score": "2-2",
+              "risk_type": "高分平局尾部",
+              "reason": "2-2赔率21.0低于大多数客胜比分，高BTTS尾部有一定压缩；若荷兰进攻兑现但防守轮换失误增加，存在小概率高分平局。"
             }
           ],
           "tail_risk_flags": [
-            "public_home_heat",
-            "bookmaker_trap_suspected",
-            "friendly_rotation_risk"
+            "public_home_hot",
+            "friendly_rotation_risk",
+            "neutral_venue_home_edge_reduced",
+            "one_goal_win_near_lowest",
+            "high_btts_tail_not_zero",
+            "draw_1_1_low_rank"
           ],
-          "confidence_downgrade_reason": "系统明确探测到主胜反向Steam信号（降水+74%热度=庄家造热），存在极大的正诱造热陷阱，坚决下调评级并防范平局冷门。",
-          "protocol_risk_hints": [
-            "score_cluster_strength_below_55",
-            "direction_edge_below_55"
-          ],
+          "confidence_downgrade_reason": "主胜方向和正确比分簇高度一致，但赛事为国际友谊赛且中立场削弱主场优势；公众主胜热度达到74%，同时缺少外部赔率时间序列、实时首发和确认聪明钱证据，因此只能中等偏谨慎处理。",
           "matrix_direction_probs": {
-            "home": 80.13,
-            "draw": 13.79,
-            "away": 6.09
+            "home": 81.64,
+            "draw": 13.07,
+            "away": 5.28
           },
           "matrix_top_scores": [
             {
               "score": "2-0",
-              "prob": 14.333
+              "prob": 14.652
             },
             {
               "score": "2-1",
-              "prob": 13.248
+              "prob": 13.416
             },
             {
               "score": "3-0",
-              "prob": 11.679
+              "prob": 11.828
             },
             {
               "score": "1-0",
-              "prob": 11.469
+              "prob": 11.065
             },
             {
               "score": "3-1",
-              "prob": 9.329
+              "prob": 9.528
             },
             {
               "score": "4-0",
-              "prob": 6.345
+              "prob": 6.48
             },
             {
               "score": "1-1",
-              "prob": 5.808
+              "prob": 5.318
             },
             {
               "score": "4-1",
-              "prob": 4.753
+              "prob": 4.81
             },
             {
               "score": "0-0",
-              "prob": 4.254
+              "prob": 4.266
             },
             {
               "score": "3-2",
-              "prob": 3.743
+              "prob": 3.788
             },
             {
               "score": "4-2",
-              "prob": 3.102
+              "prob": 3.411
             },
             {
               "score": "2-2",
-              "prob": 2.751
+              "prob": 2.517
             },
             {
               "score": "1-2",
-              "prob": 1.861
+              "prob": 1.613
             },
             {
               "score": "0-1",
-              "prob": 1.653
+              "prob": 1.365
             },
             {
               "score": "3-3",
-              "prob": 0.868
+              "prob": 0.855
             },
             {
               "score": "0-2",
-              "prob": 0.781
+              "prob": 0.683
             },
             {
               "score": "2-3",
-              "prob": 0.611
+              "prob": 0.529
             },
             {
               "score": "1-3",
-              "prob": 0.569
-            },
-            {
-              "score": "0-3",
-              "prob": 0.286
+              "prob": 0.497
             },
             {
               "score": "5-2",
-              "prob": 0.235
+              "prob": 0.294
+            },
+            {
+              "score": "6-1",
+              "prob": 0.285
             }
           ],
           "matrix_goal_probs": {
-            "0": 4.25,
-            "1": 13.12,
-            "2": 20.92,
-            "3": 27.07,
-            "4": 18.99,
-            "5": 9.11,
-            "6": 3.97,
-            "7": 2.57
+            "0": 4.27,
+            "1": 12.43,
+            "2": 20.65,
+            "3": 27.1,
+            "4": 19.02,
+            "5": 9.13,
+            "6": 4.27,
+            "7": 3.13
           },
           "matrix_lambda_home": 2.03,
           "matrix_lambda_away": 0.743,
@@ -2443,7 +1701,7 @@
           "matrix_recommended_score": "2-0",
           "matrix_recommended_direction": "home",
           "matrix_disagreement_flags": {
-            "matrix_vs_final_direction_conflict": true,
+            "matrix_vs_final_direction_conflict": false,
             "matrix_high_goal_tail_conflict": false,
             "matrix_away_tail_warning": false,
             "matrix_draw_risk_warning": false,
@@ -2478,74 +1736,64 @@
               "motivation_unclear": false,
               "critical_absence": false,
               "weather_risk": false,
-              "referee_risk": true,
-              "market_confirmed": true,
-              "market_conflict": true,
-              "web_source_count": 1,
+              "referee_risk": false,
+              "market_confirmed": false,
+              "market_conflict": false,
+              "web_source_count": 0,
               "structured_quality_score": 36,
               "penalties": [
                 "lineup_unclear",
                 "rotation_risk",
-                "market_conflict",
-                "referee_risk"
+                "market_unconfirmed",
+                "no_web_sources"
               ],
               "injury_summary": {
                 "home": "无",
                 "away": "无"
               }
             },
-            "web_used_with_sources": true,
-            "lineup_confirmed": false,
+            "web_used_with_sources": false,
+            "lineup_confirmed": true,
             "money_flow": {
-              "sharp": "away",
+              "sharp": "unclear",
               "public": "home",
-              "sharp_clear": true,
+              "sharp_clear": false,
               "public_clear": true,
-              "conflict": true,
+              "conflict": false,
               "reverse": false
             },
-            "data_quality_score": 59.1,
-            "edge_gap": 10.0,
-            "draw_probability_watch": 35.0,
+            "data_quality_score": 45.9,
+            "edge_gap": 60.0,
+            "draw_probability_watch": 16.0,
             "draw_cluster_present": true,
-            "high_goal_tail_pct": 34.64,
+            "high_goal_tail_pct": 35.55,
             "rules_applied": [
-              "prematch_v2_structured_market_conflict_no_bet",
-              "prematch_v2_rotation_risk_requires_lineup",
               "prematch_v2_cup_cross_context_lineup_motivation_required",
-              "prematch_v2_money_flow_conflict_no_bet"
+              "prematch_v2_cross_region_requires_external_confirmation"
             ],
             "risk_hints": [
-              {
-                "max_tier": "D",
-                "reason": "prematch_v2_structured_market_conflict_no_bet",
-                "tag": "prematch_v2_structured_market_conflict"
-              },
-              {
-                "max_tier": "C",
-                "reason": "prematch_v2_rotation_risk_requires_lineup",
-                "tag": "prematch_v2_rotation_risk"
-              },
               {
                 "max_tier": "C",
                 "reason": "prematch_v2_cup_cross_context_lineup_motivation_required",
                 "tag": "prematch_v2_cup_cross_context"
               },
               {
-                "max_tier": "D",
-                "reason": "prematch_v2_money_flow_conflict_no_bet",
-                "tag": "prematch_v2_money_flow_conflict"
+                "max_tier": "C",
+                "reason": "prematch_v2_cross_region_requires_external_confirmation",
+                "tag": "prematch_v2_cross_region"
               }
             ]
           },
-          "selection_layer": "放弃",
+          "selection_layer": "观察",
           "selection_stake_unit": 0.0,
-          "selection_hedge_suggestions": [],
-          "selection_layer_reasons": [
-            "硬闸门触发"
+          "selection_hedge_suggestions": [
+            "等待官方首发/战意/临场盘口"
           ],
-          "selection_confirmation_bonus": 26,
-          "final_action": "放弃"
+          "selection_layer_reasons": [
+            "杯赛或跨洲场景需要临场确认"
+          ],
+          "selection_confirmation_bonus": 10,
+          "final_action": "观察"
         },
         "is_top4_candidate": false,
         "is_recommended": false,
@@ -2616,15 +1864,15 @@
           "l03": 55.0,
           "l13": 30.0,
           "l23": 45.0,
-          "ss": 3.3,
+          "ss": 3.45,
           "sp": 14.5,
           "sf": 38.0,
-          "ps": 4.3,
-          "pp": 4.45,
-          "pf": 7.9,
+          "ps": 4.1,
+          "pp": 4.3,
+          "pf": 8.1,
           "fs": 30.0,
           "fp": 14.5,
-          "ff": 5.9
+          "ff": 6.0
         },
         "id": 3,
         "date": "2026-06-03",
@@ -2683,15 +1931,15 @@
         "l03": 55.0,
         "l13": 30.0,
         "l23": 45.0,
-        "ss": 3.3,
+        "ss": 3.45,
         "sp": 14.5,
         "sf": 38.0,
-        "ps": 4.3,
-        "pp": 4.45,
-        "pf": 7.9,
+        "ps": 4.1,
+        "pp": 4.3,
+        "pf": 8.1,
         "fs": 30.0,
         "fp": 14.5,
-        "ff": 5.9,
+        "ff": 6.0,
         "home": "波兰",
         "guest": "尼日利亚",
         "change_is_direction_code": true,
@@ -2706,9 +1954,9 @@
           "dir_score_conflict": false,
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 45.0,
-          "draw_pct": 30.0,
-          "away_win_pct": 25.0,
+          "home_win_pct": 43.0,
+          "draw_pct": 31.0,
+          "away_win_pct": 26.0,
           "confidence": 40,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
           "risk_level": "high",
@@ -2729,27 +1977,25 @@
             "top4_priority": 4,
             "bet_confidence": 40,
             "direction_stability": "weak",
-            "score_stability": "weak",
+            "score_stability": "medium",
             "risk_level": "high",
             "risk_tags": [
               "友谊赛轮换风险",
-              "主胜升水客胜降水",
-              "低比分簇拥挤",
-              "外部市场缺失",
-              "客队反打不可忽略"
+              "主胜低赔但升水",
+              "客胜降水Steam信号",
+              "缺少外部赔率来源"
             ],
             "bet_action": "observe",
             "why_this_can_fail": [
-              "波兰若早早取得领先并控制节奏，1-0会直接击穿1-1判断。",
-              "尼日利亚若利用身体优势和转换速度制造高质量机会，0-1或1-2客胜尾部会放大。",
-              "友谊赛下半场大规模换人可能破坏防守结构，使2-2或3-1这类4球尾部出现。"
+              "若波兰主场优势兑现且尼日利亚锋线缺员真实影响很大，比赛可能停在1-0而非1-1。",
+              "若客胜降水代表真实信息而非噪声，尼日利亚0-1或1-2会击穿平局判断。",
+              "缺少联网来源确认阵容和外部盘口，当前方向无法形成可买闭环。"
             ],
             "minimum_evidence_needed": [
-              "临场首发名单及核心前锋/边锋是否出场。",
-              "主流欧洲公司开盘与即时1X2变化。",
-              "亚洲盘口初盘、即时盘和水位时间序列。"
+              "临场首发确认尼日利亚锋线缺员及波兰主力进攻配置。",
+              "外部主流欧赔与亚盘至少两个时间点，验证主胜升水和客胜降水是否同步。"
             ],
-            "why_recommended": "不建议投注。1-1只是当前抓包结构下的风险控制比分，非强推荐；主胜、平局、客胜尾部均有可解释路径，且无联网外部市场验证。"
+            "why_recommended": "不建议投注。若必须做赛果观察，1-1仅是市场结构下的中性首选，不具备推荐级别；更合适的动作是等待临场阵容和外部赔率确认。"
           },
           "recommendation_tier": "C",
           "recommend_gate_pass": false,
@@ -2768,72 +2014,72 @@
           "top_score_candidates": [
             [
               "1-1",
-              15.0
+              16.0
             ],
             [
               "1-0",
               14.0
             ],
             [
-              "2-1",
-              13.0
+              "0-1",
+              11.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
               "1-1",
-              15.0
+              16.0
             ],
             [
               "1-0",
               14.0
             ],
             [
-              "2-1",
-              13.0
+              "0-1",
+              11.0
             ]
           ],
-          "score_model_prob": 15.0,
+          "score_model_prob": 16.0,
           "score_market_odds": 6.5,
           "score_market_implied_pct": 15.385,
           "anchor_audit": {
-            "zero_zero": "0-0赔率10.0处于需要严肃审计区间，友谊赛慢热可能支持闷局；但0球在总进球中仅排第五，1球、2球、3球均更低，因此不作为首选。",
-            "one_one": "1-1赔率6.5为全场第二低，也是平局最低比分，并与2球总进球众数完全匹配；在主胜升水和客胜降水下，1-1是最稳的风险控制比分。",
-            "one_zero": "1-0赔率6.25为全场最低，主队边际优势明显；但其依赖主队零封，且与1-1差距极小，无法排除客队进球。",
-            "zero_one": "0-1赔率9.5为客队最低比分，结合客胜降水，是主要爆冷尾部；但其仍明显高于1-0和1-1，客胜路径暂未超过平局路径。",
-            "two_one": "2-1赔率7.0很低，说明主队小胜BTTS可行；但3球总进球不是第一模态，且相邻表中1-0、1-1均更低，因此只列为第三候选。",
-            "one_two": "1-2赔率11.0进入低赔前列，在主胜不超过52%、客胜不低且BTTS路径成立时必须防范；但其相邻竞争对手1-1、2-1、0-1均更低，客队反打是风险不是主判。",
-            "high_score_tail": "2-2赔率13.5、3-1赔率15.0显示4+正确比分有一定压缩，但总进球4球赔率6.1高于5.3排除线，高分只作尾部，不作主推。",
-            "handicap_cover": "2-0赔率8.5、3-0赔率16.0、3-1赔率15.0均不如1-0、1-1、2-1有力；让球穿盘证据不足，主队最多一球优势更合理。"
+            "zero_zero": "0-0赔率10.0属于必须严肃审计的低比分锚点，但总进球1球4.2、2球3.2均更强，且1-1仅6.5，说明市场并未把完全无进球作为主路径。",
+            "one_one": "1-1赔率6.5为全场第二低、平局方向最低，并与2球总进球主模态完全一致；在主胜低赔但升水、客胜降水的冲突结构下，1-1是最稳的折中锚。",
+            "one_zero": "1-0赔率6.25为全场最低，代表主队主场边际优势；但客胜降水及Steam信号削弱了主队零封取胜的确定性。",
+            "zero_one": "0-1赔率9.5并不深，客胜降水也增强其爆冷含义；如果波兰进攻效率下降或友谊赛轮换影响主队组织，0-1是关键防范。",
+            "two_one": "2-1赔率7.0贴近1-1，是主队BTTS窄胜路径；但3球总进球赔率3.55低于2球3.2，且相邻1-0、1-1均更低，因此2-1只能列为近似备选。",
+            "one_two": "1-2赔率11.0进入低赔前7，不能忽略；它与客胜降水、尼日利亚近期不败叙事相互呼应，作为风险比分。",
+            "high_score_tail": "2-2、3-1等4+比分有一定压缩，但总进球4球赔率6.1高于5.3排除线，5球及以上也未形成整簇塌缩；因此高分尾部需列入风险而非主推。",
+            "handicap_cover": "让球-1模板要求审计2-0、3-0、3-1等穿盘比分；当前2-0为8.5尚可，但3-1为15、3-0为16，穿盘簇均值较高，不支持主队稳定穿盘。"
           },
           "market_interpretation": {
-            "one_x_two": "竞彩1X2为主胜1.95、平2.98、客胜3.56，主队名义低赔但公平概率约47%，并非强势主胜盘。主胜升水、客胜降水意味着主队低赔优势受到市场资金的质疑。",
-            "handicap": "抓包给出让球raw=-1.0，结合正确比分，1-0、2-1、2-0低于大胜比分，形态更像一球边际而非稳定穿盘，主队大胜概率极低。",
-            "correct_score": "正确比分最低簇为1-0、1-1、2-1、2-0、0-1。低比分平局簇与主队小胜簇同时强，且0-1、1-2也不远，说明主队虽占优但抗风险能力不足，比赛倾向于胶着。",
-            "total_goals": "总进球赔率最低为2球3.2，其次3球3.55，1球4.2；4球为6.1，已高于大球排除线5.3，因此主审应放在0-3球区间，4+大比分仅作为尾部风险。",
-            "half_full_time": "半全场最低为主/主3.3，其次平/主4.3、平/平4.45、负/负5.9。市场承认主队路径，但平/平很低，说明半场僵持和全场平局需要严肃防范。",
-            "external_market": "未能联网获取外部欧赔、亚盘或交易所时间序列；无法进行国内竞彩与国际清算盘偏斜校验，只能按单轨抓包市场结构降级处理。"
+            "one_x_two": "竞彩1X2主胜1.95为最低，去水后主胜概率约46.6%，属于轻度主倾斜。但临场主胜升水、客胜降水，说明市场对主胜信心不足。",
+            "handicap": "抓包让球为-1，但结合正确比分1-0、1-1、2-1居前，市场更倾向于一球边际或不穿盘，不支持主队稳定大胜。",
+            "correct_score": "最低簇集中在1-0(6.25)、1-1(6.5)、2-1(7.0)，低分和窄分高度集中。1-1与1-0构成核心防线，客队0-1(9.5)也未被完全排除。",
+            "total_goals": "总进球最低为2球(3.2)，其次3球(3.55)和1球(4.2)。4球(6.1)高于5.3排除线，说明主审应放在0-3球，大比分阻力极大。",
+            "half_full_time": "半全场最低为主/主(3.45)，其次平/主(4.1)和平/平(4.3)，市场倾向波兰不败；但负/负(6.0)和平/负(8.1)不算极深，客队路径仍有空间。",
+            "external_market": "未能联网获取外部欧赔、亚盘与交易所数据，无法进行国内竞彩与国际清算盘的偏斜确认，只能按单轨竞彩结构解读。"
           },
           "money_flow": {
             "public_money_direction": "home",
             "sharp_money_direction": "away",
-            "sharp_confidence": 40,
+            "sharp_confidence": 60,
             "reverse_line_movement": false,
             "steam_move": "away",
-            "evidence": "公众投票主胜46%为最高，但变动显示主胜升水、客胜降水，且存在客胜Steam信号（赔率降-1.00但散户未跟），存在明显的客向降赔压力，但因缺少完整序列无法确认RLM。"
+            "evidence": "公众投票主胜46%为最高，但抓包变动为主胜升水、客胜降水。本地量化情报探测到客胜Steam信号（赔率降但散户未跟），提示客向存在资金异动。"
           },
           "contextual_logic": {
-            "league_style": "国际友谊赛通常战意与换人不稳定，既可能前段保守磨合，也可能后段因轮换导致防守松动；本场市场总进球没有支持极端大球，故按中低比分生态处理。",
-            "team_style": "波兰主场有一定支撑但近期状态不稳；尼日利亚排名和近期叙事占优，但情报显示锋线关键球员可能缺席，这会降低客胜效率，增加平局可能。",
+            "league_style": "国际友谊赛波动中等，通常存在练兵、换人和节奏不连续；既可能降低强队连续施压，也可能因防线默契不足产生双方进球。本场总进球市场并未支持极端大球。",
+            "team_style": "波兰主场尚可但近期防守有失球压力，尼日利亚状态叙事较好但锋线可能缺少奥斯梅恩与卢克曼，双方进攻端均有隐患。",
             "tempo": "medium",
-            "score_shape": "低比分胶着，主队边际优势与平局簇并存，最合理形态是1-1、1-0、2-1之间摇摆。",
+            "score_shape": "低到中等总进球，核心形态为1球小胜或1-1平局；若早球出现，可能滑向2-1或1-2，但4+阻力较大。",
             "btts_likelihood": "yes",
             "rotation_risk": "high"
           },
           "rejected_cases": {
-            "home": "主胜低赔与1-0最低支持主队，但主胜升水、客胜降水削弱方向；若选主胜2-1，必须越过1-0和1-1两个更低/接近锚点，证据不足以支撑单挑主胜。",
-            "draw": "平局不是被拒绝方向，而是最终方向；但因1-0最低且半全场主/主最低，平局也不是高信心，只能作为风险控制选择。",
-            "away": "尼日利亚客胜降水与0-1、1-2尾部需要防范，但1X2客胜仍为3.56，客胜正确比分整体层级弱于主队和平局，缺乏升为主方向的充分证据。"
+            "home": "主胜是最低方向且1-0、2-1、2-0都强，但主胜升水、客胜降水与友谊赛轮换风险使主队赢球稳定性不足，且客队有Steam信号，不能把主胜包装成高信心。",
+            "draw": "最终方向选择平局，但并非强推；平局主要来自比分簇和总进球模态的折中，风险在于1-0最低赔和主/主半全场最低仍支持主队边际优势。",
+            "away": "尼日利亚排名和状态叙事、客胜降水、0-1/1-2低位都构成爆冷红灯；但1X2客胜仍是最高赔方向，且锋线核心可能缺席，直接选客胜证据不足。"
           },
           "web_research": {
             "used": false,
@@ -2842,7 +2088,8 @@
             "sources": [],
             "freshness_grade": "missing",
             "key_findings": [
-              "无法联网核验外部欧赔、亚盘、交易所成交、最新阵容与赔率时间点。所有方向判断仅基于抓包市场结构与packet_context。"
+              "无法联网核验外部欧赔、亚盘、交易所价格及赔率时间点。",
+              "无法联网确认奥斯梅恩、卢克曼、莫德等伤停与首发名单。"
             ],
             "source_conflicts": [],
             "validation_warnings": []
@@ -2855,17 +2102,18 @@
           },
           "data_quality": {
             "missing": [
-              "外部欧赔来源",
-              "亚洲盘口时间序列",
-              "交易所成交",
-              "实时首发阵容",
-              "可靠伤停来源",
-              "HHAD具体赔率"
+              "实时外部欧赔",
+              "亚盘即时水位",
+              "交易所成交数据",
+              "确认首发名单",
+              "权威伤停来源"
             ],
             "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "本场核心在于识别低赔主队的不稳定性。竞彩1X2给波兰低赔，但公平概率并不强，且变动显示主胜升水、客胜降水，并伴有客胜Steam信号；正确比分方面，1-0最低、1-1第二、2-1第三，三个比分贴得很近，说明市场更倾向低比分边际而非主队明确穿盘。总进球2球最低，4球赔率6.1形成大球阻力，因此1-1符合总进球众数和平局低赔簇；但由于1-0更低、2-1接近、0-1和1-2存在客队反打风险，本场只能观察，不应包装为高信心推荐。",
+          "ai_native_reason": "本场竞彩静态结构是轻度主队热门，但非强势主胜：1X2主胜最低，正确比分1-0最低，然而1-1、2-1紧贴，且总进球主模态为2球，说明低分窄分是核心。主胜升水、客胜降水与公众主胜最高形成潜在反向博弈，且本地量化情报探测到客胜Steam信号，说明有资金在防范客队不败。强制读取相邻比分表后，1-1相邻的1-0更低、2-1接近，因此1-1只能作为兼容主队优势不足和客队进球风险的折中预测，而不是高信心推荐。由于无法联网完成Web-Augmented Research，缺少外部赔率与阵容核验，最终应以观察为主。",
           "validation_warnings": [
+            "protocol_risk_hint:score_cluster_strength_below_55",
+            "protocol_risk_hint:sharp_alignment_low_and_direction_edge_not_strong",
             "protocol_risk_hint:direction_edge_below_55",
             "prematch_v2:prematch_v2_structured_market_conflict_no_bet",
             "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
@@ -2877,12 +2125,12 @@
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
             "final_model=gemini phase=final score=1-1 direction=draw",
-            "anchor_audit:{\"zero_zero\":\"0-0赔率10.0处于需要严肃审计区间，友谊赛慢热可能支持闷局；但0球在总进球中仅排第五，1球、2球、3球均更低，因此不作为首选。\",\"one_one\":\"1-1赔率6.5为全场第二低，也是平局最低比分，并与2球总进球众数完全匹配；在主胜升水和客胜降水下，1-1是最稳的风险控制比分。\",\"one_zero\":\"1-0赔率6.25为全场最低，主队边际优势明显；但其依赖主队零封，且与1-1差距极小，无法排除客队进球。\",\"zero_one\":\"0-1赔率9.5为客队最低比分，结合客胜降水，是主要爆冷尾部；但其仍明显高于1-0和1-1，客胜路径暂未超过平局路径。\",\"two_one\":\"2-1赔率7.0很低，说明主队小胜BTTS可行；但3球总进球不是第一模态，且相邻表中1-0、1-1均更低，因此只列为第三候选。\",\"one_two\":\"1-2赔率11.0进入低赔前列，在主胜不超过52%、客胜不低且BTTS路径成立时必须防范；但其相邻竞争对手1-1、2-1、0-1均更低，客队反打是风险不是主判。\",\"high_score_tail\":\"2-2赔率13.5、3-1赔率15.0显示4+正确比分有一定压缩，但总进球4球赔率6.1高于5.3排除线，高分只作尾部，不作主推。\",\"handicap_cover\":\"2-0赔率8.5、3-0赔率16.0、3-1赔率15.0均不如1-0、1-1、2-1有力；让球穿盘证据不足，主队最多一球优势更合理。\"}",
-            "market_interpretation:{\"one_x_two\":\"竞彩1X2为主胜1.95、平2.98、客胜3.56，主队名义低赔但公平概率约47%，并非强势主胜盘。主胜升水、客胜降水意味着主队低赔优势受到市场资金的质疑。\",\"handicap\":\"抓包给出让球raw=-1.0，结合正确比分，1-0、2-1、2-0低于大胜比分，形态更像一球边际而非稳定穿盘，主队大胜概率极低。\",\"correct_score\":\"正确比分最低簇为1-0、1-1、2-1、2-0、0-1。低比分平局簇与主队小胜簇同时强，且0-1、1-2也不远，说明主队虽占优但抗风险能力不足，比赛倾向于胶着。\",\"total_goals\":\"总进球赔率最低为2球3.2，其次3球3.55，1球4.2；4球为6.1，已高于大球排除线5.3，因此主审应放在0-3球区间，4+大比分仅作为尾部风险。\",\"half_full_time\":\"半全场最低为主/主3.3，其次平/主4.3、平/平4.45、负/负5.9。市场承认主队路径，但平/平很低，说明半场僵持和全场平局需要严肃防范。\",\"external_market\":\"未能联网获取外部欧赔、亚盘或交易所时间序列；无法进行国内竞彩与国际清算盘偏斜校验，只能按单轨抓包市场结构降级处理。\"}",
-            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"away\",\"sharp_confidence\":40,\"reverse_line_movement\":false,\"steam_move\":\"away\",\"evidence\":\"公众投票主胜46%为最高，但变动显示主胜升水、客胜降水，且存在客胜Steam信号（赔率降-1.00但散户未跟），存在明显的客向降赔压力，但因缺少完整序列无法确认RLM。\"}",
-            "contextual_logic:{\"league_style\":\"国际友谊赛通常战意与换人不稳定，既可能前段保守磨合，也可能后段因轮换导致防守松动；本场市场总进球没有支持极端大球，故按中低比分生态处理。\",\"team_style\":\"波兰主场有一定支撑但近期状态不稳；尼日利亚排名和近期叙事占优，但情报显示锋线关键球员可能缺席，这会降低客胜效率，增加平局可能。\",\"tempo\":\"medium\",\"score_shape\":\"低比分胶着，主队边际优势与平局簇并存，最合理形态是1-1、1-0、2-1之间摇摆。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"high\"}",
-            "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[\"无法联网核验外部欧赔、亚盘、交易所成交、最新阵容与赔率时间点。所有方向判断仅基于抓包市场结构与packet_context。\"],\"source_conflicts\":[],\"validation_warnings\":[]}",
-            "recommendation:{\"tier\":\"C\",\"is_recommended\":false,\"top4_priority\":4,\"bet_confidence\":40,\"direction_stability\":\"weak\",\"score_stability\":\"weak\",\"risk_level\":\"high\",\"risk_tags\":[\"友谊赛轮换风险\",\"主胜升水客胜降水\",\"低比分簇拥挤\",\"外部市场缺失\",\"客队反打不可忽略\"],\"bet_action\":\"observe\",\"why_this_can_fail\":[\"波兰若早早取得领先并控制节奏，1-0会直接击穿1-1判断。\",\"尼日利亚若利用身体优势和转换速度制造高质量机会，0-1或1-2客胜尾部会放大。\",\"友谊赛下半场大规模换人可能破坏防守结构，使2-2或3-1这类4球尾部出现。\"],\"minimum_evidence_needed\":[\"临场首发名单及核心前锋/边锋是否出场。\",\"主流欧洲公司开盘与即时1X2变化。\",\"亚洲盘口初盘、即时盘和水位时间序列。\"],\"why_recommended\":\"不建议投注。1-1只是当前抓包结构下的风险控制比分，非强推荐；主胜、平局、客胜尾部均有可解释路径，且无联网外部市场验证。\"}"
+            "anchor_audit:{\"zero_zero\":\"0-0赔率10.0属于必须严肃审计的低比分锚点，但总进球1球4.2、2球3.2均更强，且1-1仅6.5，说明市场并未把完全无进球作为主路径。\",\"one_one\":\"1-1赔率6.5为全场第二低、平局方向最低，并与2球总进球主模态完全一致；在主胜低赔但升水、客胜降水的冲突结构下，1-1是最稳的折中锚。\",\"one_zero\":\"1-0赔率6.25为全场最低，代表主队主场边际优势；但客胜降水及Steam信号削弱了主队零封取胜的确定性。\",\"zero_one\":\"0-1赔率9.5并不深，客胜降水也增强其爆冷含义；如果波兰进攻效率下降或友谊赛轮换影响主队组织，0-1是关键防范。\",\"two_one\":\"2-1赔率7.0贴近1-1，是主队BTTS窄胜路径；但3球总进球赔率3.55低于2球3.2，且相邻1-0、1-1均更低，因此2-1只能列为近似备选。\",\"one_two\":\"1-2赔率11.0进入低赔前7，不能忽略；它与客胜降水、尼日利亚近期不败叙事相互呼应，作为风险比分。\",\"high_score_tail\":\"2-2、3-1等4+比分有一定压缩，但总进球4球赔率6.1高于5.3排除线，5球及以上也未形成整簇塌缩；因此高分尾部需列入风险而非主推。\",\"handicap_cover\":\"让球-1模板要求审计2-0、3-0、3-1等穿盘比分；当前2-0为8.5尚可，但3-1为15、3-0为16，穿盘簇均值较高，不支持主队稳定穿盘。\"}",
+            "market_interpretation:{\"one_x_two\":\"竞彩1X2主胜1.95为最低，去水后主胜概率约46.6%，属于轻度主倾斜。但临场主胜升水、客胜降水，说明市场对主胜信心不足。\",\"handicap\":\"抓包让球为-1，但结合正确比分1-0、1-1、2-1居前，市场更倾向于一球边际或不穿盘，不支持主队稳定大胜。\",\"correct_score\":\"最低簇集中在1-0(6.25)、1-1(6.5)、2-1(7.0)，低分和窄分高度集中。1-1与1-0构成核心防线，客队0-1(9.5)也未被完全排除。\",\"total_goals\":\"总进球最低为2球(3.2)，其次3球(3.55)和1球(4.2)。4球(6.1)高于5.3排除线，说明主审应放在0-3球，大比分阻力极大。\",\"half_full_time\":\"半全场最低为主/主(3.45)，其次平/主(4.1)和平/平(4.3)，市场倾向波兰不败；但负/负(6.0)和平/负(8.1)不算极深，客队路径仍有空间。\",\"external_market\":\"未能联网获取外部欧赔、亚盘与交易所数据，无法进行国内竞彩与国际清算盘的偏斜确认，只能按单轨竞彩结构解读。\"}",
+            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"away\",\"sharp_confidence\":60,\"reverse_line_movement\":false,\"steam_move\":\"away\",\"evidence\":\"公众投票主胜46%为最高，但抓包变动为主胜升水、客胜降水。本地量化情报探测到客胜Steam信号（赔率降但散户未跟），提示客向存在资金异动。\"}",
+            "contextual_logic:{\"league_style\":\"国际友谊赛波动中等，通常存在练兵、换人和节奏不连续；既可能降低强队连续施压，也可能因防线默契不足产生双方进球。本场总进球市场并未支持极端大球。\",\"team_style\":\"波兰主场尚可但近期防守有失球压力，尼日利亚状态叙事较好但锋线可能缺少奥斯梅恩与卢克曼，双方进攻端均有隐患。\",\"tempo\":\"medium\",\"score_shape\":\"低到中等总进球，核心形态为1球小胜或1-1平局；若早球出现，可能滑向2-1或1-2，但4+阻力较大。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"high\"}",
+            "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[\"无法联网核验外部欧赔、亚盘、交易所价格及赔率时间点。\",\"无法联网确认奥斯梅恩、卢克曼、莫德等伤停与首发名单。\"],\"source_conflicts\":[],\"validation_warnings\":[]}",
+            "recommendation:{\"tier\":\"C\",\"is_recommended\":false,\"top4_priority\":4,\"bet_confidence\":40,\"direction_stability\":\"weak\",\"score_stability\":\"medium\",\"risk_level\":\"high\",\"risk_tags\":[\"友谊赛轮换风险\",\"主胜低赔但升水\",\"客胜降水Steam信号\",\"缺少外部赔率来源\"],\"bet_action\":\"observe\",\"why_this_can_fail\":[\"若波兰主场优势兑现且尼日利亚锋线缺员真实影响很大，比赛可能停在1-0而非1-1。\",\"若客胜降水代表真实信息而非噪声，尼日利亚0-1或1-2会击穿平局判断。\",\"缺少联网来源确认阵容和外部盘口，当前方向无法形成可买闭环。\"],\"minimum_evidence_needed\":[\"临场首发确认尼日利亚锋线缺员及波兰主力进攻配置。\",\"外部主流欧赔与亚盘至少两个时间点，验证主胜升水和客胜降水是否同步。\"],\"why_recommended\":\"不建议投注。若必须做赛果观察，1-1仅是市场结构下的中性首选，不具备推荐级别；更合适的动作是等待临场阵容和外部赔率确认。\"}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -2911,13 +2159,12 @@
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "公众投票主胜46%为最高，但变动显示主胜升水、客胜降水，且存在客胜Steam信号（赔率降-1.00但散户未跟），存在明显的客向降赔压力，但因缺少完整序列无法确认RLM。",
+          "smart_money_signal": "公众投票主胜46%为最高，但抓包变动为主胜升水、客胜降水。本地量化情报探测到客胜Steam信号（赔率降但散户未跟），提示客向存在资金异动。",
           "smart_signals": [
             "友谊赛轮换风险",
-            "主胜升水客胜降水",
-            "低比分簇拥挤",
-            "外部市场缺失",
-            "客队反打不可忽略"
+            "主胜低赔但升水",
+            "客胜降水Steam信号",
+            "缺少外部赔率来源"
           ],
           "sharp_detected": true,
           "sharp_dir": "away",
@@ -2926,18 +2173,18 @@
           "sharp_audit": {
             "public_money_direction": "home",
             "sharp_money_direction": "away",
-            "sharp_confidence": 40,
+            "sharp_confidence": 60,
             "reverse_line_movement": false,
             "steam_move": "away",
-            "evidence": "公众投票主胜46%为最高，但变动显示主胜升水、客胜降水，且存在客胜Steam信号（赔率降-1.00但散户未跟），存在明显的客向降赔压力，但因缺少完整序列无法确认RLM。"
+            "evidence": "公众投票主胜46%为最高，但抓包变动为主胜升水、客胜降水。本地量化情报探测到客胜Steam信号（赔率降但散户未跟），提示客向存在资金异动。"
           },
           "score_market_evidence": {
-            "one_x_two": "竞彩1X2为主胜1.95、平2.98、客胜3.56，主队名义低赔但公平概率约47%，并非强势主胜盘。主胜升水、客胜降水意味着主队低赔优势受到市场资金的质疑。",
-            "handicap": "抓包给出让球raw=-1.0，结合正确比分，1-0、2-1、2-0低于大胜比分，形态更像一球边际而非稳定穿盘，主队大胜概率极低。",
-            "correct_score": "正确比分最低簇为1-0、1-1、2-1、2-0、0-1。低比分平局簇与主队小胜簇同时强，且0-1、1-2也不远，说明主队虽占优但抗风险能力不足，比赛倾向于胶着。",
-            "total_goals": "总进球赔率最低为2球3.2，其次3球3.55，1球4.2；4球为6.1，已高于大球排除线5.3，因此主审应放在0-3球区间，4+大比分仅作为尾部风险。",
-            "half_full_time": "半全场最低为主/主3.3，其次平/主4.3、平/平4.45、负/负5.9。市场承认主队路径，但平/平很低，说明半场僵持和全场平局需要严肃防范。",
-            "external_market": "未能联网获取外部欧赔、亚盘或交易所时间序列；无法进行国内竞彩与国际清算盘偏斜校验，只能按单轨抓包市场结构降级处理。"
+            "one_x_two": "竞彩1X2主胜1.95为最低，去水后主胜概率约46.6%，属于轻度主倾斜。但临场主胜升水、客胜降水，说明市场对主胜信心不足。",
+            "handicap": "抓包让球为-1，但结合正确比分1-0、1-1、2-1居前，市场更倾向于一球边际或不穿盘，不支持主队稳定大胜。",
+            "correct_score": "最低簇集中在1-0(6.25)、1-1(6.5)、2-1(7.0)，低分和窄分高度集中。1-1与1-0构成核心防线，客队0-1(9.5)也未被完全排除。",
+            "total_goals": "总进球最低为2球(3.2)，其次3球(3.55)和1球(4.2)。4球(6.1)高于5.3排除线，说明主审应放在0-3球，大比分阻力极大。",
+            "half_full_time": "半全场最低为主/主(3.45)，其次平/主(4.1)和平/平(4.3)，市场倾向波兰不败；但负/负(6.0)和平/负(8.1)不算极深，客队路径仍有空间。",
+            "external_market": "未能联网获取外部欧赔、亚盘与交易所数据，无法进行国内竞彩与国际清算盘的偏斜确认，只能按单轨竞彩结构解读。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -2948,10 +2195,9 @@
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
               "友谊赛轮换风险",
-              "主胜升水客胜降水",
-              "低比分簇拥挤",
-              "外部市场缺失",
-              "客队反打不可忽略"
+              "主胜低赔但升水",
+              "客胜降水Steam信号",
+              "缺少外部赔率来源"
             ],
             "sharp_confirmed": true,
             "dark_verdict": ""
@@ -2966,40 +2212,46 @@
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
           "gpt_score": "1-1",
-          "gpt_analysis": "本场核心不是寻找热门主胜，而是识别低赔主队的不稳定性。竞彩1X2给波兰低赔，但公平概率并不强，且变动显示主胜升水、客胜降水；正确比分方面，1-0最低、1-1第二、2-1第三，三个比分贴得很近，说明市场更倾向低比分边际而非主队明确穿盘。总进球2球最低，4球赔率6.1形成大球阻力，因此1-1符合总进球众数和平局低赔簇；但由于1-0更低、2-1接近、0-1和1-2存在客队反打风险，本场只能观察，不应包装为高信心推荐。",
+          "gpt_analysis": "本场竞彩静态结构是轻度主队热门，但非强势主胜：1X2主胜最低，正确比分1-0最低，然而1-1、2-1紧贴，且总进球主模态为2球，说明低分窄分是核心。主胜升水、客胜降水与公众主胜最高形成潜在反向博弈，但sharp_money_facts_v203没有确认RLM，不能上升为聪明钱结论。强制读取相邻比分表后，1-1相邻的1-0更低、2-1接近，因此1-1只能作为兼容主队优势不足和客队进球风险的折中预测，而不是高信心推荐。4球以上虽有2-2、3-1压缩，但总进球4球6.1超过排除线，不宜主推大比分。由于无法联网完成Web-Augmented Research，缺少外部赔率与阵容核验，最终应以观察为主。",
           "grok_score": "1-1",
           "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
           "gemini_score": "1-1",
-          "gemini_analysis": "本场核心在于识别低赔主队的不稳定性。竞彩1X2给波兰低赔，但公平概率并不强，且变动显示主胜升水、客胜降水，并伴有客胜Steam信号；正确比分方面，1-0最低、1-1第二、2-1第三，三个比分贴得很近，说明市场更倾向低比分边际而非主队明确穿盘。总进球2球最低，4球赔率6.1形成大球阻力，因此1-1符合总进球众数和平局低赔簇；但由于1-0更低、2-1接近、0-1和1-2存在客队反打风险，本场只能观察，不应包装为高信心推荐。",
+          "gemini_analysis": "本场竞彩静态结构是轻度主队热门，但非强势主胜：1X2主胜最低，正确比分1-0最低，然而1-1、2-1紧贴，且总进球主模态为2球，说明低分窄分是核心。主胜升水、客胜降水与公众主胜最高形成潜在反向博弈，且本地量化情报探测到客胜Steam信号，说明有资金在防范客队不败。强制读取相邻比分表后，1-1相邻的1-0更低、2-1接近，因此1-1只能作为兼容主队优势不足和客队进球风险的折中预测，而不是高信心推荐。由于无法联网完成Web-Augmented Research，缺少外部赔率与阵容核验，最终应以观察为主。",
           "final_referee_score": "1-1",
-          "final_referee_analysis": "本场核心在于识别低赔主队的不稳定性。竞彩1X2给波兰低赔，但公平概率并不强，且变动显示主胜升水、客胜降水，并伴有客胜Steam信号；正确比分方面，1-0最低、1-1第二、2-1第三，三个比分贴得很近，说明市场更倾向低比分边际而非主队明确穿盘。总进球2球最低，4球赔率6.1形成大球阻力，因此1-1符合总进球众数和平局低赔簇；但由于1-0更低、2-1接近、0-1和1-2存在客队反打风险，本场只能观察，不应包装为高信心推荐。",
+          "final_referee_analysis": "本场竞彩静态结构是轻度主队热门，但非强势主胜：1X2主胜最低，正确比分1-0最低，然而1-1、2-1紧贴，且总进球主模态为2球，说明低分窄分是核心。主胜升水、客胜降水与公众主胜最高形成潜在反向博弈，且本地量化情报探测到客胜Steam信号，说明有资金在防范客队不败。强制读取相邻比分表后，1-1相邻的1-0更低、2-1接近，因此1-1只能作为兼容主队优势不足和客队进球风险的折中预测，而不是高信心推荐。由于无法联网完成Web-Augmented Research，缺少外部赔率与阵容核验，最终应以观察为主。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
           "final_ai_score": "1-1",
-          "final_ai_analysis": "本场核心在于识别低赔主队的不稳定性。竞彩1X2给波兰低赔，但公平概率并不强，且变动显示主胜升水、客胜降水，并伴有客胜Steam信号；正确比分方面，1-0最低、1-1第二、2-1第三，三个比分贴得很近，说明市场更倾向低比分边际而非主队明确穿盘。总进球2球最低，4球赔率6.1形成大球阻力，因此1-1符合总进球众数和平局低赔簇；但由于1-0更低、2-1接近、0-1和1-2存在客队反打风险，本场只能观察，不应包装为高信心推荐。",
+          "final_ai_analysis": "本场竞彩静态结构是轻度主队热门，但非强势主胜：1X2主胜最低，正确比分1-0最低，然而1-1、2-1紧贴，且总进球主模态为2球，说明低分窄分是核心。主胜升水、客胜降水与公众主胜最高形成潜在反向博弈，且本地量化情报探测到客胜Steam信号，说明有资金在防范客队不败。强制读取相邻比分表后，1-1相邻的1-0更低、2-1接近，因此1-1只能作为兼容主队优势不足和客队进球风险的折中预测，而不是高信心推荐。由于无法联网完成Web-Augmented Research，缺少外部赔率与阵容核验，最终应以观察为主。",
           "ai_abstained": [],
           "ai_avg_confidence": 40.0,
           "ai_call_status": {
             "gpt": {
               "phase1": {
-                "ok": false,
+                "ok": true,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                "elapsed": 77.7,
+                "status": "ok"
               },
-              "last_status": "http_524",
+              "last_status": "ok",
               "model": "熊猫-特供-X-10-gpt-5.5",
               "consistency": {
-                "ok": false,
+                "ok": true,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "consistency",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                "elapsed": 6.9,
+                "status": "ok"
+              },
+              "fallback_referee": {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "熊猫-特供-X-10-gpt-5.5",
+                "phase": "fallback_referee",
+                "elapsed": 76.3,
+                "status": "ok"
               }
             },
             "grok": {
@@ -3008,54 +2260,61 @@
                 "ai_name": "grok",
                 "model": "熊猫-X-10-grok-4.3",
                 "phase": "phase1",
-                "elapsed": 3.7,
+                "elapsed": 3.9,
                 "status": "http_403",
-                "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+                "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 908a11757f93b51849b78763b70eb8d1） (request id: 20260603125640415769958ZKiPPzry)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
               },
               "last_status": "http_403",
               "model": "熊猫-X-10-grok-4.3"
             },
             "gemini": {
               "final": {
-                "ok": true,
+                "ok": false,
                 "ai_name": "gemini",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
                 "phase": "final",
-                "elapsed": 62.1,
-                "status": "ok"
+                "elapsed": 300.3,
+                "status": "http_504",
+                "http_error": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>504 Gateway Timeout</title>\n    <style>\n        :root {\n            --primary-color: #3498db;\n            --background-color: #ffffff;\n            --text-color: #333333;\n            --text-light: #666666;\n            --border-color: #eeeeee;\n        }\n\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Segoe UI\", sans-serif;\n            background-color: var(--background-color);\n            color: var(--text-color);\n            line-height: 1.5;\n            padding: 0;\n            margin: 0;\n "
               },
-              "last_status": "ok",
+              "last_status": "http_504",
               "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
             }
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260603_121035_4m_047307b571a5_丹麦_刚果金",
+            "run_id": "20260603_125413_4m_d93113024e0b_丹麦_刚果金",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 4,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260603_121035_4m_047307b571a5_丹麦_刚果金_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260603_125413_4m_d93113024e0b_丹麦_刚果金_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
-                  "ok": false,
+                  "ok": true,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 125.2,
-                  "status": "http_524",
-                  "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                  "elapsed": 77.7,
+                  "status": "ok"
                 },
-                "last_status": "http_524",
+                "last_status": "ok",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "consistency": {
-                  "ok": false,
+                  "ok": true,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "consistency",
-                  "elapsed": 125.2,
-                  "status": "http_524",
-                  "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                  "elapsed": 6.9,
+                  "status": "ok"
+                },
+                "fallback_referee": {
+                  "ok": true,
+                  "ai_name": "gpt",
+                  "model": "熊猫-特供-X-10-gpt-5.5",
+                  "phase": "fallback_referee",
+                  "elapsed": 76.3,
+                  "status": "ok"
                 }
               },
               "grok": {
@@ -3064,23 +2323,24 @@
                   "ai_name": "grok",
                   "model": "熊猫-X-10-grok-4.3",
                   "phase": "phase1",
-                  "elapsed": 3.7,
+                  "elapsed": 3.9,
                   "status": "http_403",
-                  "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+                  "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 908a11757f93b51849b78763b70eb8d1） (request id: 20260603125640415769958ZKiPPzry)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
                 },
                 "last_status": "http_403",
                 "model": "熊猫-X-10-grok-4.3"
               },
               "gemini": {
                 "final": {
-                  "ok": true,
+                  "ok": false,
                   "ai_name": "gemini",
                   "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
                   "phase": "final",
-                  "elapsed": 62.1,
-                  "status": "ok"
+                  "elapsed": 300.3,
+                  "status": "http_504",
+                  "http_error": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>504 Gateway Timeout</title>\n    <style>\n        :root {\n            --primary-color: #3498db;\n            --background-color: #ffffff;\n            --text-color: #333333;\n            --text-light: #666666;\n            --border-color: #eeeeee;\n        }\n\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Segoe UI\", sans-serif;\n            background-color: var(--background-color);\n            color: var(--text-color);\n            line-height: 1.5;\n            padding: 0;\n            margin: 0;\n "
                 },
-                "last_status": "ok",
+                "last_status": "http_504",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
               }
             },
@@ -3131,106 +2391,103 @@
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
             "selected_cluster": "draw_low",
-            "why_selected_score": "选择1-1是因为总进球主模态为2球，1-1为平局最低比分且全场第二低；相邻比分中1-0更低但只差0.25，2-1也仅高0.5，说明市场在主队一球胜与双方进球平局之间摇摆。考虑主胜升水、客胜降水以及友谊赛轮换，1-1比单边主胜更符合风险控制。",
+            "why_selected_score": "选择1-1是因为总进球主模态为2球，1-1是2球档中最低的双方进球比分。主胜低赔与主胜升水存在冲突，客队有Steam信号，1-1能最好地平衡主队底蕴与客队资金动向。",
             "adjacent_scores_checked": [
               {
                 "score": "1-0",
                 "odds": 6.25,
                 "verdict": "near_miss",
-                "reason": "全场最低赔率，必须保留；但其要求客队无进球，而1-1与2-1均很接近，说明BTTS并未被市场排除，且主胜升水不支持单挑。"
+                "reason": "全场最低赔，必须保留；但其要求尼日利亚被零封，而客队状态叙事及客胜降水使客队进球不能忽略。"
               },
               {
                 "score": "1-1",
                 "odds": 6.5,
                 "verdict": "keep",
-                "reason": "总进球2球众数下的核心比分，且平局方向最低；在主胜低赔不稳、客胜降水的背景下更适合风险控制。"
+                "reason": "平局方向最低赔，处于2球总进球主模态，是低分簇中对主客两端风险兼容性最高的比分。"
               },
               {
                 "score": "2-1",
                 "odds": 7.0,
                 "verdict": "near_miss",
-                "reason": "与1-1接近，代表主队小胜BTTS路径；但3球不是总进球众数，且1-0、1-1均更低，因此不作为首选。"
-              },
-              {
-                "score": "2-0",
-                "odds": 8.5,
-                "verdict": "reject",
-                "reason": "虽在主队小胜簇内，但相邻表显示1-0、1-1、2-1均低于它，主队零封且进两球的证据不足。"
+                "reason": "与1-1接近且是主胜BTTS核心比分；但2-1落在3球档，而总进球最低仍为2球，且主胜升水削弱主队追加优势。"
               },
               {
                 "score": "0-1",
                 "odds": 9.5,
                 "verdict": "near_miss",
-                "reason": "客队最低比分，且客胜降水支持其作为爆冷风险；但1X2客胜仍为最高赔率，暂不提升为主选。"
+                "reason": "客队一球小胜赔率不高且客胜降水，属于爆冷红灯之一；但1X2客胜仍为第三方向，不能压过1-1。"
               },
               {
                 "score": "0-0",
                 "odds": 10.0,
-                "verdict": "near_miss",
-                "reason": "0-0低于或接近11，友谊赛有慢热可能；但1球、2球、3球赔率均明显低于0球，完全闷局不是主模态。"
+                "verdict": "reject",
+                "reason": "0-0低于11，闷局需审计；但1球和2球赔率均明显更靠前，且友谊赛练兵可能带来防线误差，不作为首选。"
               },
               {
                 "score": "1-2",
                 "odds": 11.0,
-                "verdict": "near_miss",
-                "reason": "客队反打比分在前七，不能忽略；但相邻审计显示1-1、2-1、0-1均低于它，客胜穿透力度不足。"
+                "verdict": "reject",
+                "reason": "客队反打BTTS路径进入低赔簇，但1X2客胜仍低于主和平，作为风险比分而非首选。"
               },
               {
                 "score": "2-2",
                 "odds": 13.5,
                 "verdict": "reject",
-                "reason": "进入低赔前八显示BTTS高分平局有尾部压缩；但4球总进球赔率6.1形成阻力，不宜主推。"
+                "reason": "赔率进入前8但总进球4球赔率6.1高于排除线，缺少真实大球整簇塌缩，不能主推。"
+              },
+              {
+                "score": "3-1",
+                "odds": 15.0,
+                "verdict": "reject",
+                "reason": "3-1需要主队明显压制并突破4球阻力；相邻2-1、2-0明显更低，说明市场更认可窄胜而非大胜。"
               }
             ],
-            "lowest_score_not_selected_reason": "1-0虽为最低赔率，但它与1-1仅差0.25，并未形成断层；同时主胜升水、客胜降水削弱主队一球胜确定性，且国际友谊赛换人会增加双方进球和后段失衡风险，因此不选最低的1-0而选择更能覆盖双方进球低比分胶着的1-1。"
+            "lowest_score_not_selected_reason": "1-0虽为最低比分，但其与1-1仅差0.25，优势并不大；同时主胜升水、客胜降水和客队Steam信号共同提示主队零封小胜并非稳态，选择1-1更能覆盖轻度主倾斜与客队反击风险之间的折中。"
           },
           "sharp_money_audit": {
             "available": true,
             "confirmed_sharp_direction": "away",
             "rlm_confirmed": false,
-            "vote_vs_odds_conflict": "公众主胜46%与市场最低主胜一致，但赔率变动为主胜升水、客胜降水，且存在客胜Steam信号，出现热门主队信心下降的反向压力。",
-            "crs_change_impact": "正确比分无变化码，无法用比分变动确认资金方向。静态簇显示1-0、1-1、2-1相互贴近，提示主胜并非单点强压。",
-            "ttg_change_impact": "总进球无变化码。静态形态为2球最低、3球次低、4球阻力明显，资金层面对大球没有可确认追捧。"
+            "vote_vs_odds_conflict": "公众主胜46%与主胜最低赔一致，表层为主队热门；但主胜升水、客胜降水与公众客胜仅24%形成反向信号，且触发了客胜Steam，说明有聪明钱在防范客队不败。",
+            "crs_change_impact": "正确比分没有变动码，无法判断比分资金流；静态结构显示1-0、1-1、2-1贴近，说明主胜、平局、低分BTTS三条路径同时竞争。",
+            "ttg_change_impact": "总进球无变化序列，静态主模态为2球，4球赔率6.1构成大球阻力；资金层面不足以支持4+主推。"
           },
           "recommendation_components": {
-            "direction_edge": 45,
-            "score_cluster_strength": 60,
-            "goal_band_strength": 65,
-            "btts_alignment": 55,
-            "sharp_alignment": 40,
+            "direction_edge": 3,
+            "score_cluster_strength": 6,
+            "goal_band_strength": 7,
+            "btts_alignment": 5,
+            "sharp_alignment": 4,
             "web_source_quality": 0,
-            "market_conflict_penalty": 30,
-            "final_grade_reason": "比分簇和总进球支持1-1处于合理区间，但外部赔率缺失、友谊赛轮换风险高，且1-0与2-1都紧贴主选，主胜升水客胜降水导致博弈复杂，无法构成高等级投注。"
+            "market_conflict_penalty": 7,
+            "final_grade_reason": "比分簇与总进球支持1-1/1-0/2-1低分三角，1-1有结构合理性；但主胜最低与主胜升水、客胜降水相互冲突，且缺少外部盘口和阵容核验，推荐等级必须下调。"
           },
           "risk_score_candidates": [
             {
               "score": "1-0",
-              "risk_type": "主队一球小胜",
-              "reason": "1-0为全场最低正确比分赔率6.25，若友谊赛节奏偏慢且客队锋线缺阵影响终结，主队可能凭借主场优势小胜。"
+              "risk_type": "主队一球边际",
+              "reason": "正确比分最低赔为1-0，市场仍保留波兰主场小胜路径，若尼日利亚锋线缺人导致反击乏力，可能被零封。"
             },
             {
               "score": "0-1",
-              "risk_type": "客队反击尾部",
-              "reason": "客胜赔率有下降趋势且存在Steam信号，0-1赔率9.5处于客队最低比分，需防范客队爆冷。"
-            },
-            {
-              "score": "2-1",
-              "risk_type": "主队小胜带BTTS",
-              "reason": "2-1赔率7.0紧随1-1之后，若主队进攻端发挥出色且防线有失误，此比分极易打出。"
+              "risk_type": "客队反击低分尾部",
+              "reason": "客胜赔率下降且出现Steam异动，尼日利亚近期状态较好，存在客队偷一球后死守的可能。"
             },
             {
               "score": "1-2",
-              "risk_type": "客队反打红灯",
-              "reason": "1-2赔率11.0进入低赔前列，在主胜升水、客胜降水的背景下，客队反打穿透主队低赔假象的风险不可忽视。"
+              "risk_type": "客队反打BTTS尾部",
+              "reason": "1-2赔率11.0处于低赔簇前列，结合客胜降水与客队不败叙事，若波兰防线持续低迷，客队有望带走比赛。"
             }
           ],
           "tail_risk_flags": [
-            "friendly_rotation_variance",
-            "away_steam_unconfirmed_risk",
-            "home_favorite_not_secure"
+            "away_steam_unconfirmed",
+            "friendly_rotation_risk",
+            "home_favorite_confidence_insufficient"
           ],
-          "confidence_downgrade_reason": "本场为国际友谊赛，战意与阵容轮换存在高度不确定性；主队虽为低赔方但处于升水状态，客胜降水且有Steam信号，方向博弈激烈，缺乏外部盘口时间序列进行交叉验证。",
+          "confidence_downgrade_reason": "国际友谊赛战意不明且轮换风险高；主胜赔率最低但临场升水，客胜降水且有Steam信号，资金博弈存在分歧，缺乏外部赔率与首发阵容的最终确认。",
           "protocol_risk_hints": [
+            "score_cluster_strength_below_55",
+            "sharp_alignment_low_and_direction_edge_not_strong",
             "direction_edge_below_55"
           ],
           "matrix_direction_probs": {
@@ -3399,8 +2656,8 @@
               "reverse": false
             },
             "data_quality_score": 34.7,
-            "edge_gap": 15.0,
-            "draw_probability_watch": 30.0,
+            "edge_gap": 12.0,
+            "draw_probability_watch": 31.0,
             "draw_cluster_present": true,
             "high_goal_tail_pct": 23.18,
             "rules_applied": [
@@ -3444,13 +2701,13 @@
         "away_team": "意大利",
         "league": "国际赛",
         "match_num": "周三204",
-        "sp_home": 7.8,
-        "sp_draw": 4.1,
-        "sp_away": 1.32,
+        "sp_home": 8.0,
+        "sp_draw": 4.25,
+        "sp_away": 1.3,
         "give_ball": 1.0,
         "change": {
           "win": 1,
-          "same": 0,
+          "same": 1,
           "lose": -1
         },
         "vote": {
@@ -3476,21 +2733,21 @@
         "home_rank": 98,
         "away_rank": 12,
         "v2_odds_dict": {
-          "a0": 10.5,
-          "a1": 4.5,
-          "a2": 3.3,
+          "a0": 12.0,
+          "a1": 4.7,
+          "a2": 3.35,
           "a3": 3.4,
-          "a4": 5.8,
-          "a5": 11.0,
-          "a6": 22.0,
-          "a7": 34.0,
-          "s00": 10.5,
-          "s11": 8.0,
+          "a4": 5.5,
+          "a5": 10.5,
+          "a6": 19.0,
+          "a7": 28.0,
+          "s00": 12.0,
+          "s11": 8.3,
           "s22": 20.0,
           "s33": 80.0,
-          "w10": 16.0,
-          "w20": 36.0,
-          "w21": 21.0,
+          "w10": 18.0,
+          "w20": 42.0,
+          "w21": 22.0,
           "w30": 90.0,
           "w31": 65.0,
           "w32": 70.0,
@@ -3501,7 +2758,7 @@
           "l02": 6.25,
           "l12": 6.25,
           "l03": 8.2,
-          "l13": 12.0,
+          "l13": 11.0,
           "l23": 27.0,
           "ss": 15.0,
           "sp": 18.0,
@@ -3536,28 +2793,28 @@
           "losses": 5,
           "goals_for": 39,
           "goals_against": 20,
-          "avg_goals_for": "1.56",
+          "avg_goals_for": "1.57",
           "avg_goals_against": "0.81",
           "clean_sheets": 4,
           "form": "WWDWW"
         },
         "h2h": [],
         "information": {},
-        "a0": 10.5,
-        "a1": 4.5,
-        "a2": 3.3,
+        "a0": 12.0,
+        "a1": 4.7,
+        "a2": 3.35,
         "a3": 3.4,
-        "a4": 5.8,
-        "a5": 11.0,
-        "a6": 22.0,
-        "a7": 34.0,
-        "s00": 10.5,
-        "s11": 8.0,
+        "a4": 5.5,
+        "a5": 10.5,
+        "a6": 19.0,
+        "a7": 28.0,
+        "s00": 12.0,
+        "s11": 8.3,
         "s22": 20.0,
         "s33": 80.0,
-        "w10": 16.0,
-        "w20": 36.0,
-        "w21": 21.0,
+        "w10": 18.0,
+        "w20": 42.0,
+        "w21": 22.0,
         "w30": 90.0,
         "w31": 65.0,
         "w32": 70.0,
@@ -3568,7 +2825,7 @@
         "l02": 6.25,
         "l12": 6.25,
         "l03": 8.2,
-        "l13": 12.0,
+        "l13": 11.0,
         "l23": 27.0,
         "ss": 15.0,
         "sp": 18.0,
@@ -3594,9 +2851,9 @@
           "is_abstain": false,
           "is_score_others": false,
           "home_win_pct": 9.0,
-          "draw_pct": 19.0,
-          "away_win_pct": 72.0,
-          "confidence": 55,
+          "draw_pct": 20.0,
+          "away_win_pct": 71.0,
+          "confidence": 20,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
           "risk_level": "high",
           "goal_band": "2",
@@ -3611,40 +2868,42 @@
           ],
           "scenario": "ai_native_2_goals",
           "recommendation": {
-            "tier": "C",
-            "is_recommended": true,
+            "tier": "D",
+            "is_recommended": false,
             "top4_priority": 0,
-            "bet_confidence": 55,
-            "direction_stability": "medium",
-            "score_stability": "medium",
+            "bet_confidence": 20,
+            "direction_stability": "weak",
+            "score_stability": "weak",
             "risk_level": "high",
             "risk_tags": [
-              "public_trap",
-              "friendly_rotation"
+              "庄家造热陷阱",
+              "友谊赛轮换",
+              "赢球输盘风险"
             ],
-            "bet_action": "small",
+            "bet_action": "no_bet",
             "why_this_can_fail": [
-              "意大利大幅轮换导致进攻便秘，最终0-0或1-1爆冷。",
-              "卢森堡防线早早崩盘，打出0-3以上大比分。"
+              "意大利大幅轮换导致进攻乏力，打出0-1或1-1。",
+              "卢森堡主场超水平发挥逼平对手。"
             ],
             "minimum_evidence_needed": [
-              "确认意大利首发阵容是否包含核心攻击手"
+              "临场首发名单",
+              "外部欧亚盘口真实资金流向"
             ],
-            "why_recommended": "基于实力差距与数理模型推演，0-2是最合理的赛果，但受限于友谊赛性质与市场造热嫌疑，仅建议小注娱乐。"
+            "why_recommended": "系统明确提示客胜存在造热陷阱，且友谊赛战意不明，1-1平局赔率异常偏低，极不建议介入。"
           },
-          "recommendation_tier": "C",
+          "recommendation_tier": "D",
           "recommend_gate_pass": false,
           "recommend_gate_reasons": [
             "ai_not_recommended_or_below_min_tier_or_v203_component_downgrade",
             "ai_not_recommended_or_two_one_tail_gate",
             "prematch_v2_risk_hints_present"
           ],
-          "safe_top_gate_score": 55.0,
-          "overall_selection_score": 55.0,
-          "direction_selection_score": 55.0,
-          "score_shape_score": 55.0,
-          "direction_tier": "C",
-          "score_tier": "C",
+          "safe_top_gate_score": 20.0,
+          "overall_selection_score": 20.0,
+          "direction_selection_score": 20.0,
+          "score_shape_score": 20.0,
+          "direction_tier": "D",
+          "score_tier": "D",
           "recommendation_downgrade_reasons": [],
           "top_score_candidates": [
             [
@@ -3653,11 +2912,11 @@
             ],
             [
               "0-1",
-              16.0
+              15.0
             ],
             [
               "1-1",
-              10.0
+              12.0
             ]
           ],
           "unified_matrix_top_scores": [
@@ -3667,33 +2926,33 @@
             ],
             [
               "0-1",
-              16.0
+              15.0
             ],
             [
               "1-1",
-              10.0
+              12.0
             ]
           ],
           "score_model_prob": 17.0,
           "score_market_odds": 6.25,
           "score_market_implied_pct": 16.0,
           "anchor_audit": {
-            "zero_zero": "10.5的赔率对于实力悬殊的比赛而言偏低，需警惕闷平冷门。",
-            "one_one": "8.0的赔率处于低位簇，是本场最大的防平锚点。",
-            "one_zero": "16.0赔率过高，主胜基本被排除。",
-            "zero_one": "5.6全场最低，确立了客队小胜的基调。",
-            "two_one": "21.0赔率较高，主队进两球极难。",
-            "one_two": "6.25与0-2同赔，但考虑到主队攻击力，0-2更合理。",
-            "high_score_tail": "4球赔率5.8，大比分尾部受到压制，不看好穿盘大胜。",
-            "handicap_cover": "+1.0盘口下，0-2刚好穿盘，0-1则走水，市场在此存在博弈。"
+            "zero_zero": "12.0，友谊赛闷平有一定可能，但不如1-1防范价值高。",
+            "one_one": "8.3，平局最低赔，在1.30客胜下显得异常低，是核心冷门防范。",
+            "one_zero": "18.0，主胜难度极大，缺乏市场支撑。",
+            "zero_one": "5.6，全场最低赔，提示客队可能仅小胜一球。",
+            "two_one": "22.0，主胜反打概率极低。",
+            "one_two": "6.25，与0-2同赔，客队防线可能松懈。",
+            "high_score_tail": "1-3(11.0)等4+比分受总进球5.5排除线压制，不予考虑。",
+            "handicap_cover": "0-2/0-3支持穿盘，但0-1最低赔提示赢球走水/输盘风险大。"
           },
           "market_interpretation": {
-            "one_x_two": "客胜赔率1.32极低，但相较于公平赔率(1.49)已被大幅压低，存在较大的抽水与大众资金涌入迹象。",
-            "handicap": "让球盘为+1.0，市场预期客队至少赢一球，但赢两球穿盘的阻力依然存在。",
-            "correct_score": "0-1(5.6)与0-2(6.25)占据绝对低位，但1-1(8.0)同样处于防范区间，比分市场并不完全看好客队大胜。",
-            "total_goals": "2球(3.3)与3球(3.4)为核心模态，4球以上赔率陡升(5.8+)，不支持开放式大比分。",
-            "half_full_time": "负/负(1.84)绝对占优，但平/负(3.65)也较低，暗示半场可能胶着。",
-            "external_market": "缺乏外部高精度偏斜度数据，但本地量化模型提示客胜方向存在造热嫌疑。"
+            "one_x_two": "客胜1.30占据绝对优势，但结合大众67%的高热度与顺势降水，存在明显的庄家造热嫌疑。",
+            "handicap": "让球为+1，0-1(5.6)与0-2(6.25)赔率接近，市场对意大利能否赢两球以上存在显著分歧。",
+            "correct_score": "0-1(5.6)为最低，0-2与1-2同为6.25，但1-1低至8.3，防平意味浓厚，比分簇并未一边倒支持客队大胜。",
+            "total_goals": "2球(3.35)为最低模态，3球(3.4)次之，4球(5.5)触及排除线，不支持4+大比分。",
+            "half_full_time": "负/负1.84最低，但平/负3.65次低，暗示上半场存在僵局可能。",
+            "external_market": "缺乏外部欧亚盘口数据，无法进行双轨偏斜度校验，信息维度受限。"
           },
           "money_flow": {
             "public_money_direction": "away",
@@ -3701,24 +2960,24 @@
             "sharp_confidence": 0,
             "reverse_line_movement": false,
             "steam_move": "away",
-            "evidence": "大众投票客胜占比高达67%，且伴随降水，系统触发了'客胜反向Steam/庄家造热'的预警信号。"
+            "evidence": "公开投票67%支持客胜，且客胜赔率下降；但本地量化情报明确提示'客胜反向Steam! 降水-1.00+热度67%=庄家造热'，属于典型的诱盘特征。"
           },
           "contextual_logic": {
-            "league_style": "国际友谊赛，战意模糊，强队常大幅轮换演练阵容，弱队主场重防守。",
-            "team_style": "意大利实力碾压但可能留力；卢森堡主场以破坏和密集防守为主。",
-            "tempo": "low",
-            "score_shape": "客队掌控球权但进攻效率受限，呈现半场攻防演练的窄胜格局。",
+            "league_style": "国际友谊赛，战意模糊，轮换幅度大，不确定性高。",
+            "team_style": "意大利实力碾压但可能演练阵容，卢森堡主场死守。",
+            "tempo": "medium",
+            "score_shape": "客队控球主导，但进攻效率受轮换影响，比分集中在0-1/0-2/1-1。",
             "btts_likelihood": "no",
             "rotation_risk": "high"
           },
           "rejected_cases": {
-            "home": "实力差距过大，主胜赔率7.8且无任何基本面支撑。",
-            "draw": "虽然存在造热预警，但直接博取平局风险过高，仅作为次级防范。",
-            "away": "大胜(0-3/0-4)被排除，因友谊赛性质及总进球赔率压制。"
+            "home": "主胜赔率8.0，1-0高达18.0，硬实力差距过大，不考虑主胜。",
+            "draw": "1-1有极高的防范价值，但作为主推过于激进，毕竟客胜数理概率高达73%。",
+            "away": "不拒绝客胜方向，但强烈拒绝高信心追捧客胜穿盘。"
           },
           "web_research": {
             "used": false,
-            "failure_reason": "未提供实时外部网络搜索结果",
+            "failure_reason": "no_web_tool_available",
             "search_queries": [],
             "sources": [],
             "freshness_grade": "missing",
@@ -3734,12 +2993,13 @@
           },
           "data_quality": {
             "missing": [
-              "live_odds_movement",
-              "web_news"
+              "web_sources",
+              "external_odds",
+              "lineups"
             ],
             "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "综合实力对比、数理泊松概率及赔率模态，客队0-2取胜是最优解。但考虑到友谊赛战意不明及系统提示的客胜造热风险，需严防0-1走水或1-1平局冷门，整体推荐评级下调至C级，建议小注或观望。",
+          "ai_native_reason": "本场比赛意大利实力占据绝对优势，静态数理概率客胜高达73%，0-2和0-1处于最低赔率簇。然而，量化情报明确发出警告：客胜方向伴随67%的高热度与降水，属于典型的庄家造热陷阱。此外，作为国际友谊赛，意大利大概率进行大幅轮换，战意和默契度存疑。1-1的平局赔率低至8.3，防平意味浓厚。综合考虑，虽然正路预测0-2，但本场比赛博弈环境极其恶劣，强烈建议放弃投注。",
           "validation_warnings": [
             "protocol_risk_hint:sharp_alignment_low_and_direction_edge_not_strong",
             "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
@@ -3751,12 +3011,12 @@
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
             "final_model=gemini phase=final score=0-2 direction=away",
-            "anchor_audit:{\"zero_zero\":\"10.5的赔率对于实力悬殊的比赛而言偏低，需警惕闷平冷门。\",\"one_one\":\"8.0的赔率处于低位簇，是本场最大的防平锚点。\",\"one_zero\":\"16.0赔率过高，主胜基本被排除。\",\"zero_one\":\"5.6全场最低，确立了客队小胜的基调。\",\"two_one\":\"21.0赔率较高，主队进两球极难。\",\"one_two\":\"6.25与0-2同赔，但考虑到主队攻击力，0-2更合理。\",\"high_score_tail\":\"4球赔率5.8，大比分尾部受到压制，不看好穿盘大胜。\",\"handicap_cover\":\"+1.0盘口下，0-2刚好穿盘，0-1则走水，市场在此存在博弈。\"}",
-            "market_interpretation:{\"one_x_two\":\"客胜赔率1.32极低，但相较于公平赔率(1.49)已被大幅压低，存在较大的抽水与大众资金涌入迹象。\",\"handicap\":\"让球盘为+1.0，市场预期客队至少赢一球，但赢两球穿盘的阻力依然存在。\",\"correct_score\":\"0-1(5.6)与0-2(6.25)占据绝对低位，但1-1(8.0)同样处于防范区间，比分市场并不完全看好客队大胜。\",\"total_goals\":\"2球(3.3)与3球(3.4)为核心模态，4球以上赔率陡升(5.8+)，不支持开放式大比分。\",\"half_full_time\":\"负/负(1.84)绝对占优，但平/负(3.65)也较低，暗示半场可能胶着。\",\"external_market\":\"缺乏外部高精度偏斜度数据，但本地量化模型提示客胜方向存在造热嫌疑。\"}",
-            "money_flow:{\"public_money_direction\":\"away\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"away\",\"evidence\":\"大众投票客胜占比高达67%，且伴随降水，系统触发了'客胜反向Steam/庄家造热'的预警信号。\"}",
-            "contextual_logic:{\"league_style\":\"国际友谊赛，战意模糊，强队常大幅轮换演练阵容，弱队主场重防守。\",\"team_style\":\"意大利实力碾压但可能留力；卢森堡主场以破坏和密集防守为主。\",\"tempo\":\"low\",\"score_shape\":\"客队掌控球权但进攻效率受限，呈现半场攻防演练的窄胜格局。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"high\"}",
-            "web_research:{\"used\":false,\"failure_reason\":\"未提供实时外部网络搜索结果\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
-            "recommendation:{\"tier\":\"C\",\"is_recommended\":true,\"top4_priority\":0,\"bet_confidence\":55,\"direction_stability\":\"medium\",\"score_stability\":\"medium\",\"risk_level\":\"high\",\"risk_tags\":[\"public_trap\",\"friendly_rotation\"],\"bet_action\":\"small\",\"why_this_can_fail\":[\"意大利大幅轮换导致进攻便秘，最终0-0或1-1爆冷。\",\"卢森堡防线早早崩盘，打出0-3以上大比分。\"],\"minimum_evidence_needed\":[\"确认意大利首发阵容是否包含核心攻击手\"],\"why_recommended\":\"基于实力差距与数理模型推演，0-2是最合理的赛果，但受限于友谊赛性质与市场造热嫌疑，仅建议小注娱乐。\"}"
+            "anchor_audit:{\"zero_zero\":\"12.0，友谊赛闷平有一定可能，但不如1-1防范价值高。\",\"one_one\":\"8.3，平局最低赔，在1.30客胜下显得异常低，是核心冷门防范。\",\"one_zero\":\"18.0，主胜难度极大，缺乏市场支撑。\",\"zero_one\":\"5.6，全场最低赔，提示客队可能仅小胜一球。\",\"two_one\":\"22.0，主胜反打概率极低。\",\"one_two\":\"6.25，与0-2同赔，客队防线可能松懈。\",\"high_score_tail\":\"1-3(11.0)等4+比分受总进球5.5排除线压制，不予考虑。\",\"handicap_cover\":\"0-2/0-3支持穿盘，但0-1最低赔提示赢球走水/输盘风险大。\"}",
+            "market_interpretation:{\"one_x_two\":\"客胜1.30占据绝对优势，但结合大众67%的高热度与顺势降水，存在明显的庄家造热嫌疑。\",\"handicap\":\"让球为+1，0-1(5.6)与0-2(6.25)赔率接近，市场对意大利能否赢两球以上存在显著分歧。\",\"correct_score\":\"0-1(5.6)为最低，0-2与1-2同为6.25，但1-1低至8.3，防平意味浓厚，比分簇并未一边倒支持客队大胜。\",\"total_goals\":\"2球(3.35)为最低模态，3球(3.4)次之，4球(5.5)触及排除线，不支持4+大比分。\",\"half_full_time\":\"负/负1.84最低，但平/负3.65次低，暗示上半场存在僵局可能。\",\"external_market\":\"缺乏外部欧亚盘口数据，无法进行双轨偏斜度校验，信息维度受限。\"}",
+            "money_flow:{\"public_money_direction\":\"away\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"away\",\"evidence\":\"公开投票67%支持客胜，且客胜赔率下降；但本地量化情报明确提示'客胜反向Steam! 降水-1.00+热度67%=庄家造热'，属于典型的诱盘特征。\"}",
+            "contextual_logic:{\"league_style\":\"国际友谊赛，战意模糊，轮换幅度大，不确定性高。\",\"team_style\":\"意大利实力碾压但可能演练阵容，卢森堡主场死守。\",\"tempo\":\"medium\",\"score_shape\":\"客队控球主导，但进攻效率受轮换影响，比分集中在0-1/0-2/1-1。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"high\"}",
+            "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
+            "recommendation:{\"tier\":\"D\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":20,\"direction_stability\":\"weak\",\"score_stability\":\"weak\",\"risk_level\":\"high\",\"risk_tags\":[\"庄家造热陷阱\",\"友谊赛轮换\",\"赢球输盘风险\"],\"bet_action\":\"no_bet\",\"why_this_can_fail\":[\"意大利大幅轮换导致进攻乏力，打出0-1或1-1。\",\"卢森堡主场超水平发挥逼平对手。\"],\"minimum_evidence_needed\":[\"临场首发名单\",\"外部欧亚盘口真实资金流向\"],\"why_recommended\":\"系统明确提示客胜存在造热陷阱，且友谊赛战意不明，1-1平局赔率异常偏低，极不建议介入。\"}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -3785,10 +3045,11 @@
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "大众投票客胜占比高达67%，且伴随降水，系统触发了'客胜反向Steam/庄家造热'的预警信号。",
+          "smart_money_signal": "公开投票67%支持客胜，且客胜赔率下降；但本地量化情报明确提示'客胜反向Steam! 降水-1.00+热度67%=庄家造热'，属于典型的诱盘特征。",
           "smart_signals": [
-            "public_trap",
-            "friendly_rotation"
+            "庄家造热陷阱",
+            "友谊赛轮换",
+            "赢球输盘风险"
           ],
           "sharp_detected": false,
           "sharp_dir": "unclear",
@@ -3800,15 +3061,15 @@
             "sharp_confidence": 0,
             "reverse_line_movement": false,
             "steam_move": "away",
-            "evidence": "大众投票客胜占比高达67%，且伴随降水，系统触发了'客胜反向Steam/庄家造热'的预警信号。"
+            "evidence": "公开投票67%支持客胜，且客胜赔率下降；但本地量化情报明确提示'客胜反向Steam! 降水-1.00+热度67%=庄家造热'，属于典型的诱盘特征。"
           },
           "score_market_evidence": {
-            "one_x_two": "客胜赔率1.32极低，但相较于公平赔率(1.49)已被大幅压低，存在较大的抽水与大众资金涌入迹象。",
-            "handicap": "让球盘为+1.0，市场预期客队至少赢一球，但赢两球穿盘的阻力依然存在。",
-            "correct_score": "0-1(5.6)与0-2(6.25)占据绝对低位，但1-1(8.0)同样处于防范区间，比分市场并不完全看好客队大胜。",
-            "total_goals": "2球(3.3)与3球(3.4)为核心模态，4球以上赔率陡升(5.8+)，不支持开放式大比分。",
-            "half_full_time": "负/负(1.84)绝对占优，但平/负(3.65)也较低，暗示半场可能胶着。",
-            "external_market": "缺乏外部高精度偏斜度数据，但本地量化模型提示客胜方向存在造热嫌疑。"
+            "one_x_two": "客胜1.30占据绝对优势，但结合大众67%的高热度与顺势降水，存在明显的庄家造热嫌疑。",
+            "handicap": "让球为+1，0-1(5.6)与0-2(6.25)赔率接近，市场对意大利能否赢两球以上存在显著分歧。",
+            "correct_score": "0-1(5.6)为最低，0-2与1-2同为6.25，但1-1低至8.3，防平意味浓厚，比分簇并未一边倒支持客队大胜。",
+            "total_goals": "2球(3.35)为最低模态，3球(3.4)次之，4球(5.5)触及排除线，不支持4+大比分。",
+            "half_full_time": "负/负1.84最低，但平/负3.65次低，暗示上半场存在僵局可能。",
+            "external_market": "缺乏外部欧亚盘口数据，无法进行双轨偏斜度校验，信息维度受限。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -3818,8 +3079,9 @@
             "strength": 0,
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
-              "public_trap",
-              "friendly_rotation"
+              "庄家造热陷阱",
+              "友谊赛轮换",
+              "赢球输盘风险"
             ],
             "sharp_confirmed": false,
             "dark_verdict": ""
@@ -3834,40 +3096,46 @@
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
           "gpt_score": "0-2",
-          "gpt_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
+          "gpt_analysis": "本场市场主方向清晰偏向意大利：1X2客胜最低，正确比分前四全部为客胜，半全场负/负最低。比分簇审计后，0-2同时满足客胜核心簇与2球总进球主模态，因此作为赛前倾向比分优于0-1和1-2。但低赔1-1、最低0-1、以及友谊赛轮换不确定性使得客胜穿盘并不稳；4+尾部虽有1-3压缩，但总进球4球赔率5.5形成阻力。综合判断为意大利客胜倾向，预测0-2，但推荐层面应观察而非下注。",
           "grok_score": "0-2",
           "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
           "gemini_score": "0-2",
-          "gemini_analysis": "综合实力对比、数理泊松概率及赔率模态，客队0-2取胜是最优解。但考虑到友谊赛战意不明及系统提示的客胜造热风险，需严防0-1走水或1-1平局冷门，整体推荐评级下调至C级，建议小注或观望。",
+          "gemini_analysis": "本场比赛意大利实力占据绝对优势，静态数理概率客胜高达73%，0-2和0-1处于最低赔率簇。然而，量化情报明确发出警告：客胜方向伴随67%的高热度与降水，属于典型的庄家造热陷阱。此外，作为国际友谊赛，意大利大概率进行大幅轮换，战意和默契度存疑。1-1的平局赔率低至8.3，防平意味浓厚。综合考虑，虽然正路预测0-2，但本场比赛博弈环境极其恶劣，强烈建议放弃投注。",
           "final_referee_score": "0-2",
-          "final_referee_analysis": "综合实力对比、数理泊松概率及赔率模态，客队0-2取胜是最优解。但考虑到友谊赛战意不明及系统提示的客胜造热风险，需严防0-1走水或1-1平局冷门，整体推荐评级下调至C级，建议小注或观望。",
+          "final_referee_analysis": "本场比赛意大利实力占据绝对优势，静态数理概率客胜高达73%，0-2和0-1处于最低赔率簇。然而，量化情报明确发出警告：客胜方向伴随67%的高热度与降水，属于典型的庄家造热陷阱。此外，作为国际友谊赛，意大利大概率进行大幅轮换，战意和默契度存疑。1-1的平局赔率低至8.3，防平意味浓厚。综合考虑，虽然正路预测0-2，但本场比赛博弈环境极其恶劣，强烈建议放弃投注。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
           "final_ai_score": "0-2",
-          "final_ai_analysis": "综合实力对比、数理泊松概率及赔率模态，客队0-2取胜是最优解。但考虑到友谊赛战意不明及系统提示的客胜造热风险，需严防0-1走水或1-1平局冷门，整体推荐评级下调至C级，建议小注或观望。",
+          "final_ai_analysis": "本场比赛意大利实力占据绝对优势，静态数理概率客胜高达73%，0-2和0-1处于最低赔率簇。然而，量化情报明确发出警告：客胜方向伴随67%的高热度与降水，属于典型的庄家造热陷阱。此外，作为国际友谊赛，意大利大概率进行大幅轮换，战意和默契度存疑。1-1的平局赔率低至8.3，防平意味浓厚。综合考虑，虽然正路预测0-2，但本场比赛博弈环境极其恶劣，强烈建议放弃投注。",
           "ai_abstained": [],
-          "ai_avg_confidence": 55.0,
+          "ai_avg_confidence": 20.0,
           "ai_call_status": {
             "gpt": {
               "phase1": {
-                "ok": false,
+                "ok": true,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                "elapsed": 77.7,
+                "status": "ok"
               },
-              "last_status": "http_524",
+              "last_status": "ok",
               "model": "熊猫-特供-X-10-gpt-5.5",
               "consistency": {
-                "ok": false,
+                "ok": true,
                 "ai_name": "gpt",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "phase": "consistency",
-                "elapsed": 125.2,
-                "status": "http_524",
-                "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                "elapsed": 6.9,
+                "status": "ok"
+              },
+              "fallback_referee": {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "熊猫-特供-X-10-gpt-5.5",
+                "phase": "fallback_referee",
+                "elapsed": 76.3,
+                "status": "ok"
               }
             },
             "grok": {
@@ -3876,54 +3144,61 @@
                 "ai_name": "grok",
                 "model": "熊猫-X-10-grok-4.3",
                 "phase": "phase1",
-                "elapsed": 3.7,
+                "elapsed": 3.9,
                 "status": "http_403",
-                "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+                "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 908a11757f93b51849b78763b70eb8d1） (request id: 20260603125640415769958ZKiPPzry)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
               },
               "last_status": "http_403",
               "model": "熊猫-X-10-grok-4.3"
             },
             "gemini": {
               "final": {
-                "ok": true,
+                "ok": false,
                 "ai_name": "gemini",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
                 "phase": "final",
-                "elapsed": 62.1,
-                "status": "ok"
+                "elapsed": 300.3,
+                "status": "http_504",
+                "http_error": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>504 Gateway Timeout</title>\n    <style>\n        :root {\n            --primary-color: #3498db;\n            --background-color: #ffffff;\n            --text-color: #333333;\n            --text-light: #666666;\n            --border-color: #eeeeee;\n        }\n\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Segoe UI\", sans-serif;\n            background-color: var(--background-color);\n            color: var(--text-color);\n            line-height: 1.5;\n            padding: 0;\n            margin: 0;\n "
               },
-              "last_status": "ok",
+              "last_status": "http_504",
               "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
             }
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260603_121035_4m_047307b571a5_丹麦_刚果金",
+            "run_id": "20260603_125413_4m_d93113024e0b_丹麦_刚果金",
             "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
             "chunk_count": 4,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260603_121035_4m_047307b571a5_丹麦_刚果金_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260603_125413_4m_d93113024e0b_丹麦_刚果金_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
-                  "ok": false,
+                  "ok": true,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 125.2,
-                  "status": "http_524",
-                  "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121314493607597cyIHvJak)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                  "elapsed": 77.7,
+                  "status": "ok"
                 },
-                "last_status": "http_524",
+                "last_status": "ok",
                 "model": "熊猫-特供-X-10-gpt-5.5",
                 "consistency": {
-                  "ok": false,
+                  "ok": true,
                   "ai_name": "gpt",
                   "model": "熊猫-特供-X-10-gpt-5.5",
                   "phase": "consistency",
-                  "elapsed": 125.2,
-                  "status": "http_524",
-                  "http_error": "{\"error\":{\"message\":\"bad response status code 524 (request id: 20260603121621823381548tib0bbD5)\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+                  "elapsed": 6.9,
+                  "status": "ok"
+                },
+                "fallback_referee": {
+                  "ok": true,
+                  "ai_name": "gpt",
+                  "model": "熊猫-特供-X-10-gpt-5.5",
+                  "phase": "fallback_referee",
+                  "elapsed": 76.3,
+                  "status": "ok"
                 }
               },
               "grok": {
@@ -3932,23 +3207,24 @@
                   "ai_name": "grok",
                   "model": "熊猫-X-10-grok-4.3",
                   "phase": "phase1",
-                  "elapsed": 3.7,
+                  "elapsed": 3.9,
                   "status": "http_403",
-                  "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 1a1272cf2091b5187ba88763c071a0bb） (request id: 2026060312131567044880UH0T26fd)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
+                  "http_error": "{\"error\":{\"message\":\"{\\\"error\\\":{\\\"code\\\":7,\\\"message\\\":\\\"Model is not found\\\",\\\"details\\\":[]}}\\n（traceid: 908a11757f93b51849b78763b70eb8d1） (request id: 20260603125640415769958ZKiPPzry)\",\"type\":\"invalid_request_error\",\"param\":\"\",\"code\":null}}"
                 },
                 "last_status": "http_403",
                 "model": "熊猫-X-10-grok-4.3"
               },
               "gemini": {
                 "final": {
-                  "ok": true,
+                  "ok": false,
                   "ai_name": "gemini",
                   "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking",
                   "phase": "final",
-                  "elapsed": 62.1,
-                  "status": "ok"
+                  "elapsed": 300.3,
+                  "status": "http_504",
+                  "http_error": "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>504 Gateway Timeout</title>\n    <style>\n        :root {\n            --primary-color: #3498db;\n            --background-color: #ffffff;\n            --text-color: #333333;\n            --text-light: #666666;\n            --border-color: #eeeeee;\n        }\n\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Segoe UI\", sans-serif;\n            background-color: var(--background-color);\n            color: var(--text-color);\n            line-height: 1.5;\n            padding: 0;\n            margin: 0;\n "
                 },
-                "last_status": "ok",
+                "last_status": "http_504",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-thinking"
               }
             },
@@ -3998,167 +3274,179 @@
           "engine_version": "vMAX 20.5.0-PREMATCH-STRUCTURED-COMPLETE",
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
-            "selected_cluster": "away_narrow",
-            "why_selected_score": "0-2完美契合总进球2球的主模态，同时也是数理基准的最高概率比分，平衡了实力差距与友谊赛属性。",
+            "selected_cluster": "away_cover",
+            "why_selected_score": "0-2符合总进球2球的主模态，且在客胜核心簇中。虽然存在造热嫌疑，但硬实力差距下0-2仍是最合理的正路比分，只是投资价值极低。",
             "adjacent_scores_checked": [
               {
                 "score": "0-1",
                 "odds": 5.6,
-                "verdict": "near_miss",
-                "reason": "赔率最低，极可能发生，但总进球1球的赔率(4.5)高于2球(3.3)，故退居次席。"
+                "verdict": "keep",
+                "reason": "全场最低赔，必须保留作为赢球输盘的防范。"
               },
               {
                 "score": "1-2",
                 "odds": 6.25,
-                "verdict": "reject",
-                "reason": "主队进攻能力孱弱，BTTS=yes的支撑力度不足。"
+                "verdict": "near_miss",
+                "reason": "同赔率分支，保留卢森堡进球可能，但非主线。"
+              },
+              {
+                "score": "1-1",
+                "odds": 8.3,
+                "verdict": "keep",
+                "reason": "诱盘陷阱下的核心平局冷门防范。"
               },
               {
                 "score": "0-3",
                 "odds": 8.2,
                 "verdict": "reject",
-                "reason": "友谊赛客队大胜动力不足，且3球以上开始触及高赔阻力区。"
+                "reason": "友谊赛战意不足，大胜难出，且偏离2球主模态。"
               }
             ],
-            "lowest_score_not_selected_reason": "0-1虽为最低赔，但0-2更符合总进球2球的最低赔率模态，且能覆盖让球盘的穿盘预期。"
+            "lowest_score_not_selected_reason": "0-1虽为最低赔，但总进球2球模态更强，0-2在实力对比上更均衡，0-1作为首要防范而非首选。"
           },
           "sharp_money_audit": {
             "available": true,
             "confirmed_sharp_direction": "unclear",
             "rlm_confirmed": false,
-            "vote_vs_odds_conflict": "大众极度看好客队(67%)且赔率下降，属于典型的正向顺势，但系统提示存在造热诱盘风险。",
-            "crs_change_impact": "无显著变盘数据支撑。",
-            "ttg_change_impact": "无显著变盘数据支撑。"
+            "vote_vs_odds_conflict": "大众热度与赔率变动同向（均向客胜），但量化模型判定为庄家造热，存在隐性冲突。",
+            "crs_change_impact": "无比分变动数据，无法判断比分资金流。",
+            "ttg_change_impact": "无总进球变动数据，静态主模态为2球。"
           },
           "recommendation_components": {
             "direction_edge": 60,
-            "score_cluster_strength": 75,
-            "goal_band_strength": 80,
-            "btts_alignment": 70,
-            "sharp_alignment": 30,
+            "score_cluster_strength": 65,
+            "goal_band_strength": 70,
+            "btts_alignment": 60,
+            "sharp_alignment": 20,
             "web_source_quality": 0,
-            "market_conflict_penalty": -20,
-            "final_grade_reason": "客队实力占优且数理支持0-2，但大众过热及造热预警导致必须降级处理，不建议重注。"
+            "market_conflict_penalty": 40,
+            "final_grade_reason": "客胜硬实力占优且数理概率高，但量化情报明确提示客胜造热陷阱，且友谊赛轮换风险大，必须大幅降级并放弃投注。"
           },
           "risk_score_candidates": [
             {
-              "score": "0-1",
-              "risk_type": "客队小胜/赢球走水",
-              "reason": "0-1为全场最低比分赔率(5.6)，友谊赛客队若大幅轮换可能仅以最小代价取胜。"
+              "score": "1-1",
+              "risk_type": "低分平局陷阱",
+              "reason": "平局赔率8.3在1.30客胜背景下异常偏低，结合量化情报提示的客胜造热陷阱，需高度警惕友谊赛冷平。"
             },
             {
-              "score": "1-1",
-              "risk_type": "冷门平局",
-              "reason": "系统捕捉到客胜造热信号(upset_home)，且1-1赔率(8.0)处于低位，需防范主队死守反击逼平。"
+              "score": "0-1",
+              "risk_type": "客胜一球边际",
+              "reason": "全场最低正确比分赔率(5.6)，若意大利轮换导致进攻效率下降，极易打出赢球输盘的小胜比分。"
+            },
+            {
+              "score": "1-2",
+              "risk_type": "客胜BTTS分支",
+              "reason": "与0-2同为6.25赔率，友谊赛防守专注度下降可能导致卢森堡取得进球。"
             }
           ],
           "tail_risk_flags": [
-            "public_heat_on_away",
-            "friendly_match_rotation"
+            "away_trap_detected",
+            "friendly_rotation_risk",
+            "public_away_hot_without_confirmed_sharp"
           ],
-          "confidence_downgrade_reason": "客胜方向存在大众过热及庄家诱盘预警(Steam信号提示造热)，且友谊赛战意不确定性高。",
+          "confidence_downgrade_reason": "系统量化情报明确探测到客胜反向Steam（降水+热度67%=庄家造热），存在正诱造热陷阱；且本场为友谊赛，轮换风险极大，1-1平局赔率异常压低，绝不宜盲目追捧客队大胜穿盘。",
           "protocol_risk_hints": [
             "sharp_alignment_low_and_direction_edge_not_strong"
           ],
           "matrix_direction_probs": {
-            "home": 8.9,
-            "draw": 18.97,
-            "away": 72.13
+            "home": 8.57,
+            "draw": 18.07,
+            "away": 73.36
           },
           "matrix_top_scores": [
             {
               "score": "0-2",
-              "prob": 17.411
+              "prob": 17.502
             },
             {
               "score": "0-1",
-              "prob": 15.622
+              "prob": 15.069
             },
             {
               "score": "1-2",
-              "prob": 13.108
+              "prob": 13.129
             },
             {
               "score": "1-3",
-              "prob": 9.66
+              "prob": 10.53
             },
             {
               "score": "0-3",
-              "prob": 9.502
+              "prob": 9.6
             },
             {
               "score": "1-1",
-              "prob": 6.903
+              "prob": 6.553
             },
             {
               "score": "0-0",
-              "prob": 6.853
+              "prob": 5.894
             },
             {
               "score": "2-3",
-              "prob": 5.356
+              "prob": 5.68
             },
             {
               "score": "2-2",
-              "prob": 2.917
-            },
-            {
-              "score": "1-0",
-              "prob": 2.381
+              "prob": 2.906
             },
             {
               "score": "3-3",
-              "prob": 2.226
+              "prob": 2.634
+            },
+            {
+              "score": "1-0",
+              "prob": 2.08
             },
             {
               "score": "2-1",
-              "prob": 1.797
+              "prob": 1.707
             },
             {
               "score": "2-0",
-              "prob": 1.326
+              "prob": 1.168
             },
             {
               "score": "3-2",
-              "prob": 0.87
-            },
-            {
-              "score": "3-1",
-              "prob": 0.766
+              "prob": 0.903
             },
             {
               "score": "4-2",
-              "prob": 0.723
+              "prob": 0.857
+            },
+            {
+              "score": "3-1",
+              "prob": 0.764
             },
             {
               "score": "3-0",
-              "prob": 0.375
+              "prob": 0.364
             },
             {
               "score": "4-1",
-              "prob": 0.272
+              "prob": 0.28
             },
             {
               "score": "2-5",
-              "prob": 0.178
+              "prob": 0.222
             },
             {
               "score": "3-4",
-              "prob": 0.168
+              "prob": 0.208
             }
           ],
           "matrix_goal_probs": {
-            "0": 6.85,
-            "1": 18.0,
-            "2": 25.64,
-            "3": 24.78,
-            "4": 13.48,
-            "5": 6.5,
-            "6": 2.95,
-            "7": 1.8
+            "0": 5.89,
+            "1": 17.15,
+            "2": 25.22,
+            "3": 24.8,
+            "4": 14.34,
+            "5": 6.86,
+            "6": 3.49,
+            "7": 2.25
           },
-          "matrix_lambda_home": 0.797,
-          "matrix_lambda_away": 1.575,
+          "matrix_lambda_home": 0.798,
+          "matrix_lambda_away": 1.617,
           "matrix_shape_verdict": "normal",
           "matrix_recommended_score": "0-2",
           "matrix_recommended_direction": "away",
@@ -4167,7 +3455,7 @@
             "matrix_high_goal_tail_conflict": false,
             "matrix_away_tail_warning": false,
             "matrix_draw_risk_warning": false,
-            "matrix_low_confidence_warning": false
+            "matrix_low_confidence_warning": true
           },
           "matrix_shadow_error": "",
           "pre_match_factor_audit": {
@@ -4199,15 +3487,14 @@
               "critical_absence": false,
               "weather_risk": false,
               "referee_risk": false,
-              "market_confirmed": false,
+              "market_confirmed": true,
               "market_conflict": false,
               "web_source_count": 0,
-              "structured_quality_score": 26,
+              "structured_quality_score": 38,
               "penalties": [
                 "lineup_unclear",
                 "rotation_risk",
                 "motivation_unclear",
-                "market_unconfirmed",
                 "no_web_sources"
               ],
               "injury_summary": {
@@ -4225,11 +3512,11 @@
               "conflict": false,
               "reverse": false
             },
-            "data_quality_score": 29.3,
-            "edge_gap": 53.0,
-            "draw_probability_watch": 19.0,
+            "data_quality_score": 34.7,
+            "edge_gap": 51.0,
+            "draw_probability_watch": 20.0,
             "draw_cluster_present": true,
-            "high_goal_tail_pct": 24.73,
+            "high_goal_tail_pct": 26.94,
             "rules_applied": [
               "prematch_v2_rotation_risk_requires_lineup",
               "prematch_v2_away_win_without_external_market_confirmation"
@@ -4247,16 +3534,14 @@
               }
             ]
           },
-          "selection_layer": "观察",
+          "selection_layer": "放弃",
           "selection_stake_unit": 0.0,
-          "selection_hedge_suggestions": [
-            "临场确认后小注客队/客不败"
-          ],
+          "selection_hedge_suggestions": [],
           "selection_layer_reasons": [
-            "客胜缺少外部市场或sharp确认"
+            "等级为D"
           ],
-          "selection_confirmation_bonus": -20,
-          "final_action": "观察"
+          "selection_confirmation_bonus": 16,
+          "final_action": "放弃"
         },
         "is_top4_candidate": false,
         "is_recommended": false,
