@@ -54,13 +54,8 @@ except Exception:  # pragma: no cover
 # ============================================================
 # 版本常量 / 基础配置
 # ============================================================
-
-ENGINE_VERSION = "vMAX 20.2.1-FULL-ANCHOR"
-ENGINE_ARCHITECTURE = (
-    "AI-NATIVE WEB-AUGMENTED 3AI FULL-RESEARCH + MARKET-ANCHOR PROMPT: "
-    "本地只做协议层；GPT/Grok 初审 + 互审 + Gemini Web-aware 终审 + 一致性审计；"
-    "新增0-0/1-1/总进球/让球盘/联赛风格锚点事实层；Top4/推荐等级由 Gemini 输出。"
-)
+# 注: ENGINE_VERSION / ENGINE_ARCHITECTURE 的权威定义在下方读盘范式段
+# (模块加载末段会覆盖, 此处旧赋值为僵尸已移除, 避免双真值源漂移)。
 
 VALID_DIRS = {"home", "draw", "away"}
 AI_NAMES = ["gpt", "grok", "gemini"]

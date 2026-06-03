@@ -17,10 +17,7 @@ from datetime import datetime, timedelta, timezone
 REQUIRED_PACKAGES = [
     "aiohttp",
     "Requests>=2.32.0",
-    "beautifulsoup4>=4.12.0",
-    "lxml>=5.0.0",
     "numpy>=1.26.0",
-    "scikit-learn>=1.4.0",
     "pandas>=2.2.0",
     "scipy>=1.12.0",
     "deep-translator>=1.11.4",
