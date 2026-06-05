@@ -207,7 +207,7 @@ body{
 
   <div class="sec">
     <div class="sec-t">今日精选推荐</div>
-    <div class="sec-b">GPT/GROK 初审 · GEMINI 终审</div>
+    <div class="sec-b">GPT/GROK 初审 ·  终审</div>
     <div class="sec-i" id="t4ic"></div>
   </div>
   <div class="t4g" id="t4"></div>
@@ -220,7 +220,7 @@ body{
   <div id="ms"></div>
 
   <div class="foot">
-    vMAX 20.2.1-FULL · AI-NATIVE 三AI架构 · GPT/Grok 初审 · Gemini 终审裁判<br>
+    vMAX 20.2.1-FULL · AI-NATIVE 三AI架构 · GPT/Grok 初审 ·  终审裁判<br>
     Claude 已移除 · 本地只做抓包 / 调用 / JSON解析 / 字段闭环 / 前端展示，不篡改最终比分<br>
     总进球锚点 · CRS正确比分 · 让球形态 · 联赛风格 · 资金流 / Sharp / Web Research 审计
   </div>
@@ -516,7 +516,7 @@ function renderSelectionBlock(p){
   return '<div class="block">'+
     '<div class="block-h">'+
       '<div class="block-t">🎯 AI-NATIVE 推荐结论</div>'+
-      '<div class="block-meta">Gemini终审输出 · 本地只做展示</div>'+
+      '<div class="block-meta">终审输出 · 本地只做展示</div>'+
     '</div>'+
     '<div class="block-b">'+
       '<div class="sel-grid">'+
@@ -537,7 +537,7 @@ function renderSelectionBlock(p){
 
 function renderAiBlock(p){
   return '<div class="ai-box">'+
-    '<div class="ai-h"><div class="ai-t">👑 GEMINI 终审裁判</div><div class="ai-s">'+esc(p.gemini_score||p.predicted_score||'弃权')+'</div></div>'+
+    '<div class="ai-h"><div class="ai-t">👑 终审裁判</div><div class="ai-s">'+esc(p.gemini_score||p.predicted_score||'弃权')+'</div></div>'+
     '<div class="ai-x">'+cl(finalReason(p))+'</div>'+
   '</div>'+
   '<div class="ai2">'+
@@ -708,7 +708,7 @@ function renderMatches(){
       '<div class="mc-b">'+
         '<div class="teams">'+
           '<div class="tm"><div class="tm-n">'+esc(m.home_team||m.home||'')+'</div></div>'+
-          '<div class="sc-c"><div class="sc-big">'+esc(score)+'</div><div class="sc-sub">Gemini终审比分</div><span class="res-tag '+rc+'">'+esc(displayDir)+'</span></div>'+
+          '<div class="sc-c"><div class="sc-big">'+esc(score)+'</div><div class="sc-sub">终审比分</div><span class="res-tag '+rc+'">'+esc(displayDir)+'</span></div>'+
           '<div class="tm"><div class="tm-n">'+esc(m.away_team||m.guest||'')+'</div></div>'+
         '</div>'+
 
