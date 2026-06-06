@@ -252,6 +252,14 @@ AI_FALLBACK_REFEREE_MODEL = str(os.environ.get("AI_FALLBACK_REFEREE_MODEL", "gpt
 AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 5400)
 AI_FINAL_READ_TIMEOUT = _env_int("AI_FINAL_READ_TIMEOUT", _env_int("AI_CLAUDE_READ_TIMEOUT", 7200))
 AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 120)
+# Plan B: bounded retry for the FINAL referee (and fallback referee) only.
+# Pure transport/transient resilience; does NOT touch request URL/key/payload/stream.
+AI_FINAL_RETRY_MAX = max(0, _env_int("AI_FINAL_RETRY_MAX", 2))
+AI_FINAL_RETRY_BASE_DELAY = _env_int("AI_FINAL_RETRY_BASE_DELAY_MS", 1500)
+# Plan B+: when Gemini final referee fails, GPT runs a 16-role family debate to
+# adjudicate the final score (acts as the referee, not a phase1 analyst).
+AI_ENABLE_FAMILY_DEBATE_REFEREE = _env_bool("AI_ENABLE_FAMILY_DEBATE_REFEREE", True)
+AI_FAMILY_DEBATE_MODEL = str(os.environ.get("AI_FAMILY_DEBATE_MODEL", "gpt")).strip().lower() or "gpt"
 AI_HTTP_TOTAL_TIMEOUT = _env_int("AI_HTTP_TOTAL_TIMEOUT", 0)
 AI_TEMPERATURE_PHASE1 = _env_float("AI_TEMPERATURE_PHASE1", 0.18)
 AI_TEMPERATURE_CRITIC = _env_float("AI_TEMPERATURE_CRITIC", 0.10)
@@ -1304,6 +1312,53 @@ def debug_ai_config() -> None:
         print(f"[AI CONFIG] {n.upper()} model={_model_for(n)} key={_mask_key(get_key_for_ai(n))} url={get_url_for_ai(n) or '<missing>'}")
 
 
+def _is_retryable_ai_status(status: Dict[str, Any]) -> bool:
+    """Transient failures worth retrying for the final referee.
+
+    Retryable: HTTP 429/5xx (channel saturation), timeouts, transport errors,
+    and empty/parse_failed completions (provider returned 0 completion tokens
+    under load). Non-retryable: no_key/no_url/aiohttp_missing/http_4xx (except 429).
+    """
+    st = str(status.get("status", "")).lower()
+    if st in {"timeout", "error", "parse_failed"}:
+        return True
+    if st.startswith("http_"):
+        code = st.replace("http_", "")
+        if code == "429":
+            return True
+        if code.startswith("5"):
+            return True
+    return False
+
+
+async def async_call_ai_json_with_retry(session: Optional[Any], ai_name: str, system_text: str, prompt: str, phase: str, expected_matches: List[int], max_retries: int = 0) -> Tuple[str, Any, Dict[str, Any]]:
+    """Wrap async_call_ai_json with bounded exponential-backoff retry on transient errors.
+
+    Only used for final/fallback referee phases. The first OK result wins; on
+    repeated transient failure the last status is returned so the caller can
+    fall through to the fallback referee or abstain.
+    """
+    attempts = max(0, int(max_retries)) + 1
+    last: Tuple[str, Any, Dict[str, Any]] = (ai_name, {}, {"ok": False, "status": "not_called"})
+    for attempt in range(attempts):
+        name, obj, st = await async_call_ai_json(session, ai_name, system_text, prompt, phase, expected_matches)
+        last = (name, obj, st)
+        if st.get("ok"):
+            if attempt > 0:
+                st["retry_succeeded_on_attempt"] = attempt + 1
+            return last
+        if attempt < attempts - 1 and _is_retryable_ai_status(st):
+            delay = (AI_FINAL_RETRY_BASE_DELAY / 1000.0) * (2 ** attempt)
+            print(f"  [RETRY] {ai_name.upper()} {phase} attempt {attempt + 1}/{attempts} failed status={st.get('status')}; retrying in {delay:.1f}s")
+            try:
+                await asyncio.sleep(delay)
+            except Exception:
+                pass
+            continue
+        break
+    return last
+
+
 async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: str, prompt: str, phase: str, expected_matches: List[int]) -> Tuple[str, Any, Dict[str, Any]]:
     t0 = time.time()
     model = _model_for(ai_name)
@@ -1333,7 +1388,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
 
     url = _chat_url(base_url)
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {key}"}
-    temperature = AI_TEMPERATURE_FINAL if phase in ("final", "fallback_referee") else AI_TEMPERATURE_CRITIC if phase == "critic" else AI_TEMPERATURE_PHASE1
+    temperature = AI_TEMPERATURE_FINAL if phase in ("final", "fallback_referee", "family_debate_referee") else AI_TEMPERATURE_CRITIC if phase == "critic" else AI_TEMPERATURE_PHASE1
     payload: Dict[str, Any] = {
         "model": model,
         "messages": [{"role": "system", "content": system_text}, {"role": "user", "content": prompt}],
@@ -1343,7 +1398,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
         payload["response_format"] = {"type": "json_object"}
 
     try:
-        read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "fallback_referee") else AI_READ_TIMEOUT
+        read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "fallback_referee", "family_debate_referee") else AI_READ_TIMEOUT
         total_timeout = None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT
         timeout = aiohttp.ClientTimeout(
             total=total_timeout,
@@ -2150,7 +2205,7 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
     final_rows: Dict[int, Dict[str, Any]] = {}
     final_ai = AI_FINAL_REFEREE_MODEL if AI_FINAL_REFEREE_MODEL in AI_NAMES else "gemini"
     final_prompt = build_gemini_final_prompt(evidence_batch, phase1, critic_reports)
-    _, final_obj, final_st = await async_call_ai_json(session, final_ai, _phase1_system("gemini"), final_prompt, "final", expected)
+    _, final_obj, final_st = await async_call_ai_json_with_retry(session, final_ai, _phase1_system("gemini"), final_prompt, "final", expected, AI_FINAL_RETRY_MAX)
     final_rows = normalize_ai_predictions(final_obj, expected, final_ai, "final")
     print(f"  [Chunk {chunk_id}] {final_ai.upper()} final {len(final_rows)}/{len(expected)} status={final_st.get('status')}")
 
@@ -2158,10 +2213,23 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
     if missing and AI_ENABLE_FALLBACK_REFEREE:
         fallback_ai = AI_FALLBACK_REFEREE_MODEL if AI_FALLBACK_REFEREE_MODEL in PHASE1_NAMES else "gpt"
         fb_prompt = build_fallback_referee_prompt([e for e in evidence_batch if e["match"] in missing], phase1, critic_reports)
-        _, fb_obj, fb_st = await async_call_ai_json(session, fallback_ai, _phase1_system(fallback_ai), fb_prompt, "fallback_referee", missing)
+        _, fb_obj, fb_st = await async_call_ai_json_with_retry(session, fallback_ai, _phase1_system(fallback_ai), fb_prompt, "fallback_referee", missing, AI_FINAL_RETRY_MAX)
         fb_rows = normalize_ai_predictions(fb_obj, missing, fallback_ai, "fallback_referee")
         final_rows.update(fb_rows)
         print(f"  [Chunk {chunk_id}] FALLBACK {fallback_ai.upper()} {len(fb_rows)}/{len(missing)} status={fb_st.get('status')}")
+
+    # Plan B+: Gemini final and standard fallback both failed -> GPT runs a 16-role
+    # family debate as the final referee (decides the score), before any abstain.
+    missing = [idx for idx in expected if idx not in final_rows]
+    if missing and AI_ENABLE_FAMILY_DEBATE_REFEREE:
+        debate_ai = AI_FAMILY_DEBATE_MODEL if AI_FAMILY_DEBATE_MODEL in AI_NAMES else "gpt"
+        debate_prompt = build_family_debate_referee_prompt([e for e in evidence_batch if e["match"] in missing], phase1, critic_reports)
+        _, db_obj, db_st = await async_call_ai_json_with_retry(session, debate_ai, _phase1_system(debate_ai), debate_prompt, "family_debate_referee", missing, AI_FINAL_RETRY_MAX)
+        db_rows = normalize_ai_predictions(db_obj, missing, debate_ai, "family_debate_referee")
+        for idx, row in db_rows.items():
+            row.setdefault("validation_warnings", []).append("final_by_gpt_family_debate_referee")
+        final_rows.update(db_rows)
+        print(f"  [Chunk {chunk_id}] FAMILY-DEBATE {debate_ai.upper()} {len(db_rows)}/{len(missing)} status={db_st.get('status')}")
 
     missing = [idx for idx in expected if idx not in final_rows]
     if missing:
@@ -2640,6 +2708,7 @@ def _merge_abstain_analysis(pred: Dict[str, Any], ai_r: Dict[str, Any], reason: 
         "risk_score_candidates", "tail_risk_flags", "confidence_downgrade_reason",
         "market_audit", "goal_market_audit", "market_conflicts", "candidate_scores",
         "public_heat_audit", "packet_news_risk_audit", "trap_candidates", "final_score_audit",
+        "family_debate",
     ]:
         if ai_r.get(k) not in (None, {}, []):
             pred[k] = ai_r.get(k)
@@ -4013,6 +4082,60 @@ def build_fallback_referee_prompt(evidence_batch: List[Dict[str, Any]], phase1_r
     return "\n".join(p)
 
 
+# 16-role "family debate" cast used by the GPT fallback referee when Gemini final
+# is unavailable. Each role is a reading-paradigm lens; GPT must internally let
+# them argue, then a chair reconciles into ONE final score per match. This is a
+# referee role (decides the final score), NOT a phase1 analyst promotion.
+FAMILY_DEBATE_ROLES = [
+    ("祖父·市场结构", "只信1x2/让球/大小球原生赔率结构与overround，先定方向边际强弱，反对凭名气下注。"),
+    ("祖母·正确比分簇", "盯CRS正确比分赔率簇与相邻比分密度，指出市场最厚的比分形状。"),
+    ("父亲·总进球档位", "先定goal_band(0-1/2-3/4+)，禁止跳过定档直接报比分。"),
+    ("母亲·大小球线移动", "看ttg/盘口位移：线下行偏小球、线上行偏大球，按联赛赋权强弱。"),
+    ("大伯·大球曲线塌缩", "判大球只看a5/a4斜率塌缩与a6/a7尾部共振，反对a4单点诱盘假信号。"),
+    ("二叔·让球形态", "用让球盘深浅+资金定比分形状：对称(1-1/2-2)还是单边(2-0/0-2)。"),
+    ("姑姑·资金流/Sharp", "读public vs sharp、reverse line movement、steam，揪庄家诱盘背离。"),
+    ("舅舅·联赛风格", "前置联赛进球生态：大开大合联赛归大球，绞肉联赛归小球，不可一刀切。"),
+    ("哥哥·强强高分簇", "强强对话审计4球≤5.3且5球≤7.8时的2-2/3-2高分簇倾向。"),
+    ("姐姐·弱势反打", "审计客胜/弱队进球路径与BTTS尾部，防机械零封。"),
+    ("表哥·逆向博弈", "低赔比分被异常压低=庄家入口，主张反向考虑或回避。"),
+    ("表姐·战意与重要性", "赛季末战意倒挂、杯赛淘汰赛保守、谢幕战松懈，作信心放大器/缩小器。"),
+    ("叔公·伤停轮换", "读intelligence伤停/轮换/试阵，友谊赛热身赛默认阵容脆弱。"),
+    ("婶婶·联网与时效", "核验web_research来源URL/时效，缺来源不得当硬证据。"),
+    ("小弟·风险与弃权", "证据不足/自相矛盾时主张降级或no_bet，宁可不推不可硬推。"),
+    ("家长·主裁仲裁", "汇总全场争论，按证据优先级裁定唯一final比分与tier，输出可证伪理由。"),
+]
+
+
+def _family_debate_roster_text() -> str:
+    return "\n".join(f"{i+1}. {name}：{stance}" for i, (name, stance) in enumerate(FAMILY_DEBATE_ROLES))
+
+
+def build_family_debate_referee_prompt(evidence_batch: List[Dict[str, Any]], phase1_results: Dict[str, Dict[int, Dict[str, Any]]], critic_reports: Dict[str, List[Dict[str, Any]]]) -> str:
+    p = []
+    p.append("<gpt_family_debate_final_referee>")
+    p.append("Gemini 终审已不可用。现在由你（GPT）独自扮演一个16人足球家庭的全部成员，对每场比赛展开内部辩论，最终仲裁出唯一最终比分。你是终审裁判，不是phase1初审；你的输出就是最终结果。")
+    p.append("【16个家庭角色，必须全部在内心发言】")
+    p.append(_family_debate_roster_text())
+    p.append("【辩论规则】")
+    p.append("1. 每场先让16角色各自从自己视角给出倾向（方向+比分+一句理由），允许互相反驳。")
+    p.append("2. 证据优先级：raw market structure > 正确比分簇 > 总进球模态 > 让球盘形态 > 资金流/Sharp > 联赛风格/战意 > 联网背景 > Phase1 共识。多数票不自动成立，相同低赔理由算同一族证据。")
+    p.append("3. 两段式读盘：先由父亲定goal_band档位+把握度，再在档内由家长仲裁唯一比分；选非众数比分必须写可证伪的背离理由，否则回落众数并下调confidence。")
+    p.append("4. 家长（主裁）负责收敛分歧，输出每场唯一 predicted_score，并在 debate_summary 里浓缩关键分歧与裁定依据。")
+    p.append("5. 证据不足或自相矛盾时，小弟有权要求 recommendation.is_recommended=false / bet_action=no_bet，但仍要给出最可能比分，不要整场留空。")
+    p.append("输出 schema 与 Gemini final 完全一致（同样的 predictions 数组与字段），额外要求：每个 prediction 增加 \"family_debate\":{\"debate_summary\":\"中文，浓缩16角色关键分歧与裁定\",\"chair_reasoning\":\"家长最终裁定逻辑\",\"dissent\":[\"被否决的少数派比分及理由\"]}。")
+    p.append("必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。不要使用本地规则，不要 markdown，只输出严格 JSON object。")
+    p.append("</gpt_family_debate_final_referee>")
+    p.append(_canonical_output_schema_text())
+    p.append("<evidence_batch>")
+    for e in evidence_batch:
+        p.append(_safe_json_line(e))
+    p.append("</evidence_batch><phase1_results>")
+    p.append(_safe_json_line({m: {str(k): _short_prediction_for_prompt(v) for k, v in rows.items()} for m, rows in phase1_results.items()}))
+    p.append("</phase1_results><critic_reports>")
+    p.append(_safe_json_line(critic_reports))
+    p.append("</critic_reports>")
+    return "\n".join(p)
+
 def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_predictions: Dict[int, Dict[str, Any]]) -> str:
     p = []
     p.append("你是 Consistency Judge，只检查结构一致性，不做足球判断，不改变预测方向/比分，除非存在字段自相矛盾时给出 repair 建议。")
@@ -4336,6 +4459,7 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
             "risk_score_candidates", "tail_risk_flags", "confidence_downgrade_reason",
             "market_audit", "score_cluster_audit", "goal_market_audit", "market_conflicts", "candidate_scores",
             "public_heat_audit", "packet_news_risk_audit", "trap_candidates", "final_score_audit",
+            "family_debate",
         ]:
             if isinstance(raw_item.get(k), (dict, list)):
                 row[k] = raw_item.get(k)
@@ -5253,7 +5377,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "score_cluster_audit", "sharp_money_audit", "recommendation_components", "risk_score_candidates",
         "tail_risk_flags", "confidence_downgrade_reason", "market_audit",
         "goal_market_audit", "market_conflicts", "candidate_scores", "public_heat_audit",
-        "packet_news_risk_audit", "trap_candidates", "final_score_audit",
+        "packet_news_risk_audit", "trap_candidates", "final_score_audit", "family_debate",
     ]:
         v = ai_r.get(k, None)
         if v in (None, {}, []):
