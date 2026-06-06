@@ -39,3 +39,29 @@ scripts/data/
 data/debug/
 data/debug_v20/
 *.log
+
+# OpenClaw / local agent workspace files (never commit persona/session state)
+.openclaw/
+AGENTS.md
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TOOLS.md
+USER.md
+
+# Local audit/backfill scratch outputs
+reports/audit_*/
+reports/audit_backfill_*/
+reports/audit_codebase_*.md
+reports/audit_frontend_*.md
+reports/audit_netherlands_upset_rootcause_*.md
+
+# One-off local read-the-answer / threshold scripts
+scripts/match_scraped_scores.py
+scripts/read_the_answer.py
+scripts/read_the_answer_analyze.py
+scripts/read_the_answer_bystyle.py
+scripts/threshold_sweep.py
+
+# Local historical snapshots not produced by the current CI run
+data/history_2026-05-28_today_morning.json
