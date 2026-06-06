@@ -4479,6 +4479,13 @@ def attach_matrix_shadow_fields(prediction: Dict[str, Any], match_obj: Dict[str,
 PREMATCH_V2_VERSION = "v20.4_pre_match_factor_gate"
 
 LEAGUE_DNA_PROFILES = {
+    # 友谊赛/热身赛不是常规联赛：方向可读但比分极脆，低赔强队常带公众入口属性。
+    # 本地只做读盘先验与风险展示，不改 AI 终审方向/比分。
+    "国际友谊": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "国际友谊赛/热身赛高方差练兵窗口：压低零封与大胜想象，保留1-1/2-2与客队进球路径"},
+    "国际赛": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "国际比赛日前后热身属性强，低赔/名气强队不是稳态实力确认，比分需防BTTS和平局尾部"},
+    "友谊": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "友谊赛高换人/试阵/保护主力，零封与大胜路径默认脆弱"},
+    "热身": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "热身赛高方差，强队低赔需当公众入口复核，不直接当精选确认"},
+    "friendly": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "Friendly context: high variance, rotation and BTTS/draw tails; cap clean-sheet and heavy-favorite imagination"},
     "德甲": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "高节奏/高BTTS/末段波动，客胜与小胜比分需降权复核"},
     "瑞超": {"volatility": "medium", "draw_risk": "high", "btts": "medium", "away_penalty": 1, "notes": "北欧联赛平局与1球差较多，弱优势必须防1-1/2-2"},
     "芬超": {"volatility": "medium", "draw_risk": "high", "btts": "medium", "away_penalty": 1, "notes": "低比分和平局权重偏高，客胜需市场确认"},
@@ -4521,8 +4528,13 @@ def _cap_recommendation_tier(pred: Dict[str, Any], max_tier: str, reason: str, t
 
 def _league_dna_profile(league: str) -> Dict[str, Any]:
     league_s = str(league or "")
+    league_l = league_s.lower()
+    friendly_tokens = ["国际友谊", "国际赛", "友谊", "热身", "friendly"]
+    if any(t.lower() in league_l for t in friendly_tokens):
+        profile = LEAGUE_DNA_PROFILES.get("国际友谊", {})
+        return {"key": "friendly_context", **profile}
     for key, profile in LEAGUE_DNA_PROFILES.items():
-        if key in league_s:
+        if key in league_s or key.lower() in league_l:
             return {"key": key, **profile}
     if any(x in league_s for x in ["杯", "Cup", "欧冠", "欧联", "亚冠", "世俱杯"]):
         return {"key": "cup_or_cross_context", "volatility": "high", "draw_risk": "medium", "btts": "medium", "away_penalty": 1, "notes": "杯赛/跨赛制比赛轮换、战意、旅行和首发不确定性更高"}
@@ -4571,6 +4583,76 @@ def _money_flow_state(pred: Dict[str, Any]) -> Dict[str, Any]:
 
 
 
+
+
+
+def _is_friendly_context(dna: Dict[str, Any], match_obj: Dict[str, Any]) -> bool:
+    if dna.get("key") == "friendly_context":
+        return True
+    league = str(match_obj.get("league", "")).lower()
+    return any(t in league for t in ["国际友谊", "国际赛", "友谊", "热身", "friendly"])
+
+
+def _add_unique_tail_flags(pred: Dict[str, Any], *flags: str) -> None:
+    cur = pred.get("tail_risk_flags", [])
+    if not isinstance(cur, list):
+        cur = [str(cur)] if cur else []
+    cur.extend(str(f) for f in flags if str(f).strip())
+    pred["tail_risk_flags"] = list(dict.fromkeys(cur))[:20]
+
+
+def _apply_friendly_reading_prior_gate(
+    pred: Dict[str, Any],
+    match_obj: Dict[str, Any],
+    audit: Dict[str, Any],
+    web_used: bool,
+    lineup_confirmed: bool,
+    final_dir: str,
+    draw_prob: float,
+    draw_cluster: bool,
+) -> None:
+    """Friendlies: surface rotation/BTTS/draw-tail risk without changing score or direction."""
+    dna = audit.get("league_dna", {}) if isinstance(audit.get("league_dna"), dict) else {}
+    if not _is_friendly_context(dna, match_obj):
+        return
+
+    score = _score_from_candidate(pred.get("predicted_score"))
+    candidates = pred.get("risk_score_candidates", [])
+    if not isinstance(candidates, list):
+        candidates = []
+    candidates = _normalize_risk_score_candidates(candidates)
+
+    btts_no = str(pred.get("btts", "")).strip().lower() in {"no", "n", "false", "否", "both_teams_no"}
+    no_confirm = not (web_used and lineup_confirmed)
+    clean_sheet_trap = final_dir in {"home", "away"} and score in {"1-0", "2-0", "0-1", "0-2"} and (no_confirm or btts_no or draw_cluster or draw_prob >= 23.0)
+    if clean_sheet_trap:
+        audit["rules_applied"].append("prematch_v2_friendly_clean_sheet_trap_guard")
+        audit.setdefault("risk_hints", []).append({"max_tier": "C", "reason": "prematch_v2_friendly_clean_sheet_trap_guard", "tag": "friendly_clean_sheet_fragility"})
+        _add_unique_tail_flags(pred, "friendly_clean_sheet_fragility", "friendly_btts_late_goal_risk", "friendly_2_2_draw_tail")
+        if final_dir == "home":
+            add_scores = ["1-1", "2-1", "2-2"]
+        else:
+            add_scores = ["1-1", "1-2", "2-2"]
+        for sc in add_scores:
+            _append_risk_candidate(candidates, sc, "friendly_context_tail", "友谊赛/热身赛零封路径脆弱，需保留BTTS与2-2平局尾部")
+
+    rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    tier = str(rec.get("tier", pred.get("recommendation_tier", "D"))).upper()
+    sp_home = _f(match_obj.get("sp_home"), 0)
+    sp_away = _f(match_obj.get("sp_away"), 0)
+    vote = match_obj.get("vote", {}) if isinstance(match_obj.get("vote"), dict) else {}
+    public_home = _f(vote.get("win"), 0)
+    public_away = _f(vote.get("lose"), 0)
+    low_price_home = final_dir == "home" and 1.01 < sp_home <= 1.35 and public_home >= 65.0
+    low_price_away = final_dir == "away" and 1.01 < sp_away <= 1.45 and public_away >= 65.0
+    if tier == "B" and (low_price_home or low_price_away) and no_confirm:
+        audit["rules_applied"].append("prematch_v2_friendly_favorite_overheat_cap")
+        audit.setdefault("risk_hints", []).append({"max_tier": "C", "reason": "prematch_v2_friendly_favorite_overheat_cap", "tag": "friendly_favorite_overheat"})
+        _add_unique_tail_flags(pred, "friendly_favorite_overheat", "friendly_draw_tail")
+        for sc in (["1-1", "2-1", "2-2"] if final_dir == "home" else ["1-1", "1-2", "2-2"]):
+            _append_risk_candidate(candidates, sc, "friendly_favorite_overheat", "友谊赛低赔/名气强队易成为公众入口，B级无首发确认不作精选")
+
+    pred["risk_score_candidates"] = candidates[:12]
 
 
 
@@ -4760,6 +4842,8 @@ def assign_selection_layer(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> D
     weak_home_draw = "prematch_v2_weak_home_win_draw_guard" in rules
     draw_defense = "prematch_v2_draw_defense_gate" in rules or "prematch_v2_high_draw_league_non_draw_cap" in rules
     high_vol = "prematch_v2_high_volatility_league_requires_confirmation" in rules
+    friendly_clean_sheet = "prematch_v2_friendly_clean_sheet_trap_guard" in rules
+    friendly_overheat = "prematch_v2_friendly_favorite_overheat_cap" in rules
 
     layer = "观察"
     stake = 0.0
@@ -4787,6 +4871,10 @@ def assign_selection_layer(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> D
         else:
             layer, stake = "主推", 1.0
             reasons.append("推荐闸门通过且结构化因子确认充分")
+    elif friendly_clean_sheet or friendly_overheat:
+        layer, stake = "防平", 0.25
+        hedge.extend(["平局", "2-2尾部"] if friendly_clean_sheet else ["平局", "强队热度降温"])
+        reasons.append("友谊赛/热身赛先验触发：低赔或零封路径只作防平观察")
     elif gate_pass and tier in {"A", "B"} and (conf + confirmation_bonus) >= 64 and not (away_unconfirmed or cup_context or weak_home_draw):
         layer, stake = "小注", 0.5
         reasons.append("推荐闸门通过但存在轻中度风险")
@@ -4896,6 +4984,9 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
         audit.setdefault("risk_hints", []).append({"max_tier": max_tier, "reason": reason, "tag": tag})
         # v20.6: prematch 本地层只记录 risk hints，避免成为第四个足球裁判。
         # 硬降级交给 AI 终审 prompt 的 bet_action / recommendation，或前端展示 final_action 风险。
+
+    # 友谊赛/热身赛读盘先验：只补风险与审计，不改 AI 终审方向/比分。
+    _apply_friendly_reading_prior_gate(pred, match_obj, audit, web_used, lineup_confirmed, final_dir, draw_prob, draw_cluster)
 
     # P0 结构化因子硬风险：轮换/战意/关键伤停/市场冲突必须进入推荐层。
     if structured_factors.get("market_conflict"):
