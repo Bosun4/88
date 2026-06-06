@@ -242,6 +242,9 @@ AI_MAX_PROMPT_CHARS_PER_CHUNK = max(30000, _env_int("AI_MAX_PROMPT_CHARS_PER_CHU
 AI_ENABLE_CROSS_EXAM = _env_bool("AI_ENABLE_CROSS_EXAM", _default_cross_exam)
 AI_ENABLE_CONSISTENCY_JUDGE = _env_bool("AI_ENABLE_CONSISTENCY_JUDGE", _default_consistency)
 AI_ENABLE_FALLBACK_REFEREE = _env_bool("AI_ENABLE_FALLBACK_REFEREE", True)
+# Safety: phase1 models are analysts, not final referees. If Gemini/fallback final
+# cannot produce a valid row, abstain instead of promoting phase1/Grok into final score.
+AI_ALLOW_PHASE1_FINAL_FALLBACK = _env_bool("AI_ALLOW_PHASE1_FINAL_FALLBACK", False)
 AI_CONSISTENCY_JUDGE_MODEL = str(os.environ.get("AI_CONSISTENCY_JUDGE_MODEL", "gpt")).strip().lower()
 AI_FINAL_REFEREE_MODEL = str(os.environ.get("AI_FINAL_REFEREE_MODEL", "gemini")).strip().lower() or "gemini"
 AI_FALLBACK_REFEREE_MODEL = str(os.environ.get("AI_FALLBACK_REFEREE_MODEL", "gpt")).strip().lower()
@@ -1405,6 +1408,51 @@ def _save_debug_dump(ai_name: str, phase: str, data: Any, raw_text: str = "") ->
         pass
 
 
+def _extract_sse_response_text(raw: str) -> str:
+    """Extract assistant text from OpenAI-compatible SSE streams.
+
+    Some proxy providers return `text/event-stream` bodies even when the request
+    did not ask for streaming. Treating the whole `data: {...}` stream as JSON
+    makes every call look like `empty_or_invalid_json_object`; this then lets
+    lower-authority phase1 rows leak into final predictions.
+    """
+    if not isinstance(raw, str) or "data:" not in raw[:2000]:
+        return ""
+    parts: List[str] = []
+    best_objects: List[str] = []
+    for line in raw.splitlines():
+        line = line.strip()
+        if not line.startswith("data:"):
+            continue
+        payload = line[5:].strip()
+        if not payload or payload == "[DONE]":
+            continue
+        try:
+            obj = json.loads(payload)
+        except Exception:
+            continue
+        # Full JSON object may itself be carried as a text event.
+        txt = _extract_response_text(obj) if not (isinstance(obj, dict) and "choices" in obj) else ""
+        if txt and ("predictions" in txt or "critic_reports" in txt or "repairs" in txt):
+            best_objects.append(txt)
+        if isinstance(obj, dict):
+            for ch in obj.get("choices", []) or []:
+                if not isinstance(ch, dict):
+                    continue
+                delta = ch.get("delta") if isinstance(ch.get("delta"), dict) else {}
+                msg = ch.get("message") if isinstance(ch.get("message"), dict) else {}
+                for v in [delta.get("content"), delta.get("reasoning_content"), msg.get("content"), ch.get("text")]:
+                    if isinstance(v, str) and v:
+                        parts.append(v)
+    joined = "".join(parts).strip()
+    if joined:
+        return joined
+    if best_objects:
+        best_objects.sort(key=len, reverse=True)
+        return best_objects[0]
+    return ""
+
+
 def _extract_response_text(data: Any) -> str:
     candidates: List[Tuple[int, str]] = []
 
@@ -1453,7 +1501,17 @@ def _extract_response_text(data: Any) -> str:
         add(data.get("text"), 5)
         walk(data)
     elif isinstance(data, str):
+        sse_text = _extract_sse_response_text(data)
+        if sse_text:
+            add(sse_text, 20)
         add(data, 5)
+
+    # Provider fallback: json.loads(raw_text) failed and async_call_ai_json wrapped
+    # the body as {"raw": text}. Parse SSE before considering the raw envelope.
+    if isinstance(data, dict) and isinstance(data.get("raw"), str):
+        sse_text = _extract_sse_response_text(data.get("raw", ""))
+        if sse_text:
+            add(sse_text, 20)
 
     if not candidates:
         return ""
@@ -2107,9 +2165,14 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
 
     missing = [idx for idx in expected if idx not in final_rows]
     if missing:
-        for idx in missing:
-            final_rows[idx] = _phase1_consensus_fallback(idx, phase1)
-        print(f"  [Chunk {chunk_id}] Phase1 consensus fallback filled {len(missing)}")
+        if AI_ALLOW_PHASE1_FINAL_FALLBACK:
+            for idx in missing:
+                final_rows[idx] = _phase1_consensus_fallback(idx, phase1)
+            print(f"  [Chunk {chunk_id}] Phase1 consensus fallback filled {len(missing)} (explicitly allowed)")
+        else:
+            for idx in missing:
+                final_rows[idx] = _abstain_ai_prediction(idx, "final_referee_missing_no_phase1_fallback")
+            print(f"  [Chunk {chunk_id}] Final referee missing; abstained {len(missing)} instead of promoting phase1")
 
     if AI_ENABLE_CONSISTENCY_JUDGE and final_rows:
         judge_ai = AI_CONSISTENCY_JUDGE_MODEL if AI_CONSISTENCY_JUDGE_MODEL in AI_NAMES else "gpt"
