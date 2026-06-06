@@ -2391,8 +2391,11 @@ def _legacy_model_analysis(ai_r: Dict[str, Any], model_name: str) -> str:
 
 
 def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
-    if not ai_r or ai_r.get("predicted_score") == "弃权" or ai_r.get("final_direction") == "abstain":
+    if not ai_r:
         return _abstain_prediction("AI全部失败或最终弃权")
+    if ai_r.get("predicted_score") == "弃权" or ai_r.get("final_direction") == "abstain":
+        reason = str((ai_r.get("validation_warnings") or ["AI全部失败或最终弃权"])[0])
+        return _merge_abstain_analysis(_abstain_prediction(reason), ai_r, reason)
 
     _protocol_enforce_prediction(ai_r)
     score = ai_r.get("predicted_score", "弃权")
@@ -2584,6 +2587,102 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "engine_version": ENGINE_VERSION,
         "engine_architecture": ENGINE_ARCHITECTURE,
     }
+
+
+def _analysis_from_phase1(ai_r: Dict[str, Any]) -> Dict[str, Any]:
+    phase1 = ai_r.get("phase1_model_outputs", {}) if isinstance(ai_r.get("phase1_model_outputs"), dict) else {}
+    # Prefer a successfully parsed analyst row for display only. This must never
+    # decide final score/direction when final referee is missing.
+    for name in ["grok", "gpt", "gemini"]:
+        row = phase1.get(name) if isinstance(phase1.get(name), dict) else None
+        if row:
+            return row
+    return {}
+
+
+def _merge_abstain_analysis(pred: Dict[str, Any], ai_r: Dict[str, Any], reason: str) -> Dict[str, Any]:
+    if not isinstance(pred, dict) or not isinstance(ai_r, dict):
+        return pred
+    phase1 = ai_r.get("phase1_model_outputs", {}) if isinstance(ai_r.get("phase1_model_outputs"), dict) else {}
+    display_row = _analysis_from_phase1(ai_r)
+
+    # Keep abstain/no-bet semantics immutable. Only restore analysis/display fields.
+    pred.update({
+        "predicted_score": "弃权",
+        "predicted_label": "弃权",
+        "result": "弃权",
+        "display_direction": "弃权",
+        "final_direction": "abstain",
+        "is_abstain": True,
+        "confidence": 0,
+        "recommend_gate_pass": False,
+        "decision_source": "ai_abstain_final_referee_missing_analysis_preserved",
+        "ai_authority_mode": "ai_native_web_no_local_football_judgement",
+    })
+    rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    tags = list(rec.get("risk_tags", [])) if isinstance(rec.get("risk_tags"), list) else []
+    tags.append(reason)
+    pred["recommendation"] = {
+        "tier": "D",
+        "is_recommended": False,
+        "top4_priority": 999,
+        "bet_confidence": 0,
+        "risk_level": "high",
+        "risk_tags": list(dict.fromkeys(str(x) for x in tags if str(x).strip())),
+        "why_recommended": "终审缺失，禁止输出比分；仅保留初审分析供审计。",
+    }
+    pred["recommendation_tier"] = "D"
+    pred["recommend_gate_reasons"] = list(dict.fromkeys([reason] + list(pred.get("recommend_gate_reasons", []))))
+
+    for k in [
+        "phase1_model_outputs", "critic_reports_by_model", "validation_warnings",
+        "score_cluster_audit", "sharp_money_audit", "recommendation_components",
+        "risk_score_candidates", "tail_risk_flags", "confidence_downgrade_reason",
+        "market_audit", "goal_market_audit", "market_conflicts", "candidate_scores",
+        "public_heat_audit", "packet_news_risk_audit", "trap_candidates", "final_score_audit",
+    ]:
+        if ai_r.get(k) not in (None, {}, []):
+            pred[k] = ai_r.get(k)
+
+    for k in [
+        "anchor_audit", "market_interpretation", "money_flow", "contextual_logic",
+        "rejected_cases", "web_research", "final_web_audit", "data_quality",
+    ]:
+        v = ai_r.get(k)
+        if v in (None, {}, []) and display_row:
+            v = display_row.get(k)
+        if v not in (None, {}, []):
+            pred[k] = v
+
+    # Legacy fields consumed by the current front-end cards. These are explicitly
+    # labelled as analyst/initial-review output, not final referee predictions.
+    final_reason = str(ai_r.get("reason", reason))[:3000]
+    pred["final_referee_score"] = "弃权"
+    pred["final_referee_analysis"] = final_reason or "终审缺失：禁止输出最终比分。"
+    pred["gemini_score"] = "弃权"
+    pred["gemini_analysis"] = final_reason or "Gemini终审缺失；本场仅展示初审审计，不给最终比分。"
+    pred["final_ai_score"] = "弃权"
+    pred["final_ai_analysis"] = pred["gemini_analysis"]
+    for name in ["gpt", "grok"]:
+        row = phase1.get(name) if isinstance(phase1.get(name), dict) else {}
+        score = _score_from_candidate(row.get("predicted_score", "")) if row else ""
+        pred[f"{name}_score"] = score if _parse_score(score)[0] is not None else "初审无有效比分"
+        pred[f"{name}_analysis"] = _legacy_model_analysis(ai_r, name)
+    pred["bayesian_evidences"] = [
+        "终审缺失：本地按AI-native安全规则弃权，不恢复任何本地/phase1比分。",
+        "以下分析来自可解析的 phase1 初审，仅用于赛前审计展示，不构成最终预测。",
+        "final_referee_missing_no_phase1_fallback",
+    ]
+    if display_row:
+        pred["bayesian_evidences"].extend([
+            "phase1_display_source:" + str(display_row.get("source_model", "unknown")),
+            "phase1_reason:" + str(display_row.get("reason", ""))[:1200],
+        ])
+    pred["ai_call_status"] = dict(AI_CALL_STATUS)
+    pred["ai_run_metadata"] = dict(_LAST_AI_RUN_METADATA)
+    pred["engine_version"] = ENGINE_VERSION
+    pred["engine_architecture"] = ENGINE_ARCHITECTURE
+    return pred
 
 
 def _abstain_prediction(reason: str = "AI全失败，AI-native模式不使用本地足球兜底") -> Dict[str, Any]:
@@ -5144,8 +5243,11 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
 def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
     apply_weak_home_tail_risk_protection(ai_r)
     pred = _BASE_ADAPT_AI_TO_FRONTEND_V2021(ai_r, match_obj)
-    if not isinstance(pred, dict) or pred.get("is_abstain"):
+    if not isinstance(pred, dict):
         return pred
+    if pred.get("is_abstain"):
+        reason = str((ai_r.get("validation_warnings") or pred.get("recommend_gate_reasons") or ["AI全部失败或最终弃权"])[0]) if isinstance(ai_r, dict) else "AI全部失败或最终弃权"
+        return _merge_abstain_analysis(pred, ai_r if isinstance(ai_r, dict) else {}, reason)
     raw_item = ai_r.get("raw_item", {}) if isinstance(ai_r.get("raw_item"), dict) else {}
     for k in [
         "score_cluster_audit", "sharp_money_audit", "recommendation_components", "risk_score_candidates",
