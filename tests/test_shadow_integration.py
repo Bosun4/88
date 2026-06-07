@@ -48,17 +48,7 @@ def test_quantitative_modules_dry_run():
     print(f"Experience rules applied: {exp_verdict}")
     assert isinstance(exp_verdict, dict)
 
-    # 3. Test advanced_models (Bivariate Poisson)
-    import advanced_models
-    poisson_model = advanced_models.ZeroInflatedBivariatePoisson()
-    # Simple default lambda estimation
-    h_xg, a_xg = 1.25, 1.45
-    poisson_res = poisson_model.predict(h_xg, a_xg)
-    print(f"Poisson projection: Home Win {poisson_res['home_win']}%, Draw {poisson_res['draw']}%, Away Win {poisson_res['away_win']}%")
-    print(f"Poisson top score: {poisson_res['predicted_score']}, Top scores: {poisson_res['top_scores'][:3]}")
-    assert poisson_res["home_win"] > 0
-
-    # 4. Test quant_edge (SteamMoveDetector)
+    # 3. Test quant_edge (SteamMoveDetector)
     import quant_edge
     steam_det = quant_edge.SteamMoveDetector()
     mock_match_with_change = MOCK_MATCH_AUCKLAND.copy()

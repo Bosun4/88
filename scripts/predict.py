@@ -3292,66 +3292,6 @@ def build_enhanced_market_modules(match_obj: Dict[str, Any], index: int) -> Dict
     }
 
 
-def build_evidence_packet_v203(match_obj: Dict[str, Any], index: int) -> Dict[str, Any]:
-    """
-    可直接替换 v20.2.1 的 build_evidence_packet。
-    注意：此函数只编译事实，不输出 predicted_score，不做本地预测判断。
-    """
-    m = normalize_match_v203(match_obj)
-
-    correct_score_odds = {sc: m.get(key) for sc, key in CRS_FULL_MAP.items() if m.get(key) not in (None, "", 0, "0")}
-    total_goals_odds = {str(i): m.get(f"a{i}") for i in range(8) if m.get(f"a{i}") not in (None, "", 0, "0")}
-    hftf_odds = {HFTF_MAP[k]: m.get(k) for k in HFTF_MAP if m.get(k) not in (None, "", 0, "0")}
-
-    evidence = {
-        "match": index,
-        "identity": {
-            "home_team": m.get("home_team", "Home"),
-            "away_team": m.get("away_team", "Away"),
-            "league": m.get("cup", m.get("league", "")),
-            "match_num": m.get("week_no", m.get("match_num", "")),
-            "week": m.get("week", ""),
-            "match_time_ts": m.get("stime", ""),
-            "wtime_ts": m.get("wtime", ""),
-        },
-        "lottery_market_1x2": {
-            "home": m.get("sp_home"),
-            "draw": m.get("sp_draw"),
-            "away": m.get("sp_away"),
-            "note": "中国体彩竞彩 HAD 赔率，不是欧洲均赔。",
-        },
-        "handicap": {
-            "raw": m.get("give_ball", m.get("handicap", m.get("rq", ""))),
-            "hhad_win": m.get("hhad_win"),
-            "hhad_same": m.get("hhad_same"),
-            "hhad_lose": m.get("hhad_lose"),
-            "note": "中国竞彩让球胜平负 HHAD；give_ball=-1 表示主让1，hhad_same 通常对应主队刚好赢1球。",
-        },
-        "movement": {
-            "had_change": _as_dict(m.get("change")),
-            "hhad_change": _as_dict(m.get("hhad_change")),
-            "ttg_change": _as_dict(m.get("ttg_change")),
-            "crs_change": _as_dict(m.get("crs_change")),
-            "hafu_change": _as_dict(m.get("hafu_change")),
-            "coding_note": "-1=赔率下降/压低，0=不变，1=赔率上升/抬高。空数组/空对象表示无可用变化数据，不能硬判 RLM。",
-        },
-        "public_vote": _as_dict(m.get("vote")),
-        "total_goals_odds": total_goals_odds,
-        "correct_score_odds": correct_score_odds,
-        "half_full_time_odds": hftf_odds,
-        "data_quality": {
-            "has_1x2": all(_f(m.get(k), 0.0) > 1.01 for k in ["sp_home", "sp_draw", "sp_away"]),
-            "has_hhad": all(_f(m.get(k), 0.0) > 1.01 for k in ["hhad_win", "hhad_same", "hhad_lose"]),
-            "has_total_goals": bool(total_goals_odds),
-            "has_correct_score": bool(correct_score_odds),
-            "has_hftf": bool(hftf_odds),
-            "has_vote": bool(_as_dict(m.get("vote"))),
-            "has_market_change": any(bool(_as_dict(m.get(k))) for k in ["change", "hhad_change", "ttg_change", "crs_change", "hafu_change"]),
-            "has_packet_context": any(_exists(m.get(k)) for k in ["intro", "analyse", "information", "points"]),
-        },
-    }
-    evidence.update(build_enhanced_market_modules(m, index))
-    return evidence
 
 # ------------------------------------------------------------
 # Prompt addendum：把 20.2.1 的自由发挥改成审计表
