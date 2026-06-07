@@ -19,7 +19,6 @@ REQUIRED_PACKAGES = [
     "Requests>=2.32.0",
     "numpy>=1.26.0",
     "pandas>=2.2.0",
-    "scipy>=1.12.0",
     "deep-translator>=1.11.4",
 ]
 
