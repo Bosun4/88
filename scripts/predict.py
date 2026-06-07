@@ -3603,10 +3603,10 @@ GEMINI_FINAL_AUDIT_ADDENDUM = """
 你是 88 系统的最高终审裁判。你拥有最高推翻权与最终裁定权，无需盲从 GPT 或 Grok 的错误保守结论！
 1. 【打破平局保守】：如果前置模块判定【大球对攻（总进球 4+）活跃】（例如预期进球 >= 3），你有权彻底无视系统原有的防平/弱主胜降级机制，强行将大球带 3-1/1-3/2-2/3-2/2-3/4-1/1-4/4-2 等主客对称比分提升为 A/S 级主推。不要龟缩在 1-1, 1-0。【对称强制】凡考虑主队大胜比分（3-1/4-1/3-2），必须同时审计客队对称镜像（1-3/1-4/2-3），不得只押单边。
 2. 【终结聪明钱背离】：仔细阅读 Grok 报告的聪明钱资金变动。若散户看主/机构看客（或相反），产生明显的聪明钱背离，无论常规强弱实力对比多大，你必须直接选择【反打下盘】或将热门强队硬降级为 D（坚决放弃不推）。
-3. 必须读取 matrix_shadow_facts（静态数理泊松基准）与 local_quantitative_intelligence。
-4. 强制执行“数理与盘口背离探测 (Divergence Detection)”：
-   - 如果静态数理概率极高，但临场赔率大反向大降水，且大众极热，必须警惕“正诱造热”陷阱，主动下调推荐等级。
-   - 如果静态数理概率极低，但临场庄家急剧降水保护，寻找被隐藏的资金入场。
+3. 必须读取 local_quantitative_intelligence（战意/经验/聪明钱蒸汽）与 jingcai_market_facts（竞彩超额抽水率）作为客观事实；系统不提供任何静态数理/泊松比分基准，比分与方向完全由你像人一样读盘推理得出。
+4. 强制执行“市场背离探测 (Divergence Detection)”——锚点是真实市场事实（大众投票热度、临场变盘方向、聪明钱资金流、国际盘偏斜），不是任何数理模型：
+   - 如果大众极热某方向、但临场赔率反向大降水或不降反升，必须警惕“正诱造热/大热必死”陷阱，主动下调推荐等级；
+   - 如果某方向临场庄家急剧降水保护，寻找被隐藏的资金入场。
 5. 必须输出 predicted_score 前完成相邻比分审计（候选必须主客对称，禁止漏列镜像比分）：
    - 2-1 比较 1-1/1-0/2-0/1-2/2-2/3-1/4-1
    - 1-2 比较 1-1/0-1/0-2/2-1/2-2/1-3/1-4
@@ -3708,7 +3708,6 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         # 1. 引入本地量化与基本面组件
         import league_intel
         import experience_rules
-        import advanced_models
         import quant_edge
 
         league_key = league_intel.detect_league_key(match_obj.get("league", ""))
@@ -3723,13 +3722,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         # 临场聪明钱蒸汽检测
         steam_res = quant_edge.SteamMoveDetector().detect(match_obj, prediction_shell)
 
-        # 2. 提前调用影子矩阵计算（泊松分布、全盘口 Devig 等数理边际概率）
-        matrix_pack = build_unified_score_matrix_shadow(match_obj)
-        top_scores = matrix_pack.get("top_scores", [])
-        recommended_score = top_scores[0]["score"] if top_scores else ""
-        recommended_direction = _score_direction(recommended_score) if recommended_score else None
-        
-        # 3. 计算中国竞彩超额抽水 (Overround)
+        # 2. 计算中国竞彩超额抽水 (Overround) —— 纯市场事实，非数理锚
         overround = 0.0
         has_1x2 = all(match_obj.get(k) not in (None, "", 0, "0") for k in ["sp_home", "sp_draw", "sp_away"])
         if has_1x2:
@@ -3742,22 +3735,14 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
             except:
                 pass
 
-        # 4. 构建并注入 matrix_shadow_facts，并加入背离风控与诱盘提示
-        evidence["matrix_shadow_facts"] = {
-            "lambda_home": matrix_pack.get("lambda_h"),
-            "lambda_away": matrix_pack.get("lambda_a"),
-            "shape_verdict": matrix_pack.get("shape_verdict", "unknown"),
-            "fair_probabilities": matrix_pack.get("direction_probs", {}),
-            "top_mathematical_scores": top_scores[:5],  # 概率最高的前5个影子比分
-            "shadow_recommended_score": recommended_score,
-            "shadow_recommended_direction": recommended_direction,
+        # 3. 注入竞彩超额抽水事实（纯市场事实，不含任何泊松/数理比分锚，避免污染 AI 读盘）
+        evidence["jingcai_market_facts"] = {
             "jingcai_overround_pct": round(overround * 100, 2),
             "note": (
-                "这是本地算法利用泊松分布与 Devig 赔率反推得到的中国竞彩静态数理客观概率。由于竞彩具备高抽水（通常11%左右）"
-                "及极强的区域风控倾向（如为了规避大众热门过度降水），数理概率在庄家诱盘或风控严重偏置时会产生系统性失真。"
-                "AI 必须利用此静态数理测算作为强事实基准，主动探测『静态数理基准』与『市场实际大众投票/临场变盘』之间的『背离 (Divergence)』。"
-                "如果发现严重背离（例如：静态主胜概率极高，但临场平客大降水且大众极热主），说明极可能存在庄家诱盘陷阱，"
-                "AI 绝不能盲目迎合静态数理模型，而应在 traps_detected、risk_score_candidates 及 final_referee_analysis 中精准反向揭露该博弈骗局。"
+                "这是中国体彩竞彩 1X2 的超额抽水率（Overround），由三向赔率隐含概率之和减 1 得到，属客观市场事实。"
+                "竞彩抽水通常 11% 左右且有极强区域风控倾向（为规避大众热门会过度降水）。"
+                "AI 应将抽水率作为庄家做盘强度的背景参考，结合大众投票/临场变盘/资金流自行读盘探测诱盘陷阱，"
+                "系统不提供任何静态数理比分基准，比分与方向判断完全由 AI 像人一样读盘推理得出。"
             )
         }
         
@@ -3829,7 +3814,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
 
         evidence["evidence_compiler_version"] = "v20.6.0_shadow_pre_injected_with_quant"
         evidence.setdefault("protocol_notes", []).extend([
-            "v20.6: matrix_shadow_facts 与 local_quantitative_intelligence 已经预先注入。",
+            "v20.6: local_quantitative_intelligence 与 jingcai_market_facts（纯抽水事实）已经预先注入；系统不提供静态数理/泊松比分基准。",
             "v20.6: dual_market_divergence_calibration 已注入高精度 Shin 偏斜度与 z-value，AI 必须检测风控背离。",
             "v20.6: 竞彩高抽水及风控背离探测（Divergence Detection）已启用。AI 必须积极识破静态数理与变盘背离之间的庄家陷阱。",
             "v20.6: sharp_money_facts_v203 是事实编译，不是本地判断Sharp真伪。",
