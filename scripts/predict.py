@@ -3439,6 +3439,14 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         
         # 战意基本面挖掘
         motivation_facts = league_intel.analyze_motivation(match_obj, league_key)
+
+        # 世界杯/国际赛读盘先验注入（5届320场分轮实证+双窗口状态档；作evidence非裁判）
+        world_cup_reading = None
+        if league_key in ("world_cup", "intl_friendly"):
+            try:
+                world_cup_reading = league_intel.analyze_world_cup_context(match_obj)
+            except Exception:
+                world_cup_reading = None
         
         # 经验规则引擎
         prediction_shell = {"home_win_pct": 33, "draw_pct": 33, "away_win_pct": 34, "model_consensus": 2}
@@ -3474,6 +3482,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         # 5. 整合本地量化智能作为原始事实，交给 AI 决策
         evidence["local_quantitative_intelligence"] = {
             "motivation_scenarios": motivation_facts,
+            "world_cup_reading_intel": world_cup_reading,
             "empirical_experience_triggered_rules": experience_verdict.get("experience_analysis", {}).get("rules", []),
             "empirical_over_2_5_pct": experience_verdict.get("over_2_5", 50.0),
             "steam_movement_signals": steam_res if steam_res.get("steam") else None,
