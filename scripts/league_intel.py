@@ -29,6 +29,8 @@ LEAGUE_PROFILES = {
     "uel": (2.65, 52, 24, 36, 42, 35, "more open than UCL"),
     "ucnf": (2.50, 48, 26, 34, 38, 37, "quality gap huge"),
     "women": (2.50, 48, 26, 34, 38, 37, "similar to mens avg"),
+    "world_cup": (2.48, 47, 28, 36, 40, 36, "WC group: R1 dampest/R2 most open/R3 margin-compressed; KO QF most defensive 24% pens"),
+    "intl_friendly": (2.60, 53, 24, 38, 42, 34, "friendly: rotation/trial, low-score clean-sheet fragile, easily broken by BTTS/2-2"),
     "default": (2.50, 50, 25, 35, 40, 35, "default"),
 }
 
@@ -183,6 +185,8 @@ def detect_league_key(league_name):
         (["\u6b27\u7f57\u5df4","europa"], "uel"),
         (["\u6b27\u534f\u8054","conference"], "ucnf"),
         (["\u5973\u4e9a\u6d32","\u5973\u8db3","\u5973\u4e16"], "women"),
+        (["\u4e16\u754c\u676f","world cup","worldcup","fifa world"], "world_cup"),
+        (["\u56fd\u9645\u8d5b","\u56fd\u9645\u53cb\u8c0a","\u53cb\u8c0a\u8d5b","\u70ed\u8eab\u8d5b","friendly"], "intl_friendly"),
     ]:
         if any(k in ln for k in keys): return val
     return "default"
@@ -282,6 +286,85 @@ def analyze_motivation(m, league_key):
     return lines
 
 
+# ===================================================================
+# WORLD CUP READING INTEL (2026) - 5届320场实证 + 3/6月双窗口状态
+# 数据源: reports/wc_research/ (ESPN/Wikipedia官方API, 可复跑核验)
+# 性质: 读盘先验, 作evidence喉AI终审, 非机械数理锡, 不当第四裁判
+# ===================================================================
+# 参赛队 2026年3月+6月双窗口状态读盘标签 (队名关键词 -> 状态档)
+WC_TEAM_FORM = {
+    # 可信主线: 状态与战力匹配
+    "阿根廷": ("trust", "WWW 进9失1, 棅西6月还轮休仍胜, 底子最厚; 首轮1-0/2-0小胜可信"),
+    "比利时": ("trust", "进13失3, 4场火力凶+客场零封, 攻防俱佳"),
+    "意大利": ("trust", "3/4零封连续1-0, 防守扎实, 宜低球/零封主线但进攻乏力"),
+    "西班牙": ("trust", "近7场零封+状态正佳, 但近2场进攻转弱(0-0/1-1)"),
+    "葡萄牙": ("lean_trust", "2零封低失球整体稳"),
+    # 分化: 看双窗口别只看最后一场
+    "法国": ("split", "⚠3月胜巴西/哥伦比仍第一档, 仅6月末场轮换1-2负科特迪瓦; 零封0/3、防反不稳, 让球易缩水"),
+    "巴西": ("split", "赢球但试阵+零封0/3, 攻强守松, 让球易缩"),
+    "德国": ("split", "WWW但场场丢球(0零封), 全程对攻, 防线漏"),
+    # 诱盘高危: 主胜易被高估
+    "美国": ("trap_risk", "东道主LLL进3失9, 三连败失球如麻, 主胜/不败诱盘高危"),
+    "荷兰": ("trap_risk", "主场0-1爆冷负阿尔及利亚, 零封0/3, 状态与盘口背离"),
+    "克罗地亚": ("trap_risk", "4场失7球, 防线老化, 半场领先常被扁"),
+    "英格兰": ("trap_risk", "⚠3场仅进2球0-1负日本, 进攻哑火, 主胜低赔防进球荒"),
+}
+# 零封脆弱队(半场领先≠稳, 防BTTS/补时击穿)
+WC_CLEAN_SHEET_FRAGILE = ["法国","葡萄牙","克罗地亚","巴西","德国","荷兰"]
+
+
+def _wc_detect_round(m):
+    """从 baseface/赛事名推断小组赛轮次或淘汰赛阶段. 无法确认返回None."""
+    bf = str(m.get("baseface", "")) + str(m.get("match_num", "")) + str(m.get("league", ""))
+    for kw, r in [("\u7b2c\u4e00\u8f6e", "R1"), ("\u9996\u8f6e", "R1"), ("\u7b2c1\u8f6e", "R1"),
+                  ("\u7b2c\u4e8c\u8f6e", "R2"), ("\u7b2c2\u8f6e", "R2"),
+                  ("\u7b2c\u4e09\u8f6e", "R3"), ("\u7b2c3\u8f6e", "R3"), ("\u672b\u8f6e", "R3"),
+                  ("1/8", "R16"), ("1/4", "QF"), ("\u534a\u51b3", "SF"), ("\u51b3\u8d5b", "F")]:
+        if kw in bf:
+            return r
+    return None
+
+
+def analyze_world_cup_context(m):
+    """世界杯读盘先验注入(作evidence, 非裁判). 返回 lines list.
+    依据: 5届320场分轮实证 + 2026新制 + 双窗口状态档."""
+    lines = []
+    h = str(m.get("home_team", ""))
+    a = str(m.get("away_team", ""))
+
+    # 1. 赛制前置闸 (2026新制)
+    lines.append("[WC2026] 48\u961f/12\u7ec4/\u524d2+8\u4e2a\u6700\u4f73\u7b2c\u4e09\u540d\u664b\u7ea7; \u6700\u4f73\u7b2c\u4e09\u540d\u673a\u5236\u4f7f\u672b\u8f6e\u8eba\u5e73\u52a8\u673a\u4e0b\u964d")
+
+    # 2. 分轮战意闸 (5届320场实证)
+    rnd = _wc_detect_round(m)
+    if rnd == "R1":
+        lines.append("[WC-R1] \u9996\u8f6e\u662f\u6700\u95f7\u4e00\u8f6e(\u573a\u57472.34\u6700\u4f4e\u30010-0\u6700\u591a): \u5404\u961f\u6c42\u7a33\u6015\u8f93\u8bd5\u63a2, \u5f3a\u961f\u9996\u6218\u5e38\u6253\u4e0d\u5f00; \u76d8\u9762\u5927\u8ba9\u7403/\u5927\u7403\u671f\u5f85\u8981\u6253\u6298, \u9632\u5c0f\u5206\u5dee/\u95f7\u5e73")
+    elif rnd == "R2":
+        lines.append("[WC-R2] \u6700\u5f00\u653e\u4e00\u8f6e(\u573a\u57472.69\u6700\u9ad8): \u5206\u5316\u671f, \u640f\u547d\u65b9\u62c9\u5f00\u5bf9\u653b")
+    elif rnd == "R3":
+        lines.append("[WC-R3] \u63a7\u5206=\u51c0\u80dc\u7403\u6536\u7a84\u975e\u603b\u8fdb\u7403\u964d(over2.5\u53cd\u800c\u9ad8): 2-1/1-0\u5360R3\u768442.5%; \u5148\u8bfb\u51fa\u7ebf\u5f62\u52bf\u518d\u5b9a\u8c03; \u5df2\u51fa\u7ebf\u5f3a\u961fvs\u6709\u52a8\u673a\u65b9=\u8bf1\u76d8\u9ad8\u5371(\u95720\u8fdb\u7403/1\u7403\u5c0f\u8d1f\u88ab\u6380)")
+    elif rnd == "QF":
+        lines.append("[WC-QF] 1/4\u51b3\u6700\u4fdd\u5b88(\u573a\u57472.10\u300135%\u8fdb\u70b9\u7403): \u5f3a\u5f3a\u8f93\u4e0d\u8d77, \u4f18\u5148\u538b\u5c0f\u7403/\u9632\u5e73\u8fdb\u52a0\u65f6")
+    elif rnd in ("R16", "SF", "F"):
+        lines.append("[WC-KO] \u6dd8\u6c70\u8d5b\u5168\u7a0b24%\u70b9\u7403\u51b3\u80dc, 90\u5206\u949f\u5e73\u5c40\u662f\u5e38\u6001, \u9632\u5e73/\u52a0\u65f6\u6743\u91cd\u9ad8\u4e8e\u5c0f\u7ec4\u8d5b")
+    else:
+        lines.append("[WC-RND?] \u8f6e\u6b21\u672a\u786e\u8ba4: \u9ed8\u8ba4\u6309\u5c0f\u7ec4\u8d5b\u8bfb, \u9996\u8f6e\u9632\u6253\u4e0d\u5f00")
+
+    # 3. 状态闸 (双窗口状态档)
+    for team, side in [(h, "\u4e3b"), (a, "\u5ba2")]:
+        for kw, (tag, note) in WC_TEAM_FORM.items():
+            if kw in team:
+                lines.append("[WC-FORM:%s %s|%s] %s" % (side, kw, tag, note))
+                break
+
+    # 4. 零封脆弱提示
+    fragile = [t for t in WC_CLEAN_SHEET_FRAGILE if t in h or t in a]
+    if fragile:
+        lines.append("[WC-CS-FRAGILE] %s \u96f6\u5c01\u80fd\u529b\u5dee/\u534a\u573a\u9886\u5148\u6613\u88ab\u6241: \u9632BTTS/\u8865\u65f6\u51fb\u7a7f\u96f6\u5c01/\u8ba9\u7403\u4e0d\u7a33" % "\u3001".join(fragile))
+
+    return lines
+
+
 def build_league_intelligence(m):
     league = str(m.get("league", ""))
     lk = detect_league_key(league)
@@ -312,9 +395,17 @@ def build_league_intelligence(m):
         if "\u6b21\u56de\u5408" in baseface or "\u7b2c\u4e8c" in baseface:
             lines.append("[2ND LEG] Trailing team attacks = more goals")
 
-    # Motivation analysis
-    motive_lines = analyze_motivation(m, lk)
-    lines.extend(motive_lines)
+    # Motivation analysis (联赛排名战意逻辑不适用于国家队赛事, 世界杯/国际赛跳过以免排名噪声污染)
+    if lk not in ("world_cup", "intl_friendly"):
+        motive_lines = analyze_motivation(m, lk)
+        lines.extend(motive_lines)
+
+    # World Cup / international reading intel (5届320场实证 + 双窗口状态)
+    if lk in ("world_cup", "intl_friendly"):
+        try:
+            lines.extend(analyze_world_cup_context(m))
+        except Exception:
+            pass
 
     # Injury impact
     h_inj = str(intel.get("h_inj", intel.get("home_injury", "")))
