@@ -43,17 +43,24 @@ def _get_float(val, default=0.0):
 
 def generate_stats_from_context(match, side):
     """API未命中时，通过赔率+排名反推统计数据（容灾方案）"""
-    rank = int(match.get("home_rank" if side=="home" else "away_rank", 10) or 10)
+    rank_raw = match.get("home_rank" if side=="home" else "away_rank", 10)
+    try: rank_int = int(rank_raw or 0)
+    except: rank_int = 0
     sp_h = float(match.get("sp_home",0) or 0)
     sp_a = float(match.get("sp_away",0) or 0)
-    rank = max(1, min(20, rank if rank > 0 else 10))
+    rank = max(1, min(20, rank_int if rank_int > 0 else 10))
     strength = 1.0 - (rank - 1) / 19.0
 
     # 赔率反推强度（权重70%，比纯排名更准）
-    if sp_h > 1 and sp_a > 1:
+    has_odds_signal = sp_h > 1 and sp_a > 1
+    if has_odds_signal:
         if side == "home": odds_strength = (1/sp_h) / (1/sp_h + 1/sp_a)
         else: odds_strength = (1/sp_a) / (1/sp_h + 1/sp_a)
         strength = strength * 0.3 + odds_strength * 0.7
+
+    # 无任何强度信号（排名缺失走兜底10 且 无1X2赔率）→ 主客两队会得到完全相同的占位值，
+    # 此时统计数据不可信，必须显式标记，避免 AI 把虚构战绩当真实读盘依据。
+    no_real_signal = (rank_int <= 0) and (not has_odds_signal)
 
     played = 25
     win_rate = max(0.15, min(0.70, strength * 0.55 + 0.15))
@@ -73,6 +80,10 @@ def generate_stats_from_context(match, side):
         "goals_for":round(played*gf),"goals_against":round(played*ga),
         "avg_goals_for":str(round(gf,2)),"avg_goals_against":str(round(ga,2)),
         "clean_sheets":max(1,round(played*(1-ga/2.5)*0.25)),"form":form,
+        "estimated": True,
+        "data_available": not no_real_signal,
+        "data_note": ("⚠️无真实战绩且无1X2赔率信号，此为排名兜底占位值，不可作读盘依据" if no_real_signal
+                       else "由赔率/排名反推的估算值，非官方真实战绩"),
     }
 
 async def scrape_wencai_jczq_async(session, date_str):
