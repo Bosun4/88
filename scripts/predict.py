@@ -980,6 +980,10 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
             "has_vote": isinstance(m.get("vote"), dict) and bool(m.get("vote")),
             "has_change": isinstance(m.get("change"), dict) and bool(m.get("change")),
             "has_context_news": any(_exists(m.get(k)) for k in ["information", "points", "injury", "lineup", "news"]),
+            "team_stats_reliable": not (
+                isinstance(m.get("home_stats"), dict) and m.get("home_stats", {}).get("data_available") is False
+                or isinstance(m.get("away_stats"), dict) and m.get("away_stats", {}).get("data_available") is False
+            ),
         },
     }
 
