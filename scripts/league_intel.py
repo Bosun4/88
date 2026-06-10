@@ -325,6 +325,80 @@ def _wc_detect_round(m):
     return None
 
 
+def world_cup_round_gate(m):
+    """世界杯分轮/赛制结构闸门。只输出事实与风控约束，不替AI判方向或比分。"""
+    rnd = _wc_detect_round(m)
+    base = {
+        "available": True,
+        "round": rnd or "unknown",
+        "basis": "5届320场世界杯分轮实证 + 2026 48队/12组/前2+8个最佳第三名赛制",
+        "format_2026": {
+            "groups": 12,
+            "teams_per_group": 4,
+            "advance_rule": "小组前2 + 8个最佳第三名晋级32强",
+            "third_place_effect": "第三名机制降低末轮完全躺平概率，但强化净胜球/避强签/一球差博弈",
+        },
+        "round_facts": {
+            "R1": {"avg_goals": 2.34, "over25_pct": 44, "four_plus_pct": 20, "pattern": "最闷一轮，首战怕输、试探、强队常赢而不穿"},
+            "R2": {"avg_goals": 2.69, "over25_pct": 45, "four_plus_pct": 28, "pattern": "最开放一轮，0分/1分球队开始搏命，对攻拉开"},
+            "R3": {"avg_goals": 2.42, "over25_pct": 51, "four_plus_pct": 20, "pattern": "控分不等于小球，总进球不降；核心是净胜球收窄与已出线强队诱盘"},
+            "QF": {"avg_goals": 2.10, "penalty_pct": 35, "pattern": "淘汰赛最保守，强强输不起，防90分钟平局/加时"},
+        },
+        "must_not_assume": [
+            "不能把R1写成正常开放抢分；历史上R1才是最低进球轮",
+            "不能把R3控分机械理解为小球；R3 over2.5反而最高，控的是净胜球和风险敞口",
+            "不能在未读取小组积分/净胜球/晋级路径时给R3强队大胜A/S",
+        ],
+        "ai_required_audit": [
+            "先标注 round 与 group_scenario；未知时写 unknown 并降级",
+            "R1必须审计强队赢不穿、0-0/1-0/1-1、小比分开局慢热",
+            "R2必须审计双方积分压力：0分/1分方可能拉高BTTS和3+球",
+            "R3必须三分类：双方已定、强队已出线vs有动机方、双方都需赢",
+            "淘汰赛必须审计90分钟平局/加时/点球权重，尤其QF",
+        ],
+    }
+    if rnd == "R1":
+        base["round_policy"] = "cagey_opening_gate"
+        base["confidence_controls"] = [
+            "强队低赔/名气优势不能单独给A/S；无首发+盘口动态+国际盘确认时最多B",
+            "让球盘主推必须证明能穿；否则优先写赢球不穿/一球小胜/防平",
+            "若选择X-0零封，必须同时解释为何BTTS不会击穿",
+        ]
+    elif rnd == "R2":
+        base["round_policy"] = "pressure_opens_game_gate"
+        base["confidence_controls"] = [
+            "R2不是简单追大，必须先判断首轮积分；0分/1分方更可能拉开节奏",
+            "若总进球曲线未塌缩，不得仅凭搏命叙事强推4+",
+            "领先方可能控节奏，落后方才是BTTS/3+核心来源",
+        ]
+    elif rnd == "R3":
+        base["round_policy"] = "qualification_state_gate"
+        base["confidence_controls"] = [
+            "必须读取小组积分/净胜球/同组同步赛；未知则不能给A/S",
+            "已出线强队vs有动机方是诱盘高危，防0进球或一球小负被掀",
+            "双方都需赢才按正常甚至大球处理；双方已定才压低节奏/轮换",
+        ]
+    elif rnd == "QF":
+        base["round_policy"] = "qf_low_margin_extra_time_gate"
+        base["confidence_controls"] = [
+            "QF强强输不起，90分钟平局/加时/点球权重必须高于常规胜负",
+            "非碾压盘不得给大胜穿盘A/S",
+        ]
+    elif rnd in ("R16", "SF", "F"):
+        base["round_policy"] = "knockout_90min_draw_gate"
+        base["confidence_controls"] = [
+            "淘汰赛全程约24%点球，90分钟平局不是尾部",
+            "必须区分晋级判断与90分钟竞彩判断",
+        ]
+    else:
+        base["round_policy"] = "unknown_world_cup_round_gate"
+        base["confidence_controls"] = [
+            "轮次未知时按小组赛保守处理，不得把大胜/穿盘升为A/S",
+            "必须要求补充轮次、积分、净胜球、同组赛程后再升级",
+        ]
+    return base
+
+
 def analyze_world_cup_context(m):
     """世界杯读盘先验注入(作evidence, 非裁判). 返回 lines list.
     依据: 5届320场分轮实证 + 2026新制 + 双窗口状态档."""

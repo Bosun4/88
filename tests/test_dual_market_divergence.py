@@ -206,5 +206,66 @@ def test_live_gpt_phase1_reads_local_skew():
     assert "dual_market_divergence_calibration" in instr
 
 
+def test_prompt_schema_allows_abstain_without_contract_conflict():
+    schema = predict._canonical_output_schema_text()
+    assert '"final_direction": "home/draw/away/abstain"' in schema
+    assert "final_direction=abstain" in schema
+    assert "predicted_score 必须写“弃权”" in schema
+
+
+def test_phase1_roles_do_not_conflict_with_prediction_schema():
+    gpt_prompt = predict.build_phase1_prompt([{"match": 1}], "gpt")
+    grok_prompt = predict.build_phase1_prompt([{"match": 1}], "grok")
+    assert "不需要给具体预测" not in gpt_prompt
+    assert "不要做最终比分预测" not in grok_prompt
+    assert "predicted_score 只作为当前最可能比分假设" in gpt_prompt
+    assert "predicted_score 只作为资金流约束下的比分假设" in grok_prompt
+
+
+def test_reverse_audit_gate_and_league_style_are_shared_by_phase1_and_final():
+    ev = [{"match": 1}]
+    phase1 = predict.build_phase1_prompt(ev, "gpt")
+    final = predict.build_gemini_final_prompt(ev, {"gpt": {}, "grok": {}}, {})
+    for prompt in (phase1, final):
+        assert "先判可不可以买，再判比分" in prompt
+        assert "a5/a4<=1.70" in prompt
+        assert "a4>5.3 是排除线" in prompt
+        assert "强队低赔若缺乏真实资金/盘口动态确认" in prompt
+
+
+def test_rlm_prompt_requires_evidence_not_direct_assertion():
+    grok_prompt = predict.build_phase1_prompt([{"match": 1}], "grok")
+    final = predict.build_gemini_final_prompt([{"match": 1}], {"gpt": {}, "grok": {}}, {})
+    assert "直接断定" not in grok_prompt
+    assert "不得直接断言" in final
+    assert "RLM 四要素" in final
+    assert "公众热度是否极端" in final
+
+
+def test_gemini_final_no_longer_forces_high_score_to_main():
+    final = predict.build_gemini_final_prompt([{"match": 1}], {"gpt": {}, "grok": {}}, {})
+    assert "彻底无视" not in final
+    assert "强行将" not in final
+    assert "才可给 A/S 或 main" in final
+
+
+def test_prompt_embeds_only_data_backed_surviving_signals():
+    prompt = predict.build_gemini_final_prompt([{"match": 1}], {"gpt": {}, "grok": {}}, {})
+    assert "联赛分位簇塌缩是有效事实信号" in prompt
+    assert "X-0 零封预测 73% 被打穿" in prompt
+    assert "06-07~06-10 已完赛国际热身赛5场方向5/5、比分2/5" in prompt
+    assert "判平不能默认 1-1" in prompt
+    assert "机械读盘骨架整体跑不赢线上系统" in prompt
+    assert "静态阈值杀平/博平" in prompt
+
+
+def test_world_cup_round_gate_prompt_blocks_unknown_round_overconfidence():
+    prompt = predict.build_gemini_final_prompt([{"match": 1}], {"gpt": {}, "grok": {}}, {})
+    assert "必须读取 local_quantitative_intelligence.world_cup_round_gate" in prompt
+    assert "round=unknown" in prompt
+    assert "不得给 A/S 或 main" in prompt
+    assert "R3：控分≠小球" in prompt
+
+
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v"]))

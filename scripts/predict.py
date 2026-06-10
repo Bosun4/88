@@ -3324,18 +3324,55 @@ def build_enhanced_market_modules(match_obj: Dict[str, Any], index: int) -> Dict
 PHASE1_ROLE_SPLIT_ADDENDUM = """
 【v20.6 AI 主导分工】
 你不是比分生成器，而是风险控制型赛前分析师；目标不是每场硬推，而是避免把低质量比赛包装成高信心推荐。
-GPT：正方市场结构师，重点输出 market_audit / score_cluster_audit / goal_market_audit / candidate_scores / 可买条件；若证据不足必须说 observe/no_bet。
-Grok：反方审判员，重点寻找 favorite_trap / draw_trap / away_win_overreach / rotation_or_motivation_risk / source_hallucination；不要顺着热门结论。
-Gemini：终审裁判，必须综合正方、反方、raw evidence 和来源质量，允许 final_direction=abstain/no_bet；若证据不足，recommendation.is_recommended=false。
+GPT：正方市场结构师，重点输出 market_audit / score_cluster_audit / goal_market_audit / candidate_scores / 可买条件；若证据不足必须把 recommendation.is_recommended=false 且 bet_action=observe/no_bet。
+Grok：反方审判员，重点寻找 favorite_trap / draw_trap / away_win_overreach / rotation_or_motivation_risk / source_hallucination；不要顺着热门结论，但必须给出证据等级与反证条件。
+Gemini：终审裁判，必须综合正方、反方、raw evidence 和来源质量；若证据不足，final_direction 可为 abstain，predicted_score 写“弃权”，recommendation.is_recommended=false。
 三方都必须列出 why_this_can_fail；不能把“名气强、低赔、常见比分模板”当成独立充分证据。
 若 GPT/Grok 仍输出最终比分，Gemini 可以参考但必须重新审计，不得机械照抄。
+""".strip()
+
+LEAGUE_STYLE_PROMPT = """
+【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：
+1. 进攻高波或高进球异动压缩（如德甲、荷甲、美职、挪超、解放者杯等大球联赛；判大球看曲线塌缩 a5/a4<=1.70 或超大球尾部共振(a6<=11/a7<=14)，而非 a4 单点低，因为 a4 被压但 a5 没跟是单点诱盘假信号）：防守往往让位于进攻，不得机械保守。不要机械拘泥于 2-1、1-1 等常规最低赔率。若联赛偏大球+曲线整簇塌缩+资金推强队共振，可把大球带（3-1、1-3、2-2、3-2、2-3、4-1、1-4、4-2 等主客对称比分）列为高优先级候选，但必须先通过下注资格闸门、相邻比分审计、资金/热度反证审计，才能升为 A/S 主推。注意 a4>5.3 是排除线（真实大球仅约13%），按小球处理。【对称强制】考虑任一主队大胜比分时，必须同时列出客队镜像比分（3-1↔1-3、4-1↔1-4、3-2↔2-3）。
+2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。
+3. 世界杯必须先读取 local_quantitative_intelligence.world_cup_round_gate：R1不是“正常抢分开放”，而是5届320场实证最低进球轮；R2才最开放；R3的控分不是小球，而是净胜球收窄与已出线强队诱盘。轮次/出线形势 unknown 时不得给 A/S。R1强队低赔常见“赢但不穿、节奏慢、最低比分锚定”，无首发、战意、真实盘口动态或国际盘确认时强队低赔最多 B，小球/一球小胜/平局尾部必须进入 risk_score_candidates。
+4. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。
+请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！
+""".strip()
+
+REVERSE_AUDIT_GATE_PROTOCOL = """
+【逆向下注资格闸门：先判可不可以买，再判比分】
+1. 每场必须先输出“反证清单”：公众热度、赔率方向、让球穿盘语义、总进球曲线、相邻比分、web/source质量、sharp/RLM是否真实可用。若任一关键反证无法解释，recommendation.is_recommended=false 或 bet_action=observe/no_bet。
+2. RLM/聪明钱不是魔法词：只有同时具备极端公众热度、明确反向变盘幅度、接近开赛或关键窗口、sharp book/国际盘或本地 change/steam 可验证来源时，才能升级为 confirmed_sharp_direction。否则只能写 unclear/noise，不得下结论式断言“大热必死”。
+3. 名气强、身价高、FIFA排名领先、最低比分赔率、半全场低赔，只能作为候选证据；不能单独构成 A/S 或 main。强队低赔若缺乏真实资金/盘口动态确认，默认先降一级并写 why_this_can_fail。
+4. 选择非最低赔率比分必须证明：它更好解释 goal_band、让球盘、相邻比分簇、反证清单；否则回落最低赔率比分并降低 confidence，或选择 no_bet。
+5. top4/main 是下注资格，不是“最可能赛果”。若最可能比分清楚但下注性价比不足，应给出 predicted_score，但 bet_action=observe/no_bet。
+""".strip()
+
+DATA_BACKED_PROMPT_TUNING = """
+【本地数据库已证实/已证伪信号（只能按此使用）】
+1. 已证实：联赛分位簇塌缩是有效事实信号。历史 176 场回测中，a4 与 a5 同步处于本联赛 p25 以下时，实际 4+ 球率 44%，比全样本基准 32% 高约 12 个百分点。用法：作为 goal_band 上修与高比分候选的事实支撑；不能机械指定唯一比分。
+2. 已证实：国际赛/友谊赛存在“零封幻觉”和进球低估。方向判对场次中 X-0 零封预测 73% 被打穿，比分低估显著多于高估。用法：国际赛/友谊赛选择 X-0 必须有对手进攻瘫痪或首发/战意硬证据；否则同方向优先审计 X-1、3-1、2-2 等上修路径。
+3. 已证实：判平不能默认 1-1。国际赛平局样本中 0-0/1-1/2-2 均出现，判平后必须用 a0/a2/a4 分位与联赛/赛事节奏做二段裁决。
+4. 已证实：L3 便宜盘防火墙仅作观察信号。主胜 1.30-1.45 且让球深时，伪强队打不穿让球盘风险高；用法是回避让胜/穿盘主推，转审进球数与小胜/赢球不穿，不得直接反向判负。
+5. 新增赛果验证：06-07~06-10 已完赛国际热身赛5场方向5/5、比分2/5；错点仍集中在BTTS/零封和进球带：秘鲁1-3西班牙、匈牙利3-1哈萨克继续证明强队方向可读，但X-0零封和低一档进球带容易被击穿。用法：方向不必因小样本改坏；比分形状必须防BTTS与上修一档。
+6. 已证伪：机械读盘骨架整体跑不赢线上系统；静态阈值杀平/博平、倒三角判平、1-1 低赔博平等机械规则不得作为硬判决。AI 可以参考事实信号，但最终必须通过反证清单与相邻比分审计收敛。
+""".strip()
+
+WORLD_CUP_ROUND_GATE_PROMPT = """
+【世界杯分轮硬闸：必须先判轮次/出线形势，再判比分】
+1. 必须读取 local_quantitative_intelligence.world_cup_round_gate；若 round=unknown，final 不得给 A/S 或 main，除非外部来源明确补足轮次、积分、净胜球与同组赛程。
+2. R1：不是正常开放抢分，历史上最闷。强队可赢但常不穿；0-0/1-0/1-1/2-0 是核心防线。若选大胜或让球穿盘，必须有比分簇整簇塌缩 + 亚盘/国际盘确认 + 首发确认。
+3. R2：最开放但不是机械追大。先读首轮积分；0分/1分方才是BTTS/3+球主来源，领先方可能控节奏。
+4. R3：控分≠小球。必须三分类：双方已定→轮换/闷平；已出线强队vs有动机方→诱盘高危，防强队0进球或一球小负；双方都需赢→正常甚至大球。未知出线形势时必须降级。
+5. 淘汰赛：区分“晋级判断”和“90分钟竞彩判断”；全程约24%点球，QF最保守，平局/加时不是尾部。
 """.strip()
 
 GEMINI_FINAL_AUDIT_ADDENDUM = """
 【vMAX Gemini 终审最高裁判协议：逆向审计、反诱盘、背离终结者】
 你是 88 系统的最高终审裁判。你拥有最高推翻权与最终裁定权，无需盲从 GPT 或 Grok 的错误保守结论！
-1. 【打破平局保守】：如果前置模块判定【大球对攻（总进球 4+）活跃】（例如预期进球 >= 3），你有权彻底无视系统原有的防平/弱主胜降级机制，强行将大球带 3-1/1-3/2-2/3-2/2-3/4-1/1-4/4-2 等主客对称比分提升为 A/S 级主推。不要龟缩在 1-1, 1-0。【对称强制】凡考虑主队大胜比分（3-1/4-1/3-2），必须同时审计客队对称镜像（1-3/1-4/2-3），不得只押单边。
-2. 【终结聪明钱背离】：仔细阅读 Grok 报告的聪明钱资金变动。若散户看主/机构看客（或相反），产生明显的聪明钱背离，无论常规强弱实力对比多大，你必须直接选择【反打下盘】或将热门强队硬降级为 D（坚决放弃不推）。
+1. 【打破平局保守但不打穿风控】：如果前置模块判定【大球对攻（总进球 4+）活跃】（例如预期进球 >= 3），你可以把大球带 3-1/1-3/2-2/3-2/2-3/4-1/1-4/4-2 等主客对称比分提升为候选；但只有在下注资格闸门、相邻比分审计、资金/热度反证审计均通过后，才可给 A/S 或 main。不要龟缩在 1-1, 1-0，也不要用“反保守”覆盖真实风险。【对称强制】凡考虑主队大胜比分（3-1/4-1/3-2），必须同时审计客队对称镜像（1-3/1-4/2-3），不得只押单边。
+2. 【终结聪明钱背离】：仔细阅读 Grok 报告的聪明钱资金变动。若散户看主/机构看客（或相反），必须按 RLM 四要素验证：公众热度是否极端、变盘幅度是否足够、是否接近关键时间窗口、是否有 sharp book/国际盘或本地 change/steam 支撑。证据齐全才可反打下盘；证据不足只能降级或 observe，不得直接断言。
 3. 必须读取 local_quantitative_intelligence（战意/经验/聪明钱蒸汽）与 jingcai_market_facts（竞彩超额抽水率）作为客观事实；系统不提供任何静态数理/泊松比分基准，比分与方向完全由你像人一样读盘推理得出。
 4. 强制执行“市场背离探测 (Divergence Detection)”——锚点是真实市场事实（大众投票热度、临场变盘方向、聪明钱资金流、国际盘偏斜），不是任何数理模型：
    - 如果大众极热某方向、但临场赔率反向大降水或不降反升，必须警惕“正诱造热/大热必死”陷阱，主动下调推荐等级；
@@ -3438,10 +3475,14 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
     """
     evidence = _BASE_BUILD_EVIDENCE_PACKET_V2021(match_obj, index)
     try:
-        # 1. 引入本地量化与基本面组件
-        import league_intel
-        import experience_rules
-        import quant_edge
+        # 1. 引入本地量化与基本面组件；兼容 `python scripts/predict.py`
+        # 与测试/工具里的 `import scripts.predict` 两种导入方式。
+        try:
+            from . import league_intel, experience_rules, quant_edge
+        except ImportError:
+            import league_intel
+            import experience_rules
+            import quant_edge
 
         league_key = league_intel.detect_league_key(match_obj.get("league", ""))
         
@@ -3450,11 +3491,15 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
 
         # 世界杯/国际赛读盘先验注入（5届320场分轮实证+双窗口状态档；作evidence非裁判）
         world_cup_reading = None
+        world_cup_round_gate = None
         if league_key in ("world_cup", "intl_friendly"):
             try:
                 world_cup_reading = league_intel.analyze_world_cup_context(match_obj)
+                if league_key == "world_cup" and hasattr(league_intel, "world_cup_round_gate"):
+                    world_cup_round_gate = league_intel.world_cup_round_gate(match_obj)
             except Exception:
                 world_cup_reading = None
+                world_cup_round_gate = None
         
         # 经验规则引擎
         prediction_shell = {"home_win_pct": 33, "draw_pct": 33, "away_win_pct": 34, "model_consensus": 2}
@@ -3491,6 +3536,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         evidence["local_quantitative_intelligence"] = {
             "motivation_scenarios": motivation_facts,
             "world_cup_reading_intel": world_cup_reading,
+            "world_cup_round_gate": world_cup_round_gate,
             "empirical_experience_triggered_rules": experience_verdict.get("experience_analysis", {}).get("rules", []),
             "empirical_over_2_5_pct": experience_verdict.get("over_2_5", 50.0),
             "steam_movement_signals": steam_res if steam_res.get("steam") else None,
@@ -3574,8 +3620,8 @@ def _canonical_output_schema_text() -> str:
 每个 prediction 必须包含：
 {
   "match": 1,
-  "final_direction": "home/draw/away",
-  "predicted_score": "2-1",
+  "final_direction": "home/draw/away/abstain",
+  "predicted_score": "2-1 或 弃权(final_direction=abstain时)",
   "direction_probs": {"home": 45, "draw": 28, "away": 27},
   "goal_band": "0-1/2/3/4+",
   "btts": "yes/no/unclear",
@@ -3660,7 +3706,7 @@ def _canonical_output_schema_text() -> str:
   "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
   "reason":"中文综合理由"
 }
-硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
+硬约束：非 abstain 时，predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score。final_direction=abstain 时，predicted_score 必须写“弃权”，recommendation.is_recommended=false，bet_action=observe/no_bet。必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
 """.strip()
 
 
@@ -3687,18 +3733,17 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append(_web_research_instruction(ai_name))
     p.append(PHASE1_ROLE_SPLIT_ADDENDUM)
     if ai_name == "gpt":
-        p.append("GPT重点【结构化清道夫与冷门探测器】：不要去盲目预测谁赢。你的唯一任务是扫描全盘的 score_cluster_diagnostics_v203。如果发现 0-0/1-1 的低分模式被严重压缩，或者强队客场让球却持续升水背离，你必须在 risk_score_candidates 里直接写入爆冷红灯，不需要给具体预测。不要被常规低赔迷惑，寻找深层陷阱！")
+        p.append("GPT重点【结构化清道夫与冷门探测器】：先扫描全盘 score_cluster_diagnostics_v203、HHAD 与总进球曲线，再给出审计型 prediction。若发现 0-0/1-1 的低分模式被严重压缩，或者强队客场让球却持续升水背离，你必须在 risk_score_candidates 里写入爆冷红灯；predicted_score 只作为当前最可能比分假设，不代表推荐通过。不要被常规低赔迷惑，寻找深层陷阱！")
     elif ai_name == "grok":
-        p.append("Grok重点【纯粹的 Sharp Money 追踪者】：只看钱！剥离战术、历史交锋等一切干扰。只看 sharp_money_facts_v203、movement、vote。如果公众投票热度 > 60% 但赔率不降反升，直接断定【大热必死诱盘】并输出高危信号；如果机构突然急剧降水，核实是否是隐藏资金入场。只输出资金流判决与背离预警，不要做最终比分预测。")
+        p.append("Grok重点【Sharp Money / RLM 证据审判员】：重点看 sharp_money_facts_v203、movement、vote、dual_market_divergence_calibration。公众投票热度 > 60% 但赔率不降反升只能记为疑似背离；必须继续验证变盘幅度、时间窗口、sharp book/国际盘或本地 change/steam 支撑，证据不足写 unclear/noise。predicted_score 只作为资金流约束下的比分假设，不代表最终推荐。")
     else:
         p.append("Gemini若参与初审，也必须按最终裁判标准完成相邻比分和来源审计。")
     p.append("强制：每场必须显式读取 score_cluster_diagnostics_v203.adjacent_score_audit_table；不能只看最低赔率。")
+    p.append(REVERSE_AUDIT_GATE_PROTOCOL)
+    p.append(DATA_BACKED_PROMPT_TUNING)
+    p.append(WORLD_CUP_ROUND_GATE_PROMPT)
     p.append("")
-    p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
-    p.append("1. 进攻高波或高进球异动压缩（如德甲、荷甲、美职、挪超、解放者杯等大球联赛；判大球看曲线塌缩 a5/a4<=1.70 或超大球尾部共振(a6<=11/a7<=14) 而非 a4 单点低，因为 a4 被压但 a5 没跟是单点诱盘假信号）：防守往往让位于进攻，不得机械保守。不要机械拘泥于 2-1、1-1 等常规最低赔率。若联赛偏大球+曲线整簇塌缩+资金推强队共振，必须敢于将大球带（3-1、1-3、2-2、3-2、2-3、4-1、1-4、4-2 等主客对称比分）作为主推首选，不要仅仅把它们当做风险尾部藏起来！注意 a4>5.3 是排除线（真实大球仅约13%），按小球处理。【对称强制】考虑任一主队大胜比分时，必须同时列出客队镜像比分（3-1↔1-3、4-1↔1-4、3-2↔2-3）。")
-    p.append("2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。")
-    p.append("3. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。")
-    p.append("请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！")
+    p.append(LEAGUE_STYLE_PROMPT)
     p.append("强制：若 web_research.used=false，不得把抓包 information/points 伪装成联网来源；只能作为 packet_context。")
     p.append("</task>\n")
     p.append("<output_schema>")
@@ -3755,11 +3800,10 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("<final_adjudication_protocol>")
     p.append("你是 Gemini 最终 Web-aware 裁判。你必须重新审计 raw evidence、GPT/Grok 初审、互审意见、v20.3市场簇和联网来源质量。")
     p.append("【前置共识权重】：如果 GPT 和 Grok 在方向或比分上达成高度一致（例如均为 1-0），除非你有致命的反向硬证据（例如明显的伤停或极强的聪明钱背离），否则不得仅仅因为 1-1 或 0-0 是全场最低赔率，就强行推翻前置共识走向保守平局。")
-    p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
-    p.append("1. 进攻高波联赛（如德甲、荷甲、挪超、美职、澳超等）：防守往往让位于进攻，不要机械拘泥于 2-1 或防守平局。若双方战术开放且支持 BTTS，必须敢于将 3-2、3-1 甚至 4-2 这种极端高比分直接作为主推首选，不要仅仅把它们当做风险尾部藏起来！")
-    p.append("2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。")
-    p.append("3. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。")
-    p.append("请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！")
+    p.append(REVERSE_AUDIT_GATE_PROTOCOL)
+    p.append(DATA_BACKED_PROMPT_TUNING)
+    p.append(WORLD_CUP_ROUND_GATE_PROMPT)
+    p.append(LEAGUE_STYLE_PROMPT)
     p.append("证据优先级：raw market structure > score_cluster_diagnostics_v203 > HHAD让球语义 > total-goals mode > sharp_money_facts_v203 > tactical/web context > Phase1 consensus。")
     p.append("多数意见不自动成立；若 GPT/Grok 基于同一低赔/单边市场理由一致，这属于相关证据，不是独立证据。")
     p.append(GEMINI_FINAL_AUDIT_ADDENDUM)
@@ -3867,7 +3911,7 @@ def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_p
     p = []
     p.append("你是 Consistency Judge，只检查结构一致性，不做足球判断，不改变预测方向/比分，除非存在字段自相矛盾时给出 repair 建议。")
     p.append("输出严格 JSON object：{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[],\"repair\":{...}}]}。")
-    p.append("检查：predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components 必须存在；risk_score_candidates/tail_risk_flags/confidence_downgrade_reason 若存在必须保持数组/字符串结构。")
+    p.append("检查：非abstain时 predicted_score方向=final_direction；abstain时 predicted_score=弃权 且 bet_action=observe/no_bet；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components 必须存在；risk_score_candidates/tail_risk_flags/confidence_downgrade_reason 若存在必须保持数组/字符串结构。")
     p.append("不得根据足球观点改比分，只能修字段。")
     p.append("<evidence_batch>")
     for e in evidence_batch:
