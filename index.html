@@ -320,11 +320,32 @@ function DS(p){
 }
 
 function finalReason(p){
-  return p.final_audit_reason || p.reason || p.gemini_analysis || '';
+  return p.final_audit_reason || p.ai_score_reason || p.reason || p.ai_native_reason || p.gemini_analysis || p.final_ai_analysis || '';
+}
+
+function getDisplayConfidence(p){
+  p=p||{};
+  var rec=getRecommendation(p);
+  return pick(
+    rec.display_bet_confidence,
+    p.display_confidence,
+    p.risk_adjusted_confidence,
+    p.ai_avg_confidence,
+    p.ai_confidence,
+    rec.bet_confidence,
+    p.confidence,
+    0
+  );
 }
 
 function getBttsLabel(p){
   var v = p.btts_ai || p.ai_btts || p.btts_label || p.btts_decision || p.btts;
+  if(v!==undefined && v!==null && String(v).trim()!=='')return String(v);
+  return '?';
+}
+
+function getOver25Label(p){
+  var v = pick(p.ai_over25, p.over_under_2_5, p.over_2_5, p.over25_label, p.total_goals_view);
   if(v!==undefined && v!==null && String(v).trim()!=='')return String(v);
   return '?';
 }
@@ -438,9 +459,10 @@ function renderDashboard(){
 
   ms.forEach(function(m){
     var p=m.prediction||{};
-    cf+=num(p.ai_avg_confidence||p.confidence,0);
-    ds+=num(p.direction_selection_score||p.ai_avg_confidence,0);
-    ss+=num(p.score_shape_score||p.ai_avg_confidence,0);
+    var displayConfidence=getDisplayConfidence(p);
+    cf+=num(displayConfidence,0);
+    ds+=num(p.direction_selection_score||displayConfidence,0);
+    ss+=num(p.score_shape_score||displayConfidence,0);
     if(aiOk(p))aiCount++;
     var tier=effectiveTier(p);
     if(tier==='S')sTier++;
@@ -478,7 +500,8 @@ function renderTop4(t4){
     var ft='';
 
     if(tier)ft+='<span class="t4-ftag" style="background:#00e08e15;color:var(--gn)">评级 '+esc(tier)+'</span>';
-    if(p.ai_avg_confidence!==undefined)ft+='<span class="t4-ftag" style="background:#4d8aff15;color:var(--bl)">AI '+fmt1(p.ai_avg_confidence)+'</span>';
+    var displayConfidence=getDisplayConfidence(p);
+    if(displayConfidence!==undefined)ft+='<span class="t4-ftag" style="background:#4d8aff15;color:var(--bl)">AI '+fmt1(displayConfidence)+'</span>';
     if(p.direction_stability||rec.direction_stability)ft+='<span class="t4-ftag" style="background:#b366ff15;color:var(--pr)">方向 '+esc(stableText(p.direction_stability||rec.direction_stability))+'</span>';
     if(p.score_stability||rec.score_stability)ft+='<span class="t4-ftag" style="background:#00d4e015;color:var(--cy)">比分 '+esc(stableText(p.score_stability||rec.score_stability))+'</span>';
     if(getWarnings(p).length)ft+='<span class="t4-ftag" style="background:#ff4d5a15;color:var(--red)">风险 '+getWarnings(p).length+'</span>';
@@ -512,7 +535,7 @@ function renderSelectionBlock(p){
       warnings.slice(0,12).map(function(w){return '<div class="warn">'+esc(w)+'</div>';}).join('');
   }
 
-  var displayConf=(rec.display_bet_confidence!==undefined?rec.display_bet_confidence:(p.display_confidence!==undefined?p.display_confidence:(p.ai_avg_confidence||rec.bet_confidence||p.confidence)));
+  var displayConf=getDisplayConfidence(p);
   return '<div class="block">'+
     '<div class="block-h">'+
       '<div class="block-t">🎯 AI-NATIVE 推荐结论</div>'+
@@ -524,7 +547,7 @@ function renderSelectionBlock(p){
         '<div class="sel"><div class="sel-l">AI推荐分</div><div class="sel-v '+tierClass(tier)+'">'+fmt1(displayConf)+'</div></div>'+
         '<div class="sel"><div class="sel-l">方向稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(stableText(dt))+'</div></div>'+
         '<div class="sel"><div class="sel-l">比分稳定</div><div class="sel-v '+tierClass(tier)+'">'+esc(stableText(st))+'</div></div>'+
-        '<div class="sel"><div class="sel-l">形态</div><div class="sel-v">'+esc(V(p.goal_band,'?'))+' · '+esc(getBttsLabel(p))+'</div></div>'+
+        '<div class="sel"><div class="sel-l">形态</div><div class="sel-v">'+esc(V(p.goal_band,'?'))+' · '+esc(getBttsLabel(p))+' · '+esc(getOver25Label(p))+'</div></div>'+
         '<div class="sel"><div class="sel-l">行动层</div><div class="sel-v">'+esc(V(p.final_action||p.selection_layer||rec.bet_action,'观察'))+'</div></div>'+
       '</div>'+
       (rec.why_recommended?'<div class="sig sig-b">推荐理由：'+esc(rec.why_recommended)+'</div>':'')+
@@ -626,7 +649,8 @@ function renderDetails(m,p){
   html+='<div class="mb"><div class="mb-t">AI结构输出</div>'+
     '<div class="mb-r"><span class="mb-l">goal_band</span><span class="mb-v">'+esc(V(p.goal_band))+'</span></div>'+
     '<div class="mb-r"><span class="mb-l">btts_ai</span><span class="mb-v">'+esc(getBttsLabel(p))+'</span></div>'+
-    '<div class="mb-r"><span class="mb-l">AI置信</span><span class="mb-v">'+esc(V(p.ai_avg_confidence||rec.bet_confidence||p.confidence))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">over2.5</span><span class="mb-v">'+esc(getOver25Label(p))+'</span></div>'+
+    '<div class="mb-r"><span class="mb-l">AI置信</span><span class="mb-v">'+esc(V(getDisplayConfidence(p)))+'</span></div>'+
     '<div class="mb-r"><span class="mb-l">方向稳定</span><span class="mb-v">'+esc(stableText(V(p.direction_stability||rec.direction_stability)))+'</span></div>'+
     '<div class="mb-r"><span class="mb-l">比分稳定</span><span class="mb-v">'+esc(stableText(V(p.score_stability||rec.score_stability)))+'</span></div>'+
     '<div class="mb-r"><span class="mb-l">expected_total_goals</span><span class="mb-v">'+esc(V(p.expected_total_goals))+'</span></div>'+
@@ -681,7 +705,7 @@ function renderMatches(){
     var isTopPick=isTopPickMatch(m,p);
     var gatePass=isGatePass(p);
     var cls=(isTopPick?'rec ':'')+(gatePass?'a ':'')+(tier==='S'?'s ':tier==='A'?'a ':'');
-    var aiConf=V(p.ai_avg_confidence||p.ai_confidence||rec.bet_confidence||p.confidence,0);
+    var aiConf=V(getDisplayConfidence(p),0);
 
     return '<div class="mc '+cls+'" id="m-'+key+'">'+
       '<div class="mc-h">'+
@@ -718,6 +742,7 @@ function renderMatches(){
           '<div class="sb"><div class="sb-l">比分稳定</div><div class="sb-v" style="color:var(--pr)">'+esc(stableText(V(p.score_stability||rec.score_stability,'medium')))+'</div></div>'+
           '<div class="sb"><div class="sb-l">Goal Band</div><div class="sb-v" style="color:var(--am)">'+esc(V(p.goal_band))+'</div></div>'+
           '<div class="sb"><div class="sb-l">BTTS</div><div class="sb-v" style="color:var(--bl)">'+esc(getBttsLabel(p))+'</div></div>'+
+          '<div class="sb"><div class="sb-l">Over2.5</div><div class="sb-v" style="color:var(--am)">'+esc(getOver25Label(p))+'</div></div>'+
           '<div class="sb"><div class="sb-l">AI信心</div><div class="sb-v" style="'+confidenceColor(aiConf)+'">'+esc(aiConf)+'</div></div>'+
         '</div>'+
 

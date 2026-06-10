@@ -24,6 +24,21 @@ TEAM_NAME_MAPPING = {
     "水晶宫":"Crystal Palace","伯恩茅斯":"Bournemouth","布莱顿":"Brighton",
     "诺丁汉森林":"Nottingham Forest","埃弗顿":"Everton","伊普斯":"Ipswich",
     "南安普顿":"Southampton","莱斯特城":"Leicester City",
+    # ===== 世界杯2026 参赛国家队（FIFA标准英文名，对齐 the-odds-api soccer_fifa_world_cup）=====
+    # 易混命名加常见别名容错；实网命名待开赛后用真实 event 校验
+    "巴西":"Brazil","阿根廷":"Argentina","法国":"France","英格兰":"England",
+    "西班牙":"Spain","德国":"Germany","葡萄牙":"Portugal","荷兰":"Netherlands",
+    "比利时":"Belgium","克罗地亚":"Croatia","乌拉圭":"Uruguay","意大利":"Italy",
+    "美国":"USA","墨西哥":"Mexico","加拿大":"Canada","日本":"Japan",
+    "韩国":"South Korea","澳大利亚":"Australia","伊朗":"Iran","沙特":"Saudi Arabia",
+    "沙特阿拉伯":"Saudi Arabia","卡塔尔":"Qatar","摩洛哥":"Morocco","塞内加尔":"Senegal",
+    "加纳":"Ghana","尼日利亚":"Nigeria","喀麦隆":"Cameroon","突尼斯":"Tunisia",
+    "阿尔及利亚":"Algeria","埃及":"Egypt","科特迪瓦":"Ivory Coast","南非":"South Africa",
+    "哥伦比亚":"Colombia","厄瓜多尔":"Ecuador","巴拉圭":"Paraguay","秘鲁":"Peru",
+    "智利":"Chile","委内瑞拉":"Venezuela","瑞士":"Switzerland","丹麦":"Denmark",
+    "波兰":"Poland","塞尔维亚":"Serbia","奥地利":"Austria","瑞典":"Sweden",
+    "挪威":"Norway","威尔士":"Wales","苏格兰":"Scotland","土耳其":"Turkey",
+    "乌克兰":"Ukraine","希腊":"Greece","捷克":"Czech Republic","新西兰":"New Zealand",
 }
 
 def translate_team_name(name):

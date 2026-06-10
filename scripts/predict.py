@@ -2309,13 +2309,16 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "draw_pct": pct.get("draw", 0.0),
         "away_win_pct": pct.get("away", 0.0),
         "confidence": int(_clip(_f(rec.get("bet_confidence", max(pct.values()) if pct else 0), 0), 0, 100)),
+        "ai_confidence": int(_clip(_f(rec.get("bet_confidence", max(pct.values()) if pct else 0), 0), 0, 100)),
         "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
         "risk_level": rec.get("risk_level", "medium"),
         "goal_band": ai_r.get("goal_band", _score_goal_band(score)),
         "btts": ai_r.get("btts", _score_btts(score)),
+        "ai_btts": ai_r.get("btts", _score_btts(score)),
         "btts_ai": ai_r.get("btts", _score_btts(score)),
         "both_score": "是" if _score_btts(score) == "yes" else "否",
         "over_under_2_5": "大" if total_goals >= 3 else "小",
+        "ai_over25": "大" if total_goals >= 3 else "小",
         "expected_total_goals": total_goals,
         "goal_range": (gmin, gmax),
         "scenario": scenario,
@@ -2344,6 +2347,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "final_web_audit": ai_r.get("final_web_audit", {}),
         "data_quality": ai_r.get("data_quality", {}),
         "ai_native_reason": ai_r.get("reason", ""),
+        "ai_score_reason": ai_r.get("reason", ""),
         "validation_warnings": list(dict.fromkeys(warnings)),
         "bayesian_evidences": evidences,
         "bayesian_prior": {},
@@ -4492,14 +4496,22 @@ LEAGUE_DNA_PROFILES = {
     # 本地只做读盘先验与风险展示，不改 AI 终审方向/比分。
     "国际友谊": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "国际友谊赛/热身赛高方差练兵窗口：压低零封与大胜想象，保留1-1/2-2与客队进球路径"},
     "国际赛": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "国际比赛日前后热身属性强，低赔/名气强队不是稳态实力确认，比分需防BTTS和平局尾部"},
+    "世界杯": {"volatility": "high", "draw_risk": "medium", "btts": "medium", "away_penalty": 1, "notes": "世界杯分轮差异极强：R1谨慎/R2放开/R3算分压缩，淘汰赛容错低；必须结合分组形势与盘口动态读盘"},
     "友谊": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "友谊赛高换人/试阵/保护主力，零封与大胜路径默认脆弱"},
     "热身": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "热身赛高方差，强队低赔需当公众入口复核，不直接当精选确认"},
     "friendly": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 1, "notes": "Friendly context: high variance, rotation and BTTS/draw tails; cap clean-sheet and heavy-favorite imagination"},
+    "英超": {"volatility": "medium", "draw_risk": "medium", "btts": "medium", "away_penalty": 1, "notes": "节奏快但市场充分，强队低赔需防公众热度；中下游对冲平局与一球差"},
     "德甲": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "高节奏/高BTTS/末段波动，客胜与小胜比分需降权复核"},
+    "西甲": {"volatility": "medium", "draw_risk": "medium", "btts": "medium", "away_penalty": 0, "notes": "节奏更技术化，2-3球与一球差常见；低比分簇被压时防机械大球"},
+    "意甲": {"volatility": "medium", "draw_risk": "high", "btts": "medium", "away_penalty": 0, "notes": "战术与比分管理更强，平局/小胜路径需严肃审计，强队也不能机械放大比分"},
+    "荷甲": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "大球与BTTS尾部活跃，若总进球簇塌缩可释放3-1/2-2/3-2对称比分带"},
     "瑞超": {"volatility": "medium", "draw_risk": "high", "btts": "medium", "away_penalty": 1, "notes": "北欧联赛平局与1球差较多，弱优势必须防1-1/2-2"},
     "芬超": {"volatility": "medium", "draw_risk": "high", "btts": "medium", "away_penalty": 1, "notes": "低比分和平局权重偏高，客胜需市场确认"},
     "挪超": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "节奏与大球尾部较强，比分需用簇而非单点"},
     "美职": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 2, "notes": "主客差/旅行/反转波动大，客胜默认高风险"},
+    "MLS": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 2, "notes": "MLS travel/home-field volatility: away wins need stronger market confirmation; BTTS tails stay live"},
+    "沙特": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "强弱与外援质量分层明显但防守波动大，名气强队低赔需复核让球穿盘与BTTS尾部"},
+    "沙职": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "沙特联大牌强队热度高，低赔必须看让球与进球数是否支持踢穿"},
     "葡超": {"volatility": "medium", "draw_risk": "medium", "btts": "medium", "away_penalty": 0, "notes": "强弱分化明显，但中下游/保级题材需防平"},
 }
 
@@ -4538,6 +4550,10 @@ def _cap_recommendation_tier(pred: Dict[str, Any], max_tier: str, reason: str, t
 def _league_dna_profile(league: str) -> Dict[str, Any]:
     league_s = str(league or "")
     league_l = league_s.lower()
+    world_cup_tokens = ["世界杯", "world cup", "worldcup", "fifa world"]
+    if any(t.lower() in league_l for t in world_cup_tokens):
+        profile = LEAGUE_DNA_PROFILES.get("世界杯", {})
+        return {"key": "世界杯", **profile}
     friendly_tokens = ["国际友谊", "国际赛", "友谊", "热身", "friendly"]
     if any(t.lower() in league_l for t in friendly_tokens):
         profile = LEAGUE_DNA_PROFILES.get("国际友谊", {})
@@ -5117,6 +5133,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         if ai_r.get("recommendation", {}).get("original_bet_confidence") is not None:
             pred["recommendation"] = ai_r.get("recommendation")
             pred["confidence"] = int(_clip(_f(ai_r.get("recommendation", {}).get("original_bet_confidence", pred.get("confidence", 0)), 0), 0, 100))
+            pred["ai_confidence"] = pred["confidence"]
             pred["display_confidence"] = ai_r.get("recommendation", {}).get("display_bet_confidence", pred.get("display_confidence", pred["confidence"]))
             pred["risk_adjusted_confidence"] = ai_r.get("recommendation", {}).get("risk_adjusted_bet_confidence", pred.get("risk_adjusted_confidence", pred["confidence"]))
             
@@ -5134,6 +5151,10 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         attach_matrix_shadow_fields(pred, match_obj)
     except Exception as e:
         pred["matrix_shadow_error"] = str(e)[:300]
+    pred.setdefault("ai_btts", pred.get("btts_ai", pred.get("btts")))
+    pred.setdefault("ai_over25", pred.get("over_under_2_5"))
+    pred.setdefault("ai_score_reason", pred.get("ai_native_reason", pred.get("final_ai_analysis", pred.get("gemini_analysis", ""))))
+    pred.setdefault("ai_confidence", pred.get("confidence", pred.get("ai_avg_confidence", 0)))
     try:
         apply_two_one_home_hard_no_bet_gate(pred)
         rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}

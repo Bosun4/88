@@ -98,6 +98,15 @@ def test_match_event_by_home():
     assert ev is not None and ev["home_team"] == "Rosenborg"
 
 
+def test_match_event_uses_home_away_pair_not_home_only():
+    events = [
+        {"home_team": "Rosenborg", "away_team": "Molde", "bookmakers": []},
+        {"home_team": "Rosenborg", "away_team": "Viking", "bookmakers": []},
+    ]
+    ev = st._match_event("Rosenborg", "Viking", events)
+    assert ev is not None and ev["away_team"] == "Viking"
+
+
 def test_match_event_no_hit():
     events = [{"home_team": "Xyz United", "away_team": "Qwe City", "bookmakers": []}]
     assert st._match_event("Totally Different", "Nope", events) is None

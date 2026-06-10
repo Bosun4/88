@@ -59,10 +59,53 @@ LEAGUE_SPORT_KEY = {
     "欧协联": "soccer_uefa_europa_conference_league",
     "解放者杯": "soccer_conmebol_copa_libertadores",
     "南美解放者杯": "soccer_conmebol_copa_libertadores",
+    "世界杯": "soccer_fifa_world_cup",
+    "FIFA世界杯": "soccer_fifa_world_cup",
+    "世界杯小组赛": "soccer_fifa_world_cup",
+    "世界杯淘汰赛": "soccer_fifa_world_cup",
 }
+
+
+def sport_key_for_league(league: str) -> Optional[str]:
+    """Resolve noisy Chinese league labels to The Odds API sport_key."""
+    label = str(league or "").strip()
+    if not label:
+        return None
+    if label in LEAGUE_SPORT_KEY:
+        return LEAGUE_SPORT_KEY[label]
+    for key in sorted(LEAGUE_SPORT_KEY, key=len, reverse=True):
+        if key and key in label:
+            return LEAGUE_SPORT_KEY[key]
+    return None
 
 # Pinnacle 优先;其后取全场中位数
 PREFERRED_BOOKMAKER = "pinnacle"
+
+TEAM_NAME_ALIASES = {
+    "USA": ["United States", "United States of America", "USMNT"],
+    "United States": ["USA", "United States of America", "USMNT"],
+    "South Korea": ["Korea Republic", "Republic of Korea"],
+    "Korea Republic": ["South Korea", "Republic of Korea"],
+    "Czech Republic": ["Czechia"],
+    "Czechia": ["Czech Republic"],
+    "Ivory Coast": ["Cote d'Ivoire", "Côte d'Ivoire"],
+    "Cote d'Ivoire": ["Ivory Coast", "Côte d'Ivoire"],
+}
+
+
+def _team_name_variants(name: str) -> List[str]:
+    base = str(name or "").strip()
+    variants = [base] if base else []
+    variants.extend(TEAM_NAME_ALIASES.get(base, []))
+    return list(dict.fromkeys(v for v in variants if v))
+
+
+def _team_similarity(left: str, right: str) -> float:
+    return max(
+        difflib.SequenceMatcher(None, a.lower(), b.lower()).ratio()
+        for a in _team_name_variants(left)
+        for b in _team_name_variants(right)
+    ) if left and right else 0.0
 
 
 def _median(xs: List[float]) -> float:
@@ -150,7 +193,7 @@ def enrich_with_global_odds(matches: List[Dict[str, Any]]) -> int:
     # 按 sport_key 分组需要拉取的联赛
     need_keys = {}
     for m in matches:
-        sk = LEAGUE_SPORT_KEY.get(str(m.get("league", "")).strip())
+        sk = sport_key_for_league(m.get("league", ""))
         if sk:
             need_keys.setdefault(sk, []).append(m)
 
@@ -175,8 +218,8 @@ def enrich_with_global_odds(matches: List[Dict[str, Any]]) -> int:
                 best = None
                 best_score = 0.0
                 for p in parsed:
-                    hs = difflib.SequenceMatcher(None, h_en.lower(), p["home_team"].lower()).ratio()
-                    as_ = difflib.SequenceMatcher(None, a_en.lower(), p["away_team"].lower()).ratio()
+                    hs = _team_similarity(h_en, p["home_team"])
+                    as_ = _team_similarity(a_en, p["away_team"])
                     score = (hs + as_) / 2.0
                     if score > best_score:
                         best_score, best = score, p

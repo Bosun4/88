@@ -97,3 +97,37 @@ def test_clean_confirmed_case_keeps_recommendation():
     assert front["recommend_gate_pass"] is True
     assert front["recommendation"]["tier"] == "A"
     assert front["pre_match_factor_audit"]["data_quality_score"] >= 70
+
+
+def test_league_dna_profiles_cover_priority_leagues():
+    expected = {
+        "世界杯小组赛": "世界杯",
+        "FIFA World Cup": "世界杯",
+        "荷甲": "荷甲",
+        "沙特联": "沙特",
+        "沙职": "沙职",
+        "MLS": "MLS",
+        "美职": "美职",
+        "英超": "英超",
+        "西甲": "西甲",
+        "意甲": "意甲",
+    }
+    for league, key in expected.items():
+        assert predict._league_dna_profile(league)["key"] == key
+
+
+def test_frontend_contract_aliases_are_stable():
+    row = _base_ai_row(
+        predicted_score="2-1",
+        btts="yes",
+        recommendation={"tier": "A", "is_recommended": True, "bet_confidence": 72, "risk_level": "low", "risk_tags": []},
+        reason="AI读盘理由",
+    )
+    front = predict.adapt_ai_to_frontend(row, {"league": "英超", "information": {"official_lineup": True}})
+
+    assert front["btts_ai"] == "yes"
+    assert front["ai_btts"] == "yes"
+    assert front["over_under_2_5"] == "大"
+    assert front["ai_over25"] == "大"
+    assert front["ai_score_reason"] == "AI读盘理由"
+    assert front["ai_confidence"] == 72
