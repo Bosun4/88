@@ -43,7 +43,9 @@ try:
         ODDS_API_KEY,
         ODDS_API_BASE,
         LEAGUE_SPORT_KEY,
+        sport_key_for_league,
         translate_team_name,
+        _team_similarity,
         _best_match,
         _median,
     )
@@ -53,7 +55,9 @@ except Exception:  # pragma: no cover - 退化路径,保证模块可独立加载
             ODDS_API_KEY,
             ODDS_API_BASE,
             LEAGUE_SPORT_KEY,
+            sport_key_for_league,
             translate_team_name,
+            _team_similarity,
             _best_match,
             _median,
         )
@@ -62,8 +66,14 @@ except Exception:  # pragma: no cover - 退化路径,保证模块可独立加载
         ODDS_API_BASE = "https://api.the-odds-api.com/v4"
         LEAGUE_SPORT_KEY = {}
 
+        def sport_key_for_league(league):
+            return LEAGUE_SPORT_KEY.get(str(league or "").strip())
+
         def translate_team_name(name):
             return str(name or "")
+
+        def _team_similarity(left, right):
+            return difflib.SequenceMatcher(None, str(left or "").lower(), str(right or "").lower()).ratio()
 
         def _best_match(target, candidates, cutoff=0.6):
             if not target or not candidates:
@@ -202,20 +212,23 @@ def fetch_totals_snapshot(sport_key: str, timeout: int = 12) -> List[Dict[str, A
 
 
 def _match_event(home: str, away: str, events: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    """按翻译后英文队名模糊匹配 event。"""
+    """按翻译后英文主客队组合模糊匹配 event,避免只中主队导致错配。"""
     en_home = translate_team_name(home)
     en_away = translate_team_name(away)
-    names = []
+    best: Optional[Dict[str, Any]] = None
+    best_score = 0.0
     for ev in events:
-        names.append((ev.get("home_team", ""), ev.get("away_team", ""), ev))
-    home_cands = [n[0] for n in names]
-    hit_home = _best_match(en_home, home_cands)
-    if not hit_home:
-        return None
-    for h, a, ev in names:
-        if h == hit_home:
-            return ev
-    return None
+        ev_home = str(ev.get("home_team", "") or "")
+        ev_away = str(ev.get("away_team", "") or "")
+        if not ev_home or not ev_away:
+            continue
+        home_score = _team_similarity(en_home, ev_home)
+        away_score = _team_similarity(en_away, ev_away)
+        score = (home_score + away_score) / 2.0
+        if score > best_score:
+            best_score = score
+            best = ev
+    return best if best and best_score >= 0.6 else None
 
 
 def compute_steam(
@@ -272,7 +285,7 @@ def save_snapshot(matches: List[Dict[str, Any]], out_path: str) -> int:
 
     n = 0
     for league, ms in by_league.items():
-        sport_key = LEAGUE_SPORT_KEY.get(league)
+        sport_key = sport_key_for_league(league)
         if not sport_key:
             continue
         events = fetch_totals_snapshot(sport_key)
@@ -320,7 +333,7 @@ def build_steam_signals(
         by_league.setdefault(m.get("league", ""), []).append(m)
 
     for league, ms in by_league.items():
-        sport_key = LEAGUE_SPORT_KEY.get(league)
+        sport_key = sport_key_for_league(league)
         events = fetch_totals_snapshot(sport_key) if sport_key else []
         for m in ms:
             key = m.get("match_id") or f"{m.get('home_team')}__{m.get('away_team')}"

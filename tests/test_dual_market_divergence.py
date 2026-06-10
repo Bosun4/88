@@ -79,6 +79,52 @@ def test_enrich_injects_global_fields(monkeypatch):
     assert m["global_odds_source"] == "the_odds_api"
 
 
+def test_world_cup_league_alias_and_country_mapping(monkeypatch):
+    monkeypatch.setattr(global_odds, "ODDS_API_KEY", "TEST_KEY")
+    monkeypatch.setattr(global_odds, "_fetch_sport", lambda sk: [{
+        "home_team": "Brazil",
+        "away_team": "Argentina",
+        "bookmakers": [{"key": "pinnacle", "markets": [{"key": "h2h", "outcomes": [
+            {"name": "Brazil", "price": 2.10},
+            {"name": "Draw", "price": 3.20},
+            {"name": "Argentina", "price": 3.40},
+        ]}]}],
+    }] if sk == "soccer_fifa_world_cup" else [])
+
+    matches = [{
+        "home_team": "巴西", "away_team": "阿根廷", "league": "世界杯小组赛",
+        "sp_home": 2.20, "sp_draw": 3.05, "sp_away": 3.20,
+    }]
+    assert global_odds.enrich_with_global_odds(matches) == 1
+    assert matches[0]["global_home"] == pytest.approx(2.10)
+    assert global_odds.sport_key_for_league("2026 FIFA世界杯") == "soccer_fifa_world_cup"
+
+
+def test_generic_international_friendly_does_not_fake_world_cup_key():
+    assert global_odds.sport_key_for_league("国际友谊") is None
+    assert global_odds.sport_key_for_league("国际友谊赛") is None
+
+
+def test_country_name_alias_similarity_handles_api_variants(monkeypatch):
+    monkeypatch.setattr(global_odds, "ODDS_API_KEY", "TEST_KEY")
+    monkeypatch.setattr(global_odds, "_fetch_sport", lambda sk: [{
+        "home_team": "United States",
+        "away_team": "Czechia",
+        "bookmakers": [{"key": "pinnacle", "markets": [{"key": "h2h", "outcomes": [
+            {"name": "United States", "price": 1.95},
+            {"name": "Draw", "price": 3.30},
+            {"name": "Czechia", "price": 3.80},
+        ]}]}],
+    }] if sk == "soccer_fifa_world_cup" else [])
+
+    matches = [{
+        "home_team": "美国", "away_team": "捷克", "league": "世界杯",
+        "sp_home": 2.00, "sp_draw": 3.10, "sp_away": 3.60,
+    }]
+    assert global_odds.enrich_with_global_odds(matches) == 1
+    assert matches[0]["global_home"] == pytest.approx(1.95)
+
+
 def test_enrich_failsafe_no_key(monkeypatch):
     monkeypatch.setattr(global_odds, "ODDS_API_KEY", "")
     matches = [{"home_team": "布兰", "away_team": "萨普斯堡", "league": "挪超",
