@@ -160,5 +160,28 @@ def test_live_gpt_phase1_reads_local_skew():
     assert "dual_market_divergence_calibration" in instr
 
 
+def test_grok_web_instruction_requires_market_timeline_rerank():
+    instr = predict._web_research_instruction("grok")
+    assert "临场资金时间序列" in instr
+    assert "T-60m" in instr
+    assert "Bet365" in instr
+    assert "Pinnacle" in instr
+    assert "比分升降级" in instr
+
+
+def test_final_referee_prompts_carry_market_timeline_rerank_protocol():
+    ev = [{"match": 1}]
+    prompts = [
+        predict.build_gemini_final_prompt(ev, {"gpt": {}, "grok": {}}, {}),
+        predict.build_fallback_referee_prompt(ev, {"gpt": {}, "grok": {}}, {}),
+        predict.build_family_debate_referee_prompt(ev, {"gpt": {}, "grok": {}}, {}),
+    ]
+    for prompt in prompts:
+        assert "临场资金时间序列" in prompt
+        assert "四市场闭环" in prompt
+        assert "比分升降级" in prompt
+        assert "T-30m" in prompt
+
+
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v"]))
