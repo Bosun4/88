@@ -97,3 +97,53 @@ def test_clean_confirmed_case_keeps_recommendation():
     assert front["recommend_gate_pass"] is True
     assert front["recommendation"]["tier"] == "A"
     assert front["pre_match_factor_audit"]["data_quality_score"] >= 70
+
+
+def test_league_dna_profiles_cover_priority_leagues():
+    for league in ["世界杯", "英超", "西甲", "意甲", "荷甲", "MLS", "沙特"]:
+        front = predict.adapt_ai_to_frontend(_base_ai_row(), {"league": league, "s11": 8.0})
+        assert front["pre_match_factor_audit"]["league_dna"]["key"] == league
+
+
+def test_frontend_contract_aliases_are_stable():
+    row = _base_ai_row(
+        final_direction="home",
+        predicted_score="2-1",
+        goal_band="3",
+        btts="yes",
+        recommendation={"tier": "B", "is_recommended": True, "bet_confidence": 72, "risk_level": "medium", "risk_tags": []},
+        reason="AI读盘理由",
+    )
+    front = predict.adapt_ai_to_frontend(row, {"league": "葡超", "s11": 8.0})
+
+    assert front["btts_ai"] == "yes"
+    assert front["ai_btts"] == "yes"
+    assert front["over_under_2_5"] == "大"
+    assert front["ai_over25"] == "大"
+    assert front["ai_score_reason"] == "AI读盘理由"
+    assert front["ai_confidence"] == 72
+
+
+def test_timeline_rerank_without_real_timeline_is_no_bet_but_keeps_score():
+    row = _base_ai_row(
+        final_direction="home",
+        predicted_score="2-1",
+        recommendation={"tier": "A", "is_recommended": True, "bet_confidence": 78, "risk_level": "low", "risk_tags": []},
+        market_timeline_audit={
+            "available": False,
+            "timeline_unavailable": True,
+            "rerank_applied": True,
+            "missing_timeline_points": ["T-60m", "T-30m"],
+            "evidence_summary": "无真实时间序列，只是静态赔率推断",
+        },
+    )
+
+    front = predict.adapt_ai_to_frontend(row, {"league": "世界杯", "s11": 5.0})
+
+    assert front["predicted_score"] == "2-1"
+    assert front["final_direction"] == "home"
+    assert front["recommendation"]["tier"] == "D"
+    assert front["recommendation"]["is_recommended"] is False
+    assert front["recommend_gate_pass"] is False
+    assert "timeline_rerank_without_real_timeline" in front["recommendation_downgrade_reasons"]
+    assert "market_timeline_audit" in front
