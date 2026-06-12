@@ -79,6 +79,33 @@ def test_enrich_injects_global_fields(monkeypatch):
     assert m["global_odds_source"] == "the_odds_api"
 
 
+def test_world_cup_league_alias_and_country_mapping(monkeypatch):
+    monkeypatch.setattr(global_odds, "ODDS_API_KEY", "TEST_KEY")
+    monkeypatch.setattr(global_odds, "_fetch_sport", lambda sk: [{
+        "id": "evt_usa_czechia",
+        "home_team": "United States",
+        "away_team": "Czechia",
+        "bookmakers": [{"key": "pinnacle", "markets": [{"key": "h2h", "outcomes": [
+            {"name": "United States", "price": 2.10},
+            {"name": "Draw", "price": 3.20},
+            {"name": "Czechia", "price": 3.50},
+        ]}]}],
+    }] if sk == "soccer_fifa_world_cup" else [])
+    monkeypatch.setattr(global_odds, "translate_team_name", lambda n: {"美国": "USA", "捷克": "Czech Republic"}.get(n, n))
+
+    matches = [{"home_team": "美国", "away_team": "捷克", "league": "2026 FIFA世界杯"}]
+
+    assert global_odds.enrich_with_global_odds(matches) == 1
+    assert matches[0]["global_home"] == pytest.approx(2.10)
+    assert matches[0]["global_away"] == pytest.approx(3.50)
+    assert global_odds.sport_key_for_league("2026 FIFA世界杯") == "soccer_fifa_world_cup"
+
+
+def test_generic_international_friendly_does_not_fake_world_cup_key():
+    assert global_odds.sport_key_for_league("国际友谊") is None
+    assert global_odds.sport_key_for_league("国际友谊赛") is None
+
+
 def test_enrich_failsafe_no_key(monkeypatch):
     monkeypatch.setattr(global_odds, "ODDS_API_KEY", "")
     matches = [{"home_team": "布兰", "away_team": "萨普斯堡", "league": "挪超",
@@ -160,16 +187,17 @@ def test_live_gpt_phase1_reads_local_skew():
     assert "dual_market_divergence_calibration" in instr
 
 
-def test_grok_web_instruction_requires_market_timeline_rerank():
+def test_reworked_timeline_protocol_is_prompted_but_evidence_gated():
     instr = predict._web_research_instruction("grok")
     assert "临场资金时间序列" in instr
     assert "T-60m" in instr
+    assert "T-30m" in instr
     assert "Bet365" in instr
     assert "Pinnacle" in instr
-    assert "比分升降级" in instr
+    assert "market_timeline_audit" in instr
+    assert "timeline_unavailable" in instr
+    assert "无真实时间序列不得升权" in instr
 
-
-def test_final_referee_prompts_carry_market_timeline_rerank_protocol():
     ev = [{"match": 1}]
     prompts = [
         predict.build_gemini_final_prompt(ev, {"gpt": {}, "grok": {}}, {}),
@@ -177,10 +205,11 @@ def test_final_referee_prompts_carry_market_timeline_rerank_protocol():
         predict.build_family_debate_referee_prompt(ev, {"gpt": {}, "grok": {}}, {}),
     ]
     for prompt in prompts:
-        assert "临场资金时间序列" in prompt
+        assert "market_timeline_audit" in prompt
         assert "四市场闭环" in prompt
         assert "比分升降级" in prompt
-        assert "T-30m" in prompt
+        assert "无真实时间序列不得升权" in prompt
+
 
 
 if __name__ == "__main__":
