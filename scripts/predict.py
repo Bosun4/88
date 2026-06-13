@@ -3929,7 +3929,7 @@ def _canonical_output_schema_text() -> str:
   "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
   "reason":"中文综合理由"
 }
-硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若使用伤停/首发/战意/轮换/赛程/天气等外部事实影响推荐，必须提供 external_fact_table 与有效 source_url；无来源或来源冲突未解决时只能降级，不得升为 main。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
+硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若强队让球达到球半/两球级别，但1X2胜赔仍在1.23-1.55、平赔/1-1锚点没有被抬死，必须按“深盘造强、胜赔不实压”审计，risk_score_candidates 至少保留 1-1 与强队一球小胜路径，推荐不得升为 main。若使用伤停/首发/战意/轮换/赛程/天气等外部事实影响推荐，必须提供 external_fact_table 与有效 source_url；无来源或来源冲突未解决时只能降级，不得升为 main。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
 """.strip()
 
 
@@ -3956,7 +3956,7 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append(_web_research_instruction(ai_name))
     p.append(PHASE1_ROLE_SPLIT_ADDENDUM)
     if ai_name == "gpt":
-        p.append("GPT重点【结构化清道夫与冷门探测器】：不要去盲目预测谁赢。你的唯一任务是扫描全盘的 score_cluster_diagnostics_v203。如果发现 0-0/1-1 的低分模式被严重压缩，或者强队客场让球却持续升水背离，你必须在 risk_score_candidates 里直接写入爆冷红灯，不需要给具体预测。不要被常规低赔迷惑，寻找深层陷阱！")
+        p.append("GPT重点【结构化清道夫与冷门探测器】：不要去盲目预测谁赢。你的唯一任务是扫描全盘的 score_cluster_diagnostics_v203。如果发现 0-0/1-1 的低分模式被严重压缩，或者强队客场让球却持续升水背离，你必须在 risk_score_candidates 里直接写入爆冷红灯，不需要给具体预测。若出现球半/两球深盘但强队1X2胜赔仍不实压、平赔/1-1未抬死，要按卡塔尔1-1瑞士型结构处理：深盘只是造强，不代表穿盘，必须保留1-1与一球小胜路径。不要被常规低赔迷惑，寻找深层陷阱！")
     elif ai_name == "grok":
         p.append("Grok重点【纯粹的 Sharp Money 追踪者】：只看钱！剥离战术、历史交锋等一切干扰。只看 sharp_money_facts_v203、movement、vote。如果公众投票热度 > 60% 但赔率不降反升，直接断定【大热必死诱盘】并输出高危信号；如果机构突然急剧降水，核实是否是隐藏资金入场。只输出资金流判决与背离预警，不要做最终比分预测。")
     else:
@@ -4155,6 +4155,7 @@ def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_p
 TAIL_RISK_PROTECTION_SCORES = ["1-2", "2-2", "2-3"]
 TAIL_RISK_DOWNGRADE_REASON = "Weak home favorite with BTTS tail risk"
 TWO_ONE_NO_BET_REASON = "2-1 home score blocked by draw/away/tail risk hard gate"
+DEEP_FAVORITE_LOOSE_EURO_GUARD_REASON = "deep favorite handicap strengthened while 1x2 favorite price remains loose; protect 1-1/one-goal paths"
 
 
 def _normalize_risk_score_candidates(value: Any) -> List[Dict[str, Any]]:
@@ -4193,6 +4194,85 @@ def _listify_strs(value: Any) -> List[str]:
     if value in (None, "", {}, []):
         return []
     return [str(value)[:160]]
+
+
+def _deep_favorite_guard_side(match_obj: Dict[str, Any]) -> Tuple[str, float, float]:
+    sp_home = _f(match_obj.get("sp_home", match_obj.get("win")), 0.0)
+    sp_away = _f(match_obj.get("sp_away", match_obj.get("lose")), 0.0)
+    if sp_home > 1.01 and (sp_away <= 1.01 or sp_home < sp_away):
+        return "home", sp_home, sp_away
+    if sp_away > 1.01 and (sp_home <= 1.01 or sp_away < sp_home):
+        return "away", sp_away, sp_home
+    return "", 0.0, 0.0
+
+
+def _deep_favorite_loose_euro_guard_trigger(match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    side, fav_odds, dog_odds = _deep_favorite_guard_side(match_obj)
+    if side not in {"home", "away"}:
+        return {"triggered": False}
+    line = _parse_handicap_value(match_obj.get("give_ball", match_obj.get("handicap", match_obj.get("rq", ""))))
+    if line is None or abs(line) < 1.5:
+        return {"triggered": False}
+    line_side = "home" if line > 0 else "away" if line < 0 else ""
+    if line_side and line_side != side:
+        return {"triggered": False}
+    sp_draw = _f(match_obj.get("sp_draw", match_obj.get("same")), 0.0)
+    s11 = _f(match_obj.get("s11"), 0.0)
+    loose_favorite_price = 1.23 <= fav_odds <= 1.55
+    draw_live = (3.60 <= sp_draw <= 5.30) or (0 < s11 <= 8.0)
+    if not (loose_favorite_price and draw_live):
+        return {"triggered": False}
+    return {
+        "triggered": True,
+        "favorite_side": side,
+        "favorite_odds": fav_odds,
+        "underdog_odds": dog_odds,
+        "draw_odds": sp_draw,
+        "handicap_line": line,
+        "one_one_odds": s11,
+    }
+
+
+def apply_deep_favorite_loose_euro_guard(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    """Surface Qatar-Switzerland style 1-1 upset risk without changing final score/direction."""
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    trigger = _deep_favorite_loose_euro_guard_trigger(match_obj)
+    if not trigger.get("triggered"):
+        return pred
+    side = str(trigger.get("favorite_side", ""))
+    if pred.get("final_direction") != side:
+        return pred
+
+    candidates = _normalize_risk_score_candidates(pred.get("risk_score_candidates", []))
+    if side == "away":
+        add_scores = ["1-1", "0-1", "1-2"]
+    else:
+        add_scores = ["1-1", "1-0", "2-1"]
+    for sc in add_scores:
+        _append_risk_candidate(candidates, sc, "deep_favorite_loose_euro_draw_guard", DEEP_FAVORITE_LOOSE_EURO_GUARD_REASON)
+    pred["risk_score_candidates"] = candidates[:12]
+    _add_unique_tail_flags(pred, "deep_favorite_loose_euro_draw_guard", "protect_1_1_and_one_goal_win_paths")
+
+    pred.setdefault("deep_favorite_loose_euro_audit", {}).update(trigger)
+    pred.setdefault("validation_warnings", []).append("deep_favorite_loose_euro_guard_applied")
+    _cap_recommendation_tier(pred, "C", "deep_favorite_loose_euro_guard", "deep_favorite_loose_euro_draw_guard")
+    rec = pred.setdefault("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    if not isinstance(pred.get("recommendation"), dict):
+        pred["recommendation"] = rec
+    rec["risk_level"] = "high"
+    old_conf = int(_clip(_f(rec.get("bet_confidence", pred.get("confidence", 0)), 0), 0, 100))
+    rec.setdefault("original_bet_confidence", old_conf)
+    rec["risk_adjusted_bet_confidence"] = min(old_conf, 54)
+    rec["display_bet_confidence"] = min(old_conf, 54)
+    pred["risk_adjusted_confidence"] = min(int(_clip(_f(pred.get("confidence", old_conf), 0), 0, 100)), 54)
+    pred["display_confidence"] = pred["risk_adjusted_confidence"]
+    pred["confidence_downgrade_reason"] = DEEP_FAVORITE_LOOSE_EURO_GUARD_REASON
+    pred.setdefault("recommend_gate_reasons", []).append("deep_favorite_loose_euro_guard")
+    pred.setdefault("recommendation_downgrade_reasons", []).append("deep_favorite_loose_euro_guard")
+    pred["validation_warnings"] = list(dict.fromkeys(str(x) for x in pred.get("validation_warnings", []) if str(x).strip()))[:80]
+    pred["recommend_gate_reasons"] = list(dict.fromkeys(str(x) for x in pred.get("recommend_gate_reasons", []) if str(x).strip()))[:80]
+    return pred
 
 
 def _raw_btts_yes_signal(row: Dict[str, Any], raw_item: Dict[str, Any]) -> bool:
@@ -5429,6 +5509,10 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         pred["score_tier"] = tier
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"two_one_hard_gate_error:{str(e)[:120]}")
+    try:
+        apply_deep_favorite_loose_euro_guard(pred, match_obj)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"deep_favorite_loose_euro_guard_error:{str(e)[:120]}")
     try:
         apply_pre_match_factor_v2_gate(pred, match_obj)
     except Exception as e:
