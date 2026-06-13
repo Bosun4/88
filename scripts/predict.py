@@ -58,6 +58,7 @@ except Exception:  # pragma: no cover
 # (模块加载末段会覆盖, 此处旧赋值为僵尸已移除, 避免双真值源漂移)。
 
 VALID_DIRS = {"home", "draw", "away"}
+BETTABLE_ACTIONS = {"main", "small", "hedge"}
 AI_NAMES = ["gpt", "grok", "gemini"]
 
 # 【读盘范式 v2.1 大球判据阈值 / 175场回归校准 20260601】
@@ -1784,7 +1785,7 @@ def _apply_external_fact_source_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
 
     text = _external_context_text(pred)
     needs_external_source = any(term.lower() in text for term in EXTERNAL_FACT_CONTEXT_TERMS)
-    evidence_quality = int(_clip(_f(pred.get("evidence_quality_score", 0), 0), 0, 100))
+    evidence_quality = _normalize_external_evidence_quality(pred)
     if valid_sources == 0 and needs_external_source:
         rec = pred.setdefault("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
         if not isinstance(pred.get("recommendation"), dict):
@@ -1806,6 +1807,148 @@ def _apply_external_fact_source_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
     elif 0 < evidence_quality < 50:
         warnings.append("external_evidence_quality_below_50")
     pred["validation_warnings"] = list(dict.fromkeys(warnings))
+    return pred
+
+
+def _source_quality_floor_and_cap(web_research: Dict[str, Any], external_fact_table: Any = None) -> Tuple[int, List[str]]:
+    warnings: List[str] = []
+    sources = web_research.get("sources", []) if isinstance(web_research, dict) else []
+    total_sources = len(sources) if isinstance(sources, list) else 0
+    valid_sources = _valid_external_source_count(web_research, external_fact_table)
+    if valid_sources <= 0:
+        if total_sources:
+            warnings.append("external_source_url_missing_or_invalid")
+            return 40, warnings
+        warnings.append("missing_external_confirmation")
+        return 30, warnings
+    if valid_sources == 1:
+        return 75, warnings
+    return 100, warnings
+
+
+def _normalize_external_evidence_quality(pred: Dict[str, Any]) -> int:
+    web = pred.get("web_research", {}) if isinstance(pred.get("web_research"), dict) else {}
+    raw_score = int(_clip(_f(pred.get("evidence_quality_score", 0), 0), 0, 100))
+    cap, warnings = _source_quality_floor_and_cap(web, pred.get("external_fact_table"))
+    normalized = min(raw_score, cap) if raw_score else 0
+    existing = pred.setdefault("validation_warnings", [])
+    if not isinstance(existing, list):
+        existing = [str(existing)] if existing else []
+    existing.extend(warnings)
+    pred["validation_warnings"] = list(dict.fromkeys(existing))
+    pred["evidence_quality_score"] = normalized
+    return normalized
+
+
+def _direction_probability_for(pred: Dict[str, Any], direction: str) -> float:
+    probs = pred.get("direction_probs", {}) if isinstance(pred.get("direction_probs"), dict) else {}
+    value = _f(probs.get(direction), 0.0)
+    if value:
+        return value
+    pct_keys = {"home": "home_win_pct", "draw": "draw_pct", "away": "away_win_pct"}
+    return _f(pred.get(pct_keys.get(direction, "")), 0.0)
+
+
+def _max_direction_probability(pred: Dict[str, Any]) -> Tuple[str, float]:
+    probs = pred.get("direction_probs", {}) if isinstance(pred.get("direction_probs"), dict) else {}
+    rows = [(d, _direction_probability_for({**pred, "direction_probs": probs}, d)) for d in VALID_DIRS]
+    return max(rows, key=lambda x: x[1]) if rows else ("", 0.0)
+
+
+def _v2_candidate_score_prob(candidate: Any) -> Tuple[str, float]:
+    if isinstance(candidate, dict):
+        return _score_from_candidate(candidate.get("score")), _f(candidate.get("prob"), 0.0)
+    if isinstance(candidate, (list, tuple)) and candidate:
+        return _score_from_candidate(candidate[0]), _f(candidate[1] if len(candidate) > 1 else 0.0, 0.0)
+    return _score_from_candidate(candidate), 0.0
+
+
+def _cap_to_observe(pred: Dict[str, Any], reason: str, max_tier: str = "C") -> None:
+    rec = pred.setdefault("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    if not isinstance(pred.get("recommendation"), dict):
+        pred["recommendation"] = rec
+    current_tier = str(rec.get("tier", pred.get("recommendation_tier", "D"))).upper()
+    rec["tier"] = max_tier if _tier_cap_value(current_tier) > _tier_cap_value(max_tier) else current_tier
+    rec["is_recommended"] = False
+    rec["bet_action"] = "observe"
+    pred["recommendation_tier"] = rec["tier"]
+    pred["recommend_gate_pass"] = False
+    reasons = pred.setdefault("recommend_gate_reasons", [])
+    if not isinstance(reasons, list):
+        reasons = [str(reasons)] if reasons else []
+        pred["recommend_gate_reasons"] = reasons
+    reasons.append(reason)
+    warnings = pred.setdefault("validation_warnings", [])
+    if not isinstance(warnings, list):
+        warnings = [str(warnings)] if warnings else []
+        pred["validation_warnings"] = warnings
+    warnings.append(reason)
+    pred["recommend_gate_reasons"] = list(dict.fromkeys(reasons))
+    pred["validation_warnings"] = list(dict.fromkeys(warnings))
+
+
+def _apply_direction_candidate_consistency_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    final_dir = str(pred.get("final_direction", ""))
+    if final_dir in VALID_DIRS:
+        max_dir, max_prob = _max_direction_probability(pred)
+        final_prob = _direction_probability_for(pred, final_dir)
+        if max_dir in VALID_DIRS and max_dir != final_dir and max_prob - final_prob >= 3.0:
+            _cap_to_observe(pred, "direction_probability_not_supporting_final_direction", "C")
+    top3 = pred.get("top3", []) if isinstance(pred.get("top3"), list) else []
+    if not top3:
+        top3 = pred.get("top_score_candidates", []) if isinstance(pred.get("top_score_candidates"), list) else []
+    if len(top3) >= 2:
+        first_score, first_prob = _v2_candidate_score_prob(top3[0])
+        predicted_score = _score_from_candidate(pred.get("predicted_score"))
+        higher_later = any(_v2_candidate_score_prob(x)[1] > first_prob + 0.01 for x in top3[1:])
+        if first_score == predicted_score and higher_later:
+            _cap_to_observe(pred, "top3_probability_order_conflict", "C")
+    return pred
+
+
+CONTRARIAN_MARKET_TERMS = ["反向steam", "steam", "造热", "大热必死", "诱盘", "反打", "聪明钱", "sharp", "rlm", "reverse line"]
+MARKET_SOURCE_TERMS = ["market", "odds", "盘口", "赔率", "亚盘", "大小球", "market_snapshot", "pinnacle", "bet365", "william"]
+
+
+def _has_valid_market_source(pred: Dict[str, Any]) -> bool:
+    web = pred.get("web_research", {}) if isinstance(pred.get("web_research"), dict) else {}
+    sources = web.get("sources", []) if isinstance(web.get("sources", []), list) else []
+    facts = pred.get("external_fact_table", []) if isinstance(pred.get("external_fact_table", []), list) else []
+    for row in sources + facts:
+        if not isinstance(row, dict):
+            continue
+        url = str(row.get("url", row.get("source_url", ""))).strip()
+        if not url or url == "#":
+            continue
+        text = _json_compact(row, 1200).lower()
+        if any(term.lower() in text for term in MARKET_SOURCE_TERMS):
+            return True
+    return False
+
+
+def _apply_contrarian_market_claim_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
+    text = _external_context_text(pred)
+    if any(term.lower() in text for term in CONTRARIAN_MARKET_TERMS) and not _has_valid_market_source(pred):
+        _cap_to_observe(pred, "contrarian_market_claim_without_valid_market_source", "C")
+    return pred
+
+
+def _sync_gate_with_bet_action(pred: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+    action = str(rec.get("bet_action") or "").lower()
+    if action and action not in BETTABLE_ACTIONS:
+        rec["is_recommended"] = False
+        pred["recommend_gate_pass"] = False
+        reasons = pred.setdefault("recommend_gate_reasons", [])
+        if not isinstance(reasons, list):
+            reasons = [str(reasons)] if reasons else []
+            pred["recommend_gate_reasons"] = reasons
+        reasons.append("gate_action_not_bettable")
+        pred["recommend_gate_reasons"] = list(dict.fromkeys(reasons))
     return pred
 
 
@@ -2711,7 +2854,9 @@ def select_top4(preds: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         rec = pr.get("recommendation", {}) if isinstance(pr.get("recommendation"), dict) else {}
         if pr.get("is_abstain"):
             continue
-        if bool(rec.get("is_recommended", False)) and _min_tier_ok(rec.get("tier", "D")):
+        action = str(rec.get("bet_action", "")).lower()
+        action_ok = not action or action in BETTABLE_ACTIONS
+        if bool(rec.get("is_recommended", False)) and bool(pr.get("recommend_gate_pass")) and _min_tier_ok(rec.get("tier", "D")) and action_ok:
             eligible.append(p)
     eligible = sorted(eligible, key=_recommend_sort_key, reverse=True)
     if len(eligible) >= 4 or not AI_FILL_TOP4_WITH_NON_RECOMMENDABLE:
@@ -5293,9 +5438,21 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"external_fact_source_gate_error:{str(e)[:120]}")
     try:
+        _apply_direction_candidate_consistency_gate(pred)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"direction_candidate_consistency_gate_error:{str(e)[:120]}")
+    try:
+        _apply_contrarian_market_claim_gate(pred)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"contrarian_market_claim_gate_error:{str(e)[:120]}")
+    try:
         assign_selection_layer(pred, match_obj)
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"selection_layer_error:{str(e)[:120]}")
+    try:
+        _sync_gate_with_bet_action(pred)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"gate_action_sync_error:{str(e)[:120]}")
     pred["engine_version"] = ENGINE_VERSION
     pred["engine_architecture"] = ENGINE_ARCHITECTURE
     return pred
