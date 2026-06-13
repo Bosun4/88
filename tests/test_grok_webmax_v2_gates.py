@@ -114,6 +114,36 @@ def test_contrarian_steam_claim_with_valid_market_source_can_remain_small():
     assert "contrarian_market_claim_without_valid_market_source" not in front.get("validation_warnings", [])
 
 
+def test_deep_away_favorite_loose_euro_keeps_qatar_style_one_one_risk():
+    row = _row(
+        final_direction="away",
+        predicted_score="0-2",
+        direction_probs={"home": 9, "draw": 21, "away": 70},
+        top3=[{"score": "0-2", "prob": 20}, {"score": "0-3", "prob": 15}],
+        web_research={"used": True, "sources": [{"title": "odds", "url": "https://example.com/odds", "claim": "market snapshot confirms deep handicap but loose favorite 1x2", "source_type": "market_snapshot"}]},
+        external_fact_table=[{"claim": "deep handicap but loose favorite 1x2", "source_url": "https://example.com/odds", "category": "market_snapshot"}],
+        recommendation={"tier": "A", "is_recommended": True, "bet_action": "main", "bet_confidence": 78},
+        reason="瑞士场面优势强，倾向0-2。",
+    )
+    front = predict.adapt_ai_to_frontend(row, {
+        "league": "世界杯",
+        "sp_home": 8.50,
+        "sp_draw": 4.75,
+        "sp_away": 1.33,
+        "give_ball": "受两球",
+        "information": {"official_lineup": True},
+        "intelligence": {"note": "小组赛首轮战意明确"},
+    })
+    risk_scores = {c["score"] for c in front.get("risk_score_candidates", []) if isinstance(c, dict)}
+    assert front["predicted_score"] == "0-2"
+    assert front["final_direction"] == "away"
+    assert {"1-1", "0-1", "1-2"}.issubset(risk_scores)
+    assert front["recommendation"]["tier"] == "C"
+    assert front["recommend_gate_pass"] is False
+    assert "deep_favorite_loose_euro_guard_applied" in front["validation_warnings"]
+    assert "deep_favorite_loose_euro_guard" in front["recommend_gate_reasons"]
+
+
 def test_gate_pass_observe_action_is_synchronized_to_not_recommended():
     row = _row(
         web_research={"used": True, "sources": [{"title": "ok", "url": "https://example.com", "claim": "ok"}]},
