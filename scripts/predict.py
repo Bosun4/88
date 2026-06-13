@@ -1021,6 +1021,31 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
 # Prompt / Schema
 # ============================================================
 
+GROK_WEBMAX_EXTERNAL_INTELLIGENCE_ADDENDUM = (
+    "你的联网重点：你是 Grok Web-Max 外部事实总参谋，不是比分裁判。必须最大化搜索并结构化输出可验证赛前事实："
+    "伤停/停赛/复出、预计或官方首发、战意与出线条件、赛程密度/旅行疲劳、天气/场地/中立场、"
+    "官方公告/主流媒体/跟队记者/数据站，以及当前赔率/亚盘/大小球快照。"
+    "每条会影响方向、比分或推荐等级的 claim 必须进入 external_fact_table，并包含 category、claim、source_type、source_title、source_url、published_at、freshness、confidence、impact_direction、why_it_matters。"
+    "必须输出 source_conflict_audit、evidence_quality_score(0-100)、minimum_evidence_needed、external_facts_decision_impact。"
+    "source_type 优先级：official > mainstream_media > beat_reporter > data_site > prediction_site > social_rumor。"
+    "无 URL、url 为 #、过旧新闻、单一预测站、社媒传闻均不得作为升权硬证据；只能降级或标记 risk_only。"
+    "禁止编造盘口时间序列；当前赔率只能作为 market_snapshot，不能推导 T-60m/T-30m、临场回补、资金持续流入、诱盘闭环。"
+    "若 sources 缺失或质量低，必须写 missing_external_confirmation，不得把伤停/首发/战意/赛程/天气当硬证据升推荐。"
+)
+
+EXTERNAL_FACT_FIELDS = [
+    "external_fact_table",
+    "source_conflict_audit",
+    "evidence_quality_score",
+    "minimum_evidence_needed",
+    "external_facts_decision_impact",
+]
+
+EXTERNAL_FACT_CONTEXT_TERMS = [
+    "伤停", "停赛", "复出", "首发", "阵容", "战意", "出线", "轮换", "轮休", "体能", "旅行", "天气", "场地", "核心", "发布会",
+    "injury", "injuries", "suspension", "lineup", "line-up", "starting xi", "motivation", "rotation", "travel", "weather", "pitch",
+]
+
 def _web_research_instruction(role: str) -> str:
     if not AI_NATIVE_WEB:
         return "AI_NATIVE_WEB=false：如果无法联网，web_research.used=false，failure_reason 写 no_web_capability_or_disabled。"
@@ -1033,7 +1058,7 @@ def _web_research_instruction(role: str) -> str:
     if role == "gpt":
         return common + "你的联网重点：外部欧赔/亚盘/交易所、赔率时间点。注意：evidence 里的 dual_market_divergence_calibration 已经用 Shin 法算出国内竞彩 vs 国际清算盘的 skew 偏斜度与 z_gap，这是已成事实，你必须直接解读该结果（不要重复联网去算一遍分歧），联网仅用于验证/补充该偏斜是否有基本面支撑。"
     if role == "grok":
-        return common + "你的联网重点：最新伤停、预计首发、临场新闻、资金流/热度/市场异动。"
+        return common + GROK_WEBMAX_EXTERNAL_INTELLIGENCE_ADDENDUM
     if role == "gemini":
         return common + "你的联网重点：球队风格、赛程密度、杯赛赛制、战意、战术影响。"
     return common + "你的联网重点：审计三家来源质量、冲突来源、新鲜度，以及哪些外部信息真正改变判断。"
@@ -1045,6 +1070,8 @@ def _short_prediction_for_prompt(r: Dict[str, Any]) -> Dict[str, Any]:
         "match", "final_direction", "predicted_score", "direction_probs", "goal_band", "btts", "top3",
         "anchor_audit", "market_interpretation", "money_flow", "contextual_logic", "rejected_cases", "recommendation",
         "data_quality", "reason", "web_research", "final_web_audit", "validation_warnings",
+        "external_fact_table", "source_conflict_audit", "evidence_quality_score",
+        "minimum_evidence_needed", "external_facts_decision_impact",
     ]:
         if k in r:
             keep[k] = r[k]
@@ -1690,6 +1717,98 @@ def _normalize_recommendation(item: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def _valid_external_source_count(web_research: Dict[str, Any], external_fact_table: Any = None) -> int:
+    count = 0
+    sources = web_research.get("sources", []) if isinstance(web_research, dict) else []
+    if isinstance(sources, list):
+        for src in sources:
+            if not isinstance(src, dict):
+                continue
+            url = str(src.get("url", "")).strip()
+            title = str(src.get("title", src.get("source_title", ""))).strip()
+            claim = str(src.get("claim", "")).strip()
+            if url and url != "#" and (title or claim):
+                count += 1
+    if isinstance(external_fact_table, list):
+        for fact in external_fact_table:
+            if not isinstance(fact, dict):
+                continue
+            url = str(fact.get("source_url", fact.get("url", ""))).strip()
+            claim = str(fact.get("claim", "")).strip()
+            if url and url != "#" and claim:
+                count += 1
+    return count
+
+
+def _copy_external_fact_fields_from_item(item: Dict[str, Any]) -> Dict[str, Any]:
+    out: Dict[str, Any] = {}
+    for key in EXTERNAL_FACT_FIELDS:
+        value = item.get(key)
+        if value in (None, {}, []):
+            audit = item.get("final_web_audit") if isinstance(item.get("final_web_audit"), dict) else {}
+            value = audit.get(key)
+        if key == "evidence_quality_score":
+            if value not in (None, ""):
+                out[key] = int(_clip(_f(value, 0), 0, 100))
+        elif isinstance(value, (dict, list)):
+            out[key] = value
+    return out
+
+
+def _external_context_text(pred: Dict[str, Any]) -> str:
+    return _json_compact({
+        "reason": pred.get("reason"),
+        "ai_native_reason": pred.get("ai_native_reason"),
+        "ai_score_reason": pred.get("ai_score_reason"),
+        "final_ai_analysis": pred.get("final_ai_analysis"),
+        "final_referee_analysis": pred.get("final_referee_analysis"),
+        "contextual_logic": pred.get("contextual_logic"),
+        "recommendation": pred.get("recommendation"),
+        "external_fact_table": pred.get("external_fact_table"),
+        "external_facts_decision_impact": pred.get("external_facts_decision_impact"),
+    }, 5000).lower()
+
+
+def _apply_external_fact_source_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    web = pred.get("web_research", {}) if isinstance(pred.get("web_research"), dict) else {}
+    valid_sources = _valid_external_source_count(web, pred.get("external_fact_table"))
+    warnings = pred.setdefault("validation_warnings", [])
+    if not isinstance(warnings, list):
+        warnings = [str(warnings)] if warnings else []
+        pred["validation_warnings"] = warnings
+    sources = web.get("sources", []) if isinstance(web.get("sources", []), list) else []
+    if sources and valid_sources < len(sources):
+        warnings.append("external_source_url_missing_or_invalid")
+
+    text = _external_context_text(pred)
+    needs_external_source = any(term.lower() in text for term in EXTERNAL_FACT_CONTEXT_TERMS)
+    evidence_quality = int(_clip(_f(pred.get("evidence_quality_score", 0), 0), 0, 100))
+    if valid_sources == 0 and needs_external_source:
+        rec = pred.setdefault("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
+        if not isinstance(pred.get("recommendation"), dict):
+            pred["recommendation"] = rec
+        current_tier = str(rec.get("tier", pred.get("recommendation_tier", "D"))).upper()
+        rec["tier"] = "C" if _tier_cap_value(current_tier) > _tier_cap_value("C") else current_tier
+        rec["is_recommended"] = False
+        rec["bet_action"] = "observe"
+        tags = rec.get("risk_tags", [])
+        if not isinstance(tags, list):
+            tags = [str(tags)] if tags else []
+        tags.extend(["missing_external_confirmation", "external_fact_without_source"])
+        rec["risk_tags"] = list(dict.fromkeys(str(t) for t in tags if str(t).strip()))[:24]
+        pred["recommendation_tier"] = rec["tier"]
+        pred["recommend_gate_pass"] = False
+        pred.setdefault("recommend_gate_reasons", []).append("external_fact_without_source")
+        pred["confidence_downgrade_reason"] = "missing_external_confirmation: 外部事实论据缺少有效来源，禁止升权。"
+        warnings.extend(["external_fact_without_source", "missing_external_confirmation"])
+    elif 0 < evidence_quality < 50:
+        warnings.append("external_evidence_quality_below_50")
+    pred["validation_warnings"] = list(dict.fromkeys(warnings))
+    return pred
+
+
 def _match_index_from_item(item: Dict[str, Any], fallback_idx: int, expected_set: set) -> Optional[int]:
     raw = item.get("match", item.get("index", item.get("match_index", item.get("id", item.get("序号")))))
     if isinstance(raw, int):
@@ -1728,6 +1847,7 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
         direction_probs = _normalize_direction_probs(item)
         web = _normalize_web_research(item)
         rec = _normalize_recommendation(item)
+        external_facts = _copy_external_fact_fields_from_item(item)
         warnings = []
         if direction_conflict:
             warnings.append(f"dir_score_conflict_protocol_fixed:{raw_dir}->{score_dir}")
@@ -1754,6 +1874,7 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
             "rejected_cases": item.get("rejected_cases", {}) if isinstance(item.get("rejected_cases"), dict) else {},
             "web_research": web,
             "final_web_audit": item.get("final_web_audit", {}) if isinstance(item.get("final_web_audit"), dict) else {},
+            **external_facts,
             "recommendation": rec,
             "data_quality": item.get("data_quality", {}) if isinstance(item.get("data_quality"), dict) else {},
             "reason": str(item.get("reason", item.get("analysis", item.get("explanation", ""))))[:5000],
@@ -3629,6 +3750,13 @@ def _canonical_output_schema_text() -> str:
     "key_findings": [],
     "source_conflicts": []
   },
+  "external_fact_table": [
+    {"category":"injury/lineup/motivation/schedule/weather/venue/media/market_snapshot/referee", "claim":"中文事实", "source_type":"official/mainstream_media/beat_reporter/data_site/prediction_site/social_rumor", "source_title":"", "source_url":"", "published_at":"", "freshness":"same_day/recent_3d/stale/unknown", "confidence":"high/medium/low", "impact_direction":"upgrade_home/downgrade_home/upgrade_draw/upgrade_away/upgrade_over/downgrade_over/risk_only/no_clear_impact", "why_it_matters":"中文说明"}
+  ],
+  "source_conflict_audit": {"has_conflict":false, "conflicts":[]},
+  "evidence_quality_score": 0,
+  "minimum_evidence_needed": [],
+  "external_facts_decision_impact": {"direction_impact":"supports_home/supports_draw/supports_away/mixed/unclear", "goal_impact":"supports_over/supports_under/mixed/unclear", "recommendation_impact":"can_upgrade/hold/downgrade/no_bet", "main_reason":"中文说明"},
   "recommendation_components": {
     "direction_edge":0,
     "score_cluster_strength":0,
@@ -3656,14 +3784,14 @@ def _canonical_output_schema_text() -> str:
   "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
   "reason":"中文综合理由"
 }
-硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
+硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若使用伤停/首发/战意/轮换/赛程/天气等外部事实影响推荐，必须提供 external_fact_table 与有效 source_url；无来源或来源冲突未解决时只能降级，不得升为 main。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
 """.strip()
 
 
 def _phase1_system(ai_name: str) -> str:
     role_intro = {
         "gpt": "你是 Probabilistic Market Structure Analyst，专攻 1X2、HHAD让球、正确比分赔率簇、总进球模态、外部赔率对照。你不是最终裁判。",
-        "grok": "你是 Money Flow / Sharp Movement Analyst，专攻 vote、change、CRS/TTG压赔抬赔、热度、Sharp/Steam/RLM、临场新闻。你不是最终裁判。",
+        "grok": "你是 Grok Web-Max External Intelligence Analyst，专攻联网外部事实、来源质量、冲突审计、伤停首发战意赛程天气与市场快照。你不是最终裁判。",
         "gemini": "你是 Gemini Final Web-aware Referee，负责战术/来源质量审计、相邻比分审计、交叉证据仲裁和最终推荐。",
     }.get(ai_name, "你是足球量化 RAW-AI 分析师。")
     return (
@@ -3761,6 +3889,8 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append(GEMINI_FINAL_AUDIT_ADDENDUM)
     p.append("")
     p.append("S级必须同时满足：方向边际强、比分簇强、总进球带强、相邻比分解释完整、Sharp/热度不冲突、推荐组件分数透明。仅赔率低赔最多A；无真实联网且依赖阵容/战意/伤停，最高B。")
+    p.append("Grok Web-Max 证据规则：你必须审计 Grok 的 external_fact_table、source_conflict_audit、evidence_quality_score、minimum_evidence_needed。若外部事实来源为空、URL为空/#、来源冲突未解决或 evidence_quality_score<50，任何依赖伤停/首发/战意/轮换/赛程/天气的推荐不得升为 main；可以保留比分判断，但必须降级 recommendation。")
+    p.append("禁止把当前赔率快照讲成盘口时间序列；没有本地多时间点数据时，不得引用 T-60m/T-30m、临场回补、资金持续流入或诱盘闭环。")
     p.append("强制输出 recommendation_components，不能只给 tier 和 bet_confidence。")
     p.append("最终推荐等级、是否进 Top4、bet_confidence 全部由你输出；本地只排序，不会改你的足球判断。")
     p.append("</final_adjudication_protocol>\n")
@@ -3792,6 +3922,7 @@ def build_fallback_referee_prompt(evidence_batch: List[Dict[str, Any]], phase1_r
     p = []
     p.append("你是 Gemini 终审失败后的 AI fallback referee。不要使用本地规则。基于 raw evidence、v20.3市场簇、Sharp事实、Phase1 和 critic reports 输出最终 predictions。")
     p.append("若 dual_market_divergence_calibration.available=true，同样必须应用双轨背离规则：skew_pct > +5% 且 z_gap 正=该方向被诱盘低开，下调 tier/confidence；skew_pct < -5%=价值洼地，可上调优先级。")
+    p.append("同样必须应用 Grok Web-Max 证据规则：审计 external_fact_table/source_conflict_audit/evidence_quality_score；无有效来源或来源冲突未解决时，不得因伤停/首发/战意/赛程/天气升为 main。禁止编造盘口时间序列。")
     p.append("输出 schema 与 Gemini final 完全一致。必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。")
     p.append(_canonical_output_schema_text())
     p.append("<evidence_batch>")
@@ -3845,6 +3976,7 @@ def build_family_debate_referee_prompt(evidence_batch: List[Dict[str, Any]], pha
     p.append("3. 两段式读盘：先由父亲定goal_band档位+把握度，再在档内由家长仲裁唯一比分；选非众数比分必须写可证伪的背离理由，否则回落众数并下调confidence。")
     p.append("4. 家长（主裁）负责收敛分歧，输出每场唯一 predicted_score，并在 debate_summary 里浓缩关键分歧与裁定依据。")
     p.append("5. 证据不足或自相矛盾时，小弟有权要求 recommendation.is_recommended=false / bet_action=no_bet，但仍要给出最可能比分，不要整场留空。")
+    p.append("6. 必须应用 Grok Web-Max 证据规则：婶婶审计 external_fact_table/source_conflict_audit/evidence_quality_score；没有有效来源的伤停/首发/战意/赛程/天气论据只能降级，不得升为 main；禁止把赔率快照编成 T-60m/T-30m 时间序列。")
     p.append("输出 schema 与 Gemini final 完全一致（同样的 predictions 数组与字段），额外要求：每个 prediction 增加 \"family_debate\":{\"debate_summary\":\"中文，浓缩16角色关键分歧与裁定\",\"chair_reasoning\":\"家长最终裁定逻辑\",\"dissent\":[\"被否决的少数派比分及理由\"]}。")
     p.append("必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。不要使用本地规则，不要 markdown，只输出严格 JSON object。")
     p.append("</gpt_family_debate_final_referee>")
@@ -4182,9 +4314,11 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
             "risk_score_candidates", "tail_risk_flags", "confidence_downgrade_reason",
             "market_audit", "score_cluster_audit", "goal_market_audit", "market_conflicts", "candidate_scores",
             "public_heat_audit", "packet_news_risk_audit", "trap_candidates", "final_score_audit",
-            "family_debate",
+            "family_debate", *EXTERNAL_FACT_FIELDS,
         ]:
-            if isinstance(raw_item.get(k), (dict, list)):
+            if k == "evidence_quality_score" and raw_item.get(k) not in (None, ""):
+                row[k] = int(_clip(_f(raw_item.get(k), 0), 0, 100))
+            elif isinstance(raw_item.get(k), (dict, list)):
                 row[k] = raw_item.get(k)
         warnings = list(row.get("validation_warnings", []))
         if not isinstance(raw_item.get("score_cluster_audit"), dict):
@@ -5101,11 +5235,14 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "tail_risk_flags", "confidence_downgrade_reason", "market_audit",
         "goal_market_audit", "market_conflicts", "candidate_scores", "public_heat_audit",
         "packet_news_risk_audit", "trap_candidates", "final_score_audit", "family_debate",
+        *EXTERNAL_FACT_FIELDS,
     ]:
         v = ai_r.get(k, None)
         if v in (None, {}, []):
             v = raw_item.get(k, None)
-        if v not in (None, {}, []):
+        if k == "evidence_quality_score" and v not in (None, ""):
+            pred[k] = int(_clip(_f(v, 0), 0, 100))
+        elif v not in (None, {}, []):
             pred[k] = v
     # 本地只做推荐风控展示/降级，不改方向和比分。
     try:
@@ -5151,6 +5288,10 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         apply_pre_match_factor_v2_gate(pred, match_obj)
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"prematch_v2_gate_error:{str(e)[:120]}")
+    try:
+        _apply_external_fact_source_gate(pred)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"external_fact_source_gate_error:{str(e)[:120]}")
     try:
         assign_selection_layer(pred, match_obj)
     except Exception as e:
