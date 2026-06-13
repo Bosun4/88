@@ -54,8 +54,10 @@ def test_away_win_without_web_or_sharp_is_no_bet_but_keeps_score_and_direction()
 
     assert front["predicted_score"] == "1-2"
     assert front["final_direction"] == "away"
-    assert front["recommend_gate_pass"] is True
-    assert front["recommendation"]["tier"] == "A"
+    assert front["recommend_gate_pass"] is False
+    assert front["recommendation"]["tier"] == "C"
+    assert "external_fact_without_source" in front["validation_warnings"]
+    assert "missing_external_confirmation" in front["validation_warnings"]
     assert front["selection_layer"] in {"观察", "防平"}
     assert "prematch_v2_away_win_without_external_market_confirmation" in front["pre_match_factor_audit"]["rules_applied"]
     assert front["pre_match_factor_audit"]["league_dna"]["key"] == "美职"

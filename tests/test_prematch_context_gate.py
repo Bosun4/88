@@ -43,8 +43,10 @@ def test_cup_cross_context_favorite_requires_lineup_and_motivation_confirmation(
 
     assert front["predicted_score"] == "2-0"
     assert front["final_direction"] == "home"
-    assert front["recommend_gate_pass"] is True
-    assert front["recommendation"]["tier"] == "B"
+    assert front["recommend_gate_pass"] is False
+    assert front["recommendation"]["tier"] == "C"
+    assert "external_fact_without_source" in front["validation_warnings"]
+    assert "missing_external_confirmation" in front["validation_warnings"]
     assert "prematch_v2_cup_cross_context_lineup_motivation_required" in front["pre_match_factor_audit"]["rules_applied"]
     assert "prematch_v2_cross_region_requires_external_confirmation" in front["pre_match_factor_audit"]["rules_applied"]
 
