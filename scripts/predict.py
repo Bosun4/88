@@ -3988,6 +3988,7 @@ def _short_prediction_for_prompt(r: Dict[str, Any]) -> Dict[str, Any]:
         "contextual_logic", "rejected_cases", "recommendation_components", "recommendation",
         "data_quality", "reason", "web_research", "final_web_audit", "risk_score_candidates",
         "tail_risk_flags", "confidence_downgrade_reason", "validation_warnings",
+        *EXTERNAL_FACT_FIELDS,
     ]:
         if k in r:
             keep[k] = r[k]
