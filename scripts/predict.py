@@ -1983,7 +1983,9 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
         if _parse_score(predicted_score)[0] is None:
             continue
         score_dir = _score_direction(predicted_score)
-        raw_dir = _dir_from_any(item.get("final_direction", item.get("direction", ""))) or score_dir or "draw"
+        raw_direction_value = item.get("final_direction", item.get("direction", ""))
+        parsed_raw_dir = _dir_from_any(raw_direction_value)
+        raw_dir = parsed_raw_dir or score_dir or "draw"
         final_direction = score_dir or raw_dir
         direction_conflict = bool(score_dir in VALID_DIRS and raw_dir in VALID_DIRS and score_dir != raw_dir)
         top3 = _normalize_top3(item, predicted_score)
@@ -1994,6 +1996,8 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
         warnings = []
         if direction_conflict:
             warnings.append(f"dir_score_conflict_protocol_fixed:{raw_dir}->{score_dir}")
+        if raw_direction_value not in (None, "") and parsed_raw_dir is None:
+            warnings.append(f"invalid_final_direction_protocol_fixed:{str(raw_direction_value)[:40]}->{final_direction}")
         if direction_probs.get("_synthetic_probs"):
             warnings.append("direction_probs_missing_synthetic")
         warnings.extend(web.get("validation_warnings", []))
@@ -3588,7 +3592,7 @@ PHASE1_ROLE_SPLIT_ADDENDUM = """
 你不是比分生成器，而是风险控制型赛前分析师；目标不是每场硬推，而是避免把低质量比赛包装成高信心推荐。
 GPT：正方市场结构师，重点输出 market_audit / score_cluster_audit / goal_market_audit / candidate_scores / 可买条件；若证据不足必须说 observe/no_bet。
 Grok：反方审判员，重点寻找 favorite_trap / draw_trap / away_win_overreach / rotation_or_motivation_risk / source_hallucination；不要顺着热门结论。
-Gemini：终审裁判，必须综合正方、反方、raw evidence 和来源质量，允许 final_direction=abstain/no_bet；若证据不足，recommendation.is_recommended=false。
+Gemini：终审裁判，必须综合正方、反方、raw evidence 和来源质量；final_direction 只能是 home/draw/away，证据不足时用 recommendation.is_recommended=false 与 bet_action=observe/no_bet 表达不下注，不得把 no_bet/abstain 写成胜平负方向。
 三方都必须列出 why_this_can_fail；不能把“名气强、低赔、常见比分模板”当成独立充分证据。
 若 GPT/Grok 仍输出最终比分，Gemini 可以参考但必须重新审计，不得机械照抄。
 """.strip()
@@ -3929,7 +3933,7 @@ def _canonical_output_schema_text() -> str:
   "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
   "reason":"中文综合理由"
 }
-硬约束：predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若强队让球达到球半/两球级别，但1X2胜赔仍在1.23-1.55、平赔/1-1锚点没有被抬死，必须按“深盘造强、胜赔不实压”审计，risk_score_candidates 至少保留 1-1 与强队一球小胜路径，推荐不得升为 main。若使用伤停/首发/战意/轮换/赛程/天气等外部事实影响推荐，必须提供 external_fact_table 与有效 source_url；无来源或来源冲突未解决时只能降级，不得升为 main。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
+硬约束：final_direction 只能是 home/draw/away；no_bet/observe 只能写在 recommendation.bet_action，不能写成 final_direction；系统级 abstain 只用于程序兜底，不允许 AI 主动输出。predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若强队让球达到球半/两球级别，但1X2胜赔仍在1.23-1.55、平赔/1-1锚点没有被抬死，必须按“深盘造强、胜赔不实压”审计，risk_score_candidates 至少保留 1-1 与强队一球小胜路径，推荐不得升为 main。若使用伤停/首发/战意/轮换/赛程/天气等外部事实影响推荐，必须提供 external_fact_table 与有效 source_url；无来源或来源冲突未解决时只能降级，不得升为 main。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
 """.strip()
 
 
@@ -3958,7 +3962,7 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     if ai_name == "gpt":
         p.append("GPT重点【结构化清道夫与冷门探测器】：不要去盲目预测谁赢。你的唯一任务是扫描全盘的 score_cluster_diagnostics_v203。如果发现 0-0/1-1 的低分模式被严重压缩，或者强队客场让球却持续升水背离，你必须在 risk_score_candidates 里直接写入爆冷红灯，不需要给具体预测。若出现球半/两球深盘但强队1X2胜赔仍不实压、平赔/1-1未抬死，要按卡塔尔1-1瑞士型结构处理：深盘只是造强，不代表穿盘，必须保留1-1与一球小胜路径。不要被常规低赔迷惑，寻找深层陷阱！")
     elif ai_name == "grok":
-        p.append("Grok重点【纯粹的 Sharp Money 追踪者】：只看钱！剥离战术、历史交锋等一切干扰。只看 sharp_money_facts_v203、movement、vote。如果公众投票热度 > 60% 但赔率不降反升，直接断定【大热必死诱盘】并输出高危信号；如果机构突然急剧降水，核实是否是隐藏资金入场。只输出资金流判决与背离预警，不要做最终比分预测。")
+        p.append("Grok重点【Web-Max 外部事实与资金背离审判员】：优先核实 external_fact_table/source_conflict_audit/evidence_quality_score，覆盖伤停、首发、战意、赛程、天气、权威新闻与市场快照；同时读取 sharp_money_facts_v203、movement、vote 审计公众热度与赔率背离。不得编造盘口时间序列，不得把无来源事实用于升 main。你不是终审裁判，但必须按统一 schema 给出基于外部事实和盘口背离的暂定 final_direction/predicted_score，供 Gemini 复核。")
     else:
         p.append("Gemini若参与初审，也必须按最终裁判标准完成相邻比分和来源审计。")
     p.append("强制：每场必须显式读取 score_cluster_diagnostics_v203.adjacent_score_audit_table；不能只看最低赔率。")
@@ -4141,7 +4145,7 @@ def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_p
     p = []
     p.append("你是 Consistency Judge，只检查结构一致性，不做足球判断，不改变预测方向/比分，除非存在字段自相矛盾时给出 repair 建议。")
     p.append("输出严格 JSON object：{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[],\"repair\":{...}}]}。")
-    p.append("检查：predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components 必须存在；risk_score_candidates/tail_risk_flags/confidence_downgrade_reason 若存在必须保持数组/字符串结构。")
+    p.append("检查：final_direction 只能是 home/draw/away，no_bet/observe 只能存在于 recommendation.bet_action；predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；external_fact_table 非空时每条必须有 source_url，且必须同步存在 source_conflict_audit/evidence_quality_score/external_facts_decision_impact；若外部事实无来源或冲突未解决，repair 只能降级 recommendation 为 observe/no_bet，不得改比分硬升；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components 必须存在；risk_score_candidates/tail_risk_flags/confidence_downgrade_reason 若存在必须保持数组/字符串结构。")
     p.append("不得根据足球观点改比分，只能修字段。")
     p.append("<evidence_batch>")
     for e in evidence_batch:
