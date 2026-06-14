@@ -1025,7 +1025,8 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
 GROK_WEBMAX_EXTERNAL_INTELLIGENCE_ADDENDUM = (
     "你的联网重点：你是 Grok Web-Max 外部事实总参谋，不是比分裁判。必须最大化搜索并结构化输出可验证赛前事实："
     "伤停/停赛/复出、预计或官方首发、战意与出线条件、赛程密度/旅行疲劳、天气/场地/中立场、"
-    "官方公告/主流媒体/跟队记者/数据站，以及当前赔率/亚盘/大小球快照。"
+    "官方公告/主流媒体/跟队记者/数据站，以及 Bet365/William Hill/威廉希尔/Pinnacle/竞彩/百家均值等当前赔率、亚盘、大小球、正确比分快照。"
+    "必须排查脏数据：无 URL、过期新闻、预测站搬运、社媒传闻、盘口快照伪装时间序列、Bet365/威廉/Pinnacle/竞彩方向冲突、赔率升水降水与大小球变化不一致。"
     "每条会影响方向、比分或推荐等级的 claim 必须进入 external_fact_table，并包含 category、claim、source_type、source_title、source_url、published_at、freshness、confidence、impact_direction、why_it_matters。"
     "必须输出 source_conflict_audit、evidence_quality_score(0-100)、minimum_evidence_needed、external_facts_decision_impact。"
     "source_type 优先级：official > mainstream_media > beat_reporter > data_site > prediction_site > social_rumor。"
@@ -1040,6 +1041,15 @@ EXTERNAL_FACT_FIELDS = [
     "evidence_quality_score",
     "minimum_evidence_needed",
     "external_facts_decision_impact",
+]
+
+FULL_SPECTRUM_AUDIT_FIELDS = [
+    "gemini_independent_research",
+    "bookmaker_cross_audit",
+    "tempo_xg_tactical_audit",
+    "worldcup_upset_audit",
+    "score_elimination_audit",
+    "dirty_work_checklist",
 ]
 
 EXTERNAL_FACT_CONTEXT_TERMS = [
@@ -1061,7 +1071,7 @@ def _web_research_instruction(role: str) -> str:
     if role == "grok":
         return common + GROK_WEBMAX_EXTERNAL_INTELLIGENCE_ADDENDUM
     if role == "gemini":
-        return common + "你的联网重点：球队风格、赛程密度、杯赛赛制、战意、战术影响。"
+        return common + "你的联网重点：Bet365/William Hill/威廉希尔/Pinnacle/竞彩/百家均值赔率差异、升水降水、亚盘、大小球、正确比分簇、球队节奏/xG/xGA、伤停首发、天气场地、世界杯轮次/出线/净胜球动机、战术与爆冷土壤。"
     return common + "你的联网重点：审计三家来源质量、冲突来源、新鲜度，以及哪些外部信息真正改变判断。"
 
 
@@ -1073,6 +1083,7 @@ def _short_prediction_for_prompt(r: Dict[str, Any]) -> Dict[str, Any]:
         "data_quality", "reason", "web_research", "final_web_audit", "validation_warnings",
         "external_fact_table", "source_conflict_audit", "evidence_quality_score",
         "minimum_evidence_needed", "external_facts_decision_impact",
+        *FULL_SPECTRUM_AUDIT_FIELDS,
     ]:
         if k in r:
             keep[k] = r[k]
@@ -1756,6 +1767,18 @@ def _copy_external_fact_fields_from_item(item: Dict[str, Any]) -> Dict[str, Any]
     return out
 
 
+def _copy_full_spectrum_audit_fields_from_item(item: Dict[str, Any]) -> Dict[str, Any]:
+    out: Dict[str, Any] = {}
+    final_audit = item.get("final_web_audit") if isinstance(item.get("final_web_audit"), dict) else {}
+    for key in FULL_SPECTRUM_AUDIT_FIELDS:
+        value = item.get(key)
+        if value in (None, {}, []):
+            value = final_audit.get(key)
+        if isinstance(value, (dict, list)):
+            out[key] = value
+    return out
+
+
 def _external_context_text(pred: Dict[str, Any]) -> str:
     return _json_compact({
         "reason": pred.get("reason"),
@@ -1993,6 +2016,7 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
         web = _normalize_web_research(item)
         rec = _normalize_recommendation(item)
         external_facts = _copy_external_fact_fields_from_item(item)
+        full_spectrum_audits = _copy_full_spectrum_audit_fields_from_item(item)
         warnings = []
         if direction_conflict:
             warnings.append(f"dir_score_conflict_protocol_fixed:{raw_dir}->{score_dir}")
@@ -2022,6 +2046,7 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
             "web_research": web,
             "final_web_audit": item.get("final_web_audit", {}) if isinstance(item.get("final_web_audit"), dict) else {},
             **external_facts,
+            **full_spectrum_audits,
             "recommendation": rec,
             "data_quality": item.get("data_quality", {}) if isinstance(item.get("data_quality"), dict) else {},
             "reason": str(item.get("reason", item.get("analysis", item.get("explanation", ""))))[:5000],
@@ -3906,6 +3931,12 @@ def _canonical_output_schema_text() -> str:
   "evidence_quality_score": 0,
   "minimum_evidence_needed": [],
   "external_facts_decision_impact": {"direction_impact":"supports_home/supports_draw/supports_away/mixed/unclear", "goal_impact":"supports_over/supports_under/mixed/unclear", "recommendation_impact":"can_upgrade/hold/downgrade/no_bet", "main_reason":"中文说明"},
+  "gemini_independent_research": {"searched":true, "key_sources":[], "missing_sources":[], "cross_checked_against_grok":"中文说明"},
+  "bookmaker_cross_audit": {"bet365":"中文说明", "william_hill":"中文说明", "pinnacle_or_low_margin":"中文说明", "jingcai":"中文说明", "average_market":"中文说明", "water_movement":"升水/降水/无可靠时间序列说明", "asian_handicap":"中文说明", "ou_total_goals":"中文说明", "correct_score_cluster":"中文说明", "bookmaker_intent":"中文庄家意图/诱盘/保护判断"},
+  "tempo_xg_tactical_audit": {"tempo":"low/medium/high/unclear", "xg_signal":"中文说明", "xga_signal":"中文说明", "pressing_transition":"中文说明", "formation_matchup":"中文说明", "key_player_impact":"中文说明"},
+  "worldcup_upset_audit": {"context":"group_stage/knockout/friendly/other", "japan_type_counter":"yes/no/unclear+中文说明", "morocco_type_low_block":"yes/no/unclear+中文说明", "croatia_type_resilience":"yes/no/unclear+中文说明", "favorite_slow_start_risk":"中文说明", "upset_path":"中文说明"},
+  "score_elimination_audit": {"0-0":"keep/reject+原因", "1-1":"keep/reject+原因", "2-2":"keep/reject+原因", "1-2":"keep/reject+原因", "2-1":"keep/reject+原因", "selected_score_final_reason":"中文说明"},
+  "dirty_work_checklist": {"lineup":false, "injury_suspension":false, "motivation_table":false, "weather_pitch":false, "referee":false, "travel_rest":false, "odds_sources":false, "xg_tempo":false, "worldcup_context":false},
   "recommendation_components": {
     "direction_edge":0,
     "score_cluster_strength":0,
@@ -3933,7 +3964,7 @@ def _canonical_output_schema_text() -> str:
   "data_quality": {"missing":[], "raw_packet_quality":"high/medium/low"},
   "reason":"中文综合理由"
 }
-硬约束：final_direction 只能是 home/draw/away；no_bet/observe 只能写在 recommendation.bet_action，不能写成 final_direction；系统级 abstain 只用于程序兜底，不允许 AI 主动输出。predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若强队让球达到球半/两球级别，但1X2胜赔仍在1.23-1.55、平赔/1-1锚点没有被抬死，必须按“深盘造强、胜赔不实压”审计，risk_score_candidates 至少保留 1-1 与强队一球小胜路径，推荐不得升为 main。若使用伤停/首发/战意/轮换/赛程/天气等外部事实影响推荐，必须提供 external_fact_table 与有效 source_url；无来源或来源冲突未解决时只能降级，不得升为 main。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
+硬约束：final_direction 只能是 home/draw/away；no_bet/observe 只能写在 recommendation.bet_action，不能写成 final_direction；系统级 abstain 只用于程序兜底，不允许 AI 主动输出。predicted_score 暗示的方向必须等于 final_direction；goal_band 与 predicted_score 总进球一致；btts 与 predicted_score 一致；top3[0].score 必须等于 predicted_score；必须完成 score_cluster_audit / sharp_money_audit / anchor_audit / recommendation_components / bookmaker_cross_audit / tempo_xg_tactical_audit / score_elimination_audit。若主胜概率低于或等于52%、客胜概率不低于23%、且 BTTS=yes，不得把 1-2、2-2、2-3 视为无关尾部；如果最终仍选主胜 2-1，必须说明为什么排除客队反打与 4+尾部，并填充 risk_score_candidates / tail_risk_flags。若强队让球达到球半/两球级别，但1X2胜赔仍在1.23-1.55、平赔/1-1锚点没有被抬死，必须按“深盘造强、胜赔不实压”审计，risk_score_candidates 至少保留 1-1 与一球小胜路径。若使用伤停/首发/战意/轮换/赛程/天气/xG/赔率源等外部事实影响推荐，必须提供 external_fact_table 与有效 source_url；无来源或来源冲突未解决时只能降级，不得升为 main。若证据不足，请 recommendation.is_recommended=false、bet_action=observe/no_bet，不要硬推。
 """.strip()
 
 
@@ -3992,7 +4023,7 @@ def _short_prediction_for_prompt(r: Dict[str, Any]) -> Dict[str, Any]:
         "contextual_logic", "rejected_cases", "recommendation_components", "recommendation",
         "data_quality", "reason", "web_research", "final_web_audit", "risk_score_candidates",
         "tail_risk_flags", "confidence_downgrade_reason", "validation_warnings",
-        *EXTERNAL_FACT_FIELDS,
+        *EXTERNAL_FACT_FIELDS, *FULL_SPECTRUM_AUDIT_FIELDS,
     ]:
         if k in r:
             keep[k] = r[k]
@@ -4030,6 +4061,10 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("你是 Gemini 最终 Web-aware 裁判。你必须重新审计 raw evidence、GPT/Grok 初审、互审意见、v20.3市场簇和联网来源质量。")
     p.append("【独立联网裁判职责】：即使 Grok 无法联网、来源为空或数据混乱，你也不能只复述 Grok。若你的 API/模型具备联网能力，必须独立执行 Web-Augmented Match Research，交叉验证球队新闻、伤停首发、战意赛程、天气场地、权威赔率/盘口快照与主流数据源；若无法联网，必须在 web_research.used=false 与 final_web_audit.web_used_by_final=false 中写明 no_web_tool_available/no_web_capability_or_disabled，且任何依赖外部事实的推荐不得升为 main。")
     p.append("【全市场终审职责】：你是最终裁判，必须自己复核 1X2 欧赔/竞彩、HHAD/亚盘让球语义、总进球/大小球、正确比分赔率簇、相邻比分、BTTS、资金热度/Sharp、dual_market_divergence_calibration 与 score_cluster_diagnostics_v203；不得把赔率、亚盘、比分簇任务只交给 GPT/Grok。最终方向、比分、推荐等级必须由你完成全维读盘后裁定。")
+    p.append("【庄家逆向读盘职责】：必须像庄家一样审计 Bet365、William Hill/威廉希尔、Pinnacle/低抽水基准、竞彩与百家均值之间的分歧；逐项解释升水/降水、亚盘升降盘、大小球水位、总进球赔率、正确比分簇是否在保护、诱导、分散或封顶。没有真实时间序列时只能写当前快照，不得编造临场故事。")
+    p.append("【节奏/xG/战术脏活】：必须独立查并评估球队节奏、xG/xGA、射门质量、转换速度、压迫强度、阵型对位、核心球员缺阵/复出、天气场地、裁判尺度、旅行休息和赛程密度；这些只能作为读盘证据，不能无来源升 main。")
+    p.append("【世界杯爆冷脑回路】：必须主动审计日本型反击爆冷、摩洛哥型低位铁桶、克罗地亚型韧性拖平/加时土壤、强队慢热/名气过热/弱队效率反杀路径；输出 worldcup_upset_audit，不得用强弱名气直接杀冷。")
+    p.append("【比分淘汰协议】：最终选比分前必须逐一审计 0-0、1-1、2-2、1-2、2-1 以及相邻镜像比分，说明 keep/reject 原因；尤其 2-1 只有在 1-1/1-2/2-2/高分尾部被充分排除后才能主推。")
     p.append("【前置共识权重】：如果 GPT 和 Grok 在方向或比分上达成高度一致（例如均为 1-0），除非你有致命的反向硬证据（例如明显的伤停或极强的聪明钱背离），否则不得仅仅因为 1-1 或 0-0 是全场最低赔率，就强行推翻前置共识走向保守平局。")
     p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
     p.append("1. 进攻高波联赛（如德甲、荷甲、挪超、美职、澳超等）：防守往往让位于进攻，不要机械拘泥于 2-1 或防守平局。若双方战术开放且支持 BTTS，必须敢于将 3-2、3-1 甚至 4-2 这种极端高比分直接作为主推首选，不要仅仅把它们当做风险尾部藏起来！")
@@ -4043,7 +4078,7 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("S级必须同时满足：方向边际强、比分簇强、总进球带强、相邻比分解释完整、Sharp/热度不冲突、推荐组件分数透明。仅赔率低赔最多A；无真实联网且依赖阵容/战意/伤停，最高B。")
     p.append("Grok Web-Max 证据规则：你必须审计 Grok 的 external_fact_table、source_conflict_audit、evidence_quality_score、minimum_evidence_needed。若外部事实来源为空、URL为空/#、来源冲突未解决或 evidence_quality_score<50，任何依赖伤停/首发/战意/轮换/赛程/天气的推荐不得升为 main；可以保留比分判断，但必须降级 recommendation。")
     p.append("禁止把当前赔率快照讲成盘口时间序列；没有本地多时间点数据时，不得引用 T-60m/T-30m、临场回补、资金持续流入或诱盘闭环。")
-    p.append("强制输出 recommendation_components，不能只给 tier 和 bet_confidence。")
+    p.append("强制输出 recommendation_components、gemini_independent_research、bookmaker_cross_audit、tempo_xg_tactical_audit、worldcup_upset_audit、score_elimination_audit、dirty_work_checklist，不能只给 tier 和 bet_confidence。")
     p.append("最终推荐等级、是否进 Top4、bet_confidence 全部由你输出；本地只排序，不会改你的足球判断。")
     p.append("</final_adjudication_protocol>\n")
     p.append("<output_schema>")
@@ -4147,7 +4182,7 @@ def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_p
     p = []
     p.append("你是 Consistency Judge，只检查结构一致性，不做足球判断，不改变预测方向/比分，除非存在字段自相矛盾时给出 repair 建议。")
     p.append("输出严格 JSON object：{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[],\"repair\":{...}}]}。")
-    p.append("检查：final_direction 只能是 home/draw/away，no_bet/observe 只能存在于 recommendation.bet_action；predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；external_fact_table 非空时每条必须有 source_url，且必须同步存在 source_conflict_audit/evidence_quality_score/external_facts_decision_impact；若外部事实无来源或冲突未解决，repair 只能降级 recommendation 为 observe/no_bet，不得改比分硬升；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components 必须存在；risk_score_candidates/tail_risk_flags/confidence_downgrade_reason 若存在必须保持数组/字符串结构。")
+    p.append("检查：final_direction 只能是 home/draw/away，no_bet/observe 只能存在于 recommendation.bet_action；predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；external_fact_table 非空时每条必须有 source_url，且必须同步存在 source_conflict_audit/evidence_quality_score/external_facts_decision_impact；若外部事实无来源或冲突未解决，repair 只能降级 recommendation 为 observe/no_bet，不得改比分硬升；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components/bookmaker_cross_audit/tempo_xg_tactical_audit/score_elimination_audit 必须存在；score_elimination_audit 必须覆盖 0-0/1-1/2-2/1-2/2-1；risk_score_candidates/tail_risk_flags/confidence_downgrade_reason 若存在必须保持数组/字符串结构。")
     p.append("不得根据足球观点改比分，只能修字段。")
     p.append("<evidence_batch>")
     for e in evidence_batch:
@@ -4546,7 +4581,7 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
             "risk_score_candidates", "tail_risk_flags", "confidence_downgrade_reason",
             "market_audit", "score_cluster_audit", "goal_market_audit", "market_conflicts", "candidate_scores",
             "public_heat_audit", "packet_news_risk_audit", "trap_candidates", "final_score_audit",
-            "family_debate", *EXTERNAL_FACT_FIELDS,
+            "family_debate", *EXTERNAL_FACT_FIELDS, *FULL_SPECTRUM_AUDIT_FIELDS,
         ]:
             if k == "evidence_quality_score" and raw_item.get(k) not in (None, ""):
                 row[k] = int(_clip(_f(raw_item.get(k), 0), 0, 100))
@@ -5467,7 +5502,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "tail_risk_flags", "confidence_downgrade_reason", "market_audit",
         "goal_market_audit", "market_conflicts", "candidate_scores", "public_heat_audit",
         "packet_news_risk_audit", "trap_candidates", "final_score_audit", "family_debate",
-        *EXTERNAL_FACT_FIELDS,
+        *EXTERNAL_FACT_FIELDS, *FULL_SPECTRUM_AUDIT_FIELDS,
     ]:
         v = ai_r.get(k, None)
         if v in (None, {}, []):
