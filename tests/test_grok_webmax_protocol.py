@@ -39,6 +39,65 @@ def test_final_referee_prompts_enforce_grok_webmax_source_quality():
         assert "禁止" in prompt and "时间序列" in prompt
 
 
+def test_output_schema_keeps_no_bet_out_of_final_direction():
+    schema = predict._canonical_output_schema_text()
+
+    assert '"final_direction": "home/draw/away"' in schema
+    assert "final_direction 只能是 home/draw/away" in schema
+    assert "no_bet/observe 只能写在 recommendation.bet_action" in schema
+    assert "系统级 abstain 只用于程序兜底" in schema
+
+
+def test_phase1_addendum_uses_no_bet_as_recommendation_action_only():
+    assert "允许 final_direction=abstain/no_bet" not in predict.PHASE1_ROLE_SPLIT_ADDENDUM
+    assert "final_direction 只能是 home/draw/away" in predict.PHASE1_ROLE_SPLIT_ADDENDUM
+    assert "bet_action=observe/no_bet" in predict.PHASE1_ROLE_SPLIT_ADDENDUM
+
+
+def test_grok_phase1_prompt_preserves_schema_despite_not_final_referee():
+    prompt = predict.build_phase1_prompt([{"match": 1}], "grok")
+
+    assert "Grok重点【Web-Max 外部事实与资金背离审判员" in prompt
+    assert "external_fact_table/source_conflict_audit/evidence_quality_score" in prompt
+    assert "暂定 final_direction/predicted_score" in prompt
+    assert "不要做最终比分预测" not in prompt
+    assert '"final_direction": "home/draw/away"' in prompt
+
+
+def test_consistency_judge_checks_external_fact_source_integrity():
+    prompt = predict.build_consistency_judge_prompt([{"match": 1}], {1: {"match": 1, "final_direction": "home", "predicted_score": "2-0"}})
+
+    assert "final_direction 只能是 home/draw/away" in prompt
+    assert "no_bet/observe 只能存在于 recommendation.bet_action" in prompt
+    assert "external_fact_table 非空时每条必须有 source_url" in prompt
+    assert "source_conflict_audit/evidence_quality_score/external_facts_decision_impact" in prompt
+    assert "repair 只能降级 recommendation 为 observe/no_bet" in prompt
+
+
+def test_invalid_ai_final_direction_is_warned_and_score_direction_preserved():
+    obj = {
+        "predictions": [
+            {
+                "match": 1,
+                "final_direction": "no_bet",
+                "predicted_score": "1-1",
+                "top3": [{"score": "1-1"}],
+                "anchor_audit": {},
+                "score_cluster_audit": {},
+                "sharp_money_audit": {},
+                "recommendation_components": {},
+                "recommendation": {"is_recommended": False, "bet_action": "no_bet"},
+            }
+        ]
+    }
+
+    row = predict.normalize_ai_predictions(obj, [1], "gemini", "final")[1]
+
+    assert row["final_direction"] == "draw"
+    assert row["raw_ai_direction"] == "draw"
+    assert "invalid_final_direction_protocol_fixed:no_bet->draw" in row["validation_warnings"]
+
+
 def test_external_fact_fields_survive_normalize_and_frontend_adapt():
     obj = {
         "predictions": [
