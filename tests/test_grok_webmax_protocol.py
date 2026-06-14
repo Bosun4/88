@@ -39,6 +39,21 @@ def test_final_referee_prompts_enforce_grok_webmax_source_quality():
         assert "禁止" in prompt and "时间序列" in prompt
 
 
+def test_gemini_final_referee_gets_independent_web_and_market_tasks():
+    prompt = predict.build_gemini_final_prompt([{"match": 1}], {"gpt": {}, "grok": {}}, {})
+
+    assert "独立联网裁判职责" in prompt
+    assert "即使 Grok 无法联网" in prompt
+    assert "必须独立执行 Web-Augmented Match Research" in prompt
+    assert "final_web_audit.web_used_by_final=false" in prompt
+    assert "全市场终审职责" in prompt
+    assert "1X2 欧赔/竞彩" in prompt
+    assert "HHAD/亚盘让球语义" in prompt
+    assert "总进球/大小球" in prompt
+    assert "正确比分赔率簇" in prompt
+    assert "不得把赔率、亚盘、比分簇任务只交给 GPT/Grok" in prompt
+
+
 def test_output_schema_keeps_no_bet_out_of_final_direction():
     schema = predict._canonical_output_schema_text()
 
