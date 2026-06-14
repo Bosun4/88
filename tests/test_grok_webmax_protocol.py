@@ -22,6 +22,8 @@ def test_grok_webmax_instruction_replaces_timeline_storytelling():
     assert "T-30m" in instr
     assert "临场回补" in instr
     assert "资金持续流入" in instr
+    assert "Bet365/William Hill/威廉希尔/Pinnacle/竞彩/百家均值" in instr
+    assert "赔率升水降水与大小球变化不一致" in instr
 
 
 def test_final_referee_prompts_enforce_grok_webmax_source_quality():
@@ -52,6 +54,34 @@ def test_gemini_final_referee_gets_independent_web_and_market_tasks():
     assert "总进球/大小球" in prompt
     assert "正确比分赔率簇" in prompt
     assert "不得把赔率、亚盘、比分簇任务只交给 GPT/Grok" in prompt
+    assert "庄家逆向读盘职责" in prompt
+    assert "Bet365、William Hill/威廉希尔、Pinnacle/低抽水基准、竞彩与百家均值" in prompt
+    assert "节奏/xG/战术脏活" in prompt
+    assert "日本型反击爆冷" in prompt
+    assert "摩洛哥型低位铁桶" in prompt
+    assert "克罗地亚型韧性拖平" in prompt
+    assert "比分淘汰协议" in prompt
+    assert "0-0、1-1、2-2、1-2、2-1" in prompt
+
+
+def test_full_spectrum_audit_schema_and_consistency_requirements():
+    schema = predict._canonical_output_schema_text()
+    judge = predict.build_consistency_judge_prompt([{"match": 1}], {1: {"match": 1, "final_direction": "home", "predicted_score": "2-0"}})
+
+    for key in [
+        "gemini_independent_research",
+        "bookmaker_cross_audit",
+        "tempo_xg_tactical_audit",
+        "worldcup_upset_audit",
+        "score_elimination_audit",
+        "dirty_work_checklist",
+    ]:
+        assert key in schema
+    assert "bet365" in schema
+    assert "william_hill" in schema
+    assert "0-0" in schema and "1-1" in schema and "2-2" in schema and "1-2" in schema and "2-1" in schema
+    assert "bookmaker_cross_audit/tempo_xg_tactical_audit/score_elimination_audit 必须存在" in judge
+    assert "score_elimination_audit 必须覆盖 0-0/1-1/2-2/1-2/2-1" in judge
 
 
 def test_output_schema_keeps_no_bet_out_of_final_direction():
@@ -145,6 +175,11 @@ def test_external_fact_fields_survive_normalize_and_frontend_adapt():
                 "evidence_quality_score": 88,
                 "minimum_evidence_needed": [],
                 "external_facts_decision_impact": {"direction_impact": "supports_home", "recommendation_impact": "hold"},
+                "bookmaker_cross_audit": {"bet365": "主胜降水但威廉平赔未抬死", "water_movement": "当前快照，不编时间线"},
+                "tempo_xg_tactical_audit": {"tempo": "high", "xg_signal": "主队高压创造质量更好"},
+                "worldcup_upset_audit": {"japan_type_counter": "unclear", "morocco_type_low_block": "no", "croatia_type_resilience": "no"},
+                "score_elimination_audit": {"0-0": "reject", "1-1": "reject", "2-2": "reject", "1-2": "reject", "2-1": "keep"},
+                "dirty_work_checklist": {"lineup": True, "odds_sources": True, "xg_tempo": True},
                 "recommendation": {"tier": "B", "is_recommended": True, "bet_action": "small", "bet_confidence": 62},
                 "reason": "官方首发确认，支持主队方向。",
             }
@@ -157,6 +192,9 @@ def test_external_fact_fields_survive_normalize_and_frontend_adapt():
     front = predict.adapt_ai_to_frontend(row, {"league": "世界杯", "sp_home": 1.55, "s11": 8.0})
     assert front["external_fact_table"][0]["source_url"] == "https://example.com/news"
     assert front["evidence_quality_score"] == 88
+    assert front["bookmaker_cross_audit"]["bet365"] == "主胜降水但威廉平赔未抬死"
+    assert front["tempo_xg_tactical_audit"]["tempo"] == "high"
+    assert front["score_elimination_audit"]["2-1"] == "keep"
 
 
 def test_grok_external_fact_fields_reach_final_referee_prompts():
