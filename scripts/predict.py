@@ -4028,6 +4028,8 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p = []
     p.append("<final_adjudication_protocol>")
     p.append("你是 Gemini 最终 Web-aware 裁判。你必须重新审计 raw evidence、GPT/Grok 初审、互审意见、v20.3市场簇和联网来源质量。")
+    p.append("【独立联网裁判职责】：即使 Grok 无法联网、来源为空或数据混乱，你也不能只复述 Grok。若你的 API/模型具备联网能力，必须独立执行 Web-Augmented Match Research，交叉验证球队新闻、伤停首发、战意赛程、天气场地、权威赔率/盘口快照与主流数据源；若无法联网，必须在 web_research.used=false 与 final_web_audit.web_used_by_final=false 中写明 no_web_tool_available/no_web_capability_or_disabled，且任何依赖外部事实的推荐不得升为 main。")
+    p.append("【全市场终审职责】：你是最终裁判，必须自己复核 1X2 欧赔/竞彩、HHAD/亚盘让球语义、总进球/大小球、正确比分赔率簇、相邻比分、BTTS、资金热度/Sharp、dual_market_divergence_calibration 与 score_cluster_diagnostics_v203；不得把赔率、亚盘、比分簇任务只交给 GPT/Grok。最终方向、比分、推荐等级必须由你完成全维读盘后裁定。")
     p.append("【前置共识权重】：如果 GPT 和 Grok 在方向或比分上达成高度一致（例如均为 1-0），除非你有致命的反向硬证据（例如明显的伤停或极强的聪明钱背离），否则不得仅仅因为 1-1 或 0-0 是全场最低赔率，就强行推翻前置共识走向保守平局。")
     p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
     p.append("1. 进攻高波联赛（如德甲、荷甲、挪超、美职、澳超等）：防守往往让位于进攻，不要机械拘泥于 2-1 或防守平局。若双方战术开放且支持 BTTS，必须敢于将 3-2、3-1 甚至 4-2 这种极端高比分直接作为主推首选，不要仅仅把它们当做风险尾部藏起来！")
