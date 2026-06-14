@@ -73,7 +73,7 @@ PHASE1_NAMES = ["gpt", "grok"]
 DEFAULT_MODELS = {
     "gpt": "熊猫-特供-X-10-gpt-5.5",
     "grok": "熊猫-A-5-grok-4.2-fast-200w上下文",
-    "gemini": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview",
+    "gemini": "熊猫-X-10-官逆-gemini-3.1-pro-联网",
 }
 
 CRS_FULL_MAP = {
