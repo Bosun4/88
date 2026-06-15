@@ -26,10 +26,32 @@ TEAM_NAME_MAPPING = {
     "南安普顿":"Southampton","莱斯特城":"Leicester City",
 }
 
+# 国家队中→英映射（世界杯/国际赛事专用）。
+# The Odds API soccer_fifa_world_cup 用英文国名；中文名走 GoogleTranslator 会因
+# ".replace('联',' United')" 等规则被污染且联网不稳，故对国家队走显式 SSOT 映射。
+NATIONAL_TEAM_MAPPING = {
+    "阿根廷":"Argentina","巴西":"Brazil","法国":"France","德国":"Germany",
+    "西班牙":"Spain","英格兰":"England","葡萄牙":"Portugal","荷兰":"Netherlands",
+    "比利时":"Belgium","克罗地亚":"Croatia","意大利":"Italy","乌拉圭":"Uruguay",
+    "哥伦比亚":"Colombia","墨西哥":"Mexico","美国":"USA","日本":"Japan",
+    "韩国":"South Korea","沙特":"Saudi Arabia","伊朗":"Iran","澳大利亚":"Australia",
+    "瑞士":"Switzerland","瑞典":"Sweden","挪威":"Norway","丹麦":"Denmark",
+    "塞内加尔":"Senegal","摩洛哥":"Morocco","加纳":"Ghana","突尼斯":"Tunisia",
+    "埃及":"Egypt","阿尔及利":"Algeria","阿尔及利亚":"Algeria","科特迪瓦":"Ivory Coast",
+    "喀麦隆":"Cameroon","尼日利亚":"Nigeria","南非":"South Africa","刚果金":"DR Congo",
+    "佛得角":"Cape Verde","加拿大":"Canada","厄瓜多尔":"Ecuador","巴拉圭":"Paraguay",
+    "乌兹别克":"Uzbekistan","乌兹别克斯坦":"Uzbekistan","伊拉克":"Iraq","约旦":"Jordan",
+    "卡塔尔":"Qatar","新西兰":"New Zealand","奥地利":"Austria","土耳其":"Turkey",
+    "波黑":"Bosnia and Herzegovina","捷克":"Czech Republic","苏格兰":"Scotland",
+    "海地":"Haiti","巴拿马":"Panama","库拉索":"Curacao","波兰":"Poland",
+    "塞尔维亚":"Serbia","乌克兰":"Ukraine","威尔士":"Wales","哥斯达黎加":"Costa Rica",
+}
+
 def translate_team_name(name):
     if not name: return ""
     name = str(name).strip()
     if name in TEAM_NAME_MAPPING: return TEAM_NAME_MAPPING[name]
+    if name in NATIONAL_TEAM_MAPPING: return NATIONAL_TEAM_MAPPING[name]
     try:
         from deep_translator import GoogleTranslator
         clean = name.replace("女足"," Women").replace("联"," United")

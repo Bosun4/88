@@ -54,6 +54,7 @@ LEAGUE_SPORT_KEY = {
     "美职": "soccer_usa_mls",
     "挪超": "soccer_norway_eliteserien",
     "瑞超": "soccer_sweden_allsvenskan",
+    "世界杯": "soccer_fifa_world_cup",
     "欧冠": "soccer_uefa_champs_league",
     "欧罗巴": "soccer_uefa_europa_league",
     "欧协联": "soccer_uefa_europa_conference_league",
