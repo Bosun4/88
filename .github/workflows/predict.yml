@@ -156,24 +156,31 @@ jobs:
 
           mkdir -p data/
 
-          git pull --rebase --autostash origin main
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "❌ origin/main 已在本次预测运行期间前进，拒绝把旧基底产物强行合并发布。请重新触发一次预测。"
+            exit 1
+          fi
 
           echo "🧹 Ensure runtime debug/cache artifacts are not committed"
           rm -rf data/ai_cache data/debug data/debug_v20 || true
 
           latest_history="$(find data -maxdepth 1 -type f -name 'history_*_today_*.json' -printf '%T@ %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)"
 
+          echo "🔒 JSON 硬闸: 产物必须能被浏览器 JSON.parse 解析"
+          node -e 'const fs=require("fs"); for (const p of process.argv.slice(1)) { JSON.parse(fs.readFileSync(p,"utf8")); console.log("JSON OK", p); }' data/predictions.json ${latest_history:+"$latest_history"}
+
+          echo "🔒 冲突标记硬闸: 绝不推送带 git 冲突标记的损坏产物"
+          if grep -nE '^(<<<<<<<|=======|>>>>>>>)' data/predictions.json ${latest_history:+"$latest_history"}; then
+            echo "❌ 检测到未解决的 git 冲突标记，中止本次推送，保护线上产物。"
+            exit 1
+          fi
+
           git add data/predictions.json
           if [ -n "$latest_history" ]; then
             git add "$latest_history"
           fi
-
-          echo "🔒 冲突标记硬闸: 绝不推送带 git 冲突标记的损坏产物"
-          if git diff --cached -U0 | grep -nE '^\+(<<<<<<<|=======|>>>>>>>)' ; then
-            echo "❌ 检测到未解决的 git 冲突标记(多为 --autostash pop 未合并所致)，中止本次推送，保护线上产物。"
-            exit 1
-          fi
-          echo "✅ 无冲突标记，继续。"
+          echo "✅ JSON 与冲突标记硬闸通过，继续。"
 
           if ! git diff --cached --quiet; then
             git commit -m "🤖 Auto-update prediction data (manual event-driven strict-ai-no-cache)"
