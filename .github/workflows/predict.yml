@@ -168,6 +168,13 @@ jobs:
             git add "$latest_history"
           fi
 
+          echo "🔒 冲突标记硬闸: 绝不推送带 git 冲突标记的损坏产物"
+          if git diff --cached -U0 | grep -nE '^\+(<<<<<<<|=======|>>>>>>>)' ; then
+            echo "❌ 检测到未解决的 git 冲突标记(多为 --autostash pop 未合并所致)，中止本次推送，保护线上产物。"
+            exit 1
+          fi
+          echo "✅ 无冲突标记，继续。"
+
           if ! git diff --cached --quiet; then
             git commit -m "🤖 Auto-update prediction data (manual event-driven strict-ai-no-cache)"
             git push
