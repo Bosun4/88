@@ -8,6 +8,7 @@ import subprocess
 import traceback
 import asyncio
 import time
+import math
 from datetime import datetime, timedelta, timezone
 
 # ============================================================
@@ -35,6 +36,30 @@ def env_int(name: str, default: int = 0) -> int:
         return int(float(str(os.environ.get(name, default)).strip()))
     except Exception:
         return default
+
+
+def _json_safe(value):
+    """Convert non-standard JSON values (NaN/Inf) to browser-parseable JSON."""
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    if isinstance(value, dict):
+        return {str(k): _json_safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(v) for v in value]
+    return value
+
+
+def write_json_atomic(path: str, payload: dict):
+    """Write valid JSON atomically: temp file -> validate -> os.replace."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    safe_payload = _json_safe(payload)
+    tmp_path = f"{path}.tmp"
+    with open(tmp_path, "w", encoding="utf-8") as f:
+        json.dump(safe_payload, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write("\n")
+    with open(tmp_path, "r", encoding="utf-8") as f:
+        json.load(f)
+    os.replace(tmp_path, path)
 
 
 def auto_install():
@@ -300,10 +325,6 @@ def main():
             },
         }
 
-        # 先写空骨架，防止后续流程找不到文件
-        with open(target_path, "w", encoding="utf-8") as f:
-            json.dump(final_output, f, ensure_ascii=False, indent=2)
-
         # ============================================================
         # 只抓 today
         # ============================================================
@@ -332,18 +353,22 @@ def main():
         if not raw_data or not raw_data.get("matches"):
             print(f"  [SKIP] {target_date} 暂无比赛数据，跳过 AI 推理。")
 
+            if not env_bool("VMAX_ALLOW_EMPTY_PUBLISH", False):
+                raise RuntimeError(
+                    "未抓到比赛数据，默认保护上一份 predictions.json；"
+                    "如确认是无赛程日，请显式设置 VMAX_ALLOW_EMPTY_PUBLISH=true。"
+                )
+
             final_output["matches"]["today"] = []
             final_output["update_time"] = datetime.now(beijing_tz).strftime("%Y-%m-%d %H:%M:%S")
 
-            with open(target_path, "w", encoding="utf-8") as f:
-                json.dump(final_output, f, ensure_ascii=False, indent=2)
+            write_json_atomic(target_path, final_output)
 
             history_path = os.path.join(
                 data_dir,
                 f"history_{target_date}_today_{session}.json",
             )
-            with open(history_path, "w", encoding="utf-8") as f:
-                json.dump(final_output, f, ensure_ascii=False, indent=2)
+            write_json_atomic(history_path, final_output)
 
             print("✅ 已落盘空 today 结构。")
             return
@@ -375,15 +400,13 @@ def main():
 
         final_output["update_time"] = datetime.now(beijing_tz).strftime("%Y-%m-%d %H:%M:%S")
 
-        with open(target_path, "w", encoding="utf-8") as f:
-            json.dump(final_output, f, ensure_ascii=False, indent=2)
+        write_json_atomic(target_path, final_output)
 
         history_path = os.path.join(
             data_dir,
             f"history_{target_date}_today_{session}.json",
         )
-        with open(history_path, "w", encoding="utf-8") as f:
-            json.dump(final_output, f, ensure_ascii=False, indent=2)
+        write_json_atomic(history_path, final_output)
 
         print(f"  ✅ today 任务完成，数据已同步至 predictions.json")
 
