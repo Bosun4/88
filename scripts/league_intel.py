@@ -335,6 +335,13 @@ def analyze_world_cup_context(m):
     # 1. 赛制前置闸 (2026新制)
     lines.append("[WC2026] 48\u961f/12\u7ec4/\u524d2+8\u4e2a\u6700\u4f73\u7b2c\u4e09\u540d\u664b\u7ea7; \u6700\u4f73\u7b2c\u4e09\u540d\u673a\u5236\u4f7f\u672b\u8f6e\u8eba\u5e73\u52a8\u673a\u4e0b\u964d")
 
+    # 1b. 生态先验 (5届320场实证数值档, 作evidence非裁判): 场均偏低/U2.5偏高, 中立场无主场优势
+    _wc = LEAGUE_PROFILES.get("world_cup", LEAGUE_PROFILES["default"])
+    lines.append(
+        "[WC-ECO] \u4e16\u754c\u676f\u751f\u6001\u5148\u9a8c(5\u5c4a320\u573a): \u573a\u5747%.2f\u7403(\u504f\u4f4e)\u3001O2.5\u7ea6%d%%\u3001U2.5\u7ea6%d%%\u3001\u4e3b\u573a\u4f18\u52bf=0(\u4e2d\u7acb\u573a)\u3002\u4e16\u754c\u676f\u662f\u4e2d\u7acb\u573a\u9526\u6807\u8d5b\u8db3\u7403,\u9ed8\u8ba4\u504f\u4f4e\u5206/\u9632\u5b88\u53cd\u51fb,\u4e0d\u5f97\u7167\u642c\u9ad8\u8282\u594f\u8054\u8d5b\u5927\u7403\u601d\u7ef4;\u65e0\u4e3b\u573a\u4f18\u52bf,\u4e3b\u5ba2\u4ec5\u4ee3\u8868\u540d\u4e49\u987a\u4f4d\u4e0d\u4ee3\u8868\u5730\u5229\u3002"
+        % (float(_wc[0]), int(_wc[1]), int(_wc[2]))
+    )
+
     # 2. 分轮战意闸 (5届320场实证)
     rnd = _wc_detect_round(m)
     if rnd == "R1":

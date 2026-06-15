@@ -4902,6 +4902,7 @@ LEAGUE_DNA_PROFILES = {
     "挪超": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "节奏与大球尾部较强，比分需用簇而非单点"},
     "美职": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 2, "notes": "主客差/旅行/反转波动大，客胜默认高风险"},
     "葡超": {"volatility": "medium", "draw_risk": "medium", "btts": "medium", "away_penalty": 0, "notes": "强弱分化明显，但中下游/保级题材需防平"},
+    "世界杯": {"volatility": "medium", "draw_risk": "high", "btts": "low", "away_penalty": 0, "neutral_venue": True, "notes": "世界杯=中立场锦标赛足球(5届320场场均2.48偏低/U2.5约28%)：默认低分/防守反击，不照搬联赛大球；无主场优势，主客名义≠地利；分轮战意差异大(首轮最闷、末轮控分/净胜球收窄)，比分用簇不用单点，强强/强弱错配防0封脆弱与诱盘"},
 }
 
 
