@@ -1809,7 +1809,9 @@ def _apply_external_fact_source_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
     text = _external_context_text(pred)
     needs_external_source = any(term.lower() in text for term in EXTERNAL_FACT_CONTEXT_TERMS)
     evidence_quality = _normalize_external_evidence_quality(pred)
-    if valid_sources == 0 and needs_external_source:
+
+    def _cap_to_c_observe(reason: str, tag_list: List[str], downgrade_msg: str) -> None:
+        """P1 硬闸统一降级动作: tier 封顶 C + 不推荐 + observe + gate 不过。"""
         rec = pred.setdefault("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
         if not isinstance(pred.get("recommendation"), dict):
             pred["recommendation"] = rec
@@ -1820,17 +1822,88 @@ def _apply_external_fact_source_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
         tags = rec.get("risk_tags", [])
         if not isinstance(tags, list):
             tags = [str(tags)] if tags else []
-        tags.extend(["missing_external_confirmation", "external_fact_without_source"])
+        tags.extend(tag_list)
         rec["risk_tags"] = list(dict.fromkeys(str(t) for t in tags if str(t).strip()))[:24]
         pred["recommendation_tier"] = rec["tier"]
         pred["recommend_gate_pass"] = False
-        pred.setdefault("recommend_gate_reasons", []).append("external_fact_without_source")
-        pred["confidence_downgrade_reason"] = "missing_external_confirmation: 外部事实论据缺少有效来源，禁止升权。"
-        warnings.extend(["external_fact_without_source", "missing_external_confirmation"])
-    elif 0 < evidence_quality < 50:
+        pred.setdefault("recommend_gate_reasons", []).append(reason)
+        if not pred.get("confidence_downgrade_reason"):
+            pred["confidence_downgrade_reason"] = downgrade_msg
+        warnings.extend(tag_list)
+
+    if valid_sources == 0 and needs_external_source:
+        _cap_to_c_observe(
+            "external_fact_without_source",
+            ["external_fact_without_source", "missing_external_confirmation"],
+            "missing_external_confirmation: 外部事实论据缺少有效来源，禁止升权。",
+        )
+
+    # P1 硬闸 3: evidence_quality 低于 50 从单纯 warning 升级为硬降级。
+    if 0 < evidence_quality < 50:
         warnings.append("external_evidence_quality_below_50")
+        if needs_external_source:
+            _cap_to_c_observe(
+                "external_evidence_quality_below_50",
+                ["external_evidence_quality_below_50"],
+                "external_evidence_quality_below_50: 证据质量<50，禁止依赖外部事实升权。",
+            )
+
+    # P1 硬闸 2: source_conflict_audit 未解决冲突 -> 硬降级。
+    if _has_unresolved_source_conflict(pred) and needs_external_source:
+        _cap_to_c_observe(
+            "unresolved_source_conflict",
+            ["unresolved_source_conflict"],
+            "unresolved_source_conflict: 来源冲突未解决，禁止升权。",
+        )
+
+    # P1 硬闸 1: external_fact 全部 stale/过旧 -> 硬降级。
+    if _all_external_facts_stale(pred) and needs_external_source:
+        _cap_to_c_observe(
+            "external_facts_all_stale",
+            ["external_facts_all_stale"],
+            "external_facts_all_stale: 外部事实均过时，禁止依赖陈旧情报升权。",
+        )
+
     pred["validation_warnings"] = list(dict.fromkeys(warnings))
     return pred
+
+
+def _has_unresolved_source_conflict(pred: Dict[str, Any]) -> bool:
+    """P1: source_conflict_audit.has_conflict=true 且 conflicts 非空 => 未解决冲突。"""
+    audit = pred.get("source_conflict_audit")
+    if not isinstance(audit, dict):
+        return False
+    if not audit.get("has_conflict"):
+        return False
+    conflicts = audit.get("conflicts")
+    return isinstance(conflicts, list) and len(conflicts) > 0
+
+
+# 新鲜度: same_day/recent_3d/recent/live/fresh 视为新鲜; stale/expired/old 视为过时。
+_FRESH_TOKENS = ("same_day", "recent_3d", "recent", "live", "fresh", "today")
+_STALE_TOKENS = ("stale", "expired", "old", "outdated")
+
+
+def _all_external_facts_stale(pred: Dict[str, Any]) -> bool:
+    """P1: external_fact_table 非空且所有条目 freshness 都是 stale/过旧 => 返回 True。
+    谨慎便: 只要有任一条 fresh 或 freshness 未知(unknown/空)就不判 stale，避免误杀。"""
+    facts = pred.get("external_fact_table")
+    if not isinstance(facts, list) or not facts:
+        return False
+    saw_any = False
+    for fact in facts:
+        if not isinstance(fact, dict):
+            continue
+        fr = str(fact.get("freshness", "")).strip().lower()
+        if not fr or fr == "unknown":
+            return False  # 未知新鲜度不当 stale，不误杀
+        if any(tok in fr for tok in _FRESH_TOKENS):
+            return False  # 有新鲜来源 -> 不是全 stale
+        if any(tok in fr for tok in _STALE_TOKENS):
+            saw_any = True
+            continue
+        return False  # 不识别的 freshness 值保守不判 stale
+    return saw_any
 
 
 def _source_quality_floor_and_cap(web_research: Dict[str, Any], external_fact_table: Any = None) -> Tuple[int, List[str]]:
