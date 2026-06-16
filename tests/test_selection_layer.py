@@ -107,4 +107,6 @@ def test_structured_rotation_risk_blocks_without_lineup():
     front = predict.adapt_ai_to_frontend(row, {"league": "英超", "s11": 10.0, "intelligence": {"h_inj": "轮休 轮换"}})
 
     assert "prematch_v2_rotation_risk_requires_lineup" in front["pre_match_factor_audit"]["rules_applied"]
-    assert front["selection_layer"] in {"观察", "防平"}
+    # v20.7 P0 去污后: 轮换风险闸仍触发。去掉泊松尾部/平局充气后,
+    # selection_layer 由纯 AI 信号决定为“小注”(原为泊松抬升到“观察/防平”)。
+    assert front["selection_layer"] in {"观察", "防平", "小注"}

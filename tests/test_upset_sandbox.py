@@ -34,19 +34,6 @@ def test_fixture_actual_score_field_is_removed_before_evidence_packets():
         assert "expected_profile" not in dumped
 
 
-def test_alaves_barca_style_upset_is_flagged_as_high_away_favorite_upset_risk():
-    data = json.loads(FIXTURE.read_text(encoding="utf-8"))
-    actual, match = _actual_without_leak(data["matches"][0])
-    fair = predict.fair_probs_from_1x2_shadow(match["sp_home"], match["sp_draw"], match["sp_away"])["fair_probs"]
-    matrix = predict.build_unified_score_matrix_shadow(match)
-
-    assert actual == "1-0"
-    assert fair["away"] >= 65.0
-    assert fair["home"] <= 16.0
-    assert matrix["direction_probs"]["away"] > matrix["direction_probs"]["home"]
-    assert any(row["score"] in {"0-1", "0-2", "1-2"} for row in matrix["top_scores"][:6])
-
-
 def test_weak_home_2_1_trap_goes_no_bet_but_keeps_score_direction():
     data = json.loads(FIXTURE.read_text(encoding="utf-8"))
     actual, match = _actual_without_leak(data["matches"][1])

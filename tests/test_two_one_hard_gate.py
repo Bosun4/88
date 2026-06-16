@@ -53,21 +53,6 @@ def test_home_2_1_with_weak_home_btts_tail_is_forced_no_bet_without_changing_sco
     assert front["sub50_tiebreaker_warning"] is True
 
 
-def test_home_2_1_matrix_draw_away_warning_blocks_recommendation():
-    row = _home_21_row(direction_probs={"home": 55, "draw": 24, "away": 21}, btts="no", risk_score_candidates=[])
-    row.update({
-        "matrix_direction_probs": {"home": 43, "draw": 31, "away": 26},
-        "matrix_disagreement_flags": {"matrix_draw_risk_warning": True, "matrix_away_tail_warning": True},
-    })
-    gated = predict.apply_two_one_home_hard_no_bet_gate(row)
-
-    assert gated["predicted_score"] == "2-1"
-    assert gated["final_direction"] == "home"
-    assert gated["recommend_gate_pass"] is False
-    assert gated["recommendation"]["tier"] == "D"
-    assert "matrix_draw_or_away_tail_warning" in gated["recommend_gate_reasons"]
-
-
 def test_home_2_1_strong_clean_case_is_not_blocked_by_hard_gate():
     row = _home_21_row(
         direction_probs={"home": 61, "draw": 22, "away": 17},
@@ -81,58 +66,6 @@ def test_home_2_1_strong_clean_case_is_not_blocked_by_hard_gate():
     assert gated["recommendation"]["tier"] == "A"
     assert gated["recommendation"].get("is_recommended") is True
     assert "two_one_home_hard_no_bet_gate_applied" not in gated.get("validation_warnings", [])
-
-
-def _benign_matrix_match_for_home_21():
-    return {
-        "home_team": "Strong Home",
-        "away_team": "Away",
-        "sp_home": 1.85,
-        "sp_draw": 3.55,
-        "sp_away": 4.20,
-        "a0": 12.0,
-        "a1": 6.2,
-        "a2": 3.5,
-        "a3": 3.7,
-        "a4": 6.0,
-        "a5": 13.0,
-        "a6": 28.0,
-        "a7": 60.0,
-        "w10": 8.5,
-        "w20": 9.0,
-        "w21": 8.0,
-        "w30": 18.0,
-        "w31": 16.0,
-        "w32": 26.0,
-        "s00": 11.0,
-        "s11": 7.0,
-        "s22": 15.0,
-        "l01": 13.0,
-        "l02": 21.0,
-        "l12": 13.5,
-        "l23": 40.0,
-    }
-
-
-def test_adapt_strong_clean_home_2_1_not_blocked_by_benign_matrix_distribution():
-    row = _home_21_row(
-        direction_probs={"home": 61, "draw": 22, "away": 17},
-        btts="no",
-        risk_score_candidates=[],
-        top3=[{"score": "2-1", "prob": 19}, {"score": "2-0", "prob": 14}],
-        recommendation={"tier": "A", "is_recommended": True, "bet_confidence": 72, "risk_level": "medium", "risk_tags": []},
-        reason="clean strong-home engineering fixture",
-    )
-    front = predict.adapt_ai_to_frontend(row, _benign_matrix_match_for_home_21())
-
-    assert front["predicted_score"] == "2-1"
-    assert front["final_direction"] == "home"
-    assert front["matrix_recommended_direction"] == "home"
-    assert front["matrix_disagreement_flags"]["matrix_vs_final_direction_conflict"] is False
-    assert front["recommendation"]["tier"] == "A"
-    assert front["recommend_gate_pass"] is True
-    assert "candidate_tail_probability_too_high" not in front.get("recommend_gate_reasons", [])
-    assert "two_one_home_hard_no_bet_gate_applied" not in front.get("validation_warnings", [])
 
 
 def test_normalize_fake_weak_home_2_1_preserves_tail_risk_for_later_no_bet():

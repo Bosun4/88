@@ -3785,7 +3785,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
             "empirical_experience_triggered_rules": experience_verdict.get("experience_analysis", {}).get("rules", []),
             "empirical_over_2_5_pct": experience_verdict.get("over_2_5", 50.0),
             "steam_movement_signals": steam_res if steam_res.get("steam") else None,
-            "compiler": "v20.6.0_shadow_pre_injected_with_quantitative_intelligence"
+            "compiler": "v20.7.0_poisson_purged_pure_board_reading"
         }
         
         # 6. 增强原有的市场模块并合并
@@ -3845,7 +3845,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
                 "note": "缺少国际欧赔基准或体彩赔率，无法计算防守偏斜度。自动退回单轨博弈。"
             }
 
-        evidence["evidence_compiler_version"] = "v20.6.0_shadow_pre_injected_with_quant"
+        evidence["evidence_compiler_version"] = "v20.7.0_poisson_purged_pure_board_reading"
         evidence.setdefault("protocol_notes", []).extend([
             "v20.6: local_quantitative_intelligence 与 jingcai_market_facts（纯抽水事实）已经预先注入；系统不提供静态数理/泊松比分基准。",
             "v20.6: dual_market_divergence_calibration 已注入高精度 Shin 偏斜度与 z-value，AI 必须检测风控背离。",
@@ -3855,7 +3855,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
             "v20.6: Gemini 必须基于相邻比分审计给出最终 predicted_score 并回答 mandatory_cross_anchor_questions。"
         ])
     except Exception as e:
-        evidence.setdefault("data_quality", {})["v206_shadow_pre_inject_error"] = str(e)[:300]
+        evidence.setdefault("data_quality", {})["v207_pre_inject_error"] = str(e)[:300]
     return evidence
 
 
@@ -4399,10 +4399,7 @@ def apply_two_one_home_hard_no_bet_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
     away_pct = _f(probs.get("away"), 0.0)
     non_home_pct = draw_pct + away_pct
 
-    matrix_probs = _extract_prob_map_0_100(pred.get("matrix_direction_probs"))
-    matrix_flags = pred.get("matrix_disagreement_flags", {}) if isinstance(pred.get("matrix_disagreement_flags"), dict) else {}
-    matrix_draw = _f(matrix_probs.get("draw"), 0.0)
-    matrix_away = _f(matrix_probs.get("away"), 0.0)
+    # v20.7 P0 去污: matrix_*(泊松出身)已删除,2-1 硬闸不再读任何泊松字段。
 
     candidates = _collect_score_candidates_for_gate(pred, raw_item)
     risk_scores = {c["score"] for c in candidates if c.get("score")}
@@ -4423,14 +4420,7 @@ def apply_two_one_home_hard_no_bet_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
         reasons.append("non_home_mass_too_high_for_home_2_1")
     if draw_pct >= 29.0 or away_pct >= 26.0:
         reasons.append("draw_or_away_probability_too_high_for_home_2_1")
-    if bool(matrix_flags.get("matrix_vs_final_direction_conflict")):
-        reasons.append("matrix_direction_conflicts_with_home_2_1")
-    if bool(matrix_flags.get("matrix_away_tail_warning")) or bool(matrix_flags.get("matrix_draw_risk_warning")):
-        reasons.append("matrix_draw_or_away_tail_warning")
-    if bool(matrix_flags.get("matrix_high_goal_tail_conflict")):
-        reasons.append("matrix_high_goal_tail_conflict_with_2_1")
-    if matrix_away >= 32.0 or matrix_draw >= 30.0:
-        reasons.append("matrix_non_home_probability_too_high")
+    # v20.7 P0 去污: 移除泊松 matrix_flags/draw/away 驱动的 NO_BET 判定,2-1 硬闸仅由 AI 概率与显式候选尾部驱动。
     if away_tail_prob >= 16.0 or draw_tail_prob >= 18.0:
         reasons.append("candidate_tail_probability_too_high")
     if tail_scores_present and (away_pct >= 22.0 or draw_pct >= 26.0):
@@ -4599,290 +4589,24 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
     return out
 
 
-def _normalize_prob_dict_shadow(d: Dict[Any, float], floor: float = 0.0) -> Dict[Any, float]:
-    vals = {k: max(floor, _f(v, 0.0)) for k, v in (d or {}).items()}
-    total = sum(vals.values())
-    if total <= 0:
-        n = len(vals) or 1
-        return {k: 1.0 / n for k in vals}
-    return {k: v / total for k, v in vals.items()}
 
 
-def fair_probs_from_1x2_shadow(sp_h: float, sp_d: float, sp_a: float, method: str = "power") -> Dict[str, Any]:
-    """Shadow-only 1X2 fair probabilities in percent; never feeds final decision fields."""
-    odds = {"home": _f(sp_h), "draw": _f(sp_d), "away": _f(sp_a)}
-    if any(v <= 1.01 for v in odds.values()):
-        return {
-            "method": "fallback",
-            "fair_probs": {"home": 33.3, "draw": 33.3, "away": 33.4},
-            "raw_implied": {"home": 33.3, "draw": 33.3, "away": 33.4},
-            "overround": 0.0,
-        }
-    q = {k: 1.0 / v for k, v in odds.items()}
-    overround_sum = sum(q.values())
-    raw_pct = {k: round(v * 100, 3) for k, v in q.items()}
-    if method == "multiplicative":
-        p = _normalize_prob_dict_shadow(q)
-        used = "multiplicative"
-    else:
-        lo, hi = 0.01, 10.0
-        for _ in range(80):
-            mid = (lo + hi) / 2.0
-            sm = sum(v ** mid for v in q.values())
-            if sm > 1.0:
-                lo = mid
-            else:
-                hi = mid
-        k = (lo + hi) / 2.0
-        p = _normalize_prob_dict_shadow({name: val ** k for name, val in q.items()})
-        used = "power"
-    fair = {k: round(v * 100, 3) for k, v in p.items()}
-    drift = round(100.0 - sum(fair.values()), 3)
-    if fair:
-        last = list(fair.keys())[-1]
-        fair[last] = round(fair[last] + drift, 3)
-    return {"method": used, "fair_probs": fair, "raw_implied": raw_pct, "overround": round(overround_sum - 1.0, 5)}
 
 
-def fair_probs_from_ttg_shadow(match_obj: Dict[str, Any], method: str = "power") -> Dict[int, float]:
-    """Shadow-only total-goals distribution from a0-a7; returns 0..1 probabilities."""
-    raw = {}
-    for g in range(8):
-        odd = _f((match_obj or {}).get(f"a{g}", 0))
-        if odd > 1.01:
-            raw[g] = 1.0 / odd
-    if len(raw) < 3:
-        return {}
-    if method == "multiplicative":
-        return _normalize_prob_dict_shadow(raw)
-    lo, hi = 0.01, 10.0
-    for _ in range(80):
-        mid = (lo + hi) / 2.0
-        sm = sum(v ** mid for v in raw.values())
-        if sm > 1.0:
-            lo = mid
-        else:
-            hi = mid
-    k = (lo + hi) / 2.0
-    return _normalize_prob_dict_shadow({g: v ** k for g, v in raw.items()})
 
 
-def crs_implied_probabilities_shadow(match_obj: Dict[str, Any]) -> Tuple[Dict[str, float], float, float]:
-    """Shadow-only CRS implied probabilities in percent, including coarse other-score buckets."""
-    raw_odds = {}
-    for score, key in CRS_FULL_MAP.items():
-        odds = _f((match_obj or {}).get(key, 0))
-        if odds > 1.1:
-            raw_odds[score] = odds
-    extras = {}
-    for key, scores_set in [
-        ("crs_win", SCORE_OTHERS_HOME),
-        ("crs_same", SCORE_OTHERS_DRAW),
-        ("crs_lose", SCORE_OTHERS_AWAY),
-    ]:
-        odds = _f((match_obj or {}).get(key, 0))
-        if odds > 1.1:
-            extras[key] = {"odds": odds, "scores": scores_set}
-    if len(raw_odds) < 8:
-        return {}, 0.0, 0.0
-    raw_sum = sum(1.0 / o for o in raw_odds.values()) + sum(1.0 / ex["odds"] for ex in extras.values())
-    if raw_sum <= 0:
-        return {}, 0.0, 0.0
-    probs = {score: (1.0 / odds) / raw_sum * 100.0 for score, odds in raw_odds.items()}
-    for ex in extras.values():
-        total_prob = (1.0 / ex["odds"]) / raw_sum * 100.0
-        if ex["scores"]:
-            per = total_prob / len(ex["scores"])
-            for sc in ex["scores"]:
-                probs[sc] = probs.get(sc, 0.0) + per
-    return probs, round(raw_sum - 1.0, 3), round(len(raw_odds) / max(1, len(CRS_FULL_MAP)), 2)
 
 
-def _poisson_pmf_shadow(lam: float, k: int) -> float:
-    lam = max(0.05, min(8.0, float(lam)))
-    return math.exp(-lam) * (lam ** k) / math.factorial(k)
 
 
-def _matrix_moments_shadow(probs: Dict[str, float]) -> Dict[str, float]:
-    regular = {}
-    for sc, p in (probs or {}).items():
-        h, a = _parse_score(sc)
-        if h is None or a is None or h > 8 or a > 8:
-            continue
-        regular[(h, a)] = _f(p, 0.0)
-    total = sum(regular.values())
-    if total <= 0:
-        return {}
-    norm = {k: v / total for k, v in regular.items()}
-    e_h = sum(h * p for (h, _a), p in norm.items())
-    e_a = sum(a * p for (_h, a), p in norm.items())
-    var_h = sum((h - e_h) ** 2 * p for (h, _a), p in norm.items())
-    var_a = sum((a - e_a) ** 2 * p for (_h, a), p in norm.items())
-    std_h = math.sqrt(var_h) if var_h > 0 else 0.01
-    std_a = math.sqrt(var_a) if var_a > 0 else 0.01
-    cov = sum((h - e_h) * (a - e_a) * p for (h, a), p in norm.items())
-    corr = cov / (std_h * std_a) if std_h * std_a > 0 else 0.0
-    return {"lambda_h": round(e_h, 3), "lambda_a": round(e_a, 3), "lambda_total": round(e_h + e_a, 3), "var_h": round(var_h, 3), "var_a": round(var_a, 3), "corr": round(corr, 3)}
 
 
-def _matrix_shape_verdict_shadow(moments: Dict[str, float]) -> str:
-    if not moments:
-        return "unknown"
-    lh, la, lt = moments.get("lambda_h", 1.3), moments.get("lambda_a", 1.2), moments.get("lambda_total", 2.5)
-    corr = moments.get("corr", 0.0)
-    if lt >= 3.0 and corr >= 0.15:
-        return "shootout"
-    if lt <= 2.2 and moments.get("var_h", 1.0) < 1.2 and moments.get("var_a", 1.0) < 1.2:
-        return "grinder"
-    if lh - la >= 1.2:
-        return "lopsided_h"
-    if la - lh >= 1.2:
-        return "lopsided_a"
-    if abs(lh - la) < 0.4:
-        return "balanced"
-    return "normal"
 
 
-def _direction_probs_from_score_probs_shadow(probs: Dict[str, float]) -> Dict[str, float]:
-    out = {"home": 0.0, "draw": 0.0, "away": 0.0}
-    for sc, p in (probs or {}).items():
-        d = _score_direction(sc)
-        if d in out:
-            out[d] += p
-    total = sum(out.values())
-    if total <= 0:
-        return {"home": 33.3, "draw": 33.3, "away": 33.4}
-    return {k: round(v / total * 100.0, 2) for k, v in out.items()}
 
 
-def build_unified_score_matrix_shadow(match_obj: Dict[str, Any], max_goals: int = 8) -> Dict[str, Any]:
-    """Build a v18.1-inspired score matrix as diagnostics only; no final decision writes."""
-    max_goals = max(5, min(10, int(max_goals or 8)))
-    sp_h = _f((match_obj or {}).get("sp_home", (match_obj or {}).get("win", 0)))
-    sp_d = _f((match_obj or {}).get("sp_draw", (match_obj or {}).get("same", 0)))
-    sp_a = _f((match_obj or {}).get("sp_away", (match_obj or {}).get("lose", 0)))
-    fair_pack = fair_probs_from_1x2_shadow(sp_h, sp_d, sp_a, method="power")
-    target_dir = {k: v / 100.0 for k, v in fair_pack.get("fair_probs", {}).items()}
-    ttg = fair_probs_from_ttg_shadow(match_obj, method="power")
-    crs_probs_pct, crs_margin, crs_coverage = crs_implied_probabilities_shadow(match_obj)
-    crs_moments = _matrix_moments_shadow(crs_probs_pct)
-    if crs_moments:
-        lam_h = _f(crs_moments.get("lambda_h"), 1.25)
-        lam_a = _f(crs_moments.get("lambda_a"), 1.15)
-    else:
-        exp_goals = sum(g * p for g, p in ttg.items()) if ttg else 2.5
-        home_edge = (target_dir.get("home", 0.333) - target_dir.get("away", 0.333))
-        lam_h = exp_goals * (0.50 + max(-0.25, min(0.25, home_edge * 0.65)))
-        lam_a = max(0.05, exp_goals - lam_h)
-    base = {}
-    for h in range(max_goals + 1):
-        for a in range(max_goals + 1):
-            base[f"{h}-{a}"] = _poisson_pmf_shadow(lam_h, h) * _poisson_pmf_shadow(lam_a, a)
-    matrix = _normalize_prob_dict_shadow(base)
-    crs_grid = {sc: max(1e-9, crs_probs_pct.get(sc, 0.0) / 100.0) for sc in matrix}
-    crs_mass = sum(crs_grid.values())
-    if crs_mass > 0.05 and crs_coverage >= 0.45:
-        crs_grid = _normalize_prob_dict_shadow(crs_grid, floor=1e-9)
-        crs_weight = min(0.72, 0.35 + crs_coverage * 0.45)
-        matrix = _normalize_prob_dict_shadow({sc: (matrix[sc] ** (1.0 - crs_weight)) * (crs_grid[sc] ** crs_weight) for sc in matrix})
-
-    def direction_of_score(sc: str) -> str:
-        d = _score_direction(sc)
-        return d if d in VALID_DIRS else "draw"
-
-    def total_of_score(sc: str) -> int:
-        h, a = _parse_score(sc)
-        return 99 if h is None else h + a
-
-    for _ in range(12):
-        cur_dir = {"home": 0.0, "draw": 0.0, "away": 0.0}
-        for sc, p in matrix.items():
-            cur_dir[direction_of_score(sc)] += p
-        for sc in list(matrix.keys()):
-            d = direction_of_score(sc)
-            if cur_dir.get(d, 0.0) > 1e-9:
-                ratio = target_dir.get(d, cur_dir[d]) / cur_dir[d]
-                matrix[sc] *= max(0.35, min(2.85, ratio))
-        matrix = _normalize_prob_dict_shadow(matrix)
-        if ttg:
-            cur_ttg = {}
-            for sc, p in matrix.items():
-                bucket = min(total_of_score(sc), 7)
-                cur_ttg[bucket] = cur_ttg.get(bucket, 0.0) + p
-            for sc in list(matrix.keys()):
-                bucket = min(total_of_score(sc), 7)
-                if bucket in ttg and cur_ttg.get(bucket, 0.0) > 1e-9:
-                    ratio = ttg[bucket] / cur_ttg[bucket]
-                    matrix[sc] *= max(0.35, min(2.85, ratio))
-            matrix = _normalize_prob_dict_shadow(matrix)
-    dir_probs = {"home": 0.0, "draw": 0.0, "away": 0.0}
-    goal_probs = {}
-    for sc, p in matrix.items():
-        dir_probs[direction_of_score(sc)] += p
-        bucket = min(total_of_score(sc), 7)
-        goal_probs[bucket] = goal_probs.get(bucket, 0.0) + p
-    top_scores = sorted(matrix.items(), key=lambda x: x[1], reverse=True)
-    goal_pct = {str(k): round(v * 100.0, 2) for k, v in sorted(goal_probs.items())}
-    drift = round(100.0 - sum(goal_pct.values()), 2)
-    if goal_pct:
-        last = list(goal_pct.keys())[-1]
-        goal_pct[last] = round(goal_pct[last] + drift, 2)
-    matrix_moments = _matrix_moments_shadow({sc: p * 100.0 for sc, p in matrix.items()})
-    return {
-        "matrix": matrix,
-        "fair_1x2": fair_pack,
-        "direction_probs": {k: round(v * 100.0, 2) for k, v in dir_probs.items()},
-        "goal_probs": goal_pct,
-        "top_scores": [{"score": sc, "prob": round(p * 100.0, 3)} for sc, p in top_scores[:20]],
-        "lambda_h": round(lam_h, 3),
-        "lambda_a": round(lam_a, 3),
-        "shape_verdict": _matrix_shape_verdict_shadow(matrix_moments or crs_moments),
-        "crs_margin": crs_margin,
-        "crs_coverage": crs_coverage,
-        "source": "unified_score_matrix_v18_1_shadow",
-    }
 
 
-def attach_matrix_shadow_fields(prediction: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
-    """Attach matrix diagnostics without modifying final_direction, score, confidence, result, or display fields."""
-    protected = {k: prediction.get(k) for k in ["predicted_score", "final_direction", "confidence", "result", "display_direction", "home_win_pct", "draw_pct", "away_win_pct"]}
-    try:
-        matrix_pack = build_unified_score_matrix_shadow(match_obj)
-        top_scores = matrix_pack.get("top_scores", [])
-        recommended_score = top_scores[0]["score"] if top_scores else ""
-        recommended_direction = _score_direction(recommended_score) if recommended_score else None
-        matrix_direction_probs = matrix_pack.get("direction_probs", {})
-        final_direction = prediction.get("final_direction")
-        predicted_score = prediction.get("predicted_score")
-        confidence = _f(prediction.get("confidence", 0), 0)
-        pred_total = _score_total(predicted_score)
-        high_tail = sum(_f(v, 0.0) for k, v in matrix_pack.get("goal_probs", {}).items() if _i(k, 0) >= 4)
-        away_tail = sum(_f(row.get("prob", 0.0), 0.0) for row in top_scores[:8] if _score_direction(row.get("score")) == "away")
-        draw_prob = _f(matrix_direction_probs.get("draw", 0.0), 0.0)
-        flags = {
-            "matrix_vs_final_direction_conflict": bool(recommended_direction in VALID_DIRS and final_direction in VALID_DIRS and recommended_direction != final_direction),
-            "matrix_high_goal_tail_conflict": bool(pred_total is not None and pred_total <= 2 and high_tail >= 38.0),
-            "matrix_away_tail_warning": bool(final_direction != "away" and (matrix_direction_probs.get("away", 0.0) >= 34.0 or away_tail >= 18.0)),
-            "matrix_draw_risk_warning": bool(final_direction != "draw" and draw_prob >= 30.0),
-            "matrix_low_confidence_warning": bool(confidence < 55 or (top_scores and _f(top_scores[0].get("prob", 0.0), 0.0) < 8.0)),
-        }
-        prediction.update({
-            "matrix_direction_probs": matrix_direction_probs,
-            "matrix_top_scores": top_scores,
-            "matrix_goal_probs": matrix_pack.get("goal_probs", {}),
-            "matrix_lambda_home": matrix_pack.get("lambda_h"),
-            "matrix_lambda_away": matrix_pack.get("lambda_a"),
-            "matrix_shape_verdict": matrix_pack.get("shape_verdict", "unknown"),
-            "matrix_recommended_score": recommended_score,
-            "matrix_recommended_direction": recommended_direction,
-            "matrix_disagreement_flags": flags,
-            "matrix_shadow_error": "",
-        })
-    except Exception as exc:
-        prediction["matrix_shadow_error"] = str(exc)[:300]
-    for key, value in protected.items():
-        prediction[key] = value
-    return prediction
 
 
 
@@ -4964,7 +4688,7 @@ def _has_confirmed_web_or_lineup(pred: Dict[str, Any], match_obj: Dict[str, Any]
 
 def _draw_cluster_present(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> bool:
     scores = set()
-    for key in ["top_score_candidates", "unified_matrix_top_scores", "matrix_top_scores", "top3", "risk_score_candidates"]:
+    for key in ["top_score_candidates", "unified_matrix_top_scores", "top3", "risk_score_candidates"]:
         rows = pred.get(key, [])
         if isinstance(rows, list):
             for x in rows[:12]:
@@ -5354,12 +5078,15 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
     }
     final_dir = str(pred.get("final_direction", ""))
     final_prob = _f(probs.get(final_dir), 0)
-    draw_prob = max(_f(probs.get("draw"), 0), _f((pred.get("matrix_direction_probs") or {}).get("draw"), 0))
-    away_prob = max(_f(probs.get("away"), 0), _f((pred.get("matrix_direction_probs") or {}).get("away"), 0))
-    home_prob = max(_f(probs.get("home"), 0), _f((pred.get("matrix_direction_probs") or {}).get("home"), 0))
+    # v20.7 P0 去污: 方向概率不再与泊松 matrix_direction_probs 做 max 融合,仅用 AI 读盘。
+    draw_prob = _f(probs.get("draw"), 0)
+    away_prob = _f(probs.get("away"), 0)
+    home_prob = _f(probs.get("home"), 0)
     sorted_probs = sorted([_f(v, 0) for k, v in probs.items() if k in VALID_DIRS], reverse=True)
     edge_gap = sorted_probs[0] - sorted_probs[1] if len(sorted_probs) >= 2 else 0
-    high_tail = sum(_f(v, 0.0) for k, v in (pred.get("matrix_goal_probs") or {}).items() if _i(k, 0) >= 4)
+    # v20.7 P0 去污: high_tail 原取自泊松 matrix_goal_probs,现泊松已删除。
+    # 保持行为等价: matrix 缺失 → high_tail 退化为 0(该泊松高进球尾部信号不再参与),不引入新数据源。
+    high_tail = 0.0
     draw_cluster = _draw_cluster_present(pred, match_obj)
 
     data_quality_score = 100
@@ -5535,10 +5262,8 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         pred["score_tier"] = tier
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"v203_recommendation_component_downgrade_error:{str(e)[:120]}")
-    try:
-        attach_matrix_shadow_fields(pred, match_obj)
-    except Exception as e:
-        pred["matrix_shadow_error"] = str(e)[:300]
+    # v20.7 P0 去污: 泊松影子矩阵已删除,不再注入 matrix_*(泊松出身)字段。
+    # 读盘比分/方向完全由 AI 读盘得出,严禁机械数理锚反向污染盘感。
     try:
         apply_two_one_home_hard_no_bet_gate(pred)
         rec = pred.get("recommendation", {}) if isinstance(pred.get("recommendation"), dict) else {}
