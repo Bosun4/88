@@ -3751,8 +3751,11 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         prediction_shell = {"home_win_pct": 33, "draw_pct": 33, "away_win_pct": 34, "model_consensus": 2}
         experience_verdict = experience_rules.apply_experience_to_prediction(match_obj, prediction_shell)
         
-        # 临场聪明钱蒸汽检测
-        steam_res = quant_edge.SteamMoveDetector().detect(match_obj, prediction_shell)
+        # v20.7 P0 去污: 移除 SteamMoveDetector 伪 steam 旁路。
+        # 实证: 竞彩抓包 change 仅为方向码 -1/0/1(967场全样本零浮点增量),
+        # SteamMoveDetector 把 -1 当作 -1.00 odds 暴跌, 对几乎每场"赔率下行"比赛喷射
+        # 满格 strength=10 伪 steam 信号并注入 AI 终审, 污染读盘且违反"不造假"军规。
+        # 方向码事实已由 compile_sharp_money_facts(_movement_label) 这条诚实链单一承担。
 
         # 2. 计算中国竞彩超额抽水 (Overround) —— 纯市场事实，非数理锚
         overround = 0.0
@@ -3784,8 +3787,8 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
             "world_cup_reading_intel": world_cup_reading,
             "empirical_experience_triggered_rules": experience_verdict.get("experience_analysis", {}).get("rules", []),
             "empirical_over_2_5_pct": experience_verdict.get("over_2_5", 50.0),
-            "steam_movement_signals": steam_res if steam_res.get("steam") else None,
-            "compiler": "v20.7.0_poisson_purged_pure_board_reading"
+            "steam_movement_signals": None,  # v20.7 P0 去污: 伪 steam 旁路已移除, 方向码事实归 sharp_money_facts_v203
+            "compiler": "v20.7.1_poisson_purged_steam_fakesig_purged_pure_board_reading"
         }
         
         # 6. 增强原有的市场模块并合并
