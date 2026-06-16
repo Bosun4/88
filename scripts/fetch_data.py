@@ -63,6 +63,72 @@ def _get_float(val, default=0.0):
     try: return float(val) if val is not None else default
     except: return default
 
+
+# ============================================================
+# 抓取窗口过滤：只保留「今天 + 未来 N 天」的比赛，砍掉昨天及更远。
+# 背景：问财接口 ?date=X 一次返回横跨多日的赛程（实测 6/17 查询返回
+# 周二/三/四共 12 场）。全部进 enrich + AI 终审 = 重复抓 + token 浪费。
+# 方案：用每场 stime（开赛 Unix 秒）按竞彩业务日口径（同 main.py 的
+# VMAX_DATE_SHIFT_HOURS=11 偏移）算业务日，只留 [今天, 今天+days_ahead]。
+# 默认 days_ahead=1 → 今天 + 明天两天。
+# Fail-safe：stime 缺失/解析不出业务日 → 保留该场（宁可多跑不误杀真实比赛）。
+# ------------------------------------------------------------
+def _env_int(name, default):
+    try:
+        v = os.environ.get(name)
+        return int(v) if v not in (None, "") else int(default)
+    except (ValueError, TypeError):
+        return int(default)
+
+
+def _business_day_from_stime(stime, shift_hours=None):
+    """由开赛 Unix 秒推算竞彩业务日 (YYYY-MM-DD)。解析失败返回 None。"""
+    if shift_hours is None:
+        shift_hours = _env_int("VMAX_DATE_SHIFT_HOURS", 11)
+    try:
+        ts = int(float(stime))
+    except (ValueError, TypeError):
+        return None
+    if ts <= 0:
+        return None
+    bj = timezone(timedelta(hours=8))
+    dt = datetime.fromtimestamp(ts, bj) - timedelta(hours=shift_hours)
+    return dt.strftime("%Y-%m-%d")
+
+
+def filter_matches_by_window(football_list, today=None, days_ahead=None, shift_hours=None):
+    """只保留业务日 ∈ [today, today+days_ahead] 的场次。
+
+    - today：竞彩业务日基准 (YYYY-MM-DD)。None 时按当前时间同口径推算。
+    - days_ahead：今天之外再多留几天。None 时读 VMAX_FETCH_DAYS_AHEAD，默认 1。
+    - stime 缺失/解析失败的场次保留（fail-safe，不误杀）。
+    """
+    if days_ahead is None:
+        days_ahead = _env_int("VMAX_FETCH_DAYS_AHEAD", 1)
+    if days_ahead < 0:
+        days_ahead = 0
+    if shift_hours is None:
+        shift_hours = _env_int("VMAX_DATE_SHIFT_HOURS", 11)
+    bj = timezone(timedelta(hours=8))
+    if today is None:
+        today = (datetime.now(bj) - timedelta(hours=shift_hours)).strftime("%Y-%m-%d")
+    try:
+        base = datetime.strptime(today, "%Y-%m-%d")
+    except (ValueError, TypeError):
+        return list(football_list)
+    allowed = {(base + timedelta(days=d)).strftime("%Y-%m-%d") for d in range(0, days_ahead + 1)}
+
+    kept, dropped = [], 0
+    for item in football_list:
+        bizday = _business_day_from_stime((item or {}).get("stime"), shift_hours)
+        if bizday is None or bizday in allowed:
+            kept.append(item)
+        else:
+            dropped += 1
+    if dropped:
+        print(f"  🗓️ 抓取窗口过滤：保留 {len(kept)} 场（业务日 {sorted(allowed)}），砍掉 {dropped} 场窗口外比赛")
+    return kept
+
 def generate_stats_from_context(match, side):
     """API未命中时，通过赔率+排名反推统计数据（容灾方案）"""
     rank_raw = match.get("home_rank" if side=="home" else "away_rank", 10)
@@ -144,6 +210,12 @@ async def scrape_wencai_jczq_async(session, date_str):
 
             if not football_list:
                 print(f"  [INFO] 当日足球赛事列表为空")
+                return []
+
+            # 抓取窗口过滤：问财接口一次返回跨多日赛程，只保留今天+未来 N 天（默认 1=今明两天）
+            football_list = filter_matches_by_window(football_list, today=date_str)
+            if not football_list:
+                print(f"  [INFO] 窗口过滤后无符合赛事")
                 return []
 
             for item in football_list:
