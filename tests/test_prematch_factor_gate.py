@@ -77,7 +77,8 @@ def test_draw_defense_caps_non_draw_weak_edge_with_draw_cluster():
     assert front["predicted_score"] == "2-1"
     assert front["final_direction"] == "home"
     assert front["recommend_gate_pass"] is False
-    assert "prematch_v2_draw_defense_gate" in front["pre_match_factor_audit"]["rules_applied"]
+    # v20.7 P0 去污后: 去掉泊松 matrix_draw 充气,纯 AI draw=29/edge=16 不触发 draw_defense_gate;
+    # 高平赔联赛闸(high_draw_league_non_draw_cap)仍拦截推荐,gate_pass 仍 False。
     assert "prematch_v2_high_draw_league_non_draw_cap" in front["pre_match_factor_audit"]["rules_applied"]
 
 
