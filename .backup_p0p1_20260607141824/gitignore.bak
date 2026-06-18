@@ -1,0 +1,41 @@
+__pycache__/
+*.pyc
+.env
+data/raw_data.json
+# Local experiment / runtime artifacts
+data/ai_phase_results*/
+data/ai_cache/
+scripts/data/ai_phase_results*/
+scripts/data/ai_cache/
+scripts/data/debug/
+reports/live_predictions/*.json
+reports/market_sentinel/live_tests/
+reports/market_sentinel/snapshots/*latest*.jsonl
+reports/market_sentinel/alerts/*latest*
+*.patch
+*.rej
+*.orig
+# One-off local analysis scripts
+check_money.py
+find_*.py
+fix_*.py
+get_*.py
+money_all.py
+parse_*.py
+run_manual_test.py
+run_pytest.py
+run_test.py
+run_tests.py
+today_matches.py
+
+# Local Python environments
+.venv/
+venv/
+
+# Local data/download caches
+.cache/
+reports/sandbox/*.json
+scripts/data/
+data/debug/
+data/debug_v20/
+*.log
