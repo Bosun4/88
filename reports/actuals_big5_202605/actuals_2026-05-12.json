@@ -1,0 +1,62 @@
+[
+ {
+  "match_num": "周二003",
+  "home_team": "塞尔塔",
+  "away_team": "莱万特",
+  "actual_score": "2-3"
+ },
+ {
+  "match_num": "周二005",
+  "home_team": "贝蒂斯",
+  "away_team": "埃尔切",
+  "actual_score": "2-1"
+ },
+ {
+  "match_num": "周二008",
+  "home_team": "奥萨苏纳",
+  "away_team": "马竞",
+  "actual_score": "1-2"
+ },
+ {
+  "match_num": "周三003",
+  "home_team": "比利亚雷",
+  "away_team": "塞维利亚",
+  "actual_score": "2-3"
+ },
+ {
+  "match_num": "周三004",
+  "home_team": "西班牙人",
+  "away_team": "毕尔巴鄂",
+  "actual_score": "2-0"
+ },
+ {
+  "match_num": "周三005",
+  "home_team": "布雷斯特",
+  "away_team": "斯特拉斯",
+  "actual_score": "1-2"
+ },
+ {
+  "match_num": "周三006",
+  "home_team": "曼城",
+  "away_team": "水晶宫",
+  "actual_score": "3-0"
+ },
+ {
+  "match_num": "周三008",
+  "home_team": "朗斯",
+  "away_team": "巴黎圣曼",
+  "actual_score": "0-2"
+ },
+ {
+  "match_num": "周三009",
+  "home_team": "阿拉维斯",
+  "away_team": "巴萨",
+  "actual_score": "1-0"
+ },
+ {
+  "match_num": "周三010",
+  "home_team": "赫塔费",
+  "away_team": "马洛卡",
+  "actual_score": "3-1"
+ }
+]

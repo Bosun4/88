@@ -1,0 +1,26 @@
+[
+ {
+  "match_num": "周五008",
+  "home_team": "多特蒙德",
+  "away_team": "法兰克福",
+  "actual_score": "3-2"
+ },
+ {
+  "match_num": "周五009",
+  "home_team": "都灵",
+  "away_team": "萨索洛",
+  "actual_score": "2-1"
+ },
+ {
+  "match_num": "周五010",
+  "home_team": "朗斯",
+  "away_team": "南特",
+  "actual_score": "1-0"
+ },
+ {
+  "match_num": "周五012",
+  "home_team": "莱万特",
+  "away_team": "奥萨苏纳",
+  "actual_score": "3-2"
+ }
+]
