@@ -2043,6 +2043,82 @@ def _apply_contrarian_market_claim_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
     return pred
 
 
+# === 审计修复 2026-06-21 (根据世界杯小组赛真实赛果对账) ===
+# 背景：现网 6/20 完赛 4 场，方向 3/4 准但比分 0/4，错误全部是
+# “给强弱悬殊场的负方多给了一个安慰球”(4-1→实3-0, 2-1→实2-0)，
+# 以及唯一方向翻车落在低信心平局档(土耳其 conf=41 戦1-1→实0-1)。
+
+
+def _apply_lopsided_consolation_goal_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
+    """Fix1 (确定性后处理): 强弱悬殊、高信心胜场，压掉负方的单个安慰球。
+
+    仅在同时满足时生效(保守，避免 n=4 过拟合)：
+      - final_direction 为 home/away 胜
+      - 胜方信心 ≥ 70 (强热)
+      - 负方进球 == 1 且胜方进球 ≥ 3 (净胜 ≥2 的“安慰球”形态)
+    动作：负方 1→0 (4-1→4-0, 3-1→3-0)，保持 final_direction 不变，
+    同步 goal_band/btts/top3[0]，并在 validation_warnings 记录溯源。
+    不修改推荐等级(只改比分形态，不动闸门)。
+    """
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    final_dir = str(pred.get("final_direction", ""))
+    if final_dir not in ("home", "away"):
+        return pred
+    score = _score_from_candidate(pred.get("predicted_score"))
+    h, a = _parse_score(score)
+    if h is None or a is None:
+        return pred
+    winner, loser = (h, a) if final_dir == "home" else (a, h)
+    if not (loser == 1 and winner >= 3):
+        return pred
+    _, conf = _max_direction_probability(pred)
+    if conf < 70.0:
+        return pred
+    new_h, new_a = (h, a - 1) if final_dir == "home" else (h - 1, a)
+    new_score = f"{new_h}-{new_a}"
+    if _score_direction(new_score) != final_dir:
+        return pred  # 安全网：绝不能改变方向
+    old_score = score
+    pred["predicted_score"] = new_score
+    try:
+        pred["goal_band"] = _score_goal_band(new_score)
+        pred["btts"] = _score_btts(new_score)
+    except Exception:
+        pass
+    top3 = pred.get("top3")
+    if isinstance(top3, list) and top3 and isinstance(top3[0], dict):
+        if _score_from_candidate(top3[0].get("score")) == old_score:
+            top3[0]["score"] = new_score
+            top3[0].setdefault("logic", "")
+            top3[0]["logic"] = (str(top3[0]["logic"]) + " |audit_consolation_goal_compressed").strip()
+    warnings = pred.setdefault("validation_warnings", [])
+    if not isinstance(warnings, list):
+        warnings = [str(warnings)] if warnings else []
+        pred["validation_warnings"] = warnings
+    warnings.append(f"lopsided_consolation_goal_compressed:{old_score}->{new_score}")
+    pred["validation_warnings"] = list(dict.fromkeys(warnings))
+    pred["score_shape_calibrated"] = True
+    return pred
+
+
+def _apply_low_confidence_draw_guard(pred: Dict[str, Any]) -> Dict[str, Any]:
+    """Fix3 (复用硬闸): 低信心平局预测降为 observe，不计入实单。
+
+    触发：final_direction==draw 且平局信心 < 45。
+    依据：本次唯一方向翻车(土耳其 conf=41 戦1-1→实0-1)落在此档。
+    与现有 _apply_direction_candidate_consistency_gate 同风格，调用 _cap_to_observe。
+    """
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    if str(pred.get("final_direction", "")) != "draw":
+        return pred
+    draw_conf = _direction_probability_for(pred, "draw")
+    if draw_conf < 45.0:
+        _cap_to_observe(pred, f"low_confidence_draw_observe:conf={draw_conf:.0f}<45", "C")
+    return pred
+
+
 def _sync_gate_with_bet_action(pred: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(pred, dict) or pred.get("is_abstain"):
         return pred
@@ -4092,6 +4168,7 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append("")
     p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
     p.append("1. 进攻高波或高进球异动压缩（如德甲、荷甲、美职、挪超、解放者杯等大球联赛；判大球看曲线塌缩 a5/a4<=1.70 或超大球尾部共振(a6<=11/a7<=14) 而非 a4 单点低，因为 a4 被压但 a5 没跟是单点诱盘假信号）：防守往往让位于进攻，不得机械保守。不要机械拘泥于 2-1、1-1 等常规最低赔率。若联赛偏大球+曲线整簇塌缩+资金推强队共振，必须敢于将大球带（3-1、1-3、2-2、3-2、2-3、4-1、1-4、4-2 等主客对称比分）作为主推首选，不要仅仅把它们当做风险尾部藏起来！注意 a4>5.3 是排除线（真实大球仅约13%），按小球处理。【对称强制】考虑任一主队大胜比分时，必须同时列出客队镜像比分（3-1↔1-3、4-1↔1-4、3-2↔2-3）。")
+    p.append("【负方安慰球审计·2026-06-21新增】：强弱悬殊+高信心的一边倒胜场，不要机械给负方留一个安慰球。真实赛果对账(世界杯小组赛)显示高热强队赢球时负方常被零封(美国2-0非2-1、巴西3-0非4-1)。规则：当胜方信心>=70且判定净胜>=2时，默认负方进球=0(优先 N-0 而非 N-1)；只有负方有独立破门证据(对攻战意/快反/定位球质量/客场不弃赛+xG支撑)时才可保留负方1球。【与大球带不冲突】本条只压负方安慰球，不阻止双方对攻的对称大比分(2-2/3-2/3-3)。")
     p.append("2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。")
     p.append("3. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。")
     p.append("请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！")
@@ -4160,6 +4237,7 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("【前置共识权重】：如果 GPT 和 Grok 在方向或比分上达成高度一致（例如均为 1-0），除非你有致命的反向硬证据（例如明显的伤停或极强的聪明钱背离），否则不得仅仅因为 1-1 或 0-0 是全场最低赔率，就强行推翻前置共识走向保守平局。")
     p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
     p.append("1. 进攻高波联赛（如德甲、荷甲、挪超、美职、澳超等）：防守往往让位于进攻，不要机械拘泥于 2-1 或防守平局。若双方战术开放且支持 BTTS，必须敢于将 3-2、3-1 甚至 4-2 这种极端高比分直接作为主推首选，不要仅仅把它们当做风险尾部藏起来！")
+    p.append("【负方安慰球审计·2026-06-21新增】：强弱悬殊+高信心的一边倒胜场，不要机械给负方留一个安慰球。真实赛果对账(世界杯小组赛)显示高热强队赢球时负方常被零封(美国2-0非2-1、巴西3-0非4-1)。规则：当胜方信心>=70且判定净胜>=2时，默认负方进球=0(优先 N-0 而非 N-1)；只有负方有独立破门证据(对攻战意/快反/定位球质量/客场不弃赛+xG支撑)时才可保留负方1球。【与大球带不冲突】本条只压负方安慰球，不阻止双方对攻的对称大比分(2-2/3-2/3-3)。")
     p.append("2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。")
     p.append("3. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。")
     p.append("请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！")
@@ -5389,6 +5467,14 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         _apply_contrarian_market_claim_gate(pred)
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"contrarian_market_claim_gate_error:{str(e)[:120]}")
+    try:
+        _apply_lopsided_consolation_goal_gate(pred)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"lopsided_consolation_goal_gate_error:{str(e)[:120]}")
+    try:
+        _apply_low_confidence_draw_guard(pred)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"low_confidence_draw_guard_error:{str(e)[:120]}")
     try:
         assign_selection_layer(pred, match_obj)
     except Exception as e:

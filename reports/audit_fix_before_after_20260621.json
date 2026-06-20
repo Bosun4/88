@@ -1,0 +1,62 @@
+{
+  "before": {
+    "n": 4,
+    "dir": 3,
+    "score": 0,
+    "band": 1,
+    "btts": 0
+  },
+  "after": {
+    "n": 4,
+    "dir": 3,
+    "score": 0,
+    "band": 1,
+    "btts": 1
+  },
+  "after_detail": [
+    {
+      "match": "美国||澳大利亚",
+      "pred": "2-1",
+      "pred_dir": "home",
+      "actual": "2-0",
+      "actual_dir": "home",
+      "dir_hit": true,
+      "score_hit": false,
+      "observe": false,
+      "score_calibrated": false
+    },
+    {
+      "match": "苏格兰||摩洛哥",
+      "pred": "1-2",
+      "pred_dir": "away",
+      "actual": "0-1",
+      "actual_dir": "away",
+      "dir_hit": true,
+      "score_hit": false,
+      "observe": false,
+      "score_calibrated": false
+    },
+    {
+      "match": "巴西||海地",
+      "pred": "4-0",
+      "pred_dir": "home",
+      "actual": "3-0",
+      "actual_dir": "home",
+      "dir_hit": true,
+      "score_hit": false,
+      "observe": false,
+      "score_calibrated": true
+    },
+    {
+      "match": "土耳其||巴拉圭",
+      "pred": "1-1",
+      "pred_dir": "draw",
+      "actual": "0-1",
+      "actual_dir": "away",
+      "dir_hit": false,
+      "score_hit": false,
+      "observe": true,
+      "score_calibrated": false
+    }
+  ]
+}
