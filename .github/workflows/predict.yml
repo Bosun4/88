@@ -166,12 +166,13 @@ jobs:
           rm -rf data/ai_cache data/debug data/debug_v20 || true
 
           latest_history="$(find data -maxdepth 1 -type f -name 'history_*_today_*.json' -printf '%T@ %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)"
+          latest_snapshot="$(find data/snapshots -maxdepth 1 -type f -name '*_today_*.json' -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -n 1 | cut -d' ' -f2-)"
 
           echo "🔒 JSON 硬闸: 产物必须能被浏览器 JSON.parse 解析"
-          node -e 'const fs=require("fs"); for (const p of process.argv.slice(1)) { JSON.parse(fs.readFileSync(p,"utf8")); console.log("JSON OK", p); }' data/predictions.json ${latest_history:+"$latest_history"}
+          node -e 'const fs=require("fs"); for (const p of process.argv.slice(1)) { JSON.parse(fs.readFileSync(p,"utf8")); console.log("JSON OK", p); }' data/predictions.json ${latest_history:+"$latest_history"} ${latest_snapshot:+"$latest_snapshot"}
 
           echo "🔒 冲突标记硬闸: 绝不推送带 git 冲突标记的损坏产物"
-          if grep -nE '^(<<<<<<<|=======|>>>>>>>)' data/predictions.json ${latest_history:+"$latest_history"}; then
+          if grep -nE '^(<<<<<<<|=======|>>>>>>>)' data/predictions.json ${latest_history:+"$latest_history"} ${latest_snapshot:+"$latest_snapshot"}; then
             echo "❌ 检测到未解决的 git 冲突标记，中止本次推送，保护线上产物。"
             exit 1
           fi
@@ -179,6 +180,9 @@ jobs:
           git add data/predictions.json
           if [ -n "$latest_history" ]; then
             git add "$latest_history"
+          fi
+          if [ -n "$latest_snapshot" ]; then
+            git add "$latest_snapshot"
           fi
           echo "✅ JSON 与冲突标记硬闸通过，继续。"
 
