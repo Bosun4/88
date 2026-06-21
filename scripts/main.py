@@ -62,6 +62,32 @@ def write_json_atomic(path: str, payload: dict):
     os.replace(tmp_path, path)
 
 
+def publish_prediction_outputs(data_dir: str, target_date: str, session: str, payload: dict, now_time: datetime) -> dict:
+    """Publish live JSON plus immutable audit snapshots."""
+    repo_dir = os.path.dirname(data_dir)
+    target_path = os.path.join(data_dir, "predictions.json")
+    history_path = os.path.join(data_dir, f"history_{target_date}_today_{session}.json")
+    snapshot_base = os.path.join(
+        data_dir,
+        "snapshots",
+        f"{target_date}_today_{session}_{now_time.strftime('%Y%m%d_%H%M%S')}.json",
+    )
+    snapshot_path = snapshot_base
+    suffix = 2
+    while os.path.exists(snapshot_path):
+        snapshot_path = snapshot_base[:-5] + f"_{suffix}.json"
+        suffix += 1
+
+    runtime = payload.setdefault("runtime", {})
+    runtime["history_path"] = os.path.relpath(history_path, repo_dir)
+    runtime["snapshot_path"] = os.path.relpath(snapshot_path, repo_dir)
+
+    write_json_atomic(target_path, payload)
+    write_json_atomic(history_path, payload)
+    write_json_atomic(snapshot_path, payload)
+    return {"live": target_path, "history": history_path, "snapshot": snapshot_path}
+
+
 def auto_install():
     # 默认不在运行时自动安装/升级依赖（CI 用 pip install -r requirements.txt，本地用 .venv）。
     # 运行时 pip 会污染系统环境且结果不确定；仅在显式 opt-in 时才执行。
@@ -301,8 +327,6 @@ def main():
         # 输出文件骨架：前端只保留 today
         # ============================================================
 
-        target_path = os.path.join(data_dir, "predictions.json")
-
         final_output = {
             "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
             "version": "MAX-v1.1",
@@ -362,15 +386,9 @@ def main():
             final_output["matches"]["today"] = []
             final_output["update_time"] = datetime.now(beijing_tz).strftime("%Y-%m-%d %H:%M:%S")
 
-            write_json_atomic(target_path, final_output)
+            paths = publish_prediction_outputs(data_dir, target_date, session, final_output, datetime.now(beijing_tz))
 
-            history_path = os.path.join(
-                data_dir,
-                f"history_{target_date}_today_{session}.json",
-            )
-            write_json_atomic(history_path, final_output)
-
-            print("✅ 已落盘空 today 结构。")
+            print(f"✅ 已落盘空 today 结构，快照: {paths['snapshot']}")
             return
 
         # 保留下游兼容字段 information
@@ -400,15 +418,10 @@ def main():
 
         final_output["update_time"] = datetime.now(beijing_tz).strftime("%Y-%m-%d %H:%M:%S")
 
-        write_json_atomic(target_path, final_output)
-
-        history_path = os.path.join(
-            data_dir,
-            f"history_{target_date}_today_{session}.json",
-        )
-        write_json_atomic(history_path, final_output)
+        paths = publish_prediction_outputs(data_dir, target_date, session, final_output, datetime.now(beijing_tz))
 
         print(f"  ✅ today 任务完成，数据已同步至 predictions.json")
+        print(f"  🧾 不可变审计快照: {paths['snapshot']}")
 
         print(f"\n{'=' * 80}")
         print("✅ 全链路执行成功！今日竞彩业务日预测任务完成。")
