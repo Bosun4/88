@@ -933,6 +933,19 @@ def _cross_anchor_questions(match_obj: Dict[str, Any]) -> List[str]:
         qs.append("【零封税·条件化】国际赛/世界杯不能机械默认 X-0，也不能机械给负方安慰球。若弱方有独立破门证据（反击/xG/定位球/对手防线轮换/BTTS盘口共振），优先保留 X-1；若强弱悬殊、弱方破门证据不足且零封比分簇(2-0/3-0/4-0)低赔集中，必须允许并优先审计 N-0，不得因旧零封税强行上修 N-1。")
         qs.append("【进球带上修·条件化】国际赛/世界杯方向判定不变，但进球带上修只在总进球曲线整簇塌缩或强队火力证据充分时使用；深盘造强但胜赔不实压、1-1锚点未抬死、弱队可能极限收缩时，必须把0-0/1-1列入最终候选并说明为什么没有入选。")
         qs.append("【判平二段裁决】若最终判平局，禁止默认 1-1，必须在 0-0/1-1/2-2 三者间用进球曲线分位(a0/a2/a4)显式选形状并写出理由。数据支撑：9 场判平全押 1-1 仅中 3。")
+        # [补丁A 2026-06-22] 单边碾压上修先验(市场版,不依赖pred)：深盘+某方零封簇低赔=单边碾压结构,
+        # 第一轮21球缺口集中在此类8场。与曲线塌缩判据互补(碾压场总进球分布天然分散,a4常>5.3不触发)。
+        try:
+            _ub_line = _parse_handicap_value(match_obj.get("give_ball", match_obj.get("handicap", match_obj.get("rq", ""))))
+            if _ub_line is not None and abs(_ub_line) >= 1.5:
+                _h_cs = min([o for o in [get_market_odds_for_score(match_obj, s) for s in ("2-0", "3-0")] if o] or [99])
+                _a_cs = min([o for o in [get_market_odds_for_score(match_obj, s) for s in ("0-2", "0-3")] if o] or [99])
+                _fav, _cs_low = ("home", _h_cs) if _h_cs <= _a_cs else ("away", _a_cs)
+                if _cs_low <= 6.0:
+                    _up = "3-0/3-1/4-1" if _fav == "home" else "0-3/1-3/1-4"
+                    qs.append(f"【单边碾压进球上修·强制】本场深盘(让球{abs(_ub_line):.2f})且{'主' if _fav=='home' else '客'}方零封簇低赔({_cs_low:.2f})=单边碾压结构。实证(世界杯小组赛)此类场进球量级被系统性低估一档(瑞典1-0→5-1/德国4-0→7-1/挪威2-0→4-1)。若方向判为{'主胜' if _fav=='home' else '客胜'}，必须把进球带从2-0/2-1上修审计到{_up}，并显式说明为何不选更高比分；不得机械回落2-1。此判据针对单边碾压,不要求总进球曲线塌缩。")
+        except Exception:
+            pass
     tpl = hand_f.get("score_shape_template", {})
     must = tpl.get("must_audit_scores", [])
     if must:
@@ -2100,6 +2113,9 @@ def _apply_lopsided_consolation_goal_gate(pred: Dict[str, Any]) -> Dict[str, Any
     pred["validation_warnings"] = list(dict.fromkeys(warnings))
     pred["score_shape_calibrated"] = True
     return pred
+
+
+
 
 
 def _apply_low_confidence_draw_guard(pred: Dict[str, Any]) -> Dict[str, Any]:
@@ -5467,10 +5483,13 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         _apply_contrarian_market_claim_gate(pred)
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"contrarian_market_claim_gate_error:{str(e)[:120]}")
-    try:
-        _apply_lopsided_consolation_goal_gate(pred)
-    except Exception as e:
-        pred.setdefault("validation_warnings", []).append(f"lopsided_consolation_goal_gate_error:{str(e)[:120]}")
+    # [补丁A1 2026-06-22] 禁用 consolation gate: 第一轮27场回测净收益=0,
+    # 且方向与赛果相反(大胜场x-1比x-0更高频),一旦触发只会打碎唯一可能命中的x-1大胜。
+    # 保留函数代码以可追溯,仅摘除调用(回测确认禁用为零回归纯收益)。
+    # try:
+    #     _apply_lopsided_consolation_goal_gate(pred)
+    # except Exception as e:
+    #     pred.setdefault("validation_warnings", []).append(f"lopsided_consolation_goal_gate_error:{str(e)[:120]}")
     try:
         _apply_low_confidence_draw_guard(pred)
     except Exception as e:
