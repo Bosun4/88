@@ -71,7 +71,7 @@ BIG_GOAL_TAIL_A7_MAX = 14.0
 PHASE1_NAMES = ["gpt", "grok"]
 
 DEFAULT_MODELS = {
-    "gpt": "[codex-pro] gpt-5.5",
+    "gpt": "gpt-5.5",
     "grok": "[grok] grok-4.3",
     "gemini": "[按量6] gemini-3.1-pro-preview [不补]",
 }
