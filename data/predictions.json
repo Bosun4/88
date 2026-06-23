@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-06-23 12:54:56",
+  "update_time": "2026-06-23 13:12:58",
   "version": "MAX-v1.1",
   "scope": "today_only",
   "top4": [],
@@ -107,9 +107,9 @@
           "data_note": "由赔率/排名反推的估算值，非官方真实战绩"
         },
         "h2h": [],
-        "global_home": 1.16,
-        "global_draw": 8.38,
-        "global_away": 20.01,
+        "global_home": 1.15,
+        "global_draw": 8.46,
+        "global_away": 20.17,
         "global_odds_source": "the_odds_api",
         "global_odds_match_score": 1.0,
         "information": {},
@@ -198,9 +198,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -211,7 +211,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -220,7 +220,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -229,7 +229,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -240,7 +240,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -251,20 +251,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -272,9 +272,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -285,7 +285,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -294,7 +294,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -303,7 +303,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -314,7 +314,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -325,9 +325,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -453,9 +453,9 @@
           "data_note": "由赔率/排名反推的估算值，非官方真实战绩"
         },
         "h2h": [],
-        "global_home": 1.22,
-        "global_draw": 6.85,
-        "global_away": 14.46,
+        "global_home": 1.21,
+        "global_draw": 6.92,
+        "global_away": 14.69,
         "global_odds_source": "the_odds_api",
         "global_odds_match_score": 1.0,
         "information": {},
@@ -544,9 +544,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -557,7 +557,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -566,7 +566,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -575,7 +575,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -586,7 +586,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -597,20 +597,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -618,9 +618,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -631,7 +631,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -640,7 +640,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -649,7 +649,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -660,7 +660,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -671,9 +671,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -806,8 +806,8 @@
           "data_note": "由赔率/排名反推的估算值，非官方真实战绩"
         },
         "h2h": [],
-        "global_home": 6.91,
-        "global_draw": 4.37,
+        "global_home": 6.86,
+        "global_draw": 4.35,
         "global_away": 1.51,
         "global_odds_source": "the_odds_api",
         "global_odds_match_score": 1.0,
@@ -897,9 +897,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -910,7 +910,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -919,7 +919,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -928,7 +928,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -939,7 +939,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -950,20 +950,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -971,9 +971,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -984,7 +984,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -993,7 +993,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -1002,7 +1002,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -1013,7 +1013,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -1024,9 +1024,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -1246,9 +1246,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -1259,7 +1259,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -1268,7 +1268,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -1277,7 +1277,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -1288,7 +1288,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -1299,20 +1299,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -1320,9 +1320,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -1333,7 +1333,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -1342,7 +1342,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -1351,7 +1351,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -1362,7 +1362,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -1373,9 +1373,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -1591,9 +1591,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -1604,7 +1604,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -1613,7 +1613,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -1622,7 +1622,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -1633,7 +1633,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -1644,20 +1644,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -1665,9 +1665,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -1678,7 +1678,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -1687,7 +1687,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -1696,7 +1696,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -1707,7 +1707,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -1718,9 +1718,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -1935,9 +1935,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -1948,7 +1948,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -1957,7 +1957,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -1966,7 +1966,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -1977,7 +1977,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -1988,20 +1988,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -2009,9 +2009,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -2022,7 +2022,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -2031,7 +2031,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -2040,7 +2040,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -2051,7 +2051,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -2062,9 +2062,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -2284,9 +2284,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -2297,7 +2297,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -2306,7 +2306,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -2315,7 +2315,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -2326,7 +2326,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -2337,20 +2337,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -2358,9 +2358,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -2371,7 +2371,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -2380,7 +2380,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -2389,7 +2389,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -2400,7 +2400,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -2411,9 +2411,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -2633,9 +2633,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -2646,7 +2646,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -2655,7 +2655,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -2664,7 +2664,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -2675,7 +2675,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -2686,20 +2686,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -2707,9 +2707,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -2720,7 +2720,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -2729,7 +2729,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -2738,7 +2738,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -2749,7 +2749,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -2760,9 +2760,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -2977,9 +2977,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -2990,7 +2990,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -2999,7 +2999,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -3008,7 +3008,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -3019,7 +3019,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -3030,20 +3030,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -3051,9 +3051,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -3064,7 +3064,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -3073,7 +3073,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -3082,7 +3082,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -3093,7 +3093,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -3104,9 +3104,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -3321,9 +3321,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -3334,7 +3334,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -3343,7 +3343,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -3352,7 +3352,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -3363,7 +3363,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -3374,20 +3374,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -3395,9 +3395,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -3408,7 +3408,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -3417,7 +3417,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -3426,7 +3426,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -3437,7 +3437,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -3448,9 +3448,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -3577,9 +3577,9 @@
           "data_note": "由赔率/排名反推的估算值，非官方真实战绩"
         },
         "h2h": [],
-        "global_home": 2.38,
+        "global_home": 2.39,
         "global_draw": 2.99,
-        "global_away": 3.52,
+        "global_away": 3.5,
         "global_odds_source": "the_odds_api",
         "global_odds_match_score": 1.0,
         "information": {},
@@ -3668,9 +3668,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -3681,7 +3681,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -3690,7 +3690,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -3699,7 +3699,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -3710,7 +3710,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -3721,20 +3721,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -3742,9 +3742,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -3755,7 +3755,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -3764,7 +3764,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -3773,7 +3773,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -3784,7 +3784,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -3795,9 +3795,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -4015,9 +4015,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -4028,7 +4028,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -4037,7 +4037,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -4046,7 +4046,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -4057,7 +4057,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -4068,20 +4068,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -4089,9 +4089,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -4102,7 +4102,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -4111,7 +4111,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -4120,7 +4120,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -4131,7 +4131,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -4142,9 +4142,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -4362,9 +4362,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -4375,7 +4375,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -4384,7 +4384,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -4393,7 +4393,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -4404,7 +4404,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -4415,20 +4415,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -4436,9 +4436,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -4449,7 +4449,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -4458,7 +4458,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -4467,7 +4467,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -4478,7 +4478,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -4489,9 +4489,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -4706,9 +4706,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -4719,7 +4719,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -4728,7 +4728,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -4737,7 +4737,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -4748,7 +4748,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -4759,20 +4759,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -4780,9 +4780,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -4793,7 +4793,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -4802,7 +4802,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -4811,7 +4811,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -4822,7 +4822,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -4833,9 +4833,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -5053,9 +5053,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -5066,7 +5066,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -5075,7 +5075,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -5084,7 +5084,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -5095,7 +5095,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -5106,20 +5106,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -5127,9 +5127,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -5140,7 +5140,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -5149,7 +5149,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -5158,7 +5158,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -5169,7 +5169,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -5180,9 +5180,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -5400,9 +5400,9 @@
                 "ai_name": "gpt",
                 "model": "[codex] gpt-5.5 [不补]",
                 "phase": "phase1",
-                "elapsed": 0.6,
+                "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[codex] gpt-5.5 [不补]",
@@ -5413,7 +5413,7 @@
                 "phase": "fallback_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
               },
               "family_debate_referee": {
                 "ok": false,
@@ -5422,7 +5422,7 @@
                 "phase": "family_debate_referee",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
               },
               "consistency": {
                 "ok": false,
@@ -5431,7 +5431,7 @@
                 "phase": "consistency",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
               }
             },
             "grok": {
@@ -5442,7 +5442,7 @@
                 "phase": "phase1",
                 "elapsed": 0.5,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[grok] grok-4.3"
@@ -5453,20 +5453,20 @@
                 "ai_name": "gemini",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]",
                 "phase": "final",
-                "elapsed": 0.5,
+                "elapsed": 0.6,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
               },
               "last_status": "http_503",
               "model": "[按量6] gemini-3.1-pro-preview [不补]"
             }
           },
           "ai_run_metadata": {
-            "run_id": "20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克",
+            "run_id": "20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 16,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260623_045259_16m_273c56837b82_葡萄牙_乌兹别克_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260623_051102_16m_6e1f8e217b6b_葡萄牙_乌兹别克_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -5474,9 +5474,9 @@
                   "ai_name": "gpt",
                   "model": "[codex] gpt-5.5 [不补]",
                   "phase": "phase1",
-                  "elapsed": 0.6,
+                  "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045437153367792EKbIiFQU)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051239608191107cwYJdQ6M)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[codex] gpt-5.5 [不补]",
@@ -5487,7 +5487,7 @@
                   "phase": "fallback_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045449395076033CXz8U9Vd)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051251925131723SLf1SDF6)\",\"type\":\"new_api_error\"}}"
                 },
                 "family_debate_referee": {
                   "ok": false,
@@ -5496,7 +5496,7 @@
                   "phase": "family_debate_referee",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623045455458075049mkkPQF52)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 2026062305125846922880Tc4QAUfi)\",\"type\":\"new_api_error\"}}"
                 },
                 "consistency": {
                   "ok": false,
@@ -5505,7 +5505,7 @@
                   "phase": "consistency",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 202606230454559981136417kIMrt48)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [codex] gpt-5.5 [不补] under group default (distributor) (request id: 20260623051258593964857P7GR89c6)\",\"type\":\"new_api_error\"}}"
                 }
               },
               "grok": {
@@ -5516,7 +5516,7 @@
                   "phase": "phase1",
                   "elapsed": 0.5,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623045437148170384oQyW224G)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [grok] grok-4.3 under group default (distributor) (request id: 20260623051239613736549HidzSQTr)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[grok] grok-4.3"
@@ -5527,9 +5527,9 @@
                   "ai_name": "gemini",
                   "model": "[按量6] gemini-3.1-pro-preview [不补]",
                   "phase": "final",
-                  "elapsed": 0.5,
+                  "elapsed": 0.6,
                   "status": "http_503",
-                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 202606230454433092042748WpmUWrh)\",\"type\":\"new_api_error\"}}"
+                  "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model [按量6] gemini-3.1-pro-preview [不补] under group default (distributor) (request id: 20260623051245794872297Y9ygOjqt)\",\"type\":\"new_api_error\"}}"
                 },
                 "last_status": "http_503",
                 "model": "[按量6] gemini-3.1-pro-preview [不补]"
@@ -5567,6 +5567,6 @@
     "ai_max_requests_per_ai": "3",
     "ai_cache_ttl": "0",
     "history_path": "data/history_2026-06-23_today_morning.json",
-    "snapshot_path": "data/snapshots/2026-06-23_today_morning_20260623_125456.json"
+    "snapshot_path": "data/snapshots/2026-06-23_today_morning_20260623_131258.json"
   }
 }
