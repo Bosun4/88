@@ -73,7 +73,7 @@ PHASE1_NAMES = ["gpt", "grok"]
 DEFAULT_MODELS = {
     "gpt": "gpt-5.5",
     "grok": "[aws] grok-4.3",
-    "gemini": "gemini-3.1-pro-preview",
+    "gemini": "[gcli] gemini-3.1-pro-preview [不补]",
 }
 
 CRS_FULL_MAP = {
