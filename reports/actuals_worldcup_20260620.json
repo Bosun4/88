@@ -1,0 +1,12 @@
+{
+  "_comment": "2026世界杯 周五029-032 (北京时间2026-06-20凌晨/今日完赛部分) 真实赛果。多源交叉核验: sportingnews.com, bracketmundial2026.com, worldcuplocaltime.com, FIFA.com, Yahoo Sports. 中文队名(主||客)->比分。周六033-035尚未完赛。",
+  "verified_at": "2026-06-20T23:40+08:00",
+  "sources": ["sportingnews.com", "bracketmundial2026.com", "worldcuplocaltime.com", "fifa.com", "sports.yahoo.com"],
+  "results": {
+    "美国||澳大利亚": "2-0",
+    "苏格兰||摩洛哥": "0-1",
+    "巴西||海地": "3-0",
+    "土耳其||巴拉圭": "0-1"
+  },
+  "pending_not_finished": ["荷兰||瑞典", "德国||科特迪瓦", "厄瓜多尔||库拉索"]
+}

@@ -117,6 +117,11 @@ STANDARD_TOTAL_GOAL_ODDS = {
 }
 
 LEAGUE_STYLE_RESEARCH_HINTS = {
+    "世界杯": {
+        "style_hint": "中立场锦标赛足球，不能照搬俱乐部联赛节奏；首轮最闷，第二轮最开放，第三轮不是机械小球，而是净胜球收窄、轮换与出线形势驱动的高波动分层场。",
+        "score_shapes_to_audit": ["0-0", "1-1", "1-0", "0-1", "2-1", "1-2", "2-2", "3-1", "1-3"],
+        "risk_note": "第三轮必须先审计出线形势、是否已出线、是否需净胜球、是否会轮换；已出线强队 vs 有动机方是诱盘高危，不能只因名气和低赔强推热门。实证(项目自对账)：后期轮强队被逼平是高频系统偏差(西班牙0-0/葡萄牙1-1/卡塔尔1-1/沙特1-1/厄瓜多尔0-0)，出线+轮换场默认下调热门胜信心上限≤60，优先防 0-0/1-1/1-0/0-1/被逼平。",
+    },
     "德甲": {
         "style_hint": "高节奏、转换快、BTTS 与 3球以上尾部常见；但仍需结合盘口与阵容验证。",
         "score_shapes_to_audit": ["2-1", "3-1", "3-2", "2-2", "1-2"],
@@ -936,6 +941,9 @@ def _cross_anchor_questions(match_obj: Dict[str, Any]) -> List[str]:
         qs.append("【零封税·条件化】国际赛/世界杯不能机械默认 X-0，也不能机械给负方安慰球。若弱方有独立破门证据（反击/xG/定位球/对手防线轮换/BTTS盘口共振），优先保留 X-1；若强弱悬殊、弱方破门证据不足且零封比分簇(2-0/3-0/4-0)低赔集中，必须允许并优先审计 N-0，不得因旧零封税强行上修 N-1。")
         qs.append("【进球带上修·条件化】国际赛/世界杯方向判定不变，但进球带上修只在总进球曲线整簇塌缩或强队火力证据充分时使用；深盘造强但胜赔不实压、1-1锚点未抬死、弱队可能极限收缩时，必须把0-0/1-1列入最终候选并说明为什么没有入选。")
         qs.append("【判平二段裁决】若最终判平局，禁止默认 1-1，必须在 0-0/1-1/2-2 三者间用进球曲线分位(a0/a2/a4)显式选形状并写出理由。数据支撑：9 场判平全押 1-1 仅中 3。")
+        qs.append("【世界杯第三轮硬审计】若识别到小组赛第三轮/末轮，必须先回答五个问题：①双方是否都还有晋级/排名/净胜球动机；②是否存在已出线强队大轮换/主力轮休风险（联网核实预计首发与教练发布会口径）；③是否属于双方都无所求的闷平土壤；④是否属于一方需抢分、一方可接受小负/小胜的控分土壤；⑤是否两队同组并行开赛、存在‘默契球/算计净胜球’的控分共谋土壤。未联网回答这五点，不得把热门强队直接推成穿盘大胜，且 recommendation 最高 B。")
+        qs.append("【世界杯第三轮爆冷高发·实证先验】项目实测(2026小组赛23场对账)：强弱悬殊却踢平的高信心翻车集中在第二/三轮（西班牙0-0、葡萄牙1-1、卡塔尔1-1、沙特1-1、厄瓜多尔0-0），根因是‘强队已出线→大面积轮换→控分/慢热→爆冷与闷平’被系统性低估。第三轮已出线强队对阵有动机弱队时，必须把【被逼平/小负/0进球】列为首要风险路径，默认下调该热门方向信心上限至 ≤60，并显式审计 0-0/1-1/1-0/0-1/1-2/2-1。")
+        qs.append("【世界杯第三轮比分簇优先级】R3 控分不是机械小球，而是净胜球收窄与热门被掀风险上升。若无强证据支持刷净胜球或全主力强攻，必须优先审计 1-0/0-1/1-1/2-1/1-2 这些一球差与冷平方向；只有联网确认双方都需抢胜/抢净胜球且双方均派主力时，才释放 3-1/1-3/2-2/3-2/2-3 等开放比分。已出线强队大轮换证据成立时，禁止主推任何净胜≥2的穿盘大胜。")
         # [补丁A 2026-06-22] 单边碾压上修先验(市场版,不依赖pred)：深盘+某方零封簇低赔=单边碾压结构,
         # 第一轮21球缺口集中在此类8场。与曲线塌缩判据互补(碾压场总进球分布天然分散,a4常>5.3不触发)。
         try:
@@ -3814,6 +3822,7 @@ Grok：反方审判员，重点寻找 favorite_trap / draw_trap / away_win_overr
 Gemini：终审裁判，必须综合正方、反方、raw evidence 和来源质量；final_direction 只能是 home/draw/away，证据不足时用 recommendation.is_recommended=false 与 bet_action=observe/no_bet 表达不下注，不得把 no_bet/abstain 写成胜平负方向。
 三方都必须列出 why_this_can_fail；不能把“名气强、低赔、常见比分模板”当成独立充分证据。
 若 GPT/Grok 仍输出最终比分，Gemini 可以参考但必须重新审计，不得机械照抄。
+【世界杯第三轮专项军规】若比赛属于世界杯/国际大赛小组赛第三轮/末轮，必须把“出线形势/净胜球需求/是否已出线/轮换强度”视为与盘口同级的主轴变量。第三轮不是默认小球，而是“净胜球收窄 + 热门被掀风险上升 + 场景分层”——必须先分为：双方都需分、双方都无所求、已出线强队vs有动机方 三类，再决定比分簇。
 """.strip()
 
 GEMINI_FINAL_AUDIT_ADDENDUM = """
@@ -4204,6 +4213,8 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append("【负方安慰球审计·2026-06-21新增】：强弱悬殊+高信心的一边倒胜场，不要机械给负方留一个安慰球。真实赛果对账(世界杯小组赛)显示高热强队赢球时负方常被零封(美国2-0非2-1、巴西3-0非4-1)。规则：当胜方信心>=70且判定净胜>=2时，默认负方进球=0(优先 N-0 而非 N-1)；只有负方有独立破门证据(对攻战意/快反/定位球质量/客场不弃赛+xG支撑)时才可保留负方1球。【与大球带不冲突】本条只压负方安慰球，不阻止双方对攻的对称大比分(2-2/3-2/3-3)。")
     p.append("2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。")
     p.append("3. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。")
+    p.append("4. 世界杯小组赛第三轮/末轮：先判断‘双方都需抢分’、‘双方都无所求’、‘已出线强队vs有动机方’这三类场景。第三轮真规律不是机械压总进球，而是净胜球收窄、1球差和冷平/小冷增多。实证先验(项目2026小组赛自对账)：已出线强队在后期轮被逼平是高频系统偏差(西班牙0-0、葡萄牙1-1、卡塔尔1-1、沙特1-1、厄瓜多尔0-0)。原因是出线后大面积轮换+控分慢热。因此若热门一方已出线、可轮换、平局或小负仍可接受，必须优先防 1-1/0-1/1-0/1-2/2-1 这类收窄比分，下调该热门胜的信心(上限≤60)，不得仅因名气与低赔强推穿盘大胜。联网核实热门是否已锁名次、是否轮换、是否同组并行开赛存在算计净胜球/默契球土壤。")
+    p.append("5. 2026 新制（最佳第三名）会削弱纯躺平，但不会消灭诱盘：若一方需要刷净胜球、另一方也有抢分希望，比分会从‘单纯低分’转向‘开放但净胜差未必拉大’。这类场景要优先比较 2-1/1-2/2-2/3-2/2-3，而不是直接从大热低赔跳到3-0/0-3。")
     p.append("请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！")
     p.append("强制：若 web_research.used=false，不得把抓包 information/points 伪装成联网来源；只能作为 packet_context。")
     p.append("</task>\n")
@@ -4266,6 +4277,9 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("【庄家逆向读盘职责】：必须像庄家一样审计 Bet365、William Hill/威廉希尔、Pinnacle/低抽水基准、竞彩与百家均值之间的分歧；逐项解释升水/降水、亚盘升降盘、大小球水位、总进球赔率、正确比分簇是否在保护、诱导、分散或封顶。没有真实时间序列时只能写当前快照，不得编造临场故事。")
     p.append("【节奏/xG/战术脏活】：必须独立查并评估球队节奏、xG/xGA、射门质量、转换速度、压迫强度、阵型对位、核心球员缺阵/复出、天气场地、裁判尺度、旅行休息和赛程密度；这些只能作为读盘证据，不能无来源升 main。")
     p.append("【世界杯爆冷脑回路】：必须主动审计日本型反击爆冷、摩洛哥型低位铁桶、克罗地亚型韧性拖平/加时土壤、强队慢热/名气过热/弱队效率反杀路径；输出 worldcup_upset_audit，不得用强弱名气直接杀冷。")
+    p.append("【世界杯第三轮三分法——强制】若比赛属于小组赛第三轮/末轮，你必须先把场景归入以下之一：A.双方都需抢分/抢净胜球；B.双方都无所求或都可接受特定结果；C.已出线强队/热门方 vs 有动机方。A 类可释放开放比分，但仍要防净胜球只收窄到1球差；B 类优先防 0-0/1-1/0-1/1-0；C 类把热门被掀、0进球、小负或被逼平列为主风险，不得把热门穿盘大胜当默认线。")
+    p.append("【第三轮轮换·控分·爆冷实证先验——强制】项目自对账实测(2026小组赛多场)：已出线强队在第二/三轮被逼平是高频系统偏差(西班牙0-0、葡萄牙1-1、卡塔尔1-1、沙特1-1、厄瓜多尔0-0全部踢平)。原因链：出线后11人轮休→阵容生疏与慢热→不打净胜球→控分/闷平/被反杀。因此：R3 一旦识别到热门方已出线+可轮换，你对该热门方胜的信心上限硬限 60，除非有联网证据证明他们仍派主力抢名次/进球净胜球争首名。同时重点释放有动机弱队的抢分动机/定位球爆冷路径。")
+    p.append("【世界杯第三轮联网硬要求】你具备联网能力，必须主动联网核实第三轮四件事：①两队实时出线形势与最佳第三名撑杆；②热门方是否已锁定出线/锁定小组名次(决定是否轮换)；③教练发布会/跟队记者披露的轮换/主力保留意图；④是否存在同组并行开赛下的默契球/算计净胜球争议。以上每条影响方向/比分/推荐的 claim 必须进入 external_fact_table / web_research.sources(含 url+published_at)。无来源时，允许保留盘口本体方向，但 recommendation 最高 B，且不得把第三轮轮换/出线战意推演包装成 main。")
     p.append("【比分淘汰协议】：最终选比分前必须逐一审计 0-0、1-1、2-2、1-2、2-1 以及相邻镜像比分，说明 keep/reject 原因；尤其 2-1 只有在 1-1/1-2/2-2/高分尾部被充分排除后才能主推。")
     p.append("【前置共识权重】：如果 GPT 和 Grok 在方向或比分上达成高度一致（例如均为 1-0），除非你有致命的反向硬证据（例如明显的伤停或极强的聪明钱背离），否则不得仅仅因为 1-1 或 0-0 是全场最低赔率，就强行推翻前置共识走向保守平局。")
     p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
@@ -5112,6 +5126,9 @@ def _match_context_flags(pred: Dict[str, Any], match_obj: Dict[str, Any], dna: D
     cross_region = any(x in league for x in ["亚冠", "世俱杯", "解放者", "南球杯"]) or any(t in text for t in ["跨洲", "中立场", "neutral", "远征", "长途", "旅行", "时差"])
     rotation_risk = any(t in text for t in ["轮休", "轮换", "替补", "二队", "青年", "休息", "rotation", "rotate", "rested"])
     importance_unclear = cup_like and not any(t in text for t in ["争冠", "保级", "必须", "晋级", "决赛", "半决赛", "主场告别", "战意", "motivation"])
+    worldcup_r3 = ("世界杯" in league or "world cup" in league.lower() or "worldcup" in league.lower()) and any(t in text for t in ["第三轮", "第3轮", "末轮"])
+    already_qualified_or_can_accept_less = any(t in text for t in ["已出线", "提前晋级", "锁定出线", "打平即可", "小负即可", "轮换", "轮休", "保留主力", "避强签", "头名", "第二名"])
+    must_win_or_need_margin = any(t in text for t in ["必须取胜", "唯有取胜", "至少赢", "净胜球", "抢头名", "争最佳第三", "背水一战", "生死战", "抢分", "晋级希望"])
     name_favorite = False
     sp_h = _f(match_obj.get("sp_home"), 0)
     sp_a = _f(match_obj.get("sp_away"), 0)
@@ -5122,6 +5139,9 @@ def _match_context_flags(pred: Dict[str, Any], match_obj: Dict[str, Any], dna: D
         "cross_region": cross_region,
         "rotation_risk": rotation_risk,
         "importance_unclear": importance_unclear,
+        "worldcup_r3": worldcup_r3,
+        "already_qualified_or_can_accept_less": already_qualified_or_can_accept_less,
+        "must_win_or_need_margin": must_win_or_need_margin,
         "name_favorite": name_favorite,
     }
 
@@ -5338,6 +5358,27 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
         apply("C", "prematch_v2_rotation_risk_requires_lineup", "prematch_v2_rotation_risk")
     if structured_factors.get("fatigue_risk") and final_dir == "away":
         apply("C", "prematch_v2_away_fatigue_travel_risk", "prematch_v2_away_fatigue")
+
+    # P0 世界杯第三轮：已出线/可接受平或小负/轮换方，不允许被包装成热门强推。
+    if context_flags.get("worldcup_r3"):
+        if context_flags.get("already_qualified_or_can_accept_less") and context_flags.get("rotation_risk") and final_dir != "draw":
+            apply("C", "prematch_v2_worldcup_r3_rotation_or_qualification_cap", "prematch_v2_worldcup_r3_rotation")
+        if context_flags.get("already_qualified_or_can_accept_less") and final_dir != "draw" and draw_cluster:
+            apply("C", "prematch_v2_worldcup_r3_draw_or_small_loss_trap", "prematch_v2_worldcup_r3_draw_trap")
+        if context_flags.get("must_win_or_need_margin") and not web_used:
+            apply("C", "prematch_v2_worldcup_r3_motivation_without_external_confirmation", "prematch_v2_worldcup_r3_unverified_motivation")
+        # [R3热门保平先验·实证20260626] 自对账: 强弱悬殊却踢平是R3/后期轮高频系统偏差
+        # (西班牙0-0/葡萄牙1-1/卡塔尔1-1/沙特1-1/厄瓜多尔0-0)。根因=已出线大轮换+控分慢热。
+        # 即使AI未显式写"已出线/轮换"，只要 R3+名气热门+判净胜>=2 的穿盘大胜，无联网证据证明仍派主力刷净胜球时，
+        # 强制把热门大胜降为最高 B(不进主推)，并标记防平。专治高信心强队被逼平翻车。
+        _r3_score = _score_from_candidate(pred.get("predicted_score"))
+        _r3_h, _r3_a = _parse_score(_r3_score)
+        _r3_margin = abs(_r3_h - _r3_a) if (_r3_h is not None and _r3_a is not None) else 0
+        if (context_flags.get("name_favorite") and final_dir in {"home", "away"} and _r3_margin >= 2
+                and not (context_flags.get("must_win_or_need_margin") and web_used)):
+            apply("B", "prematch_v2_worldcup_r3_favorite_blowout_hold_prior_caps_to_B", "prematch_v2_worldcup_r3_favorite_hold")
+            if not web_used or context_flags.get("already_qualified_or_can_accept_less") or context_flags.get("rotation_risk"):
+                apply("C", "prematch_v2_worldcup_r3_favorite_blowout_unverified_draw_defense", "prematch_v2_worldcup_r3_favorite_hold_draw")
 
     # P0 数据质量：无外部来源/无首发时，不能把上下文判断包装成高置信精选。
     data_quality_hard_context = final_dir == "away" or (final_dir != "draw" and bool(draw_cluster)) or dna.get("volatility") == "high" or high_tail >= 45.0
