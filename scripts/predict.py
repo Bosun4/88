@@ -15,7 +15,9 @@ vMAX 20.2.1-FULL-ANCHOR — 3AI Gemini-Referee FULL-RESEARCH Web-Augmented Engin
     run_predictions(raw, use_ai=True) -> (res, top4)
 
 关键环境变量：
-    API_URL / API_KEY 或各模型单独 *_API_URL / *_API_KEY
+    GPT_API_URL / GPT_API_KEY
+    GROK_API_URL / GROK_API_KEY
+    GEMINI_API_URL / GEMINI_API_KEY
     AI_MOCK_MODE=true
     AI_RESEARCH_MODE=research|enhanced|production
     AI_CHUNK_SIZE=6
@@ -187,7 +189,8 @@ def _env_float(name: str, default: float) -> float:
 
 
 AI_MOCK_MODE = _env_bool("AI_MOCK_MODE", False)
-AI_FORCE_COMMON_GATEWAY = _env_bool("FORCE_COMMON_GATEWAY_URL", True)
+# Legacy flag removed - each model now uses dedicated URL/KEY
+# AI_FORCE_COMMON_GATEWAY = _env_bool("FORCE_COMMON_GATEWAY_URL", True)
 
 AI_RESEARCH_MODE = str(os.environ.get("AI_RESEARCH_MODE", "research")).strip().lower()
 if AI_RESEARCH_MODE not in {"production", "enhanced", "research"}:
@@ -1134,15 +1137,29 @@ def _clean_env_url(*names: str) -> str:
 
 
 def get_key_for_ai(ai_name: str) -> str:
-    if AI_FORCE_COMMON_GATEWAY:
-        return _clean_env_key("API_KEY", "GPT_API_KEY", "OPENAI_API_KEY", "GROK_API_KEY", "GEMINI_API_KEY")
-    return _clean_env_key(f"{ai_name.upper()}_API_KEY", "API_KEY", "OPENAI_API_KEY", "GPT_API_KEY")
+    """Get model-specific API key. Each model now has its own dedicated key."""
+    ai_upper = ai_name.upper()
+    if ai_upper == "GPT":
+        return _clean_env_key("GPT_API_KEY")
+    elif ai_upper == "GROK":
+        return _clean_env_key("GROK_API_KEY")
+    elif ai_upper == "GEMINI":
+        return _clean_env_key("GEMINI_API_KEY")
+    # Fallback for unknown models
+    return _clean_env_key(f"{ai_upper}_API_KEY")
 
 
 def get_url_for_ai(ai_name: str) -> str:
-    if AI_FORCE_COMMON_GATEWAY:
-        return _clean_env_url("API_URL", "GPT_API_URL", "OPENAI_API_URL", "BASE_URL", "GROK_API_URL", "GEMINI_API_URL")
-    return _clean_env_url(f"{ai_name.upper()}_API_URL", "API_URL", "OPENAI_API_URL", "BASE_URL", "GPT_API_URL")
+    """Get model-specific API URL. Each model now has its own dedicated URL."""
+    ai_upper = ai_name.upper()
+    if ai_upper == "GPT":
+        return _clean_env_url("GPT_API_URL")
+    elif ai_upper == "GROK":
+        return _clean_env_url("GROK_API_URL")
+    elif ai_upper == "GEMINI":
+        return _clean_env_url("GEMINI_API_URL")
+    # Fallback for unknown models
+    return _clean_env_url(f"{ai_upper}_API_URL")
 
 
 def _model_for(ai_name: str) -> str:

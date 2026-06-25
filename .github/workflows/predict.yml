@@ -65,8 +65,6 @@ jobs:
           CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
           CLAUDE_API_URL: ${{ secrets.CLAUDE_API_URL }}
 
-          FORCE_COMMON_GATEWAY_URL: "true"
-
           AI_RUN_MODE: "fast_batch"
           AI_CHUNK_SIZE: "12"
           AI_CHUNK_CONCURRENCY: "3"
