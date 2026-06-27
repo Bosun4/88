@@ -187,6 +187,30 @@ body{
   .sc-big{font-size:35px}
   .sel-grid{grid-template-columns:1fr 1fr}
 }
+/* 下注推荐模块 */
+.bet-card{background:linear-gradient(180deg,#141b2b,#0e1420);border:1px solid #2a3a55;border-radius:10px;padding:12px;margin:10px 0}
+.bet-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.bet-title{font-size:13px;font-weight:900;color:#ffd24a;letter-spacing:.3px}
+.bet-disc{font-size:9px;color:var(--t3);line-height:1.4;margin-bottom:8px;opacity:.85}
+.bet-tabs{display:flex;gap:6px;margin-bottom:10px}
+.bet-tab{flex:1;text-align:center;padding:6px 4px;font-size:11px;font-weight:800;border-radius:6px;cursor:pointer;border:1px solid #2a3a55;background:var(--s2);color:var(--t2);user-select:none}
+.bet-tab.active{background:linear-gradient(90deg,#ff6a3d,#ff9a3d);color:#1a1206;border-color:#ff8a3d}
+.bet-tab.steady.active{background:linear-gradient(90deg,#2fa36b,#3fd08a);color:#06170f;border-color:#3fd08a}
+.bet-pane{display:none}
+.bet-pane.active{display:block}
+.bet-reason{font-size:10px;color:#cfe0ff;background:#101a2e;border-left:3px solid #4a78d6;padding:7px 9px;border-radius:5px;margin-bottom:9px;line-height:1.5}
+.bet-leg{background:var(--s2);border:1px solid var(--bd);border-radius:7px;padding:8px 9px;margin-bottom:7px}
+.bet-leg-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.bet-mk{font-size:9px;font-weight:800;color:#fff;background:#3a4d73;padding:2px 6px;border-radius:4px}
+.bet-sel{font-size:13px;font-weight:900;color:var(--t1)}
+.bet-odds{font-size:11px;color:#7fd4ff;font-weight:700}
+.bet-stake{font-size:15px;font-weight:900;color:#ffd24a}
+.bet-leg-meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;font-size:9px;color:var(--t3)}
+.bet-leg-reason{font-size:9px;color:var(--t2);margin-top:5px;line-height:1.45;opacity:.9}
+.bet-sum{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:9px;padding-top:8px;border-top:1px dashed #2a3a55;font-size:10px}
+.bet-sum b{color:#ffd24a;font-size:13px}
+.bet-sum .er b{color:#3fd08a}
+.bet-nobet{font-size:11px;color:#ff8a8a;background:#2a1414;border:1px solid #5a2a2a;border-radius:6px;padding:10px;text-align:center;line-height:1.5}
 </style>
 </head>
 <body>
@@ -597,7 +621,71 @@ function renderSignals(p){
   return html;
 }
 
-function renderDetails(m,p){
+var MARKET_ZH={correct_score:'正确比分',one_x_two:'胜平负',handicap:'让球',total_goals:'总进球',over_under:'大小球',half_full:'半全场'};
+function betLegHtml(l){
+  var mk=MARKET_ZH[l.market]||l.market||'';
+  var sel=l.label||l.selection||'';
+  var html='<div class="bet-leg"><div class="bet-leg-top">'+
+    '<span><span class="bet-mk">'+esc(mk)+'</span> <span class="bet-sel">'+esc(sel)+'</span></span>'+
+    '<span class="bet-odds">@'+esc(V(l.odds))+'</span>'+
+    '<span class="bet-stake">'+esc(V(l.stake))+'元</span></div>'+
+    '<div class="bet-leg-meta">'+
+      '<span>命中可得 '+esc(V(l.potential_payout))+'元</span>'+
+      '<span>模型命中 '+esc(Math.round((+l.p_model||0)*100))+'%</span>'+
+      '<span>EV '+esc(V(l.ev_ratio))+'</span>'+
+    '</div>'+
+    (l.reason?'<div class="bet-leg-reason">'+esc(l.reason)+'</div>':'')+
+  '</div>';
+  return html;
+}
+function betPaneHtml(combo,view,active){
+  combo=combo||{};
+  var legs=combo.legs||[];
+  var html='<div class="bet-pane '+view+(active?' active':'')+'" data-betpane="'+view+'">';
+  if(combo.reason){html+='<div class="bet-reason">'+esc(combo.reason)+'</div>';}
+  if(legs.length){
+    legs.forEach(function(l){html+=betLegHtml(l);});
+    html+='<div class="bet-sum"><span>总投注 <b>'+esc(V(combo.total_stake))+'元</b></span>'+
+      '<span class="er">组合期望返还 <b>'+esc(V(combo.expected_return))+'元</b></span></div>';
+  }else{
+    html+='<div class="bet-nobet">'+esc(combo.reason||'本组合无可用标的')+'</div>';
+  }
+  html+='</div>';
+  return html;
+}
+function renderBetRecommendation(p,key){
+  var br=p.bet_recommendation;
+  if(!br) return '';
+  var html='<div class="bet-card" data-betkey="'+esc(key)+'">';
+  html+='<div class="bet-head"><span class="bet-title">💰 下注推荐</span>'+
+    '<span style="font-size:9px;color:var(--t3)">每场预算 '+esc(V(br.per_match_budget))+'元 · 单注≥'+esc(V(br.min_stake))+'元</span></div>';
+  html+='<div class="bet-disc">⚠️ '+esc(br.disclaimer||'')+'</div>';
+  if(br.no_bet){
+    html+='<div class="bet-nobet">'+esc(br.no_bet_reason||'本场不建议下注')+'</div></div>';
+    return html;
+  }
+  if(br.available===false){
+    html+='<div class="bet-nobet">本场无下注推荐（无可用盘口赔率）</div></div>';
+    return html;
+  }
+  var def=(br.default_view==='steady')?'steady':'aggressive';
+  html+='<div class="bet-tabs">'+
+    '<div class="bet-tab '+(def==='aggressive'?'active':'')+'" data-bettab="aggressive" onclick="switchBetTab(this,\''+esc(key)+'\',\'aggressive\')">🔥 激进</div>'+
+    '<div class="bet-tab steady '+(def==='steady'?'active':'')+'" data-bettab="steady" onclick="switchBetTab(this,\''+esc(key)+'\',\'steady\')">🛡️ 稳健</div>'+
+  '</div>';
+  html+=betPaneHtml(br.aggressive,'aggressive',def==='aggressive');
+  html+=betPaneHtml(br.steady,'steady',def==='steady');
+  html+='</div>';
+  return html;
+}
+function switchBetTab(tabEl,key,view){
+  var card=tabEl.closest('.bet-card');
+  if(!card) return;
+  card.querySelectorAll('.bet-tab').forEach(function(t){t.classList.toggle('active',t.getAttribute('data-bettab')===view);});
+  card.querySelectorAll('.bet-pane').forEach(function(pn){pn.classList.toggle('active',pn.getAttribute('data-betpane')===view);});
+}
+
+function renderDetails(m,p,key){
   var top=p.top_score_candidates||p.unified_matrix_top_scores||[];
   var aa=p.anchor_audit||{};
   var mi=p.market_interpretation||{};
@@ -618,7 +706,8 @@ function renderDetails(m,p){
     ['总进球7+',m.a7]
   ];
 
-  var html='<div class="sl">抓包赔率 / 结构字段</div><div class="mg">';
+  var html=renderBetRecommendation(p,key||matchKey(m));
+  html+='<div class="sl">抓包赔率 / 结构字段</div><div class="mg">';
   html+='<div class="mb"><div class="mb-t">体彩竞彩抓包</div>';
   odds.forEach(function(o){html+='<div class="mb-r"><span class="mb-l">'+esc(o[0])+'</span><span class="mb-v">'+esc(V(o[1]))+'</span></div>';});
   html+='</div>';
@@ -732,7 +821,7 @@ function renderMatches(){
 
         '<button class="tbtn" onclick="tg(this,\'d-'+key+'\')">展开抓包与底层字段 ▼</button>'+
       '</div>'+
-      '<div class="det" id="d-'+key+'">'+renderDetails(m,p)+'</div>'+
+      '<div class="det" id="d-'+key+'">'+renderDetails(m,p,key)+'</div>'+
     '</div>';
   }).join('');
 }

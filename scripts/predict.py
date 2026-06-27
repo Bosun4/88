@@ -2081,6 +2081,344 @@ def _apply_contrarian_market_claim_gate(pred: Dict[str, Any]) -> Dict[str, Any]:
     return pred
 
 
+# === 下注推荐模块 bet_recommendation (2026-06-27) ===
+# 本地确定性纯函数：基于真实盘口赔率算各玩法期望值，产出 激进/稳健 两套下注组合。
+# 严格遵守本地闸门原则：只新增 pred["bet_recommendation"] 字段，
+# 绝不修改 AI 终审的 final_direction / predicted_score / recommendation.tier / bet_action。
+# 不调用 AI、不联网、无随机；同输入同输出，可单测可回归。
+
+BET_RECO_BUDGET = 200          # 每场总预算(元)
+BET_RECO_MIN_STAKE = 20        # 单注下限(元)
+BET_RECO_STAKE_STEP = 5        # 金额取整步长(元)
+BET_RECO_NO_BET_ACTIONS = {"no_bet", "observe"}
+BET_RECO_DISCLAIMER = "算法推荐，非盈利保证；金额仅为基于期望值的分配建议，是否下注请自行决定。"
+
+
+def _bet_score_zh(score: str) -> str:
+    """正确比分中文标签，区分 0-0/1-1/2-2 平局三态。"""
+    return str(score)
+
+
+def _extract_market_odds(match_obj: Dict[str, Any]) -> Dict[str, Dict[str, float]]:
+    """把 match_obj 原始赔率规整为 {market: {selection: odds}}。无赔率的玩法不生成键。"""
+    if not isinstance(match_obj, dict):
+        match_obj = {}
+    out: Dict[str, Dict[str, float]] = {}
+
+    # 正确比分
+    cs: Dict[str, float] = {}
+    for sc, key in CRS_FULL_MAP.items():
+        o = _f(match_obj.get(key), 0.0)
+        if o > 1.01:
+            cs[sc] = o
+    if cs:
+        out["correct_score"] = cs
+
+    # 胜平负 1X2
+    onex2: Dict[str, float] = {}
+    h = _f(match_obj.get("sp_home", match_obj.get("win")), 0.0)
+    d = _f(match_obj.get("sp_draw", match_obj.get("same")), 0.0)
+    a = _f(match_obj.get("sp_away", match_obj.get("lose")), 0.0)
+    if h > 1.01:
+        onex2["home"] = h
+    if d > 1.01:
+        onex2["draw"] = d
+    if a > 1.01:
+        onex2["away"] = a
+    if onex2:
+        out["one_x_two"] = onex2
+
+    # 总进球数 a0-a7
+    tg: Dict[str, float] = {}
+    for n in range(8):
+        o = _f(match_obj.get(f"a{n}"), 0.0)
+        if o > 1.01:
+            tg[str(n)] = o
+    if tg:
+        out["total_goals"] = tg
+        # 推导大小球 2.5：小=总进球0/1/2 赔率合成，大=3+ 合成（用最低赔近似，仅作展示参考）
+        under = [tg[k] for k in ("0", "1", "2") if k in tg]
+        over = [tg[k] for k in ("3", "4", "5", "6", "7") if k in tg]
+        ou: Dict[str, float] = {}
+        if under:
+            # 合成赔率近似：1 / Σ(1/odds)
+            inv = sum(1.0 / x for x in under if x > 1.0)
+            if inv > 0:
+                ou["under_2.5"] = round(1.0 / inv, 2)
+        if over:
+            inv = sum(1.0 / x for x in over if x > 1.0)
+            if inv > 0:
+                ou["over_2.5"] = round(1.0 / inv, 2)
+        if ou:
+            out["over_under"] = ou
+
+    # 半全场 HFTF（缺字段跳过）
+    hf: Dict[str, float] = {}
+    for code, label in HFTF_MAP.items():
+        o = _f(match_obj.get(code), 0.0)
+        if o > 1.01:
+            hf[label] = o
+    if hf:
+        out["half_full"] = hf
+
+    return out
+
+
+def _bet_p_model_for_score(pred: Dict[str, Any], score: str) -> float:
+    """从终审 top3 取该比分的模型主观概率(0-1)；无则给保守值。"""
+    top3 = pred.get("top3") if isinstance(pred.get("top3"), list) else []
+    for t in top3:
+        if isinstance(t, dict) and str(t.get("score")) == str(score):
+            return _clip(_f(t.get("prob"), 0.0) / 100.0, 0.0, 0.95)
+    # 不在 top3：给一个低保守概率
+    return 0.08
+
+
+def _bet_goal_band_main(pred: Dict[str, Any]) -> Optional[int]:
+    gb = str(pred.get("goal_band", "")).strip()
+    # goal_band 形如 "0-1/2/3/4+" 或单值；取 predicted_score 总进球更稳
+    ps = str(pred.get("predicted_score", ""))
+    tot = _score_total(ps)
+    if tot is not None:
+        return tot
+    for tok in ("4", "3", "2", "1", "0"):
+        if tok in gb:
+            return int(tok)
+    return None
+
+
+def _build_bet_candidates(pred: Dict[str, Any], odds_map: Dict[str, Dict[str, float]]) -> List[Dict[str, Any]]:
+    """生成候选腿 + p_model + ev_ratio。返回未分配金额的 leg 列表。"""
+    legs: List[Dict[str, Any]] = []
+    final_dir = str(pred.get("final_direction", "")).lower()
+    dprobs = pred.get("direction_probs") if isinstance(pred.get("direction_probs"), dict) else {}
+    predicted_score = str(pred.get("predicted_score", ""))
+
+    def add(market: str, selection: str, odds: float, p_model: float, label: str, reason: str) -> None:
+        if odds <= 1.01 or p_model <= 0:
+            return
+        ev = p_model * (odds - 1.0) - (1.0 - p_model)
+        legs.append({
+            "market": market,
+            "selection": selection,
+            "label": label,
+            "odds": round(odds, 2),
+            "p_model": round(p_model, 3),
+            "ev_ratio": round(ev, 3),
+            "reason": reason,
+        })
+
+    # 1) 正确比分：top3 + predicted_score + score_elimination_audit keep
+    cs_odds = odds_map.get("correct_score", {})
+    seen_scores = set()
+    if cs_odds:
+        elim = pred.get("score_elimination_audit") if isinstance(pred.get("score_elimination_audit"), dict) else {}
+        cand_scores: List[str] = []
+        if predicted_score:
+            cand_scores.append(predicted_score)
+        for t in (pred.get("top3") or []):
+            if isinstance(t, dict) and t.get("score"):
+                cand_scores.append(str(t.get("score")))
+        for sc_key, verdict in elim.items():
+            if isinstance(verdict, str) and verdict.strip().startswith("keep") and sc_key in cs_odds:
+                cand_scores.append(sc_key)
+        for sc in cand_scores:
+            if sc in seen_scores or sc not in cs_odds:
+                continue
+            seen_scores.add(sc)
+            p = _bet_p_model_for_score(pred, sc)
+            tag = "主选比分" if sc == predicted_score else "候选比分"
+            add("correct_score", sc, cs_odds[sc], p, f"比分 {_bet_score_zh(sc)}",
+                f"{tag}，赔率{cs_odds[sc]:.2f}，模型命中估计{p*100:.0f}%")
+
+    # 2) 胜平负
+    onex2 = odds_map.get("one_x_two", {})
+    if onex2 and final_dir in onex2:
+        p = _clip(_f(dprobs.get(final_dir), 0.0) / 100.0, 0.0, 0.95)
+        if p <= 0:
+            p = 0.4
+        zh = {"home": "主胜", "draw": "平局", "away": "客胜"}.get(final_dir, final_dir)
+        add("one_x_two", final_dir, onex2[final_dir], p, zh,
+            f"终审方向{zh}，胜平负赔率{onex2[final_dir]:.2f}，方向概率{p*100:.0f}%")
+
+    # 3) 总进球数（主选 band）
+    tg = odds_map.get("total_goals", {})
+    main_band = _bet_goal_band_main(pred)
+    if tg and main_band is not None and str(main_band) in tg:
+        add("total_goals", str(main_band), tg[str(main_band)], 0.42, f"总进球{main_band}球",
+            f"主选总进球{main_band}球，赔率{tg[str(main_band)]:.2f}")
+
+    # 4) 大小球 2.5
+    ou = odds_map.get("over_under", {})
+    if ou and main_band is not None:
+        if main_band >= 3 and "over_2.5" in ou:
+            add("over_under", "over_2.5", ou["over_2.5"], 0.45, "大2.5",
+                f"主选总进球{main_band}球→大2.5，合成赔率{ou['over_2.5']:.2f}")
+        elif main_band <= 2 and "under_2.5" in ou:
+            add("over_under", "under_2.5", ou["under_2.5"], 0.50, "小2.5",
+                f"主选总进球{main_band}球→小2.5，合成赔率{ou['under_2.5']:.2f}")
+
+    # 5) 半全场（保守：方向胜→平/主 或 主/主；缺字段已跳过）
+    hf = odds_map.get("half_full", {})
+    if hf and final_dir in ("home", "away"):
+        tempo = str((pred.get("contextual_logic") or {}).get("tempo", "")).lower()
+        slow = tempo in ("low", "medium") or "慢热" in str(pred.get("reason", ""))
+        if final_dir == "home":
+            pick = "平/主" if slow else "主/主"
+        else:
+            pick = "平/负" if slow else "负/负"
+        if pick in hf:
+            add("half_full", pick, hf[pick], 0.22, f"半全场{pick}",
+                f"方向{final_dir}+{'慢热' if slow else '强势'}→{pick}，赔率{hf[pick]:.2f}")
+
+    return legs
+
+
+def _bet_round_stake(x: float) -> int:
+    """向下取整到 BET_RECO_STAKE_STEP 的倍数。"""
+    return int(x // BET_RECO_STAKE_STEP) * BET_RECO_STAKE_STEP
+
+
+def _allocate_budget(legs: List[Dict[str, Any]], budget: int, min_stake: int, weight_key: str) -> List[Dict[str, Any]]:
+    """预算分配：按 weight_key 加权→单注下限钳制→取整到步长→余额补给最高权重腿。
+    会就地砍掉无法满足 min_stake 的最弱腿。返回带 stake/potential_payout 的腿列表。"""
+    if not legs:
+        return []
+    work = [dict(l) for l in legs]
+    # 权重(截断为正)
+    def w_of(l: Dict[str, Any]) -> float:
+        return max(_f(l.get(weight_key), 0.0), 0.01)
+
+    # 最多容纳腿数
+    max_legs = budget // min_stake
+    # 按权重降序，超出容量先砍最弱
+    work.sort(key=w_of, reverse=True)
+    if len(work) > max_legs:
+        work = work[:max_legs]
+
+    while work:
+        total_w = sum(w_of(l) for l in work)
+        if total_w <= 0:
+            break
+        # 初始分配
+        raw = [budget * w_of(l) / total_w for l in work]
+        # 若最小分配 < min_stake，砍掉权重最弱腿后重算
+        min_idx = min(range(len(work)), key=lambda i: raw[i])
+        if raw[min_idx] < min_stake and len(work) > 1:
+            del work[min_idx]
+            continue
+        # 取整到步长
+        stakes = [max(_bet_round_stake(r), min_stake) for r in raw]
+        # 确保不超预算：从最低权重腿往下削
+        total = sum(stakes)
+        order_low = sorted(range(len(work)), key=lambda i: w_of(work[i]))
+        gi = 0
+        while total > budget and gi < len(order_low):
+            i = order_low[gi]
+            if stakes[i] - BET_RECO_STAKE_STEP >= min_stake:
+                stakes[i] -= BET_RECO_STAKE_STEP
+                total -= BET_RECO_STAKE_STEP
+            else:
+                gi += 1
+        if total > budget and len(work) > 1:
+            # 仍超：砍最弱腿重算
+            del work[order_low[0]]
+            continue
+        # 余额补给最高权重腿（取整步长）
+        remain = budget - sum(stakes)
+        if remain >= BET_RECO_STAKE_STEP:
+            best_i = max(range(len(work)), key=lambda i: w_of(work[i]))
+            stakes[best_i] += _bet_round_stake(remain)
+        for l, s in zip(work, stakes):
+            l["stake"] = int(s)
+            l["potential_payout"] = round(s * _f(l.get("odds"), 0.0), 1)
+        return work
+    return []
+
+
+def _bet_combo_expected_return(legs: List[Dict[str, Any]]) -> float:
+    """组合期望返还 = Σ stake_i * odds_i * p_model_i（腿间独立近似）。"""
+    return round(sum(_f(l.get("stake")) * _f(l.get("odds")) * _f(l.get("p_model")) for l in legs), 1)
+
+
+def _apply_bet_recommendation_gate(pred: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    """主入口：组装 steady/aggressive 两套组合，写入 pred["bet_recommendation"]。
+    只新增字段，不改任何终审判断。"""
+    reco = pred.get("recommendation") if isinstance(pred.get("recommendation"), dict) else {}
+    bet_action = str(reco.get("bet_action", "")).lower()
+
+    base = {
+        "available": True,
+        "per_match_budget": BET_RECO_BUDGET,
+        "min_stake": BET_RECO_MIN_STAKE,
+        "disclaimer": BET_RECO_DISCLAIMER,
+        "default_view": "aggressive",
+        "no_bet": False,
+        "no_bet_reason": "",
+        "version": "bet_reco_v1",
+    }
+
+    # 终审不建议下注：两套都置空
+    if bet_action in BET_RECO_NO_BET_ACTIONS or not bool(reco.get("is_recommended", True)):
+        base["no_bet"] = True
+        base["no_bet_reason"] = f"终审推荐为 {bet_action or '不推荐'}，本场不建议下注"
+        base["steady"] = {"total_stake": 0, "expected_return": 0.0, "reason": base["no_bet_reason"], "legs": []}
+        base["aggressive"] = {"total_stake": 0, "expected_return": 0.0, "reason": base["no_bet_reason"], "legs": []}
+        pred["bet_recommendation"] = base
+        return pred
+
+    odds_map = _extract_market_odds(match_obj)
+    if not odds_map:
+        base["available"] = False
+        base["no_bet"] = True
+        base["no_bet_reason"] = "无可用盘口赔率字段，无法生成下注推荐"
+        base["steady"] = {"total_stake": 0, "expected_return": 0.0, "reason": base["no_bet_reason"], "legs": []}
+        base["aggressive"] = {"total_stake": 0, "expected_return": 0.0, "reason": base["no_bet_reason"], "legs": []}
+        pred["bet_recommendation"] = base
+        return pred
+
+    all_legs = _build_bet_candidates(pred, odds_map)
+
+    # 稳健：p_model≥0.35 且 ev_ratio≥-0.05，排除高赔长尾 odds>8
+    steady_pool = [l for l in all_legs if _f(l.get("p_model")) >= 0.35 and _f(l.get("ev_ratio")) >= -0.05 and _f(l.get("odds")) <= 8.0]
+    steady_pool.sort(key=lambda l: _f(l.get("p_model")), reverse=True)
+    steady_pool = steady_pool[:3]
+    steady_legs = _allocate_budget(steady_pool, BET_RECO_BUDGET, BET_RECO_MIN_STAKE, "p_model")
+
+    # 激进：ev_ratio>0，允许高赔长尾
+    agg_pool = [l for l in all_legs if _f(l.get("ev_ratio")) > 0]
+    agg_pool.sort(key=lambda l: _f(l.get("ev_ratio")), reverse=True)
+    agg_pool = agg_pool[:4]
+    agg_legs = _allocate_budget(agg_pool, BET_RECO_BUDGET, BET_RECO_MIN_STAKE, "ev_ratio")
+
+    if steady_legs:
+        base["steady"] = {
+            "total_stake": int(sum(_i(l.get("stake")) for l in steady_legs)),
+            "expected_return": _bet_combo_expected_return(steady_legs),
+            "reason": "稳健组合：命中率优先，选模型概率较高且非高赔长尾的标的，控制波动。",
+            "legs": steady_legs,
+        }
+    else:
+        base["steady"] = {"total_stake": 0, "expected_return": 0.0, "reason": "无满足稳健条件(命中率≥35%且非高赔长尾)的标的。", "legs": []}
+
+    if agg_legs:
+        base["aggressive"] = {
+            "total_stake": int(sum(_i(l.get("stake")) for l in agg_legs)),
+            "expected_return": _bet_combo_expected_return(agg_legs),
+            "reason": "激进组合：期望值优先，纳入正期望的高赔标的(含大比分长尾)，追求收益最大化，命中率较低。",
+            "legs": agg_legs,
+        }
+    else:
+        base["aggressive"] = {"total_stake": 0, "expected_return": 0.0, "reason": "无正期望值标的，激进组合空仓。", "legs": []}
+
+    # 若激进空但稳健有，默认视图回退稳健
+    if not agg_legs and steady_legs:
+        base["default_view"] = "steady"
+
+    pred["bet_recommendation"] = base
+    return pred
+
+
 # === 审计修复 2026-06-21 (根据世界杯小组赛真实赛果对账) ===
 # 背景：现网 6/20 完赛 4 场，方向 3/4 准但比分 0/4，错误全部是
 # “给强弱悬殊场的负方多给了一个安慰球”(4-1→实3-0, 2-1→实2-0)，
@@ -5560,6 +5898,11 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         _sync_gate_with_bet_action(pred)
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"gate_action_sync_error:{str(e)[:120]}")
+    # 下注推荐：本地确定性，基于全部 gate 终态赔率算期望值，只新增字段。
+    try:
+        _apply_bet_recommendation_gate(pred, match_obj)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"bet_recommendation_gate_error:{str(e)[:120]}")
     pred["engine_version"] = ENGINE_VERSION
     pred["engine_architecture"] = ENGINE_ARCHITECTURE
     return pred
