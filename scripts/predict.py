@@ -78,6 +78,36 @@ DEFAULT_MODELS = {
     "gemini": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
 }
 
+# 简单粗暴的 1-5 号接口池：URL/KEY 从后台环境变量读取，模型名在代码里写死。
+# 你只需要在这里补 2/3/4/5 的模型名；对应后台变量为：
+#   GEMINI_API_URL_2 / GEMINI_API_KEY_2  或  GEMINI_API_URL2 / GEMINI_API_KEY2
+# GPT/GROK 同理。模型名留空的 slot 会被跳过，避免误用未配置模型。
+AI_ENDPOINT_MODEL_SLOTS = {
+    "gpt": {
+        1: DEFAULT_MODELS["gpt"],
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+    },
+    "grok": {
+        1: DEFAULT_MODELS["grok"],
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+    },
+    "gemini": {
+        1: DEFAULT_MODELS["gemini"],
+        2: "",  # TODO: 填你的 GEMINI 2号模型名
+        3: "",  # TODO: 填你的 GEMINI 3号模型名
+        4: "",  # TODO: 填你的 GEMINI 4号模型名
+        5: "",  # TODO: 填你的 GEMINI 5号模型名
+    },
+}
+
+AI_ENDPOINT_RR_CURSOR: Dict[str, int] = {}
+
 CRS_FULL_MAP = {
     "1-0": "w10", "2-0": "w20", "2-1": "w21", "3-0": "w30", "3-1": "w31",
     "3-2": "w32", "4-0": "w40", "4-1": "w41", "4-2": "w42", "5-0": "w50",
@@ -265,6 +295,9 @@ AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 120)
 # Pure transport/transient resilience; does NOT touch request URL/key/payload/stream.
 AI_FINAL_RETRY_MAX = max(0, _env_int("AI_FINAL_RETRY_MAX", 2))
 AI_FINAL_RETRY_BASE_DELAY = _env_int("AI_FINAL_RETRY_BASE_DELAY_MS", 1500)
+AI_ENDPOINT_MAX_SLOTS = max(1, min(5, _env_int("AI_ENDPOINT_MAX_SLOTS", 5)))
+AI_ENDPOINT_FAILOVER = _env_bool("AI_ENDPOINT_FAILOVER", True)
+AI_ENDPOINT_ROUND_ROBIN = _env_bool("AI_ENDPOINT_ROUND_ROBIN", True)
 # Plan B+: when Gemini final referee fails, GPT runs a 16-role family debate to
 # adjudicate the final score (acts as the referee, not a phase1 analyst).
 AI_ENABLE_FAMILY_DEBATE_REFEREE = _env_bool("AI_ENABLE_FAMILY_DEBATE_REFEREE", True)
@@ -1146,33 +1179,58 @@ def _clean_env_url(*names: str) -> str:
 
 def get_key_for_ai(ai_name: str) -> str:
     """Get model-specific API key. Each model now has its own dedicated key."""
-    ai_upper = ai_name.upper()
-    if ai_upper == "GPT":
-        return _clean_env_key("GPT_API_KEY")
-    elif ai_upper == "GROK":
-        return _clean_env_key("GROK_API_KEY")
-    elif ai_upper == "GEMINI":
-        return _clean_env_key("GEMINI_API_KEY")
-    # Fallback for unknown models
-    return _clean_env_key(f"{ai_upper}_API_KEY")
+    ep = _endpoint_candidates_for_ai(ai_name)
+    return ep[0]["key"] if ep else ""
 
 
 def get_url_for_ai(ai_name: str) -> str:
     """Get model-specific API URL. Each model now has its own dedicated URL."""
-    ai_upper = ai_name.upper()
-    if ai_upper == "GPT":
-        return _clean_env_url("GPT_API_URL")
-    elif ai_upper == "GROK":
-        return _clean_env_url("GROK_API_URL")
-    elif ai_upper == "GEMINI":
-        return _clean_env_url("GEMINI_API_URL")
-    # Fallback for unknown models
-    return _clean_env_url(f"{ai_upper}_API_URL")
+    ep = _endpoint_candidates_for_ai(ai_name)
+    return ep[0]["url"] if ep else ""
 
 
 def _model_for(ai_name: str) -> str:
-    env_name = f"{ai_name.upper()}_MODEL"
-    return str(os.environ.get(env_name, DEFAULT_MODELS.get(ai_name, "model"))).strip() or DEFAULT_MODELS.get(ai_name, "model")
+    ep = _endpoint_candidates_for_ai(ai_name)
+    return ep[0]["model"] if ep else DEFAULT_MODELS.get(ai_name, "model")
+
+
+def _slot_env_names(prefix: str, kind: str, slot: int) -> List[str]:
+    if slot <= 1:
+        return [f"{prefix}_API_{kind}"]
+    return [f"{prefix}_API_{kind}_{slot}", f"{prefix}_API_{kind}{slot}"]
+
+
+def _endpoint_candidates_for_ai(ai_name: str) -> List[Dict[str, Any]]:
+    """Read simple numbered endpoint slots: URL/KEY from env, model from code.
+
+    Slot 1 uses GPT_API_URL/GPT_API_KEY. Slots 2-5 support both
+    GPT_API_URL_2/GPT_API_KEY_2 and GPT_API_URL2/GPT_API_KEY2 aliases.
+    Model names intentionally live in AI_ENDPOINT_MODEL_SLOTS above.
+    """
+    name = str(ai_name or "").strip().lower()
+    prefix = name.upper()
+    models = AI_ENDPOINT_MODEL_SLOTS.get(name, {})
+    out: List[Dict[str, Any]] = []
+    for slot in range(1, AI_ENDPOINT_MAX_SLOTS + 1):
+        model = str(models.get(slot, "")).strip()
+        if not model:
+            continue
+        url = _clean_env_url(*_slot_env_names(prefix, "URL", slot))
+        key = _clean_env_key(*_slot_env_names(prefix, "KEY", slot))
+        if not url or not key:
+            continue
+        out.append({"name": f"{name}_{slot}", "ai_name": name, "slot": slot, "url": url, "key": key, "model": model})
+    return out
+
+
+def _ordered_endpoints_for_ai(ai_name: str) -> List[Dict[str, Any]]:
+    eps = _endpoint_candidates_for_ai(ai_name)
+    if not eps or not AI_ENDPOINT_ROUND_ROBIN:
+        return eps
+    key = str(ai_name or "").strip().lower()
+    cur = AI_ENDPOINT_RR_CURSOR.get(key, 0) % len(eps)
+    AI_ENDPOINT_RR_CURSOR[key] = cur + 1
+    return eps[cur:] + eps[:cur]
 
 
 def _chat_url(base_url: str) -> str:
@@ -1185,9 +1243,14 @@ def _chat_url(base_url: str) -> str:
 
 
 def debug_ai_config() -> None:
-    print(f"[AI CONFIG] mode={AI_RESEARCH_MODE} run_mode={AI_RUN_MODE} mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} chunk_concurrency={AI_CHUNK_CONCURRENCY} model_concurrency={AI_MODEL_CONCURRENCY} phase1_parallel={AI_PHASE1_PARALLEL} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE}")
+    print(f"[AI CONFIG] mode={AI_RESEARCH_MODE} run_mode={AI_RUN_MODE} mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} chunk_concurrency={AI_CHUNK_CONCURRENCY} model_concurrency={AI_MODEL_CONCURRENCY} phase1_parallel={AI_PHASE1_PARALLEL} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE} endpoint_slots={AI_ENDPOINT_MAX_SLOTS} endpoint_failover={AI_ENDPOINT_FAILOVER} endpoint_round_robin={AI_ENDPOINT_ROUND_ROBIN}")
     for n in AI_NAMES:
-        print(f"[AI CONFIG] {n.upper()} model={_model_for(n)} key={_mask_key(get_key_for_ai(n))} url={get_url_for_ai(n) or '<missing>'}")
+        eps = _endpoint_candidates_for_ai(n)
+        if not eps:
+            print(f"[AI CONFIG] {n.upper()} endpoints=<missing>")
+            continue
+        for ep in eps:
+            print(f"[AI CONFIG] {n.upper()} slot={ep['slot']} model={ep['model']} key={_mask_key(ep['key'])} url={ep['url'] or '<missing>'}")
 
 
 def _is_retryable_ai_status(status: Dict[str, Any]) -> bool:
@@ -1239,7 +1302,8 @@ async def async_call_ai_json_with_retry(session: Optional[Any], ai_name: str, sy
 
 async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: str, prompt: str, phase: str, expected_matches: List[int]) -> Tuple[str, Any, Dict[str, Any]]:
     t0 = time.time()
-    model = _model_for(ai_name)
+    endpoints = _ordered_endpoints_for_ai(ai_name)
+    model = endpoints[0]["model"] if endpoints else _model_for(ai_name)
     status = {"ok": False, "ai_name": ai_name, "model": model, "phase": phase, "elapsed": 0.0}
 
     if AI_MOCK_MODE:
@@ -1253,72 +1317,110 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
         _update_call_status(ai_name, phase, status)
         return ai_name, {}, status
 
-    key = get_key_for_ai(ai_name)
-    base_url = get_url_for_ai(ai_name)
-    if not key:
-        status.update({"status": "no_key"})
-        _update_call_status(ai_name, phase, status)
-        return ai_name, {}, status
-    if not base_url:
-        status.update({"status": "no_url"})
-        _update_call_status(ai_name, phase, status)
-        return ai_name, {}, status
-
-    url = _chat_url(base_url)
-    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {key}"}
-    temperature = AI_TEMPERATURE_FINAL if phase in ("final", "fallback_referee", "family_debate_referee") else AI_TEMPERATURE_CRITIC if phase == "critic" else AI_TEMPERATURE_PHASE1
-    payload: Dict[str, Any] = {
-        "model": model,
-        "messages": [{"role": "system", "content": system_text}, {"role": "user", "content": prompt}],
-        "temperature": temperature,
-    }
-    if AI_USE_RESPONSE_FORMAT:
-        payload["response_format"] = {"type": "json_object"}
-
-    try:
-        read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "fallback_referee", "family_debate_referee") else AI_READ_TIMEOUT
-        total_timeout = None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT
-        timeout = aiohttp.ClientTimeout(
-            total=total_timeout,
-            connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
-            sock_connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
-            sock_read=None if read_timeout <= 0 else read_timeout,
-        )
-        assert session is not None
-        async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
-            text = await r.text()
-            if r.status < 200 or r.status >= 300:
-                status.update({"status": f"http_{r.status}", "http_error": text[:800], "elapsed": round(time.time() - t0, 1)})
-                _update_call_status(ai_name, phase, status)
-                return ai_name, {}, status
-            try:
-                data = json.loads(text)
-            except Exception:
-                data = {"raw": text}
-            raw_text = _extract_response_text(data)
-            if AI_SAVE_RAW_RESPONSE:
-                _save_debug_dump(ai_name, phase, data, raw_text)
-            obj = _json_loads_best_effort_object(raw_text)
-            if not isinstance(obj, (dict, list)) or not obj:
-                status.update({
-                    "ok": False,
-                    "status": "parse_failed",
-                    "parse_error": "empty_or_invalid_json_object",
-                    "raw_excerpt": raw_text[:300],
-                    "elapsed": round(time.time() - t0, 1),
-                })
-                _update_call_status(ai_name, phase, status)
-                return ai_name, {}, status
-            status.update({"ok": True, "status": "ok", "elapsed": round(time.time() - t0, 1)})
+    if not endpoints:
+        # Backward-compatible escape hatch for tests or callers that monkeypatch
+        # the legacy get_key_for_ai/get_url_for_ai helpers directly.
+        legacy_key = get_key_for_ai(ai_name)
+        legacy_url = get_url_for_ai(ai_name)
+        if legacy_key and legacy_url:
+            endpoints = [{
+                "name": f"{str(ai_name).lower()}_legacy",
+                "ai_name": str(ai_name).lower(),
+                "slot": 1,
+                "url": legacy_url,
+                "key": legacy_key,
+                "model": _model_for(ai_name),
+            }]
+        else:
+            status.update({"status": "no_key", "endpoint_count": 0})
             _update_call_status(ai_name, phase, status)
-            return ai_name, obj, status
-    except asyncio.TimeoutError:
-        status.update({"status": "timeout", "elapsed": round(time.time() - t0, 1)})
-    except Exception as e:
-        status.update({"status": "error", "error": str(e)[:500], "elapsed": round(time.time() - t0, 1)})
+            return ai_name, {}, status
 
-    _update_call_status(ai_name, phase, status)
-    return ai_name, {}, status
+    temperature = AI_TEMPERATURE_FINAL if phase in ("final", "fallback_referee", "family_debate_referee") else AI_TEMPERATURE_CRITIC if phase == "critic" else AI_TEMPERATURE_PHASE1
+    last_status = status
+    tries = endpoints if AI_ENDPOINT_FAILOVER else endpoints[:1]
+    for attempt, endpoint in enumerate(tries, start=1):
+        ep_t0 = time.time()
+        model = endpoint["model"]
+        url = _chat_url(endpoint["url"])
+        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {endpoint['key']}"}
+        payload: Dict[str, Any] = {
+            "model": model,
+            "messages": [{"role": "system", "content": system_text}, {"role": "user", "content": prompt}],
+            "temperature": temperature,
+        }
+        if AI_USE_RESPONSE_FORMAT:
+            payload["response_format"] = {"type": "json_object"}
+        status = {
+            "ok": False,
+            "ai_name": ai_name,
+            "model": model,
+            "phase": phase,
+            "elapsed": 0.0,
+            "endpoint_name": endpoint["name"],
+            "endpoint_slot": endpoint["slot"],
+            "endpoint_attempt": attempt,
+            "endpoint_total": len(tries),
+        }
+        try:
+            read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "fallback_referee", "family_debate_referee") else AI_READ_TIMEOUT
+            total_timeout = None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT
+            timeout = aiohttp.ClientTimeout(
+                total=total_timeout,
+                connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
+                sock_connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
+                sock_read=None if read_timeout <= 0 else read_timeout,
+            )
+            assert session is not None
+            async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
+                text = await r.text()
+                if r.status < 200 or r.status >= 300:
+                    status.update({"status": f"http_{r.status}", "http_error": text[:800], "elapsed": round(time.time() - ep_t0, 1)})
+                    _update_call_status(ai_name, phase, status)
+                    last_status = status
+                    if AI_ENDPOINT_FAILOVER and attempt < len(tries) and _is_retryable_ai_status(status):
+                        print(f"  [ENDPOINT FAILOVER] {ai_name.upper()} {phase} {endpoint['name']} status={status.get('status')} -> next slot")
+                        continue
+                    return ai_name, {}, status
+                try:
+                    data = json.loads(text)
+                except Exception:
+                    data = {"raw": text}
+                raw_text = _extract_response_text(data)
+                if AI_SAVE_RAW_RESPONSE:
+                    _save_debug_dump(ai_name, phase, data, raw_text)
+                obj = _json_loads_best_effort_object(raw_text)
+                if not isinstance(obj, (dict, list)) or not obj:
+                    status.update({
+                        "ok": False,
+                        "status": "parse_failed",
+                        "parse_error": "empty_or_invalid_json_object",
+                        "raw_excerpt": raw_text[:300],
+                        "elapsed": round(time.time() - ep_t0, 1),
+                    })
+                    _update_call_status(ai_name, phase, status)
+                    last_status = status
+                    if AI_ENDPOINT_FAILOVER and attempt < len(tries) and _is_retryable_ai_status(status):
+                        print(f"  [ENDPOINT FAILOVER] {ai_name.upper()} {phase} {endpoint['name']} status=parse_failed -> next slot")
+                        continue
+                    return ai_name, {}, status
+                status.update({"ok": True, "status": "ok", "elapsed": round(time.time() - ep_t0, 1), "total_elapsed": round(time.time() - t0, 1)})
+                _update_call_status(ai_name, phase, status)
+                return ai_name, obj, status
+        except asyncio.TimeoutError:
+            status.update({"status": "timeout", "elapsed": round(time.time() - ep_t0, 1)})
+        except Exception as e:
+            status.update({"status": "error", "error": str(e)[:500], "elapsed": round(time.time() - ep_t0, 1)})
+        _update_call_status(ai_name, phase, status)
+        last_status = status
+        if AI_ENDPOINT_FAILOVER and attempt < len(tries) and _is_retryable_ai_status(status):
+            print(f"  [ENDPOINT FAILOVER] {ai_name.upper()} {phase} {endpoint['name']} status={status.get('status')} -> next slot")
+            continue
+        return ai_name, {}, status
+
+    last_status.update({"elapsed": round(time.time() - t0, 1)})
+    _update_call_status(ai_name, phase, last_status)
+    return ai_name, {}, last_status
 
 
 def _update_call_status(ai_name: str, phase: str, status: Dict[str, Any]) -> None:
