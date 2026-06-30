@@ -1682,13 +1682,12 @@ def _normalize_top3(item: Dict[str, Any], predicted_score: str = "") -> List[Dic
         else:
             prob, logic = 0, ""
         out.append({"score": sc, "prob": round(_prob_to_float(prob), 3), "logic": str(logic)[:900]})
-        if len(out) >= 3:
+        if len(out) >= 5:
             break
     if not out and predicted_score and _parse_score(predicted_score)[0] is not None:
         out = [{"score": predicted_score, "prob": 0.0, "logic": "top3_missing_but_predicted_score_present"}]
-    if out and predicted_score and out[0]["score"] != predicted_score and _parse_score(predicted_score)[0] is not None:
-        out = [{"score": predicted_score, "prob": out[0].get("prob", 0.0), "logic": "protocol_repair_top3_primary_score"}] + [x for x in out if x["score"] != predicted_score]
-        out = out[:3]
+    elif predicted_score and _parse_score(predicted_score)[0] is not None and predicted_score not in seen:
+        out.append({"score": predicted_score, "prob": 0.0, "logic": "predicted_score_retained_without_reordering"})
     return out
 
 
@@ -2930,8 +2929,10 @@ def _protocol_enforce_prediction(r: Dict[str, Any]) -> Dict[str, Any]:
     raw_dir = _dir_from_any(r.get("final_direction"))
     warnings = list(r.get("validation_warnings", []))
     if score_dir in VALID_DIRS and raw_dir in VALID_DIRS and score_dir != raw_dir:
-        warnings.append(f"protocol_direction_fixed_to_score:{raw_dir}->{score_dir}")
-    if score_dir in VALID_DIRS:
+        warnings.append(f"protocol_score_direction_conflict_preserved:{raw_dir}!={score_dir}")
+        r["score_direction_conflict"] = True
+    elif score_dir in VALID_DIRS and raw_dir not in VALID_DIRS:
+        warnings.append(f"protocol_direction_filled_from_score:{score_dir}")
         r["final_direction"] = score_dir
     r["predicted_score"] = score
     r["goal_band"] = _score_goal_band(score)
@@ -2942,6 +2943,103 @@ def _protocol_enforce_prediction(r: Dict[str, Any]) -> Dict[str, Any]:
         r["anchor_audit"] = {}
     r["validation_warnings"] = list(dict.fromkeys(warnings))
     return r
+
+
+def _score_shape_selector(pred: Dict[str, Any], match_obj: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Re-rank score candidates without changing the final direction.
+
+    This is the missing score-shape layer between AI single-score output and
+    recommendation gates. It consumes the existing AI/market candidates and
+    only promotes scores that preserve final_direction.
+    """
+    if not isinstance(pred, dict) or pred.get("is_abstain"):
+        return pred
+    final_dir = _dir_from_any(pred.get("final_direction"))
+    score = _score_from_candidate(pred.get("predicted_score"))
+    h, a = _parse_score(score)
+    if final_dir not in VALID_DIRS or h is None or a is None:
+        return pred
+
+    raw_item = pred.get("raw_item", {}) if isinstance(pred.get("raw_item"), dict) else {}
+    candidates = _collect_score_candidates_for_gate(pred, raw_item) if "_collect_score_candidates_for_gate" in globals() else []
+    candidate_scores = []
+    for c in candidates:
+        sc = _score_from_candidate(c.get("score"))
+        if _parse_score(sc)[0] is not None and sc not in candidate_scores:
+            candidate_scores.append(sc)
+    if score not in candidate_scores:
+        candidate_scores.insert(0, score)
+
+    goal_band = str(pred.get("goal_band", "")).strip().lower()
+    btts_yes = _raw_btts_yes_signal(pred, raw_item) or str(pred.get("btts", "")).strip().lower() in {"yes", "y", "true", "是"}
+    compact = _json_compact({
+        "tail_risk_flags": pred.get("tail_risk_flags") or raw_item.get("tail_risk_flags"),
+        "score_cluster_audit": pred.get("score_cluster_audit") or raw_item.get("score_cluster_audit"),
+        "goal_market_audit": pred.get("goal_market_audit") or raw_item.get("goal_market_audit"),
+    }, 2500).lower()
+    high_goal_tail = goal_band in {"4+", "high", "4"} or any(t in compact for t in ["4+", "high_btts", "高比分", "tail", "尾部"])
+    low_goal_signal = goal_band in {"0-1", "0", "1", "low"} or any(t in compact for t in ["0-0", "low", "闷局", "低比分"])
+
+    promoted = ""
+    reason = ""
+
+    # 1) Clean-sheet over-anchor: promote same-direction BTTS candidate when
+    # the AI/market evidence already surfaced BTTS or fight-back tails.
+    if final_dir == "home" and a == 0 and btts_yes:
+        for sc in [f"{h}-{1}", f"{max(h + 1, 2)}-1"]:
+            if _score_direction(sc) == final_dir and sc in candidate_scores:
+                promoted, reason = sc, "score_shape_selector_btts_clean_sheet_uplift"
+                break
+    elif final_dir == "away" and h == 0 and btts_yes:
+        for sc in [f"1-{a}", f"1-{max(a + 1, 2)}"]:
+            if _score_direction(sc) == final_dir and sc in candidate_scores:
+                promoted, reason = sc, "score_shape_selector_btts_clean_sheet_uplift"
+                break
+
+    # 2) Draw band selector: keep draw direction but allow low/high draw bands
+    # when existing evidence explicitly points away from the 1-1 default.
+    if not promoted and final_dir == "draw":
+        draw_order = [score]
+        if high_goal_tail:
+            draw_order = ["2-2", "3-3", score, "1-1", "0-0"]
+        elif low_goal_signal:
+            draw_order = ["0-0", score, "1-1", "2-2"]
+        for sc in draw_order:
+            if _score_direction(sc) == "draw" and (sc == score or sc in candidate_scores):
+                promoted = sc
+                if promoted != score:
+                    reason = "score_shape_selector_draw_band_rerank"
+                break
+
+    if promoted and promoted != score and _score_direction(promoted) == final_dir:
+        old_score = score
+        pred["predicted_score"] = promoted
+        pred["goal_band"] = _score_goal_band(promoted)
+        pred["btts"] = _score_btts(promoted)
+        pred["score_shape_calibrated"] = True
+        pred.setdefault("score_shape_selector", {})
+        pred["score_shape_selector"].update({"old_score": old_score, "new_score": promoted, "reason": reason})
+        pred.setdefault("validation_warnings", []).append(f"{reason}:{old_score}->{promoted}")
+
+    # Preserve a candidate distribution for consumers; do not force the old
+    # predicted_score into rank #1.
+    dist = []
+    seen = set()
+    for sc in [pred.get("predicted_score"), *candidate_scores]:
+        sc = _score_from_candidate(sc)
+        if _parse_score(sc)[0] is None or sc in seen:
+            continue
+        if _score_direction(sc) != final_dir:
+            continue
+        seen.add(sc)
+        dist.append({"score": sc, "prob": 0.0, "logic": "score_shape_selector_candidate"})
+        if len(dist) >= 5:
+            break
+    if dist:
+        pred["score_distribution"] = dist
+        pred["top3"] = dist[:3]
+    pred["validation_warnings"] = list(dict.fromkeys(pred.get("validation_warnings", [])))
+    return pred
 
 
 async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
@@ -5879,6 +5977,10 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         _apply_contrarian_market_claim_gate(pred)
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"contrarian_market_claim_gate_error:{str(e)[:120]}")
+    try:
+        _score_shape_selector(pred, match_obj)
+    except Exception as e:
+        pred.setdefault("validation_warnings", []).append(f"score_shape_selector_error:{str(e)[:120]}")
     # [补丁A1 2026-06-22] 禁用 consolation gate: 第一轮27场回测净收益=0,
     # 且方向与赛果相反(大胜场x-1比x-0更高频),一旦触发只会打碎唯一可能命中的x-1大胜。
     # 保留函数代码以可追溯,仅摘除调用(回测确认禁用为零回归纯收益)。
