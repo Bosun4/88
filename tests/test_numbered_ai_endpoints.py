@@ -56,6 +56,14 @@ def test_numbered_endpoint_candidates_read_env_and_code_models(monkeypatch):
     assert eps[1]["key"] == "k2"
 
 
+def test_endpoint_model_slot_accepts_literal_model_name_and_alias(monkeypatch):
+    monkeypatch.setitem(predict.AI_ENDPOINT_MODEL_SLOTS["gpt"], 2, "gpt-5.5")
+    monkeypatch.setitem(predict.AI_ENDPOINT_MODEL_SLOTS["gpt"], 3, "gpt")
+
+    assert predict._resolve_endpoint_model_slot("gpt", 2) == "gpt-5.5"
+    assert predict._resolve_endpoint_model_slot("gpt", 3) == predict.DEFAULT_MODELS["gpt"]
+
+
 def test_numbered_endpoint_round_robin(monkeypatch):
     monkeypatch.setenv("GPT_API_URL", "https://slot1.example/v1")
     monkeypatch.setenv("GPT_API_KEY", "k1")
