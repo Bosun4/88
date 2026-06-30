@@ -108,6 +108,21 @@ AI_ENDPOINT_MODEL_SLOTS = {
 
 AI_ENDPOINT_RR_CURSOR: Dict[str, int] = {}
 
+
+def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
+    """Resolve hard-coded endpoint model slots safely.
+
+    Slot values are model strings, e.g. "gpt-5.5". They are NOT keys into
+    DEFAULT_MODELS. This guard also tolerates accidental DEFAULT_MODELS-style
+    aliases ("gpt"/"grok"/"gemini") without import-time KeyError.
+    """
+    name = str(ai_name or "").strip().lower()
+    value = AI_ENDPOINT_MODEL_SLOTS.get(name, {}).get(slot, "")
+    model = str(value or "").strip()
+    if not model:
+        return ""
+    return DEFAULT_MODELS.get(model, model)
+
 CRS_FULL_MAP = {
     "1-0": "w10", "2-0": "w20", "2-1": "w21", "3-0": "w30", "3-1": "w31",
     "3-2": "w32", "4-0": "w40", "4-1": "w41", "4-2": "w42", "5-0": "w50",
@@ -1209,10 +1224,9 @@ def _endpoint_candidates_for_ai(ai_name: str) -> List[Dict[str, Any]]:
     """
     name = str(ai_name or "").strip().lower()
     prefix = name.upper()
-    models = AI_ENDPOINT_MODEL_SLOTS.get(name, {})
     out: List[Dict[str, Any]] = []
     for slot in range(1, AI_ENDPOINT_MAX_SLOTS + 1):
-        model = str(models.get(slot, "")).strip()
+        model = _resolve_endpoint_model_slot(name, slot)
         if not model:
             continue
         url = _clean_env_url(*_slot_env_names(prefix, "URL", slot))
