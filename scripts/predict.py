@@ -98,11 +98,11 @@ AI_ENDPOINT_MODEL_SLOTS = {
         5: "",
     },
     "gemini": {
-        1: DEFAULT_MODELS["gemini"],
-        2: "",  # TODO: 填你的 GEMINI 2号模型名
-        3: "",  # TODO: 填你的 GEMINI 3号模型名
-        4: "",  # TODO: 填你的 GEMINI 4号模型名
-        5: "",  # TODO: 填你的 GEMINI 5号模型名
+        1: DEFAULT_MODELS["熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"],
+        2: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 2号模型名
+        3: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 3号模型名
+        4: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 4号模型名
+        5: "熊猫-X-10-官逆-gemini-3.1-pro-联网",  # TODO: 填你的 GEMINI 5号模型名
     },
 }
 
