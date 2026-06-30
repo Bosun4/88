@@ -91,11 +91,11 @@ AI_ENDPOINT_MODEL_SLOTS = {
         5: "熊猫-特供-X-10-gpt-5.5",
     },
     "grok": {
-        1: DEFAULT_MODELS["grok"],
-        2: "",
-        3: "",
-        4: "",
-        5: "",
+        1: DEFAULT_MODELS["grok-4.3-c"],
+        2: "grok-4.3-c",
+        3: "grok-4.3-c",
+        4: "[aws] grok-4.3",
+        5: "[aws] grok-4.3",
     },
     "gemini": {
         1: DEFAULT_MODELS["熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"],
