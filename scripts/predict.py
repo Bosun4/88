@@ -84,11 +84,11 @@ DEFAULT_MODELS = {
 # GPT/GROK 同理。模型名留空的 slot 会被跳过，避免误用未配置模型。
 AI_ENDPOINT_MODEL_SLOTS = {
     "gpt": {
-        1: DEFAULT_MODELS["gpt"],
-        2: "",
-        3: "",
-        4: "",
-        5: "",
+        1: DEFAULT_MODELS["gpt-5.5"],
+        2: "gpt-5.5",
+        3: "gpt-5.5",
+        4: "gpt-5.5",
+        5: "熊猫-特供-X-10-gpt-5.5",
     },
     "grok": {
         1: DEFAULT_MODELS["grok"],
