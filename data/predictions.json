@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-07-02 03:06:27",
+  "update_time": "2026-07-02 04:02:13",
   "version": "MAX-v1.1",
   "scope": "today_only",
   "top4": [],
@@ -115,9 +115,9 @@
           "data_note": "由赔率/排名反推的估算值，非官方真实战绩"
         },
         "h2h": [],
-        "global_home": 2.16,
-        "global_draw": 3.31,
-        "global_away": 3.89,
+        "global_home": 1.98,
+        "global_draw": 3.49,
+        "global_away": 4.34,
         "global_odds_source": "the_odds_api",
         "global_odds_match_score": 1.0,
         "information": {},
@@ -161,124 +161,138 @@
         "guest": "塞内加尔",
         "change_is_direction_code": true,
         "prediction": {
-          "predicted_score": "1-1",
-          "predicted_label": "1-1",
-          "result": "平局",
-          "display_direction": "平局",
-          "final_direction": "draw",
-          "raw_ai_direction": "draw",
-          "score_implied_direction": "draw",
+          "predicted_score": "2-1",
+          "predicted_label": "2-1",
+          "result": "主胜",
+          "display_direction": "主胜",
+          "final_direction": "home",
+          "raw_ai_direction": "home",
+          "score_implied_direction": "home",
           "dir_score_conflict": false,
           "is_abstain": false,
           "is_score_others": false,
           "home_win_pct": 46.0,
           "draw_pct": 29.0,
           "away_win_pct": 25.0,
-          "confidence": 40,
+          "confidence": 60,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
           "risk_level": "high",
-          "goal_band": "2",
+          "goal_band": "3",
           "btts": "yes",
           "btts_ai": "yes",
           "both_score": "是",
-          "over_under_2_5": "小",
-          "expected_total_goals": 2,
+          "over_under_2_5": "大",
+          "expected_total_goals": 3,
           "goal_range": [
-            1,
-            2
+            2,
+            3
           ],
-          "scenario": "ai_native_2_goals",
+          "scenario": "ai_native_3_goals",
           "recommendation": {
-            "tier": "C",
+            "tier": "D",
             "is_recommended": false,
-            "top4_priority": 4,
-            "bet_confidence": 40,
-            "direction_stability": "weak",
+            "top4_priority": 1,
+            "bet_confidence": 60,
+            "direction_stability": "medium",
             "score_stability": "medium",
             "risk_level": "high",
             "risk_tags": [
               "knockout_draw_risk",
-              "external_fact_without_source",
-              "missing_external_confirmation",
-              "external_evidence_quality_below_50"
+              "away_counter_attack",
+              "weak_home_favorite_btts_tail",
+              "away_fightback_tail",
+              "two_one_home_hard_no_bet",
+              "weak_home_2_1_btts_away_pct_gate",
+              "non_home_mass_too_high_for_home_2_1",
+              "draw_or_away_probability_too_high_for_home_2_1",
+              "explicit_1_2_2_2_2_3_tail_present"
             ],
             "bet_action": "observe",
             "why_this_can_fail": [
-              "主队早早进球打破僵局",
-              "客队反击高效直接爆冷"
+              "淘汰赛极度保守导致0-0或1-1闷平。",
+              "塞内加尔反击高效爆冷击败比利时。"
             ],
-            "minimum_evidence_needed": [
-              "首发名单"
-            ],
-            "why_recommended": "盘口势均力敌，1-1与2-1极近，缺乏下注价值，建议观望。"
+            "minimum_evidence_needed": [],
+            "why_recommended": "比利时整体实力占优，且塞内加尔防线核心门迪伤缺，利好比利时破门；但受限于淘汰赛性质及盘口区分度不高，建议小注主胜或防平。",
+            "original_bet_confidence": 60,
+            "risk_adjusted_bet_confidence": 49,
+            "display_bet_confidence": 49
           },
-          "recommendation_tier": "C",
+          "recommendation_tier": "D",
           "recommend_gate_pass": false,
           "recommend_gate_reasons": [
             "ai_not_recommended_or_below_min_tier_or_v203_component_downgrade",
+            "2-1 home score blocked by draw/away/tail risk hard gate",
+            "weak_home_2_1_btts_away_pct_gate",
+            "non_home_mass_too_high_for_home_2_1",
+            "draw_or_away_probability_too_high_for_home_2_1",
+            "explicit_1_2_2_2_2_3_tail_present",
             "ai_not_recommended_or_two_one_tail_gate",
             "prematch_v2_risk_hints_present",
-            "external_fact_without_source",
-            "external_evidence_quality_below_50",
-            "direction_probability_not_supporting_final_direction",
-            "low_confidence_draw_observe:conf=29<45",
+            "top3_probability_order_conflict",
             "gate_action_not_bettable"
           ],
-          "safe_top_gate_score": 40.0,
-          "overall_selection_score": 40.0,
-          "direction_selection_score": 40.0,
-          "score_shape_score": 40.0,
-          "direction_tier": "C",
-          "score_tier": "C",
-          "recommendation_downgrade_reasons": [],
+          "safe_top_gate_score": 60.0,
+          "overall_selection_score": 60.0,
+          "direction_selection_score": 60.0,
+          "score_shape_score": 60.0,
+          "direction_tier": "D",
+          "score_tier": "D",
+          "recommendation_downgrade_reasons": [
+            "two_one_home_hard_no_bet",
+            "weak_home_2_1_btts_away_pct_gate",
+            "non_home_mass_too_high_for_home_2_1",
+            "draw_or_away_probability_too_high_for_home_2_1",
+            "explicit_1_2_2_2_2_3_tail_present"
+          ],
           "top_score_candidates": [
             [
-              "1-1",
-              16.0
-            ],
-            [
               "2-1",
-              15.0
+              20.0
             ],
             [
-              "1-2",
-              10.0
+              "1-1",
+              21.0
+            ],
+            [
+              "1-0",
+              12.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
-              "1-1",
-              16.0
-            ],
-            [
               "2-1",
-              15.0
+              20.0
             ],
             [
-              "1-2",
-              10.0
+              "1-1",
+              21.0
+            ],
+            [
+              "1-0",
+              12.0
             ]
           ],
-          "score_model_prob": 16.0,
-          "score_market_odds": 4.7,
-          "score_market_implied_pct": 21.277,
+          "score_model_prob": 20.0,
+          "score_market_odds": 5.0,
+          "score_market_implied_pct": 20.0,
           "anchor_audit": {
-            "zero_zero": "10.5，处于低赔区间，淘汰赛需防闷平，但1-1赔率显著更低。",
-            "one_one": "4.7，全局最低，最强锚点。",
-            "one_zero": "8.0，主队一球小胜有防范，但不如1-1和2-1。",
-            "zero_one": "11.5，客队偷胜赔率较高。",
-            "two_one": "5.0，主胜最强比分，与1-1极近，是最大竞争者。",
-            "one_two": "8.5，客队反打赔率较低，需保留为风险。",
-            "high_score_tail": "2-2为11.5，4球赔率6.0阻力较大，高分平局仅作尾部风险。",
-            "handicap_cover": "让球-1下，穿盘比分2-0(11.5)和3-0(24.0)赔率较高，不支持主队大胜。"
+            "zero_zero": "10.5的赔率处于中等偏上，淘汰赛虽保守但双方进攻端均有一定能力，0-0非首选。",
+            "one_one": "4.7为全场最低，是最大的潜在风险比分，必须高度防范。",
+            "one_zero": "8.0赔率适中，若比利时早早进球后转入控球消耗，可能打出。",
+            "zero_one": "11.5赔率偏高，塞内加尔先拔头筹并守住的难度极大。",
+            "two_one": "5.0赔率仅次于1-1，高度契合主队实力占优且客队有反击能力的剧本。",
+            "one_two": "8.5赔率提示客队反击爆冷风险不可忽视。",
+            "high_score_tail": "4球赔率6.0形成阻力，3-2/4-1等高分尾部打出概率极低。",
+            "handicap_cover": "让1球盘口下，2-1只能走水，3-1(18.0)赔率较高，穿盘难度大。"
           },
           "market_interpretation": {
-            "one_x_two": "竞彩主胜1.97，去水后隐含概率约46%，属于轻度热门，但未形成绝对压制，平局和客胜均有空间。",
-            "handicap": "名义让球-1，但结合正确比分2-0(11.5)和3-0(24.0)的高赔，盘口不支持主队轻松穿盘，更倾向于一球边际或不胜。",
-            "correct_score": "1-1(4.7)与2-1(5.0)构成核心近邻，市场在平局与主队一球小胜之间摇摆，1-1占据微弱优势。",
-            "total_goals": "2球(3.0)为绝对主模态，3球(3.5)次之，4球(6.0)形成大球阻力线，比赛大概率在0-3球区间。",
-            "half_full_time": "主/主3.35最低，但平/主4.75和平/平4.8紧随其后，半场僵持概率极高。",
-            "external_market": "国内外Shin概率偏斜极小(z_gap 0.054)，无显著风控背离，国内盘口真实反映了国际市场预期。"
+            "one_x_two": "主胜赔率1.97，隐含概率约46%，属于优势但不绝对的区间；平赔2.98防范力度较大。",
+            "handicap": "让球盘口为-1.0，支持比利时赢球，但穿盘存在阻力。",
+            "correct_score": "1-1(4.7)与2-1(5.0)处于最低赔率簇，指向双方均有进球的胶着局面。",
+            "total_goals": "2球(3.0)与3球(3.5)为核心模态，4球(6.0)存在明显阻力，比赛大概率在2-3球之间决出胜负。",
+            "half_full_time": "主/主(3.35)与平/平(4.8)、平/主(4.75)防范严密，半场平局概率不低。",
+            "external_market": "国内竞彩客胜存在正向偏斜(+10.04%)，说明体彩对客胜进行了强力降水防范，需警惕客队爆冷或平局。"
           },
           "money_flow": {
             "public_money_direction": "home",
@@ -286,68 +300,104 @@
             "sharp_confidence": 0,
             "reverse_line_movement": false,
             "steam_move": "unclear",
-            "evidence": "大众投票主胜45%，但抓包显示主胜升水、客胜降水，缺乏连续时间序列确认聪明钱方向。"
+            "evidence": "大众投票主胜占45%，存在一定热度；缺乏明确的聪明钱与RLM信号。"
           },
           "contextual_logic": {
-            "league_style": "世界杯淘汰赛，中立场，90分钟内容错率低，平局和低比分频发。",
-            "team_style": "比利时实力占优但内部可能有隐患，塞内加尔具备反击能力。",
+            "league_style": "世界杯淘汰赛，容错率低，通常节奏偏慢，防守优先，90分钟平局多发。",
+            "team_style": "比利时控球渗透，塞内加尔注重身体对抗与快速反击。",
             "tempo": "medium",
-            "score_shape": "低分BTTS或一球小胜为主。",
+            "score_shape": "一球小胜或平局为主，大比分穿盘概率低。",
             "btts_likelihood": "yes",
             "rotation_risk": "low"
           },
           "rejected_cases": {
-            "home": "2-1是强备选，但1-1赔率更低且淘汰赛平局权重高，主胜缺乏绝对压制力。",
-            "draw": "已选平局，但不建议重注，因为2-1极近。",
-            "away": "1-2有防范，但客胜整体赔率偏高，不作为主推。"
+            "home": "拒绝3-0/3-1等大胜，因淘汰赛性质及4球赔率阻力。",
+            "draw": "拒绝0-0，因双方防线均有隐患（塞内加尔缺门将，比利时缺德巴斯特）。",
+            "away": "拒绝客胜作为主推，因塞内加尔整体实力及防守端面对欧洲球队的劣势。"
           },
           "web_research": {
-            "used": false,
-            "failure_reason": "no_web_tool_available",
-            "search_queries": [],
-            "sources": [],
-            "freshness_grade": "missing",
-            "key_findings": [],
+            "used": true,
+            "failure_reason": "",
+            "search_queries": [
+              "\"Belgium\" \"Senegal\" \"World Cup\" 2026 injury OR Mendy OR Courtois",
+              "\"Edouard Mendy\" injury Senegal World Cup 2026"
+            ],
+            "sources": [
+              {
+                "title": "sportsmole.co.uk",
+                "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/...",
+                "publisher": "Sports Mole",
+                "published_at": "2026-06-30",
+                "accessed_at": "2026-07-01",
+                "source_type": "injury",
+                "reliability": "high",
+                "claim": "塞内加尔主力门将门迪因膝伤缺阵，比利时后卫德巴斯特伤缺。",
+                "impact": "upgrade_home"
+              },
+              {
+                "title": "indiatimes.com",
+                "url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/...",
+                "publisher": "The Times of India",
+                "published_at": "2026-07-01",
+                "accessed_at": "2026-07-01",
+                "source_type": "news",
+                "reliability": "high",
+                "claim": "塞内加尔主帅确认门迪缺阵，Mory Diaw将首发；比利时小组赛5-1新西兰，战平埃及和伊朗。",
+                "impact": "direction"
+              }
+            ],
+            "freshness_grade": "live",
+            "key_findings": [
+              "塞内加尔绝对主力门将门迪因膝伤确定缺席本场淘汰赛，替补门将Diaw首发。",
+              "比利时后卫德巴斯特因伤缺阵。",
+              "比利时小组赛表现平稳，塞内加尔小组赛面对欧洲球队（法国、挪威）均丢3球。"
+            ],
             "source_conflicts": [],
             "validation_warnings": []
           },
           "final_web_audit": {
-            "web_used_by_final": false,
-            "decisive_web_evidence": [],
+            "web_used_by_final": true,
+            "decisive_web_evidence": [
+              "塞内加尔主力门将门迪因膝伤确定缺席"
+            ],
             "ignored_web_evidence": [],
-            "web_confidence": 0
+            "web_confidence": 90
           },
           "data_quality": {
             "missing": [
-              "实时赔率",
-              "首发名单"
+              "asian_handicap_odds"
             ],
             "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "本场比赛主胜隐含概率仅约46%，盘口区分度较低。正确比分中1-1(4.7)与2-1(5.0)极为接近，总进球2球为绝对主模态。在世界杯淘汰赛背景下，90分钟平局概率较高，庄家对1-1的防范最为严密。由于缺乏外部实时数据和首发信息确认，无法排除主队一球小胜或客队反击爆冷的风险，因此选择1-1作为最合理预测，但不建议下注。",
+          "ai_native_reason": "比利时实力占优，塞内加尔主力门将门迪伤缺是重大利好。但淘汰赛平局风险高，1-1赔率最低，主胜隐含概率仅约46%，盘口区分度一般。综合判断比利时2-1小胜，需防1-1。",
           "validation_warnings": [
+            "weak_home_tail_forced_no_bet",
+            "weak_home_favorite_btts_tail_protection_applied",
+            "protocol_risk_hint:score_cluster_strength_below_55",
             "protocol_risk_hint:sharp_alignment_low_and_direction_edge_not_strong",
             "protocol_risk_hint:direction_edge_below_55",
+            "two_one_home_hard_no_bet_gate_applied",
+            "weak_home_2_1_btts_away_pct_gate",
+            "non_home_mass_too_high_for_home_2_1",
+            "draw_or_away_probability_too_high_for_home_2_1",
+            "explicit_1_2_2_2_2_3_tail_present",
             "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
-            "prematch_v2:prematch_v2_cross_region_requires_external_confirmation",
-            "missing_external_confirmation",
-            "external_fact_without_source",
-            "external_evidence_quality_below_50",
-            "direction_probability_not_supporting_final_direction",
-            "low_confidence_draw_observe:conf=29<45"
+            "prematch_v2:prematch_v2_cup_cross_context_lineup_motivation_required",
+            "prematch_v2:prematch_v2_high_draw_league_non_draw_cap",
+            "top3_probability_order_conflict"
           ],
           "bayesian_evidences": [
             "AI-NATIVE：本地不做足球预测判断；方向、比分、Top4等级均来自 AI 输出。",
             "ANCHOR-AUDIT：本地只提供0-0/1-1/总进球/让球盘/联赛风格事实锚点，AI必须在anchor_audit中解释。",
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
-            "final_model=gemini phase=final score=1-1 direction=draw",
-            "anchor_audit:{\"zero_zero\":\"10.5，处于低赔区间，淘汰赛需防闷平，但1-1赔率显著更低。\",\"one_one\":\"4.7，全局最低，最强锚点。\",\"one_zero\":\"8.0，主队一球小胜有防范，但不如1-1和2-1。\",\"zero_one\":\"11.5，客队偷胜赔率较高。\",\"two_one\":\"5.0，主胜最强比分，与1-1极近，是最大竞争者。\",\"one_two\":\"8.5，客队反打赔率较低，需保留为风险。\",\"high_score_tail\":\"2-2为11.5，4球赔率6.0阻力较大，高分平局仅作尾部风险。\",\"handicap_cover\":\"让球-1下，穿盘比分2-0(11.5)和3-0(24.0)赔率较高，不支持主队大胜。\"}",
-            "market_interpretation:{\"one_x_two\":\"竞彩主胜1.97，去水后隐含概率约46%，属于轻度热门，但未形成绝对压制，平局和客胜均有空间。\",\"handicap\":\"名义让球-1，但结合正确比分2-0(11.5)和3-0(24.0)的高赔，盘口不支持主队轻松穿盘，更倾向于一球边际或不胜。\",\"correct_score\":\"1-1(4.7)与2-1(5.0)构成核心近邻，市场在平局与主队一球小胜之间摇摆，1-1占据微弱优势。\",\"total_goals\":\"2球(3.0)为绝对主模态，3球(3.5)次之，4球(6.0)形成大球阻力线，比赛大概率在0-3球区间。\",\"half_full_time\":\"主/主3.35最低，但平/主4.75和平/平4.8紧随其后，半场僵持概率极高。\",\"external_market\":\"国内外Shin概率偏斜极小(z_gap 0.054)，无显著风控背离，国内盘口真实反映了国际市场预期。\"}",
-            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"大众投票主胜45%，但抓包显示主胜升水、客胜降水，缺乏连续时间序列确认聪明钱方向。\"}",
-            "contextual_logic:{\"league_style\":\"世界杯淘汰赛，中立场，90分钟内容错率低，平局和低比分频发。\",\"team_style\":\"比利时实力占优但内部可能有隐患，塞内加尔具备反击能力。\",\"tempo\":\"medium\",\"score_shape\":\"低分BTTS或一球小胜为主。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"low\"}",
-            "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
-            "recommendation:{\"tier\":\"C\",\"is_recommended\":false,\"top4_priority\":4,\"bet_confidence\":40,\"direction_stability\":\"weak\",\"score_stability\":\"medium\",\"risk_level\":\"high\",\"risk_tags\":[\"knockout_draw_risk\"],\"bet_action\":\"observe\",\"why_this_can_fail\":[\"主队早早进球打破僵局\",\"客队反击高效直接爆冷\"],\"minimum_evidence_needed\":[\"首发名单\"],\"why_recommended\":\"盘口势均力敌，1-1与2-1极近，缺乏下注价值，建议观望。\"}"
+            "final_model=gemini phase=final score=2-1 direction=home",
+            "anchor_audit:{\"zero_zero\":\"10.5的赔率处于中等偏上，淘汰赛虽保守但双方进攻端均有一定能力，0-0非首选。\",\"one_one\":\"4.7为全场最低，是最大的潜在风险比分，必须高度防范。\",\"one_zero\":\"8.0赔率适中，若比利时早早进球后转入控球消耗，可能打出。\",\"zero_one\":\"11.5赔率偏高，塞内加尔先拔头筹并守住的难度极大。\",\"two_one\":\"5.0赔率仅次于1-1，高度契合主队实力占优且客队有反击能力的剧本。\",\"one_two\":\"8.5赔率提示客队反击爆冷风险不可忽视。\",\"high_score_tail\":\"4球赔率6.0形成阻力，3-2/4-1等高分尾部打出概率极低。\",\"handicap_cover\":\"让1球盘口下，2-1只能走水，3-1(18.0)赔率较高，穿盘难度大。\"}",
+            "market_interpretation:{\"one_x_two\":\"主胜赔率1.97，隐含概率约46%，属于优势但不绝对的区间；平赔2.98防范力度较大。\",\"handicap\":\"让球盘口为-1.0，支持比利时赢球，但穿盘存在阻力。\",\"correct_score\":\"1-1(4.7)与2-1(5.0)处于最低赔率簇，指向双方均有进球的胶着局面。\",\"total_goals\":\"2球(3.0)与3球(3.5)为核心模态，4球(6.0)存在明显阻力，比赛大概率在2-3球之间决出胜负。\",\"half_full_time\":\"主/主(3.35)与平/平(4.8)、平/主(4.75)防范严密，半场平局概率不低。\",\"external_market\":\"国内竞彩客胜存在正向偏斜(+10.04%)，说明体彩对客胜进行了强力降水防范，需警惕客队爆冷或平局。\"}",
+            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"大众投票主胜占45%，存在一定热度；缺乏明确的聪明钱与RLM信号。\"}",
+            "contextual_logic:{\"league_style\":\"世界杯淘汰赛，容错率低，通常节奏偏慢，防守优先，90分钟平局多发。\",\"team_style\":\"比利时控球渗透，塞内加尔注重身体对抗与快速反击。\",\"tempo\":\"medium\",\"score_shape\":\"一球小胜或平局为主，大比分穿盘概率低。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"low\"}",
+            "web_research:{\"used\":true,\"failure_reason\":\"\",\"search_queries\":[\"\\\"Belgium\\\" \\\"Senegal\\\" \\\"World Cup\\\" 2026 injury OR Mendy OR Courtois\",\"\\\"Edouard Mendy\\\" injury Senegal World Cup 2026\"],\"sources\":[{\"title\":\"sportsmole.co.uk\",\"url\":\"https://vertexaisearch.cloud.google.com/grounding-api-redirect/...\",\"publisher\":\"Sports Mole\",\"published_at\":\"2026-06-30\",\"accessed_at\":\"2026-07-01\",\"source_type\":\"injury\",\"reliability\":\"high\",\"claim\":\"塞内加尔主力门将门迪因膝伤缺阵，比利时后卫德巴斯特伤缺。\",\"impact\":\"upgrade_home\"},{\"title\":\"indiatimes.com\",\"url\":\"https://vertexaisearch.cloud.google.com/grounding-api-redirect/...\",\"publisher\":\"The Times of India\",\"published_at\":\"2026-07-01\",\"accessed_at\":\"2026-07-01\",\"source_type\":\"news\",\"reliability\":\"high\",\"claim\":\"塞内加尔主帅确认门迪缺阵，Mory Diaw将首发；比利时小组赛5-1新西兰，战平埃及和伊朗。\",\"impact\":\"direction\"}],\"freshness_grade\":\"live\",\"key_findings\":[\"塞内加尔绝对主力门将门迪因膝伤确定缺席本场淘汰赛，替补门将Diaw首发。\",\"比利时后卫德巴斯特因伤缺阵。\",\"比利时小组赛表现平稳，塞内加尔小组赛面对欧洲球队（法国、挪威）均丢3球。\"],\"source_conflicts\":[],\"validation_warnings\":[]}",
+            "recommendation:{\"tier\":\"D\",\"is_recommended\":false,\"top4_priority\":1,\"bet_confidence\":60,\"direction_stability\":\"medium\",\"score_stability\":\"medium\",\"risk_level\":\"high\",\"risk_tags\":[\"knockout_draw_risk\",\"away_counter_attack\",\"weak_home_favorite_btts_tail\",\"away_fightback_tail\"],\"bet_action\":\"small\",\"why_this_can_fail\":[\"淘汰赛极度保守导致0-0或1-1闷平。\",\"塞内加尔反击高效爆冷击败比利时。\"],\"minimum_evidence_needed\":[],\"why_recommended\":\"比利时整体实力占优，且塞内加尔防线核心门迪伤缺，利好比利时破门；但受限于淘汰赛性质及盘口区分度不高，建议小注主胜或防平。\",\"original_bet_confidence\":60,\"risk_adjusted_bet_confidence\":49,\"display_bet_confidence\":49}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -376,11 +426,17 @@
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "大众投票主胜45%，但抓包显示主胜升水、客胜降水，缺乏连续时间序列确认聪明钱方向。",
+          "smart_money_signal": "大众投票主胜占45%，存在一定热度；缺乏明确的聪明钱与RLM信号。",
           "smart_signals": [
             "knockout_draw_risk",
-            "external_fact_without_source",
-            "missing_external_confirmation"
+            "away_counter_attack",
+            "weak_home_favorite_btts_tail",
+            "away_fightback_tail",
+            "two_one_home_hard_no_bet",
+            "weak_home_2_1_btts_away_pct_gate",
+            "non_home_mass_too_high_for_home_2_1",
+            "draw_or_away_probability_too_high_for_home_2_1",
+            "explicit_1_2_2_2_2_3_tail_present"
           ],
           "sharp_detected": false,
           "sharp_dir": "unclear",
@@ -392,15 +448,15 @@
             "sharp_confidence": 0,
             "reverse_line_movement": false,
             "steam_move": "unclear",
-            "evidence": "大众投票主胜45%，但抓包显示主胜升水、客胜降水，缺乏连续时间序列确认聪明钱方向。"
+            "evidence": "大众投票主胜占45%，存在一定热度；缺乏明确的聪明钱与RLM信号。"
           },
           "score_market_evidence": {
-            "one_x_two": "竞彩主胜1.97，去水后隐含概率约46%，属于轻度热门，但未形成绝对压制，平局和客胜均有空间。",
-            "handicap": "名义让球-1，但结合正确比分2-0(11.5)和3-0(24.0)的高赔，盘口不支持主队轻松穿盘，更倾向于一球边际或不胜。",
-            "correct_score": "1-1(4.7)与2-1(5.0)构成核心近邻，市场在平局与主队一球小胜之间摇摆，1-1占据微弱优势。",
-            "total_goals": "2球(3.0)为绝对主模态，3球(3.5)次之，4球(6.0)形成大球阻力线，比赛大概率在0-3球区间。",
-            "half_full_time": "主/主3.35最低，但平/主4.75和平/平4.8紧随其后，半场僵持概率极高。",
-            "external_market": "国内外Shin概率偏斜极小(z_gap 0.054)，无显著风控背离，国内盘口真实反映了国际市场预期。"
+            "one_x_two": "主胜赔率1.97，隐含概率约46%，属于优势但不绝对的区间；平赔2.98防范力度较大。",
+            "handicap": "让球盘口为-1.0，支持比利时赢球，但穿盘存在阻力。",
+            "correct_score": "1-1(4.7)与2-1(5.0)处于最低赔率簇，指向双方均有进球的胶着局面。",
+            "total_goals": "2球(3.0)与3球(3.5)为核心模态，4球(6.0)存在明显阻力，比赛大概率在2-3球之间决出胜负。",
+            "half_full_time": "主/主(3.35)与平/平(4.8)、平/主(4.75)防范严密，半场平局概率不低。",
+            "external_market": "国内竞彩客胜存在正向偏斜(+10.04%)，说明体彩对客胜进行了强力降水防范，需警惕客队爆冷或平局。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -411,8 +467,14 @@
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
               "knockout_draw_risk",
-              "external_fact_without_source",
-              "missing_external_confirmation"
+              "away_counter_attack",
+              "weak_home_favorite_btts_tail",
+              "away_fightback_tail",
+              "two_one_home_hard_no_bet",
+              "weak_home_2_1_btts_away_pct_gate",
+              "non_home_mass_too_high_for_home_2_1",
+              "draw_or_away_probability_too_high_for_home_2_1",
+              "explicit_1_2_2_2_2_3_tail_present"
             ],
             "sharp_confirmed": false,
             "dark_verdict": ""
@@ -426,20 +488,20 @@
           "shin_dir": null,
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
-          "gpt_score": "1-1",
-          "gpt_analysis": "本场市场不是强主胜结构。竞彩1X2给比利时轻中度优势，但正确比分最低为1-1，2-1仅次且差距很小；总进球最低为2球，4球赔率达到6.0，不支持主推开放大比分。主胜升水、客胜降水削弱热门稳定性，且sharp_money_facts未确认聪明钱方向。世界杯淘汰赛环境下，90分钟平局与低分BTTS应被前置审计。综合市场结构，倾向1-1，但因无联网来源核实阵容、伤停和外盘时间序列，最终建议观察。",
+          "gpt_score": "2-1",
+          "gpt_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
           "grok_score": "2-1",
           "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
-          "gemini_score": "1-1",
-          "gemini_analysis": "本场比赛主胜隐含概率仅约46%，盘口区分度较低。正确比分中1-1(4.7)与2-1(5.0)极为接近，总进球2球为绝对主模态。在世界杯淘汰赛背景下，90分钟平局概率较高，庄家对1-1的防范最为严密。由于缺乏外部实时数据和首发信息确认，无法排除主队一球小胜或客队反击爆冷的风险，因此选择1-1作为最合理预测，但不建议下注。",
-          "final_referee_score": "1-1",
-          "final_referee_analysis": "本场比赛主胜隐含概率仅约46%，盘口区分度较低。正确比分中1-1(4.7)与2-1(5.0)极为接近，总进球2球为绝对主模态。在世界杯淘汰赛背景下，90分钟平局概率较高，庄家对1-1的防范最为严密。由于缺乏外部实时数据和首发信息确认，无法排除主队一球小胜或客队反击爆冷的风险，因此选择1-1作为最合理预测，但不建议下注。",
+          "gemini_score": "2-1",
+          "gemini_analysis": "比利时实力占优，塞内加尔主力门将门迪伤缺是重大利好。但淘汰赛平局风险高，1-1赔率最低，主胜隐含概率仅约46%，盘口区分度一般。综合判断比利时2-1小胜，需防1-1。",
+          "final_referee_score": "2-1",
+          "final_referee_analysis": "比利时实力占优，塞内加尔主力门将门迪伤缺是重大利好。但淘汰赛平局风险高，1-1赔率最低，主胜隐含概率仅约46%，盘口区分度一般。综合判断比利时2-1小胜，需防1-1。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
-          "final_ai_score": "1-1",
-          "final_ai_analysis": "本场比赛主胜隐含概率仅约46%，盘口区分度较低。正确比分中1-1(4.7)与2-1(5.0)极为接近，总进球2球为绝对主模态。在世界杯淘汰赛背景下，90分钟平局概率较高，庄家对1-1的防范最为严密。由于缺乏外部实时数据和首发信息确认，无法排除主队一球小胜或客队反击爆冷的风险，因此选择1-1作为最合理预测，但不建议下注。",
+          "final_ai_score": "2-1",
+          "final_ai_analysis": "比利时实力占优，塞内加尔主力门将门迪伤缺是重大利好。但淘汰赛平局风险高，1-1赔率最低，主胜隐含概率仅约46%，盘口区分度一般。综合判断比利时2-1小胜，需防1-1。",
           "ai_abstained": [],
-          "ai_avg_confidence": 40.0,
+          "ai_avg_confidence": 60.0,
           "ai_call_status": {
             "gpt": {
               "phase1": {
@@ -447,29 +509,42 @@
                 "ai_name": "gpt",
                 "model": "gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 173.9,
-                "endpoint_name": "gpt_3",
-                "endpoint_slot": 3,
-                "endpoint_attempt": 2,
-                "endpoint_total": 4,
+                "elapsed": 211.6,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 458.0
+                "total_elapsed": 211.6
               },
-              "last_status": "parse_failed",
+              "last_status": "ok",
               "model": "gpt-5.5",
               "critic": {
                 "ok": false,
                 "ai_name": "gpt",
                 "model": "gpt-5.5",
                 "phase": "critic",
-                "elapsed": 67.1,
-                "endpoint_name": "gpt_1",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 4,
-                "endpoint_total": 4,
+                "elapsed": 78.9,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
                 "status": "parse_failed",
                 "parse_error": "empty_or_invalid_json_object",
-                "raw_excerpt": "{\"critic_reports\":[{\"match\":2,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"schema\",\"severity\":\"high\",\"comment\":\"输出中 anchor_audit、market_interpretation、money_flow、contextual_logic、rejected_cases、data_quality 等关键审计字段为空，且 validation_warnings 已自曝 score_cluster_audit、sharp"
+                "raw_excerpt": "{\"critic_reports\":[{\"match\":4,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"web\",\"severity\":\"high\",\"comment\":\"存在明显联网证据风险。报告中声称使用 Yahoo、Sports Mole、Pinnacle、Climate Central 等实时来源，并给出2026-06/07发布日期、访问时间和具体阵容，但当前任务证据只允许使用抓包与结构化事实，且 packet_context 明确提示抓包文字不等于实时外部 Web sourc"
+              },
+              "fallback_referee": {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "gpt-5.5",
+                "phase": "fallback_referee",
+                "elapsed": 261.3,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "ok",
+                "total_elapsed": 261.3
               }
             },
             "grok": {
@@ -478,13 +553,13 @@
                 "ai_name": "grok",
                 "model": "grok-4.3-c",
                 "phase": "phase1",
-                "elapsed": 92.4,
+                "elapsed": 37.1,
                 "endpoint_name": "grok_3",
                 "endpoint_slot": 3,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 92.4
+                "total_elapsed": 37.1
               },
               "last_status": "ok",
               "model": "grok-4.3-c",
@@ -493,13 +568,13 @@
                 "ai_name": "grok",
                 "model": "grok-4.3-c",
                 "phase": "critic",
-                "elapsed": 30.0,
-                "endpoint_name": "grok_2",
-                "endpoint_slot": 2,
+                "elapsed": 7.0,
+                "endpoint_name": "grok_4",
+                "endpoint_slot": 4,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 30.0
+                "total_elapsed": 7.0
               }
             },
             "gemini": {
@@ -508,13 +583,14 @@
                 "ai_name": "gemini",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
                 "phase": "final",
-                "elapsed": 43.8,
-                "endpoint_name": "gemini_2",
-                "endpoint_slot": 2,
+                "elapsed": 67.5,
+                "endpoint_name": "gemini_4",
+                "endpoint_slot": 4,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 43.8
+                "total_elapsed": 67.5,
+                "retry_succeeded_on_attempt": 3
               },
               "last_status": "ok",
               "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"
@@ -522,11 +598,11 @@
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260701_185325_4m_828b7c27aeee_比利时_塞内加尔",
+            "run_id": "20260701_194245_4m_2ec688caee32_比利时_塞内加尔",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 4,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260701_185325_4m_828b7c27aeee_比利时_塞内加尔_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260701_194245_4m_2ec688caee32_比利时_塞内加尔_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -534,29 +610,42 @@
                   "ai_name": "gpt",
                   "model": "gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 173.9,
-                  "endpoint_name": "gpt_3",
-                  "endpoint_slot": 3,
-                  "endpoint_attempt": 2,
-                  "endpoint_total": 4,
+                  "elapsed": 211.6,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 458.0
+                  "total_elapsed": 211.6
                 },
-                "last_status": "parse_failed",
+                "last_status": "ok",
                 "model": "gpt-5.5",
                 "critic": {
                   "ok": false,
                   "ai_name": "gpt",
                   "model": "gpt-5.5",
                   "phase": "critic",
-                  "elapsed": 67.1,
-                  "endpoint_name": "gpt_1",
-                  "endpoint_slot": 1,
-                  "endpoint_attempt": 4,
-                  "endpoint_total": 4,
+                  "elapsed": 78.9,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
                   "status": "parse_failed",
                   "parse_error": "empty_or_invalid_json_object",
-                  "raw_excerpt": "{\"critic_reports\":[{\"match\":2,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"schema\",\"severity\":\"high\",\"comment\":\"输出中 anchor_audit、market_interpretation、money_flow、contextual_logic、rejected_cases、data_quality 等关键审计字段为空，且 validation_warnings 已自曝 score_cluster_audit、sharp"
+                  "raw_excerpt": "{\"critic_reports\":[{\"match\":4,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"web\",\"severity\":\"high\",\"comment\":\"存在明显联网证据风险。报告中声称使用 Yahoo、Sports Mole、Pinnacle、Climate Central 等实时来源，并给出2026-06/07发布日期、访问时间和具体阵容，但当前任务证据只允许使用抓包与结构化事实，且 packet_context 明确提示抓包文字不等于实时外部 Web sourc"
+                },
+                "fallback_referee": {
+                  "ok": true,
+                  "ai_name": "gpt",
+                  "model": "gpt-5.5",
+                  "phase": "fallback_referee",
+                  "elapsed": 261.3,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
+                  "status": "ok",
+                  "total_elapsed": 261.3
                 }
               },
               "grok": {
@@ -565,13 +654,13 @@
                   "ai_name": "grok",
                   "model": "grok-4.3-c",
                   "phase": "phase1",
-                  "elapsed": 92.4,
+                  "elapsed": 37.1,
                   "endpoint_name": "grok_3",
                   "endpoint_slot": 3,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 92.4
+                  "total_elapsed": 37.1
                 },
                 "last_status": "ok",
                 "model": "grok-4.3-c",
@@ -580,13 +669,13 @@
                   "ai_name": "grok",
                   "model": "grok-4.3-c",
                   "phase": "critic",
-                  "elapsed": 30.0,
-                  "endpoint_name": "grok_2",
-                  "endpoint_slot": 2,
+                  "elapsed": 7.0,
+                  "endpoint_name": "grok_4",
+                  "endpoint_slot": 4,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 30.0
+                  "total_elapsed": 7.0
                 }
               },
               "gemini": {
@@ -595,13 +684,14 @@
                   "ai_name": "gemini",
                   "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
                   "phase": "final",
-                  "elapsed": 43.8,
-                  "endpoint_name": "gemini_2",
-                  "endpoint_slot": 2,
+                  "elapsed": 67.5,
+                  "endpoint_name": "gemini_4",
+                  "endpoint_slot": 4,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 43.8
+                  "total_elapsed": 67.5,
+                  "retry_succeeded_on_attempt": 3
                 },
                 "last_status": "ok",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"
@@ -655,157 +745,173 @@
           "engine_version": "vMAX 20.6.0-READING-PARADIGM",
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
-            "selected_cluster": "draw_low",
-            "why_selected_score": "1-1是全局最低赔率，且总进球2球为最低赔。在世界杯淘汰赛环境下，90分钟平局概率较高，1-1完美契合盘口主模态。",
+            "selected_cluster": "home_narrow",
+            "why_selected_score": "结合塞内加尔主力门将门迪伤缺以及小组赛面对欧洲强队（法国、挪威）均丢3球的防守表现，比利时有能力打入2球；同时塞内加尔进攻端有威胁，比利时防线并非无懈可击，2-1是最合理的正路比分。",
             "adjacent_scores_checked": [
               {
                 "score": "1-1",
                 "odds": 4.7,
-                "verdict": "keep",
-                "reason": "全局最低赔，契合2球模态。"
-              },
-              {
-                "score": "2-1",
-                "odds": 5.0,
                 "verdict": "near_miss",
-                "reason": "主胜最强候选，但略高于1-1，且主胜升水。"
+                "reason": "赔率最低，淘汰赛极易打出，作为首要防范对象。"
               },
               {
                 "score": "1-0",
                 "odds": 8.0,
                 "verdict": "reject",
-                "reason": "零封主胜赔率高于BTTS路径，非首选。"
+                "reason": "塞内加尔有破门能力，比利时零封难度较大。"
+              },
+              {
+                "score": "2-0",
+                "odds": 11.5,
+                "verdict": "reject",
+                "reason": "赔率偏高，且不符合BTTS预期。"
               },
               {
                 "score": "1-2",
                 "odds": 8.5,
-                "verdict": "near_miss",
-                "reason": "客队反打赔率较低，作为风险保留。"
-              },
-              {
-                "score": "0-0",
-                "odds": 10.5,
-                "verdict": "keep",
-                "reason": "淘汰赛闷局风险，作为风险保留。"
+                "verdict": "reject",
+                "reason": "比利时整体实力更强，客胜虽需防范但非首选。"
               }
             ],
-            "lowest_score_not_selected_reason": "已选择最低比分1-1。"
+            "lowest_score_not_selected_reason": "1-1虽为最低赔，但塞内加尔主力门将伤缺且防线面对欧洲强队表现不佳，比利时在90分钟内解决战斗的概率略高于平局。"
           },
           "sharp_money_audit": {
             "available": true,
             "confirmed_sharp_direction": "unclear",
             "rlm_confirmed": false,
-            "vote_vs_odds_conflict": "大众倾向主队，但主胜升水，存在一定冲突，但无确凿聪明钱信号。",
-            "crs_change_impact": "无动态变化数据，静态看1-1防范最严。",
-            "ttg_change_impact": "无动态变化数据，静态看2球防范最严。"
+            "vote_vs_odds_conflict": "大众看好主胜，主胜赔率有升水迹象，存在一定诱盘或保护可能。",
+            "crs_change_impact": "无明显异动数据。",
+            "ttg_change_impact": "无明显异动数据。"
           },
           "recommendation_components": {
-            "direction_edge": 40,
-            "score_cluster_strength": 70,
-            "goal_band_strength": 75,
-            "btts_alignment": 65,
+            "direction_edge": 5,
+            "score_cluster_strength": 6,
+            "goal_band_strength": 7,
+            "btts_alignment": 8,
             "sharp_alignment": 0,
-            "web_source_quality": 0,
-            "market_conflict_penalty": 20,
-            "final_grade_reason": "盘口区分度低，无外部信息，只能降级观察。"
+            "web_source_quality": 9,
+            "market_conflict_penalty": -2,
+            "final_grade_reason": "主胜概率未达绝对压制线，且淘汰赛平局风险高，但外部情报（门迪伤缺）提供有力支撑，综合评定为B级。"
           },
           "risk_score_candidates": [
             {
-              "score": "2-1",
-              "risk_type": "主队一球小胜近邻",
-              "reason": "2-1赔率5.0与1-1极近，主队仍是名义低赔方，若主队效率兑现可能一球小胜。"
+              "score": "1-1",
+              "risk_type": "常规时间平局",
+              "reason": "淘汰赛90分钟平局是常态，且1-1为全场最低赔率(4.7)，塞内加尔具备一定反击能力。"
             },
             {
               "score": "1-2",
-              "risk_type": "客队反击尾部",
-              "reason": "1-2赔率8.5排在全局第四，客队反打路径未被封死，需防范冷门。"
+              "risk_type": "客队反击爆冷",
+              "reason": "主胜概率不足50%，客队具备爆冷土壤，需防范塞内加尔利用速度反击得手。"
             },
             {
-              "score": "0-0",
-              "risk_type": "淘汰赛闷局",
-              "reason": "0-0赔率10.5，淘汰赛首选保守策略，存在互交白卷风险。"
+              "score": "2-2",
+              "risk_type": "高分平局",
+              "reason": "塞内加尔防线缺少主力门将门迪，但进攻端有火力，可能演变为对攻战。"
+            },
+            {
+              "score": "2-3",
+              "risk_type": "weak_home_favorite_btts_tail",
+              "reason": "home_win_pct<=52 and away_win_pct>=23 with BTTS/tail risk; keep away fight-back and 4+ draw/away tails visible"
             }
           ],
           "tail_risk_flags": [
-            "knockout_draw_risk",
-            "away_fightback_tail"
+            "weak_home_favorite_btts_tail",
+            "away_win_not_negligible",
+            "protect_1_2_2_2_2_3_tail"
           ],
-          "confidence_downgrade_reason": "主胜隐含概率仅46%左右，盘口区分度低；正确比分1-1与2-1极近，缺乏外部强证据打破平衡，只能降级观察。",
+          "confidence_downgrade_reason": "2-1 home score blocked by draw/away/tail risk hard gate",
+          "external_fact_table": [
+            {
+              "category": "injury",
+              "claim": "塞内加尔主力门将门迪因膝伤缺阵",
+              "source_type": "mainstream_media",
+              "source_title": "The Times of India",
+              "source_url": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/...",
+              "published_at": "2026-07-01",
+              "freshness": "same_day",
+              "confidence": "high",
+              "impact_direction": "upgrade_home",
+              "why_it_matters": "门迪是塞内加尔防线核心，他的缺阵极大削弱了球队防守实力，增加了比利时进球的概率。"
+            }
+          ],
           "source_conflict_audit": {
             "has_conflict": false,
             "conflicts": []
           },
-          "evidence_quality_score": 30,
-          "minimum_evidence_needed": [
-            "临场外盘赔率变化",
-            "双方首发阵容确认"
-          ],
+          "evidence_quality_score": 90,
           "external_facts_decision_impact": {
-            "direction_impact": "unclear",
-            "goal_impact": "unclear",
-            "recommendation_impact": "no_bet",
-            "main_reason": "无外部可靠信息源，仅凭静态盘口无法给出高信心推荐。"
+            "direction_impact": "supports_home",
+            "goal_impact": "supports_over",
+            "recommendation_impact": "can_upgrade",
+            "main_reason": "塞内加尔主力门将伤缺是决定性的防线利空，支持比利时取得进球并赢下比赛。"
           },
           "gemini_independent_research": {
-            "searched": false,
-            "key_sources": [],
-            "missing_sources": [
-              "实时赔率",
-              "首发名单"
+            "searched": true,
+            "key_sources": [
+              "Sports Mole",
+              "The Times of India"
             ],
-            "cross_checked_against_grok": "Grok强推2-1忽略了1-1的最低赔属性和淘汰赛平局风险，予以纠正。"
+            "missing_sources": [],
+            "cross_checked_against_grok": "Grok未提供有效输出，独立完成联网核实。"
           },
           "bookmaker_cross_audit": {
-            "bet365": "无数据",
-            "william_hill": "无数据",
-            "pinnacle_or_low_margin": "无数据",
-            "jingcai": "主胜1.97，平2.98，防平意图明显。",
-            "average_market": "Shin概率显示无显著偏斜。",
-            "water_movement": "主胜升水",
-            "asian_handicap": "名义-1，不支持大胜。",
-            "ou_total_goals": "2球最低，4球阻力大。",
-            "correct_score_cluster": "1-1与2-1为核心。",
-            "bookmaker_intent": "庄家在保护1-1平局和主队一球小胜，未造热主队大胜。"
+            "bet365": "无具体数据",
+            "william_hill": "无具体数据",
+            "pinnacle_or_low_margin": "无具体数据",
+            "jingcai": "主胜1.97，平2.98，客胜3.49，客胜存在+10.04%的偏斜，体彩对客胜防范力度大。",
+            "average_market": "主胜隐含概率约46-49%，处于合理优势区间。",
+            "water_movement": "主胜升水，客胜降水",
+            "asian_handicap": "让1球盘口，结合1X2赔率，穿盘阻力较大。",
+            "ou_total_goals": "2-3球为核心区间，4球以上阻力大。",
+            "correct_score_cluster": "1-1与2-1为最低赔率双核，指向一球分胜负或平局。",
+            "bookmaker_intent": "庄家通过压低1-1赔率防范淘汰赛平局风险，同时体彩大幅压低客胜赔率（高偏斜）以规避爆冷赔付，整体盘面呈防守姿态。"
           },
           "tempo_xg_tactical_audit": {
             "tempo": "medium",
-            "xg_signal": "无数据",
-            "xga_signal": "无数据",
-            "pressing_transition": "无数据",
-            "formation_matchup": "无数据",
-            "key_player_impact": "无数据"
+            "xg_signal": "比利时具备较强阵地战创造力，塞内加尔门将伤缺提升了比利时的预期进球。",
+            "xga_signal": "塞内加尔反击速度快，比利时防线需警惕身后空当。",
+            "pressing_transition": "塞内加尔可能采取低位防守+快速反击策略。",
+            "formation_matchup": "比利时传控体系对阵塞内加尔身体流防线。",
+            "key_player_impact": "门迪缺阵对塞内加尔防线是致命打击。"
           },
           "worldcup_upset_audit": {
             "context": "knockout",
-            "japan_type_counter": "unclear+塞内加尔有反击能力",
-            "morocco_type_low_block": "yes+淘汰赛弱势方常采用低位防守",
-            "croatia_type_resilience": "yes+拖入加时是常见策略",
-            "favorite_slow_start_risk": "比利时可能面临破局困难",
-            "upset_path": "塞内加尔反击偷一球或死守0-0/1-1"
+            "japan_type_counter": "yes",
+            "morocco_type_low_block": "yes",
+            "croatia_type_resilience": "unclear",
+            "favorite_slow_start_risk": "淘汰赛强队往往求稳，可能出现慢热导致半场平局。",
+            "upset_path": "塞内加尔利用比利时大举压上时的身后空当，通过快速反击偷袭得手，随后死守。"
           },
           "score_elimination_audit": {
-            "0-0": "keep+淘汰赛闷局风险",
-            "1-1": "keep+全局最低赔，主选",
-            "2-2": "keep+高分平局尾部",
-            "1-2": "keep+客队反打风险",
-            "2-1": "keep+主胜最强替代",
-            "selected_score_final_reason": "1-1赔率最低，契合2球模态和淘汰赛背景，优于2-1。"
+            "0-0": "reject，双方防线均有隐患，且塞内加尔缺主力门将，难以零封。",
+            "1-1": "keep，全场最低赔，淘汰赛常规防范比分。",
+            "2-2": "keep，若早早进球演变为对攻，存在打出可能，但概率低于1-1。",
+            "1-2": "keep，客队反击爆冷路径。",
+            "2-1": "keep，主队实力占优且客队门将伤缺，最合理正路比分。",
+            "selected_score_final_reason": "综合实力、门将伤停情报及赔率分布，比利时2-1小胜是最具逻辑支撑的结果，但需高度防范1-1平局。"
           },
           "dirty_work_checklist": {
-            "lineup": false,
-            "injury_suspension": false,
-            "motivation_table": false,
+            "lineup": true,
+            "injury_suspension": true,
+            "motivation_table": true,
             "weather_pitch": false,
             "referee": false,
             "travel_rest": false,
-            "odds_sources": false,
-            "xg_tempo": false,
+            "odds_sources": true,
+            "xg_tempo": true,
             "worldcup_context": true
           },
+          "display_confidence": 49,
+          "risk_adjusted_confidence": 49,
           "protocol_risk_hints": [
+            "score_cluster_strength_below_55",
             "sharp_alignment_low_and_direction_edge_not_strong",
             "direction_edge_below_55"
           ],
+          "original_confidence": 60,
+          "no_bet_reason": "2-1 home score blocked by draw/away/tail risk hard gate: weak_home_2_1_btts_away_pct_gate,non_home_mass_too_high_for_home_2_1,draw_or_away_probability_too_high_for_home_2_1,explicit_1_2_2_2_2_3_tail_present",
+          "sub50_tiebreaker_warning": true,
           "pre_match_factor_audit": {
             "version": "v20.4_pre_match_factor_gate",
             "league_dna": {
@@ -819,7 +925,7 @@
             },
             "match_context_flags": {
               "cup_like": true,
-              "cross_region": true,
+              "cross_region": false,
               "rotation_risk": true,
               "importance_unclear": false,
               "worldcup_r3": true,
@@ -841,20 +947,19 @@
               "referee_risk": false,
               "market_confirmed": false,
               "market_conflict": false,
-              "web_source_count": 0,
-              "structured_quality_score": 36,
+              "web_source_count": 2,
+              "structured_quality_score": 50,
               "penalties": [
                 "lineup_unclear",
                 "rotation_risk",
-                "market_unconfirmed",
-                "no_web_sources"
+                "market_unconfirmed"
               ],
               "injury_summary": {
                 "home": "泽诺·德巴斯特 受伤",
                 "away": "爱德华·门迪 受伤 膝盖扭伤"
               }
             },
-            "web_used_with_sources": false,
+            "web_used_with_sources": true,
             "lineup_confirmed": false,
             "money_flow": {
               "sharp": "unclear",
@@ -864,14 +969,15 @@
               "conflict": false,
               "reverse": false
             },
-            "data_quality_score": 33.8,
+            "data_quality_score": 55.5,
             "edge_gap": 17.0,
             "draw_probability_watch": 29.0,
             "draw_cluster_present": true,
             "high_goal_tail_pct": 0.0,
             "rules_applied": [
               "prematch_v2_rotation_risk_requires_lineup",
-              "prematch_v2_cross_region_requires_external_confirmation"
+              "prematch_v2_cup_cross_context_lineup_motivation_required",
+              "prematch_v2_high_draw_league_non_draw_cap"
             ],
             "risk_hints": [
               {
@@ -881,45 +987,38 @@
               },
               {
                 "max_tier": "C",
-                "reason": "prematch_v2_cross_region_requires_external_confirmation",
-                "tag": "prematch_v2_cross_region"
+                "reason": "prematch_v2_cup_cross_context_lineup_motivation_required",
+                "tag": "prematch_v2_cup_cross_context"
+              },
+              {
+                "max_tier": "C",
+                "reason": "prematch_v2_high_draw_league_non_draw_cap",
+                "tag": "prematch_v2_high_draw_league"
               }
             ]
           },
           "score_distribution": [
             {
-              "score": "1-1",
-              "prob": 0.0,
-              "logic": "score_shape_selector_candidate"
-            },
-            {
-              "score": "0-0",
+              "score": "2-1",
               "prob": 0.0,
               "logic": "score_shape_selector_candidate"
             }
           ],
           "top3": [
             {
-              "score": "1-1",
-              "prob": 0.0,
-              "logic": "score_shape_selector_candidate"
-            },
-            {
-              "score": "0-0",
+              "score": "2-1",
               "prob": 0.0,
               "logic": "score_shape_selector_candidate"
             }
           ],
-          "selection_layer": "观察",
+          "selection_layer": "放弃",
           "selection_stake_unit": 0.0,
-          "selection_hedge_suggestions": [
-            "等待官方首发/战意/临场盘口"
-          ],
+          "selection_hedge_suggestions": [],
           "selection_layer_reasons": [
-            "杯赛或跨洲场景需要临场确认"
+            "等级为D"
           ],
-          "selection_confirmation_bonus": 10,
-          "final_action": "观察",
+          "selection_confirmation_bonus": 18,
+          "final_action": "放弃",
           "bet_recommendation": {
             "available": true,
             "per_match_budget": 200,
@@ -1112,10 +1211,10 @@
           "dir_score_conflict": false,
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 76.0,
-          "draw_pct": 16.0,
-          "away_win_pct": 8.0,
-          "confidence": 35,
+          "home_win_pct": 71.0,
+          "draw_pct": 19.0,
+          "away_win_pct": 10.0,
+          "confidence": 55,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
           "risk_level": "high",
           "goal_band": "2",
@@ -1132,29 +1231,30 @@
           "recommendation": {
             "tier": "C",
             "is_recommended": false,
-            "top4_priority": 0,
-            "bet_confidence": 35,
+            "top4_priority": 4,
+            "bet_confidence": 55,
             "direction_stability": "medium",
-            "score_stability": "weak",
+            "score_stability": "medium",
             "risk_level": "high",
             "risk_tags": [
-              "主胜过热",
+              "无联网验证",
               "世界杯轮换未知",
-              "1-1冷平风险",
+              "国内盘口严重偏斜",
               "external_fact_without_source",
               "missing_external_confirmation",
               "external_evidence_quality_below_50"
             ],
             "bet_action": "observe",
             "why_this_can_fail": [
-              "美国若已出线或有轮换，低赔主胜可能被控分节奏削弱。",
-              "国内竞彩主胜相对国际清算盘过度低开，可能只是规避大众热门而非真实价值。"
+              "美国队若已提前出线，可能派出全替补阵容，导致进攻乏力打出1-1或0-0。",
+              "波黑利用定位球或反击偷袭得手，比分变为2-1或1-1。",
+              "国内竞彩主胜赔率极低，毫无博弈价值，属于大热必死的高危区间。"
             ],
             "minimum_evidence_needed": [
-              "美国首发与轮换确认",
-              "同组积分和净胜球需求"
+              "双方实时出线形势与净胜球需求",
+              "权威媒体披露的预计首发名单"
             ],
-            "why_recommended": "不推荐下注；仅从市场结构看美国方向占优，合理观察比分为2-0，但当前风险控制优先。"
+            "why_recommended": "仅基于本地盘口快照，2-0为全场最低赔率且主胜簇集中，方向明确；但因缺乏外部事实验证且国内盘口偏斜严重，仅限小注娱乐。"
           },
           "recommendation_tier": "C",
           "recommend_gate_pass": false,
@@ -1164,63 +1264,64 @@
             "prematch_v2_risk_hints_present",
             "external_fact_without_source",
             "external_evidence_quality_below_50",
+            "contrarian_market_claim_without_valid_market_source",
             "gate_action_not_bettable"
           ],
-          "safe_top_gate_score": 35.0,
-          "overall_selection_score": 35.0,
-          "direction_selection_score": 35.0,
-          "score_shape_score": 35.0,
+          "safe_top_gate_score": 55.0,
+          "overall_selection_score": 55.0,
+          "direction_selection_score": 55.0,
+          "score_shape_score": 55.0,
           "direction_tier": "C",
           "score_tier": "C",
           "recommendation_downgrade_reasons": [],
           "top_score_candidates": [
             [
               "2-0",
-              25.0
+              18.0
             ],
             [
               "2-1",
-              20.0
+              15.0
             ],
             [
               "1-1",
-              12.0
+              9.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
               "2-0",
-              25.0
+              18.0
             ],
             [
               "2-1",
-              20.0
+              15.0
             ],
             [
               "1-1",
-              12.0
+              9.0
             ]
           ],
-          "score_model_prob": 25.0,
+          "score_model_prob": 18.0,
           "score_market_odds": 4.5,
           "score_market_implied_pct": 22.222,
           "anchor_audit": {
-            "zero_zero": "0-0赔率16，低于多数客胜尾部但不在核心区；若世界杯末轮双方控分或美国轮换，0-0可作为冷门路径，但当前市场更支持美国进球。",
-            "one_one": "1-1赔率9.5，总体第六，未被抬死；这是国内主胜热度过高时最需要防的冷平锚点。",
-            "one_zero": "1-0赔率7.5，处于主胜第四候选；对应美国小胜不穿盘，必须保留。",
-            "zero_one": "0-1赔率24，是客胜最低路径；市场未完全关闭，但概率明显低于1-1和主胜比分。",
-            "two_one": "2-1赔率5.3，靠近2-0；若波黑有独立破门证据，2-1可替代2-0。",
-            "one_two": "1-2赔率28，高于0-1且远高于1-1，客队反打存在但不是主线。",
-            "high_score_tail": "3-1低至6.7，4-0/4-1分别19/20，说明美国扩大战果有尾部压力；但a5/a4约1.85，未形成强大球整簇塌缩。",
-            "handicap_cover": "2-0最低、3-0第五、3-1第三支持美国至少赢两球的可能；但1-0和1-1均不高，穿盘需降级看待。"
+            "zero_zero": "16.0，赔率较高，非首选闷平，但需防范极端轮换情况。",
+            "one_one": "9.5，平局最低赔，未被封死，是主胜最大的潜在威胁。",
+            "one_zero": "7.5，主胜低赔簇成员，防范一球窄胜。",
+            "zero_one": "24.0，客胜最低赔，但远高于主胜和平局锚点，客队直接爆冷赢球概率极低。",
+            "two_one": "5.3，紧随2-0，是最容易打出的有失球主胜比分。",
+            "one_two": "28.0，客队反打比分，赔率过高，基本排除。",
+            "high_score_tail": "3-1（6.7）偏低，但4-1（20.0）等更高比分未完全共振，大球尾部存在但非主导。",
+            "handicap_cover": "2-0（4.5）和3-0（8.0）支持主队穿盘（-1.0），但1-0和2-1的存在说明赢一球走水的概率同样不小。"
           },
           "market_interpretation": {
-            "one_x_two": "竞彩1.22/4.91/9.40给出极强主胜框架，去水后主胜约76.3%，但国内主胜较国际清算盘偏热约7.62%，这更像热门方向风控压价而非可买价值。",
-            "handicap": "让球为-1，比分簇同时支持2-0、2-1、1-0，说明美国赢球概率高，但穿盘并非无条件；1球小胜与走盘/不穿仍是重要路径。",
-            "correct_score": "2-0最低，2-1、3-1紧随，主胜簇明显集中；但1-1处于低赔区第六，平局锚点没有死亡，不能把比赛读成无风险大胜。",
-            "total_goals": "总进球3球最低3.15，2球3.65，4球4.6；中心在2-3球。4球偏低但5球8.5、6球15未形成完整大球整簇塌缩，倾向中低到中位进球而非无脑大球。",
-            "half_full_time": "主/主1.70最低，平/主3.95次低，指向美国可能掌控比赛；但平/主较低也提示上半场打不开、下半场兑现优势的路径。",
-            "external_market": "抓包已给出国内竞彩与国际清算盘Shin分歧：国内主胜过度压低，平局和客胜相对国际被放宽，读作主胜方向热度/避险较强，投注性价比下降。"
+            "one_x_two": "竞彩1X2主胜1.22极低，去水后隐含概率约76.3%，但国际清算盘主胜概率仅约70.9%，国内主胜存在+7.62%的偏斜，说明体彩在强行压低主胜赔率以规避大众热门风险。",
+            "handicap": "名义让球-1.0，结合比分2-0最低、2-1次低，市场预期主队赢一到两球，但并未给出极度夸张的深盘让步。",
+            "correct_score": "主胜比分2-0、2-1、3-1、1-0、3-0占据低赔前五，主胜趋势明确；但1-1（9.5）排在第六，说明机构并未完全排除平局可能。",
+            "total_goals": "3球（3.15）最低，2球（3.65）次低，4球（4.6）偏低但5球未同步塌缩，整体指向2-3球的中等进球区间，不支持无脑大球。",
+            "half_full_time": "主/主1.70绝对占优，平/主3.95次之，市场预期美国队能够较早确立优势或在下半场发力拿下比赛。",
+            "external_market": "双轨背离显示国内竞彩对主胜进行了过度保护（正偏斜），国际市场对平局和客胜给出了相对更高的概率，提示主胜方向虽稳但赔率价值低。"
           },
           "money_flow": {
             "public_money_direction": "home",
@@ -1228,20 +1329,20 @@
             "sharp_confidence": 0,
             "reverse_line_movement": false,
             "steam_move": "unclear",
-            "evidence": "公众投票主胜73%，主胜赔率方向为降水、客胜升水，表面资金与赔率同向支持主队；但sharp_money_facts未提供开盘-即时完整序列，不能确认真实聪明钱或反向变盘。"
+            "evidence": "大众投票73%集中在主胜，抓包显示主胜降水，但缺乏完整的开盘到即时赔率时间序列，无法确认是否存在真实的聪明钱推动或仅仅是机构顺应热度的被动调价。"
           },
           "contextual_logic": {
-            "league_style": "世界杯中立场锦标赛属性，不能照搬俱乐部高节奏；若为小组第三轮/末轮，出线形势、净胜球需求和轮换强度与盘口同级。当前无法联网确认轮次和战意，只能按世界杯高风险场处理。",
-            "team_style": "抓包显示美国实力排名和赔率优势明显，波黑防守稳定性较弱；但美国防守端也有失球隐患，导致2-1与1-1风险上升。",
+            "league_style": "世界杯中立场赛事，需高度关注小组赛轮次、出线形势与净胜球需求，不能机械套用联赛大球思维。",
+            "team_style": "美国整体实力占优，波黑防守存在隐患，但缺乏实时数据支撑。",
             "tempo": "medium",
-            "score_shape": "主胜中位区，优先2-0/2-1，向下有1-0/1-1，向上有3-1。",
+            "score_shape": "偏向主队中低比分获胜（2-0/2-1/1-0），不支持无底线的对攻大战。",
             "btts_likelihood": "no",
-            "rotation_risk": "unclear"
+            "rotation_risk": "high"
           },
           "rejected_cases": {
-            "home": "未拒绝主胜方向；但拒绝高信心主胜穿盘和主胜低赔投注价值，因为国内相对国际明显压低主胜。",
-            "draw": "平局被保留为主要风险，尤其1-1；但1X2、比分簇和半全场仍显著压向美国，因此不作为最终方向。",
-            "away": "客胜赔率簇弱，0-1/1-2虽需列为尾部，但缺乏足够赔率簇支持，不能上升为主判断。"
+            "home": "未拒绝主胜，主胜为最终方向，但拒绝将其视为毫无风险的稳胆大胜。",
+            "draw": "1-1赔率未死，平局有一定防范价值，但主胜赔率簇优势过于明显，平局只能作为次要风险。",
+            "away": "客胜赔率9.40过高，正确比分0-1高达24.0，缺乏市场数据支持，予以拒绝。"
           },
           "web_research": {
             "used": false,
@@ -1261,15 +1362,16 @@
           },
           "data_quality": {
             "missing": [
-              "web_research_sources",
-              "external_odds_timeseries",
-              "confirmed_lineups"
+              "web_sources",
+              "external_odds",
+              "lineups",
+              "motivation"
             ],
             "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "综合1X2、让球、正确比分和总进球，美国胜面明显，2-0是最干净的市场结构落点：最低比分赔率、弱方破门证据不足、让-1下赢两球路径成立。但这不是高信心可买场，因为国内竞彩主胜相对国际清算盘过度压低，公众热度集中，1-1锚点未被抬死，且世界杯场景下轮换和出线形势无法联网核实。最终方向给home，比分给2-0，投注动作维持observe。",
+          "ai_native_reason": "本场比赛竞彩1X2和正确比分簇均明确指向美国队获胜，2-0作为全场最低赔率（4.5）是机构最防范的赛果。然而，由于无法联网核实世界杯的具体轮次、双方出线形势以及是否存在大面积轮换，且双轨背离模型显示国内竞彩对主胜进行了强行的压价避险（正偏斜+7.62%），主胜方向虽然大概率打出，但赔率极度缺乏性价比，且存在1-1冷平的隐患。因此，最终预测为2-0主胜，但推荐等级降至C级，仅建议小注。",
           "validation_warnings": [
-            "protocol_risk_hint:sharp_alignment_low_and_direction_edge_not_strong",
+            "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
             "prematch_v2:prematch_v2_worldcup_r3_rotation_or_qualification_cap",
             "prematch_v2:prematch_v2_worldcup_r3_draw_or_small_loss_trap",
             "prematch_v2:prematch_v2_worldcup_r3_motivation_without_external_confirmation",
@@ -1279,7 +1381,8 @@
             "prematch_v2:prematch_v2_cross_region_requires_external_confirmation",
             "missing_external_confirmation",
             "external_fact_without_source",
-            "external_evidence_quality_below_50"
+            "external_evidence_quality_below_50",
+            "contrarian_market_claim_without_valid_market_source"
           ],
           "bayesian_evidences": [
             "AI-NATIVE：本地不做足球预测判断；方向、比分、Top4等级均来自 AI 输出。",
@@ -1287,12 +1390,12 @@
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
             "final_model=gemini phase=final score=2-0 direction=home",
-            "anchor_audit:{\"zero_zero\":\"0-0赔率16，低于多数客胜尾部但不在核心区；若世界杯末轮双方控分或美国轮换，0-0可作为冷门路径，但当前市场更支持美国进球。\",\"one_one\":\"1-1赔率9.5，总体第六，未被抬死；这是国内主胜热度过高时最需要防的冷平锚点。\",\"one_zero\":\"1-0赔率7.5，处于主胜第四候选；对应美国小胜不穿盘，必须保留。\",\"zero_one\":\"0-1赔率24，是客胜最低路径；市场未完全关闭，但概率明显低于1-1和主胜比分。\",\"two_one\":\"2-1赔率5.3，靠近2-0；若波黑有独立破门证据，2-1可替代2-0。\",\"one_two\":\"1-2赔率28，高于0-1且远高于1-1，客队反打存在但不是主线。\",\"high_score_tail\":\"3-1低至6.7，4-0/4-1分别19/20，说明美国扩大战果有尾部压力；但a5/a4约1.85，未形成强大球整簇塌缩。\",\"handicap_cover\":\"2-0最低、3-0第五、3-1第三支持美国至少赢两球的可能；但1-0和1-1均不高，穿盘需降级看待。\"}",
-            "market_interpretation:{\"one_x_two\":\"竞彩1.22/4.91/9.40给出极强主胜框架，去水后主胜约76.3%，但国内主胜较国际清算盘偏热约7.62%，这更像热门方向风控压价而非可买价值。\",\"handicap\":\"让球为-1，比分簇同时支持2-0、2-1、1-0，说明美国赢球概率高，但穿盘并非无条件；1球小胜与走盘/不穿仍是重要路径。\",\"correct_score\":\"2-0最低，2-1、3-1紧随，主胜簇明显集中；但1-1处于低赔区第六，平局锚点没有死亡，不能把比赛读成无风险大胜。\",\"total_goals\":\"总进球3球最低3.15，2球3.65，4球4.6；中心在2-3球。4球偏低但5球8.5、6球15未形成完整大球整簇塌缩，倾向中低到中位进球而非无脑大球。\",\"half_full_time\":\"主/主1.70最低，平/主3.95次低，指向美国可能掌控比赛；但平/主较低也提示上半场打不开、下半场兑现优势的路径。\",\"external_market\":\"抓包已给出国内竞彩与国际清算盘Shin分歧：国内主胜过度压低，平局和客胜相对国际被放宽，读作主胜方向热度/避险较强，投注性价比下降。\"}",
-            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"公众投票主胜73%，主胜赔率方向为降水、客胜升水，表面资金与赔率同向支持主队；但sharp_money_facts未提供开盘-即时完整序列，不能确认真实聪明钱或反向变盘。\"}",
-            "contextual_logic:{\"league_style\":\"世界杯中立场锦标赛属性，不能照搬俱乐部高节奏；若为小组第三轮/末轮，出线形势、净胜球需求和轮换强度与盘口同级。当前无法联网确认轮次和战意，只能按世界杯高风险场处理。\",\"team_style\":\"抓包显示美国实力排名和赔率优势明显，波黑防守稳定性较弱；但美国防守端也有失球隐患，导致2-1与1-1风险上升。\",\"tempo\":\"medium\",\"score_shape\":\"主胜中位区，优先2-0/2-1，向下有1-0/1-1，向上有3-1。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"unclear\"}",
+            "anchor_audit:{\"zero_zero\":\"16.0，赔率较高，非首选闷平，但需防范极端轮换情况。\",\"one_one\":\"9.5，平局最低赔，未被封死，是主胜最大的潜在威胁。\",\"one_zero\":\"7.5，主胜低赔簇成员，防范一球窄胜。\",\"zero_one\":\"24.0，客胜最低赔，但远高于主胜和平局锚点，客队直接爆冷赢球概率极低。\",\"two_one\":\"5.3，紧随2-0，是最容易打出的有失球主胜比分。\",\"one_two\":\"28.0，客队反打比分，赔率过高，基本排除。\",\"high_score_tail\":\"3-1（6.7）偏低，但4-1（20.0）等更高比分未完全共振，大球尾部存在但非主导。\",\"handicap_cover\":\"2-0（4.5）和3-0（8.0）支持主队穿盘（-1.0），但1-0和2-1的存在说明赢一球走水的概率同样不小。\"}",
+            "market_interpretation:{\"one_x_two\":\"竞彩1X2主胜1.22极低，去水后隐含概率约76.3%，但国际清算盘主胜概率仅约70.9%，国内主胜存在+7.62%的偏斜，说明体彩在强行压低主胜赔率以规避大众热门风险。\",\"handicap\":\"名义让球-1.0，结合比分2-0最低、2-1次低，市场预期主队赢一到两球，但并未给出极度夸张的深盘让步。\",\"correct_score\":\"主胜比分2-0、2-1、3-1、1-0、3-0占据低赔前五，主胜趋势明确；但1-1（9.5）排在第六，说明机构并未完全排除平局可能。\",\"total_goals\":\"3球（3.15）最低，2球（3.65）次低，4球（4.6）偏低但5球未同步塌缩，整体指向2-3球的中等进球区间，不支持无脑大球。\",\"half_full_time\":\"主/主1.70绝对占优，平/主3.95次之，市场预期美国队能够较早确立优势或在下半场发力拿下比赛。\",\"external_market\":\"双轨背离显示国内竞彩对主胜进行了过度保护（正偏斜），国际市场对平局和客胜给出了相对更高的概率，提示主胜方向虽稳但赔率价值低。\"}",
+            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"大众投票73%集中在主胜，抓包显示主胜降水，但缺乏完整的开盘到即时赔率时间序列，无法确认是否存在真实的聪明钱推动或仅仅是机构顺应热度的被动调价。\"}",
+            "contextual_logic:{\"league_style\":\"世界杯中立场赛事，需高度关注小组赛轮次、出线形势与净胜球需求，不能机械套用联赛大球思维。\",\"team_style\":\"美国整体实力占优，波黑防守存在隐患，但缺乏实时数据支撑。\",\"tempo\":\"medium\",\"score_shape\":\"偏向主队中低比分获胜（2-0/2-1/1-0），不支持无底线的对攻大战。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"high\"}",
             "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
-            "recommendation:{\"tier\":\"C\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":35,\"direction_stability\":\"medium\",\"score_stability\":\"weak\",\"risk_level\":\"high\",\"risk_tags\":[\"主胜过热\",\"世界杯轮换未知\",\"1-1冷平风险\"],\"bet_action\":\"observe\",\"why_this_can_fail\":[\"美国若已出线或有轮换，低赔主胜可能被控分节奏削弱。\",\"国内竞彩主胜相对国际清算盘过度低开，可能只是规避大众热门而非真实价值。\"],\"minimum_evidence_needed\":[\"美国首发与轮换确认\",\"同组积分和净胜球需求\"],\"why_recommended\":\"不推荐下注；仅从市场结构看美国方向占优，合理观察比分为2-0，但当前风险控制优先。\"}"
+            "recommendation:{\"tier\":\"C\",\"is_recommended\":true,\"top4_priority\":4,\"bet_confidence\":55,\"direction_stability\":\"medium\",\"score_stability\":\"medium\",\"risk_level\":\"high\",\"risk_tags\":[\"无联网验证\",\"世界杯轮换未知\",\"国内盘口严重偏斜\"],\"bet_action\":\"small\",\"why_this_can_fail\":[\"美国队若已提前出线，可能派出全替补阵容，导致进攻乏力打出1-1或0-0。\",\"波黑利用定位球或反击偷袭得手，比分变为2-1或1-1。\",\"国内竞彩主胜赔率极低，毫无博弈价值，属于大热必死的高危区间。\"],\"minimum_evidence_needed\":[\"双方实时出线形势与净胜球需求\",\"权威媒体披露的预计首发名单\"],\"why_recommended\":\"仅基于本地盘口快照，2-0为全场最低赔率且主胜簇集中，方向明确；但因缺乏外部事实验证且国内盘口偏斜严重，仅限小注娱乐。\"}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -1321,11 +1424,11 @@
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "公众投票主胜73%，主胜赔率方向为降水、客胜升水，表面资金与赔率同向支持主队；但sharp_money_facts未提供开盘-即时完整序列，不能确认真实聪明钱或反向变盘。",
+          "smart_money_signal": "大众投票73%集中在主胜，抓包显示主胜降水，但缺乏完整的开盘到即时赔率时间序列，无法确认是否存在真实的聪明钱推动或仅仅是机构顺应热度的被动调价。",
           "smart_signals": [
-            "主胜过热",
+            "无联网验证",
             "世界杯轮换未知",
-            "1-1冷平风险",
+            "国内盘口严重偏斜",
             "external_fact_without_source",
             "missing_external_confirmation"
           ],
@@ -1339,15 +1442,15 @@
             "sharp_confidence": 0,
             "reverse_line_movement": false,
             "steam_move": "unclear",
-            "evidence": "公众投票主胜73%，主胜赔率方向为降水、客胜升水，表面资金与赔率同向支持主队；但sharp_money_facts未提供开盘-即时完整序列，不能确认真实聪明钱或反向变盘。"
+            "evidence": "大众投票73%集中在主胜，抓包显示主胜降水，但缺乏完整的开盘到即时赔率时间序列，无法确认是否存在真实的聪明钱推动或仅仅是机构顺应热度的被动调价。"
           },
           "score_market_evidence": {
-            "one_x_two": "竞彩1.22/4.91/9.40给出极强主胜框架，去水后主胜约76.3%，但国内主胜较国际清算盘偏热约7.62%，这更像热门方向风控压价而非可买价值。",
-            "handicap": "让球为-1，比分簇同时支持2-0、2-1、1-0，说明美国赢球概率高，但穿盘并非无条件；1球小胜与走盘/不穿仍是重要路径。",
-            "correct_score": "2-0最低，2-1、3-1紧随，主胜簇明显集中；但1-1处于低赔区第六，平局锚点没有死亡，不能把比赛读成无风险大胜。",
-            "total_goals": "总进球3球最低3.15，2球3.65，4球4.6；中心在2-3球。4球偏低但5球8.5、6球15未形成完整大球整簇塌缩，倾向中低到中位进球而非无脑大球。",
-            "half_full_time": "主/主1.70最低，平/主3.95次低，指向美国可能掌控比赛；但平/主较低也提示上半场打不开、下半场兑现优势的路径。",
-            "external_market": "抓包已给出国内竞彩与国际清算盘Shin分歧：国内主胜过度压低，平局和客胜相对国际被放宽，读作主胜方向热度/避险较强，投注性价比下降。"
+            "one_x_two": "竞彩1X2主胜1.22极低，去水后隐含概率约76.3%，但国际清算盘主胜概率仅约70.9%，国内主胜存在+7.62%的偏斜，说明体彩在强行压低主胜赔率以规避大众热门风险。",
+            "handicap": "名义让球-1.0，结合比分2-0最低、2-1次低，市场预期主队赢一到两球，但并未给出极度夸张的深盘让步。",
+            "correct_score": "主胜比分2-0、2-1、3-1、1-0、3-0占据低赔前五，主胜趋势明确；但1-1（9.5）排在第六，说明机构并未完全排除平局可能。",
+            "total_goals": "3球（3.15）最低，2球（3.65）次低，4球（4.6）偏低但5球未同步塌缩，整体指向2-3球的中等进球区间，不支持无脑大球。",
+            "half_full_time": "主/主1.70绝对占优，平/主3.95次之，市场预期美国队能够较早确立优势或在下半场发力拿下比赛。",
+            "external_market": "双轨背离显示国内竞彩对主胜进行了过度保护（正偏斜），国际市场对平局和客胜给出了相对更高的概率，提示主胜方向虽稳但赔率价值低。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -1357,9 +1460,9 @@
             "strength": 0,
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
-              "主胜过热",
+              "无联网验证",
               "世界杯轮换未知",
-              "1-1冷平风险",
+              "国内盘口严重偏斜",
               "external_fact_without_source",
               "missing_external_confirmation"
             ],
@@ -1376,19 +1479,19 @@
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
           "gpt_score": "2-0",
-          "gpt_analysis": "综合1X2、让球、正确比分和总进球，美国胜面明显，2-0是最干净的市场结构落点：最低比分赔率、弱方破门证据不足、让-1下赢两球路径成立。但这不是高信心可买场，因为国内竞彩主胜相对国际清算盘过度压低，公众热度集中，1-1锚点未被抬死，且世界杯场景下轮换和出线形势无法联网核实。最终方向给home，比分给2-0，投注动作维持observe。",
-          "grok_score": "2-1",
+          "gpt_analysis": "综合竞彩1X2、正确比分簇和总进球模态，美国胜面仍是主线；2-0作为全场最低比分且与一球盘赢两球路径匹配，优先于2-1。风险在于世界杯场景下热门可能轮换或控分，1-1未被抬死，同时国内竞彩相对国际清算盘明显压低主胜，说明主胜赔率没有价值优势。因此最终方向为home，比分取2-0，但投注动作只给small而非主推。",
+          "grok_score": "2-0",
           "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
           "gemini_score": "2-0",
-          "gemini_analysis": "综合1X2、让球、正确比分和总进球，美国胜面明显，2-0是最干净的市场结构落点：最低比分赔率、弱方破门证据不足、让-1下赢两球路径成立。但这不是高信心可买场，因为国内竞彩主胜相对国际清算盘过度压低，公众热度集中，1-1锚点未被抬死，且世界杯场景下轮换和出线形势无法联网核实。最终方向给home，比分给2-0，投注动作维持observe。",
+          "gemini_analysis": "本场比赛竞彩1X2和正确比分簇均明确指向美国队获胜，2-0作为全场最低赔率（4.5）是机构最防范的赛果。然而，由于无法联网核实世界杯的具体轮次、双方出线形势以及是否存在大面积轮换，且双轨背离模型显示国内竞彩对主胜进行了强行的压价避险（正偏斜+7.62%），主胜方向虽然大概率打出，但赔率极度缺乏性价比，且存在1-1冷平的隐患。因此，最终预测为2-0主胜，但推荐等级降至C级，仅建议小注。",
           "final_referee_score": "2-0",
-          "final_referee_analysis": "综合1X2、让球、正确比分和总进球，美国胜面明显，2-0是最干净的市场结构落点：最低比分赔率、弱方破门证据不足、让-1下赢两球路径成立。但这不是高信心可买场，因为国内竞彩主胜相对国际清算盘过度压低，公众热度集中，1-1锚点未被抬死，且世界杯场景下轮换和出线形势无法联网核实。最终方向给home，比分给2-0，投注动作维持observe。",
+          "final_referee_analysis": "本场比赛竞彩1X2和正确比分簇均明确指向美国队获胜，2-0作为全场最低赔率（4.5）是机构最防范的赛果。然而，由于无法联网核实世界杯的具体轮次、双方出线形势以及是否存在大面积轮换，且双轨背离模型显示国内竞彩对主胜进行了强行的压价避险（正偏斜+7.62%），主胜方向虽然大概率打出，但赔率极度缺乏性价比，且存在1-1冷平的隐患。因此，最终预测为2-0主胜，但推荐等级降至C级，仅建议小注。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
           "final_ai_score": "2-0",
-          "final_ai_analysis": "综合1X2、让球、正确比分和总进球，美国胜面明显，2-0是最干净的市场结构落点：最低比分赔率、弱方破门证据不足、让-1下赢两球路径成立。但这不是高信心可买场，因为国内竞彩主胜相对国际清算盘过度压低，公众热度集中，1-1锚点未被抬死，且世界杯场景下轮换和出线形势无法联网核实。最终方向给home，比分给2-0，投注动作维持observe。",
+          "final_ai_analysis": "本场比赛竞彩1X2和正确比分簇均明确指向美国队获胜，2-0作为全场最低赔率（4.5）是机构最防范的赛果。然而，由于无法联网核实世界杯的具体轮次、双方出线形势以及是否存在大面积轮换，且双轨背离模型显示国内竞彩对主胜进行了强行的压价避险（正偏斜+7.62%），主胜方向虽然大概率打出，但赔率极度缺乏性价比，且存在1-1冷平的隐患。因此，最终预测为2-0主胜，但推荐等级降至C级，仅建议小注。",
           "ai_abstained": [],
-          "ai_avg_confidence": 35.0,
+          "ai_avg_confidence": 55.0,
           "ai_call_status": {
             "gpt": {
               "phase1": {
@@ -1396,29 +1499,42 @@
                 "ai_name": "gpt",
                 "model": "gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 173.9,
-                "endpoint_name": "gpt_3",
-                "endpoint_slot": 3,
-                "endpoint_attempt": 2,
-                "endpoint_total": 4,
+                "elapsed": 211.6,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 458.0
+                "total_elapsed": 211.6
               },
-              "last_status": "parse_failed",
+              "last_status": "ok",
               "model": "gpt-5.5",
               "critic": {
                 "ok": false,
                 "ai_name": "gpt",
                 "model": "gpt-5.5",
                 "phase": "critic",
-                "elapsed": 67.1,
-                "endpoint_name": "gpt_1",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 4,
-                "endpoint_total": 4,
+                "elapsed": 78.9,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
                 "status": "parse_failed",
                 "parse_error": "empty_or_invalid_json_object",
-                "raw_excerpt": "{\"critic_reports\":[{\"match\":2,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"schema\",\"severity\":\"high\",\"comment\":\"输出中 anchor_audit、market_interpretation、money_flow、contextual_logic、rejected_cases、data_quality 等关键审计字段为空，且 validation_warnings 已自曝 score_cluster_audit、sharp"
+                "raw_excerpt": "{\"critic_reports\":[{\"match\":4,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"web\",\"severity\":\"high\",\"comment\":\"存在明显联网证据风险。报告中声称使用 Yahoo、Sports Mole、Pinnacle、Climate Central 等实时来源，并给出2026-06/07发布日期、访问时间和具体阵容，但当前任务证据只允许使用抓包与结构化事实，且 packet_context 明确提示抓包文字不等于实时外部 Web sourc"
+              },
+              "fallback_referee": {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "gpt-5.5",
+                "phase": "fallback_referee",
+                "elapsed": 261.3,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "ok",
+                "total_elapsed": 261.3
               }
             },
             "grok": {
@@ -1427,13 +1543,13 @@
                 "ai_name": "grok",
                 "model": "grok-4.3-c",
                 "phase": "phase1",
-                "elapsed": 92.4,
+                "elapsed": 37.1,
                 "endpoint_name": "grok_3",
                 "endpoint_slot": 3,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 92.4
+                "total_elapsed": 37.1
               },
               "last_status": "ok",
               "model": "grok-4.3-c",
@@ -1442,13 +1558,13 @@
                 "ai_name": "grok",
                 "model": "grok-4.3-c",
                 "phase": "critic",
-                "elapsed": 30.0,
-                "endpoint_name": "grok_2",
-                "endpoint_slot": 2,
+                "elapsed": 7.0,
+                "endpoint_name": "grok_4",
+                "endpoint_slot": 4,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 30.0
+                "total_elapsed": 7.0
               }
             },
             "gemini": {
@@ -1457,13 +1573,14 @@
                 "ai_name": "gemini",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
                 "phase": "final",
-                "elapsed": 43.8,
-                "endpoint_name": "gemini_2",
-                "endpoint_slot": 2,
+                "elapsed": 67.5,
+                "endpoint_name": "gemini_4",
+                "endpoint_slot": 4,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 43.8
+                "total_elapsed": 67.5,
+                "retry_succeeded_on_attempt": 3
               },
               "last_status": "ok",
               "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"
@@ -1471,11 +1588,11 @@
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260701_185325_4m_828b7c27aeee_比利时_塞内加尔",
+            "run_id": "20260701_194245_4m_2ec688caee32_比利时_塞内加尔",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 4,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260701_185325_4m_828b7c27aeee_比利时_塞内加尔_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260701_194245_4m_2ec688caee32_比利时_塞内加尔_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -1483,29 +1600,42 @@
                   "ai_name": "gpt",
                   "model": "gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 173.9,
-                  "endpoint_name": "gpt_3",
-                  "endpoint_slot": 3,
-                  "endpoint_attempt": 2,
-                  "endpoint_total": 4,
+                  "elapsed": 211.6,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 458.0
+                  "total_elapsed": 211.6
                 },
-                "last_status": "parse_failed",
+                "last_status": "ok",
                 "model": "gpt-5.5",
                 "critic": {
                   "ok": false,
                   "ai_name": "gpt",
                   "model": "gpt-5.5",
                   "phase": "critic",
-                  "elapsed": 67.1,
-                  "endpoint_name": "gpt_1",
-                  "endpoint_slot": 1,
-                  "endpoint_attempt": 4,
-                  "endpoint_total": 4,
+                  "elapsed": 78.9,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
                   "status": "parse_failed",
                   "parse_error": "empty_or_invalid_json_object",
-                  "raw_excerpt": "{\"critic_reports\":[{\"match\":2,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"schema\",\"severity\":\"high\",\"comment\":\"输出中 anchor_audit、market_interpretation、money_flow、contextual_logic、rejected_cases、data_quality 等关键审计字段为空，且 validation_warnings 已自曝 score_cluster_audit、sharp"
+                  "raw_excerpt": "{\"critic_reports\":[{\"match\":4,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"web\",\"severity\":\"high\",\"comment\":\"存在明显联网证据风险。报告中声称使用 Yahoo、Sports Mole、Pinnacle、Climate Central 等实时来源，并给出2026-06/07发布日期、访问时间和具体阵容，但当前任务证据只允许使用抓包与结构化事实，且 packet_context 明确提示抓包文字不等于实时外部 Web sourc"
+                },
+                "fallback_referee": {
+                  "ok": true,
+                  "ai_name": "gpt",
+                  "model": "gpt-5.5",
+                  "phase": "fallback_referee",
+                  "elapsed": 261.3,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
+                  "status": "ok",
+                  "total_elapsed": 261.3
                 }
               },
               "grok": {
@@ -1514,13 +1644,13 @@
                   "ai_name": "grok",
                   "model": "grok-4.3-c",
                   "phase": "phase1",
-                  "elapsed": 92.4,
+                  "elapsed": 37.1,
                   "endpoint_name": "grok_3",
                   "endpoint_slot": 3,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 92.4
+                  "total_elapsed": 37.1
                 },
                 "last_status": "ok",
                 "model": "grok-4.3-c",
@@ -1529,13 +1659,13 @@
                   "ai_name": "grok",
                   "model": "grok-4.3-c",
                   "phase": "critic",
-                  "elapsed": 30.0,
-                  "endpoint_name": "grok_2",
-                  "endpoint_slot": 2,
+                  "elapsed": 7.0,
+                  "endpoint_name": "grok_4",
+                  "endpoint_slot": 4,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 30.0
+                  "total_elapsed": 7.0
                 }
               },
               "gemini": {
@@ -1544,13 +1674,14 @@
                   "ai_name": "gemini",
                   "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
                   "phase": "final",
-                  "elapsed": 43.8,
-                  "endpoint_name": "gemini_2",
-                  "endpoint_slot": 2,
+                  "elapsed": 67.5,
+                  "endpoint_name": "gemini_4",
+                  "endpoint_slot": 4,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 43.8
+                  "total_elapsed": 67.5,
+                  "retry_succeeded_on_attempt": 3
                 },
                 "last_status": "ok",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"
@@ -1605,136 +1736,137 @@
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
             "selected_cluster": "home_cover",
-            "why_selected_score": "主胜覆盖簇和主胜窄胜簇均强，2-0同时是全场最低比分、让-1下的穿盘/赢两球代表，并与弱方破门证据不足相匹配；相较2-1，2-0更符合零封比分簇2-0/3-0/4-0整体靠前。",
+            "why_selected_score": "2-0是全场最低赔率（4.5），同时满足主胜、零封和赢盘（一球盘赢两球）的条件。在缺乏客队稳定破门证据的情况下，优先选择零封主胜而非2-1。",
             "adjacent_scores_checked": [
               {
                 "score": "2-1",
                 "odds": 5.3,
                 "verdict": "near_miss",
-                "reason": "与2-0非常接近，若美国防线延续失球问题或波黑定位球有效，则可替代。"
+                "reason": "赔率极近且有3球模态支撑，但需要客队破门，在强弱悬殊且无明确客队进攻利好时作为次选。"
               },
               {
                 "score": "1-0",
                 "odds": 7.5,
                 "verdict": "keep",
-                "reason": "一球盘下必须保留，小胜不穿盘是重要风险。"
+                "reason": "一球小胜路径，防范主队领先后控分降速。"
               },
               {
                 "score": "3-0",
-                "odds": 8,
+                "odds": 8.0,
                 "verdict": "keep",
-                "reason": "主胜零封扩展路径，若美国效率高于预期可上修。"
+                "reason": "同属零封大胜，但赔率高于2-0和2-1，优先级稍后。"
               },
               {
                 "score": "1-1",
                 "odds": 9.5,
                 "verdict": "keep",
-                "reason": "平局最低比分且未被抬死，是热门主胜的冷平红灯。"
+                "reason": "平局首选，未被抬死，防范热门大轮换或慢热爆冷。"
               }
             ],
-            "lowest_score_not_selected_reason": "2-0本身就是最低赔率比分，因此不存在最低比分被排除；选择它不是机械照抄，而是因其同时通过相邻比分、让球形态和弱方破门证据审计。"
+            "lowest_score_not_selected_reason": "最低比分2-0已被选中。未选第二低的2-1是因为在国际赛强弱对决中，若无明确的弱队反击/定位球得分证据，优先尊重机构给出的最低零封比分。"
           },
           "sharp_money_audit": {
             "available": true,
             "confirmed_sharp_direction": "unclear",
             "rlm_confirmed": false,
-            "vote_vs_odds_conflict": "公众主胜73%与主胜降水同向，不构成可确认反向变盘；但国内相对国际主胜低开，可能是区域热门避险压价。",
-            "crs_change_impact": "正确比分无变化序列，只能看静态簇。静态簇支持美国胜，且2-0、2-1近邻非常强；1-1未死降低主胜穿盘信心。",
-            "ttg_change_impact": "总进球无变化序列。静态模态为3球，2球次之，4球单点偏低但5球未同步强压，倾向2-3球中位区。"
+            "vote_vs_odds_conflict": "大众主胜极热且主胜降水，表面顺势，但由于缺乏完整序列，无法排除庄家单纯为降低赔付而压价的可能。",
+            "crs_change_impact": "无正确比分变化数据，无法判断动态资金流向。",
+            "ttg_change_impact": "无总进球变化数据，静态模态指向2-3球。"
           },
           "recommendation_components": {
-            "direction_edge": 60,
-            "score_cluster_strength": 70,
-            "goal_band_strength": 50,
-            "btts_alignment": 50,
+            "direction_edge": 70,
+            "score_cluster_strength": 65,
+            "goal_band_strength": 60,
+            "btts_alignment": 55,
             "sharp_alignment": 0,
             "web_source_quality": 0,
             "market_conflict_penalty": 30,
-            "final_grade_reason": "盘口本体对美国方向区分度强，比分簇集中度也高；但国内主胜相对国际过热、Sharp未确认、外部信息缺失且世界杯战意轮换无法核实，综合只能给低推荐等级或观察。"
+            "final_grade_reason": "盘口本体强烈支持主胜（2-0最低赔），但缺乏任何外部联网事实验证（尤其是世界杯关键的战意和轮换信息），且国内竞彩存在严重的主胜压价偏斜，因此只能给出低信心的小注推荐。"
           },
           "risk_score_candidates": [
             {
-              "score": "1-1",
-              "risk_type": "冷平防范",
-              "reason": "国内竞彩主胜相对国际清算盘明显低开，平局与1-1没有被完全抬死；若这是小组末轮或美国存在轮换/控分，1-1是首要冷平路径。"
+              "score": "2-1",
+              "risk_type": "防线漏球/定位球失分",
+              "reason": "2-1赔率5.3紧随2-0，且总进球3球为最低赔率模态，若美国防线不稳或波黑反击得手，容易打出2-1。"
             },
             {
-              "score": "2-1",
-              "risk_type": "主胜但零封失败",
-              "reason": "2-1赔率5.3仅次于2-0，说明市场仍给波黑反击或定位球破门留有空间。"
+              "score": "1-1",
+              "risk_type": "热门被逼平/轮换控分",
+              "reason": "1-1赔率9.5未被完全抬死，在国内竞彩主胜极度受热且强行压价的背景下，若美国队已出线进行轮换，存在冷平风险。"
             },
             {
               "score": "1-0",
-              "risk_type": "一球小胜不穿盘",
-              "reason": "让球为-1，一球盘必须审计赢一球路径；1-0赔率7.5不高，若美国效率一般或早早控节奏，可能只小胜。"
+              "risk_type": "一球小胜/领先后降速",
+              "reason": "1-0赔率7.5处于低赔簇，让球为一球盘，若美国队领先后控分不强求大胜，可能只赢一球。"
             }
           ],
           "tail_risk_flags": [
-            "domestic_home_overcompression",
-            "worldcup_round_motivation_unverified",
-            "one_goal_handicap_push_risk"
+            "domestic_home_skew_overpriced",
+            "worldcup_rotation_motivation_unknown",
+            "public_home_heavy"
           ],
-          "confidence_downgrade_reason": "主胜赔率与比分簇均指向美国优势，但dual_market_divergence_calibration显示国内主胜相对国际清算盘过度低开，且无法联网核实世界杯轮次、出线形势、轮换与外部盘口时间序列，因此只给方向判断，不做高信心下注。",
+          "confidence_downgrade_reason": "无法联网核实世界杯具体轮次、出线形势与双方首发轮换情况；国内竞彩主胜存在显著的正向偏斜（强行压低赔率避险），赔率性价比不足。",
           "source_conflict_audit": {
             "has_conflict": false,
             "conflicts": []
           },
           "evidence_quality_score": 30,
           "minimum_evidence_needed": [
-            "官方或主流媒体确认的世界杯轮次、同组积分与出线形势",
-            "美国与波黑预计首发、轮换和伤停名单"
+            "确认世界杯当前轮次及双方出线形势",
+            "确认美国队是否进行大面积轮换",
+            "获取外部主流机构的即时欧赔和亚盘水位"
           ],
           "external_facts_decision_impact": {
             "direction_impact": "unclear",
             "goal_impact": "unclear",
             "recommendation_impact": "downgrade",
-            "main_reason": "无法联网验证战意、轮换、伤停和外部盘口时间点；盘口本体支持美国，但外部事实不足以升为main。"
+            "main_reason": "缺乏联网能力，无法获取决定性的战意、轮换和外部盘口数据，只能依赖本地高抽水竞彩快照，必须降级处理。"
           },
           "gemini_independent_research": {
             "searched": false,
             "key_sources": [],
             "missing_sources": [
-              "外部赔率源",
-              "官方阵容/发布会",
-              "同组积分与出线形势"
+              "实时出线形势",
+              "预计首发名单",
+              "外部主流机构赔率序列"
             ],
-            "cross_checked_against_grok": "按反方审计重点处理：没有把主胜低赔直接视为高价值；重点下调国内主胜过热、1-1未死、世界杯末轮轮换未知和让-1不穿盘风险。"
+            "cross_checked_against_grok": "Grok未提供有效输出，独立完成盘口本体分析，确认主胜优势但指出国内盘口偏斜风险。"
           },
           "bookmaker_cross_audit": {
-            "bet365": "无联网工具，未获得Bet365实时赔率；不能编造外部盘口。",
-            "william_hill": "无联网工具，未获得William Hill实时赔率；不能作为硬证据。",
-            "pinnacle_or_low_margin": "无联网工具，未获得Pinnacle低水位盘口；仅能使用抓包已给出的国际清算盘Shin对照，显示国内主胜偏热。",
-            "jingcai": "竞彩主胜1.22、平4.91、客9.40，去水主胜约76.3%；主胜降水、客胜升水，公众主胜73%。",
-            "average_market": "抓包dual_market_divergence显示全球Shin约主70.9%、平19.3%、客9.9%，低于国内主胜、相对更支持平负风险。",
+            "bet365": "无数据",
+            "william_hill": "无数据",
+            "pinnacle_or_low_margin": "无数据，但双轨背离模型推算的国际清算主胜概率（70.889%）低于国内竞彩（76.288%）。",
+            "jingcai": "1.22/4.91/9.40，主胜极度受压，存在明显的正向偏斜，机构在强力防范主胜打出的赔付风险。",
+            "average_market": "国际市场对平局和客胜的包容度高于国内，提示冷门并非完全不可能。",
             "water_movement": "无可靠时间序列说明",
-            "asian_handicap": "抓包让球-1，结合2-0最低、2-1次低、1-0第四，说明美国胜面高但赢一球与赢两球并存。",
-            "ou_total_goals": "竞彩总进球模态3球，2球次低，4球第三；4球单点低但5球未同步塌缩，倾向2-3球。",
-            "correct_score_cluster": "主胜比分簇明显压缩，2-0/2-1/3-1/1-0/3-0占据前五；平局1-1在第六是关键风险。",
-            "bookmaker_intent": "竞彩可能通过压低美国主胜规避大众热门风险，诱导低回报追热；真正可买条件需要外部低水盘同步确认，而当前没有。"
+            "asian_handicap": "仅有名义-1.0让球，缺乏水位变化，无法判断真实阻挡力度。",
+            "ou_total_goals": "3球和2球为核心区间，不支持极端大球。",
+            "correct_score_cluster": "2-0/2-1/3-1/1-0构成主胜核心防线，1-1作为平局独苗被保留。",
+            "bookmaker_intent": "国内机构极度忌惮主胜大热，通过大幅压低主胜赔率进行风控；同时正确比分最低开出2-0，防范主队完胜。"
           },
           "tempo_xg_tactical_audit": {
             "tempo": "medium",
-            "xg_signal": "无可靠联网xG数据；只能从比分簇判断美国预期进球高于波黑，集中在2球附近。",
-            "xga_signal": "抓包文字提到美国防线失球隐患、波黑防守不稳，但这些不是联网证实；市场上2-1低赔说明美国失球风险未完全消失。",
-            "pressing_transition": "若美国高位压迫兑现，波黑后场失误会推向2-0/3-0；若波黑低位压缩并打反击，比赛会收窄至1-0/1-1。",
-            "formation_matchup": "无首发阵型来源，不能做硬判断；盘口更像强队主导控球、弱队防守反击模板。",
-            "key_player_impact": "无可靠伤停和首发来源，不能因个别球员推高推荐。"
+            "xg_signal": "无数据",
+            "xga_signal": "无数据",
+            "pressing_transition": "无数据",
+            "formation_matchup": "无数据",
+            "key_player_impact": "无数据"
           },
           "worldcup_upset_audit": {
             "context": "group_stage",
-            "japan_type_counter": "unclear+波黑若低位防守后快速打身后，有爆冷路径，但赔率簇未强烈支持。",
-            "morocco_type_low_block": "unclear+若波黑采取极端低位，1-0或1-1比开放大比分更合理。",
-            "croatia_type_resilience": "unclear+波黑客场/弱势方若通过经验拖节奏，可能把美国优势压缩到一球差。",
-            "favorite_slow_start_risk": "半全场平/主3.95较低，说明美国可能并非从开局就碾压；若久攻不下，平局风险放大。",
-            "upset_path": "主要爆冷路径不是波黑大胜，而是美国主胜过热后被拖成1-1，或因防线失误被0-1/1-2偷走。"
+            "japan_type_counter": "unclear+缺乏客队反击效率数据",
+            "morocco_type_low_block": "unclear+若波黑死守，1-0或0-0概率上升",
+            "croatia_type_resilience": "unclear+1-1赔率未死，提示一定的韧性逼平可能",
+            "favorite_slow_start_risk": "若美国队已出线并轮换，极易出现慢热甚至被爆冷逼平的情况。",
+            "upset_path": "美国队大轮换导致进攻便秘，波黑死守反击偷得一分（1-1）或互交白卷（0-0）。"
           },
           "score_elimination_audit": {
-            "0-0": "keep+赔率16不算核心，但世界杯轮换/控分未知，不能完全删除。",
-            "1-1": "keep+赔率9.5进入低赔区，且国内主胜过热，必须作为首要风险。",
-            "2-2": "reject+赔率23且总进球4球为单点偏低，不足以主推高分平。",
-            "1-2": "keep+赔率28虽高，但若美国防线失误与热门陷阱共振，客队小冷可作尾部。",
-            "2-1": "keep+赔率5.3极接近2-0，是零封失败时的主胜替代。",
-            "selected_score_final_reason": "2-0同时满足最低正确比分、主胜强簇、让-1赢两球与弱方破门证据不足；但因1-1和2-1邻近风险，推荐降为观察。"
+            "0-0": "keep+防范极端轮换和默契球",
+            "1-1": "keep+平局最低赔，核心防冷比分",
+            "2-2": "reject+赔率23.0过高，且总进球4球非主模态",
+            "1-2": "reject+客胜赔率过高，反打路径不支持",
+            "2-1": "keep+主胜次低赔，防范主队失球",
+            "selected_score_final_reason": "2-0是全场最低赔率，完美契合主胜、零封和一球盘赢盘的预期，在无明确客队进球证据时优于2-1。"
           },
           "dirty_work_checklist": {
             "lineup": false,
@@ -1745,11 +1877,8 @@
             "travel_rest": false,
             "odds_sources": false,
             "xg_tempo": false,
-            "worldcup_context": true
+            "worldcup_context": false
           },
-          "protocol_risk_hints": [
-            "sharp_alignment_low_and_direction_edge_not_strong"
-          ],
           "pre_match_factor_audit": {
             "version": "v20.4_pre_match_factor_gate",
             "league_dna": {
@@ -1800,7 +1929,7 @@
               }
             },
             "web_used_with_sources": false,
-            "lineup_confirmed": true,
+            "lineup_confirmed": false,
             "money_flow": {
               "sharp": "unclear",
               "public": "home",
@@ -1809,12 +1938,13 @@
               "conflict": false,
               "reverse": false
             },
-            "data_quality_score": 43.2,
-            "edge_gap": 60.0,
-            "draw_probability_watch": 16.0,
+            "data_quality_score": 31.1,
+            "edge_gap": 52.0,
+            "draw_probability_watch": 19.0,
             "draw_cluster_present": true,
             "high_goal_tail_pct": 0.0,
             "rules_applied": [
+              "prematch_v2_rotation_risk_requires_lineup",
               "prematch_v2_worldcup_r3_rotation_or_qualification_cap",
               "prematch_v2_worldcup_r3_draw_or_small_loss_trap",
               "prematch_v2_worldcup_r3_motivation_without_external_confirmation",
@@ -1824,6 +1954,11 @@
               "prematch_v2_cross_region_requires_external_confirmation"
             ],
             "risk_hints": [
+              {
+                "max_tier": "C",
+                "reason": "prematch_v2_rotation_risk_requires_lineup",
+                "tag": "prematch_v2_rotation_risk"
+              },
               {
                 "max_tier": "C",
                 "reason": "prematch_v2_worldcup_r3_rotation_or_qualification_cap",
@@ -2100,9 +2235,9 @@
           "home_win_pct": 75.0,
           "draw_pct": 17.0,
           "away_win_pct": 8.0,
-          "confidence": 80,
+          "confidence": 65,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
-          "risk_level": "low",
+          "risk_level": "medium",
           "goal_band": "2",
           "btts": "no",
           "btts_ai": "no",
@@ -2118,26 +2253,27 @@
             "tier": "C",
             "is_recommended": false,
             "top4_priority": 1,
-            "bet_confidence": 80,
+            "bet_confidence": 65,
             "direction_stability": "strong",
-            "score_stability": "strong",
-            "risk_level": "low",
+            "score_stability": "medium",
+            "risk_level": "medium",
             "risk_tags": [
-              "淘汰赛闷平风险",
-              "大球塌缩尾部",
+              "淘汰赛防平",
+              "一球小胜走水",
               "external_fact_without_source",
               "missing_external_confirmation",
               "external_evidence_quality_below_50"
             ],
             "bet_action": "observe",
             "why_this_can_fail": [
-              "西班牙得势不得分，被奥地利死守拖入0-0或1-1。",
-              "西班牙早早进球后大开杀戒，打出4-0或3-1的大比分。"
+              "西班牙久攻不下被拖入加时",
+              "奥地利偷袭得手导致丢球"
             ],
             "minimum_evidence_needed": [
-              "确认西班牙无重大中前场伤停"
+              "首发名单",
+              "临场水位"
             ],
-            "why_recommended": "主胜隐含概率高达75.6%，2-0为全局最低比分，盘口对西班牙零封完胜防范极严。本场为淘汰赛，不存在轮换问题，实力碾压下主胜穿盘是大概率事件。"
+            "why_recommended": "主胜赔率极低且零封比分簇占据绝对优势，盘口指向清晰。"
           },
           "recommendation_tier": "C",
           "recommend_gate_pass": false,
@@ -2146,61 +2282,61 @@
             "external_evidence_quality_below_50",
             "gate_action_not_bettable"
           ],
-          "safe_top_gate_score": 80.0,
-          "overall_selection_score": 80.0,
-          "direction_selection_score": 80.0,
-          "score_shape_score": 80.0,
-          "direction_tier": "A",
-          "score_tier": "A",
+          "safe_top_gate_score": 65.0,
+          "overall_selection_score": 65.0,
+          "direction_selection_score": 65.0,
+          "score_shape_score": 65.0,
+          "direction_tier": "B",
+          "score_tier": "B",
           "recommendation_downgrade_reasons": [],
           "top_score_candidates": [
             [
               "2-0",
-              20.0
+              18.0
             ],
             [
               "3-0",
-              15.0
+              14.0
             ],
             [
               "3-1",
-              12.0
+              10.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
               "2-0",
-              20.0
+              18.0
             ],
             [
               "3-0",
-              15.0
+              14.0
             ],
             [
               "3-1",
-              12.0
+              10.0
             ]
           ],
-          "score_model_prob": 20.0,
+          "score_model_prob": 18.0,
           "score_market_odds": 5.1,
           "score_market_implied_pct": 19.608,
           "anchor_audit": {
-            "zero_zero": "赔率13.0排名第7，在主胜绝对优势下不作为首选，但淘汰赛语境下不能完全排除。",
-            "one_one": "赔率9.0，未被完全抬死，是主胜防冷的核心比分。",
-            "one_zero": "赔率6.25，防范西班牙领先后降速控场的窄胜路径。",
-            "zero_one": "赔率20.0，客胜最低比分，但远高于主胜簇，仅作极端冷门。",
-            "two_one": "赔率7.0，与3-0同价，在负方无破门证据时优先级低于零封比分。",
-            "one_two": "赔率29.0，客队反打路径缺乏数据支撑，予以排除。",
-            "high_score_tail": "3-1(9.5)、4-0(13.5)，受大球曲线塌缩影响，高分尾部具备真实打出可能。",
-            "handicap_cover": "2-0、3-0低赔强力支持主队赢两球以上穿盘。"
+            "zero_zero": "13.0赔率偏高，非首选防平比分。",
+            "one_one": "9.0赔率需保留作为淘汰赛常规防平锚点。",
+            "one_zero": "6.25赔率极低，一球小胜风险真实存在。",
+            "zero_one": "20.0赔率过高，客胜爆冷概率极低。",
+            "two_one": "7.0赔率虽低，但基于零封原则被2-0/3-0压制。",
+            "one_two": "29.0赔率，客队反打不成立。",
+            "high_score_tail": "3-1(9.5)和4-0(13.5)受大球塌缩支持，需作为尾部防范。",
+            "handicap_cover": "让一球盘下2-0支持穿盘，符合主胜强势预期。"
           },
           "market_interpretation": {
-            "one_x_two": "竞彩主胜1.23，去水后隐含概率高达75.6%，主胜方向具备极强的定价优势和区分度。",
-            "handicap": "让球-1.0，结合正确比分2-0（5.1）和3-0（7.0）的低赔，盘口强烈支持主队赢两球及以上穿盘。",
-            "correct_score": "2-0为全局最低，1-0、2-1、3-0紧随其后，主胜簇占据绝对统治地位，且零封比分明显受防范。",
-            "total_goals": "2球（3.6）和3球（3.45）为模态，但4球（5.1）和5球（8.5）出现塌缩（a5/a4<=1.7），提示大球尾部不可忽视。",
-            "half_full_time": "主/主1.7极低，说明市场预期西班牙在上半场就能确立领先优势。",
-            "external_market": "国内竞彩主胜相对国际清算盘略有压低，客胜给得更宽，整体符合正路防范逻辑，无明显诱盘背离。"
+            "one_x_two": "竞彩主胜1.23极低，去水隐含概率超75%，主胜核心方向明确。",
+            "handicap": "让一球盘口下，2-0最低、1-0次低，市场预期赢一球到两球之间。",
+            "correct_score": "2-0、1-0、3-0等零封比分占据低赔前列，1-1作为冷平锚点保留。",
+            "total_goals": "3球和2球为核心模态，但4球5.1、5球8.5存在明显的大球曲线塌缩，需防范高比分。",
+            "half_full_time": "主/主1.7绝对占优，平/主3.75防范半场僵局。",
+            "external_market": "国内主胜skew为2.91%，未达强诱盘阈值，客胜-18.12%显示国内对客胜防范极弱。"
           },
           "money_flow": {
             "public_money_direction": "home",
@@ -2208,24 +2344,24 @@
             "sharp_confidence": 0,
             "reverse_line_movement": false,
             "steam_move": "unclear",
-            "evidence": "公众投票72%集中在主胜，抓包显示主胜降水，但缺乏完整的开盘/即时赔率序列，无法确认真实的聪明钱方向。"
+            "evidence": "大众投票72%集中主胜，缺乏完整赔率时间序列确认聪明钱方向。"
           },
           "contextual_logic": {
-            "league_style": "世界杯淘汰赛，中立场容错率低，通常偏向保守，但强弱悬殊局可能出现单边压制。",
-            "team_style": "西班牙控球压制，奥地利防线隐患大（场均失2球），容易被撕开防线。",
+            "league_style": "世界杯淘汰赛，容错率低，强队领先后可能控场，但也可能因实力悬殊打穿。",
+            "team_style": "西班牙传控压制，奥地利防守反击。",
             "tempo": "medium",
-            "score_shape": "主队零封完胜为主轴，兼顾大球塌缩带来的高分尾部。",
+            "score_shape": "主队零封完胜或大比分击穿。",
             "btts_likelihood": "no",
             "rotation_risk": "low"
           },
           "rejected_cases": {
-            "home": "未拒绝主胜，主胜为核心方向。",
-            "draw": "1X2去水主胜概率高达75.6%，平局仅作为淘汰赛防冷手段，不具备主推基础。",
-            "away": "客胜隐含概率极低，且奥地利防线不稳，爆大冷客胜概率微乎其微。"
+            "home": "未拒绝主胜，但拒绝无脑推大胜，保留1-0防线。",
+            "draw": "平局概率被主胜极低赔率压制，仅作为次要风险。",
+            "away": "实力差距过大且赔率不支持客胜。"
           },
           "web_research": {
             "used": false,
-            "failure_reason": "no_web_tool_available",
+            "failure_reason": "no_web_capability_or_disabled",
             "search_queries": [],
             "sources": [],
             "freshness_grade": "missing",
@@ -2241,17 +2377,16 @@
           },
           "data_quality": {
             "missing": [
-              "实时外部欧赔",
-              "官方首发伤停"
+              "实时新闻",
+              "伤停",
+              "首发"
             ],
-            "raw_packet_quality": "high"
+            "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "本场为世界杯1/16决赛，西班牙实力占据绝对优势。竞彩主胜1.23，去水隐含概率超75%，盘口区分度极高。正确比分2-0（5.1）为全局最低，且3-0（7.0）与2-1同价，在强弱悬殊且负方无独立破门证据的情况下，坚决执行N-0零封逻辑，拒绝机械添加负方安慰球。同时总进球4-5球出现塌缩，提示大胜打穿可能。综合盘口本体的强力支撑，主推2-0，防3-0/3-1。",
+          "ai_native_reason": "基于盘口本体，西班牙主胜1.23优势巨大，正确比分2-0为全场最低赔率5.1。在强弱悬殊且无客队破门证据的情况下，优先选择零封主胜。大球曲线塌缩提示有大比分可能，故保留3-0/3-1作为补充。因无联网核实，推荐等级定为B。",
           "validation_warnings": [
-            "prematch_v2:prematch_v2_data_quality_below_55_caps_to_B",
+            "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
             "prematch_v2:prematch_v2_cup_cross_context_lineup_motivation_required",
-            "prematch_v2:prematch_v2_cross_region_requires_external_confirmation",
-            "prematch_v2:prematch_v2_sharp_unclear_no_A_or_S",
             "missing_external_confirmation",
             "external_fact_without_source",
             "external_evidence_quality_below_50"
@@ -2262,12 +2397,12 @@
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
             "final_model=gemini phase=final score=2-0 direction=home",
-            "anchor_audit:{\"zero_zero\":\"赔率13.0排名第7，在主胜绝对优势下不作为首选，但淘汰赛语境下不能完全排除。\",\"one_one\":\"赔率9.0，未被完全抬死，是主胜防冷的核心比分。\",\"one_zero\":\"赔率6.25，防范西班牙领先后降速控场的窄胜路径。\",\"zero_one\":\"赔率20.0，客胜最低比分，但远高于主胜簇，仅作极端冷门。\",\"two_one\":\"赔率7.0，与3-0同价，在负方无破门证据时优先级低于零封比分。\",\"one_two\":\"赔率29.0，客队反打路径缺乏数据支撑，予以排除。\",\"high_score_tail\":\"3-1(9.5)、4-0(13.5)，受大球曲线塌缩影响，高分尾部具备真实打出可能。\",\"handicap_cover\":\"2-0、3-0低赔强力支持主队赢两球以上穿盘。\"}",
-            "market_interpretation:{\"one_x_two\":\"竞彩主胜1.23，去水后隐含概率高达75.6%，主胜方向具备极强的定价优势和区分度。\",\"handicap\":\"让球-1.0，结合正确比分2-0（5.1）和3-0（7.0）的低赔，盘口强烈支持主队赢两球及以上穿盘。\",\"correct_score\":\"2-0为全局最低，1-0、2-1、3-0紧随其后，主胜簇占据绝对统治地位，且零封比分明显受防范。\",\"total_goals\":\"2球（3.6）和3球（3.45）为模态，但4球（5.1）和5球（8.5）出现塌缩（a5/a4<=1.7），提示大球尾部不可忽视。\",\"half_full_time\":\"主/主1.7极低，说明市场预期西班牙在上半场就能确立领先优势。\",\"external_market\":\"国内竞彩主胜相对国际清算盘略有压低，客胜给得更宽，整体符合正路防范逻辑，无明显诱盘背离。\"}",
-            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"公众投票72%集中在主胜，抓包显示主胜降水，但缺乏完整的开盘/即时赔率序列，无法确认真实的聪明钱方向。\"}",
-            "contextual_logic:{\"league_style\":\"世界杯淘汰赛，中立场容错率低，通常偏向保守，但强弱悬殊局可能出现单边压制。\",\"team_style\":\"西班牙控球压制，奥地利防线隐患大（场均失2球），容易被撕开防线。\",\"tempo\":\"medium\",\"score_shape\":\"主队零封完胜为主轴，兼顾大球塌缩带来的高分尾部。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"low\"}",
-            "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
-            "recommendation:{\"tier\":\"A\",\"is_recommended\":true,\"top4_priority\":1,\"bet_confidence\":80,\"direction_stability\":\"strong\",\"score_stability\":\"strong\",\"risk_level\":\"low\",\"risk_tags\":[\"淘汰赛闷平风险\",\"大球塌缩尾部\"],\"bet_action\":\"main\",\"why_this_can_fail\":[\"西班牙得势不得分，被奥地利死守拖入0-0或1-1。\",\"西班牙早早进球后大开杀戒，打出4-0或3-1的大比分。\"],\"minimum_evidence_needed\":[\"确认西班牙无重大中前场伤停\"],\"why_recommended\":\"主胜隐含概率高达75.6%，2-0为全局最低比分，盘口对西班牙零封完胜防范极严。本场为淘汰赛，不存在轮换问题，实力碾压下主胜穿盘是大概率事件。\"}"
+            "anchor_audit:{\"zero_zero\":\"13.0赔率偏高，非首选防平比分。\",\"one_one\":\"9.0赔率需保留作为淘汰赛常规防平锚点。\",\"one_zero\":\"6.25赔率极低，一球小胜风险真实存在。\",\"zero_one\":\"20.0赔率过高，客胜爆冷概率极低。\",\"two_one\":\"7.0赔率虽低，但基于零封原则被2-0/3-0压制。\",\"one_two\":\"29.0赔率，客队反打不成立。\",\"high_score_tail\":\"3-1(9.5)和4-0(13.5)受大球塌缩支持，需作为尾部防范。\",\"handicap_cover\":\"让一球盘下2-0支持穿盘，符合主胜强势预期。\"}",
+            "market_interpretation:{\"one_x_two\":\"竞彩主胜1.23极低，去水隐含概率超75%，主胜核心方向明确。\",\"handicap\":\"让一球盘口下，2-0最低、1-0次低，市场预期赢一球到两球之间。\",\"correct_score\":\"2-0、1-0、3-0等零封比分占据低赔前列，1-1作为冷平锚点保留。\",\"total_goals\":\"3球和2球为核心模态，但4球5.1、5球8.5存在明显的大球曲线塌缩，需防范高比分。\",\"half_full_time\":\"主/主1.7绝对占优，平/主3.75防范半场僵局。\",\"external_market\":\"国内主胜skew为2.91%，未达强诱盘阈值，客胜-18.12%显示国内对客胜防范极弱。\"}",
+            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"大众投票72%集中主胜，缺乏完整赔率时间序列确认聪明钱方向。\"}",
+            "contextual_logic:{\"league_style\":\"世界杯淘汰赛，容错率低，强队领先后可能控场，但也可能因实力悬殊打穿。\",\"team_style\":\"西班牙传控压制，奥地利防守反击。\",\"tempo\":\"medium\",\"score_shape\":\"主队零封完胜或大比分击穿。\",\"btts_likelihood\":\"no\",\"rotation_risk\":\"low\"}",
+            "web_research:{\"used\":false,\"failure_reason\":\"no_web_capability_or_disabled\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
+            "recommendation:{\"tier\":\"B\",\"is_recommended\":true,\"top4_priority\":1,\"bet_confidence\":65,\"direction_stability\":\"strong\",\"score_stability\":\"medium\",\"risk_level\":\"medium\",\"risk_tags\":[\"淘汰赛防平\",\"一球小胜走水\"],\"bet_action\":\"main\",\"why_this_can_fail\":[\"西班牙久攻不下被拖入加时\",\"奥地利偷袭得手导致丢球\"],\"minimum_evidence_needed\":[\"首发名单\",\"临场水位\"],\"why_recommended\":\"主胜赔率极低且零封比分簇占据绝对优势，盘口指向清晰。\"}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -2296,10 +2431,10 @@
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "公众投票72%集中在主胜，抓包显示主胜降水，但缺乏完整的开盘/即时赔率序列，无法确认真实的聪明钱方向。",
+          "smart_money_signal": "大众投票72%集中主胜，缺乏完整赔率时间序列确认聪明钱方向。",
           "smart_signals": [
-            "淘汰赛闷平风险",
-            "大球塌缩尾部",
+            "淘汰赛防平",
+            "一球小胜走水",
             "external_fact_without_source",
             "missing_external_confirmation"
           ],
@@ -2313,15 +2448,15 @@
             "sharp_confidence": 0,
             "reverse_line_movement": false,
             "steam_move": "unclear",
-            "evidence": "公众投票72%集中在主胜，抓包显示主胜降水，但缺乏完整的开盘/即时赔率序列，无法确认真实的聪明钱方向。"
+            "evidence": "大众投票72%集中主胜，缺乏完整赔率时间序列确认聪明钱方向。"
           },
           "score_market_evidence": {
-            "one_x_two": "竞彩主胜1.23，去水后隐含概率高达75.6%，主胜方向具备极强的定价优势和区分度。",
-            "handicap": "让球-1.0，结合正确比分2-0（5.1）和3-0（7.0）的低赔，盘口强烈支持主队赢两球及以上穿盘。",
-            "correct_score": "2-0为全局最低，1-0、2-1、3-0紧随其后，主胜簇占据绝对统治地位，且零封比分明显受防范。",
-            "total_goals": "2球（3.6）和3球（3.45）为模态，但4球（5.1）和5球（8.5）出现塌缩（a5/a4<=1.7），提示大球尾部不可忽视。",
-            "half_full_time": "主/主1.7极低，说明市场预期西班牙在上半场就能确立领先优势。",
-            "external_market": "国内竞彩主胜相对国际清算盘略有压低，客胜给得更宽，整体符合正路防范逻辑，无明显诱盘背离。"
+            "one_x_two": "竞彩主胜1.23极低，去水隐含概率超75%，主胜核心方向明确。",
+            "handicap": "让一球盘口下，2-0最低、1-0次低，市场预期赢一球到两球之间。",
+            "correct_score": "2-0、1-0、3-0等零封比分占据低赔前列，1-1作为冷平锚点保留。",
+            "total_goals": "3球和2球为核心模态，但4球5.1、5球8.5存在明显的大球曲线塌缩，需防范高比分。",
+            "half_full_time": "主/主1.7绝对占优，平/主3.75防范半场僵局。",
+            "external_market": "国内主胜skew为2.91%，未达强诱盘阈值，客胜-18.12%显示国内对客胜防范极弱。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -2331,8 +2466,8 @@
             "strength": 0,
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
-              "淘汰赛闷平风险",
-              "大球塌缩尾部",
+              "淘汰赛防平",
+              "一球小胜走水",
               "external_fact_without_source",
               "missing_external_confirmation"
             ],
@@ -2349,19 +2484,19 @@
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
           "gpt_score": "2-0",
-          "gpt_analysis": "本场市场主轴是西班牙强势主胜，但不是无风险穿盘。竞彩1X2主胜低至1.23，去水后主胜优势明显；正确比分最低为2-0，其后1-0、2-1、3-0，主胜簇集中度高。总进球虽然3球最低且4+尾部有压缩，但2球赔率与3球非常接近，结合世界杯淘汰赛90分钟保守属性，2-0比2-1和3-0更均衡。关键风险在于1-1未被抬死、公众主胜过热、无法核验首发伤停与外部盘口，因此推荐只能小注，不能包装为高信心。",
-          "grok_score": "2-1",
-          "grok_analysis": "西班牙主胜低赔1.23+大球塌缩+home_narrow cluster支撑，但第三轮轮换风险与伤停事实存在，推荐B tier observe，2-1为最优簇",
+          "gpt_analysis": "综合竞彩1X2、让一球、正确比分簇、总进球模态和半全场结构，西班牙90分钟取胜仍是最合理方向。比分上不选常见2-1，是因为2-0为全场最低赔率，1-0也低于2-1，3-0与2-1同价，说明市场对奥地利破门并不强制；在强队优势较高且无可靠破门证据时，应优先审计零封。风险在于淘汰赛天然防平、1-1锚点未死、主胜大众热度高且无联网核实，因此最终为西班牙2-0，小注级别而非高信心主推。",
+          "grok_score": "2-0",
+          "grok_analysis": "Spain已出线零封趋势+Austria组赛连场失球+中立场淘汰赛首轮收窄风格，2-0窄胜符合Spain主控+联赛生态，竞彩抓包主胜降水+公共72%票一致但大热诱盘风险，Spain伤病边缘影响",
           "gemini_score": "2-0",
-          "gemini_analysis": "本场为世界杯1/16决赛，西班牙实力占据绝对优势。竞彩主胜1.23，去水隐含概率超75%，盘口区分度极高。正确比分2-0（5.1）为全局最低，且3-0（7.0）与2-1同价，在强弱悬殊且负方无独立破门证据的情况下，坚决执行N-0零封逻辑，拒绝机械添加负方安慰球。同时总进球4-5球出现塌缩，提示大胜打穿可能。综合盘口本体的强力支撑，主推2-0，防3-0/3-1。",
+          "gemini_analysis": "基于盘口本体，西班牙主胜1.23优势巨大，正确比分2-0为全场最低赔率5.1。在强弱悬殊且无客队破门证据的情况下，优先选择零封主胜。大球曲线塌缩提示有大比分可能，故保留3-0/3-1作为补充。因无联网核实，推荐等级定为B。",
           "final_referee_score": "2-0",
-          "final_referee_analysis": "本场为世界杯1/16决赛，西班牙实力占据绝对优势。竞彩主胜1.23，去水隐含概率超75%，盘口区分度极高。正确比分2-0（5.1）为全局最低，且3-0（7.0）与2-1同价，在强弱悬殊且负方无独立破门证据的情况下，坚决执行N-0零封逻辑，拒绝机械添加负方安慰球。同时总进球4-5球出现塌缩，提示大胜打穿可能。综合盘口本体的强力支撑，主推2-0，防3-0/3-1。",
+          "final_referee_analysis": "基于盘口本体，西班牙主胜1.23优势巨大，正确比分2-0为全场最低赔率5.1。在强弱悬殊且无客队破门证据的情况下，优先选择零封主胜。大球曲线塌缩提示有大比分可能，故保留3-0/3-1作为补充。因无联网核实，推荐等级定为B。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
           "final_ai_score": "2-0",
-          "final_ai_analysis": "本场为世界杯1/16决赛，西班牙实力占据绝对优势。竞彩主胜1.23，去水隐含概率超75%，盘口区分度极高。正确比分2-0（5.1）为全局最低，且3-0（7.0）与2-1同价，在强弱悬殊且负方无独立破门证据的情况下，坚决执行N-0零封逻辑，拒绝机械添加负方安慰球。同时总进球4-5球出现塌缩，提示大胜打穿可能。综合盘口本体的强力支撑，主推2-0，防3-0/3-1。",
+          "final_ai_analysis": "基于盘口本体，西班牙主胜1.23优势巨大，正确比分2-0为全场最低赔率5.1。在强弱悬殊且无客队破门证据的情况下，优先选择零封主胜。大球曲线塌缩提示有大比分可能，故保留3-0/3-1作为补充。因无联网核实，推荐等级定为B。",
           "ai_abstained": [],
-          "ai_avg_confidence": 80.0,
+          "ai_avg_confidence": 65.0,
           "ai_call_status": {
             "gpt": {
               "phase1": {
@@ -2369,29 +2504,42 @@
                 "ai_name": "gpt",
                 "model": "gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 173.9,
-                "endpoint_name": "gpt_3",
-                "endpoint_slot": 3,
-                "endpoint_attempt": 2,
-                "endpoint_total": 4,
+                "elapsed": 211.6,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 458.0
+                "total_elapsed": 211.6
               },
-              "last_status": "parse_failed",
+              "last_status": "ok",
               "model": "gpt-5.5",
               "critic": {
                 "ok": false,
                 "ai_name": "gpt",
                 "model": "gpt-5.5",
                 "phase": "critic",
-                "elapsed": 67.1,
-                "endpoint_name": "gpt_1",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 4,
-                "endpoint_total": 4,
+                "elapsed": 78.9,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
                 "status": "parse_failed",
                 "parse_error": "empty_or_invalid_json_object",
-                "raw_excerpt": "{\"critic_reports\":[{\"match\":2,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"schema\",\"severity\":\"high\",\"comment\":\"输出中 anchor_audit、market_interpretation、money_flow、contextual_logic、rejected_cases、data_quality 等关键审计字段为空，且 validation_warnings 已自曝 score_cluster_audit、sharp"
+                "raw_excerpt": "{\"critic_reports\":[{\"match\":4,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"web\",\"severity\":\"high\",\"comment\":\"存在明显联网证据风险。报告中声称使用 Yahoo、Sports Mole、Pinnacle、Climate Central 等实时来源，并给出2026-06/07发布日期、访问时间和具体阵容，但当前任务证据只允许使用抓包与结构化事实，且 packet_context 明确提示抓包文字不等于实时外部 Web sourc"
+              },
+              "fallback_referee": {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "gpt-5.5",
+                "phase": "fallback_referee",
+                "elapsed": 261.3,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "ok",
+                "total_elapsed": 261.3
               }
             },
             "grok": {
@@ -2400,13 +2548,13 @@
                 "ai_name": "grok",
                 "model": "grok-4.3-c",
                 "phase": "phase1",
-                "elapsed": 92.4,
+                "elapsed": 37.1,
                 "endpoint_name": "grok_3",
                 "endpoint_slot": 3,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 92.4
+                "total_elapsed": 37.1
               },
               "last_status": "ok",
               "model": "grok-4.3-c",
@@ -2415,13 +2563,13 @@
                 "ai_name": "grok",
                 "model": "grok-4.3-c",
                 "phase": "critic",
-                "elapsed": 30.0,
-                "endpoint_name": "grok_2",
-                "endpoint_slot": 2,
+                "elapsed": 7.0,
+                "endpoint_name": "grok_4",
+                "endpoint_slot": 4,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 30.0
+                "total_elapsed": 7.0
               }
             },
             "gemini": {
@@ -2430,13 +2578,14 @@
                 "ai_name": "gemini",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
                 "phase": "final",
-                "elapsed": 43.8,
-                "endpoint_name": "gemini_2",
-                "endpoint_slot": 2,
+                "elapsed": 67.5,
+                "endpoint_name": "gemini_4",
+                "endpoint_slot": 4,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 43.8
+                "total_elapsed": 67.5,
+                "retry_succeeded_on_attempt": 3
               },
               "last_status": "ok",
               "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"
@@ -2444,11 +2593,11 @@
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260701_185325_4m_828b7c27aeee_比利时_塞内加尔",
+            "run_id": "20260701_194245_4m_2ec688caee32_比利时_塞内加尔",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 4,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260701_185325_4m_828b7c27aeee_比利时_塞内加尔_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260701_194245_4m_2ec688caee32_比利时_塞内加尔_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -2456,29 +2605,42 @@
                   "ai_name": "gpt",
                   "model": "gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 173.9,
-                  "endpoint_name": "gpt_3",
-                  "endpoint_slot": 3,
-                  "endpoint_attempt": 2,
-                  "endpoint_total": 4,
+                  "elapsed": 211.6,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 458.0
+                  "total_elapsed": 211.6
                 },
-                "last_status": "parse_failed",
+                "last_status": "ok",
                 "model": "gpt-5.5",
                 "critic": {
                   "ok": false,
                   "ai_name": "gpt",
                   "model": "gpt-5.5",
                   "phase": "critic",
-                  "elapsed": 67.1,
-                  "endpoint_name": "gpt_1",
-                  "endpoint_slot": 1,
-                  "endpoint_attempt": 4,
-                  "endpoint_total": 4,
+                  "elapsed": 78.9,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
                   "status": "parse_failed",
                   "parse_error": "empty_or_invalid_json_object",
-                  "raw_excerpt": "{\"critic_reports\":[{\"match\":2,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"schema\",\"severity\":\"high\",\"comment\":\"输出中 anchor_audit、market_interpretation、money_flow、contextual_logic、rejected_cases、data_quality 等关键审计字段为空，且 validation_warnings 已自曝 score_cluster_audit、sharp"
+                  "raw_excerpt": "{\"critic_reports\":[{\"match\":4,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"web\",\"severity\":\"high\",\"comment\":\"存在明显联网证据风险。报告中声称使用 Yahoo、Sports Mole、Pinnacle、Climate Central 等实时来源，并给出2026-06/07发布日期、访问时间和具体阵容，但当前任务证据只允许使用抓包与结构化事实，且 packet_context 明确提示抓包文字不等于实时外部 Web sourc"
+                },
+                "fallback_referee": {
+                  "ok": true,
+                  "ai_name": "gpt",
+                  "model": "gpt-5.5",
+                  "phase": "fallback_referee",
+                  "elapsed": 261.3,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
+                  "status": "ok",
+                  "total_elapsed": 261.3
                 }
               },
               "grok": {
@@ -2487,13 +2649,13 @@
                   "ai_name": "grok",
                   "model": "grok-4.3-c",
                   "phase": "phase1",
-                  "elapsed": 92.4,
+                  "elapsed": 37.1,
                   "endpoint_name": "grok_3",
                   "endpoint_slot": 3,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 92.4
+                  "total_elapsed": 37.1
                 },
                 "last_status": "ok",
                 "model": "grok-4.3-c",
@@ -2502,13 +2664,13 @@
                   "ai_name": "grok",
                   "model": "grok-4.3-c",
                   "phase": "critic",
-                  "elapsed": 30.0,
-                  "endpoint_name": "grok_2",
-                  "endpoint_slot": 2,
+                  "elapsed": 7.0,
+                  "endpoint_name": "grok_4",
+                  "endpoint_slot": 4,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 30.0
+                  "total_elapsed": 7.0
                 }
               },
               "gemini": {
@@ -2517,13 +2679,14 @@
                   "ai_name": "gemini",
                   "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
                   "phase": "final",
-                  "elapsed": 43.8,
-                  "endpoint_name": "gemini_2",
-                  "endpoint_slot": 2,
+                  "elapsed": 67.5,
+                  "endpoint_name": "gemini_4",
+                  "endpoint_slot": 4,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 43.8
+                  "total_elapsed": 67.5,
+                  "retry_succeeded_on_attempt": 3
                 },
                 "last_status": "ok",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"
@@ -2578,138 +2741,145 @@
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
             "selected_cluster": "home_cover",
-            "why_selected_score": "2-0是全局最低比分，且在强弱悬殊、主胜概率>70%的背景下，奥地利缺乏独立破门硬证据，优先适用N-0零封逻辑而非机械给安慰球。",
+            "why_selected_score": "2-0为全场最低赔率，完美契合强队零封与让一球穿盘预期，且负方无独立破门证据。",
             "adjacent_scores_checked": [
               {
                 "score": "1-0",
                 "odds": 6.25,
-                "verdict": "near_miss",
-                "reason": "赔率较低，但让球-1.0及主胜绝对优势下，2-0的穿盘预期更符合盘面。"
+                "verdict": "keep",
+                "reason": "次低赔率，防范一球小胜。"
               },
               {
                 "score": "2-1",
-                "odds": 7,
+                "odds": 7.0,
                 "verdict": "reject",
-                "reason": "虽然赔率不高，但负方破门证据不足，且2-0和3-0的零封组合更受机构防范。"
+                "reason": "强弱悬殊且无客队破门证据，不机械给安慰球。"
+              },
+              {
+                "score": "3-0",
+                "odds": 7.0,
+                "verdict": "keep",
+                "reason": "零封扩大路径，与2-0共振。"
               },
               {
                 "score": "1-1",
-                "odds": 9,
+                "odds": 9.0,
                 "verdict": "keep",
-                "reason": "平局最低比分，淘汰赛需防范的冷平底线。"
+                "reason": "淘汰赛冷平防范。"
               }
             ],
-            "lowest_score_not_selected_reason": "已选择全局最低比分2-0。"
+            "lowest_score_not_selected_reason": "最低比分即为2-0，已入选。"
           },
           "sharp_money_audit": {
             "available": true,
             "confirmed_sharp_direction": "unclear",
             "rlm_confirmed": false,
-            "vote_vs_odds_conflict": "公众热度与赔率走势同向，未见明显冲突，属于正常的正路防范。",
-            "crs_change_impact": "无可靠时间序列，无法判断比分资金流。",
-            "ttg_change_impact": "无可靠时间序列，但静态曲线显示大球尾部塌缩。"
+            "vote_vs_odds_conflict": "主胜大热且赔率极低，无明显背离。",
+            "crs_change_impact": "无动态变化数据，静态支持主胜零封。",
+            "ttg_change_impact": "大球曲线塌缩提示进球数可能超预期。"
           },
           "recommendation_components": {
-            "direction_edge": 85,
-            "score_cluster_strength": 80,
-            "goal_band_strength": 75,
-            "btts_alignment": 80,
+            "direction_edge": 80,
+            "score_cluster_strength": 75,
+            "goal_band_strength": 60,
+            "btts_alignment": 70,
             "sharp_alignment": 50,
             "web_source_quality": 0,
             "market_conflict_penalty": 10,
-            "final_grade_reason": "盘口本体对主胜区分度极高（>75%），比分簇高度集中于零封主胜，虽无联网外部事实，但盘口硬逻辑足以支撑A级推荐。"
+            "final_grade_reason": "盘口高度支持主胜，但缺乏外部资讯核实，最高评级限制为B。"
           },
           "risk_score_candidates": [
             {
-              "score": "3-1",
-              "risk_type": "大球曲线塌缩高分尾部",
-              "reason": "总进球4球5.1，5球8.5，a5/a4=1.67触发大球整簇上移信号，若比赛早早破局，可能打出3-1或4-0的大比分。"
+              "score": "1-1",
+              "risk_type": "淘汰赛冷平",
+              "reason": "淘汰赛90分钟平局风险，1-1赔率9.0未被完全抬死。"
             },
             {
-              "score": "1-1",
-              "risk_type": "淘汰赛冷平锚点",
-              "reason": "1-1赔率9.0未被完全抬死，淘汰赛具备保守土壤，若西班牙边路进攻受阻且奥地利死守，存在90分钟闷平风险。"
+              "score": "3-1",
+              "risk_type": "大球曲线释放",
+              "reason": "总进球4球和5球赔率塌缩，提示大比分尾部风险。"
             },
             {
               "score": "1-0",
-              "risk_type": "一球小胜收窄",
-              "reason": "1-0赔率6.25仅次于2-0，符合淘汰赛领先后降速控场的特征。"
+              "risk_type": "控场小胜",
+              "reason": "1-0赔率6.25，防范西班牙领先后降速控场不穿盘。"
             }
           ],
           "tail_risk_flags": [
-            "big_goal_curve_compressed",
-            "knockout_90min_draw_risk"
+            "knockout_90min_draw_risk",
+            "high_goal_curve_compressed"
           ],
-          "confidence_downgrade_reason": "无法联网核实西班牙边路伤停的真实影响与奥地利首发阵型，且公众主胜投票高达72%存在一定大热风控风险，因此不给满分信心。",
+          "confidence_downgrade_reason": "无有效联网核实伤停与首发，且淘汰赛天然存在防平与控分风险。",
           "source_conflict_audit": {
             "has_conflict": false,
             "conflicts": []
           },
           "evidence_quality_score": 30,
           "minimum_evidence_needed": [
-            "西班牙边路伤员的确切缺阵名单",
-            "奥地利首发防线调整情况",
-            "临场外盘让球水位的真实变动"
+            "官方首发阵容",
+            "临场赔率变动",
+            "伤停确切消息"
           ],
           "external_facts_decision_impact": {
             "direction_impact": "unclear",
             "goal_impact": "unclear",
             "recommendation_impact": "hold",
-            "main_reason": "无联网能力，无法引入外部事实，但盘口本体对主胜的区分度极高，足以支撑基于盘口的推荐。"
+            "main_reason": "无联网数据，仅依赖盘口本体进行判断。"
           },
           "gemini_independent_research": {
             "searched": false,
             "key_sources": [],
             "missing_sources": [
-              "权威媒体伤停报告",
-              "临场真实资金流"
+              "实时伤停",
+              "首发名单",
+              "教练发布会"
             ],
-            "cross_checked_against_grok": "Grok过度担忧轮换风险，但本场为1/16决赛淘汰赛，不存在小组赛第三轮的轮换逻辑，西班牙必将全主力出战。"
+            "cross_checked_against_grok": "Grok使用了未经验证的抓包文本作为新闻，本裁判予以剔除，纯依盘口判断。"
           },
           "bookmaker_cross_audit": {
-            "bet365": "无实时数据，参考竞彩主胜极低赔率。",
-            "william_hill": "无实时数据。",
-            "pinnacle_or_low_margin": "国际清算盘主胜隐含概率73.5%，与国内高度一致，主胜共识强烈。",
-            "jingcai": "主胜1.23，抽水率12.99%，在强风控下依然给出极低主胜，防范意图明显。",
-            "average_market": "主胜去水概率75.6%，具备绝对定价优势。",
-            "water_movement": "降水",
-            "asian_handicap": "让球-1.0，结合2-0/3-0低赔，支持穿盘。",
-            "ou_total_goals": "2-3球为核心，但4-5球存在塌缩，大球防范不可无视。",
-            "correct_score_cluster": "2-0/1-0/3-0零封主胜簇占据绝对主导。",
-            "bookmaker_intent": "庄家极力压低主胜及零封比分赔付，同时通过大球塌缩防范西班牙大胜打穿的风险。"
+            "bet365": "无实时数据",
+            "william_hill": "无实时数据",
+            "pinnacle_or_low_margin": "国际Shin主胜概率73.49%，高度支持主胜。",
+            "jingcai": "竞彩主胜1.23，防范力度极大。",
+            "average_market": "整体市场高度倾斜主队。",
+            "water_movement": "无可靠时间序列说明",
+            "asian_handicap": "一球盘口下主队热度高，需防赢球输盘（1-0）。",
+            "ou_total_goals": "大球曲线塌缩，进球数可能向3-4球偏移。",
+            "correct_score_cluster": "零封主胜簇（2-0/3-0）占据绝对优势。",
+            "bookmaker_intent": "庄家极力压低主胜及零封比分赔率，真实看好主队顺利晋级。"
           },
           "tempo_xg_tactical_audit": {
             "tempo": "medium",
-            "xg_signal": "西班牙控球优势将转化为持续的射门机会。",
-            "xga_signal": "奥地利防线脆弱，预期失球较高。",
-            "pressing_transition": "西班牙前场压迫将限制奥地利的反击质量。",
-            "formation_matchup": "西班牙传控体系克制奥地利的不稳防线。",
-            "key_player_impact": "若西班牙边路有伤，可能更多依赖中路渗透，但整体实力碾压。"
+            "xg_signal": "无数据",
+            "xga_signal": "无数据",
+            "pressing_transition": "西班牙大概率掌控绝对球权。",
+            "formation_matchup": "传控对阵密集防守。",
+            "key_player_impact": "无确切伤停信息，假设全主力。"
           },
           "worldcup_upset_audit": {
             "context": "knockout",
-            "japan_type_counter": "no+奥地利反击速度与效率不足以支撑日本式爆冷。",
-            "morocco_type_low_block": "yes+奥地利可能摆大巴，导致西班牙久攻不下，需防范1-0或0-0/1-1。",
-            "croatia_type_resilience": "no+奥地利防线场均失2球，缺乏克罗地亚式的钢铁韧性。",
-            "favorite_slow_start_risk": "淘汰赛强队可能求稳慢热，半场平局概率存在。",
-            "upset_path": "奥地利死守拖入加时，或利用定位球偷袭得手。"
+            "japan_type_counter": "unclear+客队反击能力未知",
+            "morocco_type_low_block": "yes+奥地利可能采取低位密集防守试图拖入加时",
+            "croatia_type_resilience": "unclear+需观察客队韧性",
+            "favorite_slow_start_risk": "淘汰赛强队可能求稳导致半场僵局",
+            "upset_path": "奥地利死守0-0或1-1拖入点球大战"
           },
           "score_elimination_audit": {
-            "0-0": "keep+淘汰赛极端保守路径，作为底线防范。",
-            "1-1": "keep+主胜防冷核心比分。",
-            "2-2": "reject+强弱悬殊且奥地利进攻能力有限，打出2-2高分平局概率极低。",
-            "1-2": "reject+客队反打缺乏实力与盘口支撑。",
-            "2-1": "reject+负方安慰球在强弱悬殊局不适用，优先N-0。",
-            "selected_score_final_reason": "2-0为全局最低比分，完美契合主胜强区分度、零封逻辑以及让球穿盘预期。"
+            "0-0": "keep+淘汰赛极端防守结果",
+            "1-1": "keep+常规防平比分",
+            "2-2": "reject+客队进两球概率极低",
+            "1-2": "reject+客胜不成立",
+            "2-1": "reject+主队零封概率更高，不给安慰球",
+            "selected_score_final_reason": "2-0为全场最低赔率，符合强队零封取胜的盘口核心指向。"
           },
           "dirty_work_checklist": {
             "lineup": false,
             "injury_suspension": false,
-            "motivation_table": false,
+            "motivation_table": true,
             "weather_pitch": false,
             "referee": false,
             "travel_rest": false,
-            "odds_sources": false,
+            "odds_sources": true,
             "xg_tempo": false,
             "worldcup_context": true
           },
@@ -2726,7 +2896,7 @@
             },
             "match_context_flags": {
               "cup_like": true,
-              "cross_region": true,
+              "cross_region": false,
               "rotation_risk": true,
               "importance_unclear": false,
               "worldcup_r3": false,
@@ -2762,7 +2932,7 @@
               }
             },
             "web_used_with_sources": false,
-            "lineup_confirmed": true,
+            "lineup_confirmed": false,
             "money_flow": {
               "sharp": "unclear",
               "public": "home",
@@ -2771,37 +2941,25 @@
               "conflict": false,
               "reverse": false
             },
-            "data_quality_score": 45.9,
+            "data_quality_score": 33.8,
             "edge_gap": 58.0,
             "draw_probability_watch": 17.0,
             "draw_cluster_present": true,
             "high_goal_tail_pct": 0.0,
             "rules_applied": [
-              "prematch_v2_data_quality_below_55_caps_to_B",
-              "prematch_v2_cup_cross_context_lineup_motivation_required",
-              "prematch_v2_cross_region_requires_external_confirmation",
-              "prematch_v2_sharp_unclear_no_A_or_S"
+              "prematch_v2_rotation_risk_requires_lineup",
+              "prematch_v2_cup_cross_context_lineup_motivation_required"
             ],
             "risk_hints": [
               {
-                "max_tier": "B",
-                "reason": "prematch_v2_data_quality_below_55_caps_to_B",
-                "tag": "prematch_v2_medium_data_quality"
+                "max_tier": "C",
+                "reason": "prematch_v2_rotation_risk_requires_lineup",
+                "tag": "prematch_v2_rotation_risk"
               },
               {
                 "max_tier": "C",
                 "reason": "prematch_v2_cup_cross_context_lineup_motivation_required",
                 "tag": "prematch_v2_cup_cross_context"
-              },
-              {
-                "max_tier": "C",
-                "reason": "prematch_v2_cross_region_requires_external_confirmation",
-                "tag": "prematch_v2_cross_region"
-              },
-              {
-                "max_tier": "B",
-                "reason": "prematch_v2_sharp_unclear_no_A_or_S",
-                "tag": "prematch_v2_sharp_unclear"
               }
             ]
           },
@@ -3028,195 +3186,288 @@
         "guest": "克罗地亚",
         "change_is_direction_code": false,
         "prediction": {
-          "predicted_score": "1-1",
-          "predicted_label": "1-1",
-          "result": "平局",
-          "display_direction": "平局",
-          "final_direction": "draw",
-          "raw_ai_direction": "draw",
-          "score_implied_direction": "draw",
+          "predicted_score": "2-1",
+          "predicted_label": "2-1",
+          "result": "主胜",
+          "display_direction": "主胜",
+          "final_direction": "home",
+          "raw_ai_direction": "home",
+          "score_implied_direction": "home",
           "dir_score_conflict": false,
           "is_abstain": false,
           "is_score_others": false,
-          "home_win_pct": 54.0,
-          "draw_pct": 26.0,
-          "away_win_pct": 20.0,
-          "confidence": 40,
+          "home_win_pct": 50.0,
+          "draw_pct": 27.0,
+          "away_win_pct": 23.0,
+          "confidence": 38,
           "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
           "risk_level": "high",
-          "goal_band": "2",
+          "goal_band": "3",
           "btts": "yes",
           "btts_ai": "yes",
           "both_score": "是",
-          "over_under_2_5": "小",
-          "expected_total_goals": 2,
+          "over_under_2_5": "大",
+          "expected_total_goals": 3,
           "goal_range": [
-            1,
-            2
+            2,
+            3
           ],
-          "scenario": "ai_native_2_goals",
+          "scenario": "ai_native_3_goals",
           "recommendation": {
-            "tier": "C",
+            "tier": "D",
             "is_recommended": false,
             "top4_priority": 0,
-            "bet_confidence": 40,
+            "bet_confidence": 38,
             "direction_stability": "weak",
-            "score_stability": "medium",
+            "score_stability": "weak",
             "risk_level": "high",
             "risk_tags": [
-              "无联网数据",
-              "主胜偏斜",
-              "external_fact_without_source",
-              "missing_external_confirmation",
-              "external_evidence_quality_below_50"
+              "主胜低开诱盘",
+              "1-1冷平强锚",
+              "客胜价值洼地",
+              "淘汰赛90分钟平局",
+              "外部来源冲突",
+              "无可靠盘口时间序列",
+              "weak_home_favorite_btts_tail",
+              "away_fightback_tail",
+              "two_one_home_hard_no_bet",
+              "weak_home_2_1_btts_away_pct_gate",
+              "non_home_mass_too_high_for_home_2_1",
+              "explicit_1_2_2_2_2_3_tail_present",
+              "unresolved_source_conflict"
             ],
             "bet_action": "observe",
             "why_this_can_fail": [
-              "葡萄牙早早进球打穿盘口",
-              "克罗地亚完全放弃进攻导致1-0或2-0"
+              "1-1赔率与2-1非常接近，葡萄牙若无法持续压制，比赛很容易进入加时逻辑。",
+              "国内主胜相对全球清算盘低开，可能只是规避大众葡萄牙热度，而非真实强信号。",
+              "客胜方向在双轨背离中为价值洼地，0-1和1-2反打不能删除。",
+              "若早球出现，比赛可能跳向2-2或3-1，但4+总进球阻力又使比分尾部不稳定。",
+              "外部首发、伤停、天气和低水赔率均未有效确认，无法支撑主胜升为main。"
             ],
             "minimum_evidence_needed": [
-              "临场资金流向"
+              "官方首发和伤停名单。",
+              "Pinnacle/Bet365/交易所90分钟1X2与亚洲盘临场时间序列。",
+              "确认比赛场地、天气和裁判。",
+              "核实全球市场均赔与竞彩偏斜是否持续。"
             ],
-            "why_recommended": "数据缺失严重，且盘口存在诱导嫌疑，建议观望。"
+            "why_recommended": "不推荐下注。若必须给赛果方向，市场主线是葡萄牙2-1小胜；但主胜低开诱盘、1-1冷平和客胜价值洼地同时存在，投注动作应为观察。",
+            "original_bet_confidence": 38,
+            "risk_adjusted_bet_confidence": 38,
+            "display_bet_confidence": 38
           },
-          "recommendation_tier": "C",
+          "recommendation_tier": "D",
           "recommend_gate_pass": false,
           "recommend_gate_reasons": [
             "ai_not_recommended_or_below_min_tier_or_v203_component_downgrade",
+            "2-1 home score blocked by draw/away/tail risk hard gate",
+            "weak_home_2_1_btts_away_pct_gate",
+            "non_home_mass_too_high_for_home_2_1",
+            "explicit_1_2_2_2_2_3_tail_present",
             "ai_not_recommended_or_two_one_tail_gate",
             "prematch_v2_risk_hints_present",
-            "external_fact_without_source",
-            "external_evidence_quality_below_50",
-            "direction_probability_not_supporting_final_direction",
-            "low_confidence_draw_observe:conf=26<45",
+            "unresolved_source_conflict",
             "gate_action_not_bettable"
           ],
-          "safe_top_gate_score": 40.0,
-          "overall_selection_score": 40.0,
-          "direction_selection_score": 40.0,
-          "score_shape_score": 40.0,
-          "direction_tier": "C",
-          "score_tier": "C",
-          "recommendation_downgrade_reasons": [],
+          "safe_top_gate_score": 38.0,
+          "overall_selection_score": 38.0,
+          "direction_selection_score": 38.0,
+          "score_shape_score": 38.0,
+          "direction_tier": "D",
+          "score_tier": "D",
+          "recommendation_downgrade_reasons": [
+            "two_one_home_hard_no_bet",
+            "weak_home_2_1_btts_away_pct_gate",
+            "non_home_mass_too_high_for_home_2_1",
+            "explicit_1_2_2_2_2_3_tail_present"
+          ],
           "top_score_candidates": [
             [
-              "1-1",
-              20.0
+              "2-1",
+              15.0
             ],
             [
-              "2-1",
-              18.0
+              "1-1",
+              14.0
             ],
             [
               "1-0",
-              15.0
+              11.0
             ]
           ],
           "unified_matrix_top_scores": [
             [
-              "1-1",
-              20.0
+              "2-1",
+              15.0
             ],
             [
-              "2-1",
-              18.0
+              "1-1",
+              14.0
             ],
             [
               "1-0",
-              15.0
+              11.0
             ]
           ],
-          "score_model_prob": 20.0,
-          "score_market_odds": 6.5,
-          "score_market_implied_pct": 15.385,
+          "score_model_prob": 15.0,
+          "score_market_odds": 5.8,
+          "score_market_implied_pct": 17.241,
           "anchor_audit": {
-            "zero_zero": "11.0，非首选，但淘汰赛需防范。",
-            "one_one": "6.5，平局最低，全场第二低，核心防平比分。",
-            "one_zero": "7.0，主队窄胜核心比分。",
-            "zero_one": "13.0，客队爆冷最低比分。",
-            "two_one": "5.8，全场最低，主队常规赢球比分。",
-            "one_two": "15.0，客队反打比分，偏高。",
-            "high_score_tail": "3-1为11.0，4球赔率5.4，大比分受阻。",
-            "handicap_cover": "2-0为7.5，穿盘有一定机会但非最热。"
+            "zero_zero": "0-0赔率11.0，达到必须审计线；淘汰赛保守和克罗地亚韧性使其可防，但总进球2/3球更强，且1-1、1-0、2-1更靠前，因此不作首选。",
+            "one_one": "1-1赔率6.5，为全场第二低，是最大反热门锚点；若葡萄牙主胜低开为诱盘而非真实压制，1-1比客胜更先受益。",
+            "one_zero": "1-0赔率7.0，说明葡萄牙小胜路径强；若BTTS不兑现，1-0是2-1的首要替代。",
+            "zero_one": "0-1赔率13.0，是客胜方向最低比分；结合客胜全球概率高于国内概率的背离，应保留低比分爆冷。",
+            "two_one": "2-1赔率5.8为全场最低，最贴合主胜小优、BTTS和3球模态，是最终比分选择。",
+            "one_two": "1-2赔率15.0，客队反打存在但弱于2-1和1-1；若葡萄牙领先后失控或中场被克罗地亚拖住，该路径会抬升。",
+            "high_score_tail": "3-1和2-2有一定压缩，但4球总进球赔率5.4已越过阻力线，3-2、2-3更弱；4+必须列为尾部而非主线。",
+            "handicap_cover": "-1一球盘下，2-1和1-0属于赢球不充分释放，2-0才更接近让球穿盘；当前比分簇更支持主胜小胜，不支持强推穿盘。"
           },
           "market_interpretation": {
-            "one_x_two": "竞彩主胜1.59存在明显压价，国际清算盘主胜概率仅54%左右，国内对主胜有防范或诱导，平局和客胜空间被放宽。",
-            "handicap": "名义让球-1，但2-0、3-0等穿盘比分赔率高于2-1、1-1、1-0，说明市场对葡萄牙净胜两球信心不足。",
-            "correct_score": "2-1、1-1、1-0紧密排列，核心指向一球差或低分平局，大胜概率低。",
-            "total_goals": "2球和3球同为3.5最低，4球5.4阻力较大，进球数集中在2-3球。",
-            "half_full_time": "主/主最低，但平/主和平/平也处于低位，半场僵持概率不低。",
-            "external_market": "双轨背离显示国内主胜skew达+6.73%，存在强行低开避险或诱盘嫌疑，客胜skew为-13.55%，价值洼地在下盘。"
+            "one_x_two": "竞彩抓包1.59/3.40/4.85显示葡萄牙为明确低赔方向，去水后主胜约57.8%；但这不是欧洲均赔，且全球Shin对照主胜仅约54.2%，说明国内主胜存在更强压低和风控成分。",
+            "handicap": "名义让球为葡萄牙-1，但缺少有效HHAD赔率和水位序列。正确比分低赔集中在2-1、1-0、2-0，偏向一球边际或小胜，不支持直接解读为强穿盘。",
+            "correct_score": "2-1最低，1-1紧随，1-0和2-0也低，说明市场核心不是大胜，而是葡萄牙小胜与冷平并存；客胜簇较弱但0-1、1-2仍需保留。",
+            "total_goals": "总进球2球和3球同为3.5最低，1球4.7也不高，4球赔率5.4形成明显阻力，因此主审区间为1-3球，4+只作为尾部。",
+            "half_full_time": "半全场主/主2.35最低、平/主4.2次低，支持葡萄牙最终占优；但平/平5.6也偏低，提示慢热和90分钟平局风险不能忽略。",
+            "external_market": "双轨背离校准显示主胜skew +6.73%且z_gap为正，按规则属于该方向被诱盘低开，应下调主胜信心；客胜skew -13.55%属于价值洼地，需要上调客队尾部优先级。"
           },
           "money_flow": {
             "public_money_direction": "home",
             "sharp_money_direction": "unclear",
-            "sharp_confidence": 0,
+            "sharp_confidence": 15,
             "reverse_line_movement": false,
             "steam_move": "unclear",
-            "evidence": "缺乏完整的盘口变化序列，无法确认真实的聪明钱方向，公众倾向主队。"
+            "evidence": "大众投票主胜56%与最低赔率方向一致，未形成反向资金确认；sharp_money_facts未给出明确sharp_side_candidates，且缺少开盘至即时赔率序列，不能确认真实RLM或steam。"
           },
           "contextual_logic": {
-            "league_style": "世界杯淘汰赛，容错率低，90分钟平局和一球差是常态。",
-            "team_style": "葡萄牙整体占优但克罗地亚具备极强韧性。",
+            "league_style": "世界杯淘汰赛中立场，90分钟平局和加时策略权重高于普通联赛；名义主客不等于真实主场优势。",
+            "team_style": "葡萄牙纸面进攻与赔率定位占优，克罗地亚则具备拖节奏、控球和淘汰赛韧性；市场没有把克罗地亚完全打死。",
             "tempo": "medium",
-            "score_shape": "集中在1-1, 2-1, 1-0的低分/一球差区间。",
+            "score_shape": "主线为葡萄牙一球小胜，最大反向为1-1，客队低比分偷袭和BTTS反打为尾部。",
             "btts_likelihood": "yes",
-            "rotation_risk": "low"
+            "rotation_risk": "unclear"
           },
           "rejected_cases": {
-            "home": "国内主胜强行低开，存在诱盘或避险，且淘汰赛平局风险大，不作为首选。",
-            "draw": "未拒绝，作为首选。",
-            "away": "客胜赔率较高，直接赢球难度大，更多是拖入平局。"
+            "home": "没有否定主胜，主胜仍是1X2和正确比分簇的第一方向；但因双轨背离显示主胜低开诱盘、1-1过近，只能作为弱推荐方向而非投注主推。",
+            "draw": "平局尤其1-1非常强，但主胜1X2优势、2-1最低比分以及半全场主/主、平/主排序仍略支持葡萄牙90分钟小胜。",
+            "away": "客胜因双轨背离存在价值洼地，且0-1、1-2必须保留；但客胜正确比分簇整体赔率明显高于主胜与平局簇，尚不足以成为最终方向。"
           },
           "web_research": {
-            "used": false,
-            "failure_reason": "no_web_tool_available",
-            "search_queries": [],
-            "sources": [],
+            "used": true,
+            "failure_reason": "",
+            "search_queries": [
+              "审计Phase1中Grok提供的Portugal vs Croatia 2026 World Cup preview lineups injuries来源",
+              "审计Phase1中Pinnacle Portugal vs Croatia betting odds来源",
+              "审计Phase1中Yahoo Sports standings与Climate Central weather来源"
+            ],
+            "sources": [
+              {
+                "title": "Portugal vs Croatia: team news, lineups, predictions (World Cup 03/07)",
+                "url": "https://sports.yahoo.com/articles/preview-portugal-vs-croatia-team-230500515.html",
+                "publisher": "Yahoo Sports",
+                "published_at": "2026-06-30",
+                "accessed_at": "2026-07-02",
+                "source_type": "news",
+                "reliability": "low",
+                "claim": "Phase1称该文支持葡萄牙无新增伤停和预计阵容，但当前终审无法独立验证页面真实性，且访问日期晚于当前系统日期。",
+                "impact": "risk"
+              },
+              {
+                "title": "Portugal vs Croatia - prediction, team news, lineups | World Cup 2026",
+                "url": "https://www.sportsmole.co.uk/football/portugal/world-cup-2026/preview/portugal-vs-croatia-prediction-team-news-lineups_600433.html",
+                "publisher": "Sports Mole",
+                "published_at": "2026-06-30",
+                "accessed_at": "2026-07-02",
+                "source_type": "lineup",
+                "reliability": "low",
+                "claim": "Phase1称其给出双方预计首发，但非官方首发，且无法独立核验。",
+                "impact": "risk"
+              },
+              {
+                "title": "Portugal vs Croatia betting Odds | FIFA - World Cup Odds",
+                "url": "https://www.pinnacle.com/en/soccer/fifa-world-cup/portugal-vs-croatia/1632183795/",
+                "publisher": "Pinnacle",
+                "published_at": "2026-06-30",
+                "accessed_at": "2026-07-02",
+                "source_type": "odds",
+                "reliability": "low",
+                "claim": "Phase1称Pinnacle主胜1.384，但该数字与抓包1X2和全球Shin概率差异过大，且缺少截图和时间序列，不能用于升档。",
+                "impact": "risk"
+              },
+              {
+                "title": "2026 World Cup results, standings and schedule",
+                "url": "https://sports.yahoo.com/soccer/article/2026-world-cup-results-standings-and-schedule-live-scores-group-stage-updates-and-how-to-watch-050724193.html",
+                "publisher": "Yahoo Sports",
+                "published_at": "2026-07-01",
+                "accessed_at": "2026-07-02",
+                "source_type": "stats",
+                "reliability": "low",
+                "claim": "Phase1称双方均小组第二出线；与抓包所称1/16决赛背景大体一致，但访问日期异常，不能作为升档证据。",
+                "impact": "no_impact"
+              },
+              {
+                "title": "Climate Central World Cup 2026 heat risk",
+                "url": "https://www.climatecentral.org/world-cup-2026/matches/83",
+                "publisher": "Climate Central",
+                "published_at": "2026-06-30",
+                "accessed_at": "2026-07-02",
+                "source_type": "stats",
+                "reliability": "low",
+                "claim": "Phase1称多伦多场地有19%热风险；但本场场地在原始抓包中未给出，无法确认适用。",
+                "impact": "risk"
+              }
+            ],
             "freshness_grade": "missing",
-            "key_findings": [],
-            "source_conflicts": [],
+            "key_findings": [
+              "Phase1的外部来源无法在终审环境中独立核验，且存在accessed_at晚于当前日期的问题。",
+              "Pinnacle所谓1.384与本证据包中的竞彩和全球Shin概率不一致，不能直接作为强主胜证据。",
+              "伤停、首发、天气、场地和外部欧赔序列均不能用于把主胜升为main。"
+            ],
+            "source_conflicts": [
+              "Pinnacle主胜1.384与竞彩1.59及全球Shin主胜54.168%的定价强度不一致，缺少时间点和盘口类型解释。",
+              "Phase1来源访问日期为2026-07-02，晚于当前系统日期2026-07-01，外部证据时效审计不通过。"
+            ],
             "validation_warnings": []
           },
-          "final_web_audit": {
-            "web_used_by_final": false,
-            "decisive_web_evidence": [],
-            "ignored_web_evidence": [],
-            "web_confidence": 0
-          },
+          "final_web_audit": {},
           "data_quality": {
             "missing": [
-              "web_sources",
-              "sharp_money",
-              "lineups"
+              "官方首发",
+              "官方伤停",
+              "可靠外部赔率时间序列",
+              "Bet365实时赔率",
+              "Pinnacle可核验盘口类型",
+              "交易所成交",
+              "天气场地",
+              "裁判信息",
+              "独立xG数据"
             ],
             "raw_packet_quality": "medium"
           },
-          "ai_native_reason": "本场比赛为世界杯淘汰赛，葡萄牙虽为名义强队，但国内竞彩主胜赔率存在明显压价（skew > 6%），国际清算盘对其支持力度有限。正确比分簇中2-1、1-1、1-0紧密相连，总进球集中在2-3球，说明比赛大概率在一球差或平局中决出。考虑到克罗地亚的淘汰赛韧性及缺乏真实联网数据验证，90分钟防平（1-1）是规避主胜大热陷阱的最佳选择，但因证据不足仅建议观察。",
+          "ai_native_reason": "本场盘口本体的第一读法是葡萄牙小胜：1X2主胜最低，正确比分2-1最低，1-0和2-0也处于核心低赔区，总进球2/3球并列最低。但终审必须降级：1-1仅6.5且非常贴近2-1，淘汰赛90分钟平局权重高；双轨背离显示国内主胜skew +6.73%且z_gap为正，属于主胜低开诱盘或热门风控，客胜skew -13.55%则要求保留客队反打价值；Phase1外部来源存在时效和赔率冲突，不能用于把主胜升为main。因此最终方向保留葡萄牙2-1，但推荐为观察，不做主推。",
           "validation_warnings": [
+            "weak_home_tail_forced_no_bet",
+            "weak_home_favorite_btts_tail_protection_applied",
             "protocol_risk_hint:sharp_alignment_low_and_direction_edge_not_strong",
             "protocol_risk_hint:direction_edge_below_55",
-            "prematch_v2:prematch_v2_rotation_risk_requires_lineup",
+            "two_one_home_hard_no_bet_gate_applied",
+            "weak_home_2_1_btts_away_pct_gate",
+            "non_home_mass_too_high_for_home_2_1",
+            "explicit_1_2_2_2_2_3_tail_present",
             "prematch_v2:prematch_v2_cup_cross_context_lineup_motivation_required",
-            "missing_external_confirmation",
-            "external_fact_without_source",
-            "external_evidence_quality_below_50",
-            "direction_probability_not_supporting_final_direction",
-            "low_confidence_draw_observe:conf=26<45"
+            "prematch_v2:prematch_v2_high_draw_league_non_draw_cap",
+            "unresolved_source_conflict"
           ],
           "bayesian_evidences": [
             "AI-NATIVE：本地不做足球预测判断；方向、比分、Top4等级均来自 AI 输出。",
             "ANCHOR-AUDIT：本地只提供0-0/1-1/总进球/让球盘/联赛风格事实锚点，AI必须在anchor_audit中解释。",
             "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
             "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
-            "final_model=gemini phase=final score=1-1 direction=draw",
-            "anchor_audit:{\"zero_zero\":\"11.0，非首选，但淘汰赛需防范。\",\"one_one\":\"6.5，平局最低，全场第二低，核心防平比分。\",\"one_zero\":\"7.0，主队窄胜核心比分。\",\"zero_one\":\"13.0，客队爆冷最低比分。\",\"two_one\":\"5.8，全场最低，主队常规赢球比分。\",\"one_two\":\"15.0，客队反打比分，偏高。\",\"high_score_tail\":\"3-1为11.0，4球赔率5.4，大比分受阻。\",\"handicap_cover\":\"2-0为7.5，穿盘有一定机会但非最热。\"}",
-            "market_interpretation:{\"one_x_two\":\"竞彩主胜1.59存在明显压价，国际清算盘主胜概率仅54%左右，国内对主胜有防范或诱导，平局和客胜空间被放宽。\",\"handicap\":\"名义让球-1，但2-0、3-0等穿盘比分赔率高于2-1、1-1、1-0，说明市场对葡萄牙净胜两球信心不足。\",\"correct_score\":\"2-1、1-1、1-0紧密排列，核心指向一球差或低分平局，大胜概率低。\",\"total_goals\":\"2球和3球同为3.5最低，4球5.4阻力较大，进球数集中在2-3球。\",\"half_full_time\":\"主/主最低，但平/主和平/平也处于低位，半场僵持概率不低。\",\"external_market\":\"双轨背离显示国内主胜skew达+6.73%，存在强行低开避险或诱盘嫌疑，客胜skew为-13.55%，价值洼地在下盘。\"}",
-            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":0,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"缺乏完整的盘口变化序列，无法确认真实的聪明钱方向，公众倾向主队。\"}",
-            "contextual_logic:{\"league_style\":\"世界杯淘汰赛，容错率低，90分钟平局和一球差是常态。\",\"team_style\":\"葡萄牙整体占优但克罗地亚具备极强韧性。\",\"tempo\":\"medium\",\"score_shape\":\"集中在1-1, 2-1, 1-0的低分/一球差区间。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"low\"}",
-            "web_research:{\"used\":false,\"failure_reason\":\"no_web_tool_available\",\"search_queries\":[],\"sources\":[],\"freshness_grade\":\"missing\",\"key_findings\":[],\"source_conflicts\":[],\"validation_warnings\":[]}",
-            "recommendation:{\"tier\":\"C\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":40,\"direction_stability\":\"weak\",\"score_stability\":\"medium\",\"risk_level\":\"high\",\"risk_tags\":[\"无联网数据\",\"主胜偏斜\"],\"bet_action\":\"observe\",\"why_this_can_fail\":[\"葡萄牙早早进球打穿盘口\",\"克罗地亚完全放弃进攻导致1-0或2-0\"],\"minimum_evidence_needed\":[\"临场资金流向\"],\"why_recommended\":\"数据缺失严重，且盘口存在诱导嫌疑，建议观望。\"}"
+            "final_model=gpt phase=fallback_referee score=2-1 direction=home",
+            "anchor_audit:{\"zero_zero\":\"0-0赔率11.0，达到必须审计线；淘汰赛保守和克罗地亚韧性使其可防，但总进球2/3球更强，且1-1、1-0、2-1更靠前，因此不作首选。\",\"one_one\":\"1-1赔率6.5，为全场第二低，是最大反热门锚点；若葡萄牙主胜低开为诱盘而非真实压制，1-1比客胜更先受益。\",\"one_zero\":\"1-0赔率7.0，说明葡萄牙小胜路径强；若BTTS不兑现，1-0是2-1的首要替代。\",\"zero_one\":\"0-1赔率13.0，是客胜方向最低比分；结合客胜全球概率高于国内概率的背离，应保留低比分爆冷。\",\"two_one\":\"2-1赔率5.8为全场最低，最贴合主胜小优、BTTS和3球模态，是最终比分选择。\",\"one_two\":\"1-2赔率15.0，客队反打存在但弱于2-1和1-1；若葡萄牙领先后失控或中场被克罗地亚拖住，该路径会抬升。\",\"high_score_tail\":\"3-1和2-2有一定压缩，但4球总进球赔率5.4已越过阻力线，3-2、2-3更弱；4+必须列为尾部而非主线。\",\"handicap_cover\":\"-1一球盘下，2-1和1-0属于赢球不充分释放，2-0才更接近让球穿盘；当前比分簇更支持主胜小胜，不支持强推穿盘。\"}",
+            "market_interpretation:{\"one_x_two\":\"竞彩抓包1.59/3.40/4.85显示葡萄牙为明确低赔方向，去水后主胜约57.8%；但这不是欧洲均赔，且全球Shin对照主胜仅约54.2%，说明国内主胜存在更强压低和风控成分。\",\"handicap\":\"名义让球为葡萄牙-1，但缺少有效HHAD赔率和水位序列。正确比分低赔集中在2-1、1-0、2-0，偏向一球边际或小胜，不支持直接解读为强穿盘。\",\"correct_score\":\"2-1最低，1-1紧随，1-0和2-0也低，说明市场核心不是大胜，而是葡萄牙小胜与冷平并存；客胜簇较弱但0-1、1-2仍需保留。\",\"total_goals\":\"总进球2球和3球同为3.5最低，1球4.7也不高，4球赔率5.4形成明显阻力，因此主审区间为1-3球，4+只作为尾部。\",\"half_full_time\":\"半全场主/主2.35最低、平/主4.2次低，支持葡萄牙最终占优；但平/平5.6也偏低，提示慢热和90分钟平局风险不能忽略。\",\"external_market\":\"双轨背离校准显示主胜skew +6.73%且z_gap为正，按规则属于该方向被诱盘低开，应下调主胜信心；客胜skew -13.55%属于价值洼地，需要上调客队尾部优先级。\"}",
+            "money_flow:{\"public_money_direction\":\"home\",\"sharp_money_direction\":\"unclear\",\"sharp_confidence\":15,\"reverse_line_movement\":false,\"steam_move\":\"unclear\",\"evidence\":\"大众投票主胜56%与最低赔率方向一致，未形成反向资金确认；sharp_money_facts未给出明确sharp_side_candidates，且缺少开盘至即时赔率序列，不能确认真实RLM或steam。\"}",
+            "contextual_logic:{\"league_style\":\"世界杯淘汰赛中立场，90分钟平局和加时策略权重高于普通联赛；名义主客不等于真实主场优势。\",\"team_style\":\"葡萄牙纸面进攻与赔率定位占优，克罗地亚则具备拖节奏、控球和淘汰赛韧性；市场没有把克罗地亚完全打死。\",\"tempo\":\"medium\",\"score_shape\":\"主线为葡萄牙一球小胜，最大反向为1-1，客队低比分偷袭和BTTS反打为尾部。\",\"btts_likelihood\":\"yes\",\"rotation_risk\":\"unclear\"}",
+            "web_research:{\"used\":true,\"failure_reason\":\"\",\"search_queries\":[\"审计Phase1中Grok提供的Portugal vs Croatia 2026 World Cup preview lineups injuries来源\",\"审计Phase1中Pinnacle Portugal vs Croatia betting odds来源\",\"审计Phase1中Yahoo Sports standings与Climate Central weather来源\"],\"sources\":[{\"title\":\"Portugal vs Croatia: team news, lineups, predictions (World Cup 03/07)\",\"url\":\"https://sports.yahoo.com/articles/preview-portugal-vs-croatia-team-230500515.html\",\"publisher\":\"Yahoo Sports\",\"published_at\":\"2026-06-30\",\"accessed_at\":\"2026-07-02\",\"source_type\":\"news\",\"reliability\":\"low\",\"claim\":\"Phase1称该文支持葡萄牙无新增伤停和预计阵容，但当前终审无法独立验证页面真实性，且访问日期晚于当前系统日期。\",\"impact\":\"risk\"},{\"title\":\"Portugal vs Croatia - prediction, team news, lineups | World Cup 2026\",\"url\":\"https://www.sportsmole.co.uk/football/portugal/world-cup-2026/preview/portugal-vs-croatia-prediction-team-news-lineups_600433.html\",\"publisher\":\"Sports Mole\",\"published_at\":\"2026-06-30\",\"accessed_at\":\"2026-07-02\",\"source_type\":\"lineup\",\"reliability\":\"low\",\"claim\":\"Phase1称其给出双方预计首发，但非官方首发，且无法独立核验。\",\"impact\":\"risk\"},{\"title\":\"Portugal vs Croatia betting Odds | FIFA - World Cup Odds\",\"url\":\"https://www.pinnacle.com/en/soccer/fifa-world-cup/portugal-vs-croatia/1632183795/\",\"",
+            "recommendation:{\"tier\":\"D\",\"is_recommended\":false,\"top4_priority\":0,\"bet_confidence\":38,\"direction_stability\":\"weak\",\"score_stability\":\"weak\",\"risk_level\":\"high\",\"risk_tags\":[\"主胜低开诱盘\",\"1-1冷平强锚\",\"客胜价值洼地\",\"淘汰赛90分钟平局\",\"外部来源冲突\",\"无可靠盘口时间序列\",\"weak_home_favorite_btts_tail\",\"away_fightback_tail\"],\"bet_action\":\"observe\",\"why_this_can_fail\":[\"1-1赔率与2-1非常接近，葡萄牙若无法持续压制，比赛很容易进入加时逻辑。\",\"国内主胜相对全球清算盘低开，可能只是规避大众葡萄牙热度，而非真实强信号。\",\"客胜方向在双轨背离中为价值洼地，0-1和1-2反打不能删除。\",\"若早球出现，比赛可能跳向2-2或3-1，但4+总进球阻力又使比分尾部不稳定。\",\"外部首发、伤停、天气和低水赔率均未有效确认，无法支撑主胜升为main。\"],\"minimum_evidence_needed\":[\"官方首发和伤停名单。\",\"Pinnacle/Bet365/交易所90分钟1X2与亚洲盘临场时间序列。\",\"确认比赛场地、天气和裁判。\",\"核实全球市场均赔与竞彩偏斜是否持续。\"],\"why_recommended\":\"不推荐下注。若必须给赛果方向，市场主线是葡萄牙2-1小胜；但主胜低开诱盘、1-1冷平和客胜价值洼地同时存在，投注动作应为观察。\",\"original_bet_confidence\":38,\"risk_adjusted_bet_confidence\":38,\"display_bet_confidence\":38}"
           ],
           "bayesian_prior": {},
           "override_triggered": false,
@@ -3239,18 +3490,26 @@
           "fair_1x2_pack": {},
           "mixed_target_dir": {},
           "unified_source": "ai_native_web_anchor_audit",
-          "decision_source": "ai_native:gemini:final",
+          "decision_source": "ai_native:gpt:fallback_referee",
           "ai_authority_mode": "ai_native_web_no_local_football_judgement",
           "ev_note": "disabled_local_ev_no_local_probability",
           "suggested_kelly": 0.0,
           "edge_vs_market": 0.0,
           "is_value": false,
-          "smart_money_signal": "缺乏完整的盘口变化序列，无法确认真实的聪明钱方向，公众倾向主队。",
+          "smart_money_signal": "大众投票主胜56%与最低赔率方向一致，未形成反向资金确认；sharp_money_facts未给出明确sharp_side_candidates，且缺少开盘至即时赔率序列，不能确认真实RLM或steam。",
           "smart_signals": [
-            "无联网数据",
-            "主胜偏斜",
-            "external_fact_without_source",
-            "missing_external_confirmation"
+            "主胜低开诱盘",
+            "1-1冷平强锚",
+            "客胜价值洼地",
+            "淘汰赛90分钟平局",
+            "外部来源冲突",
+            "无可靠盘口时间序列",
+            "weak_home_favorite_btts_tail",
+            "away_fightback_tail",
+            "two_one_home_hard_no_bet",
+            "weak_home_2_1_btts_away_pct_gate",
+            "non_home_mass_too_high_for_home_2_1",
+            "explicit_1_2_2_2_2_3_tail_present"
           ],
           "sharp_detected": false,
           "sharp_dir": "unclear",
@@ -3259,18 +3518,18 @@
           "sharp_audit": {
             "public_money_direction": "home",
             "sharp_money_direction": "unclear",
-            "sharp_confidence": 0,
+            "sharp_confidence": 15,
             "reverse_line_movement": false,
             "steam_move": "unclear",
-            "evidence": "缺乏完整的盘口变化序列，无法确认真实的聪明钱方向，公众倾向主队。"
+            "evidence": "大众投票主胜56%与最低赔率方向一致，未形成反向资金确认；sharp_money_facts未给出明确sharp_side_candidates，且缺少开盘至即时赔率序列，不能确认真实RLM或steam。"
           },
           "score_market_evidence": {
-            "one_x_two": "竞彩主胜1.59存在明显压价，国际清算盘主胜概率仅54%左右，国内对主胜有防范或诱导，平局和客胜空间被放宽。",
-            "handicap": "名义让球-1，但2-0、3-0等穿盘比分赔率高于2-1、1-1、1-0，说明市场对葡萄牙净胜两球信心不足。",
-            "correct_score": "2-1、1-1、1-0紧密排列，核心指向一球差或低分平局，大胜概率低。",
-            "total_goals": "2球和3球同为3.5最低，4球5.4阻力较大，进球数集中在2-3球。",
-            "half_full_time": "主/主最低，但平/主和平/平也处于低位，半场僵持概率不低。",
-            "external_market": "双轨背离显示国内主胜skew达+6.73%，存在强行低开避险或诱盘嫌疑，客胜skew为-13.55%，价值洼地在下盘。"
+            "one_x_two": "竞彩抓包1.59/3.40/4.85显示葡萄牙为明确低赔方向，去水后主胜约57.8%；但这不是欧洲均赔，且全球Shin对照主胜仅约54.2%，说明国内主胜存在更强压低和风控成分。",
+            "handicap": "名义让球为葡萄牙-1，但缺少有效HHAD赔率和水位序列。正确比分低赔集中在2-1、1-0、2-0，偏向一球边际或小胜，不支持直接解读为强穿盘。",
+            "correct_score": "2-1最低，1-1紧随，1-0和2-0也低，说明市场核心不是大胜，而是葡萄牙小胜与冷平并存；客胜簇较弱但0-1、1-2仍需保留。",
+            "total_goals": "总进球2球和3球同为3.5最低，1球4.7也不高，4球赔率5.4形成明显阻力，因此主审区间为1-3球，4+只作为尾部。",
+            "half_full_time": "半全场主/主2.35最低、平/主4.2次低，支持葡萄牙最终占优；但平/平5.6也偏低，提示慢热和90分钟平局风险不能忽略。",
+            "external_market": "双轨背离校准显示主胜skew +6.73%且z_gap为正，按规则属于该方向被诱盘低开，应下调主胜信心；客胜skew -13.55%属于价值洼地，需要上调客队尾部优先级。"
           },
           "score_market_gate_pass": null,
           "score_market_alignment": null,
@@ -3280,10 +3539,18 @@
             "strength": 0,
             "level": "AI-native字段，不由本地判断冷门",
             "signals": [
-              "无联网数据",
-              "主胜偏斜",
-              "external_fact_without_source",
-              "missing_external_confirmation"
+              "主胜低开诱盘",
+              "1-1冷平强锚",
+              "客胜价值洼地",
+              "淘汰赛90分钟平局",
+              "外部来源冲突",
+              "无可靠盘口时间序列",
+              "weak_home_favorite_btts_tail",
+              "away_fightback_tail",
+              "two_one_home_hard_no_bet",
+              "weak_home_2_1_btts_away_pct_gate",
+              "non_home_mass_too_high_for_home_2_1",
+              "explicit_1_2_2_2_2_3_tail_present"
             ],
             "sharp_confirmed": false,
             "dark_verdict": ""
@@ -3297,20 +3564,20 @@
           "shin_dir": null,
           "actual_handicap_signed": null,
           "theoretical_handicap_signed": null,
-          "gpt_score": "1-1",
-          "gpt_analysis": "本场盘口本体显示葡萄牙名义优势明确，但优势没有达到可无视平局的程度。2-1是最低正确比分，说明葡萄牙小胜是市场主线；然而1-1仅次之且赔率差距很小，1-0、2-0也紧密相邻，整体更像淘汰赛一球差和低比分僵持结构。总进球2与3并列最低，4球赔率5.4形成大球阻力，因此不宜主推3-1或2-2。关键在于dual_market_divergence已显示国内竞彩相对国际清算盘显著压低主胜、放宽客胜，这使主胜赔率更像热门避险而非高性价比。综合后，90分钟方向选择draw，比分1-1；但因无联网工具核实外部赔率、首发、伤停和临场信息，推荐层面降为observe。",
-          "grok_score": "1-1",
-          "grok_analysis": "该模型本轮未返回可展示分析；最终结果以AI终审为准。",
-          "gemini_score": "1-1",
-          "gemini_analysis": "本场比赛为世界杯淘汰赛，葡萄牙虽为名义强队，但国内竞彩主胜赔率存在明显压价（skew > 6%），国际清算盘对其支持力度有限。正确比分簇中2-1、1-1、1-0紧密相连，总进球集中在2-3球，说明比赛大概率在一球差或平局中决出。考虑到克罗地亚的淘汰赛韧性及缺乏真实联网数据验证，90分钟防平（1-1）是规避主胜大热陷阱的最佳选择，但因证据不足仅建议观察。",
-          "final_referee_score": "1-1",
-          "final_referee_analysis": "本场比赛为世界杯淘汰赛，葡萄牙虽为名义强队，但国内竞彩主胜赔率存在明显压价（skew > 6%），国际清算盘对其支持力度有限。正确比分簇中2-1、1-1、1-0紧密相连，总进球集中在2-3球，说明比赛大概率在一球差或平局中决出。考虑到克罗地亚的淘汰赛韧性及缺乏真实联网数据验证，90分钟防平（1-1）是规避主胜大热陷阱的最佳选择，但因证据不足仅建议观察。",
+          "gpt_score": "2-1",
+          "gpt_analysis": "本场抓包市场显示葡萄牙是明确低赔热门，2-1为最低正确比分，1-0、2-0也支持主胜小优；总进球2/3球并列最低，说明比分应集中在1-3球。但风险点同样突出：1-1仅6.5且为全场第二低，淘汰赛90分钟平局权重高；国内竞彩相对国际清算盘对主胜低开约6.73%，对客胜给得更窄，体现主胜热门风控而非稳定价值。综合选择2-1作为市场主线方向，但推荐层面降为观察，不做高信心主推。",
+          "grok_score": "2-1",
+          "grok_analysis": "葡萄牙主队优势明显，出线双方无大轮换，盘口主胜领先，外部事实支持2-1，风险为1-1冷平与客队反击",
+          "gemini_score": "2-1",
+          "gemini_analysis": "本场盘口本体的第一读法是葡萄牙小胜：1X2主胜最低，正确比分2-1最低，1-0和2-0也处于核心低赔区，总进球2/3球并列最低。但终审必须降级：1-1仅6.5且非常贴近2-1，淘汰赛90分钟平局权重高；双轨背离显示国内主胜skew +6.73%且z_gap为正，属于主胜低开诱盘或热门风控，客胜skew -13.55%则要求保留客队反打价值；Phase1外部来源存在时效和赔率冲突，不能用于把主胜升为main。因此最终方向保留葡萄牙2-1，但推荐为观察，不做主推。",
+          "final_referee_score": "2-1",
+          "final_referee_analysis": "本场盘口本体的第一读法是葡萄牙小胜：1X2主胜最低，正确比分2-1最低，1-0和2-0也处于核心低赔区，总进球2/3球并列最低。但终审必须降级：1-1仅6.5且非常贴近2-1，淘汰赛90分钟平局权重高；双轨背离显示国内主胜skew +6.73%且z_gap为正，属于主胜低开诱盘或热门风控，客胜skew -13.55%则要求保留客队反打价值；Phase1外部来源存在时效和赔率冲突，不能用于把主胜升为main。因此最终方向保留葡萄牙2-1，但推荐为观察，不做主推。",
           "claude_score": "弃用",
           "claude_analysis": "Claude 已淘汰：当前版本由 Gemini 终审裁判。",
-          "final_ai_score": "1-1",
-          "final_ai_analysis": "本场比赛为世界杯淘汰赛，葡萄牙虽为名义强队，但国内竞彩主胜赔率存在明显压价（skew > 6%），国际清算盘对其支持力度有限。正确比分簇中2-1、1-1、1-0紧密相连，总进球集中在2-3球，说明比赛大概率在一球差或平局中决出。考虑到克罗地亚的淘汰赛韧性及缺乏真实联网数据验证，90分钟防平（1-1）是规避主胜大热陷阱的最佳选择，但因证据不足仅建议观察。",
+          "final_ai_score": "2-1",
+          "final_ai_analysis": "本场盘口本体的第一读法是葡萄牙小胜：1X2主胜最低，正确比分2-1最低，1-0和2-0也处于核心低赔区，总进球2/3球并列最低。但终审必须降级：1-1仅6.5且非常贴近2-1，淘汰赛90分钟平局权重高；双轨背离显示国内主胜skew +6.73%且z_gap为正，属于主胜低开诱盘或热门风控，客胜skew -13.55%则要求保留客队反打价值；Phase1外部来源存在时效和赔率冲突，不能用于把主胜升为main。因此最终方向保留葡萄牙2-1，但推荐为观察，不做主推。",
           "ai_abstained": [],
-          "ai_avg_confidence": 40.0,
+          "ai_avg_confidence": 38.0,
           "ai_call_status": {
             "gpt": {
               "phase1": {
@@ -3318,29 +3585,42 @@
                 "ai_name": "gpt",
                 "model": "gpt-5.5",
                 "phase": "phase1",
-                "elapsed": 173.9,
-                "endpoint_name": "gpt_3",
-                "endpoint_slot": 3,
-                "endpoint_attempt": 2,
-                "endpoint_total": 4,
+                "elapsed": 211.6,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 458.0
+                "total_elapsed": 211.6
               },
-              "last_status": "parse_failed",
+              "last_status": "ok",
               "model": "gpt-5.5",
               "critic": {
                 "ok": false,
                 "ai_name": "gpt",
                 "model": "gpt-5.5",
                 "phase": "critic",
-                "elapsed": 67.1,
-                "endpoint_name": "gpt_1",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 4,
-                "endpoint_total": 4,
+                "elapsed": 78.9,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
                 "status": "parse_failed",
                 "parse_error": "empty_or_invalid_json_object",
-                "raw_excerpt": "{\"critic_reports\":[{\"match\":2,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"schema\",\"severity\":\"high\",\"comment\":\"输出中 anchor_audit、market_interpretation、money_flow、contextual_logic、rejected_cases、data_quality 等关键审计字段为空，且 validation_warnings 已自曝 score_cluster_audit、sharp"
+                "raw_excerpt": "{\"critic_reports\":[{\"match\":4,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"web\",\"severity\":\"high\",\"comment\":\"存在明显联网证据风险。报告中声称使用 Yahoo、Sports Mole、Pinnacle、Climate Central 等实时来源，并给出2026-06/07发布日期、访问时间和具体阵容，但当前任务证据只允许使用抓包与结构化事实，且 packet_context 明确提示抓包文字不等于实时外部 Web sourc"
+              },
+              "fallback_referee": {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "gpt-5.5",
+                "phase": "fallback_referee",
+                "elapsed": 261.3,
+                "endpoint_name": "gpt_4",
+                "endpoint_slot": 4,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "ok",
+                "total_elapsed": 261.3
               }
             },
             "grok": {
@@ -3349,13 +3629,13 @@
                 "ai_name": "grok",
                 "model": "grok-4.3-c",
                 "phase": "phase1",
-                "elapsed": 92.4,
+                "elapsed": 37.1,
                 "endpoint_name": "grok_3",
                 "endpoint_slot": 3,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 92.4
+                "total_elapsed": 37.1
               },
               "last_status": "ok",
               "model": "grok-4.3-c",
@@ -3364,13 +3644,13 @@
                 "ai_name": "grok",
                 "model": "grok-4.3-c",
                 "phase": "critic",
-                "elapsed": 30.0,
-                "endpoint_name": "grok_2",
-                "endpoint_slot": 2,
+                "elapsed": 7.0,
+                "endpoint_name": "grok_4",
+                "endpoint_slot": 4,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 30.0
+                "total_elapsed": 7.0
               }
             },
             "gemini": {
@@ -3379,13 +3659,14 @@
                 "ai_name": "gemini",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
                 "phase": "final",
-                "elapsed": 43.8,
-                "endpoint_name": "gemini_2",
-                "endpoint_slot": 2,
+                "elapsed": 67.5,
+                "endpoint_name": "gemini_4",
+                "endpoint_slot": 4,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 43.8
+                "total_elapsed": 67.5,
+                "retry_succeeded_on_attempt": 3
               },
               "last_status": "ok",
               "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"
@@ -3393,11 +3674,11 @@
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260701_185325_4m_828b7c27aeee_比利时_塞内加尔",
+            "run_id": "20260701_194245_4m_2ec688caee32_比利时_塞内加尔",
             "engine_version": "vMAX 20.6.0-READING-PARADIGM",
             "chunk_count": 4,
             "phase_result_dir": "data/ai_phase_results",
-            "aggregate_file": "data/ai_phase_results/20260701_185325_4m_828b7c27aeee_比利时_塞内加尔_final_all_chunks.json",
+            "aggregate_file": "data/ai_phase_results/20260701_194245_4m_2ec688caee32_比利时_塞内加尔_final_all_chunks.json",
             "ai_call_status": {
               "gpt": {
                 "phase1": {
@@ -3405,29 +3686,42 @@
                   "ai_name": "gpt",
                   "model": "gpt-5.5",
                   "phase": "phase1",
-                  "elapsed": 173.9,
-                  "endpoint_name": "gpt_3",
-                  "endpoint_slot": 3,
-                  "endpoint_attempt": 2,
-                  "endpoint_total": 4,
+                  "elapsed": 211.6,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 458.0
+                  "total_elapsed": 211.6
                 },
-                "last_status": "parse_failed",
+                "last_status": "ok",
                 "model": "gpt-5.5",
                 "critic": {
                   "ok": false,
                   "ai_name": "gpt",
                   "model": "gpt-5.5",
                   "phase": "critic",
-                  "elapsed": 67.1,
-                  "endpoint_name": "gpt_1",
-                  "endpoint_slot": 1,
-                  "endpoint_attempt": 4,
-                  "endpoint_total": 4,
+                  "elapsed": 78.9,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
                   "status": "parse_failed",
                   "parse_error": "empty_or_invalid_json_object",
-                  "raw_excerpt": "{\"critic_reports\":[{\"match\":2,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"schema\",\"severity\":\"high\",\"comment\":\"输出中 anchor_audit、market_interpretation、money_flow、contextual_logic、rejected_cases、data_quality 等关键审计字段为空，且 validation_warnings 已自曝 score_cluster_audit、sharp"
+                  "raw_excerpt": "{\"critic_reports\":[{\"match\":4,\"critic_model\":\"gpt\",\"target_findings\":[{\"target_model\":\"grok\",\"issue_type\":\"web\",\"severity\":\"high\",\"comment\":\"存在明显联网证据风险。报告中声称使用 Yahoo、Sports Mole、Pinnacle、Climate Central 等实时来源，并给出2026-06/07发布日期、访问时间和具体阵容，但当前任务证据只允许使用抓包与结构化事实，且 packet_context 明确提示抓包文字不等于实时外部 Web sourc"
+                },
+                "fallback_referee": {
+                  "ok": true,
+                  "ai_name": "gpt",
+                  "model": "gpt-5.5",
+                  "phase": "fallback_referee",
+                  "elapsed": 261.3,
+                  "endpoint_name": "gpt_4",
+                  "endpoint_slot": 4,
+                  "endpoint_attempt": 1,
+                  "endpoint_total": 1,
+                  "status": "ok",
+                  "total_elapsed": 261.3
                 }
               },
               "grok": {
@@ -3436,13 +3730,13 @@
                   "ai_name": "grok",
                   "model": "grok-4.3-c",
                   "phase": "phase1",
-                  "elapsed": 92.4,
+                  "elapsed": 37.1,
                   "endpoint_name": "grok_3",
                   "endpoint_slot": 3,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 92.4
+                  "total_elapsed": 37.1
                 },
                 "last_status": "ok",
                 "model": "grok-4.3-c",
@@ -3451,13 +3745,13 @@
                   "ai_name": "grok",
                   "model": "grok-4.3-c",
                   "phase": "critic",
-                  "elapsed": 30.0,
-                  "endpoint_name": "grok_2",
-                  "endpoint_slot": 2,
+                  "elapsed": 7.0,
+                  "endpoint_name": "grok_4",
+                  "endpoint_slot": 4,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 30.0
+                  "total_elapsed": 7.0
                 }
               },
               "gemini": {
@@ -3466,13 +3760,14 @@
                   "ai_name": "gemini",
                   "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
                   "phase": "final",
-                  "elapsed": 43.8,
-                  "endpoint_name": "gemini_2",
-                  "endpoint_slot": 2,
+                  "elapsed": 67.5,
+                  "endpoint_name": "gemini_4",
+                  "endpoint_slot": 4,
                   "endpoint_attempt": 1,
                   "endpoint_total": 1,
                   "status": "ok",
-                  "total_elapsed": 43.8
+                  "total_elapsed": 67.5,
+                  "retry_succeeded_on_attempt": 3
                 },
                 "last_status": "ok",
                 "model": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网"
@@ -3526,145 +3821,288 @@
           "engine_version": "vMAX 20.6.0-READING-PARADIGM",
           "engine_architecture": "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "score_cluster_audit": {
-            "selected_cluster": "draw_low",
-            "why_selected_score": "在淘汰赛背景下，1-1是平局最低赔且全场第二低，结合国内主胜强行低开的背离，1-1能有效覆盖90分钟僵局风险。",
+            "selected_cluster": "home_narrow",
+            "why_selected_score": "选择2-1是因为它为全场最低正确比分，且与3球总进球模态、葡萄牙小优和双方进球路径一致；但1-1只高0.7赔率点，说明2-1只是窄边主线，不具备高置信穿透力。",
             "adjacent_scores_checked": [
               {
-                "score": "2-1",
-                "odds": 5.8,
-                "verdict": "near_miss",
-                "reason": "最低赔，但受国内主胜过热影响，降为防范项。"
+                "score": "1-1",
+                "odds": 6.5,
+                "verdict": "keep",
+                "reason": "与2-1非常接近，是最强冷平竞争项；若葡萄牙低开只是热门风控，1-1会成为首要替代。"
               },
               {
                 "score": "1-0",
-                "odds": 7.0,
-                "verdict": "near_miss",
-                "reason": "若克罗地亚无法破门则打出，但1-1和2-1更低，说明BTTS概率更高。"
+                "odds": 7,
+                "verdict": "keep",
+                "reason": "一球小胜路径低赔，符合淘汰赛低速和葡萄牙优势不充分释放的形态。"
               },
               {
                 "score": "2-0",
                 "odds": 7.5,
+                "verdict": "near_miss",
+                "reason": "支持葡萄牙控制比赛，但2-1更低且BTTS路径更明显，零封不是唯一主线。"
+              },
+              {
+                "score": "3-1",
+                "odds": 11,
+                "verdict": "near_miss",
+                "reason": "进入前五但受4球总进球赔率5.4阻挡，不宜主推4球比分。"
+              },
+              {
+                "score": "0-0",
+                "odds": 11,
+                "verdict": "keep",
+                "reason": "0-0赔率达到必须审计阈值，淘汰赛可防，但2/3球模态和多个进球比分更强。"
+              },
+              {
+                "score": "2-2",
+                "odds": 13,
+                "verdict": "keep",
+                "reason": "高分平局尾部可见，但4+阻力较大，只能保留为风险。"
+              },
+              {
+                "score": "0-1",
+                "odds": 13,
+                "verdict": "keep",
+                "reason": "客胜最低比分，结合客胜价值洼地，不能剔除。"
+              },
+              {
+                "score": "1-2",
+                "odds": 15,
+                "verdict": "keep",
+                "reason": "BTTS客胜反打路径，虽弱于主胜簇，但在主胜诱盘低开条件下必须保留。"
+              },
+              {
+                "score": "3-2",
+                "odds": 20,
                 "verdict": "reject",
-                "reason": "穿盘最低赔，但高于一球差和1-1，穿盘阻力大。"
+                "reason": "5球比分与总进球主模态不匹配，且3-2明显弱于2-1、3-1和2-2。"
+              },
+              {
+                "score": "2-3",
+                "odds": 50,
+                "verdict": "near_miss",
+                "reason": "赔率很高，不能作为常规候选；但因客胜价值洼地和BTTS尾部规则，作为极端风险保留。"
               }
             ],
-            "lowest_score_not_selected_reason": "2-1虽为最低赔，但国内主胜存在+6.73%的偏斜，强行低开可能诱导主胜，淘汰赛90分钟平局价值更高。"
+            "lowest_score_not_selected_reason": "全场最低比分就是2-1，因此不存在更低比分未选；未将1-1反超为主选的原因是1X2主胜仍有明确低赔优势，半全场主/主和平/主也支持葡萄牙最终占优。"
           },
           "sharp_money_audit": {
-            "available": false,
+            "available": true,
             "confirmed_sharp_direction": "unclear",
             "rlm_confirmed": false,
-            "vote_vs_odds_conflict": "无可靠变盘数据，无法确认冲突。",
-            "crs_change_impact": "无数据",
-            "ttg_change_impact": "无数据"
+            "vote_vs_odds_conflict": "大众主胜56%与竞彩主胜低赔同向，不能解读为聪明钱；双轨背离提示主胜国内低开更像热门风控，客胜则有价值洼地，但这不是已确认sharp。",
+            "crs_change_impact": "正确比分无变化序列，不能判断资金流入；只能读静态簇：2-1最低、1-1极近，主胜不干净。",
+            "ttg_change_impact": "总进球无变化序列；静态曲线显示2/3球并列最低，1-3球为主审区，4+受限。"
           },
           "recommendation_components": {
-            "direction_edge": 30,
-            "score_cluster_strength": 60,
-            "goal_band_strength": 70,
-            "btts_alignment": 60,
-            "sharp_alignment": 0,
-            "web_source_quality": 0,
-            "market_conflict_penalty": 30,
-            "final_grade_reason": "缺乏联网数据，且国内盘口存在背离，只能作为观察。"
+            "direction_edge": 50,
+            "score_cluster_strength": 58,
+            "goal_band_strength": 60,
+            "btts_alignment": 55,
+            "sharp_alignment": 15,
+            "web_source_quality": 20,
+            "market_conflict_penalty": 35,
+            "final_grade_reason": "盘口本体支持葡萄牙2-1小胜，但双轨背离明确触发主胜低开诱盘降级，客胜价值洼地提高尾部风险；外部来源冲突未解决，sharp未确认，因此不适合主推。"
           },
           "risk_score_candidates": [
             {
-              "score": "2-1",
-              "risk_type": "主队常规小胜",
-              "reason": "全场最低正确比分，若葡萄牙进攻端发挥正常，2-1是最大概率的赢球比分。"
+              "score": "1-1",
+              "risk_type": "淘汰赛冷平核心风险",
+              "reason": "1-1赔率6.5仅次于2-1的5.8，且世界杯淘汰赛90分钟平局权重高；葡萄牙主胜虽为低赔方向，但没有把平局锚点抬死。"
             },
             {
-              "score": "1-0",
-              "risk_type": "淘汰赛一球窄胜",
-              "reason": "1-0赔率7.0，符合淘汰赛领先后收缩防守的特征。"
+              "score": "1-2",
+              "risk_type": "客队反击尾部",
+              "reason": "1-2赔率15.0虽弱于2-1，但在BTTS=yes且客胜概率被双轨背离上修的条件下，不能视为无关尾部。"
             },
             {
-              "score": "0-0",
-              "risk_type": "极端闷平",
-              "reason": "0-0赔率11.0，淘汰赛防守大战的备选。"
+              "score": "2-2",
+              "risk_type": "高分平局尾部",
+              "reason": "2-2赔率13.0进入低赔前八，说明若比赛早段打开或葡萄牙领先后回收，克罗地亚仍有追平路径；但4球总进球赔率5.4限制其成为主线。"
+            },
+            {
+              "score": "2-3",
+              "risk_type": "开放式客胜极端尾部",
+              "reason": "2-3赔率50.0较高，不是主流，但在主胜低开诱盘与客胜价值洼地并存时，应作为极端反打尾部保留。"
+            },
+            {
+              "score": "0-1",
+              "risk_type": "克罗地亚低位偷袭",
+              "reason": "0-1为客胜最低比分，赔率13.0，若淘汰赛节奏被压低，客队爆冷更可能来自低比分反击或定位球。"
             }
           ],
           "tail_risk_flags": [
             "domestic_home_skew_favorite_trap",
-            "knockout_90min_draw_risk"
+            "ko_90min_draw_risk",
+            "weak_home_favorite_btts_tail",
+            "croatia_low_block_counter_tail",
+            "four_plus_resistance_but_tail_visible",
+            "away_win_not_negligible",
+            "protect_1_2_2_2_2_3_tail"
           ],
-          "confidence_downgrade_reason": "国内竞彩对主胜存在明显压价避险（skew > 6%），且缺乏真实联网数据验证伤停与临场资金，淘汰赛平局风险较高。",
+          "confidence_downgrade_reason": "2-1 home score blocked by draw/away/tail risk hard gate",
+          "external_fact_table": [
+            {
+              "category": "market_snapshot",
+              "claim": "Phase1称Pinnacle给出葡萄牙更低主胜赔率，但该外部赔率无法独立核验且与证据包全球Shin概率冲突。",
+              "source_type": "data_site",
+              "source_title": "Portugal vs Croatia betting Odds | FIFA - World Cup Odds",
+              "source_url": "https://www.pinnacle.com/en/soccer/fifa-world-cup/portugal-vs-croatia/1632183795/",
+              "published_at": "2026-06-30",
+              "freshness": "unknown",
+              "confidence": "low",
+              "impact_direction": "risk_only",
+              "why_it_matters": "若真实存在会支持葡萄牙，但当前来源冲突未解决，不能用于升档，只能提示需要赛前复核。"
+            },
+            {
+              "category": "lineup",
+              "claim": "Phase1称有媒体给出葡萄牙预计首发和无新增伤停，但非官方首发且无法核验。",
+              "source_type": "prediction_site",
+              "source_title": "Portugal vs Croatia - prediction, team news, lineups | World Cup 2026",
+              "source_url": "https://www.sportsmole.co.uk/football/portugal/world-cup-2026/preview/portugal-vs-croatia-prediction-team-news-lineups_600433.html",
+              "published_at": "2026-06-30",
+              "freshness": "unknown",
+              "confidence": "low",
+              "impact_direction": "risk_only",
+              "why_it_matters": "预计首发不能替代官方名单，且当前无法用其提高主胜评级。"
+            },
+            {
+              "category": "injury",
+              "claim": "Phase1称葡萄牙无新增伤停，但来源未被终审核验。",
+              "source_type": "mainstream_media",
+              "source_title": "Portugal vs Croatia: team news, lineups, predictions (World Cup 03/07)",
+              "source_url": "https://sports.yahoo.com/articles/preview-portugal-vs-croatia-team-230500515.html",
+              "published_at": "2026-06-30",
+              "freshness": "unknown",
+              "confidence": "low",
+              "impact_direction": "risk_only",
+              "why_it_matters": "伤停信息若真实会影响方向，但无有效核验时不得作为主推依据。"
+            },
+            {
+              "category": "motivation",
+              "claim": "原始抓包与Phase1均指向本场为世界杯1/16决赛，双方不存在小组赛末轮算分场景。",
+              "source_type": "data_site",
+              "source_title": "raw evidence context",
+              "source_url": "",
+              "published_at": "",
+              "freshness": "unknown",
+              "confidence": "medium",
+              "impact_direction": "no_clear_impact",
+              "why_it_matters": "淘汰赛背景提升90分钟平局和加时风险，但不直接支持任何一方升档。"
+            },
+            {
+              "category": "weather",
+              "claim": "Phase1称存在热风险，但原始抓包没有场地信息，无法确认天气数据适用。",
+              "source_type": "data_site",
+              "source_title": "Climate Central World Cup 2026 heat risk",
+              "source_url": "https://www.climatecentral.org/world-cup-2026/matches/83",
+              "published_at": "2026-06-30",
+              "freshness": "unknown",
+              "confidence": "low",
+              "impact_direction": "risk_only",
+              "why_it_matters": "天气可能压低节奏，但场地不明时不能改变主推荐。"
+            }
+          ],
           "source_conflict_audit": {
-            "has_conflict": false,
-            "conflicts": []
+            "has_conflict": true,
+            "conflicts": [
+              {
+                "topic": "外部赔率强度",
+                "details": "Phase1称Pinnacle主胜1.384显著强于证据包竞彩1.59和全球Shin主胜54.168%，缺少盘口类型、时间点和可核验序列，冲突未解决。"
+              },
+              {
+                "topic": "来源时效",
+                "details": "多个Phase1来源accessed_at为2026-07-02，晚于当前系统日期2026-07-01，终审不能把这些来源作为有效实时证据。"
+              },
+              {
+                "topic": "首发伤停",
+                "details": "所谓无伤停和预计首发来自媒体预测而非官方名单，且终审无法验证页面内容，不能用于升档。"
+              }
+            ]
           },
-          "evidence_quality_score": 30,
+          "evidence_quality_score": 54,
           "minimum_evidence_needed": [
-            "临场真实资金流向",
-            "双方首发阵容"
+            "官方首发与替补名单。",
+            "双方权威伤停确认和赛前发布会。",
+            "Bet365、Pinnacle或交易所的开盘至临场时间序列，并区分90分钟1X2与晋级盘。",
+            "比赛场地、天气、裁判和草皮信息。",
+            "低水欧洲均赔或亚洲盘即时水位，用于验证竞彩主胜低开是否只是区域风控。"
           ],
           "external_facts_decision_impact": {
             "direction_impact": "unclear",
             "goal_impact": "unclear",
-            "recommendation_impact": "no_bet",
-            "main_reason": "无联网数据支持，仅凭静态盘口无法给出高信心推荐。"
+            "recommendation_impact": "downgrade",
+            "main_reason": "外部来源存在时间和赔率冲突，伤停首发不可核验，因此不能用外部事实把葡萄牙升为main；最终只能依据盘口本体给出弱方向并降级观察。"
           },
           "gemini_independent_research": {
-            "searched": false,
+            "searched": true,
             "key_sources": [],
             "missing_sources": [
-              "实时赔率",
-              "首发阵容"
+              "官方首发",
+              "官方伤停",
+              "可信低水欧赔时间序列",
+              "交易所成交数据",
+              "裁判与天气场地"
             ],
-            "cross_checked_against_grok": "Grok无输出，独立完成盘口背离与比分簇分析。"
+            "cross_checked_against_grok": "已审计Grok Web-Max来源：来源可用性和时效不能被终审独立确认，且Pinnacle赔率与证据包全球Shin概率冲突，因此不采纳其对主胜升档的结论。"
           },
           "bookmaker_cross_audit": {
-            "bet365": "无数据",
-            "william_hill": "无数据",
-            "pinnacle_or_low_margin": "无数据",
-            "jingcai": "主胜1.59，存在明显压价。",
-            "average_market": "国际清算盘主胜概率低于国内，客胜概率高于国内。",
+            "bet365": "未提供Bet365有效实时来源或时间序列，不能编造；不可用于确认主胜降水。",
+            "william_hill": "未提供William Hill有效实时来源或时间序列，不能作为判断依据。",
+            "pinnacle_or_low_margin": "Phase1提及Pinnacle主胜1.384，但与证据包全球Shin概率差异过大且缺少盘口类型说明，冲突未解决，不能用来升档。",
+            "jingcai": "竞彩抓包1.59/3.40/4.85，主胜最低且大众投票56%偏主；抽水12.92%，存在区域风控和热门压低。",
+            "average_market": "证据包全球Shin为主54.168%、平26.332%、客19.5%，弱化了国内主胜57.813%的强度，并相对抬高客胜风险。",
             "water_movement": "无可靠时间序列说明",
-            "asian_handicap": "名义-1，但穿盘比分不占优。",
-            "ou_total_goals": "2-3球为主，大球受阻。",
-            "correct_score_cluster": "1-1, 2-1, 1-0紧密，指向一球差或平局。",
-            "bookmaker_intent": "国内机构强压主胜，可能在利用葡萄牙名气诱导，同时防范平局。"
+            "asian_handicap": "仅有葡萄牙-1盘口信息，缺少水位；正确比分显示更多是一球小胜或冷平，不支持强穿盘。",
+            "ou_total_goals": "总进球2/3球并列最低，4球5.4形成阻力，适合1-3球审计。",
+            "correct_score_cluster": "2-1、1-1、1-0、2-0构成核心低赔簇，主胜小胜与冷平并列重要。",
+            "bookmaker_intent": "国内竞彩压低葡萄牙主胜可能是规避大众热门风险；同时未抬死1-1和0-1，说明庄家保留冷平和客队偷袭保护。"
           },
           "tempo_xg_tactical_audit": {
             "tempo": "medium",
-            "xg_signal": "无数据",
-            "xga_signal": "无数据",
-            "pressing_transition": "无数据",
-            "formation_matchup": "无数据",
-            "key_player_impact": "无数据"
+            "xg_signal": "无可靠外部xG来源；只能由总进球赔率推断机会环境集中在2-3球，不支持极端低机会或开放大球。",
+            "xga_signal": "原始抓包有球队状态描述，但部分为估算或非官方数据，不能作为硬证据；正确比分2-1低于2-0显示客队破门路径未被市场关闭。",
+            "pressing_transition": "若葡萄牙压迫成功，2-1或2-0成立；若克罗地亚通过中场控节奏降低转换，1-1和0-0风险上升。",
+            "formation_matchup": "无官方首发和阵型来源，不能判断具体对位；只按市场形态推断葡萄牙主动、克罗地亚倾向控节奏与反击。",
+            "key_player_impact": "没有可核验的关键球员伤停或首发证据，不使用球星出场信息升档；任何核心缺阵都会进一步削弱2-1稳定性。"
           },
           "worldcup_upset_audit": {
             "context": "knockout",
-            "japan_type_counter": "unclear+无数据",
-            "morocco_type_low_block": "unclear+无数据",
-            "croatia_type_resilience": "yes+克罗地亚具备极强的淘汰赛拖平加时属性。",
-            "favorite_slow_start_risk": "葡萄牙可能面临破局困难。",
-            "upset_path": "克罗地亚死守反击，将比赛拖入1-1或0-0。"
+            "japan_type_counter": "unclear+克罗地亚客胜簇不强，但0-1和1-2仍可作为反击偷袭路径，尤其在客胜价值洼地条件下不能删除。",
+            "morocco_type_low_block": "unclear+1-1、0-0、0-1赔率均处于可审计区间，若克罗地亚低位成功，葡萄牙低赔主胜会被拖慢。",
+            "croatia_type_resilience": "yes+克罗地亚在淘汰赛语境下必须按韧性队处理，90分钟冷平与加时路径需要前置审计。",
+            "favorite_slow_start_risk": "平/主4.2显示葡萄牙慢热后赢球是重要路径；平/平5.6也说明慢热若无法破局会形成冷平。",
+            "upset_path": "主要爆冷路径为1-1拖入加时、0-1低比分偷袭，次级路径为1-2反打；开放式2-3仅为极端尾部。"
           },
           "score_elimination_audit": {
-            "0-0": "keep+淘汰赛防守战备选",
-            "1-1": "keep+平局最低赔，核心防平比分",
-            "2-2": "reject+4球阻力大",
-            "1-2": "reject+客胜难度大",
-            "2-1": "keep+主胜核心比分",
-            "selected_score_final_reason": "结合国内主胜偏斜与淘汰赛特性，1-1是最具性价比的防冷比分。"
+            "0-0": "keep+赔率11.0达到闷局审计线，淘汰赛可防；但2/3球总进球模态和2-1、1-1更强，非首选。",
+            "1-1": "keep+赔率6.5且为全场第二低，是最大反热门锚点，不能剔除。",
+            "2-2": "keep+赔率13.0进入前八，但4球总进球5.4有阻力，只作高分平局尾部。",
+            "1-2": "keep+客胜BTTS反打路径，赔率15.0不算主流，但双轨背离使客胜尾部必须保留。",
+            "2-1": "keep+全场最低正确比分，承接主胜小优、BTTS和3球模态，是最终市场主线。",
+            "selected_score_final_reason": "最终选择2-1，是因为它同时满足最低比分、主胜方向和3球模态；排除1-1是因主胜1X2仍有优势，排除1-2/2-2/2-3是因客胜和4+簇整体弱于主胜小胜簇，但这些均保留为风险。"
           },
           "dirty_work_checklist": {
             "lineup": false,
             "injury_suspension": false,
-            "motivation_table": false,
+            "motivation_table": true,
             "weather_pitch": false,
             "referee": false,
             "travel_rest": false,
-            "odds_sources": false,
+            "odds_sources": true,
             "xg_tempo": false,
             "worldcup_context": true
           },
+          "display_confidence": 38,
+          "risk_adjusted_confidence": 38,
           "protocol_risk_hints": [
             "sharp_alignment_low_and_direction_edge_not_strong",
             "direction_edge_below_55"
           ],
+          "original_confidence": 38,
+          "no_bet_reason": "2-1 home score blocked by draw/away/tail risk hard gate: weak_home_2_1_btts_away_pct_gate,non_home_mass_too_high_for_home_2_1,explicit_1_2_2_2_2_3_tail_present",
+          "sub50_tiebreaker_warning": true,
           "pre_match_factor_audit": {
             "version": "v20.4_pre_match_factor_gate",
             "league_dna": {
@@ -3678,7 +4116,7 @@
             },
             "match_context_flags": {
               "cup_like": true,
-              "cross_region": false,
+              "cross_region": true,
               "rotation_risk": true,
               "importance_unclear": false,
               "worldcup_r3": false,
@@ -3692,7 +4130,7 @@
               "lineup_predicted": false,
               "lineup_unclear": true,
               "rotation_risk": true,
-              "fatigue_risk": false,
+              "fatigue_risk": true,
               "motivation_clear": true,
               "motivation_unclear": false,
               "critical_absence": false,
@@ -3700,21 +4138,21 @@
               "referee_risk": false,
               "market_confirmed": false,
               "market_conflict": false,
-              "web_source_count": 0,
-              "structured_quality_score": 36,
+              "web_source_count": 5,
+              "structured_quality_score": 40,
               "penalties": [
                 "lineup_unclear",
                 "rotation_risk",
-                "market_unconfirmed",
-                "no_web_sources"
+                "fatigue_or_travel",
+                "market_unconfirmed"
               ],
               "injury_summary": {
                 "home": "无",
                 "away": "无"
               }
             },
-            "web_used_with_sources": false,
-            "lineup_confirmed": false,
+            "web_used_with_sources": true,
+            "lineup_confirmed": true,
             "money_flow": {
               "sharp": "unclear",
               "public": "home",
@@ -3723,62 +4161,50 @@
               "conflict": false,
               "reverse": false
             },
-            "data_quality_score": 29.4,
-            "edge_gap": 28.0,
-            "draw_probability_watch": 26.0,
+            "data_quality_score": 58.7,
+            "edge_gap": 23.0,
+            "draw_probability_watch": 27.0,
             "draw_cluster_present": true,
             "high_goal_tail_pct": 0.0,
             "rules_applied": [
-              "prematch_v2_rotation_risk_requires_lineup",
-              "prematch_v2_cup_cross_context_lineup_motivation_required"
+              "prematch_v2_cup_cross_context_lineup_motivation_required",
+              "prematch_v2_high_draw_league_non_draw_cap"
             ],
             "risk_hints": [
               {
                 "max_tier": "C",
-                "reason": "prematch_v2_rotation_risk_requires_lineup",
-                "tag": "prematch_v2_rotation_risk"
+                "reason": "prematch_v2_cup_cross_context_lineup_motivation_required",
+                "tag": "prematch_v2_cup_cross_context"
               },
               {
                 "max_tier": "C",
-                "reason": "prematch_v2_cup_cross_context_lineup_motivation_required",
-                "tag": "prematch_v2_cup_cross_context"
+                "reason": "prematch_v2_high_draw_league_non_draw_cap",
+                "tag": "prematch_v2_high_draw_league"
               }
             ]
           },
           "score_distribution": [
             {
-              "score": "1-1",
-              "prob": 0.0,
-              "logic": "score_shape_selector_candidate"
-            },
-            {
-              "score": "0-0",
+              "score": "2-1",
               "prob": 0.0,
               "logic": "score_shape_selector_candidate"
             }
           ],
           "top3": [
             {
-              "score": "1-1",
-              "prob": 0.0,
-              "logic": "score_shape_selector_candidate"
-            },
-            {
-              "score": "0-0",
+              "score": "2-1",
               "prob": 0.0,
               "logic": "score_shape_selector_candidate"
             }
           ],
-          "selection_layer": "观察",
+          "selection_layer": "放弃",
           "selection_stake_unit": 0.0,
-          "selection_hedge_suggestions": [
-            "等待官方首发/战意/临场盘口"
-          ],
+          "selection_hedge_suggestions": [],
           "selection_layer_reasons": [
-            "杯赛或跨洲场景需要临场确认"
+            "等级为D"
           ],
-          "selection_confirmation_bonus": 10,
-          "final_action": "观察",
+          "selection_confirmation_bonus": 18,
+          "final_action": "放弃",
           "bet_recommendation": {
             "available": true,
             "per_match_budget": 200,
@@ -3820,6 +4246,6 @@
     "ai_max_requests_per_ai": "3",
     "ai_cache_ttl": "0",
     "history_path": "data/history_2026-07-01_today_morning.json",
-    "snapshot_path": "data/snapshots/2026-07-01_today_morning_20260702_030627.json"
+    "snapshot_path": "data/snapshots/2026-07-01_today_morning_20260702_040213.json"
   }
 }
