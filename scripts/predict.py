@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import asyncio
 import ast
+import contextvars
 import hashlib
 import json
 import logging
@@ -107,6 +108,22 @@ AI_ENDPOINT_MODEL_SLOTS = {
 }
 
 AI_ENDPOINT_RR_CURSOR: Dict[str, int] = {}
+AI_ENDPOINT_SLOT_OVERRIDE: contextvars.ContextVar[Optional[int]] = contextvars.ContextVar("AI_ENDPOINT_SLOT_OVERRIDE", default=None)
+
+
+def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
+    """Resolve hard-coded endpoint model slots safely.
+
+    Slot values are model strings, e.g. "gpt-5.5". They are NOT keys into
+    DEFAULT_MODELS. This guard also tolerates accidental DEFAULT_MODELS-style
+    aliases ("gpt"/"grok"/"gemini") without import-time KeyError.
+    """
+    name = str(ai_name or "").strip().lower()
+    value = AI_ENDPOINT_MODEL_SLOTS.get(name, {}).get(slot, "")
+    model = str(value or "").strip()
+    if not model:
+        return ""
+    return DEFAULT_MODELS.get(model, model)
 
 
 def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
@@ -313,6 +330,8 @@ AI_FINAL_RETRY_BASE_DELAY = _env_int("AI_FINAL_RETRY_BASE_DELAY_MS", 1500)
 AI_ENDPOINT_MAX_SLOTS = max(1, min(5, _env_int("AI_ENDPOINT_MAX_SLOTS", 5)))
 AI_ENDPOINT_FAILOVER = _env_bool("AI_ENDPOINT_FAILOVER", True)
 AI_ENDPOINT_ROUND_ROBIN = _env_bool("AI_ENDPOINT_ROUND_ROBIN", True)
+AI_ENDPOINT_SLOT_QUEUE = _env_bool("AI_ENDPOINT_SLOT_QUEUE", True)
+AI_ENDPOINT_SLOT_WORKERS = max(1, min(5, _env_int("AI_ENDPOINT_SLOT_WORKERS", AI_ENDPOINT_MAX_SLOTS)))
 # Plan B+: when Gemini final referee fails, GPT runs a 16-role family debate to
 # adjudicate the final score (acts as the referee, not a phase1 analyst).
 AI_ENABLE_FAMILY_DEBATE_REFEREE = _env_bool("AI_ENABLE_FAMILY_DEBATE_REFEREE", True)
@@ -1239,6 +1258,14 @@ def _endpoint_candidates_for_ai(ai_name: str) -> List[Dict[str, Any]]:
 
 def _ordered_endpoints_for_ai(ai_name: str) -> List[Dict[str, Any]]:
     eps = _endpoint_candidates_for_ai(ai_name)
+    slot_override = AI_ENDPOINT_SLOT_OVERRIDE.get()
+    if slot_override is not None:
+        pinned = [ep for ep in eps if int(ep.get("slot", 0)) == int(slot_override)]
+        if pinned:
+            return pinned
+        # If a model lacks this numbered slot, fall back to its normal ordered
+        # endpoints instead of failing the whole match. This keeps mixed GPT/Grok/
+        # Gemini deployments usable while still pinning configured slots.
     if not eps or not AI_ENDPOINT_ROUND_ROBIN:
         return eps
     key = str(ai_name or "").strip().lower()
@@ -1257,7 +1284,7 @@ def _chat_url(base_url: str) -> str:
 
 
 def debug_ai_config() -> None:
-    print(f"[AI CONFIG] mode={AI_RESEARCH_MODE} run_mode={AI_RUN_MODE} mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} chunk_concurrency={AI_CHUNK_CONCURRENCY} model_concurrency={AI_MODEL_CONCURRENCY} phase1_parallel={AI_PHASE1_PARALLEL} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE} endpoint_slots={AI_ENDPOINT_MAX_SLOTS} endpoint_failover={AI_ENDPOINT_FAILOVER} endpoint_round_robin={AI_ENDPOINT_ROUND_ROBIN}")
+    print(f"[AI CONFIG] mode={AI_RESEARCH_MODE} run_mode={AI_RUN_MODE} mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} chunk_concurrency={AI_CHUNK_CONCURRENCY} model_concurrency={AI_MODEL_CONCURRENCY} phase1_parallel={AI_PHASE1_PARALLEL} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE} endpoint_slots={AI_ENDPOINT_MAX_SLOTS} endpoint_failover={AI_ENDPOINT_FAILOVER} endpoint_round_robin={AI_ENDPOINT_ROUND_ROBIN} endpoint_slot_queue={AI_ENDPOINT_SLOT_QUEUE} endpoint_slot_workers={AI_ENDPOINT_SLOT_WORKERS}")
     for n in AI_NAMES:
         eps = _endpoint_candidates_for_ai(n)
         if not eps:
@@ -3176,7 +3203,35 @@ async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dic
         if not AI_MOCK_MODE and aiohttp is not None:
             connector = aiohttp.TCPConnector(limit=max(8, AI_MODEL_CONCURRENCY * 4), use_dns_cache=False, ttl_dns_cache=0, force_close=False)
             session = aiohttp.ClientSession(connector=connector)
-        if AI_CHUNK_CONCURRENCY <= 1 or len(chunks) <= 1:
+        if AI_ENDPOINT_SLOT_QUEUE and len(evidence_all) > 1:
+            worker_count = min(AI_ENDPOINT_SLOT_WORKERS, AI_ENDPOINT_MAX_SLOTS, len(evidence_all))
+            queue: asyncio.Queue[Tuple[int, Dict[str, Any]]] = asyncio.Queue()
+            for i, evidence in enumerate(evidence_all, 1):
+                queue.put_nowait((i, evidence))
+
+            async def _slot_worker(slot: int) -> None:
+                token = AI_ENDPOINT_SLOT_OVERRIDE.set(slot)
+                try:
+                    while True:
+                        try:
+                            item_id, evidence = queue.get_nowait()
+                        except asyncio.QueueEmpty:
+                            return
+                        match_id = evidence.get("match")
+                        print(f"  [Slot {slot}] start match={match_id} queue_item={item_id}")
+                        try:
+                            rows = await _run_one_chunk(session, run_id, item_id, [evidence])
+                            all_final.update(rows)
+                            print(f"  [Slot {slot}] done match={match_id}")
+                        except Exception as exc:
+                            print(f"  [Slot {slot}] failed match={match_id}: {exc}")
+                        finally:
+                            queue.task_done()
+                finally:
+                    AI_ENDPOINT_SLOT_OVERRIDE.reset(token)
+
+            await asyncio.gather(*[_slot_worker(slot) for slot in range(1, worker_count + 1)])
+        elif AI_CHUNK_CONCURRENCY <= 1 or len(chunks) <= 1:
             for i, chunk in enumerate(chunks, 1):
                 rows = await _run_one_chunk(session, run_id, i, chunk)
                 all_final.update(rows)
@@ -3212,6 +3267,8 @@ async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dic
         "native_web": AI_NATIVE_WEB,
         "effective_chunk_size": AI_CHUNK_SIZE,
         "effective_chunk_concurrency": AI_CHUNK_CONCURRENCY,
+        "endpoint_slot_queue": AI_ENDPOINT_SLOT_QUEUE,
+        "endpoint_slot_workers": AI_ENDPOINT_SLOT_WORKERS,
         "effective_model_concurrency": AI_MODEL_CONCURRENCY,
         "effective_phase1_parallel": AI_PHASE1_PARALLEL,
         "cross_exam": AI_ENABLE_CROSS_EXAM,
