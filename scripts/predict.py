@@ -85,21 +85,21 @@ DEFAULT_MODELS = {
 # GPT/GROK 同理。模型名留空的 slot 会被跳过，避免误用未配置模型。
 AI_ENDPOINT_MODEL_SLOTS = {
     "gpt": {
-        1: DEFAULT_MODELS["gpt"],
+        1: "gpt-5.5",
         2: "gpt-5.5",
         3: "gpt-5.5",
         4: "gpt-5.5",
         5: "熊猫-特供-X-10-gpt-5.5",
     },
     "grok": {
-        1: DEFAULT_MODELS["grok"],
+        1: "grok-4.3-c",
         2: "grok-4.3-c",
         3: "grok-4.3-c",
         4: "[aws] grok-4.3",
         5: "[aws] grok-4.3",
     },
     "gemini": {
-        1: DEFAULT_MODELS["gemini"],
+        1: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
         2: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 2号模型名
         3: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 3号模型名
         4: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 4号模型名
@@ -109,6 +109,21 @@ AI_ENDPOINT_MODEL_SLOTS = {
 
 AI_ENDPOINT_RR_CURSOR: Dict[str, int] = {}
 AI_ENDPOINT_SLOT_OVERRIDE: contextvars.ContextVar[Optional[int]] = contextvars.ContextVar("AI_ENDPOINT_SLOT_OVERRIDE", default=None)
+
+
+def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
+    """Resolve hard-coded endpoint model slots safely.
+
+    Slot values are model strings, e.g. "gpt-5.5". They are NOT keys into
+    DEFAULT_MODELS. This guard also tolerates accidental DEFAULT_MODELS-style
+    aliases ("gpt"/"grok"/"gemini") without import-time KeyError.
+    """
+    name = str(ai_name or "").strip().lower()
+    value = AI_ENDPOINT_MODEL_SLOTS.get(name, {}).get(slot, "")
+    model = str(value or "").strip()
+    if not model:
+        return ""
+    return DEFAULT_MODELS.get(model, model)
 
 
 def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:

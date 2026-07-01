@@ -55,21 +55,56 @@ jobs:
 
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
+          GPT_API_KEY_2: ${{ secrets.GPT_API_KEY_2 }}
+          GPT_API_URL_2: ${{ secrets.GPT_API_URL_2 }}
+          GPT_API_KEY_3: ${{ secrets.GPT_API_KEY_3 }}
+          GPT_API_URL_3: ${{ secrets.GPT_API_URL_3 }}
+          GPT_API_KEY_4: ${{ secrets.GPT_API_KEY_4 }}
+          GPT_API_URL_4: ${{ secrets.GPT_API_URL_4 }}
+          GPT_API_KEY_5: ${{ secrets.GPT_API_KEY_5 }}
+          GPT_API_URL_5: ${{ secrets.GPT_API_URL_5 }}
 
           GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
           GROK_API_URL: ${{ secrets.GROK_API_URL }}
+          GROK_API_KEY_2: ${{ secrets.GROK_API_KEY_2 }}
+          GROK_API_URL_2: ${{ secrets.GROK_API_URL_2 }}
+          GROK_API_KEY_3: ${{ secrets.GROK_API_KEY_3 }}
+          GROK_API_URL_3: ${{ secrets.GROK_API_URL_3 }}
+          GROK_API_KEY_4: ${{ secrets.GROK_API_KEY_4 }}
+          GROK_API_URL_4: ${{ secrets.GROK_API_URL_4 }}
+          GROK_API_KEY_5: ${{ secrets.GROK_API_KEY_5 }}
+          GROK_API_URL_5: ${{ secrets.GROK_API_URL_5 }}
 
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_URL_2: ${{ secrets.GEMINI_API_URL_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          GEMINI_API_URL_3: ${{ secrets.GEMINI_API_URL_3 }}
+          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
+          GEMINI_API_URL_4: ${{ secrets.GEMINI_API_URL_4 }}
+          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
+          GEMINI_API_URL_5: ${{ secrets.GEMINI_API_URL_5 }}
 
           CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
           CLAUDE_API_URL: ${{ secrets.CLAUDE_API_URL }}
 
           AI_RUN_MODE: "fast_batch"
-          AI_CHUNK_SIZE: "12"
-          AI_CHUNK_CONCURRENCY: "3"
-          AI_MODEL_CONCURRENCY: "4"
+          # Fastest stable mode: one match per chunk, 5 chunks in flight.
+          # Endpoint round-robin then spreads concurrent GPT/GROK/GEMINI calls
+          # over *_API_URL/_KEY + *_API_URL_2..5/_KEY_2..5.
+          AI_CHUNK_SIZE: "1"
+          AI_CHUNK_CONCURRENCY: "5"
+          AI_MODEL_CONCURRENCY: "5"
           AI_PHASE1_PARALLEL: "true"
+          AI_ENDPOINT_MAX_SLOTS: "5"
+          AI_ENDPOINT_ROUND_ROBIN: "true"
+          AI_ENDPOINT_FAILOVER: "true"
+          # Keep the expensive fallback judges off for speed; failed/partial rows
+          # still use normal endpoint failover and final retry.
+          AI_ENABLE_CROSS_EXAM: "true"
+          AI_ENABLE_CONSISTENCY_JUDGE: "false"
+          AI_ENABLE_FAMILY_DEBATE_REFEREE: "false"
 
           VMAX_RUN_DAYS: "today"
           AI_RUN_DAYS: "today"
