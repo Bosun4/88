@@ -42,6 +42,12 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 try:
+    from confidence_calibration import get_calibrator, tier_guard as _conf_tier_guard
+except Exception:  # pragma: no cover
+    get_calibrator = None
+    _conf_tier_guard = None
+
+try:
     import aiohttp
 except Exception:  # pragma: no cover
     aiohttp = None
@@ -3455,6 +3461,18 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
     pct = _direction_pct_display(ai_r.get("direction_probs", {}))
     rec = ai_r.get("recommendation", {}) if isinstance(ai_r.get("recommendation"), dict) else {}
     tier = str(rec.get("tier", "D")).upper()
+    # P0-2: 信心经验校准层(军规: 只降推荐等级, 不改方向不改比分)
+    _raw_conf = int(_clip(_f(rec.get("bet_confidence", max(pct.values()) if pct else 0), 0), 0, 100))
+    _calibrated_conf = _raw_conf
+    _calib_tier_reason = ""
+    if get_calibrator is not None:
+        try:
+            _calibrated_conf = get_calibrator().calibrate(_raw_conf)
+            if _conf_tier_guard is not None:
+                _guarded, _calib_tier_reason = _conf_tier_guard(tier, _calibrated_conf)
+                tier = _guarded
+        except Exception:  # pragma: no cover
+            _calibrated_conf = _raw_conf
     is_ai_recommended = bool(rec.get("is_recommended", False)) and _min_tier_ok(tier)
     top_candidates = []
     for cand in ai_r.get("top3", [])[:8]:
@@ -3507,6 +3525,9 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "away_win_pct": pct.get("away", 0.0),
         "confidence": int(_clip(_f(rec.get("bet_confidence", max(pct.values()) if pct else 0), 0), 0, 100)),
         "confidence_meaning": "AI recommendation.bet_confidence，非历史校准命中率；本地不改概率。",
+        "calibrated_confidence": _calibrated_conf,
+        "calibrated_confidence_meaning": "P0-2经验校准值(按信心band历史命中率+贝叶斯收缩)；tier据此只降不升。",
+        "calibration_tier_reason": _calib_tier_reason,
         "risk_level": rec.get("risk_level", "medium"),
         "goal_band": ai_r.get("goal_band", _score_goal_band(score)),
         "btts": ai_r.get("btts", _score_btts(score)),
