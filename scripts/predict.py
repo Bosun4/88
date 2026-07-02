@@ -685,6 +685,97 @@ def get_market_odds_for_score(match_obj: Dict[str, Any], score: str) -> float:
 
 
 # ============================================================
+# P0-1 OU 独立判定头 (2026-07-02 十日审计升级)
+# 背景: over_under_2_5 曾 = f(predicted_score) 机械耦合, 比分错则OU必错。
+# 本头用 a0-a7 总进球赔率反推市场进球概率曲线, 独立判定大小球;
+# 与比分冲突时只打 ou_score_conflict 标签 —— 不改方向、不改比分 (军规)。
+# ============================================================
+
+def derive_market_goal_curve(match_obj: Dict[str, Any]) -> Optional[Dict[int, float]]:
+    """a0-a7 总进球赔率 -> 去水归一的市场进球概率曲线 {0: p0, ..., 7: p7+}。
+
+    纯市场事实反推, 不做足球判断。赔率无效(≤1.01)的档位按0概率处理;
+    有效档位不足4个视为数据不可用, 返回 None。
+    """
+    if not isinstance(match_obj, dict):
+        return None
+    raw: Dict[int, float] = {}
+    valid = 0
+    for g in range(8):
+        odd = _f(match_obj.get(f"a{g}"), 0.0)
+        if odd > 1.01:
+            raw[g] = 1.0 / odd
+            valid += 1
+        else:
+            raw[g] = 0.0
+    if valid < 4:
+        return None
+    total = sum(raw.values())
+    if total <= 0:
+        return None
+    return {g: p / total for g, p in raw.items()}
+
+
+def derive_ou_head(
+    match_obj: Dict[str, Any],
+    predicted_score: str,
+    goal_range: Optional[Tuple[int, int]] = None,
+) -> Dict[str, Any]:
+    """独立大小球判定。返回 {over_under_2_5, ou_market_prob_over, ou_score_conflict, ou_source}。
+
+    判定规则:
+      1. 市场曲线可用: P(总进球>=3) 明显偏离 0.5 (±0.05 外) → 直接按市场;
+         临界区 (0.45~0.55) 用 AI goal_range 中点做 tiebreak, 无 goal_range 则按比分总球。
+      2. 市场曲线不可用: 回退旧逻辑 (比分总球 >=3 为大) —— 向后兼容。
+      3. 弃权比分: OU 输出 None。
+    冲突标记: 独立判定与比分隐含 OU 不一致时 ou_score_conflict=True (仅标签, 不改比分)。
+    """
+    h, a = _parse_score(predicted_score)
+    if h is None or a is None:
+        return {
+            "over_under_2_5": None,
+            "ou_market_prob_over": None,
+            "ou_score_conflict": False,
+            "ou_source": "abstain",
+        }
+    score_total = h + a
+    score_ou = "大" if score_total >= 3 else "小"
+
+    curve = derive_market_goal_curve(match_obj)
+    if curve is None:
+        return {
+            "over_under_2_5": score_ou,
+            "ou_market_prob_over": None,
+            "ou_score_conflict": False,
+            "ou_source": "score_fallback",
+        }
+
+    p_over = round(sum(p for g, p in curve.items() if g >= 3), 4)
+    # 阈值0.5支点(38场回放最优); 仅窄带[0.48,0.52]真五五开时才用AI倾向tiebreak
+    if p_over > 0.52:
+        ou = "大"
+        source = "market"
+    elif p_over < 0.48:
+        ou = "小"
+        source = "market"
+    else:
+        # 临界区: 用 AI goal_range 倾向 tiebreak, 缺失则退回比分口径
+        if goal_range and len(goal_range) == 2:
+            mid = (_f(goal_range[0]) + _f(goal_range[1])) / 2.0
+            ou = "大" if mid >= 2.5 else "小"
+            source = "goal_range_tiebreak"
+        else:
+            ou = score_ou
+            source = "score_tiebreak"
+    return {
+        "over_under_2_5": ou,
+        "ou_market_prob_over": p_over,
+        "ou_score_conflict": ou != score_ou,
+        "ou_source": source,
+    }
+
+
+# ============================================================
 # Evidence Compiler：只产事实，不做足球判断
 # ============================================================
 
@@ -3374,6 +3465,8 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
     gmin, gmax, scenario = _goal_range_from_score(score)
     h, a = _parse_score(score)
     total_goals = (h or 0) + (a or 0) if h is not None and a is not None else 0
+    # P0-1: 大小球独立判定头(用a0-a7市场进球曲线), 不再被主比分总球数机械绑架
+    ou_head = derive_ou_head(match_obj, score, goal_range=(gmin, gmax))
     final_odds = get_market_odds_for_score(match_obj, score)
     market_implied = round(100.0 / final_odds, 3) if final_odds > 1.05 else None
     warnings = [w for w in list(ai_r.get("validation_warnings", [])) if "missing_published_at" not in str(w)]
@@ -3419,7 +3512,10 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "btts": ai_r.get("btts", _score_btts(score)),
         "btts_ai": ai_r.get("btts", _score_btts(score)),
         "both_score": "是" if _score_btts(score) == "yes" else "否",
-        "over_under_2_5": "大" if total_goals >= 3 else "小",
+        "over_under_2_5": ou_head["over_under_2_5"] if ou_head["over_under_2_5"] is not None else ("大" if total_goals >= 3 else "小"),
+        "ou_market_prob_over": ou_head["ou_market_prob_over"],
+        "ou_score_conflict": ou_head["ou_score_conflict"],
+        "ou_source": ou_head["ou_source"],
         "expected_total_goals": total_goals,
         "goal_range": (gmin, gmax),
         "scenario": scenario,

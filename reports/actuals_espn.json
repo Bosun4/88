@@ -1,0 +1,452 @@
+[
+ {
+  "date": "20260622",
+  "league": "fifa.world",
+  "home": "Argentina",
+  "away": "Austria",
+  "hs": "2",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260622",
+  "league": "fifa.world",
+  "home": "France",
+  "away": "Iraq",
+  "hs": "3",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260622",
+  "league": "fifa.world",
+  "home": "Norway",
+  "away": "Senegal",
+  "hs": "3",
+  "as": "2",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260622",
+  "league": "fifa.world",
+  "home": "Jordan",
+  "away": "Algeria",
+  "hs": "1",
+  "as": "2",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260623",
+  "league": "fifa.world",
+  "home": "Portugal",
+  "away": "Uzbekistan",
+  "hs": "5",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260623",
+  "league": "fifa.world",
+  "home": "England",
+  "away": "Ghana",
+  "hs": "0",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260623",
+  "league": "fifa.world",
+  "home": "Panama",
+  "away": "Croatia",
+  "hs": "0",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260623",
+  "league": "fifa.world",
+  "home": "Colombia",
+  "away": "Congo DR",
+  "hs": "1",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260624",
+  "league": "fifa.world",
+  "home": "Bosnia-Herzegovina",
+  "away": "Qatar",
+  "hs": "3",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260624",
+  "league": "fifa.world",
+  "home": "Switzerland",
+  "away": "Canada",
+  "hs": "2",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260624",
+  "league": "fifa.world",
+  "home": "Morocco",
+  "away": "Haiti",
+  "hs": "4",
+  "as": "2",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260624",
+  "league": "fifa.world",
+  "home": "Scotland",
+  "away": "Brazil",
+  "hs": "0",
+  "as": "3",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260624",
+  "league": "fifa.world",
+  "home": "Czechia",
+  "away": "Mexico",
+  "hs": "0",
+  "as": "3",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260624",
+  "league": "fifa.world",
+  "home": "South Africa",
+  "away": "South Korea",
+  "hs": "1",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260625",
+  "league": "fifa.world",
+  "home": "Curaçao",
+  "away": "Ivory Coast",
+  "hs": "0",
+  "as": "2",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260625",
+  "league": "fifa.world",
+  "home": "Ecuador",
+  "away": "Germany",
+  "hs": "2",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260625",
+  "league": "fifa.world",
+  "home": "Japan",
+  "away": "Sweden",
+  "hs": "1",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260625",
+  "league": "fifa.world",
+  "home": "Tunisia",
+  "away": "Netherlands",
+  "hs": "1",
+  "as": "3",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260625",
+  "league": "fifa.world",
+  "home": "Paraguay",
+  "away": "Australia",
+  "hs": "0",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260625",
+  "league": "fifa.world",
+  "home": "Türkiye",
+  "away": "United States",
+  "hs": "3",
+  "as": "2",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260626",
+  "league": "fifa.world",
+  "home": "Norway",
+  "away": "France",
+  "hs": "1",
+  "as": "4",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260626",
+  "league": "fifa.world",
+  "home": "Senegal",
+  "away": "Iraq",
+  "hs": "5",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260626",
+  "league": "fifa.world",
+  "home": "Cape Verde",
+  "away": "Saudi Arabia",
+  "hs": "0",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260626",
+  "league": "fifa.world",
+  "home": "Uruguay",
+  "away": "Spain",
+  "hs": "0",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260626",
+  "league": "fifa.world",
+  "home": "Egypt",
+  "away": "Iran",
+  "hs": "1",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260626",
+  "league": "fifa.world",
+  "home": "New Zealand",
+  "away": "Belgium",
+  "hs": "1",
+  "as": "5",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260627",
+  "league": "fifa.world",
+  "home": "Croatia",
+  "away": "Ghana",
+  "hs": "2",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260627",
+  "league": "fifa.world",
+  "home": "Panama",
+  "away": "England",
+  "hs": "0",
+  "as": "2",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260627",
+  "league": "fifa.world",
+  "home": "Colombia",
+  "away": "Portugal",
+  "hs": "0",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260627",
+  "league": "fifa.world",
+  "home": "Congo DR",
+  "away": "Uzbekistan",
+  "hs": "3",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260627",
+  "league": "fifa.world",
+  "home": "Algeria",
+  "away": "Austria",
+  "hs": "3",
+  "as": "3",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260627",
+  "league": "fifa.world",
+  "home": "Jordan",
+  "away": "Argentina",
+  "hs": "1",
+  "as": "3",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260628",
+  "league": "fifa.world",
+  "home": "South Africa",
+  "away": "Canada",
+  "hs": "0",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260629",
+  "league": "fifa.world",
+  "home": "Brazil",
+  "away": "Japan",
+  "hs": "2",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260629",
+  "league": "fifa.world",
+  "home": "Germany",
+  "away": "Paraguay",
+  "hs": "1",
+  "as": "1",
+  "state": "post",
+  "detail": "FT-Pens"
+ },
+ {
+  "date": "20260629",
+  "league": "fifa.world",
+  "home": "Netherlands",
+  "away": "Morocco",
+  "hs": "1",
+  "as": "1",
+  "state": "post",
+  "detail": "FT-Pens"
+ },
+ {
+  "date": "20260630",
+  "league": "fifa.world",
+  "home": "Ivory Coast",
+  "away": "Norway",
+  "hs": "1",
+  "as": "2",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260630",
+  "league": "fifa.world",
+  "home": "France",
+  "away": "Sweden",
+  "hs": "3",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260630",
+  "league": "fifa.world",
+  "home": "Mexico",
+  "away": "Ecuador",
+  "hs": "2",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260701",
+  "league": "fifa.world",
+  "home": "England",
+  "away": "Congo DR",
+  "hs": "2",
+  "as": "1",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260701",
+  "league": "fifa.world",
+  "home": "Belgium",
+  "away": "Senegal",
+  "hs": "3",
+  "as": "2",
+  "state": "post",
+  "detail": "AET"
+ },
+ {
+  "date": "20260701",
+  "league": "fifa.world",
+  "home": "United States",
+  "away": "Bosnia-Herzegovina",
+  "hs": "2",
+  "as": "0",
+  "state": "post",
+  "detail": "FT"
+ },
+ {
+  "date": "20260702",
+  "league": "fifa.world",
+  "home": "Spain",
+  "away": "Austria",
+  "hs": "0",
+  "as": "0",
+  "state": "pre",
+  "detail": "Scheduled"
+ },
+ {
+  "date": "20260702",
+  "league": "fifa.world",
+  "home": "Portugal",
+  "away": "Croatia",
+  "hs": "0",
+  "as": "0",
+  "state": "pre",
+  "detail": "Scheduled"
+ },
+ {
+  "date": "20260702",
+  "league": "fifa.world",
+  "home": "Switzerland",
+  "away": "Algeria",
+  "hs": "0",
+  "as": "0",
+  "state": "pre",
+  "detail": "Scheduled"
+ }
+]
