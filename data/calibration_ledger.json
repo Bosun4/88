@@ -1,0 +1,344 @@
+[
+ {
+  "date": "2026-06-23",
+  "match": "葡萄牙vs乌兹别克",
+  "league": "世界杯",
+  "conf": 64,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-23",
+  "match": "英格兰vs加纳",
+  "league": "世界杯",
+  "conf": 61,
+  "tier": "C",
+  "dir_hit": false,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-23",
+  "match": "巴拿马vs克罗地亚",
+  "league": "世界杯",
+  "conf": 59,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-23",
+  "match": "哥伦比亚vs刚果金",
+  "league": "世界杯",
+  "conf": 56,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-24",
+  "match": "瑞士vs加拿大",
+  "league": "世界杯",
+  "conf": 34,
+  "tier": "D",
+  "dir_hit": false,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-24",
+  "match": "波黑vs卡塔尔",
+  "league": "世界杯",
+  "conf": 58,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-24",
+  "match": "苏格兰vs巴西",
+  "league": "世界杯",
+  "conf": 63,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-24",
+  "match": "摩洛哥vs海地",
+  "league": "世界杯",
+  "conf": 62,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-24",
+  "match": "南非vs韩国",
+  "league": "世界杯",
+  "conf": 80,
+  "tier": "A",
+  "dir_hit": false,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-24",
+  "match": "捷克vs墨西哥",
+  "league": "世界杯",
+  "conf": 65,
+  "tier": "C",
+  "dir_hit": false,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-25",
+  "match": "厄瓜多尔vs德国",
+  "league": "世界杯",
+  "conf": 75,
+  "tier": "A",
+  "dir_hit": false,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-25",
+  "match": "库拉索vs科特迪瓦",
+  "league": "世界杯",
+  "conf": 65,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-25",
+  "match": "突尼斯vs荷兰",
+  "league": "世界杯",
+  "conf": 90,
+  "tier": "S",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-25",
+  "match": "日本vs瑞典",
+  "league": "世界杯",
+  "conf": 40,
+  "tier": "D",
+  "dir_hit": false,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-25",
+  "match": "巴拉圭vs澳大利亚",
+  "league": "世界杯",
+  "conf": 40,
+  "tier": "D",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-25",
+  "match": "土耳其vs美国",
+  "league": "世界杯",
+  "conf": 40,
+  "tier": "C",
+  "dir_hit": false,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-26",
+  "match": "挪威vs法国",
+  "league": "世界杯",
+  "conf": 65,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-26",
+  "match": "塞内加尔vs伊拉克",
+  "league": "世界杯",
+  "conf": 85,
+  "tier": "A",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-26",
+  "match": "佛得角vs沙特",
+  "league": "世界杯",
+  "conf": 35,
+  "tier": "D",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-26",
+  "match": "乌拉圭vs西班牙",
+  "league": "世界杯",
+  "conf": 75,
+  "tier": "A",
+  "dir_hit": true,
+  "score_hit": true
+ },
+ {
+  "date": "2026-06-26",
+  "match": "埃及vs伊朗",
+  "league": "世界杯",
+  "conf": 38,
+  "tier": "D",
+  "dir_hit": true,
+  "score_hit": true
+ },
+ {
+  "date": "2026-06-26",
+  "match": "新西兰vs比利时",
+  "league": "世界杯",
+  "conf": 65,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-27",
+  "match": "克罗地亚vs加纳",
+  "league": "世界杯",
+  "conf": 38,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-27",
+  "match": "巴拿马vs英格兰",
+  "league": "世界杯",
+  "conf": 60,
+  "tier": "B",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-27",
+  "match": "哥伦比亚vs葡萄牙",
+  "league": "世界杯",
+  "conf": 40,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-27",
+  "match": "刚果金vs乌兹别克",
+  "league": "世界杯",
+  "conf": 85,
+  "tier": "A",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-27",
+  "match": "阿尔及利vs奥地利",
+  "league": "世界杯",
+  "conf": 43,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-27",
+  "match": "约旦vs阿根廷",
+  "league": "世界杯",
+  "conf": 60,
+  "tier": "B",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-28",
+  "match": "南非vs加拿大",
+  "league": "世界杯",
+  "conf": 38,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": true
+ },
+ {
+  "date": "2026-06-29",
+  "match": "巴西vs日本",
+  "league": "世界杯",
+  "conf": 75,
+  "tier": "A",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-29",
+  "match": "德国vs巴拉圭",
+  "league": "世界杯",
+  "conf": 70,
+  "tier": "A",
+  "dir_hit": false,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-29",
+  "match": "荷兰vs摩洛哥",
+  "league": "世界杯",
+  "conf": 38,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": true
+ },
+ {
+  "date": "2026-06-30",
+  "match": "科特迪瓦vs挪威",
+  "league": "世界杯",
+  "conf": 40,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": true
+ },
+ {
+  "date": "2026-06-30",
+  "match": "法国vs瑞典",
+  "league": "世界杯",
+  "conf": 60,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-06-30",
+  "match": "墨西哥vs厄瓜多尔",
+  "league": "世界杯",
+  "conf": 30,
+  "tier": "D",
+  "dir_hit": false,
+  "score_hit": false
+ },
+ {
+  "date": "2026-07-01",
+  "match": "英格兰vs刚果金",
+  "league": "世界杯",
+  "conf": 75,
+  "tier": "A",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-07-01",
+  "match": "比利时vs塞内加尔",
+  "league": "世界杯",
+  "conf": 60,
+  "tier": "D",
+  "dir_hit": true,
+  "score_hit": false
+ },
+ {
+  "date": "2026-07-01",
+  "match": "美国vs波黑",
+  "league": "世界杯",
+  "conf": 55,
+  "tier": "C",
+  "dir_hit": true,
+  "score_hit": true
+ }
+]
