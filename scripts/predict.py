@@ -782,6 +782,70 @@ def derive_ou_head(
 
 
 # ============================================================
+# P0-3 尾部比分释放 (2026-07-02 十日审计升级)
+# 背景: 审计38场实际≥4球占60.5%, 预测≥4球=0场; 强队火力被截断在3球。
+# 军规内实现: 不改AI主比分/方向 —— 只输出市场尾部信号标签、扩候选簇、
+# 上修 expected_total_goals/goal_range 上界。
+# ============================================================
+
+_TAIL_SCORE_KEYS_HOME = [("4-0", "w40"), ("4-1", "w41"), ("5-0", "w50"), ("5-1", "w51"), ("4-2", "w42"), ("5-2", "w52")]
+_TAIL_SCORE_KEYS_AWAY = [("0-4", "l04"), ("1-4", "l14"), ("0-5", "l05"), ("1-5", "l15"), ("2-4", "l24"), ("2-5", "l25")]
+# 尾部赔率"异常低"阈值: 十日审计翻车场(葡萄牙5-0赔15/塞内加尔5-0类似) vs 均势场(5-0赔100+)
+_TAIL_ODDS_MAX = 26.0
+_TAIL_HANDICAP_MIN = 1.5
+
+
+def derive_tail_risk(match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    """深盘 + 尾部比分赔率被压低 → 大比分尾部风险信号(纯市场事实, 不做足球判断)。
+
+    触发条件(全部满足):
+      1. 让球盘绝对值 >= 1.5 (深盘强弱悬殊)
+      2. 某一方尾部比分(4+球)中至少2个赔率 <= 26.0 (市场压尾=真实信号)
+    方向不靠让球盘符号约定(数据源里主让=负, 且现有anchor有歧义), 纯由"哪边尾部被压低"决定。
+    输出: tail_risk / tail_side / tail_scores(按赔率升序, 最多3个) / tail_p50_total(市场曲线中位总球)
+    """
+    line = _parse_handicap_value(match_obj.get("give_ball", match_obj.get("handicap", match_obj.get("rq", ""))))
+    out = {"tail_risk": False, "tail_side": "", "tail_scores": [], "tail_p50_total": None}
+    if line is None or abs(line) < _TAIL_HANDICAP_MIN:
+        return out
+    def _compressed(keys):
+        out2 = []
+        for sc, key in keys:
+            odd = _f(match_obj.get(key), 0.0)
+            if 1.01 < odd <= _TAIL_ODDS_MAX:
+                out2.append((odd, sc))
+        out2.sort()
+        return out2
+    home_comp = _compressed(_TAIL_SCORE_KEYS_HOME)
+    away_comp = _compressed(_TAIL_SCORE_KEYS_AWAY)
+    # 哪边尾部被压得更狠(数量优先, 同数量比最低赔)选哪边
+    def _score_side(c):
+        return (len(c), -c[0][0]) if c else (0, 0)
+    if _score_side(home_comp) >= _score_side(away_comp):
+        side, compressed = "home", home_comp
+    else:
+        side, compressed = "away", away_comp
+    if len(compressed) < 2:
+        return out
+    curve = derive_market_goal_curve(match_obj)
+    p50 = None
+    if curve:
+        acc = 0.0
+        for g in range(8):
+            acc += curve.get(g, 0.0)
+            if acc >= 0.5:
+                p50 = g
+                break
+    out.update({
+        "tail_risk": True,
+        "tail_side": side,
+        "tail_scores": [sc for _, sc in compressed[:3]],
+        "tail_p50_total": p50,
+    })
+    return out
+
+
+# ============================================================
 # Evidence Compiler：只产事实，不做足球判断
 # ============================================================
 
@@ -3485,6 +3549,22 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
     total_goals = (h or 0) + (a or 0) if h is not None and a is not None else 0
     # P0-1: 大小球独立判定头(用a0-a7市场进球曲线), 不再被主比分总球数机械绑架
     ou_head = derive_ou_head(match_obj, score, goal_range=(gmin, gmax))
+    # P0-3: 尾部比分释放 —— 深盘+市场压尾时扩候选簇+上修总球上界(不改AI主比分/方向)
+    tail = derive_tail_risk(match_obj)
+    if tail["tail_risk"]:
+        _cand_scores = {c[0] for c in top_candidates}
+        for _tsc in tail["tail_scores"]:
+            if _tsc not in _cand_scores:
+                _todd = get_market_odds_for_score(match_obj, _tsc)
+                top_candidates.append((_tsc, round(1.0 / _todd, 3) if _todd > 1.05 else 0.03))
+                _cand_scores.add(_tsc)
+                break  # 只注入市场最低赔的1个尾部比分, 避免稀释主簇
+        # 总球预期/区间上界跟随市场曲线P50(只放不收; 主比分本身不动)
+        _p50 = tail.get("tail_p50_total")
+        if isinstance(_p50, int) and _p50 > total_goals:
+            total_goals = _p50
+        if isinstance(_p50, int) and _p50 + 1 > gmax:
+            gmax = min(_p50 + 1, 8)
     final_odds = get_market_odds_for_score(match_obj, score)
     market_implied = round(100.0 / final_odds, 3) if final_odds > 1.05 else None
     warnings = [w for w in list(ai_r.get("validation_warnings", [])) if "missing_published_at" not in str(w)]
@@ -3537,6 +3617,10 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "ou_market_prob_over": ou_head["ou_market_prob_over"],
         "ou_score_conflict": ou_head["ou_score_conflict"],
         "ou_source": ou_head["ou_source"],
+        "tail_risk": tail["tail_risk"],
+        "tail_side": tail["tail_side"],
+        "tail_scores": tail["tail_scores"],
+        "tail_p50_total": tail["tail_p50_total"],
         "expected_total_goals": total_goals,
         "goal_range": (gmin, gmax),
         "scenario": scenario,
