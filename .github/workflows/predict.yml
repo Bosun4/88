@@ -115,6 +115,10 @@ jobs:
           AI_CLAUDE_CONNECT_TIMEOUT: "120"
           AI_CLAUDE_READ_TIMEOUT: "7200"
           AI_HTTP_TOTAL_TIMEOUT: "0"
+          # 2026-07-03: Gemini final挂死1h40m事故。单请求读超时收紧到20min
+          # (正常final 1-2min), 配合 AI_CHUNK_WATCHDOG_SECONDS 单场40min熔断。
+          AI_FINAL_READ_TIMEOUT: "1200"
+          AI_CHUNK_WATCHDOG_SECONDS: "2400"
           # 2026-07-02: GPT输出被端点默认token上限截断→parse_failed→每场多122s fallback。
           # 显式给足输出空间; 配合 predict.py 的 _trim_to_parseable_prefix 双保险。
           AI_MAX_OUTPUT_TOKENS: "16000"
