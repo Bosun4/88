@@ -350,6 +350,9 @@ AI_TEMPERATURE_CRITIC = _env_float("AI_TEMPERATURE_CRITIC", 0.10)
 AI_TEMPERATURE_FINAL = _env_float("AI_TEMPERATURE_FINAL", 0.08)
 AI_USE_RESPONSE_FORMAT = _env_bool("AI_USE_RESPONSE_FORMAT", True)
 AI_SAVE_RAW_RESPONSE = _env_bool("AI_SAVE_RAW_RESPONSE", False)
+# 2026-07-02: GPT输出被端点token上限截断→parse_failed→fallback裁判(慢122s/场)。
+# >0 时在请求体注入 max_tokens; 0=不注入沿用端点默认。
+AI_MAX_OUTPUT_TOKENS = max(0, _env_int("AI_MAX_OUTPUT_TOKENS", 0))
 AI_PARSE_DEBUG = _env_bool("AI_PARSE_DEBUG", False)
 
 AI_PHASE_SNAPSHOT_ENABLED = _env_bool("AI_PHASE_SNAPSHOT_ENABLED", True)
@@ -1555,6 +1558,8 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
         }
         if AI_USE_RESPONSE_FORMAT:
             payload["response_format"] = {"type": "json_object"}
+        if AI_MAX_OUTPUT_TOKENS > 0:
+            payload["max_tokens"] = AI_MAX_OUTPUT_TOKENS
         status = {
             "ok": False,
             "ai_name": ai_name,
@@ -1838,6 +1843,38 @@ def _repair_truncated_json(text: str) -> str:
     return text
 
 
+def _trim_to_parseable_prefix(text: str) -> str:
+    """Last-resort repair for hard-truncated JSON (e.g. provider max-token cut).
+
+    Walks backwards to the nearest structural safe point (after a comma, or a
+    closing bracket/brace, or an opening bracket) dropping the trailing broken
+    fragment (half-written key, dangling colon, mid-escape string), then closes
+    all open brackets via _repair_truncated_json. Keeps every complete item
+    that arrived before the cut. 2026-07-02: GPT critic/phase1 responses were
+    valid-JSON prefixes cut mid-key, which the string/bracket closer alone
+    could not fix.
+    """
+    s = (text or "").rstrip()
+    if not s:
+        return ""
+    # Try progressively shorter prefixes ending at structural boundaries.
+    for cut in range(len(s), max(0, len(s) - 20000), -1):
+        ch = s[cut - 1]
+        if ch not in ",{}[]":
+            continue
+        prefix = s[:cut].rstrip()
+        # Drop a trailing comma so closing brackets stay valid.
+        if prefix.endswith(","):
+            prefix = prefix[:-1]
+        candidate = _repair_truncated_json(prefix)
+        try:
+            json.loads(candidate)
+            return candidate
+        except Exception:
+            continue
+    return ""
+
+
 def _json_loads_best_effort_object(text: str) -> Any:
     clean = _preclean_text(text)
     if not clean:
@@ -1867,6 +1904,14 @@ def _json_loads_best_effort_object(text: str) -> Any:
                     return ast.literal_eval(cand)
                 except Exception:
                     continue
+    trimmed = _trim_to_parseable_prefix(clean)
+    if trimmed:
+        try:
+            obj = json.loads(trimmed)
+            if isinstance(obj, (dict, list)) and obj:
+                return obj
+        except Exception:
+            pass
     return {}
 
 
