@@ -743,6 +743,7 @@ def derive_ou_head(
             "ou_market_prob_over": None,
             "ou_score_conflict": False,
             "ou_source": "abstain",
+            "ou_display": "",
         }
     score_total = h + a
     score_ou = "大" if score_total >= 3 else "小"
@@ -754,6 +755,7 @@ def derive_ou_head(
             "ou_market_prob_over": None,
             "ou_score_conflict": False,
             "ou_source": "score_fallback",
+            "ou_display": f"{score_ou}球(依比分口径)",
         }
 
     p_over = round(sum(p for g, p in curve.items() if g >= 3), 4)
@@ -773,11 +775,19 @@ def derive_ou_head(
         else:
             ou = score_ou
             source = "score_tiebreak"
+    conflict = ou != score_ou
+    if conflict:
+        # 2026-07-02: 冲突时给前端可读协调文案, 避免"比分2-0却判大"裸矛盾误导。
+        # 军规: 只解释分歧, 不改比分/方向。
+        display = f"市场倾向{ou}球(与比分{predicted_score}存在分歧, 以AI比分为主)"
+    else:
+        display = f"{ou}球"
     return {
         "over_under_2_5": ou,
         "ou_market_prob_over": p_over,
-        "ou_score_conflict": ou != score_ou,
+        "ou_score_conflict": conflict,
         "ou_source": source,
+        "ou_display": display,
     }
 
 
@@ -3498,6 +3508,33 @@ def _legacy_model_score(ai_r: Dict[str, Any], model_name: str, final_score: str)
     return final_score
 
 
+def _compute_model_consensus(ai_r: Dict[str, Any], final_direction: str) -> Tuple[Optional[int], int]:
+    """按 phase1 各模型方向与终审方向的一致数计算共识 (2026-07-02 内容修).
+
+    背景: model_consensus 字段此前硬编码 None, 前端"X/N模型一致"展示失效。
+    规则: 只统计实际在场(有phase1输出)的模型 —— GPT http_524 缺席时按在场
+    模型算, 不虚增分母。方向优先取模型自报 final_direction, 缺失时由
+    predicted_score 推导。无在场模型返回 (None, 0)。
+    """
+    phase1 = ai_r.get("phase1_model_outputs", {}) if isinstance(ai_r.get("phase1_model_outputs"), dict) else {}
+    agree = 0
+    present = 0
+    for name, row in phase1.items():
+        if not isinstance(row, dict) or not row:
+            continue
+        mdir = str(row.get("final_direction", "")).strip().lower()
+        if mdir not in ("home", "draw", "away"):
+            mdir = _score_direction(_score_from_candidate(row.get("predicted_score", ""))) or ""
+        if not mdir:
+            continue
+        present += 1
+        if mdir == final_direction:
+            agree += 1
+    if present == 0:
+        return None, 0
+    return agree, present
+
+
 def _legacy_model_analysis(ai_r: Dict[str, Any], model_name: str) -> str:
     phase1 = ai_r.get("phase1_model_outputs", {}) if isinstance(ai_r.get("phase1_model_outputs"), dict) else {}
     row = phase1.get(model_name, {}) if isinstance(phase1.get(model_name), dict) else {}
@@ -3617,6 +3654,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "ou_market_prob_over": ou_head["ou_market_prob_over"],
         "ou_score_conflict": ou_head["ou_score_conflict"],
         "ou_source": ou_head["ou_source"],
+        "ou_display": ou_head.get("ou_display", ""),
         "tail_risk": tail["tail_risk"],
         "tail_side": tail["tail_side"],
         "tail_scores": tail["tail_scores"],
@@ -3716,8 +3754,10 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "ai_call_status": dict(AI_CALL_STATUS),
         "ai_result_files": dict(AI_RESULT_FILES),
         "ai_run_metadata": dict(_LAST_AI_RUN_METADATA),
-        "model_consensus": None,
-        "total_models": 3,
+        # 2026-07-02 内容修: 原硬编码None致前端"X/N模型一致"失效。
+        # 按在场phase1模型与终审方向一致数计; 缺席模型(如GPT 524)不虚增分母。
+        "model_consensus": _compute_model_consensus(ai_r, direction)[0],
+        "total_models": _compute_model_consensus(ai_r, direction)[1] or 3,
         "refined_poisson": {},
         "poisson": {},
         "elo": {},
