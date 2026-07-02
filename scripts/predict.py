@@ -333,6 +333,8 @@ AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 120)
 # Pure transport/transient resilience; does NOT touch request URL/key/payload/stream.
 AI_FINAL_RETRY_MAX = max(0, _env_int("AI_FINAL_RETRY_MAX", 2))
 AI_FINAL_RETRY_BASE_DELAY = _env_int("AI_FINAL_RETRY_BASE_DELAY_MS", 1500)
+# phase1/critic 单模型瞬时失败重试次数(2026-07-02: grok频繁整轮缺席"未返回可展示分析")
+AI_PHASE1_RETRY_MAX = max(0, _env_int("AI_PHASE1_RETRY_MAX", 1))
 AI_ENDPOINT_MAX_SLOTS = max(1, min(5, _env_int("AI_ENDPOINT_MAX_SLOTS", 5)))
 AI_ENDPOINT_FAILOVER = _env_bool("AI_ENDPOINT_FAILOVER", True)
 AI_ENDPOINT_ROUND_ROBIN = _env_bool("AI_ENDPOINT_ROUND_ROBIN", True)
@@ -3079,18 +3081,19 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
     print(f"  [Chunk {chunk_id}] matches={expected} size={len(evidence_batch)}")
 
     phase1: Dict[str, Dict[int, Dict[str, Any]]] = {n: {} for n in PHASE1_NAMES}
+    phase1_status: Dict[str, Dict[str, Any]] = {}
     phase1_returns = []
     if AI_PHASE1_PARALLEL:
         tasks = []
         for ai in PHASE1_NAMES:
             prompt = build_phase1_prompt(evidence_batch, ai)
-            tasks.append(async_call_ai_json(session, ai, _phase1_system(ai), prompt, "phase1", expected))
+            tasks.append(async_call_ai_json_with_retry(session, ai, _phase1_system(ai), prompt, "phase1", expected, AI_PHASE1_RETRY_MAX))
         phase1_returns = await asyncio.gather(*tasks, return_exceptions=True)
     else:
         for ai in PHASE1_NAMES:
             prompt = build_phase1_prompt(evidence_batch, ai)
             try:
-                phase1_returns.append(await async_call_ai_json(session, ai, _phase1_system(ai), prompt, "phase1", expected))
+                phase1_returns.append(await async_call_ai_json_with_retry(session, ai, _phase1_system(ai), prompt, "phase1", expected, AI_PHASE1_RETRY_MAX))
             except Exception as exc:
                 phase1_returns.append(exc)
     for ret in phase1_returns:
@@ -3100,6 +3103,7 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
         ai, obj, st = ret
         rows = normalize_ai_predictions(obj, expected, ai, "phase1")
         phase1[ai] = rows
+        phase1_status[ai] = {"ok": bool(st.get("ok")), "status": st.get("status"), "retry_succeeded_on_attempt": st.get("retry_succeeded_on_attempt")}
         print(f"  [Chunk {chunk_id}] {ai.upper()} phase1 {len(rows)}/{len(expected)} status={st.get('status')}")
     _save_snapshot(run_id, f"chunk{chunk_id}_phase1", {"phase1": {m: {str(k): v for k, v in rows.items()} for m, rows in phase1.items()}, "status": AI_CALL_STATUS})
 
@@ -3109,14 +3113,14 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
             critic_tasks = []
             for ai in PHASE1_NAMES:
                 prompt = build_critic_prompt(evidence_batch, ai, phase1)
-                critic_tasks.append(async_call_ai_json(session, ai, _phase1_system(ai), prompt, "critic", expected))
+                critic_tasks.append(async_call_ai_json_with_retry(session, ai, _phase1_system(ai), prompt, "critic", expected, AI_PHASE1_RETRY_MAX))
             critic_returns = await asyncio.gather(*critic_tasks, return_exceptions=True)
         else:
             critic_returns = []
             for ai in PHASE1_NAMES:
                 prompt = build_critic_prompt(evidence_batch, ai, phase1)
                 try:
-                    critic_returns.append(await async_call_ai_json(session, ai, _phase1_system(ai), prompt, "critic", expected))
+                    critic_returns.append(await async_call_ai_json_with_retry(session, ai, _phase1_system(ai), prompt, "critic", expected, AI_PHASE1_RETRY_MAX))
                 except Exception as exc:
                     critic_returns.append(exc)
         for ret in critic_returns:
@@ -3182,6 +3186,7 @@ async def _run_one_chunk(session: Optional[Any], run_id: str, chunk_id: int, evi
             if pr:
                 phase1_pack[model_name] = _short_prediction_for_prompt(pr)
         row["phase1_model_outputs"] = phase1_pack
+        row["phase1_status"] = phase1_status
         row["critic_reports_by_model"] = {model_name: [cr for cr in reports if _i(cr.get("match"), 0) == idx] for model_name, reports in critic_reports.items()}
 
     _save_snapshot(run_id, f"chunk{chunk_id}_final", {"final": {str(k): v for k, v in final_rows.items()}, "status": AI_CALL_STATUS})
@@ -3509,6 +3514,11 @@ def _legacy_model_analysis(ai_r: Dict[str, Any], model_name: str) -> str:
         why = str(rec.get("why_recommended", "")).strip()
         if why:
             return why[:3000]
+    st = ai_r.get("phase1_status", {}) if isinstance(ai_r.get("phase1_status"), dict) else {}
+    mst = st.get(model_name, {}) if isinstance(st.get(model_name), dict) else {}
+    detail = str(mst.get("status", "")).strip()
+    if detail and detail not in ("ok",):
+        return f"该模型本轮未返回可展示分析(失败状态: {detail}；已自动重试)。最终结果以AI终审为准。"
     return "该模型本轮未返回可展示分析；最终结果以AI终审为准。"
 
 
