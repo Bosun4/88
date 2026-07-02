@@ -332,6 +332,10 @@ AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 120)
 # Plan B: bounded retry for the FINAL referee (and fallback referee) only.
 # Pure transport/transient resilience; does NOT touch request URL/key/payload/stream.
 AI_FINAL_RETRY_MAX = max(0, _env_int("AI_FINAL_RETRY_MAX", 2))
+# 2026-07-03: 单场看门狗。2026-07-02晚Gemini final挂住无响应,
+# 7200s读超时×3重试吊死整个run 1h40m。正常单场链5-7分钟,
+# 超过40分钟必然异常 → 掐掉该场继续, 不拖死全局。0=禁用。
+AI_CHUNK_WATCHDOG_SECONDS = max(0, _env_int("AI_CHUNK_WATCHDOG_SECONDS", 2400))
 AI_FINAL_RETRY_BASE_DELAY = _env_int("AI_FINAL_RETRY_BASE_DELAY_MS", 1500)
 # phase1/critic 单模型瞬时失败重试次数(2026-07-02: grok频繁整轮缺席"未返回可展示分析")
 AI_PHASE1_RETRY_MAX = max(0, _env_int("AI_PHASE1_RETRY_MAX", 1))
@@ -3407,6 +3411,27 @@ def _score_shape_selector(pred: Dict[str, Any], match_obj: Optional[Dict[str, An
 
 
 async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
+    return await _run_ai_native_web_impl(evidence_all)
+
+
+async def _run_chunk_with_watchdog(coro: Any, chunk_desc: str = "", watchdog: Optional[float] = None) -> Dict[int, Dict[str, Any]]:
+    """看门狗: 单场/单chunk超时熔断 (2026-07-03).
+
+    背景: Gemini final 端点挂住不吐数据时, AI_FINAL_READ_TIMEOUT=7200×重试
+    会吊死整个 run (实测1h40m人工取消)。正常单场链 5-7 分钟, 看门狗默认
+    2400s(40min), 超时丢弃该场返回空 dict, 其余场次不受影响。watchdog<=0 禁用。
+    """
+    wd = AI_CHUNK_WATCHDOG_SECONDS if watchdog is None else watchdog
+    if wd and wd > 0:
+        try:
+            return await asyncio.wait_for(coro, timeout=wd)
+        except asyncio.TimeoutError:
+            print(f"  [WATCHDOG] chunk {chunk_desc} exceeded {wd}s; killed to protect the run")
+            return {}
+    return await coro
+
+
+async def _run_ai_native_web_impl(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
     global _LAST_AI_RUN_METADATA
     for _n in AI_NAMES:
         AI_CALL_STATUS[_n] = {}
@@ -3441,7 +3466,10 @@ async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dic
                         match_id = evidence.get("match")
                         print(f"  [Slot {slot}] start match={match_id} queue_item={item_id}")
                         try:
-                            rows = await _run_one_chunk(session, run_id, item_id, [evidence])
+                            rows = await _run_chunk_with_watchdog(
+                                _run_one_chunk(session, run_id, item_id, [evidence]),
+                                chunk_desc=f"slot{slot}/match{match_id}",
+                            )
                             all_final.update(rows)
                             print(f"  [Slot {slot}] done match={match_id}")
                         except Exception as exc:
@@ -3454,14 +3482,18 @@ async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dic
             await asyncio.gather(*[_slot_worker(slot) for slot in range(1, worker_count + 1)])
         elif AI_CHUNK_CONCURRENCY <= 1 or len(chunks) <= 1:
             for i, chunk in enumerate(chunks, 1):
-                rows = await _run_one_chunk(session, run_id, i, chunk)
+                rows = await _run_chunk_with_watchdog(
+                    _run_one_chunk(session, run_id, i, chunk), chunk_desc=f"seq{i}"
+                )
                 all_final.update(rows)
         else:
             semaphore = asyncio.Semaphore(AI_CHUNK_CONCURRENCY)
 
             async def _run_limited_chunk(i: int, chunk: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
                 async with semaphore:
-                    return await _run_one_chunk(session, run_id, i, chunk)
+                    return await _run_chunk_with_watchdog(
+                        _run_one_chunk(session, run_id, i, chunk), chunk_desc=f"conc{i}"
+                    )
 
             tasks = [_run_limited_chunk(i, chunk) for i, chunk in enumerate(chunks, 1)]
             chunk_returns = await asyncio.gather(*tasks, return_exceptions=True)
