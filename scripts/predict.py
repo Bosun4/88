@@ -95,7 +95,7 @@ AI_ENDPOINT_MODEL_SLOTS = {
         2: "gpt-5.5",
         3: "gpt-5.5",
         4: "gpt-5.5",
-        5: "熊猫-特供-X-10-gpt-5.5",
+        5: "gpt-5.5",
     },
     "grok": {
         1: "grok-4.3-c",
