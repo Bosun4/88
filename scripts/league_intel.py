@@ -319,7 +319,10 @@ def _wc_detect_round(m):
     for kw, r in [("\u7b2c\u4e00\u8f6e", "R1"), ("\u9996\u8f6e", "R1"), ("\u7b2c1\u8f6e", "R1"),
                   ("\u7b2c\u4e8c\u8f6e", "R2"), ("\u7b2c2\u8f6e", "R2"),
                   ("\u7b2c\u4e09\u8f6e", "R3"), ("\u7b2c3\u8f6e", "R3"), ("\u672b\u8f6e", "R3"),
-                  ("1/8", "R16"), ("1/4", "QF"), ("\u534a\u51b3", "SF"), ("\u51b3\u8d5b", "F")]:
+                  ("淘汰赛", "R16"), ("1/16", "R32"), ("十六分之一", "R32"), ("32强", "R32"),
+                  ("1/8", "R16"), ("八分之一", "R16"), ("16强", "R16"),
+                  ("1/4", "QF"), ("四分之一", "QF"), ("8强", "QF"),
+                  ("半决", "SF"), ("四强", "SF"), ("决赛", "F"), ("加时", "R16"), ("点球", "R16")]:
         if kw in bf:
             return r
     return None
@@ -352,10 +355,10 @@ def analyze_world_cup_context(m):
         lines.append("[WC-R3] \u63a7\u5206=\u51c0\u80dc\u7403\u6536\u7a84\u975e\u603b\u8fdb\u7403\u964d(over2.5\u53cd\u800c\u9ad8): 2-1/1-0\u5360R3\u768442.5%; \u5148\u8bfb\u51fa\u7ebf\u5f62\u52bf\u518d\u5b9a\u8c03; \u5df2\u51fa\u7ebf\u5f3a\u961fvs\u6709\u52a8\u673a\u65b9=\u8bf1\u76d8\u9ad8\u5371(\u95720\u8fdb\u7403/1\u7403\u5c0f\u8d1f\u88ab\u6380)")
     elif rnd == "QF":
         lines.append("[WC-QF] 1/4\u51b3\u6700\u4fdd\u5b88(\u573a\u57472.10\u300135%\u8fdb\u70b9\u7403): \u5f3a\u5f3a\u8f93\u4e0d\u8d77, \u4f18\u5148\u538b\u5c0f\u7403/\u9632\u5e73\u8fdb\u52a0\u65f6")
-    elif rnd in ("R16", "SF", "F"):
-        lines.append("[WC-KO] \u6dd8\u6c70\u8d5b\u5168\u7a0b24%\u70b9\u7403\u51b3\u80dc, 90\u5206\u949f\u5e73\u5c40\u662f\u5e38\u6001, \u9632\u5e73/\u52a0\u65f6\u6743\u91cd\u9ad8\u4e8e\u5c0f\u7ec4\u8d5b")
+    elif rnd in ("R32", "R16", "SF", "F"):
+        lines.append("[WC-KO] 淘汰赛全程24%点球决胜，必须区分90分钟胜平负与晋级胜负；90分钟平局/加时/点球、强队慢热与领先后降速权重高于小组赛")
     else:
-        lines.append("[WC-RND?] \u8f6e\u6b21\u672a\u786e\u8ba4: \u9ed8\u8ba4\u6309\u5c0f\u7ec4\u8d5b\u8bfb, \u9996\u8f6e\u9632\u6253\u4e0d\u5f00")
+        lines.append("[WC-KO-DEFAULT] 轮次未确认但当前小组赛已结束：默认按淘汰赛90分钟审计，防平/加时/点球、强队慢热、低位反击；不得套用R3出线/净胜球/已出线轮换逻辑")
 
     # 3. 状态闸 (双窗口状态档)
     for team, side in [(h, "\u4e3b"), (a, "\u5ba2")]:
