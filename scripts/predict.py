@@ -186,9 +186,9 @@ STANDARD_TOTAL_GOAL_ODDS = {
 
 LEAGUE_STYLE_RESEARCH_HINTS = {
     "世界杯": {
-        "style_hint": "中立场锦标赛足球，不能照搬俱乐部联赛节奏；首轮最闷，第二轮最开放，第三轮不是机械小球，而是净胜球收窄、轮换与出线形势驱动的高波动分层场。",
-        "score_shapes_to_audit": ["0-0", "1-1", "1-0", "0-1", "2-1", "1-2", "2-2", "3-1", "1-3"],
-        "risk_note": "第三轮必须先审计出线形势、是否已出线、是否需净胜球、是否会轮换；已出线强队 vs 有动机方是诱盘高危，不能只因名气和低赔强推热门。实证(项目自对账)：后期轮强队被逼平是高频系统偏差(西班牙0-0/葡萄牙1-1/卡塔尔1-1/沙特1-1/厄瓜多尔0-0)，出线+轮换场默认下调热门胜信心上限≤60，优先防 0-0/1-1/1-0/0-1/被逼平。",
+        "style_hint": "中立场淘汰赛足球，不能照搬俱乐部联赛节奏；当前小组赛已结束，默认按90分钟淘汰赛语境审计：容错率低、慢热、防守优先、领先方控场、平局拖入加时/点球权重上升。",
+        "score_shapes_to_audit": ["0-0", "1-1", "1-0", "0-1", "2-1", "1-2", "2-0", "0-2", "2-2"],
+        "risk_note": "淘汰赛必须先审计90分钟平局/加时/点球土壤、强队慢热与领先后降速、弱队低位反击/定位球爆冷路径；不得再套用小组赛第三轮/出线形势/净胜球/已出线轮换算法。热门方向若要推穿盘或净胜≥2，必须有比分簇、总进球曲线、盘口与首发/伤停共同支撑。",
     },
     "德甲": {
         "style_hint": "高节奏、转换快、BTTS 与 3球以上尾部常见；但仍需结合盘口与阵容验证。",
@@ -1188,9 +1188,9 @@ def _cross_anchor_questions(match_obj: Dict[str, Any]) -> List[str]:
         qs.append("【零封税·条件化】国际赛/世界杯不能机械默认 X-0，也不能机械给负方安慰球。若弱方有独立破门证据（反击/xG/定位球/对手防线轮换/BTTS盘口共振），优先保留 X-1；若强弱悬殊、弱方破门证据不足且零封比分簇(2-0/3-0/4-0)低赔集中，必须允许并优先审计 N-0，不得因旧零封税强行上修 N-1。")
         qs.append("【进球带上修·条件化】国际赛/世界杯方向判定不变，但进球带上修只在总进球曲线整簇塌缩或强队火力证据充分时使用；深盘造强但胜赔不实压、1-1锚点未抬死、弱队可能极限收缩时，必须把0-0/1-1列入最终候选并说明为什么没有入选。")
         qs.append("【判平二段裁决】若最终判平局，禁止默认 1-1，必须在 0-0/1-1/2-2 三者间用进球曲线分位(a0/a2/a4)显式选形状并写出理由。数据支撑：9 场判平全押 1-1 仅中 3。")
-        qs.append("【世界杯第三轮硬审计】若识别到小组赛第三轮/末轮，必须先回答五个问题：①双方是否都还有晋级/排名/净胜球动机；②是否存在已出线强队大轮换/主力轮休风险（联网核实预计首发与教练发布会口径）；③是否属于双方都无所求的闷平土壤；④是否属于一方需抢分、一方可接受小负/小胜的控分土壤；⑤是否两队同组并行开赛、存在‘默契球/算计净胜球’的控分共谋土壤。未联网回答这五点，不得把热门强队直接推成穿盘大胜，且 recommendation 最高 B。")
-        qs.append("【世界杯第三轮爆冷高发·实证先验】项目实测(2026小组赛23场对账)：强弱悬殊却踢平的高信心翻车集中在第二/三轮（西班牙0-0、葡萄牙1-1、卡塔尔1-1、沙特1-1、厄瓜多尔0-0），根因是‘强队已出线→大面积轮换→控分/慢热→爆冷与闷平’被系统性低估。第三轮已出线强队对阵有动机弱队时，必须把【被逼平/小负/0进球】列为首要风险路径，默认下调该热门方向信心上限至 ≤60，并显式审计 0-0/1-1/1-0/0-1/1-2/2-1。")
-        qs.append("【世界杯第三轮比分簇优先级】R3 控分不是机械小球，而是净胜球收窄与热门被掀风险上升。若无强证据支持刷净胜球或全主力强攻，必须优先审计 1-0/0-1/1-1/2-1/1-2 这些一球差与冷平方向；只有联网确认双方都需抢胜/抢净胜球且双方均派主力时，才释放 3-1/1-3/2-2/3-2/2-3 等开放比分。已出线强队大轮换证据成立时，禁止主推任何净胜≥2的穿盘大胜。")
+        qs.append("【世界杯淘汰赛硬审计】小组赛已结束；当前世界杯默认按淘汰赛90分钟审计。必须显式回答：①90分钟平局/加时/点球风险是否被盘口低估；②强队是否存在慢热、领先后降速或保守控局；③弱队是否具备低位铁桶、反击、定位球、门将超常发挥的爆冷路径；④主力首发/伤停/停赛是否支持热门穿盘；⑤正确比分簇是否真正支持净胜≥2，而不是只支持窄胜。")
+        qs.append("【淘汰赛比分簇优先级】淘汰赛不是机械小球，但容错率低。必须优先比较 0-0/1-1/1-0/0-1/2-1/1-2/2-0/0-2；若要释放 3-1/1-3/2-2/3-2/2-3/4-1/1-4，必须有总进球曲线整簇塌缩、BTTS/xG/战术开放或盘口强保护的硬证据。")
+        qs.append("【热门穿盘约束】淘汰赛强弱悬殊也不能默认大胜。若最终选择热门净胜≥2，必须说明为什么 1-0/2-0/2-1/1-1/0-0/拖入加时路径被排除；缺少外部首发伤停与低水市场确认时，推荐等级不得高于 B。")
         # [补丁A 2026-06-22] 单边碾压上修先验(市场版,不依赖pred)：深盘+某方零封簇低赔=单边碾压结构,
         # 第一轮21球缺口集中在此类8场。与曲线塌缩判据互补(碾压场总进球分布天然分散,a4常>5.3不触发)。
         try:
@@ -1201,7 +1201,7 @@ def _cross_anchor_questions(match_obj: Dict[str, Any]) -> List[str]:
                 _fav, _cs_low = ("home", _h_cs) if _h_cs <= _a_cs else ("away", _a_cs)
                 if _cs_low <= 6.0:
                     _up = "3-0/3-1/4-1" if _fav == "home" else "0-3/1-3/1-4"
-                    qs.append(f"【单边碾压进球上修·强制】本场深盘(让球{abs(_ub_line):.2f})且{'主' if _fav=='home' else '客'}方零封簇低赔({_cs_low:.2f})=单边碾压结构。实证(世界杯小组赛)此类场进球量级被系统性低估一档(瑞典1-0→5-1/德国4-0→7-1/挪威2-0→4-1)。若方向判为{'主胜' if _fav=='home' else '客胜'}，必须把进球带从2-0/2-1上修审计到{_up}，并显式说明为何不选更高比分；不得机械回落2-1。此判据针对单边碾压,不要求总进球曲线塌缩。")
+                    qs.append(f"【单边碾压进球上修·谨慎】本场深盘(让球{abs(_ub_line):.2f})且{'主' if _fav=='home' else '客'}方零封簇低赔({_cs_low:.2f})=单边优势结构。淘汰赛阶段只能把进球带从2-0/2-1上修审计到{_up}作为候选，不得机械强制大胜；若最终主推高比分，必须同时排除1-0/2-0/1-1/加时路径，并说明总进球曲线或盘口为何支持突破保守土壤。")
         except Exception:
             pass
     tpl = hand_f.get("score_shape_template", {})
@@ -1307,7 +1307,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
 
 GROK_WEBMAX_EXTERNAL_INTELLIGENCE_ADDENDUM = (
     "你的联网重点：你是 Grok Web-Max 外部事实总参谋，不是比分裁判。必须最大化搜索并结构化输出可验证赛前事实："
-    "伤停/停赛/复出、预计或官方首发、战意与出线条件、赛程密度/旅行疲劳、天气/场地/中立场、"
+    "伤停/停赛/复出、预计或官方首发、比赛阶段/晋级规则/90分钟与加时点球语义、赛程密度/旅行疲劳、天气/场地/中立场、"
     "官方公告/主流媒体/跟队记者/数据站，以及 Bet365/William Hill/威廉希尔/Pinnacle/竞彩/百家均值等当前赔率、亚盘、大小球、正确比分快照。"
     "必须排查脏数据：无 URL、过期新闻、预测站搬运、社媒传闻、盘口快照伪装时间序列、Bet365/威廉/Pinnacle/竞彩方向冲突、赔率升水降水与大小球变化不一致。"
     "每条会影响方向、比分或推荐等级的 claim 必须进入 external_fact_table，并包含 category、claim、source_type、source_title、source_url、published_at、freshness、confidence、impact_direction、why_it_matters。"
@@ -1336,7 +1336,7 @@ FULL_SPECTRUM_AUDIT_FIELDS = [
 ]
 
 EXTERNAL_FACT_CONTEXT_TERMS = [
-    "伤停", "停赛", "复出", "首发", "阵容", "战意", "出线", "轮换", "轮休", "体能", "旅行", "天气", "场地", "核心", "发布会",
+    "伤停", "停赛", "复出", "首发", "阵容", "战意", "淘汰赛", "加时", "点球", "90分钟", "体能", "旅行", "天气", "场地", "核心", "发布会",
     "injury", "injuries", "suspension", "lineup", "line-up", "starting xi", "motivation", "rotation", "travel", "weather", "pitch",
 ]
 
@@ -1354,7 +1354,7 @@ def _web_research_instruction(role: str) -> str:
     if role == "grok":
         return common + GROK_WEBMAX_EXTERNAL_INTELLIGENCE_ADDENDUM
     if role == "gemini":
-        return common + "你的联网重点：Bet365/William Hill/威廉希尔/Pinnacle/竞彩/百家均值赔率差异、升水降水、亚盘、大小球、正确比分簇、球队节奏/xG/xGA、伤停首发、天气场地、世界杯轮次/出线/净胜球动机、战术与爆冷土壤。"
+        return common + "你的联网重点：Bet365/William Hill/威廉希尔/Pinnacle/竞彩/百家均值赔率差异、升水降水、亚盘、大小球、正确比分簇、球队节奏/xG/xGA、伤停首发、天气场地、淘汰赛90分钟平局/加时点球风险、战术与爆冷土壤。"
     return common + "你的联网重点：审计三家来源质量、冲突来源、新鲜度，以及哪些外部信息真正改变判断。"
 
 
@@ -4759,7 +4759,7 @@ Grok：反方审判员，重点寻找 favorite_trap / draw_trap / away_win_overr
 Gemini：终审裁判，必须综合正方、反方、raw evidence 和来源质量；final_direction 只能是 home/draw/away，证据不足时用 recommendation.is_recommended=false 与 bet_action=observe/no_bet 表达不下注，不得把 no_bet/abstain 写成胜平负方向。
 三方都必须列出 why_this_can_fail；不能把“名气强、低赔、常见比分模板”当成独立充分证据。
 若 GPT/Grok 仍输出最终比分，Gemini 可以参考但必须重新审计，不得机械照抄。
-【世界杯第三轮专项军规】若比赛属于世界杯/国际大赛小组赛第三轮/末轮，必须把“出线形势/净胜球需求/是否已出线/轮换强度”视为与盘口同级的主轴变量。第三轮不是默认小球，而是“净胜球收窄 + 热门被掀风险上升 + 场景分层”——必须先分为：双方都需分、双方都无所求、已出线强队vs有动机方 三类，再决定比分簇。
+【世界杯淘汰赛专项军规】小组赛已结束；世界杯/国际大赛默认进入淘汰赛90分钟语境。必须把“90分钟平局/加时点球风险、强队慢热与领先后控场、弱队低位反击/定位球爆冷、首发伤停停赛、盘口是否真实支持穿盘”视为与1X2同级的主轴变量；不得再套用小组赛第三轮、出线形势、净胜球、已出线轮换算法。
 """.strip()
 
 GEMINI_FINAL_AUDIT_ADDENDUM = """
@@ -5081,9 +5081,9 @@ def _canonical_output_schema_text() -> str:
   "gemini_independent_research": {"searched":true, "key_sources":[], "missing_sources":[], "cross_checked_against_grok":"中文说明"},
   "bookmaker_cross_audit": {"bet365":"中文说明", "william_hill":"中文说明", "pinnacle_or_low_margin":"中文说明", "jingcai":"中文说明", "average_market":"中文说明", "water_movement":"升水/降水/无可靠时间序列说明", "asian_handicap":"中文说明", "ou_total_goals":"中文说明", "correct_score_cluster":"中文说明", "bookmaker_intent":"中文庄家意图/诱盘/保护判断"},
   "tempo_xg_tactical_audit": {"tempo":"low/medium/high/unclear", "xg_signal":"中文说明", "xga_signal":"中文说明", "pressing_transition":"中文说明", "formation_matchup":"中文说明", "key_player_impact":"中文说明"},
-  "worldcup_upset_audit": {"context":"group_stage/knockout/friendly/other", "japan_type_counter":"yes/no/unclear+中文说明", "morocco_type_low_block":"yes/no/unclear+中文说明", "croatia_type_resilience":"yes/no/unclear+中文说明", "favorite_slow_start_risk":"中文说明", "upset_path":"中文说明"},
+  "worldcup_upset_audit": {"context":"knockout/friendly/other", "stage_evidence":"中文说明：为何判定该阶段", "ninety_minute_vs_advance_semantics":"中文说明", "japan_type_counter":"yes/no/unclear+中文说明", "morocco_type_low_block":"yes/no/unclear+中文说明", "croatia_type_resilience":"yes/no/unclear+中文说明", "favorite_slow_start_risk":"中文说明", "low_block_counter_path":"中文说明", "extra_time_penalty_risk":"low/medium/high+原因", "upset_path":"中文说明"},
   "score_elimination_audit": {"0-0":"keep/reject+原因", "1-1":"keep/reject+原因", "2-2":"keep/reject+原因", "1-2":"keep/reject+原因", "2-1":"keep/reject+原因", "selected_score_final_reason":"中文说明"},
-  "dirty_work_checklist": {"lineup":false, "injury_suspension":false, "motivation_table":false, "weather_pitch":false, "referee":false, "travel_rest":false, "odds_sources":false, "xg_tempo":false, "worldcup_context":false},
+  "dirty_work_checklist": {"lineup":false, "injury_suspension":false, "motivation_table":false, "weather_pitch":false, "referee":false, "travel_rest":false, "odds_sources":false, "xg_tempo":false, "worldcup_context":false, "knockout_stage":false, "extra_time_penalty":false, "ninety_minute_market_semantics":false},
   "recommendation_components": {
     "direction_edge":0,
     "score_cluster_strength":0,
@@ -5147,11 +5147,11 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append("")
     p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
     p.append("1. 进攻高波或高进球异动压缩（如德甲、荷甲、美职、挪超、解放者杯等大球联赛；判大球看曲线塌缩 a5/a4<=1.70 或超大球尾部共振(a6<=11/a7<=14) 而非 a4 单点低，因为 a4 被压但 a5 没跟是单点诱盘假信号）：防守往往让位于进攻，不得机械保守。不要机械拘泥于 2-1、1-1 等常规最低赔率。若联赛偏大球+曲线整簇塌缩+资金推强队共振，必须敢于将大球带（3-1、1-3、2-2、3-2、2-3、4-1、1-4、4-2 等主客对称比分）作为主推首选，不要仅仅把它们当做风险尾部藏起来！注意 a4>5.3 是排除线（真实大球仅约13%），按小球处理。【对称强制】考虑任一主队大胜比分时，必须同时列出客队镜像比分（3-1↔1-3、4-1↔1-4、3-2↔2-3）。")
-    p.append("【负方安慰球审计·2026-06-21新增】：强弱悬殊+高信心的一边倒胜场，不要机械给负方留一个安慰球。真实赛果对账(世界杯小组赛)显示高热强队赢球时负方常被零封(美国2-0非2-1、巴西3-0非4-1)。规则：当胜方信心>=70且判定净胜>=2时，默认负方进球=0(优先 N-0 而非 N-1)；只有负方有独立破门证据(对攻战意/快反/定位球质量/客场不弃赛+xG支撑)时才可保留负方1球。【与大球带不冲突】本条只压负方安慰球，不阻止双方对攻的对称大比分(2-2/3-2/3-3)。")
+    p.append("【负方安慰球审计·淘汰赛版】：强弱悬殊+高信心的一边倒胜场，不要机械给负方留一个安慰球；但淘汰赛弱队若有反击/定位球/高压尾段/强队领先后松动证据，必须保留 X-1 与拖入加时路径。规则：当胜方信心>=70且判定净胜>=2时，默认优先审计 N-0 与 N-1 的证据差异；只有负方有独立破门证据(反击/xG/定位球质量/对手防线缺口/BTTS盘口共振)时才可保留负方1球。【与大球带不冲突】本条只压机械安慰球，不阻止双方对攻的对称大比分。")
     p.append("2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。")
     p.append("3. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。")
-    p.append("4. 世界杯小组赛第三轮/末轮：先判断‘双方都需抢分’、‘双方都无所求’、‘已出线强队vs有动机方’这三类场景。第三轮真规律不是机械压总进球，而是净胜球收窄、1球差和冷平/小冷增多。实证先验(项目2026小组赛自对账)：已出线强队在后期轮被逼平是高频系统偏差(西班牙0-0、葡萄牙1-1、卡塔尔1-1、沙特1-1、厄瓜多尔0-0)。原因是出线后大面积轮换+控分慢热。因此若热门一方已出线、可轮换、平局或小负仍可接受，必须优先防 1-1/0-1/1-0/1-2/2-1 这类收窄比分，下调该热门胜的信心(上限≤60)，不得仅因名气与低赔强推穿盘大胜。联网核实热门是否已锁名次、是否轮换、是否同组并行开赛存在算计净胜球/默契球土壤。")
-    p.append("5. 2026 新制（最佳第三名）会削弱纯躺平，但不会消灭诱盘：若一方需要刷净胜球、另一方也有抢分希望，比分会从‘单纯低分’转向‘开放但净胜差未必拉大’。这类场景要优先比较 2-1/1-2/2-2/3-2/2-3，而不是直接从大热低赔跳到3-0/0-3。")
+    p.append("4. 世界杯淘汰赛：小组赛算法停止使用。先判断90分钟是否更像‘强队稳控窄胜’、‘弱队低位拖平进加时’、‘双方战术开放互有进球’三类；再决定比分簇。淘汰赛默认提高 0-0/1-1/1-0/0-1/2-1/1-2 权重，降低无证据穿盘大胜想象。")
+    p.append("5. 淘汰赛大胜/大球释放条件：只有在正确比分簇、总进球曲线、BTTS/xG/战术开放和首发伤停共同支持时，才释放 3-1/1-3/2-2/3-2/2-3/4-1/1-4；否则优先压回一球差、两球零封或90分钟平局路径。")
     p.append("请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！")
     p.append("强制：若 web_research.used=false，不得把抓包 information/points 伪装成联网来源；只能作为 packet_context。")
     p.append("</task>\n")
@@ -5214,14 +5214,14 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("【庄家逆向读盘职责】：必须像庄家一样审计 Bet365、William Hill/威廉希尔、Pinnacle/低抽水基准、竞彩与百家均值之间的分歧；逐项解释升水/降水、亚盘升降盘、大小球水位、总进球赔率、正确比分簇是否在保护、诱导、分散或封顶。没有真实时间序列时只能写当前快照，不得编造临场故事。")
     p.append("【节奏/xG/战术脏活】：必须独立查并评估球队节奏、xG/xGA、射门质量、转换速度、压迫强度、阵型对位、核心球员缺阵/复出、天气场地、裁判尺度、旅行休息和赛程密度；这些只能作为读盘证据，不能无来源升 main。")
     p.append("【世界杯爆冷脑回路】：必须主动审计日本型反击爆冷、摩洛哥型低位铁桶、克罗地亚型韧性拖平/加时土壤、强队慢热/名气过热/弱队效率反杀路径；输出 worldcup_upset_audit，不得用强弱名气直接杀冷。")
-    p.append("【世界杯第三轮三分法——强制】若比赛属于小组赛第三轮/末轮，你必须先把场景归入以下之一：A.双方都需抢分/抢净胜球；B.双方都无所求或都可接受特定结果；C.已出线强队/热门方 vs 有动机方。A 类可释放开放比分，但仍要防净胜球只收窄到1球差；B 类优先防 0-0/1-1/0-1/1-0；C 类把热门被掀、0进球、小负或被逼平列为主风险，不得把热门穿盘大胜当默认线。")
-    p.append("【第三轮轮换·控分·爆冷实证先验——强制】项目自对账实测(2026小组赛多场)：已出线强队在第二/三轮被逼平是高频系统偏差(西班牙0-0、葡萄牙1-1、卡塔尔1-1、沙特1-1、厄瓜多尔0-0全部踢平)。原因链：出线后11人轮休→阵容生疏与慢热→不打净胜球→控分/闷平/被反杀。因此：R3 一旦识别到热门方已出线+可轮换，你对该热门方胜的信心上限硬限 60，除非有联网证据证明他们仍派主力抢名次/进球净胜球争首名。同时重点释放有动机弱队的抢分动机/定位球爆冷路径。")
-    p.append("【世界杯第三轮联网硬要求】你具备联网能力，必须主动联网核实第三轮四件事：①两队实时出线形势与最佳第三名撑杆；②热门方是否已锁定出线/锁定小组名次(决定是否轮换)；③教练发布会/跟队记者披露的轮换/主力保留意图；④是否存在同组并行开赛下的默契球/算计净胜球争议。以上每条影响方向/比分/推荐的 claim 必须进入 external_fact_table / web_research.sources(含 url+published_at)。无来源时，允许保留盘口本体方向，但 recommendation 最高 B，且不得把第三轮轮换/出线战意推演包装成 main。")
+    p.append("【世界杯淘汰赛三分法——强制】小组赛已结束；你必须先把场景归入以下之一：A.强队稳控窄胜/零封；B.弱队低位拖平进加时/点球；C.双方战术开放互有进球。A 类需比较1-0/2-0/2-1，B 类优先防0-0/1-1/0-1/1-0，C 类才释放2-2/3-2/2-3/3-1/1-3。")
+    p.append("【淘汰赛慢热·加时·爆冷先验——强制】淘汰赛容错率低，90分钟平局与加时点球路径权重高于小组赛。热门方若主推净胜≥2，必须有联网首发/伤停、盘口、比分簇和总进球曲线共同确认；否则 confidence 与 recommendation 不得包装成强推。")
+    p.append("【世界杯淘汰赛联网硬要求】你具备联网能力时，必须主动核实：①官方/预计首发与停赛伤停；②教练发布会是否暗示保守、轮换或点球准备；③比赛地天气/草皮/裁判尺度；④低水外盘、亚盘和大小球是否支持90分钟取胜或穿盘。影响方向/比分/推荐的 claim 必须进入 external_fact_table / web_research.sources(含 url+published_at)。")
     p.append("【比分淘汰协议】：最终选比分前必须逐一审计 0-0、1-1、2-2、1-2、2-1 以及相邻镜像比分，说明 keep/reject 原因；尤其 2-1 只有在 1-1/1-2/2-2/高分尾部被充分排除后才能主推。")
     p.append("【前置共识权重】：如果 GPT 和 Grok 在方向或比分上达成高度一致（例如均为 1-0），除非你有致命的反向硬证据（例如明显的伤停或极强的聪明钱背离），否则不得仅仅因为 1-1 或 0-0 是全场最低赔率，就强行推翻前置共识走向保守平局。")
     p.append("【联赛风格与战意动态锚定】：比分预测绝对不能一刀切！你必须首先评估【联赛进球生态】与【比赛重要程度】：")
     p.append("1. 进攻高波联赛（如德甲、荷甲、挪超、美职、澳超等）：防守往往让位于进攻，不要机械拘泥于 2-1 或防守平局。若双方战术开放且支持 BTTS，必须敢于将 3-2、3-1 甚至 4-2 这种极端高比分直接作为主推首选，不要仅仅把它们当做风险尾部藏起来！")
-    p.append("【负方安慰球审计·2026-06-21新增】：强弱悬殊+高信心的一边倒胜场，不要机械给负方留一个安慰球。真实赛果对账(世界杯小组赛)显示高热强队赢球时负方常被零封(美国2-0非2-1、巴西3-0非4-1)。规则：当胜方信心>=70且判定净胜>=2时，默认负方进球=0(优先 N-0 而非 N-1)；只有负方有独立破门证据(对攻战意/快反/定位球质量/客场不弃赛+xG支撑)时才可保留负方1球。【与大球带不冲突】本条只压负方安慰球，不阻止双方对攻的对称大比分(2-2/3-2/3-3)。")
+    p.append("【负方安慰球审计·淘汰赛版】：强弱悬殊+高信心的一边倒胜场，不要机械给负方留一个安慰球；但淘汰赛弱队若有反击/定位球/高压尾段/强队领先后松动证据，必须保留 X-1 与拖入加时路径。规则：当胜方信心>=70且判定净胜>=2时，默认优先审计 N-0 与 N-1 的证据差异；只有负方有独立破门证据(反击/xG/定位球质量/对手防线缺口/BTTS盘口共振)时才可保留负方1球。【与大球带不冲突】本条只压机械安慰球，不阻止双方对攻的对称大比分。")
     p.append("2. 防守绞肉联赛（如西甲、意甲、法乙、阿甲等及次级联赛）：天生小球属性，2-1已是双方发挥极好的天花板。在此类联赛中，无需强行防范 2-2 或 3-1，反而要极度警惕 0-0 闷平或 1-0 窄胜。")
     p.append("3. 特殊战意节点：杯赛附加赛/淘汰赛首回合极度保守（容错率极低，首选0-0/1-1）；无欲无求的谢幕战则防守松懈（极易出大球）。")
     p.append("请结合真实的足球世界逻辑，为当前比赛选择最符合其土壤的比分，不要被单纯的赔率数字束缚想象力！")
@@ -5780,7 +5780,7 @@ LEAGUE_DNA_PROFILES = {
     "挪超": {"volatility": "high", "draw_risk": "medium", "btts": "high", "away_penalty": 1, "notes": "节奏与大球尾部较强，比分需用簇而非单点"},
     "美职": {"volatility": "high", "draw_risk": "high", "btts": "high", "away_penalty": 2, "notes": "主客差/旅行/反转波动大，客胜默认高风险"},
     "葡超": {"volatility": "medium", "draw_risk": "medium", "btts": "medium", "away_penalty": 0, "notes": "强弱分化明显，但中下游/保级题材需防平"},
-    "世界杯": {"volatility": "medium", "draw_risk": "high", "btts": "low", "away_penalty": 0, "neutral_venue": True, "notes": "世界杯=中立场锦标赛足球(5届320场场均2.48偏低/U2.5约28%)：默认低分/防守反击，不照搬联赛大球；无主场优势，主客名义≠地利；分轮战意差异大(首轮最闷、末轮控分/净胜球收窄)，比分用簇不用单点，强强/强弱错配防0封脆弱与诱盘"},
+    "世界杯": {"volatility": "medium", "draw_risk": "high", "btts": "low", "away_penalty": 0, "neutral_venue": True, "notes": "世界杯=中立场淘汰赛足球：当前小组赛已结束，默认按90分钟淘汰赛读盘；平局/加时/点球、慢热、低位防反和领先后控场权重上升；比分用簇不用单点，强弱错配仍需防0封脆弱与诱盘"},
 }
 
 
@@ -6063,7 +6063,9 @@ def _match_context_flags(pred: Dict[str, Any], match_obj: Dict[str, Any], dna: D
     cross_region = any(x in league for x in ["亚冠", "世俱杯", "解放者", "南球杯"]) or any(t in text for t in ["跨洲", "中立场", "neutral", "远征", "长途", "旅行", "时差"])
     rotation_risk = any(t in text for t in ["轮休", "轮换", "替补", "二队", "青年", "休息", "rotation", "rotate", "rested"])
     importance_unclear = cup_like and not any(t in text for t in ["争冠", "保级", "必须", "晋级", "决赛", "半决赛", "主场告别", "战意", "motivation"])
-    worldcup_r3 = ("世界杯" in league or "world cup" in league.lower() or "worldcup" in league.lower()) and any(t in text for t in ["第三轮", "第3轮", "末轮"])
+    is_worldcup = "世界杯" in league or "world cup" in league.lower() or "worldcup" in league.lower()
+    worldcup_knockout = is_worldcup and any(t in text for t in ["淘汰赛", "1/8", "八分之一", "1/16", "十六分之一", "1/4", "四分之一", "半决赛", "决赛", "16强", "32强", "8强", "四强", "加时", "点球"])
+    worldcup_r3 = is_worldcup and not worldcup_knockout and any(t in text for t in ["小组赛第三轮", "第三轮", "第3轮", "末轮", "R3"])
     already_qualified_or_can_accept_less = any(t in text for t in ["已出线", "提前晋级", "锁定出线", "打平即可", "小负即可", "轮换", "轮休", "保留主力", "避强签", "头名", "第二名"])
     must_win_or_need_margin = any(t in text for t in ["必须取胜", "唯有取胜", "至少赢", "净胜球", "抢头名", "争最佳第三", "背水一战", "生死战", "抢分", "晋级希望"])
     name_favorite = False
@@ -6077,6 +6079,7 @@ def _match_context_flags(pred: Dict[str, Any], match_obj: Dict[str, Any], dna: D
         "rotation_risk": rotation_risk,
         "importance_unclear": importance_unclear,
         "worldcup_r3": worldcup_r3,
+        "worldcup_knockout": worldcup_knockout,
         "already_qualified_or_can_accept_less": already_qualified_or_can_accept_less,
         "must_win_or_need_margin": must_win_or_need_margin,
         "name_favorite": name_favorite,
@@ -6296,7 +6299,17 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
     if structured_factors.get("fatigue_risk") and final_dir == "away":
         apply("C", "prematch_v2_away_fatigue_travel_risk", "prematch_v2_away_fatigue")
 
-    # P0 世界杯第三轮：已出线/可接受平或小负/轮换方，不允许被包装成热门强推。
+    # P0 世界杯淘汰赛：小组赛已结束，热门穿盘/大胜必须确认90分钟语义、加时风险和盘口支持。
+    if context_flags.get("worldcup_knockout"):
+        _ko_score = _score_from_candidate(pred.get("predicted_score"))
+        _ko_h, _ko_a = _parse_score(_ko_score)
+        _ko_margin = abs(_ko_h - _ko_a) if (_ko_h is not None and _ko_a is not None) else 0
+        if final_dir in {"home", "away"} and _ko_margin >= 2 and (not web_used or data_quality_score < 55):
+            apply("B", "prematch_v2_worldcup_ko_blowout_requires_confirmation", "prematch_v2_worldcup_ko_blowout_confirmation")
+        if final_dir != "draw" and draw_cluster and (not web_used or data_quality_score < 55):
+            apply("B", "prematch_v2_worldcup_ko_extra_time_draw_risk", "prematch_v2_worldcup_ko_draw_extra_time")
+
+    # P0 世界杯第三轮：仅在明确小组赛R3时启用；已出线/可接受平或小负/轮换方，不允许被包装成热门强推。
     if context_flags.get("worldcup_r3"):
         if context_flags.get("already_qualified_or_can_accept_less") and context_flags.get("rotation_risk") and final_dir != "draw":
             apply("C", "prematch_v2_worldcup_r3_rotation_or_qualification_cap", "prematch_v2_worldcup_r3_rotation")

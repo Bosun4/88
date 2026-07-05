@@ -99,10 +99,20 @@ def test_low_confidence_draw_guard_forces_observe():
     assert "low_confidence_draw_observe:conf=41<45" in pred["recommend_gate_reasons"]
 
 
-def test_worldcup_cross_anchor_prompt_no_longer_forces_x_one_over_clean_sheet():
-    text = "\n".join(predict._cross_anchor_questions({"league": "世界杯"}))
+def test_worldcup_cross_anchor_prompt_defaults_to_knockout_not_group_r3():
+    text = "\n".join(predict._cross_anchor_questions({"league": "世界杯", "baseface": "世界杯1/8决赛"}))
 
     assert "【零封税·条件化】" in text
     assert "必须假定对手至少进1球" not in text
-    assert "必须允许并优先审计 N-0" in text
-    assert "0-0/1-1列入最终候选" in text
+    assert "【世界杯淘汰赛硬审计】" in text
+    assert "加时/点球风险" in text
+    assert "世界杯第三轮硬审计" not in text
+    assert "默契球" not in text
+
+
+def test_worldcup_cross_anchor_no_longer_uses_group_r3_even_if_old_text_present():
+    text = "\n".join(predict._cross_anchor_questions({"league": "世界杯", "baseface": "世界杯小组赛第三轮"}))
+
+    assert "【世界杯淘汰赛硬审计】" in text
+    assert "【世界杯第三轮硬审计】" not in text
+    assert "默契球" not in text
