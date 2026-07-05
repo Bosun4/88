@@ -29,7 +29,7 @@ LEAGUE_PROFILES = {
     "uel": (2.65, 52, 24, 36, 42, 35, "more open than UCL"),
     "ucnf": (2.50, 48, 26, 34, 38, 37, "quality gap huge"),
     "women": (2.50, 48, 26, 34, 38, 37, "similar to mens avg"),
-    "world_cup": (2.48, 47, 28, 36, 40, 36, "WC group: R1 dampest/R2 most open/R3 margin-compressed; KO QF most defensive 24% pens"),
+    "world_cup": (2.48, 47, 28, 36, 40, 36, "WC neutral tournament: identify phase first; KO raises 90min draw/ET/penalty risk, group-stage round priors only when explicit"),
     "intl_friendly": (2.60, 53, 24, 38, 42, 34, "friendly: rotation/trial, low-score clean-sheet fragile, easily broken by BTTS/2-2"),
     "default": (2.50, 50, 25, 35, 40, 35, "default"),
 }

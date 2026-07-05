@@ -62,6 +62,8 @@ def test_gemini_final_referee_gets_independent_web_and_market_tasks():
     assert "克罗地亚型韧性拖平" in prompt
     assert "比分淘汰协议" in prompt
     assert "0-0、1-1、2-2、1-2、2-1" in prompt
+    assert "世界杯淘汰赛三分法" in prompt
+    assert "加时点球" in prompt
 
 
 def test_full_spectrum_audit_schema_and_consistency_requirements():
@@ -79,6 +81,8 @@ def test_full_spectrum_audit_schema_and_consistency_requirements():
         assert key in schema
     assert "bet365" in schema
     assert "william_hill" in schema
+    assert "ninety_minute_vs_advance_semantics" in schema
+    assert "extra_time_penalty" in schema
     assert "0-0" in schema and "1-1" in schema and "2-2" in schema and "1-2" in schema and "2-1" in schema
     assert "bookmaker_cross_audit/tempo_xg_tactical_audit/score_elimination_audit 必须存在" in judge
     assert "score_elimination_audit 必须覆盖 0-0/1-1/2-2/1-2/2-1" in judge
