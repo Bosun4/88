@@ -6064,10 +6064,11 @@ def _match_context_flags(pred: Dict[str, Any], match_obj: Dict[str, Any], dna: D
     rotation_risk = any(t in text for t in ["轮休", "轮换", "替补", "二队", "青年", "休息", "rotation", "rotate", "rested"])
     importance_unclear = cup_like and not any(t in text for t in ["争冠", "保级", "必须", "晋级", "决赛", "半决赛", "主场告别", "战意", "motivation"])
     is_worldcup = "世界杯" in league or "world cup" in league.lower() or "worldcup" in league.lower()
-    worldcup_knockout = is_worldcup and any(t in text for t in ["淘汰赛", "1/8", "八分之一", "1/16", "十六分之一", "1/4", "四分之一", "半决赛", "决赛", "16强", "32强", "8强", "四强", "加时", "点球"])
-    worldcup_r3 = is_worldcup and not worldcup_knockout and any(t in text for t in ["小组赛第三轮", "第三轮", "第3轮", "末轮", "R3"])
-    already_qualified_or_can_accept_less = any(t in text for t in ["已出线", "提前晋级", "锁定出线", "打平即可", "小负即可", "轮换", "轮休", "保留主力", "避强签", "头名", "第二名"])
-    must_win_or_need_margin = any(t in text for t in ["必须取胜", "唯有取胜", "至少赢", "净胜球", "抢头名", "争最佳第三", "背水一战", "生死战", "抢分", "晋级希望"])
+    worldcup_group_r3 = is_worldcup and any(t in text for t in ["小组赛第三轮", "小组赛第3轮", "小组赛末轮", "group r3", "group stage r3"])
+    worldcup_knockout = is_worldcup and (not worldcup_group_r3 or any(t in text for t in ["淘汰赛", "1/8", "八分之一", "1/16", "十六分之一", "1/4", "四分之一", "半决赛", "决赛", "16强", "32强", "8强", "四强", "加时", "点球"]))
+    worldcup_r3 = worldcup_group_r3 and not worldcup_knockout
+    already_qualified_or_can_accept_less = worldcup_r3 and any(t in text for t in ["已出线", "提前晋级", "锁定出线", "打平即可", "小负即可", "轮换", "轮休", "保留主力", "避强签", "头名", "第二名"])
+    must_win_or_need_margin = worldcup_r3 and any(t in text for t in ["必须取胜", "唯有取胜", "至少赢", "净胜球", "抢头名", "争最佳第三", "背水一战", "生死战", "抢分", "晋级希望"])
     name_favorite = False
     sp_h = _f(match_obj.get("sp_home"), 0)
     sp_a = _f(match_obj.get("sp_away"), 0)
