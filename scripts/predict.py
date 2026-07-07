@@ -811,7 +811,24 @@ _TAIL_SCORE_KEYS_HOME = [("4-0", "w40"), ("4-1", "w41"), ("5-0", "w50"), ("5-1",
 _TAIL_SCORE_KEYS_AWAY = [("0-4", "l04"), ("1-4", "l14"), ("0-5", "l05"), ("1-5", "l15"), ("2-4", "l24"), ("2-5", "l25")]
 # 尾部赔率"异常低"阈值: 十日审计翻车场(葡萄牙5-0赔15/塞内加尔5-0类似) vs 均势场(5-0赔100+)
 _TAIL_ODDS_MAX = 26.0
-_TAIL_HANDICAP_MIN = 1.5
+_TAIL_HANDICAP_MIN = 1.5   # 深盘大比分尾部 (4+球) ———— 审计修复 2026-07-07
+_MID_TAIL_HANDICAP_MIN = 0.75   # 中等盘口尾部 (3+球)
+_MID_TAIL_ODDS_MAX = 18.0       # 中等尾部赔率阈值
+_MID_TAIL_SCORE_KEYS_HOME = [
+    ("3-0", "w30"), ("3-1", "w31"), ("4-0", "w40"), ("4-1", "w41"),
+    ("3-2", "w32"), ("4-2", "w42"), ("5-0", "w50"),
+]
+_MID_TAIL_SCORE_KEYS_AWAY = [
+    ("0-3", "l03"), ("1-3", "l13"), ("0-4", "l04"), ("1-4", "l14"),
+    ("2-3", "l23"), ("2-4", "l24"), ("0-5", "l05"),
+]
+# 非鱼腩冷门走廊阈值
+NON_MINNOW_AWAY_ODDS_MAX = 4.5
+UPSET_CORRIDOR_HOME_PROB_MAX = 0.55
+_UPSET_SCORE_KEYS = [("1-2", "l12"), ("0-1", "l01"), ("0-2", "l02"),
+                     ("1-3", "l13"), ("2-3", "l23"), ("0-3", "l03"),
+                     ("2-2", "d22"), ("1-1", "d11")]
+_UPSET_ODDS_SIGNAL_MAX = 10.0
 
 
 def derive_tail_risk(match_obj: Dict[str, Any]) -> Dict[str, Any]:
@@ -860,6 +877,93 @@ def derive_tail_risk(match_obj: Dict[str, Any]) -> Dict[str, Any]:
         "tail_side": side,
         "tail_scores": [sc for _, sc in compressed[:3]],
         "tail_p50_total": p50,
+    })
+    return out
+
+
+def _derived_tail_scores_all(match_obj: Dict[str, Any]) -> List[str]:
+    """收集所有可能的尾部比分(不限触发阈值), 供risk_score_candidates默认填充."""
+    scores = set()
+    for keys in (_TAIL_SCORE_KEYS_HOME, _TAIL_SCORE_KEYS_AWAY,
+                 _MID_TAIL_SCORE_KEYS_HOME, _MID_TAIL_SCORE_KEYS_AWAY):
+        for sc, key in keys:
+            odd = _f(match_obj.get(key), 0.0)
+            if 1.01 < odd <= 50.0:
+                scores.add(sc)
+    return sorted(scores)
+
+
+def derive_mid_tail_risk(match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    """中等盘口尾部风险检测 (盘口0.75-1.49, 3+球尾部).
+    与深盘derive_tail_risk互补, 捕获巴西vs挪威型中强队爆冷.
+    """
+    line = _parse_handicap_value(match_obj.get("give_ball", match_obj.get("handicap", match_obj.get("rq", ""))))
+    out = {"mid_tail_risk": False, "mid_tail_side": "", "mid_tail_scores": [], "mid_tail_level": ""}
+    if line is None or abs(line) < _MID_TAIL_HANDICAP_MIN or abs(line) >= _TAIL_HANDICAP_MIN:
+        return out
+
+    def _compressed(keys):
+        out2 = []
+        for sc, key in keys:
+            odd = _f(match_obj.get(key), 0.0)
+            if 1.01 < odd <= _MID_TAIL_ODDS_MAX:
+                out2.append((odd, sc))
+        out2.sort()
+        return out2
+
+    home_comp = _compressed(_MID_TAIL_SCORE_KEYS_HOME)
+    away_comp = _compressed(_MID_TAIL_SCORE_KEYS_AWAY)
+
+    def _score_side(c):
+        return (len(c), -c[0][0]) if c else (0, 0)
+
+    if _score_side(home_comp) >= _score_side(away_comp):
+        side, compressed = "home", home_comp
+    else:
+        side, compressed = "away", away_comp
+    if len(compressed) < 2:
+        return out
+    out.update({
+        "mid_tail_risk": True,
+        "mid_tail_side": side,
+        "mid_tail_scores": [sc for _, sc in compressed[:3]],
+        "mid_tail_level": "mid",
+    })
+    return out
+
+
+def detect_non_minnow_upset_corridor(match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    """检测非鱼腩冷门走廊: 客队不是鱼腩(赔率<4.5) + 主胜概率被市场高估.
+    巴西vs挪威型: 挪威客胜赔3.0-4.5范围, 非鱼腩, 但市场过度定价巴西.
+    输出: upset_corridor / upset_evidence / upset_scores
+    """
+    out = {"upset_corridor": False, "upset_evidence": [], "upset_scores": []}
+    away_odds = _f(match_obj.get("away_win_odds", match_obj.get("l_odds", 0)), 0)
+    home_odds = _f(match_obj.get("home_win_odds", match_obj.get("w_odds", 0)), 0)
+    if away_odds <= 0 or home_odds <= 0:
+        return out
+    if away_odds > NON_MINNOW_AWAY_ODDS_MAX or away_odds < 1.8:
+        return out
+    total_implied = 1.0 / home_odds + 1.0 / away_odds + 1.0 / _f(match_obj.get("draw_odds", match_obj.get("d_odds", 0)), 3.5)
+    home_prob = (1.0 / home_odds) / total_implied if total_implied > 0 else 0
+    if home_prob >= UPSET_CORRIDOR_HOME_PROB_MAX:
+        return out
+    upset_scores = []
+    for sc, key in _UPSET_SCORE_KEYS:
+        odd = _f(match_obj.get(key), 0.0)
+        if 1.01 < odd <= _UPSET_ODDS_SIGNAL_MAX:
+            upset_scores.append((odd, sc))
+    upset_scores.sort()
+    scores = [sc for _, sc in upset_scores[:4]]
+    evidence = [
+        f"away_odds={away_odds:.2f} (非鱼腩, <{NON_MINNOW_AWAY_ODDS_MAX})",
+        f"home_prob={home_prob:.1%} (<{UPSET_CORRIDOR_HOME_PROB_MAX:.0%} 未压倒)",
+        f"away_upset_scores={scores}",
+    ]
+    out.update({
+        "upset_corridor": len(upset_scores) >= 2,
+        "upset_evidence": evidence,
+        "upset_scores": scores,
     })
     return out
 
@@ -3674,7 +3778,11 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
     # P0-1: 大小球独立判定头(用a0-a7市场进球曲线), 不再被主比分总球数机械绑架
     ou_head = derive_ou_head(match_obj, score, goal_range=(gmin, gmax))
     # P0-3: 尾部比分释放 —— 深盘+市场压尾时扩候选簇+上修总球上界(不改AI主比分/方向)
+    # 审计修复 2026-07-07: 新增中盘尾部 + 非鱼腩冷门走廊; tail_scores空数组修复
     tail = derive_tail_risk(match_obj)
+    mid_tail = derive_mid_tail_risk(match_obj)
+    upset_corridor = detect_non_minnow_upset_corridor(match_obj)
+    # 深盘尾部注入
     if tail["tail_risk"]:
         _cand_scores = {c[0] for c in top_candidates}
         for _tsc in tail["tail_scores"]:
@@ -3682,13 +3790,41 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
                 _todd = get_market_odds_for_score(match_obj, _tsc)
                 top_candidates.append((_tsc, round(1.0 / _todd, 3) if _todd > 1.05 else 0.03))
                 _cand_scores.add(_tsc)
-                break  # 只注入市场最低赔的1个尾部比分, 避免稀释主簇
-        # 总球预期/区间上界跟随市场曲线P50(只放不收; 主比分本身不动)
-        _p50 = tail.get("tail_p50_total")
-        if isinstance(_p50, int) and _p50 > total_goals:
-            total_goals = _p50
-        if isinstance(_p50, int) and _p50 + 1 > gmax:
-            gmax = min(_p50 + 1, 8)
+                break
+    # 中盘尾部注入
+    if mid_tail.get("mid_tail_risk"):
+        _cand_scores = {c[0] for c in top_candidates}
+        for _tsc in mid_tail.get("mid_tail_scores", []):
+            if _tsc not in _cand_scores:
+                _todd = get_market_odds_for_score(match_obj, _tsc)
+                top_candidates.append((_tsc, round(1.0 / _todd, 3) if _todd > 1.05 else 0.03))
+                _cand_scores.add(_tsc)
+                break
+    # 总球预期/区间上界跟随市场曲线P50(只放不收; 主比分本身不动)
+    _p50_depth = tail.get("tail_p50_total")
+    if not (isinstance(_p50_depth, int) and _p50_depth > total_goals):
+        if mid_tail.get("mid_tail_scores"):
+            _temp_p50 = 0
+            for _s in mid_tail["mid_tail_scores"]:
+                try:
+                    _parts = _s.split("-")
+                    _tg = int(_parts[0]) + int(_parts[1])
+                    if _tg > _temp_p50:
+                        _temp_p50 = _tg
+                except:
+                    pass
+            if _temp_p50 > total_goals:
+                total_goals = _temp_p50
+                gmax = max(gmax, min(_temp_p50 + 1, 8))
+        _p50 = _p50_depth
+    else:
+        _p50 = _p50_depth
+    if isinstance(_p50, int) and _p50 > total_goals:
+        total_goals = _p50
+    if isinstance(_p50, int) and _p50 + 1 > gmax:
+        gmax = min(_p50 + 1, 8)
+    # 全部尾部比分列表(供候选)
+    all_tail_scores = _derived_tail_scores_all(match_obj)
     final_odds = get_market_odds_for_score(match_obj, score)
     market_implied = round(100.0 / final_odds, 3) if final_odds > 1.05 else None
     warnings = [w for w in list(ai_r.get("validation_warnings", [])) if "missing_published_at" not in str(w)]
@@ -3746,6 +3882,14 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "tail_side": tail["tail_side"],
         "tail_scores": tail["tail_scores"],
         "tail_p50_total": tail["tail_p50_total"],
+        "mid_tail_risk": mid_tail["mid_tail_risk"],
+        "mid_tail_side": mid_tail["mid_tail_side"],
+        "mid_tail_scores": mid_tail["mid_tail_scores"],
+        "mid_tail_level": mid_tail["mid_tail_level"],
+        "upset_corridor": upset_corridor["upset_corridor"],
+        "upset_evidence": upset_corridor["upset_evidence"],
+        "upset_scores": upset_corridor["upset_scores"],
+        "all_tail_scores": all_tail_scores,
         "expected_total_goals": total_goals,
         "goal_range": (gmin, gmax),
         "scenario": scenario,
@@ -3814,7 +3958,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "score_market_gate_pass": None,
         "score_market_alignment": None,
         "sharp_clearance_score": None,
-        "cold_door": {"is_cold_door": False, "strength": 0, "level": "AI-native字段，不由本地判断冷门", "signals": rec.get("risk_tags", []), "sharp_confirmed": str(money_flow.get("sharp_money_direction", "unclear")) not in ("", "unclear", "none"), "dark_verdict": ""},
+        "cold_door": {"is_cold_door": upset_corridor["upset_corridor"], "strength": 2 if upset_corridor["upset_corridor"] else 0, "level": "AI-native + locally_confirmed_non_minnow_corridor" if upset_corridor["upset_corridor"] else "AI-native", "signals": rec.get("risk_tags", []) + (["non_minnow_upset_corridor"] if upset_corridor["upset_corridor"] else []), "sharp_confirmed": str(money_flow.get("sharp_money_direction", "unclear")) not in ("", "unclear", "none"), "dark_verdict": ""},
         "xG_home": "?",
         "xG_away": "?",
         "bookmaker_implied_home_xg": "?",
@@ -5138,7 +5282,7 @@ def build_phase1_prompt(evidence_batch: List[Dict[str, Any]], ai_name: str) -> s
     p.append(_web_research_instruction(ai_name))
     p.append(PHASE1_ROLE_SPLIT_ADDENDUM)
     if ai_name == "gpt":
-        p.append("GPT重点【结构化清道夫与冷门探测器】：不要去盲目预测谁赢。你的唯一任务是扫描全盘的 score_cluster_diagnostics_v203。如果发现 0-0/1-1 的低分模式被严重压缩，或者强队客场让球却持续升水背离，你必须在 risk_score_candidates 里直接写入爆冷红灯，不需要给具体预测。若出现球半/两球深盘但强队1X2胜赔仍不实压、平赔/1-1未抬死，要按卡塔尔1-1瑞士型结构处理：深盘只是造强，不代表穿盘，必须保留1-1与一球小胜路径。不要被常规低赔迷惑，寻找深层陷阱！")
+        p.append("【中等盘口尾部（审计修复 2026-07-07）】：盘口在0.75-1.49范围时（非深盘），即使达不到深盘大比分尾部标准，仍可能存有3+球的中等尾部风险。本地引擎已生成 mid_tail_risk / mid_tail_scores。AI 必须在 score_elimination_audit 中说明是否认同该信号，并解释主比分是否充分覆盖了中等尾部比分。 GPT重点【结构化清道夫与冷门探测器】：不要去盲目预测谁赢。你的唯一任务是扫描全盘的 score_cluster_diagnostics_v203。如果发现 0-0/1-1 的低分模式被严重压缩，或者强队客场让球却持续升水背离，你必须在 risk_score_candidates 里直接写入爆冷红灯，不需要给具体预测。若出现球半/两球深盘但强队1X2胜赔仍不实压、平赔/1-1未抬死，要按卡塔尔1-1瑞士型结构处理：深盘只是造强，不代表穿盘，必须保留1-1与一球小胜路径。不要被常规低赔迷惑，寻找深层陷阱！")
     elif ai_name == "grok":
         p.append("Grok重点【Web-Max 外部事实与资金背离审判员】：优先核实 external_fact_table/source_conflict_audit/evidence_quality_score，覆盖伤停、首发、战意、赛程、天气、权威新闻与市场快照；同时读取 sharp_money_facts_v203、movement、vote 审计公众热度与赔率背离。不得编造盘口时间序列，不得把无来源事实用于升 main。你不是终审裁判，但必须按统一 schema 给出基于外部事实和盘口背离的暂定 final_direction/predicted_score，供 Gemini 复核。")
     else:
@@ -5213,7 +5357,7 @@ def build_gemini_final_prompt(evidence_batch: List[Dict[str, Any]], phase1_resul
     p.append("【全市场终审职责】：你是最终裁判，必须自己复核 1X2 欧赔/竞彩、HHAD/亚盘让球语义、总进球/大小球、正确比分赔率簇、相邻比分、BTTS、资金热度/Sharp、dual_market_divergence_calibration 与 score_cluster_diagnostics_v203；不得把赔率、亚盘、比分簇任务只交给 GPT/Grok。最终方向、比分、推荐等级必须由你完成全维读盘后裁定。")
     p.append("【庄家逆向读盘职责】：必须像庄家一样审计 Bet365、William Hill/威廉希尔、Pinnacle/低抽水基准、竞彩与百家均值之间的分歧；逐项解释升水/降水、亚盘升降盘、大小球水位、总进球赔率、正确比分簇是否在保护、诱导、分散或封顶。没有真实时间序列时只能写当前快照，不得编造临场故事。")
     p.append("【节奏/xG/战术脏活】：必须独立查并评估球队节奏、xG/xGA、射门质量、转换速度、压迫强度、阵型对位、核心球员缺阵/复出、天气场地、裁判尺度、旅行休息和赛程密度；这些只能作为读盘证据，不能无来源升 main。")
-    p.append("【世界杯爆冷脑回路】：必须主动审计日本型反击爆冷、摩洛哥型低位铁桶、克罗地亚型韧性拖平/加时土壤、强队慢热/名气过热/弱队效率反杀路径；输出 worldcup_upset_audit，不得用强弱名气直接杀冷。")
+    p.append("【世界杯爆冷脑回路】：必须主动审计日本型反击爆冷、摩洛哥型低位铁桶、克罗地亚型韧性拖平/加时土壤、强队慢热/名气过热/弱队效率反杀路径；输出 worldcup_upset_audit，不得用强弱名气直接杀冷。 【非鱼腩冷门走廊】：若客队赔率<4.5（即客队不是鱼腩，如巴西vs挪威/墨西哥vs英格兰型），且主胜去水概率未达压倒性（<55%），则必须审计'非鱼腩冷门走廊'——中强队客场有能力反杀、拖平或小比分失利都有实际可能性。本地引擎已生成 upset_corridor 信号，AI 必须在该信号触发时在 worldcup_upset_audit.upset_path 中明确回答是否认同、并解释为什么。")
     p.append("【世界杯淘汰赛三分法——强制】小组赛已结束；你必须先把场景归入以下之一：A.强队稳控窄胜/零封；B.弱队低位拖平进加时/点球；C.双方战术开放互有进球。A 类需比较1-0/2-0/2-1，B 类优先防0-0/1-1/0-1/1-0，C 类才释放2-2/3-2/2-3/3-1/1-3。")
     p.append("【淘汰赛慢热·加时·爆冷先验——强制】淘汰赛容错率低，90分钟平局与加时点球路径权重高于小组赛。热门方若主推净胜≥2，必须有联网首发/伤停、盘口、比分簇和总进球曲线共同确认；否则 confidence 与 recommendation 不得包装成强推。")
     p.append("【世界杯淘汰赛联网硬要求】你具备联网能力时，必须主动核实：①官方/预计首发与停赛伤停；②教练发布会是否暗示保守、轮换或点球准备；③比赛地天气/草皮/裁判尺度；④低水外盘、亚盘和大小球是否支持90分钟取胜或穿盘。影响方向/比分/推荐的 claim 必须进入 external_fact_table / web_research.sources(含 url+published_at)。")
@@ -5336,7 +5480,7 @@ def build_consistency_judge_prompt(evidence_batch: List[Dict[str, Any]], final_p
     p = []
     p.append("你是 Consistency Judge，只检查结构一致性，不做足球判断，不改变预测方向/比分，除非存在字段自相矛盾时给出 repair 建议。")
     p.append("输出严格 JSON object：{\"repairs\":[{\"match\":1,\"valid\":true,\"warnings\":[],\"repair\":{...}}]}。")
-    p.append("检查：final_direction 只能是 home/draw/away，no_bet/observe 只能存在于 recommendation.bet_action；predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；external_fact_table 非空时每条必须有 source_url，且必须同步存在 source_conflict_audit/evidence_quality_score/external_facts_decision_impact；若外部事实无来源或冲突未解决，repair 只能降级 recommendation 为 observe/no_bet，不得改比分硬升；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components/bookmaker_cross_audit/tempo_xg_tactical_audit/score_elimination_audit 必须存在；score_elimination_audit 必须覆盖 0-0/1-1/2-2/1-2/2-1；risk_score_candidates/tail_risk_flags/confidence_downgrade_reason 若存在必须保持数组/字符串结构。")
+    p.append("检查：tail_scores 不得为空数组（除非确实无任何尾部比分可填入）；all_tail_scores 已自动填充市场尾部比分，AI 不要在 risk_score_candidates 中机械留空。检查：final_direction 只能是 home/draw/away，no_bet/observe 只能存在于 recommendation.bet_action；predicted_score方向=final_direction；goal_band与比分总进球一致；btts与比分一致；top3[0]=predicted_score；web_research.used=true时必须有sources；external_fact_table 非空时每条必须有 source_url，且必须同步存在 source_conflict_audit/evidence_quality_score/external_facts_decision_impact；若外部事实无来源或冲突未解决，repair 只能降级 recommendation 为 observe/no_bet，不得改比分硬升；score_cluster_audit/sharp_money_audit/anchor_audit/recommendation_components/bookmaker_cross_audit/tempo_xg_tactical_audit/score_elimination_audit 必须存在；score_elimination_audit 必须覆盖 0-0/1-1/2-2/1-2/2-1；risk_score_candidates/tail_risk_flags/confidence_downgrade_reason 若存在必须保持数组/字符串结构。")
     p.append("不得根据足球观点改比分，只能修字段。")
     p.append("<evidence_batch>")
     for e in evidence_batch:
