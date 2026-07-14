@@ -102,7 +102,7 @@ AI_ENDPOINT_MODEL_SLOTS = {
         2: "grok-4.3-fast-c",
         3: "grok-4.3-c",
         4: "grok-4.3-fast-c",
-        5: "熊猫-A-5-grok-4.2-fast-200w上下文",
+        5: "熊猫-A-10-grok-4.5",
     },
     "gemini": {
         1: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
