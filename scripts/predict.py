@@ -80,7 +80,7 @@ BIG_GOAL_TAIL_A7_MAX = 14.0
 PHASE1_NAMES = ["gpt", "grok"]
 
 DEFAULT_MODELS = {
-    "gpt": "gpt-5.5",
+    "gpt": "gpt-5.6-sol",
     "grok": "grok-4.3-c",
     "gemini": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
 }
@@ -91,11 +91,11 @@ DEFAULT_MODELS = {
 # GPT/GROK 同理。模型名留空的 slot 会被跳过，避免误用未配置模型。
 AI_ENDPOINT_MODEL_SLOTS = {
     "gpt": {
-        1: "gpt-5.5",
-        2: "gpt-5.5",
-        3: "gpt-5.5",
-        4: "gpt-5.5",
-        5: "gpt-5.5",
+        1: "gpt-5.6-sol",
+        2: "gpt-5.6-sol",
+        3: "gpt-5.6-sol",
+        4: "gpt-5.6-sol",
+        5: "gpt-5.6-sol",
     },
     "grok": {
         1: "grok-4.3-c",
@@ -120,7 +120,7 @@ AI_ENDPOINT_SLOT_OVERRIDE: contextvars.ContextVar[Optional[int]] = contextvars.C
 def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
     """Resolve hard-coded endpoint model slots safely.
 
-    Slot values are model strings, e.g. "gpt-5.5". They are NOT keys into
+    Slot values are model strings, e.g. "gpt-5.6-sol". They are NOT keys into
     DEFAULT_MODELS. This guard also tolerates accidental DEFAULT_MODELS-style
     aliases ("gpt"/"grok"/"gemini") without import-time KeyError.
     """
@@ -135,7 +135,7 @@ def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
 def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
     """Resolve hard-coded endpoint model slots safely.
 
-    Slot values are model strings, e.g. "gpt-5.5". They are NOT keys into
+    Slot values are model strings, e.g. "gpt-5.6-sol". They are NOT keys into
     DEFAULT_MODELS. This guard also tolerates accidental DEFAULT_MODELS-style
     aliases ("gpt"/"grok"/"gemini") without import-time KeyError.
     """
