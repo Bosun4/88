@@ -89,6 +89,9 @@ jobs:
           CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
           CLAUDE_API_URL: ${{ secrets.CLAUDE_API_URL }}
 
+          # 问财新版接口凭证。设备 UUID/cid 运行时随机生成，不保存用户设备信息。
+          WENCAI_AUTHORIZATION: ${{ secrets.WENCAI_AUTHORIZATION }}
+
           AI_RUN_MODE: "fast_batch"
           # Fastest stable mode: one match per chunk, 5 chunks in flight.
           # Endpoint round-robin then spreads concurrent GPT/GROK/GEMINI calls

@@ -3,6 +3,7 @@ import re
 import json
 import asyncio
 import aiohttp
+import uuid
 from datetime import datetime, timedelta, timezone
 from config import *
 
@@ -176,26 +177,51 @@ def generate_stats_from_context(match, side):
 
 async def scrape_wencai_jczq_async(session, date_str):
     """抓取问财数据，自动隔离足球与篮球（防止篮球数据污染泊松模型）"""
-    url = f"https://edu.wencaivip.cn/api/v1.reference/matches?date={date_str}"
+    # 2026-07-18 起，旧版无鉴权 GET (?date=...) 返回 code=301「非法请求」。
+    # 新版接口要求 JSON POST；Authorization 从 Secret 注入，设备 UUID 与
+    # client id 每次运行随机生成，UA 使用不含用户设备信息的通用桌面标识。
+    url = "https://edu.wencaivip.cn/api/v1.reference/matches"
     football_matches = []
 
+    authorization = os.environ.get("WENCAI_AUTHORIZATION", "").strip()
+    if not authorization:
+        print("  ❌ 问财新版接口缺少运行凭证: WENCAI_AUTHORIZATION")
+        return []
+
+    device_id = str(uuid.uuid4())
+    client_id = f"wc-{uuid.uuid4().hex}"
+
     headers = {
-        "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
         "Accept":"application/json, text/plain, */*",
         "Accept-Language":"zh-CN,zh;q=0.9,en;q=0.8",
-        "Origin":"https://edu.wencaivip.cn",
-        "Referer":"https://edu.wencaivip.cn/"
+        "Content-Type":"application/json",
+        "Origin":"http://m.wencai51.cn",
+        "Referer":"http://m.wencai51.cn/",
+        "Authorization": authorization,
     }
+    payload = {"i": device_id, "cid": client_id}
 
     try:
-        async with session.get(url, headers=headers, timeout=15) as r:
+        async with session.post(url, headers=headers, json=payload, timeout=15) as r:
             if r.status != 200:
                 print(f"  ❌ 抓取失败 HTTP {r.status}")
                 return []
 
-            data = await r.json()
+            # 服务端可能用非 JSON MIME 返回错误体，先读文本再解析以保留诊断。
+            raw_text = await r.text()
+            try:
+                data = json.loads(raw_text)
+            except json.JSONDecodeError:
+                print(f"  ❌ 问财响应不是有效 JSON: {raw_text[:200]!r}")
+                return []
+
+            if data.get("code") not in (0, "0", None):
+                print(f"  ❌ 问财业务拒绝 code={data.get('code')} msg={data.get('msg', '')}")
+                return []
+
             if "data" not in data or not data["data"]:
-                print(f"  ⚠️ 接口未返回数据: {str(data)[:100]}")
+                print(f"  ⚠️ 接口未返回数据: {str(data)[:200]}")
                 return []
 
             matches_raw = data.get("data",{}).get("matches",{})
