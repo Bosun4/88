@@ -81,7 +81,7 @@ PHASE1_NAMES = ["gpt", "grok"]
 
 DEFAULT_MODELS = {
     "gpt": "gpt-5.6-sol",
-    "grok": "grok-4.3-c",
+    "grok": "熊猫-A-10-grok-4.6",
     "gemini": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
 }
 
@@ -98,18 +98,18 @@ AI_ENDPOINT_MODEL_SLOTS = {
         5: "gpt-5.6-sol",
     },
     "grok": {
-        1: "grok-4.3-c",
-        2: "grok-4.3-fast-c",
-        3: "grok-4.3-c",
-        4: "grok-4.3-fast-c",
-        5: "熊猫-A-10-grok-4.5",
+        1: "熊猫-A-10-grok-4.6",
+        2: "熊猫-A-10-grok-4.6",
+        3: "熊猫-A-10-grok-4.6",
+        4: "熊猫-A-10-grok-4.6",
+        5: "熊猫-A-10-grok-4.6",
     },
     "gemini": {
         1: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
         2: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 2号模型名
         3: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 3号模型名
         4: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 4号模型名
-        5: "熊猫-X-10-官逆-gemini-3.1-pro-联网",  # TODO: 填你的 GEMINI 5号模型名
+        5: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 5号模型名
     },
 }
 
