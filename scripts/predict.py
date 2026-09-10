@@ -81,7 +81,7 @@ PHASE1_NAMES = ["gpt", "grok"]
 
 DEFAULT_MODELS = {
     "gpt": "gpt-5.6-sol",
-    "grok": "熊猫-A-10-grok-4.6",
+    "grok": "熊猫-A-10-grok-4.5",
     "gemini": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
 }
 
@@ -98,11 +98,11 @@ AI_ENDPOINT_MODEL_SLOTS = {
         5: "gpt-5.6-sol",
     },
     "grok": {
-        1: "熊猫-A-10-grok-4.6",
-        2: "熊猫-A-10-grok-4.6",
-        3: "熊猫-A-10-grok-4.6",
-        4: "熊猫-A-10-grok-4.6",
-        5: "熊猫-A-10-grok-4.6",
+        1: "熊猫-A-10-grok-4.5",
+        2: "熊猫-A-10-grok-4.5",
+        3: "熊猫-A-10-grok-4.5",
+        4: "熊猫-A-10-grok-4.5",
+        5: "熊猫-A-10-grok-4.5",
     },
     "gemini": {
         1: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
