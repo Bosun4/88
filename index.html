@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#10171c">
-  <title>小鱼儿 · 联赛比赛监测</title>
+  <meta name="theme-color" content="#f5f6f8">
+  <title>小鱼儿 · 足球分析</title>
   <link rel="stylesheet" href="assets/dashboard.css">
   <script src="assets/dashboard.js" defer></script>
 </head>
@@ -12,28 +12,37 @@
   <a class="skip-link" href="#matches">跳到比赛列表</a>
   <header class="app-header">
     <div class="header-inner">
-      <div class="brand"><span class="brand-mark" aria-hidden="true">鱼</span><div><strong>小鱼儿 <span>联赛比赛监测</span></strong><small>主线预测 / 风险 D / 证据审计</small></div></div>
-      <div class="header-tools"><span class="version" id="version">数据待载入</span><button id="refresh" type="button">刷新快照</button></div>
+      <a class="brand" href="./" aria-label="小鱼儿足球分析首页"><span class="brand-mark" aria-hidden="true">鱼</span><strong>小鱼儿<span>足球分析</span></strong></a>
+      <div class="header-tools"><span class="edition">比赛 · 比分 · 判断依据</span><button id="refresh" type="button">刷新数据 <span aria-hidden="true">↻</span></button></div>
     </div>
   </header>
   <main class="layout">
     <section class="overview" aria-labelledby="page-title">
-      <div class="section-heading"><div><p class="eyebrow">MATCH MONITOR · 北京时间</p><h1 id="page-title">比赛观察台</h1></div><p class="muted">预测快照，非实时赛果</p></div>
-      <div id="snapshot-status" class="snapshot-banner" role="status" aria-live="polite">正在读取预测快照…</div>
-      <div id="metrics" class="metrics" aria-label="快照概览"></div>
+      <div class="section-heading"><div><p class="eyebrow">FOOTBALL / MATCH INTELLIGENCE</p><h1 id="page-title">先看比分，再看依据。</h1></div><div id="metrics" class="metrics" aria-label="比赛概览"></div></div>
+      <div id="snapshot-status" class="snapshot-banner" role="status" aria-live="polite">正在读取比赛数据…</div>
     </section>
-    <section class="toolbar" aria-label="比赛筛选">
-      <label class="search-label">查找比赛<input id="search" type="search" placeholder="球队、联赛或场次编号" autocomplete="off"></label>
-      <label>联赛<select id="league"><option value="">全部联赛</option></select></label>
-      <label>评级<select id="tier"><option value="">全部等级</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option value="unknown">未评级</option></select></label>
-      <label>状态<select id="status"><option value="">全部状态</option><option value="today">今日赛程</option><option value="fresh">未开赛 · 快照有效</option><option value="stale">历史 / 已过期</option><option value="unknown">时间待核验</option><option value="abstain">弃权 / 无主预测</option><option value="risk">有风险比分</option><option value="eligible">通过推荐闸门</option></select></label>
-      <label>排序<select id="sort"><option value="source">原始顺序</option><option value="kickoff">开赛时间</option><option value="tier">评级优先</option><option value="risk">风险比分优先</option></select></label>
-      <button id="reset" class="subtle" type="button">重置</button>
+    <section class="controls" aria-label="比赛筛选">
+      <div class="quick-filters" role="group" aria-label="快捷筛选">
+        <button type="button" data-view="all" aria-pressed="true">全部比赛 <span data-count="all">—</span></button>
+        <button type="button" data-view="d" aria-pressed="false">D 级分析 <span data-count="d">—</span></button>
+        <button type="button" data-view="risk" aria-pressed="false">风险比分 <span data-count="risk">—</span></button>
+        <button type="button" data-view="today" aria-pressed="false">今日 <span data-count="today">—</span></button>
+      </div>
+      <div class="search-tools">
+        <label class="search-label"><span class="sr-only">查找球队、联赛或场次编号</span><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="搜索球队 / 联赛" autocomplete="off"></label>
+        <details class="filter-menu"><summary>筛选 <span aria-hidden="true">☷</span></summary><div class="toolbar">
+          <label>联赛<select id="league"><option value="">全部联赛</option></select></label>
+          <label>评级<select id="tier"><option value="">全部等级</option><option>S</option><option>A</option><option>B</option><option>C</option><option>D</option><option value="unknown">未评级</option></select></label>
+          <label>状态<select id="status"><option value="">全部状态</option><option value="today">今日赛程</option><option value="fresh">未开赛 · 数据有效</option><option value="stale">历史 / 已过期</option><option value="unknown">时间待核验</option><option value="abstain">弃权 / 无主预测</option><option value="risk">有风险比分</option><option value="eligible">当前可关注</option></select></label>
+          <label>排序<select id="sort"><option value="source">原始顺序</option><option value="kickoff">开赛时间</option><option value="tier">评级优先</option><option value="risk">风险比分优先</option></select></label>
+          <button id="reset" type="button">重置全部筛选</button>
+        </div></details>
+      </div>
     </section>
-    <section id="watchlist" class="watchlist" aria-label="候选关注列表"></section>
-    <div class="list-heading"><h2>比赛与分析 <span id="result-count"></span></h2><label class="toggle"><input type="checkbox" id="expand-all"> 展开全部分析</label></div>
-    <div id="matches" tabindex="-1" aria-live="polite"><div class="empty">正在加载 data/predictions.json…</div></div>
-    <footer><p>风险 D 是分析通道，评级 D 是推荐等级；两者不自动构成推荐。主线与副文均为数据源原有判断，未核实信息会标记缺口。</p><p>时间按北京时间展示；快照超过 24 小时、比赛已开赛或日期已过均停止推荐展示。缺少精确开赛时间时只保留分析。AI 信心分不是历史校准命中率。</p></footer>
+    <section id="watchlist" class="watchlist" aria-label="当前可关注比赛" hidden></section>
+    <div class="list-heading"><h2>比赛一览 <span id="result-count"></span></h2><label class="toggle"><input type="checkbox" id="expand-all"> 展开全部依据</label></div>
+    <div id="matches" tabindex="-1" aria-live="polite"><div class="empty">正在加载比赛…</div></div>
+    <footer><p>D 是原预测评级；风险比分与副文提及单独展示。副文出现某个比分，不等于推荐该比分。</p><p>历史记录保留原判断，不作为当前推荐。概率缺失不补值；模型信心不代表历史命中率。<span id="version">联赛分析 v21</span></p></footer>
   </main>
 </body>
 </html>
