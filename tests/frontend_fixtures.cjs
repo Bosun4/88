@@ -89,6 +89,17 @@ test('D tier, risk candidates, prose side scores survive combined filtering', ()
   assert.equal(ui.filterMatches(rows, { search: '主队', tier: 'D' }).length, 1);
 });
 
+test('risk filtering and sorting use structured scores while retaining prose', () => {
+  const mixed = view({ ...match, prediction: { ...match.prediction, reason: '副文提及2-2、3-3、0-0' } });
+  const proseOnly = view({ ...match, id: 2, prediction: { ...mixed.p, risk_score_candidates: [] } });
+  const structuredOnly = view({ ...match, id: 3, prediction: { ...match.prediction, risk_score_candidates: ['0-1', '1-3'], reason: '' } });
+  const rows = [proseOnly, mixed, structuredOnly];
+  const filtered = ui.filterMatches(rows, { status: 'risk' });
+  assert.deepEqual(Array.from(filtered, m => m.raw.id), [1, 3]);
+  assert.match(ui.renderMatch(filtered[0]), /副文提及2-2、3-3、0-0/);
+  assert.deepEqual(Array.from(ui.filterMatches(rows, { sort: 'risk' }), m => m.raw.id), [3, 1, 2]);
+});
+
 test('league_context contract renders fact envelopes, both teams, signed gaps and provenance', () => {
   const fact = (value, status = 'observed') => ({ value, status, reason: null, sources: [{ source: 'fixture-source', source_url: 'https://example.test/table', captured_at: '2026-09-19T06:00:00Z', league_id: 39, season: 2026 }] });
   const lc = { version: 1, league: '英超', season: fact(2026), stage: fact('early', 'derived'), round: fact(4), total_rounds: fact(38), home: { rank: fact(2), points: fact(9), remaining_matches: fact(35), title_gap: fact(0), europe_gap: fact(-3), relegation_cushion: fact(8), rest_days: fact(3.5), rotation: { value: 'unknown', status: 'unknown', sources: [], reason: 'no_sourced_rotation_evidence' } }, away: { points: fact(4), motivation: { value: 'unknown', status: 'unknown', sources: [], reason: 'points_do_not_prove_intent' } }, note: '分差不代表战意' };
@@ -106,4 +117,33 @@ test('untrusted text is escaped and core audit/odds/reasons are retained', () =>
   const html = ui.renderMatch(view(m));
   assert.doesNotMatch(html, /<img/);
   for (const s of ['&lt;img', '零比零审计', '公司交叉审计', '候选比分理由']) assert.ok(html.includes(s));
+});
+
+
+test('compact summary separates structured risk from prose and preserves overlap', () => {
+  const m = clone(match);
+  m.prediction.reason = '副文还提及1-2与2-2，不能因此认作推荐。';
+  const html = ui.renderMatch(view(m));
+  const summary = html.split('<div class="reason-preview">')[0];
+  const risk = summary.match(/<section class="risk-summary">([\s\S]*?)<\/section>/)[1];
+  const prose = summary.match(/<section class="prose-summary">([\s\S]*?)<\/section>/)[1];
+  assert.match(risk, /1-2/);
+  assert.doesNotMatch(risk, /2-2/);
+  assert.match(prose, /1-2/);
+  assert.match(prose, /2-2/);
+  assert.match(html, /副文还提及1-2与2-2/);
+  assert.match(html, /class="analysis-details"/);
+  assert.doesNotMatch(html, /class="analysis-details" open/);
+  assert.ok(html.indexOf('class="primary-score"') < html.indexOf('class="technical-details"'));
+});
+
+test('expanded evidence is readable without exposing raw JSON by default', () => {
+  const m = clone(match);
+  m.prediction.market_interpretation = { one_x_two:'胜平负解释', handicap:'让球解释' };
+  const html = ui.renderMatch(view(m));
+  const evidence = html.split('<details class="technical-details">')[0];
+  assert.match(evidence, /<dt>胜平负<\/dt>/);
+  assert.match(evidence, /胜平负解释/);
+  assert.doesNotMatch(evidence, /<pre/);
+  assert.match(html, /查看原始数据/);
 });

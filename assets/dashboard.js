@@ -28,7 +28,7 @@ var Dashboard = (() => {
     const add = (score, reason, label) => {
       if (!/^\d{1,2}[-:]\d{1,2}$/.test(String(score || ''))) return;
       score = score.replace(':','-');
-      if (!result.some(r => r.score === score)) result.push({score, reason:text(reason), label});
+      if (!result.some(r => r.score === score && (r.label === '副文比分') === (label === '副文比分'))) result.push({score, reason:text(reason), label});
     };
     const candidates = p.risk_score_candidates || [];
     for (const r of Array.isArray(candidates) ? candidates : []) add(typeof r === 'string' ? r : r.score, r.reason || r.logic || '', r.risk_type || '风险 D');
@@ -76,9 +76,17 @@ var Dashboard = (() => {
     const base = Object.entries(lc).filter(([k]) => ['season','stage','round','total_rounds'].includes(k)).map(([k,v]) => factRow(k,v)).join('');
     return `<div class="league-context">${base}${['home','away'].map(side => `<section><h3>${side === 'home' ? '主队' : '客队'}</h3>${Object.entries(lc[side] || {}).map(([k,v]) => factRow(k,v)).join('') || '<p>未知</p>'}</section>`).join('')}<p class="muted">${esc(lc.note || '积分差不证明战意；未知轮换不能当成既定事实。')}</p></div>`;
   }
+  const fieldLabels = {...factLabels, score:'比分',prob:'模型概率（%）',probability:'模型概率（%）',logic:'依据',reason:'理由',home:'主胜',draw:'平局',away:'客胜',zero_zero:'0-0 路径',one_one:'1-1 路径',high_score_tail:'高比分风险',handicap_cover:'让球兑现',one_x_two:'胜平负',handicap:'让球',correct_score:'比分赔率',total_goals:'总进球',external_market:'外部市场',selected_cluster:'选择的比分组',why_selected_score:'选择理由',adjacent_scores_checked:'相邻比分比较',league_style:'联赛特点',team_style:'球队特点',tempo:'比赛节奏',score_shape:'比分形态',btts_likelihood:'双方进球',rotation_risk:'轮换风险',sharp_money_direction:'资金方向判断',public_money_direction:'公众倾向',evidence:'依据',bookmaker_intent:'公司报价解读',exclusion:'排除理由',available:'是否有数据',missing:'缺失信息',source:'来源',source_url:'来源地址',captured_at:'采集时间',has_conflict:'是否存在冲突',conflicts:'冲突说明',why_this_can_fail:'可能失效的条件',why_recommended:'判断依据',risk_type:'风险情景',raw_packet_quality:'原始数据质量'};
+  const valueLabels = {unknown:'未知',unclear:'尚不明确',yes:'是',no:'否',high:'高',medium:'中',low:'低',home:'主队',away:'客队',draw:'平局',observed:'来源事实',derived:'根据事实计算'};
+  function readable(value) {
+    if (!present(value)) return '<span class="muted">未提供</span>';
+    if (Array.isArray(value)) return '<ul class="readable-list">'+value.map(v=>'<li>'+readable(v)+'</li>').join('')+'</ul>';
+    if (typeof value === 'object') return '<dl class="readable-fields">'+Object.entries(value).map(([k,v])=>`<div><dt>${esc(fieldLabels[k] || k)}</dt><dd>${readable(v)}</dd></div>`).join('')+'</dl>';
+    return `<span class="analysis-text">${esc(typeof value === 'boolean' ? (value ? '是' : '否') : valueLabels[value] || String(value))}</span>`;
+  }
   function detail(title, value) {
     if (!present(value) || (typeof value === 'object' && Object.keys(value).length === 0)) return '';
-    return `<section class="evidence-section"><h3>${esc(title)}</h3><pre class="analysis-text">${esc(text(value))}</pre></section>`;
+    return `<section class="evidence-section"><h3>${esc(title)}</h3>${readable(value)}</section>`;
   }
   function renderMatch(m) {
     const p = m.p, r = m.raw;
@@ -94,14 +102,39 @@ var Dashboard = (() => {
       ['质量检查',p.data_quality],['原始副文',p.contextual_logic],['校验提示',p.validation_warnings],
       ['推荐闸门',p.recommend_gate_reasons || p.recommendation_downgrade_reasons],['原始玩法分析',p.bet_recommendation]
     ].map(([k,v]) => detail(k,v)).join('');
-    const states = {fresh:'未开赛 · 快照有效',stale:'历史 / 已过期',unknown:'时间待核验'};
-    return `<article class="match-card" id="${m.key}"><header class="match-head"><div class="match-meta"><span class="league-name">${esc(m.league)}</span><span>${esc(r.match_num || r.match_id || r.id || '')}</span><time>${esc(dateTime(m.kickoff))}</time></div><div><span class="badge tier-${esc(m.tier)}">评级 ${esc(m.tier === 'unknown' ? '未知' : m.tier)}</span> <span class="badge ${m.state === 'fresh' ? 'good' : 'warn'}">${states[m.state]}</span></div></header><div class="match-body"><div class="teams"><div class="team-name">${esc(m.home)}<small>主队</small></div><span class="vs">VS</span><div class="team-name">${esc(m.away)}<small>客队</small></div></div><div class="tracks"><section class="track"><div class="track-title">主线分析 <span>${m.eligible ? '通过推荐闸门' : '仅作分析记录'}</span></div><div class="score-row"><strong class="score ${m.abstain ? 'missing' : ''}">${esc(m.abstain ? '弃权 / 未提供' : p.predicted_score)}</strong><span class="direction">${esc({home:'主胜',draw:'平局',away:'客胜'}[p.final_direction] || '')}</span></div><p class="analysis-text">${esc(text(reason))}</p></section><section class="track risk-track"><div class="track-title">风险 D / 副文比分</div>${m.risks.map(x => `<div class="risk-item"><strong>${esc(x.score)}</strong> <span class="badge">${esc(x.label)}</span><p class="analysis-text">${esc(x.reason)}</p></div>`).join('') || '<p class="muted">本轮未提供风险比分</p>'}</section></div><div class="summary-grid">${probs ? probs.map((v,i) => `<div class="summary-item"><span>${['主胜','平局','客胜'][i]}</span><strong>${v}%</strong></div>`).join('') : '<p class="muted">胜平负概率未提供</p>'}${detail('总进球 / 双方进球',[p.goal_band,p.btts,p.goal_range].filter(present).join(' / '))}</div></div><details><summary>查看联赛证据、模型状态与完整分析</summary><div class="detail-content"><h3>联赛与赛程证据</h3>${renderLeagueContext(p.league_context || r.league_context)}<h3>AI 调用状态</h3>${renderModels(p)}<div class="evidence-grid">${blocks}${detail('原始胜平负报价',{home:r.sp_home ?? null,draw:r.sp_draw ?? null,away:r.sp_away ?? null})}</div></div></details></article>`;
+    const states = {fresh:'赛前记录',stale:'历史记录',unknown:'时间待核验'};
+    const scoreChips = items => items.map(x=>`<span class="score-chip" title="${esc(x.label+' · '+x.reason)}">${esc(x.score)}</span>`).join('');
+    const risk = m.risks.filter(x=>x.label !== '副文比分');
+    const prose = m.risks.filter(x=>x.label === '副文比分');
+    const reasonText = typeof reason === 'string' ? reason : Object.values(reason).filter(v=>typeof v==='string').join('；');
+    const timeLabel = Number.isFinite(m.kickoff) ? dateTime(m.kickoff) : /^\d{4}-\d\d-\d\d$/.test(r.date || '') ? r.date+' · 时间待核验' : '时间待核验';
+    const direction = {home:'主胜',draw:'平局',away:'客胜'}[p.final_direction] || '';
+    const riskDetails = m.risks.map(x=>`<div class="risk-explanation"><strong>${esc(x.score)}</strong><div><span class="badge">${esc(x.label)}</span><p>${esc(x.reason)}</p></div></div>`).join('') || '<p class="muted">未提供风险比分</p>';
+    return `<article class="match-card" id="${m.key}">
+      <header class="match-head"><div class="match-meta"><span class="league-name">${esc(m.league)}</span><span>${esc(r.match_num || r.match_id || r.id || '')}</span><time>${esc(timeLabel)}</time></div><div class="match-badges"><span class="badge tier-${esc(m.tier)}">评级 ${esc(m.tier === 'unknown' ? '未知' : m.tier)}</span><span class="record-state">${states[m.state]}</span></div></header>
+      <div class="match-summary">
+        <div class="teams"><div class="team-name">${esc(m.home)}<small>主</small></div><span class="vs">VS</span><div class="team-name">${esc(m.away)}<small>客</small></div></div>
+        <section class="primary-score"><span class="column-label">${m.state === 'stale' ? '原主线比分' : '主线比分'}</span><div class="score-row"><strong class="score ${m.abstain ? 'missing' : ''}">${esc(m.abstain ? '未给出' : p.predicted_score)}</strong><span class="direction">${esc(m.abstain ? '弃权' : direction)}</span></div></section>
+        <section class="risk-summary"><span class="column-label">风险比分 <small>独立于评级</small></span><div class="score-chips">${scoreChips(risk) || '<span class="muted">未提供</span>'}</div></section>
+        <section class="prose-summary"><span class="column-label">副文提及 <small>不等于推荐</small></span><div class="score-chips">${scoreChips(prose) || '<span class="muted">无额外比分</span>'}</div></section>
+      </div>
+      <div class="reason-preview"><span>核心判断</span><p>${esc(reasonText)}</p></div>
+      <div class="match-bottom"><span class="probabilities">${probs ? probs.map((v,i)=>`${['主','平','客'][i]} ${v}%`).join('　') : '胜平负概率未提供'}</span><span class="availability">${m.eligible ? '赛前可关注' : m.state === 'stale' ? '保留原判断 · 不作当前推荐' : '仅供分析'}</span></div>
+      <details class="analysis-details"><summary>展开完整分析 <span>主线依据 · 风险情景 · 赔率证据 <i aria-hidden="true">＋</i></span></summary><div class="detail-content">
+        <div class="reading-columns">${detail('主线完整依据',reason)}<section class="evidence-section"><h3>风险 D / 副文比分 · 情景依据</h3>${riskDetails}</section></div>
+        ${detail('总进球 / 双方进球',[p.goal_band,p.btts,p.goal_range].filter(present).join(' / '))}
+        <div class="evidence-grid">${blocks}</div>
+        <section class="evidence-section league-section"><h3>联赛与赛程证据</h3>${renderLeagueContext(p.league_context || r.league_context)}</section>
+        <details class="technical-details"><summary>数据来源与模型记录</summary><div class="technical-content">${renderModels(p)}${detail('原始胜平负报价',{home:r.sp_home ?? null,draw:r.sp_draw ?? null,away:r.sp_away ?? null})}<details><summary>查看原始数据</summary><pre>${esc(JSON.stringify(r,null,2))}</pre></details></div></details>
+      </div></details>
+    </article>`;
   }
+  const structuredRiskCount = m => m.risks.filter(x=>x.label !== '副文比分').length;
   function filterMatches(rows, f) {
-    const out = rows.filter(m => (!f.league || m.league === f.league) && (!f.tier || m.tier === f.tier) && (!f.search || [m.home,m.away,m.league,m.raw.match_num,m.raw.id].join(' ').toLowerCase().includes(f.search.toLowerCase())) && (!f.status || (f.status === 'risk' ? m.risks.length > 0 : ['today','eligible','abstain'].includes(f.status) ? m[f.status] : m.state === f.status)));
+    const out = rows.filter(m => (!f.league || m.league === f.league) && (!f.tier || m.tier === f.tier) && (!f.search || [m.home,m.away,m.league,m.raw.match_num,m.raw.id].join(' ').toLowerCase().includes(f.search.toLowerCase())) && (!f.status || (f.status === 'risk' ? structuredRiskCount(m) > 0 : ['today','eligible','abstain'].includes(f.status) ? m[f.status] : m.state === f.status)));
     if (f.sort === 'kickoff') out.sort((a,b) => (a.kickoff || Infinity)-(b.kickoff || Infinity));
     if (f.sort === 'tier') out.sort((a,b) => 'SABCD'.indexOf(a.tier) - 'SABCD'.indexOf(b.tier));
-    if (f.sort === 'risk') out.sort((a,b) => b.risks.length - a.risks.length);
+    if (f.sort === 'risk') out.sort((a,b) => structuredRiskCount(b) - structuredRiskCount(a));
     return out;
   }
   async function start() {
@@ -112,15 +145,19 @@ var Dashboard = (() => {
       const filtered = filterMatches(rows,Object.fromEntries(['search','league','tier','status','sort'].map(k => [k,$(k).value])));
       $('matches').innerHTML = filtered.map(renderMatch).join('') || '<div class="empty">当前条件下没有比赛。可重置筛选查看全部快照。</div>';
       $('result-count').textContent = `${filtered.length} / ${rows.length} 场`;
-      if ($('expand-all').checked) document.querySelectorAll('#matches details').forEach(d => d.open = true);
-      const metrics = [['全部比赛',rows.length],['今日赛程',rows.filter(m=>m.today).length],['通过闸门',rows.filter(m=>m.eligible).length],['评级 D',rows.filter(m=>m.tier==='D').length],['有风险比分',rows.filter(m=>m.risks.length).length],['历史 / 过期',rows.filter(m=>m.state==='stale').length]];
+      document.querySelectorAll('#matches .analysis-details').forEach(d => d.open = $('expand-all').checked);
+      const metrics = [['比赛记录',rows.length],['当前可关注',rows.filter(m=>m.eligible).length]];
+      const counts = {all:rows.length,d:rows.filter(m=>m.tier==='D').length,risk:rows.filter(m=>structuredRiskCount(m)).length,today:rows.filter(m=>m.today).length};
+      document.querySelectorAll('[data-count]').forEach(e=>e.textContent=counts[e.dataset.count]);
+      document.querySelectorAll('[data-view]').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.view === ($('tier').value==='D' ? 'd' : ['risk','today'].includes($('status').value) ? $('status').value : !$('tier').value && !$('status').value ? 'all' : ''))));
       $('metrics').innerHTML = metrics.map(([k,v])=>`<div class="metric"><strong>${v}</strong><span>${k}</span></div>`).join('');
       const stamp = snapshotTime(data), stale = !Number.isFinite(stamp) || Date.now()-stamp>86400000 || stamp>Date.now()+300000;
       $('snapshot-status').className = 'snapshot-banner'+(stale?' stale':'');
-      $('snapshot-status').innerHTML = `<strong>${stale ? '历史快照 · 当前推荐已关闭' : '预测快照已载入'}</strong><p>更新时间：${esc(dateTime(stamp))} · 今日按北京时间和实际日期判断；保留历史主线与风险分析。</p>`;
-      $('version').textContent = data.engine_version || data.runtime?.ai_run?.engine_version || '联赛分析面板 v21';
+      $('snapshot-status').innerHTML = `<strong>${stale ? '历史快照' : '赛前快照'}</strong><p>${esc(dateTime(stamp))} 更新${stale ? ' · 仅回看原判断，暂无当前推荐' : ' · 北京时间'}</p>`;
+      $('version').textContent = '页面 v21 · 数据：'+(data.engine_version || data.runtime?.ai_run?.engine_version || '历史版本');
       const eligible = rows.filter(m=>m.eligible);
-      $('watchlist').innerHTML = `<div class="watchlist-head"><h2>候选关注列表</h2><span class="muted">${eligible.length ? '仅显示未开赛且通过闸门的比赛' : '当前无有效推荐，仍可阅读分析记录'}</span></div><div class="watchlinks">${eligible.map(m=>`<a href="#${m.key}">${esc(m.home)} vs ${esc(m.away)}</a>`).join('')}</div>`;
+      $('watchlist').hidden = eligible.length === 0;
+      $('watchlist').innerHTML = eligible.length ? `<h2>当前可关注</h2><div class="watchlinks">${eligible.map(m=>`<a href="#${m.key}">${esc(m.home)} vs ${esc(m.away)}</a>`).join('')}</div>` : '';
     }
     async function load() {
       $('refresh').disabled = true;
@@ -142,7 +179,11 @@ var Dashboard = (() => {
       } finally { $('refresh').disabled = false; }
     }
     for (const k of ['search','league','tier','status','sort']) $(k).addEventListener(k==='search'?'input':'change',render);
-    $('expand-all').addEventListener('change',()=>document.querySelectorAll('#matches details').forEach(d=>d.open=$('expand-all').checked));
+    $('expand-all').addEventListener('change',()=>document.querySelectorAll('#matches .analysis-details').forEach(d=>d.open=$('expand-all').checked));
+    document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{
+      const view=button.dataset.view; $('tier').value=view==='d' ? 'D' : '';
+      $('status').value=['risk','today'].includes(view) ? view : ''; render();
+    }));
     $('reset').addEventListener('click',()=>{for(const k of ['search','league','tier','status']) $(k).value='';$('sort').value='source';render();});
     $('refresh').addEventListener('click',load);
     await load();
