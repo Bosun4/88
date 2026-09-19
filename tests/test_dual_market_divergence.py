@@ -9,6 +9,7 @@
 import math
 import os
 import sys
+from datetime import datetime, timezone
 
 import pytest
 
@@ -25,11 +26,14 @@ import predict  # noqa: E402
 MOCK_EVENTS = [
     {
         "id": "evt_brann",
+        "sport_key": "soccer_norway_eliteserien",
+        "commence_time": "2026-09-19T19:00:00Z",
         "home_team": "Brann",
         "away_team": "Sarpsborg 08",
         "bookmakers": [
             {
                 "key": "pinnacle",
+                "last_update": "2026-09-19T11:55:00Z",
                 "markets": [
                     {
                         "key": "h2h",
@@ -51,7 +55,7 @@ def _shin(odds):
 
 
 def test_extract_1x2_prefers_pinnacle():
-    parsed = global_odds._extract_1x2(MOCK_EVENTS[0])
+    parsed = global_odds._extract_1x2(MOCK_EVENTS[0], now=datetime(2026, 9, 19, 12, tzinfo=timezone.utc))
     assert parsed is not None
     assert parsed["home_team"] == "Brann"
     assert parsed["odds"]["home"] == pytest.approx(1.60)
@@ -68,9 +72,10 @@ def test_enrich_injects_global_fields(monkeypatch):
 
     matches = [{
         "home_team": "布兰", "away_team": "萨普斯堡", "league": "挪超",
+        "kickoff_at": "2026-09-19T19:00:00Z",
         "sp_home": 1.85, "sp_draw": 3.50, "sp_away": 4.20,
     }]
-    matched = global_odds.enrich_with_global_odds(matches)
+    matched = global_odds.enrich_with_global_odds(matches, now=datetime(2026, 9, 19, 12, tzinfo=timezone.utc))
     assert matched == 1
     m = matches[0]
     assert m["global_home"] == pytest.approx(1.60)
@@ -154,7 +159,8 @@ def test_live_fallback_prompt_carries_divergence_rule():
     assert "skew_pct" in prompt
 
 
-def test_live_gpt_phase1_reads_local_skew():
+def test_live_gpt_phase1_reads_local_skew(monkeypatch):
+    monkeypatch.setattr(predict, "AI_NATIVE_WEB", True)
     """GPT 角色指令应要求解读本地已算 skew，而非联网去找分歧。"""
     instr = predict._web_research_instruction("gpt")
     assert "dual_market_divergence_calibration" in instr

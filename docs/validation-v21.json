@@ -1,0 +1,83 @@
+{
+  "date": "2026-09-19",
+  "upstream_base": "79264aa120f9a64ec064cbbcb9a91261d1f6715a",
+  "backend": {
+    "passed": 349,
+    "failed": 0
+  },
+  "frontend": {
+    "passed": 9,
+    "failed": 0
+  },
+  "browser": {
+    "cards": 26,
+    "d_filter_count": 6,
+    "historical_not_today": true,
+    "watchlist_count": 0,
+    "desktop_overflow": false,
+    "mobile_overflow": false,
+    "page_errors": [],
+    "expand_reset_filters": "passed"
+  },
+  "live_api": [
+    {
+      "experiment": "live-ai-smoke-resolved",
+      "model": "gpt-6-astra",
+      "seconds": 125.766,
+      "batches": 1,
+      "requests": 1,
+      "statuses": [
+        "http_524"
+      ],
+      "replay_requests": 0,
+      "cache_hits": 1,
+      "historical_replay_only": true
+    },
+    {
+      "experiment": "live-ai-smoke-compact",
+      "model": "gpt-6-astra",
+      "seconds": 125.578,
+      "batches": 1,
+      "requests": 1,
+      "statuses": [
+        "http_524"
+      ],
+      "replay_requests": 0,
+      "cache_hits": 1,
+      "historical_replay_only": true
+    },
+    {
+      "experiment": "live-ai-smoke-stream",
+      "model": "gpt-6-astra",
+      "seconds": 180.625,
+      "batches": 1,
+      "requests": 1,
+      "statuses": [
+        "timeout"
+      ],
+      "replay_requests": 0,
+      "cache_hits": 1,
+      "historical_replay_only": true
+    }
+  ],
+  "baseline": {
+    "input_versions": 1480,
+    "deduplicated_records": 1480,
+    "settled": 0,
+    "unresolved_in_scope": 720,
+    "strict_forward_samples": 0
+  },
+  "blockers": [
+    "Live AI response failed: HTTP 524 or 180s timeout",
+    "WENCAI_AUTHORIZATION unavailable: current fixture fetch not verified",
+    "GitHub credentials unavailable: push, CI and Pages deployment not verified"
+  ],
+  "dependency_audit": {
+    "packages": 20,
+    "vulnerabilities": 0
+  },
+  "archive": {
+    "count": 24,
+    "sha256_errors": []
+  }
+}

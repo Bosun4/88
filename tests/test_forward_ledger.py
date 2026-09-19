@@ -12,6 +12,7 @@ def test_ledger_pipeline(tmp_path):
         "predictions": [
             {
                 "match_id": "m1",
+                "kickoff_at": "2099-05-15T18:00:00Z",
                 "predicted_score": "2-0",
                 "final_direction": "home",
                 "risk_score_candidates": ["1-0", "3-0"],
@@ -37,8 +38,8 @@ def test_ledger_pipeline(tmp_path):
     actual_csv = tmp_path / "actual.csv"
     with open(actual_csv, "w", newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(["match_id", "actual_score"])
-        writer.writerow(["m1", "2-0"])
+        writer.writerow(["match_id", "event_date", "actual_score"])
+        writer.writerow(["m1", "2099-05-15", "2-0"])
         
     out_csv = tmp_path / "scored.csv"
     out_md = tmp_path / "scored.md"
@@ -58,6 +59,7 @@ def test_ledger_normalizes_flat_matrix_and_dict_risk_candidates(tmp_path):
         "predictions": [
             {
                 "match_id": "m2",
+                "kickoff_at": "2099-05-15T18:00:00Z",
                 "predicted_score": "2-1",
                 "final_direction": "home",
                 "risk_score_candidates": [{"score": "1-2"}, {"score": "2-2"}, "2-3"],
@@ -85,8 +87,8 @@ def test_ledger_normalizes_flat_matrix_and_dict_risk_candidates(tmp_path):
     actual_csv = tmp_path / "actual2.csv"
     with open(actual_csv, "w", newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(["match_id", "actual_score"])
-        writer.writerow(["m2", "2-2"])
+        writer.writerow(["match_id", "event_date", "actual_score"])
+        writer.writerow(["m2", "2099-05-15", "2-2"])
     out_csv = tmp_path / "scored2.csv"
     out_md = tmp_path / "scored2.md"
     scored = score_ledger_with_actuals(str(ledger_file), str(actual_csv), str(out_csv), str(out_md))

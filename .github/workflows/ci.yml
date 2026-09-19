@@ -1,0 +1,51 @@
+name: Offline CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: offline-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUTF8: "1"
+      VMAX_ALLOW_AUTO_INSTALL: "false"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install locked runtime and test tools
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install pytest==9.1.1 pytest-socket==0.8.1 PyYAML==6.0.3 pip-audit==2.10.1
+          python -m pip check
+      - name: Offline regression tests (no AI credentials or network)
+        run: python -m pytest -q --disable-socket --allow-unix-socket
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Frontend regression gate
+        run: node tests/frontend_fixtures.cjs
+      - name: Audit runtime dependency lock
+        run: python -m pip_audit -r requirements.txt --format json --output dependency-audit.json
+      - name: Upload dependency audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-audit-${{ github.run_id }}
+          path: dependency-audit.json
+          if-no-files-found: ignore
+          retention-days: 14

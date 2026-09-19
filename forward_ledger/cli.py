@@ -10,6 +10,7 @@ def main():
     cmd_lock = sub.add_parser("lock")
     cmd_lock.add_argument("--pred", required=True)
     cmd_lock.add_argument("--out", default="reports/forward_ledger/ledger_latest.jsonl")
+    cmd_lock.add_argument("--on-conflict", choices=("error", "keep"), default="error")
     
     cmd_score = sub.add_parser("score")
     cmd_score.add_argument("--ledger", required=True)
@@ -20,7 +21,7 @@ def main():
     args = parser.parse_args()
     
     if args.cmd == "lock":
-        cnt = create_ledger_from_prediction(args.pred, args.out)
+        cnt = create_ledger_from_prediction(args.pred, args.out, on_conflict=args.on_conflict)
         print(f"Locked {cnt} matches into {args.out}")
         
     elif args.cmd == "score":

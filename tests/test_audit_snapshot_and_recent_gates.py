@@ -21,12 +21,12 @@ def test_publish_prediction_outputs_writes_immutable_snapshot(tmp_path):
     assert os.path.exists(paths["live"])
     assert os.path.exists(paths["history"])
     assert os.path.exists(paths["snapshot"])
-    assert paths["snapshot"].endswith("data/snapshots/2026-06-21_today_evening_20260621_230900.json")
+    assert paths["snapshot"].replace(os.sep, "/").endswith("data/snapshots/2026-06-21_today_evening_20260621_230900.json")
     saved = json.load(open(paths["snapshot"], encoding="utf-8"))
     assert saved["runtime"]["snapshot_path"] == "data/snapshots/2026-06-21_today_evening_20260621_230900.json"
 
     second_paths = main.publish_prediction_outputs(str(data_dir), "2026-06-21", "evening", {"runtime": {}, "matches": {"today": []}}, now)
-    assert second_paths["snapshot"].endswith("data/snapshots/2026-06-21_today_evening_20260621_230900_2.json")
+    assert second_paths["snapshot"].replace(os.sep, "/").endswith("data/snapshots/2026-06-21_today_evening_20260621_230900_2.json")
 
 
 def test_audit_worldcup_live_accepts_explicit_snapshot_paths(tmp_path):

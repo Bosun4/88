@@ -4,6 +4,7 @@ import json
 import asyncio
 import aiohttp
 import uuid
+import hashlib
 from datetime import datetime, timedelta, timezone
 from config import *
 
@@ -82,18 +83,28 @@ def _env_int(name, default):
         return int(default)
 
 
+def _kickoff_from_stime(stime):
+    """Wencai stime is Unix seconds; unknown formats remain unknown."""
+    if isinstance(stime, bool) or not re.fullmatch(r"\d+(?:\.0+)?", str(stime)):
+        return None
+    try:
+        ts = int(float(stime))
+        if ts <= 0:
+            return None
+        return datetime.fromtimestamp(ts, timezone.utc)
+    except (ValueError, TypeError, OverflowError, OSError):
+        return None
+
+
 def _business_day_from_stime(stime, shift_hours=None):
     """由开赛 Unix 秒推算竞彩业务日 (YYYY-MM-DD)。解析失败返回 None。"""
     if shift_hours is None:
         shift_hours = _env_int("VMAX_DATE_SHIFT_HOURS", 11)
-    try:
-        ts = int(float(stime))
-    except (ValueError, TypeError):
-        return None
-    if ts <= 0:
+    kickoff = _kickoff_from_stime(stime)
+    if kickoff is None:
         return None
     bj = timezone(timedelta(hours=8))
-    dt = datetime.fromtimestamp(ts, bj) - timedelta(hours=shift_hours)
+    dt = kickoff.astimezone(bj) - timedelta(hours=shift_hours)
     return dt.strftime("%Y-%m-%d")
 
 
@@ -131,48 +142,10 @@ def filter_matches_by_window(football_list, today=None, days_ahead=None, shift_h
     return kept
 
 def generate_stats_from_context(match, side):
-    """API未命中时，通过赔率+排名反推统计数据（容灾方案）"""
-    rank_raw = match.get("home_rank" if side=="home" else "away_rank", 10)
-    try: rank_int = int(rank_raw or 0)
-    except: rank_int = 0
-    sp_h = float(match.get("sp_home",0) or 0)
-    sp_a = float(match.get("sp_away",0) or 0)
-    rank = max(1, min(20, rank_int if rank_int > 0 else 10))
-    strength = 1.0 - (rank - 1) / 19.0
-
-    # 赔率反推强度（权重70%，比纯排名更准）
-    has_odds_signal = sp_h > 1 and sp_a > 1
-    if has_odds_signal:
-        if side == "home": odds_strength = (1/sp_h) / (1/sp_h + 1/sp_a)
-        else: odds_strength = (1/sp_a) / (1/sp_h + 1/sp_a)
-        strength = strength * 0.3 + odds_strength * 0.7
-
-    # 无任何强度信号（排名缺失走兜底10 且 无1X2赔率）→ 主客两队会得到完全相同的占位值，
-    # 此时统计数据不可信，必须显式标记，避免 AI 把虚构战绩当真实读盘依据。
-    no_real_signal = (rank_int <= 0) and (not has_odds_signal)
-
-    played = 25
-    win_rate = max(0.15, min(0.70, strength * 0.55 + 0.15))
-    wins = max(1, round(played * win_rate))
-    draws = max(1, round(played * 0.25))
-    losses = max(1, played - wins - draws)
-    gf = max(0.6, strength * 1.6 + 0.4)
-    ga = max(0.5, (1-strength) * 1.5 + 0.4)
-
-    if strength > 0.6: form = "WWDWW"
-    elif strength > 0.4: form = "WDLWD"
-    elif strength > 0.25: form = "LDWDL"
-    else: form = "LLDLL"
-
+    """Missing statistics cannot be reconstructed from odds or rankings."""
     return {
-        "played":played,"wins":wins,"draws":draws,"losses":losses,
-        "goals_for":round(played*gf),"goals_against":round(played*ga),
-        "avg_goals_for":str(round(gf,2)),"avg_goals_against":str(round(ga,2)),
-        "clean_sheets":max(1,round(played*(1-ga/2.5)*0.25)),"form":form,
-        "estimated": True,
-        "data_available": not no_real_signal,
-        "data_note": ("⚠️无真实战绩且无1X2赔率信号，此为排名兜底占位值，不可作读盘依据" if no_real_signal
-                       else "由赔率/排名反推的估算值，非官方真实战绩"),
+        "estimated": False, "data_available": False, "quality": "unavailable",
+        "source": None, "data_note": "未取得可核验赛季战绩；赔率与排名不能反推比赛记录",
     }
 
 async def scrape_wencai_jczq_async(session, date_str):
@@ -244,8 +217,20 @@ async def scrape_wencai_jczq_async(session, date_str):
                 print(f"  [INFO] 窗口过滤后无符合赛事")
                 return []
 
+            captured = datetime.now(timezone.utc)
             for item in football_list:
                 try:
+                    kickoff = _kickoff_from_stime(item.get("stime"))
+                    if kickoff and kickoff <= captured:
+                        continue
+                    source_id = item.get("id")
+                    match_id = f"wencai:{source_id}" if source_id else None
+                    if not match_id and kickoff and all(item.get(k) for k in ("cup", "home", "guest")):
+                        identity = [item["cup"], item.get("season"), item["home"],
+                                    item["guest"], kickoff.isoformat()]
+                        match_id = "fixture:" + hashlib.sha256(
+                            json.dumps(identity, ensure_ascii=False).encode("utf-8")
+                        ).hexdigest()
                     m_num = str(item.get("week","")) + str(item.get("week_no",""))
                     info = _safe_dict(item.get("information"))
                     analyse = _safe_dict(item.get("analyse"))
@@ -278,6 +263,15 @@ async def scrape_wencai_jczq_async(session, date_str):
                         if val is not None: v2_odds[k] = _get_float(val)
 
                     football_matches.append({
+                        "match_id": match_id,
+                        "source_event_id": source_id,
+                        "source": "wencai",
+                        "source_url": url,
+                        "stime": item.get("stime"),
+                        "kickoff_at": kickoff.isoformat() if kickoff else None,
+                        "captured_at": captured.isoformat(),
+                        "kickoff_status": "known" if kickoff else "unknown",
+                        "season": item.get("season"),
                         "home_team": str(item.get("home","未知")),
                         "away_team": str(item.get("guest","未知")),
                         "league": str(item.get("cup","未知")),
@@ -317,74 +311,141 @@ async def async_fetch_api(session, endpoint, params, sema):
         except: return []
     return []
 
+# Provider competition identifiers, never season assumptions.
+API_LEAGUE_IDS = {
+    "英超": 39, "英冠": 40, "西甲": 140, "意甲": 135, "德甲": 78,
+    "德乙": 79, "法甲": 61, "法乙": 62, "荷甲": 88, "葡超": 94,
+    "比甲": 144, "土超": 203, "苏超": 179, "日职": 98, "韩职": 292,
+    "澳超": 188, "巴甲": 71, "阿甲": 128, "美职": 253, "挪超": 103,
+    "瑞超": 113, "欧冠": 2, "欧罗巴": 3, "欧协联": 848, "世界杯": 1,
+}
+
+
+def _api_stats(raw, team_id, league_id, season, provenance):
+    """Only return complete, correctly scoped provider statistics."""
+    fallback = generate_stats_from_context({}, "")
+    if not isinstance(raw, dict):
+        return fallback
+    if (raw.get("team", {}).get("id") != team_id
+            or raw.get("league", {}).get("id") != league_id
+            or raw.get("league", {}).get("season") != season):
+        return fallback
+    try:
+        fixtures = raw["fixtures"]
+        stats = {key: fixtures[src]["total"] for key, src in
+                 (("played", "played"), ("wins", "wins"),
+                  ("draws", "draws"), ("losses", "loses"))}
+        stats.update({"goals_for": raw["goals"]["for"]["total"]["total"],
+                      "goals_against": raw["goals"]["against"]["total"]["total"]})
+        if any(type(v) is not int or v < 0 for v in stats.values()):
+            return fallback
+        if stats["wins"] + stats["draws"] + stats["losses"] != stats["played"]:
+            return fallback
+        stats.update({"form": raw.get("form"),
+                      "avg_goals_for": raw["goals"]["for"].get("average", {}).get("total"),
+                      "avg_goals_against": raw["goals"]["against"].get("average", {}).get("total"),
+                      "clean_sheets": raw.get("clean_sheet", {}).get("total"),
+                      "estimated": False, "data_available": True,
+                      "quality": "observed", **provenance})
+        return stats
+    except (KeyError, TypeError):
+        return fallback
+
+
 async def enrich_match_data(session, m, i, date_str, sema):
-    m["id"] = i + 1
-    m["date"] = date_str
+    """Resolve a unique fixture before fetching season-scoped facts."""
+    from fixture_identity import parse_time
 
-    h_task = async_fetch_api(session,"/teams",{"search":translate_team_name(m["home_team"])},sema)
-    a_task = async_fetch_api(session,"/teams",{"search":translate_team_name(m["away_team"])},sema)
-    h_res, a_res = await asyncio.gather(h_task, a_task)
+    m.update({"id": i + 1, "date": date_str, "h2h": [],
+              "home_stats": generate_stats_from_context(m, "home"),
+              "away_stats": generate_stats_from_context(m, "away")})
+    kickoff = parse_time(m.get("kickoff_at"))
+    league_id = API_LEAGUE_IDS.get(m.get("league"))
+    if not API_FOOTBALL_KEY or not kickoff or not league_id:
+        return m
+    # No general-purpose machine translation at an identity boundary.
+    def name(value):
+        value = TEAM_NAME_MAPPING.get(value, NATIONAL_TEAM_MAPPING.get(value, value))
+        return str(value or "").strip().casefold()
 
-    m["home_id"] = h_res[0]["team"]["id"] if h_res else 0
-    m["away_id"] = a_res[0]["team"]["id"] if a_res else 0
+    candidates = await async_fetch_api(
+        session, "/fixtures", {"date": kickoff.date().isoformat(),
+                               "league": league_id, "timezone": "UTC"}, sema)
+    hits = []
+    for row in candidates if isinstance(candidates, list) else []:
+        if not isinstance(row, dict):
+            continue
+        f, league, teams = (row.get(k) or {} for k in ("fixture", "league", "teams"))
+        if (f.get("id") and league.get("id") == league_id
+                and parse_time(f.get("date")) == kickoff
+                and all(name(m.get(f"{s}_team")) == name((teams.get(s) or {}).get("name"))
+                        and (teams.get(s) or {}).get("id") for s in ("home", "away"))):
+            hits.append(row)
+    if len(hits) != 1 or not hits[0]["league"].get("season"):
+        return m
+    fixture = hits[0]
+    season = fixture["league"]["season"]
+    if m.get("season") and str(m["season"]) != str(season):
+        return m
+    m.update({"api_football_fixture_id": fixture["fixture"]["id"],
+              "league_id": league_id, "season": season})
+    for side in ("home", "away"):
+        m[f"{side}_id"] = fixture["teams"][side]["id"]
+    captured = datetime.now(timezone.utc).isoformat()
+    common = {"source": "api_football", "captured_at": captured,
+              "league_id": league_id, "season": season}
+    def proof(endpoint, params):
+        from urllib.parse import urlencode
+        return {**common, "source_url": f"{API_FOOTBALL_BASE}{endpoint}?{urlencode(params)}"}
 
-    tasks = []
-    if m["home_id"]: tasks.append(async_fetch_api(session,"/teams/statistics",{"team":m["home_id"],"season":2024},sema))
-    else: tasks.append(asyncio.sleep(0))
-    if m["away_id"]: tasks.append(async_fetch_api(session,"/teams/statistics",{"team":m["away_id"],"season":2024},sema))
-    else: tasks.append(asyncio.sleep(0))
-    if m["home_id"] and m["away_id"]: tasks.append(async_fetch_api(session,"/fixtures/headtohead",{"h2h":f"{m['home_id']}-{m['away_id']}","last":5},sema))
-    else: tasks.append(asyncio.sleep(0))
-
-    results = await asyncio.gather(*tasks)
-
-    # 主队stats（含draws/losses）
-    api_h = results[0]
-    if api_h and isinstance(api_h, dict) and "fixtures" in api_h:
-        m["home_stats"] = {
-            "played": api_h["fixtures"]["played"].get("total",0),
-            "wins": api_h["fixtures"]["wins"].get("total",0),
-            "draws": api_h["fixtures"]["draws"].get("total",0),
-            "losses": api_h["fixtures"]["loses"].get("total",0),
-            "goals_for": api_h["goals"]["for"]["total"].get("total",0),
-            "goals_against": api_h["goals"]["against"]["total"].get("total",0),
-            "avg_goals_for": str(api_h["goals"]["for"]["average"].get("total","0.0")),
-            "avg_goals_against": str(api_h["goals"]["against"]["average"].get("total","0.0")),
-            "form": api_h.get("form",""),
-            "clean_sheets": api_h["clean_sheet"].get("total",0),
-        }
-    else:
-        m["home_stats"] = generate_stats_from_context(m, "home")
-
-    # 客队stats
-    api_a = results[1]
-    if api_a and isinstance(api_a, dict) and "fixtures" in api_a:
-        m["away_stats"] = {
-            "played": api_a["fixtures"]["played"].get("total",0),
-            "wins": api_a["fixtures"]["wins"].get("total",0),
-            "draws": api_a["fixtures"]["draws"].get("total",0),
-            "losses": api_a["fixtures"]["loses"].get("total",0),
-            "goals_for": api_a["goals"]["for"]["total"].get("total",0),
-            "goals_against": api_a["goals"]["against"]["total"].get("total",0),
-            "avg_goals_for": str(api_a["goals"]["for"]["average"].get("total","0.0")),
-            "avg_goals_against": str(api_a["goals"]["against"]["average"].get("total","0.0")),
-            "form": api_a.get("form",""),
-            "clean_sheets": api_a["clean_sheet"].get("total",0),
-        }
-    else:
-        m["away_stats"] = generate_stats_from_context(m, "away")
-
-    # H2H（含日期和队名，供经验规则引擎使用）
-    h2h_raw = results[2]
-    m["h2h"] = []
-    if h2h_raw and isinstance(h2h_raw, list):
-        m["h2h"] = [{"date":x["fixture"]["date"][:10],
-                      "score":f"{x['goals']['home']}-{x['goals']['away']}",
-                      "home":x["teams"]["home"]["name"],
-                      "away":x["teams"]["away"]["name"]}
-                     for x in h2h_raw if isinstance(x,dict) and "goals" in x]
-
+    base = {"league": league_id, "season": season}
+    jobs = [("/teams/statistics", {**base, "team": m[f"{s}_id"]})
+            for s in ("home", "away")]
+    jobs += [("/standings", base), ("/fixtures/rounds", base)]
+    for side in ("home", "away"):
+        jobs.append(("/fixtures", {"team": m[f"{side}_id"],
+                                  "from": (kickoff - timedelta(days=14)).date().isoformat(),
+                                  "to": (kickoff + timedelta(days=14)).date().isoformat(),
+                                  "timezone": "UTC"}))
+    jobs.append(("/fixtures/headtohead", {"h2h": f"{m['home_id']}-{m['away_id']}",
+                                        "from": "2000-01-01",
+                                        "to": kickoff.date().isoformat()}))
+    results = await asyncio.gather(*(async_fetch_api(session, e, p, sema) for e, p in jobs))
+    # Timestamp the responses, not the request start.
+    common["captured_at"] = datetime.now(timezone.utc).isoformat()
+    evidence = {"fixture": {**proof("/fixtures", {"id": fixture["fixture"]["id"]}),
+                            "fixture_id": fixture["fixture"]["id"],
+                            "kickoff_at": kickoff.isoformat(),
+                            "home_id": m["home_id"], "away_id": m["away_id"],
+                            "round": fixture["league"].get("round")}}
+    for index, side in enumerate(("home", "away")):
+        m[f"{side}_stats"] = _api_stats(results[index], m[f"{side}_id"],
+                                        league_id, season, proof(*jobs[index]))
+    evidence["standings"] = {**proof(*jobs[2]), "groups": []}
+    for entry in results[2] if isinstance(results[2], list) else []:
+        league = entry.get("league") or {}
+        if league.get("id") == league_id and league.get("season") == season:
+            evidence["standings"]["groups"].extend(league.get("standings") or [])
+    evidence["rounds"] = {**proof(*jobs[3]), "rounds": results[3]}
+    for index, side in enumerate(("home", "away"), 4):
+        evidence[f"{side}_schedule"] = {**proof(*jobs[index]), "team_id": m[f"{side}_id"],
+                                        "fixtures": results[index]}
+    m["league_evidence"] = evidence
+    history = results[6] if isinstance(results[6], list) else []
+    for row in history:
+        f, goals = row.get("fixture") or {}, row.get("goals") or {}
+        when = parse_time(f.get("date"))
+        if (when and when < min(kickoff, datetime.now(timezone.utc))
+                and (f.get("status") or {}).get("short") == "FT"
+                and all(type(goals.get(s)) is int for s in ("home", "away"))):
+            m["h2h"].append({"date": when.isoformat(),
+                              "score": f"{goals['home']}-{goals['away']}",
+                              "home": row["teams"]["home"]["name"],
+                              "away": row["teams"]["away"]["name"],
+                              **proof(*jobs[6])})
+    m["h2h"] = sorted(m["h2h"], key=lambda x: x["date"], reverse=True)[:5]
     return m
+
 
 async def async_collect_all(date_str):
     sema = asyncio.Semaphore(8)

@@ -31,6 +31,8 @@ from __future__ import annotations
 import asyncio
 import ast
 import contextvars
+import copy
+import sys
 import hashlib
 import json
 import logging
@@ -38,7 +40,7 @@ import math
 import os
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
 try:
@@ -269,8 +271,8 @@ AI_RESEARCH_MODE = str(os.environ.get("AI_RESEARCH_MODE", "research")).strip().l
 if AI_RESEARCH_MODE not in {"production", "enhanced", "research"}:
     AI_RESEARCH_MODE = "research"
 
-AI_RUN_MODE = str(os.environ.get("AI_RUN_MODE", "")).strip().lower()
-if AI_RUN_MODE not in {"", "fast_batch", "deep_research", "post_review"}:
+AI_RUN_MODE = str(os.environ.get("AI_RUN_MODE", "single_pass")).strip().lower()
+if AI_RUN_MODE not in {"", "single_pass", "fast_batch", "deep_research", "post_review"}:
     AI_RUN_MODE = ""
 if not AI_RUN_MODE:
     AI_RUN_MODE = {
@@ -279,7 +281,12 @@ if not AI_RUN_MODE:
         "research": "deep_research",
     }.get(AI_RESEARCH_MODE, "deep_research")
 
-if AI_RUN_MODE == "fast_batch":
+if AI_RUN_MODE == "single_pass":
+    _default_native_web = False
+    _default_cross_exam = False
+    _default_consistency = False
+    _default_chunk_size = 6
+elif AI_RUN_MODE == "fast_batch":
     _default_native_web = True
     _default_cross_exam = False
     _default_consistency = True
@@ -309,8 +316,8 @@ AI_NATIVE_WEB = _env_bool("AI_NATIVE_WEB", _default_native_web)
 AI_REQUIRE_WEB_SOURCES = _env_bool("AI_REQUIRE_WEB_SOURCES", AI_NATIVE_WEB)
 AI_WARN_MISSING_PUBLISHED_AT = _env_bool("AI_WARN_MISSING_PUBLISHED_AT", False)
 AI_WEB_MAX_SOURCES_PER_MATCH = max(0, _env_int("AI_WEB_MAX_SOURCES_PER_MATCH", 8))
-AI_CHUNK_SIZE = max(1, _env_int("AI_CHUNK_SIZE", _default_chunk_size))
-AI_CHUNK_CONCURRENCY = max(1, _env_int("AI_CHUNK_CONCURRENCY", _env_int("AI_BATCH_SIZE", 1)))
+AI_CHUNK_SIZE = max(1, _env_int("AI_BATCH_SIZE", _env_int("AI_CHUNK_SIZE", _default_chunk_size)))
+AI_CHUNK_CONCURRENCY = max(1, _env_int("AI_CHUNK_CONCURRENCY", 2))
 AI_MODEL_CONCURRENCY = max(1, _env_int("AI_MODEL_CONCURRENCY", AI_CHUNK_CONCURRENCY))
 AI_PHASE1_PARALLEL = _env_bool("AI_PHASE1_PARALLEL", True)
 # Keep the default prompt budget below the historical 3-4万 token range while
@@ -326,9 +333,9 @@ AI_CONSISTENCY_JUDGE_MODEL = str(os.environ.get("AI_CONSISTENCY_JUDGE_MODEL", "g
 AI_FINAL_REFEREE_MODEL = str(os.environ.get("AI_FINAL_REFEREE_MODEL", "gemini")).strip().lower() or "gemini"
 AI_FALLBACK_REFEREE_MODEL = str(os.environ.get("AI_FALLBACK_REFEREE_MODEL", "gpt")).strip().lower()
 
-AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 5400)
+AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 180)
 AI_FINAL_READ_TIMEOUT = _env_int("AI_FINAL_READ_TIMEOUT", _env_int("AI_CLAUDE_READ_TIMEOUT", 7200))
-AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 120)
+AI_CONNECT_TIMEOUT = _env_int("AI_CONNECT_TIMEOUT", 20)
 # Plan B: bounded retry for the FINAL referee (and fallback referee) only.
 # Pure transport/transient resilience; does NOT touch request URL/key/payload/stream.
 AI_FINAL_RETRY_MAX = max(0, _env_int("AI_FINAL_RETRY_MAX", 2))
@@ -348,7 +355,7 @@ AI_ENDPOINT_SLOT_WORKERS = max(1, min(5, _env_int("AI_ENDPOINT_SLOT_WORKERS", AI
 # adjudicate the final score (acts as the referee, not a phase1 analyst).
 AI_ENABLE_FAMILY_DEBATE_REFEREE = _env_bool("AI_ENABLE_FAMILY_DEBATE_REFEREE", True)
 AI_FAMILY_DEBATE_MODEL = str(os.environ.get("AI_FAMILY_DEBATE_MODEL", "gpt")).strip().lower() or "gpt"
-AI_HTTP_TOTAL_TIMEOUT = _env_int("AI_HTTP_TOTAL_TIMEOUT", 0)
+AI_HTTP_TOTAL_TIMEOUT = _env_int("AI_HTTP_TOTAL_TIMEOUT", 180)
 AI_TEMPERATURE_PHASE1 = _env_float("AI_TEMPERATURE_PHASE1", 0.18)
 AI_TEMPERATURE_CRITIC = _env_float("AI_TEMPERATURE_CRITIC", 0.10)
 AI_TEMPERATURE_FINAL = _env_float("AI_TEMPERATURE_FINAL", 0.08)
@@ -356,7 +363,7 @@ AI_USE_RESPONSE_FORMAT = _env_bool("AI_USE_RESPONSE_FORMAT", True)
 AI_SAVE_RAW_RESPONSE = _env_bool("AI_SAVE_RAW_RESPONSE", False)
 # 2026-07-02: GPT输出被端点token上限截断→parse_failed→fallback裁判(慢122s/场)。
 # >0 时在请求体注入 max_tokens; 0=不注入沿用端点默认。
-AI_MAX_OUTPUT_TOKENS = max(0, _env_int("AI_MAX_OUTPUT_TOKENS", 0))
+AI_MAX_OUTPUT_TOKENS = max(0, _env_int("AI_MAX_OUTPUT_TOKENS", 16000))
 AI_PARSE_DEBUG = _env_bool("AI_PARSE_DEBUG", False)
 
 AI_PHASE_SNAPSHOT_ENABLED = _env_bool("AI_PHASE_SNAPSHOT_ENABLED", True)
@@ -1339,6 +1346,9 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
             "league": m.get("league", m.get("cup", "")),
             "match_num": m.get("match_num", ""),
             "match_time": m.get("match_time", m.get("time", "")),
+            "match_id": m.get("match_id", m.get("fixture_id")),
+            "kickoff_at": m.get("kickoff_at"),
+            "captured_at": m.get("captured_at"),
         },
         "lottery_market_1x2": {"home": m.get("sp_home", m.get("win")), "draw": m.get("sp_draw", m.get("same")), "away": m.get("sp_away", m.get("lose")), "note": "中国体彩竞彩抓包赔率，不是欧洲均赔。"},
         "handicap": {"raw": m.get("give_ball", m.get("handicap", m.get("rq", "")))},
@@ -1368,9 +1378,11 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
             "has_vote": isinstance(m.get("vote"), dict) and bool(m.get("vote")),
             "has_change": isinstance(m.get("change"), dict) and bool(m.get("change")),
             "has_context_news": any(_exists(m.get(k)) for k in ["information", "points", "injury", "lineup", "news"]),
-            "team_stats_reliable": not (
-                isinstance(m.get("home_stats"), dict) and m.get("home_stats", {}).get("data_available") is False
-                or isinstance(m.get("away_stats"), dict) and m.get("away_stats", {}).get("data_available") is False
+            "team_stats_reliable": all(
+                isinstance(m.get(k), dict) and bool(m[k])
+                and m[k].get("data_available") is True
+                and not m[k].get("estimated", False)
+                for k in ("home_stats", "away_stats")
             ),
         },
     }
@@ -1529,7 +1541,7 @@ def _endpoint_candidates_for_ai(ai_name: str) -> List[Dict[str, Any]]:
     prefix = name.upper()
     out: List[Dict[str, Any]] = []
     for slot in range(1, AI_ENDPOINT_MAX_SLOTS + 1):
-        model = _resolve_endpoint_model_slot(name, slot)
+        model = str(os.environ.get(f"{prefix}_MODEL_{slot}") or os.environ.get(f"{prefix}_MODEL") or _resolve_endpoint_model_slot(name, slot)).strip()
         if not model:
             continue
         url = _clean_env_url(*_slot_env_names(prefix, "URL", slot))
@@ -1627,7 +1639,8 @@ async def async_call_ai_json_with_retry(session: Optional[Any], ai_name: str, sy
 
 async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: str, prompt: str, phase: str, expected_matches: List[int]) -> Tuple[str, Any, Dict[str, Any]]:
     t0 = time.time()
-    endpoints = _ordered_endpoints_for_ai(ai_name)
+    endpoints = (_endpoint_candidates_for_ai(ai_name)[:1] if phase == "single_pass"
+                 else _ordered_endpoints_for_ai(ai_name))
     model = endpoints[0]["model"] if endpoints else _model_for(ai_name)
     status = {"ok": False, "ai_name": ai_name, "model": model, "phase": phase, "elapsed": 0.0}
 
@@ -1663,7 +1676,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
 
     temperature = AI_TEMPERATURE_FINAL if phase in ("final", "fallback_referee", "family_debate_referee") else AI_TEMPERATURE_CRITIC if phase == "critic" else AI_TEMPERATURE_PHASE1
     last_status = status
-    tries = endpoints if AI_ENDPOINT_FAILOVER else endpoints[:1]
+    tries = endpoints if AI_ENDPOINT_FAILOVER and phase != "single_pass" else endpoints[:1]
     for attempt, endpoint in enumerate(tries, start=1):
         ep_t0 = time.time()
         model = endpoint["model"]
@@ -1673,6 +1686,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
             "model": model,
             "messages": [{"role": "system", "content": system_text}, {"role": "user", "content": prompt}],
             "temperature": temperature,
+            "stream": phase == "single_pass" and _env_bool("AI_STREAM", False),
         }
         if AI_USE_RESPONSE_FORMAT:
             payload["response_format"] = {"type": "json_object"}
@@ -1683,6 +1697,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
             "ai_name": ai_name,
             "model": model,
             "phase": phase,
+            "match_ids": list(expected_matches),
             "elapsed": 0.0,
             "endpoint_name": endpoint["name"],
             "endpoint_slot": endpoint["slot"],
@@ -1691,7 +1706,8 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
         }
         try:
             read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "fallback_referee", "family_debate_referee") else AI_READ_TIMEOUT
-            total_timeout = None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT
+            total_timeout = (max(1, AI_HTTP_TOTAL_TIMEOUT) if phase == "single_pass"
+                             else None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT)
             timeout = aiohttp.ClientTimeout(
                 total=total_timeout,
                 connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
@@ -1713,10 +1729,25 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
                     data = json.loads(text)
                 except Exception:
                     data = {"raw": text}
+                choices = data.get("choices", []) if isinstance(data, dict) else []
+                if phase == "single_pass" and any(
+                    c.get("finish_reason") == "length" for c in choices if isinstance(c, dict)
+                ):
+                    status.update(ok=False, status="output_truncated", elapsed=round(time.time()-ep_t0, 1))
+                    _update_call_status(ai_name, phase, status)
+                    return ai_name, {}, status
+                if phase == "single_pass" and isinstance(data.get("raw"), str) and "data:" in data["raw"][:2000]:
+                    data = _single_pass_sse_payload(data["raw"])
                 raw_text = _extract_response_text(data)
                 if AI_SAVE_RAW_RESPONSE:
                     _save_debug_dump(ai_name, phase, data, raw_text)
-                obj = _json_loads_best_effort_object(raw_text)
+                if phase == "single_pass":
+                    try:
+                        obj = json.loads(_preclean_text(raw_text))
+                    except (TypeError, ValueError):
+                        obj = {}
+                else:
+                    obj = _json_loads_best_effort_object(raw_text)
                 if not isinstance(obj, (dict, list)) or not obj:
                     status.update({
                         "ok": False,
@@ -1752,7 +1783,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
 
 def _update_call_status(ai_name: str, phase: str, status: Dict[str, Any]) -> None:
     cur = AI_CALL_STATUS.setdefault(ai_name, {})
-    cur[phase] = status
+    cur[phase] = copy.deepcopy(status)
     cur["last_status"] = status.get("status")
     cur["model"] = status.get("model")
 
@@ -1768,6 +1799,24 @@ def _save_debug_dump(ai_name: str, phase: str, data: Any, raw_text: str = "") ->
                 f.write(raw_text)
     except Exception:
         pass
+
+
+def _single_pass_sse_payload(raw: str) -> Dict[str, Any]:
+    """Only final assistant content is prediction JSON; never merge reasoning."""
+    parts, finish = [], None
+    for line in raw.splitlines():
+        if not line.startswith("data:") or line[5:].strip() == "[DONE]":
+            continue
+        event = json.loads(line[5:].strip())
+        for choice in event.get("choices", []):
+            content = (choice.get("delta") or choice.get("message") or {}).get("content")
+            if isinstance(content, str):
+                parts.append(content)
+            if choice.get("finish_reason"):
+                finish = choice["finish_reason"]
+    if finish != "stop":
+        raise ValueError("stream_incomplete_or_truncated")
+    return {"choices": [{"message": {"content": "".join(parts)}, "finish_reason": finish}]}
 
 
 def _extract_sse_response_text(raw: str) -> str:
@@ -2091,22 +2140,15 @@ def _unwrap_predictions(obj: Any) -> List[Any]:
     return []
 
 
-def _prob_to_float(v: Any) -> float:
-    if v is None:
-        return 0.0
-    if isinstance(v, str):
-        s = v.strip().replace("％", "%")
-        pct = "%" in s
-        fv = _f(s, 0.0)
-        if pct:
-            return fv
-        if 0 < fv <= 1:
-            return fv * 100.0
-        return fv
-    fv = _f(v, 0.0)
-    if 0 < fv <= 1:
-        return fv * 100.0
-    return fv
+def _prob_to_float(v: Any) -> Optional[float]:
+    """Absolute percentage contract. Missing/invalid values stay unknown."""
+    if v is None or isinstance(v, bool):
+        return None
+    try:
+        number = float(str(v).strip().rstrip("%％"))
+    except (TypeError, ValueError):
+        return None
+    return round(number, 3) if math.isfinite(number) and 0 <= number <= 100 else None
 
 
 def _score_from_candidate(obj: Any) -> str:
@@ -2146,45 +2188,49 @@ def _normalize_top3(item: Dict[str, Any], predicted_score: str = "") -> List[Dic
             continue
         seen.add(sc)
         if isinstance(cand, dict):
-            prob = cand.get("prob", cand.get("probability", cand.get("pct", cand.get("chance", 0))))
+            prob = cand.get("prob", cand.get("probability", cand.get("pct", cand.get("chance", None))))
             logic = cand.get("logic", cand.get("market_logic", cand.get("reason", cand.get("explanation", ""))))
         else:
-            prob, logic = 0, ""
-        out.append({"score": sc, "prob": round(_prob_to_float(prob), 3), "logic": str(logic)[:900]})
+            prob, logic = None, ""
+        out.append({"score": sc, "prob": _prob_to_float(prob), "logic": str(logic)[:900]})
         if len(out) >= 5:
             break
     if not out and predicted_score and _parse_score(predicted_score)[0] is not None:
-        out = [{"score": predicted_score, "prob": 0.0, "logic": "top3_missing_but_predicted_score_present"}]
+        out = [{"score": predicted_score, "prob": None, "logic": "top3_missing_but_predicted_score_present"}]
     elif predicted_score and _parse_score(predicted_score)[0] is not None and predicted_score not in seen:
-        out.append({"score": predicted_score, "prob": 0.0, "logic": "predicted_score_retained_without_reordering"})
+        out.append({"score": predicted_score, "prob": None, "logic": "predicted_score_retained_without_reordering"})
     return out
 
 
 def _normalize_direction_probs(item: Dict[str, Any]) -> Dict[str, float]:
-    cand = None
-    for k in ["direction_probs", "direction_probabilities", "probabilities", "方向概率", "三项概率"]:
-        if isinstance(item.get(k), dict):
-            cand = item.get(k)
+    aliases = {"home": "home", "home_win": "home", "主胜": "home", "win": "home",
+               "draw": "draw", "平局": "draw", "same": "draw",
+               "away": "away", "away_win": "away", "客胜": "away", "lose": "away"}
+    missing = {"home": 0.0, "draw": 0.0, "away": 0.0, "_synthetic_probs": True}
+    for key in ("direction_probs", "direction_probabilities", "probabilities", "方向概率", "三项概率"):
+        source = item.get(key)
+        if isinstance(source, dict):
             break
-    if cand is None:
-        cand = {}
-    alias = {
-        "home": "home", "主": "home", "主胜": "home", "胜": "home", "home_win": "home", "win": "home",
-        "draw": "draw", "平": "draw", "平局": "draw", "和": "draw", "same": "draw", "tie": "draw",
-        "away": "away", "客": "away", "客胜": "away", "负": "away", "away_win": "away", "lose": "away",
-    }
-    raw = {"home": 0.0, "draw": 0.0, "away": 0.0}
-    if isinstance(cand, dict):
-        for k, v in cand.items():
-            kk = alias.get(str(k).strip().lower(), alias.get(str(k).strip()))
-            if kk in raw:
-                raw[kk] += _prob_to_float(v)
-    s = sum(raw.values())
-    if s <= 0:
-        return {"home": 33.3, "draw": 33.3, "away": 33.4, "_synthetic_probs": True}
-    out = {k: round(v / s * 100.0, 1) for k, v in raw.items()}
-    out["_synthetic_probs"] = False
-    return out
+    else:
+        return missing
+    values = {}
+    for key, value in source.items():
+        name = aliases.get(str(key).strip().lower())
+        if name and value is not None and not isinstance(value, bool):
+            try:
+                values[name] = float(str(value).strip().rstrip("%％"))
+            except (TypeError, ValueError):
+                return missing
+    if set(values) != {"home", "draw", "away"} or any(not math.isfinite(v) or v < 0 or v > 100 for v in values.values()):
+        return missing
+    total = sum(values.values())
+    # Legacy inputs may use fractions; infer the unit across the entire vector.
+    if 0.99 <= total <= 1.01 and all(v <= 1 for v in values.values()):
+        values = {k: v * 100 for k, v in values.items()}
+        total = sum(values.values())
+    if not 98 <= total <= 102:
+        return missing
+    return {**{k: round(v / total * 100, 3) for k, v in values.items()}, "_synthetic_probs": False}
 
 
 def _normalize_web_research(item: Dict[str, Any]) -> Dict[str, Any]:
@@ -2633,13 +2679,13 @@ def _extract_market_odds(match_obj: Dict[str, Any]) -> Dict[str, Dict[str, float
 
 
 def _bet_p_model_for_score(pred: Dict[str, Any], score: str) -> float:
-    """从终审 top3 取该比分的模型主观概率(0-1)；无则给保守值。"""
-    top3 = pred.get("top3") if isinstance(pred.get("top3"), list) else []
-    for t in top3:
-        if isinstance(t, dict) and str(t.get("score")) == str(score):
-            return _clip(_f(t.get("prob"), 0.0) / 100.0, 0.0, 0.95)
-    # 不在 top3：给一个低保守概率
-    return 0.08
+    """Read absolute model probabilities; unknown probabilities cannot form EV."""
+    for key in ("top3", "top_score_candidates"):
+        for candidate in pred.get(key, []) or []:
+            sc, probability = _v2_candidate_score_prob(candidate)
+            if sc == score:
+                return _clip(probability / 100.0, 0.0, 1.0)
+    return 0.0
 
 
 def _bet_goal_band_main(pred: Dict[str, Any]) -> Optional[int]:
@@ -2703,42 +2749,17 @@ def _build_bet_candidates(pred: Dict[str, Any], odds_map: Dict[str, Dict[str, fl
     onex2 = odds_map.get("one_x_two", {})
     if onex2 and final_dir in onex2:
         p = _clip(_f(dprobs.get(final_dir), 0.0) / 100.0, 0.0, 0.95)
-        if p <= 0:
-            p = 0.4
         zh = {"home": "主胜", "draw": "平局", "away": "客胜"}.get(final_dir, final_dir)
         add("one_x_two", final_dir, onex2[final_dir], p, zh,
             f"终审方向{zh}，胜平负赔率{onex2[final_dir]:.2f}，方向概率{p*100:.0f}%")
 
-    # 3) 总进球数（主选 band）
-    tg = odds_map.get("total_goals", {})
-    main_band = _bet_goal_band_main(pred)
-    if tg and main_band is not None and str(main_band) in tg:
-        add("total_goals", str(main_band), tg[str(main_band)], 0.42, f"总进球{main_band}球",
-            f"主选总进球{main_band}球，赔率{tg[str(main_band)]:.2f}")
-
-    # 4) 大小球 2.5
-    ou = odds_map.get("over_under", {})
-    if ou and main_band is not None:
-        if main_band >= 3 and "over_2.5" in ou:
-            add("over_under", "over_2.5", ou["over_2.5"], 0.45, "大2.5",
-                f"主选总进球{main_band}球→大2.5，合成赔率{ou['over_2.5']:.2f}")
-        elif main_band <= 2 and "under_2.5" in ou:
-            add("over_under", "under_2.5", ou["under_2.5"], 0.50, "小2.5",
-                f"主选总进球{main_band}球→小2.5，合成赔率{ou['under_2.5']:.2f}")
-
-    # 5) 半全场（保守：方向胜→平/主 或 主/主；缺字段已跳过）
-    hf = odds_map.get("half_full", {})
-    if hf and final_dir in ("home", "away"):
-        tempo = str((pred.get("contextual_logic") or {}).get("tempo", "")).lower()
-        slow = tempo in ("low", "medium") or "慢热" in str(pred.get("reason", ""))
-        if final_dir == "home":
-            pick = "平/主" if slow else "主/主"
-        else:
-            pick = "平/负" if slow else "负/负"
-        if pick in hf:
-            add("half_full", pick, hf[pick], 0.22, f"半全场{pick}",
-                f"方向{final_dir}+{'慢热' if slow else '强势'}→{pick}，赔率{hf[pick]:.2f}")
-
+    # Other markets require explicit model probabilities, never fixed constants.
+    market_probs = pred.get("market_probs", {})
+    for market in ("total_goals", "over_under", "half_full"):
+        probs = market_probs.get(market, {}) if isinstance(market_probs, dict) else {}
+        for selection, odds in odds_map.get(market, {}).items():
+            probability = _clip(_f(probs.get(selection), 0), 0, 100) / 100.0
+            add(market, selection, odds, probability, selection, "模型明确给出的市场概率")
     return legs
 
 
@@ -3031,7 +3052,7 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
         if raw_direction_value not in (None, "") and parsed_raw_dir is None:
             warnings.append(f"invalid_final_direction_protocol_fixed:{str(raw_direction_value)[:40]}->{final_direction}")
         if direction_probs.get("_synthetic_probs"):
-            warnings.append("direction_probs_missing_synthetic")
+            warnings.append("direction_probs_missing_unavailable")
         warnings.extend(web.get("validation_warnings", []))
         if not isinstance(item.get("anchor_audit"), dict):
             warnings.append("anchor_audit_missing_or_invalid")
@@ -3504,17 +3525,28 @@ def _score_shape_selector(pred: Dict[str, Any], match_obj: Optional[Dict[str, An
         if _score_direction(sc) != final_dir:
             continue
         seen.add(sc)
-        dist.append({"score": sc, "prob": 0.0, "logic": "score_shape_selector_candidate"})
+        probability = next((c["prob"] for c in candidates
+                            if c.get("score") == sc and c.get("source") in
+                            {"top3", "top_score_candidates", "raw_top3"}), 0.0)
+        dist.append({"score": sc, "prob": probability, "logic": "score_shape_selector_candidate"})
         if len(dist) >= 5:
             break
     if dist:
         pred["score_distribution"] = dist
-        pred["top3"] = dist[:3]
+        pred["score_shape_candidates"] = dist
+        if not pred.get("top3"):
+            pred["top3"] = dist[:3]
     pred["validation_warnings"] = list(dict.fromkeys(pred.get("validation_warnings", [])))
     return pred
 
 
 async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
+    if AI_RUN_MODE == "single_pass":
+        try:
+            from .single_pass import run_single_pass
+        except ImportError:
+            from single_pass import run_single_pass
+        return await run_single_pass(sys.modules[__name__], evidence_all)
     return await _run_ai_native_web_impl(evidence_all)
 
 
@@ -3691,7 +3723,7 @@ def _legacy_model_score(ai_r: Dict[str, Any], model_name: str, final_score: str)
     sc = _score_from_candidate(row.get("predicted_score", "")) if row else ""
     if _parse_score(sc)[0] is not None:
         return sc
-    return final_score
+    return ""
 
 
 def _compute_model_consensus(ai_r: Dict[str, Any], final_direction: str) -> Tuple[Optional[int], int]:
@@ -3771,7 +3803,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         if isinstance(cand, dict):
             sc = _score_from_candidate(cand)
             if _parse_score(sc)[0] is not None:
-                top_candidates.append((sc, round(_prob_to_float(cand.get("prob", 0)), 3)))
+                top_candidates.append((sc, _prob_to_float(cand.get("prob"))))
     gmin, gmax, scenario = _goal_range_from_score(score)
     h, a = _parse_score(score)
     total_goals = (h or 0) + (a or 0) if h is not None and a is not None else 0
@@ -3788,7 +3820,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         for _tsc in tail["tail_scores"]:
             if _tsc not in _cand_scores:
                 _todd = get_market_odds_for_score(match_obj, _tsc)
-                top_candidates.append((_tsc, round(1.0 / _todd, 3) if _todd > 1.05 else 0.03))
+                top_candidates.append((_tsc, None))  # market tail candidate: model probability unknown
                 _cand_scores.add(_tsc)
                 break
     # 中盘尾部注入
@@ -3797,7 +3829,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         for _tsc in mid_tail.get("mid_tail_scores", []):
             if _tsc not in _cand_scores:
                 _todd = get_market_odds_for_score(match_obj, _tsc)
-                top_candidates.append((_tsc, round(1.0 / _todd, 3) if _todd > 1.05 else 0.03))
+                top_candidates.append((_tsc, None))  # market tail candidate: model probability unknown
                 _cand_scores.add(_tsc)
                 break
     # 总球预期/区间上界跟随市场曲线P50(只放不收; 主比分本身不动)
@@ -3860,6 +3892,9 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "dir_score_conflict": any("dir_score_conflict" in w or "protocol_direction_fixed" in w for w in warnings),
         "is_abstain": False,
         "is_score_others": _score_display_label(score, direction) in ("胜其他", "平其他", "负其他"),
+        "direction_probs": copy.deepcopy(ai_r.get("direction_probs", {})),
+        "probabilities_available": not ai_r.get("direction_probs", {}).get("_synthetic_probs", False) and sum(pct.values()) > 0,
+        "top3": copy.deepcopy(ai_r.get("top3", [])),
         "home_win_pct": pct.get("home", 0.0),
         "draw_pct": pct.get("draw", 0.0),
         "away_win_pct": pct.get("away", 0.0),
@@ -3906,7 +3941,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "recommendation_downgrade_reasons": [],
         "top_score_candidates": top_candidates,
         "unified_matrix_top_scores": top_candidates,
-        "score_model_prob": top_candidates[0][1] if top_candidates else 0.0,
+        "score_model_prob": next((prob for candidate, prob in top_candidates if candidate == score), None),
         "score_market_odds": final_odds,
         "score_market_implied_pct": market_implied,
         "anchor_audit": anchor_audit,
@@ -3972,8 +4007,8 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "gpt_analysis": _legacy_model_analysis(ai_r, "gpt"),
         "grok_score": _legacy_model_score(ai_r, "grok", score),
         "grok_analysis": _legacy_model_analysis(ai_r, "grok"),
-        "gemini_score": score,
-        "gemini_analysis": ai_r.get("reason", "")[:3000] or "Gemini终审已给出结构化预测",
+        "gemini_score": score if ai_r.get("source_model") == "gemini" else _legacy_model_score(ai_r, "gemini", score),
+        "gemini_analysis": ai_r.get("reason", "")[:3000] if ai_r.get("source_model") == "gemini" else _legacy_model_analysis(ai_r, "gemini"),
         "final_referee_score": score,
         "final_referee_analysis": ai_r.get("reason", "")[:3000],
         "claude_score": "弃用",
@@ -3982,13 +4017,13 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         "final_ai_analysis": ai_r.get("reason", "")[:3000],
         "ai_abstained": [],
         "ai_avg_confidence": _f(rec.get("bet_confidence", 0), 0),
-        "ai_call_status": dict(AI_CALL_STATUS),
+        "ai_call_status": copy.deepcopy(ai_r.get("ai_call_status", {})),
         "ai_result_files": dict(AI_RESULT_FILES),
         "ai_run_metadata": dict(_LAST_AI_RUN_METADATA),
         # 2026-07-02 内容修: 原硬编码None致前端"X/N模型一致"失效。
         # 按在场phase1模型与终审方向一致数计; 缺席模型(如GPT 524)不虚增分母。
         "model_consensus": _compute_model_consensus(ai_r, direction)[0],
-        "total_models": _compute_model_consensus(ai_r, direction)[1] or 3,
+        "total_models": _compute_model_consensus(ai_r, direction)[1],
         "refined_poisson": {},
         "poisson": {},
         "elo": {},
@@ -4209,6 +4244,9 @@ def _run_async(coro):
 # ============================================================
 
 def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
+    global _LAST_AI_RUN_METADATA
+    _LAST_AI_RUN_METADATA = {"run_mode": AI_RUN_MODE, "run_status": "no_eligible_evidence",
+                             "request_count": 0, "cache_hits": 0}
     raw_ms = _extract_match_list(raw)
     ms = [normalize_match(m) for m in raw_ms]
 
@@ -4216,7 +4254,20 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     print(f"  [{ENGINE_VERSION}] AI-NATIVE WEB-AUGMENTED ANCHOR-AUDIT | {len(ms)} 场 | 本地只做协议层 | chunk={AI_CHUNK_SIZE} | mock={AI_MOCK_MODE}")
     print("=" * 92)
 
-    evidence_all = [build_evidence_packet(m, i) for i, m in enumerate(ms, 1)]
+    try:
+        from .prematch_guard import prematch_status, enforce_publication_gate
+    except ImportError:
+        from prematch_guard import prematch_status, enforce_publication_gate
+    guarded = AI_RUN_MODE == "single_pass" and not AI_MOCK_MODE
+    if guarded:
+        try:
+            from .fixture_identity import dedupe_predictions
+        except ImportError:
+            from fixture_identity import dedupe_predictions
+        ms = dedupe_predictions(ms)
+    statuses = {i: prematch_status(m) for i, m in enumerate(ms, 1)} if guarded else {}
+    evidence_all = [build_evidence_packet(m, i) for i, m in enumerate(ms, 1)
+                    if not guarded or statuses[i] == "eligible"]
 
     ai_final: Dict[int, Dict[str, Any]] = {}
     if use_ai and evidence_all:
@@ -4230,9 +4281,21 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
 
     res = []
     for i, m in enumerate(ms, 1):
-        ai_r = ai_final.get(i) or _abstain_ai_prediction(i, "missing_final_ai_result")
+        ai_r = ai_final.get(i) or _abstain_ai_prediction(i, statuses.get(i, "missing_final_ai_result"))
         pred = adapt_ai_to_frontend(ai_r, m) if not ai_r.get("final_direction") == "abstain" else _abstain_prediction(ai_r.get("reason", "abstain"))
-        res.append({**m, "prediction": pred})
+        pred["ai_call_status"] = copy.deepcopy(ai_r.get("ai_call_status", {}))
+        pred["prediction_completed_at"] = ai_r.get("prediction_completed_at", datetime.now(timezone.utc).isoformat())
+        pred["evidence_hash"] = ai_r.get("evidence_hash")
+        pred["ai_run_metadata"] = copy.deepcopy(_LAST_AI_RUN_METADATA)
+        try:
+            from league_context import build_league_context
+        except ImportError:
+            from .league_context import build_league_context
+        pred["league_context"] = build_league_context(m)
+        row = {**m, "prediction": pred}
+        if guarded:
+            enforce_publication_gate(row, datetime.now(timezone.utc))
+        res.append(row)
         if pred.get("is_abstain"):
             print(f"  [{i}] {m.get('home_team')} vs {m.get('away_team')} => 弃权")
         else:
@@ -4996,7 +5059,7 @@ _score_total = _BASE_SCORE_TOTAL
 _score_btts = _BASE_SCORE_BTTS
 _score_goal_band = _BASE_SCORE_GOAL_BAND
 
-ENGINE_VERSION = "vMAX 20.6.0-READING-PARADIGM"
+ENGINE_VERSION = "vMAX 21.0-LEAGUE-SINGLE-PASS"
 ENGINE_ARCHITECTURE = (
     "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；"
     "新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；"
@@ -5020,21 +5083,18 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         # 1. 引入本地量化与基本面组件
         import league_intel
         import experience_rules
-        import quant_edge
+        from league_context import build_league_context
 
         league_key = league_intel.detect_league_key(match_obj.get("league", ""))
         
         # 战意基本面挖掘
         motivation_facts = league_intel.analyze_motivation(match_obj, league_key)
 
-        # 世界杯/国际赛读盘先验注入（5届320场分轮实证+双窗口状态档；作evidence非裁判）
-        world_cup_reading = None
-        if league_key in ("world_cup", "intl_friendly"):
-            try:
-                world_cup_reading = league_intel.analyze_world_cup_context(match_obj)
-            except Exception:
-                world_cup_reading = None
-        
+        evidence["league_context"] = build_league_context(match_obj)
+        world_cup_reading = (league_intel.analyze_world_cup_context(match_obj)
+                             if AI_RUN_MODE != "single_pass" else None)
+
+
         # 经验规则引擎
         prediction_shell = {"home_win_pct": 33, "draw_pct": 33, "away_win_pct": 34, "model_consensus": 2}
         experience_verdict = experience_rules.apply_experience_to_prediction(match_obj, prediction_shell)
@@ -5147,6 +5207,19 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         ])
     except Exception as e:
         evidence.setdefault("data_quality", {})["v207_pre_inject_error"] = str(e)[:300]
+    if AI_RUN_MODE == "single_pass":
+        anchors = evidence.get("ai_anchor_facts_no_judgement", {})
+        anchors["mandatory_cross_anchor_questions"] = [
+            q for q in anchors.get("mandatory_cross_anchor_questions", [])
+            if "世界杯" not in str(q)
+        ]
+        evidence["protocol_notes"] = ["联赛单轮分析：本地只提供证据与风险限制；不预置比赛结果。"]
+        evidence.pop("local_quantitative_intelligence", None)
+        evidence.setdefault("jingcai_market_facts", {})["note"] = "三向赔率倒数之和减1；不能仅凭抽水断言操盘或资金流。"
+        calibration = evidence.get("dual_market_divergence_calibration", {})
+        if calibration.get("available"):
+            calibration["interpretation"] = "跨市场去水概率差，仅表示报价差异，不证明聪明钱或获利空间。"
+            calibration["source"] = match_obj.get("global_odds_provenance", match_obj.get("global_odds_meta", {}))
     return evidence
 
 
@@ -5517,7 +5590,7 @@ def _normalize_risk_score_candidates(value: Any) -> List[Dict[str, Any]]:
             prob = None
         row = {"score": sc, "risk_type": risk_type, "reason": reason}
         if prob is not None:
-            row["prob"] = round(_prob_to_float(prob), 3)
+            row["prob"] = _prob_to_float(prob)
         out.append(row)
     return out
 
@@ -5628,16 +5701,8 @@ def _raw_btts_yes_signal(row: Dict[str, Any], raw_item: Dict[str, Any]) -> bool:
 
 
 def _extract_prob_map_0_100(value: Any) -> Dict[str, float]:
-    if not isinstance(value, dict):
-        return {}
-    out: Dict[str, float] = {}
-    for key in ["home", "draw", "away"]:
-        raw = value.get(key)
-        pct = _f(raw, 0.0)
-        if 0 < pct <= 1.0:
-            pct *= 100.0
-        out[key] = pct
-    return out
+    normalized = _normalize_direction_probs({"direction_probs": value})
+    return {} if normalized.get("_synthetic_probs") else {k: normalized[k] for k in ("home", "draw", "away")}
 
 
 def _candidate_score_prob(cand: Dict[str, Any]) -> float:
@@ -5645,8 +5710,7 @@ def _candidate_score_prob(cand: Dict[str, Any]) -> float:
         return 0.0
     for key in ["prob", "probability", "pct", "percent", "score_prob"]:
         if key in cand:
-            val = _f(cand.get(key), 0.0)
-            return val * 100.0 if 0 < val <= 1.0 else val
+            return _prob_to_float(cand.get(key)) or 0.0
     return 0.0
 
 
@@ -5654,6 +5718,7 @@ def _collect_score_candidates_for_gate(pred: Dict[str, Any], raw_item: Dict[str,
     rows: List[Dict[str, Any]] = []
     for source_name, container in [
         ("top3", pred.get("top3")),
+        ("top_score_candidates", pred.get("top_score_candidates")),
         ("risk_score_candidates", pred.get("risk_score_candidates")),
         ("candidate_scores", pred.get("candidate_scores")),
         ("raw_top3", raw_item.get("top3")),
@@ -5663,6 +5728,8 @@ def _collect_score_candidates_for_gate(pred: Dict[str, Any], raw_item: Dict[str,
         if not isinstance(container, list):
             continue
         for cand in container:
+            if isinstance(cand, (list, tuple)) and len(cand) >= 2:
+                cand = {"score": cand[0], "prob": cand[1]}
             if not isinstance(cand, dict):
                 continue
             score = _score_from_candidate(cand)
@@ -6078,7 +6145,7 @@ def _apply_friendly_reading_prior_gate(
     public_away = _f(vote.get("lose"), 0)
     low_price_home = final_dir == "home" and 1.01 < sp_home <= 1.35 and public_home >= 65.0
     low_price_away = final_dir == "away" and 1.01 < sp_away <= 1.45 and public_away >= 65.0
-    if tier == "B" and (low_price_home or low_price_away) and no_confirm:
+    if tier in {"S", "A", "B", "C", "D"} and (low_price_home or low_price_away) and no_confirm:
         audit["rules_applied"].append("prematch_v2_friendly_favorite_overheat_cap")
         audit.setdefault("risk_hints", []).append({"max_tier": "C", "reason": "prematch_v2_friendly_favorite_overheat_cap", "tag": "friendly_favorite_overheat"})
         _add_unique_tail_flags(pred, "friendly_favorite_overheat", "friendly_draw_tail")
@@ -6445,7 +6512,7 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
         apply("C", "prematch_v2_away_fatigue_travel_risk", "prematch_v2_away_fatigue")
 
     # P0 世界杯淘汰赛：小组赛已结束，热门穿盘/大胜必须确认90分钟语义、加时风险和盘口支持。
-    if context_flags.get("worldcup_knockout"):
+    if AI_RUN_MODE != "single_pass" and context_flags.get("worldcup_knockout"):
         _ko_score = _score_from_candidate(pred.get("predicted_score"))
         _ko_h, _ko_a = _parse_score(_ko_score)
         _ko_margin = abs(_ko_h - _ko_a) if (_ko_h is not None and _ko_a is not None) else 0
@@ -6455,7 +6522,7 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
             apply("B", "prematch_v2_worldcup_ko_extra_time_draw_risk", "prematch_v2_worldcup_ko_draw_extra_time")
 
     # P0 世界杯第三轮：仅在明确小组赛R3时启用；已出线/可接受平或小负/轮换方，不允许被包装成热门强推。
-    if context_flags.get("worldcup_r3"):
+    if AI_RUN_MODE != "single_pass" and context_flags.get("worldcup_r3"):
         if context_flags.get("already_qualified_or_can_accept_less") and context_flags.get("rotation_risk") and final_dir != "draw":
             apply("C", "prematch_v2_worldcup_r3_rotation_or_qualification_cap", "prematch_v2_worldcup_r3_rotation")
         if context_flags.get("already_qualified_or_can_accept_less") and final_dir != "draw" and draw_cluster:
@@ -6565,6 +6632,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
         return _merge_abstain_analysis(pred, ai_r if isinstance(ai_r, dict) else {}, reason)
     raw_item = ai_r.get("raw_item", {}) if isinstance(ai_r.get("raw_item"), dict) else {}
     for k in [
+        "league_motivation_audit", "market_probs",
         "score_cluster_audit", "sharp_money_audit", "recommendation_components", "risk_score_candidates",
         "tail_risk_flags", "confidence_downgrade_reason", "market_audit",
         "goal_market_audit", "market_conflicts", "candidate_scores", "public_heat_audit",
@@ -6637,7 +6705,8 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"contrarian_market_claim_gate_error:{str(e)[:120]}")
     try:
-        _score_shape_selector(pred, match_obj)
+        if AI_RUN_MODE != "single_pass":
+            _score_shape_selector(pred, match_obj)
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"score_shape_selector_error:{str(e)[:120]}")
     # [补丁A1 2026-06-22] 禁用 consolation gate: 第一轮27场回测净收益=0,

@@ -16,11 +16,11 @@ from datetime import datetime, timedelta, timezone
 # ============================================================
 
 REQUIRED_PACKAGES = [
-    "aiohttp",
+    "aiohttp>=3.14.3",
     "Requests>=2.32.0",
     "numpy>=1.26.0",
     "pandas>=2.2.0",
-    "deep-translator>=1.11.4",
+
 ]
 
 
@@ -78,13 +78,34 @@ def publish_prediction_outputs(data_dir: str, target_date: str, session: str, pa
         snapshot_path = snapshot_base[:-5] + f"_{suffix}.json"
         suffix += 1
 
+    try:
+        from .prematch_guard import enforce_publication_gate
+    except ImportError:
+        from prematch_guard import enforce_publication_gate
+    if now_time.tzinfo is None:
+        raise ValueError("Publication requires timezone-aware time")
+    rows = payload.get("matches", {}).get("today", [])
+    for row in rows:
+        enforce_publication_gate(row, now_time)
+    payload["top4"] = [row for row in payload.get("top4", [])
+                       if enforce_publication_gate(row, now_time) == "eligible"]
+    payload["published_at"] = now_time.isoformat()
+    payload["target_date"] = target_date
     runtime = payload.setdefault("runtime", {})
-    runtime["history_path"] = os.path.relpath(history_path, repo_dir)
-    runtime["snapshot_path"] = os.path.relpath(snapshot_path, repo_dir)
+    runtime["history_path"] = os.path.relpath(history_path, repo_dir).replace(os.sep, "/")
+    runtime["snapshot_path"] = os.path.relpath(snapshot_path, repo_dir).replace(os.sep, "/")
 
     write_json_atomic(target_path, payload)
     write_json_atomic(history_path, payload)
     write_json_atomic(snapshot_path, payload)
+    if rows:
+        from pathlib import Path
+        project_root = str(Path(__file__).resolve().parents[1])
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+        from forward_ledger.ledger import create_ledger_from_prediction
+        ledger = os.path.join(data_dir, "forward_ledger.jsonl")
+        create_ledger_from_prediction(snapshot_path, ledger, on_conflict="keep")
     return {"live": target_path, "history": history_path, "snapshot": snapshot_path}
 
 
@@ -199,80 +220,27 @@ def get_target_date(offset=0):
 
 
 def configure_ai_defaults():
-    """
-    这里只设置不会影响预测结构的安全默认值。
-
-    注意：
-    不再在 main.py 里强制 AI_BATCH_SIZE=4。
-    不再在 main.py 里强制 AI_MODEL_CONCURRENCY=1。
-    不再在 main.py 里强制 AI_PHASE1_PARALLEL=false。
-
-    批次、并发、是否串行，应该由 predict.py 自己支持后再由 yml/env 控制。
-    main.py 不再制造“看起来是4场小批次、实际没生效”的误导日志。
-    """
-
-    # 只跑 today
-    os.environ.setdefault("AI_RUN_DAYS", "today")
-    os.environ.setdefault("VMAX_RUN_DAYS", "today")
-
-    # 每个模型最大请求数按运行模式给安全默认值：fast_batch 负责全量初筛，deep_research 保持保守。
-    if os.environ.get("AI_RUN_MODE", "").strip().lower() == "fast_batch":
-        os.environ.setdefault("AI_MAX_REQUESTS_PER_AI", "3")
-        os.environ.setdefault("AI_CHUNK_CONCURRENCY", "3")
-        os.environ.setdefault("AI_MODEL_CONCURRENCY", "4")
-        os.environ.setdefault("AI_PHASE1_PARALLEL", "true")
-    else:
-        os.environ.setdefault("AI_MAX_REQUESTS_PER_AI", "1")
-
-    # Claude 条件触发：如果 predict.py 支持，就会生效；不支持也不会影响 main.py
-    os.environ.setdefault("AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID", "true")
-    os.environ.setdefault("AI_MIN_PHASE1_VALID_FOR_CLAUDE", "2")
-
-    # Claude 终审压缩：如果 predict.py 支持，就会生效
-    os.environ.setdefault("AI_USE_COMPACT_CLAUDE_AUDIT", "true")
-    os.environ.setdefault("AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE", "350")
-
-    # 持久化缓存，避免同批重复扣费
-    os.environ.setdefault("AI_PERSISTENT_CACHE_ENABLED", "true")
-    os.environ.setdefault("AI_CACHE_DIR", "data/ai_cache")
-    os.environ.setdefault("AI_CACHE_STRIP_VOLATILE_KEYS", "true")
-    os.environ.setdefault("AI_DISK_LOCK_WAIT_SECONDS", "900")
-    os.environ.setdefault("AI_DISK_LOCK_POLL_SECONDS", "3")
-    os.environ.setdefault("AI_DECISION_CACHE_TTL", "1800")
-    os.environ.setdefault("AI_WRITE_BATCH_RESULT_IMMEDIATELY", "true")
+    """Production defaults: bounded batches, no debate/retry chain."""
+    defaults = {
+        "AI_RUN_DAYS": "today", "VMAX_RUN_DAYS": "today",
+        "AI_RUN_MODE": "single_pass", "AI_PRIMARY_MODEL": "gpt",
+        "AI_BATCH_SIZE": "6", "AI_CHUNK_CONCURRENCY": "2",
+        "AI_MODEL_CONCURRENCY": "2", "AI_SINGLE_PASS_MAX_CALLS": "12",
+        "AI_HTTP_TOTAL_TIMEOUT": "180", "AI_CONNECT_TIMEOUT": "20",
+        "AI_READ_TIMEOUT": "180", "AI_PERSISTENT_CACHE_ENABLED": "true",
+        "AI_CACHE_DIR": "data/ai_cache", "AI_DECISION_CACHE_TTL": "1800",
+    }
+    for key, value in defaults.items():
+        os.environ.setdefault(key, value)
 
 
 def print_runtime_config():
-    print("⚙️ AI运行配置:")
-    print(f"   VMAX_DATE_SHIFT_HOURS={os.environ.get('VMAX_DATE_SHIFT_HOURS', '11')}")
-    print(f"   VMAX_RUN_DAYS={os.environ.get('VMAX_RUN_DAYS', 'today')}")
-    print(f"   AI_RUN_DAYS={os.environ.get('AI_RUN_DAYS', 'today')}")
-    print(f"   AI_MAX_REQUESTS_PER_AI={os.environ.get('AI_MAX_REQUESTS_PER_AI', '1')}")
-    print(f"   AI_RUN_MODE={os.environ.get('AI_RUN_MODE', '')}")
-    print(f"   AI_CHUNK_CONCURRENCY={os.environ.get('AI_CHUNK_CONCURRENCY', '')}")
-    print(f"   AI_MODEL_CONCURRENCY={os.environ.get('AI_MODEL_CONCURRENCY', '')}")
-    print(f"   AI_PHASE1_PARALLEL={os.environ.get('AI_PHASE1_PARALLEL', '')}")
-    print(f"   AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID={os.environ.get('AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID', 'true')}")
-    print(f"   AI_MIN_PHASE1_VALID_FOR_CLAUDE={os.environ.get('AI_MIN_PHASE1_VALID_FOR_CLAUDE', '2')}")
-    print(f"   AI_USE_COMPACT_CLAUDE_AUDIT={os.environ.get('AI_USE_COMPACT_CLAUDE_AUDIT', 'true')}")
-    print(f"   AI_PERSISTENT_CACHE_ENABLED={os.environ.get('AI_PERSISTENT_CACHE_ENABLED', 'true')}")
-    print(f"   AI_DECISION_CACHE_TTL={os.environ.get('AI_DECISION_CACHE_TTL', '1800')}")
-    print(f"   AI_CACHE_DIR={os.environ.get('AI_CACHE_DIR', 'data/ai_cache')}")
-
-    if os.environ.get("AI_BATCH_SIZE"):
-        print(f"   AI_BATCH_SIZE={os.environ.get('AI_BATCH_SIZE')}  # 来自 yml/env，main.py 未强制设置")
-    else:
-        print("   AI_BATCH_SIZE=<unset>  # main.py 未强制设置")
-
-    if os.environ.get("AI_MODEL_CONCURRENCY"):
-        print(f"   AI_MODEL_CONCURRENCY={os.environ.get('AI_MODEL_CONCURRENCY')}  # 来自 yml/env，main.py 未强制设置")
-    else:
-        print("   AI_MODEL_CONCURRENCY=<unset>  # main.py 未强制设置")
-
-    if os.environ.get("AI_PHASE1_PARALLEL"):
-        print(f"   AI_PHASE1_PARALLEL={os.environ.get('AI_PHASE1_PARALLEL')}  # 来自 yml/env，main.py 未强制设置")
-    else:
-        print("   AI_PHASE1_PARALLEL=<unset>  # main.py 未强制设置")
+    print("AI运行配置（次数为每次运行的实际硬上限）:")
+    for key in ("AI_RUN_MODE", "AI_PRIMARY_MODEL", "AI_BATCH_SIZE",
+                "AI_CHUNK_CONCURRENCY", "AI_MODEL_CONCURRENCY",
+                "AI_SINGLE_PASS_MAX_CALLS", "AI_HTTP_TOTAL_TIMEOUT",
+                "AI_PERSISTENT_CACHE_ENABLED", "AI_DECISION_CACHE_TTL"):
+        print(f"   {key}={os.environ.get(key, '')}")
 
 
 # ============================================================
@@ -329,7 +297,7 @@ def main():
 
         final_output = {
             "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
-            "version": "MAX-v1.1",
+            "version": "MAX-v21.0-LEAGUE",
             "scope": "today_only",
             "top4": [],
             "matches": {
@@ -344,7 +312,7 @@ def main():
                 "ai_chunk_concurrency": os.environ.get("AI_CHUNK_CONCURRENCY", ""),
                 "ai_model_concurrency": os.environ.get("AI_MODEL_CONCURRENCY", ""),
                 "ai_phase1_parallel": os.environ.get("AI_PHASE1_PARALLEL", ""),
-                "ai_max_requests_per_ai": os.environ.get("AI_MAX_REQUESTS_PER_AI", "1"),
+                "ai_single_pass_max_calls": os.environ.get("AI_SINGLE_PASS_MAX_CALLS", "12"),
                 "ai_cache_ttl": os.environ.get("AI_DECISION_CACHE_TTL", "1800"),
             },
         }
@@ -399,6 +367,8 @@ def main():
         print(f"  [AI ENABLED] today 将启用 AI 推理 | 比赛数={len(raw_data.get('matches', []))}")
 
         results, top4 = run_predictions(raw_data, use_ai=use_ai)
+        from predict import _LAST_AI_RUN_METADATA
+        final_output["runtime"]["ai_run"] = dict(_LAST_AI_RUN_METADATA)
 
         final_output["matches"]["today"] = json.loads(
             json.dumps(results, ensure_ascii=False, default=str)

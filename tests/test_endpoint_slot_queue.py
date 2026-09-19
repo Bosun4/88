@@ -29,6 +29,7 @@ def test_endpoint_slot_override_pins_numbered_endpoint(monkeypatch):
 
 
 def test_slot_queue_assigns_one_match_per_slot_then_refills(monkeypatch):
+    monkeypatch.setattr(predict, "AI_RUN_MODE", "fast_batch")
     evidence = [{"match": i, "home": f"H{i}", "away": f"A{i}"} for i in range(1, 8)]
     calls = []
 

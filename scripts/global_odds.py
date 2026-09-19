@@ -3,9 +3,9 @@
 global_odds.py — 国际低抽水欧赔抓取与匹配(点亮双轨背离防线)
 
 职责:
-- 调 The Odds API(已配置 ODDS_API_KEY)拉取主流联赛 h2h(1X2)收盘欧赔。
-- 优先取 Pinnacle,退而取所有 bookmaker 的中位数,作为"国际清算盘"基准。
-- 以英文队名(经 translate_team_name 转换)模糊匹配,把 global_home/draw/away
+- 调 The Odds API 拉取主流联赛 h2h(1X2)赛前快照，并保留报价时间与来源。
+- 优先取 Pinnacle,否则对完整且一小时内更新的 bookmaker 市场取中位数。
+- 联赛、双方独立精确别名与带时区开赛时间联合匹配，把 global_home/draw/away
   写进每个 match 对象,供 predict.build_evidence_packet 计算 Shin 偏斜度。
 
 设计红线:
@@ -15,6 +15,8 @@ global_odds.py — 国际低抽水欧赔抓取与匹配(点亮双轨背离防线
 """
 import asyncio
 import difflib
+import math
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 
 try:
@@ -25,10 +27,19 @@ except Exception:
     ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 
 try:
-    from fetch_data import translate_team_name
+    from fetch_data import TEAM_NAME_MAPPING, NATIONAL_TEAM_MAPPING
 except Exception:
-    def translate_team_name(name):
-        return str(name or "")
+    TEAM_NAME_MAPPING, NATIONAL_TEAM_MAPPING = {}, {}
+
+try:
+    from fixture_identity import parse_time
+except ImportError:
+    from .fixture_identity import parse_time
+
+
+def translate_team_name(name):
+    """Identity aliases only; machine translation is not entity resolution."""
+    return TEAM_NAME_MAPPING.get(name, NATIONAL_TEAM_MAPPING.get(name, str(name or "")))
 
 
 # 中文联赛名 → The Odds API sport_key(只覆盖 API 实际支持的联赛)
@@ -64,6 +75,7 @@ LEAGUE_SPORT_KEY = {
 
 # Pinnacle 优先;其后取全场中位数
 PREFERRED_BOOKMAKER = "pinnacle"
+MAX_QUOTE_AGE_SECONDS = 3600
 
 
 def _median(xs: List[float]) -> float:
@@ -75,36 +87,55 @@ def _median(xs: List[float]) -> float:
     return s[mid] if n % 2 else (s[mid - 1] + s[mid]) / 2.0
 
 
-def _extract_1x2(event: Dict[str, Any]) -> Optional[Dict[str, float]]:
-    """从一个 event 抽 1X2 欧赔:优先 Pinnacle,否则各家中位数。"""
+def _extract_1x2(event: Dict[str, Any], now=None) -> Optional[Dict[str, Any]]:
+    """Select complete fresh bookmaker markets and retain their lineage."""
+    now = parse_time(now or datetime.now(timezone.utc))
+    kickoff = parse_time(event.get("commence_time"))
+    if not now or not kickoff or now >= kickoff or not event.get("id"):
+        return None
     home = event.get("home_team", "")
     away = event.get("away_team", "")
     if not home or not away:
         return None
 
-    pin = {"home": [], "draw": [], "away": []}
-    allbm = {"home": [], "draw": [], "away": []}
+    quotes = []
     for bm in event.get("bookmakers", []):
-        is_pin = bm.get("key") == PREFERRED_BOOKMAKER
+        if not isinstance(bm, dict) or not bm.get("key"):
+            continue
         for mk in bm.get("markets", []):
             if mk.get("key") != "h2h":
                 continue
+            updated = parse_time(mk.get("last_update", bm.get("last_update")))
+            if not updated or not 0 <= (now - updated).total_seconds() <= MAX_QUOTE_AGE_SECONDS:
+                continue
+            prices = {}
             for oc in mk.get("outcomes", []):
                 nm, price = oc.get("name"), oc.get("price", 0)
-                if not isinstance(price, (int, float)) or price <= 1.0:
-                    continue
                 sel = "home" if nm == home else ("away" if nm == away else ("draw" if nm == "Draw" else None))
-                if sel is None:
-                    continue
-                allbm[sel].append(price)
-                if is_pin:
-                    pin[sel].append(price)
-
-    src = pin if all(pin[k] for k in ("home", "draw", "away")) else allbm
-    odds = {k: _median(src[k]) for k in ("home", "draw", "away")}
-    if all(odds[k] > 1.0 for k in ("home", "draw", "away")):
-        return {"home_team": home, "away_team": away, "odds": odds}
-    return None
+                if (sel is None or sel in prices or type(price) not in (int, float)
+                        or not math.isfinite(price) or price <= 1.0):
+                    prices = {}
+                    break
+                prices[sel] = price
+            if set(prices) == {"home", "draw", "away"}:
+                quotes.append({"bookmaker": bm["key"], "bookmaker_title": bm.get("title"),
+                               "event_id": event["id"], "market": "h2h",
+                               "last_update": updated.isoformat(),
+                               "captured_at": now.isoformat(), "odds": prices})
+    if not quotes:
+        return None
+    # Repeated/conflicting bookmaker markets cannot be counted as independent books.
+    if len({q["bookmaker"] for q in quotes}) != len(quotes):
+        return None
+    selected = [q for q in quotes if q["bookmaker"] == PREFERRED_BOOKMAKER] or quotes
+    odds = {s: _median([q["odds"][s] for q in selected]) for s in ("home", "draw", "away")}
+    return {"home_team": home, "away_team": away, "odds": odds,
+            "event_id": event["id"], "sport_key": event.get("sport_key"),
+            "kickoff_at": kickoff.isoformat(), "captured_at": now.isoformat(),
+            "market": "h2h", "quotes": selected, "quality": "eligible",
+            "aggregation": "pinnacle" if selected[0]["bookmaker"] == PREFERRED_BOOKMAKER
+                           else "selection_median_complete_books",
+            "last_update": min(q["last_update"] for q in selected)}
 
 
 def _fetch_sport(sport_key: str) -> List[Dict[str, Any]]:
@@ -123,7 +154,8 @@ def _fetch_sport(sport_key: str) -> List[Dict[str, Any]]:
         with urllib.request.urlopen(req, timeout=12) as r:
             return _json.loads(r.read().decode("utf-8")) or []
     except Exception as e:
-        print(f"  [global_odds] {sport_key} 拉取失败: {type(e).__name__}: {str(e)[:80]}")
+        # Request exceptions may embed the API-key query string.
+        print(f"  [global_odds] {sport_key} 拉取失败: {type(e).__name__}")
         return []
 
 
@@ -139,59 +171,66 @@ def _best_match(target: str, candidates: List[str], cutoff: float = 0.6) -> Opti
     return None
 
 
-def enrich_with_global_odds(matches: List[Dict[str, Any]]) -> int:
+def enrich_with_global_odds(matches: List[Dict[str, Any]], now=None) -> int:
+    """Attach only unique, exact-side, same-league/time, fresh pre-match quotes.
+
+    now is an explicit replay clock for offline tests; live capture time is taken
+    after each HTTP response. Exact normalized aliases are the per-side threshold
+    (1.0); fuzzy names never establish a sporting entity.
     """
-    给 matches 注入 global_home/draw/away。返回成功匹配的场次数。
-    全程 fail-safe:任何失败只影响该场缺省,不抛出。
-    """
+    for match in matches:
+        for key in list(match):
+            if key.startswith("global_"):
+                match.pop(key)
+        match["global_odds_evidence"] = {
+            "quality": "unavailable", "reason": "no_verified_fresh_quote",
+            "source": "the_odds_api", "market": "h2h", "quotes": [],
+        }
     if not ODDS_API_KEY:
-        print("  [global_odds] 未配置 ODDS_API_KEY,跳过国际盘背离防线(单轨运行)")
         return 0
-
-    # 按 sport_key 分组需要拉取的联赛
-    need_keys = {}
-    for m in matches:
-        sk = LEAGUE_SPORT_KEY.get(str(m.get("league", "")).strip())
-        if sk:
-            need_keys.setdefault(sk, []).append(m)
-
-    if not need_keys:
-        print("  [global_odds] 本批次无 The Odds API 覆盖的联赛,跳过")
-        return 0
-
+    groups = {}
+    for match in matches:
+        sport = LEAGUE_SPORT_KEY.get(str(match.get("league", "")).strip())
+        if sport and parse_time(match.get("kickoff_at")):
+            groups.setdefault(sport, []).append(match)
     matched = 0
-    for sk, group in need_keys.items():
-        events = _fetch_sport(sk)
-        parsed = [p for p in (_extract_1x2(e) for e in events) if p]
-        if not parsed:
+    for sport, group in groups.items():
+        events = _fetch_sport(sport)
+        captured = parse_time(now or datetime.now(timezone.utc))
+        if not captured or not isinstance(events, list):
             continue
-        en_names = []
-        for p in parsed:
-            en_names.append(p["home_team"])
-        # 用 (home, away) 组合匹配,避免同队主客混淆
-        for m in group:
-            try:
-                h_en = translate_team_name(m.get("home_team", ""))
-                a_en = translate_team_name(m.get("away_team", ""))
-                best = None
-                best_score = 0.0
-                for p in parsed:
-                    hs = difflib.SequenceMatcher(None, h_en.lower(), p["home_team"].lower()).ratio()
-                    as_ = difflib.SequenceMatcher(None, a_en.lower(), p["away_team"].lower()).ratio()
-                    score = (hs + as_) / 2.0
-                    if score > best_score:
-                        best_score, best = score, p
-                if best and best_score >= 0.6:
-                    m["global_home"] = round(best["odds"]["home"], 3)
-                    m["global_draw"] = round(best["odds"]["draw"], 3)
-                    m["global_away"] = round(best["odds"]["away"], 3)
-                    m["global_odds_source"] = "the_odds_api"
-                    m["global_odds_match_score"] = round(best_score, 3)
-                    matched += 1
-            except Exception:
+        for match in group:
+            kickoff = parse_time(match.get("kickoff_at"))
+            if not kickoff or captured >= kickoff:
                 continue
-
-    print(f"  [global_odds] 国际欧赔匹配成功 {matched}/{len(matches)} 场,双轨背离防线已点亮")
+            names = {side: translate_team_name(match.get(f"{side}_team", "")).strip().casefold()
+                     for side in ("home", "away")}
+            candidates = [e for e in events if isinstance(e, dict)
+                          and e.get("id") and e.get("sport_key") == sport
+                          and parse_time(e.get("commence_time")) == kickoff
+                          and all(names[s] and names[s] == str(e.get(f"{s}_team", "")).strip().casefold()
+                                  for s in ("home", "away"))]
+            # Ambiguity is checked before quote availability; a stale duplicate
+            # is still a second possible event, not evidence of the first one.
+            if len(candidates) != 1:
+                continue
+            try:
+                quote = _extract_1x2(candidates[0], now=captured)
+            except (TypeError, ValueError, KeyError, AttributeError):
+                continue
+            if not quote:
+                continue
+            quote.update({"source": "the_odds_api",
+                          "source_url": f"{ODDS_API_BASE.rstrip('/')}/sports/{sport}/odds/",
+                          "identity_method": "league_both_exact_aliases_kickoff",
+                          "side_match_scores": {"home": 1.0, "away": 1.0}})
+            for side in ("home", "draw", "away"):
+                match[f"global_{side}"] = quote["odds"][side]
+            match.update({"global_odds_source": "the_odds_api",
+                          "global_odds_match_score": 1.0,
+                          "global_odds_evidence": quote})
+            matched += 1
+    print(f"  [global_odds] verified fresh event quotes {matched}/{len(matches)}")
     return matched
 
 

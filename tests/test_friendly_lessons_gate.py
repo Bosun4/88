@@ -56,7 +56,8 @@ def test_friendly_away_clean_sheet_gets_home_goal_and_draw_tail_protection():
     assert "friendly_btts_late_goal_risk" in front["tail_risk_flags"]
 
 
-def test_friendly_b_tier_low_price_home_favorite_is_capped_without_lineup_confirmation():
+def test_friendly_b_tier_low_price_home_favorite_is_capped_without_lineup_confirmation(monkeypatch):
+    monkeypatch.setattr(predict, "AI_RUN_MODE", "fast_batch")
     row = _base_ai_row(
         final_direction="home",
         predicted_score="2-1",
@@ -82,5 +83,7 @@ def test_friendly_b_tier_low_price_home_favorite_is_capped_without_lineup_confir
     scores = {x["score"] for x in front["risk_score_candidates"] if isinstance(x, dict)}
     assert {"1-1", "2-1", "2-2"}.issubset(scores)
     assert "friendly_favorite_overheat" in front["tail_risk_flags"]
-    assert front["selection_layer"] == "防平"
-    assert front["selection_stake_unit"] == 0.25
+    # Existing 2-1 hard no-bet gate takes precedence over a risk hint.
+    assert front["selection_layer"] == "放弃"
+    assert front["selection_stake_unit"] == 0
+    assert front["recommend_gate_pass"] is False

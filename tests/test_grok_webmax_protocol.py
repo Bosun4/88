@@ -9,7 +9,8 @@ if ROOT not in sys.path:
 from scripts import predict
 
 
-def test_grok_webmax_instruction_replaces_timeline_storytelling():
+def test_grok_webmax_instruction_replaces_timeline_storytelling(monkeypatch):
+    monkeypatch.setattr(predict, "AI_NATIVE_WEB", True)
     instr = predict._web_research_instruction("grok")
     assert "Grok Web-Max" in instr
     assert "external_fact_table" in instr

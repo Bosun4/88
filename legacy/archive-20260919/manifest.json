@@ -1,0 +1,150 @@
+{
+  "archive_date": "2026-09-19",
+  "reason": "Historical backups and World Cup research; no runtime file dependency found. All bytes preserved.",
+  "files": [
+    {
+      "original_path": ".backup_p0p1_20260607141824/advanced_models.py.bak",
+      "archived_path": "legacy/archive-20260919/.backup_p0p1_20260607141824/advanced_models.py.bak",
+      "sha256": "d410ef4dee2ba8f414bde1a7a6e4d27face30580400386427111c1bc1872f4b5",
+      "bytes": 12381
+    },
+    {
+      "original_path": ".backup_p0p1_20260607141824/advanced_models.py.p1bak",
+      "archived_path": "legacy/archive-20260919/.backup_p0p1_20260607141824/advanced_models.py.p1bak",
+      "sha256": "d410ef4dee2ba8f414bde1a7a6e4d27face30580400386427111c1bc1872f4b5",
+      "bytes": 12381
+    },
+    {
+      "original_path": ".backup_p0p1_20260607141824/gitignore.bak",
+      "archived_path": "legacy/archive-20260919/.backup_p0p1_20260607141824/gitignore.bak",
+      "sha256": "427b19a746f2de92c7f7739399eb1c233d98aeedc56ebe25b3cde2ebc8fb7a38",
+      "bytes": 741
+    },
+    {
+      "original_path": ".backup_p0p1_20260607141824/main.py.p1bak",
+      "archived_path": "legacy/archive-20260919/.backup_p0p1_20260607141824/main.py.p1bak",
+      "sha256": "e84971120b7fe7692aa0c367920a14005855d8396a701f6dd735dc7285bd9887",
+      "bytes": 15589
+    },
+    {
+      "original_path": ".backup_p0p1_20260607141824/predict.py.bak",
+      "archived_path": "legacy/archive-20260919/.backup_p0p1_20260607141824/predict.py.bak",
+      "sha256": "2c7ceb0237560cc954086d9349556b882e6c3b198aef725387f889e761982121",
+      "bytes": 268695
+    },
+    {
+      "original_path": ".backup_p0p1_20260607141824/predict.py.pre_p1b",
+      "archived_path": "legacy/archive-20260919/.backup_p0p1_20260607141824/predict.py.pre_p1b",
+      "sha256": "363552a4842063bbe88c58d576aad54535660bbcf4379748aa3ebd7d6844fb4b",
+      "bytes": 264687
+    },
+    {
+      "original_path": ".backup_p0p1_20260607141824/requirements.txt.bak",
+      "archived_path": "legacy/archive-20260919/.backup_p0p1_20260607141824/requirements.txt.bak",
+      "sha256": "41ee719f2ee9768cb16eeeb9caf75c3ffa61436269cd3672713ac8594df0d922",
+      "bytes": 122
+    },
+    {
+      "original_path": ".backup_p0p1_20260607141824/test_shadow_integration.py.p1bak",
+      "archived_path": "legacy/archive-20260919/.backup_p0p1_20260607141824/test_shadow_integration.py.p1bak",
+      "sha256": "b8050c0b7666af549e6e3c0b8870c8e575bd994975c2eafb1192702d5004fd48",
+      "bytes": 3004
+    },
+    {
+      "original_path": ".backup_zerotax_20260617_221622/predict.py",
+      "archived_path": "legacy/archive-20260919/.backup_zerotax_20260617_221622/predict.py",
+      "sha256": "190ba1c228dd68a3ee57e5e1bbcf2720ce6d413b0b56eb1b1b115e832bc8bdf3",
+      "bytes": 286127
+    },
+    {
+      "original_path": "reports/wc_research/WC_READING_INTEL_2026.md",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/WC_READING_INTEL_2026.md",
+      "sha256": "a04ab63b9d97350a01bb15146c968b27a2acc3953e25da51e40bc6265cf9bf83",
+      "bytes": 5292
+    },
+    {
+      "original_path": "reports/wc_research/_analyze5.py",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/_analyze5.py",
+      "sha256": "eb5459f121a8c371a679296fd00f1bd6c67033c0169a0809ae17cd8a5bdd6ca5",
+      "bytes": 4026
+    },
+    {
+      "original_path": "reports/wc_research/_fetch5.py",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/_fetch5.py",
+      "sha256": "59f78b7229e5eb1458703ec6f22cbeb38ba1bfde50d392446c3d484779a7dc29",
+      "bytes": 2620
+    },
+    {
+      "original_path": "reports/wc_research/_form.py",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/_form.py",
+      "sha256": "92087ad04b644b70a812b8ebf3939448de92414ff283639765923bc8179faae4",
+      "bytes": 2953
+    },
+    {
+      "original_path": "reports/wc_research/_form_raw.json",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/_form_raw.json",
+      "sha256": "8807cce9a5e4542ba96538942f794ca82bcab3f6989dc004763d244d4efd851f",
+      "bytes": 22717
+    },
+    {
+      "original_path": "reports/wc_research/_wc5_raw.json",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/_wc5_raw.json",
+      "sha256": "a266895e5882538bb50612aa5d5316c6403d699a80ee13190d54cb5ef2e62608",
+      "bytes": 68111
+    },
+    {
+      "original_path": "reports/wc_research/_wc_hist_raw.json",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/_wc_hist_raw.json",
+      "sha256": "3afb47c0e4b1fa0e1b639824a7f07989c306bb350a05a2a1d35babad74c01316",
+      "bytes": 6896
+    },
+    {
+      "original_path": "reports/wc_research/stats_placeholder_rootcause_fix_20260608.md",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/stats_placeholder_rootcause_fix_20260608.md",
+      "sha256": "e5f8c311f18f44063b208ce670e79d4e3ee627d12c9b315dd5e0c55616542f66",
+      "bytes": 3450
+    },
+    {
+      "original_path": "reports/wc_research/wc_2026_format_facts.md",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/wc_2026_format_facts.md",
+      "sha256": "751d0e370852f6e5c221347739f6ebb7224b9ead256c0069460b37255009063b",
+      "bytes": 3136
+    },
+    {
+      "original_path": "reports/wc_research/wc_intel_integration_beforeafter_20260608.md",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/wc_intel_integration_beforeafter_20260608.md",
+      "sha256": "2a99fa253f31b4795babfbb85905a1c7164440f09875f6c8b126abb263404bcb",
+      "bytes": 3449
+    },
+    {
+      "original_path": "reports/wc_research/wc_pretournament_friendlies_202606.md",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/wc_pretournament_friendlies_202606.md",
+      "sha256": "d82bf95c9d4f7c2a8a1797a01f46d3a8da07e99f6b5c7a7300ed7c7216f0ce69",
+      "bytes": 15225
+    },
+    {
+      "original_path": "reports/wc_research/wc_round1_odds_readthrough_20260608.md",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/wc_round1_odds_readthrough_20260608.md",
+      "sha256": "4bfe9b0e9d84ed4a304b8942c38f0680b323479659d77870594012087147cc3e",
+      "bytes": 4862
+    },
+    {
+      "original_path": "reports/wc_research/wc_round_scoring_patterns.md",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/wc_round_scoring_patterns.md",
+      "sha256": "d5da23c8534b1f68b2740c975f2d5193907d93b600485fe57b726cddab1e3d0e",
+      "bytes": 5123
+    },
+    {
+      "original_path": "reports/wc_research/wc_round_scoring_patterns_5wc.md",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/wc_round_scoring_patterns_5wc.md",
+      "sha256": "b71925c17e31bfd6a25ed5a791fef2e3353832a96c4be2b1f22b6ef245232542",
+      "bytes": 5132
+    },
+    {
+      "original_path": "reports/wc_research/wc_team_form_2026.md",
+      "archived_path": "legacy/archive-20260919/reports/wc_research/wc_team_form_2026.md",
+      "sha256": "fa963467676f7d08aba4c6b873e19dd845a050d2ef9363d2b673c9b0ac1aeb78",
+      "bytes": 5410
+    }
+  ]
+}
