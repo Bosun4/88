@@ -1,10 +1,11 @@
 name: Football AI Predict
 
+# Paid prediction calls are manual-only. Never add push/schedule here.
 on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: football-ai-predict-single-run
@@ -12,8 +13,11 @@ concurrency:
 
 jobs:
   predict:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 45
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -23,173 +27,96 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
 
-      - name: Install dependencies
+      - name: Install locked dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest
+          python -m pip install -r requirements.txt
+          python -m pip install pytest==9.1.1 pytest-socket==0.8.1 PyYAML==6.0.3
+          python -m pip check
 
-      - name: Run unit tests (regression gate)
-        run: |
-          python -m pytest -q
+      - name: Run offline regression gate
+        env:
+          VMAX_ALLOW_AUTO_INSTALL: "false"
+          PYTHONUTF8: "1"
+        run: python -m pytest -q --disable-socket --allow-unix-socket
 
-      - name: Prepare runtime data directories
-        run: |
-          mkdir -p data
-          mkdir -p data/ai_phase_results
+      # Cache keys are unique per run; restore the most recent cache for this
+      # code revision. Evidence hashes + the 1800s TTL decide actual cache hits.
+      - name: Restore prediction evidence cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/ai_cache
+          key: prediction-evidence-v21-${{ hashFiles('scripts/*.py', 'requirements.txt') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            prediction-evidence-v21-${{ hashFiles('scripts/*.py', 'requirements.txt') }}-
 
-          echo "🧹 Clearing old AI cache to avoid stale prediction pollution"
-          rm -rf data/ai_cache || true
-
-          echo "📁 Ensure AI phase result directory exists"
-          mkdir -p data/ai_phase_results
+      - name: Prepare runtime directories
+        run: mkdir -p data/ai_cache data/ai_phase_results
 
       - name: Run Predictions
         env:
           PYTHONUNBUFFERED: "1"
-
+          PYTHONUTF8: "1"
+          VMAX_ALLOW_AUTO_INSTALL: "false"
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
-
+          WENCAI_AUTHORIZATION: ${{ secrets.WENCAI_AUTHORIZATION }}
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
-          GPT_API_KEY_2: ${{ secrets.GPT_API_KEY_2 }}
-          GPT_API_URL_2: ${{ secrets.GPT_API_URL_2 }}
-          GPT_API_KEY_3: ${{ secrets.GPT_API_KEY_3 }}
-          GPT_API_URL_3: ${{ secrets.GPT_API_URL_3 }}
-          GPT_API_KEY_4: ${{ secrets.GPT_API_KEY_4 }}
-          GPT_API_URL_4: ${{ secrets.GPT_API_URL_4 }}
-          GPT_API_KEY_5: ${{ secrets.GPT_API_KEY_5 }}
-          GPT_API_URL_5: ${{ secrets.GPT_API_URL_5 }}
-
-          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
-          GROK_API_URL: ${{ secrets.GROK_API_URL }}
-          GROK_API_KEY_2: ${{ secrets.GROK_API_KEY_2 }}
-          GROK_API_URL_2: ${{ secrets.GROK_API_URL_2 }}
-          GROK_API_KEY_3: ${{ secrets.GROK_API_KEY_3 }}
-          GROK_API_URL_3: ${{ secrets.GROK_API_URL_3 }}
-          GROK_API_KEY_4: ${{ secrets.GROK_API_KEY_4 }}
-          GROK_API_URL_4: ${{ secrets.GROK_API_URL_4 }}
-          GROK_API_KEY_5: ${{ secrets.GROK_API_KEY_5 }}
-          GROK_API_URL_5: ${{ secrets.GROK_API_URL_5 }}
-
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
-          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
-          GEMINI_API_URL_2: ${{ secrets.GEMINI_API_URL_2 }}
-          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
-          GEMINI_API_URL_3: ${{ secrets.GEMINI_API_URL_3 }}
-          GEMINI_API_KEY_4: ${{ secrets.GEMINI_API_KEY_4 }}
-          GEMINI_API_URL_4: ${{ secrets.GEMINI_API_URL_4 }}
-          GEMINI_API_KEY_5: ${{ secrets.GEMINI_API_KEY_5 }}
-          GEMINI_API_URL_5: ${{ secrets.GEMINI_API_URL_5 }}
-
-          CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
-          CLAUDE_API_URL: ${{ secrets.CLAUDE_API_URL }}
-
-          # 问财新版接口凭证。设备 UUID/cid 运行时随机生成，不保存用户设备信息。
-          WENCAI_AUTHORIZATION: ${{ secrets.WENCAI_AUTHORIZATION }}
-
-          AI_RUN_MODE: "fast_batch"
-          # Fastest stable mode: one match per chunk, 5 chunks in flight.
-          # Endpoint round-robin then spreads concurrent GPT/GROK/GEMINI calls
-          # over *_API_URL/_KEY + *_API_URL_2..5/_KEY_2..5.
-          AI_CHUNK_SIZE: "1"
-          AI_CHUNK_CONCURRENCY: "5"
-          AI_MODEL_CONCURRENCY: "5"
-          AI_PHASE1_PARALLEL: "true"
-          AI_ENDPOINT_MAX_SLOTS: "5"
-          AI_ENDPOINT_ROUND_ROBIN: "true"
-          AI_ENDPOINT_FAILOVER: "true"
-          # Keep the expensive fallback judges off for speed; failed/partial rows
-          # still use normal endpoint failover and final retry.
-          AI_ENABLE_CROSS_EXAM: "true"
+          # Empty repository variable keeps the model default in scripts/config.py.
+          GPT_MODEL: ${{ vars.GPT_MODEL }}
+          AI_RUN_MODE: "single_pass"
+          AI_PRIMARY_MODEL: "gpt"
+          AI_BATCH_SIZE: "6"
+          AI_CHUNK_CONCURRENCY: "2"
+          AI_MODEL_CONCURRENCY: "2"
+          AI_SINGLE_PASS_MAX_CALLS: "12"
+          AI_CONNECT_TIMEOUT: "20"
+          AI_READ_TIMEOUT: "180"
+          AI_HTTP_TOTAL_TIMEOUT: "180"
+          AI_PHASE1_RETRY_MAX: "0"
+          AI_FINAL_RETRY_MAX: "0"
+          AI_ENDPOINT_FAILOVER: "false"
+          AI_ENABLE_CROSS_EXAM: "false"
           AI_ENABLE_CONSISTENCY_JUDGE: "false"
+          AI_ENABLE_FALLBACK_REFEREE: "false"
           AI_ENABLE_FAMILY_DEBATE_REFEREE: "false"
-
-          VMAX_RUN_DAYS: "today"
-          AI_RUN_DAYS: "today"
-          VMAX_DATE_SHIFT_HOURS: "11"
-
-          AI_CONNECT_TIMEOUT: "120"
-          AI_READ_TIMEOUT: "3600"
-          AI_CLAUDE_CONNECT_TIMEOUT: "120"
-          AI_CLAUDE_READ_TIMEOUT: "7200"
-          AI_HTTP_TOTAL_TIMEOUT: "0"
-          # 2026-07-03: Gemini final挂死1h40m事故。单请求读超时收紧到20min
-          # (正常final 1-2min), 配合 AI_CHUNK_WATCHDOG_SECONDS 单场40min熔断。
-          AI_FINAL_READ_TIMEOUT: "1200"
-          AI_CHUNK_WATCHDOG_SECONDS: "2400"
-          # 2026-07-02: GPT输出被端点默认token上限截断→parse_failed→每场多122s fallback。
-          # 显式给足输出空间; 配合 predict.py 的 _trim_to_parseable_prefix 双保险。
-          AI_MAX_OUTPUT_TOKENS: "16000"
-
-          STRICT_ONE_CALL_PER_MODEL: "true"
-          AI_MAX_REQUESTS_PER_AI: "3"
-          AI_CLAUDE_MAX_REQUESTS: "1"
           AI_ALLOW_SECOND_CALL_REPAIR: "false"
           AI_ENABLE_CLAUDE_JSON_REPAIR: "false"
           AI_ENABLE_ANY_MODEL_JSON_REPAIR: "false"
-          AI_CLAUDE_RETRY_BACKOFF_SECONDS: "20"
-
-          AI_RUN_CLAUDE_ONLY_IF_PHASE1_VALID: "false"
-          AI_RUN_CLAUDE_ALWAYS: "true"
-          AI_MIN_PHASE1_VALID_FOR_CLAUDE: "0"
-
-          AI_USE_COMPACT_CLAUDE_AUDIT: "true"
-          AI_MAX_PHASE1_REASON_CHARS_FOR_CLAUDE: "350"
-          CLAUDE_RAW_PACKET_CHAR_LIMIT: "4500"
-          CLAUDE_MATCH_SUMMARY_CHAR_LIMIT: "2200"
-          CLAUDE_COMPACT_FIELD_LIMIT: "2500"
-
-          AI_ALLOW_TEXT_FALLBACK: "false"
-          AI_ALLOW_CLAUDE_TEXT_FALLBACK: "false"
-          AI_SAFE_TEXT_FALLBACK_ONLY: "false"
-
-          AI_REQUIRE_FULL_BATCH_COVERAGE: "true"
-          AI_ACCEPT_PARTIAL_PHASE1: "false"
-          AI_ACCEPT_PARTIAL_CLAUDE: "false"
-          AI_PARTIAL_AS_FAILED: "true"
-
-          AI_ENABLE_CACHE: "false"
-          AI_DISABLE_CACHE: "true"
-          AI_PERSISTENT_CACHE_ENABLED: "false"
-          AI_SINGLEFLIGHT_ENABLED: "false"
-          AI_DECISION_CACHE_TTL: "0"
+          AI_MAX_OUTPUT_TOKENS: "16000"
+          AI_ENABLE_CACHE: "true"
+          AI_DISABLE_CACHE: "false"
+          AI_PERSISTENT_CACHE_ENABLED: "true"
+          AI_DECISION_CACHE_TTL: "1800"
           AI_CACHE_DIR: "data/ai_cache"
-          AI_CACHE_STRIP_VOLATILE_KEYS: "true"
-
-          AI_PHASE_SNAPSHOT_ENABLED: "true"
-          AI_PHASE_RESULT_DIR: "data/ai_phase_results"
-          AI_SAVE_PARTIAL_REJECTED_RESULTS: "true"
-          AI_WRITE_BATCH_RESULT_IMMEDIATELY: "true"
           AI_SAVE_RAW_RESPONSE: "false"
           AI_PARSE_DEBUG: "false"
+          VMAX_RUN_DAYS: "today"
+          AI_RUN_DAYS: "today"
+          VMAX_DATE_SHIFT_HOURS: "11"
+        run: python scripts/main.py
 
-          AI_DISK_LOCK_WAIT_SECONDS: "30"
-          AI_DISK_LOCK_POLL_SECONDS: "3"
+      - name: Save prediction evidence cache
+        if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: data/ai_cache
+          key: prediction-evidence-v21-${{ hashFiles('scripts/*.py', 'requirements.txt') }}-${{ github.run_id }}-${{ github.run_attempt }}
 
-          VMAX_MAIN_LOCK_STALE_SECONDS: "21600"
-
-          SKIP_AUTO_INSTALL: "true"
-
-        run: |
-          python scripts/main.py
-
-      - name: Upload AI phase/debug artifacts
+      - name: Upload prediction artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ai-phase-debug-${{ github.run_id }}
+          name: prediction-${{ github.run_id }}
           if-no-files-found: ignore
           retention-days: 14
           path: |
             data/ai_phase_results/
-            data/debug/
-            data/debug_v20/
             data/predictions.json
+            data/forward_ledger.jsonl
 
       - name: Push data updates
         if: success()
@@ -197,41 +124,57 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          mkdir -p data/
-
           git fetch origin main
           if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
-            echo "❌ origin/main 已在本次预测运行期间前进，拒绝把旧基底产物强行合并发布。请重新触发一次预测。"
+            echo "origin/main advanced during prediction; refusing to publish stale-base outputs. Run the manual workflow again."
             exit 1
           fi
 
-          echo "🧹 Ensure runtime debug/cache artifacts are not committed"
-          rm -rf data/ai_cache data/debug data/debug_v20 || true
+          # Use the exact paths recorded by this run, not a newest-mtime guess.
+          python - <<'PY'
+          import json
+          import pathlib
+          import subprocess
 
-          latest_history="$(find data -maxdepth 1 -type f -name 'history_*_today_*.json' -printf '%T@ %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)"
-          latest_snapshot="$(find data/snapshots -maxdepth 1 -type f -name '*_today_*.json' -printf '%T@ %p\n' 2>/dev/null | sort -nr | head -n 1 | cut -d' ' -f2-)"
-
-          echo "🔒 JSON 硬闸: 产物必须能被浏览器 JSON.parse 解析"
-          node -e 'const fs=require("fs"); for (const p of process.argv.slice(1)) { JSON.parse(fs.readFileSync(p,"utf8")); console.log("JSON OK", p); }' data/predictions.json ${latest_history:+"$latest_history"} ${latest_snapshot:+"$latest_snapshot"}
-
-          echo "🔒 冲突标记硬闸: 绝不推送带 git 冲突标记的损坏产物"
-          if grep -nE '^(<<<<<<<|=======|>>>>>>>)' data/predictions.json ${latest_history:+"$latest_history"} ${latest_snapshot:+"$latest_snapshot"}; then
-            echo "❌ 检测到未解决的 git 冲突标记，中止本次推送，保护线上产物。"
-            exit 1
-          fi
-
-          git add data/predictions.json
-          if [ -n "$latest_history" ]; then
-            git add "$latest_history"
-          fi
-          if [ -n "$latest_snapshot" ]; then
-            git add "$latest_snapshot"
-          fi
-          echo "✅ JSON 与冲突标记硬闸通过，继续。"
+          root = pathlib.Path.cwd().resolve()
+          live = root / "data/predictions.json"
+          payload = json.loads(live.read_text(encoding="utf-8"))
+          runtime = payload["runtime"]
+          paths = [live, root / runtime["history_path"], root / runtime["snapshot_path"]]
+          for path in paths:
+              path = path.resolve()
+              if not path.is_relative_to(root / "data") or path.suffix != ".json":
+                  raise SystemExit(f"Unexpected publish path: {path}")
+              text = path.read_text(encoding="utf-8")
+              if any(line.startswith(("<<<<<<<", "=======", ">>>>>>>")) for line in text.splitlines()):
+                  raise SystemExit(f"Conflict marker in {path}")
+              # Reject NaN/Infinity and validate with the browser's JSON parser too.
+              json.loads(text, parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+              subprocess.run(["node", "-e", "JSON.parse(require('fs').readFileSync(process.argv[1],'utf8'))", str(path)], check=True)
+              subprocess.run(["git", "add", "--", str(path.relative_to(root))], check=True)
+              print(f"JSON OK: {path.relative_to(root)}")
+          from forward_ledger.ledger import read_verified_entries
+          ledger = root / "data/forward_ledger.jsonl"
+          entries = list(read_verified_entries(ledger))
+          if not entries:
+              raise SystemExit("Missing forward locks: refusing publication")
+          subprocess.run(["git", "add", "--", "data/forward_ledger.jsonl"], check=True)
+          print(f"Forward ledger verified: {len(entries)} records")
+          PY
 
           if ! git diff --cached --quiet; then
-            git commit -m "🤖 Auto-update prediction data (manual event-driven strict-ai-no-cache)"
-            git push
+            git commit -m "chore: update manual single-pass prediction data"
+            git push origin HEAD:main
           else
-            echo "✅ 本次测算数据无变动，安全退出。"
+            echo "Prediction data unchanged."
           fi
+
+  # GITHUB_TOKEN pushes do not trigger another push workflow. Explicitly deploy
+  # after the manual prediction job succeeds, without invoking any AI again.
+  deploy_pages:
+    needs: predict
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/pages.yml

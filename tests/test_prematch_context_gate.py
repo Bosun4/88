@@ -71,7 +71,8 @@ def test_cup_favorite_with_web_lineup_and_motivation_can_pass():
     assert "prematch_v2_cup_cross_context_lineup_motivation_required" not in front.get("pre_match_factor_audit", {}).get("rules_applied", [])
 
 
-def test_worldcup_defaults_to_knockout_gate_even_without_round_label():
+def test_worldcup_defaults_to_knockout_gate_even_without_round_label(monkeypatch):
+    monkeypatch.setattr(predict, "AI_RUN_MODE", "fast_batch")
     row = _base_ai_row(
         final_direction="home",
         predicted_score="3-0",
@@ -108,7 +109,8 @@ def test_worldcup_knockout_text_suppresses_group_r3_gate():
     assert not any("worldcup_r3" in r for r in front["pre_match_factor_audit"]["rules_applied"])
 
 
-def test_explicit_worldcup_group_r3_can_still_trigger_legacy_exception():
+def test_explicit_worldcup_group_r3_can_still_trigger_legacy_exception(monkeypatch):
+    monkeypatch.setattr(predict, "AI_RUN_MODE", "fast_batch")
     row = _base_ai_row(
         final_direction="away",
         predicted_score="0-3",

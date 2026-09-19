@@ -61,7 +61,8 @@ def test_score_shape_selector_promotes_btts_clean_sheet_candidate_without_changi
     assert out["btts"] == "yes"
     assert out["score_shape_calibrated"] is True
     assert out["score_shape_selector"]["reason"] == "score_shape_selector_btts_clean_sheet_uplift"
-    assert out["top3"][0]["score"] == "2-1"
+    assert out["score_shape_candidates"][0]["score"] == "2-1"
+    assert out["top3"][0]["score"] == "2-0"  # Preserve the model distribution.
 
 
 def test_score_shape_selector_draw_high_band_promotes_existing_high_draw_candidate():

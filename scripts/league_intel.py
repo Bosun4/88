@@ -219,71 +219,19 @@ def detect_derby(home_team, away_team, league_key):
     return 0, ""
 
 
-def analyze_motivation(m, league_key):
-    """6-step motivation analysis"""
-    lines = []
-    finance = LEAGUE_FINANCE.get(league_key, {})
+def _context(m):
+    try:
+        from .league_context import build_league_context
+    except ImportError:
+        from league_context import build_league_context
+    return build_league_context(m)
 
-    try: hr = int(m.get("home_rank", 10) or 10)
-    except: hr = 10
-    try: ar = int(m.get("away_rank", 10) or 10)
-    except: ar = 10
 
-    h = str(m.get("home_team", ""))
-    a = str(m.get("away_team", ""))
-
-    # Step 1: Financial context
-    if finance:
-        rel_desp = finance.get("relegation_desperation", 5)
-        t4_int = finance.get("top4_intensity", 7)
-        if hr >= 16 or ar >= 16:
-            lines.append("[FINANCE] Relegation cost: %s (desperation: %d/10)" % (
-                finance.get("relegation_cost", "unknown"), rel_desp))
-        if hr <= 6 or ar <= 6:
-            lines.append("[FINANCE] Top4 value: %s (intensity: %d/10)" % (
-                finance.get("ucl_value", "unknown"), t4_int))
-
-    # Step 2: Position-based motivation
-    if hr <= 2 and ar <= 2:
-        lines.append("[TITLE] Both in title race! MAX intensity, expect goals")
-    elif hr <= 2 or ar <= 2:
-        lines.append("[TITLE] Title contender involved, high motivation")
-    if 3 <= hr <= 6 or 3 <= ar <= 6:
-        if 3 <= hr <= 6 and 3 <= ar <= 6:
-            lines.append("[TOP4] Both fighting for UCL spots! Critical match")
-        else:
-            lines.append("[TOP4] UCL qualification at stake for one team")
-    if hr >= 16 or ar >= 16:
-        if hr >= 16 and ar >= 16:
-            lines.append("[RELEGATION] BOTH fighting relegation! Desperate 6-pointer")
-        else:
-            lines.append("[RELEGATION] Survival match! Relegation team will be DESPERATE")
-    if 8 <= hr <= 14 and 8 <= ar <= 14:
-        lines.append("[MID-TABLE] Both safe, low stakes = draw risk HIGH, motivation LOW")
-
-    # Step 3: Hidden motivation patterns
-    for team_kw, note in MOTIVATION_PATTERNS.items():
-        if team_kw in h.lower() or team_kw in a.lower():
-            lines.append("[HIDDEN] %s" % note)
-            break
-
-    # Step 4: Derby detection
-    derby_int, derby_name = detect_derby(h, a, league_key)
-    if derby_int >= 7:
-        lines.append("[DERBY] %s (intensity %d/10)! NO tactical rest, MAXIMUM commitment" % (derby_name, derby_int))
-
-    # Step 5: Income sensitivity
-    if finance:
-        if hr >= 15:
-            lines.append("[SENSITIVITY] Home team: relegation = financial DISASTER in this league")
-        if ar >= 15:
-            lines.append("[SENSITIVITY] Away team: relegation = financial DISASTER in this league")
-        if league_key == "ita_top" and (hr <= 6 or ar <= 6):
-            lines.append("[SENSITIVITY] Serie A: historical income cushion for big clubs, less desperate")
-        if league_key in ["fra_top", "fra2"]:
-            lines.append("[SENSITIVITY] French football: TV deal collapsed, every euro counts!")
-
-    return lines
+def analyze_motivation(m, league_key=None):
+    """Compatibility entry: sourced league facts, never intent inferred from rank."""
+    import json
+    context = _context(m)
+    return ["[LEAGUE-CONTEXT] " + json.dumps(context, ensure_ascii=False)]
 
 
 # ===================================================================
@@ -328,7 +276,7 @@ def _wc_detect_round(m):
     return None
 
 
-def analyze_world_cup_context(m):
+def historical_analyze_world_cup_context(m):
     """世界杯读盘先验注入(作evidence, 非裁判). 返回 lines list.
     依据: 5届320场分轮实证 + 2026新制 + 双窗口状态档."""
     lines = []
@@ -375,53 +323,15 @@ def analyze_world_cup_context(m):
     return lines
 
 
+def analyze_world_cup_context(m):
+    """Live entry: unknown stage stays unknown; historical priors require opt-in."""
+    import json
+    return ["[TOURNAMENT-CONTEXT] " + json.dumps(_context(m), ensure_ascii=False)]
+
+
 def build_league_intelligence(m):
-    league = str(m.get("league", ""))
-    lk = detect_league_key(league)
-    profile = LEAGUE_PROFILES.get(lk, LEAGUE_PROFILES["default"])
-    avg_goals, over25, under25, two_three, three_plus, one_two, desc = profile
-    hr = m.get("home_rank", 10)
-    ar = m.get("away_rank", 10)
-    mt = classify_match_type(hr, ar)
-    mt_data = MATCH_TYPE_GOALS.get(lk, {})
-    mt_goals = mt_data.get(mt, (22, 22, 25, 2))
-    factors = LEAGUE_FACTORS.get(lk, {})
-    intel = m.get("intelligence", {})
-
-    lines = []
-    lines.append("[LEAGUE:%s] Avg:%.1fg O2.5:%d%% U2.5:%d%% | %s" % (
-        league, avg_goals, over25, under25, desc))
-    lines.append("[TYPE:%s] 1g=%d%% 2g=%d%% 3+g=%d%% likely=%dg" % (
-        mt.replace("_", " ").upper(), mt_goals[0], mt_goals[1], mt_goals[2], mt_goals[3]))
-
-    if factors.get("note"):
-        lines.append("[!] %s" % factors["note"])
-
-    is_knockout = False
-    baseface = str(m.get("baseface", ""))
-    if any(k in league for k in ["\u6b27\u7f57\u5df4", "\u6b27\u51a0", "\u6b27\u534f\u8054"]):
-        is_knockout = True
-        lines.append("[CUP] Knockout: higher stakes, typically more goals")
-        if "\u6b21\u56de\u5408" in baseface or "\u7b2c\u4e8c" in baseface:
-            lines.append("[2ND LEG] Trailing team attacks = more goals")
-
-    # Motivation analysis (联赛排名战意逻辑不适用于国家队赛事, 世界杯/国际赛跳过以免排名噪声污染)
-    if lk not in ("world_cup", "intl_friendly"):
-        motive_lines = analyze_motivation(m, lk)
-        lines.extend(motive_lines)
-
-    # World Cup / international reading intel (5届320场实证 + 双窗口状态)
-    if lk in ("world_cup", "intl_friendly"):
-        try:
-            lines.extend(analyze_world_cup_context(m))
-        except Exception:
-            pass
-
-    # Injury impact
-    h_inj = str(intel.get("h_inj", intel.get("home_injury", "")))
-    g_inj = str(intel.get("g_inj", intel.get("guest_injury", "")))
-    inj_kw = ["\u524d\u950b", "\u6838\u5fc3", "\u4e3b\u529b", "\u8fdb\u653b"]
-    if any(k in h_inj for k in inj_kw): lines.append("[INJ] Home key attacker OUT")
-    if any(k in g_inj for k in inj_kw): lines.append("[INJ] Away key attacker OUT")
-
-    return "\n".join(lines), avg_goals, is_knockout, mt
+    """Preserve the legacy tuple shape without fabricated current evidence."""
+    import json
+    context = _context(m)
+    return (json.dumps(context, ensure_ascii=False), None,
+            context["stage"]["value"] == "knockout", "unknown")

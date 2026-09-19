@@ -1,96 +1,135 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""auto_actuals.py — 从 football-data.co.uk 自动生成 actuals JSON。
-五大联赛真实赛果(免费无key)，输出 audit_backfill 兼容 schema:
-  [{"match_num","home_team","away_team","actual_score"}]
-匹配键: home_team||away_team (中文)，靠 team_aliases.json 中->英反查。
-用法: python3 scripts/auto_actuals.py --pred <history.json> --out <actuals.json>
+"""Fetch regulation-time results keyed by league, season, event day and teams.
+
+Rows without a verifiable event day remain explicitly unresolved. `date` in the
+prediction payload is a business/capture day and must never select a result.
 """
 from __future__ import annotations
-import argparse, json, csv, io, urllib.request, re
+
+import argparse
+import csv
+from datetime import datetime
+import io
+import json
 from pathlib import Path
+import tempfile
+import urllib.request
+from zoneinfo import ZoneInfo
 
-CODES = {'英超':'E0','西甲':'SP1','意甲':'I1','法甲':'F1','德甲':'D1'}
-BASE = 'https://www.football-data.co.uk/mmz4281/2526/'
-CACHE = '/tmp/fdcsv'  # 本地缓存优先, 避免重复打源站触发 503
+try:
+    from .fixture_identity import event_date, kickoff_time, prediction_rows
+except ImportError:
+    from fixture_identity import event_date, kickoff_time, prediction_rows
 
-def fetch_csv(code: str):
-    import os
-    cp = os.path.join(CACHE, f'{code}.csv')
-    if os.path.exists(cp):
-        return list(csv.DictReader(io.StringIO(open(cp,encoding='utf-8').read())))
-    url = f'{BASE}{code}.csv'
-    req = urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0'})
-    raw = urllib.request.urlopen(req, timeout=25).read().decode('latin1')
-    os.makedirs(CACHE, exist_ok=True)
-    open(cp,'w',encoding='utf-8').write(raw)
+CODES = {'英超': 'E0', '西甲': 'SP1', '意甲': 'I1', '法甲': 'F1', '德甲': 'D1'}
+CSV_TIMEZONES = {'英超': 'Europe/London', '西甲': 'Europe/Madrid',
+                 '意甲': 'Europe/Rome', '法甲': 'Europe/Paris', '德甲': 'Europe/Berlin'}
+BASE = 'https://www.football-data.co.uk/mmz4281/'
+CACHE = str(Path(tempfile.gettempdir()) / 'project88-fdcsv')
+
+
+def result_event_date(row):
+    """football-data CSV dates are competition-local, not capture or UTC days."""
+    kickoff = kickoff_time(row)
+    if kickoff and row.get('league') in CSV_TIMEZONES:
+        return kickoff.astimezone(ZoneInfo(CSV_TIMEZONES[row['league']])).date().isoformat()
+    return event_date(row)
+
+
+def season_for_date(day):
+    dt = datetime.strptime(day, '%Y-%m-%d')
+    start = dt.year if dt.month >= 7 else dt.year - 1
+    return f'{start % 100:02d}{(start + 1) % 100:02d}'
+
+
+def fetch_csv(code, season):
+    if code not in CODES.values() or len(season) != 4 or not season.isdigit():
+        raise ValueError('Invalid league/season')
+    path = Path(CACHE) / season / f'{code}.csv'
+    if path.exists():
+        raw = path.read_text(encoding='utf-8')
+    else:
+        req = urllib.request.Request(f'{BASE}{season}/{code}.csv', headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=25) as response:
+            raw = response.read().decode('utf-8-sig', errors='replace')
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(raw, encoding='utf-8')
     return list(csv.DictReader(io.StringIO(raw)))
 
-def build_eng_results():
-    """(EngHome,EngAway)->'fh-fa'"""
-    res = {}
+
+def build_eng_results(season):
+    results = {}
     for code in CODES.values():
-        try: rows = fetch_csv(code)
-        except Exception as e:
-            print(f'  [warn] {code} 拉取失败: {str(e)[:80]}'); continue
-        for r in rows:
-            h,a = r.get('HomeTeam'),r.get('AwayTeam')
-            try: fh,fa = int(r['FTHG']),int(r['FTAG'])
-            except: continue
-            if h and a: res[(h.strip(),a.strip())] = f'{fh}-{fa}'
-    return res
+        try:
+            rows = fetch_csv(code, season)
+        except Exception as exc:
+            print(f'[warn] {code}/{season}: {exc}')
+            continue
+        for row in rows:
+            day = None
+            for fmt in ('%d/%m/%Y', '%d/%m/%y'):
+                try:
+                    day = datetime.strptime(row.get('Date', ''), fmt).date().isoformat()
+                    break
+                except ValueError:
+                    continue
+            try:
+                gh, ga = int(row['FTHG']), int(row['FTAG'])
+            except (KeyError, ValueError, TypeError):
+                continue
+            home, away = row.get('HomeTeam'), row.get('AwayTeam')
+            if home and away and day and gh >= 0 and ga >= 0:
+                results[(code, season, day, home.strip(), away.strip())] = f'{gh}-{ga}'
+    return results
 
-def load_aliases(path: Path):
-    a = json.loads(path.read_text(encoding='utf-8'))
-    return {k:v for k,v in a.items() if not k.startswith('_')}
 
-def cn_to_eng(cn: str, aliases: dict, eng_teams: set):
-    """中文队名 -> CSV 英文队名。先查别名表(可能是关键词)，再在英文队集合里子串匹配。"""
-    kw = aliases.get(cn)
-    if kw:
-        if kw in eng_teams: return kw
-        for e in eng_teams:
-            if kw.lower() in e.lower(): return e
-    return None
+def load_aliases(path):
+    data = json.loads(Path(path).read_text(encoding='utf-8'))
+    return {k: v for k, v in data.items() if not k.startswith('_')}
+
+
+def cn_to_eng(cn, aliases, eng_teams):
+    keyword = aliases.get(cn, cn)
+    if keyword in eng_teams:
+        return keyword
+    candidates = [team for team in eng_teams if keyword and keyword.casefold() in team.casefold()]
+    return candidates[0] if len(candidates) == 1 else None
+
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--pred', required=True)
-    ap.add_argument('--out', required=True)
-    ap.add_argument('--aliases', default='reports/audit_backfill_20260531/team_aliases.json')
-    args = ap.parse_args()
-
-    pred = json.loads(Path(args.pred).read_text(encoding='utf-8'))
-    rows = []
-    m = pred.get('matches',{})
-    if isinstance(m, dict):
-        for day in m.values():
-            if isinstance(day, list): rows.extend(day)
-    aliases = load_aliases(Path(args.aliases))
-    big5 = Path('reports/audit_backfill_20260531/team_aliases_big5.json')
-    if big5.exists():
-        aliases.update(load_aliases(big5))  # 五大联赛全队补全优先合并
-    eng_res = build_eng_results()
-    eng_teams = set()
-    for h,a in eng_res: eng_teams.add(h); eng_teams.add(a)
-    print(f'CSV 真实赛果对数: {len(eng_res)} | 英文队名: {len(eng_teams)}')
-
-    out = []; matched=0; miss=[]
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--pred', required=True)
+    parser.add_argument('--out', required=True)
+    parser.add_argument('--aliases', default='reports/audit_backfill_20260531/team_aliases.json')
+    args = parser.parse_args()
+    rows = prediction_rows(json.loads(Path(args.pred).read_text(encoding='utf-8')))
+    aliases = load_aliases(args.aliases)
+    extra = Path('reports/audit_backfill_20260531/team_aliases_big5.json')
+    if extra.exists():
+        aliases.update(load_aliases(extra))
+    results = {}
+    for season in sorted({season_for_date(result_event_date(r)) for r in rows if result_event_date(r) and r.get('league') in CODES}):
+        results.update(build_eng_results(season))
+    teams = {team for key in results for team in key[-2:]}
+    out = []
     for row in rows:
-        if row.get('league') not in CODES: continue
-        h,a = row.get('home_team'),row.get('away_team')
-        eh,ea = cn_to_eng(h,aliases,eng_teams), cn_to_eng(a,aliases,eng_teams)
-        score = eng_res.get((eh,ea)) if eh and ea else None
-        if score:
-            out.append({'match_num':row.get('match_num'),'home_team':h,'away_team':a,'actual_score':score})
-            matched+=1
-        else:
-            miss.append(f"{row.get('league')} {h}({eh}) vs {a}({ea})")
-    Path(args.out).write_text(json.dumps(out,ensure_ascii=False,indent=1),encoding='utf-8')
-    print(f'已写 {matched} 场赛果 -> {args.out}')
-    if miss:
-        print(f'未匹配 {len(miss)} 场(非五大或别名缺失):')
-        for x in miss[:30]: print('  ',x)
+        if row.get('league') not in CODES:
+            continue
+        day = result_event_date(row)
+        season = season_for_date(day) if day else None
+        home = cn_to_eng(row.get('home_team'), aliases, teams)
+        away = cn_to_eng(row.get('away_team'), aliases, teams)
+        score = results.get((CODES[row['league']], season, day, home, away))
+        identity = {k: row[k] for k in ('fixture_id', 'match_id', 'api_football_fixture_id', 'source', 'fixture_source', 'match_num', 'league', 'league_id', 'home_id', 'away_id', 'home_team', 'away_team', 'kickoff_at', 'kickoff_at_utc') if k in row}
+        out.append({**identity, 'event_date': event_date(row), 'result_event_date': day,
+                    'season': row.get('season') or season,
+                    'actual_score': score, 'market': '1x2',
+                    'result_source': f'{BASE}{season}/{CODES[row["league"]]}.csv' if season else None,
+                    'settlement_status': 'settled' if score else 'unresolved',
+                    'unresolved_reason': None if score else ('missing_event_date' if not day else 'no_exact_result')})
+    Path(args.out).write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(f'Wrote {len(out)} records; settled={sum(bool(r["actual_score"]) for r in out)}')
+
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,5442 @@
+[
+{
+"wc": "2006",
+"date": "20060609",
+"home": "GER",
+"hs": 4,
+"as": 2,
+"away": "CRC",
+"tot": 6,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060609",
+"home": "POL",
+"hs": 0,
+"as": 2,
+"away": "ECU",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060610",
+"home": "ENG",
+"hs": 1,
+"as": 0,
+"away": "PAR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060610",
+"home": "TRI",
+"hs": 0,
+"as": 0,
+"away": "SWE",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060610",
+"home": "ARG",
+"hs": 2,
+"as": 1,
+"away": "CIV",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060611",
+"home": "SER",
+"hs": 0,
+"as": 1,
+"away": "NED",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060611",
+"home": "MEX",
+"hs": 3,
+"as": 1,
+"away": "IRN",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060611",
+"home": "ANG",
+"hs": 0,
+"as": 1,
+"away": "POR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060612",
+"home": "AUS",
+"hs": 3,
+"as": 1,
+"away": "JPN",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060612",
+"home": "USA",
+"hs": 0,
+"as": 3,
+"away": "CZE",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060612",
+"home": "ITA",
+"hs": 2,
+"as": 0,
+"away": "GHA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060613",
+"home": "KOR",
+"hs": 2,
+"as": 1,
+"away": "TOG",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060613",
+"home": "FRA",
+"hs": 0,
+"as": 0,
+"away": "SUI",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060613",
+"home": "BRA",
+"hs": 1,
+"as": 0,
+"away": "CRO",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060614",
+"home": "ESP",
+"hs": 4,
+"as": 0,
+"away": "UKR",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060614",
+"home": "TUN",
+"hs": 2,
+"as": 2,
+"away": "KSA",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060614",
+"home": "GER",
+"hs": 1,
+"as": 0,
+"away": "POL",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060615",
+"home": "ECU",
+"hs": 3,
+"as": 0,
+"away": "CRC",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060615",
+"home": "ENG",
+"hs": 2,
+"as": 0,
+"away": "TRI",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060615",
+"home": "SWE",
+"hs": 1,
+"as": 0,
+"away": "PAR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060616",
+"home": "ARG",
+"hs": 6,
+"as": 0,
+"away": "SER",
+"tot": 6,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060616",
+"home": "NED",
+"hs": 2,
+"as": 1,
+"away": "CIV",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060616",
+"home": "MEX",
+"hs": 0,
+"as": 0,
+"away": "ANG",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060617",
+"home": "POR",
+"hs": 2,
+"as": 0,
+"away": "IRN",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060617",
+"home": "CZE",
+"hs": 0,
+"as": 2,
+"away": "GHA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060617",
+"home": "ITA",
+"hs": 1,
+"as": 1,
+"away": "USA",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060618",
+"home": "JPN",
+"hs": 0,
+"as": 0,
+"away": "CRO",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060618",
+"home": "BRA",
+"hs": 2,
+"as": 0,
+"away": "AUS",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060618",
+"home": "FRA",
+"hs": 1,
+"as": 1,
+"away": "KOR",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060619",
+"home": "TOG",
+"hs": 0,
+"as": 2,
+"away": "SUI",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060619",
+"home": "KSA",
+"hs": 0,
+"as": 4,
+"away": "UKR",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060619",
+"home": "ESP",
+"hs": 3,
+"as": 1,
+"away": "TUN",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060620",
+"home": "CRC",
+"hs": 1,
+"as": 2,
+"away": "POL",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060620",
+"home": "ECU",
+"hs": 0,
+"as": 3,
+"away": "GER",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060620",
+"home": "PAR",
+"hs": 2,
+"as": 0,
+"away": "TRI",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060620",
+"home": "SWE",
+"hs": 2,
+"as": 2,
+"away": "ENG",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060621",
+"home": "IRN",
+"hs": 1,
+"as": 1,
+"away": "ANG",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060621",
+"home": "POR",
+"hs": 2,
+"as": 1,
+"away": "MEX",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060621",
+"home": "CIV",
+"hs": 3,
+"as": 2,
+"away": "SER",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060621",
+"home": "NED",
+"hs": 0,
+"as": 0,
+"away": "ARG",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060622",
+"home": "CZE",
+"hs": 0,
+"as": 2,
+"away": "ITA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060622",
+"home": "GHA",
+"hs": 2,
+"as": 1,
+"away": "USA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060622",
+"home": "CRO",
+"hs": 2,
+"as": 2,
+"away": "AUS",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060622",
+"home": "JPN",
+"hs": 1,
+"as": 4,
+"away": "BRA",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060623",
+"home": "KSA",
+"hs": 0,
+"as": 1,
+"away": "ESP",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060623",
+"home": "UKR",
+"hs": 1,
+"as": 0,
+"away": "TUN",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060623",
+"home": "SUI",
+"hs": 2,
+"as": 0,
+"away": "KOR",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060623",
+"home": "TOG",
+"hs": 0,
+"as": 2,
+"away": "FRA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060624",
+"home": "GER",
+"hs": 2,
+"as": 0,
+"away": "SWE",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060624",
+"home": "ARG",
+"hs": 2,
+"as": 1,
+"away": "MEX",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060625",
+"home": "ENG",
+"hs": 1,
+"as": 0,
+"away": "ECU",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060625",
+"home": "POR",
+"hs": 1,
+"as": 0,
+"away": "NED",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060626",
+"home": "ITA",
+"hs": 1,
+"as": 0,
+"away": "AUS",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060626",
+"home": "SUI",
+"hs": 0,
+"as": 0,
+"away": "UKR",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060627",
+"home": "BRA",
+"hs": 3,
+"as": 0,
+"away": "GHA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060627",
+"home": "ESP",
+"hs": 1,
+"as": 3,
+"away": "FRA",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060630",
+"home": "GER",
+"hs": 1,
+"as": 1,
+"away": "ARG",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060630",
+"home": "ITA",
+"hs": 3,
+"as": 0,
+"away": "UKR",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060701",
+"home": "ENG",
+"hs": 0,
+"as": 0,
+"away": "POR",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060701",
+"home": "BRA",
+"hs": 0,
+"as": 1,
+"away": "FRA",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060704",
+"home": "GER",
+"hs": 0,
+"as": 2,
+"away": "ITA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060705",
+"home": "POR",
+"hs": 0,
+"as": 1,
+"away": "FRA",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060708",
+"home": "GER",
+"hs": 3,
+"as": 1,
+"away": "POR",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2006",
+"date": "20060709",
+"home": "ITA",
+"hs": 1,
+"as": 1,
+"away": "FRA",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100611",
+"home": "RSA",
+"hs": 1,
+"as": 1,
+"away": "MEX",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100611",
+"home": "URU",
+"hs": 0,
+"as": 0,
+"away": "FRA",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100612",
+"home": "KOR",
+"hs": 2,
+"as": 0,
+"away": "GRE",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100612",
+"home": "ARG",
+"hs": 1,
+"as": 0,
+"away": "NGA",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100612",
+"home": "ENG",
+"hs": 1,
+"as": 1,
+"away": "USA",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100613",
+"home": "ALG",
+"hs": 0,
+"as": 1,
+"away": "SVN",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100613",
+"home": "SRB",
+"hs": 0,
+"as": 1,
+"away": "GHA",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100613",
+"home": "GER",
+"hs": 4,
+"as": 0,
+"away": "AUS",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100614",
+"home": "NED",
+"hs": 2,
+"as": 0,
+"away": "DEN",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100614",
+"home": "JPN",
+"hs": 1,
+"as": 0,
+"away": "CMR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100614",
+"home": "ITA",
+"hs": 1,
+"as": 1,
+"away": "PAR",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100615",
+"home": "NZL",
+"hs": 1,
+"as": 1,
+"away": "SVK",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100615",
+"home": "CIV",
+"hs": 0,
+"as": 0,
+"away": "POR",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100615",
+"home": "BRA",
+"hs": 2,
+"as": 1,
+"away": "PRK",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100616",
+"home": "HON",
+"hs": 0,
+"as": 1,
+"away": "CHI",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100616",
+"home": "ESP",
+"hs": 0,
+"as": 1,
+"away": "SUI",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100616",
+"home": "RSA",
+"hs": 0,
+"as": 3,
+"away": "URU",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100617",
+"home": "ARG",
+"hs": 4,
+"as": 1,
+"away": "KOR",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100617",
+"home": "GRE",
+"hs": 2,
+"as": 1,
+"away": "NGA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100617",
+"home": "FRA",
+"hs": 0,
+"as": 2,
+"away": "MEX",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100618",
+"home": "GER",
+"hs": 0,
+"as": 1,
+"away": "SRB",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100618",
+"home": "SVN",
+"hs": 2,
+"as": 2,
+"away": "USA",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100618",
+"home": "ENG",
+"hs": 0,
+"as": 0,
+"away": "ALG",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100619",
+"home": "NED",
+"hs": 1,
+"as": 0,
+"away": "JPN",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100619",
+"home": "GHA",
+"hs": 1,
+"as": 1,
+"away": "AUS",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100619",
+"home": "CMR",
+"hs": 1,
+"as": 2,
+"away": "DEN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100620",
+"home": "SVK",
+"hs": 0,
+"as": 2,
+"away": "PAR",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100620",
+"home": "ITA",
+"hs": 1,
+"as": 1,
+"away": "NZL",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100620",
+"home": "BRA",
+"hs": 3,
+"as": 1,
+"away": "CIV",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100621",
+"home": "POR",
+"hs": 7,
+"as": 0,
+"away": "PRK",
+"tot": 7,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100621",
+"home": "CHI",
+"hs": 1,
+"as": 0,
+"away": "SUI",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100621",
+"home": "ESP",
+"hs": 2,
+"as": 0,
+"away": "HON",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100622",
+"home": "FRA",
+"hs": 1,
+"as": 2,
+"away": "RSA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100622",
+"home": "MEX",
+"hs": 0,
+"as": 1,
+"away": "URU",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100622",
+"home": "GRE",
+"hs": 0,
+"as": 2,
+"away": "ARG",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100622",
+"home": "NGA",
+"hs": 2,
+"as": 2,
+"away": "KOR",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100623",
+"home": "SVN",
+"hs": 0,
+"as": 1,
+"away": "ENG",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100623",
+"home": "USA",
+"hs": 1,
+"as": 0,
+"away": "ALG",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100623",
+"home": "AUS",
+"hs": 2,
+"as": 1,
+"away": "SRB",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100623",
+"home": "GHA",
+"hs": 0,
+"as": 1,
+"away": "GER",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100624",
+"home": "PAR",
+"hs": 0,
+"as": 0,
+"away": "NZL",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100624",
+"home": "SVK",
+"hs": 3,
+"as": 2,
+"away": "ITA",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100624",
+"home": "CMR",
+"hs": 1,
+"as": 2,
+"away": "NED",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100624",
+"home": "DEN",
+"hs": 1,
+"as": 3,
+"away": "JPN",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100625",
+"home": "PRK",
+"hs": 0,
+"as": 3,
+"away": "CIV",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100625",
+"home": "POR",
+"hs": 0,
+"as": 0,
+"away": "BRA",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100625",
+"home": "CHI",
+"hs": 1,
+"as": 2,
+"away": "ESP",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100625",
+"home": "SUI",
+"hs": 0,
+"as": 0,
+"away": "HON",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100626",
+"home": "URU",
+"hs": 2,
+"as": 1,
+"away": "KOR",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100626",
+"home": "USA",
+"hs": 1,
+"as": 2,
+"away": "GHA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FINAL_AET",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100627",
+"home": "GER",
+"hs": 4,
+"as": 1,
+"away": "ENG",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100627",
+"home": "ARG",
+"hs": 3,
+"as": 1,
+"away": "MEX",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100628",
+"home": "NED",
+"hs": 2,
+"as": 1,
+"away": "SVK",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100628",
+"home": "BRA",
+"hs": 3,
+"as": 0,
+"away": "CHI",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100629",
+"home": "PAR",
+"hs": 0,
+"as": 0,
+"away": "JPN",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+5,
+3
+],
+"note": "Japan win 5-3 on penalties"
+},
+{
+"wc": "2010",
+"date": "20100629",
+"home": "ESP",
+"hs": 1,
+"as": 0,
+"away": "POR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100702",
+"home": "NED",
+"hs": 2,
+"as": 1,
+"away": "BRA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100702",
+"home": "URU",
+"hs": 1,
+"as": 1,
+"away": "GHA",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+4,
+2
+],
+"note": "Uruguay win 4-2 on penalties"
+},
+{
+"wc": "2010",
+"date": "20100703",
+"home": "ARG",
+"hs": 0,
+"as": 4,
+"away": "GER",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100703",
+"home": "PAR",
+"hs": 0,
+"as": 1,
+"away": "ESP",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100706",
+"home": "URU",
+"hs": 2,
+"as": 3,
+"away": "NED",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100707",
+"home": "GER",
+"hs": 0,
+"as": 1,
+"away": "ESP",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100710",
+"home": "URU",
+"hs": 2,
+"as": 3,
+"away": "GER",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2010",
+"date": "20100711",
+"home": "NED",
+"hs": 0,
+"as": 1,
+"away": "ESP",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FINAL_AET",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140612",
+"home": "BRA",
+"hs": 3,
+"as": 1,
+"away": "CRO",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140613",
+"home": "MEX",
+"hs": 1,
+"as": 0,
+"away": "CMR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140613",
+"home": "ESP",
+"hs": 1,
+"as": 5,
+"away": "NED",
+"tot": 6,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140613",
+"home": "CHI",
+"hs": 3,
+"as": 1,
+"away": "AUS",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140614",
+"home": "COL",
+"hs": 3,
+"as": 0,
+"away": "GRE",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140614",
+"home": "URU",
+"hs": 1,
+"as": 3,
+"away": "CRC",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140614",
+"home": "ENG",
+"hs": 1,
+"as": 2,
+"away": "ITA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140614",
+"home": "CIV",
+"hs": 2,
+"as": 1,
+"away": "JPN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140615",
+"home": "SUI",
+"hs": 2,
+"as": 1,
+"away": "ECU",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140615",
+"home": "FRA",
+"hs": 3,
+"as": 0,
+"away": "HON",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140615",
+"home": "ARG",
+"hs": 2,
+"as": 1,
+"away": "BIH",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140616",
+"home": "GER",
+"hs": 4,
+"as": 0,
+"away": "POR",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140616",
+"home": "IRN",
+"hs": 0,
+"as": 0,
+"away": "NGA",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140616",
+"home": "GHA",
+"hs": 1,
+"as": 2,
+"away": "USA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140617",
+"home": "BEL",
+"hs": 2,
+"as": 1,
+"away": "ALG",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140617",
+"home": "BRA",
+"hs": 0,
+"as": 0,
+"away": "MEX",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140617",
+"home": "RUS",
+"hs": 1,
+"as": 1,
+"away": "KOR",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140618",
+"home": "AUS",
+"hs": 2,
+"as": 3,
+"away": "NED",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140618",
+"home": "ESP",
+"hs": 0,
+"as": 2,
+"away": "CHI",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140618",
+"home": "CMR",
+"hs": 0,
+"as": 4,
+"away": "CRO",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140619",
+"home": "COL",
+"hs": 2,
+"as": 1,
+"away": "CIV",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140619",
+"home": "URU",
+"hs": 2,
+"as": 1,
+"away": "ENG",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140619",
+"home": "JPN",
+"hs": 0,
+"as": 0,
+"away": "GRE",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140620",
+"home": "ITA",
+"hs": 0,
+"as": 1,
+"away": "CRC",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140620",
+"home": "SUI",
+"hs": 2,
+"as": 5,
+"away": "FRA",
+"tot": 7,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140620",
+"home": "HON",
+"hs": 1,
+"as": 2,
+"away": "ECU",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140621",
+"home": "ARG",
+"hs": 1,
+"as": 0,
+"away": "IRN",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140621",
+"home": "GER",
+"hs": 2,
+"as": 2,
+"away": "GHA",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140621",
+"home": "NGA",
+"hs": 1,
+"as": 0,
+"away": "BIH",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140622",
+"home": "BEL",
+"hs": 1,
+"as": 0,
+"away": "RUS",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140622",
+"home": "KOR",
+"hs": 2,
+"as": 4,
+"away": "ALG",
+"tot": 6,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140622",
+"home": "USA",
+"hs": 2,
+"as": 2,
+"away": "POR",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140623",
+"home": "AUS",
+"hs": 0,
+"as": 3,
+"away": "ESP",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140623",
+"home": "NED",
+"hs": 2,
+"as": 0,
+"away": "CHI",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140623",
+"home": "CMR",
+"hs": 1,
+"as": 4,
+"away": "BRA",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140623",
+"home": "CRO",
+"hs": 1,
+"as": 3,
+"away": "MEX",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140624",
+"home": "CRC",
+"hs": 0,
+"as": 0,
+"away": "ENG",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140624",
+"home": "ITA",
+"hs": 0,
+"as": 1,
+"away": "URU",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140624",
+"home": "GRE",
+"hs": 2,
+"as": 1,
+"away": "CIV",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140624",
+"home": "JPN",
+"hs": 1,
+"as": 4,
+"away": "COL",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140625",
+"home": "BIH",
+"hs": 3,
+"as": 1,
+"away": "IRN",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140625",
+"home": "NGA",
+"hs": 2,
+"as": 3,
+"away": "ARG",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140625",
+"home": "ECU",
+"hs": 0,
+"as": 0,
+"away": "FRA",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140625",
+"home": "HON",
+"hs": 0,
+"as": 3,
+"away": "SUI",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140626",
+"home": "POR",
+"hs": 2,
+"as": 1,
+"away": "GHA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140626",
+"home": "USA",
+"hs": 0,
+"as": 1,
+"away": "GER",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140626",
+"home": "ALG",
+"hs": 1,
+"as": 1,
+"away": "RUS",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140626",
+"home": "KOR",
+"hs": 0,
+"as": 1,
+"away": "BEL",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140628",
+"home": "BRA",
+"hs": 1,
+"as": 1,
+"away": "CHI",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+3,
+2
+],
+"note": "Brazil win 3-2 on penalties"
+},
+{
+"wc": "2014",
+"date": "20140628",
+"home": "COL",
+"hs": 2,
+"as": 0,
+"away": "URU",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140629",
+"home": "NED",
+"hs": 2,
+"as": 1,
+"away": "MEX",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140629",
+"home": "CRC",
+"hs": 1,
+"as": 1,
+"away": "GRE",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+5,
+3
+],
+"note": "Costa Rica win 5-3 on penalties"
+},
+{
+"wc": "2014",
+"date": "20140630",
+"home": "FRA",
+"hs": 2,
+"as": 0,
+"away": "NGA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140630",
+"home": "GER",
+"hs": 2,
+"as": 1,
+"away": "ALG",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FINAL_AET",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140701",
+"home": "ARG",
+"hs": 1,
+"as": 0,
+"away": "SUI",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140701",
+"home": "BEL",
+"hs": 2,
+"as": 1,
+"away": "USA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140704",
+"home": "FRA",
+"hs": 0,
+"as": 1,
+"away": "GER",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140704",
+"home": "BRA",
+"hs": 2,
+"as": 1,
+"away": "COL",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140705",
+"home": "ARG",
+"hs": 1,
+"as": 0,
+"away": "BEL",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140705",
+"home": "NED",
+"hs": 0,
+"as": 0,
+"away": "CRC",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+4,
+3
+],
+"note": "Netherlands win 4-3 on penalties"
+},
+{
+"wc": "2014",
+"date": "20140708",
+"home": "BRA",
+"hs": 1,
+"as": 7,
+"away": "GER",
+"tot": 8,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140709",
+"home": "NED",
+"hs": 0,
+"as": 0,
+"away": "ARG",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+2,
+4
+],
+"note": "Argentina win 4-2 on penalties"
+},
+{
+"wc": "2014",
+"date": "20140712",
+"home": "BRA",
+"hs": 0,
+"as": 3,
+"away": "NED",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2014",
+"date": "20140713",
+"home": "GER",
+"hs": 1,
+"as": 0,
+"away": "ARG",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FINAL_AET",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180614",
+"home": "RUS",
+"hs": 5,
+"as": 0,
+"away": "KSA",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180615",
+"home": "EGY",
+"hs": 0,
+"as": 1,
+"away": "URU",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180615",
+"home": "MAR",
+"hs": 0,
+"as": 1,
+"away": "IRN",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180615",
+"home": "POR",
+"hs": 3,
+"as": 3,
+"away": "ESP",
+"tot": 6,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180616",
+"home": "FRA",
+"hs": 2,
+"as": 1,
+"away": "AUS",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180616",
+"home": "ARG",
+"hs": 1,
+"as": 1,
+"away": "ISL",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180616",
+"home": "PER",
+"hs": 0,
+"as": 1,
+"away": "DEN",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180616",
+"home": "CRO",
+"hs": 2,
+"as": 0,
+"away": "NGA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180617",
+"home": "CRC",
+"hs": 0,
+"as": 1,
+"away": "SRB",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180617",
+"home": "GER",
+"hs": 0,
+"as": 1,
+"away": "MEX",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180617",
+"home": "BRA",
+"hs": 1,
+"as": 1,
+"away": "SUI",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180618",
+"home": "SWE",
+"hs": 1,
+"as": 0,
+"away": "KOR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180618",
+"home": "BEL",
+"hs": 3,
+"as": 0,
+"away": "PAN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180618",
+"home": "TUN",
+"hs": 1,
+"as": 2,
+"away": "ENG",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180619",
+"home": "COL",
+"hs": 1,
+"as": 2,
+"away": "JPN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180619",
+"home": "POL",
+"hs": 1,
+"as": 2,
+"away": "SEN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180619",
+"home": "RUS",
+"hs": 3,
+"as": 1,
+"away": "EGY",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180620",
+"home": "POR",
+"hs": 1,
+"as": 0,
+"away": "MAR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180620",
+"home": "URU",
+"hs": 1,
+"as": 0,
+"away": "KSA",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180620",
+"home": "IRN",
+"hs": 0,
+"as": 1,
+"away": "ESP",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180621",
+"home": "DEN",
+"hs": 1,
+"as": 1,
+"away": "AUS",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180621",
+"home": "FRA",
+"hs": 1,
+"as": 0,
+"away": "PER",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180621",
+"home": "ARG",
+"hs": 0,
+"as": 3,
+"away": "CRO",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180622",
+"home": "BRA",
+"hs": 2,
+"as": 0,
+"away": "CRC",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180622",
+"home": "NGA",
+"hs": 2,
+"as": 0,
+"away": "ISL",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180622",
+"home": "SRB",
+"hs": 1,
+"as": 2,
+"away": "SUI",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180623",
+"home": "BEL",
+"hs": 5,
+"as": 2,
+"away": "TUN",
+"tot": 7,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180623",
+"home": "KOR",
+"hs": 1,
+"as": 2,
+"away": "MEX",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180623",
+"home": "GER",
+"hs": 2,
+"as": 1,
+"away": "SWE",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180624",
+"home": "ENG",
+"hs": 6,
+"as": 1,
+"away": "PAN",
+"tot": 7,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180624",
+"home": "JPN",
+"hs": 2,
+"as": 2,
+"away": "SEN",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180624",
+"home": "POL",
+"hs": 0,
+"as": 3,
+"away": "COL",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180625",
+"home": "KSA",
+"hs": 2,
+"as": 1,
+"away": "EGY",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180625",
+"home": "URU",
+"hs": 3,
+"as": 0,
+"away": "RUS",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180625",
+"home": "IRN",
+"hs": 1,
+"as": 1,
+"away": "POR",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180625",
+"home": "ESP",
+"hs": 2,
+"as": 2,
+"away": "MAR",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180626",
+"home": "AUS",
+"hs": 0,
+"as": 2,
+"away": "PER",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180626",
+"home": "DEN",
+"hs": 0,
+"as": 0,
+"away": "FRA",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180626",
+"home": "ISL",
+"hs": 1,
+"as": 2,
+"away": "CRO",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180626",
+"home": "NGA",
+"hs": 1,
+"as": 2,
+"away": "ARG",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180627",
+"home": "MEX",
+"hs": 0,
+"as": 3,
+"away": "SWE",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180627",
+"home": "KOR",
+"hs": 2,
+"as": 0,
+"away": "GER",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180627",
+"home": "SRB",
+"hs": 0,
+"as": 2,
+"away": "BRA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180627",
+"home": "SUI",
+"hs": 2,
+"as": 2,
+"away": "CRC",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180628",
+"home": "JPN",
+"hs": 0,
+"as": 1,
+"away": "POL",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180628",
+"home": "SEN",
+"hs": 0,
+"as": 1,
+"away": "COL",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180628",
+"home": "ENG",
+"hs": 0,
+"as": 1,
+"away": "BEL",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180628",
+"home": "PAN",
+"hs": 1,
+"as": 2,
+"away": "TUN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180630",
+"home": "FRA",
+"hs": 4,
+"as": 3,
+"away": "ARG",
+"tot": 7,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180630",
+"home": "URU",
+"hs": 2,
+"as": 1,
+"away": "POR",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180701",
+"home": "ESP",
+"hs": 1,
+"as": 1,
+"away": "RUS",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+3,
+4
+],
+"note": "Russia win 4-3 on penalties"
+},
+{
+"wc": "2018",
+"date": "20180701",
+"home": "CRO",
+"hs": 1,
+"as": 1,
+"away": "DEN",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+3,
+2
+],
+"note": "Croatia win 3-2 on penalties"
+},
+{
+"wc": "2018",
+"date": "20180702",
+"home": "BRA",
+"hs": 2,
+"as": 0,
+"away": "MEX",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180702",
+"home": "BEL",
+"hs": 3,
+"as": 2,
+"away": "JPN",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180703",
+"home": "SWE",
+"hs": 1,
+"as": 0,
+"away": "SUI",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180703",
+"home": "COL",
+"hs": 1,
+"as": 1,
+"away": "ENG",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+3,
+4
+],
+"note": "England win 4-3 on penalties"
+},
+{
+"wc": "2018",
+"date": "20180706",
+"home": "URU",
+"hs": 0,
+"as": 2,
+"away": "FRA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180706",
+"home": "BRA",
+"hs": 1,
+"as": 2,
+"away": "BEL",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180707",
+"home": "SWE",
+"hs": 0,
+"as": 2,
+"away": "ENG",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180707",
+"home": "RUS",
+"hs": 2,
+"as": 2,
+"away": "CRO",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+3,
+4
+],
+"note": "Croatia advance 4-3 on penalties"
+},
+{
+"wc": "2018",
+"date": "20180710",
+"home": "FRA",
+"hs": 1,
+"as": 0,
+"away": "BEL",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180711",
+"home": "CRO",
+"hs": 2,
+"as": 1,
+"away": "ENG",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FINAL_AET",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180714",
+"home": "BEL",
+"hs": 2,
+"as": 0,
+"away": "ENG",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2018",
+"date": "20180715",
+"home": "FRA",
+"hs": 4,
+"as": 2,
+"away": "CRO",
+"tot": 6,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221120",
+"home": "QAT",
+"hs": 0,
+"as": 2,
+"away": "ECU",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221121",
+"home": "ENG",
+"hs": 6,
+"as": 2,
+"away": "IRN",
+"tot": 8,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221121",
+"home": "SEN",
+"hs": 0,
+"as": 2,
+"away": "NED",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221121",
+"home": "USA",
+"hs": 1,
+"as": 1,
+"away": "WAL",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221122",
+"home": "ARG",
+"hs": 1,
+"as": 2,
+"away": "KSA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221122",
+"home": "DEN",
+"hs": 0,
+"as": 0,
+"away": "TUN",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221122",
+"home": "MEX",
+"hs": 0,
+"as": 0,
+"away": "POL",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221122",
+"home": "FRA",
+"hs": 4,
+"as": 1,
+"away": "AUS",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221123",
+"home": "MAR",
+"hs": 0,
+"as": 0,
+"away": "CRO",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221123",
+"home": "GER",
+"hs": 1,
+"as": 2,
+"away": "JPN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221123",
+"home": "ESP",
+"hs": 7,
+"as": 0,
+"away": "CRC",
+"tot": 7,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221123",
+"home": "BEL",
+"hs": 1,
+"as": 0,
+"away": "CAN",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221124",
+"home": "SUI",
+"hs": 1,
+"as": 0,
+"away": "CMR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221124",
+"home": "URU",
+"hs": 0,
+"as": 0,
+"away": "KOR",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221124",
+"home": "POR",
+"hs": 3,
+"as": 2,
+"away": "GHA",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221124",
+"home": "BRA",
+"hs": 2,
+"as": 0,
+"away": "SRB",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221125",
+"home": "WAL",
+"hs": 0,
+"as": 2,
+"away": "IRN",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221125",
+"home": "QAT",
+"hs": 1,
+"as": 3,
+"away": "SEN",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221125",
+"home": "NED",
+"hs": 1,
+"as": 1,
+"away": "ECU",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221125",
+"home": "ENG",
+"hs": 0,
+"as": 0,
+"away": "USA",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221126",
+"home": "TUN",
+"hs": 0,
+"as": 1,
+"away": "AUS",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221126",
+"home": "POL",
+"hs": 2,
+"as": 0,
+"away": "KSA",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221126",
+"home": "FRA",
+"hs": 2,
+"as": 1,
+"away": "DEN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221126",
+"home": "ARG",
+"hs": 2,
+"as": 0,
+"away": "MEX",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221127",
+"home": "JPN",
+"hs": 0,
+"as": 1,
+"away": "CRC",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221127",
+"home": "BEL",
+"hs": 0,
+"as": 2,
+"away": "MAR",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221127",
+"home": "CRO",
+"hs": 4,
+"as": 1,
+"away": "CAN",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221127",
+"home": "ESP",
+"hs": 1,
+"as": 1,
+"away": "GER",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221128",
+"home": "CMR",
+"hs": 3,
+"as": 3,
+"away": "SRB",
+"tot": 6,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221128",
+"home": "KOR",
+"hs": 2,
+"as": 3,
+"away": "GHA",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221128",
+"home": "BRA",
+"hs": 1,
+"as": 0,
+"away": "SUI",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221128",
+"home": "POR",
+"hs": 2,
+"as": 0,
+"away": "URU",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221129",
+"home": "ECU",
+"hs": 1,
+"as": 2,
+"away": "SEN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221129",
+"home": "NED",
+"hs": 2,
+"as": 0,
+"away": "QAT",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221129",
+"home": "IRN",
+"hs": 0,
+"as": 1,
+"away": "USA",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221129",
+"home": "WAL",
+"hs": 0,
+"as": 3,
+"away": "ENG",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221130",
+"home": "AUS",
+"hs": 1,
+"as": 0,
+"away": "DEN",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221130",
+"home": "TUN",
+"hs": 1,
+"as": 0,
+"away": "FRA",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221130",
+"home": "POL",
+"hs": 0,
+"as": 2,
+"away": "ARG",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221130",
+"home": "KSA",
+"hs": 1,
+"as": 2,
+"away": "MEX",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221201",
+"home": "CAN",
+"hs": 1,
+"as": 2,
+"away": "MAR",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221201",
+"home": "CRO",
+"hs": 0,
+"as": 0,
+"away": "BEL",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221201",
+"home": "CRC",
+"hs": 2,
+"as": 4,
+"away": "GER",
+"tot": 6,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221201",
+"home": "JPN",
+"hs": 2,
+"as": 1,
+"away": "ESP",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221202",
+"home": "GHA",
+"hs": 0,
+"as": 2,
+"away": "URU",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221202",
+"home": "KOR",
+"hs": 2,
+"as": 1,
+"away": "POR",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221202",
+"home": "CMR",
+"hs": 1,
+"as": 0,
+"away": "BRA",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221202",
+"home": "SRB",
+"hs": 2,
+"as": 3,
+"away": "SUI",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221203",
+"home": "NED",
+"hs": 3,
+"as": 1,
+"away": "USA",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221203",
+"home": "ARG",
+"hs": 2,
+"as": 1,
+"away": "AUS",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221204",
+"home": "FRA",
+"hs": 3,
+"as": 1,
+"away": "POL",
+"tot": 4,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221204",
+"home": "ENG",
+"hs": 3,
+"as": 0,
+"away": "SEN",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221205",
+"home": "JPN",
+"hs": 1,
+"as": 1,
+"away": "CRO",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+1,
+3
+],
+"note": "Croatia advance 3-1 on penalties"
+},
+{
+"wc": "2022",
+"date": "20221205",
+"home": "BRA",
+"hs": 4,
+"as": 1,
+"away": "KOR",
+"tot": 5,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221206",
+"home": "MAR",
+"hs": 0,
+"as": 0,
+"away": "ESP",
+"tot": 0,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+3,
+0
+],
+"note": "Morocco advance 3-0 on penalties"
+},
+{
+"wc": "2022",
+"date": "20221206",
+"home": "POR",
+"hs": 6,
+"as": 1,
+"away": "SUI",
+"tot": 7,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221209",
+"home": "CRO",
+"hs": 1,
+"as": 1,
+"away": "BRA",
+"tot": 2,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+4,
+2
+],
+"note": "Croatia advance 4-2 on penalties"
+},
+{
+"wc": "2022",
+"date": "20221209",
+"home": "NED",
+"hs": 2,
+"as": 2,
+"away": "ARG",
+"tot": 4,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+3,
+4
+],
+"note": "Argentina advance 4-3 on penalties"
+},
+{
+"wc": "2022",
+"date": "20221210",
+"home": "MAR",
+"hs": 1,
+"as": 0,
+"away": "POR",
+"tot": 1,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221210",
+"home": "ENG",
+"hs": 1,
+"as": 2,
+"away": "FRA",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221213",
+"home": "ARG",
+"hs": 3,
+"as": 0,
+"away": "CRO",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221214",
+"home": "FRA",
+"hs": 2,
+"as": 0,
+"away": "MAR",
+"tot": 2,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221217",
+"home": "CRO",
+"hs": 2,
+"as": 1,
+"away": "MAR",
+"tot": 3,
+"draw": false,
+"status": "STATUS_FULL_TIME",
+"pen": false,
+"shootout": [
+null,
+null
+],
+"note": ""
+},
+{
+"wc": "2022",
+"date": "20221218",
+"home": "ARG",
+"hs": 3,
+"as": 3,
+"away": "FRA",
+"tot": 6,
+"draw": true,
+"status": "STATUS_FINAL_PEN",
+"pen": true,
+"shootout": [
+4,
+2
+],
+"note": "Argentina win 4-2 on penalties"
+}
+]

@@ -31,7 +31,7 @@ def test_score_prediction_classifies_ai_miss_but_gate_blocked():
     assert scored["classification"] == "ai_miss_but_gate_blocked"
 
 
-def test_review_predictions_matches_by_team_pair(tmp_path):
+def test_review_predictions_requires_event_identity(tmp_path):
     pred_file = tmp_path / "predictions.json"
     actual_file = tmp_path / "actuals.json"
     pred_file.write_text(json.dumps({
@@ -49,4 +49,4 @@ def test_review_predictions_matches_by_team_pair(tmp_path):
     }, ensure_ascii=False), encoding="utf-8")
     rows = review_predictions(str(pred_file), str(actual_file))
     assert len(rows) == 1
-    assert rows[0]["classification"] == "ai_miss_but_gate_blocked"
+    assert rows[0]["settlement_status"] == "unresolved"

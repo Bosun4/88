@@ -1,126 +1,109 @@
+"""Saved-prediction review with exact event binding and separate analysis books."""
 import json
-import os
-import requests
-import time
-from config import *
-import metrics_ledger as ml
+from pathlib import Path
 
-PRED_FILE = "../data/predictions.json"
-DIARY_FILE = "../data/ai_diary.json"
+import requests
+
+try:
+    from .config import API_FOOTBALL_KEY, API_FOOTBALL_BASE, GPT_API_KEY, GPT_API_URL
+    from . import metrics_ledger as ml
+    from .fixture_identity import api_actual, dedupe_predictions, event_date, fixture_key, match_actual, prediction_rows
+except ImportError:
+    from config import API_FOOTBALL_KEY, API_FOOTBALL_BASE, GPT_API_KEY, GPT_API_URL
+    import metrics_ledger as ml
+    from fixture_identity import api_actual, dedupe_predictions, event_date, fixture_key, match_actual, prediction_rows
+
+ROOT = Path(__file__).resolve().parents[1]
+PRED_FILE = str(ROOT / 'data/predictions.json')
+DIARY_FILE = str(ROOT / 'data/ai_diary.json')
+
 
 def fetch_actual_results(date_str):
-    """去 API 查指定日期的真实赛果"""
-    h = {"x-apisports-key": API_FOOTBALL_KEY}
     try:
-        r = requests.get(f"{API_FOOTBALL_BASE}/fixtures", headers=h, params={"date": date_str}, timeout=15)
-        return r.json().get("response", [])
-    except: return []
+        response = requests.get(
+            f'{API_FOOTBALL_BASE}/fixtures', headers={'x-apisports-key': API_FOOTBALL_KEY},
+            params={'date': date_str}, timeout=15)
+        response.raise_for_status()
+        return response.json().get('response', [])
+    except (requests.RequestException, ValueError) as exc:
+        print(f'赛果获取失败: {exc}')
+        return []
 
-def self_learn():
-    print("\n🧠 [AI 自我复盘引擎] 启动...")
-    if not os.path.exists(PRED_FILE):
-        print("  ⚠️ 暂无历史预测文件，跳过复盘。")
-        return
 
-    # 1. 加载昨天的预测记录
-    with open(PRED_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    
-    matches = data.get("matches", data.get("results", []))
-    if not matches: return
-    
-    # 这里的 date 是上一次预测时的日期
-    pred_date = data.get("date", matches[0].get("date", "")) 
-    if not pred_date: return
+def evaluate_matches(matches, actuals):
+    """Pure review; accepts normalized actuals or API-Football fixtures."""
+    normalized = []
+    for actual in actuals:
+        result = api_actual(actual) if 'fixture' in actual else actual
+        if result:
+            normalized.append(result)
+    settled, unresolved, review_log = [], [], []
+    for match in dedupe_predictions(matches):
+        found = match_actual(match, normalized)
+        if not found:
+            unresolved.append({'fixture_key': fixture_key(match),
+                               'match': f"{match.get('home_team')} vs {match.get('away_team')}",
+                               'settlement_status': 'unresolved',
+                               'reason': 'missing_identity' if not fixture_key(match) else 'no_exact_result'})
+            continue
+        score = ml.normalize_score(found.get('actual_score'))
+        if not score:
+            unresolved.append({'fixture_key': fixture_key(match), 'reason': 'invalid_regulation_score'})
+            continue
+        gh, ga = map(int, score.split('-'))
+        # Only the immutable forward-ledger scoring path may declare strictness.
+        item = ml.settle_one({**match, 'strict_forward': False}, gh, ga)
+        settled.append(item)
+        review_log.append({**item, 'match': f"{match.get('home_team')} vs {match.get('away_team')}"})
+    return {'ledger': ml.aggregate(settled), 'reviews': review_log, 'unresolved': unresolved,
+            'evaluation_scope': 'retrospective_unlocked'}
 
-    print(f"  📅 正在获取 {pred_date} 的真实赛果进行对账...")
-    actuals = fetch_actual_results(pred_date)
-    actual_dict = {f"{m['teams']['home']['id']}_{m['teams']['away']['id']}": m for m in actuals}
 
-    review_log = []
-    settled = []  # 双账本结算明细
+def self_learn(pred_file=None, diary_file=None, actuals_fetcher=None):
+    path = Path(pred_file or PRED_FILE)
+    if not path.exists():
+        print('暂无预测记录，跳过复盘。')
+        return None
+    matches = prediction_rows(json.loads(path.read_text(encoding='utf-8')))
+    fetcher = actuals_fetcher or fetch_actual_results
+    actuals = []
+    for day in sorted({event_date(m) for m in matches if event_date(m)}):
+        fetched = fetcher(day)
+        actuals.extend(fetched.values() if isinstance(fetched, dict) else fetched)
+    review = evaluate_matches(matches, actuals)
+    summary = ml.coaching_summary(review['ledger'])
+    print(summary)
+    diary = {'reflection': '仅客观账本；未结算样本不参与学习。', 'risk_adjustment': '中性'}
+    if review['ledger']['samples'] and GPT_API_KEY:
+        prompt = (
+            '请依据以下账本复盘。ROI是存储报价模拟，不是成交收益；不可计算不得当作0。'
+            '方向、主比分、副文风险比分各自分母；D级仅分析，不能升级为有效推荐。'
+            '旧记录不是严格前向验证。博冷以收益和样本充分性评估，不仅看胜率。\n'
+            + summary + '\n' + json.dumps(review['reviews'], ensure_ascii=False)
+            + '\n返回纯JSON: {"reflection":"反思与策略(120字内)","risk_adjustment":"稳健/进取/中性"}')
+        try:
+            response = requests.post(
+                GPT_API_URL, headers={'Authorization': f'Bearer {GPT_API_KEY}', 'Content-Type': 'application/json'},
+                json={'model': 'gpt-5.4', 'messages': [{'role': 'user', 'content': prompt}], 'temperature': .5}, timeout=20)
+            response.raise_for_status()
+            text = response.json()['choices'][0]['message']['content']
+            parsed = json.loads(text[text.find('{'):text.rfind('}') + 1])
+            diary.update({k: parsed[k] for k in ('reflection', 'risk_adjustment') if k in parsed})
+        except (requests.RequestException, ValueError, KeyError, IndexError, TypeError) as exc:
+            print(f'AI反思失败，仍保留客观账本: {exc}')
+    agg = review['ledger']
+    roi = agg['bettable']['roi_pct']
+    accuracy = agg['direction_accuracy_pct']
+    diary.update(review)
+    diary.update({'yesterday_summary': summary,
+                  'yesterday_direction_accuracy': f'{accuracy}%' if accuracy is not None else '不可计算',
+                  'yesterday_bettable_roi': f'{roi}%' if roi is not None else '不可计算',
+                  'yesterday_win_rate': f'方向 {accuracy}% | 存储报价ROI {roi}%（非成交/非严格前向）'})
+    target = Path(diary_file or DIARY_FILE)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(diary, ensure_ascii=False, indent=2), encoding='utf-8')
+    return diary
 
-    # 2. 对账：预测 vs 真实 —— 同时做双账本结算
-    for m in matches:
-        hid, aid = m.get("home_id"), m.get("away_id")
-        key = f"{hid}_{aid}"
-        if key in actual_dict:
-            fix = actual_dict[key]
-            # 确保比赛已经踢完 (FT = Full Time)
-            if fix["fixture"]["status"]["short"] in ["FT", "AET", "PEN"]:
-                gh, ga = fix["goals"]["home"], fix["goals"]["away"]
-                pred = m.get("prediction", {})
 
-                s = ml.settle_one(pred, gh, ga)
-                settled.append(s)
-
-                review_log.append({
-                    "match": f"{m['home_team']} vs {m['away_team']}",
-                    "predicted": f"{s['pred_dir']} ({pred.get('predicted_score', '')})",
-                    "actual": f"{s['actual_dir']} ({s['actual_score']})",
-                    "correct": s["hit"],
-                    "bettable": s["bettable"],
-                    "upset": s["upset"],
-                    "odds": s["odds"],
-                    "profit": round(s["profit"], 3),
-                })
-
-    if not settled:
-        print("  ⏳ 昨天的比赛尚未全部结束，暂不生成复盘日记。")
-        return
-
-    # 3. 双账本汇总（ROI 为主，胜率仅作参考）
-    agg = ml.aggregate(settled)
-    summary = ml.coaching_summary(agg)
-    print("  🎯 昨日双账本复盘：")
-    for ln in summary.splitlines():
-        print("     " + ln)
-
-    # 4. 让 GPT 核心写“错题本”和“调参策略”——以 ROI 为准，不拿胜率惩罚博冷
-    prompt = (
-        "你是一个混合型足球预测系统的AI核心。系统同时出「价值/稳胜单」与「博冷/反打单」。\n"
-        "考核原则：盈亏用 ROI 衡量，不用胜率。博冷单天生低胜率高赔率，胜率低是正常的，只要 ROI 为正就是赢；\n"
-        "严禁因为博冷单胜率低就建议「少博冷/别反打」——只有当博冷账本 ROI 明显为负时才可收紧博冷。\n"
-        f"以下是昨日双账本复盘：\n{summary}\n逐场详情："
-    )
-    prompt += json.dumps(review_log, ensure_ascii=False)
-    prompt += (
-        "\n请分别反思价值单与博冷单：价值单是否选错方向/高估主队；博冷单是否背离信号不足却硬反打。"
-        "输出精炼的【今日调参建议】。\n"
-    )
-    prompt += '请严格返回纯JSON: {"reflection": "昨天的教训与今日策略(120字以内)", "risk_adjustment": "稳健/进取/中性"}'
-
-    print("  🤖 正在请求 GPT 深度反思...")
-    diary_data = {}
-    try:
-        h = {"Authorization": f"Bearer {GPT_API_KEY}", "Content-Type": "application/json"}
-        payload = {"model": "gpt-5.4", "messages": [{"role": "user", "content": prompt}], "temperature": 0.5}
-        r = requests.post(GPT_API_URL, headers=h, json=payload, timeout=20)
-
-        t = r.json()["choices"][0]["message"]["content"].strip()
-        start = t.find("{"); end = t.rfind("}") + 1
-        diary_data = json.loads(t[start:end])
-        print(f"  ✅ 复盘完成！今日AI策略: {diary_data.get('reflection', '')}")
-    except Exception as e:
-        print(f"  ❌ AI反思失败（仍落地真实账本）: {e}")
-        diary_data = {"reflection": "AI反思失败，以下仅为客观账本数据", "risk_adjustment": "中性"}
-
-    # 无论 AI 反思成败，都落地双账本真实结果
-    b = agg["bettable"]
-    diary_data["ledger"] = agg
-    diary_data["yesterday_summary"] = summary
-    # 保留旧字段兼容，但明确标注这是含观望的全样本方向命中率，不是盈亏指标
-    diary_data["yesterday_direction_accuracy"] = f"{agg['direction_accuracy_pct']}%"
-    diary_data["yesterday_bettable_roi"] = f"{b['roi_pct']}%"
-    diary_data["yesterday_win_rate"] = (
-        f"dir {agg['direction_accuracy_pct']}% | bet ROI {b['roi_pct']}% ({b['staked']}单)"
-    )
-    try:
-        with open(DIARY_FILE, "w", encoding="utf-8") as f:
-            json.dump(diary_data, f, ensure_ascii=False, indent=2)
-        print("  📒 双账本已写入日记。")
-    except Exception as e:
-        print(f"  ❌ 日记写入失败: {e}")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     self_learn()
