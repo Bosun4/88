@@ -74,23 +74,7 @@ def self_learn(pred_file=None, diary_file=None, actuals_fetcher=None):
     summary = ml.coaching_summary(review['ledger'])
     print(summary)
     diary = {'reflection': '仅客观账本；未结算样本不参与学习。', 'risk_adjustment': '中性'}
-    if review['ledger']['samples'] and GPT_API_KEY:
-        prompt = (
-            '请依据以下账本复盘。ROI是存储报价模拟，不是成交收益；不可计算不得当作0。'
-            '方向、主比分、副文风险比分各自分母；D级仅分析，不能升级为有效推荐。'
-            '旧记录不是严格前向验证。博冷以收益和样本充分性评估，不仅看胜率。\n'
-            + summary + '\n' + json.dumps(review['reviews'], ensure_ascii=False)
-            + '\n返回纯JSON: {"reflection":"反思与策略(120字内)","risk_adjustment":"稳健/进取/中性"}')
-        try:
-            response = requests.post(
-                GPT_API_URL, headers={'Authorization': f'Bearer {GPT_API_KEY}', 'Content-Type': 'application/json'},
-                json={'model': 'gpt-5.4', 'messages': [{'role': 'user', 'content': prompt}], 'temperature': .5}, timeout=20)
-            response.raise_for_status()
-            text = response.json()['choices'][0]['message']['content']
-            parsed = json.loads(text[text.find('{'):text.rfind('}') + 1])
-            diary.update({k: parsed[k] for k in ('reflection', 'risk_adjustment') if k in parsed})
-        except (requests.RequestException, ValueError, KeyError, IndexError, TypeError) as exc:
-            print(f'AI反思失败，仍保留客观账本: {exc}')
+    # Review is deterministic; all paid calls belong to the bounded prediction runner.
     agg = review['ledger']
     roi = agg['bettable']['roi_pct']
     accuracy = agg['direction_accuracy_pct']

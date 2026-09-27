@@ -220,12 +220,15 @@ def get_target_date(offset=0):
 
 
 def configure_ai_defaults():
-    """Production defaults: bounded batches, no debate/retry chain."""
+    """Production defaults: independent analysts followed by a bounded referee."""
     defaults = {
         "AI_RUN_DAYS": "today", "VMAX_RUN_DAYS": "today",
-        "AI_RUN_MODE": "single_pass", "AI_PRIMARY_MODEL": "gpt",
-        "AI_BATCH_SIZE": "6", "AI_CHUNK_CONCURRENCY": "2",
-        "AI_MODEL_CONCURRENCY": "2", "AI_SINGLE_PASS_MAX_CALLS": "12",
+        "AI_RUN_MODE": "panel", "AI_PRIMARY_MODEL": "gpt",
+        "AI_PANEL_MAX_CALLS": "180", "AI_STREAM": "true",
+        "AI_PANEL_MAX_SECONDS": "5400",
+        "AI_FINAL_READ_TIMEOUT": "180", "VMAX_FETCH_DAYS_AHEAD": "0",
+        "AI_BATCH_SIZE": "1", "AI_CHUNK_CONCURRENCY": "2",
+        "AI_MODEL_CONCURRENCY": "4", "AI_SINGLE_PASS_MAX_CALLS": "12",
         "AI_HTTP_TOTAL_TIMEOUT": "180", "AI_CONNECT_TIMEOUT": "20",
         "AI_READ_TIMEOUT": "180", "AI_PERSISTENT_CACHE_ENABLED": "true",
         "AI_CACHE_DIR": "data/ai_cache", "AI_DECISION_CACHE_TTL": "1800",
@@ -238,7 +241,7 @@ def print_runtime_config():
     print("AI运行配置（次数为每次运行的实际硬上限）:")
     for key in ("AI_RUN_MODE", "AI_PRIMARY_MODEL", "AI_BATCH_SIZE",
                 "AI_CHUNK_CONCURRENCY", "AI_MODEL_CONCURRENCY",
-                "AI_SINGLE_PASS_MAX_CALLS", "AI_HTTP_TOTAL_TIMEOUT",
+                "AI_SINGLE_PASS_MAX_CALLS", "AI_PANEL_MAX_CALLS", "AI_PANEL_MAX_SECONDS", "AI_HTTP_TOTAL_TIMEOUT",
                 "AI_PERSISTENT_CACHE_ENABLED", "AI_DECISION_CACHE_TTL"):
         print(f"   {key}={os.environ.get(key, '')}")
 
@@ -297,7 +300,7 @@ def main():
 
         final_output = {
             "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
-            "version": "MAX-v21.0-LEAGUE",
+            "version": "MAX-v22.0-PANEL",
             "scope": "today_only",
             "top4": [],
             "matches": {
@@ -313,6 +316,8 @@ def main():
                 "ai_model_concurrency": os.environ.get("AI_MODEL_CONCURRENCY", ""),
                 "ai_phase1_parallel": os.environ.get("AI_PHASE1_PARALLEL", ""),
                 "ai_single_pass_max_calls": os.environ.get("AI_SINGLE_PASS_MAX_CALLS", "12"),
+                "ai_panel_max_calls": os.environ.get("AI_PANEL_MAX_CALLS", "180"),
+                "ai_panel_max_seconds": os.environ.get("AI_PANEL_MAX_SECONDS", "5400"),
                 "ai_cache_ttl": os.environ.get("AI_DECISION_CACHE_TTL", "1800"),
             },
         }
@@ -369,6 +374,9 @@ def main():
         results, top4 = run_predictions(raw_data, use_ai=use_ai)
         from predict import _LAST_AI_RUN_METADATA
         final_output["runtime"]["ai_run"] = dict(_LAST_AI_RUN_METADATA)
+        write_json_atomic(os.path.join(data_dir, "ai_phase_results", "last_run.json"), final_output["runtime"]["ai_run"])
+        if _LAST_AI_RUN_METADATA.get("run_status") == "failed":
+            raise RuntimeError("本轮没有有效终审预测，保留上一份线上数据；详见 last_run.json")
 
         final_output["matches"]["today"] = json.loads(
             json.dumps(results, ensure_ascii=False, default=str)
