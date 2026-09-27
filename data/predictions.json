@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-09-28 04:01:40",
+  "update_time": "2026-09-28 04:03:49",
   "version": "MAX-v22.0-PANEL",
   "scope": "today_only",
   "top4": [],
@@ -12,7 +12,7 @@
         "source_url": "https://edu.wencaivip.cn/api/v1.reference/matches",
         "stime": 1790550000,
         "kickoff_at": "2026-09-27T23:00:00+00:00",
-        "captured_at": "2026-09-27T20:01:39.248144+00:00",
+        "captured_at": "2026-09-27T20:03:47.827845+00:00",
         "kickoff_status": "known",
         "season": null,
         "home_team": "哥伦布",
@@ -594,20 +594,20 @@
               "phase1": {
                 "ok": false,
                 "ai_name": "grok",
-                "model": "熊猫-A-10-grok-4.5",
+                "model": "熊猫-A-5-grok-4.2-fast-200w上下文",
                 "phase": "panel_analysis",
                 "match_ids": [
                   1
                 ],
-                "elapsed": 1.1,
+                "elapsed": 1.5,
                 "endpoint_name": "grok_1",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
-                "status": "http_503",
-                "http_error": "{\"error\":{\"message\":\"渠道饱和，请稍后再试，或者先用其他模型~ (request id: 202609272001407257969758268d9d6lUWLECLw)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"model_not_found\"}}",
+                "status": "http_422",
+                "http_error": "{\"error\":{\"message\":\"模型【grok-420-fast】不存在（traceid: 76047fe01f46d91827d14b736c05b19d） (request id: 202609272003494605898798268d9d6zHgNp8ia)\",\"type\":\"server_error\",\"param\":\"\",\"code\":null}}",
                 "cache_hit": false,
-                "evidence_hash": "7476cf047d36abb6a31f822e5e0777c60f689f8762e5f1494d83a6c432ccc482",
+                "evidence_hash": "0732579bb2d5b052925038710c5d45d5a93fc774d16e029afe47dfe651391860",
                 "row_status": "abstain"
               }
             },
@@ -635,7 +635,7 @@
           },
           "ai_result_files": {},
           "ai_run_metadata": {
-            "run_id": "20260927_200139_1m_b018c7a03b83_哥伦布_迈国际",
+            "run_id": "20260927_200348_1m_7cf889d3464a_哥伦布_迈国际",
             "run_mode": "panel",
             "engine_version": "panel-v22.1",
             "run_status": "completed",
@@ -675,20 +675,20 @@
               {
                 "ok": false,
                 "ai_name": "grok",
-                "model": "熊猫-A-10-grok-4.5",
+                "model": "熊猫-A-5-grok-4.2-fast-200w上下文",
                 "phase": "panel_analysis",
                 "match_ids": [
                   1
                 ],
-                "elapsed": 1.1,
+                "elapsed": 1.5,
                 "endpoint_name": "grok_1",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
-                "status": "http_503",
-                "http_error": "{\"error\":{\"message\":\"渠道饱和，请稍后再试，或者先用其他模型~ (request id: 202609272001407257969758268d9d6lUWLECLw)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"model_not_found\"}}",
+                "status": "http_422",
+                "http_error": "{\"error\":{\"message\":\"模型【grok-420-fast】不存在（traceid: 76047fe01f46d91827d14b736c05b19d） (request id: 202609272003494605898798268d9d6zHgNp8ia)\",\"type\":\"server_error\",\"param\":\"\",\"code\":null}}",
                 "cache_hit": false,
-                "evidence_hash": "7476cf047d36abb6a31f822e5e0777c60f689f8762e5f1494d83a6c432ccc482",
+                "evidence_hash": "0732579bb2d5b052925038710c5d45d5a93fc774d16e029afe47dfe651391860",
                 "row_status": "abstain"
               },
               {
@@ -711,7 +711,7 @@
                 "row_status": "ok"
               }
             ],
-            "elapsed_seconds": 1.116
+            "elapsed_seconds": 1.461
           },
           "model_consensus": 1,
           "total_models": 1,
@@ -1112,7 +1112,7 @@
               }
             }
           },
-          "prediction_completed_at": "2026-09-27T20:01:40.981340+00:00",
+          "prediction_completed_at": "2026-09-27T20:03:49.726924+00:00",
           "evidence_hash": "5dc1e1f70f11e6688d63e88d63aa64e25c9d95747fb246b2ac4eeacd5f86702d",
           "league_context": {
             "version": 1,
@@ -1322,7 +1322,7 @@
             }
           },
           "prematch_status": "eligible",
-          "published_at": "2026-09-28T04:01:40.986457+08:00"
+          "published_at": "2026-09-28T04:03:49.732018+08:00"
         },
         "is_top4_candidate": false,
         "is_recommended": false,
@@ -1344,7 +1344,7 @@
     "ai_panel_max_seconds": "5400",
     "ai_cache_ttl": "1800",
     "ai_run": {
-      "run_id": "20260927_200139_1m_b018c7a03b83_哥伦布_迈国际",
+      "run_id": "20260927_200348_1m_7cf889d3464a_哥伦布_迈国际",
       "run_mode": "panel",
       "engine_version": "panel-v22.1",
       "run_status": "completed",
@@ -1384,20 +1384,20 @@
         {
           "ok": false,
           "ai_name": "grok",
-          "model": "熊猫-A-10-grok-4.5",
+          "model": "熊猫-A-5-grok-4.2-fast-200w上下文",
           "phase": "panel_analysis",
           "match_ids": [
             1
           ],
-          "elapsed": 1.1,
+          "elapsed": 1.5,
           "endpoint_name": "grok_1",
           "endpoint_slot": 1,
           "endpoint_attempt": 1,
           "endpoint_total": 1,
-          "status": "http_503",
-          "http_error": "{\"error\":{\"message\":\"渠道饱和，请稍后再试，或者先用其他模型~ (request id: 202609272001407257969758268d9d6lUWLECLw)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"model_not_found\"}}",
+          "status": "http_422",
+          "http_error": "{\"error\":{\"message\":\"模型【grok-420-fast】不存在（traceid: 76047fe01f46d91827d14b736c05b19d） (request id: 202609272003494605898798268d9d6zHgNp8ia)\",\"type\":\"server_error\",\"param\":\"\",\"code\":null}}",
           "cache_hit": false,
-          "evidence_hash": "7476cf047d36abb6a31f822e5e0777c60f689f8762e5f1494d83a6c432ccc482",
+          "evidence_hash": "0732579bb2d5b052925038710c5d45d5a93fc774d16e029afe47dfe651391860",
           "row_status": "abstain"
         },
         {
@@ -1420,11 +1420,11 @@
           "row_status": "ok"
         }
       ],
-      "elapsed_seconds": 1.116
+      "elapsed_seconds": 1.461
     },
     "history_path": "data/history_2026-09-27_today_morning.json",
-    "snapshot_path": "data/snapshots/2026-09-27_today_morning_20260928_040140.json"
+    "snapshot_path": "data/snapshots/2026-09-27_today_morning_20260928_040349.json"
   },
-  "published_at": "2026-09-28T04:01:40.986457+08:00",
+  "published_at": "2026-09-28T04:03:49.732018+08:00",
   "target_date": "2026-09-27"
 }
