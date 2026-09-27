@@ -32,7 +32,7 @@ var Dashboard = (() => {
     };
     const candidates = p.risk_score_candidates || [];
     for (const r of Array.isArray(candidates) ? candidates : []) add(typeof r === 'string' ? r : r.score, r.reason || r.logic || '', r.risk_type || '风险 D');
-    for (const k of ['tail_scores','mid_tail_scores','upset_scores','all_tail_scores']) for (const r of Array.isArray(p[k]) ? p[k] : []) add(typeof r === 'string' ? r : r.score, r.reason || k, '尾部风险');
+    // Market-implied tails are shown separately from model risk predictions.
     const prose = [p.reason,p.ai_native_reason,p.final_ai_analysis,p.contextual_logic,p.tail_risk,p.grok_analysis].map(text).join('\n');
     for (const hit of prose.matchAll(/\b(\d{1,2}[-:]\d{1,2})\b/g)) if (hit[1] !== p.predicted_score) add(hit[1], '来自原文提及；未必是明确推荐', '副文比分');
     return result;
@@ -50,18 +50,19 @@ var Dashboard = (() => {
     return {raw:m,p,index,key:'match-'+index,home:m.home_team || m.home || '主队',away:m.away_team || m.guest || '客队',league:m.league || '未知联赛',tier:p.recommendation_tier || p.recommendation?.tier || 'unknown',kickoff,state,eligible,abstain,today:matchDay === day(now),risks:riskScores(p)};
   }
   function models(p) {
-    return ['gpt','grok','gemini','claude'].map(name => {
+    return ['gpt','grok','gemini'].map(name => {
       const st = p.ai_call_status?.[name] || {};
-      const call = st.single_pass || st.phase1;
+      const call = st.single_pass || st.final || st.phase1;
+      const final = Boolean(st.final);
       const single = Boolean(st.single_pass);
       const analysis = p[name+'_analysis'];
       const valid = call?.ok === true && call.row_status !== 'abstain' && !(single && p.final_direction === 'abstain');
       const score = valid ? (single ? p.predicted_score : p[name+'_score']) || null : null;
-      return {name,single,score,analysis:valid ? analysis : null,call};
+      return {name,single,final,score,analysis:valid ? analysis : null,call};
     });
   }
   function renderModels(p) {
-    return '<div class="model-grid">' + models(p).map(m => `<section class="model-card"><h3>${esc(m.name.toUpperCase())}</h3><p>${m.single ? '单模型单次分析' : '模型初审'} · ${esc(m.call?.model || '本轮未提供')}</p><strong class="model-score">${esc(m.score || '未返回可用预测')}</strong><p>${esc(m.call?.status || 'not_called')}${m.call?.cache_hit ? ' · 缓存命中' : ''}${m.call?.row_status === 'abstain' ? ' · 本场弃权' : ''}</p>${m.analysis ? `<p class="analysis-text">${esc(text(m.analysis))}</p>` : ''}</section>`).join('') + '</div>';
+    return '<div class="model-grid">' + models(p).map(m => `<section class="model-card"><h3>${esc(m.name.toUpperCase())}</h3><p>${m.single ? '单模型单次分析' : m.final || m.name === 'gemini' ? '终审裁决' : m.name === 'gpt' ? '盘口与主线初审' : '独立反证与风险初审'} · ${esc(m.call?.model || '本轮未提供')}</p><strong class="model-score">${esc(m.score || '未返回可用预测')}</strong><p>${esc(m.call?.status || 'not_called')}${m.call?.cache_hit ? ' · 缓存命中' : ''}${m.call?.row_status === 'abstain' ? ' · 本场弃权' : ''}</p>${m.analysis ? `<p class="analysis-text">${esc(text(m.analysis))}</p>` : ''}</section>`).join('') + '</div>';
   }
   const factLabels = {season:'赛季',stage:'赛季阶段',round:'轮次',total_rounds:'总轮次',rank:'排名',points:'积分',played:'已赛',remaining_matches:'剩余比赛',title_gap:'争冠分差',europe_gap:'欧战分差',relegation_cushion:'保级缓冲',rest_days:'距上一场 / 天',next_match_in_days:'距下一场 / 天',rotation:'轮换证据',motivation:'战意证据',goals_for:'进球',goals_against:'失球',goal_difference:'净胜球',schedule_density:'赛程密度'};
   function factRow(k, f) {
@@ -94,7 +95,7 @@ var Dashboard = (() => {
     const candidates = p.top3 || p.top_score_candidates || p.top_scores || [];
     const reason = p.reason || p.ai_native_reason || p.final_ai_analysis || p.contextual_logic || '本轮未提供主线文字分析';
     const blocks = [
-      ['候选比分及理由',candidates],['锚点审计',p.anchor_audit],['公司交叉审计',p.bookmaker_cross_audit],
+      ['候选比分及理由',candidates],['盘口尾部观察（赔率推导，并非 AI 推荐）',p.all_tail_scores],['锚点审计',p.anchor_audit],['公司交叉审计',p.bookmaker_cross_audit],
       ['盘口解读',p.market_interpretation],['盘口与市场来源',r.global_odds || r.international_odds || r.odds_movement],
       ['资金流分析（仅按来源陈述）',p.money_flow],['战术与节奏',p.tempo_xg_tactical_audit],['赛前因素',p.pre_match_factor_audit],
       ['比分排除与相邻比分比较',p.score_elimination_audit || p.score_cluster_audit],['反向风险',p.upset_evidence],
@@ -122,10 +123,11 @@ var Dashboard = (() => {
       <div class="match-bottom"><span class="probabilities">${probs ? probs.map((v,i)=>`${['主','平','客'][i]} ${v}%`).join('　') : '胜平负概率未提供'}</span><span class="availability">${m.eligible ? '赛前可关注' : m.state === 'stale' ? '保留原判断 · 不作当前推荐' : '仅供分析'}</span></div>
       <details class="analysis-details"><summary>展开完整分析 <span>主线依据 · 风险情景 · 赔率证据 <i aria-hidden="true">＋</i></span></summary><div class="detail-content">
         <div class="reading-columns">${detail('主线完整依据',reason)}<section class="evidence-section"><h3>风险 D / 副文比分 · 情景依据</h3>${riskDetails}</section></div>
+        ${renderModels(p)}
         ${detail('总进球 / 双方进球',[p.goal_band,p.btts,p.goal_range].filter(present).join(' / '))}
         <div class="evidence-grid">${blocks}</div>
         <section class="evidence-section league-section"><h3>联赛与赛程证据</h3>${renderLeagueContext(p.league_context || r.league_context)}</section>
-        <details class="technical-details"><summary>数据来源与模型记录</summary><div class="technical-content">${renderModels(p)}${detail('原始胜平负报价',{home:r.sp_home ?? null,draw:r.sp_draw ?? null,away:r.sp_away ?? null})}<details><summary>查看原始数据</summary><pre>${esc(JSON.stringify(r,null,2))}</pre></details></div></details>
+        <details class="technical-details"><summary>数据来源与模型记录</summary><div class="technical-content">${detail('原始胜平负报价',{home:r.sp_home ?? null,draw:r.sp_draw ?? null,away:r.sp_away ?? null})}<details><summary>查看原始数据</summary><pre>${esc(JSON.stringify(r,null,2))}</pre></details></div></details>
       </div></details>
     </article>`;
   }
@@ -137,6 +139,17 @@ var Dashboard = (() => {
     if (f.sort === 'risk') out.sort((a,b) => structuredRiskCount(b) - structuredRiskCount(a));
     return out;
   }
+  function renderRun(d, rows) {
+    const run = d.runtime?.ai_run || {};
+    const total = run.total_matches ?? rows.length;
+    const good = run.successful_matches ?? rows.filter(m=>!m.abstain).length;
+    const panel = run.run_mode === 'panel';
+    const state = !total ? '等待数据' : good === total ? '分析完成' : good ? '部分完成' : '暂无有效终审';
+    const failed = (run.batches || []).filter(b=>!b.ok).length;
+    return `<div class="run-heading"><div><span class="eyebrow">ANALYSIS PIPELINE</span><h2>${state} <strong>${good} / ${total}</strong></h2></div><p>${esc(run.request_count ?? '—')} 次请求 · ${esc(run.cache_hits ?? 0)} 次缓存${failed ? ` · ${failed} 次请求失败` : ''}</p></div>
+      <div class="pipeline">${panel ? '<span><b>01</b> GPT · 盘口主线</span><span><b>02</b> Grok · 独立反证</span><span class="referee"><b>03</b> Gemini · 终审裁决</span>' : '<span><b>01</b> 赛前证据</span><span><b>02</b> '+esc(run.primary_model?.toUpperCase() || '历史模型')+' · 分析</span><span><b>03</b> 协议与时间核验</span>'}</div>
+      <p class="pipeline-note">${panel ? 'GPT 与 Grok 并行分析，Gemini 随后裁决。' : '此快照按生成时的模型流程展示。'} ${good < total ? '缺失结果保留失败状态，已有初审可在完整分析中查看。' : '主线、风险与评级分别呈现。'}</p>`;
+  }
   async function start() {
     const $ = id => document.getElementById(id);
     let rows = [], data = {}, refreshTimer;
@@ -146,7 +159,8 @@ var Dashboard = (() => {
       $('matches').innerHTML = filtered.map(renderMatch).join('') || '<div class="empty">当前条件下没有比赛。可重置筛选查看全部快照。</div>';
       $('result-count').textContent = `${filtered.length} / ${rows.length} 场`;
       document.querySelectorAll('#matches .analysis-details').forEach(d => d.open = $('expand-all').checked);
-      const metrics = [['比赛记录',rows.length],['当前可关注',rows.filter(m=>m.eligible).length]];
+      const metrics = [['比赛记录',rows.length],['有效主线',rows.filter(m=>!m.abstain).length],['当前可关注',rows.filter(m=>m.eligible).length],['待完善',rows.filter(m=>m.abstain).length]];
+      $('run-status').innerHTML = renderRun(data, rows);
       const counts = {all:rows.length,d:rows.filter(m=>m.tier==='D').length,risk:rows.filter(m=>structuredRiskCount(m)).length,today:rows.filter(m=>m.today).length};
       document.querySelectorAll('[data-count]').forEach(e=>e.textContent=counts[e.dataset.count]);
       document.querySelectorAll('[data-view]').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.view === ($('tier').value==='D' ? 'd' : ['risk','today'].includes($('status').value) ? $('status').value : !$('tier').value && !$('status').value ? 'all' : ''))));
@@ -154,7 +168,7 @@ var Dashboard = (() => {
       const stamp = snapshotTime(data), stale = !Number.isFinite(stamp) || Date.now()-stamp>86400000 || stamp>Date.now()+300000;
       $('snapshot-status').className = 'snapshot-banner'+(stale?' stale':'');
       $('snapshot-status').innerHTML = `<strong>${stale ? '历史快照' : '赛前快照'}</strong><p>${esc(dateTime(stamp))} 更新${stale ? ' · 仅回看原判断，暂无当前推荐' : ' · 北京时间'}</p>`;
-      $('version').textContent = '页面 v21 · 数据：'+(data.engine_version || data.runtime?.ai_run?.engine_version || '历史版本');
+      $('version').textContent = '页面 v22 · 数据：'+(data.engine_version || data.runtime?.ai_run?.engine_version || '历史版本');
       const eligible = rows.filter(m=>m.eligible);
       $('watchlist').hidden = eligible.length === 0;
       $('watchlist').innerHTML = eligible.length ? `<h2>当前可关注</h2><div class="watchlinks">${eligible.map(m=>`<a href="#${m.key}">${esc(m.home)} vs ${esc(m.away)}</a>`).join('')}</div>` : '';
@@ -188,6 +202,6 @@ var Dashboard = (() => {
     $('refresh').addEventListener('click',load);
     await load();
   }
-  return {getMatches,probabilities,normalizeMatch,models,renderModels,renderLeagueContext,renderMatch,filterMatches,start};
+  return {getMatches,probabilities,normalizeMatch,models,renderModels,renderLeagueContext,renderMatch,filterMatches,renderRun,start};
 })();
 if (typeof document !== 'undefined') Dashboard.start();
