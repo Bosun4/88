@@ -363,8 +363,9 @@ def test_concurrency_and_call_budget_under_contention(monkeypatch, tmp_path):
     assert sum(r['final_direction'] == 'abstain' for r in output.values()) == 7
 
 
+@pytest.mark.parametrize('phase', ['single_pass', 'panel_analysis', 'panel_final'])
 @pytest.mark.parametrize('finish_reason', ['length', 'stop', None])
-def test_single_pass_transport_rejects_truncated_output(monkeypatch, tmp_path, finish_reason):
+def test_single_pass_transport_rejects_truncated_output(monkeypatch, tmp_path, finish_reason, phase):
     setup_engine(monkeypatch, tmp_path)
     from types import SimpleNamespace
 
@@ -395,7 +396,7 @@ def test_single_pass_transport_rejects_truncated_output(monkeypatch, tmp_path, f
             return Response()
 
     _, _, status = asyncio.run(predict.async_call_ai_json(
-        Session(), 'gpt', 'system', 'prompt', 'single_pass', [1],
+        Session(), 'gpt', 'system', 'prompt', phase, [1],
     ))
     assert status['ok'] is False
 

@@ -5,9 +5,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 
 
-def test_self_learn_current_artifact_no_identity_stays_unresolved(tmp_path, monkeypatch):
+def test_self_learn_legacy_fixture_no_identity_stays_unresolved(tmp_path, monkeypatch):
     import self_learn as sl
-    source = Path(__file__).resolve().parents[1] / 'data/predictions.json'
+    source = Path(__file__).resolve().parent / 'fixtures/legacy_missing_identity.json'
     monkeypatch.setattr(sl, 'PRED_FILE', str(source))
     monkeypatch.setattr(sl, 'DIARY_FILE', str(tmp_path / 'diary.json'))
     monkeypatch.setattr(sl, 'fetch_actual_results', lambda day: (_ for _ in ()).throw(AssertionError('no event date')))

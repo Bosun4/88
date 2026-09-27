@@ -20,9 +20,10 @@ def test_paid_predictions_are_manual_and_bounded():
     prediction = next(step for step in job["steps"] if step.get("name") == "Run Predictions")
     env = prediction["env"]
     expected = {
-        "AI_RUN_MODE": "single_pass", "AI_PRIMARY_MODEL": "gpt",
-        "AI_BATCH_SIZE": "6", "AI_CHUNK_CONCURRENCY": "2", "AI_MODEL_CONCURRENCY": "2",
-        "AI_SINGLE_PASS_MAX_CALLS": "12", "AI_CONNECT_TIMEOUT": "20",
+        "AI_RUN_MODE": "panel", "AI_PRIMARY_MODEL": "gpt",
+        "AI_BATCH_SIZE": "1", "AI_CHUNK_CONCURRENCY": "2", "AI_MODEL_CONCURRENCY": "4",
+        "AI_PANEL_MAX_CALLS": "180", "VMAX_FETCH_DAYS_AHEAD": "0",
+        "AI_STREAM": "true", "AI_SINGLE_PASS_MAX_CALLS": "12", "AI_CONNECT_TIMEOUT": "20",
         "AI_READ_TIMEOUT": "180", "AI_HTTP_TOTAL_TIMEOUT": "180",
         "AI_PHASE1_RETRY_MAX": "0", "AI_FINAL_RETRY_MAX": "0",
         "AI_ENDPOINT_FAILOVER": "false", "AI_ENABLE_CROSS_EXAM": "false",
@@ -34,7 +35,8 @@ def test_paid_predictions_are_manual_and_bounded():
     assert "AI_MAX_REQUESTS_PER_AI" not in env
     assert "AI_CHUNK_SIZE" not in env
     assert env["GPT_MODEL"] == "${{ vars.GPT_MODEL }}"
-    assert not any(key.startswith(("GROK_", "GEMINI_", "CLAUDE_")) for key in env)
+    assert all(env[name + "_API_KEY"] == "${{ secrets." + name + "_API_KEY }}" for name in ("GPT", "GROK", "GEMINI"))
+    assert not any(key.startswith("CLAUDE_") for key in env)
     assert doc["jobs"]["deploy_pages"]["needs"] == "predict"
 
 
