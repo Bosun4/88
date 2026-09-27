@@ -15,7 +15,7 @@ jobs:
   predict:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 120
     permissions:
       contents: write
 
@@ -65,14 +65,25 @@ jobs:
           WENCAI_AUTHORIZATION: ${{ secrets.WENCAI_AUTHORIZATION }}
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
-          # Empty repository variable keeps the model default in scripts/config.py.
+          # Empty repository variables keep endpoint model defaults in predict.py.
           GPT_MODEL: ${{ vars.GPT_MODEL }}
-          AI_RUN_MODE: "single_pass"
+          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
+          GROK_API_URL: ${{ secrets.GROK_API_URL }}
+          GROK_MODEL: ${{ vars.GROK_MODEL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          AI_RUN_MODE: "panel"
           AI_PRIMARY_MODEL: "gpt"
-          AI_BATCH_SIZE: "6"
+          AI_BATCH_SIZE: "1"
           AI_CHUNK_CONCURRENCY: "2"
-          AI_MODEL_CONCURRENCY: "2"
+          AI_MODEL_CONCURRENCY: "4"
           AI_SINGLE_PASS_MAX_CALLS: "12"
+          AI_PANEL_MAX_CALLS: "180"
+          AI_PANEL_MAX_SECONDS: "5400"
+          AI_STREAM: "true"
+          AI_FINAL_READ_TIMEOUT: "180"
+          VMAX_FETCH_DAYS_AHEAD: "0"
           AI_CONNECT_TIMEOUT: "20"
           AI_READ_TIMEOUT: "180"
           AI_HTTP_TOTAL_TIMEOUT: "180"
@@ -86,7 +97,7 @@ jobs:
           AI_ALLOW_SECOND_CALL_REPAIR: "false"
           AI_ENABLE_CLAUDE_JSON_REPAIR: "false"
           AI_ENABLE_ANY_MODEL_JSON_REPAIR: "false"
-          AI_MAX_OUTPUT_TOKENS: "16000"
+          AI_MAX_OUTPUT_TOKENS: "6000"
           AI_ENABLE_CACHE: "true"
           AI_DISABLE_CACHE: "false"
           AI_PERSISTENT_CACHE_ENABLED: "true"
@@ -100,7 +111,7 @@ jobs:
         run: python scripts/main.py
 
       - name: Save prediction evidence cache
-        if: success()
+        if: always()
         uses: actions/cache/save@v4
         with:
           path: data/ai_cache
@@ -163,7 +174,7 @@ jobs:
           PY
 
           if ! git diff --cached --quiet; then
-            git commit -m "chore: update manual single-pass prediction data"
+            git commit -m "chore: update manual panel prediction data"
             git push origin HEAD:main
           else
             echo "Prediction data unchanged."

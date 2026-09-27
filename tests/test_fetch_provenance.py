@@ -9,6 +9,22 @@ import fetch_data
 from test_wencai_post_api import FakeSession
 
 
+def test_all_score_mirrors_handicap_and_market_changes_survive_collection(monkeypatch):
+    monkeypatch.setenv('WENCAI_AUTHORIZATION', 'test-auth')
+    item = {'home': 'A', 'guest': 'B', 'cup': 'Fixture', 'id': 1,
+            'stime': int(datetime(2099, 9, 19, 13, tzinfo=timezone.utc).timestamp()),
+            'w50': 45, 'w51': 40, 'w52': 60, 'l04': 55, 'l14': 42, 'l24': 66,
+            'l05': 90, 'l15': 88, 'l25': 100, 'hhad_win': 2.1, 'hhad_same': 3.5,
+            'hhad_lose': 2.9, 'hhad_change': {'win': -.1}, 'crs_change': {'w50': -2},
+            'ttg_change': {'a3': -.3}, 'hafu_change': {'ss': -.2}}
+    result = asyncio.run(fetch_data.scrape_wencai_jczq_async(FakeSession({'data': {'matches': {'1': [item]}}}), '2099-09-19'))[0]
+    for key in ['w50', 'w51', 'w52', 'l04', 'l14', 'l24', 'l05', 'l15', 'l25', 'hhad_win', 'hhad_same', 'hhad_lose']:
+        assert result['v2_odds_dict'][key] == item[key]
+    for key in ['hhad_change', 'crs_change', 'ttg_change', 'hafu_change']:
+        assert result[key] == item[key]
+    assert result['intelligence']['h_inj'] == '未知'
+
+
 def test_fetch_preserves_stable_identity_and_aware_times(monkeypatch):
     monkeypatch.setenv('WENCAI_AUTHORIZATION', 'test-auth')
     kickoff = datetime(2099, 9, 19, 13, tzinfo=timezone.utc)

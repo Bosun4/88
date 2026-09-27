@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f5f6f8">
+  <meta name="theme-color" content="#080d17">
   <title>小鱼儿 · 足球分析</title>
   <link rel="stylesheet" href="assets/dashboard.css">
+  <link rel="stylesheet" href="assets/terminal.css">
   <script src="assets/dashboard.js" defer></script>
 </head>
 <body>
@@ -13,14 +14,15 @@
   <header class="app-header">
     <div class="header-inner">
       <a class="brand" href="./" aria-label="小鱼儿足球分析首页"><span class="brand-mark" aria-hidden="true">鱼</span><strong>小鱼儿<span>足球分析</span></strong></a>
-      <div class="header-tools"><span class="edition">比赛 · 比分 · 判断依据</span><button id="refresh" type="button">刷新数据 <span aria-hidden="true">↻</span></button></div>
+      <div class="header-tools"><span class="edition">vMAX 22 · FOOTBALL INTELLIGENCE</span><button id="refresh" type="button">刷新数据 <span aria-hidden="true">↻</span></button></div>
     </div>
   </header>
   <main class="layout">
     <section class="overview" aria-labelledby="page-title">
-      <div class="section-heading"><div><p class="eyebrow">FOOTBALL / MATCH INTELLIGENCE</p><h1 id="page-title">先看比分，再看依据。</h1></div><div id="metrics" class="metrics" aria-label="比赛概览"></div></div>
+      <div class="section-heading"><div><p class="eyebrow">小鱼儿 / FOOTBALL INTELLIGENCE</p><h1 id="page-title">让每个比分，都有依据。</h1></div><div id="metrics" class="metrics" aria-label="比赛概览"></div></div>
       <div id="snapshot-status" class="snapshot-banner" role="status" aria-live="polite">正在读取比赛数据…</div>
     </section>
+    <section id="run-status" class="run-status" aria-label="分析流程与完成情况"></section>
     <section class="controls" aria-label="比赛筛选">
       <div class="quick-filters" role="group" aria-label="快捷筛选">
         <button type="button" data-view="all" aria-pressed="true">全部比赛 <span data-count="all">—</span></button>

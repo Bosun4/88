@@ -14,8 +14,28 @@ const match = { id: 1, league: '英超', home_team: '主队', away_team: '客队
 const clone = (v) => JSON.parse(JSON.stringify(v));
 const view = (m = match, d = snapshot, at = now) => ui.normalizeMatch(m, d, at, 0);
 
-test('real snapshot: all 26 matches retained, today bucket does not mean today', () => {
-  const d = JSON.parse(fs.readFileSync(path.join(root, 'data/predictions.json'), 'utf8'));
+test('panel shows two analysts and actual final referee independently', () => {
+  const p = {predicted_score:'2-1', gpt_score:'1-0', grok_score:'1-1', gemini_score:'2-1', ai_call_status:{gpt:{phase1:{ok:true,row_status:'ok'}},grok:{phase1:{ok:true,row_status:'ok'}},gemini:{final:{ok:true,row_status:'ok'}}}};
+  assert.equal(ui.models(p).find(m=>m.name==='gemini').score, '2-1');
+  assert.match(ui.renderModels(p), /终审/);
+  p.ai_call_status.gemini.final.ok = false;
+  assert.equal(ui.models(p).find(m=>m.name==='gemini').score, null);
+  assert.equal(ui.models(p).find(m=>m.name==='gpt').score, '1-0');
+});
+
+test('run coverage distinguishes partial prediction from completed execution', () => {
+  const html = ui.renderRun({runtime:{ai_run:{run_mode:'panel',run_status:'partial',total_matches:42,successful_matches:2,request_count:9,max_calls:180,cache_hits:0}}}, []);
+  for (const s of ['部分完成','2 / 42','GPT','Grok','Gemini']) assert.ok(html.includes(s), s);
+});
+
+test('market-only tail scores are not model risk predictions', () => {
+  const m = view({...match, prediction:{...match.prediction, risk_score_candidates:[], reason:'', all_tail_scores:['5-0']}});
+  assert.equal(ui.filterMatches([m],{status:'risk'}).length, 0);
+  assert.match(ui.renderMatch(m), /盘口尾部观察/);
+});
+
+test('legacy fixture: all 26 matches retained, today bucket does not mean today', () => {
+  const d = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/legacy_missing_identity.json'), 'utf8'));
   const rows = ui.getMatches(d).map((m, i) => ui.normalizeMatch(m, d, now, i));
   assert.equal(rows.length, 26);
   assert.equal(rows.filter(m => m.today).length, 0);

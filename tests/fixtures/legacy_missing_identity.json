@@ -1,0 +1,268 @@
+{
+  "update_time": "2026-09-12 12:00:00",
+  "scope": "today_only",
+  "matches": {
+    "today": [
+      {
+        "home_team": "Legacy home 0",
+        "away_team": "Legacy away 0",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 1",
+        "away_team": "Legacy away 1",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 2",
+        "away_team": "Legacy away 2",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 3",
+        "away_team": "Legacy away 3",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 4",
+        "away_team": "Legacy away 4",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 5",
+        "away_team": "Legacy away 5",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 6",
+        "away_team": "Legacy away 6",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 7",
+        "away_team": "Legacy away 7",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 8",
+        "away_team": "Legacy away 8",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 9",
+        "away_team": "Legacy away 9",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 10",
+        "away_team": "Legacy away 10",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 11",
+        "away_team": "Legacy away 11",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 12",
+        "away_team": "Legacy away 12",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 13",
+        "away_team": "Legacy away 13",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 14",
+        "away_team": "Legacy away 14",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 15",
+        "away_team": "Legacy away 15",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 16",
+        "away_team": "Legacy away 16",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 17",
+        "away_team": "Legacy away 17",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 18",
+        "away_team": "Legacy away 18",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 19",
+        "away_team": "Legacy away 19",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 20",
+        "away_team": "Legacy away 20",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 21",
+        "away_team": "Legacy away 21",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 22",
+        "away_team": "Legacy away 22",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 23",
+        "away_team": "Legacy away 23",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 24",
+        "away_team": "Legacy away 24",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      },
+      {
+        "home_team": "Legacy home 25",
+        "away_team": "Legacy away 25",
+        "league": "Fixture league",
+        "prediction": {
+          "predicted_score": "2-1",
+          "final_direction": "home",
+          "recommendation_tier": "D"
+        }
+      }
+    ]
+  }
+}

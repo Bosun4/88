@@ -24,7 +24,7 @@ def test_extract_market_odds_basic():
     assert "correct_score" in om and om["correct_score"]["0-0"] == 8.5
     assert "one_x_two" in om and om["one_x_two"]["home"] == 1.8
     assert "total_goals" in om and om["total_goals"]["2"] == 3.5
-    assert "over_under" in om  # 推导出大小球
+    assert "over_under" not in om  # 缺少真实大小球合约报价
     assert "half_full" in om and "主/主" in om["half_full"]
 
 

@@ -133,21 +133,6 @@ def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
         return ""
     return DEFAULT_MODELS.get(model, model)
 
-
-def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
-    """Resolve hard-coded endpoint model slots safely.
-
-    Slot values are model strings, e.g. "gpt-5.6-sol". They are NOT keys into
-    DEFAULT_MODELS. This guard also tolerates accidental DEFAULT_MODELS-style
-    aliases ("gpt"/"grok"/"gemini") without import-time KeyError.
-    """
-    name = str(ai_name or "").strip().lower()
-    value = AI_ENDPOINT_MODEL_SLOTS.get(name, {}).get(slot, "")
-    model = str(value or "").strip()
-    if not model:
-        return ""
-    return DEFAULT_MODELS.get(model, model)
-
 CRS_FULL_MAP = {
     "1-0": "w10", "2-0": "w20", "2-1": "w21", "3-0": "w30", "3-1": "w31",
     "3-2": "w32", "4-0": "w40", "4-1": "w41", "4-2": "w42", "5-0": "w50",
@@ -272,7 +257,7 @@ if AI_RESEARCH_MODE not in {"production", "enhanced", "research"}:
     AI_RESEARCH_MODE = "research"
 
 AI_RUN_MODE = str(os.environ.get("AI_RUN_MODE", "single_pass")).strip().lower()
-if AI_RUN_MODE not in {"", "single_pass", "fast_batch", "deep_research", "post_review"}:
+if AI_RUN_MODE not in {"", "single_pass", "panel", "fast_batch", "deep_research", "post_review"}:
     AI_RUN_MODE = ""
 if not AI_RUN_MODE:
     AI_RUN_MODE = {
@@ -281,7 +266,7 @@ if not AI_RUN_MODE:
         "research": "deep_research",
     }.get(AI_RESEARCH_MODE, "deep_research")
 
-if AI_RUN_MODE == "single_pass":
+if AI_RUN_MODE in {"single_pass", "panel"}:
     _default_native_web = False
     _default_cross_exam = False
     _default_consistency = False
@@ -1639,7 +1624,8 @@ async def async_call_ai_json_with_retry(session: Optional[Any], ai_name: str, sy
 
 async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: str, prompt: str, phase: str, expected_matches: List[int]) -> Tuple[str, Any, Dict[str, Any]]:
     t0 = time.time()
-    endpoints = (_endpoint_candidates_for_ai(ai_name)[:1] if phase == "single_pass"
+    bounded = phase in {"single_pass", "panel_analysis", "panel_final"}
+    endpoints = (_endpoint_candidates_for_ai(ai_name)[:1] if bounded
                  else _ordered_endpoints_for_ai(ai_name))
     model = endpoints[0]["model"] if endpoints else _model_for(ai_name)
     status = {"ok": False, "ai_name": ai_name, "model": model, "phase": phase, "elapsed": 0.0}
@@ -1674,9 +1660,9 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
             _update_call_status(ai_name, phase, status)
             return ai_name, {}, status
 
-    temperature = AI_TEMPERATURE_FINAL if phase in ("final", "fallback_referee", "family_debate_referee") else AI_TEMPERATURE_CRITIC if phase == "critic" else AI_TEMPERATURE_PHASE1
+    temperature = AI_TEMPERATURE_FINAL if phase in ("final", "panel_final", "fallback_referee", "family_debate_referee") else AI_TEMPERATURE_CRITIC if phase == "critic" else AI_TEMPERATURE_PHASE1
     last_status = status
-    tries = endpoints if AI_ENDPOINT_FAILOVER and phase != "single_pass" else endpoints[:1]
+    tries = endpoints if AI_ENDPOINT_FAILOVER and not bounded else endpoints[:1]
     for attempt, endpoint in enumerate(tries, start=1):
         ep_t0 = time.time()
         model = endpoint["model"]
@@ -1686,7 +1672,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
             "model": model,
             "messages": [{"role": "system", "content": system_text}, {"role": "user", "content": prompt}],
             "temperature": temperature,
-            "stream": phase == "single_pass" and _env_bool("AI_STREAM", False),
+            "stream": bounded and _env_bool("AI_STREAM", phase.startswith("panel_")),
         }
         if AI_USE_RESPONSE_FORMAT:
             payload["response_format"] = {"type": "json_object"}
@@ -1705,8 +1691,8 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
             "endpoint_total": len(tries),
         }
         try:
-            read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "fallback_referee", "family_debate_referee") else AI_READ_TIMEOUT
-            total_timeout = (max(1, AI_HTTP_TOTAL_TIMEOUT) if phase == "single_pass"
+            read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "panel_final", "fallback_referee", "family_debate_referee") else AI_READ_TIMEOUT
+            total_timeout = (max(1, AI_HTTP_TOTAL_TIMEOUT) if bounded
                              else None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT)
             timeout = aiohttp.ClientTimeout(
                 total=total_timeout,
@@ -1730,18 +1716,18 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
                 except Exception:
                     data = {"raw": text}
                 choices = data.get("choices", []) if isinstance(data, dict) else []
-                if phase == "single_pass" and any(
+                if bounded and any(
                     c.get("finish_reason") == "length" for c in choices if isinstance(c, dict)
                 ):
                     status.update(ok=False, status="output_truncated", elapsed=round(time.time()-ep_t0, 1))
                     _update_call_status(ai_name, phase, status)
                     return ai_name, {}, status
-                if phase == "single_pass" and isinstance(data.get("raw"), str) and "data:" in data["raw"][:2000]:
+                if bounded and isinstance(data.get("raw"), str) and "data:" in data["raw"][:2000]:
                     data = _single_pass_sse_payload(data["raw"])
                 raw_text = _extract_response_text(data)
                 if AI_SAVE_RAW_RESPONSE:
                     _save_debug_dump(ai_name, phase, data, raw_text)
-                if phase == "single_pass":
+                if bounded:
                     try:
                         obj = json.loads(_preclean_text(raw_text))
                     except (TypeError, ValueError):
@@ -2650,21 +2636,7 @@ def _extract_market_odds(match_obj: Dict[str, Any]) -> Dict[str, Dict[str, float
             tg[str(n)] = o
     if tg:
         out["total_goals"] = tg
-        # 推导大小球 2.5：小=总进球0/1/2 赔率合成，大=3+ 合成（用最低赔近似，仅作展示参考）
-        under = [tg[k] for k in ("0", "1", "2") if k in tg]
-        over = [tg[k] for k in ("3", "4", "5", "6", "7") if k in tg]
-        ou: Dict[str, float] = {}
-        if under:
-            # 合成赔率近似：1 / Σ(1/odds)
-            inv = sum(1.0 / x for x in under if x > 1.0)
-            if inv > 0:
-                ou["under_2.5"] = round(1.0 / inv, 2)
-        if over:
-            inv = sum(1.0 / x for x in over if x > 1.0)
-            if inv > 0:
-                ou["over_2.5"] = round(1.0 / inv, 2)
-        if ou:
-            out["over_under"] = ou
+        # Exact total-goal contracts are not executable over/under quotes.
 
     # 半全场 HFTF（缺字段跳过）
     hf: Dict[str, float] = {}
@@ -3541,6 +3513,12 @@ def _score_shape_selector(pred: Dict[str, Any], match_obj: Optional[Dict[str, An
 
 
 async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dict[str, Any]]:
+    if AI_RUN_MODE == "panel":
+        try:
+            from .panel import run_panel
+        except ImportError:
+            from panel import run_panel
+        return await run_panel(sys.modules[__name__], evidence_all)
     if AI_RUN_MODE == "single_pass":
         try:
             from .single_pass import run_single_pass
@@ -3870,7 +3848,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
     evidences = [
         "AI-NATIVE：本地不做足球预测判断；方向、比分、Top4等级均来自 AI 输出。",
         "ANCHOR-AUDIT：本地只提供0-0/1-1/总进球/让球盘/联赛风格事实锚点，AI必须在anchor_audit中解释。",
-        "WEB-AUGMENTED：Prompt 要求 AI 联网并输出 sources；本地只校验来源字段完整性。",
+        "SOURCE-AUDIT：本轮以实际采集证据为准，模型自述联网不代表已检索。",
         "LOCAL PROTOCOL ONLY：本地只修字段闭环，如 goal_band/btts 与比分一致，不改变足球观点。",
         f"final_model={ai_r.get('source_model')} phase={ai_r.get('source_phase')} score={score} direction={direction}",
         "anchor_audit:" + _json_compact(anchor_audit, 1500),
@@ -4258,7 +4236,7 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
         from .prematch_guard import prematch_status, enforce_publication_gate
     except ImportError:
         from prematch_guard import prematch_status, enforce_publication_gate
-    guarded = AI_RUN_MODE == "single_pass" and not AI_MOCK_MODE
+    guarded = AI_RUN_MODE in {"single_pass", "panel"} and not AI_MOCK_MODE
     if guarded:
         try:
             from .fixture_identity import dedupe_predictions
@@ -4275,6 +4253,7 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
             ai_final = _run_async(run_ai_native_web(evidence_all))
         except Exception as e:
             logger.error(f"AI-native矩阵执行失败: {e}")
+            _LAST_AI_RUN_METADATA.update(run_status="failed", error_type=type(e).__name__)
             ai_final = {}
     elif not use_ai:
         print("  [AI-NATIVE] use_ai=False → 全部弃权，不启用本地足球兜底")
@@ -4282,8 +4261,9 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
     res = []
     for i, m in enumerate(ms, 1):
         ai_r = ai_final.get(i) or _abstain_ai_prediction(i, statuses.get(i, "missing_final_ai_result"))
-        pred = adapt_ai_to_frontend(ai_r, m) if not ai_r.get("final_direction") == "abstain" else _abstain_prediction(ai_r.get("reason", "abstain"))
+        pred = adapt_ai_to_frontend(ai_r, m) if not ai_r.get("final_direction") == "abstain" else _merge_abstain_analysis(_abstain_prediction(ai_r.get("reason", "abstain")), ai_r, ai_r.get("reason", "abstain"))
         pred["ai_call_status"] = copy.deepcopy(ai_r.get("ai_call_status", {}))
+        pred["phase1_model_outputs"] = copy.deepcopy(ai_r.get("phase1_model_outputs", {}))
         pred["prediction_completed_at"] = ai_r.get("prediction_completed_at", datetime.now(timezone.utc).isoformat())
         pred["evidence_hash"] = ai_r.get("evidence_hash")
         pred["ai_run_metadata"] = copy.deepcopy(_LAST_AI_RUN_METADATA)
@@ -5059,11 +5039,11 @@ _score_total = _BASE_SCORE_TOTAL
 _score_btts = _BASE_SCORE_BTTS
 _score_goal_band = _BASE_SCORE_GOAL_BAND
 
-ENGINE_VERSION = "vMAX 21.0-LEAGUE-SINGLE-PASS"
+ENGINE_VERSION = "vMAX 22.0-BOUNDED-PANEL"
 ENGINE_ARCHITECTURE = (
-    "AI-NATIVE WEB-AUGMENTED 3AI FULL-SHARP-CLUSTER: 保留20.2.1完整AI调用链；"
-    "新增Sharp/聪明钱事实编译、HHAD让球语义、CRS比分簇、TTG/CRS change消费、相邻比分审计；"
-    "新增赛前综合因子V2风控闸门：联赛DNA/战意轮换/杯赛跨洲/弱主胜防平/客胜复核/数据质量/资金冲突；新增结构化外部因子与临场确认升级；新增推荐分层：主推/小注/防平/观察/放弃；"
+    "默认逐场 GPT/Grok 并行初审 → Gemini 终审；调用预算、总时间和赛前时点受限；"
+    "保留HHAD让球语义、CRS比分簇、总进球及变化证据和相邻比分审计；"
+    "外部事实以实际输入来源为准，证据缺口与推荐闸门独立展示；"
     "本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。"
 )
 
@@ -5092,7 +5072,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
 
         evidence["league_context"] = build_league_context(match_obj)
         world_cup_reading = (league_intel.analyze_world_cup_context(match_obj)
-                             if AI_RUN_MODE != "single_pass" else None)
+                             if AI_RUN_MODE not in {"single_pass", "panel"} else None)
 
 
         # 经验规则引擎
@@ -5207,7 +5187,7 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
         ])
     except Exception as e:
         evidence.setdefault("data_quality", {})["v207_pre_inject_error"] = str(e)[:300]
-    if AI_RUN_MODE == "single_pass":
+    if AI_RUN_MODE in {"single_pass", "panel"}:
         anchors = evidence.get("ai_anchor_facts_no_judgement", {})
         anchors["mandatory_cross_anchor_questions"] = [
             q for q in anchors.get("mandatory_cross_anchor_questions", [])
@@ -6512,7 +6492,7 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
         apply("C", "prematch_v2_away_fatigue_travel_risk", "prematch_v2_away_fatigue")
 
     # P0 世界杯淘汰赛：小组赛已结束，热门穿盘/大胜必须确认90分钟语义、加时风险和盘口支持。
-    if AI_RUN_MODE != "single_pass" and context_flags.get("worldcup_knockout"):
+    if AI_RUN_MODE not in {"single_pass", "panel"} and context_flags.get("worldcup_knockout"):
         _ko_score = _score_from_candidate(pred.get("predicted_score"))
         _ko_h, _ko_a = _parse_score(_ko_score)
         _ko_margin = abs(_ko_h - _ko_a) if (_ko_h is not None and _ko_a is not None) else 0
@@ -6522,7 +6502,7 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
             apply("B", "prematch_v2_worldcup_ko_extra_time_draw_risk", "prematch_v2_worldcup_ko_draw_extra_time")
 
     # P0 世界杯第三轮：仅在明确小组赛R3时启用；已出线/可接受平或小负/轮换方，不允许被包装成热门强推。
-    if AI_RUN_MODE != "single_pass" and context_flags.get("worldcup_r3"):
+    if AI_RUN_MODE not in {"single_pass", "panel"} and context_flags.get("worldcup_r3"):
         if context_flags.get("already_qualified_or_can_accept_less") and context_flags.get("rotation_risk") and final_dir != "draw":
             apply("C", "prematch_v2_worldcup_r3_rotation_or_qualification_cap", "prematch_v2_worldcup_r3_rotation")
         if context_flags.get("already_qualified_or_can_accept_less") and final_dir != "draw" and draw_cluster:
@@ -6705,7 +6685,7 @@ def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dic
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"contrarian_market_claim_gate_error:{str(e)[:120]}")
     try:
-        if AI_RUN_MODE != "single_pass":
+        if AI_RUN_MODE not in {"single_pass", "panel"}:
             _score_shape_selector(pred, match_obj)
     except Exception as e:
         pred.setdefault("validation_warnings", []).append(f"score_shape_selector_error:{str(e)[:120]}")

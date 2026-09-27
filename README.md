@@ -1,19 +1,19 @@
-# Football AI · v21
+# Football AI · v22
 
-足球赛前证据整理、单轮批量 AI 分析与赛后独立统计工具。Python 生成数据，静态网页读取 `data/predictions.json`。默认只处理当前竞彩业务日；北京时间减去 11 小时确定业务日。
+足球赛前证据整理、GPT/Grok 独立初审、Gemini 终审与赛后独立统计工具。Python 生成数据，静态网页读取 `data/predictions.json`。默认只处理当前竞彩业务日；北京时间减去 11 小时确定业务日。
 
 ## 运行流程
 
-**赛前证据 → 单轮批量 AI → 协议校验 → 主线 / 风险线 → 锁档 → 赛后独立统计**
+**赛前证据 → GPT + Grok 并行初审 → Gemini 终审 → 协议校验 → 主线 / 风险线 → 锁档 → 赛后独立统计**
 
 1. 收集赛程、赔率和可获得的赛前资料；缺失、时间不明或相互冲突的资料要明确标注。
-2. `single_pass` 按每批最多 6 场调用一个主模型。每批只调用一次，不互评、不追加修复或备用裁判调用。超时、无有效响应或达到调用上限时显式弃权。
+2. 默认 `panel` 每场 GPT 分析盘口与主线，Grok 独立审查反向、平局与高比分风险；两者并行。至少一份初审有效才交给 Gemini 终审，两份都失败则直接弃权。终审失败保留初审观点，但不将初审比分冒充最终预测。
 3. 协议层检查返回结构、场次对应和可展示字段；协议通过不等于预测准确或可盈利。
 4. 主线保存本次方向和比分；风险线单独呈现不同走势与候选比分，不把风险命中混算为主线命中。
 5. 写入实时文件、按业务日历史文件和独立时间戳快照。赛前锁档保留源文件哈希；后续赛果不得反写原预测。
 6. 赛后用实际赛果单独评分，区分方向、比分、风险覆盖与弃权，避免同一比赛跨快照重复计数。
 
-升级改动与实际验证边界见 [docs/UPGRADE_V21.md](docs/UPGRADE_V21.md)。
+本次历史依据与设计见 [恢复设计](docs/superpowers/specs/2026-09-28-pipeline-recovery-design.md)。旧版单模型 `single_pass` 模式仍可显式启用，v21 记录保留在 [docs/UPGRADE_V21.md](docs/UPGRADE_V21.md)。
 
 ## 安装与离线检查
 
@@ -47,30 +47,36 @@ python -m pytest -q --allow-hosts=127.0.0.1,::1 --allow-unix-socket
 | 环境变量 | 用途 |
 | --- | --- |
 | `WENCAI_AUTHORIZATION` | 当前主赛程接口认证 |
-| `GPT_API_URL`、`GPT_API_KEY` | 主模型接口与密钥 |
-| `GPT_MODEL` | 可选，覆盖已有模型名称；空值沿用代码默认 |
+| `GPT_API_URL`、`GPT_API_KEY` | 主线初审接口与密钥 |
+| `GROK_API_URL`、`GROK_API_KEY` | 独立反证初审接口与密钥 |
+| `GEMINI_API_URL`、`GEMINI_API_KEY` | 终审接口与密钥 |
+| `GPT_MODEL`、`GROK_MODEL`、`GEMINI_MODEL` | 可选模型名称；空值沿用 `scripts/predict.py` 中 endpoint slot 默认值 |
 | `API_FOOTBALL_KEY`、`FOOTBALL_DATA_KEY`、`ODDS_API_KEY` | 对应数据源凭证；缺失可能降低证据完整度 |
 
 ```bash
-AI_RUN_MODE=single_pass \
-AI_PRIMARY_MODEL=gpt \
-AI_BATCH_SIZE=6 \
+AI_RUN_MODE=panel \
+AI_BATCH_SIZE=1 \
 AI_CHUNK_CONCURRENCY=2 \
-AI_MODEL_CONCURRENCY=2 \
-AI_SINGLE_PASS_MAX_CALLS=12 \
+AI_MODEL_CONCURRENCY=4 \
+AI_PANEL_MAX_CALLS=180 \
+AI_PANEL_MAX_SECONDS=5400 \
 AI_CONNECT_TIMEOUT=20 \
 AI_READ_TIMEOUT=180 \
-AI_STREAM=false \
+AI_FINAL_READ_TIMEOUT=180 \
+AI_STREAM=true \
 AI_HTTP_TOTAL_TIMEOUT=180 \
+VMAX_FETCH_DAYS_AHEAD=0 \
 AI_DECISION_CACHE_TTL=1800 \
 AI_PERSISTENT_CACHE_ENABLED=true \
 VMAX_ALLOW_AUTO_INSTALL=false \
 python scripts/main.py
 ```
 
-该命令会抓取实时数据并可能产生 API 费用。`AI_BATCH_SIZE` 是每批场数，同时受证据字符预算约束，超大批次会拆分；两个并发变量控制在途批次和模型请求。`AI_SINGLE_PASS_MAX_CALLS=12` 是每次运行的硬调用上限；超过上限的待预测场次必须弃权。单次失败不重试、不切换备用端点。旧 `AI_MAX_REQUESTS_PER_AI` 未在旧引擎执行，v21 不再将它作为费用保护。
+该命令会抓取实时数据并可能产生 API 费用。`panel` 每场最多三次调用，按整场预留预算，默认最多 60 场、180 次请求、两个场次与四个模型请求并发。90 分钟后停止新阶段，已发请求仍受 180 秒总超时限制。每阶段调用前重新核验开赛时间。单次失败不重试、不切换备用端点、不追加修复或备用裁判。赛后复盘只做客观对账，不暗中调用模型。
 
-缓存位于 `data/ai_cache/`，按预测证据哈希和 1800 秒 TTL 决定复用；更新代码或证据后不应复用旧决策。缓存不提交、不发布到 Pages。缓存命中或无赛事不保证一定发起 API 调用。
+`runtime.ai_run` 和 `data/ai_phase_results/last_run.json` 记录有效终审数、弃权数、调用次数、缓存命中及阶段状态。全部失败时工作流报错并保留上一份线上预测；部分成功时明确展示完成率。页面中的模型分歧、主线、风险候选和盘口推导尾部各自标明。
+
+缓存位于 `data/ai_cache/`，按语义证据、模型、接口、提示与生成参数的哈希及 1800 秒 TTL 决定复用。重复采集时钟不使缓存失效，报价和开赛时间改变会失效；失败也短期缓存，避免重复扣费。缓存不提交、不发布到 Pages。缺失伤停保持未知，模型自述网页搜索不视为已检索事实；没有真实大小球报价时，不从总进球选项合成可交易赔率。
 
 ## GitHub Actions
 
@@ -78,7 +84,7 @@ python scripts/main.py
 - **Offline CI**：push、PR 或手动执行，只有 `contents: read`，不注入 Secrets；运行禁网测试、`pip check` 和 `pip-audit`，失败会阻断作业。
 - **Deploy Pages**：仅打包 `index.html`、`assets/` 和公开 JSON 数据；不运行预测。手动预测成功后显式调用部署，因为 `GITHUB_TOKEN` 的推送不会再触发 push 工作流。
 
-在仓库 **Settings → Secrets and variables → Actions** 添加上述 Secrets，模型覆盖使用 Repository Variable `GPT_MODEL`。在 **Settings → Pages** 将部署来源设为 **GitHub Actions**，并确保 `github-pages` environment 允许 `main` 部署。本次本地升级没有修改这些远端设置，也没有触发线上预测或部署。
+在仓库 **Settings → Secrets and variables → Actions** 添加上述 Secrets，模型覆盖使用对应 Repository Variables。在 **Settings → Pages** 将部署来源设为 **GitHub Actions**，并确保 `github-pages` environment 允许 `main` 部署。测试全部使用模拟接口；真实模型可用性与当日采集情况以手动运行日志和 `runtime.ai_run` 为准。完整流程运行成功不代表预测准确率或收益改善，须继续用赛前锁档样本评估。
 
 ## 锁档与赛后验证
 

@@ -4,8 +4,8 @@ import pytest
 from forward_ledger.ledger import create_ledger_from_prediction
 
 
-def test_current_artifact_preserved_as_unverifiable_abstentions(tmp_path):
-    source = Path(__file__).resolve().parents[1] / 'data/predictions.json'
+def test_legacy_fixture_preserved_as_unverifiable_abstentions(tmp_path):
+    source = Path(__file__).resolve().parent / 'fixtures/legacy_missing_identity.json'
     expected = len(json.loads(source.read_text(encoding='utf-8'))['matches']['today'])
     ledger = tmp_path / 'ledger.jsonl'
     assert create_ledger_from_prediction(str(source), str(ledger)) == expected

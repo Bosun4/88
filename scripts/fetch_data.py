@@ -243,8 +243,8 @@ async def scrape_wencai_jczq_async(session, date_str):
                     odds_mov = f"主胜{'升水' if w_c>0 else '降水' if w_c<0 else '平稳'}，客胜{'升水' if l_c>0 else '降水' if l_c<0 else '平稳'}"
 
                     # 深度提取情报
-                    h_inj = str(info.get("home_injury","无")).replace("\n"," ").strip()[:150]
-                    g_inj = str(info.get("guest_injury","无")).replace("\n"," ").strip()[:150]
+                    h_inj = str(info.get("home_injury") or "未知").replace("\n"," ").strip()[:150]
+                    g_inj = str(info.get("guest_injury") or "未知").replace("\n"," ").strip()[:150]
                     home_bad = str(info.get("home_bad_news","")).replace("\n"," ").strip()[:150]
                     guest_bad = str(info.get("guest_bad_news","")).replace("\n"," ").strip()[:150]
 
@@ -256,8 +256,9 @@ async def scrape_wencai_jczq_async(session, date_str):
                     v2_odds = {}
                     for k in ["a0","a1","a2","a3","a4","a5","a6","a7",
                               "s00","s11","s22","s33",
-                              "w10","w20","w21","w30","w31","w32","w40","w41","w42",
-                              "l01","l02","l12","l03","l13","l23",
+                              "w10","w20","w21","w30","w31","w32","w40","w41","w42","w50","w51","w52",
+                              "l01","l02","l12","l03","l13","l23","l04","l14","l24","l05","l15","l25",
+                              "hhad_win","hhad_same","hhad_lose",
                               "ss","sp","sf","ps","pp","pf","fs","fp","ff"]:
                         val = item.get(k)
                         if val is not None: v2_odds[k] = _get_float(val)
@@ -281,6 +282,7 @@ async def scrape_wencai_jczq_async(session, date_str):
                         "sp_away": _get_float(item.get("lose")),
                         "give_ball": _get_float(item.get("give_ball")),
                         "change": chg,
+                        **{key: _safe_dict(item.get(key)) for key in ("hhad_change", "crs_change", "ttg_change", "hafu_change")},
                         "vote": _safe_dict(item.get("vote")),
                         "odds_movement": odds_mov,
                         "intelligence": {"h_inj":h_inj,"g_inj":g_inj,"home_bad_news":home_bad,"guest_bad_news":guest_bad},

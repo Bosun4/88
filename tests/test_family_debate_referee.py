@@ -40,9 +40,9 @@ def test_family_debate_phase_uses_final_grade_temperature_and_timeout():
     src = open(predict.__file__, encoding="utf-8").read()
     assert '"family_debate_referee"' in src
     # temperature line
-    assert 'AI_TEMPERATURE_FINAL if phase in ("final", "fallback_referee", "family_debate_referee")' in src
+    assert 'AI_TEMPERATURE_FINAL if phase in ("final", "panel_final", "fallback_referee", "family_debate_referee")' in src
     # read timeout line
-    assert 'AI_FINAL_READ_TIMEOUT if phase in ("final", "fallback_referee", "family_debate_referee")' in src
+    assert 'AI_FINAL_READ_TIMEOUT if phase in ("final", "panel_final", "fallback_referee", "family_debate_referee")' in src
 
 
 def test_family_debate_referee_enabled_by_default():
