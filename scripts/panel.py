@@ -6,20 +6,23 @@ import copy
 import os
 import threading
 import time
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 
 try:
-    from .single_pass import SYSTEM, INSTRUCTIONS, compact_evidence, _digest, _load_cache, _save_cache
+    from .single_pass import compact_evidence, _digest, _load_cache, _save_cache
+    from .score_policy import SYSTEM, INSTRUCTIONS, score_only_row
     from .prematch_guard import prematch_status
 except ImportError:
-    from single_pass import SYSTEM, INSTRUCTIONS, compact_evidence, _digest, _load_cache, _save_cache
+    from single_pass import compact_evidence, _digest, _load_cache, _save_cache
+    from score_policy import SYSTEM, INSTRUCTIONS, score_only_row
     from prematch_guard import prematch_status
 
-VERSION = 'panel-v22.1'
+VERSION = 'panel-v23.0'
 ROLES = {
-    'gpt': '你负责主线读盘：交叉胜平负、让球、总进球、相邻比分及联赛赛程，给出主线和最强反证。',
+    'gpt': '你负责比分情景初审：先审球队与赛程证据，再交叉让球、总进球及相邻比分，给出主线和最强反证。',
     'grok': '你负责独立反证：检验热门兑现、平局与反向路径、高比分尾部和轮换缺口；不得为博冷而博冷。',
     'gemini': '你是终审：先读原始证据，再比较初审的分歧及依据，独立裁决。初审缺席必须标注；不可按多数票或最高信心机械选分。',
 }
@@ -103,6 +106,7 @@ async def _run_panel(engine, evidence):
     fixture_slots = asyncio.Semaphore(max(1, engine.AI_CHUNK_CONCURRENCY))
     request_count = cache_hits = reserved = 0
     stages = []
+    unavailable_origins = {}
     run_id = engine._make_run_id(evidence)
     session = None
     if engine.aiohttp is not None and not engine.AI_MOCK_MODE:
@@ -112,6 +116,8 @@ async def _run_panel(engine, evidence):
     async def call(name, phase, entry, analysts=None):
         nonlocal request_count, cache_hits
         idx = entry['match']
+        endpoint = urlsplit(engine.get_url_for_ai(name))
+        origin = (endpoint.scheme, endpoint.hostname, endpoint.port)
         packet = {'evidence': entry, 'analyst_outputs': analysts or {}}
         instructions = ROLES[name] + '\n' + INSTRUCTIONS + '\n每场总解释不超过600汉字，聚焦可核验的因果；禁止复制输入。'
         key = _digest({'version': VERSION, 'model': engine._model_for(name),
@@ -137,6 +143,9 @@ async def _run_panel(engine, evidence):
             elif cached:
                 obj, status = cached['object'], {**cached['status'], 'cache_hit': True}
                 cache_hits += 1
+            elif origin in unavailable_origins:
+                status = {'ok': False, 'status': 'endpoint_unavailable',
+                          'blocked_cause': unavailable_origins[origin]}
             else:
                 if use_cache:
                     directory.mkdir(parents=True, exist_ok=True)
@@ -158,6 +167,8 @@ async def _run_panel(engine, evidence):
                         prompt = instructions + '\n指定match编号: ' + str([idx]) + '\n' + engine._safe_json_line(packet)
                         _, obj, status = await engine.async_call_ai_json(session, name, SYSTEM, prompt, phase, [idx])
                         status = {**status, 'cache_hit': False}
+                        if status.get('status') in {'tls_handshake_error', 'tls_certificate_error', 'dns_error', 'connect_error'}:
+                            unavailable_origins[origin] = status['status']
                         if use_cache:
                             _save_cache(path, obj, status)
                 finally:
@@ -168,7 +179,7 @@ async def _run_panel(engine, evidence):
         rows = engine.normalize_ai_predictions({'predictions': [{**matched[0], 'match': idx}]}, [idx], name, phase) if len(matched) == 1 else {}
         row = rows.get(idx)
         if row:
-            row = verified_sources(row, entry)
+            row = score_only_row(verified_sources(row, entry))
         valid = bool(row and row.get('final_direction') in {'home', 'draw', 'away'} and not row.get('is_abstain'))
         status = {**status, 'ai_name': name, 'phase': phase, 'match_ids': [idx],
                   'model': engine._model_for(name), 'evidence_hash': key,
@@ -195,7 +206,9 @@ async def _run_panel(engine, evidence):
                     if not task.done():
                         task.cancel()
                 await asyncio.gather(*analyst_tasks, return_exceptions=True)
-            analysts = {n: engine._short_prediction_for_prompt(r) for n, (r, s) in zip(('gpt', 'grok'), initial) if r}
+            analysts = {n: {**engine._short_prediction_for_prompt(r),
+                            'market_risk_audit': r.get('market_risk_audit', {})}
+                        for n, (r, s) in zip(('gpt', 'grok'), initial) if r}
             statuses = {n: {'phase1': s} for n, (r, s) in zip(('gpt', 'grok'), initial)}
             if analysts:
                 final, status = await call('gemini', 'panel_final', entry, analysts)
@@ -228,6 +241,7 @@ async def _run_panel(engine, evidence):
         'max_seconds': max_seconds,
         'call_order': ['GPT + Grok independent analysis', 'Gemini final review'],
         'mock_mode': engine.AI_MOCK_MODE, 'retries': 0, 'batches': stages,
+        'failure_summary': dict(Counter(s.get('status', 'unknown') for s in stages if not s.get('ok'))),
         'elapsed_seconds': round(time.monotonic()-started, 3),
     }
     return result

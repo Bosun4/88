@@ -62,6 +62,27 @@ def write_json_atomic(path: str, payload: dict):
     os.replace(tmp_path, path)
 
 
+def write_run_diagnostics(data_dir: str, metadata: dict):
+    write_json_atomic(os.path.join(data_dir, 'ai_phase_results', 'last_run.json'), metadata)
+    failures = metadata.get('failure_summary', {})
+    for kind, count in sorted(failures.items()):
+        print(f'  [AI FAILURE] {kind}: {count}')
+    summary_path = os.environ.get('GITHUB_STEP_SUMMARY')
+    if not summary_path:
+        return
+    lines = ['## Football AI 运行诊断', '',
+             f"有效终审：{metadata.get('successful_matches', 0)} / {metadata.get('total_matches', 0)}；"
+             f"实际请求：{metadata.get('request_count', 0)}；缓存：{metadata.get('cache_hits', 0)}。", '',
+             '| 状态 | 次数 |', '| --- | ---: |']
+    lines.extend(f'| {kind} | {count} |' for kind, count in sorted(failures.items()))
+    if any(kind in failures for kind in ('tls_handshake_error', 'tls_certificate_error')):
+        lines += ['', 'TLS 连接在模型推理前失败；已停止本轮对相同接口地址的后续请求。证书验证保持启用，原接口与模型保持不变。']
+    if metadata.get('run_status') == 'failed':
+        lines += ['', '本轮没有有效终审，保留上一份线上数据。完整记录见 prediction artifact 中的 ai_phase_results/last_run.json。']
+    with open(summary_path, 'a', encoding='utf-8') as handle:
+        handle.write('\n'.join(lines) + '\n')
+
+
 def publish_prediction_outputs(data_dir: str, target_date: str, session: str, payload: dict, now_time: datetime) -> dict:
     """Publish live JSON plus immutable audit snapshots."""
     repo_dir = os.path.dirname(data_dir)
@@ -300,7 +321,7 @@ def main():
 
         final_output = {
             "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
-            "version": "MAX-v22.0-PANEL",
+            "version": "MAX-v23.0-SCORE-PANEL",
             "scope": "today_only",
             "top4": [],
             "matches": {
@@ -374,7 +395,7 @@ def main():
         results, top4 = run_predictions(raw_data, use_ai=use_ai)
         from predict import _LAST_AI_RUN_METADATA
         final_output["runtime"]["ai_run"] = dict(_LAST_AI_RUN_METADATA)
-        write_json_atomic(os.path.join(data_dir, "ai_phase_results", "last_run.json"), final_output["runtime"]["ai_run"])
+        write_run_diagnostics(data_dir, final_output["runtime"]["ai_run"])
         if _LAST_AI_RUN_METADATA.get("run_status") == "failed":
             raise RuntimeError("本轮没有有效终审预测，保留上一份线上数据；详见 last_run.json")
 

@@ -167,3 +167,14 @@ test('expanded evidence is readable without exposing raw JSON by default', () =>
   assert.doesNotMatch(evidence, /<pre/);
   assert.match(html, /查看原始数据/);
 });
+
+test('score policy shows market costs and falsifiable risk without result probabilities', () => {
+  const m = clone(match);
+  Object.assign(m.prediction, {analysis_policy:'score-first-v23',direction_probs:{home:60,draw:20,away:20},
+    market_margin_audit:{result_market:{overround_pct:8.3333,theoretical_hold_pct:7.6923}},
+    market_risk_audit:{status:'hypothesis',alternative_explanations:['正常风控'],counterevidence:['<script>bad</script>']}});
+  m.odds_movement = {home:'legacy-direction-hint'};
+  const html = ui.renderMatch(view(m)).split('<details class="technical-details">')[0];
+  for (const s of ['报价成本核验','理论留存率','7.6923','盘口风险假设与反证','待验证假设','正常风控','反证','比分情景分析']) assert.ok(html.includes(s), s);
+  assert.doesNotMatch(html, /主 60%|legacy-direction-hint|<script>/);
+});

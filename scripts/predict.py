@@ -39,6 +39,8 @@ import logging
 import math
 import os
 import re
+import socket
+import ssl
 import time
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
@@ -1622,6 +1624,27 @@ async def async_call_ai_json_with_retry(session: Optional[Any], ai_name: str, sy
     return last
 
 
+def transport_failure(exc):
+    """Classify connection failures without recording URLs or credentials."""
+    causes, current = [], exc
+    while current is not None and all(current is not c for c in causes):
+        causes.append(current)
+        current = getattr(current, 'os_error', None) or current.__cause__
+    def has_type(*names):
+        return any(any(cls.__name__ in names for cls in type(c).__mro__) for c in causes)
+    if any(isinstance(c, ssl.SSLCertVerificationError) for c in causes) or has_type('ClientConnectorCertificateError'):
+        kind, message = 'tls_certificate_error', 'TLS certificate verification failed before model inference.'
+    elif any(isinstance(c, ssl.SSLError) for c in causes) or has_type('ClientConnectorSSLError'):
+        kind, message = 'tls_handshake_error', 'TLS handshake failed before model inference.'
+    elif any(isinstance(c, socket.gaierror) for c in causes) or has_type('ClientConnectorDNSError'):
+        kind, message = 'dns_error', 'Endpoint name resolution failed before model inference.'
+    elif has_type('ClientConnectorError') or any(isinstance(c, ConnectionError) for c in causes):
+        kind, message = 'connect_error', 'Endpoint connection failed before model inference.'
+    else:
+        kind, message = 'error', 'Request failed; inspect the error type and stage.'
+    return {'status': kind, 'error_type': type(exc).__name__, 'error': message}
+
+
 async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: str, prompt: str, phase: str, expected_matches: List[int]) -> Tuple[str, Any, Dict[str, Any]]:
     t0 = time.time()
     bounded = phase in {"single_pass", "panel_analysis", "panel_final"}
@@ -1754,7 +1777,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
         except asyncio.TimeoutError:
             status.update({"status": "timeout", "elapsed": round(time.time() - ep_t0, 1)})
         except Exception as e:
-            status.update({"status": "error", "error": str(e)[:500], "elapsed": round(time.time() - ep_t0, 1)})
+            status.update({**transport_failure(e), "elapsed": round(time.time() - ep_t0, 1)})
         _update_call_status(ai_name, phase, status)
         last_status = status
         if AI_ENDPOINT_FAILOVER and attempt < len(tries) and _is_retryable_ai_status(status):
@@ -5039,7 +5062,7 @@ _score_total = _BASE_SCORE_TOTAL
 _score_btts = _BASE_SCORE_BTTS
 _score_goal_band = _BASE_SCORE_GOAL_BAND
 
-ENGINE_VERSION = "vMAX 22.0-BOUNDED-PANEL"
+ENGINE_VERSION = "vMAX 23.0-SCORE-PANEL"
 ENGINE_ARCHITECTURE = (
     "默认逐场 GPT/Grok 并行初审 → Gemini 终审；调用预算、总时间和赛前时点受限；"
     "保留HHAD让球语义、CRS比分簇、总进球及变化证据和相邻比分审计；"
@@ -5058,6 +5081,12 @@ def build_evidence_packet(match_obj: Dict[str, Any], index: int) -> Dict[str, An
        改而要求 AI 主动探测“数理估值（静态）与真实市场（变盘/诱盘/热度 skew）”之间的背离（Divergence），
        以此戳破庄家做盘陷阱，实现真正的逆向博弈思维。
     """
+    if AI_RUN_MODE == "panel":
+        try:
+            from .score_policy import build_evidence
+        except ImportError:
+            from score_policy import build_evidence
+        return build_evidence(sys.modules[__name__], match_obj, index)
     evidence = _BASE_BUILD_EVIDENCE_PACKET_V2021(match_obj, index)
     try:
         # 1. 引入本地量化与基本面组件
@@ -5925,12 +5954,13 @@ def normalize_ai_predictions(obj: Any, expected_matches: List[int], source_model
         warnings = list(row.get("validation_warnings", []))
         if not isinstance(raw_item.get("score_cluster_audit"), dict):
             warnings.append("score_cluster_audit_missing_or_invalid")
-        if not isinstance(raw_item.get("sharp_money_audit"), dict):
+        if not phase.startswith('panel_') and not isinstance(raw_item.get("sharp_money_audit"), dict):
             warnings.append("sharp_money_audit_missing_or_invalid")
-        if not isinstance(raw_item.get("recommendation_components"), dict):
+        if not phase.startswith('panel_') and not isinstance(raw_item.get("recommendation_components"), dict):
             warnings.append("recommendation_components_missing_or_invalid")
         row["validation_warnings"] = list(dict.fromkeys(warnings))
-        apply_weak_home_tail_risk_protection(row)
+        if not phase.startswith('panel_'):
+            apply_weak_home_tail_risk_protection(row)
     return out
 
 
@@ -6603,6 +6633,12 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
     return pred
 
 def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
+    if ai_r.get('analysis_policy') == 'score-first-v23' and ai_r.get('final_direction') != 'abstain':
+        try:
+            from .score_policy import adapt_prediction
+        except ImportError:
+            from score_policy import adapt_prediction
+        return adapt_prediction(sys.modules[__name__], ai_r, match_obj)
     apply_weak_home_tail_risk_protection(ai_r)
     pred = _BASE_ADAPT_AI_TO_FRONTEND_V2021(ai_r, match_obj)
     if not isinstance(pred, dict):
