@@ -53,3 +53,62 @@ def test_failed_summary_explains_connection_stage_and_preserves_diagnostics(tmp_
     assert json.loads((tmp_path / 'data/ai_phase_results/last_run.json').read_text()) == metadata
     assert 'TLS' in summary.read_text(encoding='utf-8')
     assert 'tls_handshake_error: 4' in capsys.readouterr().out
+
+
+def bounded_response(monkeypatch, content, phase):
+    """Exercise the actual transport parser without contacting a provider."""
+    monkeypatch.setattr(predict, 'AI_MOCK_MODE', False)
+    monkeypatch.setattr(predict, 'AI_SAVE_RAW_RESPONSE', False)
+    monkeypatch.setattr(predict, 'aiohttp', aiohttp)
+    monkeypatch.setattr(predict, '_endpoint_candidates_for_ai', lambda name: [{
+        'name': 'offline', 'slot': 1, 'url': 'https://offline.invalid/v1',
+        'model': 'original-model', 'key': 'fake',
+    }])
+
+    class Response:
+        status = 200
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *args):
+            return False
+
+        async def text(self):
+            return json.dumps({'choices': [{
+                'finish_reason': 'stop', 'message': {'content': content},
+            }]})
+
+    class Session:
+        def post(self, *args, **kwargs):
+            return Response()
+
+    return asyncio.run(predict.async_call_ai_json(
+        Session(), 'gemini', 'system', 'prompt', phase, [1],
+    ))
+
+
+@pytest.mark.parametrize('phase', ['single_pass', 'panel_analysis', 'panel_final'])
+@pytest.mark.parametrize('wrapper', ['plain', 'fence', 'bom'])
+def test_bounded_json_preserves_chinese_quotes_and_literal_markup(monkeypatch, phase, wrapper):
+    content = '[{"match":1,"predicted_score":"1-2","reason":"所谓“强阵”与‘落败’待核实；```json```及<think>原文</think>均为引用"}]'
+    if wrapper == 'fence':
+        content = '```json\n' + content + '\n```'
+    elif wrapper == 'bom':
+        content = '\ufeff' + content
+    _, output, status = bounded_response(monkeypatch, content, phase)
+    assert status['ok'] is True
+    assert output == [{'match': 1, 'predicted_score': '1-2',
+                       'reason': '所谓“强阵”与‘落败’待核实；```json```及<think>原文</think>均为引用'}]
+
+
+@pytest.mark.parametrize('content', [
+    '```json\n{"predictions":[{"match":1,"predicted_score":"1-2"}]',
+    '{"predictions":[{"match":1,"predicted_score":"1-2"}]} trailing prose',
+    '{“predictions”:[{"match":1,"predicted_score":"1-2"}]}',
+    '{"reason":"bad\x00literal","match":1}',
+])
+def test_bounded_json_rejects_invalid_content_without_repair(monkeypatch, content):
+    _, output, status = bounded_response(monkeypatch, content, 'panel_final')
+    assert output == {}
+    assert status['status'] == 'parse_failed'
