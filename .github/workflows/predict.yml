@@ -65,7 +65,7 @@ jobs:
           WENCAI_AUTHORIZATION: ${{ secrets.WENCAI_AUTHORIZATION }}
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
-          # Empty repository variables keep endpoint model defaults in predict.py.
+          # One URL/key pair per provider; empty model vars use config.py defaults.
           GPT_MODEL: ${{ vars.GPT_MODEL }}
           GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
           GROK_API_URL: ${{ secrets.GROK_API_URL }}
@@ -89,7 +89,6 @@ jobs:
           AI_HTTP_TOTAL_TIMEOUT: "180"
           AI_PHASE1_RETRY_MAX: "0"
           AI_FINAL_RETRY_MAX: "0"
-          AI_ENDPOINT_FAILOVER: "false"
           AI_ENABLE_CROSS_EXAM: "false"
           AI_ENABLE_CONSISTENCY_JUDGE: "false"
           AI_ENABLE_FALLBACK_REFEREE: "false"
