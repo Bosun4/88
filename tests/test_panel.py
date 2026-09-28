@@ -143,6 +143,34 @@ def test_duplicate_referee_identifier_abstains(monkeypatch, tmp_path):
     assert result[1]['final_direction'] == 'abstain'
 
 
+def test_manual_refresh_recovers_from_cached_provider_failure(monkeypatch, tmp_path):
+    grok_ready = False
+    async def call(session, name, system, prompt, phase, expected):
+        if name == 'grok' and not grok_ready:
+            return name, {}, {'ok': False, 'status': 'http_503'}
+        return name, {'predictions': [row(expected[0])]}, {'ok': True, 'status': 'ok'}
+    run = run_engine(monkeypatch, tmp_path, call)
+    evidence = [{'match': 1, 'fixture_id': 'refresh-fixture'}]
+    run(evidence)
+    grok_ready = True
+    cached = run(evidence)
+    assert cached[1]['ai_call_status']['grok']['phase1']['cache_hit'] is True
+    assert predict._LAST_AI_RUN_METADATA['request_count'] == 0
+    # A fresh Actions runner skips cache restore but still saves new responses.
+    monkeypatch.setenv('AI_CACHE_DIR', str(tmp_path / 'fresh-run-cache'))
+    refreshed = run(evidence)
+    assert set(refreshed[1]['phase1_model_outputs']) == {'gpt', 'grok'}
+    assert refreshed[1]['ai_call_status']['grok']['phase1']['row_status'] == 'ok'
+    assert predict._LAST_AI_RUN_METADATA['request_count'] == 3
+    assert predict._LAST_AI_RUN_METADATA['cache_hits'] == 0
+    assert predict._LAST_AI_RUN_METADATA['failure_summary'] == {}
+    reused = run(evidence)
+    assert set(reused[1]['phase1_model_outputs']) == {'gpt', 'grok'}
+    assert predict._LAST_AI_RUN_METADATA['request_count'] == 0
+    assert predict._LAST_AI_RUN_METADATA['cache_hits'] == 3
+    assert predict._LAST_AI_RUN_METADATA['failure_summary'] == {}
+
+
 def test_self_reported_sources_are_not_accepted_as_retrieval(monkeypatch, tmp_path):
     async def call(session, name, system, prompt, phase, expected):
         r = row(1)

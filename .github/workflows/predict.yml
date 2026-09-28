@@ -16,6 +16,11 @@ on:
         options:
           - next_available
           - current
+      refresh_ai:
+        description: '重新请求三家 AI（更新密钥/通道后勾选；本轮跳过缓存，产生新请求）'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -57,6 +62,7 @@ jobs:
       # Cache keys are unique per run; restore the most recent cache for this
       # code revision. Evidence hashes + the 1800s TTL decide actual cache hits.
       - name: Restore prediction evidence cache
+        if: ${{ !inputs.refresh_ai }}
         uses: actions/cache/restore@v4
         with:
           path: data/ai_cache
