@@ -3,6 +3,19 @@ name: Football AI Predict
 # Paid prediction calls are manual-only. Never add push/schedule here.
 on:
   workflow_dispatch:
+    inputs:
+      target_date:
+        description: '指定竞彩业务日 YYYY-MM-DD（留空自动选择）'
+        required: false
+        type: string
+      date_mode:
+        description: '当前业务日无未开赛比赛时，选择未来7天内最近一个业务日'
+        required: true
+        default: next_available
+        type: choice
+        options:
+          - next_available
+          - current
 
 permissions:
   contents: read
@@ -107,6 +120,8 @@ jobs:
           VMAX_RUN_DAYS: "today"
           AI_RUN_DAYS: "today"
           VMAX_DATE_SHIFT_HOURS: "11"
+          VMAX_TARGET_DATE: ${{ inputs.target_date }}
+          VMAX_DATE_MODE: ${{ inputs.date_mode || 'next_available' }}
         run: python scripts/main.py
 
       - name: Save prediction evidence cache
