@@ -4,9 +4,9 @@
 
 | AI | GitHub Secret：地址 | GitHub Secret：密钥 | 默认模型 |
 | --- | --- | --- | --- |
-| GPT | `GPT_API_URL` | `GPT_API_KEY` | `gpt-5.6-sol` |
-| Gemini | `GEMINI_API_URL` | `GEMINI_API_KEY` | `熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网` |
-| Grok | `GROK_API_URL` | `GROK_API_KEY` | `熊猫-A-10-grok-4.6` |
+| GPT | `GPT_API_URL` | `GPT_API_KEY` | `熊猫-按量-gpt-6-astra` |
+| Gemini | `GEMINI_API_URL` | `GEMINI_API_KEY` | `gemini-3.8-flash-high` |
+| Grok | `GROK_API_URL` | `GROK_API_KEY` | `grok-4.7` |
 
 模型默认值统一在 `scripts/config.py` 的 `DEFAULT_MODELS`。现有可选 Repository Variables `GPT_MODEL`、`GEMINI_MODEL`、`GROK_MODEL` 分别覆盖该家的唯一模型；未设置或为空白时使用默认值，不要求新增配置。
 
