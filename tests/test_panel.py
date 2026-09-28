@@ -34,6 +34,26 @@ def test_analysts_finish_before_referee_and_keep_model_identity(monkeypatch, tmp
     assert predict._LAST_AI_RUN_METADATA['successful_matches'] == 1
 
 
+def test_stage_context_distinguishes_independent_analysis_from_missing_analyst(monkeypatch, tmp_path):
+    seen = {}
+    async def call(session, name, system, prompt, phase, expected):
+        packet = json.loads(prompt.splitlines()[-1])
+        seen[name] = packet['review_context']
+        if name == 'grok':
+            return name, {}, {'ok': False, 'status': 'http_503'}
+        return name, {'predictions': [row(1)]}, {'ok': True, 'status': 'ok'}
+    result = run_engine(monkeypatch, tmp_path, call)([{'match': 1}])
+    for name in ('gpt', 'grok'):
+        assert seen[name] == {'current_model': name, 'stage': 'independent_analysis',
+                              'analyst_availability': {}, 'final_referee': 'gemini'}
+    assert seen['gemini'] == {'current_model': 'gemini', 'stage': 'final_review',
+                             'analyst_availability': {'gpt': {'available': True, 'status': 'ok'},
+                                                      'grok': {'available': False, 'status': 'http_503'}},
+                             'final_referee': 'gemini'}
+    assert result[1]['review_context'] == seen['gemini']
+    assert result[1]['phase1_model_outputs']['gpt']['review_context'] == seen['gpt']
+
+
 def test_all_analysts_failed_skips_referee_and_reports_failure(monkeypatch, tmp_path):
     calls = []
     async def call(session, name, *args):
