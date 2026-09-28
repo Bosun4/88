@@ -14,6 +14,8 @@ import asyncio
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import predict as P
@@ -60,7 +62,20 @@ def test_watchdog_disabled_when_zero():
     assert rows == {2: {"predicted_score": "1-1"}}
 
 
-def test_slot_worker_uses_watchdog_in_source():
-    """源码守卫: 三条执行路径(_slot_worker/顺序/chunk并发)都必须走看门狗"""
-    src = Path(P.__file__).read_text(encoding="utf-8")
-    assert src.count("_run_chunk_with_watchdog(") >= 4  # 定义1 + 调用≥3
+@pytest.mark.parametrize('concurrency', [1, 2])
+def test_runner_times_out_hung_match_and_keeps_other_results(monkeypatch, concurrency):
+    monkeypatch.setattr(P, 'AI_RUN_MODE', 'fast_batch')
+    monkeypatch.setattr(P, 'AI_MOCK_MODE', True)
+    monkeypatch.setattr(P, 'AI_CHUNK_SIZE', 1)
+    monkeypatch.setattr(P, 'AI_CHUNK_CONCURRENCY', concurrency)
+    monkeypatch.setattr(P, 'AI_CHUNK_WATCHDOG_SECONDS', 0.02)
+    monkeypatch.setattr(P, '_save_snapshot', lambda *args, **kwargs: '')
+
+    async def chunk(session, run_id, chunk_id, evidence):
+        if evidence[0]['match'] == 1:
+            await asyncio.Event().wait()
+        return {2: {'predicted_score': '2-0'}}
+
+    monkeypatch.setattr(P, '_run_one_chunk', chunk)
+    assert asyncio.run(P.run_ai_native_web([{'match': 1}, {'match': 2}])) == {
+        2: {'predicted_score': '2-0'}}

@@ -26,7 +26,7 @@ def test_paid_predictions_are_manual_and_bounded():
         "AI_STREAM": "true", "AI_SINGLE_PASS_MAX_CALLS": "12", "AI_CONNECT_TIMEOUT": "20",
         "AI_READ_TIMEOUT": "180", "AI_HTTP_TOTAL_TIMEOUT": "180",
         "AI_PHASE1_RETRY_MAX": "0", "AI_FINAL_RETRY_MAX": "0",
-        "AI_ENDPOINT_FAILOVER": "false", "AI_ENABLE_CROSS_EXAM": "false",
+        "AI_ENABLE_CROSS_EXAM": "false",
         "AI_ENABLE_CONSISTENCY_JUDGE": "false", "AI_ENABLE_FALLBACK_REFEREE": "false",
         "AI_ENABLE_FAMILY_DEBATE_REFEREE": "false",
         "AI_PERSISTENT_CACHE_ENABLED": "true", "AI_DECISION_CACHE_TTL": "1800",
@@ -34,8 +34,13 @@ def test_paid_predictions_are_manual_and_bounded():
     assert {key: env.get(key) for key in expected} == expected
     assert "AI_MAX_REQUESTS_PER_AI" not in env
     assert "AI_CHUNK_SIZE" not in env
-    assert env["GPT_MODEL"] == "${{ vars.GPT_MODEL }}"
-    assert all(env[name + "_API_KEY"] == "${{ secrets." + name + "_API_KEY }}" for name in ("GPT", "GROK", "GEMINI"))
+    for name in ("GPT", "GROK", "GEMINI"):
+        assert env[name + "_MODEL"] == "${{ vars." + name + "_MODEL }}"
+        credentials = {k: v for k, v in env.items() if k.startswith(name + "_API_")}
+        assert credentials == {
+            name + "_API_URL": "${{ secrets." + name + "_API_URL }}",
+            name + "_API_KEY": "${{ secrets." + name + "_API_KEY }}",
+        }
     assert not any(key.startswith("CLAUDE_") for key in env)
     assert doc["jobs"]["deploy_pages"]["needs"] == "predict"
 
