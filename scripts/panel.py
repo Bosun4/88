@@ -20,12 +20,14 @@ except ImportError:
     from score_policy import SYSTEM, INSTRUCTIONS, score_only_row
     from prematch_guard import prematch_status
 
-VERSION = 'panel-v24.0'
+VERSION = 'panel-v24.1'
 ROLES = {
-    'gpt': '你负责比分情景初审：先审球队与赛程证据，再交叉让球、总进球及相邻比分，给出主线和最强反证。',
-    'grok': '你负责独立反证：检验热门兑现、平局与反向路径、高比分尾部和轮换缺口；不得为博冷而博冷。',
-    'gemini': '你是终审：先读原始证据，再比较初审的分歧及依据，独立裁决。初审缺席必须标注；不可按多数票或最高信心机械选分。',
+    'gpt': '你现在是GPT独立初审，负责比分情景：先审球队与赛程证据，再交叉让球、总进球及相邻比分，给出主线和最强反证。',
+    'grok': '你现在是Grok独立初审，负责反证：检验热门兑现、平局与反向路径、高比分尾部和轮换缺口；不得为博冷而博冷。',
+    'gemini': '你现在就是Gemini唯一终审：先核原始证据，再按review_context确认哪份初审实际可用。逐份明确采纳或驳回及证据，不按多数票。即使沿用初审比分，也须独立填写自己的五步摘要，不能复制初审对调用状态的叙述。Gemini不参与初审，不能把自己列为缺席。',
 }
+ANALYST_STAGE = ('这是独立初审阶段，analyst_outputs为空是正常隔离，不表示任何模型调用失败。'
+                 '五步摘要只写你自己的比赛证据、候选比较和失效条件，不评价其他模型是否缺席，不声称已执行终审。')
 
 
 def semantic_evidence(value):
@@ -113,13 +115,16 @@ async def _run_panel(engine, evidence):
         session = engine.aiohttp.ClientSession(trust_env=True,
                     connector=engine.aiohttp.TCPConnector(limit=max(1, engine.AI_MODEL_CONCURRENCY)))
 
-    async def call(name, phase, entry, analysts=None):
+    async def call(name, phase, entry, analysts=None, availability=None):
         nonlocal request_count, cache_hits
         idx = entry['match']
         endpoint = urlsplit(engine.get_url_for_ai(name))
         origin = (endpoint.scheme, endpoint.hostname, endpoint.port)
-        packet = {'evidence': entry, 'analyst_outputs': analysts or {}}
-        instructions = ROLES[name] + '\n' + INSTRUCTIONS
+        review_context = {'current_model': name,
+                          'stage': 'final_review' if phase == 'panel_final' else 'independent_analysis',
+                          'analyst_availability': availability or {}, 'final_referee': 'gemini'}
+        packet = {'review_context': review_context, 'evidence': entry, 'analyst_outputs': analysts or {}}
+        instructions = ROLES[name] + '\n' + (ANALYST_STAGE if phase == 'panel_analysis' else '') + '\n' + INSTRUCTIONS
         key = _digest({'version': VERSION, 'model': engine._model_for(name),
                        'endpoint': engine.get_url_for_ai(name), 'phase': phase,
                        'system': SYSTEM, 'instructions': instructions,
@@ -180,6 +185,7 @@ async def _run_panel(engine, evidence):
         row = rows.get(idx)
         if row:
             row = score_only_row(verified_sources(row, entry))
+            row['review_context'] = copy.deepcopy(review_context)
         valid = bool(row and row.get('final_direction') in {'home', 'draw', 'away'} and not row.get('is_abstain'))
         status = {**status, 'ai_name': name, 'phase': phase, 'match_ids': [idx],
                   'model': engine._model_for(name), 'evidence_hash': key,
@@ -207,12 +213,15 @@ async def _run_panel(engine, evidence):
                         task.cancel()
                 await asyncio.gather(*analyst_tasks, return_exceptions=True)
             analysts = {n: {**engine._short_prediction_for_prompt(r),
+                            'review_context': r['review_context'],
                             'reading_summary': r.get('reading_summary', {}),
                             'market_risk_audit': r.get('market_risk_audit', {})}
                         for n, (r, s) in zip(('gpt', 'grok'), initial) if r}
             statuses = {n: {'phase1': s} for n, (r, s) in zip(('gpt', 'grok'), initial)}
             if analysts:
-                final, status = await call('gemini', 'panel_final', entry, analysts)
+                availability = {n: {'available': bool(r), 'status': s.get('status', 'unknown')}
+                                for n, (r, s) in zip(('gpt', 'grok'), initial)}
+                final, status = await call('gemini', 'panel_final', entry, analysts, availability)
                 statuses['gemini'] = {'final': status}
                 final = final or engine._abstain_ai_prediction(idx, 'final_referee_failed')
             else:

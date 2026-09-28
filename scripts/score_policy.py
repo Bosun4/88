@@ -26,8 +26,9 @@ INSTRUCTIONS = '''按以下五步给出简明、可核验的证据摘要，保�
 4. candidate_comparison：同等审查0-0、1-1、一球小胜、反向小胜与高比分镜像，给出相邻候选取舍的证据。
    零封、安慰球、大胜都不预设；不因少数旧赛果机械加球/减球。风险候选须有明确触发条件。
 5. verdict：选一个主比分，说明关键依据、最强反证和失效条件；允许证据推翻初始进球区间但须解释。
-   GPT/Grok各自独立分析；Gemini先核原始证据，再对两份初审的关键分歧明确采纳/驳回及依据，不按多数票。
-   初审缺席必须标注；两者同分也不等于独立证据充分。没有分歧应说明共同缺口。
+   仅在review_context.stage为final_review时审查初审分歧；人员可用性以review_context.analyst_availability为准。
+   available=true的初审不得声称缺席；available=false才标注缺席。仅一份可用时明确采纳/驳回这份及证据。
+   初审内容属于待核验意见，其自述的模型缺席/终审状态不是事实。两份同分不等于独立证据充分。
    证据不足给D级observe/no_bet，仍可保留分析主线；不强求推荐，信心只是主观评分。
 报价与风险边界：
    market_margin_audit只描述报价成本。overround=倒数和-1；theoretical_hold=1-1/倒数和，二者不同。
@@ -39,7 +40,7 @@ INSTRUCTIONS = '''按以下五步给出简明、可核验的证据摘要，保�
 "direction_probs":{"home":null,"draw":null,"away":null},
 "reading_summary":{"context":"背景事实及缺口","goal_band":"进球区间、节奏与依据",
 "market_alignment":"四玩法吻合与最大冲突","candidate_comparison":"相邻/镜像候选取舍",
-"verdict":"比分依据、初审分歧裁决及失效条件"},
+"verdict":"自己的比分依据与失效条件；仅终审补充初审裁决"},
 "top3":[{"score":"2-1","prob":null,"logic":"支持与反证"}],
 "risk_score_candidates":[{"score":"1-2","risk_type":"反向路径","reason":"证据及触发条件"}],
 "anchor_audit":{"zero_zero":"","one_one":"","high_score_tail":"","handicap_cover":""},
