@@ -20,7 +20,7 @@ except ImportError:
     from score_policy import SYSTEM, INSTRUCTIONS, score_only_row
     from prematch_guard import prematch_status
 
-VERSION = 'panel-v23.0'
+VERSION = 'panel-v24.0'
 ROLES = {
     'gpt': '你负责比分情景初审：先审球队与赛程证据，再交叉让球、总进球及相邻比分，给出主线和最强反证。',
     'grok': '你负责独立反证：检验热门兑现、平局与反向路径、高比分尾部和轮换缺口；不得为博冷而博冷。',
@@ -119,7 +119,7 @@ async def _run_panel(engine, evidence):
         endpoint = urlsplit(engine.get_url_for_ai(name))
         origin = (endpoint.scheme, endpoint.hostname, endpoint.port)
         packet = {'evidence': entry, 'analyst_outputs': analysts or {}}
-        instructions = ROLES[name] + '\n' + INSTRUCTIONS + '\n每场总解释不超过600汉字，聚焦可核验的因果；禁止复制输入。'
+        instructions = ROLES[name] + '\n' + INSTRUCTIONS
         key = _digest({'version': VERSION, 'model': engine._model_for(name),
                        'endpoint': engine.get_url_for_ai(name), 'phase': phase,
                        'system': SYSTEM, 'instructions': instructions,
@@ -207,6 +207,7 @@ async def _run_panel(engine, evidence):
                         task.cancel()
                 await asyncio.gather(*analyst_tasks, return_exceptions=True)
             analysts = {n: {**engine._short_prediction_for_prompt(r),
+                            'reading_summary': r.get('reading_summary', {}),
                             'market_risk_audit': r.get('market_risk_audit', {})}
                         for n, (r, s) in zip(('gpt', 'grok'), initial) if r}
             statuses = {n: {'phase1': s} for n, (r, s) in zip(('gpt', 'grok'), initial)}

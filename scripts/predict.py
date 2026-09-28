@@ -2354,6 +2354,7 @@ def _copy_full_spectrum_audit_fields_from_item(item: Dict[str, Any]) -> Dict[str
 
 def _external_context_text(pred: Dict[str, Any]) -> str:
     return _json_compact({
+        "reading_summary": pred.get("reading_summary"),
         "reason": pred.get("reason"),
         "ai_native_reason": pred.get("ai_native_reason"),
         "ai_score_reason": pred.get("ai_score_reason"),
@@ -5062,7 +5063,7 @@ _score_total = _BASE_SCORE_TOTAL
 _score_btts = _BASE_SCORE_BTTS
 _score_goal_band = _BASE_SCORE_GOAL_BAND
 
-ENGINE_VERSION = "vMAX 23.0-SCORE-PANEL"
+ENGINE_VERSION = "vMAX 24.0-SCORE-PANEL"
 ENGINE_ARCHITECTURE = (
     "默认逐场 GPT/Grok 并行初审 → Gemini 终审；调用预算、总时间和赛前时点受限；"
     "保留HHAD让球语义、CRS比分簇、总进球及变化证据和相邻比分审计；"
@@ -6633,7 +6634,7 @@ def apply_pre_match_factor_v2_gate(pred: Dict[str, Any], match_obj: Dict[str, An
     return pred
 
 def adapt_ai_to_frontend(ai_r: Dict[str, Any], match_obj: Dict[str, Any]) -> Dict[str, Any]:
-    if ai_r.get('analysis_policy') == 'score-first-v23' and ai_r.get('final_direction') != 'abstain':
+    if str(ai_r.get('analysis_policy', '')).startswith('score-first-') and ai_r.get('final_direction') != 'abstain':
         try:
             from .score_policy import adapt_prediction
         except ImportError:
