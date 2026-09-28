@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-09-29 03:52:38",
+  "update_time": "2026-09-29 04:03:56",
   "version": "MAX-v23.0-SCORE-PANEL",
   "scope": "today_only",
   "top4": [],
@@ -12,7 +12,7 @@
         "source_url": "https://edu.wencaivip.cn/api/v1.reference/matches",
         "stime": 1790661600,
         "kickoff_at": "2026-09-29T06:00:00+00:00",
-        "captured_at": "2026-09-28T19:51:06.833236+00:00",
+        "captured_at": "2026-09-28T20:03:56.675669+00:00",
         "kickoff_status": "known",
         "season": null,
         "home_team": "朝鲜女",
@@ -525,7 +525,7 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 62.7,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
                 "row_status": "ok"
               }
@@ -546,7 +546,7 @@
                 "endpoint_total": 1,
                 "status": "http_503",
                 "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
                 "row_status": "abstain"
               }
@@ -567,13 +567,13 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 25.5,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "d6d3f8aa42f96ea61035647aea758c4b7b8c965922e60cd19a183b2d131c13ed",
                 "row_status": "ok"
               }
             }
           },
-          "prediction_completed_at": "2026-09-28T19:52:35.086207+00:00",
+          "prediction_completed_at": "2026-09-28T20:03:56.686157+00:00",
           "evidence_hash": "95bb9290a581c8089148625f4c8527a8196e418ab0937b2a8195b3ad6d1ff5ae",
           "predicted_label": "2-0",
           "result": "主胜",
@@ -872,16 +872,16 @@
           "gemini_analysis": "主选2-0(主胜)：该比分在半全场主/主(1.98)、让球-1主胜(2.07)、总进球2球档(3.7)与比分低赔(6.5)四玩法上呈现最强共振。终审裁决：Grok因http_503缺席；驳回GPT的1-1方案，因其违背半全场主/主及让球胜的核心指向。最强反证为基本面与阵容完全缺失，维持D级观望。",
           "confidence_downgrade_reason": "missing_external_confirmation: 外部事实论据缺少有效来源，禁止升权。",
           "ai_run_metadata": {
-            "run_id": "20260928_195106_2m_e0d85176f517_朝鲜女_中国女",
+            "run_id": "20260928_200356_2m_c822aea188ba_朝鲜女_中国女",
             "run_mode": "panel",
             "engine_version": "panel-v24.1",
             "run_status": "completed",
             "total_matches": 2,
             "successful_matches": 2,
             "abstained_matches": 0,
-            "request_count": 6,
+            "request_count": 0,
             "max_calls": 180,
-            "cache_hits": 0,
+            "cache_hits": 6,
             "max_seconds": 5400,
             "call_order": [
               "GPT + Grok independent analysis",
@@ -890,44 +890,6 @@
             "mock_mode": false,
             "retries": 0,
             "batches": [
-              {
-                "ok": false,
-                "ai_name": "grok",
-                "model": "grok-4.7",
-                "phase": "panel_analysis",
-                "match_ids": [
-                  1
-                ],
-                "elapsed": 0.2,
-                "endpoint_name": "grok",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 1,
-                "endpoint_total": 1,
-                "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": false,
-                "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
-                "row_status": "abstain"
-              },
-              {
-                "ok": false,
-                "ai_name": "grok",
-                "model": "grok-4.7",
-                "phase": "panel_analysis",
-                "match_ids": [
-                  2
-                ],
-                "elapsed": 0.2,
-                "endpoint_name": "grok",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 1,
-                "endpoint_total": 1,
-                "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": false,
-                "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
-                "row_status": "abstain"
-              },
               {
                 "ok": true,
                 "ai_name": "gpt",
@@ -943,9 +905,28 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 62.7,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
                 "row_status": "ok"
+              },
+              {
+                "ok": false,
+                "ai_name": "grok",
+                "model": "grok-4.7",
+                "phase": "panel_analysis",
+                "match_ids": [
+                  1
+                ],
+                "elapsed": 0.2,
+                "endpoint_name": "grok",
+                "endpoint_slot": 1,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "http_503",
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": true,
+                "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
+                "row_status": "abstain"
               },
               {
                 "ok": true,
@@ -962,9 +943,28 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 74.9,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
                 "row_status": "ok"
+              },
+              {
+                "ok": false,
+                "ai_name": "grok",
+                "model": "grok-4.7",
+                "phase": "panel_analysis",
+                "match_ids": [
+                  2
+                ],
+                "elapsed": 0.2,
+                "endpoint_name": "grok",
+                "endpoint_slot": 1,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "http_503",
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": true,
+                "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
+                "row_status": "abstain"
               },
               {
                 "ok": true,
@@ -981,7 +981,7 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 25.5,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "d6d3f8aa42f96ea61035647aea758c4b7b8c965922e60cd19a183b2d131c13ed",
                 "row_status": "ok"
               },
@@ -1000,7 +1000,7 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 17.0,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "6338dbe8a5de1128b9add68721fb5ad2d0830204537bcfb2b3e2ac86a4da2605",
                 "row_status": "ok"
               }
@@ -1008,10 +1008,10 @@
             "failure_summary": {
               "http_503": 2
             },
-            "elapsed_seconds": 91.923
+            "elapsed_seconds": 0.008
           },
           "prematch_status": "eligible",
-          "published_at": "2026-09-29T03:52:38.766056+08:00"
+          "published_at": "2026-09-29T04:03:56.692727+08:00"
         },
         "is_top4_candidate": false,
         "is_recommended": false,
@@ -1024,7 +1024,7 @@
         "source_url": "https://edu.wencaivip.cn/api/v1.reference/matches",
         "stime": 1790677800,
         "kickoff_at": "2026-09-29T10:30:00+00:00",
-        "captured_at": "2026-09-28T19:51:06.833236+00:00",
+        "captured_at": "2026-09-28T20:03:56.675669+00:00",
         "kickoff_status": "known",
         "season": null,
         "home_team": "日本女",
@@ -1558,7 +1558,7 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 74.9,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
                 "row_status": "ok"
               }
@@ -1579,7 +1579,7 @@
                 "endpoint_total": 1,
                 "status": "http_503",
                 "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
                 "row_status": "abstain"
               }
@@ -1600,13 +1600,13 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 17.0,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "6338dbe8a5de1128b9add68721fb5ad2d0830204537bcfb2b3e2ac86a4da2605",
                 "row_status": "ok"
               }
             }
           },
-          "prediction_completed_at": "2026-09-28T19:52:38.759649+00:00",
+          "prediction_completed_at": "2026-09-28T20:03:56.688036+00:00",
           "evidence_hash": "2800da58d8f838bcb181ad96ae9aaf5cc03059c79a9f77342e9e24882804583d",
           "predicted_label": "2-1",
           "result": "主胜",
@@ -1905,16 +1905,16 @@
           "gemini_analysis": "主线聚焦2-1：总进球3球档位赔率最优，配合韩国近两场连续失球情报及日本常规主胜，形成合理解释；反证为2-0更低赔且让球-2抑制穿盘。因缺乏首发、积分赛程与底层数据，评级为D级观察。",
           "confidence_downgrade_reason": "missing_external_confirmation: 外部事实论据缺少有效来源，禁止升权。",
           "ai_run_metadata": {
-            "run_id": "20260928_195106_2m_e0d85176f517_朝鲜女_中国女",
+            "run_id": "20260928_200356_2m_c822aea188ba_朝鲜女_中国女",
             "run_mode": "panel",
             "engine_version": "panel-v24.1",
             "run_status": "completed",
             "total_matches": 2,
             "successful_matches": 2,
             "abstained_matches": 0,
-            "request_count": 6,
+            "request_count": 0,
             "max_calls": 180,
-            "cache_hits": 0,
+            "cache_hits": 6,
             "max_seconds": 5400,
             "call_order": [
               "GPT + Grok independent analysis",
@@ -1923,44 +1923,6 @@
             "mock_mode": false,
             "retries": 0,
             "batches": [
-              {
-                "ok": false,
-                "ai_name": "grok",
-                "model": "grok-4.7",
-                "phase": "panel_analysis",
-                "match_ids": [
-                  1
-                ],
-                "elapsed": 0.2,
-                "endpoint_name": "grok",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 1,
-                "endpoint_total": 1,
-                "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": false,
-                "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
-                "row_status": "abstain"
-              },
-              {
-                "ok": false,
-                "ai_name": "grok",
-                "model": "grok-4.7",
-                "phase": "panel_analysis",
-                "match_ids": [
-                  2
-                ],
-                "elapsed": 0.2,
-                "endpoint_name": "grok",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 1,
-                "endpoint_total": 1,
-                "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": false,
-                "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
-                "row_status": "abstain"
-              },
               {
                 "ok": true,
                 "ai_name": "gpt",
@@ -1976,9 +1938,28 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 62.7,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
                 "row_status": "ok"
+              },
+              {
+                "ok": false,
+                "ai_name": "grok",
+                "model": "grok-4.7",
+                "phase": "panel_analysis",
+                "match_ids": [
+                  1
+                ],
+                "elapsed": 0.2,
+                "endpoint_name": "grok",
+                "endpoint_slot": 1,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "http_503",
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": true,
+                "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
+                "row_status": "abstain"
               },
               {
                 "ok": true,
@@ -1995,9 +1976,28 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 74.9,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
                 "row_status": "ok"
+              },
+              {
+                "ok": false,
+                "ai_name": "grok",
+                "model": "grok-4.7",
+                "phase": "panel_analysis",
+                "match_ids": [
+                  2
+                ],
+                "elapsed": 0.2,
+                "endpoint_name": "grok",
+                "endpoint_slot": 1,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "http_503",
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": true,
+                "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
+                "row_status": "abstain"
               },
               {
                 "ok": true,
@@ -2014,7 +2014,7 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 25.5,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "d6d3f8aa42f96ea61035647aea758c4b7b8c965922e60cd19a183b2d131c13ed",
                 "row_status": "ok"
               },
@@ -2033,7 +2033,7 @@
                 "endpoint_total": 1,
                 "status": "ok",
                 "total_elapsed": 17.0,
-                "cache_hit": false,
+                "cache_hit": true,
                 "evidence_hash": "6338dbe8a5de1128b9add68721fb5ad2d0830204537bcfb2b3e2ac86a4da2605",
                 "row_status": "ok"
               }
@@ -2041,10 +2041,10 @@
             "failure_summary": {
               "http_503": 2
             },
-            "elapsed_seconds": 91.923
+            "elapsed_seconds": 0.008
           },
           "prematch_status": "eligible",
-          "published_at": "2026-09-29T03:52:38.766056+08:00"
+          "published_at": "2026-09-29T04:03:56.692727+08:00"
         },
         "is_top4_candidate": false,
         "is_recommended": false,
@@ -2071,7 +2071,7 @@
       "source_status": "ok",
       "date_mode": "next_available",
       "selection_reason": "next_available",
-      "captured_at": "2026-09-28T19:51:06.831604+00:00",
+      "captured_at": "2026-09-28T20:03:56.673776+00:00",
       "source_count": 3,
       "selected_count": 2,
       "future_business_dates": [
@@ -2109,16 +2109,16 @@
       ]
     },
     "ai_run": {
-      "run_id": "20260928_195106_2m_e0d85176f517_朝鲜女_中国女",
+      "run_id": "20260928_200356_2m_c822aea188ba_朝鲜女_中国女",
       "run_mode": "panel",
       "engine_version": "panel-v24.1",
       "run_status": "completed",
       "total_matches": 2,
       "successful_matches": 2,
       "abstained_matches": 0,
-      "request_count": 6,
+      "request_count": 0,
       "max_calls": 180,
-      "cache_hits": 0,
+      "cache_hits": 6,
       "max_seconds": 5400,
       "call_order": [
         "GPT + Grok independent analysis",
@@ -2127,44 +2127,6 @@
       "mock_mode": false,
       "retries": 0,
       "batches": [
-        {
-          "ok": false,
-          "ai_name": "grok",
-          "model": "grok-4.7",
-          "phase": "panel_analysis",
-          "match_ids": [
-            1
-          ],
-          "elapsed": 0.2,
-          "endpoint_name": "grok",
-          "endpoint_slot": 1,
-          "endpoint_attempt": 1,
-          "endpoint_total": 1,
-          "status": "http_503",
-          "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
-          "cache_hit": false,
-          "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
-          "row_status": "abstain"
-        },
-        {
-          "ok": false,
-          "ai_name": "grok",
-          "model": "grok-4.7",
-          "phase": "panel_analysis",
-          "match_ids": [
-            2
-          ],
-          "elapsed": 0.2,
-          "endpoint_name": "grok",
-          "endpoint_slot": 1,
-          "endpoint_attempt": 1,
-          "endpoint_total": 1,
-          "status": "http_503",
-          "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
-          "cache_hit": false,
-          "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
-          "row_status": "abstain"
-        },
         {
           "ok": true,
           "ai_name": "gpt",
@@ -2180,9 +2142,28 @@
           "endpoint_total": 1,
           "status": "ok",
           "total_elapsed": 62.7,
-          "cache_hit": false,
+          "cache_hit": true,
           "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
           "row_status": "ok"
+        },
+        {
+          "ok": false,
+          "ai_name": "grok",
+          "model": "grok-4.7",
+          "phase": "panel_analysis",
+          "match_ids": [
+            1
+          ],
+          "elapsed": 0.2,
+          "endpoint_name": "grok",
+          "endpoint_slot": 1,
+          "endpoint_attempt": 1,
+          "endpoint_total": 1,
+          "status": "http_503",
+          "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
+          "cache_hit": true,
+          "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
+          "row_status": "abstain"
         },
         {
           "ok": true,
@@ -2199,9 +2180,28 @@
           "endpoint_total": 1,
           "status": "ok",
           "total_elapsed": 74.9,
-          "cache_hit": false,
+          "cache_hit": true,
           "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
           "row_status": "ok"
+        },
+        {
+          "ok": false,
+          "ai_name": "grok",
+          "model": "grok-4.7",
+          "phase": "panel_analysis",
+          "match_ids": [
+            2
+          ],
+          "elapsed": 0.2,
+          "endpoint_name": "grok",
+          "endpoint_slot": 1,
+          "endpoint_attempt": 1,
+          "endpoint_total": 1,
+          "status": "http_503",
+          "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
+          "cache_hit": true,
+          "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
+          "row_status": "abstain"
         },
         {
           "ok": true,
@@ -2218,7 +2218,7 @@
           "endpoint_total": 1,
           "status": "ok",
           "total_elapsed": 25.5,
-          "cache_hit": false,
+          "cache_hit": true,
           "evidence_hash": "d6d3f8aa42f96ea61035647aea758c4b7b8c965922e60cd19a183b2d131c13ed",
           "row_status": "ok"
         },
@@ -2237,7 +2237,7 @@
           "endpoint_total": 1,
           "status": "ok",
           "total_elapsed": 17.0,
-          "cache_hit": false,
+          "cache_hit": true,
           "evidence_hash": "6338dbe8a5de1128b9add68721fb5ad2d0830204537bcfb2b3e2ac86a4da2605",
           "row_status": "ok"
         }
@@ -2245,11 +2245,11 @@
       "failure_summary": {
         "http_503": 2
       },
-      "elapsed_seconds": 91.923
+      "elapsed_seconds": 0.008
     },
     "history_path": "data/history_2026-09-29_today_morning.json",
-    "snapshot_path": "data/snapshots/2026-09-29_today_morning_20260929_035238.json"
+    "snapshot_path": "data/snapshots/2026-09-29_today_morning_20260929_040356.json"
   },
-  "published_at": "2026-09-29T03:52:38.766056+08:00",
+  "published_at": "2026-09-29T04:03:56.692727+08:00",
   "target_date": "2026-09-29"
 }
