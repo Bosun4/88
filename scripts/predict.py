@@ -30,7 +30,6 @@ from __future__ import annotations
 
 import asyncio
 import ast
-import contextvars
 import copy
 import sys
 import hashlib
@@ -83,57 +82,11 @@ BIG_GOAL_TAIL_A6_MAX = 11.0
 BIG_GOAL_TAIL_A7_MAX = 14.0
 PHASE1_NAMES = ["gpt", "grok"]
 
-DEFAULT_MODELS = {
-    "gpt": "gpt-5.6-sol",
-    "grok": "熊猫-A-10-grok-4.6",
-    "gemini": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
-}
+try:
+    from .config import DEFAULT_MODELS, get_model_for
+except ImportError:
+    from config import DEFAULT_MODELS, get_model_for
 
-# 简单粗暴的 1-5 号接口池：URL/KEY 从后台环境变量读取，模型名在代码里写死。
-# 你只需要在这里补 2/3/4/5 的模型名；对应后台变量为：
-#   GEMINI_API_URL_2 / GEMINI_API_KEY_2  或  GEMINI_API_URL2 / GEMINI_API_KEY2
-# GPT/GROK 同理。模型名留空的 slot 会被跳过，避免误用未配置模型。
-AI_ENDPOINT_MODEL_SLOTS = {
-    "gpt": {
-        1: "gpt-5.6-sol",
-        2: "gpt-5.6-sol",
-        3: "gpt-5.6-sol",
-        4: "gpt-5.6-sol",
-        5: "gpt-5.6-sol",
-    },
-    "grok": {
-        1: "熊猫-A-10-grok-4.6",
-        2: "熊猫-A-10-grok-4.6",
-        3: "熊猫-A-10-grok-4.6",
-        4: "熊猫-A-10-grok-4.6",
-        5: "熊猫-A-10-grok-4.6",
-    },
-    "gemini": {
-        1: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
-        2: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 2号模型名
-        3: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 3号模型名
-        4: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 4号模型名
-        5: "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",  # TODO: 填你的 GEMINI 5号模型名
-    },
-}
-
-AI_ENDPOINT_RR_CURSOR: Dict[str, int] = {}
-AI_ENDPOINT_SLOT_OVERRIDE: contextvars.ContextVar[Optional[int]] = contextvars.ContextVar("AI_ENDPOINT_SLOT_OVERRIDE", default=None)
-
-
-def _resolve_endpoint_model_slot(ai_name: str, slot: int) -> str:
-    """Resolve hard-coded endpoint model slots safely.
-
-    Slot values are model strings, e.g. "gpt-5.6-sol". They are NOT keys into
-    DEFAULT_MODELS. This guard also tolerates accidental DEFAULT_MODELS-style
-    aliases ("gpt"/"grok"/"gemini") without import-time KeyError.
-    """
-    name = str(ai_name or "").strip().lower()
-    value = AI_ENDPOINT_MODEL_SLOTS.get(name, {}).get(slot, "")
-    model = str(value or "").strip()
-    if not model:
-        return ""
-    return DEFAULT_MODELS.get(model, model)
 
 CRS_FULL_MAP = {
     "1-0": "w10", "2-0": "w20", "2-1": "w21", "3-0": "w30", "3-1": "w31",
@@ -333,11 +286,6 @@ AI_CHUNK_WATCHDOG_SECONDS = max(0, _env_int("AI_CHUNK_WATCHDOG_SECONDS", 2400))
 AI_FINAL_RETRY_BASE_DELAY = _env_int("AI_FINAL_RETRY_BASE_DELAY_MS", 1500)
 # phase1/critic 单模型瞬时失败重试次数(2026-07-02: grok频繁整轮缺席"未返回可展示分析")
 AI_PHASE1_RETRY_MAX = max(0, _env_int("AI_PHASE1_RETRY_MAX", 1))
-AI_ENDPOINT_MAX_SLOTS = max(1, min(5, _env_int("AI_ENDPOINT_MAX_SLOTS", 5)))
-AI_ENDPOINT_FAILOVER = _env_bool("AI_ENDPOINT_FAILOVER", True)
-AI_ENDPOINT_ROUND_ROBIN = _env_bool("AI_ENDPOINT_ROUND_ROBIN", True)
-AI_ENDPOINT_SLOT_QUEUE = _env_bool("AI_ENDPOINT_SLOT_QUEUE", True)
-AI_ENDPOINT_SLOT_WORKERS = max(1, min(5, _env_int("AI_ENDPOINT_SLOT_WORKERS", AI_ENDPOINT_MAX_SLOTS)))
 # Plan B+: when Gemini final referee fails, GPT runs a 16-role family debate to
 # adjudicate the final score (acts as the referee, not a phase1 analyst).
 AI_ENABLE_FAMILY_DEBATE_REFEREE = _env_bool("AI_ENABLE_FAMILY_DEBATE_REFEREE", True)
@@ -1507,54 +1455,23 @@ def get_url_for_ai(ai_name: str) -> str:
 
 
 def _model_for(ai_name: str) -> str:
-    ep = _endpoint_candidates_for_ai(ai_name)
-    return ep[0]["model"] if ep else DEFAULT_MODELS.get(ai_name, "model")
-
-
-def _slot_env_names(prefix: str, kind: str, slot: int) -> List[str]:
-    if slot <= 1:
-        return [f"{prefix}_API_{kind}"]
-    return [f"{prefix}_API_{kind}_{slot}", f"{prefix}_API_{kind}{slot}"]
+    return get_model_for(ai_name)
 
 
 def _endpoint_candidates_for_ai(ai_name: str) -> List[Dict[str, Any]]:
-    """Read simple numbered endpoint slots: URL/KEY from env, model from code.
-
-    Slot 1 uses GPT_API_URL/GPT_API_KEY. Slots 2-5 support both
-    GPT_API_URL_2/GPT_API_KEY_2 and GPT_API_URL2/GPT_API_KEY2 aliases.
-    Model names intentionally live in AI_ENDPOINT_MODEL_SLOTS above.
-    """
+    """Use only this provider's unnumbered URL/key and its single model."""
     name = str(ai_name or "").strip().lower()
+    model = _model_for(name)
+    if not model:
+        return []
     prefix = name.upper()
-    out: List[Dict[str, Any]] = []
-    for slot in range(1, AI_ENDPOINT_MAX_SLOTS + 1):
-        model = str(os.environ.get(f"{prefix}_MODEL_{slot}") or os.environ.get(f"{prefix}_MODEL") or _resolve_endpoint_model_slot(name, slot)).strip()
-        if not model:
-            continue
-        url = _clean_env_url(*_slot_env_names(prefix, "URL", slot))
-        key = _clean_env_key(*_slot_env_names(prefix, "KEY", slot))
-        if not url or not key:
-            continue
-        out.append({"name": f"{name}_{slot}", "ai_name": name, "slot": slot, "url": url, "key": key, "model": model})
-    return out
-
-
-def _ordered_endpoints_for_ai(ai_name: str) -> List[Dict[str, Any]]:
-    eps = _endpoint_candidates_for_ai(ai_name)
-    slot_override = AI_ENDPOINT_SLOT_OVERRIDE.get()
-    if slot_override is not None:
-        pinned = [ep for ep in eps if int(ep.get("slot", 0)) == int(slot_override)]
-        if pinned:
-            return pinned
-        # If a model lacks this numbered slot, fall back to its normal ordered
-        # endpoints instead of failing the whole match. This keeps mixed GPT/Grok/
-        # Gemini deployments usable while still pinning configured slots.
-    if not eps or not AI_ENDPOINT_ROUND_ROBIN:
-        return eps
-    key = str(ai_name or "").strip().lower()
-    cur = AI_ENDPOINT_RR_CURSOR.get(key, 0) % len(eps)
-    AI_ENDPOINT_RR_CURSOR[key] = cur + 1
-    return eps[cur:] + eps[:cur]
+    url = _clean_env_url(f"{prefix}_API_URL")
+    key = _clean_env_key(f"{prefix}_API_KEY")
+    if not url or not key:
+        return []
+    # Retain slot=1 in diagnostic records for existing history consumers.
+    return [{"name": name, "ai_name": name, "slot": 1,
+             "url": url, "key": key, "model": model}]
 
 
 def _chat_url(base_url: str) -> str:
@@ -1567,14 +1484,14 @@ def _chat_url(base_url: str) -> str:
 
 
 def debug_ai_config() -> None:
-    print(f"[AI CONFIG] mode={AI_RESEARCH_MODE} run_mode={AI_RUN_MODE} mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} chunk_concurrency={AI_CHUNK_CONCURRENCY} model_concurrency={AI_MODEL_CONCURRENCY} phase1_parallel={AI_PHASE1_PARALLEL} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE} endpoint_slots={AI_ENDPOINT_MAX_SLOTS} endpoint_failover={AI_ENDPOINT_FAILOVER} endpoint_round_robin={AI_ENDPOINT_ROUND_ROBIN} endpoint_slot_queue={AI_ENDPOINT_SLOT_QUEUE} endpoint_slot_workers={AI_ENDPOINT_SLOT_WORKERS}")
+    print(f"[AI CONFIG] mode={AI_RESEARCH_MODE} run_mode={AI_RUN_MODE} mock={AI_MOCK_MODE} native_web={AI_NATIVE_WEB} chunk_size={AI_CHUNK_SIZE} chunk_concurrency={AI_CHUNK_CONCURRENCY} model_concurrency={AI_MODEL_CONCURRENCY} phase1_parallel={AI_PHASE1_PARALLEL} cross_exam={AI_ENABLE_CROSS_EXAM} consistency_judge={AI_ENABLE_CONSISTENCY_JUDGE} endpoint_policy=one_per_provider")
     for n in AI_NAMES:
         eps = _endpoint_candidates_for_ai(n)
         if not eps:
             print(f"[AI CONFIG] {n.upper()} endpoints=<missing>")
             continue
         for ep in eps:
-            print(f"[AI CONFIG] {n.upper()} slot={ep['slot']} model={ep['model']} key={_mask_key(ep['key'])} url={ep['url'] or '<missing>'}")
+            print(f"[AI CONFIG] {n.upper()} model={ep['model']} key={_mask_key(ep['key'])} url={ep['url'] or '<missing>'}")
 
 
 def _is_retryable_ai_status(status: Dict[str, Any]) -> bool:
@@ -1648,8 +1565,7 @@ def transport_failure(exc):
 async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: str, prompt: str, phase: str, expected_matches: List[int]) -> Tuple[str, Any, Dict[str, Any]]:
     t0 = time.time()
     bounded = phase in {"single_pass", "panel_analysis", "panel_final"}
-    endpoints = (_endpoint_candidates_for_ai(ai_name)[:1] if bounded
-                 else _ordered_endpoints_for_ai(ai_name))
+    endpoints = _endpoint_candidates_for_ai(ai_name)[:1]
     model = endpoints[0]["model"] if endpoints else _model_for(ai_name)
     status = {"ok": False, "ai_name": ai_name, "model": model, "phase": phase, "elapsed": 0.0}
 
@@ -1684,110 +1600,92 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
             return ai_name, {}, status
 
     temperature = AI_TEMPERATURE_FINAL if phase in ("final", "panel_final", "fallback_referee", "family_debate_referee") else AI_TEMPERATURE_CRITIC if phase == "critic" else AI_TEMPERATURE_PHASE1
-    last_status = status
-    tries = endpoints if AI_ENDPOINT_FAILOVER and not bounded else endpoints[:1]
-    for attempt, endpoint in enumerate(tries, start=1):
-        ep_t0 = time.time()
-        model = endpoint["model"]
-        url = _chat_url(endpoint["url"])
-        headers = {"Content-Type": "application/json", "Authorization": f"Bearer {endpoint['key']}"}
-        payload: Dict[str, Any] = {
-            "model": model,
-            "messages": [{"role": "system", "content": system_text}, {"role": "user", "content": prompt}],
-            "temperature": temperature,
-            "stream": bounded and _env_bool("AI_STREAM", phase.startswith("panel_")),
-        }
-        if AI_USE_RESPONSE_FORMAT:
-            payload["response_format"] = {"type": "json_object"}
-        if AI_MAX_OUTPUT_TOKENS > 0:
-            payload["max_tokens"] = AI_MAX_OUTPUT_TOKENS
-        status = {
-            "ok": False,
-            "ai_name": ai_name,
-            "model": model,
-            "phase": phase,
-            "match_ids": list(expected_matches),
-            "elapsed": 0.0,
-            "endpoint_name": endpoint["name"],
-            "endpoint_slot": endpoint["slot"],
-            "endpoint_attempt": attempt,
-            "endpoint_total": len(tries),
-        }
-        try:
-            read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "panel_final", "fallback_referee", "family_debate_referee") else AI_READ_TIMEOUT
-            total_timeout = (max(1, AI_HTTP_TOTAL_TIMEOUT) if bounded
-                             else None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT)
-            timeout = aiohttp.ClientTimeout(
-                total=total_timeout,
-                connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
-                sock_connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
-                sock_read=None if read_timeout <= 0 else read_timeout,
-            )
-            assert session is not None
-            async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
-                text = await r.text()
-                if r.status < 200 or r.status >= 300:
-                    status.update({"status": f"http_{r.status}", "http_error": text[:800], "elapsed": round(time.time() - ep_t0, 1)})
-                    _update_call_status(ai_name, phase, status)
-                    last_status = status
-                    if AI_ENDPOINT_FAILOVER and attempt < len(tries) and _is_retryable_ai_status(status):
-                        print(f"  [ENDPOINT FAILOVER] {ai_name.upper()} {phase} {endpoint['name']} status={status.get('status')} -> next slot")
-                        continue
-                    return ai_name, {}, status
-                try:
-                    data = json.loads(text)
-                except Exception:
-                    data = {"raw": text}
-                choices = data.get("choices", []) if isinstance(data, dict) else []
-                if bounded and any(
-                    c.get("finish_reason") == "length" for c in choices if isinstance(c, dict)
-                ):
-                    status.update(ok=False, status="output_truncated", elapsed=round(time.time()-ep_t0, 1))
-                    _update_call_status(ai_name, phase, status)
-                    return ai_name, {}, status
-                if bounded and isinstance(data.get("raw"), str) and "data:" in data["raw"][:2000]:
-                    data = _single_pass_sse_payload(data["raw"])
-                raw_text = _extract_response_text(data)
-                if AI_SAVE_RAW_RESPONSE:
-                    _save_debug_dump(ai_name, phase, data, raw_text)
-                if bounded:
-                    try:
-                        obj = _strict_response_json(raw_text)
-                    except (TypeError, ValueError):
-                        obj = {}
-                else:
-                    obj = _json_loads_best_effort_object(raw_text)
-                if not isinstance(obj, (dict, list)) or not obj:
-                    status.update({
-                        "ok": False,
-                        "status": "parse_failed",
-                        "parse_error": "empty_or_invalid_json_object",
-                        "raw_excerpt": raw_text[:300],
-                        "elapsed": round(time.time() - ep_t0, 1),
-                    })
-                    _update_call_status(ai_name, phase, status)
-                    last_status = status
-                    if AI_ENDPOINT_FAILOVER and attempt < len(tries) and _is_retryable_ai_status(status):
-                        print(f"  [ENDPOINT FAILOVER] {ai_name.upper()} {phase} {endpoint['name']} status=parse_failed -> next slot")
-                        continue
-                    return ai_name, {}, status
-                status.update({"ok": True, "status": "ok", "elapsed": round(time.time() - ep_t0, 1), "total_elapsed": round(time.time() - t0, 1)})
+    endpoint = endpoints[0]
+    ep_t0 = time.time()
+    model = endpoint["model"]
+    url = _chat_url(endpoint["url"])
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {endpoint['key']}"}
+    payload: Dict[str, Any] = {
+        "model": model,
+        "messages": [{"role": "system", "content": system_text}, {"role": "user", "content": prompt}],
+        "temperature": temperature,
+        "stream": bounded and _env_bool("AI_STREAM", phase.startswith("panel_")),
+    }
+    if AI_USE_RESPONSE_FORMAT:
+        payload["response_format"] = {"type": "json_object"}
+    if AI_MAX_OUTPUT_TOKENS > 0:
+        payload["max_tokens"] = AI_MAX_OUTPUT_TOKENS
+    status = {
+        "ok": False,
+        "ai_name": ai_name,
+        "model": model,
+        "phase": phase,
+        "match_ids": list(expected_matches),
+        "elapsed": 0.0,
+        "endpoint_name": endpoint["name"],
+        "endpoint_slot": endpoint["slot"],
+        "endpoint_attempt": 1,
+        "endpoint_total": 1,
+    }
+    try:
+        read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "panel_final", "fallback_referee", "family_debate_referee") else AI_READ_TIMEOUT
+        total_timeout = (max(1, AI_HTTP_TOTAL_TIMEOUT) if bounded
+                         else None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT)
+        timeout = aiohttp.ClientTimeout(
+            total=total_timeout,
+            connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
+            sock_connect=None if AI_CONNECT_TIMEOUT <= 0 else AI_CONNECT_TIMEOUT,
+            sock_read=None if read_timeout <= 0 else read_timeout,
+        )
+        assert session is not None
+        async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
+            text = await r.text()
+            if r.status < 200 or r.status >= 300:
+                status.update({"status": f"http_{r.status}", "http_error": text[:800], "elapsed": round(time.time() - ep_t0, 1)})
                 _update_call_status(ai_name, phase, status)
-                return ai_name, obj, status
-        except asyncio.TimeoutError:
-            status.update({"status": "timeout", "elapsed": round(time.time() - ep_t0, 1)})
-        except Exception as e:
-            status.update({**transport_failure(e), "elapsed": round(time.time() - ep_t0, 1)})
-        _update_call_status(ai_name, phase, status)
-        last_status = status
-        if AI_ENDPOINT_FAILOVER and attempt < len(tries) and _is_retryable_ai_status(status):
-            print(f"  [ENDPOINT FAILOVER] {ai_name.upper()} {phase} {endpoint['name']} status={status.get('status')} -> next slot")
-            continue
-        return ai_name, {}, status
-
-    last_status.update({"elapsed": round(time.time() - t0, 1)})
-    _update_call_status(ai_name, phase, last_status)
-    return ai_name, {}, last_status
+                return ai_name, {}, status
+            try:
+                data = json.loads(text)
+            except Exception:
+                data = {"raw": text}
+            choices = data.get("choices", []) if isinstance(data, dict) else []
+            if bounded and any(
+                c.get("finish_reason") == "length" for c in choices if isinstance(c, dict)
+            ):
+                status.update(ok=False, status="output_truncated", elapsed=round(time.time()-ep_t0, 1))
+                _update_call_status(ai_name, phase, status)
+                return ai_name, {}, status
+            if bounded and isinstance(data.get("raw"), str) and "data:" in data["raw"][:2000]:
+                data = _single_pass_sse_payload(data["raw"])
+            raw_text = _extract_response_text(data)
+            if AI_SAVE_RAW_RESPONSE:
+                _save_debug_dump(ai_name, phase, data, raw_text)
+            if bounded:
+                try:
+                    obj = _strict_response_json(raw_text)
+                except (TypeError, ValueError):
+                    obj = {}
+            else:
+                obj = _json_loads_best_effort_object(raw_text)
+            if not isinstance(obj, (dict, list)) or not obj:
+                status.update({
+                    "ok": False,
+                    "status": "parse_failed",
+                    "parse_error": "empty_or_invalid_json_object",
+                    "raw_excerpt": raw_text[:300],
+                    "elapsed": round(time.time() - ep_t0, 1),
+                })
+                _update_call_status(ai_name, phase, status)
+                return ai_name, {}, status
+            status.update({"ok": True, "status": "ok", "elapsed": round(time.time() - ep_t0, 1), "total_elapsed": round(time.time() - t0, 1)})
+            _update_call_status(ai_name, phase, status)
+            return ai_name, obj, status
+    except asyncio.TimeoutError:
+        status.update({"status": "timeout", "elapsed": round(time.time() - ep_t0, 1)})
+    except Exception as e:
+        status.update({**transport_failure(e), "elapsed": round(time.time() - ep_t0, 1)})
+    _update_call_status(ai_name, phase, status)
+    return ai_name, {}, status
 
 
 def _update_call_status(ai_name: str, phase: str, status: Dict[str, Any]) -> None:
@@ -3600,38 +3498,7 @@ async def _run_ai_native_web_impl(evidence_all: List[Dict[str, Any]]) -> Dict[in
         if not AI_MOCK_MODE and aiohttp is not None:
             connector = aiohttp.TCPConnector(limit=max(8, AI_MODEL_CONCURRENCY * 4), use_dns_cache=False, ttl_dns_cache=0, force_close=False)
             session = aiohttp.ClientSession(connector=connector)
-        if AI_ENDPOINT_SLOT_QUEUE and len(evidence_all) > 1:
-            worker_count = min(AI_ENDPOINT_SLOT_WORKERS, AI_ENDPOINT_MAX_SLOTS, len(evidence_all))
-            queue: asyncio.Queue[Tuple[int, Dict[str, Any]]] = asyncio.Queue()
-            for i, evidence in enumerate(evidence_all, 1):
-                queue.put_nowait((i, evidence))
-
-            async def _slot_worker(slot: int) -> None:
-                token = AI_ENDPOINT_SLOT_OVERRIDE.set(slot)
-                try:
-                    while True:
-                        try:
-                            item_id, evidence = queue.get_nowait()
-                        except asyncio.QueueEmpty:
-                            return
-                        match_id = evidence.get("match")
-                        print(f"  [Slot {slot}] start match={match_id} queue_item={item_id}")
-                        try:
-                            rows = await _run_chunk_with_watchdog(
-                                _run_one_chunk(session, run_id, item_id, [evidence]),
-                                chunk_desc=f"slot{slot}/match{match_id}",
-                            )
-                            all_final.update(rows)
-                            print(f"  [Slot {slot}] done match={match_id}")
-                        except Exception as exc:
-                            print(f"  [Slot {slot}] failed match={match_id}: {exc}")
-                        finally:
-                            queue.task_done()
-                finally:
-                    AI_ENDPOINT_SLOT_OVERRIDE.reset(token)
-
-            await asyncio.gather(*[_slot_worker(slot) for slot in range(1, worker_count + 1)])
-        elif AI_CHUNK_CONCURRENCY <= 1 or len(chunks) <= 1:
+        if AI_CHUNK_CONCURRENCY <= 1 or len(chunks) <= 1:
             for i, chunk in enumerate(chunks, 1):
                 rows = await _run_chunk_with_watchdog(
                     _run_one_chunk(session, run_id, i, chunk), chunk_desc=f"seq{i}"
@@ -3671,8 +3538,7 @@ async def _run_ai_native_web_impl(evidence_all: List[Dict[str, Any]]) -> Dict[in
         "native_web": AI_NATIVE_WEB,
         "effective_chunk_size": AI_CHUNK_SIZE,
         "effective_chunk_concurrency": AI_CHUNK_CONCURRENCY,
-        "endpoint_slot_queue": AI_ENDPOINT_SLOT_QUEUE,
-        "endpoint_slot_workers": AI_ENDPOINT_SLOT_WORKERS,
+        "endpoint_policy": "one_per_provider",
         "effective_model_concurrency": AI_MODEL_CONCURRENCY,
         "effective_phase1_parallel": AI_PHASE1_PARALLEL,
         "cross_exam": AI_ENABLE_CROSS_EXAM,
