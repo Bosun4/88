@@ -46,12 +46,44 @@ def test_all_analysts_failed_skips_referee_and_reports_failure(monkeypatch, tmp_
     assert predict._LAST_AI_RUN_METADATA['run_status'] == 'failed'
 
 
+def test_shared_endpoint_tls_failure_stops_remaining_fixtures(monkeypatch, tmp_path):
+    calls = []
+    async def call(session, name, *args):
+        calls.append(name)
+        return name, {}, {'ok': False, 'status': 'tls_handshake_error', 'error_type': 'ClientConnectorSSLError'}
+    monkeypatch.setattr(predict, 'get_url_for_ai', lambda name: 'https://fixture.invalid/v1')
+    run = run_engine(monkeypatch, tmp_path, call)
+    result = run([{'match': i} for i in range(1, 9)])
+    assert 1 <= len(calls) <= 4
+    assert all(r['final_direction'] == 'abstain' for r in result.values())
+    metadata = predict._LAST_AI_RUN_METADATA
+    assert metadata['run_status'] == 'failed'
+    assert metadata['failure_summary']['endpoint_unavailable'] >= 12
+    assert metadata['failure_summary']['tls_handshake_error'] >= 1
+
+
 def test_failed_referee_never_promotes_analyst(monkeypatch, tmp_path):
     async def call(session, name, system, prompt, phase, expected):
         return name, {'predictions': [row(expected[0])]} if name != 'gemini' else {}, {'ok': name != 'gemini', 'status': 'http_524' if name == 'gemini' else 'ok'}
     result = run_engine(monkeypatch, tmp_path, call)([{'match': 1}])
     assert result[1]['final_direction'] == 'abstain'
     assert result[1]['phase1_model_outputs']['gpt']['predicted_score'] == '2-1'
+
+
+@pytest.mark.parametrize('grok_status', ['http_503', 'tls_handshake_error'])
+def test_one_model_failure_does_not_disable_healthy_origin(monkeypatch, tmp_path, grok_status):
+    calls = []
+    async def call(session, name, system, prompt, phase, expected):
+        calls.append(name)
+        if name == 'grok':
+            return name, {}, {'ok': False, 'status': grok_status}
+        return name, {'predictions': [row(expected[0])]}, {'ok': True, 'status': 'ok'}
+    monkeypatch.setattr(predict, 'get_url_for_ai', lambda name:
+                        'https://grok.fixture.invalid/v1' if name == 'grok' and grok_status.startswith('tls')
+                        else 'https://shared.fixture.invalid/v1')
+    result = run_engine(monkeypatch, tmp_path, call)([{'match': 1}, {'match': 2}])
+    assert all(r['source_model'] == 'gemini' for r in result.values())
+    assert calls.count('gpt') == 2 and calls.count('gemini') == 2
 
 
 def test_budget_reserves_whole_match_instead_of_stranding_all_referees(monkeypatch, tmp_path):
