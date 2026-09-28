@@ -5063,7 +5063,7 @@ _score_total = _BASE_SCORE_TOTAL
 _score_btts = _BASE_SCORE_BTTS
 _score_goal_band = _BASE_SCORE_GOAL_BAND
 
-ENGINE_VERSION = "vMAX 24.0-SCORE-PANEL"
+ENGINE_VERSION = "vMAX 24.1-SCORE-PANEL"
 ENGINE_ARCHITECTURE = (
     "默认逐场 GPT/Grok 并行初审 → Gemini 终审；调用预算、总时间和赛前时点受限；"
     "保留HHAD让球语义、CRS比分簇、总进球及变化证据和相邻比分审计；"
