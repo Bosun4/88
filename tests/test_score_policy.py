@@ -76,15 +76,57 @@ def test_panel_output_does_not_restore_probabilities_or_legacy_score_hints(monke
     assert 'market_risk_audit' in prompts[-1]
 
 
-def test_score_output_keeps_source_gate(monkeypatch, tmp_path):
+@pytest.mark.parametrize('claim_field', ['reason', 'reading_summary'])
+def test_score_output_keeps_source_gate(monkeypatch, tmp_path, claim_field):
     setup_engine(monkeypatch, tmp_path)
     monkeypatch.setattr(predict, 'AI_RUN_MODE', 'panel')
     async def call(session, name, system, prompt, phase, expected):
         answer = row(expected[0])
-        answer.update(reason='官方首发确认因此提升评级', evidence_quality_score=90)
+        answer.update(reason='报价交叉支持主线', evidence_quality_score=90)
+        answer[claim_field] = '官方首发确认因此提升评级' if claim_field == 'reason' else {'context':'官方首发确认因此提升评级'}
         answer['recommendation'] = {'tier': 'A', 'is_recommended': True, 'bet_action': 'main', 'bet_confidence': 85}
         return name, {'predictions': [answer]}, {'ok': True, 'status': 'ok'}
     monkeypatch.setattr(predict, 'async_call_ai_json', call)
     output, top = predict.run_predictions({'matches': [market()]})
     assert output[0]['prediction']['recommend_gate_pass'] is False
     assert top == []
+
+
+def test_ordered_summary_reaches_referee_and_publication_without_rewriting_score(monkeypatch, tmp_path):
+    setup_engine(monkeypatch, tmp_path)
+    monkeypatch.setattr(predict, 'AI_RUN_MODE', 'panel')
+    received = []
+    summaries = {name: {'context': f'{name}：首发未知', 'goal_band': '2至3球；节奏有分歧',
+                       'market_alignment': '总球与让球需要交叉核验',
+                       'candidate_comparison': '比较1-1、2-1及1-2',
+                       'verdict': f'{name}：反击效率是失效条件'}
+                 for name in ('gpt', 'grok', 'gemini')}
+    async def call(session, name, system, prompt, phase, expected):
+        packet = json.loads(prompt.splitlines()[-1])
+        if name == 'gemini':
+            for analyst in ('gpt', 'grok'):
+                assert packet['analyst_outputs'][analyst]['reading_summary'] == summaries[analyst]
+        else:
+            assert packet['analyst_outputs'] == {}
+        received.append(name)
+        answer = row(expected[0])
+        answer['reading_summary'] = summaries[name]
+        if name == 'gemini':
+            answer.update(predicted_score='1-2', final_direction='away')
+        return name, {'predictions': [answer]}, {'ok': True, 'status': 'ok'}
+    monkeypatch.setattr(predict, 'async_call_ai_json', call)
+    output, _ = predict.run_predictions({'matches': [market()]})
+    pred = output[0]['prediction']
+    assert pred['reading_summary'] == summaries['gemini']
+    assert pred['phase1_model_outputs']['gpt']['reading_summary'] == summaries['gpt']
+    assert pred['predicted_score'] == pred['final_ai_score'] == '1-2'
+    assert pred['gpt_score'] == '2-1'
+    assert pred['final_direction'] == 'away'
+    assert received == ['gpt', 'grok', 'gemini']
+
+
+@pytest.mark.parametrize('summary', [None, 'invalid', [], {'context': [], 'goal_band': 3}])
+def test_invalid_or_legacy_summary_is_not_reconstructed(summary):
+    from score_policy import score_only_row
+    answer = {'raw_item': {'reading_summary': summary}, 'reason': '旧版理由', 'predicted_score': '2-1'}
+    assert score_only_row(answer)['reading_summary'] == {}
