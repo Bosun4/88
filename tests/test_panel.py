@@ -156,12 +156,18 @@ def test_manual_refresh_recovers_from_cached_provider_failure(monkeypatch, tmp_p
     cached = run(evidence)
     assert cached[1]['ai_call_status']['grok']['phase1']['cache_hit'] is True
     assert predict._LAST_AI_RUN_METADATA['request_count'] == 0
-    monkeypatch.setenv('AI_PERSISTENT_CACHE_ENABLED', 'false')
+    # A fresh Actions runner skips cache restore but still saves new responses.
+    monkeypatch.setenv('AI_CACHE_DIR', str(tmp_path / 'fresh-run-cache'))
     refreshed = run(evidence)
     assert set(refreshed[1]['phase1_model_outputs']) == {'gpt', 'grok'}
     assert refreshed[1]['ai_call_status']['grok']['phase1']['row_status'] == 'ok'
     assert predict._LAST_AI_RUN_METADATA['request_count'] == 3
     assert predict._LAST_AI_RUN_METADATA['cache_hits'] == 0
+    assert predict._LAST_AI_RUN_METADATA['failure_summary'] == {}
+    reused = run(evidence)
+    assert set(reused[1]['phase1_model_outputs']) == {'gpt', 'grok'}
+    assert predict._LAST_AI_RUN_METADATA['request_count'] == 0
+    assert predict._LAST_AI_RUN_METADATA['cache_hits'] == 3
     assert predict._LAST_AI_RUN_METADATA['failure_summary'] == {}
 
 

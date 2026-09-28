@@ -18,6 +18,11 @@ def test_paid_predictions_are_manual_and_bounded():
     refresh = doc["on"]["workflow_dispatch"]["inputs"]["refresh_ai"]
     assert refresh["type"] == "boolean" and refresh["default"] == "false"
     job = doc["jobs"]["predict"]
+    restore = next(step for step in job["steps"] if step.get("uses") == "actions/cache/restore@v4")
+    assert restore["if"] == "${{ !inputs.refresh_ai }}"
+    save = next(step for step in job["steps"] if step.get("uses") == "actions/cache/save@v4")
+    assert save["if"] == "always()"
+    assert "data/ai_cache/" in (ROOT / ".gitignore").read_text().splitlines()
     assert job["if"] == "github.ref == 'refs/heads/main'"
     prediction = next(step for step in job["steps"] if step.get("name") == "Run Predictions")
     env = prediction["env"]
@@ -31,7 +36,7 @@ def test_paid_predictions_are_manual_and_bounded():
         "AI_ENABLE_CROSS_EXAM": "false",
         "AI_ENABLE_CONSISTENCY_JUDGE": "false", "AI_ENABLE_FALLBACK_REFEREE": "false",
         "AI_ENABLE_FAMILY_DEBATE_REFEREE": "false",
-        "AI_PERSISTENT_CACHE_ENABLED": "${{ inputs.refresh_ai && 'false' || 'true' }}",
+        "AI_PERSISTENT_CACHE_ENABLED": "true",
         "AI_DECISION_CACHE_TTL": "1800",
     }
     assert {key: env.get(key) for key in expected} == expected
