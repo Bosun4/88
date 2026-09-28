@@ -69,11 +69,11 @@ def test_missing_primary_config_never_uses_numbered_or_other_provider(provider_e
 
 
 @pytest.mark.parametrize('name,expected', [
-    ('gpt', 'gpt-5.6-sol'),
-    ('grok', '熊猫-A-10-grok-4.6'),
-    ('gemini', '熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网'),
+    ('gpt', '熊猫-按量-gpt-6-astra'),
+    ('grok', 'grok-4.7'),
+    ('gemini', 'gemini-3.8-flash-high'),
 ])
-def test_blank_model_uses_original_single_default(provider_env, monkeypatch, name, expected):
+def test_blank_model_uses_current_single_default(provider_env, monkeypatch, name, expected):
     monkeypatch.setenv(name.upper() + '_MODEL', '  ')
     assert predict._endpoint_candidates_for_ai(name)[0]['model'] == expected
     assert predict._model_for(name) == expected
