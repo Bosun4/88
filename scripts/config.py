@@ -15,9 +15,9 @@ TIMEZONE = "Asia/Shanghai"
 
 # Each provider has one model and one unnumbered URL/key pair.
 DEFAULT_MODELS = {
-    "gpt": "gpt-5.6-sol",
-    "grok": "熊猫-A-10-grok-4.6",
-    "gemini": "熊猫-顶级特供-X-17-gemini-3.1-pro-preview-联网",
+    "gpt": "熊猫-按量-gpt-6-astra",
+    "grok": "grok-4.7",
+    "gemini": "gemini-3.8-flash-high",
 }
 
 
