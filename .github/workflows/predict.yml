@@ -16,6 +16,11 @@ on:
         options:
           - next_available
           - current
+      refresh_ai:
+        description: '重新请求三家 AI（更新密钥/通道后勾选；本轮跳过缓存，产生新请求）'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -112,7 +117,7 @@ jobs:
           AI_MAX_OUTPUT_TOKENS: "6000"
           AI_ENABLE_CACHE: "true"
           AI_DISABLE_CACHE: "false"
-          AI_PERSISTENT_CACHE_ENABLED: "true"
+          AI_PERSISTENT_CACHE_ENABLED: ${{ inputs.refresh_ai && 'false' || 'true' }}
           AI_DECISION_CACHE_TTL: "1800"
           AI_CACHE_DIR: "data/ai_cache"
           AI_SAVE_RAW_RESPONSE: "false"
