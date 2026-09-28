@@ -234,6 +234,12 @@ def get_target_date(offset=0):
     如果以后想按自然日跑，设置：
       VMAX_DATE_SHIFT_HOURS=0
     """
+    explicit = os.environ.get('VMAX_TARGET_DATE', '').strip()
+    if explicit:
+        parsed = datetime.strptime(explicit, '%Y-%m-%d')
+        if parsed.strftime('%Y-%m-%d') != explicit:
+            raise ValueError('VMAX_TARGET_DATE must use YYYY-MM-DD')
+        return (parsed + timedelta(days=offset)).strftime('%Y-%m-%d')
     beijing_tz = timezone(timedelta(hours=8))
     shift_hours = env_int("VMAX_DATE_SHIFT_HOURS", 11)
     now = datetime.now(beijing_tz) - timedelta(hours=shift_hours)
@@ -367,14 +373,26 @@ def main():
             raise
 
         raw_data = asyncio.run(async_collect_all(target_date))
+        schedule = (raw_data or {}).get('schedule', {})
+        target_date = (raw_data or {}).get('date', target_date)
+        final_output['runtime']['schedule'] = schedule
+        write_json_atomic(os.path.join(data_dir, 'ai_phase_results', 'schedule.json'), schedule)
+        summary_path = os.environ.get('GITHUB_STEP_SUMMARY')
+        if summary_path:
+            with open(summary_path, 'a', encoding='utf-8') as handle:
+                handle.write(f"## 赛程选择\n\n请求业务日：{schedule.get('requested_date', target_date)}；"
+                             f"实际业务日：{target_date}；数据源状态：{schedule.get('source_status', 'unknown')}；"
+                             f"可用比赛：{len((raw_data or {}).get('matches', []))}。\n\n"
+                             "逐场日期与筛选原因见 artifact 中的 ai_phase_results/schedule.json。\n\n")
 
         if not raw_data or not raw_data.get("matches"):
             print(f"  [SKIP] {target_date} 暂无比赛数据，跳过 AI 推理。")
 
             if not env_bool("VMAX_ALLOW_EMPTY_PUBLISH", False):
                 raise RuntimeError(
-                    "未抓到比赛数据，默认保护上一份 predictions.json；"
-                    "如确认是无赛程日，请显式设置 VMAX_ALLOW_EMPTY_PUBLISH=true。"
+                    f"业务日 {target_date} 没有可用的未开赛比赛（源状态："
+                    f"{schedule.get('source_status', 'unknown')}）。保留上一份 predictions.json；"
+                    "具体日期与筛选原因见 ai_phase_results/schedule.json。"
                 )
 
             final_output["matches"]["today"] = []

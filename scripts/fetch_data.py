@@ -141,6 +141,63 @@ def filter_matches_by_window(football_list, today=None, days_ahead=None, shift_h
         print(f"  🗓️ 抓取窗口过滤：保留 {len(kept)} 场（业务日 {sorted(allowed)}），砍掉 {dropped} 场窗口外比赛")
     return kept
 
+
+def select_schedule_window(football_list, requested_date, now=None):
+    """Select one available business day without admitting already-started games."""
+    now = now or datetime.now(timezone.utc)
+    base = datetime.strptime(requested_date, '%Y-%m-%d')
+    mode = os.environ.get('VMAX_DATE_MODE', 'current').strip() or 'current'
+    if mode not in ('current', 'next_available'):
+        raise ValueError('VMAX_DATE_MODE must be current or next_available')
+    explicit = bool(os.environ.get('VMAX_TARGET_DATE', '').strip())
+    parsed = [(item, _kickoff_from_stime(item.get('stime')),
+               _business_day_from_stime(item.get('stime')))
+              for item in football_list if isinstance(item, dict)]
+    future_dates = sorted({day for _, kickoff, day in parsed
+                           if kickoff and kickoff > now and day})
+    selected_date = requested_date
+    reason = 'explicit_date' if explicit else 'current_business_day'
+    if mode == 'next_available' and not explicit and requested_date not in future_dates:
+        latest = (base + timedelta(days=7)).strftime('%Y-%m-%d')
+        candidates = [day for day in future_dates if requested_date < day <= latest]
+        if candidates:
+            selected_date = candidates[0]
+            reason = 'next_available'
+
+    # Production selects one day. Legacy direct callers may retain their window.
+    days_ahead = 0 if mode == 'next_available' or explicit else max(0, _env_int('VMAX_FETCH_DAYS_AHEAD', 1))
+    selected_base = datetime.strptime(selected_date, '%Y-%m-%d')
+    allowed = {(selected_base + timedelta(days=d)).strftime('%Y-%m-%d')
+               for d in range(days_ahead + 1)}
+    kept, fixtures = [], []
+    for item, kickoff, day in parsed:
+        if kickoff and kickoff <= now:
+            decision = 'already_started'
+        elif day and day not in allowed:
+            decision = 'outside_window'
+        elif not kickoff:
+            decision = 'unknown_kickoff'
+        else:
+            decision = 'selected'
+        if decision == 'selected' or (decision == 'unknown_kickoff' and mode == 'current' and not explicit):
+            kept.append(item)
+        fixtures.append({'source_event_id': item.get('id'),
+                         'home': str(item.get('home', ''))[:120],
+                         'away': str(item.get('guest', ''))[:120],
+                         'stime': str(item.get('stime', ''))[:50],
+                         'kickoff_at': kickoff.isoformat() if kickoff else None,
+                         'business_date': day, 'reason': decision})
+    report = {'requested_date': requested_date, 'selected_date': selected_date,
+              'date_mode': mode, 'selection_reason': reason,
+              'captured_at': now.isoformat(), 'source_count': len(football_list),
+              'selected_count': len(kept), 'future_business_dates': future_dates,
+              'fixtures': fixtures}
+    print(f"  [SCHEDULE] requested={requested_date} selected={selected_date} "
+          f"reason={reason} source={len(football_list)} selected_count={len(kept)}")
+    for fixture in fixtures[:60]:
+        print('  [FIXTURE] ' + json.dumps(fixture, ensure_ascii=False))
+    return kept, report
+
 def generate_stats_from_context(match, side):
     """Missing statistics cannot be reconstructed from odds or rankings."""
     return {
@@ -148,13 +205,15 @@ def generate_stats_from_context(match, side):
         "source": None, "data_note": "未取得可核验赛季战绩；赔率与排名不能反推比赛记录",
     }
 
-async def scrape_wencai_jczq_async(session, date_str):
+async def scrape_wencai_jczq_async(session, date_str, diagnostics=None):
     """抓取问财数据，自动隔离足球与篮球（防止篮球数据污染泊松模型）"""
     # 2026-07-18 起，旧版无鉴权 GET (?date=...) 返回 code=301「非法请求」。
     # 新版接口要求 JSON POST；Authorization 从 Secret 注入，设备 UUID 与
     # client id 每次运行随机生成，UA 使用不含用户设备信息的通用桌面标识。
     url = "https://edu.wencaivip.cn/api/v1.reference/matches"
     football_matches = []
+    diagnostics = diagnostics if diagnostics is not None else {}
+    diagnostics.update(requested_date=date_str, selected_date=date_str, source_status='source_error')
 
     authorization = os.environ.get("WENCAI_AUTHORIZATION", "").strip()
     if not authorization:
@@ -198,6 +257,7 @@ async def scrape_wencai_jczq_async(session, date_str):
                 return []
 
             matches_raw = data.get("data",{}).get("matches",{})
+            diagnostics['source_status'] = 'ok'
 
             # ===== 核心修复: 只取 "1" (足球)，跳过 "2" (篮球) =====
             # 篮球数据(124:101)如果流进泊松模型会直接溢出崩溃
@@ -207,12 +267,8 @@ async def scrape_wencai_jczq_async(session, date_str):
             if basketball_count > 0:
                 print(f"  🏀 已隔离 {basketball_count} 场篮球赛事（防止污染泊松模型）")
 
-            if not football_list:
-                print(f"  [INFO] 当日足球赛事列表为空")
-                return []
-
-            # 抓取窗口过滤：问财接口一次返回跨多日赛程，只保留今天+未来 N 天（默认 1=今明两天）
-            football_list = filter_matches_by_window(football_list, today=date_str)
+            football_list, schedule = select_schedule_window(football_list, date_str)
+            diagnostics.update(schedule)
             if not football_list:
                 print(f"  [INFO] 窗口过滤后无符合赛事")
                 return []
@@ -296,6 +352,8 @@ async def scrape_wencai_jczq_async(session, date_str):
                 except: continue
 
     except Exception as e:
+        diagnostics['source_status'] = 'source_error'
+        diagnostics['error_type'] = type(e).__name__
         print(f"  ❌ 网络抓取异常: {e}")
 
     print(f"  ⚽ 足球赛事: {len(football_matches)} 场")
@@ -451,10 +509,12 @@ async def enrich_match_data(session, m, i, date_str, sema):
 
 async def async_collect_all(date_str):
     sema = asyncio.Semaphore(8)
+    diagnostics = {}
 
     async with aiohttp.ClientSession() as session:
-        matches = await scrape_wencai_jczq_async(session, date_str)
-        if not matches: return {"date": date_str, "matches": []}
+        matches = await scrape_wencai_jczq_async(session, date_str, diagnostics=diagnostics)
+        date_str = diagnostics.get('selected_date', date_str)
+        if not matches: return {"date": date_str, "matches": [], "schedule": diagnostics}
 
         print(f"  API-Football 并发补充数据中...")
         tasks = [enrich_match_data(session, m, i, date_str, sema) for i, m in enumerate(matches)]
@@ -467,4 +527,4 @@ async def async_collect_all(date_str):
     except Exception as e:
         print(f"  [global_odds] 模块加载/执行失败,降级单轨: {type(e).__name__}: {str(e)[:80]}")
 
-    return {"date": date_str, "matches": enriched}
+    return {"date": date_str, "matches": enriched, "schedule": diagnostics}
