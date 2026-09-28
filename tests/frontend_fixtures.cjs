@@ -46,7 +46,8 @@ test('legacy fixture: all 26 matches retained, today bucket does not mean today'
 test('stale snapshot, started game, missing timezone and future snapshot all block recommendations', () => {
   const m = clone(match);
   m.prediction.recommend_gate_pass = true;
-  m.prediction.recommendation = { is_recommended: true, bet_action: 'main' };
+  m.prediction.recommendation_tier = 'A';
+  m.prediction.recommendation = { tier:'A', is_recommended: true, bet_action: 'main' };
   assert.equal(view(m).eligible, true);
   assert.equal(view(m, { update_time: '2026-09-17 12:00:00' }).eligible, false);
   assert.equal(view(m, snapshot, Date.parse(m.kickoff_at)).eligible, false);
@@ -97,7 +98,7 @@ test('single_pass reports model, cache, row abstention and budget status truthfu
   p.ai_call_status.gemini.single_pass.row_status = 'abstain';
   assert.equal(ui.models(p).find(m => m.name === 'gemini').score, null);
   p.ai_call_status.gemini.single_pass = { ok: false, status: 'run_call_budget_exhausted', row_status: 'abstain' };
-  assert.match(ui.renderModels(p), /run_call_budget_exhausted/);
+  assert.match(ui.renderModels(p), /已达本轮调用预算/);
 });
 
 test('D tier, risk candidates, prose side scores survive combined filtering', () => {
@@ -140,7 +141,7 @@ test('untrusted text is escaped and core audit/odds/reasons are retained', () =>
 });
 
 
-test('compact summary separates structured risk from prose and preserves overlap', () => {
+test('full card separates structured risk from prose and preserves overlap', () => {
   const m = clone(match);
   m.prediction.reason = '副文还提及1-2与2-2，不能因此认作推荐。';
   const html = ui.renderMatch(view(m));
@@ -155,6 +156,39 @@ test('compact summary separates structured risk from prose and preserves overlap
   assert.match(html, /class="analysis-details"/);
   assert.doesNotMatch(html, /class="analysis-details" open/);
   assert.ok(html.indexOf('class="primary-score"') < html.indexOf('class="technical-details"'));
+});
+
+test('featured cards require actionable state and show at most four current matches', () => {
+  const good = clone(match);
+  Object.assign(good.prediction, {recommend_gate_pass:true, recommendation_tier:'A',
+    recommendation:{tier:'A',is_recommended:true,bet_action:'main'}});
+  assert.equal(view(good).eligible, true);
+  for (const action of ['observe','no_bet','',null]) {
+    const bad = clone(good); bad.prediction.recommendation.bet_action = action;
+    assert.equal(view(bad).eligible, false, String(action));
+  }
+  for (const tier of ['C','D']) {
+    const bad = clone(good); bad.prediction.recommendation.tier = tier;
+    assert.equal(view(bad).eligible, false, tier);
+  }
+  const rows = Array.from({length:6}, (_,i)=>ui.normalizeMatch(good,snapshot,now,i));
+  assert.equal((ui.renderWatchlist(rows).match(/class="featured-card"/g) || []).length, 4);
+  assert.match(ui.renderWatchlist([view()]), /暂无当前可关注比赛/);
+});
+
+test('ordered evidence and complete model reasons are visible before technical accordion', () => {
+  const m = clone(match);
+  Object.assign(m.prediction, {analysis_policy:'score-first-v24',
+    reading_summary:{context:'首发未知',goal_band:'2至3球',market_alignment:'总球分歧',
+      candidate_comparison:'<img src=x>',verdict:'终审保留反击风险'},
+    ai_call_status:{gpt:{phase1:{ok:true,row_status:'ok'}}},gpt_score:'2-1',gpt_analysis:'完整初审理由'});
+  const html = ui.renderMatch(view(m));
+  const visible = html.split('<details class="analysis-details">')[0];
+  for (const phrase of ['首发未知','2至3球','总球分歧','&lt;img','终审保留反击风险','完整初审理由']) assert.ok(visible.includes(phrase), phrase);
+  assert.doesNotMatch(visible, /<img/);
+  assert.match(ui.renderMatch(view()), /旧版未记录分步摘要/);
+  m.prediction.direction_probs = {home:60,draw:20,away:20};
+  assert.doesNotMatch(ui.renderMatch(view(m)), /主 60%/);
 });
 
 test('expanded evidence is readable without exposing raw JSON by default', () => {
