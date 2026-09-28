@@ -78,7 +78,8 @@ var Dashboard = (() => {
     return `<div class="league-context">${base}${['home','away'].map(side => `<section><h3>${side === 'home' ? '主队' : '客队'}</h3>${Object.entries(lc[side] || {}).map(([k,v]) => factRow(k,v)).join('') || '<p>未知</p>'}</section>`).join('')}<p class="muted">${esc(lc.note || '积分差不证明战意；未知轮换不能当成既定事实。')}</p></div>`;
   }
   const fieldLabels = {...factLabels, score:'比分',prob:'模型概率（%）',probability:'模型概率（%）',logic:'依据',reason:'理由',home:'主胜',draw:'平局',away:'客胜',zero_zero:'0-0 路径',one_one:'1-1 路径',high_score_tail:'高比分风险',handicap_cover:'让球兑现',one_x_two:'胜平负',handicap:'让球',correct_score:'比分赔率',total_goals:'总进球',external_market:'外部市场',selected_cluster:'选择的比分组',why_selected_score:'选择理由',adjacent_scores_checked:'相邻比分比较',league_style:'联赛特点',team_style:'球队特点',tempo:'比赛节奏',score_shape:'比分形态',btts_likelihood:'双方进球',rotation_risk:'轮换风险',sharp_money_direction:'资金方向判断',public_money_direction:'公众倾向',evidence:'依据',bookmaker_intent:'公司报价解读',exclusion:'排除理由',available:'是否有数据',missing:'缺失信息',source:'来源',source_url:'来源地址',captured_at:'采集时间',has_conflict:'是否存在冲突',conflicts:'冲突说明',why_this_can_fail:'可能失效的条件',why_recommended:'判断依据',risk_type:'风险情景',raw_packet_quality:'原始数据质量'};
-  const valueLabels = {unknown:'未知',unclear:'尚不明确',yes:'是',no:'否',high:'高',medium:'中',low:'低',home:'主队',away:'客队',draw:'平局',observed:'来源事实',derived:'根据事实计算'};
+  Object.assign(fieldLabels, {result_market:'三项报价整体成本',half_full_time:'半全场',quote_count:'有效报价数',overround_pct:'倒数和超额（%）',theoretical_payout_pct:'理论返还率（%）',theoretical_hold_pct:'理论留存率（%）',note:'说明',status:'证据状态',alternative_explanations:'其他合理解释',counterevidence:'反证',confirmation_needed:'待确认信息'});
+  const valueLabels = {unknown:'未知',unclear:'尚不明确',yes:'是',no:'否',high:'高',medium:'中',low:'低',home:'主队',away:'客队',draw:'平局',observed:'来源事实',derived:'根据事实计算',hypothesis:'待验证假设',no_evidence:'缺少可核验证据'};
   function readable(value) {
     if (!present(value)) return '<span class="muted">未提供</span>';
     if (Array.isArray(value)) return '<ul class="readable-list">'+value.map(v=>'<li>'+readable(v)+'</li>').join('')+'</ul>';
@@ -91,12 +92,14 @@ var Dashboard = (() => {
   }
   function renderMatch(m) {
     const p = m.p, r = m.raw;
-    const probs = probabilities(p);
+    const scorePolicy = p.analysis_policy === 'score-first-v23';
+    const probs = scorePolicy ? null : probabilities(p);
     const candidates = p.top3 || p.top_score_candidates || p.top_scores || [];
     const reason = p.reason || p.ai_native_reason || p.final_ai_analysis || p.contextual_logic || '本轮未提供主线文字分析';
     const blocks = [
       ['候选比分及理由',candidates],['盘口尾部观察（赔率推导，并非 AI 推荐）',p.all_tail_scores],['锚点审计',p.anchor_audit],['公司交叉审计',p.bookmaker_cross_audit],
-      ['盘口解读',p.market_interpretation],['盘口与市场来源',r.global_odds || r.international_odds || r.odds_movement],
+      ['盘口解读',p.market_interpretation],['盘口与市场来源',scorePolicy ? null : r.global_odds || r.international_odds || r.odds_movement],
+      ['报价成本核验',p.market_margin_audit],['盘口风险假设与反证',p.market_risk_audit],
       ['资金流分析（仅按来源陈述）',p.money_flow],['战术与节奏',p.tempo_xg_tactical_audit],['赛前因素',p.pre_match_factor_audit],
       ['比分排除与相邻比分比较',p.score_elimination_audit || p.score_cluster_audit],['反向风险',p.upset_evidence],
       ['外部事实与来源',p.external_fact_table],['来源冲突',p.source_conflict_audit],['证据缺口',p.minimum_evidence_needed],
@@ -120,14 +123,14 @@ var Dashboard = (() => {
         <section class="prose-summary"><span class="column-label">副文提及 <small>不等于推荐</small></span><div class="score-chips">${scoreChips(prose) || '<span class="muted">无额外比分</span>'}</div></section>
       </div>
       <div class="reason-preview"><span>核心判断</span><p>${esc(reasonText)}</p></div>
-      <div class="match-bottom"><span class="probabilities">${probs ? probs.map((v,i)=>`${['主','平','客'][i]} ${v}%`).join('　') : '胜平负概率未提供'}</span><span class="availability">${m.eligible ? '赛前可关注' : m.state === 'stale' ? '保留原判断 · 不作当前推荐' : '仅供分析'}</span></div>
+      <div class="match-bottom"><span class="probabilities">${scorePolicy ? '比分情景分析 · 不作概率定价' : probs ? probs.map((v,i)=>`${['主','平','客'][i]} ${v}%`).join('　') : '胜平负概率未提供'}</span><span class="availability">${m.eligible ? '赛前可关注' : m.state === 'stale' ? '保留原判断 · 不作当前推荐' : '仅供分析'}</span></div>
       <details class="analysis-details"><summary>展开完整分析 <span>主线依据 · 风险情景 · 赔率证据 <i aria-hidden="true">＋</i></span></summary><div class="detail-content">
         <div class="reading-columns">${detail('主线完整依据',reason)}<section class="evidence-section"><h3>风险 D / 副文比分 · 情景依据</h3>${riskDetails}</section></div>
         ${renderModels(p)}
         ${detail('总进球 / 双方进球',[p.goal_band,p.btts,p.goal_range].filter(present).join(' / '))}
         <div class="evidence-grid">${blocks}</div>
         <section class="evidence-section league-section"><h3>联赛与赛程证据</h3>${renderLeagueContext(p.league_context || r.league_context)}</section>
-        <details class="technical-details"><summary>数据来源与模型记录</summary><div class="technical-content">${detail('原始胜平负报价',{home:r.sp_home ?? null,draw:r.sp_draw ?? null,away:r.sp_away ?? null})}<details><summary>查看原始数据</summary><pre>${esc(JSON.stringify(r,null,2))}</pre></details></div></details>
+        <details class="technical-details"><summary>数据来源与模型记录</summary><div class="technical-content">${scorePolicy ? '' : detail('原始胜平负报价',{home:r.sp_home ?? null,draw:r.sp_draw ?? null,away:r.sp_away ?? null})}<details><summary>查看原始数据</summary><pre>${esc(JSON.stringify(r,null,2))}</pre></details></div></details>
       </div></details>
     </article>`;
   }
@@ -168,7 +171,7 @@ var Dashboard = (() => {
       const stamp = snapshotTime(data), stale = !Number.isFinite(stamp) || Date.now()-stamp>86400000 || stamp>Date.now()+300000;
       $('snapshot-status').className = 'snapshot-banner'+(stale?' stale':'');
       $('snapshot-status').innerHTML = `<strong>${stale ? '历史快照' : '赛前快照'}</strong><p>${esc(dateTime(stamp))} 更新${stale ? ' · 仅回看原判断，暂无当前推荐' : ' · 北京时间'}</p>`;
-      $('version').textContent = '页面 v22 · 数据：'+(data.engine_version || data.runtime?.ai_run?.engine_version || '历史版本');
+      $('version').textContent = '页面 v23 · 数据：'+(data.engine_version || data.runtime?.ai_run?.engine_version || '历史版本');
       const eligible = rows.filter(m=>m.eligible);
       $('watchlist').hidden = eligible.length === 0;
       $('watchlist').innerHTML = eligible.length ? `<h2>当前可关注</h2><div class="watchlinks">${eligible.map(m=>`<a href="#${m.key}">${esc(m.home)} vs ${esc(m.away)}</a>`).join('')}</div>` : '';
