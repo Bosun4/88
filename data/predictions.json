@@ -1,5 +1,5 @@
 {
-  "update_time": "2026-09-29 04:03:56",
+  "update_time": "2026-09-29 04:20:03",
   "version": "MAX-v23.0-SCORE-PANEL",
   "scope": "today_only",
   "top4": [],
@@ -12,7 +12,7 @@
         "source_url": "https://edu.wencaivip.cn/api/v1.reference/matches",
         "stime": 1790661600,
         "kickoff_at": "2026-09-29T06:00:00+00:00",
-        "captured_at": "2026-09-28T20:03:56.675669+00:00",
+        "captured_at": "2026-09-28T20:17:43.591735+00:00",
         "kickoff_status": "known",
         "season": null,
         "home_team": "朝鲜女",
@@ -191,37 +191,37 @@
           "top3": [
             {
               "score": "2-0",
-              "logic": "主线：共振覆盖半全场主/主(1.98)、让步胜(2.07)与2球档(3.7)；反证为缺少零封事实。",
-              "prob": null
-            },
-            {
-              "score": "2-1",
-              "logic": "备选：吻合总进球3档(3.6)与主胜方向；反证为让球平(3.42)在让步结构中非最优。",
+              "logic": "正确比分最低档之一，吻合总进球2球及-1让球主胜最低项；反证是1-0同赔且球队事实完全缺失。",
               "prob": null
             },
             {
               "score": "1-0",
-              "logic": "防守型主胜：比分6.5并列最低；反证为与让球玩法倾斜净胜2球的形态存在张力。",
+              "logic": "与2-0并列最低比分，反映稳健防守小胜；反证是让球平赔率偏高(3.42)，总进球1球报价偏离重心。",
+              "prob": null
+            },
+            {
+              "score": "2-1",
+              "logic": "处于总进球3球(3.6)低位区间且满足主胜；反证是客队进球缺乏战术与阵容依据支持。",
               "prob": null
             }
           ],
           "anchor_audit": {
-            "zero_zero": "0-0报价14.0，总进球0报价14.0，半全场平/平6.8；严重背离主/主1.98强势主胜预期，排除。",
-            "one_one": "1-1报价9.0，虽受总进球2档支持，但与半全场主/主(1.98)及让球胜(2.07)冲突，暂作风险防范。",
-            "high_score_tail": "总进球5(9.5)、6(17.0)、7+(24.0)呈常规递减尾部，无大比分基本面线索支撑。",
-            "handicap_cover": "主队-1调整后，2-0对应home_cover(2.07)，1-0对应draw(3.42)，1-1对应away_cover(2.83)。"
+            "zero_zero": "0-0报价14.0，总进球0球14.0，平/平6.8，均不支持互交白卷。",
+            "one_one": "1-1报价9.0，总进球2球虽低，但主/主1.98显著压低了平局权重。",
+            "high_score_tail": "4球5.3、5球9.5、7+为24.0，尾部衰减正常，不支持高比分对攻。",
+            "handicap_cover": "主-1下，home_cover(2.07)低于away_cover(2.83)与draw(3.42)，倾向净胜2球及以上。"
           },
           "market_interpretation": {
-            "handicap": "主队-1后home_cover(2.07)显著低于away_cover(2.83)与draw(3.42)，指向净胜2球及以上格局。",
-            "correct_score": "1-0与2-0均为6.5并列最低，2-1为7.0，主胜赔率高度集聚；客胜0-1高达18.0，分布极其悬殊。",
-            "total_goals": "2球(3.7)与3球(3.6)为密集低赔区，4球(5.3)开始明显断档，限定主要进球区间为2-3球。",
-            "half_full_time": "主/主低至1.98，平/主3.9，展现早段建立领先优势的强烈倾向，平局与客胜形态被边缘化。"
+            "handicap": "主-1让球，home_cover 2.07为三项最低，主胜净胜两球或以上有相对成本倾向。",
+            "correct_score": "1-0与2-0同为6.5构筑第一核心簇，2-1为7.0紧跟，客胜与高比分全面冷门化。",
+            "total_goals": "2球(3.7)与3球(3.6)并列平台区，向两端逐渐走高，指向2-3球总进球情景。",
+            "half_full_time": "主/主1.98、平/主3.9统领格局，显示半场开始主队即有明确控制力预期。"
           },
           "contextual_logic": {
-            "league_style": "unknown；缺少亚运女足风格历史样本",
+            "league_style": "亚运女足赛事阶段未知，但具备杯赛性质，防守重视度可能高于联赛。",
             "tempo": "unknown",
-            "rotation_risk": "unknown；赛程及首发名单缺失",
-            "motivation": "亚运淘汰赛阶段战意均等，但阵容磨合度及体能恢复未知"
+            "rotation_risk": "unknown",
+            "motivation": "杯赛淘汰环境战意未知，缺乏官方晋级处境背景。"
           },
           "rejected_cases": {},
           "web_research": {
@@ -234,7 +234,7 @@
             "has_conflict": false,
             "conflicts": []
           },
-          "evidence_quality_score": 1,
+          "evidence_quality_score": 25,
           "recommendation": {
             "tier": "D",
             "is_recommended": false,
@@ -244,37 +244,35 @@
             "score_stability": "unknown",
             "risk_level": "high",
             "risk_tags": [
-              "球队数据缺失",
-              "首发未确认",
-              "单次报价快照",
-              "初审裁决分歧",
+              "基本面数据归零",
+              "仅凭单次报价快照",
+              "让球与比分低赔存在冲突点",
               "external_fact_without_source",
               "missing_external_confirmation",
               "external_evidence_quality_below_50"
             ],
             "bet_action": "observe",
             "why_this_can_fail": [
-              "缺乏基本面与战术支持，纯盘口反推容易脱离比赛实际进程。",
-              "客队若先取得进球将直接瓦解主/主及2-0路径。",
-              "亚运淘汰赛节奏突变易导致低比分平局。"
+              "1-0打出时让球主胜失效",
+              "球队基本面与首发完全空白，实际实力差可能脱离盘面预期"
             ],
             "minimum_evidence_needed": [
-              "赛前最终首发名单",
-              "两队近期比赛攻防xG或详尽技术统计",
-              "赔率异动序列"
+              "确认首发11人与战术阵型",
+              "获取双方近期真实攻防统计",
+              "获取带时间戳的多源变盘数据"
             ],
-            "why_recommended": "缺乏球队与阵容基本面事实支撑，不具备推荐投注价值，仅依盘口共振保留2-0作为观察主线。"
+            "why_recommended": ""
           },
           "data_quality": {
             "missing": [
-              "两队赛季及近期技术统计",
-              "确认首发名单与即时伤停",
-              "带时间戳的赔率变动时间序列",
-              "赛事具体阶段与休息天数"
+              "双方赛季战绩与进失球数据",
+              "双方首发名单与伤停",
+              "赛事具体轮次与赛程表",
+              "连续报价变化序列"
             ],
             "raw_packet_quality": "low"
           },
-          "reason": "主选2-0(主胜)：该比分在半全场主/主(1.98)、让球-1主胜(2.07)、总进球2球档(3.7)与比分低赔(6.5)四玩法上呈现最强共振。终审裁决：Grok因http_503缺席；驳回GPT的1-1方案，因其违背半全场主/主及让球胜的核心指向。最强反证为基本面与阵容完全缺失，维持D级观望。",
+          "reason": "主线2-0建立在正确比分低位(6.5)、总进球2-3球重心以及-1让球home_cover(2.07)的交叉映射；最强反证为1-0同赔并立且能降低进攻负荷；因缺乏两队实际比赛统计与首发，证据链单薄，列入D级观察。",
           "validation_warnings": [
             "direction_probs_missing_unavailable",
             "missing_external_confirmation",
@@ -282,26 +280,31 @@
             "external_evidence_quality_below_50"
           ],
           "score_cluster_audit": {
-            "why_selected_score": "2-0兼顾了总进球2档(3.7)、半全场主/主绝对低赔(1.98)与让球-1穿盘(2.07)的交叉共振。",
+            "why_selected_score": "2-0是同时符合正确比分最低档、总进球2球次低档、半全场主/主与-1让球胜的唯一交集。",
             "adjacent_scores_checked": [
               "1-0",
               "2-1",
-              "3-0",
               "1-1",
-              "0-0"
+              "3-0"
             ]
           },
           "risk_score_candidates": [
             {
-              "score": "1-1",
-              "risk_type": "平局阻击路径",
-              "reason": "若中国女足深度防守且朝鲜攻坚受阻，总进球2档易滑入平局，平/平(6.8)构成潜在分流。",
+              "score": "1-0",
+              "risk_type": "低球小胜",
+              "reason": "若主队破局后采取控节奏策略未能扩大分差，且让球平(3.42)打出。",
               "prob": null
             },
             {
-              "score": "1-2",
-              "risk_type": "客队反向小胜",
-              "reason": "中国女足若打出高转化反击且朝鲜防线失误触发，但市场客胜报价极为边缘化。",
+              "score": "1-1",
+              "risk_type": "平局冷门",
+              "reason": "客队利用定位球偷袭逼平，总进球2球仍在低赔区间内。",
+              "prob": null
+            },
+            {
+              "score": "3-0",
+              "risk_type": "深盘大胜",
+              "reason": "客队体能崩溃防线失守，触发高比分尾部路径。",
               "prob": null
             }
           ],
@@ -310,26 +313,28 @@
           "score_elimination_audit": {},
           "analysis_policy": "score-first-v24",
           "reading_summary": {
-            "context": "赛事为亚运女足，比分按90分钟常规时间核算。赛程、赛季、积分、休息天数均未知。双方赛季数据、交锋及伤停缺席。情报片段仅提及中国女足上战加时1-0战胜越南，信息单一缺乏完整语境，无法据此定性攻防硬实力。",
-            "goal_band": "球队基本面事实不可用，比赛节奏判定为unknown。总进球报价曲线中，2球(3.7)与3球(3.6)处于最低区间，4球(5.3)快速走高，高球尾部递减。设定2-3球为基准情景，缺少球队统计支持，全凭报价形态推演。",
-            "market_alignment": "2-0在四项玩法中契合度最高：总进球2档(3.7)、半全场主/主(1.98为最低项)、让球主队-1后home_cover(2.07为让球玩法最低)、比分2-0(6.5并列最低)。最大冲突是1-0同为6.5但对应让球平(3.42)，且防守零封尚无球队事实验证。",
-            "candidate_comparison": "0-0(14.0)与1-1(9.0)严重违背半全场主/主(1.98)的核心指向；2-1(7.0)落在总进球3球档，但让球平(3.42)较让球胜(2.07)吸引力偏弱；2-0更贴合净胜2球偏好。客胜赔率极高(0-1达18.0)，反向小胜仅列尾部防范。",
-            "verdict": "主选2-0。依据为半全场主/主、让步穿盘、总进球2球档与波胆低赔的一致性共振；最强反证为零封与攻坚能力无基本面核验；若客队先失球后坚决收缩或客队先进球则主线失效。初审裁决：Grok因http_503缺席；驳回GPT的1-1方案，因其违背主/主及让球胜的核心倾斜，选点出现玩法冲突。本场证据严重不足，定为D级观望。"
+            "context": "赛事为亚运女足，按90分钟结算；比赛时间2026-09-29，快照时间前置约10小时。双方联赛积分、具体轮次、体能与休整天数均缺失，阵容及伤停未确认。情报中关于客队加时赛淘汰越南的描述缺乏具体数据源且样本单一，无法据此推导实力断层。",
+            "goal_band": "无实际球队进失球统计，进球区间全依单点报价展开。总进球曲线中2球(3.7)与3球(3.6)处在最低档，1球(5.25)与4球(5.3)对称上升，7+达24.0，进球重心落于2-3球区间，呈现中低进球倾向，但无战术或xG交叉验证。",
+            "market_alignment": "正确比分1-0与2-0并列最低(6.5)，2-1(7.0)紧随其后；半全场主/主(1.98)和平/主(3.9)明显占优；让球主队-1下home_cover为2.07，draw为3.42。2-0同时契合最低比分、总进球2球与让球主胜；最大冲突在于1-0同为最低比分却导致让球平(3.42)高赔，各玩法源于同一快照，不可视为独立印证。",
+            "candidate_comparison": "0-0(14.0)与1-1(9.0)在比分及半全场(平/平6.8)支持偏弱，平局路径顺位靠后；1-0同为最低赔但让球支持偏弱，且与总进球2-3球区间略有脱节；2-1虽符合主胜但需客队破门并推高总球数；3-0进入高球尾部；2-0在净胜与总球数平衡上略优于1-0。",
+            "verdict": "终审判定主比分取2-0。初审审核：analyst_availability显示grok为http_503驳回其缺席状态，gpt可用。gpt选择2-0逻辑与原始报价结构相符，予以采纳。关键失效条件：主队进攻乏力仅能小胜1球（倒向1-0），或客队防守反击破门（倒向2-1或1-1）。"
           },
           "market_risk_audit": {
             "status": "hypothesis",
             "evidence": [
-              "仅单次报价快照，各玩法高度倾向朝鲜女足半全场胜及净胜2球。"
+              "单一时点静态快照，无时间序列变化",
+              "1-0与2-0完全同赔造成首选二选一冲突"
             ],
             "alternative_explanations": [
-              "常规女足国际赛事实力定位差异导致的常规风险控制报价。"
+              "杯赛淘汰赛属性常规控水",
+              "初盘信息不对称下的保守开盘"
             ],
             "counterevidence": [
-              "无报价时间序列与资金流动数据，无法确证诱盘或资金过热。"
+              "让球主胜与正确比分主胜低赔方向一致，未见明显反向诱导信号"
             ],
             "confirmation_needed": [
-              "连续多时间戳报价序列",
-              "两队确认首发阵容与赛前伤停"
+              "首发名单与替补名单确认",
+              "临场1-2小时多机构变盘走势"
             ]
           },
           "review_context": {
@@ -350,102 +355,103 @@
           "phase1_model_outputs": {
             "gpt": {
               "match": 1,
-              "final_direction": "draw",
-              "predicted_score": "1-1",
+              "final_direction": "home",
+              "predicted_score": "2-0",
               "direction_probs": {
                 "home": null,
                 "draw": null,
                 "away": null
               },
               "goal_band": "2",
-              "btts": "yes",
+              "btts": "no",
               "top3": [
                 {
-                  "score": "1-1",
-                  "logic": "主线：总进球2档与平/平情景相合；反证是半全场主/主报价更低，且无球队数据验证平局。",
-                  "prob": null
-                },
-                {
-                  "score": "2-1",
-                  "logic": "主队小胜备选，与主/主及总进球3档相容；缺少实力、阵容和节奏事实支撑。",
+                  "score": "2-0",
+                  "logic": "正确比分低报价，落在总进球2球区间，且满足-1让球后的主胜；反证是无球队统计和首发支持。",
                   "prob": null
                 },
                 {
                   "score": "1-0",
-                  "logic": "低比分主胜备选；与主队让球-1后落在away_cover相冲突，且零封无证据。",
+                  "logic": "正确比分与2-0同为最低报价，低节奏解释更稳；但-1让球后仅为平，削弱其与让球玩法的吻合。",
+                  "prob": null
+                },
+                {
+                  "score": "2-1",
+                  "logic": "正确比分报价接近低位，满足主胜及-1让球主胜；但总进球升至3球且需客队进球，证据不足。",
                   "prob": null
                 }
               ],
               "score_cluster_audit": {
-                "why_selected_score": "1-1是当前报价所支持的2球平局情景之一；选择仅属低质量初审主线，不代表概率优势。",
+                "why_selected_score": "2-0同时连接正确比分低位、总进球2球、半全场主/主和-1让球主胜四个证据面。",
                 "adjacent_scores_checked": [
-                  "0-0",
                   "1-0",
-                  "2-0",
+                  "1-1",
                   "2-1",
-                  "1-2",
-                  "2-2"
+                  "3-0",
+                  "0-0"
                 ]
               },
               "anchor_audit": {
-                "zero_zero": "0-0报价14.0，总进球0报价14.0；缺乏双方低节奏事实，未选。",
-                "one_one": "1-1报价9.0，与总进球2报价3.7及平/平6.8方向一致，但报价不是球队事实。",
-                "high_score_tail": "总进球5、6、7+报价分别为9.5、17.0、24.0；高球尾部不能排除，缺少球队统计评估其条件。",
-                "handicap_cover": "主队调整-1；1-1对应away_cover，1-0对应draw，2-1对应draw。该结算按调整后比分比较。"
+                "zero_zero": "0-0报价14.0，高于1-0、2-0，且半全场平/平并非低位，暂不支持。",
+                "one_one": "1-1报价9.0，低于0-0但高于主胜低比分；缺少球队进攻与防守事实支撑。",
+                "high_score_tail": "4球及以上总进球报价整体抬升，7+为24.0；3-0虽可作镜像候选，但不宜仅凭高球报价选择。",
+                "handicap_cover": "主队-1后，2-0为home_cover，1-0为draw，1-1与主队小负路径为away_cover；2-0与让球主胜方向一致。"
               },
               "market_interpretation": {
-                "handicap": "主队-1后，1-1为away_cover；主/客让球报价成本约为完整互斥报价的成本指标，不用于推断真实胜率。",
-                "correct_score": "1-1报价9.0，但比分集合不完整互斥，抽水未知；最低报价不是主线依据。",
-                "total_goals": "0至7+报价齐全；2、3档相对较低，4档后走高。理论hold约16.97%，只描述报价成本，不合成大小球交易盘。",
-                "half_full_time": "主/主1.98为所列最低项，与平/平主线冲突；理论hold约16.89%，非独立确认或真实概率。"
+                "handicap": "-1让球下，2-0为主队让球后胜；报价成本较高，不等同于真实胜率。",
+                "correct_score": "1-0与2-0同为6.5最低报价，2-1为7.0；只能作为情景排序，不能换算比分概率。",
+                "total_goals": "0至7+完整曲线显示2、3球相邻低位，4球后报价上升；7为7+，不合成大小球交易结论。",
+                "half_full_time": "主/主1.98为最低报价，平/主3.9次之；同一来源且与其他玩法相关，不能独立加权。"
               },
               "contextual_logic": {
-                "league_style": "unknown；没有可核验赛事或球队风格数据。",
+                "league_style": "亚运女足赛事阶段未知，无法据赛事类型推定淘汰赛或战意。",
                 "tempo": "unknown",
-                "rotation_risk": "unknown；赛程与阵容均缺失。",
-                "motivation": "unknown；无积分榜、轮次或赛程依据。"
+                "rotation_risk": "unknown",
+                "motivation": "双方积分目标、晋级处境与赛程压力均未知。"
               },
               "rejected_cases": {},
               "recommendation": {
                 "tier": "D",
                 "is_recommended": false,
                 "top4_priority": 99,
-                "bet_confidence": 0,
+                "bet_confidence": 22,
                 "direction_stability": "unknown",
                 "score_stability": "unknown",
                 "risk_level": "high",
                 "risk_tags": [
                   "球队事实缺失",
-                  "阵容未确认",
-                  "仅单次报价",
-                  "玩法间方向冲突"
+                  "首发未确认",
+                  "单次报价快照",
+                  "玩法报价相关",
+                  "让球边界敏感"
                 ],
                 "bet_action": "observe",
                 "why_this_can_fail": [
-                  "球队和阵容证据不足，1-1主要由报价情景支撑。",
-                  "主/主报价与平局主线冲突。",
-                  "早段进球、红牌或轮换可能改变比分路径。"
+                  "2-0主要依赖市场快照而非球队事实。",
+                  "1-0与2-0并列低位，主队若只赢一球则让球方向改变。",
+                  "客队进球或主队轮换会改变比分簇。"
                 ],
                 "minimum_evidence_needed": [
-                  "核实赛事阶段、赛程与休息情况。",
-                  "取得双方近期比赛统计及伤停、首发信息。",
-                  "如要判断市场变化，需有带时间戳的连续报价。"
+                  "确认双方首发与关键伤停。",
+                  "核验赛事阶段、赛程密度和休息情况。",
+                  "补充双方近期可核验进失球与比赛样本。",
+                  "取得带时间序列的多玩法报价。"
                 ],
-                "why_recommended": "证据不足，不推荐投注；保留1-1仅作待核验比分主线。"
+                "why_recommended": "不推荐交易；仅保留2-0作为待核验主线。"
               },
               "data_quality": {
                 "missing": [
-                  "赛季与轮次",
-                  "积分、赛程、休息及旅行",
-                  "双方赛季和近期统计",
-                  "伤停与确认首发",
-                  "完整情报来源、时间及样本语境",
+                  "赛季与比赛阶段",
+                  "真实积分和赛程",
+                  "双方赛季统计",
+                  "近期战绩与交锋",
+                  "首发、伤停、轮换",
                   "报价时间序列",
-                  "完整正确比分互斥报价"
+                  "独立多源市场信息"
                 ],
                 "raw_packet_quality": "low"
               },
-              "reason": "暂以1-1作为低置信度情景：总进球2档及平/平报价相符；最强反证是主/主报价更低。缺少球队表现、阵容、赛程及报价序列，无法验证实力或节奏，D级观望。",
+              "reason": "主线为2-0，来自正确比分低位、总进球2至3球邻近、半全场主/主及-1让球主胜的交叉吻合；最强反证是1-0同为最低正确比分报价。球队、赛程、首发和时间序列证据严重不足，当前应观察。",
               "web_research": {
                 "used": false,
                 "sources": [],
@@ -454,15 +460,21 @@
               "final_web_audit": {},
               "risk_score_candidates": [
                 {
-                  "score": "2-1",
-                  "risk_type": "主队小胜路径",
-                  "reason": "若中国女队首发完整且较早取得进球，报价中的主/主与总进球3档可与该情景相容；阵容和比赛过程目前未知。",
+                  "score": "1-0",
+                  "risk_type": "低比分主胜",
+                  "reason": "与2-0同为正确比分最低报价；若主队仅形成一球优势，-1让球转为平。",
                   "prob": null
                 },
                 {
-                  "score": "1-2",
-                  "risk_type": "反向小胜",
-                  "reason": "若朝鲜女队攻防优势或中国女队轮换、体能问题得到可靠赛前证据，客队小胜可成为替代情景；当前无相关核验资料。",
+                  "score": "1-1",
+                  "risk_type": "平局路径",
+                  "reason": "总进球2球仍在相邻区间；若主队优势被客队进球抵消，主线失效。",
+                  "prob": null
+                },
+                {
+                  "score": "3-0",
+                  "risk_type": "高比分镜像",
+                  "reason": "主队持续压制且客队防线崩溃时触发，但4球总进球已进入报价高尾部。",
                   "prob": null
                 }
               ],
@@ -474,9 +486,20 @@
                 "has_conflict": false,
                 "conflicts": []
               },
-              "evidence_quality_score": 1,
-              "tempo_xg_tactical_audit": {},
-              "score_elimination_audit": {},
+              "evidence_quality_score": 25,
+              "tempo_xg_tactical_audit": {
+                "tempo": "仅报价支持2至3球区间，球队实际节奏未知。",
+                "xg": "未提供xG或可核验球队进攻统计，不估计。",
+                "tactical": "首发和战术未确认，无法判断零封、安慰球或大胜路径。"
+              },
+              "score_elimination_audit": {
+                "excluded_or_deprioritized": [
+                  "0-0",
+                  "1-1",
+                  "3-0"
+                ],
+                "basis": "分别因正确比分相对报价、半全场支持或总进球尾部位置较弱而降级，不代表不可能。"
+              },
               "review_context": {
                 "current_model": "gpt",
                 "stage": "independent_analysis",
@@ -484,26 +507,32 @@
                 "final_referee": "gemini"
               },
               "reading_summary": {
-                "context": "赛事标为亚运女足，90分钟比分口径按常规时间理解；赛季、轮次、赛程、积分、休息与旅行均未知。开球时间和采集时间仅按输入记录，未独立核验。双方赛季数据、交锋、伤停及首发缺失；情报片段仅有中国女队上一场加时1比0越南的叙述，来源、样本与完整语境不足，不能据此推定本场状态或战意。",
-                "goal_band": "球队统计与阵容不可用，无法建立有球队事实支撑的进球区间；报价曲线仅显示总进球2、3档较低，4档回升，5至7+继续走高。只能将2至3球作为待核验情景，不能视作固定上限；缺少球队事实，节奏判断为unknown。",
-                "market_alignment": "1-1与总进球2档相合，也对应半全场平/平；但主/主报价更低，显示与平局主线的最大冲突。让球主队-1后，1-1对应away_cover，与2.83这一选项相符；2-1则对应让球平局。比分报价缺少完整互斥集合，不能作概率比较。总进球、半全场成本指标较高，仅描述报价成本；单机构多玩法相关，且无时间序列，不能证明资金流或诱盘。",
-                "candidate_comparison": "0-0与总进球0档一致，但比分报价较高且缺少低节奏球队证据；1-1同时覆盖总进球2及平/平情景，故暂选。主队一球小胜2-1得到主/主方向与总进球3档的部分支持，但让球平局报价并非独立佐证。客队一球小胜1-2及高比分镜像均有比分报价支持不足或缺少球队依据；若早段进球、红牌或阵容信息改变比赛状态，应重新评估。"
+                "context": "赛事标识为亚运女足，赛季、阶段、轮次、积分、赛程、休息与旅行均未知。盘口按90分钟结算；证据快照时间为2026-09-28 20:17:43 UTC，开赛时间为2026-09-29 06:00:00 UTC。双方首发、伤停和轮换未确认。中国女足艰难淘汰越南的片段未给出可靠来源、时间与完整样本，权重有限。",
+                "goal_band": "球队赛季统计不可用，节奏只能由报价交叉判断。总进球报价在2至3球附近最集中，4球后明显进入高球尾部，0球与1球报价更高；暂取2至3球情景，不能据此视为固定上限或真实概率。",
+                "market_alignment": "正确比分中1-0与2-0同为最低报价，2-1次之；总进球2与3相邻且报价接近；半全场主/主为最低报价，支持主队90分钟取胜。让球为主队-1，2-0结算为主队让球后胜，吻合home_cover；最大冲突是1-0同样得到正确比分最低报价但让球后为平。所有报价来自同一快照，不能视为多家独立确认。",
+                "candidate_comparison": "0-0与1-1缺少总进球和半全场支持，且报价高于主胜低比分。1-0是最强低比分邻项，但无法覆盖-1让球主胜；2-1同时满足主胜与让球主胜，却把总进球推到3球并引入客队进球。3-0是2-0的高比分镜像，处于高球尾部，暂不优先。",
+                "verdict": "主线为2-0，依据是正确比分低报价、总进球2至3球邻近区间、主/主最低报价及-1让球主胜方向共同吻合。最强反证为1-0同为正确比分最低报价且总进球更低；若确认主队无法形成至少两球净优势、客队进球能力或主队轮换明显，2-0失效并转向1-0或1-1。"
               },
               "market_risk_audit": {
                 "status": "hypothesis",
                 "evidence": [
-                  "仅有一次报价快照；主/主报价较低而平局比分与总进球2档也有报价支持。"
+                  "仅有单次快照，无报价时间序列。",
+                  "正确比分1-0与2-0并列低位，2至3球报价接近。",
+                  "总进球和半全场报价成本高于正确比分可比性有限。"
                 ],
                 "alternative_explanations": [
-                  "不同玩法报价成本和结算结构不同。",
-                  "后续阵容或正常风险管理可能影响报价。"
+                  "正常的主队实力预期或赛事定价。",
+                  "首发、临场战术或风险控制尚未反映在快照中。",
+                  "不同玩法存在独立报价成本与相关性。"
                 ],
                 "counterevidence": [
-                  "没有报价时间序列、可靠热度数据或球队统计，无法确认市场过热或机构意图。"
+                  "没有资金流、热度、连续变盘或机构意图证据。",
+                  "1-0与2-0并列低位，不构成单一诱导方向。"
                 ],
                 "confirmation_needed": [
-                  "可核验的连续报价与时间戳。",
-                  "可靠首发、伤停及双方近期比赛数据。"
+                  "临场首发、伤停与轮换确认。",
+                  "至少两次有时间标记的同源报价或可靠多源报价。",
+                  "可核验的赛事阶段、赛程密度与双方近期比赛事实。"
                 ]
               }
             }
@@ -518,14 +547,14 @@
                 "match_ids": [
                   1
                 ],
-                "elapsed": 62.7,
+                "elapsed": 126.6,
                 "endpoint_name": "gpt",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 62.7,
-                "cache_hit": true,
+                "total_elapsed": 126.6,
+                "cache_hit": false,
                 "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
                 "row_status": "ok"
               }
@@ -545,8 +574,8 @@
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": true,
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609282017437665982458268d9d6eRGDdYIg)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": false,
                 "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
                 "row_status": "abstain"
               }
@@ -560,20 +589,20 @@
                 "match_ids": [
                   1
                 ],
-                "elapsed": 25.5,
+                "elapsed": 13.6,
                 "endpoint_name": "gemini",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 25.5,
-                "cache_hit": true,
-                "evidence_hash": "d6d3f8aa42f96ea61035647aea758c4b7b8c965922e60cd19a183b2d131c13ed",
+                "total_elapsed": 13.6,
+                "cache_hit": false,
+                "evidence_hash": "18253abe4dc8c1d4bacb25dec2a3dd131d09c7771e919f088ce8e22c4f85a2d6",
                 "row_status": "ok"
               }
             }
           },
-          "prediction_completed_at": "2026-09-28T20:03:56.686157+00:00",
+          "prediction_completed_at": "2026-09-28T20:20:03.804633+00:00",
           "evidence_hash": "95bb9290a581c8089148625f4c8527a8196e418ab0937b2a8195b3ad6d1ff5ae",
           "predicted_label": "2-0",
           "result": "主胜",
@@ -599,19 +628,19 @@
               null
             ],
             [
-              "2-1",
+              "1-0",
               null
             ],
             [
-              "1-0",
+              "2-1",
               null
             ]
           ],
           "final_ai_score": "2-0",
           "final_referee_score": "2-0",
-          "ai_native_reason": "主选2-0(主胜)：该比分在半全场主/主(1.98)、让球-1主胜(2.07)、总进球2球档(3.7)与比分低赔(6.5)四玩法上呈现最强共振。终审裁决：Grok因http_503缺席；驳回GPT的1-1方案，因其违背半全场主/主及让球胜的核心指向。最强反证为基本面与阵容完全缺失，维持D级观望。",
-          "final_ai_analysis": "主选2-0(主胜)：该比分在半全场主/主(1.98)、让球-1主胜(2.07)、总进球2球档(3.7)与比分低赔(6.5)四玩法上呈现最强共振。终审裁决：Grok因http_503缺席；驳回GPT的1-1方案，因其违背半全场主/主及让球胜的核心指向。最强反证为基本面与阵容完全缺失，维持D级观望。",
-          "final_referee_analysis": "主选2-0(主胜)：该比分在半全场主/主(1.98)、让球-1主胜(2.07)、总进球2球档(3.7)与比分低赔(6.5)四玩法上呈现最强共振。终审裁决：Grok因http_503缺席；驳回GPT的1-1方案，因其违背半全场主/主及让球胜的核心指向。最强反证为基本面与阵容完全缺失，维持D级观望。",
+          "ai_native_reason": "主线2-0建立在正确比分低位(6.5)、总进球2-3球重心以及-1让球home_cover(2.07)的交叉映射；最强反证为1-0同赔并立且能降低进攻负荷；因缺乏两队实际比赛统计与首发，证据链单薄，列入D级观察。",
+          "final_ai_analysis": "主线2-0建立在正确比分低位(6.5)、总进球2-3球重心以及-1让球home_cover(2.07)的交叉映射；最强反证为1-0同赔并立且能降低进攻负荷；因缺乏两队实际比赛统计与首发，证据链单薄，列入D级观察。",
+          "final_referee_analysis": "主线2-0建立在正确比分低位(6.5)、总进球2-3球重心以及-1让球home_cover(2.07)的交叉映射；最强反证为1-0同赔并立且能降低进攻负荷；因缺乏两队实际比赛统计与首发，证据链单薄，列入D级观察。",
           "market_margin_audit": {
             "result_market": {
               "available": true,
@@ -864,24 +893,24 @@
           "decision_source": "ai_score_scenarios:gemini:panel_final",
           "engine_version": "vMAX 24.1-SCORE-PANEL",
           "engine_architecture": "默认逐场 GPT/Grok 并行初审 → Gemini 终审；调用预算、总时间和赛前时点受限；保留HHAD让球语义、CRS比分簇、总进球及变化证据和相邻比分审计；外部事实以实际输入来源为准，证据缺口与推荐闸门独立展示；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
-          "gpt_score": "1-1",
-          "gpt_analysis": "暂以1-1作为低置信度情景：总进球2档及平/平报价相符；最强反证是主/主报价更低。缺少球队表现、阵容、赛程及报价序列，无法验证实力或节奏，D级观望。",
+          "gpt_score": "2-0",
+          "gpt_analysis": "主线为2-0，来自正确比分低位、总进球2至3球邻近、半全场主/主及-1让球主胜的交叉吻合；最强反证是1-0同为最低正确比分报价。球队、赛程、首发和时间序列证据严重不足，当前应观察。",
           "grok_score": "",
           "grok_analysis": "",
           "gemini_score": "2-0",
-          "gemini_analysis": "主选2-0(主胜)：该比分在半全场主/主(1.98)、让球-1主胜(2.07)、总进球2球档(3.7)与比分低赔(6.5)四玩法上呈现最强共振。终审裁决：Grok因http_503缺席；驳回GPT的1-1方案，因其违背半全场主/主及让球胜的核心指向。最强反证为基本面与阵容完全缺失，维持D级观望。",
+          "gemini_analysis": "主线2-0建立在正确比分低位(6.5)、总进球2-3球重心以及-1让球home_cover(2.07)的交叉映射；最强反证为1-0同赔并立且能降低进攻负荷；因缺乏两队实际比赛统计与首发，证据链单薄，列入D级观察。",
           "confidence_downgrade_reason": "missing_external_confirmation: 外部事实论据缺少有效来源，禁止升权。",
           "ai_run_metadata": {
-            "run_id": "20260928_200356_2m_c822aea188ba_朝鲜女_中国女",
+            "run_id": "20260928_201743_2m_7bb2e09b6748_朝鲜女_中国女",
             "run_mode": "panel",
             "engine_version": "panel-v24.1",
             "run_status": "completed",
             "total_matches": 2,
             "successful_matches": 2,
             "abstained_matches": 0,
-            "request_count": 0,
+            "request_count": 6,
             "max_calls": 180,
-            "cache_hits": 6,
+            "cache_hits": 0,
             "max_seconds": 5400,
             "call_order": [
               "GPT + Grok independent analysis",
@@ -891,25 +920,6 @@
             "retries": 0,
             "batches": [
               {
-                "ok": true,
-                "ai_name": "gpt",
-                "model": "熊猫-按量-gpt-6-astra",
-                "phase": "panel_analysis",
-                "match_ids": [
-                  1
-                ],
-                "elapsed": 62.7,
-                "endpoint_name": "gpt",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 1,
-                "endpoint_total": 1,
-                "status": "ok",
-                "total_elapsed": 62.7,
-                "cache_hit": true,
-                "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
-                "row_status": "ok"
-              },
-              {
                 "ok": false,
                 "ai_name": "grok",
                 "model": "grok-4.7",
@@ -923,31 +933,12 @@
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": true,
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609282017437665982458268d9d6eRGDdYIg)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": false,
                 "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
                 "row_status": "abstain"
               },
               {
-                "ok": true,
-                "ai_name": "gpt",
-                "model": "熊猫-按量-gpt-6-astra",
-                "phase": "panel_analysis",
-                "match_ids": [
-                  2
-                ],
-                "elapsed": 74.9,
-                "endpoint_name": "gpt",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 1,
-                "endpoint_total": 1,
-                "status": "ok",
-                "total_elapsed": 74.9,
-                "cache_hit": true,
-                "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
-                "row_status": "ok"
-              },
-              {
                 "ok": false,
                 "ai_name": "grok",
                 "model": "grok-4.7",
@@ -955,34 +946,34 @@
                 "match_ids": [
                   2
                 ],
-                "elapsed": 0.2,
+                "elapsed": 3.1,
                 "endpoint_name": "grok",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": true,
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609282017459908302998268d9d6pG7ceWBh)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": false,
                 "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
                 "row_status": "abstain"
               },
               {
                 "ok": true,
-                "ai_name": "gemini",
-                "model": "gemini-3.8-flash-high",
-                "phase": "panel_final",
+                "ai_name": "gpt",
+                "model": "熊猫-按量-gpt-6-astra",
+                "phase": "panel_analysis",
                 "match_ids": [
-                  1
+                  2
                 ],
-                "elapsed": 25.5,
-                "endpoint_name": "gemini",
+                "elapsed": 34.8,
+                "endpoint_name": "gpt",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 25.5,
-                "cache_hit": true,
-                "evidence_hash": "d6d3f8aa42f96ea61035647aea758c4b7b8c965922e60cd19a183b2d131c13ed",
+                "total_elapsed": 34.8,
+                "cache_hit": false,
+                "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
                 "row_status": "ok"
               },
               {
@@ -993,25 +984,63 @@
                 "match_ids": [
                   2
                 ],
-                "elapsed": 17.0,
+                "elapsed": 9.7,
                 "endpoint_name": "gemini",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 17.0,
-                "cache_hit": true,
-                "evidence_hash": "6338dbe8a5de1128b9add68721fb5ad2d0830204537bcfb2b3e2ac86a4da2605",
+                "total_elapsed": 9.7,
+                "cache_hit": false,
+                "evidence_hash": "de9a051d594736e67fecf5c8d7aba9a556ff9b61e909274ec6cfdcb651b47d9a",
+                "row_status": "ok"
+              },
+              {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "熊猫-按量-gpt-6-astra",
+                "phase": "panel_analysis",
+                "match_ids": [
+                  1
+                ],
+                "elapsed": 126.6,
+                "endpoint_name": "gpt",
+                "endpoint_slot": 1,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "ok",
+                "total_elapsed": 126.6,
+                "cache_hit": false,
+                "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
+                "row_status": "ok"
+              },
+              {
+                "ok": true,
+                "ai_name": "gemini",
+                "model": "gemini-3.8-flash-high",
+                "phase": "panel_final",
+                "match_ids": [
+                  1
+                ],
+                "elapsed": 13.6,
+                "endpoint_name": "gemini",
+                "endpoint_slot": 1,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "ok",
+                "total_elapsed": 13.6,
+                "cache_hit": false,
+                "evidence_hash": "18253abe4dc8c1d4bacb25dec2a3dd131d09c7771e919f088ce8e22c4f85a2d6",
                 "row_status": "ok"
               }
             ],
             "failure_summary": {
               "http_503": 2
             },
-            "elapsed_seconds": 0.008
+            "elapsed_seconds": 140.209
           },
           "prematch_status": "eligible",
-          "published_at": "2026-09-29T04:03:56.692727+08:00"
+          "published_at": "2026-09-29T04:20:03.810101+08:00"
         },
         "is_top4_candidate": false,
         "is_recommended": false,
@@ -1024,7 +1053,7 @@
         "source_url": "https://edu.wencaivip.cn/api/v1.reference/matches",
         "stime": 1790677800,
         "kickoff_at": "2026-09-29T10:30:00+00:00",
-        "captured_at": "2026-09-28T20:03:56.675669+00:00",
+        "captured_at": "2026-09-28T20:17:43.591735+00:00",
         "kickoff_status": "known",
         "season": null,
         "home_team": "日本女",
@@ -1203,37 +1232,37 @@
           "top3": [
             {
               "score": "2-1",
-              "logic": "契合总进球3球核心档位与主胜主线，兼容韩国女足近期能进球亦易丢球的战术特征，且符合主让2球客胜赔率更低的制约。",
+              "logic": "契合总进球3球最低赔与主让2球客胜赔率，但受比分赔率非最低压制。",
               "prob": null
             },
             {
               "score": "2-0",
-              "logic": "原始比分报价全场最低（6.25），半全场主/主（1.60）高度聚焦，但反证在于韩国进攻端效率尚存。",
+              "logic": "正确比分玩法中最低赔选项，但对应让球平(3.80)与2球总进球(4.05)。",
               "prob": null
             },
             {
               "score": "3-0",
-              "logic": "同样满足3球区间与日本强势胜出，反证为让球-2下穿盘赔率偏高（2.73），需建立在日本彻底打穿防线前提下。",
+              "logic": "同属3球档位且比分赔率(7.40)低于2-1，对应让球主胜(2.73)。",
               "prob": null
             }
           ],
           "anchor_audit": {
-            "zero_zero": "报价高达21.0，与半全场主/主及进球区间完全背离，缺乏球队风格层面的低比分支撑。",
-            "one_one": "报价11.0，平局最低档，但在主/主低至1.60的背景下属于小概率防守端异动选项。",
-            "high_score_tail": "总进球6球（13.0）、7+（17.5）与4球（4.70）明显脱节，虽韩国上轮打出高比分，但整体尾部缺乏普遍支撑。",
-            "handicap_cover": "主让2球后away_cover 2.00低于home_cover 2.73，限制了日本以3球及以上净胜球穿盘的预期。"
+            "zero_zero": "0-0报价21.0，总进球0球报价21.0，缺乏互相对抗零封支撑。",
+            "one_one": "1-1报价11.0，平局选项次优但整体走势偏向主胜。",
+            "high_score_tail": "5球(7.65)、6球(13.0)、7+(17.5)，高球尾部赔率陡峭但未完全排除。",
+            "handicap_cover": "主队-2：2-1结算为让球客胜(2.00)，2-0为让球平(3.80)，3-0为让球主胜(2.73)。"
           },
           "market_interpretation": {
-            "handicap": "主让2球，让平3.80、让负2.00，让胜2.73，显示出日本赢球但难以轻易净胜3球的市场格局。",
-            "correct_score": "2-0为6.25处于最低位，3-0与2-1、1-0形成第一集团梯队，重心聚焦在日本净胜1至2球。",
-            "total_goals": "以3球（3.60）为波峰，两侧2球（4.05）与4球（4.70）构成主要进球带，低比分与超大比分均未受重点倾斜。",
-            "half_full_time": "主/主低至1.60，平/主3.90，几乎排除客队半场领先路径，高度强化日本常规时间取胜逻辑。"
+            "handicap": "主队让2球后，客胜2.00明显低于主胜2.73和平3.80，暗示倾向净胜1球或不败。",
+            "correct_score": "2-0(6.25)与3-0(7.40)居前，2-1(8.00)略高，玩法间存在成本与偏好分歧。",
+            "total_goals": "3球(3.60)最低，依次为2球(4.05)与4球(4.70)，重心在2-3球。",
+            "half_full_time": "主/主(1.60)绝对低赔，指向半全场建立优势，无法锁定具体终场比分。"
           },
           "contextual_logic": {
-            "league_style": "亚运女足，淘汰赛阶段通常容错率低，但防线易在体能下降时出现空间。",
+            "league_style": "unknown",
             "tempo": "unknown",
             "rotation_risk": "unknown",
-            "motivation": "赛会制奖牌争夺战意高，但具体轮换无法确认。"
+            "motivation": "亚运会阶段目标未知，缺乏官方晋级战意证据"
           },
           "rejected_cases": {},
           "web_research": {
@@ -1246,7 +1275,13 @@
             "has_conflict": false,
             "conflicts": []
           },
-          "evidence_quality_score": 30,
+          "evidence_quality_score": 20,
+          "tempo_xg_tactical_audit": {
+            "status": "无可用xG、射门及战术数据"
+          },
+          "score_elimination_audit": {
+            "status": "未硬性剔除任何非极端比分，保留2-0与3-0作为主要风险对立面"
+          },
           "recommendation": {
             "tier": "D",
             "is_recommended": false,
@@ -1256,36 +1291,35 @@
             "score_stability": "unknown",
             "risk_level": "high",
             "risk_tags": [
-              "球队底层数据缺失",
-              "首发未确认",
-              "单次报价快照",
+              "缺乏球队基础数据",
+              "阵容与伤停未知",
+              "盘口无时间序列",
               "external_fact_without_source",
               "missing_external_confirmation",
               "external_evidence_quality_below_50"
             ],
             "bet_action": "observe",
             "why_this_can_fail": [
-              "日本女足完成零封（打出2-0）",
-              "日本队进攻状态极佳形成大比分穿盘（打出3-0及以上）",
-              "韩国女足战术收缩逼出低平比分"
+              "2-0及3-0比分赔率更低压制2-1",
+              "韩国进攻火力若哑火直接导向零封"
             ],
             "minimum_evidence_needed": [
               "官方确认首发阵容",
-              "比赛具体轮次与淘汰赛阶段确认",
-              "赛前多时点赔率流动轨迹"
+              "比赛性质与赛制阶段",
+              "连续盘口赔率序列"
             ],
             "why_recommended": ""
           },
           "data_quality": {
             "missing": [
-              "确认首发与伤停",
-              "准确赛制阶段",
-              "双方赛季进失球与高阶统计",
-              "连续时间序列盘口数据"
+              "赛事阶段与积分信息",
+              "首发及替补名单",
+              "近期交锋与真实统计",
+              "报价时间序列"
             ],
             "raw_packet_quality": "low"
           },
-          "reason": "主线聚焦2-1：总进球3球档位赔率最优，配合韩国近两场连续失球情报及日本常规主胜，形成合理解释；反证为2-0更低赔且让球-2抑制穿盘。因缺乏首发、积分赛程与底层数据，评级为D级观察。",
+          "reason": "主线2-1由总进球3球与让球客胜交叉得出，但比分玩法更青睐2-0与3-0构成严重反证。在球队战绩与阵容全面缺失下，无法验证防守端破门事实，全盘维持观察。",
           "validation_warnings": [
             "direction_probs_missing_unavailable",
             "missing_external_confirmation",
@@ -1293,62 +1327,60 @@
             "external_evidence_quality_below_50"
           ],
           "score_cluster_audit": {
-            "why_selected_score": "2-1落入总进球3球最低档，兼顾了日本女足的主导地位和韩国女足防守易失球的情报，且规避了日本必须零封或大胜两球以上的假设。",
+            "why_selected_score": "在总进球3球(3.60)与让球客胜(2.00)的交叉下2-1具有较好平衡性，尽管比分单项2-0更低。",
             "adjacent_scores_checked": [
               "1-0",
               "2-0",
               "3-0",
+              "3-1",
               "1-1",
-              "3-1"
+              "1-2"
             ]
           },
           "risk_score_candidates": [
             {
-              "score": "2-0",
-              "risk_type": "零封路径",
-              "reason": "市场最低赔比分，半全场主/主优势明显，若韩国攻击哑火则迅速滑向此分。",
+              "score": "3-0",
+              "risk_type": "零封扩大",
+              "reason": "若日本女足攻防压制显著且零封韩国，比分将滑向3-0让胜路径。",
               "prob": null
             },
             {
-              "score": "3-0",
-              "risk_type": "深度穿盘",
-              "reason": "韩国防线大溃败且日本进攻全开，但受让球-2客胜低赔的约束。",
+              "score": "2-0",
+              "risk_type": "让平小胜",
+              "reason": "比分玩法最低赔率指向，若进攻节奏放缓至2球区间则触发。",
               "prob": null
             },
             {
               "score": "1-1",
-              "risk_type": "平局防冷",
-              "reason": "若日本出现大幅轮换或进攻效率低下，韩国偷袭得手导致主胜落空。",
+              "risk_type": "平局防范",
+              "reason": "若韩国女足反击奏效且日本进攻受挫，主胜主线即告失效。",
               "prob": null
             }
           ],
           "external_fact_table": [],
-          "tempo_xg_tactical_audit": {},
-          "score_elimination_audit": {},
           "analysis_policy": "score-first-v24",
           "reading_summary": {
-            "context": "亚运女足日本女对阵韩国女，90分钟常规时间口径。赛季阶段、具体轮次、休息天数及确认首发均缺失；双方真实赛季数据未录入。情报显示韩国女足近两场连续失球（1-1朝鲜、6-3乌兹别克），防守保护存隐患，但缺少日本女足同期样本，战意与轮换状态保持unknown。",
-            "goal_band": "缺乏双方底层xG数据，进球节奏主要依凭报价分布与韩国近期防守表现。总进球0至7+曲线上，3球（3.60）处于最低位，2球（4.05）与4球（4.70）紧邻，两头0球（21.0）与6球及以上显著拉开，整体锚定在2-4球区间，中枢指向2-3球。",
-            "market_alignment": "原始正确比分2-0（6.25）最低，3-0（7.40）、1-0（8.00）及2-1（8.00）紧随其后。半全场主/主（1.60）显示日本半场即确立优势的偏向；让球玩法主让2球下客胜（away_cover 2.00）明显低于主胜（2.73），形成对日本净胜3球及以上深盘大胜的制约，2-1落入受让方覆盖范围与该反证相容。",
-            "candidate_comparison": "2-0吻合最低比分及半全场主/主，但过度依赖日本零封且忽视韩国尚可的攻击端与近两场失球多反映的开放风格；3-0符合3球档但穿盘赔付偏高；1-1虽有防冷价值但与主/主极低赔率大幅背离；2-1同时吸收日本胜向、3球最优档位以及韩国有进球且防守有失的特征，相对均衡。",
-            "verdict": "终审核定采纳GPT初审主选2-1（Grok因http_503缺席，非多数票采纳）。主选依据为日本胜向、总进球3球顶峰及让球-2对大胜的压制；最强反证为2-0更低赔且主/主极度聚集。失效条件为日本实现稳固零封（直接导向2-0）或轮换乏力导致防线受挫无法破门。"
+            "context": "亚运女足日本女对韩国女，以常规90分钟为准。赛事阶段、真实积分、具体赛程、首发伤停均未知；情报片段关于韩国女足防守的描述无来源与时间核验，无法作为防守漏洞的铁证。",
+            "goal_band": "缺两队统计与xG事实，进球区间仅由报价反映：总进球3球最低(3.6)，2球(4.05)与4球(4.7)相邻，高球尾部5至7+依次升高；节奏与进球区间缺乏球队事实，仅存报价支持。",
+            "market_alignment": "2-1符合总进球3球与主队让2球下的让球客胜(2.00)；最大冲突为正确比分最低档为2-0(6.25)及3-0(7.40)，均低于2-1(8.00)。半全场主/主(1.60)支持主胜走势，各玩法为同源单次报价。",
+            "candidate_comparison": "0-0(21.0)与1-1(11.0)支持力偏弱；反向1-2(28.0)赔率过高；在主胜集群中，2-0对应让平(3.80)，3-0对应让胜(2.73)，2-1与让负(2.00)及总进球3球交叉吻合度更均衡。",
+            "verdict": "终审核定：采纳初审GPT的2-1主线逻辑与五步推导，其合理揭示了比分报价与让球玩法的内部张力；驳回Grok（status=http_503，处于不可用缺席状态）。关键反证为2-0与3-0报价更低，若日本确立防守零封优势则2-1失效。数据严重匮乏，维持D级观察。"
           },
           "market_risk_audit": {
             "status": "hypothesis",
             "evidence": [
-              "单次快照显示半全场主/主（1.60）显著低赔聚集。",
-              "让球-2下away_cover仅2.00，对穿盘形成抑制。"
+              "单次同源盘口快照，玩法间存在让负与比分最低档不完全一致的结构张力"
             ],
             "alternative_explanations": [
-              "杯赛赛会制风控差异及女足淘汰赛性质的天然防范。",
-              "无连续时序，可能仅为机构初始平衡抽水布局。"
+              "不同玩法抽水成本不同导致赔率排序差异",
+              "淘汰赛杯赛特殊防守调整"
             ],
             "counterevidence": [
-              "2-0比分报价最低，并未完全放弃日本完胜零封可能。"
+              "无赔率变化时间序列，无成交量与资金流向监控"
             ],
             "confirmation_needed": [
-              "双方最终确认首发与伤停名单。",
-              "赛前盘口水位变动与热度趋势。"
+              "首发伤停名单",
+              "盘口连续变动时间序列"
             ]
           },
           "review_context": {
@@ -1381,92 +1413,89 @@
               "top3": [
                 {
                   "score": "2-1",
-                  "logic": "日本主胜与总进球3档吻合，韩国近两场未零封及单场丢3球支持其有失球或进球路径；反证是2-0报价更低且半全场主/主强。",
-                  "prob": null
-                },
-                {
-                  "score": "2-0",
-                  "logic": "原始比分报价最低，半全场主/主最吻合，体现日本胜且零封的路径；反证是韩国近期防守失球情报和总进球3档。",
+                  "logic": "贴近3球与让球客胜报价；缺球队事实支撑失球判断。",
                   "prob": null
                 },
                 {
                   "score": "3-0",
-                  "logic": "原始比分次低，符合日本胜、总进球3及让球方向中的大胜路径；反证是让球-2下客胜报价较低，且没有日本进攻统计或首发证据支持扩大分差。",
+                  "logic": "同为3球且比分报价更低；对应让球主胜，与让球客胜报价冲突。",
+                  "prob": null
+                },
+                {
+                  "score": "2-0",
+                  "logic": "比分报价最低；对应让球平，且总进球2球报价高于3球。",
                   "prob": null
                 }
               ],
               "score_cluster_audit": {
-                "why_selected_score": "2-1同时连接日本主胜、总进球3和韩国近期防守失球证据，较2-0少依赖零封假设，较3-0少依赖日本扩大分差假设。",
+                "why_selected_score": "3球与让球客胜交叉支持2-1，但比分报价更偏向2-0、3-0。",
                 "adjacent_scores_checked": [
+                  "0-0",
+                  "1-1",
                   "1-0",
                   "2-0",
                   "3-0",
-                  "1-1",
-                  "2-2",
-                  "1-2"
+                  "1-2",
+                  "3-1",
+                  "1-3"
                 ]
               },
               "anchor_audit": {
-                "zero_zero": "报价21.0，且与主/主及总进球3档不吻合，暂无球队事实支持低节奏僵局。",
-                "one_one": "报价11.0，较0-0更接近中低比分，但与半全场主/主及日本主胜主线冲突；仅在日本轮换或韩国防守改善时上升。",
-                "high_score_tail": "4球4.7、5球7.65、6球13.0、7+17.5，4球仍需保留；6球以上尾部报价明显拉开，暂无进攻统计支持。",
-                "handicap_cover": "主队让2球后，2-1属于away_cover；让球away_cover报价2.0低于home_cover 2.73，形成日本大胜不足的主要反证。"
+                "zero_zero": "0-0报21、0球报21；无零封双方的球队证据。",
+                "one_one": "1-1报11；缺双方得分能力证据。",
+                "high_score_tail": "5、6、7+球分别报7.65、13、17.5；尾部未被排除。",
+                "handicap_cover": "主队-2：2-1为让球客胜，2-0为让球平，3-0为让球主胜。"
               },
               "market_interpretation": {
-                "handicap": "主队-2后，2-1为让球后客胜；该结果与2-0、3-0等主队赢两球路径形成分歧，报价更偏向日本难以轻松穿过两球门槛。",
-                "correct_score": "2-0最低，3-0次低，1-0与2-1同档；最低报价只作为锚点，不能单独替代球队证据。",
-                "total_goals": "完整0至7+曲线以3球为最低档，2球和4球相邻；支持2-1、2-0、3-0候选并保留4球尾部，不能由此合成真实大小球概率。",
-                "half_full_time": "主/主为1.6，显著支持日本半场领先并最终取胜；但该玩法与让球及韩国失球证据存在相关性，不能视为独立确认。"
+                "handicap": "主队90分钟进球减2后比较；客胜报价2.0不等于真实胜率。",
+                "correct_score": "2-0报价最低，不能单凭此定主线；比分报价不完整，成本未知。",
+                "total_goals": "3球报价最低，2球和4球相邻；7为7+，不能合成大小球盘。",
+                "half_full_time": "主/主1.6与主胜终场情景相容，不能指定半场或最终比分。"
               },
               "contextual_logic": {
-                "league_style": "亚运女足赛事属性可确认，但阶段与赛制语境未知，不能据此推断战意或比赛风格。",
+                "league_style": "unknown",
                 "tempo": "unknown",
                 "rotation_risk": "unknown",
-                "motivation": "unknown；积分、轮次与赛程目标均未提供。"
+                "motivation": "unknown"
               },
               "rejected_cases": {},
               "recommendation": {
                 "tier": "D",
                 "is_recommended": false,
                 "top4_priority": 99,
-                "bet_confidence": 32,
+                "bet_confidence": 20,
                 "direction_stability": "unknown",
                 "score_stability": "unknown",
                 "risk_level": "high",
                 "risk_tags": [
-                  "首发未确认",
-                  "球队统计缺失",
-                  "赛制与战意未知",
-                  "单次报价快照",
-                  "玩法报价相关"
+                  "球队证据不足",
+                  "阵容未知",
+                  "同源单次报价"
                 ],
                 "bet_action": "observe",
                 "why_this_can_fail": [
-                  "2-0报价和主/主结构可能对应日本零封，而2-1依赖韩国进球路径。",
-                  "让球-2下客胜报价较低，可能反映日本难以形成两球优势。",
-                  "缺少双方真实赛季数据，无法核验节奏与实力差。"
+                  "2-0及3-0比分报价更低",
+                  "韩国得分能力未经核验"
                 ],
                 "minimum_evidence_needed": [
-                  "确认双方首发、伤停与轮换。",
-                  "补充可核验的近期进失球、对手强度和赛程休息信息。",
-                  "获得多时点且来源清晰的报价变化记录。"
+                  "可靠近期球队数据",
+                  "确认阵容与赛程",
+                  "可核验情报来源"
                 ],
-                "why_recommended": "证据可形成2-1主线和2-0、3-0相邻候选，但球队事实不足、首发未知且让球存在明确反证，保留情景分析，不作投注推荐。"
+                "why_recommended": ""
               },
               "data_quality": {
                 "missing": [
                   "赛季与赛事阶段",
-                  "双方积分、排名与真实赛程",
-                  "双方赛季进失球统计",
-                  "历史交锋",
-                  "休息与旅行",
-                  "伤停及确认首发",
-                  "多时点报价序列",
-                  "可靠热度或资金流"
+                  "球队统计",
+                  "完整赛程及休息旅行",
+                  "确认首发与伤停",
+                  "情报来源及时间",
+                  "连续报价"
                 ],
-                "raw_packet_quality": "medium"
+                "raw_packet_quality": "low"
               },
-              "reason": "主线为2-1：日本主胜、总进球3档及韩国防守失球证据相互吻合。最强反证为2-0的原始比分低报价、半全场主/主集中，以及让球-2下对日本大胜不足的报价约束。首发、赛制、赛程和球队统计缺失，故为D级观察。",
+              "reason": "2-1仅是3球、让球客胜及主/主报价可交叉容纳的情景；2-0、3-0形成强反证，球队事实不足，维持观察。",
               "web_research": {
                 "used": false,
                 "sources": [],
@@ -1475,21 +1504,21 @@
               "final_web_audit": {},
               "risk_score_candidates": [
                 {
-                  "score": "2-0",
-                  "risk_type": "零封路径",
-                  "reason": "原始比分最低报价且半全场主/主最强；若韩国攻击端受限或日本首发完整，主线可能少算客队进球。",
-                  "prob": null
-                },
-                {
                   "score": "3-0",
-                  "risk_type": "主队扩大优势",
-                  "reason": "总进球3档与主胜方向一致，且让球场景要求关注两球以上差距；触发条件是日本高强度首发并早早领先。",
+                  "risk_type": "零封扩大",
+                  "reason": "若日本防守与进攻配置获确认且压制持续，让球主胜路径增强。",
                   "prob": null
                 },
                 {
                   "score": "1-1",
-                  "risk_type": "主胜落空",
-                  "reason": "若日本轮换、韩国防守改善且比赛节奏偏低，平局路径成立；目前缺少双方赛季数据和首发确认，无法排除。",
+                  "risk_type": "平局",
+                  "reason": "若日本进攻受限、韩国形成有效反击，主胜路径失效。",
+                  "prob": null
+                },
+                {
+                  "score": "1-2",
+                  "risk_type": "反向小胜",
+                  "reason": "若韩国有效限制日本并取得两球，需重新评估报价主线。",
                   "prob": null
                 }
               ],
@@ -1501,9 +1530,13 @@
                 "has_conflict": false,
                 "conflicts": []
               },
-              "evidence_quality_score": 46,
-              "tempo_xg_tactical_audit": {},
-              "score_elimination_audit": {},
+              "evidence_quality_score": 20,
+              "tempo_xg_tactical_audit": {
+                "status": "球队统计、战术与xG均无可核验证据"
+              },
+              "score_elimination_audit": {
+                "status": "未硬性排除零封、平局、反向或高比分"
+              },
               "review_context": {
                 "current_model": "gpt",
                 "stage": "independent_analysis",
@@ -1511,32 +1544,27 @@
                 "final_referee": "gemini"
               },
               "reading_summary": {
-                "context": "赛事身份为亚运女足日本女对韩国女，按90分钟口径分析；赛季、阶段、轮次、积分、赛程密度、休息与旅行信息均未知。证据时间为2026-09-28 19:51，开赛时间为2026-09-29 10:30。双方首发未确认，轮换、伤停与可用性存在缺口。韩国女队前四场3胜1平、近两场未零封及四分之一决赛丢3球来自单条情报，未提供独立来源、完整样本或日本队对应数据。",
-                "goal_band": "球队统计不可核验，进球区间主要由完整总进球报价支持，集中在2至4球，3球档最低；0、1球档与6、7+尾部均明显更高。韩国防守转换和禁区保护存在已提供的负面证据，使双方进球的3球情景可成立，但不能据此固定上限。",
-                "market_alignment": "原始比分中2-0为最低报价，3-0次低，2-1与1-0同档；总进球以3球最集中，2球和4球相邻。半全场主/主显著低于其他组合，支持日本90分钟取胜。让球为主队-2，2-1落入让球后客胜，构成对日本大胜主线的最大冲突；让球报价成本约11.46%，总进球与半全场成本约16.92%，仅为报价成本背景。无时间序列，不能解释为资金流或诱盘。",
-                "candidate_comparison": "0-0与1-1缺少日本进攻或双方低节奏的球队统计支持，且半全场主/主不吻合。1-0符合日本取胜和低比分，但总进球3档及韩国近期连续失球使其少算一个客队进球。2-0最吻合原始比分最低档和半全场主/主，但忽略韩国防守端已给出的失球风险。2-1同时满足日本胜、总进球3和韩国存在破门路径，因此作为主线；3-0是强相邻候选，需日本压制并完成零封。",
-                "verdict": "主比分选2-1，依据是日本主胜方向、总进球3档、韩国近两场未零封及四分之一决赛丢3球的已提供情报交叉一致。最强反证是2-0为原始比分最低报价且半全场主/主明显占优，另有让球-2下客胜报价较低，均提示日本只赢一球或未能拉开差距。若确认韩国主力防线完整、日本明显轮换，或临场玩法仍全面集中于日本零封大胜，2-1失效。"
+                "context": "亚运女足日本女对韩国女，按90分钟；赛季、阶段、赛程、休息及首发未知。韩国近况片段无来源、时间和完整样本，不能据此确认防线状态。",
+                "goal_band": "缺球队统计与阵容，2至3球仅有报价支持，非进球上限；总进球0至7+中，3球3.6、2球4.05、4球4.7，5至7+报价依次上升。",
+                "market_alignment": "2-1对应3球、让球后客胜；让球客胜2.0低于主胜2.73、平3.8。比分2-0报6.25、3-0报7.4，均低于2-1的8.0，是主要冲突；半全场主/主1.6支持主队领先终场，但不区分这些比分。均为同源相关报价。",
+                "candidate_comparison": "0-0报21且0球报21；1-1报11，均弱于主胜相邻比分。1-0与2-1同报8，后者更贴近3球报价；2-0虽为最低比分报价，但对应让球平。3-0同为3球却对应让球主胜；反向1-2报28，高比分镜像如3-1报9.5、1-3报80，均不能排除。",
+                "verdict": "暂以2-1为报价交叉下的主线，非球队实力结论。最强反证是2-0、3-0的比分报价更低；若确认日本零封能力或韩国进攻受损，主线失效。"
               },
               "market_risk_audit": {
                 "status": "hypothesis",
                 "evidence": [
-                  "仅有单次完整报价快照，无报价时间序列、热度或资金流数据。",
-                  "半全场主/主明显集中，原始比分集中于日本胜且总进球2至3球。",
-                  "让球-2下away_cover报价低于home_cover，提示报价结构对日本大胜存在约束。"
+                  "仅有单次同源报价；让球与比分偏好不完全一致"
                 ],
                 "alternative_explanations": [
-                  "报价成本和不同玩法的结算差异可能造成档位差异。",
-                  "阵容、临场战术或正常风险控制可能解释日本大胜报价受限。",
-                  "同一机构多个玩法相关，不能视为多家独立确认。"
+                  "不同玩法报价成本不同",
+                  "阵容信息未确认"
                 ],
                 "counterevidence": [
-                  "2-0和3-0原始比分报价较低，仍支持日本零封或两球以上获胜。",
-                  "主/主报价强，反向解读为日本不胜缺乏直接市场支持。"
+                  "无可靠热度、资金流或连续报价"
                 ],
                 "confirmation_needed": [
-                  "双方官方首发、核心攻击与防线可用性。",
-                  "临场多时点报价序列及可核验的热度信息。",
-                  "赛事阶段、积分目标、休息与轮换事实。"
+                  "带时间戳的连续报价",
+                  "可靠阵容与球队数据"
                 ]
               }
             }
@@ -1551,14 +1579,14 @@
                 "match_ids": [
                   2
                 ],
-                "elapsed": 74.9,
+                "elapsed": 34.8,
                 "endpoint_name": "gpt",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 74.9,
-                "cache_hit": true,
+                "total_elapsed": 34.8,
+                "cache_hit": false,
                 "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
                 "row_status": "ok"
               }
@@ -1572,14 +1600,14 @@
                 "match_ids": [
                   2
                 ],
-                "elapsed": 0.2,
+                "elapsed": 3.1,
                 "endpoint_name": "grok",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": true,
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609282017459908302998268d9d6pG7ceWBh)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": false,
                 "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
                 "row_status": "abstain"
               }
@@ -1593,20 +1621,20 @@
                 "match_ids": [
                   2
                 ],
-                "elapsed": 17.0,
+                "elapsed": 9.7,
                 "endpoint_name": "gemini",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 17.0,
-                "cache_hit": true,
-                "evidence_hash": "6338dbe8a5de1128b9add68721fb5ad2d0830204537bcfb2b3e2ac86a4da2605",
+                "total_elapsed": 9.7,
+                "cache_hit": false,
+                "evidence_hash": "de9a051d594736e67fecf5c8d7aba9a556ff9b61e909274ec6cfdcb651b47d9a",
                 "row_status": "ok"
               }
             }
           },
-          "prediction_completed_at": "2026-09-28T20:03:56.688036+00:00",
+          "prediction_completed_at": "2026-09-28T20:18:28.124214+00:00",
           "evidence_hash": "2800da58d8f838bcb181ad96ae9aaf5cc03059c79a9f77342e9e24882804583d",
           "predicted_label": "2-1",
           "result": "主胜",
@@ -1642,9 +1670,9 @@
           ],
           "final_ai_score": "2-1",
           "final_referee_score": "2-1",
-          "ai_native_reason": "主线聚焦2-1：总进球3球档位赔率最优，配合韩国近两场连续失球情报及日本常规主胜，形成合理解释；反证为2-0更低赔且让球-2抑制穿盘。因缺乏首发、积分赛程与底层数据，评级为D级观察。",
-          "final_ai_analysis": "主线聚焦2-1：总进球3球档位赔率最优，配合韩国近两场连续失球情报及日本常规主胜，形成合理解释；反证为2-0更低赔且让球-2抑制穿盘。因缺乏首发、积分赛程与底层数据，评级为D级观察。",
-          "final_referee_analysis": "主线聚焦2-1：总进球3球档位赔率最优，配合韩国近两场连续失球情报及日本常规主胜，形成合理解释；反证为2-0更低赔且让球-2抑制穿盘。因缺乏首发、积分赛程与底层数据，评级为D级观察。",
+          "ai_native_reason": "主线2-1由总进球3球与让球客胜交叉得出，但比分玩法更青睐2-0与3-0构成严重反证。在球队战绩与阵容全面缺失下，无法验证防守端破门事实，全盘维持观察。",
+          "final_ai_analysis": "主线2-1由总进球3球与让球客胜交叉得出，但比分玩法更青睐2-0与3-0构成严重反证。在球队战绩与阵容全面缺失下，无法验证防守端破门事实，全盘维持观察。",
+          "final_referee_analysis": "主线2-1由总进球3球与让球客胜交叉得出，但比分玩法更青睐2-0与3-0构成严重反证。在球队战绩与阵容全面缺失下，无法验证防守端破门事实，全盘维持观察。",
           "market_margin_audit": {
             "result_market": {
               "available": true,
@@ -1898,23 +1926,23 @@
           "engine_version": "vMAX 24.1-SCORE-PANEL",
           "engine_architecture": "默认逐场 GPT/Grok 并行初审 → Gemini 终审；调用预算、总时间和赛前时点受限；保留HHAD让球语义、CRS比分簇、总进球及变化证据和相邻比分审计；外部事实以实际输入来源为准，证据缺口与推荐闸门独立展示；本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。",
           "gpt_score": "2-1",
-          "gpt_analysis": "主线为2-1：日本主胜、总进球3档及韩国防守失球证据相互吻合。最强反证为2-0的原始比分低报价、半全场主/主集中，以及让球-2下对日本大胜不足的报价约束。首发、赛制、赛程和球队统计缺失，故为D级观察。",
+          "gpt_analysis": "2-1仅是3球、让球客胜及主/主报价可交叉容纳的情景；2-0、3-0形成强反证，球队事实不足，维持观察。",
           "grok_score": "",
           "grok_analysis": "",
           "gemini_score": "2-1",
-          "gemini_analysis": "主线聚焦2-1：总进球3球档位赔率最优，配合韩国近两场连续失球情报及日本常规主胜，形成合理解释；反证为2-0更低赔且让球-2抑制穿盘。因缺乏首发、积分赛程与底层数据，评级为D级观察。",
+          "gemini_analysis": "主线2-1由总进球3球与让球客胜交叉得出，但比分玩法更青睐2-0与3-0构成严重反证。在球队战绩与阵容全面缺失下，无法验证防守端破门事实，全盘维持观察。",
           "confidence_downgrade_reason": "missing_external_confirmation: 外部事实论据缺少有效来源，禁止升权。",
           "ai_run_metadata": {
-            "run_id": "20260928_200356_2m_c822aea188ba_朝鲜女_中国女",
+            "run_id": "20260928_201743_2m_7bb2e09b6748_朝鲜女_中国女",
             "run_mode": "panel",
             "engine_version": "panel-v24.1",
             "run_status": "completed",
             "total_matches": 2,
             "successful_matches": 2,
             "abstained_matches": 0,
-            "request_count": 0,
+            "request_count": 6,
             "max_calls": 180,
-            "cache_hits": 6,
+            "cache_hits": 0,
             "max_seconds": 5400,
             "call_order": [
               "GPT + Grok independent analysis",
@@ -1924,25 +1952,6 @@
             "retries": 0,
             "batches": [
               {
-                "ok": true,
-                "ai_name": "gpt",
-                "model": "熊猫-按量-gpt-6-astra",
-                "phase": "panel_analysis",
-                "match_ids": [
-                  1
-                ],
-                "elapsed": 62.7,
-                "endpoint_name": "gpt",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 1,
-                "endpoint_total": 1,
-                "status": "ok",
-                "total_elapsed": 62.7,
-                "cache_hit": true,
-                "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
-                "row_status": "ok"
-              },
-              {
                 "ok": false,
                 "ai_name": "grok",
                 "model": "grok-4.7",
@@ -1956,31 +1965,12 @@
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": true,
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609282017437665982458268d9d6eRGDdYIg)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": false,
                 "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
                 "row_status": "abstain"
               },
               {
-                "ok": true,
-                "ai_name": "gpt",
-                "model": "熊猫-按量-gpt-6-astra",
-                "phase": "panel_analysis",
-                "match_ids": [
-                  2
-                ],
-                "elapsed": 74.9,
-                "endpoint_name": "gpt",
-                "endpoint_slot": 1,
-                "endpoint_attempt": 1,
-                "endpoint_total": 1,
-                "status": "ok",
-                "total_elapsed": 74.9,
-                "cache_hit": true,
-                "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
-                "row_status": "ok"
-              },
-              {
                 "ok": false,
                 "ai_name": "grok",
                 "model": "grok-4.7",
@@ -1988,34 +1978,34 @@
                 "match_ids": [
                   2
                 ],
-                "elapsed": 0.2,
+                "elapsed": 3.1,
                 "endpoint_name": "grok",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "http_503",
-                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
-                "cache_hit": true,
+                "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609282017459908302998268d9d6pG7ceWBh)\",\"type\":\"new_api_error\"}}",
+                "cache_hit": false,
                 "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
                 "row_status": "abstain"
               },
               {
                 "ok": true,
-                "ai_name": "gemini",
-                "model": "gemini-3.8-flash-high",
-                "phase": "panel_final",
+                "ai_name": "gpt",
+                "model": "熊猫-按量-gpt-6-astra",
+                "phase": "panel_analysis",
                 "match_ids": [
-                  1
+                  2
                 ],
-                "elapsed": 25.5,
-                "endpoint_name": "gemini",
+                "elapsed": 34.8,
+                "endpoint_name": "gpt",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 25.5,
-                "cache_hit": true,
-                "evidence_hash": "d6d3f8aa42f96ea61035647aea758c4b7b8c965922e60cd19a183b2d131c13ed",
+                "total_elapsed": 34.8,
+                "cache_hit": false,
+                "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
                 "row_status": "ok"
               },
               {
@@ -2026,25 +2016,63 @@
                 "match_ids": [
                   2
                 ],
-                "elapsed": 17.0,
+                "elapsed": 9.7,
                 "endpoint_name": "gemini",
                 "endpoint_slot": 1,
                 "endpoint_attempt": 1,
                 "endpoint_total": 1,
                 "status": "ok",
-                "total_elapsed": 17.0,
-                "cache_hit": true,
-                "evidence_hash": "6338dbe8a5de1128b9add68721fb5ad2d0830204537bcfb2b3e2ac86a4da2605",
+                "total_elapsed": 9.7,
+                "cache_hit": false,
+                "evidence_hash": "de9a051d594736e67fecf5c8d7aba9a556ff9b61e909274ec6cfdcb651b47d9a",
+                "row_status": "ok"
+              },
+              {
+                "ok": true,
+                "ai_name": "gpt",
+                "model": "熊猫-按量-gpt-6-astra",
+                "phase": "panel_analysis",
+                "match_ids": [
+                  1
+                ],
+                "elapsed": 126.6,
+                "endpoint_name": "gpt",
+                "endpoint_slot": 1,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "ok",
+                "total_elapsed": 126.6,
+                "cache_hit": false,
+                "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
+                "row_status": "ok"
+              },
+              {
+                "ok": true,
+                "ai_name": "gemini",
+                "model": "gemini-3.8-flash-high",
+                "phase": "panel_final",
+                "match_ids": [
+                  1
+                ],
+                "elapsed": 13.6,
+                "endpoint_name": "gemini",
+                "endpoint_slot": 1,
+                "endpoint_attempt": 1,
+                "endpoint_total": 1,
+                "status": "ok",
+                "total_elapsed": 13.6,
+                "cache_hit": false,
+                "evidence_hash": "18253abe4dc8c1d4bacb25dec2a3dd131d09c7771e919f088ce8e22c4f85a2d6",
                 "row_status": "ok"
               }
             ],
             "failure_summary": {
               "http_503": 2
             },
-            "elapsed_seconds": 0.008
+            "elapsed_seconds": 140.209
           },
           "prematch_status": "eligible",
-          "published_at": "2026-09-29T04:03:56.692727+08:00"
+          "published_at": "2026-09-29T04:20:03.810101+08:00"
         },
         "is_top4_candidate": false,
         "is_recommended": false,
@@ -2071,7 +2099,7 @@
       "source_status": "ok",
       "date_mode": "next_available",
       "selection_reason": "next_available",
-      "captured_at": "2026-09-28T20:03:56.673776+00:00",
+      "captured_at": "2026-09-28T20:17:43.590263+00:00",
       "source_count": 3,
       "selected_count": 2,
       "future_business_dates": [
@@ -2109,16 +2137,16 @@
       ]
     },
     "ai_run": {
-      "run_id": "20260928_200356_2m_c822aea188ba_朝鲜女_中国女",
+      "run_id": "20260928_201743_2m_7bb2e09b6748_朝鲜女_中国女",
       "run_mode": "panel",
       "engine_version": "panel-v24.1",
       "run_status": "completed",
       "total_matches": 2,
       "successful_matches": 2,
       "abstained_matches": 0,
-      "request_count": 0,
+      "request_count": 6,
       "max_calls": 180,
-      "cache_hits": 6,
+      "cache_hits": 0,
       "max_seconds": 5400,
       "call_order": [
         "GPT + Grok independent analysis",
@@ -2128,25 +2156,6 @@
       "retries": 0,
       "batches": [
         {
-          "ok": true,
-          "ai_name": "gpt",
-          "model": "熊猫-按量-gpt-6-astra",
-          "phase": "panel_analysis",
-          "match_ids": [
-            1
-          ],
-          "elapsed": 62.7,
-          "endpoint_name": "gpt",
-          "endpoint_slot": 1,
-          "endpoint_attempt": 1,
-          "endpoint_total": 1,
-          "status": "ok",
-          "total_elapsed": 62.7,
-          "cache_hit": true,
-          "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
-          "row_status": "ok"
-        },
-        {
           "ok": false,
           "ai_name": "grok",
           "model": "grok-4.7",
@@ -2160,31 +2169,12 @@
           "endpoint_attempt": 1,
           "endpoint_total": 1,
           "status": "http_503",
-          "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070003978818268d9d6ifrqKRk4)\",\"type\":\"new_api_error\"}}",
-          "cache_hit": true,
+          "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609282017437665982458268d9d6eRGDdYIg)\",\"type\":\"new_api_error\"}}",
+          "cache_hit": false,
           "evidence_hash": "20ab4aa0eadc4a903e29991b749d189b9aaf49893aecab370cc8482311e07a50",
           "row_status": "abstain"
         },
         {
-          "ok": true,
-          "ai_name": "gpt",
-          "model": "熊猫-按量-gpt-6-astra",
-          "phase": "panel_analysis",
-          "match_ids": [
-            2
-          ],
-          "elapsed": 74.9,
-          "endpoint_name": "gpt",
-          "endpoint_slot": 1,
-          "endpoint_attempt": 1,
-          "endpoint_total": 1,
-          "status": "ok",
-          "total_elapsed": 74.9,
-          "cache_hit": true,
-          "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
-          "row_status": "ok"
-        },
-        {
           "ok": false,
           "ai_name": "grok",
           "model": "grok-4.7",
@@ -2192,34 +2182,34 @@
           "match_ids": [
             2
           ],
-          "elapsed": 0.2,
+          "elapsed": 3.1,
           "endpoint_name": "grok",
           "endpoint_slot": 1,
           "endpoint_attempt": 1,
           "endpoint_total": 1,
           "status": "http_503",
-          "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609281951070051686218268d9d6yuxJA7t6)\",\"type\":\"new_api_error\"}}",
-          "cache_hit": true,
+          "http_error": "{\"error\":{\"code\":\"model_not_found\",\"message\":\"No available channel for model grok-4.7 under group E-Antigravity (distributor) (request id: 202609282017459908302998268d9d6pG7ceWBh)\",\"type\":\"new_api_error\"}}",
+          "cache_hit": false,
           "evidence_hash": "a1385882370a02b097b218ae830bd1e7289dff99df809029acf921f456aef860",
           "row_status": "abstain"
         },
         {
           "ok": true,
-          "ai_name": "gemini",
-          "model": "gemini-3.8-flash-high",
-          "phase": "panel_final",
+          "ai_name": "gpt",
+          "model": "熊猫-按量-gpt-6-astra",
+          "phase": "panel_analysis",
           "match_ids": [
-            1
+            2
           ],
-          "elapsed": 25.5,
-          "endpoint_name": "gemini",
+          "elapsed": 34.8,
+          "endpoint_name": "gpt",
           "endpoint_slot": 1,
           "endpoint_attempt": 1,
           "endpoint_total": 1,
           "status": "ok",
-          "total_elapsed": 25.5,
-          "cache_hit": true,
-          "evidence_hash": "d6d3f8aa42f96ea61035647aea758c4b7b8c965922e60cd19a183b2d131c13ed",
+          "total_elapsed": 34.8,
+          "cache_hit": false,
+          "evidence_hash": "9ce280e850b3b15035546971c346404d1120ace396b3392182a1984551ee243b",
           "row_status": "ok"
         },
         {
@@ -2230,26 +2220,64 @@
           "match_ids": [
             2
           ],
-          "elapsed": 17.0,
+          "elapsed": 9.7,
           "endpoint_name": "gemini",
           "endpoint_slot": 1,
           "endpoint_attempt": 1,
           "endpoint_total": 1,
           "status": "ok",
-          "total_elapsed": 17.0,
-          "cache_hit": true,
-          "evidence_hash": "6338dbe8a5de1128b9add68721fb5ad2d0830204537bcfb2b3e2ac86a4da2605",
+          "total_elapsed": 9.7,
+          "cache_hit": false,
+          "evidence_hash": "de9a051d594736e67fecf5c8d7aba9a556ff9b61e909274ec6cfdcb651b47d9a",
+          "row_status": "ok"
+        },
+        {
+          "ok": true,
+          "ai_name": "gpt",
+          "model": "熊猫-按量-gpt-6-astra",
+          "phase": "panel_analysis",
+          "match_ids": [
+            1
+          ],
+          "elapsed": 126.6,
+          "endpoint_name": "gpt",
+          "endpoint_slot": 1,
+          "endpoint_attempt": 1,
+          "endpoint_total": 1,
+          "status": "ok",
+          "total_elapsed": 126.6,
+          "cache_hit": false,
+          "evidence_hash": "16a08e8afe42c4f47bc02f25d3dd814f380aad96dfdec124fa555dcab4f368e5",
+          "row_status": "ok"
+        },
+        {
+          "ok": true,
+          "ai_name": "gemini",
+          "model": "gemini-3.8-flash-high",
+          "phase": "panel_final",
+          "match_ids": [
+            1
+          ],
+          "elapsed": 13.6,
+          "endpoint_name": "gemini",
+          "endpoint_slot": 1,
+          "endpoint_attempt": 1,
+          "endpoint_total": 1,
+          "status": "ok",
+          "total_elapsed": 13.6,
+          "cache_hit": false,
+          "evidence_hash": "18253abe4dc8c1d4bacb25dec2a3dd131d09c7771e919f088ce8e22c4f85a2d6",
           "row_status": "ok"
         }
       ],
       "failure_summary": {
         "http_503": 2
       },
-      "elapsed_seconds": 0.008
+      "elapsed_seconds": 140.209
     },
     "history_path": "data/history_2026-09-29_today_morning.json",
-    "snapshot_path": "data/snapshots/2026-09-29_today_morning_20260929_040356.json"
+    "snapshot_path": "data/snapshots/2026-09-29_today_morning_20260929_042003.json"
   },
-  "published_at": "2026-09-29T04:03:56.692727+08:00",
+  "published_at": "2026-09-29T04:20:03.810101+08:00",
   "target_date": "2026-09-29"
 }
