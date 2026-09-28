@@ -1752,7 +1752,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
                     _save_debug_dump(ai_name, phase, data, raw_text)
                 if bounded:
                     try:
-                        obj = json.loads(_preclean_text(raw_text))
+                        obj = _strict_response_json(raw_text)
                     except (TypeError, ValueError):
                         obj = {}
                 else:
@@ -1937,6 +1937,19 @@ def _extract_response_text(data: Any) -> str:
         return ""
     candidates.sort(key=lambda x: (x[0], len(x[1])), reverse=True)
     return candidates[0][1]
+
+
+def _strict_response_json(text: str) -> Any:
+    """Preserve JSON contents; only tolerate a BOM and a complete outer fence."""
+    try:
+        return json.loads(text)
+    except ValueError:
+        clean = text.strip().removeprefix("\ufeff").strip()
+        fence = re.fullmatch(r"```(?:json)?[ \t]*\r?\n(.*?)\r?\n```", clean,
+                             flags=re.DOTALL | re.IGNORECASE)
+        if fence:
+            clean = fence.group(1)
+        return json.loads(clean)
 
 
 def _preclean_text(text: str) -> str:
