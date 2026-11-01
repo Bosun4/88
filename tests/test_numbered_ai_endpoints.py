@@ -70,7 +70,7 @@ def test_missing_primary_config_never_uses_numbered_or_other_provider(provider_e
 
 
 @pytest.mark.parametrize('name,expected', [
-    ('gpt', '熊猫-按量-gpt-6-astra'),
+    ('gpt', 'gpt-6-astra'),
 ])
 def test_blank_model_uses_current_single_default(provider_env, monkeypatch, name, expected):
     monkeypatch.setenv(name.upper() + '_MODEL', '  ')

@@ -1,12 +1,12 @@
 # GPT 单模型配置（v25）
 
-生产入口默认且只接受 `AI_RUN_MODE=panel`。沿用既有地址、密钥、模型；本次未修改 GitHub Secrets，未发送真实 GPT 预测请求。
+生产入口默认且只接受 `AI_RUN_MODE=panel`。沿用既有地址和密钥；按发布要求将模型标识改为 `gpt-6-astra`。本次未修改 GitHub Secrets，未发送真实 GPT 预测请求。
 
 | 配置 | 位置 | 行为 |
 | --- | --- | --- |
 | `GPT_API_URL` | Secret / 环境变量 | 既有 Chat Completions 兼容地址，保留服务商 `/v1` 路径 |
 | `GPT_API_KEY` | Secret / 环境变量 | 既有密钥 |
-| `GPT_MODEL` | Repository Variable / 环境变量 | 留空沿用 `熊猫-按量-gpt-6-astra` |
+| `GPT_MODEL` | Repository Variable / 环境变量 | 默认及当前部署配置均为 `gpt-6-astra` |
 | `API_FOOTBALL_KEY` | 可选 Secret | 精确匹配赛事后补充赛况；缺失有诊断 |
 | `WENCAI_AUTHORIZATION` | 既有 Secret | 现有竞彩赛程及报价来源 |
 
