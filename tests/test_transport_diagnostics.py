@@ -84,7 +84,7 @@ def bounded_response(monkeypatch, content, phase):
             return Response()
 
     return asyncio.run(predict.async_call_ai_json(
-        Session(), 'gemini', 'system', 'prompt', phase, [1],
+        Session(), 'gpt', 'system', 'prompt', phase, [1],
     ))
 
 

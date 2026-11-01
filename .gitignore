@@ -5,6 +5,7 @@ data/raw_data.json
 # Local experiment / runtime artifacts
 data/ai_phase_results*/
 data/ai_cache/
+data/research/
 scripts/data/ai_phase_results*/
 scripts/data/ai_cache/
 scripts/data/debug/

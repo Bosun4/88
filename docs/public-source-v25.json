@@ -1,0 +1,25 @@
+{
+  "coverage": {
+    "fixtures": 0,
+    "quote_records": 0,
+    "result_fixtures": 0,
+    "official_opening_records": 0,
+    "prematch_observations": 0,
+    "retrospective_observations": 0,
+    "date_from": null,
+    "date_to": null,
+    "imported_files": 0,
+    "complete_jingcai_history": false
+  },
+  "files": [],
+  "public_source": [
+    {
+      "date": "2026-10-13",
+      "status": "source_unavailable",
+      "error_type": "HTTPError",
+      "http_status": 567,
+      "source_url": "https://webapi.sporttery.cn/gateway/uniform/football/",
+      "checked_at": "2026-11-01T09:48:08.807152+00:00"
+    }
+  ]
+}

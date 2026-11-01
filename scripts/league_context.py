@@ -37,7 +37,7 @@ def _valid(snapshot, match, max_age_hours=48):
     captured = parse_time(snapshot.get("captured_at"))
     # match.captured_at can precede enrichment: use the explicit analysis cutoff
     # if provided, otherwise kickoff is the strict upper bound for stored evidence.
-    cutoff = parse_time(match.get("prediction_started_at")) or kickoff
+    cutoff = parse_time(match.get("analysis_cutoff")) or parse_time(match.get("prediction_started_at")) or kickoff
     return bool(kickoff and captured and cutoff and captured < kickoff and captured <= cutoff
                 and 0 <= (cutoff - captured).total_seconds() <= max_age_hours * 3600
                 and all(match.get(k) is not None and str(snapshot.get(k)) == str(match[k])

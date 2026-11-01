@@ -17,7 +17,7 @@ on:
           - next_available
           - current
       refresh_ai:
-        description: '重新请求三家 AI（更新密钥/通道后勾选；本轮跳过缓存，产生新请求）'
+        description: '重新请求 GPT 三个分析角色（更新密钥/通道后勾选；本轮跳过缓存，产生新请求）'
         required: false
         default: false
         type: boolean
@@ -70,6 +70,13 @@ jobs:
           restore-keys: |
             prediction-evidence-v21-${{ hashFiles('scripts/*.py', 'requirements.txt') }}-
 
+      - name: Restore research index
+        uses: actions/cache/restore@v4
+        with:
+          path: data/research
+          key: research-v25-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: research-v25-
+
       - name: Prepare runtime directories
         run: mkdir -p data/ai_cache data/ai_phase_results
 
@@ -84,20 +91,13 @@ jobs:
           WENCAI_AUTHORIZATION: ${{ secrets.WENCAI_AUTHORIZATION }}
           GPT_API_KEY: ${{ secrets.GPT_API_KEY }}
           GPT_API_URL: ${{ secrets.GPT_API_URL }}
-          # One URL/key pair per provider; empty model vars use config.py defaults.
+          # One GPT URL/key pair; the model variable overrides config.py.
           GPT_MODEL: ${{ vars.GPT_MODEL }}
-          GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
-          GROK_API_URL: ${{ secrets.GROK_API_URL }}
-          GROK_MODEL: ${{ vars.GROK_MODEL }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_API_URL: ${{ secrets.GEMINI_API_URL }}
-          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           AI_RUN_MODE: "panel"
           AI_PRIMARY_MODEL: "gpt"
           AI_BATCH_SIZE: "1"
           AI_CHUNK_CONCURRENCY: "2"
           AI_MODEL_CONCURRENCY: "4"
-          AI_SINGLE_PASS_MAX_CALLS: "12"
           AI_PANEL_MAX_CALLS: "180"
           AI_PANEL_MAX_SECONDS: "5400"
           AI_STREAM: "true"
@@ -117,7 +117,7 @@ jobs:
           AI_ENABLE_ANY_MODEL_JSON_REPAIR: "false"
           AI_MAX_OUTPUT_TOKENS: "6000"
           AI_ENABLE_CACHE: "true"
-          AI_DISABLE_CACHE: "false"
+          AI_DISABLE_CACHE: ${{ inputs.refresh_ai && 'true' || 'false' }}
           AI_PERSISTENT_CACHE_ENABLED: "true"
           AI_DECISION_CACHE_TTL: "1800"
           AI_CACHE_DIR: "data/ai_cache"
@@ -129,6 +129,13 @@ jobs:
           VMAX_TARGET_DATE: ${{ inputs.target_date }}
           VMAX_DATE_MODE: ${{ inputs.date_mode || 'next_available' }}
         run: python scripts/main.py
+
+      - name: Save research index
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/research
+          key: research-v25-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Save prediction evidence cache
         if: always()

@@ -202,7 +202,9 @@ def test_external_fact_fields_survive_normalize_and_frontend_adapt():
     assert front["score_elimination_audit"]["2-1"] == "keep"
 
 
-def test_grok_external_fact_fields_reach_final_referee_prompts():
+def test_legacy_external_fact_fields_reach_historical_referee_prompts(monkeypatch):
+    # Offline compatibility helper, unreachable from the GPT-only runner.
+    monkeypatch.setattr(predict, 'PHASE1_NAMES', ['gpt', 'grok'])
     grok_row = {
         "match": 1,
         "final_direction": "home",

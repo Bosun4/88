@@ -1,0 +1,16 @@
+{
+  "checked_files": 225,
+  "changed_files": [],
+  "method": "Git blob hashes with checkout clean filters",
+  "raw_sha256": {
+    "data/forward_ledger.jsonl": "fd2eb9c9728205cccc4ebc8967e7e9816e902467ba68de0887eb3ec840f6be75",
+    "data/predictions.json": "34241f781b39959ccb63fef5b621a655c319053c8b544c6926773975fcc6ac2d",
+    "forward_ledger/README.md": "8ffb53fe7cf0f5a58a9d94747a42f174eebabef0389fc8b0d6efd510d49340f7",
+    "forward_ledger/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "forward_ledger/cli.py": "f59c7445d7b2a142b3068462b9eef11d88e24d855a7d3509468f7d8932d1b02f",
+    "forward_ledger/hash_utils.py": "354225e40c2884c3ae9daddfb3f4f9c40e7ed2d4c50d2750682c8e5657297ee3",
+    "forward_ledger/ledger.py": "e5302fdbd99fdd90d18cd3df3cd6a5ad7a2eee7316d9b0cfee81d029a08ad9ae",
+    "forward_ledger/schema.py": "248bcd9a0f1e63c2a859f586814461cebfcafa172871430993a0aa8a83fb13bc",
+    "forward_ledger/scoring.py": "96862aa0bdfd29bb49ce1c92962048d3153dde2f37b036b1da1a78d9a01adac3"
+  }
+}

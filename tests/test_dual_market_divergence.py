@@ -99,8 +99,8 @@ def test_enrich_failsafe_uncovered_league(monkeypatch):
     assert global_odds.enrich_with_global_odds(matches) == 0
 
 
-def test_calibration_lights_up_and_skew_math():
-    """闭环核心:注入 global_* 后,build_evidence_packet 必须点亮校准且 skew 数学正确。"""
+def test_current_compiler_does_not_inject_probability_calibration():
+    """Raw quotes cannot activate the retired Shin/calibration path."""
     local = {"home": 1.85, "draw": 3.50, "away": 4.20}
     glob = {"home": 1.60, "draw": 4.10, "away": 5.50}
     match_obj = {
@@ -110,25 +110,9 @@ def test_calibration_lights_up_and_skew_math():
         "vote": {}, "change": {},
     }
     ev = predict.build_evidence_packet(match_obj, 1)
-    cal = ev.get("dual_market_divergence_calibration")
-    assert cal is not None, "校准块缺失"
-    assert cal["available"] is True, f"防线未点亮: {cal.get('note')}"
-
-    # 独立用 Shin 复算期望值
-    lp, lz = _shin(local)
-    gp, gz = _shin(glob)
-    exp_home = round((lp["home"] / gp["home"] - 1.0) * 100, 2)
-    exp_draw = round((lp["draw"] / gp["draw"] - 1.0) * 100, 2)
-    exp_away = round((lp["away"] / gp["away"] - 1.0) * 100, 2)
-
-    sk = cal["skew_metrics_pct"]
-    assert sk["skew_home_pct"] == pytest.approx(exp_home, abs=0.01)
-    assert sk["skew_draw_pct"] == pytest.approx(exp_draw, abs=0.01)
-    assert sk["skew_away_pct"] == pytest.approx(exp_away, abs=0.01)
-    assert cal["insider_z_gap"] == pytest.approx(round(lz - gz, 5), abs=1e-4)
-
-    # 业务语义:国内对热门主队开得更"水"(1.85 vs 国际1.60)=> 主胜概率被低开,skew_home 显著为负=价值洼地方向
-    assert sk["skew_home_pct"] < 0
+    assert 'dual_market_divergence_calibration' not in ev
+    assert ev['result_odds'] == local
+    assert ev['market_margin_audit']['result_market']['available']
 
 
 def test_calibration_failsafe_without_global():
@@ -138,9 +122,8 @@ def test_calibration_failsafe_without_global():
         "sp_home": 2.11, "sp_draw": 2.73, "sp_away": 3.46, "vote": {}, "change": {},
     }
     ev = predict.build_evidence_packet(match_obj, 1)
-    cal = ev["dual_market_divergence_calibration"]
-    assert cal["available"] is False
-    assert "note" in cal
+    assert 'dual_market_divergence_calibration' not in ev
+    assert ev['result_odds']['home'] == 2.11
 
 
 def test_live_final_prompt_carries_divergence_rule():

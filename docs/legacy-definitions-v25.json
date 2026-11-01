@@ -1,0 +1,61 @@
+{
+  "duplicate_top_level_functions": {
+    "_f": [
+      298,
+      4224
+    ],
+    "_i": [
+      315,
+      4236
+    ],
+    "_exists": [
+      326,
+      4243
+    ],
+    "_json_compact": [
+      330,
+      4255
+    ],
+    "_normalize_score_text": [
+      390,
+      4263
+    ],
+    "_parse_score": [
+      394,
+      4267
+    ],
+    "_score_direction": [
+      415,
+      4277
+    ],
+    "_score_total": [
+      433,
+      4288
+    ],
+    "_score_goal_band": [
+      440,
+      4302
+    ],
+    "_score_btts": [
+      453,
+      4295
+    ],
+    "build_evidence_packet": [
+      1241,
+      4928
+    ],
+    "_short_prediction_for_prompt": [
+      1391,
+      5248
+    ],
+    "normalize_ai_predictions": [
+      2908,
+      5793
+    ],
+    "adapt_ai_to_frontend": [
+      3631,
+      6489
+    ]
+  },
+  "production_guard": "AI_RUN_MODE=panel only; final public definitions route to score_policy and panel"
+}

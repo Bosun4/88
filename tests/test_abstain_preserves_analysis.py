@@ -10,13 +10,13 @@ def test_abstain_preserves_phase1_analysis_for_frontend_display():
         "predicted_score": "弃权",
         "validation_warnings": ["final_referee_missing_no_phase1_fallback"],
         "phase1_model_outputs": {
-            "grok": {
+            "market_history": {
                 "match": 1,
-                "source_model": "grok",
+                "source_model": "gpt",
                 "source_phase": "phase1",
                 "final_direction": "home",
                 "predicted_score": "2-1",
-                "reason": "Grok 初审分析：主胜降水，但仅供审计展示。",
+                "reason": "GPT 盘口初审：主胜报价较低，但仅供审计展示。",
                 "anchor_audit": {"one_one_case": "已审计 1-1"},
                 "market_interpretation": {"one_x_two": "主胜低赔"},
                 "money_flow": {"sharp_money_direction": "home", "evidence": "主胜降水"},
@@ -34,8 +34,8 @@ def test_abstain_preserves_phase1_analysis_for_frontend_display():
     assert pred["recommend_gate_pass"] is False
     assert pred["decision_source"] == "ai_abstain_final_referee_missing_analysis_preserved"
 
-    assert pred["grok_score"] == "2-1"
-    assert "Grok 初审分析" in pred["grok_analysis"]
+    assert pred['phase1_model_outputs']['market_history']['predicted_score'] == '2-1'
+    assert 'GPT 盘口初审' in pred['phase1_model_outputs']['market_history']['reason']
     assert pred["anchor_audit"]["one_one_case"] == "已审计 1-1"
     assert pred["market_interpretation"]["one_x_two"] == "主胜低赔"
     assert pred["money_flow"]["sharp_money_direction"] == "home"

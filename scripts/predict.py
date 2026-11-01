@@ -1,29 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-vMAX 20.2.1-FULL-ANCHOR — 3AI Gemini-Referee FULL-RESEARCH Web-Augmented Engine
-=================================================================================
+v25 GPT-only production boundary, with offline legacy compatibility utilities.
 
-本版基于 vMAX 20.2.1-FULL 的 AI-native 架构升级：
-1. 保留原版 API 调用链：get_key_for_ai / get_url_for_ai / _chat_url / async_call_ai_json / _run_one_chunk / run_ai_native_web / run_predictions。
-2. 本地不做足球预测裁决：不判断 Sharp 真伪、不改比分、不改方向、不用本地经验卡覆盖 AI。
-3. 新增 AI 锚点事实层：0-0、1-1、总进球赔率、4球/5球/6+尾部、让球盘比分形态、联赛风格提示。
-4. Prompt 强制 AI 做 anchor_audit：每场必须解释为什么不是 0-0/1-1/1-0/2-1/3-1 等关键候选。
-5. Gemini 终审仍是最终裁判；本地只做协议校验、JSON解析、字段闭环、落盘、前端兼容。
-6. Mock 只用于工程闭环，不代表真实命中率。
-
-入口：
-    run_predictions(raw, use_ai=True) -> (res, top4)
-
-关键环境变量：
-    GPT_API_URL / GPT_API_KEY
-    GROK_API_URL / GROK_API_KEY
-    GEMINI_API_URL / GEMINI_API_KEY
-    AI_MOCK_MODE=true
-    AI_RESEARCH_MODE=research|enhanced|production
-    AI_CHUNK_SIZE=6
-    AI_ENABLE_CROSS_EXAM=true
-    AI_ENABLE_CONSISTENCY_JUDGE=true
-    AI_NATIVE_WEB=true
+run_predictions -> score_policy.build_evidence -> panel.run_panel ->
+score_policy.adapt_prediction -> prematch publication gate.
+Only GPT_API_URL / GPT_API_KEY / GPT_MODEL configure model access.
+AI_RUN_MODE must be panel. Two isolated roles and one referee, no retries.
+Legacy prompt/score helpers below remain for historical regression coverage;
+they are not reachable through the production runner. Mock is engineering
+validation only, never evidence of model quality or real prematch performance.
 """
 
 from __future__ import annotations
@@ -71,7 +56,7 @@ except Exception:  # pragma: no cover
 
 VALID_DIRS = {"home", "draw", "away"}
 BETTABLE_ACTIONS = {"main", "small", "hedge"}
-AI_NAMES = ["gpt", "grok", "gemini"]
+AI_NAMES = ["gpt"]
 
 # 【读盘范式 v2.1 大球判据阈值 / 175场回归校准 20260601】
 # 单一真相来源：判大球的曲线塌缩斜率阈值与超大球尾部豁免阈值。
@@ -80,7 +65,7 @@ AI_NAMES = ["gpt", "grok", "gemini"]
 BIG_GOAL_SLOPE_THRESHOLD = 1.70
 BIG_GOAL_TAIL_A6_MAX = 11.0
 BIG_GOAL_TAIL_A7_MAX = 14.0
-PHASE1_NAMES = ["gpt", "grok"]
+PHASE1_NAMES = ["gpt"]
 
 try:
     from .config import DEFAULT_MODELS, get_model_for
@@ -211,15 +196,9 @@ AI_RESEARCH_MODE = str(os.environ.get("AI_RESEARCH_MODE", "research")).strip().l
 if AI_RESEARCH_MODE not in {"production", "enhanced", "research"}:
     AI_RESEARCH_MODE = "research"
 
-AI_RUN_MODE = str(os.environ.get("AI_RUN_MODE", "single_pass")).strip().lower()
-if AI_RUN_MODE not in {"", "single_pass", "panel", "fast_batch", "deep_research", "post_review"}:
-    AI_RUN_MODE = ""
-if not AI_RUN_MODE:
-    AI_RUN_MODE = {
-        "production": "fast_batch",
-        "enhanced": "deep_research",
-        "research": "deep_research",
-    }.get(AI_RESEARCH_MODE, "deep_research")
+AI_RUN_MODE = str(os.environ.get("AI_RUN_MODE", "panel")).strip().lower() or "panel"
+if AI_RUN_MODE != "panel":
+    raise ValueError("AI_RUN_MODE must be panel; legacy runners are disabled")
 
 if AI_RUN_MODE in {"single_pass", "panel"}:
     _default_native_web = False
@@ -270,7 +249,7 @@ AI_ENABLE_FALLBACK_REFEREE = _env_bool("AI_ENABLE_FALLBACK_REFEREE", True)
 # cannot produce a valid row, abstain instead of promoting phase1/Grok into final score.
 AI_ALLOW_PHASE1_FINAL_FALLBACK = _env_bool("AI_ALLOW_PHASE1_FINAL_FALLBACK", False)
 AI_CONSISTENCY_JUDGE_MODEL = str(os.environ.get("AI_CONSISTENCY_JUDGE_MODEL", "gpt")).strip().lower()
-AI_FINAL_REFEREE_MODEL = str(os.environ.get("AI_FINAL_REFEREE_MODEL", "gemini")).strip().lower() or "gemini"
+AI_FINAL_REFEREE_MODEL = "gpt"
 AI_FALLBACK_REFEREE_MODEL = str(os.environ.get("AI_FALLBACK_REFEREE_MODEL", "gpt")).strip().lower()
 
 AI_READ_TIMEOUT = _env_int("AI_READ_TIMEOUT", 180)
@@ -1491,7 +1470,7 @@ def debug_ai_config() -> None:
             print(f"[AI CONFIG] {n.upper()} endpoints=<missing>")
             continue
         for ep in eps:
-            print(f"[AI CONFIG] {n.upper()} model={ep['model']} key={_mask_key(ep['key'])} url={ep['url'] or '<missing>'}")
+            print(f"[AI CONFIG] {n.upper()} model={ep['model']} credentials_configured=True endpoint_configured=True")
 
 
 def _is_retryable_ai_status(status: Dict[str, Any]) -> bool:
@@ -1564,7 +1543,9 @@ def transport_failure(exc):
 
 async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: str, prompt: str, phase: str, expected_matches: List[int]) -> Tuple[str, Any, Dict[str, Any]]:
     t0 = time.time()
-    bounded = phase in {"single_pass", "panel_analysis", "panel_final"}
+    if ai_name != 'gpt':
+        return ai_name, {}, {'ok': False, 'status': 'unsupported_provider', 'ai_name': ai_name}
+    bounded = phase == 'single_pass' or phase.startswith('panel_')
     endpoints = _endpoint_candidates_for_ai(ai_name)[:1]
     model = endpoints[0]["model"] if endpoints else _model_for(ai_name)
     status = {"ok": False, "ai_name": ai_name, "model": model, "phase": phase, "elapsed": 0.0}
@@ -1629,7 +1610,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
     }
     try:
         read_timeout = AI_FINAL_READ_TIMEOUT if phase in ("final", "panel_final", "fallback_referee", "family_debate_referee") else AI_READ_TIMEOUT
-        total_timeout = (max(1, AI_HTTP_TOTAL_TIMEOUT) if bounded
+        total_timeout = (min(180, max(1, AI_HTTP_TOTAL_TIMEOUT)) if bounded
                          else None if AI_HTTP_TOTAL_TIMEOUT <= 0 else AI_HTTP_TOTAL_TIMEOUT)
         timeout = aiohttp.ClientTimeout(
             total=total_timeout,
@@ -1638,10 +1619,10 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
             sock_read=None if read_timeout <= 0 else read_timeout,
         )
         assert session is not None
-        async with session.post(url, headers=headers, json=payload, timeout=timeout) as r:
+        async with session.post(url, headers=headers, json=payload, timeout=timeout, allow_redirects=False) as r:
             text = await r.text()
             if r.status < 200 or r.status >= 300:
-                status.update({"status": f"http_{r.status}", "http_error": text[:800], "elapsed": round(time.time() - ep_t0, 1)})
+                status.update({"status": f"http_{r.status}", "http_error": "Provider rejected request; response body withheld", "elapsed": round(time.time() - ep_t0, 1)})
                 _update_call_status(ai_name, phase, status)
                 return ai_name, {}, status
             try:
@@ -1672,7 +1653,7 @@ async def async_call_ai_json(session: Optional[Any], ai_name: str, system_text: 
                     "ok": False,
                     "status": "parse_failed",
                     "parse_error": "empty_or_invalid_json_object",
-                    "raw_excerpt": raw_text[:300],
+                    "raw_excerpt": "Invalid provider output withheld",
                     "elapsed": round(time.time() - ep_t0, 1),
                 })
                 _update_call_status(ai_name, phase, status)
@@ -1698,7 +1679,7 @@ def _update_call_status(ai_name: str, phase: str, status: Dict[str, Any]) -> Non
 def _save_debug_dump(ai_name: str, phase: str, data: Any, raw_text: str = "") -> None:
     try:
         _ensure_dir("data/debug_v20")
-        ts = int(time.time())
+        ts = time.time_ns()
         with open(f"data/debug_v20/{ai_name}_{phase}_{ts}.json", "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2, default=str)
         if raw_text:
@@ -3454,13 +3435,7 @@ async def run_ai_native_web(evidence_all: List[Dict[str, Any]]) -> Dict[int, Dic
         except ImportError:
             from panel import run_panel
         return await run_panel(sys.modules[__name__], evidence_all)
-    if AI_RUN_MODE == "single_pass":
-        try:
-            from .single_pass import run_single_pass
-        except ImportError:
-            from single_pass import run_single_pass
-        return await run_single_pass(sys.modules[__name__], evidence_all)
-    return await _run_ai_native_web_impl(evidence_all)
+    raise ValueError('AI_RUN_MODE must be panel; legacy runners are disabled')
 
 
 async def _run_chunk_with_watchdog(coro: Any, chunk_desc: str = "", watchdog: Optional[float] = None) -> Dict[int, Dict[str, Any]]:
@@ -3942,7 +3917,7 @@ def _analysis_from_phase1(ai_r: Dict[str, Any]) -> Dict[str, Any]:
     phase1 = ai_r.get("phase1_model_outputs", {}) if isinstance(ai_r.get("phase1_model_outputs"), dict) else {}
     # Prefer a successfully parsed analyst row for display only. This must never
     # decide final score/direction when final referee is missing.
-    for name in ["grok", "gpt", "gemini"]:
+    for name in ["market_history", "context_risk", "gpt"]:
         row = phase1.get(name) if isinstance(phase1.get(name), dict) else None
         if row:
             return row
@@ -3984,7 +3959,7 @@ def _merge_abstain_analysis(pred: Dict[str, Any], ai_r: Dict[str, Any], reason: 
     pred["recommend_gate_reasons"] = list(dict.fromkeys([reason] + list(pred.get("recommend_gate_reasons", []))))
 
     for k in [
-        "phase1_model_outputs", "critic_reports_by_model", "validation_warnings",
+        "role_reports", "phase1_model_outputs", "critic_reports_by_model", "validation_warnings",
         "score_cluster_audit", "sharp_money_audit", "recommendation_components",
         "risk_score_candidates", "tail_risk_flags", "confidence_downgrade_reason",
         "market_audit", "goal_market_audit", "market_conflicts", "candidate_scores",
@@ -4009,11 +3984,9 @@ def _merge_abstain_analysis(pred: Dict[str, Any], ai_r: Dict[str, Any], reason: 
     final_reason = str(ai_r.get("reason", reason))[:3000]
     pred["final_referee_score"] = "弃权"
     pred["final_referee_analysis"] = final_reason or "终审缺失：禁止输出最终比分。"
-    pred["gemini_score"] = "弃权"
-    pred["gemini_analysis"] = final_reason or "Gemini终审缺失；本场仅展示初审审计，不给最终比分。"
     pred["final_ai_score"] = "弃权"
-    pred["final_ai_analysis"] = pred["gemini_analysis"]
-    for name in ["gpt", "grok"]:
+    pred["final_ai_analysis"] = final_reason or "GPT终审缺失；仅展示初审。"
+    for name in ["gpt"]:
         row = phase1.get(name) if isinstance(phase1.get(name), dict) else {}
         score = _score_from_candidate(row.get("predicted_score", "")) if row else ""
         pred[f"{name}_score"] = score if _parse_score(score)[0] is not None else "初审无有效比分"
@@ -4155,7 +4128,7 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
         try:
             ai_final = _run_async(run_ai_native_web(evidence_all))
         except Exception as e:
-            logger.error(f"AI-native矩阵执行失败: {e}")
+            logger.error(f"GPT analysis failed: {type(e).__name__}")
             _LAST_AI_RUN_METADATA.update(run_status="failed", error_type=type(e).__name__)
             ai_final = {}
     elif not use_ai:
@@ -4167,6 +4140,7 @@ def run_predictions(raw: Dict[str, Any], use_ai: bool = True):
         pred = adapt_ai_to_frontend(ai_r, m) if not ai_r.get("final_direction") == "abstain" else _merge_abstain_analysis(_abstain_prediction(ai_r.get("reason", "abstain")), ai_r, ai_r.get("reason", "abstain"))
         pred["ai_call_status"] = copy.deepcopy(ai_r.get("ai_call_status", {}))
         pred["phase1_model_outputs"] = copy.deepcopy(ai_r.get("phase1_model_outputs", {}))
+        pred["role_reports"] = copy.deepcopy(ai_r.get("role_reports", {}))
         pred["prediction_completed_at"] = ai_r.get("prediction_completed_at", datetime.now(timezone.utc).isoformat())
         pred["evidence_hash"] = ai_r.get("evidence_hash")
         pred["ai_run_metadata"] = copy.deepcopy(_LAST_AI_RUN_METADATA)
@@ -4942,9 +4916,9 @@ _score_total = _BASE_SCORE_TOTAL
 _score_btts = _BASE_SCORE_BTTS
 _score_goal_band = _BASE_SCORE_GOAL_BAND
 
-ENGINE_VERSION = "vMAX 24.1-SCORE-PANEL"
+ENGINE_VERSION = "vMAX 25-GPT-RESEARCH"
 ENGINE_ARCHITECTURE = (
-    "默认逐场 GPT/Grok 并行初审 → Gemini 终审；调用预算、总时间和赛前时点受限；"
+    "逐场 GPT 盘口与历史 / GPT 近况与风险独立初审 → GPT 终审；最多三次调用，禁止重试；"
     "保留HHAD让球语义、CRS比分簇、总进球及变化证据和相邻比分审计；"
     "外部事实以实际输入来源为准，证据缺口与推荐闸门独立展示；"
     "本地不改足球方向/比分，只做Evidence编译、协议校验、推荐风险展示。"

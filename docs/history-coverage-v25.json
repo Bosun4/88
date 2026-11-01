@@ -1,0 +1,1943 @@
+{
+  "coverage": {
+    "fixtures": 150,
+    "quote_records": 827,
+    "result_fixtures": 0,
+    "official_opening_records": 0,
+    "prematch_observations": 827,
+    "retrospective_observations": 0,
+    "date_from": "2026-09-19T15:15:00+00:00",
+    "date_to": "2026-10-13T19:00:00+00:00",
+    "imported_files": 214,
+    "complete_jingcai_history": false
+  },
+  "files": [
+    {
+      "file": "history_2026-05-06_today_evening.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-06_today_morning.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-07_today_evening.json",
+      "rows": 18,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 18,
+      "missing_result_provenance": 18,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-07_today_morning.json",
+      "rows": 18,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 18,
+      "missing_result_provenance": 18,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-08_today_evening.json",
+      "rows": 56,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 56,
+      "missing_result_provenance": 56,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-08_today_morning.json",
+      "rows": 44,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 44,
+      "missing_result_provenance": 44,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-09_today_evening.json",
+      "rows": 48,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 48,
+      "missing_result_provenance": 48,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-09_today_morning.json",
+      "rows": 39,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 39,
+      "missing_result_provenance": 39,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-12_today_evening.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-13_today_evening.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-14_today_morning.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-15_today_morning.json",
+      "rows": 43,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 43,
+      "missing_result_provenance": 43,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-16_today_evening.json",
+      "rows": 66,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 66,
+      "missing_result_provenance": 66,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-17_today_evening.json",
+      "rows": 30,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 30,
+      "missing_result_provenance": 30,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-17_today_morning.json",
+      "rows": 11,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 11,
+      "missing_result_provenance": 11,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-20_today_evening.json",
+      "rows": 20,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 20,
+      "missing_result_provenance": 20,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-23_today_morning.json",
+      "rows": 42,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 42,
+      "missing_result_provenance": 42,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-26_today_morning.json",
+      "rows": 14,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 14,
+      "missing_result_provenance": 14,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-27_today_evening.json",
+      "rows": 11,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 11,
+      "missing_result_provenance": 11,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-28_today_evening.json",
+      "rows": 13,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 13,
+      "missing_result_provenance": 13,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-29_today_evening.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-30_today_evening.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "history_2026-05-31_today_morning.json",
+      "rows": 3,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 3,
+      "missing_result_provenance": 3,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-01_today_evening.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-01_today_morning.json",
+      "rows": 2,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 2,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-02_today_evening.json",
+      "rows": 3,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 3,
+      "missing_result_provenance": 3,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-03_today_evening.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-03_today_morning.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-04_today_evening.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-05_today_evening.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-06_today_evening.json",
+      "rows": 13,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 13,
+      "missing_result_provenance": 13,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-06_today_morning.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-07_today_evening.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-08_today_evening.json",
+      "rows": 27,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 27,
+      "missing_result_provenance": 27,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-08_today_morning.json",
+      "rows": 27,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 27,
+      "missing_result_provenance": 27,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-09_today_evening.json",
+      "rows": 27,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 27,
+      "missing_result_provenance": 27,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-10_today_evening.json",
+      "rows": 26,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 26,
+      "missing_result_provenance": 26,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-13_today_evening.json",
+      "rows": 22,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 22,
+      "missing_result_provenance": 22,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-13_today_morning.json",
+      "rows": 19,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 19,
+      "missing_result_provenance": 19,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-14_today_evening.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-14_today_morning.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-15_today_evening.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-16_today_evening.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-16_today_morning.json",
+      "rows": 8,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 8,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-17_today_evening.json",
+      "rows": 11,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 11,
+      "missing_result_provenance": 11,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-18_today_evening.json",
+      "rows": 7,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 7,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-18_today_morning.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-19_today_evening.json",
+      "rows": 7,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 7,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-20_today_morning.json",
+      "rows": 8,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 8,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-21_today_evening.json",
+      "rows": 7,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 7,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-21_today_morning.json",
+      "rows": 8,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 8,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-22_today_morning.json",
+      "rows": 8,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 8,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-23_today_evening.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-23_today_morning.json",
+      "rows": 11,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 11,
+      "missing_result_provenance": 11,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-24_today_evening.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-24_today_morning.json",
+      "rows": 8,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 8,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-25_today_evening.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-25_today_morning.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-26_today_evening.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-26_today_morning.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-27_today_evening.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-28_today_evening.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-28_today_morning.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-29_today_evening.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-29_today_morning.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-30_today_evening.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-06-30_today_morning.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-01_today_evening.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-01_today_morning.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-02_today_evening.json",
+      "rows": 7,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 7,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-02_today_morning.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-03_today_evening.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-03_today_morning.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-04_today_evening.json",
+      "rows": 11,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 11,
+      "missing_result_provenance": 11,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-04_today_morning.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-05_today_evening.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-05_today_morning.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-06_today_evening.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-07_today_evening.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-08_today_evening.json",
+      "rows": 2,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 2,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-11_today_morning.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-14_today_evening.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-15_today_morning.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-17_today_evening.json",
+      "rows": 13,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 13,
+      "missing_result_provenance": 13,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-18_today_evening.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-22_today_evening.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-23_today_morning.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-24_today_evening.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-25_today_morning.json",
+      "rows": 29,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 29,
+      "missing_result_provenance": 29,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-26_today_evening.json",
+      "rows": 20,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 20,
+      "missing_result_provenance": 20,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-27_today_evening.json",
+      "rows": 2,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 2,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-28_today_morning.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-29_today_evening.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-30_today_evening.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "history_2026-07-31_today_morning.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-08-01_today_evening.json",
+      "rows": 30,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 30,
+      "missing_result_provenance": 30,
+      "cached": false
+    },
+    {
+      "file": "history_2026-08-02_today_evening.json",
+      "rows": 18,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 18,
+      "missing_result_provenance": 18,
+      "cached": false
+    },
+    {
+      "file": "history_2026-08-03_today_evening.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-08-05_today_evening.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "history_2026-08-06_today_evening.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "history_2026-08-07_today_evening.json",
+      "rows": 28,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 28,
+      "missing_result_provenance": 28,
+      "cached": false
+    },
+    {
+      "file": "history_2026-08-08_today_evening.json",
+      "rows": 43,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 43,
+      "missing_result_provenance": 43,
+      "cached": false
+    },
+    {
+      "file": "history_2026-09-03_today_morning.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "history_2026-09-06_today_evening.json",
+      "rows": 18,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 18,
+      "missing_result_provenance": 18,
+      "cached": false
+    },
+    {
+      "file": "history_2026-09-12_today_morning.json",
+      "rows": 26,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 26,
+      "missing_result_provenance": 26,
+      "cached": false
+    },
+    {
+      "file": "history_2026-09-19_today_evening.json",
+      "rows": 42,
+      "quote_records": 164,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 42,
+      "cached": false
+    },
+    {
+      "file": "history_2026-09-27_today_morning.json",
+      "rows": 1,
+      "quote_records": 5,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 1,
+      "cached": false
+    },
+    {
+      "file": "history_2026-09-28_today_morning.json",
+      "rows": 8,
+      "quote_records": 40,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "history_2026-09-29_today_morning.json",
+      "rows": 15,
+      "quote_records": 75,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "history_2026-09-30_today_morning.json",
+      "rows": 2,
+      "quote_records": 10,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "history_2026-10-05_today_evening.json",
+      "rows": 7,
+      "quote_records": 35,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "history_2026-10-06_today_evening.json",
+      "rows": 12,
+      "quote_records": 58,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-10-07_today_evening.json",
+      "rows": 6,
+      "quote_records": 30,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-10-08_today_evening.json",
+      "rows": 6,
+      "quote_records": 30,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "history_2026-10-09_today_evening.json",
+      "rows": 10,
+      "quote_records": 49,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "history_2026-10-10_today_evening.json",
+      "rows": 18,
+      "quote_records": 88,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 18,
+      "cached": false
+    },
+    {
+      "file": "history_2026-10-11_today_evening.json",
+      "rows": 12,
+      "quote_records": 59,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "history_2026-10-13_today_evening.json",
+      "rows": 11,
+      "quote_records": 54,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 11,
+      "cached": false
+    },
+    {
+      "file": "2026-06-21_today_evening_20260622_000128.json",
+      "rows": 7,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 7,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "2026-06-22_today_morning_20260623_005931.json",
+      "rows": 8,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 8,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "2026-06-23_today_evening_20260623_223424.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "2026-06-23_today_morning_20260623_123841.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "2026-06-23_today_morning_20260623_125456.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "2026-06-23_today_morning_20260623_131258.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "2026-06-23_today_morning_20260623_133129.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "2026-06-23_today_morning_20260623_135709.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "2026-06-23_today_morning_20260623_150237.json",
+      "rows": 16,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 16,
+      "missing_result_provenance": 16,
+      "cached": false
+    },
+    {
+      "file": "2026-06-23_today_morning_20260624_020628.json",
+      "rows": 11,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 11,
+      "missing_result_provenance": 11,
+      "cached": false
+    },
+    {
+      "file": "2026-06-24_today_evening_20260624_194545.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "2026-06-24_today_morning_20260625_071127.json",
+      "rows": 8,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 8,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "2026-06-24_today_morning_20260625_091421.json",
+      "rows": 8,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 8,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "2026-06-25_today_evening_20260625_185248.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "2026-06-25_today_morning_20260626_032200.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "2026-06-25_today_morning_20260626_075058.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-06-26_today_evening_20260626_230323.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "2026-06-26_today_morning_20260627_030534.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "2026-06-27_today_evening_20260627_160330.json",
+      "rows": 13,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 13,
+      "missing_result_provenance": 13,
+      "cached": false
+    },
+    {
+      "file": "2026-06-27_today_evening_20260627_231334.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "2026-06-28_today_evening_20260628_200904.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-06-28_today_evening_20260628_232947.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-06-28_today_morning_20260629_024331.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-06-29_today_evening_20260629_190755.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-06-29_today_evening_20260630_013740.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-06-29_today_morning_20260630_055358.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "2026-06-30_today_evening_20260630_201245.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-06-30_today_morning_20260701_004202.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-06-30_today_morning_20260701_032242.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "2026-07-01_today_evening_20260701_205552.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "2026-07-01_today_evening_20260701_231836.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "2026-07-01_today_morning_20260702_030627.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-07-01_today_morning_20260702_040213.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-07-02_today_evening_20260702_152726.json",
+      "rows": 7,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 7,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "2026-07-02_today_evening_20260702_162724.json",
+      "rows": 7,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 7,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "2026-07-02_today_evening_20260702_212724.json",
+      "rows": 7,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 7,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "2026-07-02_today_morning_20260702_115305.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-07-02_today_morning_20260703_034121.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-07-03_today_evening_20260703_212440.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "2026-07-03_today_evening_20260703_215641.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "2026-07-03_today_morning_20260703_125652.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "2026-07-03_today_morning_20260703_134006.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "2026-07-04_today_evening_20260704_161754.json",
+      "rows": 19,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 19,
+      "missing_result_provenance": 19,
+      "cached": false
+    },
+    {
+      "file": "2026-07-04_today_evening_20260704_223834.json",
+      "rows": 11,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 11,
+      "missing_result_provenance": 11,
+      "cached": false
+    },
+    {
+      "file": "2026-07-04_today_morning_20260705_012931.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "2026-07-05_today_evening_20260705_185430.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "2026-07-05_today_morning_20260705_115005.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "2026-07-06_today_evening_20260706_215721.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-07-07_today_evening_20260707_203234.json",
+      "rows": 5,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 5,
+      "missing_result_provenance": 5,
+      "cached": false
+    },
+    {
+      "file": "2026-07-08_today_evening_20260708_225110.json",
+      "rows": 2,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 2,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "2026-07-11_today_morning_20260712_012134.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "2026-07-14_today_evening_20260714_190847.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-07-15_today_morning_20260716_014120.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "2026-07-17_today_evening_20260717_224037.json",
+      "rows": 13,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 13,
+      "missing_result_provenance": 13,
+      "cached": false
+    },
+    {
+      "file": "2026-07-18_today_evening_20260718_231718.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 10,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "2026-07-22_today_evening_20260722_154409.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 12,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "2026-07-23_today_morning_20260723_150026.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "2026-07-24_today_evening_20260724_215946.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-07-25_today_morning_20260725_145810.json",
+      "rows": 29,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 29,
+      "missing_result_provenance": 29,
+      "cached": false
+    },
+    {
+      "file": "2026-07-26_today_evening_20260726_160528.json",
+      "rows": 20,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 20,
+      "missing_result_provenance": 20,
+      "cached": false
+    },
+    {
+      "file": "2026-07-27_today_evening_20260727_183647.json",
+      "rows": 2,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 2,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "2026-07-28_today_morning_20260728_144135.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-07-29_today_evening_20260729_224400.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-07-30_today_evening_20260730_202105.json",
+      "rows": 9,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 9,
+      "missing_result_provenance": 9,
+      "cached": false
+    },
+    {
+      "file": "2026-07-31_today_morning_20260801_002522.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 6,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-08-01_today_evening_20260801_185409.json",
+      "rows": 30,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 30,
+      "missing_result_provenance": 30,
+      "cached": false
+    },
+    {
+      "file": "2026-08-02_today_evening_20260802_173034.json",
+      "rows": 18,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 18,
+      "missing_result_provenance": 18,
+      "cached": false
+    },
+    {
+      "file": "2026-08-03_today_evening_20260803_185349.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-08-05_today_evening_20260805_230548.json",
+      "rows": 4,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 4,
+      "missing_result_provenance": 4,
+      "cached": false
+    },
+    {
+      "file": "2026-08-06_today_evening_20260806_210911.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "2026-08-07_today_evening_20260807_154555.json",
+      "rows": 28,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 28,
+      "missing_result_provenance": 28,
+      "cached": false
+    },
+    {
+      "file": "2026-08-08_today_evening_20260808_210348.json",
+      "rows": 43,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 43,
+      "missing_result_provenance": 43,
+      "cached": false
+    },
+    {
+      "file": "2026-09-03_today_morning_20260904_044133.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 15,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "2026-09-06_today_evening_20260906_233025.json",
+      "rows": 18,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 18,
+      "missing_result_provenance": 18,
+      "cached": false
+    },
+    {
+      "file": "2026-09-12_today_morning_20260913_033440.json",
+      "rows": 26,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 26,
+      "missing_result_provenance": 26,
+      "cached": false
+    },
+    {
+      "file": "2026-09-19_today_evening_20260919_223446.json",
+      "rows": 42,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 42,
+      "cached": false
+    },
+    {
+      "file": "2026-09-27_today_morning_20260928_035507.json",
+      "rows": 1,
+      "quote_records": 5,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 1,
+      "cached": false
+    },
+    {
+      "file": "2026-09-27_today_morning_20260928_040140.json",
+      "rows": 1,
+      "quote_records": 5,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 1,
+      "cached": false
+    },
+    {
+      "file": "2026-09-27_today_morning_20260928_040349.json",
+      "rows": 1,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 1,
+      "cached": false
+    },
+    {
+      "file": "2026-09-28_today_morning_20260928_125642.json",
+      "rows": 8,
+      "quote_records": 40,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "2026-09-28_today_morning_20260928_141603.json",
+      "rows": 8,
+      "quote_records": 40,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "2026-09-28_today_morning_20260928_143417.json",
+      "rows": 8,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 8,
+      "cached": false
+    },
+    {
+      "file": "2026-09-29_today_morning_20260929_035238.json",
+      "rows": 2,
+      "quote_records": 10,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "2026-09-29_today_morning_20260929_040356.json",
+      "rows": 2,
+      "quote_records": 10,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "2026-09-29_today_morning_20260929_042003.json",
+      "rows": 2,
+      "quote_records": 10,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "2026-09-29_today_morning_20260929_044048.json",
+      "rows": 2,
+      "quote_records": 10,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "2026-09-29_today_morning_20260929_140304.json",
+      "rows": 15,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 15,
+      "cached": false
+    },
+    {
+      "file": "2026-09-30_today_morning_20260930_134820.json",
+      "rows": 2,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 2,
+      "cached": false
+    },
+    {
+      "file": "2026-10-05_today_evening_20261005_175725.json",
+      "rows": 7,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 7,
+      "cached": false
+    },
+    {
+      "file": "2026-10-06_today_evening_20261006_182355.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "2026-10-07_today_evening_20261007_225050.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-10-08_today_evening_20261008_195847.json",
+      "rows": 6,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 6,
+      "cached": false
+    },
+    {
+      "file": "2026-10-09_today_evening_20261009_203329.json",
+      "rows": 10,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 10,
+      "cached": false
+    },
+    {
+      "file": "2026-10-10_today_evening_20261010_221355.json",
+      "rows": 18,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 18,
+      "cached": false
+    },
+    {
+      "file": "2026-10-11_today_evening_20261011_223145.json",
+      "rows": 12,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 12,
+      "cached": false
+    },
+    {
+      "file": "2026-10-13_today_evening_20261013_180254.json",
+      "rows": 11,
+      "quote_records": 0,
+      "result_records": 0,
+      "missing_quote_provenance": 0,
+      "missing_result_provenance": 11,
+      "cached": false
+    }
+  ],
+  "public_source": []
+}

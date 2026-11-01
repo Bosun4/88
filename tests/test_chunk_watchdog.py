@@ -77,5 +77,5 @@ def test_runner_times_out_hung_match_and_keeps_other_results(monkeypatch, concur
         return {2: {'predicted_score': '2-0'}}
 
     monkeypatch.setattr(P, '_run_one_chunk', chunk)
-    assert asyncio.run(P.run_ai_native_web([{'match': 1}, {'match': 2}])) == {
+    assert asyncio.run(P._run_ai_native_web_impl([{'match': 1}, {'match': 2}])) == {
         2: {'predicted_score': '2-0'}}

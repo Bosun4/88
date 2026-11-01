@@ -51,6 +51,18 @@ var Dashboard = (() => {
     return {raw:m,p,index,key:'match-'+index,home:m.home_team || m.home || '主队',away:m.away_team || m.guest || '客队',league:m.league || '未知联赛',tier,kickoff,state,eligible,abstain,today:matchDay === day(now),risks:riskScores(p)};
   }
   function models(p) {
+    if (p.role_reports && Object.keys(p.role_reports).length) {
+      const labels = {market_history:'GPT 盘口与历史分析',context_risk:'GPT 近况与风险分析',final:'GPT 终审'};
+      return Object.entries(labels).map(([role,label]) => {
+        const entry = p.role_reports[role] || {}, call = entry.status || {};
+        const valid = call.ok === true && call.row_status === 'ok';
+        return {name:'gpt',label,role,final:role==='final',single:false,call,
+                score:valid ? entry.report?.predicted_score : null,
+                analysis:valid ? entry.report?.reason : null,
+                gaps:entry.evidence_gaps || entry.report?.data_quality?.missing || []};
+      });
+    }
+    // Read-only compatibility for immutable snapshots produced before v25.
     return ['gpt','grok','gemini'].map(name => {
       const st = p.ai_call_status?.[name] || {};
       const call = st.single_pass || st.final || st.phase1;
@@ -63,10 +75,10 @@ var Dashboard = (() => {
     });
   }
   function renderModels(p) {
-    return '<div class="model-grid">' + models(p).map(m => `<section class="model-card"><h3>${esc(m.name.toUpperCase())}</h3><p>${m.single ? '单模型单次分析' : m.final || m.name === 'gemini' ? '终审裁决' : m.name === 'gpt' ? '盘口与主线初审' : '独立反证与风险初审'} · ${esc(m.call?.model || '本轮未提供')}</p><strong class="model-score">${esc(m.score || '未返回可用预测')}</strong><p>${esc(m.call?.ok && m.call?.row_status === 'abstain' ? '已收到响应，本场结果不合格' : statusText(m.call?.status || 'not_called'))}${m.call?.cache_hit ? ' · 缓存命中' : ''}${m.call?.row_status === 'abstain' ? ' · 本场弃权' : ''}</p>${m.analysis ? `<p class="analysis-text">${esc(text(m.analysis))}</p>` : ''}</section>`).join('') + '</div>';
+    return '<div class="model-grid">' + models(p).map(m => `<section class="model-card"><h3>${esc(m.label || m.name.toUpperCase())}</h3><p>${m.role ? (m.final ? '综合裁决' : '独立初审') : m.single ? '单模型单次分析' : m.final || m.name === 'gemini' ? '终审裁决' : m.name === 'gpt' ? '盘口与主线初审' : '独立反证与风险初审'} · ${esc(m.call?.model || '本轮未提供')}</p><strong class="model-score">${esc(m.score || '未返回可用预测')}</strong><p>${esc(m.call?.ok && m.call?.row_status === 'abstain' ? '已收到响应，本场结果不合格' : statusText(m.call?.status || 'not_called'))}${m.call?.cache_hit ? ' · 缓存命中' : ''}${m.call?.row_status === 'abstain' ? ' · 本场弃权' : ''}</p>${m.analysis ? `<p class="analysis-text">${esc(text(m.analysis))}</p>` : ''}${Array.isArray(m.gaps) && m.gaps.length ? '<p class="muted">证据缺口：'+esc(m.gaps.join('；'))+'</p>' : ''}</section>`).join('') + '</div>';
   }
   function statusText(value) {
-    const labels = {ok:'已返回',not_called:'本轮未调用',error:'请求或响应处理失败',final_referee_failed:'终审未返回合格结果，保留初审供查看',all_analysts_failed:'两份初审均未返回合格结果，终审未启动',run_call_budget_exhausted:'已达本轮调用预算',run_deadline_exhausted:'已达本轮时间上限',already_started:'比赛已开始',http_503:'接口暂不可用（http_503）',http_524:'接口响应超时（http_524）',tls_handshake_error:'接口连接握手失败',endpoint_unavailable:'接口连接故障，本轮后续请求已停止'};
+    const labels = {timeout:'请求超时',transport_error:'传输异常',parse_failed:'响应格式不合格',output_truncated:'响应被截断',ok:'已返回',not_called:'本轮未调用',error:'请求或响应处理失败',final_referee_failed:'终审未返回合格结果，保留初审供查看',all_analysts_failed:'两份初审均未返回合格结果，终审未启动',run_call_budget_exhausted:'已达本轮调用预算',run_deadline_exhausted:'已达本轮时间上限',already_started:'比赛已开始',http_503:'接口暂不可用（http_503）',http_524:'接口响应超时（http_524）',tls_handshake_error:'接口连接握手失败',endpoint_unavailable:'接口连接故障，本轮后续请求已停止'};
     return labels[value] || value;
   }
   const factLabels = {season:'赛季',stage:'赛季阶段',round:'轮次',total_rounds:'总轮次',rank:'排名',points:'积分',played:'已赛',remaining_matches:'剩余比赛',title_gap:'争冠分差',europe_gap:'欧战分差',relegation_cushion:'保级缓冲',rest_days:'距上一场 / 天',next_match_in_days:'距下一场 / 天',rotation:'轮换证据',motivation:'战意证据',goals_for:'进球',goals_against:'失球',goal_difference:'净胜球',schedule_density:'赛程密度'};
@@ -85,10 +97,21 @@ var Dashboard = (() => {
   const fieldLabels = {...factLabels, score:'比分',prob:'模型概率（%）',probability:'模型概率（%）',logic:'依据',reason:'理由',home:'主胜',draw:'平局',away:'客胜',zero_zero:'0-0 路径',one_one:'1-1 路径',high_score_tail:'高比分风险',handicap_cover:'让球兑现',one_x_two:'胜平负',handicap:'让球',correct_score:'比分赔率',total_goals:'总进球',external_market:'外部市场',selected_cluster:'选择的比分组',why_selected_score:'选择理由',adjacent_scores_checked:'相邻比分比较',league_style:'联赛特点',team_style:'球队特点',tempo:'比赛节奏',score_shape:'比分形态',btts_likelihood:'双方进球',rotation_risk:'轮换风险',sharp_money_direction:'资金方向判断',public_money_direction:'公众倾向',evidence:'依据',bookmaker_intent:'公司报价解读',exclusion:'排除理由',available:'是否有数据',missing:'缺失信息',source:'来源',source_url:'来源地址',captured_at:'采集时间',has_conflict:'是否存在冲突',conflicts:'冲突说明',why_this_can_fail:'可能失效的条件',why_recommended:'判断依据',risk_type:'风险情景',raw_packet_quality:'原始数据质量'};
   Object.assign(fieldLabels, {result_market:'三项报价整体成本',half_full_time:'半全场',quote_count:'有效报价数',overround_pct:'倒数和超额（%）',theoretical_payout_pct:'理论返还率（%）',theoretical_hold_pct:'理论留存率（%）',note:'说明',status:'证据状态',alternative_explanations:'其他合理解释',counterevidence:'反证',confirmation_needed:'待确认信息'});
   const valueLabels = {unknown:'未知',unclear:'尚不明确',yes:'是',no:'否',high:'高',medium:'中',low:'低',home:'主队',away:'客队',draw:'平局',observed:'来源事实',derived:'根据事实计算',hypothesis:'待验证假设',no_evidence:'缺少可核验证据'};
+  Object.assign(valueLabels, {official_opening:'来源确认初盘',first_observed:'首次采集报价',subsequent_observation:'后续采集报价',retrospective:'赛后补录',prematch:'赛前采集',historical_comparison:'历史案例比较'});
+  Object.assign(valueLabels, {missing_api_key:'未配置数据接口密钥',fixture_not_uniquely_matched:'赛事未唯一匹配',fields_missing_or_identity_mismatch:'字段缺失或身份不一致',provider_rejected:'数据源拒绝请求',missing_verified_recent_form:'缺少可核验近期赛况',api_football:'API-Football',timeout:'请求超时'});
+  Object.assign(fieldLabels, {market:'玩法',odds:'原始报价',result:'胜平负',quote_records:'报价记录数',official_opening_records:'已确认初盘记录数',market_source:'报价来源',analysis_cutoff:'分析截止时间',favorite_realized_count:'低赔方向兑现案例数',contrary_count:'低赔方向未兑现案例数'});
+  Object.assign(fieldLabels, {recent_form:'近期赛况',last_30_days:'近30天',last_5:'近5场',last_10:'近10场',sample_count:'样本数',matches:'比赛明细',date_from:'起始日期',date_to:'截止日期',quote_timeline:'报价时间线',quoted_at:'来源报价时间',display_kind:'报价类型',collection_mode:'采集方式',official_opening_available:'是否取得初盘',history_coverage:'历史覆盖',result_fixtures:'可核实赛果场数',fixtures:'赛事数',complete_jingcai_history:'是否完整竞彩历史',cases:'相似案例',opening:'已确认初盘案例',observations:'历史报价案例',favorite_realized:'低赔方向是否兑现',quote_distance:'报价差异',same_season:'同赛季',same_goal_structure:'相近进球结构',reference_quotes:'历史报价',actual:'已核实赛果',period:'赛果口径',records:'记录',collection_diagnostics:'采集诊断',injuries:'伤停来源',lineups:'首发来源',confirmed_lineup:'首发已确认',result_odds:'胜平负原始报价',opponent:'对手',venue_side:'主客场',red_cards:'红牌记录',cutoff:'分析截止时间'});
+  function sourceLink(value) {
+    try {
+      const url = new URL(value);
+      if (!['http:','https:'].includes(url.protocol) || url.username || url.password) return readable(String(value));
+      return `<a href="${esc(url.href)}" target="_blank" rel="noopener noreferrer">${esc(url.hostname)} ↗</a>`;
+    } catch { return readable(String(value)); }
+  }
   function readable(value) {
     if (!present(value)) return '<span class="muted">未提供</span>';
     if (Array.isArray(value)) return value.length ? '<ul class="readable-list">'+value.map(v=>'<li>'+readable(v)+'</li>').join('')+'</ul>' : '<span class="muted">未记录</span>';
-    if (typeof value === 'object') return '<dl class="readable-fields">'+Object.entries(value).map(([k,v])=>`<div><dt>${esc(fieldLabels[k] || k)}</dt><dd>${readable(v)}</dd></div>`).join('')+'</dl>';
+    if (typeof value === 'object') return '<dl class="readable-fields">'+Object.entries(value).map(([k,v])=>`<div><dt>${esc(fieldLabels[k] || k)}</dt><dd>${k === 'source_url' && typeof v === 'string' ? sourceLink(v) : readable(v)}</dd></div>`).join('')+'</dl>';
     return `<span class="analysis-text">${esc(typeof value === 'boolean' ? (value ? '是' : '否') : valueLabels[value] || String(value))}</span>`;
   }
   function detail(title, value) {
@@ -99,7 +122,7 @@ var Dashboard = (() => {
     const labels = [['context','赛事情境'],['goal_band','进球区间'],['market_alignment','盘口交叉'],['candidate_comparison','比分比较'],['verdict','裁决与反证']];
     const summary = p.reading_summary;
     if (!summary || !labels.some(([k])=>typeof summary[k] === 'string' && summary[k].trim())) {
-      return `<p class="reading-missing">${p.analysis_policy === 'score-first-v24' ? '本轮未返回分步摘要，以下保留原始分析。' : '旧版未记录分步摘要，以下保留原始分析。'}</p>`;
+      return `<p class="reading-missing">${String(p.analysis_policy || '').startsWith('score-first-') ? '本轮未返回分步摘要，以下保留原始分析。' : '旧版未记录分步摘要，以下保留原始分析。'}</p>`;
     }
     return '<ol class="reading-steps">'+labels.map(([key,label],i)=>`<li><div class="reading-step-title"><span>0${i+1}</span><h3>${label}</h3></div><p>${esc(typeof summary[key] === 'string' && summary[key].trim() ? summary[key] : '本项未记录')}</p></li>`).join('')+'</ol>';
   }
@@ -117,6 +140,10 @@ var Dashboard = (() => {
       ['候选比分及理由',candidates],['盘口尾部观察（赔率推导，并非 AI 推荐）',p.all_tail_scores],['锚点审计',p.anchor_audit],['公司交叉审计',p.bookmaker_cross_audit],
       ['盘口解读',p.market_interpretation],['盘口与市场来源',scorePolicy ? null : r.global_odds || r.international_odds || r.odds_movement],
       ['报价成本核验',p.market_margin_audit],['盘口风险假设与反证',p.market_risk_audit],
+      ['五玩法原始报价',p.market_quotes || {result:p.result_odds}],['报价来源与截止时间',{...(p.market_source || {}),analysis_cutoff:p.analysis_cutoff}],['近期赛况',p.recent_form || r.recent_form],
+      ['伤停与首发来源',p.fixture_details || r.fixture_details],['报价时间线',p.quote_timeline || r.quote_timeline],
+      ['历史相似与反向案例',p.historical_cases || r.historical_cases],
+      ['历史覆盖与缺口',p.history_coverage || r.history_coverage],['采集诊断',p.collection_diagnostics || r.collection_diagnostics],
       ['资金流分析（仅按来源陈述）',p.money_flow],['战术与节奏',p.tempo_xg_tactical_audit],['赛前因素',p.pre_match_factor_audit],
       ['比分排除与相邻比分比较',p.score_elimination_audit || p.score_cluster_audit],['反向风险',p.upset_evidence],
       ['外部事实与来源',p.external_fact_table],['来源冲突',p.source_conflict_audit],['证据缺口',p.minimum_evidence_needed],
@@ -146,7 +173,7 @@ var Dashboard = (() => {
       <div class="match-bottom"><span class="probabilities">${scorePolicy ? '比分情景分析 · 不作概率定价' : probs ? probs.map((v,i)=>`${['主','平','客'][i]} ${v}%`).join('　') : '胜平负概率未提供'}</span><span class="availability">${m.eligible ? '赛前可关注' : m.state === 'stale' ? '保留原判断 · 不作当前推荐' : '仅供分析'}</span></div>
       <div class="match-analysis">
         ${renderReading(p)}
-        <div class="analysis-heading"><h3>三模型分析对照</h3><span>独立初审 → 唯一终审</span></div>
+        <div class="analysis-heading"><h3>${p.role_reports && Object.keys(p.role_reports).length ? 'GPT 多视角分析' : '历史模型分析对照'}</h3><span>独立初审 → 唯一终审</span></div>
         ${renderModels(p)}
         <div class="reading-columns"><section class="evidence-section"><h3>风险 D / 副文比分 · 情景依据</h3>${riskDetails}</section>${detail('判决可能失效的条件与证据缺口',{why_this_can_fail:p.recommendation?.why_this_can_fail || [],missing:p.recommendation?.minimum_evidence_needed || p.data_quality?.missing || []})}</div>
       </div>
@@ -171,11 +198,12 @@ var Dashboard = (() => {
     const total = run.total_matches ?? rows.length;
     const good = run.successful_matches ?? rows.filter(m=>!m.abstain).length;
     const panel = run.run_mode === 'panel';
+    const gptRoles = run.provider === 'gpt' && Array.isArray(run.roles);
     const state = !total ? '等待数据' : good === total ? '分析完成' : good ? '部分完成' : '暂无有效终审';
     const failed = (run.batches || []).filter(b=>!b.ok).length;
-    return `<div class="run-heading"><div><span class="eyebrow">ANALYSIS PIPELINE</span><h2>${state} <strong>${good} / ${total}</strong></h2></div><p>${esc(run.request_count ?? '—')} 次请求 · ${esc(run.cache_hits ?? 0)} 次缓存${failed ? ` · ${failed} 次请求失败` : ''}</p></div>
-      <div class="pipeline">${panel ? '<span><b>01</b> GPT · 盘口主线</span><span><b>02</b> Grok · 独立反证</span><span class="referee"><b>03</b> Gemini · 终审裁决</span>' : '<span><b>01</b> 赛前证据</span><span><b>02</b> '+esc(run.primary_model?.toUpperCase() || '历史模型')+' · 分析</span><span><b>03</b> 协议与时间核验</span>'}</div>
-      <p class="pipeline-note">${panel ? 'GPT 与 Grok 并行分析，Gemini 随后裁决。' : '此快照按生成时的模型流程展示。'} ${good < total ? '缺失结果保留失败状态，已有初审可在完整分析中查看。' : '主线、风险与评级分别呈现。'}</p>`;
+    return `<div class="run-heading"><div><span class="eyebrow">ANALYSIS PIPELINE</span><h2>${state} <strong>${esc(good)} / ${esc(total)}</strong></h2></div><p>${esc(run.request_count ?? '—')} 次请求 · ${esc(run.cache_hits ?? 0)} 次缓存${failed ? ` · ${failed} 次请求失败` : ''}</p></div>
+      <div class="pipeline">${gptRoles ? '<span><b>01</b> GPT · 盘口与历史</span><span><b>02</b> GPT · 近况与风险</span><span class="referee"><b>03</b> GPT · 终审</span>' : panel ? '<span><b>01</b> GPT · 盘口主线</span><span><b>02</b> Grok · 独立反证</span><span class="referee"><b>03</b> Gemini · 终审裁决</span>' : '<span><b>01</b> 赛前证据</span><span><b>02</b> '+esc(run.primary_model?.toUpperCase() || '历史模型')+' · 分析</span><span><b>03</b> 协议与时间核验</span>'}</div>
+      <p class="pipeline-note">${gptRoles ? '同一 GPT 的两组初审并行，再由 GPT 终审；观点一致不等于独立证据。' : '历史快照按生成时的模型流程展示。'} ${good < total ? '缺失结果保留失败状态，已有初审可在完整分析中查看。' : '主线、风险与评级分别呈现。'}</p>`;
   }
   async function start() {
     const $ = id => document.getElementById(id);
@@ -195,7 +223,7 @@ var Dashboard = (() => {
       const stamp = snapshotTime(data), stale = !Number.isFinite(stamp) || Date.now()-stamp>86400000 || stamp>Date.now()+300000;
       $('snapshot-status').className = 'snapshot-banner'+(stale?' stale':'');
       $('snapshot-status').innerHTML = `<strong>${stale ? '历史快照' : '赛前快照'}</strong><p>${esc(dateTime(stamp))} 更新${stale ? ' · 仅回看原判断，暂无当前推荐' : ' · 北京时间'}</p>`;
-      $('version').textContent = '页面 v24 · 数据：'+(data.engine_version || data.runtime?.ai_run?.engine_version || '历史版本');
+      $('version').textContent = '页面 v25 · 数据：'+(data.engine_version || data.runtime?.ai_run?.engine_version || '历史版本');
       $('watchlist').hidden = false;
       $('watchlist').innerHTML = renderWatchlist(filtered);
     }

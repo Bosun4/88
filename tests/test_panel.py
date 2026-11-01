@@ -10,7 +10,11 @@ from test_single_pass import predict, row, setup_engine
 def run_engine(monkeypatch, tmp_path, handler, budget='180'):
     setup_engine(monkeypatch, tmp_path)
     monkeypatch.setenv('AI_PANEL_MAX_CALLS', budget)
-    monkeypatch.setattr(predict, 'async_call_ai_json', handler)
+    async def transport(session, provider, system, prompt, phase, expected):
+        assert provider == 'gpt'
+        role = json.loads(prompt.splitlines()[-1])['review_context']['current_role']
+        return await handler(session, role, system, prompt, phase, expected)
+    monkeypatch.setattr(predict, 'async_call_ai_json', transport)
     from panel import run_panel
     return lambda evidence: asyncio.run(run_panel(predict, evidence))
 
@@ -19,7 +23,7 @@ def test_analysts_finish_before_referee_and_keep_model_identity(monkeypatch, tmp
     done = []
     async def call(session, name, system, prompt, phase, expected):
         if phase == 'panel_final':
-            assert set(done) == {'gpt', 'grok'}
+            assert set(done) == {'market_history', 'context_risk'}
             assert 'analyst_outputs' in prompt
         else:
             await asyncio.sleep(0)
@@ -27,9 +31,9 @@ def test_analysts_finish_before_referee_and_keep_model_identity(monkeypatch, tmp
         return name, {'predictions': [row(expected[0])]}, {'ok': True, 'status': 'ok'}
     run = run_engine(monkeypatch, tmp_path, call)
     result = run([{'match': 1, 'fixture_id': 'a'}])
-    assert result[1]['source_model'] == 'gemini'
-    assert set(result[1]['phase1_model_outputs']) == {'gpt', 'grok'}
-    assert result[1]['ai_call_status']['gemini']['final']['row_status'] == 'ok'
+    assert result[1]['source_model'] == 'gpt'
+    assert set(result[1]['phase1_model_outputs']) == {'market_history', 'context_risk'}
+    assert result[1]['ai_call_status']['final']['final']['row_status'] == 'ok'
     assert predict._LAST_AI_RUN_METADATA['request_count'] == 3
     assert predict._LAST_AI_RUN_METADATA['successful_matches'] == 1
 
@@ -39,19 +43,19 @@ def test_stage_context_distinguishes_independent_analysis_from_missing_analyst(m
     async def call(session, name, system, prompt, phase, expected):
         packet = json.loads(prompt.splitlines()[-1])
         seen[name] = packet['review_context']
-        if name == 'grok':
+        if name == 'context_risk':
             return name, {}, {'ok': False, 'status': 'http_503'}
         return name, {'predictions': [row(1)]}, {'ok': True, 'status': 'ok'}
     result = run_engine(monkeypatch, tmp_path, call)([{'match': 1}])
-    for name in ('gpt', 'grok'):
-        assert seen[name] == {'current_model': name, 'stage': 'independent_analysis',
-                              'analyst_availability': {}, 'final_referee': 'gemini'}
-    assert seen['gemini'] == {'current_model': 'gemini', 'stage': 'final_review',
-                             'analyst_availability': {'gpt': {'available': True, 'status': 'ok'},
-                                                      'grok': {'available': False, 'status': 'http_503'}},
-                             'final_referee': 'gemini'}
-    assert result[1]['review_context'] == seen['gemini']
-    assert result[1]['phase1_model_outputs']['gpt']['review_context'] == seen['gpt']
+    for name in ('market_history', 'context_risk'):
+        assert seen[name] == {'current_model': 'gpt', 'current_role': name, 'stage': 'independent_analysis',
+                              'analyst_availability': {}, 'final_referee': 'gpt'}
+    assert seen['final'] == {'current_model': 'gpt', 'current_role': 'final', 'stage': 'final_review',
+                             'analyst_availability': {'market_history': {'available': True, 'status': 'ok'},
+                                                      'context_risk': {'available': False, 'status': 'http_503'}},
+                             'final_referee': 'gpt'}
+    assert result[1]['review_context'] == seen['final']
+    assert result[1]['phase1_model_outputs']['market_history']['review_context'] == seen['market_history']
 
 
 def test_all_analysts_failed_skips_referee_and_reports_failure(monkeypatch, tmp_path):
@@ -61,7 +65,7 @@ def test_all_analysts_failed_skips_referee_and_reports_failure(monkeypatch, tmp_
         return name, {}, {'ok': False, 'status': 'http_524'}
     run = run_engine(monkeypatch, tmp_path, call)
     result = run([{'match': 1}])
-    assert calls == ['gpt', 'grok']
+    assert calls == ['market_history', 'context_risk']
     assert result[1]['final_direction'] == 'abstain'
     assert predict._LAST_AI_RUN_METADATA['run_status'] == 'failed'
 
@@ -84,26 +88,26 @@ def test_shared_endpoint_tls_failure_stops_remaining_fixtures(monkeypatch, tmp_p
 
 def test_failed_referee_never_promotes_analyst(monkeypatch, tmp_path):
     async def call(session, name, system, prompt, phase, expected):
-        return name, {'predictions': [row(expected[0])]} if name != 'gemini' else {}, {'ok': name != 'gemini', 'status': 'http_524' if name == 'gemini' else 'ok'}
+        return name, {'predictions': [row(expected[0])]} if name != 'final' else {}, {'ok': name != 'final', 'status': 'http_524' if name == 'final' else 'ok'}
     result = run_engine(monkeypatch, tmp_path, call)([{'match': 1}])
     assert result[1]['final_direction'] == 'abstain'
-    assert result[1]['phase1_model_outputs']['gpt']['predicted_score'] == '2-1'
+    assert result[1]['phase1_model_outputs']['market_history']['predicted_score'] == '2-1'
 
 
-@pytest.mark.parametrize('grok_status', ['http_503', 'tls_handshake_error'])
-def test_one_model_failure_does_not_disable_healthy_origin(monkeypatch, tmp_path, grok_status):
+@pytest.mark.parametrize('grok_status', ['http_503', 'parse_failed'])
+def test_one_role_response_failure_allows_other_role_and_final(monkeypatch, tmp_path, grok_status):
     calls = []
     async def call(session, name, system, prompt, phase, expected):
         calls.append(name)
-        if name == 'grok':
+        if name == 'context_risk':
             return name, {}, {'ok': False, 'status': grok_status}
         return name, {'predictions': [row(expected[0])]}, {'ok': True, 'status': 'ok'}
     monkeypatch.setattr(predict, 'get_url_for_ai', lambda name:
-                        'https://grok.fixture.invalid/v1' if name == 'grok' and grok_status.startswith('tls')
+                        'https://grok.fixture.invalid/v1' if name == 'context_risk' and grok_status.startswith('tls')
                         else 'https://shared.fixture.invalid/v1')
     result = run_engine(monkeypatch, tmp_path, call)([{'match': 1}, {'match': 2}])
-    assert all(r['source_model'] == 'gemini' for r in result.values())
-    assert calls.count('gpt') == 2 and calls.count('gemini') == 2
+    assert all(r['source_model'] == 'gpt' for r in result.values())
+    assert calls.count('market_history') == 2 and calls.count('final') == 2
 
 
 def test_budget_reserves_whole_match_instead_of_stranding_all_referees(monkeypatch, tmp_path):
@@ -119,7 +123,7 @@ def test_budget_reserves_whole_match_instead_of_stranding_all_referees(monkeypat
     assert predict._LAST_AI_RUN_METADATA['run_status'] == 'partial'
 
 
-def test_recapture_reuses_cache_but_quote_change_invalidates(monkeypatch, tmp_path):
+def test_cache_reuses_identical_evidence_and_invalidates_observation_time(monkeypatch, tmp_path):
     calls = []
     async def call(session, name, system, prompt, phase, expected):
         calls.append(name)
@@ -127,18 +131,17 @@ def test_recapture_reuses_cache_but_quote_change_invalidates(monkeypatch, tmp_pa
     run = run_engine(monkeypatch, tmp_path, call)
     evidence = [{'match': 1, 'captured_at': '2026-09-28T10:00:00Z', 'sp_home': 2.1}]
     run(evidence)
-    evidence[0]['captured_at'] = '2026-09-28T10:01:00Z'
     run(evidence)
     assert len(calls) == 3
     assert predict._LAST_AI_RUN_METADATA['cache_hits'] == 3
-    evidence[0]['sp_home'] = 2.2
+    evidence[0]['captured_at'] = '2026-09-28T10:01:00Z'
     run(evidence)
     assert len(calls) == 6
 
 
 def test_duplicate_referee_identifier_abstains(monkeypatch, tmp_path):
     async def call(session, name, system, prompt, phase, expected):
-        return name, {'predictions': [row(1)] * (2 if name == 'gemini' else 1)}, {'ok': True}
+        return name, {'predictions': [row(1)] * (2 if name == 'final' else 1)}, {'ok': True}
     result = run_engine(monkeypatch, tmp_path, call)([{'match': 1}])
     assert result[1]['final_direction'] == 'abstain'
 
@@ -146,7 +149,7 @@ def test_duplicate_referee_identifier_abstains(monkeypatch, tmp_path):
 def test_manual_refresh_recovers_from_cached_provider_failure(monkeypatch, tmp_path):
     grok_ready = False
     async def call(session, name, system, prompt, phase, expected):
-        if name == 'grok' and not grok_ready:
+        if name == 'context_risk' and not grok_ready:
             return name, {}, {'ok': False, 'status': 'http_503'}
         return name, {'predictions': [row(expected[0])]}, {'ok': True, 'status': 'ok'}
     run = run_engine(monkeypatch, tmp_path, call)
@@ -154,18 +157,18 @@ def test_manual_refresh_recovers_from_cached_provider_failure(monkeypatch, tmp_p
     run(evidence)
     grok_ready = True
     cached = run(evidence)
-    assert cached[1]['ai_call_status']['grok']['phase1']['cache_hit'] is True
+    assert cached[1]['ai_call_status']['context_risk']['phase1']['cache_hit'] is True
     assert predict._LAST_AI_RUN_METADATA['request_count'] == 0
     # A fresh Actions runner skips cache restore but still saves new responses.
     monkeypatch.setenv('AI_CACHE_DIR', str(tmp_path / 'fresh-run-cache'))
     refreshed = run(evidence)
-    assert set(refreshed[1]['phase1_model_outputs']) == {'gpt', 'grok'}
-    assert refreshed[1]['ai_call_status']['grok']['phase1']['row_status'] == 'ok'
+    assert set(refreshed[1]['phase1_model_outputs']) == {'market_history', 'context_risk'}
+    assert refreshed[1]['ai_call_status']['context_risk']['phase1']['row_status'] == 'ok'
     assert predict._LAST_AI_RUN_METADATA['request_count'] == 3
     assert predict._LAST_AI_RUN_METADATA['cache_hits'] == 0
     assert predict._LAST_AI_RUN_METADATA['failure_summary'] == {}
     reused = run(evidence)
-    assert set(reused[1]['phase1_model_outputs']) == {'gpt', 'grok'}
+    assert set(reused[1]['phase1_model_outputs']) == {'market_history', 'context_risk'}
     assert predict._LAST_AI_RUN_METADATA['request_count'] == 0
     assert predict._LAST_AI_RUN_METADATA['cache_hits'] == 3
     assert predict._LAST_AI_RUN_METADATA['failure_summary'] == {}
@@ -235,13 +238,14 @@ def test_full_panel_adapter_and_publication_keep_roles(monkeypatch, tmp_path, re
     setup_engine(monkeypatch, tmp_path)
     monkeypatch.setattr(predict, 'AI_RUN_MODE', 'panel')
     async def call(session, name, system, prompt, phase, expected):
-        ok = referee_ok or name != 'gemini'
+        assert name == 'gpt'
+        ok = referee_ok or phase != 'panel_final'
         return name, {'predictions': [row(expected[0])]} if ok else {}, {'ok': ok, 'status': 'ok' if ok else 'http_524'}
     monkeypatch.setattr(predict, 'async_call_ai_json', call)
     output, top4 = predict.run_predictions({'matches': [future_match()]})
     pred = output[0]['prediction']
     assert pred['is_abstain'] is not referee_ok
-    assert set(pred['phase1_model_outputs']) == {'gpt', 'grok'}
+    assert set(pred['phase1_model_outputs']) == {'market_history', 'context_risk'}
     assert pred['ai_run_metadata']['request_count'] == 3
     assert pred['ai_run_metadata']['run_status'] == ('completed' if referee_ok else 'failed')
     if referee_ok:
@@ -262,9 +266,9 @@ def test_kickoff_is_rechecked_before_referee(monkeypatch, tmp_path):
         calls.append(name)
         return name, {'predictions': [row(expected[0])]}, {'ok': True}
     result = run_engine(monkeypatch, tmp_path, call)([{'match': 1, 'identity': future_match()}])
-    assert calls == ['gpt', 'grok']
+    assert calls == ['market_history', 'context_risk']
     assert result[1]['final_direction'] == 'abstain'
-    assert result[1]['ai_call_status']['gemini']['final']['status'] == 'already_started'
+    assert result[1]['ai_call_status']['final']['final']['status'] == 'already_started'
 
 
 def test_run_deadline_prevents_another_stage(monkeypatch, tmp_path):
@@ -275,9 +279,69 @@ def test_run_deadline_prevents_another_stage(monkeypatch, tmp_path):
     calls = []
     async def call(session, name, system, prompt, phase, expected):
         calls.append(name)
-        if name == 'grok':
+        if name == 'context_risk':
             clock[0] = 61
         return name, {'predictions': [row(expected[0])]}, {'ok': True}
     result = run_engine(monkeypatch, tmp_path, call)([{'match': 1}])
-    assert calls == ['gpt', 'grok']
-    assert result[1]['ai_call_status']['gemini']['final']['status'] == 'run_deadline_exhausted'
+    assert calls == ['market_history', 'context_risk']
+    assert result[1]['ai_call_status']['final']['final']['status'] == 'run_deadline_exhausted'
+
+
+def test_hard_limits_cannot_be_raised_by_environment(monkeypatch, tmp_path):
+    async def call(session, name, system, prompt, phase, expected):
+        return name, {'predictions': [row(expected[0])]}, {'ok': True}
+    monkeypatch.setenv('AI_PANEL_MAX_SECONDS', '999999')
+    result = run_engine(monkeypatch, tmp_path, call, '999999')([{'match': i} for i in range(1, 63)])
+    assert predict._LAST_AI_RUN_METADATA['request_count'] == 180
+    assert predict._LAST_AI_RUN_METADATA['max_seconds'] == 5400
+    assert result[61]['role_reports']['final']['status']['status'] == 'run_call_budget_exhausted'
+
+
+def test_refresh_bypasses_all_roles_and_saves_new_cache(monkeypatch, tmp_path):
+    calls = []
+    async def call(session, name, system, prompt, phase, expected):
+        calls.append(name)
+        r = row(expected[0])
+        r['reason'] = name
+        return name, {'predictions': [r]}, {'ok': True}
+    run = run_engine(monkeypatch, tmp_path, call)
+    evidence = [{'match': 1}]
+    run(evidence)
+    monkeypatch.setenv('AI_DISABLE_CACHE', 'true')
+    refreshed = run(evidence)
+    assert len(calls) == 6
+    for role in ('market_history', 'context_risk', 'final'):
+        assert refreshed[1]['role_reports'][role]['report']['reason'] == role
+    monkeypatch.setenv('AI_DISABLE_CACHE', 'false')
+    run(evidence)
+    assert len(calls) == 6 and predict._LAST_AI_RUN_METADATA['cache_hits'] == 3
+
+
+def test_adapter_exception_only_fails_one_role_without_leaking_error(monkeypatch, tmp_path):
+    async def call(session, name, system, prompt, phase, expected):
+        if name == 'context_risk':
+            raise RuntimeError('SECRET-DO-NOT-LOG')
+        return name, {'predictions': [row(expected[0])]}, {'ok': True}
+    result = run_engine(monkeypatch, tmp_path, call)([{'match': 1}])
+    assert result[1]['final_direction'] == 'home'
+    assert result[1]['role_reports']['context_risk']['status']['status'] == 'transport_error'
+    assert 'SECRET-DO-NOT-LOG' not in json.dumps(result)
+    assert predict._LAST_AI_RUN_METADATA['request_count'] == 3
+
+
+def test_request_watchdog_caps_timeout_and_never_retries(monkeypatch, tmp_path):
+    import panel
+    timeouts = []
+    async def deadline(coro, timeout):
+        timeouts.append(timeout)
+        coro.close()
+        raise asyncio.TimeoutError
+    async def call(*args):
+        raise AssertionError('watchdog should expire')
+    monkeypatch.setattr(panel.asyncio, 'wait_for', deadline)
+    run = run_engine(monkeypatch, tmp_path, call)
+    monkeypatch.setattr(predict, 'AI_HTTP_TOTAL_TIMEOUT', 99999)
+    result = run([{'match': 1}])
+    assert timeouts == [180, 180]
+    assert result[1]['final_direction'] == 'abstain'
+    assert predict._LAST_AI_RUN_METADATA['request_count'] == 2

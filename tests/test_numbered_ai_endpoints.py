@@ -24,7 +24,8 @@ class _Resp:
 class _Session:
     def __init__(self):
         self.calls = []
-    def post(self, url, headers=None, json=None, timeout=None):
+    def post(self, url, headers=None, json=None, timeout=None, allow_redirects=True):
+        assert allow_redirects is False
         self.calls.append((url, headers, json))
         return _Resp()
 
@@ -43,7 +44,7 @@ def provider_env(monkeypatch):
     monkeypatch.setattr(predict, 'AI_MOCK_MODE', False)
 
 
-@pytest.mark.parametrize('name', ['gpt', 'grok', 'gemini'])
+@pytest.mark.parametrize('name', ['gpt'])
 def test_only_dedicated_unnumbered_credentials_and_model_are_used(provider_env, name):
     endpoints = predict._endpoint_candidates_for_ai(name)
     assert len(endpoints) == 1
@@ -55,7 +56,7 @@ def test_only_dedicated_unnumbered_credentials_and_model_are_used(provider_env, 
     assert predict.get_key_for_ai(name) == endpoint['key']
 
 
-@pytest.mark.parametrize('name', ['gpt', 'grok', 'gemini'])
+@pytest.mark.parametrize('name', ['gpt'])
 @pytest.mark.parametrize('missing', ['URL', 'KEY'])
 def test_missing_primary_config_never_uses_numbered_or_other_provider(provider_env, monkeypatch, name, missing):
     monkeypatch.delenv(name.upper() + '_API_' + missing)
@@ -69,9 +70,7 @@ def test_missing_primary_config_never_uses_numbered_or_other_provider(provider_e
 
 
 @pytest.mark.parametrize('name,expected', [
-    ('gpt', '熊猫-按量-gpt-6-astra'),
-    ('grok', 'grok-4.7'),
-    ('gemini', 'gemini-3.8-flash-high'),
+    ('gpt', 'gpt-6-astra'),
 ])
 def test_blank_model_uses_current_single_default(provider_env, monkeypatch, name, expected):
     monkeypatch.setenv(name.upper() + '_MODEL', '  ')
@@ -93,3 +92,11 @@ def test_failure_never_rotates_or_fails_over_to_numbered_endpoint(provider_env, 
         assert url == 'https://gpt.example/v1/chat/completions'
         assert headers['Authorization'] == 'Bearer GPT-key'
         assert payload['model'] == 'GPT-selected-model'
+
+
+@pytest.mark.parametrize('name', ['grok', 'gemini', 'claude'])
+def test_removed_providers_never_read_configuration_or_send(provider_env, name):
+    assert predict._endpoint_candidates_for_ai(name) == []
+    session = _Session()
+    _, obj, status = asyncio.run(predict.async_call_ai_json(session, name, 's', 'p', 'panel_final', [1]))
+    assert status['status'] == 'unsupported_provider' and not session.calls and obj == {}
