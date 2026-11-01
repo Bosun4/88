@@ -13,7 +13,9 @@
 
 ## 运行审计
 
-[失败运行 38746022926](https://github.com/Bosun4/88/actions/runs/38746022926) 的公开状态只能确认失败发生于 Run Predictions。未取得授权后的完整步骤日志；不能认定根因是密钥、模型、TLS、JSON或预算。本次实现补充明确诊断，但没有宣称已复现原故障。
+[失败运行 38746022926](https://github.com/Bosun4/88/actions/runs/38746022926) 在恢复 GitHub 登录后已读取完整日志。13场的 Grok 初审全部 HTTP403；GPT 初审5场成功、4场超时、3场泛化 error、1场 HTTP500；随后启动的5次 Gemini 终审全部 HTTP403，导致没有有效终审。Run Predictions 因保护逻辑抛出“本轮没有有效终审预测，保留上一份线上数据”，部署被跳过。脱敏摘录见 [failed-run-38746022926.json](failed-run-38746022926.json)。
+
+这些日志确认的是直接失败链，不能仅凭403断言密钥失效或具体服务商权限原因，也不能从泛化 error 推断 TLS。改为 GPT 唯一供应商消除了对两个403供应商的依赖，但 GPT 自身的超时/500仍须真实接口试运行验证；本次没有付费重放该运行。
 
 `predict.py` 保留历史兼容代码和多次定义的旧函数。清单见 [legacy-definitions-v25.json](legacy-definitions-v25.json)。当前最终绑定的 `build_evidence_packet` 在 panel 下直接走 `score_policy.build_evidence`；`run_ai_native_web` 仅走 `panel.run_panel`；score-first 输出直接走 `score_policy.adapt_prediction`。回归设置旧数学编译器为禁止调用，核验当前链路未被同名定义覆盖。未进行大规模删除旧函数，以免破坏离线历史回归；旧提示内容不作为当前分析提示，也不存在非 GPT 传输后备。
 
