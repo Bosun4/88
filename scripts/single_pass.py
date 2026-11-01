@@ -127,7 +127,7 @@ async def _run_single_pass(engine: Any, evidence: list[dict]) -> dict[int, dict]
     started = time.monotonic()
     primary = os.environ.get("AI_PRIMARY_MODEL", "gpt").strip().lower()
     if primary not in engine.AI_NAMES:
-        raise ValueError("AI_PRIMARY_MODEL must be gpt, grok or gemini")
+        raise ValueError("AI_PRIMARY_MODEL must be gpt")
     unique: dict[int, dict] = {}
     for entry in evidence:
         idx = entry.get("match")

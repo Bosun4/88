@@ -1,29 +1,45 @@
-# 三家 AI 的单一配置入口
+# GPT 单模型配置（v25）
 
-每家只使用一个模型和一组无编号的 URL/KEY，三家可以指向同一个服务商地址。相同地址不会额外生成模型槽位。
+生产入口默认且只接受 `AI_RUN_MODE=panel`。沿用既有地址、密钥、模型；本次未修改 GitHub Secrets，未发送真实 GPT 预测请求。
 
-| AI | GitHub Secret：地址 | GitHub Secret：密钥 | 默认模型 |
-| --- | --- | --- | --- |
-| GPT | `GPT_API_URL` | `GPT_API_KEY` | `熊猫-按量-gpt-6-astra` |
-| Gemini | `GEMINI_API_URL` | `GEMINI_API_KEY` | `gemini-3.8-flash-high` |
-| Grok | `GROK_API_URL` | `GROK_API_KEY` | `grok-4.7` |
+| 配置 | 位置 | 行为 |
+| --- | --- | --- |
+| `GPT_API_URL` | Secret / 环境变量 | 既有 Chat Completions 兼容地址，保留服务商 `/v1` 路径 |
+| `GPT_API_KEY` | Secret / 环境变量 | 既有密钥 |
+| `GPT_MODEL` | Repository Variable / 环境变量 | 留空沿用 `熊猫-按量-gpt-6-astra` |
+| `API_FOOTBALL_KEY` | 可选 Secret | 精确匹配赛事后补充赛况；缺失有诊断 |
+| `WENCAI_AUTHORIZATION` | 既有 Secret | 现有竞彩赛程及报价来源 |
 
-模型默认值统一在 `scripts/config.py` 的 `DEFAULT_MODELS`。现有可选 Repository Variables `GPT_MODEL`、`GEMINI_MODEL`、`GROK_MODEL` 分别覆盖该家的唯一模型；未设置或为空白时使用默认值，不要求新增配置。
+活动模型代码只读取三个 GPT 配置，不读取其他供应商或编号槽位。旧多供应商模式及 single_pass 不能通过生产入口运行。部分旧提示/解析函数保留作历史回归工具，不是备用调用路径。历史 JSON 按原生成方式展示。
 
-旧的 `*_API_URL_2` / `*_API_URL2`、`*_API_KEY_2` / `*_API_KEY2` 等编号配置以及 `*_MODEL_1` 至 `*_MODEL_5` 均不读取。旧 `AI_ENDPOINT_*` 轮询、备用接口和槽位队列已移除，保留在后台的旧变量不会生效。
+## 流程和限制
 
-GPT 和 Grok 独立并行初审，Gemini 随后终审。当前工作流仍每场最多三次请求、无自动重试；并发由场次和请求上限控制，不再由五个接口槽位控制。缺少某家的 URL 或 KEY 时明确记录缺失，绝不借用另一家的配置或旧编号槽位。
+1. `market_history`：GPT 盘口与历史分析，核对五玩法、初盘与首次采集区别、历史正反案例。
+2. `context_risk`：GPT 近况与风险分析，核对近30天/近5及10场、赛程、伤停首发、替代解释。
+3. `final`：GPT 终审，读取原证据与有效初审，说明采纳、驳回、分歧、失效条件。
 
-这项配置清理不改变服务商对模型的路由和 TLS 连接状态；接口返回 `model_not_found` 或握手失败时仍保留真实故障。历史数据、已保存比分和前端布局不受本次配置整理影响。
+初审并行且互不读取结论。同模型一致意见不算独立证据。`role_reports` 分角色保存 provider、role、model、status、report、evidence_gaps；传输阶段分别为 `panel_market_history`、`panel_context_risk`、`panel_final`。
 
-## 手动运行与凌晨赛程
+每场先预留三次预算，每轮最多180次（60场完整预算）。阶段启动期限最多5400秒，单请求最多180秒；默认2场、4请求并发。环境变量可调低上限，不能突破硬限制。无重试、修复、额外质询或备用终审。
 
-在 Actions → Football AI Predict → Run workflow 运行。`target_date` 可填写 `YYYY-MM-DD` 格式的竞彩业务日；留空时按北京时间减 11 小时计算当前业务日。
+一组失败可带缺口终审；两组失败不启动终审；终审失败弃权。阶段启动及发布前再检查开赛时间。全轮没有有效终审时保留线上旧数据并报错。
 
-默认 `date_mode=next_available`：优先选择当前业务日的未开赛比赛；该日没有可用比赛时，选择源数据中未来 7 天内最近的一个业务日，每次仍只分析一天。选择 `current` 则严格保留当前业务日。显式填写 `target_date` 时不自动换日。已开赛比赛和自动选择模式下缺少可靠开赛时间的比赛不进入 AI。
+## 缓存与手动运行
 
-实际选定日期会传递到比赛、输出 `target_date`、历史文件和不可变快照。Actions 摘要会显示请求日期、实际日期、源状态和可用场数；artifact 的 `ai_phase_results/schedule.json` 保存逐场开赛时间、业务日及筛选原因。
+键包含角色、阶段、模型、地址、提示版本/内容、参数及证据；采集时间参与新鲜度判断。失败/不确定响应也有30分钟缓存，避免隐性重扣。密钥不进入键。请求锁阻止并发重复计费。
 
-源错误或没有可用比赛时仍保留旧线上数据并报错，不以空发布模拟预测成功。接口根地址应包含服务商要求的版本路径，例如 `https://api.luminai.cc/v1`，程序随后追加 `/chat/completions`。
+更新密钥或通道后，在 Actions → Football AI Predict → Run workflow 勾选 `refresh_ai`，跳过旧缓存恢复/读取并保存新结果。仍守三次上限，且不会抢占在途请求锁。日常保持不勾选。
 
-更新密钥、模型权限或服务商通道后，在 Run workflow 勾选“重新请求三家 AI”（`refresh_ai`）。普通运行会在 30 分钟内复用相同证据的结果，包括已记录的失败；密钥值不参与证据缓存标识，因此保存新密钥后直接重跑可能仍显示旧错误。勾选后本轮跳过旧 AI 缓存恢复，重新请求 GPT、Grok 和 Gemini，并保存新响应供后续普通运行复用，仍遵守每场最多三次调用、无自动重试的限制。正常日常运行保持不勾选以节约请求；运行摘要中的实际请求数与缓存数用于区分真实调用和复用。
+工作流只手动在 main 执行，运行会预测并发布。**PR/功能分支只执行离线 CI，不预测、不发布。** 本次尚未执行手动生产运行。
+
+`target_date` 指定竞彩业务日 YYYY-MM-DD；留空按北京时间减11小时选业务日。默认 `date_mode=next_available`，当天无未开赛比赛则选择源数据未来7天内最近业务日；`current` 固定当天。显式日期不自动换日。源失败或空赛程默认保留旧线上数据。
+
+## 数据边界
+
+保留胜平负、竞彩让球胜平负、比分、总进球7+、半全场原始报价。让球加到主队90分钟进球后结算，不是亚洲走盘。仅核算报价成本；比分缺三种“其他”不算完整抽水。不输出预测概率、EV、投注金额或数学比分模型结果。
+
+近期样本默认30天，近5/10场不足最多回溯90天，展示实际数量。API-Football 依赖密钥、权限、联赛和球队精确匹配；`collection_diagnostics` 明确缺密钥、匹配失败、来源拒绝和字段缺失。未取得的首发伤停红牌保持未知。
+
+供应商涨跌码不能冒充时间序列；降赔不能证明资金流。开盘策划/庄家思维必须提供可观察证据、其他解释、反证与确认条件。
+
+历史导入见 [RESEARCH_DATA.md](RESEARCH_DATA.md)，验收及未验证项目见 [AUDIT_V25.md](AUDIT_V25.md)。

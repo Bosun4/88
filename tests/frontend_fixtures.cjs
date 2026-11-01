@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
-const context = vm.createContext({ console, Date, Intl });
+const context = vm.createContext({ console, Date, Intl, URL });
 vm.runInContext(fs.readFileSync(path.join(root, 'assets/dashboard.js'), 'utf8'), context);
 const ui = context.Dashboard;
 const now = Date.parse('2026-09-19T08:00:00Z');
@@ -13,6 +13,25 @@ const snapshot = { update_time: '2026-09-19 15:30:00', scope: 'today_only' };
 const match = { id: 1, league: '英超', home_team: '主队', away_team: '客队', date: '2026-09-19', kickoff_at: '2026-09-19T12:00:00Z', prediction: { predicted_score: '2-1', final_direction: 'home', recommendation_tier: 'D', recommend_gate_pass: false, risk_score_candidates: [{ score: '1-2', reason: '反击', risk_type: '风险D' }], reason: '副文保留2-2风险' } };
 const clone = (v) => JSON.parse(JSON.stringify(v));
 const view = (m = match, d = snapshot, at = now) => ui.normalizeMatch(m, d, at, 0);
+
+test('GPT roles retain separate reports, failures, gaps and escaped sources', () => {
+  const m = clone(match);
+  m.prediction.analysis_policy = 'score-first-v25';
+  m.prediction.role_reports = Object.fromEntries(['market_history','context_risk','final'].map((role,i)=>[role,{
+    provider:'gpt',role,status:{ok:i!==1,row_status:i===1?'abstain':'ok',status:i===1?'timeout':'ok'},
+    report:{predicted_score:i===2?'1-1':'2-1',reason:role},evidence_gaps:['缺少初盘 <img src=x>']
+  }]));
+  m.prediction.quote_timeline = {records:[{source_url:'https://www.sporttery.cn/results',captured_at:'2026-09-19T08:00:00Z'},
+    {source_url:'javascript:alert(1)'}, {source_url:'https://user:secret@example.com/'}]};
+  const html = ui.renderMatch(view(m));
+  for (const label of ['GPT 盘口与历史分析','GPT 近况与风险分析','GPT 终审','证据缺口','&lt;img','www.sporttery.cn','noopener noreferrer']) assert.ok(html.includes(label));
+  assert.doesNotMatch(html, /Grok|Gemini|<img|href="javascript:|href="https:\/\/user:/);
+  const roles = ui.models(m.prediction);
+  assert.equal(roles[0].score,'2-1'); assert.equal(roles[1].score,null); assert.equal(roles[2].score,'1-1');
+  const run = ui.renderRun({runtime:{ai_run:{provider:'gpt',roles:['market_history','context_risk','final'],
+    total_matches:1,successful_matches:1,request_count:'<img src=x>'}}},[]);
+  assert.doesNotMatch(run,/Grok|Gemini|<img/);
+});
 
 test('panel shows two analysts and actual final referee independently', () => {
   const p = {predicted_score:'2-1', gpt_score:'1-0', grok_score:'1-1', gemini_score:'2-1', ai_call_status:{gpt:{phase1:{ok:true,row_status:'ok'}},grok:{phase1:{ok:true,row_status:'ok'}},gemini:{final:{ok:true,row_status:'ok'}}}};

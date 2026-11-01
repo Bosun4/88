@@ -29,11 +29,14 @@ def test_panel_evidence_excludes_direction_pricing_and_legacy_hints(monkeypatch)
     assert evidence['handicap']['odds']['home_cover'] == 3
 
 
-def test_swapping_threeway_odds_cannot_flip_score_evidence(monkeypatch):
+def test_threeway_quotes_are_preserved_without_probability_anchors(monkeypatch):
     monkeypatch.setattr(predict, 'AI_RUN_MODE', 'panel')
     first = market()
     second = {**first, 'sp_home': 4.0, 'sp_away': 2.0}
-    assert predict.build_evidence_packet(first, 1) == predict.build_evidence_packet(second, 1)
+    a, b = predict.build_evidence_packet(first, 1), predict.build_evidence_packet(second, 1)
+    assert a['result_odds'] == {'home': 2.0, 'draw': 4.0, 'away': 4.0}
+    assert b['result_odds']['home'] == 4.0
+    assert a['market_margin_audit'] == b['market_margin_audit']
 
 
 def test_margin_distinguishes_overround_from_theoretical_hold_and_missing(monkeypatch):
@@ -100,29 +103,32 @@ def test_ordered_summary_reaches_referee_and_publication_without_rewriting_score
                        'market_alignment': '总球与让球需要交叉核验',
                        'candidate_comparison': '比较1-1、2-1及1-2',
                        'verdict': f'{name}：反击效率是失效条件'}
-                 for name in ('gpt', 'grok', 'gemini')}
+                 for name in ('market_history', 'context_risk', 'final')}
     async def call(session, name, system, prompt, phase, expected):
+        assert name == 'gpt'
         packet = json.loads(prompt.splitlines()[-1])
-        if name == 'gemini':
-            for analyst in ('gpt', 'grok'):
+        name = packet['review_context']['current_role']
+        if name == 'final':
+            for analyst in ('market_history', 'context_risk'):
                 assert packet['analyst_outputs'][analyst]['reading_summary'] == summaries[analyst]
         else:
             assert packet['analyst_outputs'] == {}
         received.append(name)
         answer = row(expected[0])
         answer['reading_summary'] = summaries[name]
-        if name == 'gemini':
+        if name == 'final':
             answer.update(predicted_score='1-2', final_direction='away')
         return name, {'predictions': [answer]}, {'ok': True, 'status': 'ok'}
     monkeypatch.setattr(predict, 'async_call_ai_json', call)
     output, _ = predict.run_predictions({'matches': [market()]})
     pred = output[0]['prediction']
-    assert pred['reading_summary'] == summaries['gemini']
-    assert pred['phase1_model_outputs']['gpt']['reading_summary'] == summaries['gpt']
+    assert pred['reading_summary'] == summaries['final']
+    assert pred['phase1_model_outputs']['market_history']['reading_summary'] == summaries['market_history']
     assert pred['predicted_score'] == pred['final_ai_score'] == '1-2'
-    assert pred['gpt_score'] == '2-1'
+    assert pred['role_reports']['market_history']['report']['predicted_score'] == '2-1'
+    assert pred['gpt_score'] == '1-2'
     assert pred['final_direction'] == 'away'
-    assert received == ['gpt', 'grok', 'gemini']
+    assert received == ['market_history', 'context_risk', 'final']
 
 
 @pytest.mark.parametrize('summary', [None, 'invalid', [], {'context': [], 'goal_band': 3}])

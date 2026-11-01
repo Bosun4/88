@@ -30,7 +30,7 @@ def test_paid_predictions_are_manual_and_bounded():
         "AI_RUN_MODE": "panel", "AI_PRIMARY_MODEL": "gpt",
         "AI_BATCH_SIZE": "1", "AI_CHUNK_CONCURRENCY": "2", "AI_MODEL_CONCURRENCY": "4",
         "AI_PANEL_MAX_CALLS": "180", "VMAX_FETCH_DAYS_AHEAD": "0",
-        "AI_STREAM": "true", "AI_SINGLE_PASS_MAX_CALLS": "12", "AI_CONNECT_TIMEOUT": "20",
+        "AI_STREAM": "true", "AI_CONNECT_TIMEOUT": "20",
         "AI_READ_TIMEOUT": "180", "AI_HTTP_TOTAL_TIMEOUT": "180",
         "AI_PHASE1_RETRY_MAX": "0", "AI_FINAL_RETRY_MAX": "0",
         "AI_ENABLE_CROSS_EXAM": "false",
@@ -42,14 +42,14 @@ def test_paid_predictions_are_manual_and_bounded():
     assert {key: env.get(key) for key in expected} == expected
     assert "AI_MAX_REQUESTS_PER_AI" not in env
     assert "AI_CHUNK_SIZE" not in env
-    for name in ("GPT", "GROK", "GEMINI"):
+    for name in ("GPT",):
         assert env[name + "_MODEL"] == "${{ vars." + name + "_MODEL }}"
         credentials = {k: v for k, v in env.items() if k.startswith(name + "_API_")}
         assert credentials == {
             name + "_API_URL": "${{ secrets." + name + "_API_URL }}",
             name + "_API_KEY": "${{ secrets." + name + "_API_KEY }}",
         }
-    assert not any(key.startswith("CLAUDE_") for key in env)
+    assert not any(key.startswith(("CLAUDE_", "GROK_", "GEMINI_")) for key in env)
     assert doc["jobs"]["deploy_pages"]["needs"] == "predict"
 
 
@@ -84,7 +84,9 @@ def test_runtime_dependency_graph_is_exactly_pinned():
     names = [line.split("==")[0].lower().replace("_", "-") for line in requirements]
     assert len(names) == len(set(names))
     assert "deep-translator" not in names
-    assert "aiohttp==3.14.3" in requirements
+    assert "aiohttp==3.14.4" in requirements
+    assert "multidict==6.9.1" in requirements
+    assert "certifi==2026.10.19" in requirements
 
 
 def test_publication_stages_and_validates_persistent_forward_ledger():

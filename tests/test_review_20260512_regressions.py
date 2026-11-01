@@ -9,16 +9,15 @@ import asyncio
 import importlib
 from scripts import predict
 
-def test_odds_overround_removal_normalizes_probabilities():
+def test_current_evidence_keeps_quotes_and_cost_without_forecast_probabilities():
     predict = importlib.import_module("scripts.predict")
     packet = predict.build_evidence_packet(
         {"home_team": "A", "away_team": "B", "sp_home": 2.50, "sp_draw": 3.20, "sp_away": 2.90},
         1,
     )
-    implied = packet["market_implied"]
-    total = implied["home_fair_prob"] + implied["draw_fair_prob"] + implied["away_fair_prob"]
-    assert abs(total - 1.0) <= 0.001
-    assert implied["overround"] > 0
+    assert packet['result_odds'] == {'home': 2.5, 'draw': 3.2, 'away': 2.9}
+    assert 'market_implied' not in packet
+    assert packet['market_margin_audit']['result_market']['overround_pct'] > 0
 
 
 def test_build_evidence_packet_runtime_function_has_no_prediction_leakage():
@@ -43,7 +42,7 @@ def test_build_evidence_packet_runtime_function_has_no_prediction_leakage():
     assert packet["identity"]["home_team"] == "塞尔塔"
     assert "prediction" not in packet
     assert "predicted_score" not in packet.get("context_raw_fields", {})
-    assert packet.get("evidence_compiler_version") in {"v20.3.0_sharp_cluster_full", "v20.6.0_shadow_pre_injected", "v20.6.0_shadow_pre_injected_with_quant", "v20.7.0_poisson_purged_pure_board_reading"}
+    assert packet.get("evidence_compiler_version") == 'score-first-v25'
 
 
 def test_predicted_score_and_final_direction_are_closed_by_score():

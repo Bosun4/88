@@ -32,7 +32,7 @@ def test_legacy_batches_respect_concurrency_and_process_each_match_once(monkeypa
         return {match: {'match': match}}
 
     monkeypatch.setattr(predict, '_run_one_chunk', fake_chunk)
-    result = asyncio.run(predict.run_ai_native_web(evidence))
+    result = asyncio.run(predict._run_ai_native_web_impl(evidence))
     assert sorted(result) == list(range(1, 8))
     assert sorted(calls) == list(range(1, 8))
     assert peak == concurrency

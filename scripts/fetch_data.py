@@ -359,16 +359,33 @@ async def scrape_wencai_jczq_async(session, date_str, diagnostics=None):
     print(f"  ⚽ 足球赛事: {len(football_matches)} 场")
     return football_matches
 
+from contextvars import ContextVar
+API_DIAGNOSTICS = ContextVar('api_diagnostics', default=None)
+
+
 async def async_fetch_api(session, endpoint, params, sema):
-    if not API_FOOTBALL_KEY: return []
+    diagnostics = API_DIAGNOSTICS.get()
+    def note(status):
+        if diagnostics is not None:
+            diagnostics.append({'source': 'api_football', 'endpoint': endpoint, 'status': status})
+    if not API_FOOTBALL_KEY:
+        note('missing_api_key')
+        return []
     headers = {"x-apisports-key": API_FOOTBALL_KEY}
     async with sema:
         try:
             async with session.get(f"{API_FOOTBALL_BASE}{endpoint}", headers=headers, params=params, timeout=10) as r:
                 if r.status == 200:
                     d = await r.json()
+                    if d.get('errors'):
+                        note('provider_rejected')
+                        return []
+                    note('ok' if d.get('response') else 'empty_response')
                     return d.get("response",[])
-        except: return []
+                note('http_' + str(r.status))
+        except Exception as error:
+            note(type(error).__name__)
+            return []
     return []
 
 # Provider competition identifiers, never season assumptions.
@@ -413,6 +430,15 @@ def _api_stats(raw, team_id, league_id, season, provenance):
 
 
 async def enrich_match_data(session, m, i, date_str, sema):
+    diagnostics = m.setdefault('collection_diagnostics', [])
+    token = API_DIAGNOSTICS.set(diagnostics)
+    try:
+        return await _enrich_match_data(session, m, i, date_str, sema)
+    finally:
+        API_DIAGNOSTICS.reset(token)
+
+
+async def _enrich_match_data(session, m, i, date_str, sema):
     """Resolve a unique fixture before fetching season-scoped facts."""
     from fixture_identity import parse_time
 
@@ -422,6 +448,8 @@ async def enrich_match_data(session, m, i, date_str, sema):
     kickoff = parse_time(m.get("kickoff_at"))
     league_id = API_LEAGUE_IDS.get(m.get("league"))
     if not API_FOOTBALL_KEY or not kickoff or not league_id:
+        m['collection_diagnostics'].append({'source': 'api_football', 'status':
+            'missing_api_key' if not API_FOOTBALL_KEY else 'missing_kickoff' if not kickoff else 'unmapped_league'})
         return m
     # No general-purpose machine translation at an identity boundary.
     def name(value):
@@ -442,15 +470,20 @@ async def enrich_match_data(session, m, i, date_str, sema):
                         and (teams.get(s) or {}).get("id") for s in ("home", "away"))):
             hits.append(row)
     if len(hits) != 1 or not hits[0]["league"].get("season"):
+        m['collection_diagnostics'].append({'source': 'api_football', 'status': 'fixture_not_uniquely_matched', 'candidates': len(hits)})
         return m
     fixture = hits[0]
     season = fixture["league"]["season"]
     if m.get("season") and str(m["season"]) != str(season):
+        m['collection_diagnostics'].append({'source': 'api_football', 'status': 'season_conflict'})
         return m
     m.update({"api_football_fixture_id": fixture["fixture"]["id"],
               "league_id": league_id, "season": season})
     for side in ("home", "away"):
         m[f"{side}_id"] = fixture["teams"][side]["id"]
+    if datetime.now(timezone.utc) >= kickoff:
+        m['collection_diagnostics'].append({'source': 'api_football', 'status': 'already_started'})
+        return m
     captured = datetime.now(timezone.utc).isoformat()
     common = {"source": "api_football", "captured_at": captured,
               "league_id": league_id, "season": season}
@@ -464,7 +497,7 @@ async def enrich_match_data(session, m, i, date_str, sema):
     jobs += [("/standings", base), ("/fixtures/rounds", base)]
     for side in ("home", "away"):
         jobs.append(("/fixtures", {"team": m[f"{side}_id"],
-                                  "from": (kickoff - timedelta(days=14)).date().isoformat(),
+                                  "from": (min(kickoff, datetime.now(timezone.utc)) - timedelta(days=90)).date().isoformat(),
                                   "to": (kickoff + timedelta(days=14)).date().isoformat(),
                                   "timezone": "UTC"}))
     jobs.append(("/fixtures/headtohead", {"h2h": f"{m['home_id']}-{m['away_id']}",
@@ -481,6 +514,9 @@ async def enrich_match_data(session, m, i, date_str, sema):
     for index, side in enumerate(("home", "away")):
         m[f"{side}_stats"] = _api_stats(results[index], m[f"{side}_id"],
                                         league_id, season, proof(*jobs[index]))
+        if not m[f'{side}_stats'].get('data_available'):
+            m['collection_diagnostics'].append({'source': 'api_football', 'endpoint': jobs[index][0],
+                                                 'status': 'fields_missing_or_identity_mismatch', 'side': side})
     evidence["standings"] = {**proof(*jobs[2]), "groups": []}
     for entry in results[2] if isinstance(results[2], list) else []:
         league = entry.get("league") or {}
@@ -495,8 +531,9 @@ async def enrich_match_data(session, m, i, date_str, sema):
     for row in history:
         f, goals = row.get("fixture") or {}, row.get("goals") or {}
         when = parse_time(f.get("date"))
-        if (when and when < min(kickoff, datetime.now(timezone.utc))
+        if (when and when + timedelta(minutes=90) <= min(kickoff, datetime.now(timezone.utc))
                 and (f.get("status") or {}).get("short") == "FT"
+                and {row.get('teams', {}).get(s, {}).get('id') for s in ('home', 'away')} == {m['home_id'], m['away_id']}
                 and all(type(goals.get(s)) is int for s in ("home", "away"))):
             m["h2h"].append({"date": when.isoformat(),
                               "score": f"{goals['home']}-{goals['away']}",
@@ -504,6 +541,40 @@ async def enrich_match_data(session, m, i, date_str, sema):
                               "away": row["teams"]["away"]["name"],
                               **proof(*jobs[6])})
     m["h2h"] = sorted(m["h2h"], key=lambda x: x["date"], reverse=True)[:5]
+    from research_data import recent_form
+    cutoff = min(kickoff, datetime.now(timezone.utc))
+    m['recent_form'] = {side: recent_form(results[index], m[f'{side}_id'], cutoff, proof(*jobs[index]), kickoff)
+                        for index, side in enumerate(('home', 'away'), 4)}
+    # Current fixture details are independently sourced; no inferred lineup or injury.
+    detail_jobs = [(endpoint, {'fixture': fixture['fixture']['id']})
+                   for endpoint in ('/injuries', '/fixtures/lineups')]
+    details = await asyncio.gather(*(async_fetch_api(session, e, p, sema) for e, p in detail_jobs))
+    common['captured_at'] = datetime.now(timezone.utc).isoformat()
+    expected_teams = {m['home_id'], m['away_id']}
+    details = [[r for r in values if isinstance(r, dict)
+                and r.get('team', {}).get('id') in expected_teams
+                and (index == 1 or r.get('fixture', {}).get('id') == fixture['fixture']['id'])]
+               if isinstance(values, list) else [] for index, values in enumerate(details)]
+    m['fixture_details'] = {key: {'records': value if isinstance(value, list) else [],
+                                  'available': bool(value), **proof(*job)}
+                            for key, value, job in zip(('injuries', 'lineups'), details, detail_jobs)}
+    lineup_teams = {r.get('team', {}).get('id') for r in details[1]
+                    if isinstance(r, dict) and len(r.get('startXI') or []) == 11} if isinstance(details[1], list) else set()
+    m['fixture_details']['confirmed_lineup'] = expected_teams <= lineup_teams
+    # Fetch card events for the five most recent fixtures per team, deduplicated.
+    recent_ids = {r['fixture_id'] for form in m['recent_form'].values() for r in form.get('matches', [])[:5]}
+    for fid in sorted(recent_ids):
+        events = await async_fetch_api(session, '/fixtures/events', {'fixture': fid}, sema)
+        for form in m['recent_form'].values():
+            for record in form.get('matches', []):
+                if record['fixture_id'] == fid:
+                    record['red_cards'] = [e for e in events if isinstance(e, dict)
+                                           and e.get('type') == 'Card' and e.get('detail') in ('Red Card', 'Second Yellow card')
+                                           and e.get('time', {}).get('elapsed') is not None
+                                           and 0 <= e['time']['elapsed'] <= 90] if events else None
+                    record['events_source'] = {**proof('/fixtures/events', {'fixture': fid}),
+                                               'captured_at': datetime.now(timezone.utc).isoformat()}
+    m['analysis_cutoff'] = datetime.now(timezone.utc).isoformat()
     return m
 
 
@@ -525,6 +596,6 @@ async def async_collect_all(date_str):
         from global_odds import enrich_with_global_odds_async
         await enrich_with_global_odds_async(enriched)
     except Exception as e:
-        print(f"  [global_odds] 模块加载/执行失败,降级单轨: {type(e).__name__}: {str(e)[:80]}")
+        print(f"  [global_odds] 模块加载/执行失败,降级单轨: {type(e).__name__}")
 
     return {"date": date_str, "matches": enriched, "schedule": diagnostics}

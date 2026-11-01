@@ -16,7 +16,7 @@ from datetime import datetime, timedelta, timezone
 # ============================================================
 
 REQUIRED_PACKAGES = [
-    "aiohttp>=3.14.3",
+    "aiohttp>=3.14.4",
     "Requests>=2.32.0",
     "numpy>=1.26.0",
     "pandas>=2.2.0",
@@ -255,7 +255,7 @@ def configure_ai_defaults():
         "AI_PANEL_MAX_SECONDS": "5400",
         "AI_FINAL_READ_TIMEOUT": "180", "VMAX_FETCH_DAYS_AHEAD": "0",
         "AI_BATCH_SIZE": "1", "AI_CHUNK_CONCURRENCY": "2",
-        "AI_MODEL_CONCURRENCY": "4", "AI_SINGLE_PASS_MAX_CALLS": "12",
+        "AI_MODEL_CONCURRENCY": "4",
         "AI_HTTP_TOTAL_TIMEOUT": "180", "AI_CONNECT_TIMEOUT": "20",
         "AI_READ_TIMEOUT": "180", "AI_PERSISTENT_CACHE_ENABLED": "true",
         "AI_CACHE_DIR": "data/ai_cache", "AI_DECISION_CACHE_TTL": "1800",
@@ -268,7 +268,7 @@ def print_runtime_config():
     print("AI运行配置（次数为每次运行的实际硬上限）:")
     for key in ("AI_RUN_MODE", "AI_PRIMARY_MODEL", "AI_BATCH_SIZE",
                 "AI_CHUNK_CONCURRENCY", "AI_MODEL_CONCURRENCY",
-                "AI_SINGLE_PASS_MAX_CALLS", "AI_PANEL_MAX_CALLS", "AI_PANEL_MAX_SECONDS", "AI_HTTP_TOTAL_TIMEOUT",
+                "AI_PANEL_MAX_CALLS", "AI_PANEL_MAX_SECONDS", "AI_HTTP_TOTAL_TIMEOUT",
                 "AI_PERSISTENT_CACHE_ENABLED", "AI_DECISION_CACHE_TTL"):
         print(f"   {key}={os.environ.get(key, '')}")
 
@@ -327,7 +327,7 @@ def main():
 
         final_output = {
             "update_time": now_time.strftime("%Y-%m-%d %H:%M:%S"),
-            "version": "MAX-v23.0-SCORE-PANEL",
+            "version": "MAX-v25-GPT-RESEARCH",
             "scope": "today_only",
             "top4": [],
             "matches": {
@@ -342,7 +342,6 @@ def main():
                 "ai_chunk_concurrency": os.environ.get("AI_CHUNK_CONCURRENCY", ""),
                 "ai_model_concurrency": os.environ.get("AI_MODEL_CONCURRENCY", ""),
                 "ai_phase1_parallel": os.environ.get("AI_PHASE1_PARALLEL", ""),
-                "ai_single_pass_max_calls": os.environ.get("AI_SINGLE_PASS_MAX_CALLS", "12"),
                 "ai_panel_max_calls": os.environ.get("AI_PANEL_MAX_CALLS", "180"),
                 "ai_panel_max_seconds": os.environ.get("AI_PANEL_MAX_SECONDS", "5400"),
                 "ai_cache_ttl": os.environ.get("AI_DECISION_CACHE_TTL", "1800"),
@@ -402,6 +401,9 @@ def main():
 
             print(f"✅ 已落盘空 today 结构，快照: {paths['snapshot']}")
             return
+
+        from research_data import attach_research
+        final_output['runtime']['history_coverage'] = attach_research(raw_data['matches'], data_dir)
 
         # 保留下游兼容字段 information
         for match in raw_data.get("matches", []):

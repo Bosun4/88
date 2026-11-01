@@ -424,12 +424,11 @@ def test_compact_prompt_preserves_all_market_quotes_and_source_context():
                            / 'data/predictions.json').read_text(encoding='utf-8'))
     evidence = predict.build_evidence_packet(snapshot['matches']['today'][0], 1)
     compact = compact_evidence(evidence)
-    for key in ('correct_score_odds', 'lottery_market_1x2', 'total_goals_odds',
+    for key in ('correct_score_odds', 'result_odds', 'total_goals_odds',
                 'league_context', 'match'):
         assert compact[key] == evidence[key]
-    assert len(json.dumps(compact)) < len(json.dumps(evidence)) * .6
-    assert 'adjacent_score_audit_table' in evidence['score_cluster_diagnostics_v203']
-    assert 'adjacent_score_audit_table' not in compact['score_cluster_diagnostics_v203']
+    assert compact == evidence  # v25 compiler already emits compact raw markets
+    assert 'score_cluster_diagnostics_v203' not in compact
 
 
 def test_publication_rechecks_kickoff_and_preserves_risk(tmp_path):
@@ -515,7 +514,7 @@ def test_publish_lock_rerun_and_risk_settlement_end_to_end(tmp_path):
     assert result[0]['strict_forward'] is True
 
 
-@pytest.mark.parametrize("mode", ["single_pass", "fast_batch", "deep_research", "post_review"])
+@pytest.mark.parametrize("mode", ["panel", "single_pass", "fast_batch", "deep_research", "post_review"])
 def test_run_modes_import_without_network(mode):
     from pathlib import Path
     import os
@@ -527,5 +526,9 @@ def test_run_modes_import_without_network(mode):
         env={**os.environ, "AI_RUN_MODE": mode, "VMAX_ALLOW_AUTO_INSTALL": "false"},
         capture_output=True, text=True, timeout=20,
     )
-    assert result.returncode == 0, result.stderr
-    assert result.stdout.strip().endswith(mode)
+    if mode == 'panel':
+        assert result.returncode == 0, result.stderr
+        assert result.stdout.strip().endswith(mode)
+    else:
+        assert result.returncode != 0
+        assert 'AI_RUN_MODE must be panel' in result.stderr

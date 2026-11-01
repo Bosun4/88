@@ -16,8 +16,6 @@ TIMEZONE = "Asia/Shanghai"
 # Each provider has one model and one unnumbered URL/key pair.
 DEFAULT_MODELS = {
     "gpt": "熊猫-按量-gpt-6-astra",
-    "grok": "grok-4.7",
-    "gemini": "gemini-3.8-flash-high",
 }
 
 
@@ -32,13 +30,3 @@ def get_model_for(ai_name):
 GPT_API_URL = os.environ.get("GPT_API_URL", "")
 GPT_API_KEY = os.environ.get("GPT_API_KEY", "")
 GPT_MODEL = get_model_for("gpt")
-
-# Gemini
-GEMINI_API_URL = os.environ.get("GEMINI_API_URL", "")
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL = get_model_for("gemini")
-
-# Grok
-GROK_API_URL = os.environ.get("GROK_API_URL", "")
-GROK_API_KEY = os.environ.get("GROK_API_KEY", "")
-GROK_MODEL = get_model_for("grok")
